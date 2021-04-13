@@ -32,4 +32,6 @@ message Experiment {
   // The time when the experiment should end, If unspecified, the experiment runs indefinitely unless it is manually
   // stopped by a user.
   google.protobuf.Timestamp end_time = 4;
+  // The status of the experiment.
+  Status status = 5;
 }

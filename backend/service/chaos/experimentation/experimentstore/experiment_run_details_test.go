@@ -80,7 +80,7 @@ func TestExperimentRunDetailsStatus(t *testing.T) {
 				CancellationTime: tt.cancellationTime,
 				CreationTime:     tt.creationTime,
 			}
-			config := &ExperimentConfig{id: "2", Config: &any.Any{}}
+			config := &ExperimentConfig{Id: "2", Config: &any.Any{}}
 			tr := NewTransformer(zaptest.NewLogger(t).Sugar())
 			rd, err := NewRunDetails(run, config, &tr, tt.now)
 			assert.NoError(t, err)

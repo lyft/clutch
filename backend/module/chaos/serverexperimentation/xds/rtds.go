@@ -9,8 +9,8 @@ import (
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"go.uber.org/zap"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 const (
@@ -46,7 +46,7 @@ type RTDSConfig struct {
 	egressPrefix string
 }
 
-func generateRTDSResource(experiments []*experimentation.Experiment, rtdsConfig *RTDSConfig, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
+func generateRTDSResource(experiments []*experimentstore.Experiment, rtdsConfig *RTDSConfig, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
 	var fieldMap = map[string]*pstruct.Value{}
 
 	// No experiments meaning clear all experiments for the given upstream cluster

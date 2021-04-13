@@ -73,12 +73,17 @@ func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.Cre
 		return nil, err
 	}
 
-	experiment, err := s.storer.CreateExperiment(ctx, es)
+	e, err := s.storer.CreateExperiment(ctx, es)
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.CreateExperimentResponse{Experiment: experiment}, nil
+	ep, err := e.Proto(time.Now())
+	if err != nil {
+		return nil, err
+	}
+
+	return &experimentation.CreateExperimentResponse{Experiment: ep}, nil
 }
 
 func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentation.CreateOrGetExperimentRequest) (*experimentation.CreateOrGetExperimentResponse, error) {
@@ -89,6 +94,11 @@ func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentatio
 		return nil, err
 	}
 	createOrGetExperiment, err := s.storer.CreateOrGetExperiment(ctx, es)
+	if err != nil {
+		return nil, err
+	}
+
+	ep, err := createOrGetExperiment.Experiment.Proto(time.Now())
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +114,7 @@ func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentatio
 	}
 
 	return &experimentation.CreateOrGetExperimentResponse{
-		Experiment: createOrGetExperiment.Experiment,
+		Experiment: ep,
 		Origin:     createOrGetExperiment.Origin,
 	}, nil
 }
@@ -123,13 +133,21 @@ func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.
 // GetExperiments returns all experiments from the experiment store.
 func (s *Service) GetExperiments(ctx context.Context, request *experimentation.GetExperimentsRequest) (*experimentation.GetExperimentsResponse, error) {
 	s.getExperimentsStat.Inc(1)
-	experiments, err := s.storer.GetExperiments(ctx, request.GetConfigType(), request.GetStatus())
+	es, err := s.storer.GetExperiments(ctx, request.GetConfigType(), request.GetStatus())
 	if err != nil {
-		s.logger.Errorw("GetExperiments: Unable to retrieve experiments", "error", err)
 		return &experimentation.GetExperimentsResponse{}, err
 	}
 
-	return &experimentation.GetExperimentsResponse{Experiments: experiments}, nil
+	ee := make([]*experimentation.Experiment, len(es))
+	for i := range ee {
+		ep, err := es[i].Proto(time.Now())
+		if err != nil {
+			return nil, err
+		}
+		ee[i] = ep
+	}
+
+	return &experimentation.GetExperimentsResponse{Experiments: ee}, nil
 }
 
 func (s *Service) GetListView(ctx context.Context, _ *experimentation.GetListViewRequest) (*experimentation.GetListViewResponse, error) {

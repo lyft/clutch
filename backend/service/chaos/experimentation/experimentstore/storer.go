@@ -22,10 +22,10 @@ const Name = "clutch.service.chaos.experimentation.store"
 
 // Storer stores experiment data
 type Storer interface {
-	CreateExperiment(context.Context, *ExperimentSpecification) (*experimentation.Experiment, error)
+	CreateExperiment(context.Context, *ExperimentSpecification) (*Experiment, error)
 	CreateOrGetExperiment(context.Context, *ExperimentSpecification) (*CreateOrGetExperimentResult, error)
 	CancelExperimentRun(ctx context.Context, id string, reason string) error
-	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
+	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id string) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
 	RegisterTransformation(transformation Transformation) error
@@ -61,7 +61,7 @@ func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error)
 	}, nil
 }
 
-func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecification) (*experimentation.Experiment, error) {
+func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecification) (*Experiment, error) {
 	// This API call will eventually be broken into 2 separate calls:
 	// 1) creating the config
 	// 2) starting a new experiment with the config
@@ -105,7 +105,7 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 	// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiment function
 	// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
 	// their respective IDs
-	return es.toExperiment()
+	return s.getExperiment(ctx, es.RunId)
 }
 
 func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecification) (*CreateOrGetExperimentResult, error) {
@@ -117,24 +117,19 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 	}
 
 	if exists {
-		runConfigPair, err := s.getExperiment(ctx, es.RunId)
+		exp, err := s.getExperiment(ctx, es.RunId)
 		if err != nil {
 			return nil, err
 		}
 
-		experiment, err := runConfigPair.toProto()
-		if err != nil {
-			return nil, err
-		}
-
-		return &CreateOrGetExperimentResult{Experiment: experiment, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING}, nil
+		return &CreateOrGetExperimentResult{Experiment: exp, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING}, nil
 	} else {
-		experiment, err := s.CreateExperiment(ctx, es)
+		exp, err := s.CreateExperiment(ctx, es)
 		if err != nil {
 			return nil, err
 		}
 
-		return &CreateOrGetExperimentResult{Experiment: experiment, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW}, nil
+		return &CreateOrGetExperimentResult{Experiment: exp, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW}, nil
 	}
 }
 
@@ -154,7 +149,7 @@ func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason stri
 
 // GetExperiments experiments with a given type of the configuration. Returns all experiments if provided configuration type
 // parameter is an empty string.
-func (s *storer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+func (s *storer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*Experiment, error) {
 	query := `
 		SELECT
 			experiment_run.id,
@@ -162,6 +157,7 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
+			termination_reason,
 			experiment_config.id,
 			details
 		FROM experiment_config, experiment_run
@@ -179,12 +175,12 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 
 	defer rows.Close()
 
-	var experiments []*experimentation.Experiment
+	var experiments []*Experiment
 	for rows.Next() {
 		var details string
 		run := ExperimentRun{}
 		config := ExperimentConfig{Config: &any.Any{}}
-		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.creationTime, &config.id, &details)
+		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &run.TerminationReason, &config.Id, &details)
 
 		if err != nil {
 			return nil, err
@@ -195,11 +191,7 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 			return nil, err
 		}
 
-		e, err := Experiment{Run: &run, Config: &config}.toProto()
-		if err != nil {
-			return nil, err
-		}
-		experiments = append(experiments, e)
+		experiments = append(experiments, &Experiment{Run: &run, Config: &config})
 	}
 
 	err = rows.Err()
@@ -218,6 +210,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
+		    termination_reason,
 			experiment_config.id,
 			details
 		FROM experiment_config, experiment_run
@@ -236,7 +229,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 		var details string
 		run := ExperimentRun{}
 		config := ExperimentConfig{Config: &any.Any{}}
-		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &config.id, &details)
+		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &run.TerminationReason, &config.Id, &details)
 		if err != nil {
 			return nil, err
 		}
@@ -278,6 +271,7 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
+		    termination_reason,
 			experiment_config.id,
 			details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
@@ -287,7 +281,7 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 	var details string
 	run := ExperimentRun{}
 	config := ExperimentConfig{Config: &any.Any{}}
-	err := row.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &config.id, &details)
+	err := row.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &run.TerminationReason, &config.Id, &details)
 	if err != nil {
 		return nil, err
 	}

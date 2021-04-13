@@ -1,6 +1,8 @@
 package experimentstore
 
 import (
+	"time"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -13,7 +15,7 @@ type Experiment struct {
 	Config *ExperimentConfig
 }
 
-func (rc Experiment) toProto() (*experimentationv1.Experiment, error) {
+func (rc Experiment) Proto(now time.Time) (*experimentationv1.Experiment, error) {
 	startTimestampProto := timestamppb.New(rc.Run.StartTime)
 	if err := startTimestampProto.CheckValid(); err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)
@@ -32,5 +34,6 @@ func (rc Experiment) toProto() (*experimentationv1.Experiment, error) {
 		StartTime: startTimestampProto,
 		EndTime:   endTimestampProto,
 		Config:    rc.Config.Config,
+		Status:    rc.Run.Status(now),
 	}, nil
 }
