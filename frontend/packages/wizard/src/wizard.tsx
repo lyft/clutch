@@ -60,10 +60,10 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
   const [, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const origin = location.state?.origin;
+  const { origin } = location.state as { origin?: string };
 
   const navigateToOrigin = () => {
-    if (origin !== undefined) {
+    if (origin) {
       navigate(origin);
     }
   };
