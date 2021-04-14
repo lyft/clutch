@@ -13,9 +13,5 @@ message Config {
 
   // Slack signs the requests using this secret and is a way to confirm that each request came from Slack.
   // https://api.slack.com/authentication/verifying-requests-from-slack
-  string signing_secret = 2;
-
-  // Bot app's verification token is sent in each request from Slack and is a way to confirm the request came from
-  // Slack.
-  string verification_token = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string signing_secret = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }

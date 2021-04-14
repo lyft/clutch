@@ -101,9 +101,6 @@ message EventRequest {
   // randomly generated string used as part of the URL verification handshake,
   // https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
   string challenge = 11;
-  // sent in the request if we receive more than 30,000 events in 60 minutes
-  // https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events__rate-limiting
-  string minute_rate_limited = 12;
 }
 
 // Respond back to the Slack Events API with the challenge or a 2xx,

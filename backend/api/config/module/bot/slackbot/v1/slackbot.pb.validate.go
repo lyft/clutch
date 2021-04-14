@@ -50,11 +50,9 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	// no validation rules for SigningSecret
-
-	if len(m.GetVerificationToken()) < 1 {
+	if len(m.GetSigningSecret()) < 1 {
 		return ConfigValidationError{
-			field:  "VerificationToken",
+			field:  "SigningSecret",
 			reason: "value length must be at least 1 bytes",
 		}
 	}
