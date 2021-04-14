@@ -248,8 +248,8 @@ func (p *OIDCProvider) Read(ctx context.Context, userID, provider string) (*oaut
 		return nil, status.Error(codes.Internal, "token read attempted but storage is not configured")
 	}
 
-	if provider == clutchProvider {
-		return nil, status.Error(codes.Internal, "only tokens from third-party providers should be read")
+	if provider != p.providerAlias {
+		return nil, status.Errorf(codes.InvalidArgument, "provider '%s' cannot read '%s' tokens", p.providerAlias, provider)
 	}
 
 	// Get token from storage.
