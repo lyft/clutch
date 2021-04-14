@@ -2,6 +2,7 @@ import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clut
 import type { WizardChild } from "@clutch-sh/wizard";
 
 import DeletePod from "./delete-pod";
+import KubeDashboard from "./k8s-dashboard";
 import ResizeHPA from "./resize-hpa";
 
 interface ResolverConfigProps {
@@ -39,6 +40,13 @@ const register = (): WorkflowConfiguration => {
         description: "Resize a horizontal autoscaler.",
         component: ResizeHPA,
         requiredConfigProps: ["resolverType"],
+      },
+      kubeDashboard: {
+        path: "dashboard",
+        displayName: "Kubernetes Dashboard",
+        description: "Dashboard for Kubernetes Resources.",
+        component: KubeDashboard,
+        requiredConfigProps: [],
       },
     },
   };
