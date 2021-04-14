@@ -6,12 +6,8 @@ import (
 
 type svc struct{}
 
-func (s svc) MatchSlackCommand(string) string {
+func (s svc) MatchCommand(string) (reply string) {
 	return ""
-}
-
-func (s svc) MatchCommand(string) (string, bool) {
-	return "", true
 }
 
 func New() bot.Service {

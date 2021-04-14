@@ -46,9 +46,9 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, 
 	m := &mod{
 		slack:             slack.New(config.BotToken),
 		verificationToken: config.VerificationToken,
-		bot:    bot,
-		logger: logger,
-		scope:  scope,
+		bot:               bot,
+		logger:            logger,
+		scope:             scope,
 	}
 
 	return m, nil
@@ -57,9 +57,9 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, 
 type mod struct {
 	slack             *slack.Client
 	verificationToken string
-	bot    bot.Service
-	logger *zap.Logger
-	scope  tally.Scope
+	bot               bot.Service
+	logger            *zap.Logger
+	scope             tally.Scope
 }
 
 func (m *mod) Register(r module.Registrar) error {
@@ -144,7 +144,7 @@ func (m *mod) handleCallBackEvent(event *slackbotv1.Event) error {
 
 // event type for messages that mention the bot directly
 func (m *mod) handleAppMentionEvent(event *slackbotv1.Event) error {
-	match := m.bot.MatchSlackCommand(event.Text)
+	match := m.bot.MatchCommand(event.Text)
 	err := sendBotReply(m.slack, event.Channel, match)
 	if err != nil {
 		return err
@@ -161,7 +161,7 @@ func (m *mod) handleMessageEvent(event *slackbotv1.Event) error {
 	// it's standard behavior of the Slack Events API that the bot will receive all message events, including from it's own posts
 	// so we need to filter out these events by checking that the BotId field is empty; otherwise by reacting to them we will create an infinte loop
 	if event.BotId == "" {
-		match := m.bot.MatchSlackCommand(event.Text)
+		match := m.bot.MatchCommand(event.Text)
 		err := sendBotReply(m.slack, event.Channel, match)
 		if err != nil {
 			return err
