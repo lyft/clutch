@@ -81,18 +81,17 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 		return m.handleURLVerificationEvent(req.Challenge)
 	}
 
+	// TODO:(sperry) turn retries off?
+	// https://api.slack.com/apis/connections/events-api#the-events-api__field-guide__error-handling__graceful-retries__turning-retries-off
+
 	// at this point in the flow, we can ack the Slack API with a 2xx response and process the event seperately
-	// TODO: (sperry) asynchronous processing
-	err = m.handleEvent(req)
-	if err != nil {
-		m.logger.Error("handle event error", log.ErrorField(err))
-	}
+	go m.handleEvent(req)
 
 	return &slackbotv1.EventResponse{}, nil
 }
 
-// TODO: (sperry) Slack currently still supports this type of verification by sending the verification token in each request
-// but will change this to use the signing secrets or mutual TLS flow instead as it is more secure
+// TODO: (sperry) Slack currently still supports this verification type but they plan to deprecate this inf the future &
+// we want to check the signing secret instead so this is a short-term solution (need to change API design first)
 func verifySlackRequest(token, requestToken string) error {
 	t := slackevents.TokenComparator{VerificationToken: token}
 	ok := t.Verify(requestToken)
@@ -103,7 +102,6 @@ func verifySlackRequest(token, requestToken string) error {
 }
 
 // event type recieved the first time when configuring Slack API to send requests to our endpoint, https://api.slack.com/events/url_verification
-// the Slack API will send us the challenge string in the request and we must respond back with the same challenge
 func (m *mod) handleURLVerificationEvent(challenge string) (*slackbotv1.EventResponse, error) {
 	// this should never happen
 	if challenge == "" {
@@ -114,23 +112,25 @@ func (m *mod) handleURLVerificationEvent(challenge string) (*slackbotv1.EventRes
 	return &slackbotv1.EventResponse{Challenge: challenge}, nil
 }
 
-// request has 2 layers - "outer event" and "inner event". this is the outer event and is 1 of 3 types: url_verification, event_callback, and app_rate_limited
-func (m *mod) handleEvent(req *slackbotv1.EventRequest) error {
+// this outer event is 1 of 3 types: url_verification, event_callback, and app_rate_limited
+// this should be called via `go` in order to avoid blocking main execution
+func (m *mod) handleEvent(req *slackbotv1.EventRequest) {
 	switch req.Type {
 	case slackevents.CallbackEvent:
-		return m.handleCallBackEvent(req.Event)
+		err := m.handleCallBackEvent(req.Event)
+		if err != nil {
+			m.logger.Error("handle callback event error", log.ErrorField(err))
+		}
 	case slackevents.AppRateLimited:
 		// received if endpoint got more than 30,000 request events in 60 minutes, https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events__rate-limiting
 		m.logger.Error("app's event subscriptions are being rate limited")
 	default:
-		// if Slack API adds a new outer event type
-		return fmt.Errorf("received unexpected event type: %s", req.Type)
+		m.logger.Error("received unexpected event type", zap.String("event type", req.Type))
 	}
-	return nil
 }
 
-// request has two layers - "outer event" and "inner event". This is the inner event and we currently support 2 types: app_mention (messages that mention the bot directly)
-// and message (specifically DMs with the bot). full list of Slack event types: https://api.slack.com/events
+// for the inner event, we currently support 2 types: app_mention (messages that mention the bot directly) and message (specifically DMs with the bot)
+// full list of Slack event types: https://api.slack.com/events
 func (m *mod) handleCallBackEvent(event *slackbotv1.Event) error {
 	switch event.Type {
 	case slackevents.AppMention:
