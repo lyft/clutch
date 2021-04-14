@@ -263,6 +263,10 @@ func (p *OIDCProvider) Read(ctx context.Context, userID, provider string) (*oaut
 		return t, nil
 	}
 
+	if t.RefreshToken == "" {
+		return nil, status.Error(codes.Unauthenticated, "the token has expired and no refresh token is present")
+	}
+
 	// If invalid, attempt refresh.
 	newToken, err := p.oauth2.TokenSource(ctx, t).Token()
 	if err != nil {
