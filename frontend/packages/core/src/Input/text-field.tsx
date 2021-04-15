@@ -220,7 +220,6 @@ const TextField = ({
     onKeyDown,
     onFocus: onChange,
     onBlur: onChange,
-    onChange,
     error,
     helperText: helpText,
     InputProps: {
@@ -272,7 +271,7 @@ const TextField = ({
     );
   }
 
-  return <StyledTextField {...textFieldProps} defaultValue={defaultValue} {...props} />;
+  return <StyledTextField {...textFieldProps} defaultValue={defaultValue} onChange={onChange} {...props} />;
 };
 
 export default TextField;
