@@ -198,13 +198,6 @@ func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]
 		return result, false, nil
 	}
 
-	// Check that all of the fields have values
-	for _, value := range result {
-		if len(value) == 0 {
-			return result, false, nil
-		}
-	}
-
 	return result, true, nil
 }
 

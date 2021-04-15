@@ -220,6 +220,16 @@ func TestExtractProtoPatternsValues(t *testing.T) {
 			expect:      "",
 			shouldError: true,
 		},
+		{
+			id: "pod",
+			pb: &k8sapiv1.Pod{
+				Cluster:   "foo",
+				Namespace: "",
+				Name:      "cat",
+			},
+			expect:      "foo//cat",
+			shouldError: false,
+		},
 	}
 
 	for _, tt := range tests {
@@ -286,6 +296,17 @@ func TestPatternValueMapping(t *testing.T) {
 				"cluster":   "mycluster",
 				"namespace": "mynamespace",
 				"name":      "deploymentname",
+			},
+			ok: true,
+		},
+		{
+			id:     "k8s pod",
+			pb:     &k8sapiv1.Pod{},
+			search: "mycluster//podID",
+			result: map[string]string{
+				"cluster":   "mycluster",
+				"namespace": "",
+				"name":      "podID",
 			},
 			ok: true,
 		},
