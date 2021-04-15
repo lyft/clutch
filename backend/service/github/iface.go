@@ -3,7 +3,7 @@ package github
 import (
 	"context"
 
-	githubv3 "github.com/google/go-github/v34/github"
+	githubv3 "github.com/google/go-github/v35/github"
 	"github.com/shurcooL/githubv4"
 )
 

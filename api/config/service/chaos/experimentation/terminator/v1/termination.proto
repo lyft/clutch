@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package clutch.config.service.chaos.experimentation.terminator.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1;terminatorv1";
+
+import "validate/validate.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/any.proto";
+
+message Config {
+  message PerConfigTypeConfig {
+    // List of termination criteria to evaluate for each config type.
+    repeated google.protobuf.Any termination_criteria = 2 [ (validate.rules).repeated = {min_items : 1} ];
+  }
+
+  // Mapping from typeUrl of registered experiment type to its termination configuration.
+  map<string, PerConfigTypeConfig> per_config_type_configuration = 1;
+
+  // The interval at which the outer loop should poll for active experiments.
+  google.protobuf.Duration outer_loop_interval = 2 [ (validate.rules).duration.gt.seconds = 0 ];
+
+  // The interval at which the inner loop should evaluate the termination criteria for each monitored experiment.
+  // This should likely be less than outer_loop_interval as the checks should be relatively cheap.
+  google.protobuf.Duration per_experiment_check_interval = 3 [ (validate.rules).duration.gt.seconds = 0 ];
+}
+
+// Termination criterion that will terminate an experiment after a configured max duration. This is helpful in ensuring
+// that there is an upper limit to how long experiments will run for.
+message MaxTimeTerminationCriterion {
+  // The maximum duration experiments can run for before being terminated.
+  google.protobuf.Duration max_duration = 1 [ (validate.rules).duration.gt.seconds = 0 ];
+}

@@ -76,7 +76,8 @@ const GroupDetails: React.FC<WizardChild> = () => {
               key: "size.desired",
               validation: number()
                 .integer()
-                .min(ref("Min Size") as Reference<number>),
+                .min(ref("Min Size") as Reference<number>)
+                .max(ref("Max Size") as Reference<number>),
             },
           },
           { name: "Availability Zone", value: group.zones },

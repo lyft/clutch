@@ -1,8 +1,16 @@
 import * as React from "react";
+import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
+import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
-import type { TableProps, TableRowProps } from "../table";
-import { Table, TableRow } from "../table";
+import {
+  Table,
+  TableProps,
+  TableRow,
+  TableRowAction,
+  TableRowActions,
+  TableRowProps,
+} from "../table";
 
 export default {
   title: "Core/Table/Table",
@@ -37,6 +45,18 @@ const IncompleteTableRow = (props: TableRowProps) => {
   );
 };
 
+const ActionableTableRow = (props: TableRowProps) => (
+  <TableRow {...props}>
+    <div>Value 1</div>
+    <div>Value 2</div>
+    <TableRowActions>
+      <TableRowAction icon={<EmojiPeopleIcon />} onClick={action("row-action")}>
+        Take Action
+      </TableRowAction>
+    </TableRowActions>
+  </TableRow>
+);
+
 export const Primary = Template.bind({});
 Primary.args = {
   row: <PrimaryTableRow />,
@@ -56,4 +76,10 @@ MissingCellValue.args = {
 export const DefaultCellValue = Template.bind({});
 DefaultCellValue.args = {
   row: <IncompleteTableRow defaultCellValue="null" />,
+};
+
+export const ActionableRows = Template.bind({});
+ActionableRows.args = {
+  actionsColumn: true,
+  row: <ActionableTableRow />,
 };

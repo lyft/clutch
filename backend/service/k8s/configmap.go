@@ -50,7 +50,10 @@ func (s *svc) ListConfigMaps(ctx context.Context, clientset, cluster, namespace 
 		return nil, err
 	}
 
-	opts := ApplyListOptions(listOptions)
+	opts, err := ApplyListOptions(listOptions)
+	if err != nil {
+		return nil, err
+	}
 
 	configMapList, err := cs.CoreV1().ConfigMaps(cs.Namespace()).List(ctx, opts)
 	if err != nil {

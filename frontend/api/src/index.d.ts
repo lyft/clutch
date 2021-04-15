@@ -987,6 +987,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public callback(request: clutch.authn.v1.ICallbackRequest): Promise<clutch.authn.v1.CallbackResponse>;
+
+                /**
+                 * Calls CreateToken.
+                 * @param request CreateTokenRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and CreateTokenResponse
+                 */
+                public createToken(request: clutch.authn.v1.ICreateTokenRequest, callback: clutch.authn.v1.AuthnAPI.CreateTokenCallback): void;
+
+                /**
+                 * Calls CreateToken.
+                 * @param request CreateTokenRequest message or plain object
+                 * @returns Promise
+                 */
+                public createToken(request: clutch.authn.v1.ICreateTokenRequest): Promise<clutch.authn.v1.CreateTokenResponse>;
             }
 
             namespace AuthnAPI {
@@ -1004,6 +1018,13 @@ export namespace clutch {
                  * @param [response] CallbackResponse
                  */
                 type CallbackCallback = (error: (Error|null), response?: clutch.authn.v1.CallbackResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.authn.v1.AuthnAPI#createToken}.
+                 * @param error Error, if any
+                 * @param [response] CreateTokenResponse
+                 */
+                type CreateTokenCallback = (error: (Error|null), response?: clutch.authn.v1.CreateTokenResponse) => void;
             }
 
             /** Properties of a LoginRequest. */
@@ -1211,6 +1232,123 @@ export namespace clutch {
 
                 /**
                  * Converts this CallbackResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateTokenRequest. */
+            interface ICreateTokenRequest {
+
+                /** CreateTokenRequest subject */
+                subject?: (string|null);
+
+                /** CreateTokenRequest expiry */
+                expiry?: (google.protobuf.IDuration|null);
+
+                /** CreateTokenRequest tokenType */
+                tokenType?: (clutch.authn.v1.CreateTokenRequest.TokenType|null);
+            }
+
+            /** Represents a CreateTokenRequest. */
+            class CreateTokenRequest implements ICreateTokenRequest {
+
+                /**
+                 * Constructs a new CreateTokenRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.authn.v1.ICreateTokenRequest);
+
+                /** CreateTokenRequest subject. */
+                public subject: string;
+
+                /** CreateTokenRequest expiry. */
+                public expiry?: (google.protobuf.IDuration|null);
+
+                /** CreateTokenRequest tokenType. */
+                public tokenType: clutch.authn.v1.CreateTokenRequest.TokenType;
+
+                /**
+                 * Verifies a CreateTokenRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateTokenRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateTokenRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.authn.v1.CreateTokenRequest;
+
+                /**
+                 * Creates a plain object from a CreateTokenRequest message. Also converts values to other types if specified.
+                 * @param message CreateTokenRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.authn.v1.CreateTokenRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateTokenRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace CreateTokenRequest {
+
+                /** TokenType enum. */
+                enum TokenType {
+                    UNSPECIFIED = 0,
+                    SERVICE = 1
+                }
+            }
+
+            /** Properties of a CreateTokenResponse. */
+            interface ICreateTokenResponse {
+
+                /** CreateTokenResponse accessToken */
+                accessToken?: (string|null);
+            }
+
+            /** Represents a CreateTokenResponse. */
+            class CreateTokenResponse implements ICreateTokenResponse {
+
+                /**
+                 * Constructs a new CreateTokenResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.authn.v1.ICreateTokenResponse);
+
+                /** CreateTokenResponse accessToken. */
+                public accessToken: string;
+
+                /**
+                 * Verifies a CreateTokenResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateTokenResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateTokenResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.authn.v1.CreateTokenResponse;
+
+                /**
+                 * Creates a plain object from a CreateTokenResponse message. Also converts values to other types if specified.
+                 * @param message CreateTokenResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.authn.v1.CreateTokenResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateTokenResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -2904,6 +3042,9 @@ export namespace clutch {
 
                     /** EventRequest challenge */
                     challenge?: (string|null);
+
+                    /** EventRequest minuteRateLimited */
+                    minuteRateLimited?: (string|null);
                 }
 
                 /** Represents an EventRequest. */
@@ -2947,6 +3088,9 @@ export namespace clutch {
 
                     /** EventRequest challenge. */
                     public challenge: string;
+
+                    /** EventRequest minuteRateLimited. */
+                    public minuteRateLimited: string;
 
                     /**
                      * Verifies an EventRequest message.
@@ -4408,9 +4552,6 @@ export namespace clutch {
 
                     /** FaultTargeting downstreamCluster */
                     downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
-
-                    /** FaultTargeting redisCommands */
-                    redisCommands?: (string[]|null);
                 }
 
                 /** Represents a FaultTargeting. */
@@ -4427,9 +4568,6 @@ export namespace clutch {
 
                     /** FaultTargeting downstreamCluster. */
                     public downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
-
-                    /** FaultTargeting redisCommands. */
-                    public redisCommands: string[];
 
                     /**
                      * Verifies a FaultTargeting message.
@@ -6469,6 +6607,9 @@ export namespace clutch {
 
                             /** Config signingSecret */
                             signingSecret?: (string|null);
+
+                            /** Config verificationToken */
+                            verificationToken?: (string|null);
                         }
 
                         /** Represents a Config. */
@@ -6485,6 +6626,9 @@ export namespace clutch {
 
                             /** Config signingSecret. */
                             public signingSecret: string;
+
+                            /** Config verificationToken. */
+                            public verificationToken: string;
 
                             /**
                              * Verifies a Config message.
@@ -7200,6 +7344,9 @@ export namespace clutch {
 
                         /** Config oidc */
                         oidc?: (clutch.config.service.authn.v1.IOIDC|null);
+
+                        /** Config enableServiceTokenCreation */
+                        enableServiceTokenCreation?: (boolean|null);
                     }
 
                     /** Represents a Config. */
@@ -7216,6 +7363,9 @@ export namespace clutch {
 
                         /** Config oidc. */
                         public oidc?: (clutch.config.service.authn.v1.IOIDC|null);
+
+                        /** Config enableServiceTokenCreation. */
+                        public enableServiceTokenCreation: boolean;
 
                         /** Config type. */
                         public type?: "oidc";
@@ -7698,6 +7848,243 @@ export namespace clutch {
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
+            /** Namespace bot. */
+            namespace bot {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Bot enum. */
+                    enum Bot {
+                        UNSPECIFIED = 0,
+                        SLACK = 1
+                    }
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config botProvider */
+                        botProvider?: (clutch.config.service.bot.v1.Bot|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.bot.v1.IConfig);
+
+                        /** Config botProvider. */
+                        public botProvider: clutch.config.service.bot.v1.Bot;
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.bot.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.bot.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
+            /** Namespace chaos. */
+            namespace chaos {
+
+                /** Namespace experimentation. */
+                namespace experimentation {
+
+                    /** Namespace terminator. */
+                    namespace terminator {
+
+                        /** Namespace v1. */
+                        namespace v1 {
+
+                            /** Properties of a Config. */
+                            interface IConfig {
+
+                                /** Config perConfigTypeConfiguration */
+                                perConfigTypeConfiguration?: ({ [k: string]: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig }|null);
+
+                                /** Config outerLoopInterval */
+                                outerLoopInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config perExperimentCheckInterval */
+                                perExperimentCheckInterval?: (google.protobuf.IDuration|null);
+                            }
+
+                            /** Represents a Config. */
+                            class Config implements IConfig {
+
+                                /**
+                                 * Constructs a new Config.
+                                 * @param [properties] Properties to set
+                                 */
+                                constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.IConfig);
+
+                                /** Config perConfigTypeConfiguration. */
+                                public perConfigTypeConfiguration: { [k: string]: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig };
+
+                                /** Config outerLoopInterval. */
+                                public outerLoopInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config perExperimentCheckInterval. */
+                                public perExperimentCheckInterval?: (google.protobuf.IDuration|null);
+
+                                /**
+                                 * Verifies a Config message.
+                                 * @param message Plain object to verify
+                                 * @returns `null` if valid, otherwise the reason why it is not
+                                 */
+                                public static verify(message: { [k: string]: any }): (string|null);
+
+                                /**
+                                 * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                                 * @param object Plain object
+                                 * @returns Config
+                                 */
+                                public static fromObject(object: { [k: string]: any }): clutch.config.service.chaos.experimentation.terminator.v1.Config;
+
+                                /**
+                                 * Creates a plain object from a Config message. Also converts values to other types if specified.
+                                 * @param message Config
+                                 * @param [options] Conversion options
+                                 * @returns Plain object
+                                 */
+                                public static toObject(message: clutch.config.service.chaos.experimentation.terminator.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                /**
+                                 * Converts this Config to JSON.
+                                 * @returns JSON object
+                                 */
+                                public toJSON(): { [k: string]: any };
+                            }
+
+                            namespace Config {
+
+                                /** Properties of a PerConfigTypeConfig. */
+                                interface IPerConfigTypeConfig {
+
+                                    /** PerConfigTypeConfig terminationCriteria */
+                                    terminationCriteria?: (google.protobuf.IAny[]|null);
+                                }
+
+                                /** Represents a PerConfigTypeConfig. */
+                                class PerConfigTypeConfig implements IPerConfigTypeConfig {
+
+                                    /**
+                                     * Constructs a new PerConfigTypeConfig.
+                                     * @param [properties] Properties to set
+                                     */
+                                    constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig);
+
+                                    /** PerConfigTypeConfig terminationCriteria. */
+                                    public terminationCriteria: google.protobuf.IAny[];
+
+                                    /**
+                                     * Verifies a PerConfigTypeConfig message.
+                                     * @param message Plain object to verify
+                                     * @returns `null` if valid, otherwise the reason why it is not
+                                     */
+                                    public static verify(message: { [k: string]: any }): (string|null);
+
+                                    /**
+                                     * Creates a PerConfigTypeConfig message from a plain object. Also converts values to their respective internal types.
+                                     * @param object Plain object
+                                     * @returns PerConfigTypeConfig
+                                     */
+                                    public static fromObject(object: { [k: string]: any }): clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig;
+
+                                    /**
+                                     * Creates a plain object from a PerConfigTypeConfig message. Also converts values to other types if specified.
+                                     * @param message PerConfigTypeConfig
+                                     * @param [options] Conversion options
+                                     * @returns Plain object
+                                     */
+                                    public static toObject(message: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                    /**
+                                     * Converts this PerConfigTypeConfig to JSON.
+                                     * @returns JSON object
+                                     */
+                                    public toJSON(): { [k: string]: any };
+                                }
+                            }
+
+                            /** Properties of a MaxTimeTerminationCriterion. */
+                            interface IMaxTimeTerminationCriterion {
+
+                                /** MaxTimeTerminationCriterion maxDuration */
+                                maxDuration?: (google.protobuf.IDuration|null);
+                            }
+
+                            /** Represents a MaxTimeTerminationCriterion. */
+                            class MaxTimeTerminationCriterion implements IMaxTimeTerminationCriterion {
+
+                                /**
+                                 * Constructs a new MaxTimeTerminationCriterion.
+                                 * @param [properties] Properties to set
+                                 */
+                                constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.IMaxTimeTerminationCriterion);
+
+                                /** MaxTimeTerminationCriterion maxDuration. */
+                                public maxDuration?: (google.protobuf.IDuration|null);
+
+                                /**
+                                 * Verifies a MaxTimeTerminationCriterion message.
+                                 * @param message Plain object to verify
+                                 * @returns `null` if valid, otherwise the reason why it is not
+                                 */
+                                public static verify(message: { [k: string]: any }): (string|null);
+
+                                /**
+                                 * Creates a MaxTimeTerminationCriterion message from a plain object. Also converts values to their respective internal types.
+                                 * @param object Plain object
+                                 * @returns MaxTimeTerminationCriterion
+                                 */
+                                public static fromObject(object: { [k: string]: any }): clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion;
+
+                                /**
+                                 * Creates a plain object from a MaxTimeTerminationCriterion message. Also converts values to other types if specified.
+                                 * @param message MaxTimeTerminationCriterion
+                                 * @param [options] Conversion options
+                                 * @returns Plain object
+                                 */
+                                public static toObject(message: clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                /**
+                                 * Converts this MaxTimeTerminationCriterion to JSON.
+                                 * @returns JSON object
+                                 */
+                                public toJSON(): { [k: string]: any };
+                            }
+                        }
                     }
                 }
             }
@@ -11178,6 +11565,9 @@ export namespace clutch {
 
                 /** Pod initContainers */
                 initContainers?: (clutch.k8s.v1.IContainer[]|null);
+
+                /** Pod status */
+                status?: (string|null);
             }
 
             /** Represents a Pod. */
@@ -11228,6 +11618,9 @@ export namespace clutch {
                 /** Pod initContainers. */
                 public initContainers: clutch.k8s.v1.IContainer[];
 
+                /** Pod status. */
+                public status: string;
+
                 /**
                  * Verifies a Pod message.
                  * @param message Plain object to verify
@@ -11275,6 +11668,9 @@ export namespace clutch {
 
                 /** ListOptions labels */
                 labels?: ({ [k: string]: string }|null);
+
+                /** ListOptions supplementalSelectorString */
+                supplementalSelectorString?: (string|null);
             }
 
             /** Represents a ListOptions. */
@@ -11288,6 +11684,9 @@ export namespace clutch {
 
                 /** ListOptions labels. */
                 public labels: { [k: string]: string };
+
+                /** ListOptions supplementalSelectorString. */
+                public supplementalSelectorString: string;
 
                 /**
                  * Verifies a ListOptions message.

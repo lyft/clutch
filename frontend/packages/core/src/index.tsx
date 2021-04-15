@@ -16,6 +16,7 @@ import {
 } from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
+import { Card, CardContent } from "./card";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
@@ -29,7 +30,16 @@ import Paper from "./paper";
 import Resolver from "./Resolver";
 import { Step, Stepper } from "./stepper";
 import { Tab, Tabs } from "./tab";
-import { AccordionRow, MetadataTable, Table, TableCell, TableRow, TreeTable } from "./Table";
+import {
+  AccordionRow,
+  MetadataTable,
+  Table,
+  TableCell,
+  TableRow,
+  TableRowAction,
+  TableRowActions,
+  TreeTable,
+} from "./Table";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
@@ -45,13 +55,15 @@ export {
   AccordionRow,
   Alert,
   AvatarIcon,
-  ClutchApp,
   Button,
   ButtonGroup,
+  Card,
+  CardContent,
   Checkbox,
   CheckboxPanel,
   client,
   ClipboardButton,
+  ClutchApp,
   Confirmation,
   Dialog,
   DialogActions,
@@ -78,10 +90,12 @@ export {
   Stepper,
   Switch,
   Tab,
-  Tabs,
   Table,
   TableCell,
   TableRow,
+  TableRowAction,
+  TableRowActions,
+  Tabs,
   TextField,
   TreeTable,
   useWizardContext,

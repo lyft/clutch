@@ -11,12 +11,56 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
+
+const testConfigType = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"
+
+func TestConfigLoad(t *testing.T) {
+	builtInCriterionConfig := &terminatorv1.MaxTimeTerminationCriterion{
+		MaxDuration: durationpb.New(time.Hour),
+	}
+	builtInCriterionAnyConfig, err := anypb.New(builtInCriterionConfig)
+	assert.NoError(t, err)
+
+	cfg := &terminatorv1.Config{
+		PerConfigTypeConfiguration: map[string]*terminatorv1.Config_PerConfigTypeConfig{testConfigType: {TerminationCriteria: []*anypb.Any{builtInCriterionAnyConfig}}},
+		OuterLoopInterval:          durationpb.New(time.Second),
+		PerExperimentCheckInterval: durationpb.New(time.Second),
+	}
+
+	any, err := anypb.New(cfg)
+	assert.NoError(t, err)
+
+	service.Registry[experimentstore.Name] = &experimentstoremock.MockStorer{}
+
+	// Happy path testing.
+	m, err := NewMonitor(any, zap.NewNop(), tally.NoopScope)
+	assert.NoError(t, err)
+	assert.Len(t, m.terminationCriteriaByTypeUrl, 1)
+	assert.Len(t, m.terminationCriteriaByTypeUrl[testConfigType], 1)
+
+	// If configured with a criteria we don't have registered we should error out.
+	otherProto := &wrapperspb.StringValue{}
+	otherProtoAny, err := anypb.New(otherProto)
+	assert.NoError(t, err)
+
+	cfg.PerConfigTypeConfiguration[testConfigType].TerminationCriteria = append(cfg.PerConfigTypeConfiguration[testConfigType].TerminationCriteria, otherProtoAny)
+	any, err = anypb.New(cfg)
+	assert.NoError(t, err)
+
+	m, err = NewMonitor(any, zap.NewNop(), tally.NoopScope)
+	assert.Nil(t, m)
+	assert.EqualError(t, err, "terminator module configured with unknown criterion 'type.googleapis.com/google.protobuf.StringValue'")
+}
 
 func TestTerminator(t *testing.T) {
 	l, err := zap.NewDevelopment()
@@ -25,22 +69,21 @@ func TestTerminator(t *testing.T) {
 	testScope := tally.NewTestScope("", map[string]string{})
 
 	store := &experimentstoremock.SimpleStorer{}
-	criteria := &testCriteria{}
-	monitor := monitor{
-		store:                      store,
-		enabledConfigTypes:         []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
-		criterias:                  []TerminationCriteria{criteria},
-		outerLoopInterval:          time.Millisecond,
-		perExperimentCheckInterval: time.Millisecond,
-		log:                        l.Sugar(),
+	criterion := &testCriterion{}
+	monitor := Monitor{
+		store:                        store,
+		terminationCriteriaByTypeUrl: map[string][]TerminationCriterion{testConfigType: {criterion}},
+		outerLoopInterval:            time.Millisecond,
+		perExperimentCheckInterval:   time.Millisecond,
+		log:                          l.Sugar(),
 		activeMonitoringRoutines: trackingGauge{
 			gauge: testScope.Gauge("active_routines"),
 			value: 0,
 		},
-		criteriaEvaluationSuccess: testScope.Counter("criteria_success"),
-		criteriaEvaluationFailure: testScope.Counter("criteria_failure"),
-		terminationCount:          testScope.Counter("terminations"),
-		marshallingErrors:         testScope.Counter("unpack_error"),
+		criterionEvaluationSuccessCount: testScope.Counter("criterion_success"),
+		criterionEvaluationFailureCount: testScope.Counter("criterion_failure"),
+		terminationCount:                testScope.Counter("terminations"),
+		marshallingErrorCount:           testScope.Counter("unpack_error"),
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
@@ -50,17 +93,17 @@ func TestTerminator(t *testing.T) {
 
 	awaitGaugeValue(ctx, t, testScope, "active_routines", 1)
 
-	es, err := store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
+	es, err := store.GetExperiments(ctx, testConfigType, experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
 	assert.NoError(t, err)
 	assert.Len(t, es, 1)
 
-	criteria.update(true)
+	criterion.update(true)
 
 	// Ensure that we tear down the monitoring goroutines once we're done with an experiment.
 	awaitGaugeValue(ctx, t, testScope, "active_routines", 0)
 	assert.Equal(t, int64(1), testScope.Snapshot().Counters()["terminations+"].Value())
 
-	es, err = store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
+	es, err = store.GetExperiments(ctx, testConfigType, experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
 	assert.NoError(t, err)
 	assert.Len(t, es, 0)
 }
@@ -107,13 +150,13 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	return experiment
 }
 
-type testCriteria struct {
+type testCriterion struct {
 	evaluation bool
 
 	sync.Mutex
 }
 
-func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
+func (t *testCriterion) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
@@ -124,7 +167,7 @@ func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment,
 	return "", nil
 }
 
-func (t *testCriteria) update(evaluation bool) {
+func (t *testCriterion) update(evaluation bool) {
 	t.Lock()
 	defer t.Unlock()
 

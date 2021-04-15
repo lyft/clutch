@@ -309,3 +309,174 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CallbackResponseValidationError{}
+
+// Validate checks the field values on CreateTokenRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateTokenRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetSubject()) < 1 {
+		return CreateTokenRequestValidationError{
+			field:  "Subject",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if v, ok := interface{}(m.GetExpiry()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateTokenRequestValidationError{
+				field:  "Expiry",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if _, ok := _CreateTokenRequest_TokenType_NotInLookup[m.GetTokenType()]; ok {
+		return CreateTokenRequestValidationError{
+			field:  "TokenType",
+			reason: "value must not be in list [0]",
+		}
+	}
+
+	if _, ok := CreateTokenRequest_TokenType_name[int32(m.GetTokenType())]; !ok {
+		return CreateTokenRequestValidationError{
+			field:  "TokenType",
+			reason: "value must be one of the defined enum values",
+		}
+	}
+
+	return nil
+}
+
+// CreateTokenRequestValidationError is the validation error returned by
+// CreateTokenRequest.Validate if the designated constraints aren't met.
+type CreateTokenRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateTokenRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateTokenRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateTokenRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateTokenRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateTokenRequestValidationError) ErrorName() string {
+	return "CreateTokenRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateTokenRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateTokenRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateTokenRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateTokenRequestValidationError{}
+
+var _CreateTokenRequest_TokenType_NotInLookup = map[CreateTokenRequest_TokenType]struct{}{
+	0: {},
+}
+
+// Validate checks the field values on CreateTokenResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateTokenResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for AccessToken
+
+	return nil
+}
+
+// CreateTokenResponseValidationError is the validation error returned by
+// CreateTokenResponse.Validate if the designated constraints aren't met.
+type CreateTokenResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateTokenResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateTokenResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateTokenResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateTokenResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateTokenResponseValidationError) ErrorName() string {
+	return "CreateTokenResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateTokenResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateTokenResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateTokenResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateTokenResponseValidationError{}

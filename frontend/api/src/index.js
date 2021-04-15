@@ -2327,6 +2327,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.authn.v1.AuthnAPI#createToken}.
+                 * @memberof clutch.authn.v1.AuthnAPI
+                 * @typedef CreateTokenCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.authn.v1.CreateTokenResponse} [response] CreateTokenResponse
+                 */
+
+                /**
+                 * Calls CreateToken.
+                 * @function createToken
+                 * @memberof clutch.authn.v1.AuthnAPI
+                 * @instance
+                 * @param {clutch.authn.v1.ICreateTokenRequest} request CreateTokenRequest message or plain object
+                 * @param {clutch.authn.v1.AuthnAPI.CreateTokenCallback} callback Node-style callback called with the error, if any, and CreateTokenResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(AuthnAPI.prototype.createToken = function createToken(request, callback) {
+                    return this.rpcCall(createToken, $root.clutch.authn.v1.CreateTokenRequest, $root.clutch.authn.v1.CreateTokenResponse, request, callback);
+                }, "name", { value: "CreateToken" });
+
+                /**
+                 * Calls CreateToken.
+                 * @function createToken
+                 * @memberof clutch.authn.v1.AuthnAPI
+                 * @instance
+                 * @param {clutch.authn.v1.ICreateTokenRequest} request CreateTokenRequest message or plain object
+                 * @returns {Promise<clutch.authn.v1.CreateTokenResponse>} Promise
+                 * @variation 2
+                 */
+
                 return AuthnAPI;
             })();
 
@@ -2780,6 +2813,273 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return CallbackResponse;
+            })();
+
+            v1.CreateTokenRequest = (function() {
+
+                /**
+                 * Properties of a CreateTokenRequest.
+                 * @memberof clutch.authn.v1
+                 * @interface ICreateTokenRequest
+                 * @property {string|null} [subject] CreateTokenRequest subject
+                 * @property {google.protobuf.IDuration|null} [expiry] CreateTokenRequest expiry
+                 * @property {clutch.authn.v1.CreateTokenRequest.TokenType|null} [tokenType] CreateTokenRequest tokenType
+                 */
+
+                /**
+                 * Constructs a new CreateTokenRequest.
+                 * @memberof clutch.authn.v1
+                 * @classdesc Represents a CreateTokenRequest.
+                 * @implements ICreateTokenRequest
+                 * @constructor
+                 * @param {clutch.authn.v1.ICreateTokenRequest=} [properties] Properties to set
+                 */
+                function CreateTokenRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateTokenRequest subject.
+                 * @member {string} subject
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @instance
+                 */
+                CreateTokenRequest.prototype.subject = "";
+
+                /**
+                 * CreateTokenRequest expiry.
+                 * @member {google.protobuf.IDuration|null|undefined} expiry
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @instance
+                 */
+                CreateTokenRequest.prototype.expiry = null;
+
+                /**
+                 * CreateTokenRequest tokenType.
+                 * @member {clutch.authn.v1.CreateTokenRequest.TokenType} tokenType
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @instance
+                 */
+                CreateTokenRequest.prototype.tokenType = 0;
+
+                /**
+                 * Verifies a CreateTokenRequest message.
+                 * @function verify
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateTokenRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.subject != null && message.hasOwnProperty("subject"))
+                        if (!$util.isString(message.subject))
+                            return "subject: string expected";
+                    if (message.expiry != null && message.hasOwnProperty("expiry")) {
+                        let error = $root.google.protobuf.Duration.verify(message.expiry);
+                        if (error)
+                            return "expiry." + error;
+                    }
+                    if (message.tokenType != null && message.hasOwnProperty("tokenType"))
+                        switch (message.tokenType) {
+                        default:
+                            return "tokenType: enum value expected";
+                        case 0:
+                        case 1:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateTokenRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.authn.v1.CreateTokenRequest} CreateTokenRequest
+                 */
+                CreateTokenRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.authn.v1.CreateTokenRequest)
+                        return object;
+                    let message = new $root.clutch.authn.v1.CreateTokenRequest();
+                    if (object.subject != null)
+                        message.subject = String(object.subject);
+                    if (object.expiry != null) {
+                        if (typeof object.expiry !== "object")
+                            throw TypeError(".clutch.authn.v1.CreateTokenRequest.expiry: object expected");
+                        message.expiry = $root.google.protobuf.Duration.fromObject(object.expiry);
+                    }
+                    switch (object.tokenType) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.tokenType = 0;
+                        break;
+                    case "SERVICE":
+                    case 1:
+                        message.tokenType = 1;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateTokenRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @static
+                 * @param {clutch.authn.v1.CreateTokenRequest} message CreateTokenRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateTokenRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.subject = "";
+                        object.expiry = null;
+                        object.tokenType = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.subject != null && message.hasOwnProperty("subject"))
+                        object.subject = message.subject;
+                    if (message.expiry != null && message.hasOwnProperty("expiry"))
+                        object.expiry = $root.google.protobuf.Duration.toObject(message.expiry, options);
+                    if (message.tokenType != null && message.hasOwnProperty("tokenType"))
+                        object.tokenType = options.enums === String ? $root.clutch.authn.v1.CreateTokenRequest.TokenType[message.tokenType] : message.tokenType;
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateTokenRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateTokenRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * TokenType enum.
+                 * @name clutch.authn.v1.CreateTokenRequest.TokenType
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} SERVICE=1 SERVICE value
+                 */
+                CreateTokenRequest.TokenType = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "SERVICE"] = 1;
+                    return values;
+                })();
+
+                return CreateTokenRequest;
+            })();
+
+            v1.CreateTokenResponse = (function() {
+
+                /**
+                 * Properties of a CreateTokenResponse.
+                 * @memberof clutch.authn.v1
+                 * @interface ICreateTokenResponse
+                 * @property {string|null} [accessToken] CreateTokenResponse accessToken
+                 */
+
+                /**
+                 * Constructs a new CreateTokenResponse.
+                 * @memberof clutch.authn.v1
+                 * @classdesc Represents a CreateTokenResponse.
+                 * @implements ICreateTokenResponse
+                 * @constructor
+                 * @param {clutch.authn.v1.ICreateTokenResponse=} [properties] Properties to set
+                 */
+                function CreateTokenResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateTokenResponse accessToken.
+                 * @member {string} accessToken
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @instance
+                 */
+                CreateTokenResponse.prototype.accessToken = "";
+
+                /**
+                 * Verifies a CreateTokenResponse message.
+                 * @function verify
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateTokenResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        if (!$util.isString(message.accessToken))
+                            return "accessToken: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateTokenResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.authn.v1.CreateTokenResponse} CreateTokenResponse
+                 */
+                CreateTokenResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.authn.v1.CreateTokenResponse)
+                        return object;
+                    let message = new $root.clutch.authn.v1.CreateTokenResponse();
+                    if (object.accessToken != null)
+                        message.accessToken = String(object.accessToken);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateTokenResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @static
+                 * @param {clutch.authn.v1.CreateTokenResponse} message CreateTokenResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateTokenResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.accessToken = "";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        object.accessToken = message.accessToken;
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateTokenResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateTokenResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateTokenResponse;
             })();
 
             return v1;
@@ -6691,6 +6991,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [eventContext] EventRequest eventContext
                      * @property {google.protobuf.IValue|null} [authorizations] EventRequest authorizations
                      * @property {string|null} [challenge] EventRequest challenge
+                     * @property {string|null} [minuteRateLimited] EventRequest minuteRateLimited
                      */
 
                     /**
@@ -6797,6 +7098,14 @@ export const clutch = $root.clutch = (() => {
                     EventRequest.prototype.challenge = "";
 
                     /**
+                     * EventRequest minuteRateLimited.
+                     * @member {string} minuteRateLimited
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.minuteRateLimited = "";
+
+                    /**
                      * Verifies an EventRequest message.
                      * @function verify
                      * @memberof clutch.bot.slackbot.v1.EventRequest
@@ -6844,6 +7153,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.challenge != null && message.hasOwnProperty("challenge"))
                             if (!$util.isString(message.challenge))
                                 return "challenge: string expected";
+                        if (message.minuteRateLimited != null && message.hasOwnProperty("minuteRateLimited"))
+                            if (!$util.isString(message.minuteRateLimited))
+                                return "minuteRateLimited: string expected";
                         return null;
                     };
 
@@ -6894,6 +7206,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.challenge != null)
                             message.challenge = String(object.challenge);
+                        if (object.minuteRateLimited != null)
+                            message.minuteRateLimited = String(object.minuteRateLimited);
                         return message;
                     };
 
@@ -6926,6 +7240,7 @@ export const clutch = $root.clutch = (() => {
                             object.eventContext = "";
                             object.authorizations = null;
                             object.challenge = "";
+                            object.minuteRateLimited = "";
                         }
                         if (message.token != null && message.hasOwnProperty("token"))
                             object.token = message.token;
@@ -6952,6 +7267,8 @@ export const clutch = $root.clutch = (() => {
                             object.authorizations = $root.google.protobuf.Value.toObject(message.authorizations, options);
                         if (message.challenge != null && message.hasOwnProperty("challenge"))
                             object.challenge = message.challenge;
+                        if (message.minuteRateLimited != null && message.hasOwnProperty("minuteRateLimited"))
+                            object.minuteRateLimited = message.minuteRateLimited;
                         return object;
                     };
 
@@ -10270,7 +10587,6 @@ export const clutch = $root.clutch = (() => {
                      * @interface IFaultTargeting
                      * @property {clutch.chaos.redisexperimentation.v1.ISingleCluster|null} [upstreamCluster] FaultTargeting upstreamCluster
                      * @property {clutch.chaos.redisexperimentation.v1.ISingleCluster|null} [downstreamCluster] FaultTargeting downstreamCluster
-                     * @property {Array.<string>|null} [redisCommands] FaultTargeting redisCommands
                      */
 
                     /**
@@ -10282,7 +10598,6 @@ export const clutch = $root.clutch = (() => {
                      * @param {clutch.chaos.redisexperimentation.v1.IFaultTargeting=} [properties] Properties to set
                      */
                     function FaultTargeting(properties) {
-                        this.redisCommands = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -10306,14 +10621,6 @@ export const clutch = $root.clutch = (() => {
                     FaultTargeting.prototype.downstreamCluster = null;
 
                     /**
-                     * FaultTargeting redisCommands.
-                     * @member {Array.<string>} redisCommands
-                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
-                     * @instance
-                     */
-                    FaultTargeting.prototype.redisCommands = $util.emptyArray;
-
-                    /**
                      * Verifies a FaultTargeting message.
                      * @function verify
                      * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
@@ -10333,13 +10640,6 @@ export const clutch = $root.clutch = (() => {
                             let error = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.verify(message.downstreamCluster);
                             if (error)
                                 return "downstreamCluster." + error;
-                        }
-                        if (message.redisCommands != null && message.hasOwnProperty("redisCommands")) {
-                            if (!Array.isArray(message.redisCommands))
-                                return "redisCommands: array expected";
-                            for (let i = 0; i < message.redisCommands.length; ++i)
-                                if (!$util.isString(message.redisCommands[i]))
-                                    return "redisCommands: string[] expected";
                         }
                         return null;
                     };
@@ -10366,13 +10666,6 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultTargeting.downstreamCluster: object expected");
                             message.downstreamCluster = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.fromObject(object.downstreamCluster);
                         }
-                        if (object.redisCommands) {
-                            if (!Array.isArray(object.redisCommands))
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultTargeting.redisCommands: array expected");
-                            message.redisCommands = [];
-                            for (let i = 0; i < object.redisCommands.length; ++i)
-                                message.redisCommands[i] = String(object.redisCommands[i]);
-                        }
                         return message;
                     };
 
@@ -10389,8 +10682,6 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults)
-                            object.redisCommands = [];
                         if (options.defaults) {
                             object.upstreamCluster = null;
                             object.downstreamCluster = null;
@@ -10399,11 +10690,6 @@ export const clutch = $root.clutch = (() => {
                             object.upstreamCluster = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.toObject(message.upstreamCluster, options);
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster"))
                             object.downstreamCluster = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.toObject(message.downstreamCluster, options);
-                        if (message.redisCommands && message.redisCommands.length) {
-                            object.redisCommands = [];
-                            for (let j = 0; j < message.redisCommands.length; ++j)
-                                object.redisCommands[j] = message.redisCommands[j];
-                        }
                         return object;
                     };
 
@@ -15280,6 +15566,7 @@ export const clutch = $root.clutch = (() => {
                              * @interface IConfig
                              * @property {string|null} [botToken] Config botToken
                              * @property {string|null} [signingSecret] Config signingSecret
+                             * @property {string|null} [verificationToken] Config verificationToken
                              */
 
                             /**
@@ -15314,6 +15601,14 @@ export const clutch = $root.clutch = (() => {
                             Config.prototype.signingSecret = "";
 
                             /**
+                             * Config verificationToken.
+                             * @member {string} verificationToken
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.verificationToken = "";
+
+                            /**
                              * Verifies a Config message.
                              * @function verify
                              * @memberof clutch.config.module.bot.slackbot.v1.Config
@@ -15330,6 +15625,9 @@ export const clutch = $root.clutch = (() => {
                                 if (message.signingSecret != null && message.hasOwnProperty("signingSecret"))
                                     if (!$util.isString(message.signingSecret))
                                         return "signingSecret: string expected";
+                                if (message.verificationToken != null && message.hasOwnProperty("verificationToken"))
+                                    if (!$util.isString(message.verificationToken))
+                                        return "verificationToken: string expected";
                                 return null;
                             };
 
@@ -15349,6 +15647,8 @@ export const clutch = $root.clutch = (() => {
                                     message.botToken = String(object.botToken);
                                 if (object.signingSecret != null)
                                     message.signingSecret = String(object.signingSecret);
+                                if (object.verificationToken != null)
+                                    message.verificationToken = String(object.verificationToken);
                                 return message;
                             };
 
@@ -15368,11 +15668,14 @@ export const clutch = $root.clutch = (() => {
                                 if (options.defaults) {
                                     object.botToken = "";
                                     object.signingSecret = "";
+                                    object.verificationToken = "";
                                 }
                                 if (message.botToken != null && message.hasOwnProperty("botToken"))
                                     object.botToken = message.botToken;
                                 if (message.signingSecret != null && message.hasOwnProperty("signingSecret"))
                                     object.signingSecret = message.signingSecret;
+                                if (message.verificationToken != null && message.hasOwnProperty("verificationToken"))
+                                    object.verificationToken = message.verificationToken;
                                 return object;
                             };
 
@@ -17159,6 +17462,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface IConfig
                          * @property {string|null} [sessionSecret] Config sessionSecret
                          * @property {clutch.config.service.authn.v1.IOIDC|null} [oidc] Config oidc
+                         * @property {boolean|null} [enableServiceTokenCreation] Config enableServiceTokenCreation
                          */
 
                         /**
@@ -17191,6 +17495,14 @@ export const clutch = $root.clutch = (() => {
                          * @instance
                          */
                         Config.prototype.oidc = null;
+
+                        /**
+                         * Config enableServiceTokenCreation.
+                         * @member {boolean} enableServiceTokenCreation
+                         * @memberof clutch.config.service.authn.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.enableServiceTokenCreation = false;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -17229,6 +17541,9 @@ export const clutch = $root.clutch = (() => {
                                         return "oidc." + error;
                                 }
                             }
+                            if (message.enableServiceTokenCreation != null && message.hasOwnProperty("enableServiceTokenCreation"))
+                                if (typeof message.enableServiceTokenCreation !== "boolean")
+                                    return "enableServiceTokenCreation: boolean expected";
                             return null;
                         };
 
@@ -17251,6 +17566,8 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.authn.v1.Config.oidc: object expected");
                                 message.oidc = $root.clutch.config.service.authn.v1.OIDC.fromObject(object.oidc);
                             }
+                            if (object.enableServiceTokenCreation != null)
+                                message.enableServiceTokenCreation = Boolean(object.enableServiceTokenCreation);
                             return message;
                         };
 
@@ -17267,8 +17584,10 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults)
+                            if (options.defaults) {
                                 object.sessionSecret = "";
+                                object.enableServiceTokenCreation = false;
+                            }
                             if (message.sessionSecret != null && message.hasOwnProperty("sessionSecret"))
                                 object.sessionSecret = message.sessionSecret;
                             if (message.oidc != null && message.hasOwnProperty("oidc")) {
@@ -17276,6 +17595,8 @@ export const clutch = $root.clutch = (() => {
                                 if (options.oneofs)
                                     object.type = "oidc";
                             }
+                            if (message.enableServiceTokenCreation != null && message.hasOwnProperty("enableServiceTokenCreation"))
+                                object.enableServiceTokenCreation = message.enableServiceTokenCreation;
                             return object;
                         };
 
@@ -18471,6 +18792,594 @@ export const clutch = $root.clutch = (() => {
                 })();
 
                 return aws;
+            })();
+
+            service.bot = (function() {
+
+                /**
+                 * Namespace bot.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const bot = {};
+
+                bot.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.bot
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    /**
+                     * Bot enum.
+                     * @name clutch.config.service.bot.v1.Bot
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} SLACK=1 SLACK value
+                     */
+                    v1.Bot = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "SLACK"] = 1;
+                        return values;
+                    })();
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.bot.v1
+                         * @interface IConfig
+                         * @property {clutch.config.service.bot.v1.Bot|null} [botProvider] Config botProvider
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.bot.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.bot.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config botProvider.
+                         * @member {clutch.config.service.bot.v1.Bot} botProvider
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.botProvider = 0;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.botProvider != null && message.hasOwnProperty("botProvider"))
+                                switch (message.botProvider) {
+                                default:
+                                    return "botProvider: enum value expected";
+                                case 0:
+                                case 1:
+                                    break;
+                                }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.bot.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.bot.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.bot.v1.Config();
+                            switch (object.botProvider) {
+                            case "UNSPECIFIED":
+                            case 0:
+                                message.botProvider = 0;
+                                break;
+                            case "SLACK":
+                            case 1:
+                                message.botProvider = 1;
+                                break;
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {clutch.config.service.bot.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.botProvider = options.enums === String ? "UNSPECIFIED" : 0;
+                            if (message.botProvider != null && message.hasOwnProperty("botProvider"))
+                                object.botProvider = options.enums === String ? $root.clutch.config.service.bot.v1.Bot[message.botProvider] : message.botProvider;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return bot;
+            })();
+
+            service.chaos = (function() {
+
+                /**
+                 * Namespace chaos.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const chaos = {};
+
+                chaos.experimentation = (function() {
+
+                    /**
+                     * Namespace experimentation.
+                     * @memberof clutch.config.service.chaos
+                     * @namespace
+                     */
+                    const experimentation = {};
+
+                    experimentation.terminator = (function() {
+
+                        /**
+                         * Namespace terminator.
+                         * @memberof clutch.config.service.chaos.experimentation
+                         * @namespace
+                         */
+                        const terminator = {};
+
+                        terminator.v1 = (function() {
+
+                            /**
+                             * Namespace v1.
+                             * @memberof clutch.config.service.chaos.experimentation.terminator
+                             * @namespace
+                             */
+                            const v1 = {};
+
+                            v1.Config = (function() {
+
+                                /**
+                                 * Properties of a Config.
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1
+                                 * @interface IConfig
+                                 * @property {Object.<string,clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig>|null} [perConfigTypeConfiguration] Config perConfigTypeConfiguration
+                                 * @property {google.protobuf.IDuration|null} [outerLoopInterval] Config outerLoopInterval
+                                 * @property {google.protobuf.IDuration|null} [perExperimentCheckInterval] Config perExperimentCheckInterval
+                                 */
+
+                                /**
+                                 * Constructs a new Config.
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1
+                                 * @classdesc Represents a Config.
+                                 * @implements IConfig
+                                 * @constructor
+                                 * @param {clutch.config.service.chaos.experimentation.terminator.v1.IConfig=} [properties] Properties to set
+                                 */
+                                function Config(properties) {
+                                    this.perConfigTypeConfiguration = {};
+                                    if (properties)
+                                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                            if (properties[keys[i]] != null)
+                                                this[keys[i]] = properties[keys[i]];
+                                }
+
+                                /**
+                                 * Config perConfigTypeConfiguration.
+                                 * @member {Object.<string,clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig>} perConfigTypeConfiguration
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.perConfigTypeConfiguration = $util.emptyObject;
+
+                                /**
+                                 * Config outerLoopInterval.
+                                 * @member {google.protobuf.IDuration|null|undefined} outerLoopInterval
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.outerLoopInterval = null;
+
+                                /**
+                                 * Config perExperimentCheckInterval.
+                                 * @member {google.protobuf.IDuration|null|undefined} perExperimentCheckInterval
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.perExperimentCheckInterval = null;
+
+                                /**
+                                 * Verifies a Config message.
+                                 * @function verify
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                 * @static
+                                 * @param {Object.<string,*>} message Plain object to verify
+                                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                 */
+                                Config.verify = function verify(message) {
+                                    if (typeof message !== "object" || message === null)
+                                        return "object expected";
+                                    if (message.perConfigTypeConfiguration != null && message.hasOwnProperty("perConfigTypeConfiguration")) {
+                                        if (!$util.isObject(message.perConfigTypeConfiguration))
+                                            return "perConfigTypeConfiguration: object expected";
+                                        let key = Object.keys(message.perConfigTypeConfiguration);
+                                        for (let i = 0; i < key.length; ++i) {
+                                            let error = $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.verify(message.perConfigTypeConfiguration[key[i]]);
+                                            if (error)
+                                                return "perConfigTypeConfiguration." + error;
+                                        }
+                                    }
+                                    if (message.outerLoopInterval != null && message.hasOwnProperty("outerLoopInterval")) {
+                                        let error = $root.google.protobuf.Duration.verify(message.outerLoopInterval);
+                                        if (error)
+                                            return "outerLoopInterval." + error;
+                                    }
+                                    if (message.perExperimentCheckInterval != null && message.hasOwnProperty("perExperimentCheckInterval")) {
+                                        let error = $root.google.protobuf.Duration.verify(message.perExperimentCheckInterval);
+                                        if (error)
+                                            return "perExperimentCheckInterval." + error;
+                                    }
+                                    return null;
+                                };
+
+                                /**
+                                 * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                                 * @function fromObject
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                 * @static
+                                 * @param {Object.<string,*>} object Plain object
+                                 * @returns {clutch.config.service.chaos.experimentation.terminator.v1.Config} Config
+                                 */
+                                Config.fromObject = function fromObject(object) {
+                                    if (object instanceof $root.clutch.config.service.chaos.experimentation.terminator.v1.Config)
+                                        return object;
+                                    let message = new $root.clutch.config.service.chaos.experimentation.terminator.v1.Config();
+                                    if (object.perConfigTypeConfiguration) {
+                                        if (typeof object.perConfigTypeConfiguration !== "object")
+                                            throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.perConfigTypeConfiguration: object expected");
+                                        message.perConfigTypeConfiguration = {};
+                                        for (let keys = Object.keys(object.perConfigTypeConfiguration), i = 0; i < keys.length; ++i) {
+                                            if (typeof object.perConfigTypeConfiguration[keys[i]] !== "object")
+                                                throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.perConfigTypeConfiguration: object expected");
+                                            message.perConfigTypeConfiguration[keys[i]] = $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.fromObject(object.perConfigTypeConfiguration[keys[i]]);
+                                        }
+                                    }
+                                    if (object.outerLoopInterval != null) {
+                                        if (typeof object.outerLoopInterval !== "object")
+                                            throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.outerLoopInterval: object expected");
+                                        message.outerLoopInterval = $root.google.protobuf.Duration.fromObject(object.outerLoopInterval);
+                                    }
+                                    if (object.perExperimentCheckInterval != null) {
+                                        if (typeof object.perExperimentCheckInterval !== "object")
+                                            throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.perExperimentCheckInterval: object expected");
+                                        message.perExperimentCheckInterval = $root.google.protobuf.Duration.fromObject(object.perExperimentCheckInterval);
+                                    }
+                                    return message;
+                                };
+
+                                /**
+                                 * Creates a plain object from a Config message. Also converts values to other types if specified.
+                                 * @function toObject
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                 * @static
+                                 * @param {clutch.config.service.chaos.experimentation.terminator.v1.Config} message Config
+                                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                 * @returns {Object.<string,*>} Plain object
+                                 */
+                                Config.toObject = function toObject(message, options) {
+                                    if (!options)
+                                        options = {};
+                                    let object = {};
+                                    if (options.objects || options.defaults)
+                                        object.perConfigTypeConfiguration = {};
+                                    if (options.defaults) {
+                                        object.outerLoopInterval = null;
+                                        object.perExperimentCheckInterval = null;
+                                    }
+                                    let keys2;
+                                    if (message.perConfigTypeConfiguration && (keys2 = Object.keys(message.perConfigTypeConfiguration)).length) {
+                                        object.perConfigTypeConfiguration = {};
+                                        for (let j = 0; j < keys2.length; ++j)
+                                            object.perConfigTypeConfiguration[keys2[j]] = $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.toObject(message.perConfigTypeConfiguration[keys2[j]], options);
+                                    }
+                                    if (message.outerLoopInterval != null && message.hasOwnProperty("outerLoopInterval"))
+                                        object.outerLoopInterval = $root.google.protobuf.Duration.toObject(message.outerLoopInterval, options);
+                                    if (message.perExperimentCheckInterval != null && message.hasOwnProperty("perExperimentCheckInterval"))
+                                        object.perExperimentCheckInterval = $root.google.protobuf.Duration.toObject(message.perExperimentCheckInterval, options);
+                                    return object;
+                                };
+
+                                /**
+                                 * Converts this Config to JSON.
+                                 * @function toJSON
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                 * @instance
+                                 * @returns {Object.<string,*>} JSON object
+                                 */
+                                Config.prototype.toJSON = function toJSON() {
+                                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                };
+
+                                Config.PerConfigTypeConfig = (function() {
+
+                                    /**
+                                     * Properties of a PerConfigTypeConfig.
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                     * @interface IPerConfigTypeConfig
+                                     * @property {Array.<google.protobuf.IAny>|null} [terminationCriteria] PerConfigTypeConfig terminationCriteria
+                                     */
+
+                                    /**
+                                     * Constructs a new PerConfigTypeConfig.
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                     * @classdesc Represents a PerConfigTypeConfig.
+                                     * @implements IPerConfigTypeConfig
+                                     * @constructor
+                                     * @param {clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig=} [properties] Properties to set
+                                     */
+                                    function PerConfigTypeConfig(properties) {
+                                        this.terminationCriteria = [];
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * PerConfigTypeConfig terminationCriteria.
+                                     * @member {Array.<google.protobuf.IAny>} terminationCriteria
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @instance
+                                     */
+                                    PerConfigTypeConfig.prototype.terminationCriteria = $util.emptyArray;
+
+                                    /**
+                                     * Verifies a PerConfigTypeConfig message.
+                                     * @function verify
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    PerConfigTypeConfig.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        if (message.terminationCriteria != null && message.hasOwnProperty("terminationCriteria")) {
+                                            if (!Array.isArray(message.terminationCriteria))
+                                                return "terminationCriteria: array expected";
+                                            for (let i = 0; i < message.terminationCriteria.length; ++i) {
+                                                let error = $root.google.protobuf.Any.verify(message.terminationCriteria[i]);
+                                                if (error)
+                                                    return "terminationCriteria." + error;
+                                            }
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a PerConfigTypeConfig message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig} PerConfigTypeConfig
+                                     */
+                                    PerConfigTypeConfig.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig)
+                                            return object;
+                                        let message = new $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig();
+                                        if (object.terminationCriteria) {
+                                            if (!Array.isArray(object.terminationCriteria))
+                                                throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.terminationCriteria: array expected");
+                                            message.terminationCriteria = [];
+                                            for (let i = 0; i < object.terminationCriteria.length; ++i) {
+                                                if (typeof object.terminationCriteria[i] !== "object")
+                                                    throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.terminationCriteria: object expected");
+                                                message.terminationCriteria[i] = $root.google.protobuf.Any.fromObject(object.terminationCriteria[i]);
+                                            }
+                                        }
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a PerConfigTypeConfig message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @static
+                                     * @param {clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig} message PerConfigTypeConfig
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    PerConfigTypeConfig.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (options.arrays || options.defaults)
+                                            object.terminationCriteria = [];
+                                        if (message.terminationCriteria && message.terminationCriteria.length) {
+                                            object.terminationCriteria = [];
+                                            for (let j = 0; j < message.terminationCriteria.length; ++j)
+                                                object.terminationCriteria[j] = $root.google.protobuf.Any.toObject(message.terminationCriteria[j], options);
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this PerConfigTypeConfig to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    PerConfigTypeConfig.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return PerConfigTypeConfig;
+                                })();
+
+                                return Config;
+                            })();
+
+                            v1.MaxTimeTerminationCriterion = (function() {
+
+                                /**
+                                 * Properties of a MaxTimeTerminationCriterion.
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1
+                                 * @interface IMaxTimeTerminationCriterion
+                                 * @property {google.protobuf.IDuration|null} [maxDuration] MaxTimeTerminationCriterion maxDuration
+                                 */
+
+                                /**
+                                 * Constructs a new MaxTimeTerminationCriterion.
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1
+                                 * @classdesc Represents a MaxTimeTerminationCriterion.
+                                 * @implements IMaxTimeTerminationCriterion
+                                 * @constructor
+                                 * @param {clutch.config.service.chaos.experimentation.terminator.v1.IMaxTimeTerminationCriterion=} [properties] Properties to set
+                                 */
+                                function MaxTimeTerminationCriterion(properties) {
+                                    if (properties)
+                                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                            if (properties[keys[i]] != null)
+                                                this[keys[i]] = properties[keys[i]];
+                                }
+
+                                /**
+                                 * MaxTimeTerminationCriterion maxDuration.
+                                 * @member {google.protobuf.IDuration|null|undefined} maxDuration
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion
+                                 * @instance
+                                 */
+                                MaxTimeTerminationCriterion.prototype.maxDuration = null;
+
+                                /**
+                                 * Verifies a MaxTimeTerminationCriterion message.
+                                 * @function verify
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion
+                                 * @static
+                                 * @param {Object.<string,*>} message Plain object to verify
+                                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                 */
+                                MaxTimeTerminationCriterion.verify = function verify(message) {
+                                    if (typeof message !== "object" || message === null)
+                                        return "object expected";
+                                    if (message.maxDuration != null && message.hasOwnProperty("maxDuration")) {
+                                        let error = $root.google.protobuf.Duration.verify(message.maxDuration);
+                                        if (error)
+                                            return "maxDuration." + error;
+                                    }
+                                    return null;
+                                };
+
+                                /**
+                                 * Creates a MaxTimeTerminationCriterion message from a plain object. Also converts values to their respective internal types.
+                                 * @function fromObject
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion
+                                 * @static
+                                 * @param {Object.<string,*>} object Plain object
+                                 * @returns {clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion} MaxTimeTerminationCriterion
+                                 */
+                                MaxTimeTerminationCriterion.fromObject = function fromObject(object) {
+                                    if (object instanceof $root.clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion)
+                                        return object;
+                                    let message = new $root.clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion();
+                                    if (object.maxDuration != null) {
+                                        if (typeof object.maxDuration !== "object")
+                                            throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion.maxDuration: object expected");
+                                        message.maxDuration = $root.google.protobuf.Duration.fromObject(object.maxDuration);
+                                    }
+                                    return message;
+                                };
+
+                                /**
+                                 * Creates a plain object from a MaxTimeTerminationCriterion message. Also converts values to other types if specified.
+                                 * @function toObject
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion
+                                 * @static
+                                 * @param {clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion} message MaxTimeTerminationCriterion
+                                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                 * @returns {Object.<string,*>} Plain object
+                                 */
+                                MaxTimeTerminationCriterion.toObject = function toObject(message, options) {
+                                    if (!options)
+                                        options = {};
+                                    let object = {};
+                                    if (options.defaults)
+                                        object.maxDuration = null;
+                                    if (message.maxDuration != null && message.hasOwnProperty("maxDuration"))
+                                        object.maxDuration = $root.google.protobuf.Duration.toObject(message.maxDuration, options);
+                                    return object;
+                                };
+
+                                /**
+                                 * Converts this MaxTimeTerminationCriterion to JSON.
+                                 * @function toJSON
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion
+                                 * @instance
+                                 * @returns {Object.<string,*>} JSON object
+                                 */
+                                MaxTimeTerminationCriterion.prototype.toJSON = function toJSON() {
+                                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                };
+
+                                return MaxTimeTerminationCriterion;
+                            })();
+
+                            return v1;
+                        })();
+
+                        return terminator;
+                    })();
+
+                    return experimentation;
+                })();
+
+                return chaos;
             })();
 
             service.db = (function() {
@@ -26208,6 +27117,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [stateReason] Pod stateReason
                  * @property {Array.<clutch.k8s.v1.IPodCondition>|null} [podConditions] Pod podConditions
                  * @property {Array.<clutch.k8s.v1.IContainer>|null} [initContainers] Pod initContainers
+                 * @property {string|null} [status] Pod status
                  */
 
                 /**
@@ -26335,6 +27245,14 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.initContainers = $util.emptyArray;
 
                 /**
+                 * Pod status.
+                 * @member {string} status
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.status = "";
+
+                /**
                  * Verifies a Pod message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Pod
@@ -26423,6 +27341,9 @@ export const clutch = $root.clutch = (() => {
                                 return "initContainers." + error;
                         }
                     }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        if (!$util.isString(message.status))
+                            return "status: string expected";
                     return null;
                 };
 
@@ -26525,6 +27446,8 @@ export const clutch = $root.clutch = (() => {
                             message.initContainers[i] = $root.clutch.k8s.v1.Container.fromObject(object.initContainers[i]);
                         }
                     }
+                    if (object.status != null)
+                        message.status = String(object.status);
                     return message;
                 };
 
@@ -26559,6 +27482,7 @@ export const clutch = $root.clutch = (() => {
                         object.state = options.enums === String ? "UNSPECIFIED" : 0;
                         object.startTime = null;
                         object.stateReason = "";
+                        object.status = "";
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -26602,6 +27526,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.initContainers.length; ++j)
                             object.initContainers[j] = $root.clutch.k8s.v1.Container.toObject(message.initContainers[j], options);
                     }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        object.status = message.status;
                     return object;
                 };
 
@@ -26648,6 +27574,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.k8s.v1
                  * @interface IListOptions
                  * @property {Object.<string,string>|null} [labels] ListOptions labels
+                 * @property {string|null} [supplementalSelectorString] ListOptions supplementalSelectorString
                  */
 
                 /**
@@ -26675,6 +27602,14 @@ export const clutch = $root.clutch = (() => {
                 ListOptions.prototype.labels = $util.emptyObject;
 
                 /**
+                 * ListOptions supplementalSelectorString.
+                 * @member {string} supplementalSelectorString
+                 * @memberof clutch.k8s.v1.ListOptions
+                 * @instance
+                 */
+                ListOptions.prototype.supplementalSelectorString = "";
+
+                /**
                  * Verifies a ListOptions message.
                  * @function verify
                  * @memberof clutch.k8s.v1.ListOptions
@@ -26693,6 +27628,9 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.labels[key[i]]))
                                 return "labels: string{k:string} expected";
                     }
+                    if (message.supplementalSelectorString != null && message.hasOwnProperty("supplementalSelectorString"))
+                        if (!$util.isString(message.supplementalSelectorString))
+                            return "supplementalSelectorString: string expected";
                     return null;
                 };
 
@@ -26715,6 +27653,8 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
                             message.labels[keys[i]] = String(object.labels[keys[i]]);
                     }
+                    if (object.supplementalSelectorString != null)
+                        message.supplementalSelectorString = String(object.supplementalSelectorString);
                     return message;
                 };
 
@@ -26733,12 +27673,16 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.objects || options.defaults)
                         object.labels = {};
+                    if (options.defaults)
+                        object.supplementalSelectorString = "";
                     let keys2;
                     if (message.labels && (keys2 = Object.keys(message.labels)).length) {
                         object.labels = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.labels[keys2[j]] = message.labels[keys2[j]];
                     }
+                    if (message.supplementalSelectorString != null && message.hasOwnProperty("supplementalSelectorString"))
+                        object.supplementalSelectorString = message.supplementalSelectorString;
                     return object;
                 };
 
