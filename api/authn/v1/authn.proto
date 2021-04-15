@@ -26,7 +26,8 @@ service AuthnAPI {
 
   rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {
     option (google.api.http) = {
-      get : "/v1/authn/createToken"
+      post : "/v1/authn/createToken"
+      body : "*"
     };
     option (clutch.api.v1.action).type = CREATE;
   }
@@ -65,7 +66,7 @@ message CallbackResponse {
 message CreateTokenRequest {
   option (clutch.api.v1.redacted) = true;
 
-  // The subject to issue this token for. The subject must be prefixed with the string `service:`, e.g. `service:foo`.
+  // The subject to issue this token for.
   string subject = 1 [ (validate.rules).string = {min_bytes : 1} ];
 
   // The duration until this token should expire. If unset, the token will never expire.
