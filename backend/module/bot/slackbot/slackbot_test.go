@@ -3,11 +3,17 @@ package slackbot
 import (
 	"testing"
 
+	"github.com/slack-go/slack"
+	"github.com/slack-go/slack/slacktest"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest"
+	"go.uber.org/zap/zaptest/observer"
 	"google.golang.org/protobuf/types/known/anypb"
 
+	slackbotv1 "github.com/lyft/clutch/backend/api/bot/slackbot/v1"
 	slackbotconfigv1 "github.com/lyft/clutch/backend/api/config/module/bot/slackbot/v1"
 	"github.com/lyft/clutch/backend/mock/service/botmock"
 	"github.com/lyft/clutch/backend/module/moduletest"
@@ -33,9 +39,8 @@ func TestModule(t *testing.T) {
 
 func modMock(t *testing.T) *mod {
 	log := zaptest.NewLogger(t)
-	return &mod{
-		logger: log,
-	}
+	svc := botmock.New()
+	return &mod{logger: log, bot: svc}
 }
 
 func TestVerifySlackRequest(t *testing.T) {
@@ -59,4 +64,75 @@ func TestHandleURLVerificationEvent(t *testing.T) {
 	resp, err = m.handleURLVerificationEvent("")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
+}
+
+func TestHandleEvent(t *testing.T) {
+	// testing error log count
+	testCases := []struct {
+		req   *slackbotv1.EventRequest
+		count int
+	}{
+		{
+			req: &slackbotv1.EventRequest{
+				Type:  "event_callback",
+				Event: &slackbotv1.Event{Type: "foo"},
+			},
+			count: 1,
+		},
+		{req: &slackbotv1.EventRequest{Type: "app_rate_limited"}, count: 1},
+		{req: &slackbotv1.EventRequest{Type: "foo"}, count: 1},
+	}
+
+	for _, test := range testCases {
+		core, recorded := observer.New(zapcore.DebugLevel)
+		log := zap.New(core)
+		m := &mod{logger: log}
+
+		m.handleEvent(test.req)
+		assert.Equal(t, test.count, recorded.Len())
+	}
+}
+
+func TestHandleCallBackEvent(t *testing.T) {
+	m := modMock(t)
+
+	// invalid event type
+	event := &slackbotv1.Event{Type: "foo"}
+	err := m.handleCallBackEvent(event)
+	assert.Error(t, err)
+}
+
+func TestAppMentionEvent(t *testing.T) {
+	m := modMock(t)
+
+	// setting up mocks
+	slacktest.NewTestServer()
+	s := slacktest.NewTestServer()
+	go s.Start()
+	client := slack.New("ABCDEFG", slack.OptionAPIURL(s.GetAPIURL()))
+	m.slack = client
+
+	event := &slackbotv1.Event{Type: "app_mention"}
+	err := m.handleAppMentionEvent(event)
+	assert.NoError(t, err)
+}
+
+func TestHandleMessageEvent(t *testing.T) {
+	m := modMock(t)
+
+	// invalid event type
+	event := &slackbotv1.Event{Type: "foo"}
+	err := m.handleMessageEvent(event)
+	assert.Error(t, err)
+
+	// setting up mocks
+	slacktest.NewTestServer()
+	s := slacktest.NewTestServer()
+	go s.Start()
+	client := slack.New("ABCDEFG", slack.OptionAPIURL(s.GetAPIURL()))
+	m.slack = client
+
+	event = &slackbotv1.Event{Type: "message", ChannelType: "im"}
+	err = m.handleMessageEvent(event)
+	assert.NoError(t, err)
 }

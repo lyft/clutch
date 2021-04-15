@@ -81,10 +81,8 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 		return m.handleURLVerificationEvent(req.Challenge)
 	}
 
-	// TODO:(sperry) turn retries off?
-	// https://api.slack.com/apis/connections/events-api#the-events-api__field-guide__error-handling__graceful-retries__turning-retries-off
-
 	// at this point in the flow, we can ack the Slack API with a 2xx response and process the event seperately
+	// TODO: (sperry) use a worker goroutine / save event to DB
 	go m.handleEvent(req)
 
 	return &slackbotv1.EventResponse{}, nil
