@@ -27,6 +27,7 @@ service K8sAPI {
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
+    option (clutch.api.v1.disable_audit) = true;
   }
 
   rpc DeletePod(DeletePodRequest) returns (DeletePodResponse) {
