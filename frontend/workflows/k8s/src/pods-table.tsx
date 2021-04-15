@@ -33,7 +33,6 @@ const PodTable = () => {
         actionsColumn
         headings={[
           "Name",
-          "Facet",
           "Cluster",
           "Containers Ready",
           "Restart",
@@ -50,7 +49,6 @@ const PodTable = () => {
         ]).map(pod => (
           <TableRow key={pod.name} defaultCellValue="nil">
             {pod.name}
-            {pod.labels?.facet}
             {pod.cluster}
             {getReadyCountString(pod.containers)}
             {getRestartCountString(pod.containers)}
