@@ -220,6 +220,7 @@ const TextField = ({
     onKeyDown,
     onFocus: onChange,
     onBlur: onChange,
+    onChange,
     error,
     helperText: helpText,
     InputProps: {
