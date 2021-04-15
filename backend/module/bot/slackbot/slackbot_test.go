@@ -67,7 +67,7 @@ func TestHandleURLVerificationEvent(t *testing.T) {
 }
 
 func TestHandleEvent(t *testing.T) {
-	// testing error log count
+	// testing log count
 	testCases := []struct {
 		req   *slackbotv1.EventRequest
 		count int
@@ -105,7 +105,7 @@ func TestHandleCallBackEvent(t *testing.T) {
 func TestAppMentionEvent(t *testing.T) {
 	m := modMock(t)
 
-	// setting up mocks
+	// setting up slack mocks
 	slacktest.NewTestServer()
 	s := slacktest.NewTestServer()
 	go s.Start()
@@ -125,7 +125,7 @@ func TestHandleMessageEvent(t *testing.T) {
 	err := m.handleMessageEvent(event)
 	assert.Error(t, err)
 
-	// setting up mocks
+	// setting up slack mocks
 	slacktest.NewTestServer()
 	s := slacktest.NewTestServer()
 	go s.Start()
