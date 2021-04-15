@@ -1,5 +1,9 @@
 package slackbot
 
+// <!-- START clutchdoc -->
+// description: Receives bot events from the Slack Events API
+// <!-- END clutchdoc -->
+
 import (
 	"context"
 	"errors"
@@ -68,6 +72,7 @@ func (m *mod) Register(r module.Registrar) error {
 }
 
 // One request, one event. https://api.slack.com/apis/connections/events-api#the-events-api__receiving-events
+// TODO: (sperry) capture success/failure metrics when handling the event
 func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbotv1.EventResponse, error) {
 	err := verifySlackRequest(m.verificationToken, req.Token)
 	if err != nil {
@@ -143,12 +148,7 @@ func (m *mod) handleCallBackEvent(event *slackbotv1.Event) error {
 // event type for messages that mention the bot directly
 func (m *mod) handleAppMentionEvent(event *slackbotv1.Event) error {
 	match := m.bot.MatchCommand(event.Text)
-	err := sendBotReply(m.slack, event.Channel, match)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return sendBotReply(m.slack, event.Channel, match)
 }
 
 // event type for DMs with the bot
@@ -157,13 +157,12 @@ func (m *mod) handleMessageEvent(event *slackbotv1.Event) error {
 		return fmt.Errorf("unexpected channel type: %s", event.ChannelType)
 	}
 	// it's standard behavior of the Slack Events API that the bot will receive all message events, including from it's own posts
-	// so we need to filter out these events by checking that the BotId field is empty; otherwise by reacting to them we will create an infinte loop
-	if event.BotId == "" {
-		match := m.bot.MatchCommand(event.Text)
-		err := sendBotReply(m.slack, event.Channel, match)
-		if err != nil {
-			return err
-		}
+	// so we need to filter out these events by checking the BotId field; otherwise by reacting to them we will create an infinte loop
+	if event.BotId != "" {
+		// it's the bot's own post, ignore it
+		return nil
 	}
-	return nil
+
+	match := m.bot.MatchCommand(event.Text)
+	return sendBotReply(m.slack, event.Channel, match)
 }

@@ -109,6 +109,8 @@ func TestAppMentionEvent(t *testing.T) {
 	slacktest.NewTestServer()
 	s := slacktest.NewTestServer()
 	go s.Start()
+	defer s.Stop()
+
 	client := slack.New("ABCDEFG", slack.OptionAPIURL(s.GetAPIURL()))
 	m.slack = client
 
@@ -129,6 +131,8 @@ func TestHandleMessageEvent(t *testing.T) {
 	slacktest.NewTestServer()
 	s := slacktest.NewTestServer()
 	go s.Start()
+	defer s.Stop()
+
 	client := slack.New("ABCDEFG", slack.OptionAPIURL(s.GetAPIURL()))
 	m.slack = client
 

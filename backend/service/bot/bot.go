@@ -1,5 +1,9 @@
 package bot
 
+// <!-- START clutchdoc -->
+// description: Maps a bot command to a Clutch API call, returning the endpoint data as the bot's reply
+// <!-- END clutchdoc -->
+
 import (
 	"fmt"
 
