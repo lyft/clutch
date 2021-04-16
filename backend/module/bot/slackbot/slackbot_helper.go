@@ -1,11 +1,13 @@
 package slackbot
 
 import (
+	"context"
+
 	"github.com/slack-go/slack"
 )
 
-func sendBotReply(client *slack.Client, channel, message string) error {
-	_, _, err := client.PostMessage(channel, slack.MsgOptionText(message, false))
+func sendBotReply(ctx context.Context, client *slack.Client, channel, message string) error {
+	_, _, err := client.PostMessageContext(ctx, channel, slack.MsgOptionText(message, false))
 	if err != nil {
 		return err
 	}

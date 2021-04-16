@@ -88,7 +88,7 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 
 	// at this point in the flow, we can ack the Slack API with a 2xx response and process the event seperately
 	// TODO: (sperry) use a worker goroutine / save event to DB
-	go m.handleEvent(req)
+	go m.handleEvent(context.Background(), req)
 
 	return &slackbotv1.EventResponse{}, nil
 }
@@ -117,10 +117,10 @@ func (m *mod) handleURLVerificationEvent(challenge string) (*slackbotv1.EventRes
 
 // this outer event is 1 of 3 types: url_verification, event_callback, and app_rate_limited
 // this should be called via `go` in order to avoid blocking main execution
-func (m *mod) handleEvent(req *slackbotv1.EventRequest) {
+func (m *mod) handleEvent(ctx context.Context, req *slackbotv1.EventRequest) {
 	switch req.Type {
 	case slackevents.CallbackEvent:
-		err := m.handleCallBackEvent(req.Event)
+		err := m.handleCallBackEvent(ctx, req.Event)
 		if err != nil {
 			m.logger.Error("handle callback event error", log.ErrorField(err))
 		}
@@ -134,25 +134,25 @@ func (m *mod) handleEvent(req *slackbotv1.EventRequest) {
 
 // for the inner event, we currently support 2 types: app_mention (messages that mention the bot directly) and message (specifically DMs with the bot)
 // full list of Slack event types: https://api.slack.com/events
-func (m *mod) handleCallBackEvent(event *slackbotv1.Event) error {
+func (m *mod) handleCallBackEvent(ctx context.Context, event *slackbotv1.Event) error {
 	switch event.Type {
 	case slackevents.AppMention:
-		return m.handleAppMentionEvent(event)
+		return m.handleAppMentionEvent(ctx, event)
 	case slackevents.Message:
-		return m.handleMessageEvent(event)
+		return m.handleMessageEvent(ctx, event)
 	default:
 		return fmt.Errorf("received unsuported event type: %s", event.Type)
 	}
 }
 
 // event type for messages that mention the bot directly
-func (m *mod) handleAppMentionEvent(event *slackbotv1.Event) error {
+func (m *mod) handleAppMentionEvent(ctx context.Context, event *slackbotv1.Event) error {
 	match := m.bot.MatchCommand(event.Text)
-	return sendBotReply(m.slack, event.Channel, match)
+	return sendBotReply(ctx, m.slack, event.Channel, match)
 }
 
 // event type for DMs with the bot
-func (m *mod) handleMessageEvent(event *slackbotv1.Event) error {
+func (m *mod) handleMessageEvent(ctx context.Context, event *slackbotv1.Event) error {
 	if event.ChannelType != dmMessage {
 		return fmt.Errorf("unexpected channel type: %s", event.ChannelType)
 	}
@@ -164,5 +164,5 @@ func (m *mod) handleMessageEvent(event *slackbotv1.Event) error {
 	}
 
 	match := m.bot.MatchCommand(event.Text)
-	return sendBotReply(m.slack, event.Channel, match)
+	return sendBotReply(ctx, m.slack, event.Channel, match)
 }

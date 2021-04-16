@@ -1,6 +1,7 @@
 package slackbot
 
 import (
+	"context"
 	"testing"
 
 	"github.com/slack-go/slack"
@@ -88,7 +89,7 @@ func TestHandleEvent(t *testing.T) {
 		log := zap.New(core)
 		m := &mod{logger: log}
 
-		m.handleEvent(test.req)
+		m.handleEvent(context.Background(), test.req)
 		assert.Equal(t, test.count, recorded.Len())
 	}
 }
@@ -98,7 +99,7 @@ func TestHandleCallBackEvent(t *testing.T) {
 
 	// invalid event type
 	event := &slackbotv1.Event{Type: "foo"}
-	err := m.handleCallBackEvent(event)
+	err := m.handleCallBackEvent(context.Background(), event)
 	assert.Error(t, err)
 }
 
@@ -115,7 +116,7 @@ func TestAppMentionEvent(t *testing.T) {
 	m.slack = client
 
 	event := &slackbotv1.Event{Type: "app_mention"}
-	err := m.handleAppMentionEvent(event)
+	err := m.handleAppMentionEvent(context.Background(), event)
 	assert.NoError(t, err)
 }
 
@@ -124,7 +125,7 @@ func TestHandleMessageEvent(t *testing.T) {
 
 	// invalid event type
 	event := &slackbotv1.Event{Type: "foo"}
-	err := m.handleMessageEvent(event)
+	err := m.handleMessageEvent(context.Background(), event)
 	assert.Error(t, err)
 
 	// setting up slack mocks
@@ -137,6 +138,6 @@ func TestHandleMessageEvent(t *testing.T) {
 	m.slack = client
 
 	event = &slackbotv1.Event{Type: "message", ChannelType: "im"}
-	err = m.handleMessageEvent(event)
+	err = m.handleMessageEvent(context.Background(), event)
 	assert.NoError(t, err)
 }
