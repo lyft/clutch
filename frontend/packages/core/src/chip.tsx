@@ -25,8 +25,7 @@ const StyledChip = styled(MuiChip)({
 });
 
 const ClutchChip = ({ variant, ...props }: ChipProps) => {
-  const styleOverride = { background: CHIP_COLOR_MAP[variant] };
-  return <StyledChip {...props } style={styleOverride} />;
+    return <StyledChip {...props} style={{ background: CHIP_COLOR_MAP[variant] }} />;
 };
 
 export default ClutchChip;
