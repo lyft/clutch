@@ -21,7 +21,7 @@ import (
 const Name = "clutch.service.chaos.experimentation.termination"
 
 func TypeUrl(message proto.Message) string {
-	return "types.google.com/" + string(message.ProtoReflect().Descriptor().FullName())
+	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
 }
 
 var CriterionFactories = map[string]CriterionFactory{
