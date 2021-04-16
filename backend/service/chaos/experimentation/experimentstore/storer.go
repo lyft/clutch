@@ -213,7 +213,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
-		    termination_reason,
+			termination_reason,
 			experiment_config.id,
 			details
 		FROM experiment_config, experiment_run
@@ -274,7 +274,7 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
-		    termination_reason,
+			termination_reason,
 			experiment_config.id,
 			details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`

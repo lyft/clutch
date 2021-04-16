@@ -139,8 +139,8 @@ func (s *Service) GetExperiments(ctx context.Context, request *experimentation.G
 	}
 
 	ee := make([]*experimentation.Experiment, len(es))
-	for i := range ee {
-		ep, err := es[i].Proto(time.Now())
+	for i, e := range es {
+		ep, err := e.Proto(time.Now())
 		if err != nil {
 			return nil, err
 		}

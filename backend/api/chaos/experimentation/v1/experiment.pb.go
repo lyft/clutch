@@ -33,7 +33,8 @@ const (
 	Experiment_STATUS_RUNNING Experiment_Status = 2
 	// An experiment has completed.
 	Experiment_STATUS_COMPLETED Experiment_Status = 3
-	// An experiment has been canceled before it started.
+	// An experiment has been stopped before it was completed. Used only
+	// for experiments with defined end_time.
 	Experiment_STATUS_CANCELED Experiment_Status = 4
 )
 
