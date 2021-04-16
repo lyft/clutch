@@ -80,9 +80,8 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 		return nil, status.Error(codes.Unauthenticated, err.Error())
 	}
 
-	m.logger.Info("received event from Slack API")
-
 	if req.Type == slackevents.URLVerification {
+		m.logger.Info("recieved url verification event")
 		return m.handleURLVerificationEvent(req.Challenge)
 	}
 
@@ -147,7 +146,15 @@ func (m *mod) handleCallBackEvent(ctx context.Context, event *slackbotv1.Event) 
 
 // event type for messages that mention the bot directly
 func (m *mod) handleAppMentionEvent(ctx context.Context, event *slackbotv1.Event) error {
-	match := m.bot.MatchCommand(event.Text)
+	m.logger.Info(
+		"recieved app_mention event",
+		zap.String("text", event.Text),
+		// TODO: (sperry) request just provides the id of the channel and user. we'd have to make seperate slack API calls using the ids to get the names
+		zap.String("channel id", event.Channel),
+		zap.String("user id", event.User),
+	)
+
+	match := m.bot.MatchCommand(ctx, event.Text)
 	return sendBotReply(ctx, m.slack, event.Channel, match)
 }
 
@@ -163,6 +170,13 @@ func (m *mod) handleMessageEvent(ctx context.Context, event *slackbotv1.Event) e
 		return nil
 	}
 
-	match := m.bot.MatchCommand(event.Text)
+	m.logger.Info(
+		"recieved DM event",
+		zap.String("text", event.Text),
+		// TODO: (sperry) request just provides the id of the user. we'd have to make seperate slack API calls using the id to get the name
+		zap.String("user id", event.User),
+	)
+
+	match := m.bot.MatchCommand(ctx, event.Text)
 	return sendBotReply(ctx, m.slack, event.Channel, match)
 }

@@ -5,6 +5,7 @@ package bot
 // <!-- END clutchdoc -->
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/uber-go/tally"
@@ -56,10 +57,10 @@ type svc struct {
 type Service interface {
 	// MatchCommand takes a user's command to the bot (ie describe pod foo-cluster/foo-namespace/foo-pod)
 	// and returns the appropriate bot reply
-	MatchCommand(command string) (reply string)
+	MatchCommand(ctx context.Context, command string) (reply string)
 }
 
-func (s *svc) MatchCommand(command string) (reply string) {
+func (s *svc) MatchCommand(ctx context.Context, command string) (reply string) {
 	command, err := sanitize(s.botProvider, command)
 	if err != nil {
 		// return the error as the bot's reply instead of failing silently
