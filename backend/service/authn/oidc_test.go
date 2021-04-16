@@ -202,6 +202,52 @@ oidc:
 	assert.Error(t, err)
 }
 
+func TestReadThrough(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+enable_service_token_creation: false
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	mockStorage := authnmock.NewMockStorage()
+
+	mockprovider := authnmock.NewMockOIDCProviderServer("foo@example.com")
+	defer mockprovider.Close()
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+
+	p, err := NewOIDCProvider(ctx, cfg, mockStorage)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	tr, ok := p.(*OIDCProvider)
+	assert.True(t, ok)
+	assert.NotNil(t, tr)
+
+	assert.NoError(t, mockStorage.Store(context.Background(), "foo@example.com", tr.providerAlias, &oauth2.Token{AccessToken: "AAAA", RefreshToken: "RRRR"}))
+	assert.NoError(t, mockStorage.Store(context.Background(), "fooExpired@example.com", tr.providerAlias, &oauth2.Token{AccessToken: "AAAA", RefreshToken: "RRRR", Expiry: time.Unix(1, 0)}))
+
+	// Valid token returned.
+	readToken, err := tr.Read(context.Background(), "foo@example.com", tr.providerAlias)
+	assert.NoError(t, err)
+	assert.Equal(t, "AAAA", readToken.AccessToken)
+
+	// Now test an expired token refreshes.
+	readToken, err = tr.Read(ctx, "fooExpired@example.com", tr.providerAlias)
+	assert.NoError(t, err)
+	assert.Equal(t, "AAAAAAAAAAAA", readToken.AccessToken)
+	assert.Equal(t, "REFRESH", readToken.RefreshToken)
+	storedToken, _ := mockStorage.Read(context.Background(), "fooExpired@example.com", tr.providerAlias)
+	assert.Equal(t, "REFRESH", storedToken.RefreshToken)
+}
+
 func TestTokenRevocationFlow(t *testing.T) {
 	cfg := &authnv1.Config{}
 	apimock.FromYAML(`

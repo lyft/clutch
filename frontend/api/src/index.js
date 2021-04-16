@@ -6991,6 +6991,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [eventContext] EventRequest eventContext
                      * @property {google.protobuf.IValue|null} [authorizations] EventRequest authorizations
                      * @property {string|null} [challenge] EventRequest challenge
+                     * @property {string|null} [minuteRateLimited] EventRequest minuteRateLimited
                      */
 
                     /**
@@ -7097,6 +7098,14 @@ export const clutch = $root.clutch = (() => {
                     EventRequest.prototype.challenge = "";
 
                     /**
+                     * EventRequest minuteRateLimited.
+                     * @member {string} minuteRateLimited
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.minuteRateLimited = "";
+
+                    /**
                      * Verifies an EventRequest message.
                      * @function verify
                      * @memberof clutch.bot.slackbot.v1.EventRequest
@@ -7144,6 +7153,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.challenge != null && message.hasOwnProperty("challenge"))
                             if (!$util.isString(message.challenge))
                                 return "challenge: string expected";
+                        if (message.minuteRateLimited != null && message.hasOwnProperty("minuteRateLimited"))
+                            if (!$util.isString(message.minuteRateLimited))
+                                return "minuteRateLimited: string expected";
                         return null;
                     };
 
@@ -7194,6 +7206,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.challenge != null)
                             message.challenge = String(object.challenge);
+                        if (object.minuteRateLimited != null)
+                            message.minuteRateLimited = String(object.minuteRateLimited);
                         return message;
                     };
 
@@ -7226,6 +7240,7 @@ export const clutch = $root.clutch = (() => {
                             object.eventContext = "";
                             object.authorizations = null;
                             object.challenge = "";
+                            object.minuteRateLimited = "";
                         }
                         if (message.token != null && message.hasOwnProperty("token"))
                             object.token = message.token;
@@ -7252,6 +7267,8 @@ export const clutch = $root.clutch = (() => {
                             object.authorizations = $root.google.protobuf.Value.toObject(message.authorizations, options);
                         if (message.challenge != null && message.hasOwnProperty("challenge"))
                             object.challenge = message.challenge;
+                        if (message.minuteRateLimited != null && message.hasOwnProperty("minuteRateLimited"))
+                            object.minuteRateLimited = message.minuteRateLimited;
                         return object;
                     };
 
@@ -10608,7 +10625,6 @@ export const clutch = $root.clutch = (() => {
                      * @interface IFaultTargeting
                      * @property {clutch.chaos.redisexperimentation.v1.ISingleCluster|null} [upstreamCluster] FaultTargeting upstreamCluster
                      * @property {clutch.chaos.redisexperimentation.v1.ISingleCluster|null} [downstreamCluster] FaultTargeting downstreamCluster
-                     * @property {Array.<string>|null} [redisCommands] FaultTargeting redisCommands
                      */
 
                     /**
@@ -10620,7 +10636,6 @@ export const clutch = $root.clutch = (() => {
                      * @param {clutch.chaos.redisexperimentation.v1.IFaultTargeting=} [properties] Properties to set
                      */
                     function FaultTargeting(properties) {
-                        this.redisCommands = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -10644,14 +10659,6 @@ export const clutch = $root.clutch = (() => {
                     FaultTargeting.prototype.downstreamCluster = null;
 
                     /**
-                     * FaultTargeting redisCommands.
-                     * @member {Array.<string>} redisCommands
-                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
-                     * @instance
-                     */
-                    FaultTargeting.prototype.redisCommands = $util.emptyArray;
-
-                    /**
                      * Verifies a FaultTargeting message.
                      * @function verify
                      * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
@@ -10671,13 +10678,6 @@ export const clutch = $root.clutch = (() => {
                             let error = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.verify(message.downstreamCluster);
                             if (error)
                                 return "downstreamCluster." + error;
-                        }
-                        if (message.redisCommands != null && message.hasOwnProperty("redisCommands")) {
-                            if (!Array.isArray(message.redisCommands))
-                                return "redisCommands: array expected";
-                            for (let i = 0; i < message.redisCommands.length; ++i)
-                                if (!$util.isString(message.redisCommands[i]))
-                                    return "redisCommands: string[] expected";
                         }
                         return null;
                     };
@@ -10704,13 +10704,6 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultTargeting.downstreamCluster: object expected");
                             message.downstreamCluster = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.fromObject(object.downstreamCluster);
                         }
-                        if (object.redisCommands) {
-                            if (!Array.isArray(object.redisCommands))
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultTargeting.redisCommands: array expected");
-                            message.redisCommands = [];
-                            for (let i = 0; i < object.redisCommands.length; ++i)
-                                message.redisCommands[i] = String(object.redisCommands[i]);
-                        }
                         return message;
                     };
 
@@ -10727,8 +10720,6 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults)
-                            object.redisCommands = [];
                         if (options.defaults) {
                             object.upstreamCluster = null;
                             object.downstreamCluster = null;
@@ -10737,11 +10728,6 @@ export const clutch = $root.clutch = (() => {
                             object.upstreamCluster = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.toObject(message.upstreamCluster, options);
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster"))
                             object.downstreamCluster = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.toObject(message.downstreamCluster, options);
-                        if (message.redisCommands && message.redisCommands.length) {
-                            object.redisCommands = [];
-                            for (let j = 0; j < message.redisCommands.length; ++j)
-                                object.redisCommands[j] = message.redisCommands[j];
-                        }
                         return object;
                     };
 
@@ -15618,6 +15604,7 @@ export const clutch = $root.clutch = (() => {
                              * @interface IConfig
                              * @property {string|null} [botToken] Config botToken
                              * @property {string|null} [signingSecret] Config signingSecret
+                             * @property {string|null} [verificationToken] Config verificationToken
                              */
 
                             /**
@@ -15652,6 +15639,14 @@ export const clutch = $root.clutch = (() => {
                             Config.prototype.signingSecret = "";
 
                             /**
+                             * Config verificationToken.
+                             * @member {string} verificationToken
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.verificationToken = "";
+
+                            /**
                              * Verifies a Config message.
                              * @function verify
                              * @memberof clutch.config.module.bot.slackbot.v1.Config
@@ -15668,6 +15663,9 @@ export const clutch = $root.clutch = (() => {
                                 if (message.signingSecret != null && message.hasOwnProperty("signingSecret"))
                                     if (!$util.isString(message.signingSecret))
                                         return "signingSecret: string expected";
+                                if (message.verificationToken != null && message.hasOwnProperty("verificationToken"))
+                                    if (!$util.isString(message.verificationToken))
+                                        return "verificationToken: string expected";
                                 return null;
                             };
 
@@ -15687,6 +15685,8 @@ export const clutch = $root.clutch = (() => {
                                     message.botToken = String(object.botToken);
                                 if (object.signingSecret != null)
                                     message.signingSecret = String(object.signingSecret);
+                                if (object.verificationToken != null)
+                                    message.verificationToken = String(object.verificationToken);
                                 return message;
                             };
 
@@ -15706,11 +15706,14 @@ export const clutch = $root.clutch = (() => {
                                 if (options.defaults) {
                                     object.botToken = "";
                                     object.signingSecret = "";
+                                    object.verificationToken = "";
                                 }
                                 if (message.botToken != null && message.hasOwnProperty("botToken"))
                                     object.botToken = message.botToken;
                                 if (message.signingSecret != null && message.hasOwnProperty("signingSecret"))
                                     object.signingSecret = message.signingSecret;
+                                if (message.verificationToken != null && message.hasOwnProperty("verificationToken"))
+                                    object.verificationToken = message.verificationToken;
                                 return object;
                             };
 
@@ -18827,6 +18830,157 @@ export const clutch = $root.clutch = (() => {
                 })();
 
                 return aws;
+            })();
+
+            service.bot = (function() {
+
+                /**
+                 * Namespace bot.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const bot = {};
+
+                bot.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.bot
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    /**
+                     * Bot enum.
+                     * @name clutch.config.service.bot.v1.Bot
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} SLACK=1 SLACK value
+                     */
+                    v1.Bot = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "SLACK"] = 1;
+                        return values;
+                    })();
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.bot.v1
+                         * @interface IConfig
+                         * @property {clutch.config.service.bot.v1.Bot|null} [botProvider] Config botProvider
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.bot.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.bot.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config botProvider.
+                         * @member {clutch.config.service.bot.v1.Bot} botProvider
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.botProvider = 0;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.botProvider != null && message.hasOwnProperty("botProvider"))
+                                switch (message.botProvider) {
+                                default:
+                                    return "botProvider: enum value expected";
+                                case 0:
+                                case 1:
+                                    break;
+                                }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.bot.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.bot.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.bot.v1.Config();
+                            switch (object.botProvider) {
+                            case "UNSPECIFIED":
+                            case 0:
+                                message.botProvider = 0;
+                                break;
+                            case "SLACK":
+                            case 1:
+                                message.botProvider = 1;
+                                break;
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {clutch.config.service.bot.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.botProvider = options.enums === String ? "UNSPECIFIED" : 0;
+                            if (message.botProvider != null && message.hasOwnProperty("botProvider"))
+                                object.botProvider = options.enums === String ? $root.clutch.config.service.bot.v1.Bot[message.botProvider] : message.botProvider;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return bot;
             })();
 
             service.chaos = (function() {
@@ -27001,6 +27155,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [stateReason] Pod stateReason
                  * @property {Array.<clutch.k8s.v1.IPodCondition>|null} [podConditions] Pod podConditions
                  * @property {Array.<clutch.k8s.v1.IContainer>|null} [initContainers] Pod initContainers
+                 * @property {string|null} [status] Pod status
                  */
 
                 /**
@@ -27128,6 +27283,14 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.initContainers = $util.emptyArray;
 
                 /**
+                 * Pod status.
+                 * @member {string} status
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.status = "";
+
+                /**
                  * Verifies a Pod message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Pod
@@ -27216,6 +27379,9 @@ export const clutch = $root.clutch = (() => {
                                 return "initContainers." + error;
                         }
                     }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        if (!$util.isString(message.status))
+                            return "status: string expected";
                     return null;
                 };
 
@@ -27318,6 +27484,8 @@ export const clutch = $root.clutch = (() => {
                             message.initContainers[i] = $root.clutch.k8s.v1.Container.fromObject(object.initContainers[i]);
                         }
                     }
+                    if (object.status != null)
+                        message.status = String(object.status);
                     return message;
                 };
 
@@ -27352,6 +27520,7 @@ export const clutch = $root.clutch = (() => {
                         object.state = options.enums === String ? "UNSPECIFIED" : 0;
                         object.startTime = null;
                         object.stateReason = "";
+                        object.status = "";
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -27395,6 +27564,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.initContainers.length; ++j)
                             object.initContainers[j] = $root.clutch.k8s.v1.Container.toObject(message.initContainers[j], options);
                     }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        object.status = message.status;
                     return object;
                 };
 

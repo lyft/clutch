@@ -18,7 +18,7 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-const Name = "clutch.module.chaos.experimentation.termination"
+const Name = "clutch.service.chaos.experimentation.termination"
 
 func TypeUrl(message proto.Message) string {
 	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
@@ -41,9 +41,10 @@ type TerminationCriterion interface {
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	m, err := NewMonitor(cfg, logger, scope)
 	if err != nil {
-		m.Run(context.Background())
+		return nil, err
 	}
 
+	m.Run(context.Background())
 	return m, nil
 }
 
