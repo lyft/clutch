@@ -21,7 +21,7 @@ import (
 const Name = "clutch.service.chaos.experimentation.termination"
 
 func TypeUrl(message proto.Message) string {
-	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
+	return "types.google.com/" + string(message.ProtoReflect().Descriptor().FullName())
 }
 
 var CriterionFactories = map[string]CriterionFactory{
@@ -40,7 +40,7 @@ type TerminationCriterion interface {
 
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	m, err := NewMonitor(cfg, logger, scope)
-	if err != nil {
+	if err == nil {
 		m.Run(context.Background())
 	}
 
