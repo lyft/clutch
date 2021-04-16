@@ -18,7 +18,7 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-const Name = "clutch.module.chaos.experimentation.termination"
+const Name = "clutch.service.chaos.experimentation.termination"
 
 func TypeUrl(message proto.Message) string {
 	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
