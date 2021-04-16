@@ -25,12 +25,12 @@ const StyledChip = styled(MuiChip)(
     margin: "10px",
   },
   props => ({
-    background: CHIP_COLOR_MAP["data-variant"],
+    background: CHIP_COLOR_MAP[props["data-variant"]],
   })
 );
 
 const Chip = ({ variant, ...props }: ChipProps) => {
-  <StyledChip {...props} data-variant={variant} />;
+  return <StyledChip {...props} data-variant={variant} />;
 };
 
 export default Chip;
