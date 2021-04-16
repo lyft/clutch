@@ -183,7 +183,11 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 		var details string
 		run := ExperimentRun{}
 		config := ExperimentConfig{Config: &any.Any{}}
-		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &run.TerminationReason, &config.Id, &details)
+		var terminationReason sql.NullString
+		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &terminationReason, &config.Id, &details)
+		if terminationReason.Valid {
+			run.TerminationReason = terminationReason.String
+		}
 
 		if err != nil {
 			return nil, err
@@ -232,7 +236,11 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 		var details string
 		run := ExperimentRun{}
 		config := ExperimentConfig{Config: &any.Any{}}
-		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &run.TerminationReason, &config.Id, &details)
+		var terminationReason sql.NullString
+		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &terminationReason, &config.Id, &details)
+		if terminationReason.Valid {
+			run.TerminationReason = terminationReason.String
+		}
 		if err != nil {
 			return nil, err
 		}
@@ -284,7 +292,12 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 	var details string
 	run := ExperimentRun{}
 	config := ExperimentConfig{Config: &any.Any{}}
-	err := row.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &run.TerminationReason, &config.Id, &details)
+	var terminationReason sql.NullString
+	err := row.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &terminationReason, &config.Id, &details)
+	if terminationReason.Valid {
+		run.TerminationReason = terminationReason.String
+	}
+
 	if err != nil {
 		return nil, err
 	}
