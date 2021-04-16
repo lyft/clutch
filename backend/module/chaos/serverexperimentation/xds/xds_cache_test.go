@@ -39,7 +39,7 @@ const (
 	LATENCY  = "latency"
 )
 
-func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentation.Experiment {
+func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentstore.Experiment {
 	config := &serverexperimentation.HTTPFaultConfig{}
 
 	upstreamSingleCluster := &serverexperimentation.SingleCluster{
@@ -101,11 +101,15 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 		t.Errorf("marshalAny failed: %v", err)
 	}
 
-	return &experimentation.Experiment{Config: anyConfig}
+	return &experimentstore.Experiment{
+		Config: &experimentstore.ExperimentConfig{
+			Config: anyConfig,
+		},
+	}
 }
 
-func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
-	return []*experimentation.Experiment{
+func mockGenerateFaultData(t *testing.T) []*experimentstore.Experiment {
+	return []*experimentstore.Experiment{
 		// Abort - Service B -> Service A (Internal)
 		createExperiment(t, "serviceA", "serviceB", 10, 404, INTERNAL, ABORT),
 
@@ -148,10 +152,10 @@ func TestSetSnapshotRTDS(t *testing.T) {
 		egressPrefix:  egressPrefix,
 	}
 
-	var testClusterFaults []*experimentation.Experiment
+	var testClusterFaults []*experimentstore.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := experiment.GetConfig().UnmarshalTo(config)
+		err := experiment.Config.Config.UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalling Any failed %v", err)
 		}
@@ -212,10 +216,10 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 		egressPrefix:  egressPrefix,
 	}
 
-	var testClusterFaults []*experimentation.Experiment
+	var testClusterFaults []*experimentstore.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := experiment.GetConfig().UnmarshalTo(config)
+		err := experiment.Config.Config.UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalling Any failed %v", err)
 		}
@@ -364,10 +368,10 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	var downstreamCluster string
 	mockExperimentList := mockGenerateFaultData(t)
 
-	var testClusterFaults []*experimentation.Experiment
+	var testClusterFaults []*experimentstore.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := experiment.GetConfig().UnmarshalTo(config)
+		err := experiment.Config.Config.UnmarshalTo(config)
 		assert.NoError(t, err)
 
 		upstream, downstream, err := getClusterPair(config)
@@ -456,10 +460,10 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	var upstreamCluster string
 	mockExperimentList := mockGenerateFaultData(t)
 
-	var testClusterFaults []*experimentation.Experiment
+	var testClusterFaults []*experimentstore.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := experiment.GetConfig().UnmarshalTo(config)
+		err := experiment.Config.Config.UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}

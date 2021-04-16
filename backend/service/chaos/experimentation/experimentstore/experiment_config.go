@@ -3,20 +3,20 @@ package experimentstore
 import (
 	"github.com/golang/protobuf/ptypes/any"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type ExperimentConfig struct {
-	id     string
+	Id     string
 	Config *any.Any
 }
 
-func (ec *ExperimentConfig) CreateProperties() ([]*experimentation.Property, error) {
-	return []*experimentation.Property{
+func (ec *ExperimentConfig) CreateProperties() ([]*experimentationv1.Property, error) {
+	return []*experimentationv1.Property{
 		{
 			Id:    "config_identifier",
 			Label: "Config Identifier",
-			Value: &experimentation.Property_StringValue{StringValue: ec.id},
+			Value: &experimentationv1.Property_StringValue{StringValue: ec.Id},
 		},
 	}, nil
 }

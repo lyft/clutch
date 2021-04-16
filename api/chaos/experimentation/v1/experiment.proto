@@ -17,10 +17,9 @@ message Experiment {
     STATUS_RUNNING = 2;
     // An experiment has completed.
     STATUS_COMPLETED = 3;
-    // An experiment has been canceled before it started.
+    // An experiment has been stopped before it was completed. Used only
+    // for experiments with defined end_time.
     STATUS_CANCELED = 4;
-    // An experiment was running and was stopped before its originally scheduled end time.
-    STATUS_STOPPED = 5;
   }
 
   // An unique identifier of an experiment run.
@@ -32,4 +31,6 @@ message Experiment {
   // The time when the experiment should end, If unspecified, the experiment runs indefinitely unless it is manually
   // stopped by a user.
   google.protobuf.Timestamp end_time = 4;
+  // The status of the experiment.
+  Status status = 5;
 }
