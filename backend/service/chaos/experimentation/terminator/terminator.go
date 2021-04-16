@@ -40,10 +40,11 @@ type TerminationCriterion interface {
 
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	m, err := NewMonitor(cfg, logger, scope)
-	if err == nil {
-		m.Run(context.Background())
+	if err != nil {
+		return nil, err
 	}
 
+	m.Run(context.Background())
 	return m, nil
 }
 
