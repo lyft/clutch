@@ -3,29 +3,34 @@ import styled from "@emotion/styled";
 import type { ChipProps as MuiChipProps } from "@material-ui/core";
 import { Chip as MuiChip } from "@material-ui/core";
 
-type variants = "error" | "unknown" | "pending" | "running" | "succeeded";
 export interface ChipProps extends Pick<MuiChipProps, "label"> {
-  variant: variants;
+  variant: "WORST" | "BAD" | "NEUTRAL" | "BLANK" | "GOOD" | "BEST";
 }
 
 const CHIP_COLOR_MAP = {
-  error: "#FF8A80",
-  unknown: "#FFCC80",
-  pending: "#FFF59D",
-  running: "#C2C8F2",
-  succeeded: "#69F0AE",
+  WORST: "#FF8A80", // red
+  BAD: "#FFCC80", // orange
+  NEUTRAL: "#FFF59D", // yellow
+  BLANK: "#EBEDFB", // whiteish
+  GOOD: "#C2C8F2", // purplish
+  BEST: "#69F0AE", // green
 };
 
-const StyledChip = styled(MuiChip)({
-  height: "20px",
-  fontSize: "12px",
-  lineHeight: "20px",
-  cursor: "inherit",
-  margin: "10px",
-});
+const StyledChip = styled(MuiChip)(
+  {
+    height: "20px",
+    fontSize: "12px",
+    lineHeight: "20px",
+    cursor: "inherit",
+    margin: "10px",
+  },
+  props => ({
+    background: CHIP_COLOR_MAP["data-variant"],
+  })
+);
 
-const ClutchChip = ({ variant, ...props }: ChipProps) => {
-  return <StyledChip {...props} style={{ background: CHIP_COLOR_MAP[variant] }} />;
+const Chip = ({ variant, ...props }: ChipProps) => {
+  <StyledChip {...props} data-variant={variant} />;
 };
 
-export default ClutchChip;
+export default Chip;
