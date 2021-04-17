@@ -6,6 +6,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"regexp"
+	"strings"
 	"testing"
 	"time"
 
@@ -15,27 +16,9 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
-
-var experimentConfigTableColumns = []string{
-	"id",
-	"details",
-}
-
-type testQuery struct {
-	sql  string
-	args []driver.Value
-}
-
-type experimentTest struct {
-	id        string
-	config    *any.Any
-	startTime time.Time
-	queries   []*testQuery
-	err       error
-}
 
 type experimentConfigTestData struct {
 	stringifiedConfig string
@@ -43,23 +26,23 @@ type experimentConfigTestData struct {
 }
 
 func NewExperimentConfigTestData() (*experimentConfigTestData, error) {
-	config := &serverexperimentation.HTTPFaultConfig{
-		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
-			AbortFault: &serverexperimentation.AbortFault{
-				Percentage:  &serverexperimentation.FaultPercentage{Percentage: 100},
-				AbortStatus: &serverexperimentation.FaultAbortStatus{HttpStatusCode: 401},
+	config := &serverexperimentationv1.HTTPFaultConfig{
+		Fault: &serverexperimentationv1.HTTPFaultConfig_AbortFault{
+			AbortFault: &serverexperimentationv1.AbortFault{
+				Percentage:  &serverexperimentationv1.FaultPercentage{Percentage: 100},
+				AbortStatus: &serverexperimentationv1.FaultAbortStatus{HttpStatusCode: 401},
 			},
 		},
-		FaultTargeting: &serverexperimentation.FaultTargeting{
-			Enforcer: &serverexperimentation.FaultTargeting_UpstreamEnforcing{
-				UpstreamEnforcing: &serverexperimentation.UpstreamEnforcing{
-					UpstreamType: &serverexperimentation.UpstreamEnforcing_UpstreamCluster{
-						UpstreamCluster: &serverexperimentation.SingleCluster{
+		FaultTargeting: &serverexperimentationv1.FaultTargeting{
+			Enforcer: &serverexperimentationv1.FaultTargeting_UpstreamEnforcing{
+				UpstreamEnforcing: &serverexperimentationv1.UpstreamEnforcing{
+					UpstreamType: &serverexperimentationv1.UpstreamEnforcing_UpstreamCluster{
+						UpstreamCluster: &serverexperimentationv1.SingleCluster{
 							Name: "upstreamCluster",
 						},
 					},
-					DownstreamType: &serverexperimentation.UpstreamEnforcing_DownstreamCluster{
-						DownstreamCluster: &serverexperimentation.SingleCluster{
+					DownstreamType: &serverexperimentationv1.UpstreamEnforcing_DownstreamCluster{
+						DownstreamCluster: &serverexperimentationv1.SingleCluster{
 							Name: "downstreamCluster",
 						},
 					},
@@ -84,18 +67,34 @@ func NewExperimentConfigTestData() (*experimentConfigTestData, error) {
 	}, nil
 }
 
-func createExperimentsTests() ([]experimentTest, error) {
+func TestCreateExperiment(t *testing.T) {
 	ctd, err := NewExperimentConfigTestData()
-	if err != nil {
-		return nil, err
+	assert.NoError(t, err)
+
+	type exec struct {
+		sql  string
+		args []driver.Value
 	}
 
-	return []experimentTest{
+	type query struct {
+		sql    string
+		args   []driver.Value
+		result *sqlmock.Rows
+	}
+
+	tests := []struct {
+		id              string
+		config          *any.Any
+		startTime       time.Time
+		expectedExecs   []*exec
+		expectedQueries []*query
+		expectedError   error
+	}{
 		{
 			id:        "create experiment",
 			config:    ctd.marshaledConfig,
 			startTime: time.Now(),
-			queries: []*testQuery{
+			expectedExecs: []*exec{
 				{
 					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
 					args: []driver.Value{
@@ -113,47 +112,51 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 			},
-			err: nil,
+			expectedQueries: []*query{
+				{
+					sql:    `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, termination_reason, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`,
+					args:   []driver.Value{"1"},
+					result: sqlmock.NewRows([]string{"run_id", "execution_time", "execution_time", "cancellation_time", "creation_time", "termination_reason", "config_id", "details"}).AddRow("1", time.Now(), time.Now(), sql.NullTime{}, time.Now(), "", "2", ctd.stringifiedConfig),
+				},
+			},
 		},
-	}, nil
-}
-
-func TestCreateExperiments(t *testing.T) {
-	t.Parallel()
-
-	tests, err := createExperimentsTests()
-	if err != nil {
-		t.Errorf("setSnapshot failed %v", err)
 	}
 
-	for _, test := range tests {
-		test := test
-
-		t.Run(test.id, func(t *testing.T) {
+	for idx, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
-			a := assert.New(t)
 
 			db, mock, err := sqlmock.New()
-			a.NoError(err)
+			assert.NoError(t, err)
 
 			es := &storer{db: db}
 			defer es.Close()
 			mock.ExpectBegin()
-			for _, query := range test.queries {
+			for _, query := range tt.expectedExecs {
 				expected := mock.ExpectExec(regexp.QuoteMeta(query.sql))
 				expected.WithArgs(query.args...).WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 			mock.ExpectCommit()
 
-			s := ExperimentSpecification{RunId: "1", ConfigId: "1", StartTime: test.startTime, EndTime: nil, Config: test.config}
+			for _, query := range tt.expectedQueries {
+				expected := mock.ExpectQuery(regexp.QuoteMeta(query.sql))
+				expected.WithArgs(query.args...)
+				expected.WillReturnRows(query.result)
+			}
+
+			s := ExperimentSpecification{RunId: "1", ConfigId: "1", StartTime: tt.startTime, EndTime: nil, Config: tt.config}
 			_, err = es.CreateExperiment(context.Background(), &s)
-			a.Equal(test.err, err)
-			a.NoError(mock.ExpectationsWereMet())
+			assert.Equal(t, tt.expectedError, err)
+			assert.NoError(t, mock.ExpectationsWereMet())
 		})
 	}
 }
 
 func TestCreateOrGetExperiment(t *testing.T) {
+	ctd, err := NewExperimentConfigTestData()
+	assert.NoError(t, err)
+
 	type query struct {
 		sql    string
 		args   []driver.Value
@@ -165,35 +168,32 @@ func TestCreateOrGetExperiment(t *testing.T) {
 		args []driver.Value
 	}
 
-	a := assert.New(t)
-	ctd, err := NewExperimentConfigTestData()
-	a.NoError(err)
-
 	tests := []struct {
-		runId           string
-		expectedQueries []*query
-		expectedExecs   []*exec
-		expectedOrigin  experimentation.CreateOrGetExperimentResponse_Origin
+		runId              string
+		beforeExecsQueries []*query
+		expectedExecs      []*exec
+		afterExecsQueries  []*query
+		expectedOrigin     experimentationv1.CreateOrGetExperimentResponse_Origin
 	}{
 		{
 			runId: "1",
-			expectedQueries: []*query{
+			beforeExecsQueries: []*query{
 				{
 					sql:    `SELECT exists (select id from experiment_run where id == $1)`,
 					args:   []driver.Value{sqlmock.AnyArg()},
 					result: sqlmock.NewRows([]string{"exists"}).AddRow(true),
 				},
 				{
-					sql:    `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`,
+					sql:    `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, termination_reason, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`,
 					args:   []driver.Value{"1"},
-					result: sqlmock.NewRows([]string{"run_id", "execution_time", "execution_time", "cancellation_time", "creation_time", "config_id", "details"}).AddRow("1", time.Now(), time.Now(), sql.NullTime{}, time.Now(), "2", ctd.stringifiedConfig),
+					result: sqlmock.NewRows([]string{"run_id", "execution_time", "execution_time", "cancellation_time", "creation_time", "termination_reason", "config_id", "details"}).AddRow("1", time.Now(), time.Now(), sql.NullTime{}, time.Now(), "", "2", ctd.stringifiedConfig),
 				},
 			},
-			expectedOrigin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING,
+			expectedOrigin: experimentationv1.CreateOrGetExperimentResponse_ORIGIN_EXISTING,
 		},
 		{
 			runId: "1",
-			expectedQueries: []*query{
+			beforeExecsQueries: []*query{
 				{
 					sql:    `SELECT exists (select id from experiment_run where id == $1)`,
 					args:   []driver.Value{sqlmock.AnyArg()},
@@ -218,7 +218,14 @@ func TestCreateOrGetExperiment(t *testing.T) {
 					},
 				},
 			},
-			expectedOrigin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW,
+			afterExecsQueries: []*query{
+				{
+					sql:    `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, termination_reason, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`,
+					args:   []driver.Value{"1"},
+					result: sqlmock.NewRows([]string{"run_id", "execution_time", "execution_time", "cancellation_time", "creation_time", "termination_reason", "config_id", "details"}).AddRow("1", time.Now(), time.Now(), sql.NullTime{}, time.Now(), "", "2", ctd.stringifiedConfig),
+				},
+			},
+			expectedOrigin: experimentationv1.CreateOrGetExperimentResponse_ORIGIN_NEW,
 		},
 	}
 
@@ -228,11 +235,11 @@ func TestCreateOrGetExperiment(t *testing.T) {
 			t.Parallel()
 
 			db, mock, err := sqlmock.New()
-			a.NoError(err)
+			assert.NoError(t, err)
 
 			es := &storer{db: db}
 			defer es.Close()
-			for _, query := range tt.expectedQueries {
+			for _, query := range tt.beforeExecsQueries {
 				expected := mock.ExpectQuery(regexp.QuoteMeta(query.sql))
 				expected.WithArgs(query.args...)
 				expected.WillReturnRows(query.result)
@@ -247,11 +254,17 @@ func TestCreateOrGetExperiment(t *testing.T) {
 				mock.ExpectCommit()
 			}
 
+			for _, query := range tt.afterExecsQueries {
+				expected := mock.ExpectQuery(regexp.QuoteMeta(query.sql))
+				expected.WithArgs(query.args...)
+				expected.WillReturnRows(query.result)
+			}
+
 			s := ExperimentSpecification{RunId: tt.runId, StartTime: time.Now(), Config: ctd.marshaledConfig}
 			result, err := es.CreateOrGetExperiment(context.Background(), &s)
-			a.NoError(err)
-			a.Equal(tt.expectedOrigin, result.Origin)
-			a.NoError(mock.ExpectationsWereMet())
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expectedOrigin, result.Origin)
+			assert.NoError(t, mock.ExpectationsWereMet())
 		})
 	}
 }
@@ -273,72 +286,95 @@ func TestCancelExperimentRun(t *testing.T) {
 	assert.NoError(mock.ExpectationsWereMet())
 }
 
-var getExperimentsSQLQuery = `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
+func TestGetExperiments(t *testing.T) {
+	ctd, err := NewExperimentConfigTestData()
+	assert.NoError(t, err)
 
-func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
-	assert := assert.New(t)
+	now := time.Now()
+	future := time.Now().Add(2 * time.Minute)
 
-	db, mock, err := sqlmock.New()
-	assert.NoError(err)
+	run := &ExperimentRun{
+		Id:                "1",
+		StartTime:         now,
+		EndTime:           &future,
+		CancellationTime:  &future,
+		CreationTime:      now,
+		TerminationReason: "foo",
+	}
+	config := &ExperimentConfig{
+		Id:     "2",
+		Config: ctd.marshaledConfig,
+	}
 
-	es := &storer{db: db}
-	defer es.Close()
-
-	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
-	rows := sqlmock.NewRows(experimentConfigTableColumns)
-	rows.AddRow([]driver.Value{
-		1234,
-		`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
-	}...)
-	expected.WillReturnRows(rows)
-
-	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_STATUS_UNSPECIFIED)
-	assert.NoError(err)
-
-	assert.Equal(1, len(experiments))
-	experiment := experiments[0]
-	assert.Equal("1234", experiment.GetRunId())
-
-	config := &serverexperimentation.HTTPFaultConfig{}
-	err = experiment.GetConfig().UnmarshalTo(config)
-	assert.NoError(err)
-	assert.Nil(config.GetLatencyFault())
-	abort := config.GetAbortFault()
-	assert.NotNil(abort)
-	assert.Equal(uint32(401), abort.GetAbortStatus().GetHttpStatusCode())
-	assert.Equal(uint32(100), abort.GetPercentage().GetPercentage())
-	assert.NoError(mock.ExpectationsWereMet())
-}
-
-func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *testing.T) {
-	assert := assert.New(t)
-
-	db, mock, err := sqlmock.New()
-	assert.NoError(err)
-
-	es := &storer{db: db}
-	defer es.Close()
-
-	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
-	rowsData := [][]driver.Value{
+	tests := []struct {
+		queryResult          [][]driver.Value
+		expectedExperiments  []*Experiment
+		expectedErrorMessage string
+	}{
 		{
-			1,
-			`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
+			queryResult: [][]driver.Value{
+				{
+					run.Id, run.StartTime, run.EndTime, run.CancellationTime, run.CreationTime, run.TerminationReason, config.Id, ctd.stringifiedConfig,
+				},
+			},
+			expectedExperiments: []*Experiment{
+				{
+					Run: run, Config: config,
+				},
+			},
+			expectedErrorMessage: "",
 		},
 		{
-			2,
-			`{"@type": "malformed_foo","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
+			queryResult: [][]driver.Value{
+				{
+					run.Id, run.StartTime, run.EndTime, run.CancellationTime, run.CreationTime, run.TerminationReason, config.Id, ctd.stringifiedConfig,
+				},
+				{
+					run.Id, run.StartTime, run.EndTime, run.CancellationTime, run.CreationTime, run.TerminationReason, config.Id, "{malformed dictionary}",
+				},
+			},
+			expectedExperiments:  nil,
+			expectedErrorMessage: "syntax error (line 1:2): invalid value malformed",
 		},
 	}
 
-	rows := sqlmock.NewRows(experimentConfigTableColumns)
-	for _, row := range rowsData {
-		rows.AddRow(row...)
-	}
-	expected.WillReturnRows(rows)
+	for idx, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
 
-	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_STATUS_UNSPECIFIED)
-	assert.Nil(experiments)
-	assert.Error(err)
-	assert.NoError(mock.ExpectationsWereMet())
+			expectedQuery := `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, termination_reason, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
+			db, mock, err := sqlmock.New()
+			assert.NoError(t, err)
+			es := &storer{db: db}
+			defer es.Close()
+
+			rows := sqlmock.NewRows([]string{
+				"run_id",
+				"execution_time",
+				"execution_time",
+				"cancellation_time",
+				"creation_time",
+				"termination_reason",
+				"config_id",
+				"details",
+			})
+
+			for _, row := range tt.queryResult {
+				rows.AddRow(row...)
+			}
+
+			expected := mock.ExpectQuery(regexp.QuoteMeta(expectedQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
+			expected.WillReturnRows(rows)
+			experiments, err := es.GetExperiments(context.Background(), "foo", experimentationv1.GetExperimentsRequest_STATUS_UNSPECIFIED)
+
+			if tt.expectedErrorMessage != "" {
+				assert.True(t, strings.Contains(err.Error(), tt.expectedErrorMessage))
+			} else {
+				assert.NoError(t, err)
+			}
+			assert.Equal(t, tt.expectedExperiments, experiments)
+			assert.NoError(t, mock.ExpectationsWereMet())
+		})
+	}
 }

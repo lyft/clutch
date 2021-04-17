@@ -27,7 +27,7 @@ type getExperimentArguments struct {
 	ConfigType string
 }
 
-func (fs *MockStorer) CreateExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentation.Experiment, error) {
+func (fs *MockStorer) CreateExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.Experiment, error) {
 	return nil, nil
 }
 
@@ -39,7 +39,7 @@ func (fs *MockStorer) CancelExperimentRun(ctx context.Context, runId string, rea
 	return nil
 }
 
-func (fs *MockStorer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+func (fs *MockStorer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentstore.Experiment, error) {
 	fs.GetExperimentArguments = getExperimentArguments{ConfigType: configType}
 	return nil, nil
 }

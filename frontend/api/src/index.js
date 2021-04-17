@@ -9150,6 +9150,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {google.protobuf.IAny|null} [config] Experiment config
                      * @property {google.protobuf.ITimestamp|null} [startTime] Experiment startTime
                      * @property {google.protobuf.ITimestamp|null} [endTime] Experiment endTime
+                     * @property {clutch.chaos.experimentation.v1.Experiment.Status|null} [status] Experiment status
                      */
 
                     /**
@@ -9200,6 +9201,14 @@ export const clutch = $root.clutch = (() => {
                     Experiment.prototype.endTime = null;
 
                     /**
+                     * Experiment status.
+                     * @member {clutch.chaos.experimentation.v1.Experiment.Status} status
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.status = 0;
+
+                    /**
                      * Verifies an Experiment message.
                      * @function verify
                      * @memberof clutch.chaos.experimentation.v1.Experiment
@@ -9228,6 +9237,17 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "endTime." + error;
                         }
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                                break;
+                            }
                         return null;
                     };
 
@@ -9260,6 +9280,28 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.experimentation.v1.Experiment.endTime: object expected");
                             message.endTime = $root.google.protobuf.Timestamp.fromObject(object.endTime);
                         }
+                        switch (object.status) {
+                        case "STATUS_UNSPECIFIED":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "STATUS_SCHEDULED":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        case "STATUS_RUNNING":
+                        case 2:
+                            message.status = 2;
+                            break;
+                        case "STATUS_COMPLETED":
+                        case 3:
+                            message.status = 3;
+                            break;
+                        case "STATUS_CANCELED":
+                        case 4:
+                            message.status = 4;
+                            break;
+                        }
                         return message;
                     };
 
@@ -9281,6 +9323,7 @@ export const clutch = $root.clutch = (() => {
                             object.config = null;
                             object.startTime = null;
                             object.endTime = null;
+                            object.status = options.enums === String ? "STATUS_UNSPECIFIED" : 0;
                         }
                         if (message.runId != null && message.hasOwnProperty("runId"))
                             object.runId = message.runId;
@@ -9290,6 +9333,8 @@ export const clutch = $root.clutch = (() => {
                             object.startTime = $root.google.protobuf.Timestamp.toObject(message.startTime, options);
                         if (message.endTime != null && message.hasOwnProperty("endTime"))
                             object.endTime = $root.google.protobuf.Timestamp.toObject(message.endTime, options);
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.Experiment.Status[message.status] : message.status;
                         return object;
                     };
 
@@ -9313,7 +9358,6 @@ export const clutch = $root.clutch = (() => {
                      * @property {number} STATUS_RUNNING=2 STATUS_RUNNING value
                      * @property {number} STATUS_COMPLETED=3 STATUS_COMPLETED value
                      * @property {number} STATUS_CANCELED=4 STATUS_CANCELED value
-                     * @property {number} STATUS_STOPPED=5 STATUS_STOPPED value
                      */
                     Experiment.Status = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
@@ -9322,7 +9366,6 @@ export const clutch = $root.clutch = (() => {
                         values[valuesById[2] = "STATUS_RUNNING"] = 2;
                         values[valuesById[3] = "STATUS_COMPLETED"] = 3;
                         values[valuesById[4] = "STATUS_CANCELED"] = 4;
-                        values[valuesById[5] = "STATUS_STOPPED"] = 5;
                         return values;
                     })();
 
@@ -10033,7 +10076,6 @@ export const clutch = $root.clutch = (() => {
                             case 2:
                             case 3:
                             case 4:
-                            case 5:
                                 break;
                             }
                         if (message.properties != null && message.hasOwnProperty("properties")) {
@@ -10083,10 +10125,6 @@ export const clutch = $root.clutch = (() => {
                         case "STATUS_CANCELED":
                         case 4:
                             message.status = 4;
-                            break;
-                        case "STATUS_STOPPED":
-                        case 5:
-                            message.status = 5;
                             break;
                         }
                         if (object.properties != null) {

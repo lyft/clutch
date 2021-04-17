@@ -5,7 +5,6 @@ import (
 
 	"go.uber.org/zap"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -31,7 +30,7 @@ const (
 	HTTPStatusForEgress        = `%s.%s.abort.http_status`
 )
 
-func GetEnforcingCluster(experiment *experimentation.Experiment, logger *zap.SugaredLogger) (string, error) {
+func GetEnforcingCluster(experiment *experimentstore.Experiment, logger *zap.SugaredLogger) (string, error) {
 	httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
 	if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
 		return "", nil
@@ -54,7 +53,7 @@ func GetEnforcingCluster(experiment *experimentation.Experiment, logger *zap.Sug
 	}
 }
 
-func RuntimeKeysGeneration(experiment *experimentation.Experiment, runtimePrefixes *experimentstore.RuntimePrefixes, logger *zap.SugaredLogger) ([]*experimentstore.RuntimeKeyValue, error) {
+func RuntimeKeysGeneration(experiment *experimentstore.Experiment, runtimePrefixes *experimentstore.RuntimePrefixes, logger *zap.SugaredLogger) ([]*experimentstore.RuntimeKeyValue, error) {
 	httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
 	if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
 		return nil, nil
@@ -162,8 +161,8 @@ func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFau
 	return percentageKey, percentageValue, faultKey, faultValue, nil
 }
 
-func maybeUnmarshalFaultTest(experiment *experimentation.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
-	err := experiment.GetConfig().UnmarshalTo(httpFaultConfig)
+func maybeUnmarshalFaultTest(experiment *experimentstore.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
+	err := experiment.Config.Config.UnmarshalTo(httpFaultConfig)
 	if err != nil {
 		return false
 	}

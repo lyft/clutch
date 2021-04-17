@@ -2,14 +2,12 @@ package experimentstore
 
 import (
 	"go.uber.org/zap"
-
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type RuntimeGeneration struct {
 	ConfigTypeUrl         string
-	GetEnforcingCluster   func(experiment *experimentation.Experiment, logger *zap.SugaredLogger) (string, error)
-	RuntimeKeysGeneration func(experiment *experimentation.Experiment, runtimePrefixes *RuntimePrefixes, logger *zap.SugaredLogger) ([]*RuntimeKeyValue, error)
+	GetEnforcingCluster   func(experiment *Experiment, logger *zap.SugaredLogger) (string, error)
+	RuntimeKeysGeneration func(experiment *Experiment, runtimePrefixes *RuntimePrefixes, logger *zap.SugaredLogger) ([]*RuntimeKeyValue, error)
 }
 
 type RuntimeGenerator struct {

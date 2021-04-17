@@ -4,48 +4,37 @@ import (
 	"context"
 	"strconv"
 	"sync"
-	"time"
-
-	"google.golang.org/protobuf/types/known/anypb"
-	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-type SimpleExperiment struct {
-	runId     string
-	config    *anypb.Any
-	startTime time.Time
-	stopTime  *time.Time
-}
-
-func (s *SimpleExperiment) toProto() *experimentation.Experiment {
-	startTime := timestamppb.New(s.startTime)
-	endTime := timestamppb.New(*s.stopTime)
-	return &experimentation.Experiment{
-		RunId:     s.runId,
-		Config:    s.config,
-		StartTime: startTime,
-		EndTime:   endTime,
-	}
-}
-
 type SimpleStorer struct {
-	experiments []SimpleExperiment
+	experiments []*experimentstore.Experiment
 	idGenerator int
 	runtimeGeneration experimentstore.RuntimeGeneration
 
 	sync.Mutex
 }
 
-func (s *SimpleStorer) CreateExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentation.Experiment, error) {
+func (s *SimpleStorer) CreateExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.Experiment, error) {
 	s.Lock()
 	defer s.Unlock()
 
-	s.experiments = append(s.experiments, SimpleExperiment{runId: strconv.Itoa(s.idGenerator), config: es.Config, startTime: es.StartTime, stopTime: es.EndTime})
+	e := &experimentstore.Experiment{
+		Run: &experimentstore.ExperimentRun{
+			Id:        strconv.Itoa(s.idGenerator),
+			StartTime: es.StartTime,
+			EndTime:   es.EndTime,
+		},
+		Config: &experimentstore.ExperimentConfig{
+			Id:     strconv.Itoa(s.idGenerator),
+			Config: es.Config,
+		},
+	}
+	s.experiments = append(s.experiments, e)
 	s.idGenerator++
-	return s.experiments[len(s.experiments)-1].toProto(), nil
+	return s.experiments[len(s.experiments)-1], nil
 }
 
 func (s *SimpleStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.CreateOrGetExperimentResult, error) {
@@ -64,9 +53,9 @@ func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, runId string, re
 	s.Lock()
 	defer s.Unlock()
 
-	newExperiments := []SimpleExperiment{}
+	var newExperiments []*experimentstore.Experiment
 	for _, e := range s.experiments {
-		if e.runId == runId {
+		if e.Run.Id == runId {
 			continue
 		}
 
@@ -77,15 +66,12 @@ func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, runId string, re
 	return nil
 }
 
-func (s *SimpleStorer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+func (s *SimpleStorer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentstore.Experiment, error) {
 	s.Lock()
 	defer s.Unlock()
 
-	experiments := []*experimentation.Experiment{}
-
-	for _, e := range s.experiments {
-		experiments = append(experiments, e.toProto())
-	}
+	var experiments []*experimentstore.Experiment
+	experiments = append(experiments, s.experiments...)
 
 	return experiments, nil
 }

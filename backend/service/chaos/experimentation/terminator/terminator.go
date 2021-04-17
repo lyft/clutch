@@ -18,7 +18,7 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-const Name = "clutch.module.chaos.experimentation.termination"
+const Name = "clutch.service.chaos.experimentation.termination"
 
 func TypeUrl(message proto.Message) string {
 	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
@@ -35,15 +35,16 @@ type CriterionFactory interface {
 type TerminationCriterion interface {
 	// ShouldTerminate determines whether the provided experiment should be terminated.
 	// To signal that termination should occur, return a non-empty string with a nil error.
-	ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error)
+	ShouldTerminate(experiment *experimentstore.Experiment, experimentConfig proto.Message) (string, error)
 }
 
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	m, err := NewMonitor(cfg, logger, scope)
 	if err != nil {
-		m.Run(context.Background())
+		return nil, err
 	}
 
+	m.Run(context.Background())
 	return m, nil
 }
 
@@ -158,14 +159,14 @@ func (m *Monitor) Run(ctx context.Context) {
 
 // Iterates over all the provided experiments, spawning a goroutine to montior each experiment that doesn't already have
 // a monitoring routine. Returns a set containing all the active experiment ids for further processing.
-func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[string]context.CancelFunc, criteria []TerminationCriterion) map[string]struct{} {
+func (m *Monitor) monitorNewExperiments(es []*experimentstore.Experiment, trackedExperiments map[string]context.CancelFunc, criteria []TerminationCriterion) map[string]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
 	activeExperiments := map[string]struct{}{}
 	for _, e := range es {
-		activeExperiments[e.RunId] = struct{}{}
-		if _, ok := trackedExperiments[e.RunId]; !ok {
+		activeExperiments[e.Run.Id] = struct{}{}
+		if _, ok := trackedExperiments[e.Run.Id]; !ok {
 			ctx, cancel := context.WithCancel(context.Background())
-			trackedExperiments[e.RunId] = cancel
+			trackedExperiments[e.Run.Id] = cancel
 
 			m.activeMonitoringRoutines.inc()
 			go func() {
@@ -177,16 +178,16 @@ func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trac
 	return activeExperiments
 }
 
-func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment, criteria []TerminationCriterion) {
+func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentstore.Experiment, criteria []TerminationCriterion) {
 	ticker := time.NewTicker(m.perExperimentCheckInterval)
 	terminated := false
 
 	// TODO(snowp): I suspect that we might run into issues here if we try to unpack an "old" proto
 	// which is no longer linked into the program due to how the type registry works, but this should
 	// be rare enough that logging an error is probably fine.
-	unpackedConfig, err := anypb.UnmarshalNew(e.Config, proto.UnmarshalOptions{})
+	unpackedConfig, err := anypb.UnmarshalNew(e.Config.Config, proto.UnmarshalOptions{})
 	if err != nil {
-		m.log.Errorw("failed to unmarshal experiment", "runId", e.RunId)
+		m.log.Errorw("failed to unmarshal experiment", "runId", e.Run.Id)
 		m.marshallingErrorCount.Inc(1)
 		return
 	}
@@ -206,19 +207,19 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
 					m.criterionEvaluationFailureCount.Inc(1)
-					m.log.Errorw("error while evaluating termination criterion", "runId", e.RunId, "error", err)
+					m.log.Errorw("error while evaluating termination criterion", "runId", e.Run.Id, "error", err)
 					continue
 				}
 
 				m.criterionEvaluationSuccessCount.Inc(1)
 
 				if terminationReason != "" {
-					err = m.store.CancelExperimentRun(context.Background(), e.RunId, terminationReason)
+					err = m.store.CancelExperimentRun(context.Background(), e.Run.Id, terminationReason)
 					if err != nil {
-						m.log.Errorw("failed to terminate experiment", "err", err, "experimentRunId", e.RunId)
+						m.log.Errorw("failed to terminate experiment", "err", err, "experimentRunId", e.Run.Id)
 						continue
 					}
-					m.log.Errorw("terminated experiment", "experimentRunId", e.RunId)
+					m.log.Errorw("terminated experiment", "experimentRunId", e.Run.Id)
 					m.terminationCount.Inc(1)
 					terminated = true
 				}

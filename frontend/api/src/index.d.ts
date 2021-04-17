@@ -4003,6 +4003,9 @@ export namespace clutch {
 
                     /** Experiment endTime */
                     endTime?: (google.protobuf.ITimestamp|null);
+
+                    /** Experiment status */
+                    status?: (clutch.chaos.experimentation.v1.Experiment.Status|null);
                 }
 
                 /** Represents an Experiment. */
@@ -4025,6 +4028,9 @@ export namespace clutch {
 
                     /** Experiment endTime. */
                     public endTime?: (google.protobuf.ITimestamp|null);
+
+                    /** Experiment status. */
+                    public status: clutch.chaos.experimentation.v1.Experiment.Status;
 
                     /**
                      * Verifies an Experiment message.
@@ -4063,8 +4069,7 @@ export namespace clutch {
                         STATUS_SCHEDULED = 1,
                         STATUS_RUNNING = 2,
                         STATUS_COMPLETED = 3,
-                        STATUS_CANCELED = 4,
-                        STATUS_STOPPED = 5
+                        STATUS_CANCELED = 4
                     }
                 }
 

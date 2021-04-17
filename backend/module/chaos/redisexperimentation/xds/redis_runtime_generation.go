@@ -5,7 +5,6 @@ import (
 
 	"go.uber.org/zap"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	redisexperimentation "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -17,7 +16,7 @@ const (
 	RedisErrorPercentageWithDownstream   = `%s.%s.delay.error_percent`
 )
 
-func GetEnforcingCluster(experiment *experimentation.Experiment, logger *zap.SugaredLogger) (string, error) {
+func GetEnforcingCluster(experiment *experimentstore.Experiment, logger *zap.SugaredLogger) (string, error) {
 	redisFaultConfig := &redisexperimentation.FaultConfig{}
 	if !maybeUnmarshalRedisFaultTest(experiment, redisFaultConfig) {
 		logger.Errorw("Invalid redis fault config", "config", redisFaultConfig)
@@ -28,7 +27,7 @@ func GetEnforcingCluster(experiment *experimentation.Experiment, logger *zap.Sug
 	return upstreamCluster, nil
 }
 
-func RuntimeKeysGeneration(experiment *experimentation.Experiment, runtimePrefixes *experimentstore.RuntimePrefixes, logger *zap.SugaredLogger) ([]*experimentstore.RuntimeKeyValue, error) {
+func RuntimeKeysGeneration(experiment *experimentstore.Experiment, runtimePrefixes *experimentstore.RuntimePrefixes, logger *zap.SugaredLogger) ([]*experimentstore.RuntimeKeyValue, error) {
 	redisFaultConfig := &redisexperimentation.FaultConfig{}
 	if !maybeUnmarshalRedisFaultTest(experiment, redisFaultConfig) {
 		logger.Errorw("Invalid redis fault config", "config", redisFaultConfig)
@@ -80,8 +79,8 @@ func createRedisRuntimeKeys(upstreamCluster string, redisFaultConfig *redisexper
 	return percentageKey, percentageValue, nil
 }
 
-func maybeUnmarshalRedisFaultTest(experiment *experimentation.Experiment, redisFaultConfig *redisexperimentation.FaultConfig) bool {
-	err := experiment.GetConfig().UnmarshalTo(redisFaultConfig)
+func maybeUnmarshalRedisFaultTest(experiment *experimentstore.Experiment, redisFaultConfig *redisexperimentation.FaultConfig) bool {
+	err := experiment.Config.Config.UnmarshalTo(redisFaultConfig)
 	if err != nil {
 		return false
 	}

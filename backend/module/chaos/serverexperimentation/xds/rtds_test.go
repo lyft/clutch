@@ -32,7 +32,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 		var expectedFaultValue uint32
 
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := testExperiment.GetConfig().UnmarshalTo(config)
+		err := testExperiment.Config.Config.UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
