@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"google.golang.org/protobuf/proto"
 
 	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
@@ -15,7 +14,7 @@ type maxTimeTerminationCriterion struct {
 	maxTime time.Duration
 }
 
-func (m maxTimeTerminationCriterion) ShouldTerminate(experiment *experimentstore.Experiment, experimentConfig proto.Message) (string, error) {
+func (m maxTimeTerminationCriterion) ShouldTerminate(experiment *experimentstore.Experiment) (string, error) {
 	startTime := experiment.Run.StartTime
 
 	if startTime.Add(m.maxTime).Before(time.Now()) {
