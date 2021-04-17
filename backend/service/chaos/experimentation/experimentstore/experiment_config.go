@@ -11,6 +11,7 @@ import (
 
 type ExperimentConfig struct {
 	Id      string
+	// TODO(Augustyniak): Remove Config property once all of its existing usages are removed. Use Message property instead.
 	Config  *any.Any
 	Message proto.Message
 }
