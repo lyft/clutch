@@ -11,7 +11,6 @@ import (
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -271,12 +270,12 @@ func (t *testCriterion) start() {
 	t.startCheckingTime = true
 }
 
-func (t *testCriterion) ShouldTerminate(experiment *experimentstore.Experiment, experimentConfig proto.Message) (string, error) {
+func (t *testCriterion) ShouldTerminate(experiment *experimentstore.Experiment) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
 	// Sanity check that we get the expected configuration type.
-	if _, ok := experimentConfig.(*serverexperimentation.HTTPFaultConfig); !ok {
+	if _, ok := experiment.Config.Message.(*serverexperimentation.HTTPFaultConfig); !ok {
 		panic("received unexpected experiment config")
 	}
 	started := experiment.Run.StartTime
