@@ -92,8 +92,8 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 	return &slackbotv1.EventResponse{}, nil
 }
 
-// TODO: (sperry) Slack currently still supports this verification type but they plan to deprecate this inf the future &
-// we want to check the signing secret instead so this is a short-term solution (need to change API design first)
+// TODO: (sperry) Slack plans to deprecate this form of verification in the future. we'll refactor to check the
+// signing secret instead (need to change API design)
 func verifySlackRequest(token, requestToken string) error {
 	t := slackevents.TokenComparator{VerificationToken: token}
 	ok := t.Verify(requestToken)
