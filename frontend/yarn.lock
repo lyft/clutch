@@ -1878,10 +1878,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hookform/devtools@^3.0.0":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@hookform/devtools/-/devtools-3.0.1.tgz#1140da954835760d1328320caac0d8baba1e5212"
-  integrity sha512-vxA9mPFehRlLnPcefOBJWFswSPmr/bMKVIlJGPnO/hyIssvsLpnT1OkoQBPuDLODjtrNrYTumXrPIhxLYDUA0A==
+"@hookform/devtools@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@hookform/devtools/-/devtools-3.0.2.tgz#96bcc0b3ceeb5a54e8f6917b6e3d12ced2c4c2a9"
+  integrity sha512-MKACdurOQwNK6bRzDRRnsMMCYZKf9QVHuKBisnVYNPVgDOhuecp02EroocBe92Hs8MAZSrenNwzzH6+7I+SprA==
   dependencies:
     "@emotion/core" "^10.0.28"
     "@emotion/styled" "^10.0.27"
@@ -1890,10 +1890,10 @@
     lodash "^4.17.15"
     react-simple-animate "^3.3.8"
 
-"@hookform/resolvers@2.0.0", "@hookform/resolvers@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.0.0.tgz#256414308d4584f2037d5c4349c119dbd66d11d6"
-  integrity sha512-picG6qjP516JNblvg/wuDc8JPfdm3aNbtPbfu+PXQWFXp6ED6dyBL2IoB/tDvPFaNwwqUEwb6UYVKMIFAH+aqQ==
+"@hookform/resolvers@2.4.0", "@hookform/resolvers@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.4.0.tgz#3b454463fbb5e7a0de4da029fa34e677f32d8d8d"
+  integrity sha512-KiHc7Uwd2IJMvPTMQ9vQxfss2ulq2gRYL/HYZ90qiTs+07UgGWCikiIvE2pKjjGVltEYjq5eR8x0ITmoyEjGxQ==
 
 "@icons/material@^0.2.4":
   version "0.2.4"
@@ -16835,10 +16835,10 @@ react-helmet-async@^1.0.2:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
-react-hook-form@^7.0.0:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.0.3.tgz#b26ddbcafcd7973e25ebdf26beaa34df57776025"
-  integrity sha512-NTxs6i4mvvd0MBuAX7rWfyM+DteDwvVGWjhbZk00gfoINHip0SZrLDrnOxT0inFXQZAWbL7veIxGEE46Fps4zg==
+react-hook-form@^7.2.1:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.2.1.tgz#99b3540dd2314499df12e9a53c70587ad63a806c"
+  integrity sha512-QopAubhVofqQrwlWLr9aK0DF8tNU8fnU8sJIlw1Tb3tGkEvP9yeaA+cx1hlxYni8xBswtHruL1WcDEa6CYQDow==
 
 react-hook-thunk-reducer@^0.2.1:
   version "0.2.4"
