@@ -15,6 +15,9 @@ ANGULAR_CLANG_FORMAT_RELEASE=1.4.0
 ANGULAR_CLANG_FORMAT_RELEASE_MD5_LINUX=fee8c52e196e28ae5928d6ff8757f58c
 ANGULAR_CLANG_FORMAT_RELEASE_MD5_OSX=c3ebe742599dcc38b9dc6544cacd69bb
 
+# Ideally matches https://github.com/bazelbuild/rules_go/blob/master/go/private/repositories.bzl
+GOOGLEAPIS_SHA=d4cd8d96ed6eb5dd7c997aab68a1d6bb0825090c
+
 PROTOS=()
 PROTO_DIRS=()
 
@@ -77,9 +80,9 @@ main() {
   cd "${REPO_ROOT}/backend"
 
   prepare_build_environment
-  discover_protos
+  discover_protos 
 
-  grpc_gateway_include_path="$(modpath github.com/grpc-ecosystem/grpc-gateway/v2)/third_party/googleapis"
+  googleapis_include_path="${BUILD_ROOT}/bin/googleapis-${GOOGLEAPIS_SHA}"
   pg_validate_include_path="$(modpath github.com/envoyproxy/protoc-gen-validate)"
 
   # Lint (fix) and exit if requested.
@@ -104,7 +107,7 @@ main() {
       for proto in "${PROTOS[@]}"; do
         if ! output=$("${PROTOC_BIN}" \
           -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
-          -I"${grpc_gateway_include_path}" -I"${pg_validate_include_path}" \
+          -I"${googleapis_include_path}" -I"${pg_validate_include_path}" \
           --buf-check-lint_out=. \
           "--buf-check-lint_opt={\"input_config\": ${buf_lint_config}}" \
           --plugin=protoc-gen-buf-check-lint="${GOBIN}/protoc-gen-buf-check-lint" \
@@ -128,7 +131,7 @@ main() {
     echo "${proto_dir}"
     "${PROTOC_BIN}" \
       -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
-      -I"${grpc_gateway_include_path}" -I"${pg_validate_include_path}" \
+      -I"${googleapis_include_path}" -I"${pg_validate_include_path}" \
       --go_out "${proto_out_dir}" \
       --go_opt paths=source_relative \
       --go-grpc_out "${proto_out_dir}" \
@@ -149,7 +152,7 @@ main() {
   js_out="frontend/api/src/index.js"
   "${PROTOBUFJS_DIR}/node_modules/.bin/pbjs" \
     -p "${PROTOC_INCLUDE_DIR}" -p "${API_ROOT}" -p"${CLUTCH_API_ROOT}" \
-    -p "${grpc_gateway_include_path}" -p "${pg_validate_include_path}" \
+    -p "${googleapis_include_path}" -p "${pg_validate_include_path}" \
     -t static-module \
     --no-create --no-encode --no-decode --no-delimited \
     -w es6 --es6 \
@@ -188,6 +191,7 @@ prepare_build_environment() {
   mkdir -p "${GOBIN}"
 
   install_protoc
+  install_googleapis
 
   if [[ "${ACTION}" == "compile" ]]; then
     install_protobufjs
@@ -211,6 +215,34 @@ install_protobufjs() {
     echo "info: Downloading protobufjs to build environment"
     mkdir -p "${PROTOBUFJS_DIR}"
     "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "protobufjs@${PROTOBUFJS_RELEASE}"
+  fi
+}
+
+install_googleapis() {
+  final_out_dir="${BUILD_ROOT}/bin/googleapis-${GOOGLEAPIS_SHA}/google"
+  if [[ ! -f "${final_out_dir}/rpc/status.proto" ]]; then
+    echo "info: Downloading googleapis@${GOOGLEAPIS_SHA} to build environment"
+    googleapis_zip_out="/tmp/googleapis-${GOOGLEAPIS_SHA}.zip"
+    curl -sSL -o "${googleapis_zip_out}" \
+      "https://github.com/googleapis/googleapis/archive/${GOOGLEAPIS_SHA}.zip"
+    
+    googleapis_dir_out="/tmp/googleapis-${GOOGLEAPIS_SHA}"
+    mkdir -p "${googleapis_dir_out}"
+    unzip -q -o "${googleapis_zip_out}" -d "${googleapis_dir_out}"
+
+    final_out_dir="${BUILD_ROOT}/bin/googleapis-${GOOGLEAPIS_SHA}/google"
+
+    mkdir -p "${final_out_dir}/api"
+    mkdir -p "${final_out_dir}/rpc"
+
+    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/annotations.proto" "${final_out_dir}/api"
+    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/field_behavior.proto" "${final_out_dir}/api"
+    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/http.proto" "${final_out_dir}/api"
+    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/httpbody.proto" "${final_out_dir}/api"
+
+    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/code.proto" "${final_out_dir}/rpc"
+    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/error_details.proto" "${final_out_dir}/rpc"
+    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/status.proto" "${final_out_dir}/rpc"
   fi
 }
 
