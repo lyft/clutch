@@ -11,7 +11,11 @@ message Config {
   // Bot tokens begin with "xoxb-", https://api.slack.com/authentication/token-types#bot
   string bot_token = 1 [ (validate.rules).string = {min_bytes : 1} ];
 
-  // Slack signs the requests using this secret. Used to confirm that each request came from Slack.
+  // Slack signs the requests using this secret and is a way to confirm that each request came from Slack.
   // https://api.slack.com/authentication/verifying-requests-from-slack
-  string signing_secret = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string signing_secret = 2;
+
+  // Bot app's verification token is sent in each request from Slack and is a way to confirm the request came from
+  // Slack.
+  string verification_token = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }

@@ -44,19 +44,19 @@ func TestExperimentRunDetailsStatus(t *testing.T) {
 		},
 		{
 			startTime:        now,
+			endTime:          &farFuture,
+			cancellationTime: &future,
+			creationTime:     now,
+			now:              future,
+			expectedStatus:   experimentation.Experiment_STATUS_CANCELED,
+		},
+		{
+			startTime:        now,
 			endTime:          nil,
 			cancellationTime: nil,
 			creationTime:     now,
 			now:              future,
 			expectedStatus:   experimentation.Experiment_STATUS_RUNNING,
-		},
-		{
-			startTime:        now,
-			endTime:          &farFuture,
-			cancellationTime: &future,
-			creationTime:     now,
-			now:              future,
-			expectedStatus:   experimentation.Experiment_STATUS_STOPPED,
 		},
 		{
 			startTime:        now,
@@ -80,7 +80,7 @@ func TestExperimentRunDetailsStatus(t *testing.T) {
 				CancellationTime: tt.cancellationTime,
 				CreationTime:     tt.creationTime,
 			}
-			config := &ExperimentConfig{id: "2", Config: &any.Any{}}
+			config := &ExperimentConfig{Id: "2", Config: &any.Any{}}
 			tr := NewTransformer(zaptest.NewLogger(t).Sugar())
 			rd, err := NewRunDetails(run, config, &tr, tt.now)
 			assert.NoError(t, err)

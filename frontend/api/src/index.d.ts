@@ -3042,6 +3042,9 @@ export namespace clutch {
 
                     /** EventRequest challenge */
                     challenge?: (string|null);
+
+                    /** EventRequest minuteRateLimited */
+                    minuteRateLimited?: (string|null);
                 }
 
                 /** Represents an EventRequest. */
@@ -3085,6 +3088,9 @@ export namespace clutch {
 
                     /** EventRequest challenge. */
                     public challenge: string;
+
+                    /** EventRequest minuteRateLimited. */
+                    public minuteRateLimited: string;
 
                     /**
                      * Verifies an EventRequest message.
@@ -3997,6 +4003,9 @@ export namespace clutch {
 
                     /** Experiment endTime */
                     endTime?: (google.protobuf.ITimestamp|null);
+
+                    /** Experiment status */
+                    status?: (clutch.chaos.experimentation.v1.Experiment.Status|null);
                 }
 
                 /** Represents an Experiment. */
@@ -4019,6 +4028,9 @@ export namespace clutch {
 
                     /** Experiment endTime. */
                     public endTime?: (google.protobuf.ITimestamp|null);
+
+                    /** Experiment status. */
+                    public status: clutch.chaos.experimentation.v1.Experiment.Status;
 
                     /**
                      * Verifies an Experiment message.
@@ -4057,8 +4069,7 @@ export namespace clutch {
                         STATUS_SCHEDULED = 1,
                         STATUS_RUNNING = 2,
                         STATUS_COMPLETED = 3,
-                        STATUS_CANCELED = 4,
-                        STATUS_STOPPED = 5
+                        STATUS_CANCELED = 4
                     }
                 }
 
@@ -4546,9 +4557,6 @@ export namespace clutch {
 
                     /** FaultTargeting downstreamCluster */
                     downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
-
-                    /** FaultTargeting redisCommands */
-                    redisCommands?: (string[]|null);
                 }
 
                 /** Represents a FaultTargeting. */
@@ -4565,9 +4573,6 @@ export namespace clutch {
 
                     /** FaultTargeting downstreamCluster. */
                     public downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
-
-                    /** FaultTargeting redisCommands. */
-                    public redisCommands: string[];
 
                     /**
                      * Verifies a FaultTargeting message.
@@ -6607,6 +6612,9 @@ export namespace clutch {
 
                             /** Config signingSecret */
                             signingSecret?: (string|null);
+
+                            /** Config verificationToken */
+                            verificationToken?: (string|null);
                         }
 
                         /** Represents a Config. */
@@ -6623,6 +6631,9 @@ export namespace clutch {
 
                             /** Config signingSecret. */
                             public signingSecret: string;
+
+                            /** Config verificationToken. */
+                            public verificationToken: string;
 
                             /**
                              * Verifies a Config message.
@@ -7839,6 +7850,68 @@ export namespace clutch {
 
                         /**
                          * Converts this ClientConfig to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
+            /** Namespace bot. */
+            namespace bot {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Bot enum. */
+                    enum Bot {
+                        UNSPECIFIED = 0,
+                        SLACK = 1
+                    }
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config botProvider */
+                        botProvider?: (clutch.config.service.bot.v1.Bot|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.bot.v1.IConfig);
+
+                        /** Config botProvider. */
+                        public botProvider: clutch.config.service.bot.v1.Bot;
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.bot.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.bot.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
@@ -11497,6 +11570,9 @@ export namespace clutch {
 
                 /** Pod initContainers */
                 initContainers?: (clutch.k8s.v1.IContainer[]|null);
+
+                /** Pod status */
+                status?: (string|null);
             }
 
             /** Represents a Pod. */
@@ -11546,6 +11622,9 @@ export namespace clutch {
 
                 /** Pod initContainers. */
                 public initContainers: clutch.k8s.v1.IContainer[];
+
+                /** Pod status. */
+                public status: string;
 
                 /**
                  * Verifies a Pod message.

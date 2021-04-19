@@ -41,9 +41,6 @@ message FaultTargeting {
   SingleCluster upstream_cluster = 1;
   // A single downstream cluster sending requests to redis upstream.
   SingleCluster downstream_cluster = 2;
-
-  // The redis commands to enforce a fault on. If unset, faults will apply to all redis commands.
-  repeated string redis_commands = 3 [ (validate.rules).repeated = {unique : true} ];
 }
 
 // A single cluster that is partaking in the fault injection.

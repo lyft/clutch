@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package clutch.config.service.bot.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/service/bot/v1;botv1";
+
+import "validate/validate.proto";
+
+// We need to add bot types to this list as they are supported in clutch.
+enum Bot {
+  UNSPECIFIED = 0;
+  SLACK = 1;
+}
+
+message Config {
+  Bot bot_provider = 1 [ (validate.rules).enum = {defined_only : true} ];
+}

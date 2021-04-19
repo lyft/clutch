@@ -13,6 +13,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"golang.org/x/oauth2"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
@@ -239,6 +241,44 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 	}
 
 	return claims, nil
+}
+
+func (p *OIDCProvider) Read(ctx context.Context, userID, provider string) (*oauth2.Token, error) {
+	if p.tokenStorage == nil {
+		return nil, status.Error(codes.Internal, "token read attempted but storage is not configured")
+	}
+
+	if provider != p.providerAlias {
+		return nil, status.Errorf(codes.InvalidArgument, "provider '%s' cannot read '%s' tokens", p.providerAlias, provider)
+	}
+
+	// Get token from storage.
+	t, err := p.tokenStorage.Read(ctx, userID, provider)
+	if err != nil {
+		return nil, err
+	}
+
+	// Validate token and return it if valid.
+	if t.Valid() {
+		return t, nil
+	}
+
+	if t.RefreshToken == "" {
+		return nil, status.Error(codes.Unauthenticated, "the token has expired and no refresh token is present")
+	}
+
+	// If invalid, attempt refresh.
+	newToken, err := p.oauth2.TokenSource(ctx, t).Token()
+	if err != nil {
+		return nil, err
+	}
+
+	// Store new token if refresh succeeded.
+	if err := p.tokenStorage.Store(ctx, userID, provider, newToken); err != nil {
+		return nil, err
+	}
+
+	return newToken, nil
 }
 
 func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage Storage) (Provider, error) {
