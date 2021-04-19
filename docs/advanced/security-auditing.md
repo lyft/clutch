@@ -130,9 +130,9 @@ The second annotation (`patterns = ...`) says that the identifier for this messa
 
 ### Middleware
 
-On each request, the [above annotations](#annotations) are read along with what endpoint was called, by whom, and when. When a response is being sent, any additional resources or final identifiers are merged with the initial list from the request.
+On each request, the [above annotations](#api-annotations) are read along with what endpoint was called, by whom, and when. When a response is being sent, any additional resources or final identifiers are merged with the initial list from the request.
 
-All of this information is passed along to the audit [service](./###Service) to persist.
+All of this information is passed along to the audit [service](#service) to persist.
 
 The configuration for the audit middleware looks like:
 
