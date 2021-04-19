@@ -43,7 +43,7 @@
     "material-table": "1.69.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "react-hook-form": "^6.11.0",
+    "react-hook-form": "^6.15.5",
     "react-is": "^16.8.0",
     "react-router": "^6.0.0-beta",
     "react-router-dom": "^6.0.0-beta",
