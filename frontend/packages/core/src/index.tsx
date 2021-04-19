@@ -27,6 +27,7 @@ import Loadable from "./loading";
 import { client } from "./Network";
 import ExpansionPanel from "./panel";
 import Paper from "./paper";
+import { Popper, PopperItem } from "./popper";
 import Resolver from "./Resolver";
 import { Step, Stepper } from "./stepper";
 import { Tab, Tabs } from "./tab";
@@ -40,7 +41,6 @@ import {
   TableRowActions,
   TreeTable,
 } from "./Table";
-import { Popper, PopperItem } from "./popper";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
