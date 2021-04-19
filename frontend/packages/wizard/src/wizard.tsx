@@ -97,10 +97,13 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
     };
   };
 
-  const lastStepIndex = React.Children.count(children) - 1;
+  // toArray will exclude any null Children.
+  const filteredChildren = React.Children.toArray(children);
+
+  const lastStepIndex = filteredChildren.length - 1;
   // If our wizard only has 1 step, it doesn't make sense to put a restart button
   const isMultistep = lastStepIndex > 0;
-  const steps = React.Children.map(children, (child: WizardChildren) => {
+  const steps = filteredChildren.map((child: WizardChildren) => {
     const isLoading = wizardStepData[child.type.name]?.isLoading || false;
     const hasError = wizardStepData[child.type.name]?.hasError;
     return (
@@ -146,7 +149,7 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
         {heading && <Heading>{heading}</Heading>}
         <Grid item>
           <Stepper activeStep={state.activeStep}>
-            {React.Children.map(children, (child: WizardChildren) => {
+            {filteredChildren.map((child: WizardChildren) => {
               const { name } = child.props;
               const hasError = wizardStepData[child.type.name]?.hasError;
               return <Step key={name} label={name} error={hasError} />;

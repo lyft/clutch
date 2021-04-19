@@ -1,61 +1,78 @@
 package experimentstore
 
 import (
-	"database/sql"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type ExperimentRun struct {
-	Id               string
-	StartTime        time.Time
-	EndTime          sql.NullTime
-	CancellationTime sql.NullTime
-	creationTime     time.Time
+	Id                string
+	StartTime         time.Time
+	EndTime           *time.Time
+	CancellationTime  *time.Time
+	CreationTime      time.Time
+	TerminationReason string
 }
 
-func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Property, error) {
-	status := timesToStatus(er.StartTime, er.EndTime, er.CancellationTime, now)
-	startTimeTimestamp, err := ptypes.TimestampProto(er.StartTime)
-	if err != nil {
+func (er *ExperimentRun) Status(now time.Time) experimentationv1.Experiment_Status {
+	if er.CancellationTime != nil {
+		if (er.EndTime == nil && er.CancellationTime.After(er.StartTime)) || (er.EndTime != nil && er.CancellationTime.After(*er.EndTime)) {
+			return experimentationv1.Experiment_STATUS_COMPLETED
+		}
+
+		return experimentationv1.Experiment_STATUS_CANCELED
+	} else {
+		if now.Before(er.StartTime) {
+			return experimentationv1.Experiment_STATUS_SCHEDULED
+		} else if now.After(er.StartTime) && (er.EndTime == nil || now.Before(*er.EndTime)) {
+			return experimentationv1.Experiment_STATUS_RUNNING
+		}
+		return experimentationv1.Experiment_STATUS_COMPLETED
+	}
+}
+
+func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentationv1.Property, error) {
+	status := er.Status(now)
+	startTimeTimestamp := timestamppb.New(er.StartTime)
+	if err := startTimeTimestamp.CheckValid(); err != nil {
 		return nil, err
 	}
 
-	creationTimeTimestamp, err := ptypes.TimestampProto(er.creationTime)
-	if err != nil {
+	creationTimeTimestamp := timestamppb.New(er.CreationTime)
+	if err := creationTimeTimestamp.CheckValid(); err != nil {
 		return nil, err
 	}
 
-	properties := []*experimentation.Property{
+	properties := []*experimentationv1.Property{
 		{
 			Id:    "run_identifier",
 			Label: "Run Identifier",
-			Value: &experimentation.Property_StringValue{StringValue: er.Id},
+			Value: &experimentationv1.Property_StringValue{StringValue: er.Id},
 		},
 		{
 			Id:    "status",
 			Label: "Status",
-			Value: &experimentation.Property_StringValue{StringValue: statusToString(status)},
+			Value: &experimentationv1.Property_StringValue{StringValue: StatusToString(status)},
 		},
 		{
 			Id:    "run_creation_time",
 			Label: "Created At",
-			Value: &experimentation.Property_DateValue{DateValue: creationTimeTimestamp},
+			Value: &experimentationv1.Property_DateValue{DateValue: creationTimeTimestamp},
 		},
 		{
 			Id:    "start_time",
 			Label: "Start Time",
-			Value: &experimentation.Property_DateValue{DateValue: startTimeTimestamp},
+			Value: &experimentationv1.Property_DateValue{DateValue: startTimeTimestamp},
 		},
 	}
 
-	var time sql.NullTime
-	if er.EndTime.Valid {
+	var time *time.Time
+	if er.EndTime != nil {
 		time = er.EndTime
-	} else if er.CancellationTime.Valid {
+	} else if er.CancellationTime != nil {
 		time = er.CancellationTime
 	}
 
@@ -64,28 +81,41 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		return nil, err
 	}
 
-	properties = append(properties, &experimentation.Property{
+	properties = append(properties, &experimentationv1.Property{
 		Id:    "end_time",
 		Label: "End Time",
 		Value: endTimeTimestamp,
 	})
 
-	cancelationTimeTimestamp, err := TimeToPropertyDateValue(er.CancellationTime)
+	cancellationTimeTimestamp, err := TimeToPropertyDateValue(er.CancellationTime)
 	if err != nil {
 		return nil, err
 	}
 
-	if status == experimentation.Experiment_STATUS_STOPPED {
-		properties = append(properties, &experimentation.Property{
-			Id:    "stopped_at",
-			Label: "Stopped At",
-			Value: cancelationTimeTimestamp,
-		})
-	} else if status == experimentation.Experiment_STATUS_CANCELED {
-		properties = append(properties, &experimentation.Property{
-			Id:    "canceled_at",
-			Label: "Canceled At",
-			Value: cancelationTimeTimestamp,
+	if status == experimentationv1.Experiment_STATUS_CANCELED {
+		if er.CancellationTime != nil && er.CancellationTime.After(er.StartTime) {
+			properties = append(properties, &experimentationv1.Property{
+				Id:    "stopped_at",
+				Label: "Stopped At",
+				Value: cancellationTimeTimestamp,
+			})
+		} else if status == experimentationv1.Experiment_STATUS_CANCELED {
+			properties = append(properties, &experimentationv1.Property{
+				Id:    "canceled_at",
+				Label: "Canceled At",
+				Value: cancellationTimeTimestamp,
+			})
+		}
+
+		terminationReason := "Unknown"
+		if er.TerminationReason != "" {
+			terminationReason = er.TerminationReason
+		}
+
+		properties = append(properties, &experimentationv1.Property{
+			Id:    "termination_reason",
+			Label: "Termination Reason",
+			Value: &experimentationv1.Property_StringValue{StringValue: terminationReason},
 		})
 	}
 

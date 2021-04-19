@@ -256,6 +256,32 @@ message Container {
   State state = 3;
   bool ready = 4;
   int32 restart_count = 5;
+
+  // ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerState
+  oneof state_details {
+    StateWaiting state_waiting = 6;
+    StateRunning state_running = 7;
+    StateTerminated state_terminated = 8;
+  }
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateWaiting
+message StateWaiting {
+  string reason = 1;
+  string message = 2;
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateRunning
+message StateRunning {
+  google.protobuf.Timestamp start_time = 1;
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateTerminated
+message StateTerminated {
+  string reason = 1;
+  string message = 2;
+  int32 exit_code = 3;
+  int32 signal = 4;
 }
 
 message PodCondition {
@@ -315,13 +341,33 @@ message Pod {
   // current service state of pod.
   // https://pkg.go.dev/k8s.io/api/core/v1#PodCondition
   repeated PodCondition pod_conditions = 12;
+
+  // one entry per init container.
+  // ref: https://pkg.go.dev/k8s.io/api/core/v1#PodStatus
+  repeated Container init_containers = 13;
+
+  // status string calculated based on the same logic as kubectl
+  // which summarizes the current status of the pod depending on
+  // the status of its containers.
+  // ref: https://github.com/kubernetes/kubernetes/blob/master/pkg/printers/internalversion/printers.go#L761
+  string status = 14;
 }
 
 message ListOptions {
   map<string, string> labels = 9;
+  // This selector string will be concatenated to the string that is
+  // formed from formatting the labels.
+  // This is useful in the case of having Set-based selectors rather
+  // than just equality-based selectors which is how the map is formatted.
+  string supplemental_selector_string = 10;
 }
 
 message ListPodsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -499,6 +545,11 @@ message DescribeDeploymentResponse {
 }
 
 message ListDeploymentsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -587,6 +638,11 @@ message DescribeStatefulSetResponse {
 }
 
 message ListStatefulSetsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -747,6 +803,11 @@ message DescribeCronJobResponse {
 }
 
 message ListCronJobsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -797,6 +858,11 @@ message ConfigMap {
 }
 
 message ListConfigMapsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -858,6 +924,11 @@ message Job {
 }
 
 message ListJobsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];

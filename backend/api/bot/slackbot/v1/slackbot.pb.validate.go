@@ -264,6 +264,8 @@ func (m *EventRequest) Validate() error {
 
 	// no validation rules for Challenge
 
+	// no validation rules for MinuteRateLimited
+
 	return nil
 }
 

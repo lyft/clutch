@@ -1878,22 +1878,22 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hookform/devtools@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@hookform/devtools/-/devtools-3.0.2.tgz#96bcc0b3ceeb5a54e8f6917b6e3d12ced2c4c2a9"
-  integrity sha512-MKACdurOQwNK6bRzDRRnsMMCYZKf9QVHuKBisnVYNPVgDOhuecp02EroocBe92Hs8MAZSrenNwzzH6+7I+SprA==
+"@hookform/devtools@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@hookform/devtools/-/devtools-2.2.1.tgz#2d88414d375199e193c2611b770b194b7752a623"
+  integrity sha512-VQh4kqwUOpz9LCDzIP0aJ4qnD/ob8Gp09L8gDy++9XtL66z6g8kbCynUvBrJm4qbCNdH0M7/Spm3AUjJqUuFlA==
   dependencies:
     "@emotion/core" "^10.0.28"
     "@emotion/styled" "^10.0.27"
     "@types/lodash" "^4.14.152"
-    little-state-machine "^4.0.0"
+    little-state-machine "^3.0.1"
     lodash "^4.17.15"
     react-simple-animate "^3.3.8"
 
-"@hookform/resolvers@2.4.0", "@hookform/resolvers@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.4.0.tgz#3b454463fbb5e7a0de4da029fa34e677f32d8d8d"
-  integrity sha512-KiHc7Uwd2IJMvPTMQ9vQxfss2ulq2gRYL/HYZ90qiTs+07UgGWCikiIvE2pKjjGVltEYjq5eR8x0ITmoyEjGxQ==
+"@hookform/resolvers@2.0.0-beta.3":
+  version "2.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.0.0-beta.3.tgz#6a13cecb8d261fee9fc53564e3e4ef6212148f16"
+  integrity sha512-sOP+IX7TglN34WbMVt8eRqWgnXAQcvFc4XUU6x3bIiIjTkjV5L3N7sBjff2Ln4QPTMYnmdXaZV2Yf5WxOiC5YQ==
 
 "@icons/material@^0.2.4":
   version "0.2.4"
@@ -7950,10 +7950,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-cypress@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-7.0.0.tgz#78b67a87bace1b530c123ba8d779899e676ed676"
-  integrity sha512-gri53gIGQPf/RoUknwvNS3alUjZwdmtp9BcKzLgyrwA/gBxJcpDLZ1t+MTvXy57ifRWEMxmEWzQe+iszCzJZqA==
+cypress@7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-7.1.0.tgz#6cb5dc22c6271a9d7a79a2477251a95afc77e531"
+  integrity sha512-AptQP9fVtN/FfOv8rJ9hTGJE2XQFc8saLHT38r/EeyWhzp0q/+P/DYRTDtjGZHeLTCNznAUrT4lal8jm+ouS7Q==
   dependencies:
     "@cypress/listr-verbose-renderer" "^0.4.1"
     "@cypress/request" "^2.88.5"
@@ -13449,10 +13449,10 @@ listr@^0.14.3:
     p-map "^2.0.0"
     rxjs "^6.3.3"
 
-little-state-machine@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/little-state-machine/-/little-state-machine-4.1.0.tgz#8ca1eae22ea2408e97dc82097b4aa3fe1f96a199"
-  integrity sha512-JeWPyIwnhYGheF10h8DY9+OnEwJ0waRzyXP/WclB3Bqg5v1+xwruXTtDvTow/69ZBAuRlYT5Apl+I8TN+HMp9g==
+little-state-machine@^3.0.1:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/little-state-machine/-/little-state-machine-3.1.2.tgz#4f2742db028787e4ae353150be2864873fed384a"
+  integrity sha512-vHbZRyYSMgefIzISJWbSbbdKZZVTSdOi+DiUfk4Z8jM+mL2LKsY46perBsjNmkmO5Cq2jFG541bHvCXf9kWDqg==
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -16835,10 +16835,10 @@ react-helmet-async@^1.0.2:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
-react-hook-form@^7.2.1:
-  version "7.2.1"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.2.1.tgz#99b3540dd2314499df12e9a53c70587ad63a806c"
-  integrity sha512-QopAubhVofqQrwlWLr9aK0DF8tNU8fnU8sJIlw1Tb3tGkEvP9yeaA+cx1hlxYni8xBswtHruL1WcDEa6CYQDow==
+react-hook-form@^6.11.0:
+  version "6.15.5"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.15.5.tgz#c2578f9ce6a6df7b33015587d40cd880dc13e2db"
+  integrity sha512-so2jEPYKdVk1olMo+HQ9D9n1hVzaPPFO4wsjgSeZ964R7q7CHsYRbVF0PGBi83FcycA5482WHflasdwLIUVENg==
 
 react-hook-thunk-reducer@^0.2.1:
   version "0.2.4"

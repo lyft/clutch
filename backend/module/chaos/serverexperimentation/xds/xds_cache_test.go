@@ -17,14 +17,14 @@ import (
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/duration"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -39,7 +39,7 @@ const (
 	LATENCY  = "latency"
 )
 
-func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentation.Experiment {
+func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentstore.Experiment {
 	config := &serverexperimentation.HTTPFaultConfig{}
 
 	upstreamSingleCluster := &serverexperimentation.SingleCluster{
@@ -101,11 +101,15 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 		t.Errorf("marshalAny failed: %v", err)
 	}
 
-	return &experimentation.Experiment{Config: anyConfig}
+	return &experimentstore.Experiment{
+		Config: &experimentstore.ExperimentConfig{
+			Config: anyConfig,
+		},
+	}
 }
 
-func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
-	return []*experimentation.Experiment{
+func mockGenerateFaultData(t *testing.T) []*experimentstore.Experiment {
+	return []*experimentstore.Experiment{
 		// Abort - Service B -> Service A (Internal)
 		createExperiment(t, "serviceA", "serviceB", 10, 404, INTERNAL, ABORT),
 
@@ -148,10 +152,10 @@ func TestSetSnapshotRTDS(t *testing.T) {
 		egressPrefix:  egressPrefix,
 	}
 
-	var testClusterFaults []*experimentation.Experiment
+	var testClusterFaults []*experimentstore.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := experiment.GetConfig().UnmarshalTo(config)
+		err := experiment.Config.Config.UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalling Any failed %v", err)
 		}
@@ -212,10 +216,10 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 		egressPrefix:  egressPrefix,
 	}
 
-	var testClusterFaults []*experimentation.Experiment
+	var testClusterFaults []*experimentstore.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := experiment.GetConfig().UnmarshalTo(config)
+		err := experiment.Config.Config.UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalling Any failed %v", err)
 		}
@@ -312,8 +316,7 @@ func TestRefreshCache(t *testing.T) {
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
 	future := now.Add(1 * time.Hour)
-	futureTimestamp, err := ptypes.TimestampProto(future)
-	assert.NoError(t, err)
+	futureTimestamp := timestamppb.New(future)
 
 	d := &experimentation.CreateExperimentData{EndTime: futureTimestamp, Config: a}
 	es, err := experimentstore.NewExperimentSpecification(d, now)
@@ -365,10 +368,10 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	var downstreamCluster string
 	mockExperimentList := mockGenerateFaultData(t)
 
-	var testClusterFaults []*experimentation.Experiment
+	var testClusterFaults []*experimentstore.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := experiment.GetConfig().UnmarshalTo(config)
+		err := experiment.Config.Config.UnmarshalTo(config)
 		assert.NoError(t, err)
 
 		upstream, downstream, err := getClusterPair(config)
@@ -416,9 +419,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	expectedHTTPFaultFilter := &gcpFilterFault.HTTPFault{
 		Delay: &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-				FixedDelay: &duration.Duration{
-					Nanos: 1000000, // 0.001 second
-				},
+				FixedDelay: durationpb.New(time.Millisecond),
 			},
 			Percentage: &gcpType.FractionalPercent{
 				Numerator:   0,
@@ -459,10 +460,10 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	var upstreamCluster string
 	mockExperimentList := mockGenerateFaultData(t)
 
-	var testClusterFaults []*experimentation.Experiment
+	var testClusterFaults []*experimentstore.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := experiment.GetConfig().UnmarshalTo(config)
+		err := experiment.Config.Config.UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
@@ -512,9 +513,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	expectedHTTPFaultFilter := &gcpFilterFault.HTTPFault{
 		Delay: &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-				FixedDelay: &duration.Duration{
-					Nanos: 200000000, // 200 ms
-				},
+				FixedDelay: durationpb.New(time.Millisecond * 200),
 			},
 			Percentage: &gcpType.FractionalPercent{
 				Numerator:   40,

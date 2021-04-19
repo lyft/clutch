@@ -75,6 +75,8 @@ func (m *Experiment) Validate() error {
 		}
 	}
 
+	// no validation rules for Status
+
 	return nil
 }
 

@@ -271,7 +271,14 @@ const TextField = ({
     );
   }
 
-  return <StyledTextField {...textFieldProps} defaultValue={defaultValue} {...props} />;
+  return (
+    <StyledTextField
+      {...textFieldProps}
+      defaultValue={defaultValue}
+      onChange={onChange}
+      {...props}
+    />
+  );
 };
 
 export default TextField;

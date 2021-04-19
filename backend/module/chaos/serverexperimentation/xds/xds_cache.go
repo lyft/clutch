@@ -32,10 +32,10 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		logger.Errorw("Failed to get data from experiments store", "error", err)
 
 		// If failed to get data from DB, stop all ongoing experiments.
-		allRunningExperiments = []*experimentation.Experiment{}
+		allRunningExperiments = []*experimentstore.Experiment{}
 	}
 
-	clusterFaultMap := make(map[string][]*experimentation.Experiment)
+	clusterFaultMap := make(map[string][]*experimentstore.Experiment)
 	for _, experiment := range allRunningExperiments {
 		httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
 		if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
@@ -68,7 +68,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 			// in order to remove fault, we need to set the snapshot with default ecds config and default runtime resource
 			emptyResources[gcpTypes.ExtensionConfig] = generateEmptyECDSResource(cluster, ecdsConfig, logger)
-			emptyResources[gcpTypes.Runtime] = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
+			emptyResources[gcpTypes.Runtime] = generateRTDSResource([]*experimentstore.Experiment{}, rtdsConfig, ttl, logger)
 
 			err := setSnapshot(emptyResources, cluster, snapshotCache, logger)
 			if err != nil {
@@ -87,7 +87,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		// Enable ECDS if cluster is ECDS enabled else enable RTDS
 		if _, exists := ecdsConfig.enabledClusters[cluster]; exists {
 			resources[gcpTypes.ExtensionConfig] = generateECDSResource(experiments, cluster, ttl, logger)
-			resources[gcpTypes.Runtime] = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
+			resources[gcpTypes.Runtime] = generateRTDSResource([]*experimentstore.Experiment{}, rtdsConfig, ttl, logger)
 		} else {
 			resources[gcpTypes.Runtime] = generateRTDSResource(experiments, rtdsConfig, ttl, logger)
 			resources[gcpTypes.ExtensionConfig] = generateEmptyECDSResource(cluster, ecdsConfig, logger)
@@ -137,8 +137,8 @@ func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTt
 	return nil
 }
 
-func maybeUnmarshalFaultTest(experiment *experimentation.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
-	err := experiment.GetConfig().UnmarshalTo(httpFaultConfig)
+func maybeUnmarshalFaultTest(experiment *experimentstore.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
+	err := experiment.Config.Config.UnmarshalTo(httpFaultConfig)
 	if err != nil {
 		return false
 	}

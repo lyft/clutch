@@ -1,7 +1,7 @@
 package experimentstore
 
 import (
-	"database/sql"
+	"fmt"
 	"testing"
 	"time"
 
@@ -12,108 +12,79 @@ import (
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
-var startTime = time.Date(2020, 11, 17, 20, 34, 58, 651387237, time.UTC)
-var creationTime = startTime
-var endTime = time.Date(2020, 11, 20, 20, 34, 58, 651387237, time.UTC)
+func TestExperimentRunDetailsStatus(t *testing.T) {
+	now := time.Now()
+	past := now.Add(-1 * time.Hour)
+	future := now.Add(1 * time.Hour)
+	farFuture := future.Add(1 * time.Hour)
 
-func TestScheduledExperiment(t *testing.T) {
-	logger := zaptest.NewLogger(t).Sugar()
-
-	end := sql.NullTime{Valid: false}
-	cancellation := sql.NullTime{Valid: false}
-	now := startTime.AddDate(0, 0, -1)
-
-	run := &ExperimentRun{Id: "1", StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
-	config := &ExperimentConfig{id: "2", Config: &any.Any{}}
-	transformer := NewTransformer(logger)
-
-	runDetails, err := NewRunDetails(run, config, &transformer, now)
-
-	assert := assert.New(t)
-	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_STATUS_SCHEDULED, runDetails.Status)
-}
-
-func TestCanceledExperiment(t *testing.T) {
-	logger := zaptest.NewLogger(t).Sugar()
-
-	end := sql.NullTime{Valid: false}
-	cancellation := sql.NullTime{
-		Time:  startTime.AddDate(0, 0, -1),
-		Valid: true,
+	tests := []struct {
+		startTime        time.Time
+		endTime          *time.Time
+		cancellationTime *time.Time
+		creationTime     time.Time
+		now              time.Time
+		expectedStatus   experimentation.Experiment_Status
+	}{
+		{
+			startTime:        future,
+			endTime:          nil,
+			cancellationTime: nil,
+			creationTime:     now,
+			now:              now,
+			expectedStatus:   experimentation.Experiment_STATUS_SCHEDULED,
+		},
+		{
+			startTime:        now,
+			endTime:          nil,
+			cancellationTime: &past,
+			creationTime:     past,
+			now:              now,
+			expectedStatus:   experimentation.Experiment_STATUS_CANCELED,
+		},
+		{
+			startTime:        now,
+			endTime:          &farFuture,
+			cancellationTime: &future,
+			creationTime:     now,
+			now:              future,
+			expectedStatus:   experimentation.Experiment_STATUS_CANCELED,
+		},
+		{
+			startTime:        now,
+			endTime:          nil,
+			cancellationTime: nil,
+			creationTime:     now,
+			now:              future,
+			expectedStatus:   experimentation.Experiment_STATUS_RUNNING,
+		},
+		{
+			startTime:        now,
+			endTime:          &future,
+			cancellationTime: nil,
+			creationTime:     now,
+			now:              farFuture,
+			expectedStatus:   experimentation.Experiment_STATUS_COMPLETED,
+		},
 	}
 
-	run := &ExperimentRun{Id: "1", StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
-	config := &ExperimentConfig{id: "2", Config: &any.Any{}}
-	transformer := NewTransformer(logger)
+	for idx, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
 
-	runDetails, err := NewRunDetails(run, config, &transformer, time.Now())
-
-	assert := assert.New(t)
-	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_STATUS_CANCELED, runDetails.Status)
-}
-
-func TestRunningExperiment(t *testing.T) {
-	logger := zaptest.NewLogger(t).Sugar()
-
-	end := sql.NullTime{Valid: false}
-	cancellation := sql.NullTime{Valid: false}
-	now := startTime.AddDate(0, 0, 1)
-
-	run := &ExperimentRun{Id: "1", StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
-	config := &ExperimentConfig{id: "2", Config: &any.Any{}}
-	transformer := NewTransformer(logger)
-
-	runDetails, err := NewRunDetails(run, config, &transformer, now)
-
-	assert := assert.New(t)
-	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_STATUS_RUNNING, runDetails.Status)
-}
-
-func TestStoppedExperiment(t *testing.T) {
-	logger := zaptest.NewLogger(t).Sugar()
-
-	end := sql.NullTime{
-		Time:  endTime,
-		Valid: true,
+			run := &ExperimentRun{
+				Id:               "1",
+				StartTime:        tt.startTime,
+				EndTime:          tt.endTime,
+				CancellationTime: tt.cancellationTime,
+				CreationTime:     tt.creationTime,
+			}
+			config := &ExperimentConfig{Id: "2", Config: &any.Any{}}
+			tr := NewTransformer(zaptest.NewLogger(t).Sugar())
+			rd, err := NewRunDetails(run, config, &tr, tt.now)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expectedStatus, rd.Status)
+		})
 	}
-	cancellation := sql.NullTime{
-		Time:  startTime.AddDate(0, 0, 1),
-		Valid: true,
-	}
-
-	run := &ExperimentRun{Id: "1", StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
-	config := &ExperimentConfig{id: "2", Config: &any.Any{}}
-	transformer := NewTransformer(logger)
-
-	runDetails, err := NewRunDetails(run, config, &transformer, time.Now())
-
-	assert := assert.New(t)
-	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_STATUS_STOPPED, runDetails.Status)
-}
-
-func TestCompletedExperiment(t *testing.T) {
-	logger := zaptest.NewLogger(t).Sugar()
-
-	end := sql.NullTime{
-		Time:  endTime,
-		Valid: true,
-	}
-	cancellation := sql.NullTime{
-		Valid: false,
-	}
-	now := endTime.AddDate(0, 0, 1)
-
-	run := &ExperimentRun{Id: "1", StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
-	config := &ExperimentConfig{id: "2", Config: &any.Any{}}
-	transformer := NewTransformer(logger)
-
-	runDetails, err := NewRunDetails(run, config, &transformer, now)
-
-	assert := assert.New(t)
-	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_STATUS_COMPLETED, runDetails.Status)
 }

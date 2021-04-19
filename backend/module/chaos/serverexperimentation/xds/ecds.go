@@ -16,8 +16,8 @@ import (
 	"github.com/golang/protobuf/ptypes/duration"
 	"go.uber.org/zap"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 const (
@@ -99,7 +99,7 @@ type ECDSConfig struct {
 	ecdsResourceMap *SafeEcdsResourceMap
 }
 
-func generateECDSResource(experiments []*experimentation.Experiment, cluster string, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
+func generateECDSResource(experiments []*experimentstore.Experiment, cluster string, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
 	var downstreamCluster string
 	var upstreamCluster string
 	var isEgressFault = false
