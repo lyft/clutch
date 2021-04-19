@@ -36,7 +36,7 @@
     "cypress": "7.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
-    "esbuild": "^0.11.0",
+    "esbuild": "^0.11.5",
     "eslint": "^7.24.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.2.0",
