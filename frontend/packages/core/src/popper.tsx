@@ -90,7 +90,7 @@ export interface PopperProps
     Pick<MuiPopperProps, "placement"> {
   open: boolean;
   anchorRef: React.MutableRefObject<HTMLElement>;
-  children: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
+  children?: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
 }
 const Popper = ({
   open,

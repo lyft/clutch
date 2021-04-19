@@ -40,6 +40,7 @@ import {
   TableRowActions,
   TreeTable,
 } from "./Table";
+import { Popper, PopperItem } from "./popper";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
@@ -81,6 +82,8 @@ export {
   Note,
   NotePanel,
   Paper,
+  Popper,
+  PopperItem,
   Radio,
   RadioGroup,
   Resolver,
