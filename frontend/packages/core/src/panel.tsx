@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 import {
   Accordion as MuiExpansionPanel,
   AccordionDetails,
@@ -6,7 +7,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import styled from "styled-components";
 
 const FullWidthExpansionPanel = styled(MuiExpansionPanel)`
   width: 100%;
