@@ -9,8 +9,8 @@
   "scripts": {
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
-    "compile:dev": "tsc --sourceMap",
-    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
+    "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
+    "compile:watch": "yarn compile:dev --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "test": "jest --passWithNoTests",
@@ -24,5 +24,8 @@
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
