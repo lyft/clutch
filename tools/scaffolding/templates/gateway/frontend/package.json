@@ -5,8 +5,8 @@
   "scripts": {
     "build": "yarn compile && yarn register-workflows && react-scripts build",
     "clean": "rm -rf build",
-    "compile": "lerna run compile",
-    "compile:watch": "lerna run compile:watch",
+    "compile": "lerna run compile --parallel",
+    "compile:watch": "lerna run compile:watch --parallel",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx .",
     "lint:fix": "yarn run lint --fix",
