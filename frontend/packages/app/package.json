@@ -27,5 +27,8 @@
     "@clutch-sh/tools": "^1.0.0-beta",
     "esbuild-loader": "^2.10.0"
   },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "proxy": "http://localhost:8080"
 }

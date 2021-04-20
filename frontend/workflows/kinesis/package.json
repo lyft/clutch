@@ -35,5 +35,8 @@
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
