@@ -48,4 +48,4 @@ yarn-ensure:
 
 .PHONY: frontend-dev # Start the frontend in development mode.
 frontend-dev: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile && yarn --cwd frontend start
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend start
