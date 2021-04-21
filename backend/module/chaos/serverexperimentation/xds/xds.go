@@ -1,7 +1,7 @@
 package xds
 
 // <!-- START clutchdoc -->
-// description: Discovery Service (xTDS) implementation that delivers chaos experiment values to subscribed Envoys.
+// description: Chaos Experimentation Framework - Envoy Discovery Service (xDS) implementation that delivers chaos experiment values to subscribed Envoys.
 // <!-- END clutchdoc -->
 
 import (

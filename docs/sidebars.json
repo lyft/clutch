@@ -39,6 +39,7 @@
       "label": "Advanced Features",
       "items": [
         "advanced/auth",
+        "advanced/chaos-experimentation",
         "advanced/security-auditing"
       ]
     },

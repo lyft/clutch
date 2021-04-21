@@ -1,5 +1,9 @@
 package terminator
 
+// <!-- START clutchdoc -->
+// description: Chaos Experimentation Framework - Performs termination of experiments based on certain given criteria
+// <!-- END clutchdoc -->
+
 import (
 	"context"
 	"errors"
