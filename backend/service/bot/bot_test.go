@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -49,7 +50,7 @@ func TestMatchCommand(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		match := test.svc.MatchCommand(test.command)
+		match := test.svc.MatchCommand(context.Background(), test.command)
 		assert.Equal(t, test.expected, match)
 	}
 }

@@ -6,6 +6,7 @@ MAKEFLAGS += --no-print-directory
 PRIMARY_MODULE_DIR := $(shell cd backend && go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/backend")
 TOOLS_MODULE_DIR := $(shell cd backend && go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/tools")
 MY_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+YARN:=./build/bin/yarn.sh
 
 .PHONY: all # Generate API, Frontend, and backend assets.
 all: api frontend backend-tidy backend-with-assets
@@ -35,11 +36,11 @@ backend-with-assets: frontend
 
 .PHONY: frontend
 frontend: yarn-install
-	yarn --cwd frontend build
+	$(YARN) --cwd frontend build
 
 .PHONY: yarn-install
 yarn-install: yarn-ensure
-	yarn --cwd frontend install
+	$(YARN) --cwd frontend install
 
 .PHONY: yarn-ensure
 yarn-ensure:
@@ -47,4 +48,4 @@ yarn-ensure:
 
 .PHONY: frontend-dev # Start the frontend in development mode.
 frontend-dev: yarn-ensure
-	yarn --cwd frontend install --frozen-lockfile && yarn --cwd frontend start
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend start

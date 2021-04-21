@@ -13,6 +13,7 @@ import (
 	authnmod "github.com/lyft/clutch/backend/module/authn"
 	authzmod "github.com/lyft/clutch/backend/module/authz"
 	awsmod "github.com/lyft/clutch/backend/module/aws"
+	slackbotmod "github.com/lyft/clutch/backend/module/bot/slackbot"
 	experimentationapi "github.com/lyft/clutch/backend/module/chaos/experimentation/api"
 	"github.com/lyft/clutch/backend/module/chaos/redisexperimentation"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
@@ -68,6 +69,7 @@ var Modules = module.Factory{
 	xdsmod.Name:                xdsmod.New,
 	serverexperimentation.Name: serverexperimentation.New,
 	redisexperimentation.Name:  redisexperimentation.New,
+	slackbotmod.Name:           slackbotmod.New,
 	sourcecontrol.Name:         sourcecontrol.New,
 	topologymod.Name:           topologymod.New,
 }

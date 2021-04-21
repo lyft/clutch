@@ -170,7 +170,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults enabled")
 
 	// TODO(kathan24): Test TTL by stopping the server instead of canceling the experiment. Currently, TTL is not not supported for ECDS in the upstream Envoy
-	ts.Storer.CancelExperimentRun(context.Background(), experiment.RunId, "")
+	ts.Storer.CancelExperimentRun(context.Background(), experiment.Run.Id, "")
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        10 * time.Second,
@@ -179,7 +179,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults reverted")
 }
 
-func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experimentstoremock.SimpleStorer) *experimentationv1.Experiment {
+func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experimentstoremock.SimpleStorer) *experimentstore.Experiment {
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
 			AbortFault: &serverexperimentation.AbortFault{
@@ -271,7 +271,7 @@ func (t *testCriterion) start() {
 	t.startCheckingTime = true
 }
 
-func (t *testCriterion) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
+func (t *testCriterion) ShouldTerminate(experiment *experimentstore.Experiment, experimentConfig proto.Message) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
@@ -279,7 +279,7 @@ func (t *testCriterion) ShouldTerminate(experiment *experimentationv1.Experiment
 	if _, ok := experimentConfig.(*serverexperimentation.HTTPFaultConfig); !ok {
 		panic("received unexpected experiment config")
 	}
-	started := experiment.StartTime.AsTime()
+	started := experiment.Run.StartTime
 	if t.startCheckingTime && started.Add(1*time.Second).Before(time.Now()) {
 		return "timed out", nil
 	}

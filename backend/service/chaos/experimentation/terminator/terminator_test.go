@@ -147,7 +147,9 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	experiment, err := storer.CreateExperiment(context.Background(), es)
 	assert.NoError(t, err)
 
-	return experiment
+	e, err := experiment.Proto(now)
+	assert.NoError(t, err)
+	return e
 }
 
 type testCriterion struct {
@@ -156,7 +158,7 @@ type testCriterion struct {
 	sync.Mutex
 }
 
-func (t *testCriterion) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
+func (t *testCriterion) ShouldTerminate(experiment *experimentstore.Experiment, experimentConfig proto.Message) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
