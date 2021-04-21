@@ -17,11 +17,12 @@ describe("success interceptor", () => {
   describe("on auth url response data", () => {
     let response: () => AxiosResponse;
     beforeEach(() => {
-      response = () => successInterceptor({
-        data: {
-          authUrl: "https://clutch.sh/auth",
-        },
-      } as AxiosResponse);
+      response = () =>
+        successInterceptor({
+          data: {
+            authUrl: "https://clutch.sh/auth",
+          },
+        } as AxiosResponse);
     });
 
     it("redirects to provided url", () => {
