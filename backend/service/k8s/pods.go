@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"google.golang.org/grpc/codes"
@@ -52,7 +53,10 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 		return nil, err
 	}
 
-	opts := ApplyListOptions(listOpts)
+	opts, err := ApplyListOptions(listOpts)
+	if err != nil {
+		return nil, err
+	}
 
 	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(ctx, opts)
 	if err != nil {
@@ -189,6 +193,7 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 		StateReason:    k8spod.Status.Reason,
 		PodConditions:  makeConditions(k8spod.Status.Conditions),
 		InitContainers: makeContainers(k8spod.Status.InitContainerStatuses),
+		Status:         getPodStatus(k8spod),
 	}
 }
 
@@ -305,4 +310,77 @@ func protoForConditionStatus(status corev1.ConditionStatus) k8sapiv1.PodConditio
 	default:
 		return k8sapiv1.PodCondition_STATUS_UNSPECIFIED
 	}
+}
+
+func getPodStatus(pod *corev1.Pod) string {
+	restarts := 0
+	readyContainers := 0
+
+	reason := string(pod.Status.Phase)
+	if pod.Status.Reason != "" {
+		reason = pod.Status.Reason
+	}
+
+	initializing := false
+	for i := range pod.Status.InitContainerStatuses {
+		container := pod.Status.InitContainerStatuses[i]
+		restarts += int(container.RestartCount)
+		switch {
+		case container.State.Terminated != nil && container.State.Terminated.ExitCode == 0:
+			continue
+		case container.State.Terminated != nil:
+			// initialization is failed
+			if len(container.State.Terminated.Reason) == 0 {
+				if container.State.Terminated.Signal != 0 {
+					reason = fmt.Sprintf("Init: Signal %d", container.State.Terminated.Signal)
+				} else {
+					reason = fmt.Sprintf("Init: ExitCode %d", container.State.Terminated.ExitCode)
+				}
+			} else {
+				reason = "Init:" + container.State.Terminated.Reason
+			}
+			initializing = true
+		case container.State.Waiting != nil && len(container.State.Waiting.Reason) > 0 && container.State.Waiting.Reason != "PodInitializing":
+			reason = fmt.Sprintf("Init: %s", container.State.Waiting.Reason)
+			initializing = true
+		default:
+			reason = fmt.Sprintf("Init: %d/%d", i, len(pod.Spec.InitContainers))
+			initializing = true
+		}
+		break
+	}
+	if !initializing {
+		restarts = 0
+		for i := len(pod.Status.ContainerStatuses) - 1; i >= 0; i-- {
+			container := pod.Status.ContainerStatuses[i]
+
+			restarts += int(container.RestartCount)
+			switch {
+			case container.State.Waiting != nil && container.State.Waiting.Reason != "":
+				reason = container.State.Waiting.Reason
+			case container.State.Terminated != nil && container.State.Terminated.Reason != "":
+				reason = container.State.Terminated.Reason
+			case container.State.Terminated != nil && container.State.Terminated.Reason == "":
+				if container.State.Terminated.Signal != 0 {
+					reason = fmt.Sprintf("Signal: %d", container.State.Terminated.Signal)
+				} else {
+					reason = fmt.Sprintf("ExitCode: %d", container.State.Terminated.ExitCode)
+				}
+			case container.Ready && container.State.Running != nil:
+				readyContainers++
+			}
+		}
+	}
+
+	if pod.DeletionTimestamp != nil && pod.Status.Reason == "NodeLost" {
+		reason = string(corev1.PodUnknown)
+	} else if pod.DeletionTimestamp != nil {
+		reason = "Terminating"
+	}
+
+	if len(reason) == 0 {
+		reason = string(corev1.PodUnknown)
+	}
+
+	return reason
 }

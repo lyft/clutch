@@ -692,6 +692,8 @@ func (m *Pod) Validate() error {
 
 	}
 
+	// no validation rules for Status
+
 	return nil
 }
 
@@ -758,6 +760,8 @@ func (m *ListOptions) Validate() error {
 	}
 
 	// no validation rules for Labels
+
+	// no validation rules for SupplementalSelectorString
 
 	return nil
 }

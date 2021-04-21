@@ -13,7 +13,10 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"golang.org/x/oauth2"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
+	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 )
 
@@ -36,6 +39,8 @@ type OIDCProvider struct {
 	providerAlias string
 
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
+
+	enableServiceTokenCreation bool
 }
 
 // Clutch's state token claims used during the exchange.
@@ -133,6 +138,41 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		}
 	}
 
+	return p.signNewToken(ctx, claims)
+}
+
+func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (*oauth2.Token, error) {
+	if !p.enableServiceTokenCreation {
+		return nil, errors.New("not configured to allow service token creation")
+	}
+
+	var prefixedSubject string
+	switch tokenType {
+	case authnmodulev1.CreateTokenRequest_SERVICE:
+		prefixedSubject = "service:" + subject
+	default:
+		return nil, errors.New("invalid token type")
+	}
+
+	issuedAt := time.Now()
+	var expiresAt int64
+	if expiry != nil {
+		expiresAt = issuedAt.Add(*expiry).Unix()
+	}
+
+	claims := &Claims{
+		StandardClaims: &jwt.StandardClaims{
+			ExpiresAt: expiresAt,
+			IssuedAt:  issuedAt.Unix(),
+			Issuer:    clutchProvider,
+			Subject:   prefixedSubject,
+		},
+	}
+
+	return p.signNewToken(ctx, claims)
+}
+
+func (p *OIDCProvider) signNewToken(ctx context.Context, claims *Claims) (*oauth2.Token, error) {
 	// Sign and issue token.
 	accessToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(p.sessionSecret))
 	if err != nil {
@@ -151,7 +191,8 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 			return nil, err
 		}
 	}
-	return t, err
+
+	return t, nil
 }
 
 type ClaimsFromOIDCTokenFunc func(ctx context.Context, t *oidc.IDToken) (*Claims, error)
@@ -202,6 +243,44 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 	return claims, nil
 }
 
+func (p *OIDCProvider) Read(ctx context.Context, userID, provider string) (*oauth2.Token, error) {
+	if p.tokenStorage == nil {
+		return nil, status.Error(codes.Internal, "token read attempted but storage is not configured")
+	}
+
+	if provider != p.providerAlias {
+		return nil, status.Errorf(codes.InvalidArgument, "provider '%s' cannot read '%s' tokens", p.providerAlias, provider)
+	}
+
+	// Get token from storage.
+	t, err := p.tokenStorage.Read(ctx, userID, provider)
+	if err != nil {
+		return nil, err
+	}
+
+	// Validate token and return it if valid.
+	if t.Valid() {
+		return t, nil
+	}
+
+	if t.RefreshToken == "" {
+		return nil, status.Error(codes.Unauthenticated, "the token has expired and no refresh token is present")
+	}
+
+	// If invalid, attempt refresh.
+	newToken, err := p.oauth2.TokenSource(ctx, t).Token()
+	if err != nil {
+		return nil, err
+	}
+
+	// Store new token if refresh succeeded.
+	if err := p.tokenStorage.Store(ctx, userID, provider, newToken); err != nil {
+		return nil, err
+	}
+
+	return newToken, nil
+}
+
 func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage Storage) (Provider, error) {
 	c := config.GetOidc()
 
@@ -248,14 +327,15 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 	}
 
 	p := &OIDCProvider{
-		providerAlias:       alias,
-		provider:            provider,
-		verifier:            verifier,
-		oauth2:              oc,
-		httpClient:          ctx.Value(oauth2.HTTPClient).(*http.Client),
-		sessionSecret:       config.SessionSecret,
-		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
-		tokenStorage:        tokenStorage,
+		providerAlias:              alias,
+		provider:                   provider,
+		verifier:                   verifier,
+		oauth2:                     oc,
+		httpClient:                 ctx.Value(oauth2.HTTPClient).(*http.Client),
+		sessionSecret:              config.SessionSecret,
+		claimsFromOIDCToken:        DefaultClaimsFromOIDCToken,
+		tokenStorage:               tokenStorage,
+		enableServiceTokenCreation: tokenStorage != nil && config.EnableServiceTokenCreation,
 	}
 
 	return p, nil

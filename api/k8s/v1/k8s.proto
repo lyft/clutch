@@ -345,10 +345,21 @@ message Pod {
   // one entry per init container.
   // ref: https://pkg.go.dev/k8s.io/api/core/v1#PodStatus
   repeated Container init_containers = 13;
+
+  // status string calculated based on the same logic as kubectl
+  // which summarizes the current status of the pod depending on
+  // the status of its containers.
+  // ref: https://github.com/kubernetes/kubernetes/blob/master/pkg/printers/internalversion/printers.go#L761
+  string status = 14;
 }
 
 message ListOptions {
   map<string, string> labels = 9;
+  // This selector string will be concatenated to the string that is
+  // formed from formatting the labels.
+  // This is useful in the case of having Set-based selectors rather
+  // than just equality-based selectors which is how the map is formatted.
+  string supplemental_selector_string = 10;
 }
 
 message ListPodsRequest {

@@ -23,4 +23,8 @@ message Config {
   oneof type {
     OIDC oidc = 2;
   }
+
+  // Whether to permit service tokens to be issued. In addition to setting this flag
+  // a token store must be configured.
+  bool enable_service_token_creation = 3;
 }

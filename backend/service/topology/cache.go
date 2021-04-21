@@ -46,8 +46,12 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 		default:
 			c.log.Error("lost connection to database, trying to reconnect...", zap.Error(err))
 		}
+
 		// Closes the db connection which will also release the advisory lock
-		conn.Close()
+		// Conn could be nil if we are in trying to gracefully shutdown
+		if conn != nil {
+			conn.Close()
+		}
 
 		select {
 		case <-ticker.C:
@@ -105,7 +109,9 @@ func (c *client) startTopologyCache(ctx context.Context) {
 // Notably a flush will happen every 30 seconds, ensuring all items make it into cache even if the
 // configured BatchInsertSize is not met.
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
-	var batchInsert []*topologyv1.Resource
+	// We utilize a map here to deduplicate entries coming off the object channel
+	// It is not possible for postgres to insert or update the same item more than once in the same query
+	var batchInsert = make(map[string]*topologyv1.Resource)
 	queueDepth := c.scope.Tagged(map[string]string{
 		"service": service,
 	}).SubScope("cache").Gauge("object_channel.queue_depth")
@@ -121,7 +127,7 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 
 			switch obj.Action {
 			case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
-				batchInsert = append(batchInsert, obj.Resource)
+				batchInsert[obj.Resource.Id] = obj.Resource
 			case topologyv1.UpdateCacheRequest_DELETE:
 				if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
 					c.log.Error("Error deleting cache", zap.Error(err))
@@ -131,23 +137,33 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 			}
 
 			if len(batchInsert) >= c.batchInsertSize {
-				if err := c.setCache(ctx, batchInsert); err != nil {
+				batch := convertBatchInsertToSlice(batchInsert)
+				if err := c.setCache(ctx, batch); err != nil {
 					c.log.Error("Error setting cache", zap.Error(err))
 				}
-				batchInsert = batchInsert[:0]
+				batchInsert = make(map[string]*topologyv1.Resource)
 			}
 		// TODO (mcutalo): There is a possibility that this code will never be reached.
 		// If deletes happen at a faster interval than the flush timer (which is configurable via batchInsertFlush),
 		// insert items would be stuck in the batch until the BatchInsertSize is reached.
 		case <-time.After(c.batchInsertFlush):
 			if len(batchInsert) > 0 {
-				if err := c.setCache(ctx, batchInsert); err != nil {
+				batch := convertBatchInsertToSlice(batchInsert)
+				if err := c.setCache(ctx, batch); err != nil {
 					c.log.Error("Error setting cache", zap.Error(err))
 				}
-				batchInsert = batchInsert[:0]
+				batchInsert = make(map[string]*topologyv1.Resource)
 			}
 		}
 	}
+}
+
+func convertBatchInsertToSlice(batch map[string]*topologyv1.Resource) []*topologyv1.Resource {
+	batchInsert := make([]*topologyv1.Resource, 0, len(batch))
+	for _, resource := range batch {
+		batchInsert = append(batchInsert, resource)
+	}
+	return batchInsert
 }
 
 func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface{}, string) {

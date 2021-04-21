@@ -27,10 +27,20 @@ import Loadable from "./loading";
 import { client } from "./Network";
 import ExpansionPanel from "./panel";
 import Paper from "./paper";
+import { Popper, PopperItem } from "./popper";
 import Resolver from "./Resolver";
 import { Step, Stepper } from "./stepper";
 import { Tab, Tabs } from "./tab";
-import { AccordionRow, MetadataTable, Table, TableCell, TableRow, TreeTable } from "./Table";
+import {
+  AccordionRow,
+  MetadataTable,
+  Table,
+  TableCell,
+  TableRow,
+  TableRowAction,
+  TableRowActions,
+  TreeTable,
+} from "./Table";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
@@ -72,6 +82,8 @@ export {
   Note,
   NotePanel,
   Paper,
+  Popper,
+  PopperItem,
   Radio,
   RadioGroup,
   Resolver,
@@ -84,6 +96,8 @@ export {
   Table,
   TableCell,
   TableRow,
+  TableRowAction,
+  TableRowActions,
   Tabs,
   TextField,
   TreeTable,

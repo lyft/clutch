@@ -28,11 +28,6 @@ func NewStorage(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.
 	return newStorage(c)
 }
 
-type Storage interface {
-	Store(ctx context.Context, userID, provider string, token *oauth2.Token) error
-	Read(ctx context.Context, userID, provider string) (*oauth2.Token, error)
-}
-
 type storage struct {
 	crypto *cryptographer
 	repo   *repository
