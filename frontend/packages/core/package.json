@@ -47,7 +47,6 @@
     "react-is": "^16.8.0",
     "react-router": "^6.0.0-beta",
     "react-router-dom": "^6.0.0-beta",
-    "styled-components": "^5.1.1",
     "superstruct": "~0.15.0",
     "yup": "^0.32.8"
   },

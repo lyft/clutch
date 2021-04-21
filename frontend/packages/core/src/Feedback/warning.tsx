@@ -1,11 +1,11 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { Snackbar } from "@material-ui/core";
 import { Alert as MuiAlert } from "@material-ui/lab";
-import styled from "styled-components";
 
-const Alert = styled(MuiAlert)`
-  margin: 5px;
-`;
+const Alert = styled(MuiAlert)({
+  margin: "5px",
+});
 
 export interface WarningProps {
   message: any;
