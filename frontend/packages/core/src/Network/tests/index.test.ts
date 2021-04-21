@@ -31,7 +31,7 @@ describe("success interceptor", () => {
     });
 
     it("throws a ClutchError", () => {
-      expect(response()).toThrow({
+      expect(() => response()).toThrow({
         message: "Authentication Expired",
         status: {
           code: 401,
