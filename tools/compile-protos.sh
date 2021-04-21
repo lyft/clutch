@@ -15,7 +15,8 @@ ANGULAR_CLANG_FORMAT_RELEASE=1.4.0
 ANGULAR_CLANG_FORMAT_RELEASE_MD5_LINUX=fee8c52e196e28ae5928d6ff8757f58c
 ANGULAR_CLANG_FORMAT_RELEASE_MD5_OSX=c3ebe742599dcc38b9dc6544cacd69bb
 
-# Ideally matches https://github.com/bazelbuild/rules_go/blob/master/go/private/repositories.bzl
+# Ideally matches https://github.com/bazelbuild/rules_go/blob/master/go/private/repositories.bzl (ultimately generated into grpc-go).
+# However, these protos should be very stable, so drift is not a big concern.
 GOOGLEAPIS_SHA=d4cd8d96ed6eb5dd7c997aab68a1d6bb0825090c
 
 PROTOS=()
@@ -80,7 +81,7 @@ main() {
   cd "${REPO_ROOT}/backend"
 
   prepare_build_environment
-  discover_protos 
+  discover_protos
 
   googleapis_include_path="${BUILD_ROOT}/bin/googleapis-${GOOGLEAPIS_SHA}"
   pg_validate_include_path="$(modpath github.com/envoyproxy/protoc-gen-validate)"
@@ -232,17 +233,20 @@ install_googleapis() {
 
     final_out_dir="${BUILD_ROOT}/bin/googleapis-${GOOGLEAPIS_SHA}/google"
 
-    mkdir -p "${final_out_dir}/api"
-    mkdir -p "${final_out_dir}/rpc"
+    mkdir -p "${final_out_dir}/api" "${final_out_dir}/rpc"
 
-    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/annotations.proto" "${final_out_dir}/api"
-    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/field_behavior.proto" "${final_out_dir}/api"
-    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/http.proto" "${final_out_dir}/api"
-    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/httpbody.proto" "${final_out_dir}/api"
+    mv \
+    "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/annotations.proto" \
+    "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/field_behavior.proto" \
+    "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/http.proto" \
+    "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/api/httpbody.proto" \
+    "${final_out_dir}/api"
 
-    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/code.proto" "${final_out_dir}/rpc"
-    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/error_details.proto" "${final_out_dir}/rpc"
-    mv "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/status.proto" "${final_out_dir}/rpc"
+    mv \
+    "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/code.proto" \
+    "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/error_details.proto" \
+    "${googleapis_dir_out}/googleapis-${GOOGLEAPIS_SHA}/google/rpc/status.proto" \
+    "${final_out_dir}/rpc"
   fi
 }
 
