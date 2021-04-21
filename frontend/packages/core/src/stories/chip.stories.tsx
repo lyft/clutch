@@ -26,23 +26,29 @@ WarningChip.args = {
 export const NeutralChip = Template.bind({});
 NeutralChip.args = {
   variant: "NEUTRAL",
-  label: "Medium",
+  label: "Neutral",
 };
 
-export const BlankChip = Template.bind({});
-BlankChip.args = {
-  variant: "BLANK",
-  label: "Blank",
+export const NeutralBadChip = Template.bind({});
+NeutralBadChip.args = {
+  variant: "NEUTRALBAD",
+  label: "NeutralBad",
+};
+
+export const NeutralGoodChip = Template.bind({});
+NeutralGoodChip.args = {
+  variant: "NEUTRALGOOD",
+  label: "NeutralGood",
 };
 
 export const RunningChip = Template.bind({});
 RunningChip.args = {
   variant: "GOOD",
-  label: "Running",
+  label: "Good",
 };
 
 export const SucceededChip = Template.bind({});
 SucceededChip.args = {
   variant: "BEST",
-  label: "Succeeded",
+  label: "Best",
 };
