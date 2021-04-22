@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,25 +30,47 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
 
-// define the regex for a UUID once up-front
-var _aws_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on InstanceID with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *InstanceID) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// InstanceIDMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *InstanceID) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Id
 
 	// no validation rules for Region
 
+	if len(errors) > 0 {
+		return InstanceIDMultiError(errors)
+	}
 	return nil
 }
+
+// InstanceIDMultiError is an error wrapping multiple validation errors
+// returned by InstanceID.Validate(true) if the designated constraints aren't met.
+type InstanceIDMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstanceIDMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstanceIDMultiError) AllErrors() []error { return m }
 
 // InstanceIDValidationError is the validation error returned by
 // InstanceID.Validate if the designated constraints aren't met.
@@ -106,18 +128,43 @@ var _ interface {
 
 // Validate checks the field values on AutoscalingGroupName with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *AutoscalingGroupName) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in AutoscalingGroupNameMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *AutoscalingGroupName) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
 	// no validation rules for Region
 
+	if len(errors) > 0 {
+		return AutoscalingGroupNameMultiError(errors)
+	}
 	return nil
 }
+
+// AutoscalingGroupNameMultiError is an error wrapping multiple validation
+// errors returned by AutoscalingGroupName.Validate(true) if the designated
+// constraints aren't met.
+type AutoscalingGroupNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AutoscalingGroupNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AutoscalingGroupNameMultiError) AllErrors() []error { return m }
 
 // AutoscalingGroupNameValidationError is the validation error returned by
 // AutoscalingGroupName.Validate if the designated constraints aren't met.
@@ -177,18 +224,43 @@ var _ interface {
 
 // Validate checks the field values on KinesisStreamName with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *KinesisStreamName) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in KinesisStreamNameMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *KinesisStreamName) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
 	// no validation rules for Region
 
+	if len(errors) > 0 {
+		return KinesisStreamNameMultiError(errors)
+	}
 	return nil
 }
+
+// KinesisStreamNameMultiError is an error wrapping multiple validation errors
+// returned by KinesisStreamName.Validate(true) if the designated constraints
+// aren't met.
+type KinesisStreamNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m KinesisStreamNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m KinesisStreamNameMultiError) AllErrors() []error { return m }
 
 // KinesisStreamNameValidationError is the validation error returned by
 // KinesisStreamName.Validate if the designated constraints aren't met.

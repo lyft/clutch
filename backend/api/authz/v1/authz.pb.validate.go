@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 )
@@ -32,25 +32,47 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 
 	_ = apiv1.ActionType(0)
 )
 
-// define the regex for a UUID once up-front
-var _authz_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Subject with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Subject) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// SubjectMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Subject) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for User
 
+	if len(errors) > 0 {
+		return SubjectMultiError(errors)
+	}
 	return nil
 }
+
+// SubjectMultiError is an error wrapping multiple validation errors returned
+// by Subject.Validate(true) if the designated constraints aren't met.
+type SubjectMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SubjectMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SubjectMultiError) AllErrors() []error { return m }
 
 // SubjectValidationError is the validation error returned by Subject.Validate
 // if the designated constraints aren't met.
@@ -108,26 +130,39 @@ var _ interface {
 
 // Validate checks the field values on CheckRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *CheckRequest) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// CheckRequestMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *CheckRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetSubject() == nil {
-		return CheckRequestValidationError{
+		err := CheckRequestValidationError{
 			field:  "Subject",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSubject()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CheckRequestValidationError{
+	if v, ok := interface{}(m.GetSubject()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = CheckRequestValidationError{
 				field:  "Subject",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
@@ -137,8 +172,28 @@ func (m *CheckRequest) Validate() error {
 
 	// no validation rules for Resource
 
+	if len(errors) > 0 {
+		return CheckRequestMultiError(errors)
+	}
 	return nil
 }
+
+// CheckRequestMultiError is an error wrapping multiple validation errors
+// returned by CheckRequest.Validate(true) if the designated constraints
+// aren't met.
+type CheckRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CheckRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CheckRequestMultiError) AllErrors() []error { return m }
 
 // CheckRequestValidationError is the validation error returned by
 // CheckRequest.Validate if the designated constraints aren't met.
@@ -196,16 +251,41 @@ var _ interface {
 
 // Validate checks the field values on CheckResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *CheckResponse) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// CheckResponseMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *CheckResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Decision
 
+	if len(errors) > 0 {
+		return CheckResponseMultiError(errors)
+	}
 	return nil
 }
+
+// CheckResponseMultiError is an error wrapping multiple validation errors
+// returned by CheckResponse.Validate(true) if the designated constraints
+// aren't met.
+type CheckResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CheckResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CheckResponseMultiError) AllErrors() []error { return m }
 
 // CheckResponseValidationError is the validation error returned by
 // CheckResponse.Validate if the designated constraints aren't met.

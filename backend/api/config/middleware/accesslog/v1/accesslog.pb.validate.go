@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,36 +30,62 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
 
-// define the regex for a UUID once up-front
-var _accesslog_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Config) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ConfigMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Config) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetStatusCodeFilters() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ConfigValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ConfigValidationError{
 					field:  fmt.Sprintf("StatusCodeFilters[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.Validate(true) if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.
@@ -117,27 +143,56 @@ var _ interface {
 
 // Validate checks the field values on Config_StatusCodeFilter with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *Config_StatusCodeFilter) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in Config_StatusCodeFilterMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *Config_StatusCodeFilter) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	switch m.FilterType.(type) {
 
 	case *Config_StatusCodeFilter_Equals:
 
 		if val := m.GetEquals(); val < 0 || val > 16 {
-			return Config_StatusCodeFilterValidationError{
+			err := Config_StatusCodeFilterValidationError{
 				field:  "Equals",
 				reason: "value must be inside range [0, 16]",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return Config_StatusCodeFilterMultiError(errors)
+	}
 	return nil
 }
+
+// Config_StatusCodeFilterMultiError is an error wrapping multiple validation
+// errors returned by Config_StatusCodeFilter.Validate(true) if the designated
+// constraints aren't met.
+type Config_StatusCodeFilterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Config_StatusCodeFilterMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Config_StatusCodeFilterMultiError) AllErrors() []error { return m }
 
 // Config_StatusCodeFilterValidationError is the validation error returned by
 // Config_StatusCodeFilter.Validate if the designated constraints aren't met.

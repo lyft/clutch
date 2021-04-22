@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,66 +30,108 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _github_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on RepositoryParameters with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *RepositoryParameters) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in RepositoryParametersMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *RepositoryParameters) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if _, ok := _RepositoryParameters_Visibility_NotInLookup[m.GetVisibility()]; ok {
-		return RepositoryParametersValidationError{
+		err := RepositoryParametersValidationError{
 			field:  "Visibility",
 			reason: "value must not be in list [0]",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if _, ok := RepositoryParameters_Visibility_name[int32(m.GetVisibility())]; !ok {
-		return RepositoryParametersValidationError{
+		err := RepositoryParametersValidationError{
 			field:  "Visibility",
 			reason: "value must be one of the defined enum values",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetAllowMergeCommit()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RepositoryParametersValidationError{
+	if v, ok := interface{}(m.GetAllowMergeCommit()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = RepositoryParametersValidationError{
 				field:  "AllowMergeCommit",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetAllowRebaseMerge()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RepositoryParametersValidationError{
+	if v, ok := interface{}(m.GetAllowRebaseMerge()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = RepositoryParametersValidationError{
 				field:  "AllowRebaseMerge",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetAllowSquashMerge()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RepositoryParametersValidationError{
+	if v, ok := interface{}(m.GetAllowSquashMerge()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = RepositoryParametersValidationError{
 				field:  "AllowSquashMerge",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return RepositoryParametersMultiError(errors)
+	}
 	return nil
 }
+
+// RepositoryParametersMultiError is an error wrapping multiple validation
+// errors returned by RepositoryParameters.Validate(true) if the designated
+// constraints aren't met.
+type RepositoryParametersMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RepositoryParametersMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RepositoryParametersMultiError) AllErrors() []error { return m }
 
 // RepositoryParametersValidationError is the validation error returned by
 // RepositoryParameters.Validate if the designated constraints aren't met.
@@ -153,26 +195,55 @@ var _RepositoryParameters_Visibility_NotInLookup = map[RepositoryParameters_Visi
 
 // Validate checks the field values on CreateRepositoryOptions with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *CreateRepositoryOptions) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in CreateRepositoryOptionsMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *CreateRepositoryOptions) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetParameters()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CreateRepositoryOptionsValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetParameters()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = CreateRepositoryOptionsValidationError{
 				field:  "Parameters",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
 	// no validation rules for AutoInit
 
+	if len(errors) > 0 {
+		return CreateRepositoryOptionsMultiError(errors)
+	}
 	return nil
 }
+
+// CreateRepositoryOptionsMultiError is an error wrapping multiple validation
+// errors returned by CreateRepositoryOptions.Validate(true) if the designated
+// constraints aren't met.
+type CreateRepositoryOptionsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateRepositoryOptionsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateRepositoryOptionsMultiError) AllErrors() []error { return m }
 
 // CreateRepositoryOptionsValidationError is the validation error returned by
 // CreateRepositoryOptions.Validate if the designated constraints aren't met.
@@ -232,26 +303,55 @@ var _ interface {
 
 // Validate checks the field values on UpdateRepositoryOptions with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateRepositoryOptions) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateRepositoryOptionsMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *UpdateRepositoryOptions) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetParameters()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UpdateRepositoryOptionsValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetParameters()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = UpdateRepositoryOptionsValidationError{
 				field:  "Parameters",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
 	// no validation rules for Archived
 
+	if len(errors) > 0 {
+		return UpdateRepositoryOptionsMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateRepositoryOptionsMultiError is an error wrapping multiple validation
+// errors returned by UpdateRepositoryOptions.Validate(true) if the designated
+// constraints aren't met.
+type UpdateRepositoryOptionsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateRepositoryOptionsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateRepositoryOptionsMultiError) AllErrors() []error { return m }
 
 // UpdateRepositoryOptionsValidationError is the validation error returned by
 // UpdateRepositoryOptions.Validate if the designated constraints aren't met.
@@ -311,16 +411,41 @@ var _ interface {
 
 // Validate checks the field values on CommitComparison with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *CommitComparison) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in CommitComparisonMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *CommitComparison) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Status
 
+	if len(errors) > 0 {
+		return CommitComparisonMultiError(errors)
+	}
 	return nil
 }
+
+// CommitComparisonMultiError is an error wrapping multiple validation errors
+// returned by CommitComparison.Validate(true) if the designated constraints
+// aren't met.
+type CommitComparisonMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CommitComparisonMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CommitComparisonMultiError) AllErrors() []error { return m }
 
 // CommitComparisonValidationError is the validation error returned by
 // CommitComparison.Validate if the designated constraints aren't met.

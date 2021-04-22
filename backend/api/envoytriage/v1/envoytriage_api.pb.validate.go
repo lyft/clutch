@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,37 +30,62 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _envoytriage_api_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on ReadRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ReadRequest) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// ReadRequestMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *ReadRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetOperations() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ReadRequestValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ReadRequestValidationError{
 					field:  fmt.Sprintf("Operations[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ReadRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ReadRequestMultiError is an error wrapping multiple validation errors
+// returned by ReadRequest.Validate(true) if the designated constraints aren't met.
+type ReadRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReadRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReadRequestMultiError) AllErrors() []error { return m }
 
 // ReadRequestValidationError is the validation error returned by
 // ReadRequest.Validate if the designated constraints aren't met.
@@ -118,41 +143,78 @@ var _ interface {
 
 // Validate checks the field values on ReadOperation with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ReadOperation) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// ReadOperationMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *ReadOperation) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetAddress() == nil {
-		return ReadOperationValidationError{
+		err := ReadOperationValidationError{
 			field:  "Address",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetAddress()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ReadOperationValidationError{
+	if v, ok := interface{}(m.GetAddress()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ReadOperationValidationError{
 				field:  "Address",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetInclude()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ReadOperationValidationError{
+	if v, ok := interface{}(m.GetInclude()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ReadOperationValidationError{
 				field:  "Include",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ReadOperationMultiError(errors)
+	}
 	return nil
 }
+
+// ReadOperationMultiError is an error wrapping multiple validation errors
+// returned by ReadOperation.Validate(true) if the designated constraints
+// aren't met.
+type ReadOperationMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReadOperationMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReadOperationMultiError) AllErrors() []error { return m }
 
 // ReadOperationValidationError is the validation error returned by
 // ReadOperation.Validate if the designated constraints aren't met.
@@ -210,29 +272,58 @@ var _ interface {
 
 // Validate checks the field values on ReadResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ReadResponse) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// ReadResponseMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *ReadResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetResults() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ReadResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ReadResponseValidationError{
 					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ReadResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ReadResponseMultiError is an error wrapping multiple validation errors
+// returned by ReadResponse.Validate(true) if the designated constraints
+// aren't met.
+type ReadResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReadResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReadResponseMultiError) AllErrors() []error { return m }
 
 // ReadResponseValidationError is the validation error returned by
 // ReadResponse.Validate if the designated constraints aren't met.
@@ -289,28 +380,45 @@ var _ interface {
 } = ReadResponseValidationError{}
 
 // Validate checks the field values on Address with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Address) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// AddressMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Address) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if err := m._validateHostname(m.GetHost()); err != nil {
 		if ip := net.ParseIP(m.GetHost()); ip == nil {
-			return AddressValidationError{
+			err := AddressValidationError{
 				field:  "Host",
 				reason: "value must be a valid hostname, or ip address",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
 	if m.GetPort() > 65535 {
-		return AddressValidationError{
+		err := AddressValidationError{
 			field:  "Port",
 			reason: "value must be less than or equal to 65535",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return AddressMultiError(errors)
+	}
 	return nil
 }
 
@@ -343,6 +451,22 @@ func (m *Address) _validateHostname(host string) error {
 
 	return nil
 }
+
+// AddressMultiError is an error wrapping multiple validation errors returned
+// by Address.Validate(true) if the designated constraints aren't met.
+type AddressMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddressMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddressMultiError) AllErrors() []error { return m }
 
 // AddressValidationError is the validation error returned by Address.Validate
 // if the designated constraints aren't met.
@@ -399,44 +523,81 @@ var _ interface {
 } = AddressValidationError{}
 
 // Validate checks the field values on Result with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Result) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ResultMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Result) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetAddress()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ResultValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetAddress()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ResultValidationError{
 				field:  "Address",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetNodeMetadata()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ResultValidationError{
+	if v, ok := interface{}(m.GetNodeMetadata()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ResultValidationError{
 				field:  "NodeMetadata",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetOutput()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ResultValidationError{
+	if v, ok := interface{}(m.GetOutput()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ResultValidationError{
 				field:  "Output",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ResultMultiError(errors)
+	}
 	return nil
 }
+
+// ResultMultiError is an error wrapping multiple validation errors returned by
+// Result.Validate(true) if the designated constraints aren't met.
+type ResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResultMultiError) AllErrors() []error { return m }
 
 // ResultValidationError is the validation error returned by Result.Validate if
 // the designated constraints aren't met.
@@ -494,11 +655,16 @@ var _ interface {
 
 // Validate checks the field values on NodeMetadata with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *NodeMetadata) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// NodeMetadataMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *NodeMetadata) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for ServiceNode
 
@@ -508,8 +674,28 @@ func (m *NodeMetadata) Validate() error {
 
 	// no validation rules for Version
 
+	if len(errors) > 0 {
+		return NodeMetadataMultiError(errors)
+	}
 	return nil
 }
+
+// NodeMetadataMultiError is an error wrapping multiple validation errors
+// returned by NodeMetadata.Validate(true) if the designated constraints
+// aren't met.
+type NodeMetadataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NodeMetadataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NodeMetadataMultiError) AllErrors() []error { return m }
 
 // NodeMetadataValidationError is the validation error returned by
 // NodeMetadata.Validate if the designated constraints aren't met.
@@ -567,11 +753,16 @@ var _ interface {
 
 // Validate checks the field values on ReadOperation_Include with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ReadOperation_Include) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ReadOperation_IncludeMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ReadOperation_Include) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Clusters
 
@@ -585,8 +776,28 @@ func (m *ReadOperation_Include) Validate() error {
 
 	// no validation rules for ServerInfo
 
+	if len(errors) > 0 {
+		return ReadOperation_IncludeMultiError(errors)
+	}
 	return nil
 }
+
+// ReadOperation_IncludeMultiError is an error wrapping multiple validation
+// errors returned by ReadOperation_Include.Validate(true) if the designated
+// constraints aren't met.
+type ReadOperation_IncludeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReadOperation_IncludeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReadOperation_IncludeMultiError) AllErrors() []error { return m }
 
 // ReadOperation_IncludeValidationError is the validation error returned by
 // ReadOperation_Include.Validate if the designated constraints aren't met.
@@ -646,74 +857,123 @@ var _ interface {
 
 // Validate checks the field values on Result_Output with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *Result_Output) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// Result_OutputMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *Result_Output) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetClusters()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Result_OutputValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetClusters()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = Result_OutputValidationError{
 				field:  "Clusters",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetConfigDump()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Result_OutputValidationError{
+	if v, ok := interface{}(m.GetConfigDump()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = Result_OutputValidationError{
 				field:  "ConfigDump",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetListeners()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Result_OutputValidationError{
+	if v, ok := interface{}(m.GetListeners()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = Result_OutputValidationError{
 				field:  "Listeners",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetRuntime()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Result_OutputValidationError{
+	if v, ok := interface{}(m.GetRuntime()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = Result_OutputValidationError{
 				field:  "Runtime",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetStats()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Result_OutputValidationError{
+	if v, ok := interface{}(m.GetStats()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = Result_OutputValidationError{
 				field:  "Stats",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetServerInfo()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Result_OutputValidationError{
+	if v, ok := interface{}(m.GetServerInfo()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = Result_OutputValidationError{
 				field:  "ServerInfo",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return Result_OutputMultiError(errors)
+	}
 	return nil
 }
+
+// Result_OutputMultiError is an error wrapping multiple validation errors
+// returned by Result_Output.Validate(true) if the designated constraints
+// aren't met.
+type Result_OutputMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Result_OutputMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Result_OutputMultiError) AllErrors() []error { return m }
 
 // Result_OutputValidationError is the validation error returned by
 // Result_Output.Validate if the designated constraints aren't met.

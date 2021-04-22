@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,34 +30,44 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _redisexperimentation_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on FaultConfig with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *FaultConfig) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// FaultConfigMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *FaultConfig) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetFaultTargeting() == nil {
-		return FaultConfigValidationError{
+		err := FaultConfigValidationError{
 			field:  "FaultTargeting",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return FaultConfigValidationError{
+	if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = FaultConfigValidationError{
 				field:  "FaultTargeting",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
@@ -65,38 +75,69 @@ func (m *FaultConfig) Validate() error {
 
 	case *FaultConfig_ErrorFault:
 
-		if v, ok := interface{}(m.GetErrorFault()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return FaultConfigValidationError{
+		if v, ok := interface{}(m.GetErrorFault()).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = FaultConfigValidationError{
 					field:  "ErrorFault",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	case *FaultConfig_LatencyFault:
 
-		if v, ok := interface{}(m.GetLatencyFault()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return FaultConfigValidationError{
+		if v, ok := interface{}(m.GetLatencyFault()).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = FaultConfigValidationError{
 					field:  "LatencyFault",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	default:
-		return FaultConfigValidationError{
+		err := FaultConfigValidationError{
 			field:  "Fault",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 
 	}
 
+	if len(errors) > 0 {
+		return FaultConfigMultiError(errors)
+	}
 	return nil
 }
+
+// FaultConfigMultiError is an error wrapping multiple validation errors
+// returned by FaultConfig.Validate(true) if the designated constraints aren't met.
+type FaultConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FaultConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FaultConfigMultiError) AllErrors() []error { return m }
 
 // FaultConfigValidationError is the validation error returned by
 // FaultConfig.Validate if the designated constraints aren't met.
@@ -153,31 +194,64 @@ var _ interface {
 } = FaultConfigValidationError{}
 
 // Validate checks the field values on ErrorFault with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *ErrorFault) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ErrorFaultMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *ErrorFault) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetPercentage() == nil {
-		return ErrorFaultValidationError{
+		err := ErrorFaultValidationError{
 			field:  "Percentage",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ErrorFaultValidationError{
+	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ErrorFaultValidationError{
 				field:  "Percentage",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ErrorFaultMultiError(errors)
+	}
 	return nil
 }
+
+// ErrorFaultMultiError is an error wrapping multiple validation errors
+// returned by ErrorFault.Validate(true) if the designated constraints aren't met.
+type ErrorFaultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ErrorFaultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ErrorFaultMultiError) AllErrors() []error { return m }
 
 // ErrorFaultValidationError is the validation error returned by
 // ErrorFault.Validate if the designated constraints aren't met.
@@ -235,48 +309,89 @@ var _ interface {
 
 // Validate checks the field values on LatencyFault with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *LatencyFault) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// LatencyFaultMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *LatencyFault) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetPercentage() == nil {
-		return LatencyFaultValidationError{
+		err := LatencyFaultValidationError{
 			field:  "Percentage",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return LatencyFaultValidationError{
+	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = LatencyFaultValidationError{
 				field:  "Percentage",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
 	if m.GetLatencyDuration() == nil {
-		return LatencyFaultValidationError{
+		err := LatencyFaultValidationError{
 			field:  "LatencyDuration",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetLatencyDuration()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return LatencyFaultValidationError{
+	if v, ok := interface{}(m.GetLatencyDuration()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = LatencyFaultValidationError{
 				field:  "LatencyDuration",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return LatencyFaultMultiError(errors)
+	}
 	return nil
 }
+
+// LatencyFaultMultiError is an error wrapping multiple validation errors
+// returned by LatencyFault.Validate(true) if the designated constraints
+// aren't met.
+type LatencyFaultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LatencyFaultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LatencyFaultMultiError) AllErrors() []error { return m }
 
 // LatencyFaultValidationError is the validation error returned by
 // LatencyFault.Validate if the designated constraints aren't met.
@@ -334,34 +449,67 @@ var _ interface {
 
 // Validate checks the field values on FaultTargeting with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *FaultTargeting) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// FaultTargetingMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *FaultTargeting) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetUpstreamCluster()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return FaultTargetingValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetUpstreamCluster()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = FaultTargetingValidationError{
 				field:  "UpstreamCluster",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetDownstreamCluster()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return FaultTargetingValidationError{
+	if v, ok := interface{}(m.GetDownstreamCluster()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = FaultTargetingValidationError{
 				field:  "DownstreamCluster",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return FaultTargetingMultiError(errors)
+	}
 	return nil
 }
+
+// FaultTargetingMultiError is an error wrapping multiple validation errors
+// returned by FaultTargeting.Validate(true) if the designated constraints
+// aren't met.
+type FaultTargetingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FaultTargetingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FaultTargetingMultiError) AllErrors() []error { return m }
 
 // FaultTargetingValidationError is the validation error returned by
 // FaultTargeting.Validate if the designated constraints aren't met.
@@ -419,21 +567,50 @@ var _ interface {
 
 // Validate checks the field values on SingleCluster with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *SingleCluster) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// SingleClusterMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *SingleCluster) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetName()) < 1 {
-		return SingleClusterValidationError{
+		err := SingleClusterValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return SingleClusterMultiError(errors)
+	}
 	return nil
 }
+
+// SingleClusterMultiError is an error wrapping multiple validation errors
+// returned by SingleCluster.Validate(true) if the designated constraints
+// aren't met.
+type SingleClusterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SingleClusterMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SingleClusterMultiError) AllErrors() []error { return m }
 
 // SingleClusterValidationError is the validation error returned by
 // SingleCluster.Validate if the designated constraints aren't met.
@@ -491,21 +668,50 @@ var _ interface {
 
 // Validate checks the field values on FaultPercentage with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *FaultPercentage) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in FaultPercentageMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *FaultPercentage) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if val := m.GetPercentage(); val <= 0 || val > 100 {
-		return FaultPercentageValidationError{
+		err := FaultPercentageValidationError{
 			field:  "Percentage",
 			reason: "value must be inside range (0, 100]",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return FaultPercentageMultiError(errors)
+	}
 	return nil
 }
+
+// FaultPercentageMultiError is an error wrapping multiple validation errors
+// returned by FaultPercentage.Validate(true) if the designated constraints
+// aren't met.
+type FaultPercentageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FaultPercentageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FaultPercentageMultiError) AllErrors() []error { return m }
 
 // FaultPercentageValidationError is the validation error returned by
 // FaultPercentage.Validate if the designated constraints aren't met.
@@ -563,21 +769,50 @@ var _ interface {
 
 // Validate checks the field values on FaultLatencyDuration with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *FaultLatencyDuration) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in FaultLatencyDurationMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *FaultLatencyDuration) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetFixedDurationMs() <= 0 {
-		return FaultLatencyDurationValidationError{
+		err := FaultLatencyDurationValidationError{
 			field:  "FixedDurationMs",
 			reason: "value must be greater than 0",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return FaultLatencyDurationMultiError(errors)
+	}
 	return nil
 }
+
+// FaultLatencyDurationMultiError is an error wrapping multiple validation
+// errors returned by FaultLatencyDuration.Validate(true) if the designated
+// constraints aren't met.
+type FaultLatencyDurationMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FaultLatencyDurationMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FaultLatencyDurationMultiError) AllErrors() []error { return m }
 
 // FaultLatencyDurationValidationError is the validation error returned by
 // FaultLatencyDuration.Validate if the designated constraints aren't met.

@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,38 +30,68 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
 
-// define the regex for a UUID once up-front
-var _aws_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Config) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ConfigMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Config) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetRegions()) < 1 {
-		return ConfigValidationError{
+		err := ConfigValidationError{
 			field:  "Regions",
 			reason: "value must contain at least 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetClientConfig()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ConfigValidationError{
+	if v, ok := interface{}(m.GetClientConfig()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ConfigValidationError{
 				field:  "ClientConfig",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.Validate(true) if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.
@@ -119,21 +149,50 @@ var _ interface {
 
 // Validate checks the field values on ClientConfig with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ClientConfig) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// ClientConfigMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *ClientConfig) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetRetries() < 0 {
-		return ClientConfigValidationError{
+		err := ClientConfigValidationError{
 			field:  "Retries",
 			reason: "value must be greater than or equal to 0",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return ClientConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ClientConfigMultiError is an error wrapping multiple validation errors
+// returned by ClientConfig.Validate(true) if the designated constraints
+// aren't met.
+type ClientConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ClientConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ClientConfigMultiError) AllErrors() []error { return m }
 
 // ClientConfigValidationError is the validation error returned by
 // ClientConfig.Validate if the designated constraints aren't met.

@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,26 +30,48 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _resolver_api_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on AutocompleteResult with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *AutocompleteResult) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in AutocompleteResultMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *AutocompleteResult) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Id
 
 	// no validation rules for Label
 
+	if len(errors) > 0 {
+		return AutocompleteResultMultiError(errors)
+	}
 	return nil
 }
+
+// AutocompleteResultMultiError is an error wrapping multiple validation errors
+// returned by AutocompleteResult.Validate(true) if the designated constraints
+// aren't met.
+type AutocompleteResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AutocompleteResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AutocompleteResultMultiError) AllErrors() []error { return m }
 
 // AutocompleteResultValidationError is the validation error returned by
 // AutocompleteResult.Validate if the designated constraints aren't met.
@@ -109,30 +131,63 @@ var _ interface {
 
 // Validate checks the field values on AutocompleteRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *AutocompleteRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in AutocompleteRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *AutocompleteRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetWant()) < 1 {
-		return AutocompleteRequestValidationError{
+		err := AutocompleteRequestValidationError{
 			field:  "Want",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetSearch()) < 1 {
-		return AutocompleteRequestValidationError{
+		err := AutocompleteRequestValidationError{
 			field:  "Search",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	// no validation rules for Limit
 
+	if len(errors) > 0 {
+		return AutocompleteRequestMultiError(errors)
+	}
 	return nil
 }
+
+// AutocompleteRequestMultiError is an error wrapping multiple validation
+// errors returned by AutocompleteRequest.Validate(true) if the designated
+// constraints aren't met.
+type AutocompleteRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AutocompleteRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AutocompleteRequestMultiError) AllErrors() []error { return m }
 
 // AutocompleteRequestValidationError is the validation error returned by
 // AutocompleteRequest.Validate if the designated constraints aren't met.
@@ -192,29 +247,58 @@ var _ interface {
 
 // Validate checks the field values on AutocompleteResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *AutocompleteResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in AutocompleteResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *AutocompleteResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetResults() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return AutocompleteResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = AutocompleteResponseValidationError{
 					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return AutocompleteResponseMultiError(errors)
+	}
 	return nil
 }
+
+// AutocompleteResponseMultiError is an error wrapping multiple validation
+// errors returned by AutocompleteResponse.Validate(true) if the designated
+// constraints aren't met.
+type AutocompleteResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AutocompleteResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AutocompleteResponseMultiError) AllErrors() []error { return m }
 
 // AutocompleteResponseValidationError is the validation error returned by
 // AutocompleteResponse.Validate if the designated constraints aren't met.
@@ -274,24 +358,37 @@ var _ interface {
 
 // Validate checks the field values on ResolveRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ResolveRequest) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// ResolveRequestMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *ResolveRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetWant()) < 1 {
-		return ResolveRequestValidationError{
+		err := ResolveRequestValidationError{
 			field:  "Want",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetHave() == nil {
-		return ResolveRequestValidationError{
+		err := ResolveRequestValidationError{
 			field:  "Have",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if a := m.GetHave(); a != nil {
@@ -300,8 +397,28 @@ func (m *ResolveRequest) Validate() error {
 
 	// no validation rules for Limit
 
+	if len(errors) > 0 {
+		return ResolveRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ResolveRequestMultiError is an error wrapping multiple validation errors
+// returned by ResolveRequest.Validate(true) if the designated constraints
+// aren't met.
+type ResolveRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResolveRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResolveRequestMultiError) AllErrors() []error { return m }
 
 // ResolveRequestValidationError is the validation error returned by
 // ResolveRequest.Validate if the designated constraints aren't met.
@@ -359,22 +476,31 @@ var _ interface {
 
 // Validate checks the field values on ResolveResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ResolveResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ResolveResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ResolveResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetResults() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ResolveResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ResolveResponseValidationError{
 					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
@@ -383,20 +509,44 @@ func (m *ResolveResponse) Validate() error {
 	for idx, item := range m.GetPartialFailures() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ResolveResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ResolveResponseValidationError{
 					field:  fmt.Sprintf("PartialFailures[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ResolveResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ResolveResponseMultiError is an error wrapping multiple validation errors
+// returned by ResolveResponse.Validate(true) if the designated constraints
+// aren't met.
+type ResolveResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResolveResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResolveResponseMultiError) AllErrors() []error { return m }
 
 // ResolveResponseValidationError is the validation error returned by
 // ResolveResponse.Validate if the designated constraints aren't met.
@@ -454,30 +604,63 @@ var _ interface {
 
 // Validate checks the field values on SearchRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *SearchRequest) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// SearchRequestMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *SearchRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetWant()) < 1 {
-		return SearchRequestValidationError{
+		err := SearchRequestValidationError{
 			field:  "Want",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetQuery()) < 1 {
-		return SearchRequestValidationError{
+		err := SearchRequestValidationError{
 			field:  "Query",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	// no validation rules for Limit
 
+	if len(errors) > 0 {
+		return SearchRequestMultiError(errors)
+	}
 	return nil
 }
+
+// SearchRequestMultiError is an error wrapping multiple validation errors
+// returned by SearchRequest.Validate(true) if the designated constraints
+// aren't met.
+type SearchRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SearchRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SearchRequestMultiError) AllErrors() []error { return m }
 
 // SearchRequestValidationError is the validation error returned by
 // SearchRequest.Validate if the designated constraints aren't met.
@@ -535,22 +718,31 @@ var _ interface {
 
 // Validate checks the field values on SearchResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *SearchResponse) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// SearchResponseMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *SearchResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetResults() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return SearchResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = SearchResponseValidationError{
 					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
@@ -559,20 +751,44 @@ func (m *SearchResponse) Validate() error {
 	for idx, item := range m.GetPartialFailures() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return SearchResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = SearchResponseValidationError{
 					field:  fmt.Sprintf("PartialFailures[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return SearchResponseMultiError(errors)
+	}
 	return nil
 }
+
+// SearchResponseMultiError is an error wrapping multiple validation errors
+// returned by SearchResponse.Validate(true) if the designated constraints
+// aren't met.
+type SearchResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SearchResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SearchResponseMultiError) AllErrors() []error { return m }
 
 // SearchResponseValidationError is the validation error returned by
 // SearchResponse.Validate if the designated constraints aren't met.
@@ -630,21 +846,50 @@ var _ interface {
 
 // Validate checks the field values on GetObjectSchemasRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *GetObjectSchemasRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in GetObjectSchemasRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *GetObjectSchemasRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetTypeUrl()) < 1 {
-		return GetObjectSchemasRequestValidationError{
+		err := GetObjectSchemasRequestValidationError{
 			field:  "TypeUrl",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return GetObjectSchemasRequestMultiError(errors)
+	}
 	return nil
 }
+
+// GetObjectSchemasRequestMultiError is an error wrapping multiple validation
+// errors returned by GetObjectSchemasRequest.Validate(true) if the designated
+// constraints aren't met.
+type GetObjectSchemasRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetObjectSchemasRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetObjectSchemasRequestMultiError) AllErrors() []error { return m }
 
 // GetObjectSchemasRequestValidationError is the validation error returned by
 // GetObjectSchemasRequest.Validate if the designated constraints aren't met.
@@ -704,31 +949,60 @@ var _ interface {
 
 // Validate checks the field values on GetObjectSchemasResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *GetObjectSchemasResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in GetObjectSchemasResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *GetObjectSchemasResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for TypeUrl
 
 	for idx, item := range m.GetSchemas() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return GetObjectSchemasResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = GetObjectSchemasResponseValidationError{
 					field:  fmt.Sprintf("Schemas[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return GetObjectSchemasResponseMultiError(errors)
+	}
 	return nil
 }
+
+// GetObjectSchemasResponseMultiError is an error wrapping multiple validation
+// errors returned by GetObjectSchemasResponse.Validate(true) if the
+// designated constraints aren't met.
+type GetObjectSchemasResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetObjectSchemasResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetObjectSchemasResponseMultiError) AllErrors() []error { return m }
 
 // GetObjectSchemasResponseValidationError is the validation error returned by
 // GetObjectSchemasResponse.Validate if the designated constraints aren't met.

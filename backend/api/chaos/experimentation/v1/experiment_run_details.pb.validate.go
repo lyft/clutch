@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,46 +30,76 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _experiment_run_details_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on ExperimentRunDetails with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ExperimentRunDetails) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ExperimentRunDetailsMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ExperimentRunDetails) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for RunId
 
 	// no validation rules for Status
 
-	if v, ok := interface{}(m.GetProperties()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ExperimentRunDetailsValidationError{
+	if v, ok := interface{}(m.GetProperties()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ExperimentRunDetailsValidationError{
 				field:  "Properties",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ExperimentRunDetailsValidationError{
+	if v, ok := interface{}(m.GetConfig()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ExperimentRunDetailsValidationError{
 				field:  "Config",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ExperimentRunDetailsMultiError(errors)
+	}
 	return nil
 }
+
+// ExperimentRunDetailsMultiError is an error wrapping multiple validation
+// errors returned by ExperimentRunDetails.Validate(true) if the designated
+// constraints aren't met.
+type ExperimentRunDetailsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExperimentRunDetailsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExperimentRunDetailsMultiError) AllErrors() []error { return m }
 
 // ExperimentRunDetailsValidationError is the validation error returned by
 // ExperimentRunDetails.Validate if the designated constraints aren't met.

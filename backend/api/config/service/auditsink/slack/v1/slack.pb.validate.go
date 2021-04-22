@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,61 +30,98 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _slack_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on SlackConfig with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *SlackConfig) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// SlackConfigMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *SlackConfig) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetToken()) < 1 {
-		return SlackConfigValidationError{
+		err := SlackConfigValidationError{
 			field:  "Token",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetChannel()) < 1 {
-		return SlackConfigValidationError{
+		err := SlackConfigValidationError{
 			field:  "Channel",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SlackConfigValidationError{
+	if v, ok := interface{}(m.GetFilter()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = SlackConfigValidationError{
 				field:  "Filter",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
 	for idx, item := range m.GetOverrides() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return SlackConfigValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = SlackConfigValidationError{
 					field:  fmt.Sprintf("Overrides[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return SlackConfigMultiError(errors)
+	}
 	return nil
 }
+
+// SlackConfigMultiError is an error wrapping multiple validation errors
+// returned by SlackConfig.Validate(true) if the designated constraints aren't met.
+type SlackConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SlackConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SlackConfigMultiError) AllErrors() []error { return m }
 
 // SlackConfigValidationError is the validation error returned by
 // SlackConfig.Validate if the designated constraints aren't met.
@@ -142,28 +179,61 @@ var _ interface {
 
 // Validate checks the field values on CustomMessage with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *CustomMessage) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// CustomMessageMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *CustomMessage) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetFullMethod()) < 1 {
-		return CustomMessageValidationError{
+		err := CustomMessageValidationError{
 			field:  "FullMethod",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetMessage()) < 1 {
-		return CustomMessageValidationError{
+		err := CustomMessageValidationError{
 			field:  "Message",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return CustomMessageMultiError(errors)
+	}
 	return nil
 }
+
+// CustomMessageMultiError is an error wrapping multiple validation errors
+// returned by CustomMessage.Validate(true) if the designated constraints
+// aren't met.
+type CustomMessageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CustomMessageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CustomMessageMultiError) AllErrors() []error { return m }
 
 // CustomMessageValidationError is the validation error returned by
 // CustomMessage.Validate if the designated constraints aren't met.

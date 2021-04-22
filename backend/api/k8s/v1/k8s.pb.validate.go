@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	structpb "google.golang.org/protobuf/types/known/structpb"
 )
@@ -32,52 +32,90 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 
 	_ = structpb.NullValue(0)
 )
 
-// define the regex for a UUID once up-front
-var _k_8_s_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on DescribePodRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribePodRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribePodRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DescribePodRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DescribePodRequestValidationError{
+		err := DescribePodRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DescribePodRequestValidationError{
+		err := DescribePodRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DescribePodRequestValidationError{
+		err := DescribePodRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DescribePodRequestValidationError{
+		err := DescribePodRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DescribePodRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DescribePodRequestMultiError is an error wrapping multiple validation errors
+// returned by DescribePodRequest.Validate(true) if the designated constraints
+// aren't met.
+type DescribePodRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribePodRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribePodRequestMultiError) AllErrors() []error { return m }
 
 // DescribePodRequestValidationError is the validation error returned by
 // DescribePodRequest.Validate if the designated constraints aren't met.
@@ -137,24 +175,53 @@ var _ interface {
 
 // Validate checks the field values on DescribePodResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribePodResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribePodResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DescribePodResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetPod()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DescribePodResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetPod()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = DescribePodResponseValidationError{
 				field:  "Pod",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return DescribePodResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DescribePodResponseMultiError is an error wrapping multiple validation
+// errors returned by DescribePodResponse.Validate(true) if the designated
+// constraints aren't met.
+type DescribePodResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribePodResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribePodResponseMultiError) AllErrors() []error { return m }
 
 // DescribePodResponseValidationError is the validation error returned by
 // DescribePodResponse.Validate if the designated constraints aren't met.
@@ -213,11 +280,17 @@ var _ interface {
 } = DescribePodResponseValidationError{}
 
 // Validate checks the field values on Container with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Container) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ContainerMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *Container) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -233,44 +306,75 @@ func (m *Container) Validate() error {
 
 	case *Container_StateWaiting:
 
-		if v, ok := interface{}(m.GetStateWaiting()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ContainerValidationError{
+		if v, ok := interface{}(m.GetStateWaiting()).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ContainerValidationError{
 					field:  "StateWaiting",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	case *Container_StateRunning:
 
-		if v, ok := interface{}(m.GetStateRunning()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ContainerValidationError{
+		if v, ok := interface{}(m.GetStateRunning()).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ContainerValidationError{
 					field:  "StateRunning",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	case *Container_StateTerminated:
 
-		if v, ok := interface{}(m.GetStateTerminated()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ContainerValidationError{
+		if v, ok := interface{}(m.GetStateTerminated()).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ContainerValidationError{
 					field:  "StateTerminated",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ContainerMultiError(errors)
+	}
 	return nil
 }
+
+// ContainerMultiError is an error wrapping multiple validation errors returned
+// by Container.Validate(true) if the designated constraints aren't met.
+type ContainerMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ContainerMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ContainerMultiError) AllErrors() []error { return m }
 
 // ContainerValidationError is the validation error returned by
 // Container.Validate if the designated constraints aren't met.
@@ -328,18 +432,43 @@ var _ interface {
 
 // Validate checks the field values on StateWaiting with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *StateWaiting) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// StateWaitingMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *StateWaiting) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Reason
 
 	// no validation rules for Message
 
+	if len(errors) > 0 {
+		return StateWaitingMultiError(errors)
+	}
 	return nil
 }
+
+// StateWaitingMultiError is an error wrapping multiple validation errors
+// returned by StateWaiting.Validate(true) if the designated constraints
+// aren't met.
+type StateWaitingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StateWaitingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StateWaitingMultiError) AllErrors() []error { return m }
 
 // StateWaitingValidationError is the validation error returned by
 // StateWaiting.Validate if the designated constraints aren't met.
@@ -397,24 +526,53 @@ var _ interface {
 
 // Validate checks the field values on StateRunning with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *StateRunning) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// StateRunningMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *StateRunning) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StateRunningValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = StateRunningValidationError{
 				field:  "StartTime",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return StateRunningMultiError(errors)
+	}
 	return nil
 }
+
+// StateRunningMultiError is an error wrapping multiple validation errors
+// returned by StateRunning.Validate(true) if the designated constraints
+// aren't met.
+type StateRunningMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StateRunningMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StateRunningMultiError) AllErrors() []error { return m }
 
 // StateRunningValidationError is the validation error returned by
 // StateRunning.Validate if the designated constraints aren't met.
@@ -472,11 +630,16 @@ var _ interface {
 
 // Validate checks the field values on StateTerminated with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *StateTerminated) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in StateTerminatedMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *StateTerminated) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Reason
 
@@ -486,8 +649,28 @@ func (m *StateTerminated) Validate() error {
 
 	// no validation rules for Signal
 
+	if len(errors) > 0 {
+		return StateTerminatedMultiError(errors)
+	}
 	return nil
 }
+
+// StateTerminatedMultiError is an error wrapping multiple validation errors
+// returned by StateTerminated.Validate(true) if the designated constraints
+// aren't met.
+type StateTerminatedMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StateTerminatedMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StateTerminatedMultiError) AllErrors() []error { return m }
 
 // StateTerminatedValidationError is the validation error returned by
 // StateTerminated.Validate if the designated constraints aren't met.
@@ -545,18 +728,43 @@ var _ interface {
 
 // Validate checks the field values on PodCondition with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *PodCondition) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// PodConditionMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *PodCondition) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Type
 
 	// no validation rules for Status
 
+	if len(errors) > 0 {
+		return PodConditionMultiError(errors)
+	}
 	return nil
 }
+
+// PodConditionMultiError is an error wrapping multiple validation errors
+// returned by PodCondition.Validate(true) if the designated constraints
+// aren't met.
+type PodConditionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PodConditionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PodConditionMultiError) AllErrors() []error { return m }
 
 // PodConditionValidationError is the validation error returned by
 // PodCondition.Validate if the designated constraints aren't met.
@@ -613,11 +821,17 @@ var _ interface {
 } = PodConditionValidationError{}
 
 // Validate checks the field values on Pod with the rules defined in the proto
-// definition for this message. If any rules are violated, an error is returned.
-func (m *Pod) Validate() error {
+// definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// PodMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Pod) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -628,13 +842,17 @@ func (m *Pod) Validate() error {
 	for idx, item := range m.GetContainers() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return PodValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = PodValidationError{
 					field:  fmt.Sprintf("Containers[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
@@ -646,13 +864,17 @@ func (m *Pod) Validate() error {
 
 	// no validation rules for State
 
-	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return PodValidationError{
+	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = PodValidationError{
 				field:  "StartTime",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
@@ -665,13 +887,17 @@ func (m *Pod) Validate() error {
 	for idx, item := range m.GetPodConditions() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return PodValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = PodValidationError{
 					field:  fmt.Sprintf("PodConditions[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
@@ -680,13 +906,17 @@ func (m *Pod) Validate() error {
 	for idx, item := range m.GetInitContainers() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return PodValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = PodValidationError{
 					field:  fmt.Sprintf("InitContainers[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
@@ -694,8 +924,27 @@ func (m *Pod) Validate() error {
 
 	// no validation rules for Status
 
+	if len(errors) > 0 {
+		return PodMultiError(errors)
+	}
 	return nil
 }
+
+// PodMultiError is an error wrapping multiple validation errors returned by
+// Pod.Validate(true) if the designated constraints aren't met.
+type PodMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PodMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PodMultiError) AllErrors() []error { return m }
 
 // PodValidationError is the validation error returned by Pod.Validate if the
 // designated constraints aren't met.
@@ -753,18 +1002,42 @@ var _ interface {
 
 // Validate checks the field values on ListOptions with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ListOptions) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// ListOptionsMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *ListOptions) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Labels
 
 	// no validation rules for SupplementalSelectorString
 
+	if len(errors) > 0 {
+		return ListOptionsMultiError(errors)
+	}
 	return nil
 }
+
+// ListOptionsMultiError is an error wrapping multiple validation errors
+// returned by ListOptions.Validate(true) if the designated constraints aren't met.
+type ListOptionsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListOptionsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListOptionsMultiError) AllErrors() []error { return m }
 
 // ListOptionsValidationError is the validation error returned by
 // ListOptions.Validate if the designated constraints aren't met.
@@ -822,52 +1095,97 @@ var _ interface {
 
 // Validate checks the field values on ListPodsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ListPodsRequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ListPodsRequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ListPodsRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return ListPodsRequestValidationError{
+		err := ListPodsRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return ListPodsRequestValidationError{
+		err := ListPodsRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return ListPodsRequestValidationError{
+		err := ListPodsRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetOptions() == nil {
-		return ListPodsRequestValidationError{
+		err := ListPodsRequestValidationError{
 			field:  "Options",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListPodsRequestValidationError{
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ListPodsRequestValidationError{
 				field:  "Options",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ListPodsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ListPodsRequestMultiError is an error wrapping multiple validation errors
+// returned by ListPodsRequest.Validate(true) if the designated constraints
+// aren't met.
+type ListPodsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListPodsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListPodsRequestMultiError) AllErrors() []error { return m }
 
 // ListPodsRequestValidationError is the validation error returned by
 // ListPodsRequest.Validate if the designated constraints aren't met.
@@ -925,29 +1243,58 @@ var _ interface {
 
 // Validate checks the field values on ListPodsResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ListPodsResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ListPodsResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ListPodsResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetPods() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListPodsResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ListPodsResponseValidationError{
 					field:  fmt.Sprintf("Pods[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ListPodsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ListPodsResponseMultiError is an error wrapping multiple validation errors
+// returned by ListPodsResponse.Validate(true) if the designated constraints
+// aren't met.
+type ListPodsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListPodsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListPodsResponseMultiError) AllErrors() []error { return m }
 
 // ListPodsResponseValidationError is the validation error returned by
 // ListPodsResponse.Validate if the designated constraints aren't met.
@@ -1005,42 +1352,83 @@ var _ interface {
 
 // Validate checks the field values on DeletePodRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *DeletePodRequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in DeletePodRequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *DeletePodRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DeletePodRequestValidationError{
+		err := DeletePodRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DeletePodRequestValidationError{
+		err := DeletePodRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DeletePodRequestValidationError{
+		err := DeletePodRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DeletePodRequestValidationError{
+		err := DeletePodRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DeletePodRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DeletePodRequestMultiError is an error wrapping multiple validation errors
+// returned by DeletePodRequest.Validate(true) if the designated constraints
+// aren't met.
+type DeletePodRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeletePodRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeletePodRequestMultiError) AllErrors() []error { return m }
 
 // DeletePodRequestValidationError is the validation error returned by
 // DeletePodRequest.Validate if the designated constraints aren't met.
@@ -1098,14 +1486,39 @@ var _ interface {
 
 // Validate checks the field values on DeletePodResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *DeletePodResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in DeletePodResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *DeletePodResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeletePodResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DeletePodResponseMultiError is an error wrapping multiple validation errors
+// returned by DeletePodResponse.Validate(true) if the designated constraints
+// aren't met.
+type DeletePodResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeletePodResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeletePodResponseMultiError) AllErrors() []error { return m }
 
 // DeletePodResponseValidationError is the validation error returned by
 // DeletePodResponse.Validate if the designated constraints aren't met.
@@ -1165,72 +1578,125 @@ var _ interface {
 
 // Validate checks the field values on UpdatePodRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *UpdatePodRequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in UpdatePodRequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *UpdatePodRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return UpdatePodRequestValidationError{
+		err := UpdatePodRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return UpdatePodRequestValidationError{
+		err := UpdatePodRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return UpdatePodRequestValidationError{
+		err := UpdatePodRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return UpdatePodRequestValidationError{
+		err := UpdatePodRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetExpectedObjectMetaFields()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UpdatePodRequestValidationError{
+	if v, ok := interface{}(m.GetExpectedObjectMetaFields()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = UpdatePodRequestValidationError{
 				field:  "ExpectedObjectMetaFields",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetObjectMetaFields()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UpdatePodRequestValidationError{
+	if v, ok := interface{}(m.GetObjectMetaFields()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = UpdatePodRequestValidationError{
 				field:  "ObjectMetaFields",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetRemoveObjectMetaFields()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UpdatePodRequestValidationError{
+	if v, ok := interface{}(m.GetRemoveObjectMetaFields()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = UpdatePodRequestValidationError{
 				field:  "RemoveObjectMetaFields",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return UpdatePodRequestMultiError(errors)
+	}
 	return nil
 }
+
+// UpdatePodRequestMultiError is an error wrapping multiple validation errors
+// returned by UpdatePodRequest.Validate(true) if the designated constraints
+// aren't met.
+type UpdatePodRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdatePodRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdatePodRequestMultiError) AllErrors() []error { return m }
 
 // UpdatePodRequestValidationError is the validation error returned by
 // UpdatePodRequest.Validate if the designated constraints aren't met.
@@ -1288,14 +1754,39 @@ var _ interface {
 
 // Validate checks the field values on UpdatePodResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *UpdatePodResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in UpdatePodResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *UpdatePodResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return UpdatePodResponseMultiError(errors)
+	}
 	return nil
 }
+
+// UpdatePodResponseMultiError is an error wrapping multiple validation errors
+// returned by UpdatePodResponse.Validate(true) if the designated constraints
+// aren't met.
+type UpdatePodResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdatePodResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdatePodResponseMultiError) AllErrors() []error { return m }
 
 // UpdatePodResponseValidationError is the validation error returned by
 // UpdatePodResponse.Validate if the designated constraints aren't met.
@@ -1354,11 +1845,17 @@ var _ interface {
 } = UpdatePodResponseValidationError{}
 
 // Validate checks the field values on HPA with the rules defined in the proto
-// definition for this message. If any rules are violated, an error is returned.
-func (m *HPA) Validate() error {
+// definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// HPAMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *HPA) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -1366,13 +1863,17 @@ func (m *HPA) Validate() error {
 
 	// no validation rules for Name
 
-	if v, ok := interface{}(m.GetSizing()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return HPAValidationError{
+	if v, ok := interface{}(m.GetSizing()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = HPAValidationError{
 				field:  "Sizing",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
@@ -1380,8 +1881,27 @@ func (m *HPA) Validate() error {
 
 	// no validation rules for Annotations
 
+	if len(errors) > 0 {
+		return HPAMultiError(errors)
+	}
 	return nil
 }
+
+// HPAMultiError is an error wrapping multiple validation errors returned by
+// HPA.Validate(true) if the designated constraints aren't met.
+type HPAMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m HPAMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m HPAMultiError) AllErrors() []error { return m }
 
 // HPAValidationError is the validation error returned by HPA.Validate if the
 // designated constraints aren't met.
@@ -1439,59 +1959,108 @@ var _ interface {
 
 // Validate checks the field values on ResizeHPARequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ResizeHPARequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ResizeHPARequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ResizeHPARequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return ResizeHPARequestValidationError{
+		err := ResizeHPARequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return ResizeHPARequestValidationError{
+		err := ResizeHPARequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return ResizeHPARequestValidationError{
+		err := ResizeHPARequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return ResizeHPARequestValidationError{
+		err := ResizeHPARequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetSizing() == nil {
-		return ResizeHPARequestValidationError{
+		err := ResizeHPARequestValidationError{
 			field:  "Sizing",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSizing()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ResizeHPARequestValidationError{
+	if v, ok := interface{}(m.GetSizing()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ResizeHPARequestValidationError{
 				field:  "Sizing",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ResizeHPARequestMultiError(errors)
+	}
 	return nil
 }
+
+// ResizeHPARequestMultiError is an error wrapping multiple validation errors
+// returned by ResizeHPARequest.Validate(true) if the designated constraints
+// aren't met.
+type ResizeHPARequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResizeHPARequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResizeHPARequestMultiError) AllErrors() []error { return m }
 
 // ResizeHPARequestValidationError is the validation error returned by
 // ResizeHPARequest.Validate if the designated constraints aren't met.
@@ -1549,14 +2118,39 @@ var _ interface {
 
 // Validate checks the field values on ResizeHPAResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ResizeHPAResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ResizeHPAResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ResizeHPAResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return ResizeHPAResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ResizeHPAResponseMultiError is an error wrapping multiple validation errors
+// returned by ResizeHPAResponse.Validate(true) if the designated constraints
+// aren't met.
+type ResizeHPAResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResizeHPAResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResizeHPAResponseMultiError) AllErrors() []error { return m }
 
 // ResizeHPAResponseValidationError is the validation error returned by
 // ResizeHPAResponse.Validate if the designated constraints aren't met.
@@ -1616,42 +2210,83 @@ var _ interface {
 
 // Validate checks the field values on DeleteHPARequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *DeleteHPARequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in DeleteHPARequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *DeleteHPARequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DeleteHPARequestValidationError{
+		err := DeleteHPARequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DeleteHPARequestValidationError{
+		err := DeleteHPARequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DeleteHPARequestValidationError{
+		err := DeleteHPARequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DeleteHPARequestValidationError{
+		err := DeleteHPARequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DeleteHPARequestMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteHPARequestMultiError is an error wrapping multiple validation errors
+// returned by DeleteHPARequest.Validate(true) if the designated constraints
+// aren't met.
+type DeleteHPARequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteHPARequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteHPARequestMultiError) AllErrors() []error { return m }
 
 // DeleteHPARequestValidationError is the validation error returned by
 // DeleteHPARequest.Validate if the designated constraints aren't met.
@@ -1709,14 +2344,39 @@ var _ interface {
 
 // Validate checks the field values on DeleteHPAResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *DeleteHPAResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in DeleteHPAResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *DeleteHPAResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeleteHPAResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteHPAResponseMultiError is an error wrapping multiple validation errors
+// returned by DeleteHPAResponse.Validate(true) if the designated constraints
+// aren't met.
+type DeleteHPAResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteHPAResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteHPAResponseMultiError) AllErrors() []error { return m }
 
 // DeleteHPAResponseValidationError is the validation error returned by
 // DeleteHPAResponse.Validate if the designated constraints aren't met.
@@ -1775,11 +2435,17 @@ var _ interface {
 } = DeleteHPAResponseValidationError{}
 
 // Validate checks the field values on Deployment with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Deployment) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// DeploymentMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *Deployment) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -1791,18 +2457,41 @@ func (m *Deployment) Validate() error {
 
 	// no validation rules for Annotations
 
-	if v, ok := interface{}(m.GetDeploymentStatus()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DeploymentValidationError{
+	if v, ok := interface{}(m.GetDeploymentStatus()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = DeploymentValidationError{
 				field:  "DeploymentStatus",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return DeploymentMultiError(errors)
+	}
 	return nil
 }
+
+// DeploymentMultiError is an error wrapping multiple validation errors
+// returned by Deployment.Validate(true) if the designated constraints aren't met.
+type DeploymentMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeploymentMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeploymentMultiError) AllErrors() []error { return m }
 
 // DeploymentValidationError is the validation error returned by
 // Deployment.Validate if the designated constraints aren't met.
@@ -1860,42 +2549,83 @@ var _ interface {
 
 // Validate checks the field values on DescribeDeploymentRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeDeploymentRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeDeploymentRequestMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *DescribeDeploymentRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DescribeDeploymentRequestValidationError{
+		err := DescribeDeploymentRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DescribeDeploymentRequestValidationError{
+		err := DescribeDeploymentRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DescribeDeploymentRequestValidationError{
+		err := DescribeDeploymentRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DescribeDeploymentRequestValidationError{
+		err := DescribeDeploymentRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DescribeDeploymentRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeDeploymentRequestMultiError is an error wrapping multiple validation
+// errors returned by DescribeDeploymentRequest.Validate(true) if the
+// designated constraints aren't met.
+type DescribeDeploymentRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeDeploymentRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeDeploymentRequestMultiError) AllErrors() []error { return m }
 
 // DescribeDeploymentRequestValidationError is the validation error returned by
 // DescribeDeploymentRequest.Validate if the designated constraints aren't met.
@@ -1955,24 +2685,53 @@ var _ interface {
 
 // Validate checks the field values on DescribeDeploymentResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeDeploymentResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeDeploymentResponseMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *DescribeDeploymentResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetDeployment()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DescribeDeploymentResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetDeployment()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = DescribeDeploymentResponseValidationError{
 				field:  "Deployment",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return DescribeDeploymentResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeDeploymentResponseMultiError is an error wrapping multiple
+// validation errors returned by DescribeDeploymentResponse.Validate(true) if
+// the designated constraints aren't met.
+type DescribeDeploymentResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeDeploymentResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeDeploymentResponseMultiError) AllErrors() []error { return m }
 
 // DescribeDeploymentResponseValidationError is the validation error returned
 // by DescribeDeploymentResponse.Validate if the designated constraints aren't met.
@@ -2032,52 +2791,97 @@ var _ interface {
 
 // Validate checks the field values on ListDeploymentsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListDeploymentsRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ListDeploymentsRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ListDeploymentsRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return ListDeploymentsRequestValidationError{
+		err := ListDeploymentsRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return ListDeploymentsRequestValidationError{
+		err := ListDeploymentsRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return ListDeploymentsRequestValidationError{
+		err := ListDeploymentsRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetOptions() == nil {
-		return ListDeploymentsRequestValidationError{
+		err := ListDeploymentsRequestValidationError{
 			field:  "Options",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListDeploymentsRequestValidationError{
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ListDeploymentsRequestValidationError{
 				field:  "Options",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ListDeploymentsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ListDeploymentsRequestMultiError is an error wrapping multiple validation
+// errors returned by ListDeploymentsRequest.Validate(true) if the designated
+// constraints aren't met.
+type ListDeploymentsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListDeploymentsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListDeploymentsRequestMultiError) AllErrors() []error { return m }
 
 // ListDeploymentsRequestValidationError is the validation error returned by
 // ListDeploymentsRequest.Validate if the designated constraints aren't met.
@@ -2137,29 +2941,58 @@ var _ interface {
 
 // Validate checks the field values on ListDeploymentsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListDeploymentsResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ListDeploymentsResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ListDeploymentsResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetDeployments() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListDeploymentsResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ListDeploymentsResponseValidationError{
 					field:  fmt.Sprintf("Deployments[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ListDeploymentsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ListDeploymentsResponseMultiError is an error wrapping multiple validation
+// errors returned by ListDeploymentsResponse.Validate(true) if the designated
+// constraints aren't met.
+type ListDeploymentsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListDeploymentsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListDeploymentsResponseMultiError) AllErrors() []error { return m }
 
 // ListDeploymentsResponseValidationError is the validation error returned by
 // ListDeploymentsResponse.Validate if the designated constraints aren't met.
@@ -2219,59 +3052,108 @@ var _ interface {
 
 // Validate checks the field values on UpdateDeploymentRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateDeploymentRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateDeploymentRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *UpdateDeploymentRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return UpdateDeploymentRequestValidationError{
+		err := UpdateDeploymentRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return UpdateDeploymentRequestValidationError{
+		err := UpdateDeploymentRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return UpdateDeploymentRequestValidationError{
+		err := UpdateDeploymentRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return UpdateDeploymentRequestValidationError{
+		err := UpdateDeploymentRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetFields() == nil {
-		return UpdateDeploymentRequestValidationError{
+		err := UpdateDeploymentRequestValidationError{
 			field:  "Fields",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetFields()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UpdateDeploymentRequestValidationError{
+	if v, ok := interface{}(m.GetFields()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = UpdateDeploymentRequestValidationError{
 				field:  "Fields",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return UpdateDeploymentRequestMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateDeploymentRequestMultiError is an error wrapping multiple validation
+// errors returned by UpdateDeploymentRequest.Validate(true) if the designated
+// constraints aren't met.
+type UpdateDeploymentRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateDeploymentRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateDeploymentRequestMultiError) AllErrors() []error { return m }
 
 // UpdateDeploymentRequestValidationError is the validation error returned by
 // UpdateDeploymentRequest.Validate if the designated constraints aren't met.
@@ -2331,14 +3213,39 @@ var _ interface {
 
 // Validate checks the field values on UpdateDeploymentResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateDeploymentResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateDeploymentResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *UpdateDeploymentResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return UpdateDeploymentResponseMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateDeploymentResponseMultiError is an error wrapping multiple validation
+// errors returned by UpdateDeploymentResponse.Validate(true) if the
+// designated constraints aren't met.
+type UpdateDeploymentResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateDeploymentResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateDeploymentResponseMultiError) AllErrors() []error { return m }
 
 // UpdateDeploymentResponseValidationError is the validation error returned by
 // UpdateDeploymentResponse.Validate if the designated constraints aren't met.
@@ -2398,42 +3305,83 @@ var _ interface {
 
 // Validate checks the field values on DeleteDeploymentRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteDeploymentRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteDeploymentRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteDeploymentRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DeleteDeploymentRequestValidationError{
+		err := DeleteDeploymentRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DeleteDeploymentRequestValidationError{
+		err := DeleteDeploymentRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DeleteDeploymentRequestValidationError{
+		err := DeleteDeploymentRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DeleteDeploymentRequestValidationError{
+		err := DeleteDeploymentRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DeleteDeploymentRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteDeploymentRequestMultiError is an error wrapping multiple validation
+// errors returned by DeleteDeploymentRequest.Validate(true) if the designated
+// constraints aren't met.
+type DeleteDeploymentRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteDeploymentRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteDeploymentRequestMultiError) AllErrors() []error { return m }
 
 // DeleteDeploymentRequestValidationError is the validation error returned by
 // DeleteDeploymentRequest.Validate if the designated constraints aren't met.
@@ -2493,14 +3441,39 @@ var _ interface {
 
 // Validate checks the field values on DeleteDeploymentResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteDeploymentResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteDeploymentResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteDeploymentResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeleteDeploymentResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteDeploymentResponseMultiError is an error wrapping multiple validation
+// errors returned by DeleteDeploymentResponse.Validate(true) if the
+// designated constraints aren't met.
+type DeleteDeploymentResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteDeploymentResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteDeploymentResponseMultiError) AllErrors() []error { return m }
 
 // DeleteDeploymentResponseValidationError is the validation error returned by
 // DeleteDeploymentResponse.Validate if the designated constraints aren't met.
@@ -2560,11 +3533,16 @@ var _ interface {
 
 // Validate checks the field values on StatefulSet with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *StatefulSet) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// StatefulSetMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *StatefulSet) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -2576,8 +3554,27 @@ func (m *StatefulSet) Validate() error {
 
 	// no validation rules for Annotations
 
+	if len(errors) > 0 {
+		return StatefulSetMultiError(errors)
+	}
 	return nil
 }
+
+// StatefulSetMultiError is an error wrapping multiple validation errors
+// returned by StatefulSet.Validate(true) if the designated constraints aren't met.
+type StatefulSetMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatefulSetMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatefulSetMultiError) AllErrors() []error { return m }
 
 // StatefulSetValidationError is the validation error returned by
 // StatefulSet.Validate if the designated constraints aren't met.
@@ -2635,42 +3632,83 @@ var _ interface {
 
 // Validate checks the field values on DescribeStatefulSetRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeStatefulSetRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeStatefulSetRequestMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *DescribeStatefulSetRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DescribeStatefulSetRequestValidationError{
+		err := DescribeStatefulSetRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DescribeStatefulSetRequestValidationError{
+		err := DescribeStatefulSetRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DescribeStatefulSetRequestValidationError{
+		err := DescribeStatefulSetRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DescribeStatefulSetRequestValidationError{
+		err := DescribeStatefulSetRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DescribeStatefulSetRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeStatefulSetRequestMultiError is an error wrapping multiple
+// validation errors returned by DescribeStatefulSetRequest.Validate(true) if
+// the designated constraints aren't met.
+type DescribeStatefulSetRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeStatefulSetRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeStatefulSetRequestMultiError) AllErrors() []error { return m }
 
 // DescribeStatefulSetRequestValidationError is the validation error returned
 // by DescribeStatefulSetRequest.Validate if the designated constraints aren't met.
@@ -2730,24 +3768,53 @@ var _ interface {
 
 // Validate checks the field values on DescribeStatefulSetResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeStatefulSetResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeStatefulSetResponseMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *DescribeStatefulSetResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetStatefulSet()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DescribeStatefulSetResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetStatefulSet()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = DescribeStatefulSetResponseValidationError{
 				field:  "StatefulSet",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return DescribeStatefulSetResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeStatefulSetResponseMultiError is an error wrapping multiple
+// validation errors returned by DescribeStatefulSetResponse.Validate(true) if
+// the designated constraints aren't met.
+type DescribeStatefulSetResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeStatefulSetResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeStatefulSetResponseMultiError) AllErrors() []error { return m }
 
 // DescribeStatefulSetResponseValidationError is the validation error returned
 // by DescribeStatefulSetResponse.Validate if the designated constraints
@@ -2808,52 +3875,97 @@ var _ interface {
 
 // Validate checks the field values on ListStatefulSetsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListStatefulSetsRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ListStatefulSetsRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ListStatefulSetsRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return ListStatefulSetsRequestValidationError{
+		err := ListStatefulSetsRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return ListStatefulSetsRequestValidationError{
+		err := ListStatefulSetsRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return ListStatefulSetsRequestValidationError{
+		err := ListStatefulSetsRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetOptions() == nil {
-		return ListStatefulSetsRequestValidationError{
+		err := ListStatefulSetsRequestValidationError{
 			field:  "Options",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListStatefulSetsRequestValidationError{
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ListStatefulSetsRequestValidationError{
 				field:  "Options",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ListStatefulSetsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ListStatefulSetsRequestMultiError is an error wrapping multiple validation
+// errors returned by ListStatefulSetsRequest.Validate(true) if the designated
+// constraints aren't met.
+type ListStatefulSetsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListStatefulSetsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListStatefulSetsRequestMultiError) AllErrors() []error { return m }
 
 // ListStatefulSetsRequestValidationError is the validation error returned by
 // ListStatefulSetsRequest.Validate if the designated constraints aren't met.
@@ -2913,29 +4025,58 @@ var _ interface {
 
 // Validate checks the field values on ListStatefulSetsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListStatefulSetsResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ListStatefulSetsResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ListStatefulSetsResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetStatefulSets() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListStatefulSetsResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ListStatefulSetsResponseValidationError{
 					field:  fmt.Sprintf("StatefulSets[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ListStatefulSetsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ListStatefulSetsResponseMultiError is an error wrapping multiple validation
+// errors returned by ListStatefulSetsResponse.Validate(true) if the
+// designated constraints aren't met.
+type ListStatefulSetsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListStatefulSetsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListStatefulSetsResponseMultiError) AllErrors() []error { return m }
 
 // ListStatefulSetsResponseValidationError is the validation error returned by
 // ListStatefulSetsResponse.Validate if the designated constraints aren't met.
@@ -2995,42 +4136,83 @@ var _ interface {
 
 // Validate checks the field values on DeleteStatefulSetRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteStatefulSetRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteStatefulSetRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteStatefulSetRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DeleteStatefulSetRequestValidationError{
+		err := DeleteStatefulSetRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DeleteStatefulSetRequestValidationError{
+		err := DeleteStatefulSetRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DeleteStatefulSetRequestValidationError{
+		err := DeleteStatefulSetRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DeleteStatefulSetRequestValidationError{
+		err := DeleteStatefulSetRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DeleteStatefulSetRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteStatefulSetRequestMultiError is an error wrapping multiple validation
+// errors returned by DeleteStatefulSetRequest.Validate(true) if the
+// designated constraints aren't met.
+type DeleteStatefulSetRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteStatefulSetRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteStatefulSetRequestMultiError) AllErrors() []error { return m }
 
 // DeleteStatefulSetRequestValidationError is the validation error returned by
 // DeleteStatefulSetRequest.Validate if the designated constraints aren't met.
@@ -3090,14 +4272,39 @@ var _ interface {
 
 // Validate checks the field values on DeleteStatefulSetResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteStatefulSetResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteStatefulSetResponseMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *DeleteStatefulSetResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeleteStatefulSetResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteStatefulSetResponseMultiError is an error wrapping multiple validation
+// errors returned by DeleteStatefulSetResponse.Validate(true) if the
+// designated constraints aren't met.
+type DeleteStatefulSetResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteStatefulSetResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteStatefulSetResponseMultiError) AllErrors() []error { return m }
 
 // DeleteStatefulSetResponseValidationError is the validation error returned by
 // DeleteStatefulSetResponse.Validate if the designated constraints aren't met.
@@ -3157,59 +4364,108 @@ var _ interface {
 
 // Validate checks the field values on UpdateStatefulSetRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateStatefulSetRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateStatefulSetRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *UpdateStatefulSetRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return UpdateStatefulSetRequestValidationError{
+		err := UpdateStatefulSetRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return UpdateStatefulSetRequestValidationError{
+		err := UpdateStatefulSetRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return UpdateStatefulSetRequestValidationError{
+		err := UpdateStatefulSetRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return UpdateStatefulSetRequestValidationError{
+		err := UpdateStatefulSetRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetFields() == nil {
-		return UpdateStatefulSetRequestValidationError{
+		err := UpdateStatefulSetRequestValidationError{
 			field:  "Fields",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetFields()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UpdateStatefulSetRequestValidationError{
+	if v, ok := interface{}(m.GetFields()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = UpdateStatefulSetRequestValidationError{
 				field:  "Fields",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return UpdateStatefulSetRequestMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateStatefulSetRequestMultiError is an error wrapping multiple validation
+// errors returned by UpdateStatefulSetRequest.Validate(true) if the
+// designated constraints aren't met.
+type UpdateStatefulSetRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateStatefulSetRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateStatefulSetRequestMultiError) AllErrors() []error { return m }
 
 // UpdateStatefulSetRequestValidationError is the validation error returned by
 // UpdateStatefulSetRequest.Validate if the designated constraints aren't met.
@@ -3269,14 +4525,39 @@ var _ interface {
 
 // Validate checks the field values on UpdateStatefulSetResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateStatefulSetResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateStatefulSetResponseMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *UpdateStatefulSetResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return UpdateStatefulSetResponseMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateStatefulSetResponseMultiError is an error wrapping multiple validation
+// errors returned by UpdateStatefulSetResponse.Validate(true) if the
+// designated constraints aren't met.
+type UpdateStatefulSetResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateStatefulSetResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateStatefulSetResponseMultiError) AllErrors() []error { return m }
 
 // UpdateStatefulSetResponseValidationError is the validation error returned by
 // UpdateStatefulSetResponse.Validate if the designated constraints aren't met.
@@ -3335,11 +4616,17 @@ var _ interface {
 } = UpdateStatefulSetResponseValidationError{}
 
 // Validate checks the field values on Service with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Service) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ServiceMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Service) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -3353,8 +4640,27 @@ func (m *Service) Validate() error {
 
 	// no validation rules for Annotations
 
+	if len(errors) > 0 {
+		return ServiceMultiError(errors)
+	}
 	return nil
 }
+
+// ServiceMultiError is an error wrapping multiple validation errors returned
+// by Service.Validate(true) if the designated constraints aren't met.
+type ServiceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ServiceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ServiceMultiError) AllErrors() []error { return m }
 
 // ServiceValidationError is the validation error returned by Service.Validate
 // if the designated constraints aren't met.
@@ -3412,42 +4718,83 @@ var _ interface {
 
 // Validate checks the field values on DescribeServiceRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeServiceRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeServiceRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DescribeServiceRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DescribeServiceRequestValidationError{
+		err := DescribeServiceRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DescribeServiceRequestValidationError{
+		err := DescribeServiceRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DescribeServiceRequestValidationError{
+		err := DescribeServiceRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DescribeServiceRequestValidationError{
+		err := DescribeServiceRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DescribeServiceRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeServiceRequestMultiError is an error wrapping multiple validation
+// errors returned by DescribeServiceRequest.Validate(true) if the designated
+// constraints aren't met.
+type DescribeServiceRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeServiceRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeServiceRequestMultiError) AllErrors() []error { return m }
 
 // DescribeServiceRequestValidationError is the validation error returned by
 // DescribeServiceRequest.Validate if the designated constraints aren't met.
@@ -3507,24 +4854,53 @@ var _ interface {
 
 // Validate checks the field values on DescribeServiceResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeServiceResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeServiceResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DescribeServiceResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetService()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DescribeServiceResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetService()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = DescribeServiceResponseValidationError{
 				field:  "Service",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return DescribeServiceResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeServiceResponseMultiError is an error wrapping multiple validation
+// errors returned by DescribeServiceResponse.Validate(true) if the designated
+// constraints aren't met.
+type DescribeServiceResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeServiceResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeServiceResponseMultiError) AllErrors() []error { return m }
 
 // DescribeServiceResponseValidationError is the validation error returned by
 // DescribeServiceResponse.Validate if the designated constraints aren't met.
@@ -3584,42 +4960,83 @@ var _ interface {
 
 // Validate checks the field values on DeleteServiceRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteServiceRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteServiceRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteServiceRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DeleteServiceRequestValidationError{
+		err := DeleteServiceRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DeleteServiceRequestValidationError{
+		err := DeleteServiceRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DeleteServiceRequestValidationError{
+		err := DeleteServiceRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DeleteServiceRequestValidationError{
+		err := DeleteServiceRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DeleteServiceRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteServiceRequestMultiError is an error wrapping multiple validation
+// errors returned by DeleteServiceRequest.Validate(true) if the designated
+// constraints aren't met.
+type DeleteServiceRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteServiceRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteServiceRequestMultiError) AllErrors() []error { return m }
 
 // DeleteServiceRequestValidationError is the validation error returned by
 // DeleteServiceRequest.Validate if the designated constraints aren't met.
@@ -3679,14 +5096,39 @@ var _ interface {
 
 // Validate checks the field values on DeleteServiceResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteServiceResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteServiceResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteServiceResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeleteServiceResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteServiceResponseMultiError is an error wrapping multiple validation
+// errors returned by DeleteServiceResponse.Validate(true) if the designated
+// constraints aren't met.
+type DeleteServiceResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteServiceResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteServiceResponseMultiError) AllErrors() []error { return m }
 
 // DeleteServiceResponseValidationError is the validation error returned by
 // DeleteServiceResponse.Validate if the designated constraints aren't met.
@@ -3745,11 +5187,17 @@ var _ interface {
 } = DeleteServiceResponseValidationError{}
 
 // Validate checks the field values on CronJob with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *CronJob) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// CronJobMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *CronJob) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -3769,18 +5217,41 @@ func (m *CronJob) Validate() error {
 
 	// no validation rules for ConcurrencyPolicy
 
-	if v, ok := interface{}(m.GetStartingDeadlineSeconds()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CronJobValidationError{
+	if v, ok := interface{}(m.GetStartingDeadlineSeconds()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = CronJobValidationError{
 				field:  "StartingDeadlineSeconds",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return CronJobMultiError(errors)
+	}
 	return nil
 }
+
+// CronJobMultiError is an error wrapping multiple validation errors returned
+// by CronJob.Validate(true) if the designated constraints aren't met.
+type CronJobMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CronJobMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CronJobMultiError) AllErrors() []error { return m }
 
 // CronJobValidationError is the validation error returned by CronJob.Validate
 // if the designated constraints aren't met.
@@ -3838,42 +5309,83 @@ var _ interface {
 
 // Validate checks the field values on DescribeCronJobRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeCronJobRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeCronJobRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DescribeCronJobRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DescribeCronJobRequestValidationError{
+		err := DescribeCronJobRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DescribeCronJobRequestValidationError{
+		err := DescribeCronJobRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DescribeCronJobRequestValidationError{
+		err := DescribeCronJobRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DescribeCronJobRequestValidationError{
+		err := DescribeCronJobRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DescribeCronJobRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeCronJobRequestMultiError is an error wrapping multiple validation
+// errors returned by DescribeCronJobRequest.Validate(true) if the designated
+// constraints aren't met.
+type DescribeCronJobRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeCronJobRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeCronJobRequestMultiError) AllErrors() []error { return m }
 
 // DescribeCronJobRequestValidationError is the validation error returned by
 // DescribeCronJobRequest.Validate if the designated constraints aren't met.
@@ -3933,24 +5445,53 @@ var _ interface {
 
 // Validate checks the field values on DescribeCronJobResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeCronJobResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeCronJobResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DescribeCronJobResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetCronjob()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DescribeCronJobResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetCronjob()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = DescribeCronJobResponseValidationError{
 				field:  "Cronjob",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return DescribeCronJobResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeCronJobResponseMultiError is an error wrapping multiple validation
+// errors returned by DescribeCronJobResponse.Validate(true) if the designated
+// constraints aren't met.
+type DescribeCronJobResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeCronJobResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeCronJobResponseMultiError) AllErrors() []error { return m }
 
 // DescribeCronJobResponseValidationError is the validation error returned by
 // DescribeCronJobResponse.Validate if the designated constraints aren't met.
@@ -4010,52 +5551,97 @@ var _ interface {
 
 // Validate checks the field values on ListCronJobsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListCronJobsRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ListCronJobsRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ListCronJobsRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return ListCronJobsRequestValidationError{
+		err := ListCronJobsRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return ListCronJobsRequestValidationError{
+		err := ListCronJobsRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return ListCronJobsRequestValidationError{
+		err := ListCronJobsRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetOptions() == nil {
-		return ListCronJobsRequestValidationError{
+		err := ListCronJobsRequestValidationError{
 			field:  "Options",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListCronJobsRequestValidationError{
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ListCronJobsRequestValidationError{
 				field:  "Options",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ListCronJobsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ListCronJobsRequestMultiError is an error wrapping multiple validation
+// errors returned by ListCronJobsRequest.Validate(true) if the designated
+// constraints aren't met.
+type ListCronJobsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListCronJobsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListCronJobsRequestMultiError) AllErrors() []error { return m }
 
 // ListCronJobsRequestValidationError is the validation error returned by
 // ListCronJobsRequest.Validate if the designated constraints aren't met.
@@ -4115,29 +5701,58 @@ var _ interface {
 
 // Validate checks the field values on ListCronJobsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListCronJobsResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ListCronJobsResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ListCronJobsResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetCronJobs() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListCronJobsResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ListCronJobsResponseValidationError{
 					field:  fmt.Sprintf("CronJobs[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ListCronJobsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ListCronJobsResponseMultiError is an error wrapping multiple validation
+// errors returned by ListCronJobsResponse.Validate(true) if the designated
+// constraints aren't met.
+type ListCronJobsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListCronJobsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListCronJobsResponseMultiError) AllErrors() []error { return m }
 
 // ListCronJobsResponseValidationError is the validation error returned by
 // ListCronJobsResponse.Validate if the designated constraints aren't met.
@@ -4197,42 +5812,83 @@ var _ interface {
 
 // Validate checks the field values on DeleteCronJobRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteCronJobRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteCronJobRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteCronJobRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DeleteCronJobRequestValidationError{
+		err := DeleteCronJobRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DeleteCronJobRequestValidationError{
+		err := DeleteCronJobRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DeleteCronJobRequestValidationError{
+		err := DeleteCronJobRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DeleteCronJobRequestValidationError{
+		err := DeleteCronJobRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DeleteCronJobRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteCronJobRequestMultiError is an error wrapping multiple validation
+// errors returned by DeleteCronJobRequest.Validate(true) if the designated
+// constraints aren't met.
+type DeleteCronJobRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteCronJobRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteCronJobRequestMultiError) AllErrors() []error { return m }
 
 // DeleteCronJobRequestValidationError is the validation error returned by
 // DeleteCronJobRequest.Validate if the designated constraints aren't met.
@@ -4292,14 +5948,39 @@ var _ interface {
 
 // Validate checks the field values on DeleteCronJobResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteCronJobResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteCronJobResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteCronJobResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeleteCronJobResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteCronJobResponseMultiError is an error wrapping multiple validation
+// errors returned by DeleteCronJobResponse.Validate(true) if the designated
+// constraints aren't met.
+type DeleteCronJobResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteCronJobResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteCronJobResponseMultiError) AllErrors() []error { return m }
 
 // DeleteCronJobResponseValidationError is the validation error returned by
 // DeleteCronJobResponse.Validate if the designated constraints aren't met.
@@ -4358,11 +6039,17 @@ var _ interface {
 } = DeleteCronJobResponseValidationError{}
 
 // Validate checks the field values on ConfigMap with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *ConfigMap) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ConfigMapMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *ConfigMap) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -4378,8 +6065,27 @@ func (m *ConfigMap) Validate() error {
 
 	// no validation rules for BinaryData
 
+	if len(errors) > 0 {
+		return ConfigMapMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMapMultiError is an error wrapping multiple validation errors returned
+// by ConfigMap.Validate(true) if the designated constraints aren't met.
+type ConfigMapMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMapMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMapMultiError) AllErrors() []error { return m }
 
 // ConfigMapValidationError is the validation error returned by
 // ConfigMap.Validate if the designated constraints aren't met.
@@ -4437,52 +6143,97 @@ var _ interface {
 
 // Validate checks the field values on ListConfigMapsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListConfigMapsRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ListConfigMapsRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ListConfigMapsRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return ListConfigMapsRequestValidationError{
+		err := ListConfigMapsRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return ListConfigMapsRequestValidationError{
+		err := ListConfigMapsRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return ListConfigMapsRequestValidationError{
+		err := ListConfigMapsRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetOptions() == nil {
-		return ListConfigMapsRequestValidationError{
+		err := ListConfigMapsRequestValidationError{
 			field:  "Options",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListConfigMapsRequestValidationError{
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ListConfigMapsRequestValidationError{
 				field:  "Options",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ListConfigMapsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ListConfigMapsRequestMultiError is an error wrapping multiple validation
+// errors returned by ListConfigMapsRequest.Validate(true) if the designated
+// constraints aren't met.
+type ListConfigMapsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListConfigMapsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListConfigMapsRequestMultiError) AllErrors() []error { return m }
 
 // ListConfigMapsRequestValidationError is the validation error returned by
 // ListConfigMapsRequest.Validate if the designated constraints aren't met.
@@ -4542,29 +6293,58 @@ var _ interface {
 
 // Validate checks the field values on ListConfigMapsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ListConfigMapsResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ListConfigMapsResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ListConfigMapsResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetConfigMaps() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListConfigMapsResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ListConfigMapsResponseValidationError{
 					field:  fmt.Sprintf("ConfigMaps[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ListConfigMapsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ListConfigMapsResponseMultiError is an error wrapping multiple validation
+// errors returned by ListConfigMapsResponse.Validate(true) if the designated
+// constraints aren't met.
+type ListConfigMapsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListConfigMapsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListConfigMapsResponseMultiError) AllErrors() []error { return m }
 
 // ListConfigMapsResponseValidationError is the validation error returned by
 // ListConfigMapsResponse.Validate if the designated constraints aren't met.
@@ -4624,42 +6404,83 @@ var _ interface {
 
 // Validate checks the field values on DescribeConfigMapRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeConfigMapRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeConfigMapRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DescribeConfigMapRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DescribeConfigMapRequestValidationError{
+		err := DescribeConfigMapRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DescribeConfigMapRequestValidationError{
+		err := DescribeConfigMapRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DescribeConfigMapRequestValidationError{
+		err := DescribeConfigMapRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DescribeConfigMapRequestValidationError{
+		err := DescribeConfigMapRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DescribeConfigMapRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeConfigMapRequestMultiError is an error wrapping multiple validation
+// errors returned by DescribeConfigMapRequest.Validate(true) if the
+// designated constraints aren't met.
+type DescribeConfigMapRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeConfigMapRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeConfigMapRequestMultiError) AllErrors() []error { return m }
 
 // DescribeConfigMapRequestValidationError is the validation error returned by
 // DescribeConfigMapRequest.Validate if the designated constraints aren't met.
@@ -4719,24 +6540,53 @@ var _ interface {
 
 // Validate checks the field values on DescribeConfigMapResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeConfigMapResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeConfigMapResponseMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *DescribeConfigMapResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetConfigMap()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DescribeConfigMapResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetConfigMap()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = DescribeConfigMapResponseValidationError{
 				field:  "ConfigMap",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return DescribeConfigMapResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeConfigMapResponseMultiError is an error wrapping multiple validation
+// errors returned by DescribeConfigMapResponse.Validate(true) if the
+// designated constraints aren't met.
+type DescribeConfigMapResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeConfigMapResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeConfigMapResponseMultiError) AllErrors() []error { return m }
 
 // DescribeConfigMapResponseValidationError is the validation error returned by
 // DescribeConfigMapResponse.Validate if the designated constraints aren't met.
@@ -4796,42 +6646,83 @@ var _ interface {
 
 // Validate checks the field values on DeleteConfigMapRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteConfigMapRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteConfigMapRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteConfigMapRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DeleteConfigMapRequestValidationError{
+		err := DeleteConfigMapRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DeleteConfigMapRequestValidationError{
+		err := DeleteConfigMapRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DeleteConfigMapRequestValidationError{
+		err := DeleteConfigMapRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DeleteConfigMapRequestValidationError{
+		err := DeleteConfigMapRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DeleteConfigMapRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteConfigMapRequestMultiError is an error wrapping multiple validation
+// errors returned by DeleteConfigMapRequest.Validate(true) if the designated
+// constraints aren't met.
+type DeleteConfigMapRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteConfigMapRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteConfigMapRequestMultiError) AllErrors() []error { return m }
 
 // DeleteConfigMapRequestValidationError is the validation error returned by
 // DeleteConfigMapRequest.Validate if the designated constraints aren't met.
@@ -4891,14 +6782,39 @@ var _ interface {
 
 // Validate checks the field values on DeleteConfigMapResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteConfigMapResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DeleteConfigMapResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DeleteConfigMapResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeleteConfigMapResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteConfigMapResponseMultiError is an error wrapping multiple validation
+// errors returned by DeleteConfigMapResponse.Validate(true) if the designated
+// constraints aren't met.
+type DeleteConfigMapResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteConfigMapResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteConfigMapResponseMultiError) AllErrors() []error { return m }
 
 // DeleteConfigMapResponseValidationError is the validation error returned by
 // DeleteConfigMapResponse.Validate if the designated constraints aren't met.
@@ -4957,11 +6873,17 @@ var _ interface {
 } = DeleteConfigMapResponseValidationError{}
 
 // Validate checks the field values on Job with the rules defined in the proto
-// definition for this message. If any rules are violated, an error is returned.
-func (m *Job) Validate() error {
+// definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// JobMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Job) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -4973,8 +6895,27 @@ func (m *Job) Validate() error {
 
 	// no validation rules for Labels
 
+	if len(errors) > 0 {
+		return JobMultiError(errors)
+	}
 	return nil
 }
+
+// JobMultiError is an error wrapping multiple validation errors returned by
+// Job.Validate(true) if the designated constraints aren't met.
+type JobMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m JobMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m JobMultiError) AllErrors() []error { return m }
 
 // JobValidationError is the validation error returned by Job.Validate if the
 // designated constraints aren't met.
@@ -5032,52 +6973,97 @@ var _ interface {
 
 // Validate checks the field values on ListJobsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ListJobsRequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ListJobsRequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ListJobsRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return ListJobsRequestValidationError{
+		err := ListJobsRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return ListJobsRequestValidationError{
+		err := ListJobsRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return ListJobsRequestValidationError{
+		err := ListJobsRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetOptions() == nil {
-		return ListJobsRequestValidationError{
+		err := ListJobsRequestValidationError{
 			field:  "Options",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListJobsRequestValidationError{
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ListJobsRequestValidationError{
 				field:  "Options",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ListJobsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ListJobsRequestMultiError is an error wrapping multiple validation errors
+// returned by ListJobsRequest.Validate(true) if the designated constraints
+// aren't met.
+type ListJobsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListJobsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListJobsRequestMultiError) AllErrors() []error { return m }
 
 // ListJobsRequestValidationError is the validation error returned by
 // ListJobsRequest.Validate if the designated constraints aren't met.
@@ -5135,29 +7121,58 @@ var _ interface {
 
 // Validate checks the field values on ListJobsResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ListJobsResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ListJobsResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ListJobsResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetJobs() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ListJobsResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ListJobsResponseValidationError{
 					field:  fmt.Sprintf("Jobs[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ListJobsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ListJobsResponseMultiError is an error wrapping multiple validation errors
+// returned by ListJobsResponse.Validate(true) if the designated constraints
+// aren't met.
+type ListJobsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListJobsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListJobsResponseMultiError) AllErrors() []error { return m }
 
 // ListJobsResponseValidationError is the validation error returned by
 // ListJobsResponse.Validate if the designated constraints aren't met.
@@ -5215,42 +7230,83 @@ var _ interface {
 
 // Validate checks the field values on DeleteJobRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *DeleteJobRequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in DeleteJobRequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *DeleteJobRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DeleteJobRequestValidationError{
+		err := DeleteJobRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DeleteJobRequestValidationError{
+		err := DeleteJobRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return DeleteJobRequestValidationError{
+		err := DeleteJobRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DeleteJobRequestValidationError{
+		err := DeleteJobRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DeleteJobRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteJobRequestMultiError is an error wrapping multiple validation errors
+// returned by DeleteJobRequest.Validate(true) if the designated constraints
+// aren't met.
+type DeleteJobRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteJobRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteJobRequestMultiError) AllErrors() []error { return m }
 
 // DeleteJobRequestValidationError is the validation error returned by
 // DeleteJobRequest.Validate if the designated constraints aren't met.
@@ -5308,14 +7364,39 @@ var _ interface {
 
 // Validate checks the field values on DeleteJobResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *DeleteJobResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in DeleteJobResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *DeleteJobResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeleteJobResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DeleteJobResponseMultiError is an error wrapping multiple validation errors
+// returned by DeleteJobResponse.Validate(true) if the designated constraints
+// aren't met.
+type DeleteJobResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteJobResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteJobResponseMultiError) AllErrors() []error { return m }
 
 // DeleteJobResponseValidationError is the validation error returned by
 // DeleteJobResponse.Validate if the designated constraints aren't met.
@@ -5374,24 +7455,53 @@ var _ interface {
 } = DeleteJobResponseValidationError{}
 
 // Validate checks the field values on JobConfig with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *JobConfig) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// JobConfigMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *JobConfig) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetValue()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return JobConfigValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetValue()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = JobConfigValidationError{
 				field:  "Value",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return JobConfigMultiError(errors)
+	}
 	return nil
 }
+
+// JobConfigMultiError is an error wrapping multiple validation errors returned
+// by JobConfig.Validate(true) if the designated constraints aren't met.
+type JobConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m JobConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m JobConfigMultiError) AllErrors() []error { return m }
 
 // JobConfigValidationError is the validation error returned by
 // JobConfig.Validate if the designated constraints aren't met.
@@ -5449,45 +7559,86 @@ var _ interface {
 
 // Validate checks the field values on CreateJobRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *CreateJobRequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in CreateJobRequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *CreateJobRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return CreateJobRequestValidationError{
+		err := CreateJobRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return CreateJobRequestValidationError{
+		err := CreateJobRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetNamespace()) < 1 {
-		return CreateJobRequestValidationError{
+		err := CreateJobRequestValidationError{
 			field:  "Namespace",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetJobConfig()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CreateJobRequestValidationError{
+	if v, ok := interface{}(m.GetJobConfig()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = CreateJobRequestValidationError{
 				field:  "JobConfig",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return CreateJobRequestMultiError(errors)
+	}
 	return nil
 }
+
+// CreateJobRequestMultiError is an error wrapping multiple validation errors
+// returned by CreateJobRequest.Validate(true) if the designated constraints
+// aren't met.
+type CreateJobRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateJobRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateJobRequestMultiError) AllErrors() []error { return m }
 
 // CreateJobRequestValidationError is the validation error returned by
 // CreateJobRequest.Validate if the designated constraints aren't met.
@@ -5545,24 +7696,53 @@ var _ interface {
 
 // Validate checks the field values on CreateJobResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *CreateJobResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in CreateJobResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *CreateJobResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetJob()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CreateJobResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetJob()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = CreateJobResponseValidationError{
 				field:  "Job",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return CreateJobResponseMultiError(errors)
+	}
 	return nil
 }
+
+// CreateJobResponseMultiError is an error wrapping multiple validation errors
+// returned by CreateJobResponse.Validate(true) if the designated constraints
+// aren't met.
+type CreateJobResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateJobResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateJobResponseMultiError) AllErrors() []error { return m }
 
 // CreateJobResponseValidationError is the validation error returned by
 // CreateJobResponse.Validate if the designated constraints aren't met.
@@ -5621,11 +7801,17 @@ var _ interface {
 } = CreateJobResponseValidationError{}
 
 // Validate checks the field values on Namespace with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Namespace) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// NamespaceMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *Namespace) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Cluster
 
@@ -5635,8 +7821,27 @@ func (m *Namespace) Validate() error {
 
 	// no validation rules for Labels
 
+	if len(errors) > 0 {
+		return NamespaceMultiError(errors)
+	}
 	return nil
 }
+
+// NamespaceMultiError is an error wrapping multiple validation errors returned
+// by Namespace.Validate(true) if the designated constraints aren't met.
+type NamespaceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NamespaceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NamespaceMultiError) AllErrors() []error { return m }
 
 // NamespaceValidationError is the validation error returned by
 // Namespace.Validate if the designated constraints aren't met.
@@ -5694,35 +7899,72 @@ var _ interface {
 
 // Validate checks the field values on DescribeNamespaceRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeNamespaceRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeNamespaceRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *DescribeNamespaceRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetClientset()) < 1 {
-		return DescribeNamespaceRequestValidationError{
+		err := DescribeNamespaceRequestValidationError{
 			field:  "Clientset",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetCluster()) < 1 {
-		return DescribeNamespaceRequestValidationError{
+		err := DescribeNamespaceRequestValidationError{
 			field:  "Cluster",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetName()) < 1 {
-		return DescribeNamespaceRequestValidationError{
+		err := DescribeNamespaceRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return DescribeNamespaceRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeNamespaceRequestMultiError is an error wrapping multiple validation
+// errors returned by DescribeNamespaceRequest.Validate(true) if the
+// designated constraints aren't met.
+type DescribeNamespaceRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeNamespaceRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeNamespaceRequestMultiError) AllErrors() []error { return m }
 
 // DescribeNamespaceRequestValidationError is the validation error returned by
 // DescribeNamespaceRequest.Validate if the designated constraints aren't met.
@@ -5782,24 +8024,53 @@ var _ interface {
 
 // Validate checks the field values on DescribeNamespaceResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeNamespaceResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in DescribeNamespaceResponseMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *DescribeNamespaceResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetNamespace()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DescribeNamespaceResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetNamespace()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = DescribeNamespaceResponseValidationError{
 				field:  "Namespace",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return DescribeNamespaceResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeNamespaceResponseMultiError is an error wrapping multiple validation
+// errors returned by DescribeNamespaceResponse.Validate(true) if the
+// designated constraints aren't met.
+type DescribeNamespaceResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeNamespaceResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeNamespaceResponseMultiError) AllErrors() []error { return m }
 
 // DescribeNamespaceResponseValidationError is the validation error returned by
 // DescribeNamespaceResponse.Validate if the designated constraints aren't met.
@@ -5859,11 +8130,16 @@ var _ interface {
 
 // Validate checks the field values on NullableString with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *NullableString) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// NullableStringMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *NullableString) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	switch m.Kind.(type) {
 
@@ -5875,8 +8151,28 @@ func (m *NullableString) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return NullableStringMultiError(errors)
+	}
 	return nil
 }
+
+// NullableStringMultiError is an error wrapping multiple validation errors
+// returned by NullableString.Validate(true) if the designated constraints
+// aren't met.
+type NullableStringMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NullableStringMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NullableStringMultiError) AllErrors() []error { return m }
 
 // NullableStringValidationError is the validation error returned by
 // NullableString.Validate if the designated constraints aren't met.
@@ -5934,29 +8230,42 @@ var _ interface {
 
 // Validate checks the field values on ExpectedObjectMetaFields with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ExpectedObjectMetaFields) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ExpectedObjectMetaFieldsMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ExpectedObjectMetaFields) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	for key, val := range m.GetLabels() {
 		_ = val
 
 		if len(key) < 1 {
-			return ExpectedObjectMetaFieldsValidationError{
+			err := ExpectedObjectMetaFieldsValidationError{
 				field:  fmt.Sprintf("Labels[%v]", key),
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ExpectedObjectMetaFieldsValidationError{
+		if v, ok := interface{}(val).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ExpectedObjectMetaFieldsValidationError{
 					field:  fmt.Sprintf("Labels[%v]", key),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
@@ -5966,26 +8275,54 @@ func (m *ExpectedObjectMetaFields) Validate() error {
 		_ = val
 
 		if len(key) < 1 {
-			return ExpectedObjectMetaFieldsValidationError{
+			err := ExpectedObjectMetaFieldsValidationError{
 				field:  fmt.Sprintf("Annotations[%v]", key),
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ExpectedObjectMetaFieldsValidationError{
+		if v, ok := interface{}(val).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ExpectedObjectMetaFieldsValidationError{
 					field:  fmt.Sprintf("Annotations[%v]", key),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ExpectedObjectMetaFieldsMultiError(errors)
+	}
 	return nil
 }
+
+// ExpectedObjectMetaFieldsMultiError is an error wrapping multiple validation
+// errors returned by ExpectedObjectMetaFields.Validate(true) if the
+// designated constraints aren't met.
+type ExpectedObjectMetaFieldsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExpectedObjectMetaFieldsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExpectedObjectMetaFieldsMultiError) AllErrors() []error { return m }
 
 // ExpectedObjectMetaFieldsValidationError is the validation error returned by
 // ExpectedObjectMetaFields.Validate if the designated constraints aren't met.
@@ -6045,20 +8382,29 @@ var _ interface {
 
 // Validate checks the field values on ObjectMetaFields with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ObjectMetaFields) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ObjectMetaFieldsMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ObjectMetaFields) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	for key, val := range m.GetLabels() {
 		_ = val
 
 		if len(key) < 1 {
-			return ObjectMetaFieldsValidationError{
+			err := ObjectMetaFieldsValidationError{
 				field:  fmt.Sprintf("Labels[%v]", key),
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 		// no validation rules for Labels[key]
@@ -6068,17 +8414,41 @@ func (m *ObjectMetaFields) Validate() error {
 		_ = val
 
 		if len(key) < 1 {
-			return ObjectMetaFieldsValidationError{
+			err := ObjectMetaFieldsValidationError{
 				field:  fmt.Sprintf("Annotations[%v]", key),
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 		// no validation rules for Annotations[key]
 	}
 
+	if len(errors) > 0 {
+		return ObjectMetaFieldsMultiError(errors)
+	}
 	return nil
 }
+
+// ObjectMetaFieldsMultiError is an error wrapping multiple validation errors
+// returned by ObjectMetaFields.Validate(true) if the designated constraints
+// aren't met.
+type ObjectMetaFieldsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ObjectMetaFieldsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ObjectMetaFieldsMultiError) AllErrors() []error { return m }
 
 // ObjectMetaFieldsValidationError is the validation error returned by
 // ObjectMetaFields.Validate if the designated constraints aren't met.
@@ -6136,11 +8506,16 @@ var _ interface {
 
 // Validate checks the field values on RemoveObjectMetaFields with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *RemoveObjectMetaFields) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in RemoveObjectMetaFieldsMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *RemoveObjectMetaFields) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	_RemoveObjectMetaFields_Labels_Unique := make(map[string]struct{}, len(m.GetLabels()))
 
@@ -6148,10 +8523,14 @@ func (m *RemoveObjectMetaFields) Validate() error {
 		_, _ = idx, item
 
 		if _, exists := _RemoveObjectMetaFields_Labels_Unique[item]; exists {
-			return RemoveObjectMetaFieldsValidationError{
+			err := RemoveObjectMetaFieldsValidationError{
 				field:  fmt.Sprintf("Labels[%v]", idx),
 				reason: "repeated value must contain unique items",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		} else {
 			_RemoveObjectMetaFields_Labels_Unique[item] = struct{}{}
 		}
@@ -6165,10 +8544,14 @@ func (m *RemoveObjectMetaFields) Validate() error {
 		_, _ = idx, item
 
 		if _, exists := _RemoveObjectMetaFields_Annotations_Unique[item]; exists {
-			return RemoveObjectMetaFieldsValidationError{
+			err := RemoveObjectMetaFieldsValidationError{
 				field:  fmt.Sprintf("Annotations[%v]", idx),
 				reason: "repeated value must contain unique items",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		} else {
 			_RemoveObjectMetaFields_Annotations_Unique[item] = struct{}{}
 		}
@@ -6176,8 +8559,28 @@ func (m *RemoveObjectMetaFields) Validate() error {
 		// no validation rules for Annotations[idx]
 	}
 
+	if len(errors) > 0 {
+		return RemoveObjectMetaFieldsMultiError(errors)
+	}
 	return nil
 }
+
+// RemoveObjectMetaFieldsMultiError is an error wrapping multiple validation
+// errors returned by RemoveObjectMetaFields.Validate(true) if the designated
+// constraints aren't met.
+type RemoveObjectMetaFieldsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RemoveObjectMetaFieldsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RemoveObjectMetaFieldsMultiError) AllErrors() []error { return m }
 
 // RemoveObjectMetaFieldsValidationError is the validation error returned by
 // RemoveObjectMetaFields.Validate if the designated constraints aren't met.
@@ -6236,11 +8639,17 @@ var _ interface {
 } = RemoveObjectMetaFieldsValidationError{}
 
 // Validate checks the field values on HPA_Sizing with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *HPA_Sizing) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// HPA_SizingMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *HPA_Sizing) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for MinReplicas
 
@@ -6250,8 +8659,27 @@ func (m *HPA_Sizing) Validate() error {
 
 	// no validation rules for DesiredReplicas
 
+	if len(errors) > 0 {
+		return HPA_SizingMultiError(errors)
+	}
 	return nil
 }
+
+// HPA_SizingMultiError is an error wrapping multiple validation errors
+// returned by HPA_Sizing.Validate(true) if the designated constraints aren't met.
+type HPA_SizingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m HPA_SizingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m HPA_SizingMultiError) AllErrors() []error { return m }
 
 // HPA_SizingValidationError is the validation error returned by
 // HPA_Sizing.Validate if the designated constraints aren't met.
@@ -6309,18 +8737,43 @@ var _ interface {
 
 // Validate checks the field values on ResizeHPARequest_Sizing with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ResizeHPARequest_Sizing) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in ResizeHPARequest_SizingMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *ResizeHPARequest_Sizing) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Min
 
 	// no validation rules for Max
 
+	if len(errors) > 0 {
+		return ResizeHPARequest_SizingMultiError(errors)
+	}
 	return nil
 }
+
+// ResizeHPARequest_SizingMultiError is an error wrapping multiple validation
+// errors returned by ResizeHPARequest_Sizing.Validate(true) if the designated
+// constraints aren't met.
+type ResizeHPARequest_SizingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResizeHPARequest_SizingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResizeHPARequest_SizingMultiError) AllErrors() []error { return m }
 
 // ResizeHPARequest_SizingValidationError is the validation error returned by
 // ResizeHPARequest_Sizing.Validate if the designated constraints aren't met.
@@ -6380,11 +8833,16 @@ var _ interface {
 
 // Validate checks the field values on Deployment_DeploymentStatus with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *Deployment_DeploymentStatus) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in Deployment_DeploymentStatusMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *Deployment_DeploymentStatus) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Replicas
 
@@ -6399,20 +8857,44 @@ func (m *Deployment_DeploymentStatus) Validate() error {
 	for idx, item := range m.GetDeploymentConditions() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return Deployment_DeploymentStatusValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = Deployment_DeploymentStatusValidationError{
 					field:  fmt.Sprintf("DeploymentConditions[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return Deployment_DeploymentStatusMultiError(errors)
+	}
 	return nil
 }
+
+// Deployment_DeploymentStatusMultiError is an error wrapping multiple
+// validation errors returned by Deployment_DeploymentStatus.Validate(true) if
+// the designated constraints aren't met.
+type Deployment_DeploymentStatusMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Deployment_DeploymentStatusMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Deployment_DeploymentStatusMultiError) AllErrors() []error { return m }
 
 // Deployment_DeploymentStatusValidationError is the validation error returned
 // by Deployment_DeploymentStatus.Validate if the designated constraints
@@ -6473,11 +8955,17 @@ var _ interface {
 
 // Validate checks the field values on Deployment_DeploymentStatus_Condition
 // with the rules defined in the proto definition for this message. If any
-// rules are violated, an error is returned.
-func (m *Deployment_DeploymentStatus_Condition) Validate() error {
+// rules are violated, an error is returned. When asked to return all errors,
+// validation continues after first violation, and the result is a list of
+// violation errors wrapped in
+// Deployment_DeploymentStatus_ConditionMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *Deployment_DeploymentStatus_Condition) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Type
 
@@ -6487,8 +8975,29 @@ func (m *Deployment_DeploymentStatus_Condition) Validate() error {
 
 	// no validation rules for Message
 
+	if len(errors) > 0 {
+		return Deployment_DeploymentStatus_ConditionMultiError(errors)
+	}
 	return nil
 }
+
+// Deployment_DeploymentStatus_ConditionMultiError is an error wrapping
+// multiple validation errors returned by
+// Deployment_DeploymentStatus_Condition.Validate(true) if the designated
+// constraints aren't met.
+type Deployment_DeploymentStatus_ConditionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Deployment_DeploymentStatus_ConditionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Deployment_DeploymentStatus_ConditionMultiError) AllErrors() []error { return m }
 
 // Deployment_DeploymentStatus_ConditionValidationError is the validation error
 // returned by Deployment_DeploymentStatus_Condition.Validate if the
@@ -6549,20 +9058,29 @@ var _ interface {
 
 // Validate checks the field values on UpdateDeploymentRequest_Fields with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateDeploymentRequest_Fields) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateDeploymentRequest_FieldsMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *UpdateDeploymentRequest_Fields) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	for key, val := range m.GetLabels() {
 		_ = val
 
 		if len(key) < 1 {
-			return UpdateDeploymentRequest_FieldsValidationError{
+			err := UpdateDeploymentRequest_FieldsValidationError{
 				field:  fmt.Sprintf("Labels[%v]", key),
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 		// no validation rules for Labels[key]
@@ -6572,17 +9090,41 @@ func (m *UpdateDeploymentRequest_Fields) Validate() error {
 		_ = val
 
 		if len(key) < 1 {
-			return UpdateDeploymentRequest_FieldsValidationError{
+			err := UpdateDeploymentRequest_FieldsValidationError{
 				field:  fmt.Sprintf("Annotations[%v]", key),
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 		// no validation rules for Annotations[key]
 	}
 
+	if len(errors) > 0 {
+		return UpdateDeploymentRequest_FieldsMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateDeploymentRequest_FieldsMultiError is an error wrapping multiple
+// validation errors returned by UpdateDeploymentRequest_Fields.Validate(true)
+// if the designated constraints aren't met.
+type UpdateDeploymentRequest_FieldsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateDeploymentRequest_FieldsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateDeploymentRequest_FieldsMultiError) AllErrors() []error { return m }
 
 // UpdateDeploymentRequest_FieldsValidationError is the validation error
 // returned by UpdateDeploymentRequest_Fields.Validate if the designated
@@ -6643,20 +9185,29 @@ var _ interface {
 
 // Validate checks the field values on UpdateStatefulSetRequest_Fields with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateStatefulSetRequest_Fields) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateStatefulSetRequest_FieldsMultiError, or nil if none
+// found. Otherwise, only the first error is returned, if any.
+func (m *UpdateStatefulSetRequest_Fields) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	for key, val := range m.GetLabels() {
 		_ = val
 
 		if len(key) < 1 {
-			return UpdateStatefulSetRequest_FieldsValidationError{
+			err := UpdateStatefulSetRequest_FieldsValidationError{
 				field:  fmt.Sprintf("Labels[%v]", key),
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 		// no validation rules for Labels[key]
@@ -6666,17 +9217,42 @@ func (m *UpdateStatefulSetRequest_Fields) Validate() error {
 		_ = val
 
 		if len(key) < 1 {
-			return UpdateStatefulSetRequest_FieldsValidationError{
+			err := UpdateStatefulSetRequest_FieldsValidationError{
 				field:  fmt.Sprintf("Annotations[%v]", key),
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 		// no validation rules for Annotations[key]
 	}
 
+	if len(errors) > 0 {
+		return UpdateStatefulSetRequest_FieldsMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateStatefulSetRequest_FieldsMultiError is an error wrapping multiple
+// validation errors returned by
+// UpdateStatefulSetRequest_Fields.Validate(true) if the designated
+// constraints aren't met.
+type UpdateStatefulSetRequest_FieldsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateStatefulSetRequest_FieldsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateStatefulSetRequest_FieldsMultiError) AllErrors() []error { return m }
 
 // UpdateStatefulSetRequest_FieldsValidationError is the validation error
 // returned by UpdateStatefulSetRequest_Fields.Validate if the designated

@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,22 +30,44 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _assets_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on FetchRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *FetchRequest) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// FetchRequestMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *FetchRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return FetchRequestMultiError(errors)
+	}
 	return nil
 }
+
+// FetchRequestMultiError is an error wrapping multiple validation errors
+// returned by FetchRequest.Validate(true) if the designated constraints
+// aren't met.
+type FetchRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FetchRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FetchRequestMultiError) AllErrors() []error { return m }
 
 // FetchRequestValidationError is the validation error returned by
 // FetchRequest.Validate if the designated constraints aren't met.
@@ -103,14 +125,39 @@ var _ interface {
 
 // Validate checks the field values on FetchResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *FetchResponse) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// FetchResponseMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *FetchResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return FetchResponseMultiError(errors)
+	}
 	return nil
 }
+
+// FetchResponseMultiError is an error wrapping multiple validation errors
+// returned by FetchResponse.Validate(true) if the designated constraints
+// aren't met.
+type FetchResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FetchResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FetchResponseMultiError) AllErrors() []error { return m }
 
 // FetchResponseValidationError is the validation error returned by
 // FetchResponse.Validate if the designated constraints aren't met.

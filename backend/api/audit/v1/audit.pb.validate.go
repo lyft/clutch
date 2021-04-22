@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 )
@@ -32,40 +32,70 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 
 	_ = apiv1.ActionType(0)
 )
 
-// define the regex for a UUID once up-front
-var _audit_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on TimeRange with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *TimeRange) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// TimeRangeMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *TimeRange) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetStartTime() == nil {
-		return TimeRangeValidationError{
+		err := TimeRangeValidationError{
 			field:  "StartTime",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetEndTime()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return TimeRangeValidationError{
+	if v, ok := interface{}(m.GetEndTime()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = TimeRangeValidationError{
 				field:  "EndTime",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return TimeRangeMultiError(errors)
+	}
 	return nil
 }
+
+// TimeRangeMultiError is an error wrapping multiple validation errors returned
+// by TimeRange.Validate(true) if the designated constraints aren't met.
+type TimeRangeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TimeRangeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TimeRangeMultiError) AllErrors() []error { return m }
 
 // TimeRangeValidationError is the validation error returned by
 // TimeRange.Validate if the designated constraints aren't met.
@@ -123,42 +153,75 @@ var _ interface {
 
 // Validate checks the field values on GetEventsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *GetEventsRequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in GetEventsRequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *GetEventsRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	switch m.Window.(type) {
 
 	case *GetEventsRequest_Range:
 
-		if v, ok := interface{}(m.GetRange()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return GetEventsRequestValidationError{
+		if v, ok := interface{}(m.GetRange()).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = GetEventsRequestValidationError{
 					field:  "Range",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	case *GetEventsRequest_Since:
 
-		if v, ok := interface{}(m.GetSince()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return GetEventsRequestValidationError{
+		if v, ok := interface{}(m.GetSince()).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = GetEventsRequestValidationError{
 					field:  "Since",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return GetEventsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// GetEventsRequestMultiError is an error wrapping multiple validation errors
+// returned by GetEventsRequest.Validate(true) if the designated constraints
+// aren't met.
+type GetEventsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetEventsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetEventsRequestMultiError) AllErrors() []error { return m }
 
 // GetEventsRequestValidationError is the validation error returned by
 // GetEventsRequest.Validate if the designated constraints aren't met.
@@ -215,18 +278,43 @@ var _ interface {
 } = GetEventsRequestValidationError{}
 
 // Validate checks the field values on Resource with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Resource) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ResourceMultiError, or nil if none found. Otherwise, only the first error
+// is returned, if any.
+func (m *Resource) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for TypeUrl
 
 	// no validation rules for Id
 
+	if len(errors) > 0 {
+		return ResourceMultiError(errors)
+	}
 	return nil
 }
+
+// ResourceMultiError is an error wrapping multiple validation errors returned
+// by Resource.Validate(true) if the designated constraints aren't met.
+type ResourceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResourceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResourceMultiError) AllErrors() []error { return m }
 
 // ResourceValidationError is the validation error returned by
 // Resource.Validate if the designated constraints aren't met.
@@ -284,24 +372,53 @@ var _ interface {
 
 // Validate checks the field values on RequestMetadata with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *RequestMetadata) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in RequestMetadataMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *RequestMetadata) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetBody()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RequestMetadataValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetBody()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = RequestMetadataValidationError{
 				field:  "Body",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return RequestMetadataMultiError(errors)
+	}
 	return nil
 }
+
+// RequestMetadataMultiError is an error wrapping multiple validation errors
+// returned by RequestMetadata.Validate(true) if the designated constraints
+// aren't met.
+type RequestMetadataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RequestMetadataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RequestMetadataMultiError) AllErrors() []error { return m }
 
 // RequestMetadataValidationError is the validation error returned by
 // RequestMetadata.Validate if the designated constraints aren't met.
@@ -359,24 +476,53 @@ var _ interface {
 
 // Validate checks the field values on ResponseMetadata with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ResponseMetadata) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in ResponseMetadataMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *ResponseMetadata) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetBody()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ResponseMetadataValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetBody()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ResponseMetadataValidationError{
 				field:  "Body",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ResponseMetadataMultiError(errors)
+	}
 	return nil
 }
+
+// ResponseMetadataMultiError is an error wrapping multiple validation errors
+// returned by ResponseMetadata.Validate(true) if the designated constraints
+// aren't met.
+type ResponseMetadataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResponseMetadataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResponseMetadataMultiError) AllErrors() []error { return m }
 
 // ResponseMetadataValidationError is the validation error returned by
 // ResponseMetadata.Validate if the designated constraints aren't met.
@@ -434,87 +580,144 @@ var _ interface {
 
 // Validate checks the field values on RequestEvent with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *RequestEvent) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// RequestEventMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *RequestEvent) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if utf8.RuneCountInString(m.GetUsername()) < 1 {
-		return RequestEventValidationError{
+		err := RequestEventValidationError{
 			field:  "Username",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetServiceName()) < 1 {
-		return RequestEventValidationError{
+		err := RequestEventValidationError{
 			field:  "ServiceName",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetMethodName()) < 1 {
-		return RequestEventValidationError{
+		err := RequestEventValidationError{
 			field:  "MethodName",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if _, ok := apiv1.ActionType_name[int32(m.GetType())]; !ok {
-		return RequestEventValidationError{
+		err := RequestEventValidationError{
 			field:  "Type",
 			reason: "value must be one of the defined enum values",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetStatus()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RequestEventValidationError{
+	if v, ok := interface{}(m.GetStatus()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = RequestEventValidationError{
 				field:  "Status",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
 	for idx, item := range m.GetResources() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return RequestEventValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = RequestEventValidationError{
 					field:  fmt.Sprintf("Resources[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
-	if v, ok := interface{}(m.GetRequestMetadata()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RequestEventValidationError{
+	if v, ok := interface{}(m.GetRequestMetadata()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = RequestEventValidationError{
 				field:  "RequestMetadata",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
-	if v, ok := interface{}(m.GetResponseMetadata()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RequestEventValidationError{
+	if v, ok := interface{}(m.GetResponseMetadata()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = RequestEventValidationError{
 				field:  "ResponseMetadata",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return RequestEventMultiError(errors)
+	}
 	return nil
 }
+
+// RequestEventMultiError is an error wrapping multiple validation errors
+// returned by RequestEvent.Validate(true) if the designated constraints
+// aren't met.
+type RequestEventMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RequestEventMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RequestEventMultiError) AllErrors() []error { return m }
 
 // RequestEventValidationError is the validation error returned by
 // RequestEvent.Validate if the designated constraints aren't met.
@@ -571,19 +774,29 @@ var _ interface {
 } = RequestEventValidationError{}
 
 // Validate checks the field values on Event with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Event) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// EventMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Event) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetOccurredAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return EventValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetOccurredAt()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = EventValidationError{
 				field:  "OccurredAt",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
@@ -591,20 +804,43 @@ func (m *Event) Validate() error {
 
 	case *Event_Event:
 
-		if v, ok := interface{}(m.GetEvent()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return EventValidationError{
+		if v, ok := interface{}(m.GetEvent()).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = EventValidationError{
 					field:  "Event",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return EventMultiError(errors)
+	}
 	return nil
 }
+
+// EventMultiError is an error wrapping multiple validation errors returned by
+// Event.Validate(true) if the designated constraints aren't met.
+type EventMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EventMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EventMultiError) AllErrors() []error { return m }
 
 // EventValidationError is the validation error returned by Event.Validate if
 // the designated constraints aren't met.
@@ -662,29 +898,58 @@ var _ interface {
 
 // Validate checks the field values on GetEventsResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *GetEventsResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in GetEventsResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *GetEventsResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetEvents() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return GetEventsResponseValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = GetEventsResponseValidationError{
 					field:  fmt.Sprintf("Events[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return GetEventsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// GetEventsResponseMultiError is an error wrapping multiple validation errors
+// returned by GetEventsResponse.Validate(true) if the designated constraints
+// aren't met.
+type GetEventsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetEventsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetEventsResponseMultiError) AllErrors() []error { return m }
 
 // GetEventsResponseValidationError is the validation error returned by
 // GetEventsResponse.Validate if the designated constraints aren't met.

@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,23 +30,45 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
 
-// define the regex for a UUID once up-front
-var _envoy_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Cluster with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Cluster) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ClusterMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Cluster) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Name
 
+	if len(errors) > 0 {
+		return ClusterMultiError(errors)
+	}
 	return nil
 }
+
+// ClusterMultiError is an error wrapping multiple validation errors returned
+// by Cluster.Validate(true) if the designated constraints aren't met.
+type ClusterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ClusterMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ClusterMultiError) AllErrors() []error { return m }
 
 // ClusterValidationError is the validation error returned by Cluster.Validate
 // if the designated constraints aren't met.

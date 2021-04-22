@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,37 +30,63 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _error_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on ErrorDetails with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ErrorDetails) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// ErrorDetailsMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *ErrorDetails) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetWrapped() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ErrorDetailsValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = ErrorDetailsValidationError{
 					field:  fmt.Sprintf("Wrapped[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ErrorDetailsMultiError(errors)
+	}
 	return nil
 }
+
+// ErrorDetailsMultiError is an error wrapping multiple validation errors
+// returned by ErrorDetails.Validate(true) if the designated constraints
+// aren't met.
+type ErrorDetailsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ErrorDetailsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ErrorDetailsMultiError) AllErrors() []error { return m }
 
 // ErrorDetailsValidationError is the validation error returned by
 // ErrorDetails.Validate if the designated constraints aren't met.

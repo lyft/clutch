@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,18 +30,21 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
 
-// define the regex for a UUID once up-front
-var _status_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Status with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Status) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// StatusMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Status) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Status
 
@@ -51,18 +54,41 @@ func (m *Status) Validate() error {
 
 	// no validation rules for Code
 
-	if v, ok := interface{}(m.GetDetails()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StatusValidationError{
+	if v, ok := interface{}(m.GetDetails()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = StatusValidationError{
 				field:  "Details",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return StatusMultiError(errors)
+	}
 	return nil
 }
+
+// StatusMultiError is an error wrapping multiple validation errors returned by
+// Status.Validate(true) if the designated constraints aren't met.
+type StatusMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatusMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatusMultiError) AllErrors() []error { return m }
 
 // StatusValidationError is the validation error returned by Status.Validate if
 // the designated constraints aren't met.
@@ -120,11 +146,16 @@ var _ interface {
 
 // Validate checks the field values on StatusDetails with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *StatusDetails) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// StatusDetailsMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *StatusDetails) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -137,20 +168,44 @@ func (m *StatusDetails) Validate() error {
 	for idx, item := range m.GetCauses() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StatusDetailsValidationError{
+		if v, ok := interface{}(item).(interface{ Validate(bool) error }); ok {
+			if err := v.Validate(all); err != nil {
+				err = StatusDetailsValidationError{
 					field:  fmt.Sprintf("Causes[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
 			}
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return StatusDetailsMultiError(errors)
+	}
 	return nil
 }
+
+// StatusDetailsMultiError is an error wrapping multiple validation errors
+// returned by StatusDetails.Validate(true) if the designated constraints
+// aren't met.
+type StatusDetailsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatusDetailsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatusDetailsMultiError) AllErrors() []error { return m }
 
 // StatusDetailsValidationError is the validation error returned by
 // StatusDetails.Validate if the designated constraints aren't met.
@@ -208,11 +263,16 @@ var _ interface {
 
 // Validate checks the field values on StatusCause with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *StatusCause) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// StatusCauseMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *StatusCause) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Type
 
@@ -220,8 +280,27 @@ func (m *StatusCause) Validate() error {
 
 	// no validation rules for Field
 
+	if len(errors) > 0 {
+		return StatusCauseMultiError(errors)
+	}
 	return nil
 }
+
+// StatusCauseMultiError is an error wrapping multiple validation errors
+// returned by StatusCause.Validate(true) if the designated constraints aren't met.
+type StatusCauseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatusCauseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatusCauseMultiError) AllErrors() []error { return m }
 
 // StatusCauseValidationError is the validation error returned by
 // StatusCause.Validate if the designated constraints aren't met.

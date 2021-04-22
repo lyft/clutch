@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,18 +30,21 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
 
-// define the regex for a UUID once up-front
-var _slackbot_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Bot with the rules defined in the proto
-// definition for this message. If any rules are violated, an error is returned.
-func (m *Bot) Validate() error {
+// definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// BotMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Bot) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Id
 
@@ -57,8 +60,27 @@ func (m *Bot) Validate() error {
 
 	// no validation rules for TeamId
 
+	if len(errors) > 0 {
+		return BotMultiError(errors)
+	}
 	return nil
 }
+
+// BotMultiError is an error wrapping multiple validation errors returned by
+// Bot.Validate(true) if the designated constraints aren't met.
+type BotMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BotMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BotMultiError) AllErrors() []error { return m }
 
 // BotValidationError is the validation error returned by Bot.Validate if the
 // designated constraints aren't met.
@@ -115,11 +137,17 @@ var _ interface {
 } = BotValidationError{}
 
 // Validate checks the field values on Event with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Event) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// EventMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Event) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Type
 
@@ -127,13 +155,17 @@ func (m *Event) Validate() error {
 
 	// no validation rules for BotId
 
-	if v, ok := interface{}(m.GetBotProfile()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return EventValidationError{
+	if v, ok := interface{}(m.GetBotProfile()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = EventValidationError{
 				field:  "BotProfile",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
@@ -151,18 +183,41 @@ func (m *Event) Validate() error {
 
 	// no validation rules for Team
 
-	if v, ok := interface{}(m.GetBlocks()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return EventValidationError{
+	if v, ok := interface{}(m.GetBlocks()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = EventValidationError{
 				field:  "Blocks",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return EventMultiError(errors)
+	}
 	return nil
 }
+
+// EventMultiError is an error wrapping multiple validation errors returned by
+// Event.Validate(true) if the designated constraints aren't met.
+type EventMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EventMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EventMultiError) AllErrors() []error { return m }
 
 // EventValidationError is the validation error returned by Event.Validate if
 // the designated constraints aren't met.
@@ -220,11 +275,16 @@ var _ interface {
 
 // Validate checks the field values on EventRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *EventRequest) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// EventRequestMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *EventRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Token
 
@@ -234,13 +294,17 @@ func (m *EventRequest) Validate() error {
 
 	// no validation rules for ApiAppId
 
-	if v, ok := interface{}(m.GetEvent()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return EventRequestValidationError{
+	if v, ok := interface{}(m.GetEvent()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = EventRequestValidationError{
 				field:  "Event",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
@@ -252,13 +316,17 @@ func (m *EventRequest) Validate() error {
 
 	// no validation rules for EventContext
 
-	if v, ok := interface{}(m.GetAuthorizations()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return EventRequestValidationError{
+	if v, ok := interface{}(m.GetAuthorizations()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = EventRequestValidationError{
 				field:  "Authorizations",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
@@ -266,8 +334,28 @@ func (m *EventRequest) Validate() error {
 
 	// no validation rules for MinuteRateLimited
 
+	if len(errors) > 0 {
+		return EventRequestMultiError(errors)
+	}
 	return nil
 }
+
+// EventRequestMultiError is an error wrapping multiple validation errors
+// returned by EventRequest.Validate(true) if the designated constraints
+// aren't met.
+type EventRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EventRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EventRequestMultiError) AllErrors() []error { return m }
 
 // EventRequestValidationError is the validation error returned by
 // EventRequest.Validate if the designated constraints aren't met.
@@ -325,16 +413,41 @@ var _ interface {
 
 // Validate checks the field values on EventResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *EventResponse) Validate() error {
+// is returned. When asked to return all errors, validation continues after
+// first violation, and the result is a list of violation errors wrapped in
+// EventResponseMultiError, or nil if none found. Otherwise, only the first
+// error is returned, if any.
+func (m *EventResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Challenge
 
+	if len(errors) > 0 {
+		return EventResponseMultiError(errors)
+	}
 	return nil
 }
+
+// EventResponseMultiError is an error wrapping multiple validation errors
+// returned by EventResponse.Validate(true) if the designated constraints
+// aren't met.
+type EventResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EventResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EventResponseMultiError) AllErrors() []error { return m }
 
 // EventResponseValidationError is the validation error returned by
 // EventResponse.Validate if the designated constraints aren't met.

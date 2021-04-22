@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,31 +30,57 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
 
-// define the regex for a UUID once up-front
-var _topology_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Config) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// ConfigMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Config) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetCache()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ConfigValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetCache()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = ConfigValidationError{
 				field:  "Cache",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.Validate(true) if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.
@@ -111,47 +137,85 @@ var _ interface {
 } = ConfigValidationError{}
 
 // Validate checks the field values on Cache with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Cache) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// CacheMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Cache) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if d := m.GetTtl(); d != nil {
-		dur, err := ptypes.Duration(d)
+		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
-			return CacheValidationError{
+			err = CacheValidationError{
 				field:  "Ttl",
 				reason: "value is not a valid duration",
 				cause:  err,
 			}
-		}
-
-		gt := time.Duration(1*time.Second + 0*time.Nanosecond)
-
-		if dur <= gt {
-			return CacheValidationError{
-				field:  "Ttl",
-				reason: "value must be greater than 1s",
+			if !all {
+				return err
 			}
-		}
+			errors = append(errors, err)
+		} else {
 
+			gt := time.Duration(1*time.Second + 0*time.Nanosecond)
+
+			if dur <= gt {
+				err := CacheValidationError{
+					field:  "Ttl",
+					reason: "value must be greater than 1s",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+		}
 	}
 
 	// no validation rules for BatchInsertSize
 
-	if v, ok := interface{}(m.GetBatchInsertFlush()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CacheValidationError{
+	if v, ok := interface{}(m.GetBatchInsertFlush()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = CacheValidationError{
 				field:  "BatchInsertFlush",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return CacheMultiError(errors)
+	}
 	return nil
 }
+
+// CacheMultiError is an error wrapping multiple validation errors returned by
+// Cache.Validate(true) if the designated constraints aren't met.
+type CacheMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CacheMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CacheMultiError) AllErrors() []error { return m }
 
 // CacheValidationError is the validation error returned by Cache.Validate if
 // the designated constraints aren't met.

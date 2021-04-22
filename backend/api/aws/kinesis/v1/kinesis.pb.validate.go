@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,26 +30,48 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _kinesis_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on GetStreamRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *GetStreamRequest) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in GetStreamRequestMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *GetStreamRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for StreamName
 
 	// no validation rules for Region
 
+	if len(errors) > 0 {
+		return GetStreamRequestMultiError(errors)
+	}
 	return nil
 }
+
+// GetStreamRequestMultiError is an error wrapping multiple validation errors
+// returned by GetStreamRequest.Validate(true) if the designated constraints
+// aren't met.
+type GetStreamRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetStreamRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetStreamRequestMultiError) AllErrors() []error { return m }
 
 // GetStreamRequestValidationError is the validation error returned by
 // GetStreamRequest.Validate if the designated constraints aren't met.
@@ -107,24 +129,53 @@ var _ interface {
 
 // Validate checks the field values on GetStreamResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *GetStreamResponse) Validate() error {
+// error is returned. When asked to return all errors, validation continues
+// after first violation, and the result is a list of violation errors wrapped
+// in GetStreamResponseMultiError, or nil if none found. Otherwise, only the
+// first error is returned, if any.
+func (m *GetStreamResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetStream()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return GetStreamResponseValidationError{
+	var errors []error
+
+	if v, ok := interface{}(m.GetStream()).(interface{ Validate(bool) error }); ok {
+		if err := v.Validate(all); err != nil {
+			err = GetStreamResponseValidationError{
 				field:  "Stream",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetStreamResponseMultiError(errors)
+	}
 	return nil
 }
+
+// GetStreamResponseMultiError is an error wrapping multiple validation errors
+// returned by GetStreamResponse.Validate(true) if the designated constraints
+// aren't met.
+type GetStreamResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetStreamResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetStreamResponseMultiError) AllErrors() []error { return m }
 
 // GetStreamResponseValidationError is the validation error returned by
 // GetStreamResponse.Validate if the designated constraints aren't met.
@@ -184,11 +235,16 @@ var _ interface {
 
 // Validate checks the field values on UpdateShardCountRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateShardCountRequest) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateShardCountRequestMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *UpdateShardCountRequest) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for StreamName
 
@@ -196,8 +252,28 @@ func (m *UpdateShardCountRequest) Validate() error {
 
 	// no validation rules for TargetShardCount
 
+	if len(errors) > 0 {
+		return UpdateShardCountRequestMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateShardCountRequestMultiError is an error wrapping multiple validation
+// errors returned by UpdateShardCountRequest.Validate(true) if the designated
+// constraints aren't met.
+type UpdateShardCountRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateShardCountRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateShardCountRequestMultiError) AllErrors() []error { return m }
 
 // UpdateShardCountRequestValidationError is the validation error returned by
 // UpdateShardCountRequest.Validate if the designated constraints aren't met.
@@ -257,14 +333,39 @@ var _ interface {
 
 // Validate checks the field values on UpdateShardCountResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *UpdateShardCountResponse) Validate() error {
+// violated, an error is returned. When asked to return all errors, validation
+// continues after first violation, and the result is a list of violation
+// errors wrapped in UpdateShardCountResponseMultiError, or nil if none found.
+// Otherwise, only the first error is returned, if any.
+func (m *UpdateShardCountResponse) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return UpdateShardCountResponseMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateShardCountResponseMultiError is an error wrapping multiple validation
+// errors returned by UpdateShardCountResponse.Validate(true) if the
+// designated constraints aren't met.
+type UpdateShardCountResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateShardCountResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateShardCountResponseMultiError) AllErrors() []error { return m }
 
 // UpdateShardCountResponseValidationError is the validation error returned by
 // UpdateShardCountResponse.Validate if the designated constraints aren't met.
@@ -323,11 +424,17 @@ var _ interface {
 } = UpdateShardCountResponseValidationError{}
 
 // Validate checks the field values on Stream with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Stream) Validate() error {
+// proto definition for this message. If any rules are violated, an error is
+// returned. When asked to return all errors, validation continues after first
+// violation, and the result is a list of violation errors wrapped in
+// StreamMultiError, or nil if none found. Otherwise, only the first error is
+// returned, if any.
+func (m *Stream) Validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for StreamName
 
@@ -335,8 +442,27 @@ func (m *Stream) Validate() error {
 
 	// no validation rules for CurrentShardCount
 
+	if len(errors) > 0 {
+		return StreamMultiError(errors)
+	}
 	return nil
 }
+
+// StreamMultiError is an error wrapping multiple validation errors returned by
+// Stream.Validate(true) if the designated constraints aren't met.
+type StreamMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StreamMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StreamMultiError) AllErrors() []error { return m }
 
 // StreamValidationError is the validation error returned by Stream.Validate if
 // the designated constraints aren't met.
