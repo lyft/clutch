@@ -201,7 +201,7 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 
 		config, err := NewExperimentConfig(configId, details)
 		if err != nil {
-			s.logger.Errorw("failed to initialize experiment config", "configId", configId, "runId", run.Id)
+			s.logger.Errorw("failed to deserialize experiment config", "configId", configId, "runId", run.Id)
 			s.configDeserializationErrorCount.Inc(1)
 			continue
 		}
