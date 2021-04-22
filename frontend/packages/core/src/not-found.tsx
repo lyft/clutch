@@ -1,18 +1,16 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { Grid, Typography } from "@material-ui/core";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
-import styled from "styled-components";
 
 const Container = styled(Grid)`
   minheight: 80vh;
 `;
 
-const IconContainer = styled(Grid)`
-  ${({ theme }) => `
-  color: ${theme.palette.accent.main};
-  font-size: 7rem;
-  `}
-`;
+const IconContainer = styled(Grid)({
+  color: "#02acbe",
+  fontSize: "7rem",
+});
 
 const NotFound: React.FC<{}> = () => (
   <Container

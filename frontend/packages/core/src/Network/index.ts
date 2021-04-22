@@ -1,4 +1,4 @@
-import type { AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 import axios from "axios";
 
 import type { ClutchError } from "./errors";
@@ -20,6 +20,26 @@ export interface HttpStatus {
   /** The status message. */
   text: string;
 }
+
+const successInterceptor = (response: AxiosResponse) => {
+  // n.b. this middleware handles authentication redirects
+  // to prevent CORS issues from redirecting on the server.
+  if (response?.data?.authUrl) {
+    window.location = response.data.authUrl;
+    response.data.code = 401;
+    response.data.message = "Authentication Expired";
+    const clutchError = {
+      status: {
+        code: 401,
+        text: "Authentication Expired",
+      },
+      message: "Authentication Expired",
+    } as ClutchError;
+    throw clutchError;
+  }
+
+  return response;
+};
 
 const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   const response = error?.response;
@@ -65,7 +85,7 @@ const createClient = () => {
       return status < 400;
     },
   });
-  axiosClient.interceptors.response.use(resp => resp, errorInterceptor);
+  axiosClient.interceptors.response.use(successInterceptor, errorInterceptor);
 
   return axiosClient;
 };
