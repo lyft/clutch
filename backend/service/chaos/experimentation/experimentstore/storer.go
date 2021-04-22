@@ -59,7 +59,7 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, er
 		db:                              client.DB(),
 		logger:                          sugaredLogger,
 		transformer:                     &transformer,
-		configDeserializationErrorCount: scope.Counter("config_initialization"),
+		configDeserializationErrorCount: scope.Counter("config_deserialization_error"),
 	}, nil
 }
 
