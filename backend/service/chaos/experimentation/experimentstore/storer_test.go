@@ -364,9 +364,9 @@ func TestGetExperiments(t *testing.T) {
 			testScope := tally.NewTestScope("", map[string]string{})
 
 			es := &storer{
-				db:                             db,
-				logger:                         l.Sugar(),
-				configInitializationErrorCount: testScope.Counter("config_initialization"),
+				db:                              db,
+				logger:                          l.Sugar(),
+				configDeserializationErrorCount: testScope.Counter("config_initialization"),
 			}
 
 			defer es.Close()

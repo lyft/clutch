@@ -33,10 +33,10 @@ type Storer interface {
 }
 
 type storer struct {
-	db                             *sql.DB
-	logger                         *zap.SugaredLogger
-	transformer                    *Transformer
-	configInitializationErrorCount tally.Counter
+	db                              *sql.DB
+	logger                          *zap.SugaredLogger
+	transformer                     *Transformer
+	configDeserializationErrorCount tally.Counter
 }
 
 var _ Storer = (*storer)(nil)
@@ -56,10 +56,10 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, er
 	sugaredLogger := logger.Sugar()
 	transformer := NewTransformer(sugaredLogger)
 	return &storer{
-		db:                             client.DB(),
-		logger:                         sugaredLogger,
-		transformer:                    &transformer,
-		configInitializationErrorCount: scope.Counter("config_initialization"),
+		db:                              client.DB(),
+		logger:                          sugaredLogger,
+		transformer:                     &transformer,
+		configDeserializationErrorCount: scope.Counter("config_initialization"),
 	}, nil
 }
 
@@ -202,7 +202,7 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 		config, err := NewExperimentConfig(configId, details)
 		if err != nil {
 			s.logger.Errorw("failed to initialize experiment config", "configId", configId, "runId", run.Id)
-			s.configInitializationErrorCount.Inc(1)
+			s.configDeserializationErrorCount.Inc(1)
 			continue
 		}
 
@@ -269,7 +269,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 
 		if err != nil {
 			s.logger.Errorw("failed to initialize experiment config", "configId", configId, "runId", run.Id)
-			s.configInitializationErrorCount.Inc(1)
+			s.configDeserializationErrorCount.Inc(1)
 			continue
 		}
 
@@ -341,7 +341,7 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 
 	if err != nil {
 		s.logger.Errorw("failed to initialize experiment config", "configId", configId, "runId", run.Id)
-		s.configInitializationErrorCount.Inc(1)
+		s.configDeserializationErrorCount.Inc(1)
 	}
 
 	if terminationReason.Valid {
