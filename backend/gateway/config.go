@@ -52,7 +52,7 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 	if err := parseFile(f.ConfigPath, &cfg, f.Template); err != nil {
 		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
 	}
-	if err := cfg.Validate(); err != nil {
+	if err := cfg.Validate(false); err != nil {
 		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
 	}
 
