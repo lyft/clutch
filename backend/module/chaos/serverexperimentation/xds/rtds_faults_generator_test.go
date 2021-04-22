@@ -75,8 +75,8 @@ func TestServerFaultsRTDSResourceGenerating(t *testing.T) {
 			t.Parallel()
 
 			g := RTDSServerFaultsResourceGenerator{
-				ingressPrefix: tt.ingressRuntimeKeyPrefix,
-				egressPrefix:  tt.egressRuntimeKeyPrefix,
+				IngressFaultRuntimePrefix: tt.ingressRuntimeKeyPrefix,
+				EgressFaultRuntimePrefix:  tt.egressRuntimeKeyPrefix,
 			}
 			r, err := g.GenerateResource(tt.experiment)
 			assert.NoError(t, err)
