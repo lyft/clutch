@@ -3,48 +3,78 @@ import styled from "@emotion/styled";
 import type { ChipProps as MuiChipProps } from "@material-ui/core";
 import { Chip as MuiChip } from "@material-ui/core";
 
+/**
+ * Explanation of variants:
+ * error - red, failed, worst
+ * warn - orange, warning, bad
+ * attention - grey, not started, neutral-bad
+ * neutral - light grey, default state, neutral
+ * active - purplish, active, running, neutral-good
+ * pending - yellow, low risk, good
+ * success - green, completion, succeeded, best
+ */
+const CHIP_VARIANTS = [
+  "error",
+  "warn",
+  "attention",
+  "neutral",
+  "active",
+  "pending",
+  "success",
+] as const;
 export interface ChipProps extends Pick<MuiChipProps, "label"> {
-  variant: "WORST" | "BAD" | "NEUTRALBAD" | "NEUTRAL" | "NEUTRALGOOD" | "GOOD" | "BEST";
+  variant: typeof CHIP_VARIANTS[number];
 }
 
-const CHIP_BACKGROUND_COLOR_MAP = {
-  WORST: "#F9EAE7", // red
-  BAD: "#FEF8E8", // orange
-  NEUTRALBAD: "#E2E2E6", // greyish
-  NEUTRAL: "#F8F8F9", // whiteish
-  NEUTRALGOOD: "#EBEDFA", // purplish
-  GOOD: "#FFFEE8", // yellow
-  BEST: "#E9F6EC", // green
-};
-
-const CHIP_LABEL_COLOR_MAP = {
-  WORST: "#C2302E", // red
-  BAD: "#D87313", // orange
-  NEUTRALBAD: "#0D1030", // greyish
-  NEUTRAL: "#0D1030", // whiteish
-  NEUTRALGOOD: "#3548D4", // purplish
-  GOOD: "#B09027", // yellow
-  BEST: "#40A05A", // green
+const CHIP_COLOR_MAP = {
+  error: {
+    background: "#F9EAE7",
+    label: "#C2302E",
+  },
+  warn: {
+    background: "#FEF8E8",
+    label: "#D87313",
+  },
+  attention: {
+    background: "#E2E2E6",
+    label: "#0D1030",
+  },
+  neutral: {
+    background: "#F8F8F9",
+    label: "#0D1030",
+  },
+  active: {
+    background: "#EBEDFA",
+    label: "#3548D4",
+  },
+  pending: {
+    background: "#FFFEE8",
+    label: "#B09027",
+  },
+  success: {
+    background: "#E9F6EC",
+    label: "#40A05A",
+  },
 };
 
 const StyledChip = styled(MuiChip)(
   {
-    height: "20px",
-    fontSize: "12px",
-    lineHeight: "20px",
+    height: "32px",
     cursor: "inherit",
-    margin: "10px",
     borderStyle: "solid",
     borderWidth: "1px",
+    ".MuiChip-label": {
+      fontSize: "12px",
+      lineHeight: "20px",
+      padding: "6px 12px",
+    },
   },
   props => ({
-    background: CHIP_BACKGROUND_COLOR_MAP[props["data-variant"]],
-    color: CHIP_LABEL_COLOR_MAP[props["data-variant"]],
+    background: CHIP_COLOR_MAP[props["data-variant"]].background,
+    color: CHIP_COLOR_MAP[props["data-variant"]].label,
   })
 );
 
-const Chip = ({ variant, ...props }: ChipProps) => {
-  return <StyledChip {...props} data-variant={variant} />;
-};
+const Chip = ({ variant, ...props }: ChipProps) => <StyledChip {...props} data-variant={variant} />;
 
-export default Chip;
+export default { Chip, CHIP_VARIANTS };

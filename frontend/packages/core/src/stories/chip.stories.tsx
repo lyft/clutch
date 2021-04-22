@@ -2,53 +2,61 @@ import * as React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { ChipProps } from "../chip";
-import Chip from "../chip";
+import { Chip, CHIP_VARIANTS } from "../chip";
 
-export default {
+export default ({
   title: "Core/Chip",
   component: Chip,
-} as Meta;
+  argTypes: {
+    variant: {
+      control: {
+        type: "select",
+        options: CHIP_VARIANTS,
+      },
+    },
+  },
+} as unknown) as Meta;
 
 const Template = (props: ChipProps) => <Chip {...props} />;
 
 export const ErrorChip = Template.bind({});
 ErrorChip.args = {
-  variant: "WORST",
-  label: "Error",
+  variant: "error",
+  label: "error",
 };
 
 export const WarningChip = Template.bind({});
 WarningChip.args = {
-  variant: "BAD",
-  label: "Warning",
+  variant: "warn",
+  label: "warn",
 };
 
 export const NeutralChip = Template.bind({});
 NeutralChip.args = {
-  variant: "NEUTRAL",
-  label: "Neutral",
+  variant: "neutral",
+  label: "neutral",
 };
 
 export const NeutralBadChip = Template.bind({});
 NeutralBadChip.args = {
-  variant: "NEUTRALBAD",
-  label: "NeutralBad",
+  variant: "attention",
+  label: "attention",
 };
 
 export const NeutralGoodChip = Template.bind({});
 NeutralGoodChip.args = {
-  variant: "NEUTRALGOOD",
-  label: "NeutralGood",
+  variant: "active",
+  label: "active",
 };
 
 export const RunningChip = Template.bind({});
 RunningChip.args = {
-  variant: "GOOD",
-  label: "Good",
+  variant: "pending",
+  label: "pending",
 };
 
 export const SucceededChip = Template.bind({});
 SucceededChip.args = {
-  variant: "BEST",
-  label: "Best",
+  variant: "success",
+  label: "success",
 };
