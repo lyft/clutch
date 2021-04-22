@@ -1,6 +1,8 @@
 package xdstest
 
 import (
+	"time"
+
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -22,7 +24,7 @@ type TestModuleServer struct {
 	Storer *experimentstoremock.SimpleStorer
 }
 
-func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool, config *xdsconfigv1.Config) *TestModuleServer {
+func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool, config *xdsconfigv1.Config) (*TestModuleServer, error) {
 	// Set up a test server listening to :9000.
 	if ttl {
 		config.ResourceTtl = &durationpb.Duration{
@@ -33,9 +35,13 @@ func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Sc
 		}
 	}
 
+	if config.CacheRefreshInterval == nil {
+		config.CacheRefreshInterval = durationpb.New(time.Second * 1)
+	}
+
 	cfg, err := anypb.New(config)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	ms := &TestModuleServer{
@@ -46,12 +52,15 @@ func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Sc
 
 	m, err := c(cfg, ms.Logger, ms.Scope)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	ms.Register(m)
 
-	ms.Run()
+	err = ms.Run()
+	if err != nil {
+		return nil, err
+	}
 
-	return ms
+	return ms, nil
 }

@@ -43,6 +43,61 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
+	for key, val := range m.GetPerConfigRtdsGeneratorTypeConfiguration() {
+		_ = val
+
+		// no validation rules for PerConfigRtdsGeneratorTypeConfiguration[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  fmt.Sprintf("PerConfigRtdsGeneratorTypeConfiguration[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for key, val := range m.GetPerConfigEcdsGeneratorTypeConfiguration() {
+		_ = val
+
+		// no validation rules for PerConfigEcdsGeneratorTypeConfiguration[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  fmt.Sprintf("PerConfigEcdsGeneratorTypeConfiguration[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if d := m.GetCacheRefreshInterval(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
+			return ConfigValidationError{
+				field:  "CacheRefreshInterval",
+				reason: "value is not a valid duration",
+				cause:  err,
+			}
+		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "CacheRefreshInterval",
+				reason: "value must be greater than 0s",
+			}
+		}
+
+	}
+
 	if len(m.GetRtdsLayerName()) < 1 {
 		return ConfigValidationError{
 			field:  "RtdsLayerName",
@@ -50,38 +105,46 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetCacheRefreshInterval()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ConfigValidationError{
-				field:  "CacheRefreshInterval",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	// no validation rules for IngressFaultRuntimePrefix
-
-	// no validation rules for EgressFaultRuntimePrefix
-
-	if v, ok := interface{}(m.GetResourceTtl()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if d := m.GetResourceTtl(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
 			return ConfigValidationError{
 				field:  "ResourceTtl",
-				reason: "embedded message failed validation",
+				reason: "value is not a valid duration",
 				cause:  err,
 			}
 		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "ResourceTtl",
+				reason: "value must be greater than 0s",
+			}
+		}
+
 	}
 
-	if v, ok := interface{}(m.GetHeartbeatInterval()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if d := m.GetHeartbeatInterval(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
 			return ConfigValidationError{
 				field:  "HeartbeatInterval",
-				reason: "embedded message failed validation",
+				reason: "value is not a valid duration",
 				cause:  err,
 			}
 		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "HeartbeatInterval",
+				reason: "value must be greater than 0s",
+			}
+		}
+
 	}
 
 	if v, ok := interface{}(m.GetEcdsAllowList()).(interface{ Validate() error }); ok {
@@ -151,12 +214,211 @@ var _ interface {
 	ErrorName() string
 } = ConfigValidationError{}
 
+// Validate checks the field values on
+// Config_PerConfigRTDSResourceGeneratorTypeConfig with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *Config_PerConfigRTDSResourceGeneratorTypeConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetResourceGenerators()) < 1 {
+		return Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError{
+			field:  "ResourceGenerators",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetResourceGenerators() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError{
+					field:  fmt.Sprintf("ResourceGenerators[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError is the
+// validation error returned by
+// Config_PerConfigRTDSResourceGeneratorTypeConfig.Validate if the designated
+// constraints aren't met.
+type Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError) ErrorName() string {
+	return "Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConfig_PerConfigRTDSResourceGeneratorTypeConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Config_PerConfigRTDSResourceGeneratorTypeConfigValidationError{}
+
+// Validate checks the field values on
+// Config_PerConfigECDSResourceGeneratorTypeConfig with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *Config_PerConfigECDSResourceGeneratorTypeConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetResourceGenerators()) < 1 {
+		return Config_PerConfigECDSResourceGeneratorTypeConfigValidationError{
+			field:  "ResourceGenerators",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetResourceGenerators() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Config_PerConfigECDSResourceGeneratorTypeConfigValidationError{
+					field:  fmt.Sprintf("ResourceGenerators[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Config_PerConfigECDSResourceGeneratorTypeConfigValidationError is the
+// validation error returned by
+// Config_PerConfigECDSResourceGeneratorTypeConfig.Validate if the designated
+// constraints aren't met.
+type Config_PerConfigECDSResourceGeneratorTypeConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Config_PerConfigECDSResourceGeneratorTypeConfigValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e Config_PerConfigECDSResourceGeneratorTypeConfigValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e Config_PerConfigECDSResourceGeneratorTypeConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Config_PerConfigECDSResourceGeneratorTypeConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Config_PerConfigECDSResourceGeneratorTypeConfigValidationError) ErrorName() string {
+	return "Config_PerConfigECDSResourceGeneratorTypeConfigValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Config_PerConfigECDSResourceGeneratorTypeConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConfig_PerConfigECDSResourceGeneratorTypeConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Config_PerConfigECDSResourceGeneratorTypeConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Config_PerConfigECDSResourceGeneratorTypeConfigValidationError{}
+
 // Validate checks the field values on Config_ECDSAllowList with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
 func (m *Config_ECDSAllowList) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if len(m.GetEnabledClusters()) < 1 {
+		return Config_ECDSAllowListValidationError{
+			field:  "EnabledClusters",
+			reason: "value must contain at least 1 item(s)",
+		}
 	}
 
 	return nil

@@ -22,7 +22,7 @@ import (
 	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds/internal/xdstest"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 )
@@ -33,11 +33,10 @@ func TestEnvoyFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
 		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
 	}
 
-	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	ts, err := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.NoError(t, err)
 	defer ts.Stop()
 
 	e, err := envoytest.NewEnvoyHandle()
@@ -75,11 +74,10 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
 		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
 	}
 
-	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	ts, err := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.NoError(t, err)
 	defer ts.Stop()
 
 	criterion := &testCriterion{}
@@ -142,12 +140,11 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
 		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
 		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
 	}
 
-	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	ts, err := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.NoError(t, err)
 	defer ts.Stop()
 
 	e, err := envoytest.NewEnvoyHandle()
