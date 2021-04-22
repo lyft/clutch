@@ -1,12 +1,10 @@
 package xds
 
 import (
-	"google.golang.org/protobuf/types/known/anypb"
-
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-var RTDSGeneratorFactories = map[string]RTDSGeneratorFactory{}
+var RTDSGeneratorsByTypeUrl = map[string]RTDSResourceGenerator{}
 
 type RuntimeKeyValue struct {
 	Key   string
@@ -41,8 +39,4 @@ type RTDSResourceGenerator interface {
 	// return a resource created with a `NewEmptyRTDSResource` method call if the receiver is not
 	// interested in generating faults for a passed experiment.
 	GenerateResource(experiment *experimentstore.Experiment) (*RTDSResource, error)
-}
-
-type RTDSGeneratorFactory interface {
-	Create(cfg *anypb.Any) (RTDSResourceGenerator, error)
 }

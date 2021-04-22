@@ -2,12 +2,11 @@ package xds
 
 import (
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
-	"google.golang.org/protobuf/types/known/anypb"
 
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-var ECDSGeneratorFactories = map[string]ECDSGeneratorFactory{}
+var ECDSGeneratorsByTypeUrl = map[string]ECDSResourceGenerator{}
 
 type ECDSResource struct {
 	Cluster         string
@@ -42,8 +41,4 @@ type ECDSResourceGenerator interface {
 	// resource. The implementation of the method should return a resource created with
 	// a `NewEmptyECDSResource` method call if it receives a `resourceName` that it doesn't recognize.
 	GenerateDefaultResource(cluster string, resourceName string) (*ECDSResource, error)
-}
-
-type ECDSGeneratorFactory interface {
-	Create(cfg *anypb.Any) (ECDSResourceGenerator, error)
 }

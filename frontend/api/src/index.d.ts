@@ -6682,12 +6682,6 @@ export namespace clutch {
                             /** Properties of a Config. */
                             interface IConfig {
 
-                                /** Config perConfigRtdsGeneratorTypeConfiguration */
-                                perConfigRtdsGeneratorTypeConfiguration?: ({ [k: string]: clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigRTDSResourceGeneratorTypeConfig }|null);
-
-                                /** Config perConfigEcdsGeneratorTypeConfiguration */
-                                perConfigEcdsGeneratorTypeConfiguration?: ({ [k: string]: clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigECDSResourceGeneratorTypeConfig }|null);
-
                                 /** Config cacheRefreshInterval */
                                 cacheRefreshInterval?: (google.protobuf.IDuration|null);
 
@@ -6712,12 +6706,6 @@ export namespace clutch {
                                  * @param [properties] Properties to set
                                  */
                                 constructor(properties?: clutch.config.module.chaos.experimentation.xds.v1.IConfig);
-
-                                /** Config perConfigRtdsGeneratorTypeConfiguration. */
-                                public perConfigRtdsGeneratorTypeConfiguration: { [k: string]: clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigRTDSResourceGeneratorTypeConfig };
-
-                                /** Config perConfigEcdsGeneratorTypeConfiguration. */
-                                public perConfigEcdsGeneratorTypeConfiguration: { [k: string]: clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigECDSResourceGeneratorTypeConfig };
 
                                 /** Config cacheRefreshInterval. */
                                 public cacheRefreshInterval?: (google.protobuf.IDuration|null);
@@ -6764,102 +6752,6 @@ export namespace clutch {
                             }
 
                             namespace Config {
-
-                                /** Properties of a PerConfigRTDSResourceGeneratorTypeConfig. */
-                                interface IPerConfigRTDSResourceGeneratorTypeConfig {
-
-                                    /** PerConfigRTDSResourceGeneratorTypeConfig resourceGenerators */
-                                    resourceGenerators?: (google.protobuf.IAny[]|null);
-                                }
-
-                                /** Represents a PerConfigRTDSResourceGeneratorTypeConfig. */
-                                class PerConfigRTDSResourceGeneratorTypeConfig implements IPerConfigRTDSResourceGeneratorTypeConfig {
-
-                                    /**
-                                     * Constructs a new PerConfigRTDSResourceGeneratorTypeConfig.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigRTDSResourceGeneratorTypeConfig);
-
-                                    /** PerConfigRTDSResourceGeneratorTypeConfig resourceGenerators. */
-                                    public resourceGenerators: google.protobuf.IAny[];
-
-                                    /**
-                                     * Verifies a PerConfigRTDSResourceGeneratorTypeConfig message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates a PerConfigRTDSResourceGeneratorTypeConfig message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns PerConfigRTDSResourceGeneratorTypeConfig
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig;
-
-                                    /**
-                                     * Creates a plain object from a PerConfigRTDSResourceGeneratorTypeConfig message. Also converts values to other types if specified.
-                                     * @param message PerConfigRTDSResourceGeneratorTypeConfig
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this PerConfigRTDSResourceGeneratorTypeConfig to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
-
-                                /** Properties of a PerConfigECDSResourceGeneratorTypeConfig. */
-                                interface IPerConfigECDSResourceGeneratorTypeConfig {
-
-                                    /** PerConfigECDSResourceGeneratorTypeConfig resourceGenerators */
-                                    resourceGenerators?: (google.protobuf.IAny[]|null);
-                                }
-
-                                /** Represents a PerConfigECDSResourceGeneratorTypeConfig. */
-                                class PerConfigECDSResourceGeneratorTypeConfig implements IPerConfigECDSResourceGeneratorTypeConfig {
-
-                                    /**
-                                     * Constructs a new PerConfigECDSResourceGeneratorTypeConfig.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigECDSResourceGeneratorTypeConfig);
-
-                                    /** PerConfigECDSResourceGeneratorTypeConfig resourceGenerators. */
-                                    public resourceGenerators: google.protobuf.IAny[];
-
-                                    /**
-                                     * Verifies a PerConfigECDSResourceGeneratorTypeConfig message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates a PerConfigECDSResourceGeneratorTypeConfig message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns PerConfigECDSResourceGeneratorTypeConfig
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig;
-
-                                    /**
-                                     * Creates a plain object from a PerConfigECDSResourceGeneratorTypeConfig message. Also converts values to other types if specified.
-                                     * @param message PerConfigECDSResourceGeneratorTypeConfig
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this PerConfigECDSResourceGeneratorTypeConfig to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
 
                                 /** Properties of a ECDSAllowList. */
                                 interface IECDSAllowList {
@@ -6909,102 +6801,68 @@ export namespace clutch {
                                     public toJSON(): { [k: string]: any };
                                 }
                             }
+                        }
+                    }
+                }
 
-                            /** Properties of a ServerFaultsECDSResourceGeneratorConfig. */
-                            interface IServerFaultsECDSResourceGeneratorConfig {
-                            }
+                /** Namespace serverexperimentation. */
+                namespace serverexperimentation {
 
-                            /** Represents a ServerFaultsECDSResourceGeneratorConfig. */
-                            class ServerFaultsECDSResourceGeneratorConfig implements IServerFaultsECDSResourceGeneratorConfig {
+                    /** Namespace v1. */
+                    namespace v1 {
 
-                                /**
-                                 * Constructs a new ServerFaultsECDSResourceGeneratorConfig.
-                                 * @param [properties] Properties to set
-                                 */
-                                constructor(properties?: clutch.config.module.chaos.experimentation.xds.v1.IServerFaultsECDSResourceGeneratorConfig);
+                        /** Properties of a Config. */
+                        interface IConfig {
 
-                                /**
-                                 * Verifies a ServerFaultsECDSResourceGeneratorConfig message.
-                                 * @param message Plain object to verify
-                                 * @returns `null` if valid, otherwise the reason why it is not
-                                 */
-                                public static verify(message: { [k: string]: any }): (string|null);
+                            /** Config ingressFaultRuntimePrefix */
+                            ingressFaultRuntimePrefix?: (string|null);
 
-                                /**
-                                 * Creates a ServerFaultsECDSResourceGeneratorConfig message from a plain object. Also converts values to their respective internal types.
-                                 * @param object Plain object
-                                 * @returns ServerFaultsECDSResourceGeneratorConfig
-                                 */
-                                public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig;
+                            /** Config egressFaultRuntimePrefix */
+                            egressFaultRuntimePrefix?: (string|null);
+                        }
 
-                                /**
-                                 * Creates a plain object from a ServerFaultsECDSResourceGeneratorConfig message. Also converts values to other types if specified.
-                                 * @param message ServerFaultsECDSResourceGeneratorConfig
-                                 * @param [options] Conversion options
-                                 * @returns Plain object
-                                 */
-                                public static toObject(message: clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        /** Represents a Config. */
+                        class Config implements IConfig {
 
-                                /**
-                                 * Converts this ServerFaultsECDSResourceGeneratorConfig to JSON.
-                                 * @returns JSON object
-                                 */
-                                public toJSON(): { [k: string]: any };
-                            }
+                            /**
+                             * Constructs a new Config.
+                             * @param [properties] Properties to set
+                             */
+                            constructor(properties?: clutch.config.module.chaos.serverexperimentation.v1.IConfig);
 
-                            /** Properties of a ServerFaultsRTDSResourceGeneratorConfig. */
-                            interface IServerFaultsRTDSResourceGeneratorConfig {
+                            /** Config ingressFaultRuntimePrefix. */
+                            public ingressFaultRuntimePrefix: string;
 
-                                /** ServerFaultsRTDSResourceGeneratorConfig ingressFaultRuntimePrefix */
-                                ingressFaultRuntimePrefix?: (string|null);
+                            /** Config egressFaultRuntimePrefix. */
+                            public egressFaultRuntimePrefix: string;
 
-                                /** ServerFaultsRTDSResourceGeneratorConfig egressFaultRuntimePrefix */
-                                egressFaultRuntimePrefix?: (string|null);
-                            }
+                            /**
+                             * Verifies a Config message.
+                             * @param message Plain object to verify
+                             * @returns `null` if valid, otherwise the reason why it is not
+                             */
+                            public static verify(message: { [k: string]: any }): (string|null);
 
-                            /** Represents a ServerFaultsRTDSResourceGeneratorConfig. */
-                            class ServerFaultsRTDSResourceGeneratorConfig implements IServerFaultsRTDSResourceGeneratorConfig {
+                            /**
+                             * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                             * @param object Plain object
+                             * @returns Config
+                             */
+                            public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.serverexperimentation.v1.Config;
 
-                                /**
-                                 * Constructs a new ServerFaultsRTDSResourceGeneratorConfig.
-                                 * @param [properties] Properties to set
-                                 */
-                                constructor(properties?: clutch.config.module.chaos.experimentation.xds.v1.IServerFaultsRTDSResourceGeneratorConfig);
+                            /**
+                             * Creates a plain object from a Config message. Also converts values to other types if specified.
+                             * @param message Config
+                             * @param [options] Conversion options
+                             * @returns Plain object
+                             */
+                            public static toObject(message: clutch.config.module.chaos.serverexperimentation.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
-                                /** ServerFaultsRTDSResourceGeneratorConfig ingressFaultRuntimePrefix. */
-                                public ingressFaultRuntimePrefix: string;
-
-                                /** ServerFaultsRTDSResourceGeneratorConfig egressFaultRuntimePrefix. */
-                                public egressFaultRuntimePrefix: string;
-
-                                /**
-                                 * Verifies a ServerFaultsRTDSResourceGeneratorConfig message.
-                                 * @param message Plain object to verify
-                                 * @returns `null` if valid, otherwise the reason why it is not
-                                 */
-                                public static verify(message: { [k: string]: any }): (string|null);
-
-                                /**
-                                 * Creates a ServerFaultsRTDSResourceGeneratorConfig message from a plain object. Also converts values to their respective internal types.
-                                 * @param object Plain object
-                                 * @returns ServerFaultsRTDSResourceGeneratorConfig
-                                 */
-                                public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig;
-
-                                /**
-                                 * Creates a plain object from a ServerFaultsRTDSResourceGeneratorConfig message. Also converts values to other types if specified.
-                                 * @param message ServerFaultsRTDSResourceGeneratorConfig
-                                 * @param [options] Conversion options
-                                 * @returns Plain object
-                                 */
-                                public static toObject(message: clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                /**
-                                 * Converts this ServerFaultsRTDSResourceGeneratorConfig to JSON.
-                                 * @returns JSON object
-                                 */
-                                public toJSON(): { [k: string]: any };
-                            }
+                            /**
+                             * Converts this Config to JSON.
+                             * @returns JSON object
+                             */
+                            public toJSON(): { [k: string]: any };
                         }
                     }
                 }
