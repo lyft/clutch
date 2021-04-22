@@ -8,7 +8,6 @@ LINKED_PACKAGES=(
   "react-dom"
   "react-router"
   "react-router-dom"
-  "styled-components"
   "@emotion/react"
   "@emotion/styled"
   "@material-ui/styles"
@@ -19,7 +18,6 @@ LINKED_PACKAGES=(
   "@types/node"
   "@types/react"
   "@types/react-dom"
-  "@types/styled-components"
   "typescript"
 )
 

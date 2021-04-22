@@ -12,7 +12,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.2.2
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.5.0
 	github.com/aws/smithy-go v1.3.1
-	github.com/bufbuild/buf v0.30.0
+	github.com/bufbuild/buf v0.37.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -27,9 +27,9 @@ require (
 	github.com/google/go-github/v35 v35.0.0
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.2.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
 	github.com/iancoleman/strcase v0.1.3
-	github.com/jhump/protoreflect v1.7.1
+	github.com/jhump/protoreflect v1.8.1
 	github.com/lib/pq v1.10.0
 	github.com/mitchellh/hashstructure/v2 v2.0.1
 	github.com/shurcooL/githubv4 v0.0.0-20201206200315-234843c633fa
@@ -48,7 +48,7 @@ require (
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/square/go-jose.v2 v2.5.1
-	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	k8s.io/api v0.20.5
 	k8s.io/apimachinery v0.20.5
 	k8s.io/client-go v0.20.5

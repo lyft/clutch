@@ -1,22 +1,18 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { Fab, Link } from "@material-ui/core";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
-import styled from "styled-components";
 
-const Button = styled(Fab)`
-  ${({ theme }) => `
-  position: fixed;
-  right: ${theme.spacing(2)}px;
-  bottom: ${theme.spacing(2)}px;
-  `}
-`;
+const Button = styled(Fab)({
+  position: "fixed",
+  right: "16px",
+  bottom: "16px",
+});
 
-const Icon = styled(ChatBubbleOutlineIcon)`
-  ${({ theme }) => `
-  margin: ${theme.spacing(1)}px;
-  color: ${theme.palette.secondary.main}
-  `}
-`;
+const Icon = styled(ChatBubbleOutlineIcon)({
+  margin: "8px",
+  color: "#2D3F50",
+});
 
 const FeedbackButton: React.FC<{}> = () => (
   // Hack because ButtonBaseProps can't take a component prop
