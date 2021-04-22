@@ -15782,10 +15782,10 @@ export const clutch = $root.clutch = (() => {
                                  * Properties of a Config.
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1
                                  * @interface IConfig
-                                 * @property {string|null} [rtdsLayerName] Config rtdsLayerName
+                                 * @property {Object.<string,clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigRTDSResourceGeneratorTypeConfig>|null} [perConfigRtdsGeneratorTypeConfiguration] Config perConfigRtdsGeneratorTypeConfiguration
+                                 * @property {Object.<string,clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigECDSResourceGeneratorTypeConfig>|null} [perConfigEcdsGeneratorTypeConfiguration] Config perConfigEcdsGeneratorTypeConfiguration
                                  * @property {google.protobuf.IDuration|null} [cacheRefreshInterval] Config cacheRefreshInterval
-                                 * @property {string|null} [ingressFaultRuntimePrefix] Config ingressFaultRuntimePrefix
-                                 * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
+                                 * @property {string|null} [rtdsLayerName] Config rtdsLayerName
                                  * @property {google.protobuf.IDuration|null} [resourceTtl] Config resourceTtl
                                  * @property {google.protobuf.IDuration|null} [heartbeatInterval] Config heartbeatInterval
                                  * @property {clutch.config.module.chaos.experimentation.xds.v1.Config.IECDSAllowList|null} [ecdsAllowList] Config ecdsAllowList
@@ -15800,6 +15800,8 @@ export const clutch = $root.clutch = (() => {
                                  * @param {clutch.config.module.chaos.experimentation.xds.v1.IConfig=} [properties] Properties to set
                                  */
                                 function Config(properties) {
+                                    this.perConfigRtdsGeneratorTypeConfiguration = {};
+                                    this.perConfigEcdsGeneratorTypeConfiguration = {};
                                     if (properties)
                                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                             if (properties[keys[i]] != null)
@@ -15807,12 +15809,20 @@ export const clutch = $root.clutch = (() => {
                                 }
 
                                 /**
-                                 * Config rtdsLayerName.
-                                 * @member {string} rtdsLayerName
+                                 * Config perConfigRtdsGeneratorTypeConfiguration.
+                                 * @member {Object.<string,clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigRTDSResourceGeneratorTypeConfig>} perConfigRtdsGeneratorTypeConfiguration
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
-                                Config.prototype.rtdsLayerName = "";
+                                Config.prototype.perConfigRtdsGeneratorTypeConfiguration = $util.emptyObject;
+
+                                /**
+                                 * Config perConfigEcdsGeneratorTypeConfiguration.
+                                 * @member {Object.<string,clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigECDSResourceGeneratorTypeConfig>} perConfigEcdsGeneratorTypeConfiguration
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.perConfigEcdsGeneratorTypeConfiguration = $util.emptyObject;
 
                                 /**
                                  * Config cacheRefreshInterval.
@@ -15823,20 +15833,12 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.cacheRefreshInterval = null;
 
                                 /**
-                                 * Config ingressFaultRuntimePrefix.
-                                 * @member {string} ingressFaultRuntimePrefix
+                                 * Config rtdsLayerName.
+                                 * @member {string} rtdsLayerName
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
-                                Config.prototype.ingressFaultRuntimePrefix = "";
-
-                                /**
-                                 * Config egressFaultRuntimePrefix.
-                                 * @member {string} egressFaultRuntimePrefix
-                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
-                                 * @instance
-                                 */
-                                Config.prototype.egressFaultRuntimePrefix = "";
+                                Config.prototype.rtdsLayerName = "";
 
                                 /**
                                  * Config resourceTtl.
@@ -15873,20 +15875,34 @@ export const clutch = $root.clutch = (() => {
                                 Config.verify = function verify(message) {
                                     if (typeof message !== "object" || message === null)
                                         return "object expected";
-                                    if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
-                                        if (!$util.isString(message.rtdsLayerName))
-                                            return "rtdsLayerName: string expected";
+                                    if (message.perConfigRtdsGeneratorTypeConfiguration != null && message.hasOwnProperty("perConfigRtdsGeneratorTypeConfiguration")) {
+                                        if (!$util.isObject(message.perConfigRtdsGeneratorTypeConfiguration))
+                                            return "perConfigRtdsGeneratorTypeConfiguration: object expected";
+                                        let key = Object.keys(message.perConfigRtdsGeneratorTypeConfiguration);
+                                        for (let i = 0; i < key.length; ++i) {
+                                            let error = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig.verify(message.perConfigRtdsGeneratorTypeConfiguration[key[i]]);
+                                            if (error)
+                                                return "perConfigRtdsGeneratorTypeConfiguration." + error;
+                                        }
+                                    }
+                                    if (message.perConfigEcdsGeneratorTypeConfiguration != null && message.hasOwnProperty("perConfigEcdsGeneratorTypeConfiguration")) {
+                                        if (!$util.isObject(message.perConfigEcdsGeneratorTypeConfiguration))
+                                            return "perConfigEcdsGeneratorTypeConfiguration: object expected";
+                                        let key = Object.keys(message.perConfigEcdsGeneratorTypeConfiguration);
+                                        for (let i = 0; i < key.length; ++i) {
+                                            let error = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig.verify(message.perConfigEcdsGeneratorTypeConfiguration[key[i]]);
+                                            if (error)
+                                                return "perConfigEcdsGeneratorTypeConfiguration." + error;
+                                        }
+                                    }
                                     if (message.cacheRefreshInterval != null && message.hasOwnProperty("cacheRefreshInterval")) {
                                         let error = $root.google.protobuf.Duration.verify(message.cacheRefreshInterval);
                                         if (error)
                                             return "cacheRefreshInterval." + error;
                                     }
-                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
-                                        if (!$util.isString(message.ingressFaultRuntimePrefix))
-                                            return "ingressFaultRuntimePrefix: string expected";
-                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
-                                        if (!$util.isString(message.egressFaultRuntimePrefix))
-                                            return "egressFaultRuntimePrefix: string expected";
+                                    if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
+                                        if (!$util.isString(message.rtdsLayerName))
+                                            return "rtdsLayerName: string expected";
                                     if (message.resourceTtl != null && message.hasOwnProperty("resourceTtl")) {
                                         let error = $root.google.protobuf.Duration.verify(message.resourceTtl);
                                         if (error)
@@ -15917,17 +15933,33 @@ export const clutch = $root.clutch = (() => {
                                     if (object instanceof $root.clutch.config.module.chaos.experimentation.xds.v1.Config)
                                         return object;
                                     let message = new $root.clutch.config.module.chaos.experimentation.xds.v1.Config();
-                                    if (object.rtdsLayerName != null)
-                                        message.rtdsLayerName = String(object.rtdsLayerName);
+                                    if (object.perConfigRtdsGeneratorTypeConfiguration) {
+                                        if (typeof object.perConfigRtdsGeneratorTypeConfiguration !== "object")
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.perConfigRtdsGeneratorTypeConfiguration: object expected");
+                                        message.perConfigRtdsGeneratorTypeConfiguration = {};
+                                        for (let keys = Object.keys(object.perConfigRtdsGeneratorTypeConfiguration), i = 0; i < keys.length; ++i) {
+                                            if (typeof object.perConfigRtdsGeneratorTypeConfiguration[keys[i]] !== "object")
+                                                throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.perConfigRtdsGeneratorTypeConfiguration: object expected");
+                                            message.perConfigRtdsGeneratorTypeConfiguration[keys[i]] = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig.fromObject(object.perConfigRtdsGeneratorTypeConfiguration[keys[i]]);
+                                        }
+                                    }
+                                    if (object.perConfigEcdsGeneratorTypeConfiguration) {
+                                        if (typeof object.perConfigEcdsGeneratorTypeConfiguration !== "object")
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.perConfigEcdsGeneratorTypeConfiguration: object expected");
+                                        message.perConfigEcdsGeneratorTypeConfiguration = {};
+                                        for (let keys = Object.keys(object.perConfigEcdsGeneratorTypeConfiguration), i = 0; i < keys.length; ++i) {
+                                            if (typeof object.perConfigEcdsGeneratorTypeConfiguration[keys[i]] !== "object")
+                                                throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.perConfigEcdsGeneratorTypeConfiguration: object expected");
+                                            message.perConfigEcdsGeneratorTypeConfiguration[keys[i]] = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig.fromObject(object.perConfigEcdsGeneratorTypeConfiguration[keys[i]]);
+                                        }
+                                    }
                                     if (object.cacheRefreshInterval != null) {
                                         if (typeof object.cacheRefreshInterval !== "object")
                                             throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.cacheRefreshInterval: object expected");
                                         message.cacheRefreshInterval = $root.google.protobuf.Duration.fromObject(object.cacheRefreshInterval);
                                     }
-                                    if (object.ingressFaultRuntimePrefix != null)
-                                        message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
-                                    if (object.egressFaultRuntimePrefix != null)
-                                        message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
+                                    if (object.rtdsLayerName != null)
+                                        message.rtdsLayerName = String(object.rtdsLayerName);
                                     if (object.resourceTtl != null) {
                                         if (typeof object.resourceTtl !== "object")
                                             throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.resourceTtl: object expected");
@@ -15959,23 +15991,32 @@ export const clutch = $root.clutch = (() => {
                                     if (!options)
                                         options = {};
                                     let object = {};
+                                    if (options.objects || options.defaults) {
+                                        object.perConfigRtdsGeneratorTypeConfiguration = {};
+                                        object.perConfigEcdsGeneratorTypeConfiguration = {};
+                                    }
                                     if (options.defaults) {
-                                        object.rtdsLayerName = "";
                                         object.cacheRefreshInterval = null;
-                                        object.ingressFaultRuntimePrefix = "";
-                                        object.egressFaultRuntimePrefix = "";
+                                        object.rtdsLayerName = "";
                                         object.resourceTtl = null;
                                         object.heartbeatInterval = null;
                                         object.ecdsAllowList = null;
                                     }
-                                    if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
-                                        object.rtdsLayerName = message.rtdsLayerName;
+                                    let keys2;
+                                    if (message.perConfigRtdsGeneratorTypeConfiguration && (keys2 = Object.keys(message.perConfigRtdsGeneratorTypeConfiguration)).length) {
+                                        object.perConfigRtdsGeneratorTypeConfiguration = {};
+                                        for (let j = 0; j < keys2.length; ++j)
+                                            object.perConfigRtdsGeneratorTypeConfiguration[keys2[j]] = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig.toObject(message.perConfigRtdsGeneratorTypeConfiguration[keys2[j]], options);
+                                    }
+                                    if (message.perConfigEcdsGeneratorTypeConfiguration && (keys2 = Object.keys(message.perConfigEcdsGeneratorTypeConfiguration)).length) {
+                                        object.perConfigEcdsGeneratorTypeConfiguration = {};
+                                        for (let j = 0; j < keys2.length; ++j)
+                                            object.perConfigEcdsGeneratorTypeConfiguration[keys2[j]] = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig.toObject(message.perConfigEcdsGeneratorTypeConfiguration[keys2[j]], options);
+                                    }
                                     if (message.cacheRefreshInterval != null && message.hasOwnProperty("cacheRefreshInterval"))
                                         object.cacheRefreshInterval = $root.google.protobuf.Duration.toObject(message.cacheRefreshInterval, options);
-                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
-                                        object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
-                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
-                                        object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
+                                    if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
+                                        object.rtdsLayerName = message.rtdsLayerName;
                                     if (message.resourceTtl != null && message.hasOwnProperty("resourceTtl"))
                                         object.resourceTtl = $root.google.protobuf.Duration.toObject(message.resourceTtl, options);
                                     if (message.heartbeatInterval != null && message.hasOwnProperty("heartbeatInterval"))
@@ -15995,6 +16036,242 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.toJSON = function toJSON() {
                                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                                 };
+
+                                Config.PerConfigRTDSResourceGeneratorTypeConfig = (function() {
+
+                                    /**
+                                     * Properties of a PerConfigRTDSResourceGeneratorTypeConfig.
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                     * @interface IPerConfigRTDSResourceGeneratorTypeConfig
+                                     * @property {Array.<google.protobuf.IAny>|null} [resourceGenerators] PerConfigRTDSResourceGeneratorTypeConfig resourceGenerators
+                                     */
+
+                                    /**
+                                     * Constructs a new PerConfigRTDSResourceGeneratorTypeConfig.
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                     * @classdesc Represents a PerConfigRTDSResourceGeneratorTypeConfig.
+                                     * @implements IPerConfigRTDSResourceGeneratorTypeConfig
+                                     * @constructor
+                                     * @param {clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigRTDSResourceGeneratorTypeConfig=} [properties] Properties to set
+                                     */
+                                    function PerConfigRTDSResourceGeneratorTypeConfig(properties) {
+                                        this.resourceGenerators = [];
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * PerConfigRTDSResourceGeneratorTypeConfig resourceGenerators.
+                                     * @member {Array.<google.protobuf.IAny>} resourceGenerators
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig
+                                     * @instance
+                                     */
+                                    PerConfigRTDSResourceGeneratorTypeConfig.prototype.resourceGenerators = $util.emptyArray;
+
+                                    /**
+                                     * Verifies a PerConfigRTDSResourceGeneratorTypeConfig message.
+                                     * @function verify
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    PerConfigRTDSResourceGeneratorTypeConfig.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        if (message.resourceGenerators != null && message.hasOwnProperty("resourceGenerators")) {
+                                            if (!Array.isArray(message.resourceGenerators))
+                                                return "resourceGenerators: array expected";
+                                            for (let i = 0; i < message.resourceGenerators.length; ++i) {
+                                                let error = $root.google.protobuf.Any.verify(message.resourceGenerators[i]);
+                                                if (error)
+                                                    return "resourceGenerators." + error;
+                                            }
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a PerConfigRTDSResourceGeneratorTypeConfig message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig} PerConfigRTDSResourceGeneratorTypeConfig
+                                     */
+                                    PerConfigRTDSResourceGeneratorTypeConfig.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig)
+                                            return object;
+                                        let message = new $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig();
+                                        if (object.resourceGenerators) {
+                                            if (!Array.isArray(object.resourceGenerators))
+                                                throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig.resourceGenerators: array expected");
+                                            message.resourceGenerators = [];
+                                            for (let i = 0; i < object.resourceGenerators.length; ++i) {
+                                                if (typeof object.resourceGenerators[i] !== "object")
+                                                    throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig.resourceGenerators: object expected");
+                                                message.resourceGenerators[i] = $root.google.protobuf.Any.fromObject(object.resourceGenerators[i]);
+                                            }
+                                        }
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a PerConfigRTDSResourceGeneratorTypeConfig message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig
+                                     * @static
+                                     * @param {clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig} message PerConfigRTDSResourceGeneratorTypeConfig
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    PerConfigRTDSResourceGeneratorTypeConfig.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (options.arrays || options.defaults)
+                                            object.resourceGenerators = [];
+                                        if (message.resourceGenerators && message.resourceGenerators.length) {
+                                            object.resourceGenerators = [];
+                                            for (let j = 0; j < message.resourceGenerators.length; ++j)
+                                                object.resourceGenerators[j] = $root.google.protobuf.Any.toObject(message.resourceGenerators[j], options);
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this PerConfigRTDSResourceGeneratorTypeConfig to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigRTDSResourceGeneratorTypeConfig
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    PerConfigRTDSResourceGeneratorTypeConfig.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return PerConfigRTDSResourceGeneratorTypeConfig;
+                                })();
+
+                                Config.PerConfigECDSResourceGeneratorTypeConfig = (function() {
+
+                                    /**
+                                     * Properties of a PerConfigECDSResourceGeneratorTypeConfig.
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                     * @interface IPerConfigECDSResourceGeneratorTypeConfig
+                                     * @property {Array.<google.protobuf.IAny>|null} [resourceGenerators] PerConfigECDSResourceGeneratorTypeConfig resourceGenerators
+                                     */
+
+                                    /**
+                                     * Constructs a new PerConfigECDSResourceGeneratorTypeConfig.
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                     * @classdesc Represents a PerConfigECDSResourceGeneratorTypeConfig.
+                                     * @implements IPerConfigECDSResourceGeneratorTypeConfig
+                                     * @constructor
+                                     * @param {clutch.config.module.chaos.experimentation.xds.v1.Config.IPerConfigECDSResourceGeneratorTypeConfig=} [properties] Properties to set
+                                     */
+                                    function PerConfigECDSResourceGeneratorTypeConfig(properties) {
+                                        this.resourceGenerators = [];
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * PerConfigECDSResourceGeneratorTypeConfig resourceGenerators.
+                                     * @member {Array.<google.protobuf.IAny>} resourceGenerators
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig
+                                     * @instance
+                                     */
+                                    PerConfigECDSResourceGeneratorTypeConfig.prototype.resourceGenerators = $util.emptyArray;
+
+                                    /**
+                                     * Verifies a PerConfigECDSResourceGeneratorTypeConfig message.
+                                     * @function verify
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    PerConfigECDSResourceGeneratorTypeConfig.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        if (message.resourceGenerators != null && message.hasOwnProperty("resourceGenerators")) {
+                                            if (!Array.isArray(message.resourceGenerators))
+                                                return "resourceGenerators: array expected";
+                                            for (let i = 0; i < message.resourceGenerators.length; ++i) {
+                                                let error = $root.google.protobuf.Any.verify(message.resourceGenerators[i]);
+                                                if (error)
+                                                    return "resourceGenerators." + error;
+                                            }
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a PerConfigECDSResourceGeneratorTypeConfig message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig} PerConfigECDSResourceGeneratorTypeConfig
+                                     */
+                                    PerConfigECDSResourceGeneratorTypeConfig.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig)
+                                            return object;
+                                        let message = new $root.clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig();
+                                        if (object.resourceGenerators) {
+                                            if (!Array.isArray(object.resourceGenerators))
+                                                throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig.resourceGenerators: array expected");
+                                            message.resourceGenerators = [];
+                                            for (let i = 0; i < object.resourceGenerators.length; ++i) {
+                                                if (typeof object.resourceGenerators[i] !== "object")
+                                                    throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig.resourceGenerators: object expected");
+                                                message.resourceGenerators[i] = $root.google.protobuf.Any.fromObject(object.resourceGenerators[i]);
+                                            }
+                                        }
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a PerConfigECDSResourceGeneratorTypeConfig message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig
+                                     * @static
+                                     * @param {clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig} message PerConfigECDSResourceGeneratorTypeConfig
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    PerConfigECDSResourceGeneratorTypeConfig.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (options.arrays || options.defaults)
+                                            object.resourceGenerators = [];
+                                        if (message.resourceGenerators && message.resourceGenerators.length) {
+                                            object.resourceGenerators = [];
+                                            for (let j = 0; j < message.resourceGenerators.length; ++j)
+                                                object.resourceGenerators[j] = $root.google.protobuf.Any.toObject(message.resourceGenerators[j], options);
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this PerConfigECDSResourceGeneratorTypeConfig to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.PerConfigECDSResourceGeneratorTypeConfig
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    PerConfigECDSResourceGeneratorTypeConfig.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return PerConfigECDSResourceGeneratorTypeConfig;
+                                })();
 
                                 Config.ECDSAllowList = (function() {
 
@@ -16110,6 +16387,202 @@ export const clutch = $root.clutch = (() => {
                                 })();
 
                                 return Config;
+                            })();
+
+                            v1.ServerFaultsECDSResourceGeneratorConfig = (function() {
+
+                                /**
+                                 * Properties of a ServerFaultsECDSResourceGeneratorConfig.
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1
+                                 * @interface IServerFaultsECDSResourceGeneratorConfig
+                                 */
+
+                                /**
+                                 * Constructs a new ServerFaultsECDSResourceGeneratorConfig.
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1
+                                 * @classdesc Represents a ServerFaultsECDSResourceGeneratorConfig.
+                                 * @implements IServerFaultsECDSResourceGeneratorConfig
+                                 * @constructor
+                                 * @param {clutch.config.module.chaos.experimentation.xds.v1.IServerFaultsECDSResourceGeneratorConfig=} [properties] Properties to set
+                                 */
+                                function ServerFaultsECDSResourceGeneratorConfig(properties) {
+                                    if (properties)
+                                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                            if (properties[keys[i]] != null)
+                                                this[keys[i]] = properties[keys[i]];
+                                }
+
+                                /**
+                                 * Verifies a ServerFaultsECDSResourceGeneratorConfig message.
+                                 * @function verify
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig
+                                 * @static
+                                 * @param {Object.<string,*>} message Plain object to verify
+                                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                 */
+                                ServerFaultsECDSResourceGeneratorConfig.verify = function verify(message) {
+                                    if (typeof message !== "object" || message === null)
+                                        return "object expected";
+                                    return null;
+                                };
+
+                                /**
+                                 * Creates a ServerFaultsECDSResourceGeneratorConfig message from a plain object. Also converts values to their respective internal types.
+                                 * @function fromObject
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig
+                                 * @static
+                                 * @param {Object.<string,*>} object Plain object
+                                 * @returns {clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig} ServerFaultsECDSResourceGeneratorConfig
+                                 */
+                                ServerFaultsECDSResourceGeneratorConfig.fromObject = function fromObject(object) {
+                                    if (object instanceof $root.clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig)
+                                        return object;
+                                    return new $root.clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig();
+                                };
+
+                                /**
+                                 * Creates a plain object from a ServerFaultsECDSResourceGeneratorConfig message. Also converts values to other types if specified.
+                                 * @function toObject
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig
+                                 * @static
+                                 * @param {clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig} message ServerFaultsECDSResourceGeneratorConfig
+                                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                 * @returns {Object.<string,*>} Plain object
+                                 */
+                                ServerFaultsECDSResourceGeneratorConfig.toObject = function toObject() {
+                                    return {};
+                                };
+
+                                /**
+                                 * Converts this ServerFaultsECDSResourceGeneratorConfig to JSON.
+                                 * @function toJSON
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsECDSResourceGeneratorConfig
+                                 * @instance
+                                 * @returns {Object.<string,*>} JSON object
+                                 */
+                                ServerFaultsECDSResourceGeneratorConfig.prototype.toJSON = function toJSON() {
+                                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                };
+
+                                return ServerFaultsECDSResourceGeneratorConfig;
+                            })();
+
+                            v1.ServerFaultsRTDSResourceGeneratorConfig = (function() {
+
+                                /**
+                                 * Properties of a ServerFaultsRTDSResourceGeneratorConfig.
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1
+                                 * @interface IServerFaultsRTDSResourceGeneratorConfig
+                                 * @property {string|null} [ingressFaultRuntimePrefix] ServerFaultsRTDSResourceGeneratorConfig ingressFaultRuntimePrefix
+                                 * @property {string|null} [egressFaultRuntimePrefix] ServerFaultsRTDSResourceGeneratorConfig egressFaultRuntimePrefix
+                                 */
+
+                                /**
+                                 * Constructs a new ServerFaultsRTDSResourceGeneratorConfig.
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1
+                                 * @classdesc Represents a ServerFaultsRTDSResourceGeneratorConfig.
+                                 * @implements IServerFaultsRTDSResourceGeneratorConfig
+                                 * @constructor
+                                 * @param {clutch.config.module.chaos.experimentation.xds.v1.IServerFaultsRTDSResourceGeneratorConfig=} [properties] Properties to set
+                                 */
+                                function ServerFaultsRTDSResourceGeneratorConfig(properties) {
+                                    if (properties)
+                                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                            if (properties[keys[i]] != null)
+                                                this[keys[i]] = properties[keys[i]];
+                                }
+
+                                /**
+                                 * ServerFaultsRTDSResourceGeneratorConfig ingressFaultRuntimePrefix.
+                                 * @member {string} ingressFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig
+                                 * @instance
+                                 */
+                                ServerFaultsRTDSResourceGeneratorConfig.prototype.ingressFaultRuntimePrefix = "";
+
+                                /**
+                                 * ServerFaultsRTDSResourceGeneratorConfig egressFaultRuntimePrefix.
+                                 * @member {string} egressFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig
+                                 * @instance
+                                 */
+                                ServerFaultsRTDSResourceGeneratorConfig.prototype.egressFaultRuntimePrefix = "";
+
+                                /**
+                                 * Verifies a ServerFaultsRTDSResourceGeneratorConfig message.
+                                 * @function verify
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig
+                                 * @static
+                                 * @param {Object.<string,*>} message Plain object to verify
+                                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                 */
+                                ServerFaultsRTDSResourceGeneratorConfig.verify = function verify(message) {
+                                    if (typeof message !== "object" || message === null)
+                                        return "object expected";
+                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                        if (!$util.isString(message.ingressFaultRuntimePrefix))
+                                            return "ingressFaultRuntimePrefix: string expected";
+                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                        if (!$util.isString(message.egressFaultRuntimePrefix))
+                                            return "egressFaultRuntimePrefix: string expected";
+                                    return null;
+                                };
+
+                                /**
+                                 * Creates a ServerFaultsRTDSResourceGeneratorConfig message from a plain object. Also converts values to their respective internal types.
+                                 * @function fromObject
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig
+                                 * @static
+                                 * @param {Object.<string,*>} object Plain object
+                                 * @returns {clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig} ServerFaultsRTDSResourceGeneratorConfig
+                                 */
+                                ServerFaultsRTDSResourceGeneratorConfig.fromObject = function fromObject(object) {
+                                    if (object instanceof $root.clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig)
+                                        return object;
+                                    let message = new $root.clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig();
+                                    if (object.ingressFaultRuntimePrefix != null)
+                                        message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
+                                    if (object.egressFaultRuntimePrefix != null)
+                                        message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
+                                    return message;
+                                };
+
+                                /**
+                                 * Creates a plain object from a ServerFaultsRTDSResourceGeneratorConfig message. Also converts values to other types if specified.
+                                 * @function toObject
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig
+                                 * @static
+                                 * @param {clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig} message ServerFaultsRTDSResourceGeneratorConfig
+                                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                 * @returns {Object.<string,*>} Plain object
+                                 */
+                                ServerFaultsRTDSResourceGeneratorConfig.toObject = function toObject(message, options) {
+                                    if (!options)
+                                        options = {};
+                                    let object = {};
+                                    if (options.defaults) {
+                                        object.ingressFaultRuntimePrefix = "";
+                                        object.egressFaultRuntimePrefix = "";
+                                    }
+                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                        object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
+                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                        object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
+                                    return object;
+                                };
+
+                                /**
+                                 * Converts this ServerFaultsRTDSResourceGeneratorConfig to JSON.
+                                 * @function toJSON
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.ServerFaultsRTDSResourceGeneratorConfig
+                                 * @instance
+                                 * @returns {Object.<string,*>} JSON object
+                                 */
+                                ServerFaultsRTDSResourceGeneratorConfig.prototype.toJSON = function toJSON() {
+                                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                };
+
+                                return ServerFaultsRTDSResourceGeneratorConfig;
                             })();
 
                             return v1;

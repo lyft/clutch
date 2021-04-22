@@ -7,8 +7,8 @@ package xds
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sync/atomic"
-	"time"
 
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
@@ -20,6 +20,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/protobuf/proto"
 
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -29,28 +30,19 @@ import (
 
 const Name = "clutch.module.chaos.experimentation.xds"
 
+func TypeUrl(message proto.Message) string {
+	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
+}
+
 // Server serves xDS
 type Server struct {
 	ctx context.Context
 
-	// Experiment store
-	storer experimentstore.Storer
-
-	// Built-in cache for V3 xDS
-	snapshotCacheV3 gcpCacheV3.SnapshotCache
-
-	// duration of cache refresh in seconds
-	cacheRefreshInterval time.Duration
-
-	// The TTL to set for xTDS resources.
-	resourceTTL *time.Duration
-
-	xdsScope tally.Scope
-
-	rtdsConfig *RTDSConfig
+	poller *Poller
 
 	ecdsConfig *ECDSConfig
 
+	scope  tally.Scope
 	logger *zap.SugaredLogger
 }
 
@@ -71,11 +63,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, err
 	}
 
-	if err := config.CacheRefreshInterval.CheckValid(); err != nil {
-		return nil, err
-	}
-	cacheRefreshInterval := config.CacheRefreshInterval.AsDuration()
-
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
 		return nil, errors.New("could not find experiment store service")
@@ -86,36 +73,46 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, errors.New("service was not the correct type")
 	}
 
-	var heartbeatInterval *time.Duration
-	var resourceTTL *time.Duration
-	if config.ResourceTtl != nil {
-		if err := config.ResourceTtl.CheckValid(); err != nil {
-			return nil, err
-		}
-		d := config.ResourceTtl.AsDuration()
-		resourceTTL = &d
+	rtdsGeneratorsByTypeUrl := map[string][]RTDSResourceGenerator{}
+	for configType, perConfigRtdsGeneratorTypeConfiguration := range config.PerConfigRtdsGeneratorTypeConfiguration {
+		perConfigRTDSGenerators := []RTDSResourceGenerator{}
 
-		if config.HeartbeatInterval != nil {
-			if err := config.HeartbeatInterval.CheckValid(); err != nil {
-				return nil, err
+		for _, c := range perConfigRtdsGeneratorTypeConfiguration.ResourceGenerators {
+			factory, ok := RTDSGeneratorFactories[c.TypeUrl]
+			if !ok {
+				return nil, fmt.Errorf("xds configured with unknown RTDS resource generator '%s'", c.TypeUrl)
 			}
-			d := config.HeartbeatInterval.AsDuration()
-			heartbeatInterval = &d
+
+			generator, err := factory.Create(c)
+			if err != nil {
+				return nil, fmt.Errorf("failed to create RTDS resouce generator '%s': %s", c.TypeUrl, err)
+			}
+
+			perConfigRTDSGenerators = append(perConfigRTDSGenerators, generator)
 		}
+
+		rtdsGeneratorsByTypeUrl[configType] = perConfigRTDSGenerators
 	}
 
-	ctx := context.Background()
-	var cacheV3 gcpCacheV3.SnapshotCache
-	if heartbeatInterval != nil {
-		cacheV3 = gcpCacheV3.NewSnapshotCacheWithHeartbeating(ctx, false, ClusterHashV3{}, logger.Sugar(), *heartbeatInterval)
-	} else {
-		cacheV3 = gcpCacheV3.NewSnapshotCache(false, ClusterHashV3{}, logger.Sugar())
-	}
+	ecdsGeneratorsByTypeUrl := map[string][]ECDSResourceGenerator{}
+	for configType, perConfigEcdsGeneratorTypeConfiguration := range config.PerConfigEcdsGeneratorTypeConfiguration {
+		perConfigECDSGenerators := []ECDSResourceGenerator{}
 
-	rtdsConfig := RTDSConfig{
-		layerName:     config.GetRtdsLayerName(),
-		ingressPrefix: config.GetIngressFaultRuntimePrefix(),
-		egressPrefix:  config.GetEgressFaultRuntimePrefix(),
+		for _, c := range perConfigEcdsGeneratorTypeConfiguration.ResourceGenerators {
+			factory, ok := ECDSGeneratorFactories[c.TypeUrl]
+			if !ok {
+				return nil, fmt.Errorf("xds configured with unknown ECDS resource generator '%s'", c.TypeUrl)
+			}
+
+			generator, err := factory.Create(c)
+			if err != nil {
+				return nil, fmt.Errorf("failed to create ECDS resouce generator '%s': %s", c.TypeUrl, err)
+			}
+
+			perConfigECDSGenerators = append(perConfigECDSGenerators, generator)
+		}
+
+		ecdsGeneratorsByTypeUrl[configType] = perConfigECDSGenerators
 	}
 
 	enabledECDSClusters := make(map[string]struct{})
@@ -123,25 +120,48 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		enabledECDSClusters[cluster] = struct{}{}
 	}
 
-	safeECDSResourceMap := SafeEcdsResourceMap{
-		requestedResourcesMap: make(map[string]map[string]struct{}),
+	ecdsConfig := &ECDSConfig{
+		enabledClusters: enabledECDSClusters,
+		ecdsResourceMap: &SafeEcdsResourceMap{
+			requestedResourcesMap: make(map[string]map[string]struct{}),
+		},
 	}
 
-	ecdsConfig := ECDSConfig{
-		enabledClusters: enabledECDSClusters,
-		ecdsResourceMap: &safeECDSResourceMap,
+	ctx := context.Background()
+	cacheV3 := gcpCacheV3.NewSnapshotCacheWithHeartbeating(ctx, false, ClusterHashV3{}, logger.Sugar(), config.HeartbeatInterval.AsDuration())
+
+	poller := Poller{
+		ctx:           ctx,
+		storer:        storer,
+		snapshotCache: cacheV3,
+
+		resourceTtl:          config.ResourceTtl.AsDuration(),
+		cacheRefreshInterval: config.CacheRefreshInterval.AsDuration(),
+
+		rtdsConfig: &RTDSConfig{
+			layerName: config.RtdsLayerName,
+		},
+		ecdsConfig: ecdsConfig,
+
+		rtdsGeneratorsByTypeUrl: rtdsGeneratorsByTypeUrl,
+		ecdsGeneratorsByTypeUrl: ecdsGeneratorsByTypeUrl,
+
+		rtdsResourceGenerationFailureCount:        scope.Counter("rtds_resource_generation_failure"),
+		ecdsResourceGenerationFailureCount:        scope.Counter("ecds_resource_generation_failure"),
+		ecdsDefaultResourceGenerationFailureCount: scope.Counter("ecds_default_resource_generation_failure"),
+		setCacheSnapshotSuccessCount:              scope.Counter("set_snapshot_success"),
+		setCacheSnapshotFailureCount:              scope.Counter("set_snapshot_failure"),
+		activeFaultsGauge:                         scope.Gauge("active_faults"),
+
+		logger: logger.Sugar(),
 	}
 
 	return &Server{
-		ctx:                  ctx,
-		storer:               storer,
-		snapshotCacheV3:      cacheV3,
-		cacheRefreshInterval: cacheRefreshInterval,
-		rtdsConfig:           &rtdsConfig,
-		ecdsConfig:           &ecdsConfig,
-		resourceTTL:          resourceTTL,
-		xdsScope:             scope,
-		logger:               logger.Sugar(),
+		ctx:        ctx,
+		scope:      scope,
+		poller:     &poller,
+		ecdsConfig: ecdsConfig,
+		logger:     logger.Sugar(),
 	}, nil
 }
 
@@ -152,7 +172,7 @@ type serverStats struct {
 }
 
 func (s *Server) newScopedStats(subScope string) serverStats {
-	scope := s.xdsScope.SubScope(subScope)
+	scope := s.scope.SubScope(subScope)
 	return serverStats{
 		totalStreams:         scope.Gauge("totalStreams"),
 		totalResourcesServed: scope.Counter("totalResourcesServed"),
@@ -161,13 +181,13 @@ func (s *Server) newScopedStats(subScope string) serverStats {
 }
 
 func (s *Server) Register(r module.Registrar) error {
-	PeriodicallyRefreshCache(s)
+	s.poller.Start()
 	// RTDS V3 Server
-	rtdsServer := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &rtdsCallbacks{callbacksBase{s.newScopedStats("rtds"),
+	rtdsServer := gcpServerV3.NewServer(s.ctx, s.poller.snapshotCache, &rtdsCallbacks{callbacksBase{s.newScopedStats("rtds"),
 		s.logger, 0}})
 	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), rtdsServer)
 
-	ecdsServer := NewECDSServer(s.ctx, s.snapshotCacheV3, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.ecdsResourceMap})
+	ecdsServer := NewECDSServer(s.ctx, s.poller.snapshotCache, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.ecdsResourceMap})
 	gcpExtencionServiceV3.RegisterExtensionConfigDiscoveryServiceServer(r.GRPCServer(), ecdsServer)
 	return nil
 }

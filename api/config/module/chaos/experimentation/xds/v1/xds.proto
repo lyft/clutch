@@ -6,32 +6,43 @@ option go_package = "github.com/lyft/clutch/backend/api/config/module/chaos/expe
 
 import "validate/validate.proto";
 import "google/protobuf/duration.proto";
+import "google/protobuf/any.proto";
 
 message Config {
+  message PerConfigRTDSResourceGeneratorTypeConfig {
+    // List of RTDS resource generators to evaluate for each config type.
+    repeated google.protobuf.Any resource_generators = 1 [ (validate.rules).repeated = {min_items : 1} ];
+  }
+
+  message PerConfigECDSResourceGeneratorTypeConfig {
+    // List of ECDS resource generators to evaluate for each config type.
+    repeated google.protobuf.Any resource_generators = 1 [ (validate.rules).repeated = {min_items : 1} ];
+  }
+
+  // Mapping from typeUrl of registered experiment type to its RTDS resource generator configuration.
+  map<string, PerConfigRTDSResourceGeneratorTypeConfig> per_config_rtds_generator_type_configuration = 1;
+
+  // Mapping from typeUrl of registered experiment type to its ECDS resource generator configuration.
+  map<string, PerConfigECDSResourceGeneratorTypeConfig> per_config_ecds_generator_type_configuration = 2;
+
+  // Interval in seconds between refreshes of xDS data from the backing store.
+  google.protobuf.Duration cache_refresh_interval = 3 [ (validate.rules).duration.gt.seconds = 0 ];
+
   // Name of the RTDS layer in Envoy config i.e. envoy.yaml
-  // https://www.envoyproxy.io/docs/envoy/latest/configuration/operations/runtime#config-runtime-rtds
-  string rtds_layer_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
-
-  // Interval in seconds between refreshes of xDS data from the backing store
-  google.protobuf.Duration cache_refresh_interval = 2;
-
-  // A prefix to use for runtime variables if a fault type is equal to ingress (see FaultInjectionCluster)
-  string ingress_fault_runtime_prefix = 3;
-
-  // A prefix to use for runtime variables if a fault type is equal to egress (see FaultInjectionCluster)
-  string egress_fault_runtime_prefix = 4;
+  // https://www.envoyproxy.io/docs/envoy/latest/configuration/operations/runtime#config-runtime-rtds.
+  string rtds_layer_name = 4 [ (validate.rules).string.min_bytes = 1 ];
 
   // The resource TTL to set for xDS resources.
-  google.protobuf.Duration resource_ttl = 5;
+  google.protobuf.Duration resource_ttl = 5 [ (validate.rules).duration.gt.seconds = 0 ];
 
   // The interval at which to send heartbeat responses for TTL'd resources.
-  google.protobuf.Duration heartbeat_interval = 6;
+  google.protobuf.Duration heartbeat_interval = 6 [ (validate.rules).duration.gt.seconds = 0 ];
 
   message ECDSAllowList {
-    repeated string enabled_clusters = 1;
+    repeated string enabled_clusters = 1 [ (validate.rules).repeated = {min_items : 1} ];
   }
 
   // Specifies which clusters ECDS is enabled for, causing faults to be communicated over ECDS instead of RTDS where
-  // supported. Currently, allowing all cluster is not supported
+  // supported. Currently, allowing all cluster is not supported.
   ECDSAllowList ecds_allow_list = 7;
 }

@@ -14,22 +14,85 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	xdsv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds/internal/xdstest"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-func TestServerStats(t *testing.T) {
-	xdsConfig := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
+func TestInitializationWithRTDSGeneratorConfig(t *testing.T) {
+	registeredConfig := &wrapperspb.StringValue{}
+	anyRegisteredConfig, err := anypb.New(registeredConfig)
+	assert.NoError(t, err)
+
+	mockFactory := MockRTDSGeneratorFactory{}
+	RTDSGeneratorFactories[TypeUrl(registeredConfig)] = &mockFactory
+
+	xdsConfig := &xdsv1.Config{
+		PerConfigRtdsGeneratorTypeConfiguration: map[string]*xdsv1.Config_PerConfigRTDSResourceGeneratorTypeConfig{
+			"foo": {ResourceGenerators: []*anypb.Any{anyRegisteredConfig}},
+		},
 	}
 
-	testServer := xdstest.NewTestModuleServer(New, false, xdsConfig)
+	s, err := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, mockFactory.createdGeneratorCount)
+	s.Stop()
+
+	unregisteredConfig := &wrapperspb.Int64Value{}
+	anyUnregisteredConfig, err := anypb.New(unregisteredConfig)
+	assert.NoError(t, err)
+	xdsConfig = &xdsv1.Config{
+		PerConfigRtdsGeneratorTypeConfiguration: map[string]*xdsv1.Config_PerConfigRTDSResourceGeneratorTypeConfig{
+			"foo": {ResourceGenerators: []*anypb.Any{anyUnregisteredConfig}},
+		},
+	}
+
+	_, err = xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.EqualError(t, err, "xds configured with unknown RTDS resource generator 'type.googleapis.com/google.protobuf.Int64Value'")
+}
+
+func TestInitializationWithECDSGeneratorConfig(t *testing.T) {
+	registeredConfig := &wrapperspb.StringValue{}
+	anyRegisteredConfig, err := anypb.New(registeredConfig)
+	assert.NoError(t, err)
+
+	mockFactory := MockECDSGeneratorFactory{}
+	ECDSGeneratorFactories[TypeUrl(registeredConfig)] = &mockFactory
+
+	xdsConfig := &xdsv1.Config{
+		PerConfigEcdsGeneratorTypeConfiguration: map[string]*xdsv1.Config_PerConfigECDSResourceGeneratorTypeConfig{
+			"foo": {ResourceGenerators: []*anypb.Any{anyRegisteredConfig}},
+		},
+	}
+
+	s, err := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, mockFactory.createdGeneratorCount)
+	s.Stop()
+
+	unregisteredConfig := &wrapperspb.Int64Value{}
+	anyUnregisteredConfig, err := anypb.New(unregisteredConfig)
+	assert.NoError(t, err)
+	xdsConfig = &xdsv1.Config{
+		PerConfigEcdsGeneratorTypeConfiguration: map[string]*xdsv1.Config_PerConfigECDSResourceGeneratorTypeConfig{
+			"foo": {ResourceGenerators: []*anypb.Any{anyUnregisteredConfig}},
+		},
+	}
+
+	_, err = xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.EqualError(t, err, "xds configured with unknown ECDS resource generator 'type.googleapis.com/google.protobuf.Int64Value'")
+}
+
+func TestServerStats(t *testing.T) {
+	xdsConfig := &xdsv1.Config{
+		RtdsLayerName:     "rtds",
+		HeartbeatInterval: durationpb.New(time.Second),
+	}
+
+	testServer, err := xdstest.NewTestModuleServer(New, false, xdsConfig)
+	assert.NoError(t, err)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -59,48 +122,31 @@ func TestServerStats(t *testing.T) {
 
 // Verifies that TTL and heartbeating is done when configured to do so.
 func TestResourceTTL(t *testing.T) {
-	xdsConfig := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
+	registeredConfig := &wrapperspb.StringValue{}
+	anyRegisteredConfig, err := anypb.New(registeredConfig)
+	assert.NoError(t, err)
+
+	res, err := NewRTDSResource("cluster", []*RuntimeKeyValue{{Key: "foo", Value: 1}})
+	assert.NoError(t, err)
+	mockFactory := MockRTDSGeneratorFactory{resource: res}
+	RTDSGeneratorFactories[TypeUrl(registeredConfig)] = &mockFactory
+
+	xdsConfig := &xdsv1.Config{
+		RtdsLayerName: "rtds",
+		PerConfigRtdsGeneratorTypeConfiguration: map[string]*xdsv1.Config_PerConfigRTDSResourceGeneratorTypeConfig{
+			TypeUrl(&durationpb.Duration{}): {ResourceGenerators: []*anypb.Any{anyRegisteredConfig}},
+		},
 	}
 
-	testServer := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	testServer, err := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.NoError(t, err)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	now := time.Now()
-	config := serverexperimentation.HTTPFaultConfig{
-		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
-			AbortFault: &serverexperimentation.AbortFault{
-				Percentage: &serverexperimentation.FaultPercentage{
-					Percentage: 10,
-				},
-				AbortStatus: &serverexperimentation.FaultAbortStatus{
-					HttpStatusCode: 503,
-				},
-			},
-		},
-		FaultTargeting: &serverexperimentation.FaultTargeting{
-			Enforcer: &serverexperimentation.FaultTargeting_UpstreamEnforcing{
-				UpstreamEnforcing: &serverexperimentation.UpstreamEnforcing{
-					UpstreamType: &serverexperimentation.UpstreamEnforcing_UpstreamCluster{
-						UpstreamCluster: &serverexperimentation.SingleCluster{
-							Name: "cluster",
-						},
-					},
-					DownstreamType: &serverexperimentation.UpstreamEnforcing_DownstreamCluster{
-						DownstreamCluster: &serverexperimentation.SingleCluster{
-							Name: "cluster",
-						},
-					},
-				},
-			},
-		},
-	}
+	config := durationpb.Duration{}
 	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 
@@ -256,4 +302,40 @@ func (v *v3StreamWrapper) sendV3RequestAndAwaitResponse(version string, nonce st
 	}
 
 	return response, nil
+}
+
+type MockRTDSGeneratorFactory struct {
+	createdGeneratorCount int
+	resource              *RTDSResource
+}
+
+func (f *MockRTDSGeneratorFactory) Create(cfg *anypb.Any) (RTDSResourceGenerator, error) {
+	f.createdGeneratorCount += 1
+	return MockRTDSGenerator{resource: f.resource}, nil
+}
+
+type MockRTDSGenerator struct {
+	resource *RTDSResource
+}
+
+func (g MockRTDSGenerator) GenerateResource(experiment *experimentstore.Experiment) (*RTDSResource, error) {
+	return g.resource, nil
+}
+
+type MockECDSGeneratorFactory struct {
+	createdGeneratorCount int
+}
+
+func (f *MockECDSGeneratorFactory) Create(cfg *anypb.Any) (ECDSResourceGenerator, error) {
+	f.createdGeneratorCount += 1
+	return &MockECDSGenerator{}, nil
+}
+
+type MockECDSGenerator struct{}
+
+func (g *MockECDSGenerator) GenerateResource(experiment *experimentstore.Experiment) (*ECDSResource, error) {
+	return nil, nil
+}
+func (g *MockECDSGenerator) GenerateDefaultResource(cluster string, resourceName string) (*ECDSResource, error) {
+	return nil, nil
 }
