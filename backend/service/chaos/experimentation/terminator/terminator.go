@@ -35,7 +35,7 @@ type CriterionFactory interface {
 type TerminationCriterion interface {
 	// ShouldTerminate determines whether the provided experiment should be terminated.
 	// To signal that termination should occur, return a non-empty string with a nil error.
-	ShouldTerminate(experiment *experimentstore.Experiment, experimentConfig proto.Message) (string, error)
+	ShouldTerminate(experiment *experimentstore.Experiment) (string, error)
 }
 
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
@@ -97,7 +97,6 @@ func NewMonitor(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (*Monitor
 		criterionEvaluationSuccessCount: scope.Counter("criterion_success"),
 		criterionEvaluationFailureCount: scope.Counter("criterion_failure"),
 		terminationCount:                scope.Counter("terminations"),
-		marshallingErrorCount:           scope.Counter("unpack_error"),
 	}, nil
 }
 
@@ -114,7 +113,6 @@ type Monitor struct {
 	criterionEvaluationSuccessCount tally.Counter
 	criterionEvaluationFailureCount tally.Counter
 	terminationCount                tally.Counter
-	marshallingErrorCount           tally.Counter
 }
 
 func (m *Monitor) Run(ctx context.Context) {
@@ -157,7 +155,7 @@ func (m *Monitor) Run(ctx context.Context) {
 	}
 }
 
-// Iterates over all the provided experiments, spawning a goroutine to montior each experiment that doesn't already have
+// Iterates over all the provided experiments, spawning a goroutine to monitor each experiment that doesn't already have
 // a monitoring routine. Returns a set containing all the active experiment ids for further processing.
 func (m *Monitor) monitorNewExperiments(es []*experimentstore.Experiment, trackedExperiments map[string]context.CancelFunc, criteria []TerminationCriterion) map[string]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
@@ -182,16 +180,6 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentstor
 	ticker := time.NewTicker(m.perExperimentCheckInterval)
 	terminated := false
 
-	// TODO(snowp): I suspect that we might run into issues here if we try to unpack an "old" proto
-	// which is no longer linked into the program due to how the type registry works, but this should
-	// be rare enough that logging an error is probably fine.
-	unpackedConfig, err := anypb.UnmarshalNew(e.Config.Config, proto.UnmarshalOptions{})
-	if err != nil {
-		m.log.Errorw("failed to unmarshal experiment", "runId", e.Run.Id)
-		m.marshallingErrorCount.Inc(1)
-		return
-	}
-
 	for {
 		select {
 		case <-ticker.C:
@@ -203,7 +191,7 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentstor
 				continue
 			}
 			for _, c := range criteria {
-				terminationReason, err := c.ShouldTerminate(e, unpackedConfig)
+				terminationReason, err := c.ShouldTerminate(e)
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
 					m.criterionEvaluationFailureCount.Inc(1)

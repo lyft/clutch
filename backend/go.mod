@@ -30,7 +30,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
 	github.com/iancoleman/strcase v0.1.3
 	github.com/jhump/protoreflect v1.8.1
-	github.com/lib/pq v1.10.0
+	github.com/lib/pq v1.10.1
 	github.com/lyft/protoc-gen-star v0.5.2 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.1
 	github.com/shurcooL/githubv4 v0.0.0-20201206200315-234843c633fa
@@ -53,7 +53,7 @@ require (
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/square/go-jose.v2 v2.5.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
-	k8s.io/api v0.20.5
-	k8s.io/apimachinery v0.20.5
-	k8s.io/client-go v0.20.5
+	k8s.io/api v0.21.0
+	k8s.io/apimachinery v0.21.0
+	k8s.io/client-go v0.21.0
 )
