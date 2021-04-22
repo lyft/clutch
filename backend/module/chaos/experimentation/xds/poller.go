@@ -28,8 +28,8 @@ type Poller struct {
 	rtdsConfig *RTDSConfig
 	ecdsConfig *ECDSConfig
 
-	rtdsGeneratorsByTypeUrl map[string][]RTDSResourceGenerator
-	ecdsGeneratorsByTypeUrl map[string][]ECDSResourceGenerator
+	rtdsGeneratorsByTypeUrl map[string]RTDSResourceGenerator
+	ecdsGeneratorsByTypeUrl map[string]ECDSResourceGenerator
 
 	rtdsResourceGenerationFailureCount        tally.Counter
 	ecdsResourceGenerationFailureCount        tally.Counter
@@ -71,48 +71,44 @@ func (p *Poller) refreshCache() {
 	ecdsResourcesByCluster := make(map[string][]*ECDSResource)
 
 	for _, experiment := range allRunningExperiments {
-		if gs, ok := p.rtdsGeneratorsByTypeUrl[TypeUrl(experiment.Config.Message)]; ok {
-			for _, g := range gs {
-				r, err := g.GenerateResource(experiment)
-				if err != nil {
-					p.rtdsResourceGenerationFailureCount.Inc(1)
-					p.logger.Errorw("Error when generating RTDS resource for experiment", "error", err, "experimentRunID", experiment.Run.Id)
-					continue
-				}
-				if r.Empty() {
-					// Nothing to do if resource is empty
-					continue
-				}
-				if _, exists := p.ecdsConfig.enabledClusters[r.Cluster]; exists {
-					// Allow ECDS to control resource for a given cluster instead
-					continue
-				}
-
-				rtdsResourcesByCluster[r.Cluster] = append(rtdsResourcesByCluster[r.Cluster], r)
-				clustersWithResources[r.Cluster] = true
+		if g, ok := p.rtdsGeneratorsByTypeUrl[TypeUrl(experiment.Config.Message)]; ok {
+			r, err := g.GenerateResource(experiment)
+			if err != nil {
+				p.rtdsResourceGenerationFailureCount.Inc(1)
+				p.logger.Errorw("Error when generating RTDS resource for experiment", "error", err, "experimentRunID", experiment.Run.Id)
+				continue
 			}
+			if r.Empty() {
+				// Nothing to do if resource is empty
+				continue
+			}
+			if _, exists := p.ecdsConfig.enabledClusters[r.Cluster]; exists {
+				// Allow ECDS to control resource for a given cluster instead
+				continue
+			}
+
+			rtdsResourcesByCluster[r.Cluster] = append(rtdsResourcesByCluster[r.Cluster], r)
+			clustersWithResources[r.Cluster] = true
 		}
 
-		if gs, ok := p.ecdsGeneratorsByTypeUrl[TypeUrl(experiment.Config.Message)]; ok {
-			for _, g := range gs {
-				r, err := g.GenerateResource(experiment)
-				if err != nil {
-					p.ecdsResourceGenerationFailureCount.Inc(1)
-					p.logger.Errorw("Error when generating ECDS resource for experiment", "error", err, "experimentRunID", experiment.Run.Id)
-					continue
-				}
-				if r.Empty() {
-					// Nothing to do if resource is empty
-					continue
-				}
-				if _, exists := p.ecdsConfig.enabledClusters[r.Cluster]; !exists {
-					// RTDS controls resource for a given cluster
-					continue
-				}
-
-				ecdsResourcesByCluster[r.Cluster] = append(ecdsResourcesByCluster[r.Cluster], r)
-				clustersWithResources[r.Cluster] = true
+		if g, ok := p.ecdsGeneratorsByTypeUrl[TypeUrl(experiment.Config.Message)]; ok {
+			r, err := g.GenerateResource(experiment)
+			if err != nil {
+				p.ecdsResourceGenerationFailureCount.Inc(1)
+				p.logger.Errorw("Error when generating ECDS resource for experiment", "error", err, "experimentRunID", experiment.Run.Id)
+				continue
 			}
+			if r.Empty() {
+				// Nothing to do if resource is empty
+				continue
+			}
+			if _, exists := p.ecdsConfig.enabledClusters[r.Cluster]; !exists {
+				// RTDS controls resource for a given cluster
+				continue
+			}
+
+			ecdsResourcesByCluster[r.Cluster] = append(ecdsResourcesByCluster[r.Cluster], r)
+			clustersWithResources[r.Cluster] = true
 		}
 	}
 
@@ -132,21 +128,19 @@ func (p *Poller) refreshCache() {
 
 				resourcesWithTTL := make([]gcpTypes.ResourceWithTtl, 0)
 				// iterate over all of the ECDS resource generators and all of the resource names
-				for _, generatorsPerTypeUrl := range p.ecdsGeneratorsByTypeUrl {
-					for _, g := range generatorsPerTypeUrl {
-						for _, n := range resourceNames {
-							r, err := g.GenerateDefaultResource(cluster, n)
-							if err != nil {
-								p.ecdsDefaultResourceGenerationFailureCount.Inc(1)
-								p.logger.Errorw("Cannot generate empty ECDS resource for cluster", "cluster", cluster, "resource", n)
-							}
-							if r.Empty() {
-								continue
-							}
-
-							resourceWithTTL := p.createResourceWithTTLForECDSResource(r, nil)
-							resourcesWithTTL = append(resourcesWithTTL, resourceWithTTL...)
+				for _, g := range p.ecdsGeneratorsByTypeUrl {
+					for _, n := range resourceNames {
+						r, err := g.GenerateDefaultResource(cluster, n)
+						if err != nil {
+							p.ecdsDefaultResourceGenerationFailureCount.Inc(1)
+							p.logger.Errorw("Cannot generate empty ECDS resource for cluster", "cluster", cluster, "resource", n)
 						}
+						if r.Empty() {
+							continue
+						}
+
+						resourceWithTTL := p.createResourceWithTTLForECDSResource(r, nil)
+						resourcesWithTTL = append(resourcesWithTTL, resourceWithTTL...)
 					}
 				}
 
@@ -198,10 +192,10 @@ func (p *Poller) refreshCache() {
 	p.activeFaultsGauge.Update(float64(activeFaults))
 }
 
-// Only one experiment
-// can end up controlling a given set of runtime key values but it's
-// still possible for multiple experiments to control runtime values for
-// keys  as long as there is no overlap between these keys.
+// Only one experiment can end up controlling a runtime key-value pair
+// for a given cluster but it's  still possible for multiple different experiments to
+// control runtime values for one cluster as long as each of them controls different
+// key-value pairs.
 func (p *Poller) createRuntime(runtimeKeyValues [][]*RuntimeKeyValue, ttl *time.Duration) ([]gcpTypes.ResourceWithTtl, int) {
 	isUsed := func(usedKeys map[string]bool, keyValues []*RuntimeKeyValue) bool {
 		for _, kv := range keyValues {
@@ -223,8 +217,8 @@ func (p *Poller) createRuntime(runtimeKeyValues [][]*RuntimeKeyValue, ttl *time.
 	usedKeys := make(map[string]bool)
 	for _, kvs := range runtimeKeyValues {
 		if isUsed(usedKeys, kvs) {
-			// Skip if there is an overlap between already processed keys and currently keys
-			// that are being currently evaluated.
+			// Skip if there is an overlap between already processed keys and
+			// keys that are being currently evaluated.
 			continue
 		}
 

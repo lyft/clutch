@@ -37,18 +37,19 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 	}
 
 	configString := &wrapperspb.StringValue{}
-	anyConfigString, err := anypb.New(configString)
-	assert.NoError(t, err)
-
 	configInt := &wrapperspb.Int64Value{}
-	anyConfigInt, err := anypb.New(configInt)
-	assert.NoError(t, err)
+	configDouble := &wrapperspb.DoubleValue{}
+	configBool := &wrapperspb.BoolValue{}
+	configBytes := &wrapperspb.BytesValue{}
 
 	input := []struct {
-		data *anypb.Any
+		data proto.Message
 	}{
-		{data: anyConfigString},
-		{data: anyConfigInt},
+		{data: configString},
+		{data: configInt},
+		{data: configDouble},
+		{data: configBool},
+		{data: configBytes},
 	}
 
 	now := time.Now()
@@ -56,10 +57,12 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 
 	s := experimentstoremock.SimpleStorer{}
 	for _, i := range input {
+		any, err := anypb.New(i.data)
+		assert.NoError(t, err)
 		es, err := experimentstore.NewExperimentSpecification(
 			&experimentation.CreateExperimentData{
 				EndTime: futureTimestamp,
-				Config:  i.data,
+				Config:  any,
 			}, now)
 		assert.NoError(t, err)
 		_, err = s.CreateExperiment(context.Background(), es)
@@ -70,45 +73,42 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 	l, err := zap.NewDevelopment()
 	assert.NoError(t, err)
 
-	rtdsGeneratorsByTypeUrl := map[string][]RTDSResourceGenerator{
-		TypeUrl(configString): []RTDSResourceGenerator{
-			// The error should be ignored and the process of generating resources
-			// should continue.
-			&MockRTDSResourceGenerator{
-				err: errors.New("foo"),
-			},
-			// Even though both of these resources target the same cluster,
-			// they can coexist since they specify different runtime keys.
-			&MockRTDSResourceGenerator{
-				resource: &RTDSResource{
-					Cluster:          "foo",
-					RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo1", Value: 1}},
-				},
-			},
-			&MockRTDSResourceGenerator{
-				resource: &RTDSResource{
-					Cluster:          "foo",
-					RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo2", Value: 2}},
-				},
+	rtdsGeneratorsByTypeUrl := map[string]RTDSResourceGenerator{
+		// The error should be ignored and the process of generating resources
+		// should continue.
+		TypeUrl(configString): &MockRTDSResourceGenerator{
+			err: errors.New("foo"),
+		},
+		// This resource should work just fine.
+		TypeUrl(configDouble): &MockRTDSResourceGenerator{
+			resource: &RTDSResource{
+				Cluster:          "foo",
+				RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo1", Value: 1}},
 			},
 		},
-		TypeUrl(configInt): []RTDSResourceGenerator{
-			// This resource cannot coexist with similar one from the above
-			// since it targets the same cluster and uses the same runtime key.
-			&MockRTDSResourceGenerator{
-				resource: &RTDSResource{
-					Cluster:          "foo",
-					RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo1", Value: 1}},
-				},
+		// Even though both of these resources target the same cluster,
+		// they can coexist since they specify different runtime keys.
+		TypeUrl(configBool): &MockRTDSResourceGenerator{
+			resource: &RTDSResource{
+				Cluster:          "foo",
+				RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo2", Value: 2}},
 			},
-			// This resource can coexist with other resources that use `foo1` key
-			// since it targets a cluster that's different compared to what other
-			// resources use.
-			&MockRTDSResourceGenerator{
-				resource: &RTDSResource{
-					Cluster:          "bar",
-					RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo1", Value: 1}},
-				},
+		},
+		// This resource cannot coexist with similar one from the above
+		// since it targets the same cluster and uses the same runtime key.
+		TypeUrl(configInt): &MockRTDSResourceGenerator{
+			resource: &RTDSResource{
+				Cluster:          "foo",
+				RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo1", Value: 1}},
+			},
+		},
+		// This resource can coexist with other resources that use `foo1` key
+		// since it targets a cluster that's different compared to what other
+		// resources use.
+		TypeUrl(configBytes): &MockRTDSResourceGenerator{
+			resource: &RTDSResource{
+				Cluster:          "bar",
+				RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo1", Value: 1}},
 			},
 		},
 	}
@@ -123,7 +123,7 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 		rtdsConfig:                         &rtdsConfig,
 		ecdsConfig:                         &ecdsConfig,
 		rtdsGeneratorsByTypeUrl:            rtdsGeneratorsByTypeUrl,
-		ecdsGeneratorsByTypeUrl:            make(map[string][]ECDSResourceGenerator),
+		ecdsGeneratorsByTypeUrl:            make(map[string]ECDSResourceGenerator),
 		rtdsResourceGenerationFailureCount: scope.Counter("generation_failures"),
 		ecdsResourceGenerationFailureCount: scope.Counter("c2"),
 		ecdsDefaultResourceGenerationFailureCount: scope.Counter("c1"),
@@ -173,16 +173,19 @@ func TestECDSResourcesRefresh(t *testing.T) {
 	configString := &wrapperspb.StringValue{}
 	anyConfigString, err := anypb.New(configString)
 	assert.NoError(t, err)
-
 	configInt := &wrapperspb.Int64Value{}
-	anyConfigInt, err := anypb.New(configInt)
-	assert.NoError(t, err)
+	configDouble := &wrapperspb.DoubleValue{}
+	configBool := &wrapperspb.BoolValue{}
+	configBytes := &wrapperspb.BytesValue{}
 
 	input := []struct {
-		data *anypb.Any
+		data proto.Message
 	}{
-		{data: anyConfigString},
-		{data: anyConfigInt},
+		{data: configString},
+		{data: configInt},
+		{data: configDouble},
+		{data: configBool},
+		{data: configBytes},
 	}
 
 	now := time.Now()
@@ -190,10 +193,12 @@ func TestECDSResourcesRefresh(t *testing.T) {
 
 	s := experimentstoremock.SimpleStorer{}
 	for _, i := range input {
+		any, err := anypb.New(i.data)
+		assert.NoError(t, err)
 		es, err := experimentstore.NewExperimentSpecification(
 			&experimentation.CreateExperimentData{
 				EndTime: futureTimestamp,
-				Config:  i.data,
+				Config:  any,
 			}, now)
 		assert.NoError(t, err)
 		_, err = s.CreateExperiment(context.Background(), es)
@@ -207,57 +212,53 @@ func TestECDSResourcesRefresh(t *testing.T) {
 	serializedFilter, err := proto.Marshal(anyConfigString)
 	assert.NoError(t, err)
 
-	ecdsGeneratorsByTypeUrl := map[string][]ECDSResourceGenerator{
-		TypeUrl(configString): []ECDSResourceGenerator{
-			// The error should be ignored and the process of generating resources
-			// should continue.
-			&MockECDSResourceGenerator{
-				err: errors.New("foo"),
-			},
-			// Even though both of these resources target the same cluster,
-			// they can coexist since they specify different runtime keys.
-			&MockECDSResourceGenerator{
-				resource: &ECDSResource{
-					Cluster: "foo",
-					ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
-						Name: "filter1",
-					},
+	ecdsGeneratorsByTypeUrl := map[string]ECDSResourceGenerator{
+		// The error should be ignored and the process of generating resources
+		// should continue.
+		TypeUrl(configString): &MockECDSResourceGenerator{
+			err: errors.New("foo"),
+		},
+		// Even though both of these resources target the same cluster,
+		// they can coexist since they specify different runtime keys.
+		TypeUrl(configDouble): &MockECDSResourceGenerator{
+			resource: &ECDSResource{
+				Cluster: "foo",
+				ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
+					Name: "filter1",
 				},
 			},
-			// This one is in conflict with the previous one since both of them
-			// target the same cluster. Only one of them will be applied.
-			&MockECDSResourceGenerator{
-				resource: &ECDSResource{
-					Cluster: "foo",
-					ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
-						Name: "filter1",
+		},
+		// This one is in conflict with the previous one since both of them
+		// target the same cluster. Only one of them will be applied.
+		TypeUrl(configBool): &MockECDSResourceGenerator{
+			resource: &ECDSResource{
+				Cluster: "foo",
+				ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
+					Name: "filter1",
+				},
+			},
+		},
+		// This resource can coexist with similar one from the above
+		// since it targets a unique cluster.
+		TypeUrl(configInt): &MockECDSResourceGenerator{
+			resource: &ECDSResource{
+				Cluster: "bar",
+				ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
+					Name: "filter2",
+					TypedConfig: &any.Any{
+						TypeUrl: TypeUrl(configString),
+						Value:   serializedFilter,
 					},
 				},
 			},
 		},
-		TypeUrl(configInt): []ECDSResourceGenerator{
-			// This resource can coexist with similar one from the above
-			// since it targets a unique cluster.
-			&MockECDSResourceGenerator{
-				resource: &ECDSResource{
-					Cluster: "bar",
-					ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
-						Name: "filter2",
-						TypedConfig: &any.Any{
-							TypeUrl: TypeUrl(configString),
-							Value:   serializedFilter,
-						},
-					},
-				},
-			},
-			// This resource is ignored since ECDSConfig passed to poller doesn't
-			// specify cluster "zar" as ECDS enabled one.
-			&MockECDSResourceGenerator{
-				resource: &ECDSResource{
-					Cluster: "zar",
-					ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
-						Name: "filter3",
-					},
+		// This resource is ignored since ECDSConfig passed to poller doesn't
+		// specify cluster "zar" as ECDS enabled one.
+		TypeUrl(configBytes): &MockECDSResourceGenerator{
+			resource: &ECDSResource{
+				Cluster: "zar",
+				ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
+					Name: "filter3",
 				},
 			},
 		},
@@ -272,7 +273,7 @@ func TestECDSResourcesRefresh(t *testing.T) {
 		cacheRefreshInterval:               time.Duration(time.Second),
 		rtdsConfig:                         &rtdsConfig,
 		ecdsConfig:                         &ecdsConfig,
-		rtdsGeneratorsByTypeUrl:            make(map[string][]RTDSResourceGenerator),
+		rtdsGeneratorsByTypeUrl:            make(map[string]RTDSResourceGenerator),
 		ecdsGeneratorsByTypeUrl:            ecdsGeneratorsByTypeUrl,
 		rtdsResourceGenerationFailureCount: scope.Counter("c1"),
 		ecdsResourceGenerationFailureCount: scope.Counter("c2"),

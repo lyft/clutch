@@ -7,7 +7,6 @@ package xds
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync/atomic"
 
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
@@ -73,48 +72,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, errors.New("service was not the correct type")
 	}
 
-	rtdsGeneratorsByTypeUrl := map[string][]RTDSResourceGenerator{}
-	for configType, perConfigRtdsGeneratorTypeConfiguration := range config.PerConfigRtdsGeneratorTypeConfiguration {
-		perConfigRTDSGenerators := []RTDSResourceGenerator{}
-
-		for _, c := range perConfigRtdsGeneratorTypeConfiguration.ResourceGenerators {
-			factory, ok := RTDSGeneratorFactories[c.TypeUrl]
-			if !ok {
-				return nil, fmt.Errorf("xds configured with unknown RTDS resource generator '%s'", c.TypeUrl)
-			}
-
-			generator, err := factory.Create(c)
-			if err != nil {
-				return nil, fmt.Errorf("failed to create RTDS resouce generator '%s': %s", c.TypeUrl, err)
-			}
-
-			perConfigRTDSGenerators = append(perConfigRTDSGenerators, generator)
-		}
-
-		rtdsGeneratorsByTypeUrl[configType] = perConfigRTDSGenerators
-	}
-
-	ecdsGeneratorsByTypeUrl := map[string][]ECDSResourceGenerator{}
-	for configType, perConfigEcdsGeneratorTypeConfiguration := range config.PerConfigEcdsGeneratorTypeConfiguration {
-		perConfigECDSGenerators := []ECDSResourceGenerator{}
-
-		for _, c := range perConfigEcdsGeneratorTypeConfiguration.ResourceGenerators {
-			factory, ok := ECDSGeneratorFactories[c.TypeUrl]
-			if !ok {
-				return nil, fmt.Errorf("xds configured with unknown ECDS resource generator '%s'", c.TypeUrl)
-			}
-
-			generator, err := factory.Create(c)
-			if err != nil {
-				return nil, fmt.Errorf("failed to create ECDS resouce generator '%s': %s", c.TypeUrl, err)
-			}
-
-			perConfigECDSGenerators = append(perConfigECDSGenerators, generator)
-		}
-
-		ecdsGeneratorsByTypeUrl[configType] = perConfigECDSGenerators
-	}
-
 	enabledECDSClusters := make(map[string]struct{})
 	for _, cluster := range config.GetEcdsAllowList().GetEnabledClusters() {
 		enabledECDSClusters[cluster] = struct{}{}
@@ -143,8 +100,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		},
 		ecdsConfig: ecdsConfig,
 
-		rtdsGeneratorsByTypeUrl: rtdsGeneratorsByTypeUrl,
-		ecdsGeneratorsByTypeUrl: ecdsGeneratorsByTypeUrl,
+		rtdsGeneratorsByTypeUrl: RTDSGeneratorsByTypeUrl,
+		ecdsGeneratorsByTypeUrl: ECDSGeneratorsByTypeUrl,
 
 		rtdsResourceGenerationFailureCount:        scope.Counter("rtds_resource_generation_failure"),
 		ecdsResourceGenerationFailureCount:        scope.Counter("ecds_resource_generation_failure"),
