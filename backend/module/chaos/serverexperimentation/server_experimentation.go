@@ -7,10 +7,15 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/proto"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	ecdsv1 "github.com/lyft/clutch/backend/api/config/module/chaos/serverexperimentation/ecds/v1"
+	rtdsv1 "github.com/lyft/clutch/backend/api/config/module/chaos/serverexperimentation/rtds/v1"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
+	serverxds "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -21,6 +26,10 @@ const (
 
 type Service struct {
 	storer experimentstore.Storer
+}
+
+func TypeUrl(message proto.Message) string {
+	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
 }
 
 // New instantiates a Service object.
@@ -35,6 +44,8 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		return nil, errors.New("service was not the correct type")
 	}
 
+	xds.RTDSGeneratorFactories[TypeUrl(&rtdsv1.ServerFaultsRTDSResourceGeneratorConfig{})] = serverxds.RTDSServerFaultsResourceGeneratorFactory{}
+	xds.ECDSGeneratorFactories[TypeUrl(&ecdsv1.ServerFaultsECDSResourceGeneratorConfig{})] = serverxds.ECDSServerFaultsResourceGeneratorFactory{}
 	return &Service{
 		storer: storer,
 	}, nil

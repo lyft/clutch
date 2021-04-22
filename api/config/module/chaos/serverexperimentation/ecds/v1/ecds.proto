@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package clutch.config.module.chaos.experimentation.xds.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1;xdsv1";
+
+message ServerFaultsECDSResourceGeneratorConfig {
+}
