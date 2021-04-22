@@ -6,14 +6,16 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"regexp"
-	"strings"
 	"testing"
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -23,6 +25,7 @@ import (
 type experimentConfigTestData struct {
 	stringifiedConfig string
 	marshaledConfig   *any.Any
+	message           proto.Message
 }
 
 func NewExperimentConfigTestData() (*experimentConfigTestData, error) {
@@ -56,6 +59,11 @@ func NewExperimentConfigTestData() (*experimentConfigTestData, error) {
 		return nil, err
 	}
 
+	message, err := anypb.UnmarshalNew(anyConfig, proto.UnmarshalOptions{})
+	if err != nil {
+		return nil, err
+	}
+
 	jsonConfig, err := protojson.Marshal(anyConfig)
 	if err != nil {
 		return nil, err
@@ -64,6 +72,7 @@ func NewExperimentConfigTestData() (*experimentConfigTestData, error) {
 	return &experimentConfigTestData{
 		stringifiedConfig: string(jsonConfig),
 		marshaledConfig:   anyConfig,
+		message:           message,
 	}, nil
 }
 
@@ -302,14 +311,14 @@ func TestGetExperiments(t *testing.T) {
 		TerminationReason: "foo",
 	}
 	config := &ExperimentConfig{
-		Id:     "2",
-		Config: ctd.marshaledConfig,
+		Id:      "2",
+		Config:  ctd.marshaledConfig,
+		Message: ctd.message,
 	}
 
 	tests := []struct {
-		queryResult          [][]driver.Value
-		expectedExperiments  []*Experiment
-		expectedErrorMessage string
+		queryResult         [][]driver.Value
+		expectedExperiments []*Experiment
 	}{
 		{
 			queryResult: [][]driver.Value{
@@ -322,7 +331,6 @@ func TestGetExperiments(t *testing.T) {
 					Run: run, Config: config,
 				},
 			},
-			expectedErrorMessage: "",
 		},
 		{
 			queryResult: [][]driver.Value{
@@ -333,8 +341,11 @@ func TestGetExperiments(t *testing.T) {
 					run.Id, run.StartTime, run.EndTime, run.CancellationTime, run.CreationTime, run.TerminationReason, config.Id, "{malformed dictionary}",
 				},
 			},
-			expectedExperiments:  nil,
-			expectedErrorMessage: "syntax error (line 1:2): invalid value malformed",
+			expectedExperiments: []*Experiment{
+				{
+					Run: run, Config: config,
+				},
+			},
 		},
 	}
 
@@ -346,7 +357,18 @@ func TestGetExperiments(t *testing.T) {
 			expectedQuery := `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, termination_reason, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
 			db, mock, err := sqlmock.New()
 			assert.NoError(t, err)
-			es := &storer{db: db}
+
+			l, err := zap.NewDevelopment()
+			assert.NoError(t, err)
+
+			testScope := tally.NewTestScope("", map[string]string{})
+
+			es := &storer{
+				db:                              db,
+				logger:                          l.Sugar(),
+				configDeserializationErrorCount: testScope.Counter("config_initialization"),
+			}
+
 			defer es.Close()
 
 			rows := sqlmock.NewRows([]string{
@@ -368,11 +390,7 @@ func TestGetExperiments(t *testing.T) {
 			expected.WillReturnRows(rows)
 			experiments, err := es.GetExperiments(context.Background(), "foo", experimentationv1.GetExperimentsRequest_STATUS_UNSPECIFIED)
 
-			if tt.expectedErrorMessage != "" {
-				assert.True(t, strings.Contains(err.Error(), tt.expectedErrorMessage))
-			} else {
-				assert.NoError(t, err)
-			}
+			assert.NoError(t, err)
 			assert.Equal(t, tt.expectedExperiments, experiments)
 			assert.NoError(t, mock.ExpectationsWereMet())
 		})
