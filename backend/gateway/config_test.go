@@ -152,3 +152,7 @@ func TestReplaceVarTemplateToken(t *testing.T) {
 	contents := replaceVarTemplateToken(config)
 	assert.Equal(t, expected, contents)
 }
+
+func TestValidateAny(t *testing.T) {
+
+}

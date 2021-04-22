@@ -206,7 +206,7 @@ func newTmpLogger() *zap.Logger {
 }
 
 type validator interface {
-	Validate() error
+	Validate(bool) error
 }
 
 // Returns maximum timeout, where 0 is considered maximum (i.e. no timeout).
@@ -241,7 +241,7 @@ func validateAny(a *anypb.Any) error {
 	}
 
 	if v, ok := m.(validator); ok {
-		return v.Validate()
+		return v.Validate(false)
 	}
 	return nil
 }
