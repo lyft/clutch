@@ -9,10 +9,9 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	ecdsv1 "github.com/lyft/clutch/backend/api/config/module/chaos/serverexperimentation/ecds/v1"
-	rtdsv1 "github.com/lyft/clutch/backend/api/config/module/chaos/serverexperimentation/rtds/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	configv1 "github.com/lyft/clutch/backend/api/config/module/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	serverxds "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
@@ -33,7 +32,12 @@ func TypeUrl(message proto.Message) string {
 }
 
 // New instantiates a Service object.
-func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+	config := &configv1.Config{}
+	if err := untypedConfig.UnmarshalTo(config); err != nil {
+		return nil, err
+	}
+
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
 		return nil, errors.New("could not find experiment store service")
@@ -44,8 +48,13 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		return nil, errors.New("service was not the correct type")
 	}
 
-	xds.RTDSGeneratorFactories[TypeUrl(&rtdsv1.ServerFaultsRTDSResourceGeneratorConfig{})] = serverxds.RTDSServerFaultsResourceGeneratorFactory{}
-	xds.ECDSGeneratorFactories[TypeUrl(&ecdsv1.ServerFaultsECDSResourceGeneratorConfig{})] = serverxds.ECDSServerFaultsResourceGeneratorFactory{}
+	xds.RTDSGeneratorsByTypeUrl[TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverxds.RTDSServerFaultsResourceGenerator{
+		IngressFaultRuntimePrefix: config.IngressFaultRuntimePrefix,
+		EgressFaultRuntimePrefix:  config.EgressFaultRuntimePrefix,
+	}
+
+	xds.ECDSGeneratorsByTypeUrl[TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverxds.ECDSServerFaultsResourceGenerator{}
+
 	return &Service{
 		storer: storer,
 	}, nil
@@ -56,10 +65,10 @@ func (s *Service) Register(r module.Registrar) error {
 	return s.storer.RegisterTransformation(transformation)
 }
 
-func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
-	var experimentConfig = serverexperimentation.HTTPFaultConfig{}
+func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentationv1.Property, error) {
+	var experimentConfig = serverexperimentationv1.HTTPFaultConfig{}
 	if err := config.Config.UnmarshalTo(&experimentConfig); err != nil {
-		return []*experimentation.Property{}, err
+		return []*experimentationv1.Property{}, err
 	}
 
 	faultsDescription, err := experimentConfigToString(&experimentConfig)
@@ -69,37 +78,37 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 
 	var downstream, upstream string
 	switch experimentConfig.GetFaultTargeting().GetEnforcer().(type) {
-	case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
+	case *serverexperimentationv1.FaultTargeting_DownstreamEnforcing:
 		downstreamEnforcing := experimentConfig.GetFaultTargeting().GetDownstreamEnforcing()
 
 		switch downstreamEnforcing.GetDownstreamType().(type) {
-		case *serverexperimentation.DownstreamEnforcing_DownstreamCluster:
+		case *serverexperimentationv1.DownstreamEnforcing_DownstreamCluster:
 			downstream = downstreamEnforcing.GetDownstreamCluster().GetName()
 		default:
 			return nil, fmt.Errorf("unknown downstream type of downstream enforcing %v", downstreamEnforcing.GetDownstreamType())
 		}
 
 		switch downstreamEnforcing.GetUpstreamType().(type) {
-		case *serverexperimentation.DownstreamEnforcing_UpstreamCluster:
+		case *serverexperimentationv1.DownstreamEnforcing_UpstreamCluster:
 			upstream = downstreamEnforcing.GetUpstreamCluster().GetName()
 		default:
 			return nil, fmt.Errorf("unknown upstream type of downstream enforcing %v", downstreamEnforcing.GetUpstreamType())
 		}
 
-	case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
+	case *serverexperimentationv1.FaultTargeting_UpstreamEnforcing:
 		upstreamEnforcing := experimentConfig.GetFaultTargeting().GetUpstreamEnforcing()
 
 		switch upstreamEnforcing.GetDownstreamType().(type) {
-		case *serverexperimentation.UpstreamEnforcing_DownstreamCluster:
+		case *serverexperimentationv1.UpstreamEnforcing_DownstreamCluster:
 			downstream = upstreamEnforcing.GetDownstreamCluster().GetName()
 		default:
 			return nil, fmt.Errorf("unknown downstream type of upstream enforcing %v", upstreamEnforcing.GetDownstreamType())
 		}
 
 		switch upstreamEnforcing.GetUpstreamType().(type) {
-		case *serverexperimentation.UpstreamEnforcing_UpstreamCluster:
+		case *serverexperimentationv1.UpstreamEnforcing_UpstreamCluster:
 			upstream = upstreamEnforcing.GetUpstreamCluster().GetName()
-		case *serverexperimentation.UpstreamEnforcing_UpstreamPartialSingleCluster:
+		case *serverexperimentationv1.UpstreamEnforcing_UpstreamPartialSingleCluster:
 			upstream = upstreamEnforcing.GetUpstreamPartialSingleCluster().GetName()
 		default:
 			return nil, fmt.Errorf("unknown upstream type of upstream enforcing %v", upstreamEnforcing.GetUpstreamType())
@@ -109,34 +118,34 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 		return nil, fmt.Errorf("unknown enforcer %v", experimentConfig.GetFaultTargeting())
 	}
 
-	return []*experimentation.Property{
+	return []*experimentationv1.Property{
 		{
 			Id:    "type",
 			Label: "Type",
-			Value: &experimentation.Property_StringValue{StringValue: "Server"},
+			Value: &experimentationv1.Property_StringValue{StringValue: "Server"},
 		},
 		{
 			Id:    "target",
 			Label: "Target",
-			Value: &experimentation.Property_StringValue{StringValue: fmt.Sprintf("%s ➡️ %s", downstream, upstream)},
+			Value: &experimentationv1.Property_StringValue{StringValue: fmt.Sprintf("%s ➡️ %s", downstream, upstream)},
 		},
 		{
 			Id:    "fault_types",
 			Label: "Fault Types",
-			Value: &experimentation.Property_StringValue{StringValue: faultsDescription},
+			Value: &experimentationv1.Property_StringValue{StringValue: faultsDescription},
 		},
 	}, nil
 }
 
-func experimentConfigToString(experiment *serverexperimentation.HTTPFaultConfig) (string, error) {
+func experimentConfigToString(experiment *serverexperimentationv1.HTTPFaultConfig) (string, error) {
 	if experiment == nil {
 		return "", errors.New("experiment is nil")
 	}
 
 	switch experiment.GetFault().(type) {
-	case *serverexperimentation.HTTPFaultConfig_AbortFault:
+	case *serverexperimentationv1.HTTPFaultConfig_AbortFault:
 		return "Abort", nil
-	case *serverexperimentation.HTTPFaultConfig_LatencyFault:
+	case *serverexperimentationv1.HTTPFaultConfig_LatencyFault:
 		return "Latency", nil
 	default:
 		return "", fmt.Errorf("unexpected fault type %v", experiment.GetFault())
