@@ -58,7 +58,7 @@ func (RTDSServerFaultsResourceGeneratorFactory) Create(cfg *any.Any) (xds.RTDSRe
 func (g *RTDSServerFaultsResourceGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.RTDSResource, error) {
 	httpFaultConfig, ok := experiment.Config.Message.(*serverexperimentationv1.HTTPFaultConfig)
 	if !ok {
-		return xds.NewEmptyRTDSResource(""), nil
+		return nil, fmt.Errorf("RTDS server faults generator cannot generate faults for a given experiment (run ID: %s, config ID %s)", experiment.Run.Id, experiment.Config.Id)
 	}
 
 	cluster, err := GetEnforcingCluster(httpFaultConfig)

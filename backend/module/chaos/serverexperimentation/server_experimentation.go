@@ -3,10 +3,10 @@ package serverexperimentation
 import (
 	"errors"
 	"fmt"
+
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/proto"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -26,10 +26,6 @@ type Service struct {
 	storer experimentstore.Storer
 }
 
-func TypeUrl(message proto.Message) string {
-	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
-}
-
 // New instantiates a Service object.
 func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &configv1.Config{}
@@ -47,12 +43,12 @@ func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.
 		return nil, errors.New("service was not the correct type")
 	}
 
-	xds.RTDSGeneratorsByTypeUrl[TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.RTDSServerFaultsResourceGenerator{
+	xds.RTDSGeneratorsByTypeUrl[xds.TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.RTDSServerFaultsResourceGenerator{
 		IngressFaultRuntimePrefix: config.IngressFaultRuntimePrefix,
 		EgressFaultRuntimePrefix:  config.EgressFaultRuntimePrefix,
 	}
 
-	xds.ECDSGeneratorsByTypeUrl[TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.ECDSServerFaultsResourceGenerator{}
+	xds.ECDSGeneratorsByTypeUrl[xds.TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.ECDSServerFaultsResourceGenerator{}
 
 	return &Service{
 		storer: storer,

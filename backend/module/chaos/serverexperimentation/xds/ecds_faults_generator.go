@@ -73,7 +73,7 @@ type ECDSServerFaultsResourceGenerator struct {
 func (g *ECDSServerFaultsResourceGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.ECDSResource, error) {
 	httpFaultConfig, ok := experiment.Config.Message.(*serverexperimentation.HTTPFaultConfig)
 	if !ok {
-		return xds.NewEmptyECDSResource(), nil
+		return nil, fmt.Errorf("ECDS server faults generator cannot generate faults for a given experiment (run ID: %s, config ID %s)", experiment.Run.Id, experiment.Config.Id)
 	}
 
 	upstreamCluster, downstreamCluster, err := GetClusterPair(httpFaultConfig)
