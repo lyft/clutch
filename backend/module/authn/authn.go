@@ -55,6 +55,7 @@ type api struct {
 }
 
 func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv1.LoginResponse, error) {
+
 	state, err := a.provider.GetStateNonce(request.RedirectUrl)
 	if err != nil {
 		return nil, err
@@ -97,6 +98,10 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 		"Location":         redirectURL,
 		"Set-Cookie-Token": token.AccessToken,
 	})
+
+	if token.RefreshToken != "" {
+		md.Set("Set-Cookie-RefreshToken", token.RefreshToken)
+	}
 
 	if err := grpc.SendHeader(ctx, md); err != nil {
 		return nil, err

@@ -166,7 +166,17 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 			Name:     "token",
 			Value:    cookies[0],
 			Path:     "/",
-			HttpOnly: false,
+			HttpOnly: false, // JWT is readable by front-end code for display of claims and other information.
+		}
+		http.SetCookie(w, cookie)
+	}
+
+	if cookies := md.HeaderMD.Get("Set-Cookie-RefreshToken"); len(cookies) > 0 {
+		cookie := &http.Cookie{
+			Name:       "refreshToken",
+			Value:      cookies[0],
+			HttpOnly:   true,
+			Path:       "/v1/authn/login",
 		}
 		http.SetCookie(w, cookie)
 	}
