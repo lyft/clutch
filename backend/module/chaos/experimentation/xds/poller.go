@@ -76,19 +76,13 @@ func (p *Poller) refreshCache() {
 			if err != nil {
 				p.rtdsResourceGenerationFailureCount.Inc(1)
 				p.logger.Errorw("Error when generating RTDS resource for experiment", "error", err, "experimentRunID", experiment.Run.Id)
-				continue
+			} else if _, exists := p.ecdsConfig.enabledClusters[r.Cluster]; !exists && !r.Empty() {
+				// apply a generated RTDS resource if the resource is not empty and a target cluster
+				// does not have ECDS faults enabled. If a cluster is on ECDS  enable list ignore RTDS
+				// resource and proceed to checking for ECDS Resources.
+				rtdsResourcesByCluster[r.Cluster] = append(rtdsResourcesByCluster[r.Cluster], r)
+				clustersWithResources[r.Cluster] = true
 			}
-			if r.Empty() {
-				// Nothing to do if resource is empty
-				continue
-			}
-			if _, exists := p.ecdsConfig.enabledClusters[r.Cluster]; exists {
-				// Allow ECDS to control resource for a given cluster instead
-				continue
-			}
-
-			rtdsResourcesByCluster[r.Cluster] = append(rtdsResourcesByCluster[r.Cluster], r)
-			clustersWithResources[r.Cluster] = true
 		}
 
 		if g, ok := p.ecdsGeneratorsByTypeUrl[TypeUrl(experiment.Config.Message)]; ok {
@@ -114,46 +108,44 @@ func (p *Poller) refreshCache() {
 
 	// Settings snapshot with empty experiments to remove the experiments
 	for _, cluster := range p.snapshotCache.GetStatusKeys() {
-		if _, ok := clustersWithResources[cluster]; !ok {
-			// in order to remove fault, we need to set the snapshot with default ecds config and default runtime resource
-			emptyResources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
+		if _, ok := clustersWithResources[cluster]; ok {
+			continue
+		}
+		// in order to remove fault, we need to set the snapshot with default ecds config and default runtime resource
+		emptyResources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
 
-			p.logger.Debugw("Removing RTDS resource for cluster", "cluster", cluster)
-			runtime, _ := p.createRuntime([][]*RuntimeKeyValue{}, nil)
-			emptyResources[gcpTypes.Runtime] = runtime
+		p.logger.Debugw("Removing RTDS resource for cluster", "cluster", cluster)
+		runtime, _ := p.createRuntime([][]*RuntimeKeyValue{}, nil)
+		emptyResources[gcpTypes.Runtime] = runtime
 
-			if _, exists := p.ecdsConfig.ecdsResourceMap.requestedResourcesMap[cluster]; exists {
-				p.logger.Debugw("Removing ECDS resources for cluster", "cluster", cluster)
-				resourceNames := p.ecdsConfig.ecdsResourceMap.getResourcesFromCluster(cluster)
+		if _, exists := p.ecdsConfig.ecdsResourceMap.requestedResourcesMap[cluster]; exists {
+			p.logger.Debugw("Removing ECDS resources for cluster", "cluster", cluster)
+			resourceNames := p.ecdsConfig.ecdsResourceMap.getResourcesFromCluster(cluster)
 
-				resourcesWithTTL := make([]gcpTypes.ResourceWithTtl, 0)
-				// iterate over all of the ECDS resource generators and all of the resource names
-				for _, g := range p.ecdsGeneratorsByTypeUrl {
-					for _, n := range resourceNames {
-						r, err := g.GenerateDefaultResource(cluster, n)
-						if err != nil {
-							p.ecdsDefaultResourceGenerationFailureCount.Inc(1)
-							p.logger.Errorw("Cannot generate empty ECDS resource for cluster", "cluster", cluster, "resource", n)
-						}
-						if r.Empty() {
-							continue
-						}
-
+			resourcesWithTTL := make([]gcpTypes.ResourceWithTtl, 0)
+			// iterate over all of the ECDS resource generators and all of the resource names
+			for _, g := range p.ecdsGeneratorsByTypeUrl {
+				for _, n := range resourceNames {
+					r, err := g.GenerateDefaultResource(cluster, n)
+					if err != nil {
+						p.ecdsDefaultResourceGenerationFailureCount.Inc(1)
+						p.logger.Errorw("Cannot generate empty ECDS resource for cluster", "cluster", cluster, "resource", n)
+					} else if !r.Empty() {
 						resourceWithTTL := p.createResourceWithTTLForECDSResource(r, nil)
 						resourcesWithTTL = append(resourcesWithTTL, resourceWithTTL...)
 					}
 				}
-
-				emptyResources[gcpTypes.ExtensionConfig] = resourcesWithTTL
 			}
 
-			err := p.setSnapshot(emptyResources, cluster)
-			if err != nil {
-				p.setCacheSnapshotFailureCount.Inc(1)
-				p.logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster, "error", err)
-			} else {
-				p.setCacheSnapshotSuccessCount.Inc(1)
-			}
+			emptyResources[gcpTypes.ExtensionConfig] = resourcesWithTTL
+		}
+
+		err := p.setSnapshot(emptyResources, cluster)
+		if err != nil {
+			p.setCacheSnapshotFailureCount.Inc(1)
+			p.logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster, "error", err)
+		} else {
+			p.setCacheSnapshotSuccessCount.Inc(1)
 		}
 	}
 
