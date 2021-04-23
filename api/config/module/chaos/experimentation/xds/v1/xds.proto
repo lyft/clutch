@@ -27,6 +27,6 @@ message Config {
   }
 
   // Specifies which clusters ECDS is enabled for, causing faults to be communicated over ECDS instead of RTDS where
-  // supported. Currently, allowing all cluster is not supported.
+  // supported. Currently, allowing all clusters is not supported.
   ECDSAllowList ecds_allow_list = 5;
 }

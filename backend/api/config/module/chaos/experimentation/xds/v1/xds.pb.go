@@ -38,7 +38,7 @@ type Config struct {
 	// The interval at which to send heartbeat responses for TTL'd resources.
 	HeartbeatInterval *durationpb.Duration `protobuf:"bytes,4,opt,name=heartbeat_interval,json=heartbeatInterval,proto3" json:"heartbeat_interval,omitempty"`
 	// Specifies which clusters ECDS is enabled for, causing faults to be communicated over ECDS instead of RTDS where
-	// supported. Currently, allowing all cluster is not supported.
+	// supported. Currently, allowing all clusters is not supported.
 	EcdsAllowList *Config_ECDSAllowList `protobuf:"bytes,5,opt,name=ecds_allow_list,json=ecdsAllowList,proto3" json:"ecds_allow_list,omitempty"`
 }
 

@@ -17,10 +17,13 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
+type RTDSConfig struct {
+	layerName string
+}
+
 type Poller struct {
-	ctx           context.Context
-	storer        experimentstore.Storer
-	snapshotCache gcpCacheV3.SnapshotCache
+	storer experimentstore.Storer
+	cache  gcpCacheV3.SnapshotCache
 
 	resourceTtl          time.Duration
 	cacheRefreshInterval time.Duration
@@ -39,25 +42,25 @@ type Poller struct {
 	activeFaultsGauge                         tally.Gauge
 
 	logger *zap.SugaredLogger
-	ticker *time.Ticker
 }
 
-func (p *Poller) Start() {
-	p.ticker = time.NewTicker(p.cacheRefreshInterval)
+func (p *Poller) Start(ctx context.Context) {
+	ticker := time.NewTicker(p.cacheRefreshInterval)
 	go func() {
-		for range p.ticker.C {
-			p.logger.Info("Refreshing xDS cache")
-			p.refreshCache()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				p.logger.Info("Refreshing xDS cache")
+				p.refreshCache(ctx)
+			}
 		}
 	}()
 }
 
-func (p *Poller) Stop() {
-	p.ticker.Stop()
-}
-
-func (p *Poller) refreshCache() {
-	allRunningExperiments, err := p.storer.GetExperiments(p.ctx, "", experimentation.GetExperimentsRequest_STATUS_RUNNING)
+func (p *Poller) refreshCache(ctx context.Context) {
+	allRunningExperiments, err := p.storer.GetExperiments(ctx, "", experimentation.GetExperimentsRequest_STATUS_RUNNING)
 
 	if err != nil {
 		p.logger.Errorw("Failed to get data from experiments store", "error", err)
@@ -107,7 +110,7 @@ func (p *Poller) refreshCache() {
 	}
 
 	// Settings snapshot with empty experiments to remove the experiments
-	for _, cluster := range p.snapshotCache.GetStatusKeys() {
+	for _, cluster := range p.cache.GetStatusKeys() {
 		if _, ok := clustersWithResources[cluster]; ok {
 			continue
 		}
@@ -254,7 +257,7 @@ func (p *Poller) createResourceWithTTLForECDSResource(resource *ECDSResource, tt
 }
 
 func (p *Poller) setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string) error {
-	currentSnapshot, _ := p.snapshotCache.GetSnapshot(cluster)
+	currentSnapshot, _ := p.cache.GetSnapshot(cluster)
 
 	snapshot := gcpCacheV3.Snapshot{}
 	isNewSnapshotSame := true
@@ -279,7 +282,7 @@ func (p *Poller) setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.Re
 	}
 
 	p.logger.Infow("Setting snapshot", "cluster", cluster, "resources", resourceMap)
-	err := p.snapshotCache.SetSnapshot(cluster, snapshot)
+	err := p.cache.SetSnapshot(cluster, snapshot)
 	if err != nil {
 		return err
 	}

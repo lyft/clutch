@@ -88,9 +88,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 	cacheV3 := gcpCacheV3.NewSnapshotCacheWithHeartbeating(ctx, false, ClusterHashV3{}, logger.Sugar(), config.HeartbeatInterval.AsDuration())
 
 	poller := Poller{
-		ctx:           ctx,
-		storer:        storer,
-		snapshotCache: cacheV3,
+		storer: storer,
+		cache:  cacheV3,
 
 		resourceTtl:          config.ResourceTtl.AsDuration(),
 		cacheRefreshInterval: config.CacheRefreshInterval.AsDuration(),
@@ -114,11 +113,12 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 	}
 
 	return &Server{
-		ctx:        ctx,
-		scope:      scope,
+		ctx:        context.Background(),
 		poller:     &poller,
 		ecdsConfig: ecdsConfig,
-		logger:     logger.Sugar(),
+		scope:      scope,
+
+		logger: logger.Sugar(),
 	}, nil
 }
 
@@ -138,13 +138,14 @@ func (s *Server) newScopedStats(subScope string) serverStats {
 }
 
 func (s *Server) Register(r module.Registrar) error {
-	s.poller.Start()
+	ctx := context.Background()
+	s.poller.Start(ctx)
 	// RTDS V3 Server
-	rtdsServer := gcpServerV3.NewServer(s.ctx, s.poller.snapshotCache, &rtdsCallbacks{callbacksBase{s.newScopedStats("rtds"),
+	rtdsServer := gcpServerV3.NewServer(s.ctx, s.poller.cache, &rtdsCallbacks{callbacksBase{s.newScopedStats("rtds"),
 		s.logger, 0}})
 	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), rtdsServer)
 
-	ecdsServer := NewECDSServer(s.ctx, s.poller.snapshotCache, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.ecdsResourceMap})
+	ecdsServer := NewECDSServer(s.ctx, s.poller.cache, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.ecdsResourceMap})
 	gcpExtencionServiceV3.RegisterExtensionConfigDiscoveryServiceServer(r.GRPCServer(), ecdsServer)
 	return nil
 }
