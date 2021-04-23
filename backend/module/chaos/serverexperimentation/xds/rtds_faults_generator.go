@@ -3,10 +3,7 @@ package xds
 import (
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes/any"
-
 	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	rtdsv1 "github.com/lyft/clutch/backend/api/config/module/chaos/serverexperimentation/rtds/v1"
 	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -33,29 +30,14 @@ const (
 	HTTPStatusForEgress        = `%s.%s.abort.http_status`
 )
 
-type RTDSServerFaultsResourceGenerator struct {
+type RTDSFaultsGenerator struct {
 	// Runtime prefix for ingress faults
 	IngressFaultRuntimePrefix string
 	// Runtime prefix for egress faults
 	EgressFaultRuntimePrefix string
 }
 
-type RTDSServerFaultsResourceGeneratorFactory struct{}
-
-func (RTDSServerFaultsResourceGeneratorFactory) Create(cfg *any.Any) (xds.RTDSResourceGenerator, error) {
-	typedConfig := &rtdsv1.ServerFaultsRTDSResourceGeneratorConfig{}
-	err := cfg.UnmarshalTo(typedConfig)
-	if err != nil {
-		return nil, err
-	}
-
-	return &RTDSServerFaultsResourceGenerator{
-		IngressFaultRuntimePrefix: typedConfig.IngressFaultRuntimePrefix,
-		EgressFaultRuntimePrefix:  typedConfig.EgressFaultRuntimePrefix,
-	}, nil
-}
-
-func (g *RTDSServerFaultsResourceGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.RTDSResource, error) {
+func (g *RTDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.RTDSResource, error) {
 	httpFaultConfig, ok := experiment.Config.Message.(*serverexperimentationv1.HTTPFaultConfig)
 	if !ok {
 		return nil, fmt.Errorf("RTDS server faults generator cannot generate faults for a given experiment (run ID: %s, config ID %s)", experiment.Run.Id, experiment.Config.Id)
@@ -83,7 +65,7 @@ func (g *RTDSServerFaultsResourceGenerator) GenerateResource(experiment *experim
 	return xds.NewRTDSResource(cluster, keyValuePairs)
 }
 
-func (g *RTDSServerFaultsResourceGenerator) createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentationv1.HTTPFaultConfig) (string, uint32, string, uint32, error) {
+func (g *RTDSFaultsGenerator) createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentationv1.HTTPFaultConfig) (string, uint32, string, uint32, error) {
 	var percentageKey string
 	var percentageValue uint32
 	var faultKey string

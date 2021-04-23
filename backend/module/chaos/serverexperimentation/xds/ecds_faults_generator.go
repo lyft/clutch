@@ -14,7 +14,6 @@ import (
 	"github.com/golang/protobuf/ptypes/duration"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	ecdsv1 "github.com/lyft/clutch/backend/api/config/module/chaos/serverexperimentation/ecds/v1"
 	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -54,23 +53,11 @@ var DefaultDelayFaultConfig = &gcpFilterCommon.FaultDelay{
 	},
 }
 
-type ECDSServerFaultsResourceGeneratorFactory struct{}
-
-func (ECDSServerFaultsResourceGeneratorFactory) Create(cfg *any.Any) (xds.ECDSResourceGenerator, error) {
-	typedConfig := &ecdsv1.ServerFaultsECDSResourceGeneratorConfig{}
-	err := cfg.UnmarshalTo(typedConfig)
-	if err != nil {
-		return nil, err
-	}
-
-	return &ECDSServerFaultsResourceGenerator{}, nil
-}
-
-type ECDSServerFaultsResourceGenerator struct {
+type ECDSFaultsGenerator struct {
 	SerializedDefaultFaultFilter []byte
 }
 
-func (g *ECDSServerFaultsResourceGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.ECDSResource, error) {
+func (g *ECDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.ECDSResource, error) {
 	httpFaultConfig, ok := experiment.Config.Message.(*serverexperimentation.HTTPFaultConfig)
 	if !ok {
 		return nil, fmt.Errorf("ECDS server faults generator cannot generate faults for a given experiment (run ID: %s, config ID %s)", experiment.Run.Id, experiment.Config.Id)
@@ -143,7 +130,7 @@ func (g *ECDSServerFaultsResourceGenerator) GenerateResource(experiment *experim
 	return xds.NewECDSResource(enforcingCluster, config)
 }
 
-func (g *ECDSServerFaultsResourceGenerator) GenerateDefaultResource(cluster string, resourceName string) (*xds.ECDSResource, error) {
+func (g *ECDSFaultsGenerator) GenerateDefaultResource(cluster string, resourceName string) (*xds.ECDSResource, error) {
 	if resourceName != faultFilterConfigNameForIngressFault && !strings.HasPrefix(resourceName, fmt.Sprintf(faultFilterConfigNameForEgressFault, "")) {
 		return xds.NewEmptyECDSResource(), nil
 	}
@@ -177,7 +164,7 @@ func (g *ECDSServerFaultsResourceGenerator) GenerateDefaultResource(cluster stri
 	return xds.NewECDSResource(cluster, config)
 }
 
-func (g *ECDSServerFaultsResourceGenerator) createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (bool, *gcpFilterFault.FaultAbort, *gcpFilterCommon.FaultDelay, error) {
+func (g *ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (bool, *gcpFilterFault.FaultAbort, *gcpFilterCommon.FaultDelay, error) {
 	var isEgressFault bool
 	var abort *gcpFilterFault.FaultAbort
 	var delay *gcpFilterCommon.FaultDelay

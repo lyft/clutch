@@ -10,7 +10,7 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-func TestServerFaultsRTDSResourceGenerating(t *testing.T) {
+func TestRTDSFaultsGeneration(t *testing.T) {
 	tests := []struct {
 		experiment               *experimentstore.Experiment
 		ingressRuntimeKeyPrefix  string
@@ -74,7 +74,7 @@ func TestServerFaultsRTDSResourceGenerating(t *testing.T) {
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
-			g := RTDSServerFaultsResourceGenerator{
+			g := RTDSFaultsGenerator{
 				IngressFaultRuntimePrefix: tt.ingressRuntimeKeyPrefix,
 				EgressFaultRuntimePrefix:  tt.egressRuntimeKeyPrefix,
 			}
