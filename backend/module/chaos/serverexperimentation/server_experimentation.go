@@ -3,7 +3,6 @@ package serverexperimentation
 import (
 	"errors"
 	"fmt"
-
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -14,7 +13,7 @@ import (
 	configv1 "github.com/lyft/clutch/backend/api/config/module/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
-	serverxds "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
+	serverexperimentationxds "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -48,12 +47,12 @@ func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.
 		return nil, errors.New("service was not the correct type")
 	}
 
-	xds.RTDSGeneratorsByTypeUrl[TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverxds.RTDSServerFaultsResourceGenerator{
+	xds.RTDSGeneratorsByTypeUrl[TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.RTDSServerFaultsResourceGenerator{
 		IngressFaultRuntimePrefix: config.IngressFaultRuntimePrefix,
 		EgressFaultRuntimePrefix:  config.EgressFaultRuntimePrefix,
 	}
 
-	xds.ECDSGeneratorsByTypeUrl[TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverxds.ECDSServerFaultsResourceGenerator{}
+	xds.ECDSGeneratorsByTypeUrl[TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.ECDSServerFaultsResourceGenerator{}
 
 	return &Service{
 		storer: storer,
