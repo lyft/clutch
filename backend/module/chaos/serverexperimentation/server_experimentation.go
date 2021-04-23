@@ -43,12 +43,12 @@ func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.
 		return nil, errors.New("service was not the correct type")
 	}
 
-	xds.RTDSGeneratorsByTypeUrl[xds.TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.RTDSServerFaultsResourceGenerator{
+	xds.RTDSGeneratorsByTypeUrl[xds.TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.RTDSFaultsGenerator{
 		IngressFaultRuntimePrefix: config.IngressFaultRuntimePrefix,
 		EgressFaultRuntimePrefix:  config.EgressFaultRuntimePrefix,
 	}
 
-	xds.ECDSGeneratorsByTypeUrl[xds.TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.ECDSServerFaultsResourceGenerator{}
+	xds.ECDSGeneratorsByTypeUrl[xds.TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.ECDSFaultsGenerator{}
 
 	return &Service{
 		storer: storer,

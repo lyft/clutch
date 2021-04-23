@@ -17,83 +17,7 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-const (
-	INTERNAL = "internal"
-	EXTERNAL = "external"
-	ABORT    = "abort"
-	LATENCY  = "latency"
-)
-
-func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentstore.Experiment {
-	httpConfig := &serverexperimentation.HTTPFaultConfig{}
-
-	upstreamSingleCluster := &serverexperimentation.SingleCluster{
-		Name: upstreamCluster,
-	}
-
-	downstreamSingleCluster := &serverexperimentation.SingleCluster{
-		Name: downstreamCluster,
-	}
-
-	switch faultType {
-	case ABORT:
-		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_AbortFault{
-			AbortFault: &serverexperimentation.AbortFault{
-				Percentage:  &serverexperimentation.FaultPercentage{Percentage: faultPercent},
-				AbortStatus: &serverexperimentation.FaultAbortStatus{HttpStatusCode: faultValue},
-			},
-		}
-	case LATENCY:
-		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_LatencyFault{
-			LatencyFault: &serverexperimentation.LatencyFault{
-				Percentage:      &serverexperimentation.FaultPercentage{Percentage: faultPercent},
-				LatencyDuration: &serverexperimentation.FaultLatencyDuration{FixedDurationMs: faultValue},
-			},
-		}
-	}
-
-	switch faultInjectorEnforcing {
-	case INTERNAL:
-		httpConfig.FaultTargeting = &serverexperimentation.FaultTargeting{
-			Enforcer: &serverexperimentation.FaultTargeting_UpstreamEnforcing{
-				UpstreamEnforcing: &serverexperimentation.UpstreamEnforcing{
-					UpstreamType: &serverexperimentation.UpstreamEnforcing_UpstreamCluster{
-						UpstreamCluster: upstreamSingleCluster,
-					},
-					DownstreamType: &serverexperimentation.UpstreamEnforcing_DownstreamCluster{
-						DownstreamCluster: downstreamSingleCluster,
-					},
-				},
-			},
-		}
-	case EXTERNAL:
-		httpConfig.FaultTargeting = &serverexperimentation.FaultTargeting{
-			Enforcer: &serverexperimentation.FaultTargeting_DownstreamEnforcing{
-				DownstreamEnforcing: &serverexperimentation.DownstreamEnforcing{
-					UpstreamType: &serverexperimentation.DownstreamEnforcing_UpstreamCluster{
-						UpstreamCluster: upstreamSingleCluster,
-					},
-					DownstreamType: &serverexperimentation.DownstreamEnforcing_DownstreamCluster{
-						DownstreamCluster: downstreamSingleCluster,
-					},
-				},
-			},
-		}
-	}
-
-	anyConfig, err := anypb.New(httpConfig)
-	assert.NoError(t, err)
-	jsonConfig, err := protojson.Marshal(anyConfig)
-	assert.NoError(t, err)
-	config, err := experimentstore.NewExperimentConfig("1", string(jsonConfig))
-	assert.NoError(t, err)
-
-	return &experimentstore.Experiment{
-		Config: config,
-	}
-}
-
-func TestServerFaultsECDSResourceGenerating(t *testing.T) {
+func TestECDSFaultsGeneration(t *testing.T) {
 	tests := []struct {
 		experiment                       *experimentstore.Experiment
 		expectedCluster                  string
@@ -179,7 +103,7 @@ func TestServerFaultsECDSResourceGenerating(t *testing.T) {
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
-			g := &ECDSServerFaultsResourceGenerator{}
+			g := &ECDSFaultsGenerator{}
 			r, err := g.GenerateResource(tt.experiment)
 
 			assert.NoError(t, err)
@@ -214,7 +138,7 @@ func TestServerFaultsECDSResourceGenerating(t *testing.T) {
 	}
 }
 
-func TestServerFaultsECDSDefaultResourceGenerating(t *testing.T) {
+func TestECDSDefaultFaultsGeneration(t *testing.T) {
 	tests := []struct {
 		cluster         string
 		resourceName    string
@@ -242,7 +166,7 @@ func TestServerFaultsECDSDefaultResourceGenerating(t *testing.T) {
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
-			g := &ECDSServerFaultsResourceGenerator{}
+			g := &ECDSFaultsGenerator{}
 			r, err := g.GenerateDefaultResource(tt.cluster, tt.resourceName)
 
 			assert.NoError(t, err)
@@ -257,5 +181,81 @@ func TestServerFaultsECDSDefaultResourceGenerating(t *testing.T) {
 				assert.NotNil(t, faultFilter.DelayDurationRuntime)
 			}
 		})
+	}
+}
+
+const (
+	INTERNAL = "internal"
+	EXTERNAL = "external"
+	ABORT    = "abort"
+	LATENCY  = "latency"
+)
+
+func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentstore.Experiment {
+	httpConfig := &serverexperimentation.HTTPFaultConfig{}
+
+	upstreamSingleCluster := &serverexperimentation.SingleCluster{
+		Name: upstreamCluster,
+	}
+
+	downstreamSingleCluster := &serverexperimentation.SingleCluster{
+		Name: downstreamCluster,
+	}
+
+	switch faultType {
+	case ABORT:
+		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_AbortFault{
+			AbortFault: &serverexperimentation.AbortFault{
+				Percentage:  &serverexperimentation.FaultPercentage{Percentage: faultPercent},
+				AbortStatus: &serverexperimentation.FaultAbortStatus{HttpStatusCode: faultValue},
+			},
+		}
+	case LATENCY:
+		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_LatencyFault{
+			LatencyFault: &serverexperimentation.LatencyFault{
+				Percentage:      &serverexperimentation.FaultPercentage{Percentage: faultPercent},
+				LatencyDuration: &serverexperimentation.FaultLatencyDuration{FixedDurationMs: faultValue},
+			},
+		}
+	}
+
+	switch faultInjectorEnforcing {
+	case INTERNAL:
+		httpConfig.FaultTargeting = &serverexperimentation.FaultTargeting{
+			Enforcer: &serverexperimentation.FaultTargeting_UpstreamEnforcing{
+				UpstreamEnforcing: &serverexperimentation.UpstreamEnforcing{
+					UpstreamType: &serverexperimentation.UpstreamEnforcing_UpstreamCluster{
+						UpstreamCluster: upstreamSingleCluster,
+					},
+					DownstreamType: &serverexperimentation.UpstreamEnforcing_DownstreamCluster{
+						DownstreamCluster: downstreamSingleCluster,
+					},
+				},
+			},
+		}
+	case EXTERNAL:
+		httpConfig.FaultTargeting = &serverexperimentation.FaultTargeting{
+			Enforcer: &serverexperimentation.FaultTargeting_DownstreamEnforcing{
+				DownstreamEnforcing: &serverexperimentation.DownstreamEnforcing{
+					UpstreamType: &serverexperimentation.DownstreamEnforcing_UpstreamCluster{
+						UpstreamCluster: upstreamSingleCluster,
+					},
+					DownstreamType: &serverexperimentation.DownstreamEnforcing_DownstreamCluster{
+						DownstreamCluster: downstreamSingleCluster,
+					},
+				},
+			},
+		}
+	}
+
+	anyConfig, err := anypb.New(httpConfig)
+	assert.NoError(t, err)
+	jsonConfig, err := protojson.Marshal(anyConfig)
+	assert.NoError(t, err)
+	config, err := experimentstore.NewExperimentConfig("1", string(jsonConfig))
+	assert.NoError(t, err)
+
+	return &experimentstore.Experiment{
+		Config: config,
 	}
 }
