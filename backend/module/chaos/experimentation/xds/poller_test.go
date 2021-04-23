@@ -42,22 +42,20 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 	configBool := &wrapperspb.BoolValue{}
 	configBytes := &wrapperspb.BytesValue{}
 
-	input := []struct {
-		data proto.Message
-	}{
-		{data: configString},
-		{data: configInt},
-		{data: configDouble},
-		{data: configBool},
-		{data: configBytes},
+	input := []proto.Message{
+		configString,
+		configInt,
+		configDouble,
+		configBool,
+		configBytes,
 	}
 
 	now := time.Now()
 	futureTimestamp := timestamppb.New(now.Add(time.Hour))
 
 	s := experimentstoremock.SimpleStorer{}
-	for _, i := range input {
-		any, err := anypb.New(i.data)
+	for _, d := range input {
+		any, err := anypb.New(d)
 		assert.NoError(t, err)
 		es, err := experimentstore.NewExperimentSpecification(
 			&experimentation.CreateExperimentData{
@@ -68,10 +66,6 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 		_, err = s.CreateExperiment(context.Background(), es)
 		assert.NoError(t, err)
 	}
-
-	scope := tally.NewTestScope("", nil)
-	l, err := zap.NewDevelopment()
-	assert.NoError(t, err)
 
 	rtdsGeneratorsByTypeUrl := map[string]RTDSResourceGenerator{
 		// The error should be ignored and the process of generating resources
@@ -113,11 +107,15 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 		},
 	}
 
+	scope := tally.NewTestScope("", nil)
+	l, err := zap.NewDevelopment()
+	assert.NoError(t, err)
+
 	cache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
+
 	p := Poller{
-		ctx:                                context.Background(),
 		storer:                             &s,
-		snapshotCache:                      cache,
+		cache:                              cache,
 		resourceTtl:                        time.Duration(time.Second),
 		cacheRefreshInterval:               time.Duration(time.Second),
 		rtdsConfig:                         &rtdsConfig,
@@ -132,8 +130,10 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 		activeFaultsGauge:                         scope.Gauge("active_faults"),
 		logger:                                    l.Sugar(),
 	}
-	defer p.Stop()
-	p.Start()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	p.Start(ctx)
 
 	awaitGaugeEquals(t, scope, "active_faults+", 3)
 	assert.Equal(t, int64(1), scope.Snapshot().Counters()["generation_failures+"].Value())
@@ -178,22 +178,20 @@ func TestECDSResourcesRefresh(t *testing.T) {
 	configBool := &wrapperspb.BoolValue{}
 	configBytes := &wrapperspb.BytesValue{}
 
-	input := []struct {
-		data proto.Message
-	}{
-		{data: configString},
-		{data: configInt},
-		{data: configDouble},
-		{data: configBool},
-		{data: configBytes},
+	input := []proto.Message{
+		configString,
+		configInt,
+		configDouble,
+		configBool,
+		configBytes,
 	}
 
 	now := time.Now()
 	futureTimestamp := timestamppb.New(now.Add(time.Hour))
 
 	s := experimentstoremock.SimpleStorer{}
-	for _, i := range input {
-		any, err := anypb.New(i.data)
+	for _, d := range input {
+		any, err := anypb.New(d)
 		assert.NoError(t, err)
 		es, err := experimentstore.NewExperimentSpecification(
 			&experimentation.CreateExperimentData{
@@ -204,10 +202,6 @@ func TestECDSResourcesRefresh(t *testing.T) {
 		_, err = s.CreateExperiment(context.Background(), es)
 		assert.NoError(t, err)
 	}
-
-	scope := tally.NewTestScope("", nil)
-	l, err := zap.NewDevelopment()
-	assert.NoError(t, err)
 
 	serializedFilter, err := proto.Marshal(anyConfigString)
 	assert.NoError(t, err)
@@ -264,11 +258,14 @@ func TestECDSResourcesRefresh(t *testing.T) {
 		},
 	}
 
+	scope := tally.NewTestScope("", nil)
+	l, err := zap.NewDevelopment()
+	assert.NoError(t, err)
+
 	cache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
 	p := Poller{
-		ctx:                                context.Background(),
 		storer:                             &s,
-		snapshotCache:                      cache,
+		cache:                              cache,
 		resourceTtl:                        time.Duration(time.Second),
 		cacheRefreshInterval:               time.Duration(time.Second),
 		rtdsConfig:                         &rtdsConfig,
@@ -283,8 +280,10 @@ func TestECDSResourcesRefresh(t *testing.T) {
 		activeFaultsGauge:                         scope.Gauge("active_faults"),
 		logger:                                    l.Sugar(),
 	}
-	defer p.Stop()
-	p.Start()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	p.Start(ctx)
 
 	awaitGaugeEquals(t, scope, "active_faults+", 2)
 
