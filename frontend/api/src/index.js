@@ -16087,6 +16087,130 @@ export const clutch = $root.clutch = (() => {
                     return experimentation;
                 })();
 
+                chaos.redisexperimentation = (function() {
+
+                    /**
+                     * Namespace redisexperimentation.
+                     * @memberof clutch.config.module.chaos
+                     * @namespace
+                     */
+                    const redisexperimentation = {};
+
+                    redisexperimentation.v1 = (function() {
+
+                        /**
+                         * Namespace v1.
+                         * @memberof clutch.config.module.chaos.redisexperimentation
+                         * @namespace
+                         */
+                        const v1 = {};
+
+                        v1.Config = (function() {
+
+                            /**
+                             * Properties of a Config.
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1
+                             * @interface IConfig
+                             * @property {string|null} [faultRuntimePrefix] Config faultRuntimePrefix
+                             */
+
+                            /**
+                             * Constructs a new Config.
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1
+                             * @classdesc Represents a Config.
+                             * @implements IConfig
+                             * @constructor
+                             * @param {clutch.config.module.chaos.redisexperimentation.v1.IConfig=} [properties] Properties to set
+                             */
+                            function Config(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * Config faultRuntimePrefix.
+                             * @member {string} faultRuntimePrefix
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.faultRuntimePrefix = "";
+
+                            /**
+                             * Verifies a Config message.
+                             * @function verify
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            Config.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                if (message.faultRuntimePrefix != null && message.hasOwnProperty("faultRuntimePrefix"))
+                                    if (!$util.isString(message.faultRuntimePrefix))
+                                        return "faultRuntimePrefix: string expected";
+                                return null;
+                            };
+
+                            /**
+                             * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.config.module.chaos.redisexperimentation.v1.Config} Config
+                             */
+                            Config.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.config.module.chaos.redisexperimentation.v1.Config)
+                                    return object;
+                                let message = new $root.clutch.config.module.chaos.redisexperimentation.v1.Config();
+                                if (object.faultRuntimePrefix != null)
+                                    message.faultRuntimePrefix = String(object.faultRuntimePrefix);
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a Config message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @static
+                             * @param {clutch.config.module.chaos.redisexperimentation.v1.Config} message Config
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            Config.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (options.defaults)
+                                    object.faultRuntimePrefix = "";
+                                if (message.faultRuntimePrefix != null && message.hasOwnProperty("faultRuntimePrefix"))
+                                    object.faultRuntimePrefix = message.faultRuntimePrefix;
+                                return object;
+                            };
+
+                            /**
+                             * Converts this Config to JSON.
+                             * @function toJSON
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            Config.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return Config;
+                        })();
+
+                        return v1;
+                    })();
+
+                    return redisexperimentation;
+                })();
+
                 chaos.serverexperimentation = (function() {
 
                     /**
