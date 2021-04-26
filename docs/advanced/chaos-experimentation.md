@@ -205,11 +205,11 @@ filters:
 
 ### Redis experiments 
 
-To perform Redis experiments, there is a specific module that is used to process the Redis experiment data. You will need below component in addition to the above Experimentation components. Also, keep in mind that Redis experiments can be only performed with RTDS. 
+To perform Redis experiments, there is a specific module that is used to process the Redis experiments data. You will need below component in addition to the above Experimentation components. Also, keep in mind that Redis experiments can be only be run with the use of RTDS (and not ECDS). 
 
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
-| `clutch.module.chaos.redisexperimentation`    | Module which is responsible to processes the data specifically for Redis experiments that it receives from database to be UI ready
+| `clutch.module.chaos.redisexperimentation`    | Module which is responsible for orchestrating the Redis experiments
 
 #### Frontend Config
 
