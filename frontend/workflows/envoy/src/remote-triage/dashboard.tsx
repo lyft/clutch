@@ -59,8 +59,7 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
             width={215}
             innerRadius={0.75}
             colors={{ datum: "data.color" }}
-            enableSliceLabels={false}
-            enableRadialLabels={false}
+            enableArcLabels={false}
             isInteractive={false}
           />
           <PieLegendContainer>
