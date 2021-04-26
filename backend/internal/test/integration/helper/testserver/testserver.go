@@ -2,6 +2,7 @@ package xdstest
 
 import (
 	"net"
+	"strings"
 
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -37,18 +38,19 @@ func (t *TestServer) Register(m module.Module) {
 	}
 }
 
-func (t *TestServer) Run() {
+func (t *TestServer) Run() error {
 	//nolint:gosec
 	l, err := net.Listen("tcp", "0.0.0.0:9000")
 	if err != nil {
-		panic(err)
+		return err
 	}
 	go func() {
 		err = t.registrar.GRPCServer().Serve(l)
-		if err != nil {
+		if err != nil && !strings.Contains(err.Error(), "grpc: the server has been stopped") {
 			panic(err)
 		}
 	}()
+	return nil
 }
 
 func (t *TestServer) Stop() {
