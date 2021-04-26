@@ -20,7 +20,7 @@ func TestRTDSFaultsGeneration(t *testing.T) {
 	}{
 		{
 			// Abort - Service B -> Service A (Internal)
-			experiment:              createExperiment(t, "serviceA", "serviceB", 10, 404, INTERNAL, ABORT),
+			experiment:              createExperiment(t, "serviceA", "serviceB", 10, 404, faultUpstreamServiceTypeInternal, faultTypeAbort),
 			ingressRuntimeKeyPrefix: "ingressfoo",
 			expectedCluster:         "serviceA",
 			expectedRuntimeKeyValues: []*xds.RuntimeKeyValue{
@@ -30,7 +30,7 @@ func TestRTDSFaultsGeneration(t *testing.T) {
 		},
 		{
 			// Latency - Service D -> Service A (Internal)
-			experiment:              createExperiment(t, "serviceA", "serviceD", 30, 100, INTERNAL, LATENCY),
+			experiment:              createExperiment(t, "serviceA", "serviceD", 30, 100, faultUpstreamServiceTypeInternal, faultTypeLatency),
 			ingressRuntimeKeyPrefix: "ingressfoo",
 			expectedCluster:         "serviceA",
 			expectedRuntimeKeyValues: []*xds.RuntimeKeyValue{
@@ -40,7 +40,7 @@ func TestRTDSFaultsGeneration(t *testing.T) {
 		},
 		{
 			// Abort - Service A -> Service X (External)
-			experiment:             createExperiment(t, "serviceX", "serviceA", 65, 400, EXTERNAL, ABORT),
+			experiment:             createExperiment(t, "serviceX", "serviceA", 65, 400, faultUpstreamServiceTypeExternal, faultTypeAbort),
 			egressRuntimeKeyPrefix: "egressfoo",
 			expectedCluster:        "serviceA",
 			expectedRuntimeKeyValues: []*xds.RuntimeKeyValue{
@@ -50,7 +50,7 @@ func TestRTDSFaultsGeneration(t *testing.T) {
 		},
 		{
 			// Latency - Service F -> Service Y (External)
-			experiment:             createExperiment(t, "serviceY", "serviceF", 40, 200, EXTERNAL, LATENCY),
+			experiment:             createExperiment(t, "serviceY", "serviceF", 40, 200, faultUpstreamServiceTypeExternal, faultTypeLatency),
 			egressRuntimeKeyPrefix: "egressfoo",
 			expectedCluster:        "serviceF",
 			expectedRuntimeKeyValues: []*xds.RuntimeKeyValue{

@@ -28,7 +28,7 @@ func TestECDSFaultsGeneration(t *testing.T) {
 	}{
 		{
 			// Abort - Service B -> Service A (Internal)
-			experiment:           createExperiment(t, "serviceA", "serviceB", 10, 404, INTERNAL, ABORT),
+			experiment:           createExperiment(t, "serviceA", "serviceB", 10, 404, faultUpstreamServiceTypeInternal, faultTypeAbort),
 			expectedCluster:      "serviceA",
 			expectedResourceName: "envoy.extension_config",
 			expectedAbort: &gcpFilterFault.FaultAbort{
@@ -45,7 +45,7 @@ func TestECDSFaultsGeneration(t *testing.T) {
 		},
 		{
 			// Latency - Service D -> Service A (Internal)
-			experiment:           createExperiment(t, "serviceA", "serviceD", 30, 100, INTERNAL, LATENCY),
+			experiment:           createExperiment(t, "serviceA", "serviceD", 30, 100, faultUpstreamServiceTypeInternal, faultTypeLatency),
 			expectedCluster:      "serviceA",
 			expectedResourceName: "envoy.extension_config",
 			expectedAbort:        nil,
@@ -64,7 +64,7 @@ func TestECDSFaultsGeneration(t *testing.T) {
 		},
 		{
 			// Abort - Service A -> Service X (External)
-			experiment:           createExperiment(t, "serviceX", "serviceA", 65, 400, EXTERNAL, ABORT),
+			experiment:           createExperiment(t, "serviceX", "serviceA", 65, 400, faultUpstreamServiceTypeExternal, faultTypeAbort),
 			expectedCluster:      "serviceA",
 			expectedResourceName: "envoy.egress.extension_config.serviceX",
 			expectedAbort: &gcpFilterFault.FaultAbort{
@@ -80,7 +80,7 @@ func TestECDSFaultsGeneration(t *testing.T) {
 		},
 		{
 			// Latency - Service F -> Service Y (External)
-			experiment:           createExperiment(t, "serviceY", "serviceF", 40, 200, EXTERNAL, LATENCY),
+			experiment:           createExperiment(t, "serviceY", "serviceF", 40, 200, faultUpstreamServiceTypeExternal, faultTypeLatency),
 			expectedCluster:      "serviceF",
 			expectedResourceName: "envoy.egress.extension_config.serviceY",
 			expectedAbort:        nil,
@@ -185,10 +185,10 @@ func TestECDSDefaultFaultsGeneration(t *testing.T) {
 }
 
 const (
-	INTERNAL = "internal"
-	EXTERNAL = "external"
-	ABORT    = "abort"
-	LATENCY  = "latency"
+	faultUpstreamServiceTypeInternal = "internal"
+	faultUpstreamServiceTypeExternal = "external"
+	faultTypeAbort                   = "abort"
+	faultTypeLatency                 = "latency"
 )
 
 func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentstore.Experiment {
@@ -203,14 +203,14 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 	}
 
 	switch faultType {
-	case ABORT:
+	case faultTypeAbort:
 		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_AbortFault{
 			AbortFault: &serverexperimentation.AbortFault{
 				Percentage:  &serverexperimentation.FaultPercentage{Percentage: faultPercent},
 				AbortStatus: &serverexperimentation.FaultAbortStatus{HttpStatusCode: faultValue},
 			},
 		}
-	case LATENCY:
+	case faultTypeLatency:
 		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_LatencyFault{
 			LatencyFault: &serverexperimentation.LatencyFault{
 				Percentage:      &serverexperimentation.FaultPercentage{Percentage: faultPercent},
@@ -220,7 +220,7 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 	}
 
 	switch faultInjectorEnforcing {
-	case INTERNAL:
+	case faultUpstreamServiceTypeInternal:
 		httpConfig.FaultTargeting = &serverexperimentation.FaultTargeting{
 			Enforcer: &serverexperimentation.FaultTargeting_UpstreamEnforcing{
 				UpstreamEnforcing: &serverexperimentation.UpstreamEnforcing{
@@ -233,7 +233,7 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 				},
 			},
 		}
-	case EXTERNAL:
+	case faultUpstreamServiceTypeExternal:
 		httpConfig.FaultTargeting = &serverexperimentation.FaultTargeting{
 			Enforcer: &serverexperimentation.FaultTargeting_DownstreamEnforcing{
 				DownstreamEnforcing: &serverexperimentation.DownstreamEnforcing{
