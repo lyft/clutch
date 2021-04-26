@@ -19,12 +19,12 @@ The xDS management server uses [go-control-plane](http://github.com/envoyproxy/g
 
 ### Components
 
-Below components are responsible to perform Chaos experiments starting from storing the data into the Postgres database for each incoming request all the way to passing the experiment values to the Envoys to inject faults.
+Below components are responsible to perform Chaos experiments starting from storing the data in the Postgres database for each incoming request all the way to passing the experiment values to the Envoys to inject faults.
 
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
 | `clutch.module.chaos.experimentation.api`     | Module that supports CRUD API for managing Chaos experiments like Create, Get, List, Cancel, etc|
-| `clutch.module.chaos.serverexperimentation`   |  Module responsible for orchestrating server fault Chaos experiments.
+| `clutch.module.chaos.serverexperimentation`   | Module responsible for orchestrating server fault Chaos experiments.
 | `clutch.module.chaos.experimentation.xds`     | Module which runs Envoy xDS management server which is responsible for propagating chaos experiment configurations to Envoys
 | `clutch.service.chaos.experimentation.store`  | Service that defines the data layer to perform all database operations for chaos experiments  
 | `clutch.service.db.postgres`                  | Service used to connect to Postgres database
