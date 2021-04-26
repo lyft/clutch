@@ -3,16 +3,6 @@ import styled from "@emotion/styled";
 import type { ChipProps as MuiChipProps } from "@material-ui/core";
 import { Chip as MuiChip } from "@material-ui/core";
 
-/**
- * Explanation of variants:
- * error - red, failed, worst
- * warn - orange, warning, bad
- * attention - grey, not started, neutral-bad
- * neutral - light grey, default state, neutral
- * active - purplish, active, running, neutral-good
- * pending - yellow, low risk, good
- * success - green, completion, succeeded, best
- */
 const CHIP_VARIANTS = [
   "error",
   "warn",
@@ -23,6 +13,18 @@ const CHIP_VARIANTS = [
   "success",
 ] as const;
 export interface ChipProps extends Pick<MuiChipProps, "label"> {
+  /**
+   * Variant of chip.
+   * 
+   * Types of variants sorted from worst to best:
+   *  * error:     failed
+   *  * warn:      warning
+   *  * attention: not started
+   *  * neutral:   default state
+   *  * active:    active/running
+   *  * pending:   low risk
+   *  * success:   completion/succeeded
+   */
   variant: typeof CHIP_VARIANTS[number];
 }
 
@@ -83,6 +85,6 @@ const StyledChip = styled(MuiChip)(
   })
 );
 
-const Chip = ({ variant, ...props }: ChipProps) => <StyledChip {...props} data-variant={variant} />;
+const Chip = ({ variant, ...props }: ChipProps) => <StyledChip data-variant={variant} {...props} />;
 
-export default { Chip, CHIP_VARIANTS };
+export { Chip, CHIP_VARIANTS };
