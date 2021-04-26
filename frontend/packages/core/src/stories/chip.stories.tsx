@@ -1,10 +1,9 @@
 import * as React from "react";
-import type { Meta } from "@storybook/react";
 
 import type { ChipProps } from "../chip";
 import { Chip, CHIP_VARIANTS } from "../chip";
 
-export default ({
+export default {
   title: "Core/Chip",
   component: Chip,
   argTypes: {
@@ -15,7 +14,7 @@ export default ({
       },
     },
   },
-} as unknown) as Meta;
+};
 
 const Template = (props: ChipProps) => <Chip {...props} />;
 

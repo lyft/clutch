@@ -15,7 +15,7 @@ const CHIP_VARIANTS = [
 export interface ChipProps extends Pick<MuiChipProps, "label"> {
   /**
    * Variant of chip.
-   * 
+   *
    * Types of variants sorted from worst to best:
    *  * error:     failed
    *  * warn:      warning
@@ -47,7 +47,7 @@ const CHIP_COLOR_MAP = {
   neutral: {
     background: "#F8F8F9",
     label: "#0D1030",
-    borderColor: "#0D10301A",
+    borderColor: "rgba(13, 16, 48, 0.1)",
   },
   active: {
     background: "#EBEDFA",
@@ -73,7 +73,8 @@ const StyledChip = styled(MuiChip)(
     borderStyle: "solid",
     borderWidth: "1px",
     ".MuiChip-label": {
-      fontSize: "12px",
+      fontSize: "16px",
+      fontWeight: 500,
       lineHeight: "20px",
       padding: "6px 12px",
     },
