@@ -13,7 +13,7 @@ Chaos Experimentation Framework consists of a few parts - frontend, a backend se
 
 The Frontend uses [Clutch's core frontend](https://clutch.sh/docs/development/frontend). It can be customized by using the frontend config. 
 
-The Backend server is responsible for performing CRUD operations of the experimentation package - [CreateExperiments](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L68), [GetExperiments](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L134), [CancelExperimentRun](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L123), etc. It stores experiments in its tables in the Postgres database. 
+The Backend server is responsible for performing CRUD operations of the experimentation package - [CreateExperiment](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L68), [GetExperiments](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L134), [CancelExperimentRun](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L123), etc. It stores experiments in its tables in the Postgres database. 
 
 The xDS management server uses [go-control-plane](http://github.com/envoyproxy/go-control-plane) library and serves two Envoy APIs - [Runtime Discovery Service (RTDS)](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#rtds) and [Extension Configuration Discovery Service (ECDS)](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#ecds). Either of these two APIs can be used to perform fault injection tests. With RTDS, you can make changes to runtime specific to faults whereas with ECDS you can make changes to the entire fault filter to perform any custom experiments.
 
@@ -24,10 +24,10 @@ Below components are responsible to perform experiments starting from storing th
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
 | `clutch.module.chaos.experimentation.api`     | Module that supports CRUD API for managing experiments like Create, Get, List, Cancel, etc|
-| `clutch.module.chaos.serverexperimentation`   | Module which is responsible to processes the experiment data that it receives from database to be UI ready
-| `clutch.module.chaos.experimentation.xds`     | Module which runs Envoy xDS management server which is responsible to propagate experiment values to Envoys
+| `clutch.module.chaos.serverexperimentation`   |  Module responsible for orchestrating server fault chaos experiments.
+| `clutch.module.chaos.experimentation.xds`     | Module which runs Envoy xDS management server which is responsible for propagating chaos experiment configurations to Envoys
 | `clutch.service.chaos.experimentation.store`  | Service that defines the data layer to perform all database operations for experiments  
-| `clutch.service.db.postgres`                  | Service to connect to Postgres database
+| `clutch.service.db.postgres`                  | Service used to connect to Postgres database
 
 In order to use Chaos Experimentation Framework, **registration of all the above components is required**. 
 
@@ -37,7 +37,7 @@ It is recommended to run Envoy xDS management server (`clutch.module.chaos.exper
 
 #### Frontend
 
-The frontend of the framework is completely configurable. Below is a sample [frontend config](https://github.com/lyft/clutch/blob/6990b5aa8b1e6a47a33b28e2aaab9783e4e9d084/frontend/packages/app/src/clutch.config.js) which will show the list of experiments and as well as workflow to start/stop an experiment. 
+The frontend of the framework is completely configurable. Below is an [example frontend config](https://github.com/lyft/clutch/blob/6990b5aa8b1e6a47a33b28e2aaab9783e4e9d084/frontend/packages/app/src/clutch.config.js) which will show the list of experiments and as well as workflow to start/stop an experiment. 
 
 ```"@clutch-sh/experimentation": {
 module.exports = {
@@ -135,7 +135,7 @@ Keep in mind that both backend config and xDS config need to connect to the same
 
 ### Example Envoy config
 
-When Envoy in the mesh boots up, it creates a bi-directional gRPC stream with the management server. Below is the sample Envoy configs for RTDS and ECDS which will initiate the connection to the xDS server. Checkout [Envoy Proxy docs](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter) for details on Fault Injection
+When Envoy in the mesh boots up, it creates a bi-directional gRPC stream with the management server. Below is the sample Envoy configs for RTDS and ECDS which will initiate the connection to the xDS server. Checkout [Envoy Proxy docs](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter) for details on Envoy's support for Fault Injection.
 
 #### RTDS 
 ```yaml title="envoy.yaml"
