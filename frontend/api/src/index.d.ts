@@ -6860,68 +6860,6 @@ export namespace clutch {
                         }
                     }
                 }
-
-                /** Namespace serverexperimentation. */
-                namespace serverexperimentation {
-
-                    /** Namespace v1. */
-                    namespace v1 {
-
-                        /** Properties of a Config. */
-                        interface IConfig {
-
-                            /** Config ingressFaultRuntimePrefix */
-                            ingressFaultRuntimePrefix?: (string|null);
-
-                            /** Config egressFaultRuntimePrefix */
-                            egressFaultRuntimePrefix?: (string|null);
-                        }
-
-                        /** Represents a Config. */
-                        class Config implements IConfig {
-
-                            /**
-                             * Constructs a new Config.
-                             * @param [properties] Properties to set
-                             */
-                            constructor(properties?: clutch.config.module.chaos.serverexperimentation.v1.IConfig);
-
-                            /** Config ingressFaultRuntimePrefix. */
-                            public ingressFaultRuntimePrefix: string;
-
-                            /** Config egressFaultRuntimePrefix. */
-                            public egressFaultRuntimePrefix: string;
-
-                            /**
-                             * Verifies a Config message.
-                             * @param message Plain object to verify
-                             * @returns `null` if valid, otherwise the reason why it is not
-                             */
-                            public static verify(message: { [k: string]: any }): (string|null);
-
-                            /**
-                             * Creates a Config message from a plain object. Also converts values to their respective internal types.
-                             * @param object Plain object
-                             * @returns Config
-                             */
-                            public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.serverexperimentation.v1.Config;
-
-                            /**
-                             * Creates a plain object from a Config message. Also converts values to other types if specified.
-                             * @param message Config
-                             * @param [options] Conversion options
-                             * @returns Plain object
-                             */
-                            public static toObject(message: clutch.config.module.chaos.serverexperimentation.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                            /**
-                             * Converts this Config to JSON.
-                             * @returns JSON object
-                             */
-                            public toJSON(): { [k: string]: any };
-                        }
-                    }
-                }
             }
 
             /** Namespace sourcecontrol. */

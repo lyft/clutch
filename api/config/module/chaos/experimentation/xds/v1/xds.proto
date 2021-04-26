@@ -6,7 +6,6 @@ option go_package = "github.com/lyft/clutch/backend/api/config/module/chaos/expe
 
 import "validate/validate.proto";
 import "google/protobuf/duration.proto";
-import "google/protobuf/any.proto";
 
 message Config {
   // Interval in seconds between refreshes of xDS data from the backing store.
