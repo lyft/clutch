@@ -135,7 +135,7 @@ Keep in mind that both backend config and xDS config need to connect to the same
 
 ### Example Envoy config
 
-When Envoy in the mesh boots up, it creates a bi-directional gRPC stream with the management server. Below is the sample Envoy configs for RTDS and ECDS which will initiate the connection to the xDS server. Checkout [Envoy Proxy docs](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter) for details on Fault Injection
+When Envoy in the mesh boots up, it creates a bi-directional gRPC stream with the management server. Below is the sample Envoy configs for RTDS and ECDS which will initiate the connection to the xDS server. Checkout [Envoy Proxy docs](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter) for details on Envoy's support for Fault Injection.
 
 #### RTDS 
 ```yaml title="envoy.yaml"
