@@ -24,7 +24,7 @@ Below components are responsible to perform experiments starting from storing th
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
 | `clutch.module.chaos.experimentation.api`     | Module that supports CRUD API for managing experiments like Create, Get, List, Cancel, etc|
-| `clutch.module.chaos.serverexperimentation`   | Module which is responsible to processes the experiment data that it receives from database to be UI ready
+| `clutch.module.chaos.serverexperimentation`   |  Module responsible for orchestrating server fault chaos experiments.
 | `clutch.module.chaos.experimentation.xds`     | Module which runs Envoy xDS management server which is responsible to propagate experiment values to Envoys
 | `clutch.service.chaos.experimentation.store`  | Service that defines the data layer to perform all database operations for experiments  
 | `clutch.service.db.postgres`                  | Service to connect to Postgres database
