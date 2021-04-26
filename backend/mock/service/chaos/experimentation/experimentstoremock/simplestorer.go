@@ -5,6 +5,9 @@ import (
 	"strconv"
 	"sync"
 
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
+
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -20,6 +23,11 @@ func (s *SimpleStorer) CreateExperiment(ctx context.Context, es *experimentstore
 	s.Lock()
 	defer s.Unlock()
 
+	message, err := anypb.UnmarshalNew(es.Config, proto.UnmarshalOptions{})
+	if err != nil {
+		return nil, err
+	}
+
 	e := &experimentstore.Experiment{
 		Run: &experimentstore.ExperimentRun{
 			Id:        strconv.Itoa(s.idGenerator),
@@ -27,8 +35,9 @@ func (s *SimpleStorer) CreateExperiment(ctx context.Context, es *experimentstore
 			EndTime:   es.EndTime,
 		},
 		Config: &experimentstore.ExperimentConfig{
-			Id:     strconv.Itoa(s.idGenerator),
-			Config: es.Config,
+			Id:      strconv.Itoa(s.idGenerator),
+			Config:  es.Config,
+			Message: message,
 		},
 	}
 	s.experiments = append(s.experiments, e)
