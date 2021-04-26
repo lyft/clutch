@@ -27,7 +27,7 @@ Below components are responsible to perform experiments starting from storing th
 | `clutch.module.chaos.serverexperimentation`   |  Module responsible for orchestrating server fault chaos experiments.
 | `clutch.module.chaos.experimentation.xds`     | Module which runs Envoy xDS management server which is responsible for propagating chaos experiment configurations to Envoys
 | `clutch.service.chaos.experimentation.store`  | Service that defines the data layer to perform all database operations for experiments  
-| `clutch.service.db.postgres`                  | Service to connect to Postgres database
+| `clutch.service.db.postgres`                  | Service used to connect to Postgres database
 
 In order to use Chaos Experimentation Framework, **registration of all the above components is required**. 
 
