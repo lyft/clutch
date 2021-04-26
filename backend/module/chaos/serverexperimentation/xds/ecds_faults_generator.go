@@ -57,10 +57,10 @@ type ECDSFaultsGenerator struct {
 	SerializedDefaultFaultFilter []byte
 }
 
-func (g *ECDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.ECDSResource, error) {
+func (g ECDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.ECDSResource, error) {
 	httpFaultConfig, ok := experiment.Config.Message.(*serverexperimentation.HTTPFaultConfig)
 	if !ok {
-		return nil, fmt.Errorf("ECDS server faults generator cannot generate faults for a given experiment (run ID: %s, config ID %s)", experiment.Run.Id, experiment.Config.Id)
+		return nil, fmt.Errorf("ECDS server faults generator couldn't generate faults due to config type casting failure (experiment run ID: %s, experiment config ID %s)", experiment.Run.Id, experiment.Config.Id)
 	}
 
 	upstreamCluster, downstreamCluster, err := GetClusterPair(httpFaultConfig)
@@ -164,7 +164,7 @@ func (g *ECDSFaultsGenerator) GenerateDefaultResource(cluster string, resourceNa
 	return xds.NewECDSResource(cluster, config)
 }
 
-func (g *ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (bool, *gcpFilterFault.FaultAbort, *gcpFilterCommon.FaultDelay, error) {
+func (g ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (bool, *gcpFilterFault.FaultAbort, *gcpFilterCommon.FaultDelay, error) {
 	var isEgressFault bool
 	var abort *gcpFilterFault.FaultAbort
 	var delay *gcpFilterCommon.FaultDelay
