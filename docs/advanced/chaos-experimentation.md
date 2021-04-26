@@ -9,17 +9,17 @@ A framework to perform Chaos experiments built on top of [EnvoyProxy](https://ww
 
 <img alt="Clutch Component Architecture" src={useBaseUrl('img/docs/chaos-experimentation.png')} width="75%" />
 
-Chaos Experimentation Framework consists of few parts - frontend, a backend server and a xDS management server. 
+Chaos Experimentation Framework consists of a few parts - frontend, a backend server and a xDS management server. 
 
 The Frontend uses [Clutch's core frontend](https://clutch.sh/docs/development/frontend). It can be customized by using the frontend config. 
 
-The Backend server is responsible for all the CRUD operations of the experiments. It stores experiments in its tables in the Postgres database. 
+The Backend server is responsible for performing CRUD operations of the experimentation package - [CreateExperiments](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L68), [GetExperiments](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L134), [CancelExperimentRun](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L123), etc. It stores experiments in its tables in the Postgres database. 
 
-The xDS management server uses [go-control-plane](http://github.com/envoyproxy/go-control-plane) library and serves two Envoy APIs - [RTDS](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#rtds) and [ECDS](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#ecds). Either of these two APIs can be used to perform fault injection tests. With RTDS, you can make changes to runtimes specific to faults whereas with ECDS you can make changes to the entire fault filter to perform any custom experiments.
+The xDS management server uses [go-control-plane](http://github.com/envoyproxy/go-control-plane) library and serves two Envoy APIs - [Runtime Discovery Service (RTDS)](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#rtds) and [Extension Configuration Discovery Service (ECDS)](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#ecds). Either of these two APIs can be used to perform fault injection tests. With RTDS, you can make changes to runtime specific to faults whereas with ECDS you can make changes to the entire fault filter to perform any custom experiments.
 
 ### Components
 
-The framework needs below mentioned components to perform experiments starting from storing the data into the Postgres database for each incoming request all the way to pass the experiment values to the Envoys to inject faults.
+Below components are responsible to perform experiments starting from storing the data into the Postgres database for each incoming request all the way to passing the experiment values to the Envoys to inject faults.
 
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
@@ -83,7 +83,6 @@ Below configuration will spin up all the required modules and services to store 
 modules:
   ...
   - name: clutch.module.chaos.experimentation.api
-  - name: clutch.module.chaos.lyftexperimentation
   - name: clutch.module.chaos.serverexperimentation
 services:
   ...
@@ -91,12 +90,12 @@ services:
       typed_config:
         "@type": types.google.com/clutch.config.service.db.postgres.v1.Config
         connection:
-          host: ${RDS_HOST}
-          port: ${RDS_PORT}
-          user: ${RDS_USER}
+          host: <RDS_HOST>
+          port: <RDS_PORT>
+          user: <RDS_USER>
           ssl_mode: REQUIRE
-          dbname: ${RDS_NAME}
-          password: ${CREDENTIALS_CLUTCH_TO_RDS_PASSWORD}
+          dbname: <RDS_NAME>
+          password: <RDS_PASSWORD>
   - name: clutch.service.chaos.experimentation.store
 ```
 
@@ -123,16 +122,16 @@ services:
     typed_config:
       "@type": types.google.com/clutch.config.service.db.postgres.v1.Config
       connection:
-        host: ${RDS_HOST}
-        port: ${RDS_PORT}
-        user: ${RDS_USER}
+        host: <RDS_HOST>
+        port: <RDS_PORT>
+        user: <RDS_USER>
         ssl_mode: REQUIRE
-        dbname: ${RDS_NAME}
-        password: ${CREDENTIALS_CLUTCH_TO_RDS_PASSWORD}
+        dbname: <RDS_NAME>
+        password: <RDS_PASSWORD>
   - name: clutch.service.chaos.experimentation.store
 ```
 
-Keep in mind that both backend config and xDS config needs to connect to the same Postgres database.
+Keep in mind that both backend config and xDS config need to connect to the same Postgres database.
 
 ### Example Envoy config
 
@@ -191,7 +190,7 @@ filters:
 
 ### Redis experiments 
 
-To perform Redis experiments, there is a specific module that is used to process the Redis experiment data. You will need below component in addition to the above Experimentation components 
+To perform Redis experiments, there is a specific module that is used to process the Redis experiment data. You will need below component in addition to the above Experimentation components. Also, keep in mind that Redis experiments can be only performed with RTDS. 
 
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
