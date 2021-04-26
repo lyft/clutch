@@ -17,6 +17,7 @@ import {
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
 import { Card, CardContent } from "./card";
+import { Chip } from "./chip";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
@@ -62,6 +63,7 @@ export {
   CardContent,
   Checkbox,
   CheckboxPanel,
+  Chip,
   client,
   ClipboardButton,
   ClutchApp,
