@@ -37,7 +37,7 @@ It is recommended to run Envoy xDS management server (`clutch.module.chaos.exper
 
 #### Frontend
 
-The frontend of the framework is completely configurable. Below is a sample [frontend config](https://github.com/lyft/clutch/blob/6990b5aa8b1e6a47a33b28e2aaab9783e4e9d084/frontend/packages/app/src/clutch.config.js) which will show the list of experiments and as well as workflow to start/stop an experiment. 
+The frontend of the framework is completely configurable. Below is an [example frontend config](https://github.com/lyft/clutch/blob/6990b5aa8b1e6a47a33b28e2aaab9783e4e9d084/frontend/packages/app/src/clutch.config.js) which will show the list of experiments and as well as workflow to start/stop an experiment. 
 
 ```"@clutch-sh/experimentation": {
 module.exports = {
