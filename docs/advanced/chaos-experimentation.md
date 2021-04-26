@@ -135,10 +135,10 @@ Keep in mind that both backend config and xDS config need to connect to the same
 
 ### Example Envoy config
 
-When Envoy in the mesh boots up, it creates a bi-directional gRPC stream with the management server. Below is the sample Envoy configs for RTDS and ECDS which will initiate the connection to the xDS server 
+When Envoy in the mesh boots up, it creates a bi-directional gRPC stream with the management server. Below is the sample Envoy configs for RTDS and ECDS which will initiate the connection to the xDS server. Checkout [Envoy Proxy docs](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter) for details on Fault Injection
 
 #### RTDS 
-```yaml title="envoy-rtds-config.yaml"
+```yaml title="envoy.yaml"
 ...
 layered_runtime:
   layers:
@@ -151,11 +151,26 @@ layered_runtime:
             grpc_services:
               envoy_grpc:
                 cluster_name: <xDS_CLUSTER>
-        
+...
+http_filters:
+  - name: envoy.fault
+    typed_config:
+      "@type": "type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault"
+      abort:
+        percentage:
+          numerator: 0
+          denominator: HUNDRED
+        http_status: 503
+      delay:
+        percentage:
+          numerator: 0
+          denominator: HUNDRED
+        fixed_delay: 0.001s
+...        
 ```
 
 #### ECDS
-```yaml title="envoy-ecds-config.yaml"
+```yaml title="envoy.yaml"
 filters:
   ...
   http_filters:
@@ -172,17 +187,17 @@ filters:
         initial_fetch_timeout: 10s
         resource_api_version: V3
       default_config: 
-        '@type': type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
-        abort: 
-          http_status: 503
-          percentage: {denominator: HUNDRED, numerator: 0}
-        abort_http_status_runtime: ecds_runtime_override_do_not_use.http.abort.http_status
-        abort_percent_runtime: ecds_runtime_override_do_not_use.http.abort.abort_percent
-        delay: 
-          fixed_delay: 0.001s
-          percentage: {denominator: HUNDRED, numerator: 0}
-        delay_duration_runtime: ecds_runtime_override_do_not_use.http.delay.fixed_duration_ms
-        delay_percent_runtime: ecds_runtime_override_do_not_use.http.delay.percentage
+        "@type": "type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault"
+          abort:
+            percentage:
+              numerator: 0
+              denominator: HUNDRED
+            http_status: 503
+          delay:
+            percentage:
+              numerator: 0
+              denominator: HUNDRED
+            fixed_delay: 0.001s
       apply_default_config_without_warming: false
       type_urls: 
         - type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
