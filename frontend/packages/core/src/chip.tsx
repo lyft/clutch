@@ -30,30 +30,37 @@ const CHIP_COLOR_MAP = {
   error: {
     background: "#F9EAE7",
     label: "#C2302E",
+    borderColor: "#C2302E",
   },
   warn: {
     background: "#FEF8E8",
     label: "#D87313",
+    borderColor: "##D87313",
   },
   attention: {
     background: "#E2E2E6",
     label: "#0D1030",
+    borderColor: "##0D103061",
   },
   neutral: {
     background: "#F8F8F9",
     label: "#0D1030",
+    borderColor: "#0D10301A",
   },
   active: {
     background: "#EBEDFA",
     label: "#3548D4",
+    borderColor: "#3548D4",
   },
   pending: {
     background: "#FFFEE8",
     label: "#B09027",
+    borderColor: "#B09027",
   },
   success: {
     background: "#E9F6EC",
     label: "#40A05A",
+    borderColor: "#40A05A",
   },
 };
 
@@ -72,6 +79,7 @@ const StyledChip = styled(MuiChip)(
   props => ({
     background: CHIP_COLOR_MAP[props["data-variant"]].background,
     color: CHIP_COLOR_MAP[props["data-variant"]].label,
+    borderColor: CHIP_COLOR_MAP[props["data-variant"]].borderColor,
   })
 );
 
