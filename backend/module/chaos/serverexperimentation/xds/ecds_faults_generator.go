@@ -54,7 +54,27 @@ var DefaultDelayFaultConfig = &gcpFilterCommon.FaultDelay{
 }
 
 type ECDSFaultsGenerator struct {
-	SerializedDefaultFaultFilter []byte
+	serializedDefaultFaultFilter []byte
+}
+
+func NewECDSFaultsGenerator() (*ECDSFaultsGenerator, error) {
+	faultFilter := &gcpFilterFault.HTTPFault{
+		Delay: DefaultDelayFaultConfig,
+		Abort: DefaultAbortFaultConfig,
+		// override runtimes so that default runtime is not used.
+		DelayPercentRuntime:    delayPercentRuntime,
+		DelayDurationRuntime:   delayDurationRuntime,
+		AbortHttpStatusRuntime: abortHttpStatusRuntime,
+		AbortPercentRuntime:    abortPercentRuntime,
+	}
+	marshaledFilter, err := proto.Marshal(faultFilter)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ECDSFaultsGenerator{
+		serializedDefaultFaultFilter: marshaledFilter,
+	}, nil
 }
 
 func (g ECDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.ECDSResource, error) {
@@ -135,29 +155,11 @@ func (g *ECDSFaultsGenerator) GenerateDefaultResource(cluster string, resourceNa
 		return xds.NewEmptyECDSResource(), nil
 	}
 
-	if g.SerializedDefaultFaultFilter == nil {
-		faultFilter := &gcpFilterFault.HTTPFault{
-			Delay: DefaultDelayFaultConfig,
-			Abort: DefaultAbortFaultConfig,
-			// override runtimes so that default runtime is not used.
-			DelayPercentRuntime:    delayPercentRuntime,
-			DelayDurationRuntime:   delayDurationRuntime,
-			AbortHttpStatusRuntime: abortHttpStatusRuntime,
-			AbortPercentRuntime:    abortPercentRuntime,
-		}
-		marshaledFilter, err := proto.Marshal(faultFilter)
-		if err != nil {
-			return nil, err
-		}
-
-		g.SerializedDefaultFaultFilter = marshaledFilter
-	}
-
 	config := &gcpCoreV3.TypedExtensionConfig{
 		Name: resourceName,
 		TypedConfig: &any.Any{
 			TypeUrl: faultFilterTypeURL,
-			Value:   g.SerializedDefaultFaultFilter,
+			Value:   g.serializedDefaultFaultFilter,
 		},
 	}
 

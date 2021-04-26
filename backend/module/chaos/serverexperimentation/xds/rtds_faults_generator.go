@@ -13,21 +13,21 @@ const (
 	// a given downstream service to a given upstream service faults
 	latencyPercentageWithDownstream = `%s.%s.delay.fixed_delay_percent`
 	latencyDurationWithDownstream   = `%s.%s.delay.fixed_duration_ms`
-	hTTPPercentageWithDownstream    = `%s.%s.abort.abort_percent`
-	hTTPStatusWithDownstream        = `%s.%s.abort.http_status`
+	httpPercentageWithDownstream    = `%s.%s.abort.abort_percent`
+	httpStatusWithDownstream        = `%s.%s.abort.http_status`
 
 	// all downstream service to a given upstream faults
 	latencyPercentageWithoutDownstream = `%s.delay.fixed_delay_percent`
 	latencyDurationWithoutDownstream   = `%s.delay.fixed_duration_ms`
-	hTTPPercentageWithoutDownstream    = `%s.abort.abort_percent`
-	hTTPStatusWithoutDownstream        = `%s.abort.http_status`
+	httpPercentageWithoutDownstream    = `%s.abort.abort_percent`
+	httpStatusWithoutDownstream        = `%s.abort.http_status`
 
 	// EGRESS FAULT
 	// a given downstream service to a given external upstream faults
 	latencyPercentageForEgress = `%s.%s.delay.fixed_delay_percent`
 	latencyDurationForEgress   = `%s.%s.delay.fixed_duration_ms`
-	hTTPPercentageForEgress    = `%s.%s.abort.abort_percent`
-	hTTPStatusForEgress        = `%s.%s.abort.http_status`
+	httpPercentageForEgress    = `%s.%s.abort.abort_percent`
+	httpStatusForEgress        = `%s.%s.abort.http_status`
 )
 
 type RTDSFaultsGenerator struct {
@@ -80,18 +80,18 @@ func (g RTDSFaultsGenerator) createRuntimeKeys(upstreamCluster string, downstrea
 		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
 		case *serverexperimentationv1.FaultTargeting_DownstreamEnforcing:
 			// Abort Egress Fault
-			percentageKey = fmt.Sprintf(hTTPPercentageForEgress, g.EgressFaultRuntimePrefix, upstreamCluster)
-			faultKey = fmt.Sprintf(hTTPStatusForEgress, g.EgressFaultRuntimePrefix, upstreamCluster)
+			percentageKey = fmt.Sprintf(httpPercentageForEgress, g.EgressFaultRuntimePrefix, upstreamCluster)
+			faultKey = fmt.Sprintf(httpStatusForEgress, g.EgressFaultRuntimePrefix, upstreamCluster)
 
 		case *serverexperimentationv1.FaultTargeting_UpstreamEnforcing:
 			// Abort Internal Fault for all downstream services
 			if downstreamCluster == "" {
-				percentageKey = fmt.Sprintf(hTTPPercentageWithoutDownstream, g.IngressFaultRuntimePrefix)
-				faultKey = fmt.Sprintf(hTTPStatusWithoutDownstream, g.IngressFaultRuntimePrefix)
+				percentageKey = fmt.Sprintf(httpPercentageWithoutDownstream, g.IngressFaultRuntimePrefix)
+				faultKey = fmt.Sprintf(httpStatusWithoutDownstream, g.IngressFaultRuntimePrefix)
 			} else {
 				// Abort Internal Fault for a given downstream services
-				percentageKey = fmt.Sprintf(hTTPPercentageWithDownstream, g.IngressFaultRuntimePrefix, downstreamCluster)
-				faultKey = fmt.Sprintf(hTTPStatusWithDownstream, g.IngressFaultRuntimePrefix, downstreamCluster)
+				percentageKey = fmt.Sprintf(httpPercentageWithDownstream, g.IngressFaultRuntimePrefix, downstreamCluster)
+				faultKey = fmt.Sprintf(httpStatusWithDownstream, g.IngressFaultRuntimePrefix, downstreamCluster)
 			}
 
 		default:

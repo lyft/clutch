@@ -7,8 +7,8 @@ option go_package = "github.com/lyft/clutch/backend/api/config/module/chaos/serv
 import "validate/validate.proto";
 
 message Config {
-  // A prefix to use for runtime variables if a fault type is injected on the ingress traffic by an upstream service.
+  // The prefix to use for runtime variables if a fault type is injected on the ingress traffic by an upstream service.
   string ingress_fault_runtime_prefix = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  // A prefix to use for runtime variables if a fault type is injected on the egress traffic by a downstream service.
+  // The prefix to use for runtime variables if a fault type is injected on the egress traffic by a downstream service.
   string egress_fault_runtime_prefix = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
