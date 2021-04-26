@@ -19,7 +19,7 @@ The xDS management server uses [go-control-plane](http://github.com/envoyproxy/g
 
 ### Components
 
-Below components are responsible to perform experiments starting from storing the data into the Postgres database for each incoming request all the way to passing the experiment values to the Envoys to inject faults.
+Below components are responsible to perform experiments starting from storing the data in the Postgres database for each incoming request all the way to passing the experiment values to the Envoys to inject faults.
 
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
