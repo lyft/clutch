@@ -23,20 +23,9 @@ func NewRTDSResource(cluster string, keyValues []*RuntimeKeyValue) (*RTDSResourc
 	}, nil
 }
 
-func NewEmptyRTDSResource(cluster string) *RTDSResource {
-	return &RTDSResource{
-		Cluster:          cluster,
-		RuntimeKeyValues: nil,
-	}
-}
-
-func (r *RTDSResource) Empty() bool {
-	return r.RuntimeKeyValues == nil
-}
-
 type RTDSResourceGenerator interface {
 	// Generates an RTDS resource for a given experiment. The implementation of this method should
-	// return a resource created with a `NewEmptyRTDSResource` method call if the receiver is not
-	// interested in generating faults for a passed experiment.
+	// return a nil resource and no error if  the receiver is not interested in generating faults for a
+	// passed experiment.
 	GenerateResource(experiment *experimentstore.Experiment) (*RTDSResource, error)
 }

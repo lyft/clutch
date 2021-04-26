@@ -79,7 +79,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 			if err != nil {
 				p.rtdsResourceGenerationFailureCount.Inc(1)
 				p.logger.Errorw("Error when generating RTDS resource for experiment", "error", err, "experimentRunID", experiment.Run.Id)
-			} else if _, exists := p.ecdsConfig.enabledClusters[r.Cluster]; !exists && !r.Empty() {
+			} else if _, exists := p.ecdsConfig.enabledClusters[r.Cluster]; !exists && r != nil {
 				// apply a generated RTDS resource if the resource is not empty and a target cluster
 				// does not have ECDS faults enabled. If a cluster is on ECDS  enable list ignore RTDS
 				// resource and proceed to checking for ECDS Resources.
@@ -95,7 +95,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 				p.logger.Errorw("Error when generating ECDS resource for experiment", "error", err, "experimentRunID", experiment.Run.Id)
 				continue
 			}
-			if r.Empty() {
+			if r == nil {
 				// Nothing to do if resource is empty
 				continue
 			}
@@ -133,7 +133,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 					if err != nil {
 						p.ecdsDefaultResourceGenerationFailureCount.Inc(1)
 						p.logger.Errorw("Cannot generate empty ECDS resource for cluster", "cluster", cluster, "resource", n)
-					} else if !r.Empty() {
+					} else if r != nil {
 						resourceWithTTL := p.createResourceWithTTLForECDSResource(r, nil)
 						resourcesWithTTL = append(resourcesWithTTL, resourceWithTTL...)
 					}
