@@ -43,6 +43,27 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
+	if d := m.GetCacheRefreshInterval(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
+			return ConfigValidationError{
+				field:  "CacheRefreshInterval",
+				reason: "value is not a valid duration",
+				cause:  err,
+			}
+		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "CacheRefreshInterval",
+				reason: "value must be greater than 0s",
+			}
+		}
+
+	}
+
 	if len(m.GetRtdsLayerName()) < 1 {
 		return ConfigValidationError{
 			field:  "RtdsLayerName",
@@ -50,38 +71,46 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetCacheRefreshInterval()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ConfigValidationError{
-				field:  "CacheRefreshInterval",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	// no validation rules for IngressFaultRuntimePrefix
-
-	// no validation rules for EgressFaultRuntimePrefix
-
-	if v, ok := interface{}(m.GetResourceTtl()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if d := m.GetResourceTtl(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
 			return ConfigValidationError{
 				field:  "ResourceTtl",
-				reason: "embedded message failed validation",
+				reason: "value is not a valid duration",
 				cause:  err,
 			}
 		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "ResourceTtl",
+				reason: "value must be greater than 0s",
+			}
+		}
+
 	}
 
-	if v, ok := interface{}(m.GetHeartbeatInterval()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if d := m.GetHeartbeatInterval(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
 			return ConfigValidationError{
 				field:  "HeartbeatInterval",
-				reason: "embedded message failed validation",
+				reason: "value is not a valid duration",
 				cause:  err,
 			}
 		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "HeartbeatInterval",
+				reason: "value must be greater than 0s",
+			}
+		}
+
 	}
 
 	if v, ok := interface{}(m.GetEcdsAllowList()).(interface{ Validate() error }); ok {
@@ -157,6 +186,13 @@ var _ interface {
 func (m *Config_ECDSAllowList) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if len(m.GetEnabledClusters()) < 1 {
+		return Config_ECDSAllowListValidationError{
+			field:  "EnabledClusters",
+			reason: "value must contain at least 1 item(s)",
+		}
 	}
 
 	return nil
