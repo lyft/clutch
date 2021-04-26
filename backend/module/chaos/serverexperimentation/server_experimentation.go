@@ -1,5 +1,9 @@
 package serverexperimentation
 
+// <!-- START clutchdoc -->
+// description: Chaos Experimentation Framework - Supports transformation of data from database to be UI ready
+// <!-- END clutchdoc -->
+
 import (
 	"errors"
 	"fmt"

@@ -1,7 +1,7 @@
 package api
 
 // <!-- START clutchdoc -->
-// description: Experimentation Framework Service implementation. Supports a CRUD API for managing experiments.
+// description: Chaos Experimentation Framework - Supports a CRUD API for managing experiments.
 // <!-- END clutchdoc -->
 
 import (

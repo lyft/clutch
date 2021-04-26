@@ -1,5 +1,9 @@
 package redisexperimentation
 
+// <!-- START clutchdoc -->
+// description: Chaos Experimentation Framework - Supports Redis specific experiments.
+// <!-- END clutchdoc -->
+
 import (
 	"errors"
 	"fmt"
