@@ -13,20 +13,20 @@ Chaos Experimentation Framework consists of a few parts - frontend, a backend se
 
 The Frontend uses [Clutch's core frontend](https://clutch.sh/docs/development/frontend). It can be customized by using the frontend config. 
 
-The Backend server is responsible for performing CRUD operations of the experimentation package - [CreateExperiment](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L68), [GetExperiments](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L134), [CancelExperimentRun](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L123), etc. It stores experiments in its tables in the Postgres database. 
+The Backend server is responsible for performing CRUD operations of the experimentation package - [CreateExperiment](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L68), [GetExperiments](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L134), [CancelExperimentRun](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L123), etc. It stores Chaos experiments in its tables in the Postgres database. 
 
-The xDS management server uses [go-control-plane](http://github.com/envoyproxy/go-control-plane) library and serves two Envoy APIs - [Runtime Discovery Service (RTDS)](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#rtds) and [Extension Configuration Discovery Service (ECDS)](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#ecds). Either of these two APIs can be used to perform fault injection tests. With RTDS, you can make changes to runtime specific to faults whereas with ECDS you can make changes to the entire fault filter to perform any custom experiments.
+The xDS management server uses [go-control-plane](http://github.com/envoyproxy/go-control-plane) library and serves two Envoy APIs - [Runtime Discovery Service (RTDS)](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#rtds) and [Extension Configuration Discovery Service (ECDS)](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration#ecds). Either of these two APIs can be used to perform fault injection tests. With RTDS, you can make changes to runtime specific to faults whereas with ECDS you can make changes to the entire fault filter to perform any custom Chaos experiments.
 
 ### Components
 
-Below components are responsible to perform experiments starting from storing the data into the Postgres database for each incoming request all the way to passing the experiment values to the Envoys to inject faults.
+Below components are responsible to perform Chaos experiments starting from storing the data into the Postgres database for each incoming request all the way to passing the experiment values to the Envoys to inject faults.
 
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
-| `clutch.module.chaos.experimentation.api`     | Module that supports CRUD API for managing experiments like Create, Get, List, Cancel, etc|
-| `clutch.module.chaos.serverexperimentation`   |  Module responsible for orchestrating server fault chaos experiments.
+| `clutch.module.chaos.experimentation.api`     | Module that supports CRUD API for managing Chaos experiments like Create, Get, List, Cancel, etc|
+| `clutch.module.chaos.serverexperimentation`   |  Module responsible for orchestrating server fault Chaos experiments.
 | `clutch.module.chaos.experimentation.xds`     | Module which runs Envoy xDS management server which is responsible for propagating chaos experiment configurations to Envoys
-| `clutch.service.chaos.experimentation.store`  | Service that defines the data layer to perform all database operations for experiments  
+| `clutch.service.chaos.experimentation.store`  | Service that defines the data layer to perform all database operations for chaos experiments  
 | `clutch.service.db.postgres`                  | Service used to connect to Postgres database
 
 In order to use Chaos Experimentation Framework, **registration of all the above components is required**. 
@@ -37,14 +37,14 @@ It is recommended to run Envoy xDS management server (`clutch.module.chaos.exper
 
 #### Frontend
 
-The frontend of the framework is completely configurable. Below is an [example frontend config](https://github.com/lyft/clutch/blob/6990b5aa8b1e6a47a33b28e2aaab9783e4e9d084/frontend/packages/app/src/clutch.config.js) which will show the list of experiments and as well as workflow to start/stop an experiment. 
+The frontend of the framework is completely configurable. Below is an [example frontend config](https://github.com/lyft/clutch/blob/6990b5aa8b1e6a47a33b28e2aaab9783e4e9d084/frontend/packages/app/src/clutch.config.js) which will show the list of Chaos experiments and as well as workflow to start/stop an experiment. 
 
 ```"@clutch-sh/experimentation": {
 module.exports = {
   ...
   "@clutch-sh/experimentation": {
     listExperiments: {
-      description: "Manage fault injection experiments.",
+      description: "Manage fault injection Chaos experiments.",
       trending: true,
       componentProps: {
         columns: [
@@ -203,13 +203,13 @@ filters:
         - type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
 ```
 
-### Redis experiments 
+### Redis Chaos experiments 
 
-To perform Redis experiments, there is a specific module that is used to process the Redis experiments data. You will need below component in addition to the above Experimentation components. Also, keep in mind that Redis experiments can be only be run with the use of RTDS (and not ECDS). 
+To perform Redis Chaos experiments, there is a specific module that is used to process the Redis Chaos experiments data. You will need below component in addition to the above Experimentation components. Also, keep in mind that Redis experiments can be only be run with the use of RTDS (and not ECDS). 
 
 | Component Name                                | Description |
 | --------------------------------------------- | ----------- |
-| `clutch.module.chaos.redisexperimentation`    | Module which is responsible for orchestrating the Redis experiments
+| `clutch.module.chaos.redisexperimentation`    | Module which is responsible for orchestrating the Redis Chaos experiments
 
 #### Frontend Config
 
