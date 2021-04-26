@@ -48,7 +48,11 @@ func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.
 		EgressFaultRuntimePrefix:  config.EgressFaultRuntimePrefix,
 	}
 
-	xds.ECDSGeneratorsByTypeUrl[xds.TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = &serverexperimentationxds.ECDSFaultsGenerator{}
+	g, err := serverexperimentationxds.NewECDSFaultsGenerator()
+	if err != nil {
+		return nil, err
+	}
+	xds.ECDSGeneratorsByTypeUrl[xds.TypeUrl(&serverexperimentationv1.HTTPFaultConfig{})] = g
 
 	return &Service{
 		storer: storer,

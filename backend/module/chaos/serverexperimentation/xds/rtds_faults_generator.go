@@ -58,11 +58,10 @@ func (g RTDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experi
 		return nil, err
 	}
 
-	keyValuePairs := make([]*xds.RuntimeKeyValue, 2)
-	keyValuePairs[0] = &xds.RuntimeKeyValue{Key: percentageKey, Value: percentageValue}
-	keyValuePairs[1] = &xds.RuntimeKeyValue{Key: faultKey, Value: faultValue}
-
-	return xds.NewRTDSResource(cluster, keyValuePairs)
+	return xds.NewRTDSResource(cluster, []*xds.RuntimeKeyValue{
+		&xds.RuntimeKeyValue{Key: percentageKey, Value: percentageValue},
+		&xds.RuntimeKeyValue{Key: faultKey, Value: faultValue},
+	})
 }
 
 func (g RTDSFaultsGenerator) createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentationv1.HTTPFaultConfig) (string, uint32, string, uint32, error) {

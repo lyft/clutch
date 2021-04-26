@@ -152,7 +152,7 @@ func (g ECDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experi
 
 func (g *ECDSFaultsGenerator) GenerateDefaultResource(cluster string, resourceName string) (*xds.ECDSResource, error) {
 	if resourceName != faultFilterConfigNameForIngressFault && !strings.HasPrefix(resourceName, fmt.Sprintf(faultFilterConfigNameForEgressFault, "")) {
-		return xds.NewEmptyECDSResource(), nil
+		return nil, nil
 	}
 
 	config := &gcpCoreV3.TypedExtensionConfig{

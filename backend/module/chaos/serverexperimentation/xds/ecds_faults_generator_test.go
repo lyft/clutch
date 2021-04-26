@@ -166,12 +166,12 @@ func TestECDSDefaultFaultsGeneration(t *testing.T) {
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
-			g := &ECDSFaultsGenerator{}
-			r, err := g.GenerateDefaultResource(tt.cluster, tt.resourceName)
-
+			g, err := NewECDSFaultsGenerator()
 			assert.NoError(t, err)
-			assert.Equal(t, tt.expectedCluster, r.Cluster)
+			r, err := g.GenerateDefaultResource(tt.cluster, tt.resourceName)
+			assert.NoError(t, err)
 			if tt.expectedCluster != "" {
+				assert.Equal(t, tt.expectedCluster, r.Cluster)
 				faultFilter := &gcpFilterFault.HTTPFault{}
 				err = r.ExtensionConfig.TypedConfig.UnmarshalTo(faultFilter)
 				assert.NoError(t, err)
@@ -179,6 +179,8 @@ func TestECDSDefaultFaultsGeneration(t *testing.T) {
 				assert.NotNil(t, faultFilter.AbortHttpStatusRuntime)
 				assert.NotNil(t, faultFilter.DelayPercentRuntime)
 				assert.NotNil(t, faultFilter.DelayDurationRuntime)
+			} else {
+				assert.Nil(t, r)
 			}
 		})
 	}
