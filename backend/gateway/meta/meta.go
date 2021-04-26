@@ -66,6 +66,25 @@ func GetAction(method string) apiv1.ActionType {
 	return opts.Get(actionTypeDescriptor).Message().Interface().(*apiv1.Action).Type
 }
 
+// Returns a new unfilled request.
+func GetNewRequest(method string) proto.Message {
+	md, ok := methodDescriptors[method]
+	if !ok {
+		return nil
+	}
+	d := md.GetInputType().AsDescriptorProto()
+	return d.ProtoReflect().New().Interface()
+}
+
+func GetNewResponse(method string) proto.Message {
+	md, ok := methodDescriptors[method]
+	if !ok {
+		return nil
+	}
+	d := md.GetOutputType().AsDescriptorProto()
+	return d.ProtoReflect().New().Interface()
+}
+
 func IsAuditDisabled(method string) bool {
 	md, ok := methodDescriptors[method]
 	if !ok {

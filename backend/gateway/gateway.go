@@ -284,6 +284,24 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		go runtimeStats.Collect(ctx)
 	}
 
+	// TODO: test out calling through Scarlett's Slack flow.
+	// Determine mapping of command, get full method from that.
+	go func() {
+		time.Sleep(time.Second * 2) // give server time to come up
+
+		fmt.Println("attempt call")
+
+		// TODO: map command to method e.g. "healthcheck healthcheck" in this case
+		method := "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck"
+
+		// TODO: map method to request and response objects
+		// TODO: fill in request object from plaintext
+		req := meta.GetNewRequest(method)
+		resp := meta.GetNewResponse(method)
+		err := conn.Invoke(context.TODO(), method, req, resp)
+		fmt.Println("received", err, resp)
+	}()
+
 	srv := &http.Server{
 		Handler:      mux.InsecureHandler(rpcMux),
 		Addr:         addr,
@@ -291,4 +309,6 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		WriteTimeout: timeout,
 	}
 	logger.Fatal("error bringing up listener", zap.Error(srv.ListenAndServe()))
+
+
 }
