@@ -9,18 +9,18 @@ import (
 )
 
 const (
-	RedisErrorPercentage   = `%s.%s.error.error_percent`
-	RedisLatencyPercentage = `%s.%s.delay.fixed_delay_percent`
+	redisErrorPercentage   = `%s.%s.error.error_percent`
+	redisLatencyPercentage = `%s.%s.delay.fixed_delay_percent`
 )
 
 type RTDSFaultsGenerator struct {
 	FaultRuntimePrefix string
 }
 
-func (g *RTDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.RTDSResource, error) {
+func (g RTDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.RTDSResource, error) {
 	redisFaultConfig, ok := experiment.Config.Message.(*redisexperimentation.FaultConfig)
 	if !ok {
-		return nil, fmt.Errorf("RTDS redis faults generator cannot generate faults for a given experiment (run ID: %s, config ID %s)", experiment.Run.Id, experiment.Config.Id)
+		return nil, fmt.Errorf("RTDS redis faults generator couldn't generate faults due to config type casting failure (experiment run ID: %s, experiment config ID %s)", experiment.Run.Id, experiment.Config.Id)
 	}
 
 	downstreamCluster := redisFaultConfig.GetFaultTargeting().GetDownstreamCluster().GetName()
@@ -39,17 +39,17 @@ func (g *RTDSFaultsGenerator) GenerateResource(experiment *experimentstore.Exper
 	})
 }
 
-func (g *RTDSFaultsGenerator) createRedisRuntimeKeys(upstreamCluster string, redisFaultConfig *redisexperimentation.FaultConfig) (string, uint32, error) {
+func (g RTDSFaultsGenerator) createRedisRuntimeKeys(upstreamCluster string, redisFaultConfig *redisexperimentation.FaultConfig) (string, uint32, error) {
 	var percentageKey string
 	var percentageValue uint32
 
 	switch redisFaultConfig.GetFault().(type) {
 	case *redisexperimentation.FaultConfig_ErrorFault:
 		percentageValue = redisFaultConfig.GetErrorFault().GetPercentage().GetPercentage()
-		percentageKey = fmt.Sprintf(RedisErrorPercentage, g.FaultRuntimePrefix, upstreamCluster)
+		percentageKey = fmt.Sprintf(redisErrorPercentage, g.FaultRuntimePrefix, upstreamCluster)
 	case *redisexperimentation.FaultConfig_LatencyFault:
 		percentageValue = redisFaultConfig.GetLatencyFault().GetPercentage().GetPercentage()
-		percentageKey = fmt.Sprintf(RedisLatencyPercentage, g.FaultRuntimePrefix, upstreamCluster)
+		percentageKey = fmt.Sprintf(redisLatencyPercentage, g.FaultRuntimePrefix, upstreamCluster)
 	default:
 		return "", 0, fmt.Errorf("unknown fault type %v", redisFaultConfig)
 	}
