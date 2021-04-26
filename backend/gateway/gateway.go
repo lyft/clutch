@@ -294,7 +294,6 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		// TODO: map command to method e.g. "healthcheck healthcheck" in this case
 		method := "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck"
 
-		// TODO: map method to request and response objects
 		// TODO: fill in request object from plaintext
 		req := meta.GetNewRequest(method)
 		resp := meta.GetNewResponse(method)
