@@ -21,13 +21,13 @@ func TestRTDSFaultsGeneration(t *testing.T) {
 		expectedRuntimeKeyValue *xds.RuntimeKeyValue
 	}{
 		{
-			experiment:              createExperiment(t, "foo1", "bar", Latency, 1),
+			experiment:              createExperiment(t, "foo1", "bar", faultTypeLatency, 1),
 			prefix:                  "pre",
 			expectedCluster:         "foo1",
 			expectedRuntimeKeyValue: &xds.RuntimeKeyValue{Key: "pre.bar.delay.fixed_delay_percent", Value: 1},
 		},
 		{
-			experiment:              createExperiment(t, "foo2", "zar", Error, 2),
+			experiment:              createExperiment(t, "foo2", "zar", faultTypeError, 2),
 			prefix:                  "prefix",
 			expectedCluster:         "foo2",
 			expectedRuntimeKeyValue: &xds.RuntimeKeyValue{Key: "prefix.zar.error.error_percent", Value: 2},
@@ -52,8 +52,8 @@ func TestRTDSFaultsGeneration(t *testing.T) {
 }
 
 const (
-	Error   = `error`
-	Latency = `latency`
+	faultTypeError   = `error`
+	faultTypeLatency = `latency`
 )
 
 func createExperiment(t *testing.T, downstreamCluster string, upstreamCluster string, faultType string, faultPercentage uint32) *experimentstore.Experiment {
@@ -68,7 +68,7 @@ func createExperiment(t *testing.T, downstreamCluster string, upstreamCluster st
 		},
 	}
 
-	if faultType == Error {
+	if faultType == faultTypeError {
 		fault.Fault = &redisexperimentation.FaultConfig_ErrorFault{
 			ErrorFault: &redisexperimentation.ErrorFault{
 				Percentage: &redisexperimentation.FaultPercentage{
