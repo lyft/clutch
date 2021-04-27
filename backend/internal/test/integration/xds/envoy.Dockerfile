@@ -1,5 +1,5 @@
 
-FROM envoyproxy/envoy:v1.17.1 as envoy
+FROM envoyproxy/envoy-alpine:v1.17.1 as envoy
 
 FROM golang:1.16.0
 COPY --from=envoy /usr/local/bin/envoy /usr/local/bin/envoy
