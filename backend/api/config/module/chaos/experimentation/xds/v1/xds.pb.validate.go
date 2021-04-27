@@ -41,7 +41,7 @@ func (m *Config) Validate() error {
 	}
 
 	if d := m.GetCacheRefreshInterval(); d != nil {
-		dur, err := ptypes.Duration(d)
+		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
 			return ConfigValidationError{
 				field:  "CacheRefreshInterval",
@@ -69,7 +69,7 @@ func (m *Config) Validate() error {
 	}
 
 	if d := m.GetResourceTtl(); d != nil {
-		dur, err := ptypes.Duration(d)
+		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
 			return ConfigValidationError{
 				field:  "ResourceTtl",
@@ -90,7 +90,7 @@ func (m *Config) Validate() error {
 	}
 
 	if d := m.GetHeartbeatInterval(); d != nil {
-		dur, err := ptypes.Duration(d)
+		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
 			return ConfigValidationError{
 				field:  "HeartbeatInterval",

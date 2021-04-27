@@ -26,9 +26,9 @@ type Config struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// A prefix to use for runtime variables if a fault type is injected on the ingress traffic by an upstream service.
+	// The prefix to use for runtime variables if a fault type is injected on the ingress traffic by an upstream service.
 	IngressFaultRuntimePrefix string `protobuf:"bytes,1,opt,name=ingress_fault_runtime_prefix,json=ingressFaultRuntimePrefix,proto3" json:"ingress_fault_runtime_prefix,omitempty"`
-	// A prefix to use for runtime variables if a fault type is injected on the egress traffic by a downstream service.
+	// The prefix to use for runtime variables if a fault type is injected on the egress traffic by a downstream service.
 	EgressFaultRuntimePrefix string `protobuf:"bytes,2,opt,name=egress_fault_runtime_prefix,json=egressFaultRuntimePrefix,proto3" json:"egress_fault_runtime_prefix,omitempty"`
 }
 
