@@ -1,3 +1,3 @@
-FROM golang:1.16.0
+FROM scratch
 
 ADD testrunner /testrunner
