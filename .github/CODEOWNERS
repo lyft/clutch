@@ -1,4 +1,4 @@
-*                                                    @lyft/clutch-maintainers
+*                                                    @lyft/clutch-maintainer
 /api/chaos/                                          @lyft/resilience
 /api/config/module/chaos/                            @lyft/resilience
 /backend/**/chaos/                                   @lyft/resilience
