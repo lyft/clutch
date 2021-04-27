@@ -26,8 +26,6 @@ const successInterceptor = (response: AxiosResponse) => {
   // to prevent CORS issues from redirecting on the server.
   if (response?.data?.authUrl) {
     window.location = response.data.authUrl;
-    response.data.code = 401;
-    response.data.message = "Authentication Expired";
     const clutchError = {
       status: {
         code: 401,
@@ -92,4 +90,4 @@ const createClient = () => {
 
 const client = createClient();
 
-export { client, errorInterceptor };
+export { client, errorInterceptor, successInterceptor };
