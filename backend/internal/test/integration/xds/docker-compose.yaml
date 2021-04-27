@@ -8,6 +8,7 @@ services:
     volumes:
     - ../../../..:/code
     - ~/.cache/go-build:/root/.cache/go-build
+    - ~/go:/root/go
     ports:
       - "10000:10000"
       - "9901:9901"
@@ -16,6 +17,7 @@ services:
     volumes:
     - ../../../..:/code
     - ~/.cache/go-build:/root/.cache/go-build
+    - ~/go:/root/go
     command: sh -c 'cd /code/module/chaos/serverexperimentation/xds && go test -tags integration_only'
     ports:
       - "9000:9000"
