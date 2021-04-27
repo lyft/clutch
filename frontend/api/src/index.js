@@ -45976,6 +45976,7 @@ export const validate = $root.validate = (() => {
          * @property {number|null} [gte] FloatRules gte
          * @property {Array.<number>|null} ["in"] FloatRules in
          * @property {Array.<number>|null} [notIn] FloatRules notIn
+         * @property {boolean|null} [ignoreEmpty] FloatRules ignoreEmpty
          */
 
         /**
@@ -46052,6 +46053,14 @@ export const validate = $root.validate = (() => {
         FloatRules.prototype.notIn = $util.emptyArray;
 
         /**
+         * FloatRules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.FloatRules
+         * @instance
+         */
+        FloatRules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a FloatRules message.
          * @function verify
          * @memberof validate.FloatRules
@@ -46091,6 +46100,9 @@ export const validate = $root.validate = (() => {
                     if (typeof message.notIn[i] !== "number")
                         return "notIn: number[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -46130,6 +46142,8 @@ export const validate = $root.validate = (() => {
                 for (let i = 0; i < object.notIn.length; ++i)
                     message.notIn[i] = Number(object.notIn[i]);
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -46156,6 +46170,7 @@ export const validate = $root.validate = (() => {
                 object.lte = 0;
                 object.gt = 0;
                 object.gte = 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = options.json && !isFinite(message["const"]) ? String(message["const"]) : message["const"];
@@ -46177,6 +46192,8 @@ export const validate = $root.validate = (() => {
                 for (let j = 0; j < message.notIn.length; ++j)
                     object.notIn[j] = options.json && !isFinite(message.notIn[j]) ? String(message.notIn[j]) : message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -46207,6 +46224,7 @@ export const validate = $root.validate = (() => {
          * @property {number|null} [gte] DoubleRules gte
          * @property {Array.<number>|null} ["in"] DoubleRules in
          * @property {Array.<number>|null} [notIn] DoubleRules notIn
+         * @property {boolean|null} [ignoreEmpty] DoubleRules ignoreEmpty
          */
 
         /**
@@ -46283,6 +46301,14 @@ export const validate = $root.validate = (() => {
         DoubleRules.prototype.notIn = $util.emptyArray;
 
         /**
+         * DoubleRules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.DoubleRules
+         * @instance
+         */
+        DoubleRules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a DoubleRules message.
          * @function verify
          * @memberof validate.DoubleRules
@@ -46322,6 +46348,9 @@ export const validate = $root.validate = (() => {
                     if (typeof message.notIn[i] !== "number")
                         return "notIn: number[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -46361,6 +46390,8 @@ export const validate = $root.validate = (() => {
                 for (let i = 0; i < object.notIn.length; ++i)
                     message.notIn[i] = Number(object.notIn[i]);
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -46387,6 +46418,7 @@ export const validate = $root.validate = (() => {
                 object.lte = 0;
                 object.gt = 0;
                 object.gte = 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = options.json && !isFinite(message["const"]) ? String(message["const"]) : message["const"];
@@ -46408,6 +46440,8 @@ export const validate = $root.validate = (() => {
                 for (let j = 0; j < message.notIn.length; ++j)
                     object.notIn[j] = options.json && !isFinite(message.notIn[j]) ? String(message.notIn[j]) : message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -46438,6 +46472,7 @@ export const validate = $root.validate = (() => {
          * @property {number|null} [gte] Int32Rules gte
          * @property {Array.<number>|null} ["in"] Int32Rules in
          * @property {Array.<number>|null} [notIn] Int32Rules notIn
+         * @property {boolean|null} [ignoreEmpty] Int32Rules ignoreEmpty
          */
 
         /**
@@ -46514,6 +46549,14 @@ export const validate = $root.validate = (() => {
         Int32Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * Int32Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.Int32Rules
+         * @instance
+         */
+        Int32Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies an Int32Rules message.
          * @function verify
          * @memberof validate.Int32Rules
@@ -46553,6 +46596,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]))
                         return "notIn: integer[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -46592,6 +46638,8 @@ export const validate = $root.validate = (() => {
                 for (let i = 0; i < object.notIn.length; ++i)
                     message.notIn[i] = object.notIn[i] | 0;
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -46618,6 +46666,7 @@ export const validate = $root.validate = (() => {
                 object.lte = 0;
                 object.gt = 0;
                 object.gte = 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = message["const"];
@@ -46639,6 +46688,8 @@ export const validate = $root.validate = (() => {
                 for (let j = 0; j < message.notIn.length; ++j)
                     object.notIn[j] = message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -46669,6 +46720,7 @@ export const validate = $root.validate = (() => {
          * @property {number|Long|null} [gte] Int64Rules gte
          * @property {Array.<number|Long>|null} ["in"] Int64Rules in
          * @property {Array.<number|Long>|null} [notIn] Int64Rules notIn
+         * @property {boolean|null} [ignoreEmpty] Int64Rules ignoreEmpty
          */
 
         /**
@@ -46745,6 +46797,14 @@ export const validate = $root.validate = (() => {
         Int64Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * Int64Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.Int64Rules
+         * @instance
+         */
+        Int64Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies an Int64Rules message.
          * @function verify
          * @memberof validate.Int64Rules
@@ -46784,6 +46844,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]) && !(message.notIn[i] && $util.isInteger(message.notIn[i].low) && $util.isInteger(message.notIn[i].high)))
                         return "notIn: integer|Long[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -46872,6 +46935,8 @@ export const validate = $root.validate = (() => {
                     else if (typeof object.notIn[i] === "object")
                         message.notIn[i] = new $util.LongBits(object.notIn[i].low >>> 0, object.notIn[i].high >>> 0).toNumber();
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -46918,6 +46983,7 @@ export const validate = $root.validate = (() => {
                     object.gte = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gte = options.longs === String ? "0" : 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 if (typeof message["const"] === "number")
@@ -46960,6 +47026,8 @@ export const validate = $root.validate = (() => {
                     else
                         object.notIn[j] = options.longs === String ? $util.Long.prototype.toString.call(message.notIn[j]) : options.longs === Number ? new $util.LongBits(message.notIn[j].low >>> 0, message.notIn[j].high >>> 0).toNumber() : message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -46990,6 +47058,7 @@ export const validate = $root.validate = (() => {
          * @property {number|null} [gte] UInt32Rules gte
          * @property {Array.<number>|null} ["in"] UInt32Rules in
          * @property {Array.<number>|null} [notIn] UInt32Rules notIn
+         * @property {boolean|null} [ignoreEmpty] UInt32Rules ignoreEmpty
          */
 
         /**
@@ -47066,6 +47135,14 @@ export const validate = $root.validate = (() => {
         UInt32Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * UInt32Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.UInt32Rules
+         * @instance
+         */
+        UInt32Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a UInt32Rules message.
          * @function verify
          * @memberof validate.UInt32Rules
@@ -47105,6 +47182,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]))
                         return "notIn: integer[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -47144,6 +47224,8 @@ export const validate = $root.validate = (() => {
                 for (let i = 0; i < object.notIn.length; ++i)
                     message.notIn[i] = object.notIn[i] >>> 0;
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -47170,6 +47252,7 @@ export const validate = $root.validate = (() => {
                 object.lte = 0;
                 object.gt = 0;
                 object.gte = 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = message["const"];
@@ -47191,6 +47274,8 @@ export const validate = $root.validate = (() => {
                 for (let j = 0; j < message.notIn.length; ++j)
                     object.notIn[j] = message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -47221,6 +47306,7 @@ export const validate = $root.validate = (() => {
          * @property {number|Long|null} [gte] UInt64Rules gte
          * @property {Array.<number|Long>|null} ["in"] UInt64Rules in
          * @property {Array.<number|Long>|null} [notIn] UInt64Rules notIn
+         * @property {boolean|null} [ignoreEmpty] UInt64Rules ignoreEmpty
          */
 
         /**
@@ -47297,6 +47383,14 @@ export const validate = $root.validate = (() => {
         UInt64Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * UInt64Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.UInt64Rules
+         * @instance
+         */
+        UInt64Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a UInt64Rules message.
          * @function verify
          * @memberof validate.UInt64Rules
@@ -47336,6 +47430,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]) && !(message.notIn[i] && $util.isInteger(message.notIn[i].low) && $util.isInteger(message.notIn[i].high)))
                         return "notIn: integer|Long[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -47424,6 +47521,8 @@ export const validate = $root.validate = (() => {
                     else if (typeof object.notIn[i] === "object")
                         message.notIn[i] = new $util.LongBits(object.notIn[i].low >>> 0, object.notIn[i].high >>> 0).toNumber(true);
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -47470,6 +47569,7 @@ export const validate = $root.validate = (() => {
                     object.gte = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gte = options.longs === String ? "0" : 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 if (typeof message["const"] === "number")
@@ -47512,6 +47612,8 @@ export const validate = $root.validate = (() => {
                     else
                         object.notIn[j] = options.longs === String ? $util.Long.prototype.toString.call(message.notIn[j]) : options.longs === Number ? new $util.LongBits(message.notIn[j].low >>> 0, message.notIn[j].high >>> 0).toNumber(true) : message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -47542,6 +47644,7 @@ export const validate = $root.validate = (() => {
          * @property {number|null} [gte] SInt32Rules gte
          * @property {Array.<number>|null} ["in"] SInt32Rules in
          * @property {Array.<number>|null} [notIn] SInt32Rules notIn
+         * @property {boolean|null} [ignoreEmpty] SInt32Rules ignoreEmpty
          */
 
         /**
@@ -47618,6 +47721,14 @@ export const validate = $root.validate = (() => {
         SInt32Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * SInt32Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.SInt32Rules
+         * @instance
+         */
+        SInt32Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a SInt32Rules message.
          * @function verify
          * @memberof validate.SInt32Rules
@@ -47657,6 +47768,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]))
                         return "notIn: integer[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -47696,6 +47810,8 @@ export const validate = $root.validate = (() => {
                 for (let i = 0; i < object.notIn.length; ++i)
                     message.notIn[i] = object.notIn[i] | 0;
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -47722,6 +47838,7 @@ export const validate = $root.validate = (() => {
                 object.lte = 0;
                 object.gt = 0;
                 object.gte = 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = message["const"];
@@ -47743,6 +47860,8 @@ export const validate = $root.validate = (() => {
                 for (let j = 0; j < message.notIn.length; ++j)
                     object.notIn[j] = message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -47773,6 +47892,7 @@ export const validate = $root.validate = (() => {
          * @property {number|Long|null} [gte] SInt64Rules gte
          * @property {Array.<number|Long>|null} ["in"] SInt64Rules in
          * @property {Array.<number|Long>|null} [notIn] SInt64Rules notIn
+         * @property {boolean|null} [ignoreEmpty] SInt64Rules ignoreEmpty
          */
 
         /**
@@ -47849,6 +47969,14 @@ export const validate = $root.validate = (() => {
         SInt64Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * SInt64Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.SInt64Rules
+         * @instance
+         */
+        SInt64Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a SInt64Rules message.
          * @function verify
          * @memberof validate.SInt64Rules
@@ -47888,6 +48016,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]) && !(message.notIn[i] && $util.isInteger(message.notIn[i].low) && $util.isInteger(message.notIn[i].high)))
                         return "notIn: integer|Long[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -47976,6 +48107,8 @@ export const validate = $root.validate = (() => {
                     else if (typeof object.notIn[i] === "object")
                         message.notIn[i] = new $util.LongBits(object.notIn[i].low >>> 0, object.notIn[i].high >>> 0).toNumber();
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -48022,6 +48155,7 @@ export const validate = $root.validate = (() => {
                     object.gte = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gte = options.longs === String ? "0" : 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 if (typeof message["const"] === "number")
@@ -48064,6 +48198,8 @@ export const validate = $root.validate = (() => {
                     else
                         object.notIn[j] = options.longs === String ? $util.Long.prototype.toString.call(message.notIn[j]) : options.longs === Number ? new $util.LongBits(message.notIn[j].low >>> 0, message.notIn[j].high >>> 0).toNumber() : message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -48094,6 +48230,7 @@ export const validate = $root.validate = (() => {
          * @property {number|null} [gte] Fixed32Rules gte
          * @property {Array.<number>|null} ["in"] Fixed32Rules in
          * @property {Array.<number>|null} [notIn] Fixed32Rules notIn
+         * @property {boolean|null} [ignoreEmpty] Fixed32Rules ignoreEmpty
          */
 
         /**
@@ -48170,6 +48307,14 @@ export const validate = $root.validate = (() => {
         Fixed32Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * Fixed32Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.Fixed32Rules
+         * @instance
+         */
+        Fixed32Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a Fixed32Rules message.
          * @function verify
          * @memberof validate.Fixed32Rules
@@ -48209,6 +48354,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]))
                         return "notIn: integer[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -48248,6 +48396,8 @@ export const validate = $root.validate = (() => {
                 for (let i = 0; i < object.notIn.length; ++i)
                     message.notIn[i] = object.notIn[i] >>> 0;
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -48274,6 +48424,7 @@ export const validate = $root.validate = (() => {
                 object.lte = 0;
                 object.gt = 0;
                 object.gte = 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = message["const"];
@@ -48295,6 +48446,8 @@ export const validate = $root.validate = (() => {
                 for (let j = 0; j < message.notIn.length; ++j)
                     object.notIn[j] = message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -48325,6 +48478,7 @@ export const validate = $root.validate = (() => {
          * @property {number|Long|null} [gte] Fixed64Rules gte
          * @property {Array.<number|Long>|null} ["in"] Fixed64Rules in
          * @property {Array.<number|Long>|null} [notIn] Fixed64Rules notIn
+         * @property {boolean|null} [ignoreEmpty] Fixed64Rules ignoreEmpty
          */
 
         /**
@@ -48401,6 +48555,14 @@ export const validate = $root.validate = (() => {
         Fixed64Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * Fixed64Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.Fixed64Rules
+         * @instance
+         */
+        Fixed64Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a Fixed64Rules message.
          * @function verify
          * @memberof validate.Fixed64Rules
@@ -48440,6 +48602,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]) && !(message.notIn[i] && $util.isInteger(message.notIn[i].low) && $util.isInteger(message.notIn[i].high)))
                         return "notIn: integer|Long[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -48528,6 +48693,8 @@ export const validate = $root.validate = (() => {
                     else if (typeof object.notIn[i] === "object")
                         message.notIn[i] = new $util.LongBits(object.notIn[i].low >>> 0, object.notIn[i].high >>> 0).toNumber();
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -48574,6 +48741,7 @@ export const validate = $root.validate = (() => {
                     object.gte = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gte = options.longs === String ? "0" : 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 if (typeof message["const"] === "number")
@@ -48616,6 +48784,8 @@ export const validate = $root.validate = (() => {
                     else
                         object.notIn[j] = options.longs === String ? $util.Long.prototype.toString.call(message.notIn[j]) : options.longs === Number ? new $util.LongBits(message.notIn[j].low >>> 0, message.notIn[j].high >>> 0).toNumber() : message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -48646,6 +48816,7 @@ export const validate = $root.validate = (() => {
          * @property {number|null} [gte] SFixed32Rules gte
          * @property {Array.<number>|null} ["in"] SFixed32Rules in
          * @property {Array.<number>|null} [notIn] SFixed32Rules notIn
+         * @property {boolean|null} [ignoreEmpty] SFixed32Rules ignoreEmpty
          */
 
         /**
@@ -48722,6 +48893,14 @@ export const validate = $root.validate = (() => {
         SFixed32Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * SFixed32Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.SFixed32Rules
+         * @instance
+         */
+        SFixed32Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a SFixed32Rules message.
          * @function verify
          * @memberof validate.SFixed32Rules
@@ -48761,6 +48940,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]))
                         return "notIn: integer[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -48800,6 +48982,8 @@ export const validate = $root.validate = (() => {
                 for (let i = 0; i < object.notIn.length; ++i)
                     message.notIn[i] = object.notIn[i] | 0;
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -48826,6 +49010,7 @@ export const validate = $root.validate = (() => {
                 object.lte = 0;
                 object.gt = 0;
                 object.gte = 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = message["const"];
@@ -48847,6 +49032,8 @@ export const validate = $root.validate = (() => {
                 for (let j = 0; j < message.notIn.length; ++j)
                     object.notIn[j] = message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -48877,6 +49064,7 @@ export const validate = $root.validate = (() => {
          * @property {number|Long|null} [gte] SFixed64Rules gte
          * @property {Array.<number|Long>|null} ["in"] SFixed64Rules in
          * @property {Array.<number|Long>|null} [notIn] SFixed64Rules notIn
+         * @property {boolean|null} [ignoreEmpty] SFixed64Rules ignoreEmpty
          */
 
         /**
@@ -48953,6 +49141,14 @@ export const validate = $root.validate = (() => {
         SFixed64Rules.prototype.notIn = $util.emptyArray;
 
         /**
+         * SFixed64Rules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.SFixed64Rules
+         * @instance
+         */
+        SFixed64Rules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a SFixed64Rules message.
          * @function verify
          * @memberof validate.SFixed64Rules
@@ -48992,6 +49188,9 @@ export const validate = $root.validate = (() => {
                     if (!$util.isInteger(message.notIn[i]) && !(message.notIn[i] && $util.isInteger(message.notIn[i].low) && $util.isInteger(message.notIn[i].high)))
                         return "notIn: integer|Long[] expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -49080,6 +49279,8 @@ export const validate = $root.validate = (() => {
                     else if (typeof object.notIn[i] === "object")
                         message.notIn[i] = new $util.LongBits(object.notIn[i].low >>> 0, object.notIn[i].high >>> 0).toNumber();
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -49126,6 +49327,7 @@ export const validate = $root.validate = (() => {
                     object.gte = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.gte = options.longs === String ? "0" : 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 if (typeof message["const"] === "number")
@@ -49168,6 +49370,8 @@ export const validate = $root.validate = (() => {
                     else
                         object.notIn[j] = options.longs === String ? $util.Long.prototype.toString.call(message.notIn[j]) : options.longs === Number ? new $util.LongBits(message.notIn[j].low >>> 0, message.notIn[j].high >>> 0).toNumber() : message.notIn[j];
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -49316,6 +49520,7 @@ export const validate = $root.validate = (() => {
          * @property {boolean|null} [uuid] StringRules uuid
          * @property {validate.KnownRegex|null} [wellKnownRegex] StringRules wellKnownRegex
          * @property {boolean|null} [strict] StringRules strict
+         * @property {boolean|null} [ignoreEmpty] StringRules ignoreEmpty
          */
 
         /**
@@ -49535,6 +49740,14 @@ export const validate = $root.validate = (() => {
          */
         StringRules.prototype.strict = true;
 
+        /**
+         * StringRules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.StringRules
+         * @instance
+         */
+        StringRules.prototype.ignoreEmpty = false;
+
         // OneOf field names bound to virtual getters and setters
         let $oneOfFields;
 
@@ -49688,6 +49901,9 @@ export const validate = $root.validate = (() => {
             if (message.strict != null && message.hasOwnProperty("strict"))
                 if (typeof message.strict !== "boolean")
                     return "strict: boolean expected";
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -49817,6 +50033,8 @@ export const validate = $root.validate = (() => {
             }
             if (object.strict != null)
                 message.strict = Boolean(object.strict);
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -49875,6 +50093,7 @@ export const validate = $root.validate = (() => {
                     object.lenBytes = options.longs === String ? "0" : 0;
                 object.notContains = "";
                 object.strict = true;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = message["const"];
@@ -49980,6 +50199,8 @@ export const validate = $root.validate = (() => {
             }
             if (message.strict != null && message.hasOwnProperty("strict"))
                 object.strict = message.strict;
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -50032,6 +50253,7 @@ export const validate = $root.validate = (() => {
          * @property {boolean|null} [ip] BytesRules ip
          * @property {boolean|null} [ipv4] BytesRules ipv4
          * @property {boolean|null} [ipv6] BytesRules ipv6
+         * @property {boolean|null} [ignoreEmpty] BytesRules ignoreEmpty
          */
 
         /**
@@ -50155,6 +50377,14 @@ export const validate = $root.validate = (() => {
          */
         BytesRules.prototype.ipv6 = false;
 
+        /**
+         * BytesRules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.BytesRules
+         * @instance
+         */
+        BytesRules.prototype.ignoreEmpty = false;
+
         // OneOf field names bound to virtual getters and setters
         let $oneOfFields;
 
@@ -50238,6 +50468,9 @@ export const validate = $root.validate = (() => {
                 if (typeof message.ipv6 !== "boolean")
                     return "ipv6: boolean expected";
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -50328,6 +50561,8 @@ export const validate = $root.validate = (() => {
                 message.ipv4 = Boolean(object.ipv4);
             if (object.ipv6 != null)
                 message.ipv6 = Boolean(object.ipv6);
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -50393,6 +50628,7 @@ export const validate = $root.validate = (() => {
                     object.len = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.len = options.longs === String ? "0" : 0;
+                object.ignoreEmpty = false;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = options.bytes === String ? $util.base64.encode(message["const"], 0, message["const"].length) : options.bytes === Array ? Array.prototype.slice.call(message["const"]) : message["const"];
@@ -50444,6 +50680,8 @@ export const validate = $root.validate = (() => {
                     object.len = options.longs === String ? String(message.len) : message.len;
                 else
                     object.len = options.longs === String ? $util.Long.prototype.toString.call(message.len) : options.longs === Number ? new $util.LongBits(message.len.low >>> 0, message.len.high >>> 0).toNumber(true) : message.len;
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -50769,6 +51007,7 @@ export const validate = $root.validate = (() => {
          * @property {number|Long|null} [maxItems] RepeatedRules maxItems
          * @property {boolean|null} [unique] RepeatedRules unique
          * @property {validate.IFieldRules|null} [items] RepeatedRules items
+         * @property {boolean|null} [ignoreEmpty] RepeatedRules ignoreEmpty
          */
 
         /**
@@ -50819,6 +51058,14 @@ export const validate = $root.validate = (() => {
         RepeatedRules.prototype.items = null;
 
         /**
+         * RepeatedRules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.RepeatedRules
+         * @instance
+         */
+        RepeatedRules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a RepeatedRules message.
          * @function verify
          * @memberof validate.RepeatedRules
@@ -50843,6 +51090,9 @@ export const validate = $root.validate = (() => {
                 if (error)
                     return "items." + error;
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -50883,6 +51133,8 @@ export const validate = $root.validate = (() => {
                     throw TypeError(".validate.RepeatedRules.items: object expected");
                 message.items = $root.validate.FieldRules.fromObject(object.items);
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -50912,6 +51164,7 @@ export const validate = $root.validate = (() => {
                     object.maxItems = options.longs === String ? "0" : 0;
                 object.unique = false;
                 object.items = null;
+                object.ignoreEmpty = false;
             }
             if (message.minItems != null && message.hasOwnProperty("minItems"))
                 if (typeof message.minItems === "number")
@@ -50927,6 +51180,8 @@ export const validate = $root.validate = (() => {
                 object.unique = message.unique;
             if (message.items != null && message.hasOwnProperty("items"))
                 object.items = $root.validate.FieldRules.toObject(message.items, options);
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -50955,6 +51210,7 @@ export const validate = $root.validate = (() => {
          * @property {boolean|null} [noSparse] MapRules noSparse
          * @property {validate.IFieldRules|null} [keys] MapRules keys
          * @property {validate.IFieldRules|null} [values] MapRules values
+         * @property {boolean|null} [ignoreEmpty] MapRules ignoreEmpty
          */
 
         /**
@@ -51013,6 +51269,14 @@ export const validate = $root.validate = (() => {
         MapRules.prototype.values = null;
 
         /**
+         * MapRules ignoreEmpty.
+         * @member {boolean} ignoreEmpty
+         * @memberof validate.MapRules
+         * @instance
+         */
+        MapRules.prototype.ignoreEmpty = false;
+
+        /**
          * Verifies a MapRules message.
          * @function verify
          * @memberof validate.MapRules
@@ -51042,6 +51306,9 @@ export const validate = $root.validate = (() => {
                 if (error)
                     return "values." + error;
             }
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                if (typeof message.ignoreEmpty !== "boolean")
+                    return "ignoreEmpty: boolean expected";
             return null;
         };
 
@@ -51087,6 +51354,8 @@ export const validate = $root.validate = (() => {
                     throw TypeError(".validate.MapRules.values: object expected");
                 message.values = $root.validate.FieldRules.fromObject(object.values);
             }
+            if (object.ignoreEmpty != null)
+                message.ignoreEmpty = Boolean(object.ignoreEmpty);
             return message;
         };
 
@@ -51117,6 +51386,7 @@ export const validate = $root.validate = (() => {
                 object.noSparse = false;
                 object.keys = null;
                 object.values = null;
+                object.ignoreEmpty = false;
             }
             if (message.minPairs != null && message.hasOwnProperty("minPairs"))
                 if (typeof message.minPairs === "number")
@@ -51134,6 +51404,8 @@ export const validate = $root.validate = (() => {
                 object.keys = $root.validate.FieldRules.toObject(message.keys, options);
             if (message.values != null && message.hasOwnProperty("values"))
                 object.values = $root.validate.FieldRules.toObject(message.values, options);
+            if (message.ignoreEmpty != null && message.hasOwnProperty("ignoreEmpty"))
+                object.ignoreEmpty = message.ignoreEmpty;
             return object;
         };
 
@@ -55103,6 +55375,7 @@ export const google = $root.google = (() => {
              * @property {clutch.api.v1.IIdentifier|null} [".clutch.api.v1.id"] MessageOptions .clutch.api.v1.id
              * @property {boolean|null} [".clutch.api.v1.redacted"] MessageOptions .clutch.api.v1.redacted
              * @property {boolean|null} [".validate.disabled"] MessageOptions .validate.disabled
+             * @property {boolean|null} [".validate.ignored"] MessageOptions .validate.ignored
              * @property {clutch.resolver.v1.ISchemaMetadata|null} [".clutch.resolver.v1.schema"] MessageOptions .clutch.resolver.v1.schema
              */
 
@@ -55195,6 +55468,14 @@ export const google = $root.google = (() => {
             MessageOptions.prototype[".validate.disabled"] = false;
 
             /**
+             * MessageOptions .validate.ignored.
+             * @member {boolean} .validate.ignored
+             * @memberof google.protobuf.MessageOptions
+             * @instance
+             */
+            MessageOptions.prototype[".validate.ignored"] = false;
+
+            /**
              * MessageOptions .clutch.resolver.v1.schema.
              * @member {clutch.resolver.v1.ISchemaMetadata|null|undefined} .clutch.resolver.v1.schema
              * @memberof google.protobuf.MessageOptions
@@ -55250,6 +55531,9 @@ export const google = $root.google = (() => {
                 if (message[".validate.disabled"] != null && message.hasOwnProperty(".validate.disabled"))
                     if (typeof message[".validate.disabled"] !== "boolean")
                         return ".validate.disabled: boolean expected";
+                if (message[".validate.ignored"] != null && message.hasOwnProperty(".validate.ignored"))
+                    if (typeof message[".validate.ignored"] !== "boolean")
+                        return ".validate.ignored: boolean expected";
                 if (message[".clutch.resolver.v1.schema"] != null && message.hasOwnProperty(".clutch.resolver.v1.schema")) {
                     let error = $root.clutch.resolver.v1.SchemaMetadata.verify(message[".clutch.resolver.v1.schema"]);
                     if (error)
@@ -55302,6 +55586,8 @@ export const google = $root.google = (() => {
                     message[".clutch.api.v1.redacted"] = Boolean(object[".clutch.api.v1.redacted"]);
                 if (object[".validate.disabled"] != null)
                     message[".validate.disabled"] = Boolean(object[".validate.disabled"]);
+                if (object[".validate.ignored"] != null)
+                    message[".validate.ignored"] = Boolean(object[".validate.ignored"]);
                 if (object[".clutch.resolver.v1.schema"] != null) {
                     if (typeof object[".clutch.resolver.v1.schema"] !== "object")
                         throw TypeError(".google.protobuf.MessageOptions..clutch.resolver.v1.schema: object expected");
@@ -55331,6 +55617,7 @@ export const google = $root.google = (() => {
                     object.deprecated = false;
                     object.mapEntry = false;
                     object[".validate.disabled"] = false;
+                    object[".validate.ignored"] = false;
                     object[".clutch.api.v1.reference"] = null;
                     object[".clutch.api.v1.id"] = null;
                     object[".clutch.api.v1.redacted"] = false;
@@ -55351,6 +55638,8 @@ export const google = $root.google = (() => {
                 }
                 if (message[".validate.disabled"] != null && message.hasOwnProperty(".validate.disabled"))
                     object[".validate.disabled"] = message[".validate.disabled"];
+                if (message[".validate.ignored"] != null && message.hasOwnProperty(".validate.ignored"))
+                    object[".validate.ignored"] = message[".validate.ignored"];
                 if (message[".clutch.api.v1.reference"] != null && message.hasOwnProperty(".clutch.api.v1.reference"))
                     object[".clutch.api.v1.reference"] = $root.clutch.api.v1.Reference.toObject(message[".clutch.api.v1.reference"], options);
                 if (message[".clutch.api.v1.id"] != null && message.hasOwnProperty(".clutch.api.v1.id"))
