@@ -8,6 +8,9 @@ services:
     ports:
       - "10000:10000"
       - "9901:9901"
+    volumes:
+      - ./backend/module/chaos/experimentation/xds:/experimentation/xds
+      - ./backend/module/chaos/serverexperimentation:/serverexperimentation
   test_runner:
     build:
       context: ../../../.. # backend root directory
