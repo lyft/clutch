@@ -7,6 +7,7 @@ services:
       dockerfile: internal/test/integration/xds/envoy.Dockerfile
     volumes:
     - ../../../..:/code
+    - ~/.cache/go-build:~/.cache/go-build
     ports:
       - "10000:10000"
       - "9901:9901"
@@ -14,6 +15,7 @@ services:
     image: golang:1.16.0
     volumes:
     - ../../../..:/code
+    - ~/.cache/go-build:~/.cache/go-build
     command: sh -c 'cd /code/module/chaos/serverexperimentation/xds && go test -tags integration_only'
     ports:
       - "9000:9000"
