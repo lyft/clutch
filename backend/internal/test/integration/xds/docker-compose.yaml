@@ -13,6 +13,5 @@ services:
     build:
       context: .
       dockerfile: testrunner.Dockerfile
-    command: /testrunner
     ports:
       - "9000:9000"
