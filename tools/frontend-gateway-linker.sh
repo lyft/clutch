@@ -4,6 +4,7 @@ set -euo pipefail
 REPO_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 # Packages should be added to this list if there can only be one of them present when using Clutch as a submodule.
 LINKED_PACKAGES=(
+  "esbuild"
   "react"
   "react-dom"
   "react-router"

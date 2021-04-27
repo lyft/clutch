@@ -1,5 +1,9 @@
 package experimentstore
 
+// <!-- START clutchdoc -->
+// description: Chaos Experimentation Framework - Data layer to handle all database operations
+// <!-- END clutchdoc -->
+
 import (
 	"context"
 	"database/sql"
