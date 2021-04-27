@@ -1,9 +1,7 @@
-FROM golang:1.16.0 AS build
-COPY . /code
-RUN cd /code/internal/test/integration/xds/cmd/envoyconfiggen && go build -o /tmp/generate_config
-RUN /tmp/generate_config > /config.json
 
-FROM envoyproxy/envoy:v1.17.1
-COPY --from=build /config.json /config.json
+FROM envoyproxy/envoy:v1.17.1 as envoy
 
-ENTRYPOINT /usr/local/bin/envoy -c /config.json
+FROM golang:1.16.0
+COPY --from=envoy /usr/local/bin/envoy /usr/local/bin/envoy
+
+ENTRYPOINT bash -c '/usr/local/bin/envoy -c $(go run /code/internal/test/integration/xds/cmd/envoyconfiggen)'

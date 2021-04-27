@@ -5,13 +5,15 @@ services:
     build:
       context: ../../../.. # backend root directory
       dockerfile: internal/test/integration/xds/envoy.Dockerfile
+    volumes:
+    - ../../../..:/code
     ports:
       - "10000:10000"
       - "9901:9901"
   test_runner:
-    build:
-      context: ../../../.. # backend root directory
-      dockerfile: internal/test/integration/xds/testrunner.Dockerfile
-    command: /testrunner
+    image: golang:1.16.0
+    volumes:
+    - ../../../..:/code
+    command: sh -c 'cd /code/module/chaos/serverexperimentation/xds && go test -tags integration_only'
     ports:
       - "9000:9000"
