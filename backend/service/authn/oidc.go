@@ -87,7 +87,7 @@ func (p *OIDCProvider) GetStateNonce(redirectURL string) (string, error) {
 	if u.Scheme != "" || u.Host != "" {
 		return "", errors.New("only relative redirects are supported")
 	}
-	dest := u.Path
+	dest := u.RequestURI()
 	if !strings.HasPrefix(dest, "/") {
 		dest = fmt.Sprintf("/%s", dest)
 	}
