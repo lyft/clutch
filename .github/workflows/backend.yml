@@ -24,7 +24,7 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go build cache
@@ -48,7 +48,7 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go test cache
@@ -63,6 +63,29 @@ jobs:
         env:
           GOFLAGS: "-count=1" # idiomatic way to disable test caching so they always run
       - run: make backend-config-validation
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.16.0
+      - name: go mod cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-mod-
+      - name: go test cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-test-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-test-
       - run: make backend-integration-test
   lint:
     runs-on: ubuntu-latest
@@ -76,7 +99,7 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go lint cache
