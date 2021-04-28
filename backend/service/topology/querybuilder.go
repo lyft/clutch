@@ -18,7 +18,7 @@ const (
 	column                   = "column"
 	columnIdentifer          = "column."
 	metadata                 = "metadata"
-	metadataIdentifer        = "metadata."
+	data                     = "data"
 	queryDefaultLimit uint64 = 100
 	maxResultLimit           = 1000
 )
@@ -97,8 +97,8 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 
 		if identifer == column {
 			searchIdentiferExpr = sq.Expr(strings.TrimPrefix(f.Search.Field, columnIdentifer))
-		} else if identifer == metadata {
-			mdQuery, err := convertMetadataToQuery(f.Search.Field)
+		} else if identifer == metadata || identifer == data {
+			mdQuery, err := convertDataOrMetadataToQuery(f.Search.Field)
 			if err != nil {
 				return sq.SelectBuilder{}, err
 			}
@@ -143,8 +143,8 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 
 	if identifer == column {
 		query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, columnIdentifer))
-	} else if identifer == metadata {
-		mdQuery, err := convertMetadataToQuery(s.Field)
+	} else if identifer == metadata || identifer == data {
+		mdQuery, err := convertDataOrMetadataToQuery(s.Field)
 		if err != nil {
 			return sq.SelectBuilder{}, err
 		}
@@ -173,6 +173,8 @@ func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 	switch strings.Split(identifer, ".")[0] {
 	case column:
 		return column, nil
+	case data:
+		return data, nil
 	case metadata:
 		return metadata, nil
 	default:
@@ -184,21 +186,24 @@ func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 // Example:
 //  input: "metadata.fieldone.fieldtwo.id"
 //  output: "metadata->fieldone->fieldtwo->>id"
-func convertMetadataToQuery(input string) (string, error) {
-	splitMetadata := strings.Split(strings.TrimPrefix(input, metadataIdentifer), ".")
+func convertDataOrMetadataToQuery(input string) (string, error) {
+	splitIdentifer := strings.Split(input, ".")
 
-	if splitMetadata[0] == "" {
+	if len(splitIdentifer[0]) < 2 || splitIdentifer[1] == "" {
 		return "", fmt.Errorf("Incomplete metadata identifer: [%s]", metadata)
 	}
 
+	identifer := splitIdentifer[0]
+	splitIdentifer = splitIdentifer[1:]
+
 	var query string
-	if len(splitMetadata) == 1 {
-		query = fmt.Sprintf("metadata->>'%s'", splitMetadata[0])
+	if len(splitIdentifer) == 1 {
+		query = fmt.Sprintf("%s->>'%s'", identifer, splitIdentifer[0])
 	} else {
-		for i := range splitMetadata {
-			splitMetadata[i] = fmt.Sprintf("'%s'", splitMetadata[i])
+		for i := range splitIdentifer {
+			splitIdentifer[i] = fmt.Sprintf("'%s'", splitIdentifer[i])
 		}
-		query = fmt.Sprintf("metadata->%s", strings.Join(splitMetadata, "->"))
+		query = fmt.Sprintf("%s->%s", identifer, strings.Join(splitIdentifer, "->"))
 
 		// Must replace the last -> with ->> to perform a text search rather than a jsonb one.
 		lastIndex := strings.LastIndex(query, "->")

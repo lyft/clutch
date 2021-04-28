@@ -345,26 +345,32 @@ func TestConvertMetadataToQuery(t *testing.T) {
 		},
 		{
 			id:          "top level field",
-			input:       "toplevel",
+			input:       "metadata.toplevel",
 			expect:      "metadata->>'toplevel'",
 			shouldError: false,
 		},
 		{
 			id:          "one level deep",
-			input:       "toplevel.level1",
+			input:       "metadata.toplevel.level1",
 			expect:      "metadata->'toplevel'->>'level1'",
 			shouldError: false,
 		},
 		{
 			id:          "two levels deep",
-			input:       "toplevel.level1.level2",
+			input:       "metadata.toplevel.level1.level2",
 			expect:      "metadata->'toplevel'->'level1'->>'level2'",
+			shouldError: false,
+		},
+		{
+			id:          "two levels deep",
+			input:       "data.level1.level2.idk:ok:cool",
+			expect:      "data->'level1'->'level2'->>'idk:ok:cool'",
 			shouldError: false,
 		},
 	}
 
 	for _, test := range testCases {
-		output, err := convertMetadataToQuery(test.input)
+		output, err := convertDataOrMetadataToQuery(test.input)
 		if test.shouldError {
 			assert.Error(t, err)
 		} else {
