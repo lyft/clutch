@@ -3,17 +3,6 @@ package mux
 import (
 	"context"
 	"fmt"
-	"io"
-	"net/http"
-	"net/http/httptest"
-	"net/http/pprof"
-	"net/textproto"
-	"net/url"
-	"path"
-	"regexp"
-	"strconv"
-	"strings"
-
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
@@ -23,6 +12,17 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"io"
+	"net/http"
+	"net/http/httptest"
+	"net/http/pprof"
+	"net/textproto"
+	"net/url"
+	"path"
+	"reflect"
+	"regexp"
+	"strconv"
+	"strings"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -155,6 +155,21 @@ func getAssetProviderService(assetCfg *gatewayv1.Assets) (service.Service, error
 	}
 }
 
+// This is a hack, but it's the best way to get the Accept header from the response forwarder without significant plumbing
+// complexity and overhead via middleware.
+func copyRequestHeadersFromResponseWriter(w http.ResponseWriter) http.Header {
+	req := reflect.ValueOf(w).Elem().FieldByName("req").Elem().FieldByName("Header")
+
+	h := make(http.Header, req.Len())
+	iter := req.MapRange()
+	for iter.Next() {
+		k := iter.Key().String()
+		v := iter.Value().Index(0).String()
+		h.Add(k, v)
+	}
+	return h
+}
+
 func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp proto.Message) error {
 	md, ok := runtime.ServerMetadataFromContext(ctx)
 	if !ok {
@@ -171,9 +186,9 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 		http.SetCookie(w, cookie)
 	}
 
-	if redirects := md.HeaderMD.Get("Location"); len(redirects) > 0 {
-		w.Header().Set("Location", redirects[0])
-
+	// Redirect if it's the browser.
+	redirects := md.HeaderMD.Get("Location")
+	if len(redirects) > 0 && isBrowser(copyRequestHeadersFromResponseWriter(w)) {
 		code := http.StatusFound
 		if st := md.HeaderMD.Get("Location-Status"); len(st) > 0 {
 			headerCodeOverride, err := strconv.Atoi(st[0])
@@ -182,8 +197,11 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 			}
 			code = headerCodeOverride
 		}
+
+		w.Header().Set("Location", redirects[0])
 		w.WriteHeader(code)
 	}
+
 	return nil
 }
 
@@ -200,9 +218,12 @@ func customHeaderMatcher(key string) (string, bool) {
 	return runtime.DefaultHeaderMatcher(key)
 }
 
+func isBrowser(h http.Header) bool {
+	return strings.HasPrefix(h.Get("Accept"), "text/html")
+}
+
 func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
-	//  TODO(maybe): once we have non-browser clients we probably want to avoid the redirect and directly return the error.
-	if strings.HasPrefix(req.Header.Get("Accept"), "text/html") { // Redirect if it's the browser (non-XHR).
+	if isBrowser(req.Header) { // Redirect if it's the browser (non-XHR).
 		if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
 			redirectPath := fmt.Sprintf("/v1/authn/login?redirect_url=%s", url.QueryEscape(req.RequestURI))
 
