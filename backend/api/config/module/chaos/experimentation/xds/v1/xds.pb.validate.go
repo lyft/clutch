@@ -40,6 +40,13 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
+	if m.GetCacheRefreshInterval() == nil {
+		return ConfigValidationError{
+			field:  "CacheRefreshInterval",
+			reason: "value is required",
+		}
+	}
+
 	if d := m.GetCacheRefreshInterval(); d != nil {
 		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
@@ -68,6 +75,13 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	if m.GetResourceTtl() == nil {
+		return ConfigValidationError{
+			field:  "ResourceTtl",
+			reason: "value is required",
+		}
+	}
+
 	if d := m.GetResourceTtl(); d != nil {
 		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
@@ -87,6 +101,13 @@ func (m *Config) Validate() error {
 			}
 		}
 
+	}
+
+	if m.GetHeartbeatInterval() == nil {
+		return ConfigValidationError{
+			field:  "HeartbeatInterval",
+			reason: "value is required",
+		}
 	}
 
 	if d := m.GetHeartbeatInterval(); d != nil {

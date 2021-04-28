@@ -9,17 +9,26 @@ import "google/protobuf/duration.proto";
 
 message Config {
   // Interval in seconds between refreshes of xDS data from the backing store.
-  google.protobuf.Duration cache_refresh_interval = 1 [ (validate.rules).duration.gt.seconds = 0 ];
+  google.protobuf.Duration cache_refresh_interval = 1 [ (validate.rules).duration = {
+    required : true,
+    gt : {seconds : 0},
+  } ];
 
   // Name of the RTDS layer in Envoy config i.e. envoy.yaml
   // https://www.envoyproxy.io/docs/envoy/latest/configuration/operations/runtime#config-runtime-rtds.
   string rtds_layer_name = 2 [ (validate.rules).string.min_bytes = 1 ];
 
   // The resource TTL to set for xDS resources.
-  google.protobuf.Duration resource_ttl = 3 [ (validate.rules).duration.gt.seconds = 0 ];
+  google.protobuf.Duration resource_ttl = 3 [ (validate.rules).duration = {
+    required : true,
+    gt : {seconds : 0},
+  } ];
 
   // The interval at which to send heartbeat responses for TTL'd resources.
-  google.protobuf.Duration heartbeat_interval = 4 [ (validate.rules).duration.gt.seconds = 0 ];
+  google.protobuf.Duration heartbeat_interval = 4 [ (validate.rules).duration = {
+    required : true,
+    gt : {seconds : 0},
+  } ];
 
   message ECDSAllowList {
     repeated string enabled_clusters = 1 [ (validate.rules).repeated = {min_items : 1} ];
