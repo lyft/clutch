@@ -54,6 +54,10 @@ interface ResolverProps {
    *  API module to resolve lookups against.
    * */
   apiPackage?: object;
+  /**
+   *  enableAutocomplete bool is used to enable/disable autocomplete at the workflow level rather than the schema level.
+   */
+  enableAutocomplete?: boolean;
 }
 
 const Resolver: React.FC<ResolverProps> = ({
@@ -62,6 +66,7 @@ const Resolver: React.FC<ResolverProps> = ({
   onResolve,
   variant = "dual",
   apiPackage,
+  enableAutocomplete = "true",
 }) => {
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
@@ -116,6 +121,7 @@ const Resolver: React.FC<ResolverProps> = ({
                   setSearchParams({ q: data.query });
                   submitHandler(data);
                 }}
+                enableAutocomplete={enableAutocomplete}
               />
             </>
           )}
