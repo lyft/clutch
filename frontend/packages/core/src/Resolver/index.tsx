@@ -66,7 +66,7 @@ const Resolver: React.FC<ResolverProps> = ({
   onResolve,
   variant = "dual",
   apiPackage,
-  enableAutocomplete = "true",
+  enableAutocomplete = true,
 }) => {
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
