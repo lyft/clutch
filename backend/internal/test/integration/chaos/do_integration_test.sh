@@ -13,12 +13,14 @@ export GOARCH=amd64
 export CGO_ENABLED=0
 
 run_tests () {
+	envoy_config_gen=$1
+  	tests_directory=$2
 	# Place the output binaries in $target_dir for use by the Dockerfiles.
 	pushd ../../../..
-		pushd $1
+		pushd $envoy_config_gen
 	  		go build -o $target_dir/envoyconfiggen main.go
 		popd
-		pushd $2
+		pushd $tests_directory
 			go test -tags integration_only -c -o $target_dir/testrunner
 		popd
   	popd
