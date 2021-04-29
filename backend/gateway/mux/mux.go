@@ -156,7 +156,7 @@ func getAssetProviderService(assetCfg *gatewayv1.Assets) (service.Service, error
 }
 
 // This is a hack, but it's the best way to get the Accept header from the response forwarder without significant plumbing
-// complexity and overhead via middleware.
+// complexity and overhead via middleware. Do not invoke this in the normal request flow.
 func copyRequestHeadersFromResponseWriter(w http.ResponseWriter) http.Header {
 	req := reflect.ValueOf(w).Elem().FieldByName("req").Elem().FieldByName("Header")
 
@@ -165,7 +165,7 @@ func copyRequestHeadersFromResponseWriter(w http.ResponseWriter) http.Header {
 	for iter.Next() {
 		k := iter.Key().String()
 		v := iter.Value().Index(0).String()
-		h.Add(k, v)
+		h[k] = []string{v}
 	}
 	return h
 }
