@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  envoy:
+    stop_grace_period: 0s
+    build:
+      context: .
+      dockerfile: envoy.Dockerfile
+    ports:
+      - "10000:10000"
+      - "9901:9901"
+  test_runner:
+    build:
+      context: .
+      dockerfile: testrunner.Dockerfile
+    ports:
+      - "9000:9000"

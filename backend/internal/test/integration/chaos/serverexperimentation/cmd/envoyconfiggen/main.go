@@ -30,7 +30,7 @@ rtds_layer:
       api_type: GRPC
       transport_api_version: V3
       grpc_services:
-      - envoy_grpc: 
+      - envoy_grpc:
           cluster_name: clutchxds
 `
 
@@ -38,28 +38,28 @@ const ecdsFilterConfig = `
 name: envoy.extension_config
 config_discovery:
   config_source:
-    api_config_source: 
+    api_config_source:
       api_type: GRPC
-      grpc_services: 
-        - envoy_grpc: 
+      grpc_services:
+        - envoy_grpc:
             cluster_name: clutchxds
       transport_api_version: V3
     initial_fetch_timeout: 10s
     resource_api_version: V3
-  default_config: 
+  default_config:
     '@type': type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
-    abort: 
+    abort:
       http_status: 503
       percentage: {denominator: HUNDRED, numerator: 0}
     abort_http_status_runtime: ecds_runtime_override_do_not_use.http.abort.http_status
     abort_percent_runtime: ecds_runtime_override_do_not_use.http.abort.abort_percent
-    delay: 
+    delay:
       fixed_delay: 0.001s
       percentage: {denominator: HUNDRED, numerator: 0}
     delay_duration_runtime: ecds_runtime_override_do_not_use.http.delay.fixed_duration_ms
     delay_percent_runtime: ecds_runtime_override_do_not_use.http.delay.percentage
   apply_default_config_without_warming: false
-  type_urls: 
+  type_urls:
     - type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
 `
 
@@ -73,7 +73,7 @@ load_assignment:
   - lb_endpoints:
     - endpoint:
         address:
-          socket_address: 
+          socket_address:
             address: "test_runner"
             port_value: 9000
 name: clutchxds

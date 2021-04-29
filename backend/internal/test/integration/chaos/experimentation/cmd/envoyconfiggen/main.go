@@ -18,7 +18,7 @@ load_assignment:
   - lb_endpoints:
     - endpoint:
         address:
-          socket_address: 
+          socket_address:
             address: "test_runner"
             port_value: 9000
 name: clutchxds
