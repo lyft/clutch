@@ -48,7 +48,12 @@ const autoComplete = async (type: string, search: string): Promise<any> => {
   return { results: response?.data?.results || [] };
 };
 
-const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submitHandler, enableAutocomplete = true }) => {
+const QueryResolver: React.FC<QueryResolverProps> = ({
+  inputType,
+  schemas,
+  submitHandler,
+  enableAutocomplete = true,
+}) => {
   const validation = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -68,7 +73,8 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
   // If there is at least 1 schema that has the ability to autocomplete we will enable it.
   // enableAutocomplete's default value is true.  We only use it (set it to false) when we want to override and disable autocomplete at the workflow level rather than the schema level.
   const isAutoCompleteEnabled =
-    (schemas.filter(schema => schema?.metadata?.search?.autocompleteEnabled === true).length >= 1) && enableAutocomplete;
+    schemas.filter(schema => schema?.metadata?.search?.autocompleteEnabled === true).length >= 1 &&
+    enableAutocomplete;
 
   const error = validation.errors?.query;
   return (
