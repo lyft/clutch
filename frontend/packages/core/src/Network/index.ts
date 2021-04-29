@@ -41,23 +41,8 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   // This section handles authentication redirects.
   if (response?.status === 401) {
     // TODO: turn this in to silent refresh once refresh tokens are supported.
-    if (response?.headers["grpc-metadata-location"] !== undefined) {
-      window.location = response.headers["grpc-metadata-location"]; // Navigate to specified location to re-do auth.
-    } else {
-      const redirectUrl = window.location.href.replace(window.location.origin, "");
-      window.location.href = `/v1/authn/login?redirect_url=${encodeURIComponent(redirectUrl)}`;
-    }
-
-    response.data.code = 401;
-    response.data.message = "Authentication Expired";
-    const clutchError = {
-      status: {
-        code: 401,
-        text: "Authentication Expired",
-      },
-      message: "Authentication Expired",
-    } as ClutchError;
-    return Promise.reject(clutchError);
+    const redirectUrl = window.location.href.replace(window.location.origin, "");
+    window.location.href = `/v1/authn/login?redirect_url=${encodeURIComponent(redirectUrl)}`;
   }
 
   // we are guaranteed to have a response object on the error from this point on
