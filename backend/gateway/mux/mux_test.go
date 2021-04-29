@@ -5,12 +5,18 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
 
 func TestCopyHTTPResponse(t *testing.T) {
@@ -121,4 +127,109 @@ func TestCustomHeaderMatcher(t *testing.T) {
 		assert.Equal(t, test.expectedKey, result)
 		assert.Equal(t, test.expectedBool, ok)
 	}
+}
+
+func TestCustomErrorHandler(t *testing.T) {
+	ctx := context.Background()
+	mux := runtime.NewServeMux()
+	marshaler := &runtime.JSONPb{}
+
+	{
+		// Business as usual.
+		req := &http.Request{}
+		rec := httptest.NewRecorder()
+		w := mockResponseWriter{ResponseWriter: rec}
+		err := status.Error(codes.NotFound, "not found")
+		customErrorHandler(ctx, mux, marshaler, w, req, err)
+		assert.Equal(t, 404, rec.Code)
+	}
+	{
+		// Auth redirect for browser 401.
+		uri := "https://example.com/bar?foo=bar"
+		req, _ := http.NewRequest("GET", uri, nil)
+		req.RequestURI = uri
+		req.Header.Add("Accept", "text/html")
+		rec := httptest.NewRecorder()
+		w := mockResponseWriter{ResponseWriter: rec}
+		err := status.Error(codes.Unauthenticated, "not found")
+		customErrorHandler(ctx, mux, marshaler, w, req, err)
+		assert.Equal(t, 302, rec.Code)
+		assert.Contains(t, rec.Header().Get("Location"), url.QueryEscape(uri))
+	}
+	{
+		// No auth redirect for non-browser 401.
+		uri := "https://example.com/bar?foo=bar"
+		req, _ := http.NewRequest(http.MethodGet, uri, nil)
+		req.RequestURI = uri
+		rec := httptest.NewRecorder()
+		w := mockResponseWriter{ResponseWriter: rec}
+		err := status.Error(codes.Unauthenticated, "not found")
+		customErrorHandler(ctx, mux, marshaler, w, req, err)
+		assert.Equal(t, 401, rec.Code)
+	}
+}
+
+func TestCustomResponseForwarder(t *testing.T) {
+	ctx := runtime.NewServerMetadataContext(context.Background(), runtime.ServerMetadata{})
+	rec := httptest.NewRecorder()
+	w := mockResponseWriter{ResponseWriter: rec}
+	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
+	assert.NoError(t, err)
+	assert.Equal(t, 200, rec.Code)
+}
+
+func TestCustomResponseForwarderAuthCookies(t *testing.T) {
+	ctx := runtime.NewServerMetadataContext(context.Background(), runtime.ServerMetadata{
+		HeaderMD: metadata.Pairs(
+			"Set-Cookie-Token", "myToken",
+			"Location", "https://example.com",
+		),
+	})
+
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "https://example.com/bar", nil)
+	req.Header.Add("Accept", "text/html") // Is browser.
+	w := &mockResponseWriter{ResponseWriter: rec, req: req}
+	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
+	assert.NoError(t, err)
+	assert.Equal(t, 302, rec.Code)
+	assert.Equal(t, "token=myToken; Path=/", rec.Header().Get("Set-Cookie"))
+	assert.Equal(t, "https://example.com", rec.Header().Get("Location"))
+}
+
+func TestCustomResponseForwarderLocationStatusOverride(t *testing.T) {
+	ctx := runtime.NewServerMetadataContext(context.Background(), runtime.ServerMetadata{
+		HeaderMD: metadata.Pairs(
+			"Set-Cookie-Token", "myToken",
+			"Location", "https://example.com",
+			"Location-Status", "304",
+		),
+	})
+
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "https://example.com/bar", nil)
+	req.Header.Add("Accept", "text/html") // Is browser.
+	w := &mockResponseWriter{ResponseWriter: rec, req: req}
+	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
+	assert.NoError(t, err)
+	assert.Equal(t, 304, rec.Code)
+	assert.Equal(t, "token=myToken; Path=/", rec.Header().Get("Set-Cookie"))
+	assert.Equal(t, "https://example.com", rec.Header().Get("Location"))
+}
+
+func TestCustomResponseForwarderAuthCookiesNonBrowser(t *testing.T) {
+	ctx := runtime.NewServerMetadataContext(context.Background(), runtime.ServerMetadata{
+		HeaderMD: metadata.Pairs(
+			"Location", "https://example.com",
+		),
+	})
+
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "https://example.com/bar", nil)
+	req.Header.Add("Accept", "*/*") // Not a browser!
+	w := &mockResponseWriter{ResponseWriter: rec, req: req}
+	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
+	assert.NoError(t, err)
+	assert.Equal(t, 200, rec.Code)
+	assert.Equal(t, "", rec.Header().Get("Location"))
 }
