@@ -3,45 +3,6 @@ import type { AxiosError, AxiosResponse } from "axios";
 import type { ClutchError } from "../errors";
 import { client, errorInterceptor, successInterceptor } from "../index";
 
-describe("success interceptor", () => {
-  const { location } = window;
-
-  beforeAll(() => {
-    delete window.location;
-  });
-
-  afterAll(() => {
-    window.location = location;
-  });
-
-  describe("on auth url response data", () => {
-    let response: () => AxiosResponse;
-    beforeEach(() => {
-      response = () =>
-        successInterceptor({
-          data: {
-            authUrl: "https://clutch.sh/auth",
-          },
-        } as AxiosResponse);
-    });
-
-    it("redirects to provided url", () => {
-      expect(() => response()).toThrow();
-      expect(window.location).toBe("https://clutch.sh/auth");
-    });
-
-    it("throws a ClutchError", () => {
-      expect(() => response()).toThrow({
-        message: "Authentication Expired",
-        status: {
-          code: 401,
-          text: "Authentication Expired",
-        },
-      } as ClutchError);
-    });
-  });
-});
-
 describe("error interceptor", () => {
   describe("on axios error", () => {
     let err: Promise<ClutchError>;
@@ -60,6 +21,36 @@ describe("error interceptor", () => {
         },
         message: "Request timeout of 1ms reached",
       });
+    });
+  });
+
+  describe("on auth error", () => {
+    const axiosError = {
+      response: {
+        status: 401,
+        statusText: "Not Authorized",
+        data: {
+          code: 16,
+          message: "Whoops!",
+        },
+      },
+    } as AxiosError;
+
+    beforeAll(() => {
+      global.window = Object.create(window);
+      const url = "/example?foo=bar";
+      Object.defineProperty(window, "location", {
+        value: {
+          href: url,
+        },
+        writable: true,
+      });
+
+      errorInterceptor(axiosError);
+    });
+
+    it("redirects to provided url", () => {
+      expect(window.location.href).toBe("/v1/authn/login?redirect_url=%2Fexample%3Ffoo%3Dbar");
     });
   });
 
