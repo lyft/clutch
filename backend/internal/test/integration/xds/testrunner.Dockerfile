@@ -1,5 +1,5 @@
-FROM golang:1.16.0
+FROM alpine
 
-COPY . /code
+ADD build/testrunner /testrunner
 
-RUN cd /code/module/chaos/experimentation/xds && go test -tags integration_only -c -o /testrunner
+ENTRYPOINT /testrunner

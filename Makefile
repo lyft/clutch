@@ -81,8 +81,7 @@ yarn-install: yarn-ensure
 
 .PHONY: backend-integration-test
 backend-integration-test:
-	docker-compose -f backend/internal/test/integration/serverexperimentation/docker-compose.yaml up --build --abort-on-container-exit \
-	&& docker-compose -f backend/internal/test/integration/xds/docker-compose.yaml up --build --abort-on-container-exit
+	cd backend/internal/test/integration/xds && ./do_integration_test.sh
 
 .PHONY: frontend # Build production frontend assets.
 frontend: yarn-install
