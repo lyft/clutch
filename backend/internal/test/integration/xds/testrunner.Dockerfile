@@ -1,5 +1,5 @@
 FROM alpine
 
-ADD testrunner /testrunner
+ADD build/testrunner /testrunner
 
 ENTRYPOINT /testrunner

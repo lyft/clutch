@@ -2,7 +2,8 @@
 set -euo pipefail
 
 # We expect this to be run from the directory containing the script.
-target_dir="$(pwd)"
+mkdir -p build/
+target_dir="$(pwd)/build"
 
 # Build the Go executable on the host system targeting linux. This is much faster
 # than naively building within the container setup since we get to share the host Go
