@@ -1,7 +1,7 @@
-import type { AxiosError, AxiosResponse } from "axios";
+import type { AxiosError } from "axios";
 
 import type { ClutchError } from "../errors";
-import { client, errorInterceptor, successInterceptor } from "../index";
+import { client, errorInterceptor } from "../index";
 
 describe("error interceptor", () => {
   describe("on axios error", () => {
