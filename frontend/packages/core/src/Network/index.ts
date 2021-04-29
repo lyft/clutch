@@ -98,4 +98,4 @@ const createClient = () => {
 
 const client = createClient();
 
-export { client, errorInterceptor };
+export { client, errorInterceptor, successInterceptor };

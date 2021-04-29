@@ -73,10 +73,10 @@ const StyledChip = styled(MuiChip)(
     borderStyle: "solid",
     borderWidth: "1px",
     ".MuiChip-label": {
-      fontSize: "16px",
-      fontWeight: 500,
+      fontSize: "14px",
+      fontWeight: 400,
       lineHeight: "20px",
-      padding: "6px 12px",
+      padding: "7px 12px",
     },
   },
   props => ({
