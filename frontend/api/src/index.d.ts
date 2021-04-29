@@ -4270,13 +4270,13 @@ export namespace clutch {
                     public dateValue?: (google.protobuf.ITimestamp|null);
 
                     /** Property stringValue. */
-                    public stringValue: string;
+                    public stringValue?: (string|null);
 
                     /** Property intValue. */
-                    public intValue: (number|Long);
+                    public intValue?: (number|Long|null);
 
                     /** Property urlValue. */
-                    public urlValue: string;
+                    public urlValue?: (string|null);
 
                     /** Property value. */
                     public value?: ("dateValue"|"stringValue"|"intValue"|"urlValue");
@@ -6212,7 +6212,7 @@ export namespace clutch {
                     public level: clutch.config.gateway.v1.Logger.Level;
 
                     /** Logger pretty. */
-                    public pretty: boolean;
+                    public pretty?: (boolean|null);
 
                     /** Logger format. */
                     public format?: "pretty";
@@ -6554,7 +6554,7 @@ export namespace clutch {
                             constructor(properties?: clutch.config.middleware.accesslog.v1.Config.IStatusCodeFilter);
 
                             /** StatusCodeFilter equals. */
-                            public equals: number;
+                            public equals?: (number|null);
 
                             /** StatusCodeFilter filterType. */
                             public filterType?: "equals";
@@ -7045,7 +7045,7 @@ export namespace clutch {
                         public field: clutch.config.service.audit.v1.EventFilter.FilterType;
 
                         /** EventFilter text. */
-                        public text: string;
+                        public text?: (string|null);
 
                         /** EventFilter value. */
                         public value?: "text";
@@ -7218,10 +7218,10 @@ export namespace clutch {
                         constructor(properties?: clutch.config.service.audit.v1.IConfig);
 
                         /** Config dbProvider. */
-                        public dbProvider: string;
+                        public dbProvider?: (string|null);
 
                         /** Config inMemory. */
-                        public inMemory: boolean;
+                        public inMemory?: (boolean|null);
 
                         /** Config filter. */
                         public filter?: (clutch.config.service.audit.v1.IFilter|null);
@@ -7480,10 +7480,10 @@ export namespace clutch {
                         constructor(properties?: clutch.config.service.authz.v1.IPrincipal);
 
                         /** Principal user. */
-                        public user: string;
+                        public user?: (string|null);
 
                         /** Principal group. */
-                        public group: string;
+                        public group?: (string|null);
 
                         /** Principal type. */
                         public type?: ("user"|"group");
@@ -8150,7 +8150,7 @@ export namespace clutch {
                             public sslMode: clutch.config.service.db.postgres.v1.Connection.SSLMode;
 
                             /** Connection password. */
-                            public password: string;
+                            public password?: (string|null);
 
                             /** Connection authn. */
                             public authn?: "password";
@@ -8340,7 +8340,7 @@ export namespace clutch {
                         constructor(properties?: clutch.config.service.github.v1.IConfig);
 
                         /** Config accessToken. */
-                        public accessToken: string;
+                        public accessToken?: (string|null);
 
                         /** Config auth. */
                         public auth?: "accessToken";
@@ -10183,7 +10183,7 @@ export namespace clutch {
                     public key: string;
 
                     /** Entry value. */
-                    public value: string;
+                    public value?: (string|null);
 
                     /** Entry type. */
                     public type?: "value";
@@ -15663,10 +15663,10 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.INullableString);
 
                 /** NullableString null. */
-                public null: google.protobuf.NullValue;
+                public null?: (google.protobuf.NullValue|null);
 
                 /** NullableString value. */
-                public value: string;
+                public value?: (string|null);
 
                 /** NullableString kind. */
                 public kind?: ("null"|"value");
@@ -16321,7 +16321,7 @@ export namespace clutch {
                 public displayName: string;
 
                 /** Option stringValue. */
-                public stringValue: string;
+                public stringValue?: (string|null);
 
                 /** Option value. */
                 public value?: "stringValue";
@@ -20409,34 +20409,34 @@ export namespace validate {
         public notIn: string[];
 
         /** StringRules email. */
-        public email: boolean;
+        public email?: (boolean|null);
 
         /** StringRules hostname. */
-        public hostname: boolean;
+        public hostname?: (boolean|null);
 
         /** StringRules ip. */
-        public ip: boolean;
+        public ip?: (boolean|null);
 
         /** StringRules ipv4. */
-        public ipv4: boolean;
+        public ipv4?: (boolean|null);
 
         /** StringRules ipv6. */
-        public ipv6: boolean;
+        public ipv6?: (boolean|null);
 
         /** StringRules uri. */
-        public uri: boolean;
+        public uri?: (boolean|null);
 
         /** StringRules uriRef. */
-        public uriRef: boolean;
+        public uriRef?: (boolean|null);
 
         /** StringRules address. */
-        public address: boolean;
+        public address?: (boolean|null);
 
         /** StringRules uuid. */
-        public uuid: boolean;
+        public uuid?: (boolean|null);
 
         /** StringRules wellKnownRegex. */
-        public wellKnownRegex: validate.KnownRegex;
+        public wellKnownRegex?: (validate.KnownRegex|null);
 
         /** StringRules strict. */
         public strict: boolean;
@@ -20569,13 +20569,13 @@ export namespace validate {
         public notIn: Uint8Array[];
 
         /** BytesRules ip. */
-        public ip: boolean;
+        public ip?: (boolean|null);
 
         /** BytesRules ipv4. */
-        public ipv4: boolean;
+        public ipv4?: (boolean|null);
 
         /** BytesRules ipv6. */
-        public ipv6: boolean;
+        public ipv6?: (boolean|null);
 
         /** BytesRules ignoreEmpty. */
         public ignoreEmpty: boolean;
@@ -23381,16 +23381,16 @@ export namespace google {
             constructor(properties?: google.protobuf.IValue);
 
             /** Value nullValue. */
-            public nullValue: google.protobuf.NullValue;
+            public nullValue?: (google.protobuf.NullValue|null);
 
             /** Value numberValue. */
-            public numberValue: number;
+            public numberValue?: (number|null);
 
             /** Value stringValue. */
-            public stringValue: string;
+            public stringValue?: (string|null);
 
             /** Value boolValue. */
-            public boolValue: boolean;
+            public boolValue?: (boolean|null);
 
             /** Value structValue. */
             public structValue?: (google.protobuf.IStruct|null);
@@ -24084,19 +24084,19 @@ export namespace google {
             public selector: string;
 
             /** HttpRule get. */
-            public get: string;
+            public get?: (string|null);
 
             /** HttpRule put. */
-            public put: string;
+            public put?: (string|null);
 
             /** HttpRule post. */
-            public post: string;
+            public post?: (string|null);
 
             /** HttpRule delete. */
-            public delete: string;
+            public delete?: (string|null);
 
             /** HttpRule patch. */
-            public patch: string;
+            public patch?: (string|null);
 
             /** HttpRule custom. */
             public custom?: (google.api.ICustomHttpPattern|null);
