@@ -20,7 +20,7 @@ const reducer = (state: StateProps, action: WizardAction): StateProps => {
     case WizardAction.BACK:
       return {
         ...state,
-        activeStep: state.activeStep - 1,
+        activeStep: state.activeStep > 0 ? state.activeStep - 1 : 0,
       };
     case WizardAction.RESET:
       return {

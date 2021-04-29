@@ -1,7 +1,46 @@
-import type { AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 
 import type { ClutchError } from "../errors";
-import { client, errorInterceptor } from "../index";
+import { client, errorInterceptor, successInterceptor } from "../index";
+
+describe("success interceptor", () => {
+  const { location } = window;
+
+  beforeAll(() => {
+    delete window.location;
+  });
+
+  afterAll(() => {
+    window.location = location;
+  });
+
+  describe("on auth url response data", () => {
+    let response: () => AxiosResponse;
+    beforeEach(() => {
+      response = () =>
+        successInterceptor({
+          data: {
+            authUrl: "https://clutch.sh/auth",
+          },
+        } as AxiosResponse);
+    });
+
+    it("redirects to provided url", () => {
+      expect(() => response()).toThrow();
+      expect(window.location).toBe("https://clutch.sh/auth");
+    });
+
+    it("throws a ClutchError", () => {
+      expect(() => response()).toThrow({
+        message: "Authentication Expired",
+        status: {
+          code: 401,
+          text: "Authentication Expired",
+        },
+      } as ClutchError);
+    });
+  });
+});
 
 describe("error interceptor", () => {
   describe("on axios error", () => {
