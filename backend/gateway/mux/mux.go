@@ -10,7 +10,6 @@ import (
 	"net/textproto"
 	"net/url"
 	"path"
-	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -156,21 +155,6 @@ func getAssetProviderService(assetCfg *gatewayv1.Assets) (service.Service, error
 	}
 }
 
-// This is a hack, but it's the best way to get the Accept header from the response forwarder without significant plumbing
-// complexity and overhead via middleware. Do not invoke this in the normal request flow.
-func copyRequestHeadersFromResponseWriter(w http.ResponseWriter) http.Header {
-	req := reflect.ValueOf(w).Elem().FieldByName("req").Elem().FieldByName("Header")
-
-	h := make(http.Header, req.Len())
-	iter := req.MapRange()
-	for iter.Next() {
-		k := iter.Key().String()
-		v := iter.Value().Index(0).String()
-		h[k] = []string{v}
-	}
-	return h
-}
-
 func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp proto.Message) error {
 	md, ok := runtime.ServerMetadataFromContext(ctx)
 	if !ok {
@@ -217,10 +201,6 @@ func customHeaderMatcher(key string) (string, bool) {
 	}
 	// the the default header mapping rule
 	return runtime.DefaultHeaderMatcher(key)
-}
-
-func isBrowser(h http.Header) bool {
-	return strings.HasPrefix(h.Get("Accept"), "text/html")
 }
 
 func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
