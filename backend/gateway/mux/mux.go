@@ -3,15 +3,6 @@ package mux
 import (
 	"context"
 	"fmt"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/reflection"
-	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/proto"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -23,6 +14,16 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -186,7 +187,7 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 		http.SetCookie(w, cookie)
 	}
 
-	// Redirect if it's the browser.
+	// Redirect if it's the browser (non-XHR).
 	redirects := md.HeaderMD.Get("Location")
 	if len(redirects) > 0 && isBrowser(copyRequestHeadersFromResponseWriter(w)) {
 		code := http.StatusFound
@@ -226,11 +227,11 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	if isBrowser(req.Header) { // Redirect if it's the browser (non-XHR).
 		if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
 			redirectPath := fmt.Sprintf("/v1/authn/login?redirect_url=%s", url.QueryEscape(req.RequestURI))
-
 			http.Redirect(w, req, redirectPath, http.StatusFound)
 			return
 		}
 	}
+
 	runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 }
 
