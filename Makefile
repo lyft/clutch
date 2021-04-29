@@ -81,7 +81,7 @@ yarn-install: yarn-ensure
 
 .PHONY: backend-integration-test
 backend-integration-test:
-	cd backend/internal/test/integration/xds && ./do_integration_test.sh
+	cd backend/internal/test/integration/chaos && ./do_integration_test.sh
 
 .PHONY: frontend # Build production frontend assets.
 frontend: yarn-install
