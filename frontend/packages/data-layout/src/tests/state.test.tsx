@@ -13,7 +13,7 @@ describe("Manager State", () => {
           type: ManagerAction.HYDRATE_END,
           payload: { key: "layout", result: [{ hydrate: "value" }] },
         });
-        expect(state.layout.data).toEqual([{ hydrate: "value" }, { update: "value" }]);
+        expect(state.layout.data).toEqual([{ update: "value" }, { hydrate: "value" }]);
       });
 
       it("of objects", () => {
@@ -30,7 +30,7 @@ describe("Manager State", () => {
       });
     });
 
-    it("gives priority to existing data", () => {
+    it("gives priority to new data", () => {
       let state = {};
       state = reducer(state, {
         type: ManagerAction.SET,
@@ -40,7 +40,7 @@ describe("Manager State", () => {
         type: ManagerAction.HYDRATE_END,
         payload: { key: "layout", result: { update: "endingValue" } },
       });
-      expect(state.layout.data).toStrictEqual({ update: "initialValue" });
+      expect(state.layout.data).toStrictEqual({ update: "endingValue" });
     });
 
     describe("on type mismatch", () => {

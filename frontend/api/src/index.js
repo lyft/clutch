@@ -9797,27 +9797,27 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Property stringValue.
-                     * @member {string} stringValue
+                     * @member {string|null|undefined} stringValue
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
-                    Property.prototype.stringValue = "";
+                    Property.prototype.stringValue = null;
 
                     /**
                      * Property intValue.
-                     * @member {number|Long} intValue
+                     * @member {number|Long|null|undefined} intValue
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
-                    Property.prototype.intValue = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                    Property.prototype.intValue = null;
 
                     /**
                      * Property urlValue.
-                     * @member {string} urlValue
+                     * @member {string|null|undefined} urlValue
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
-                    Property.prototype.urlValue = "";
+                    Property.prototype.urlValue = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -14627,11 +14627,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Logger pretty.
-                     * @member {boolean} pretty
+                     * @member {boolean|null|undefined} pretty
                      * @memberof clutch.config.gateway.v1.Logger
                      * @instance
                      */
-                    Logger.prototype.pretty = false;
+                    Logger.prototype.pretty = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -15456,11 +15456,11 @@ export const clutch = $root.clutch = (() => {
 
                             /**
                              * StatusCodeFilter equals.
-                             * @member {number} equals
+                             * @member {number|null|undefined} equals
                              * @memberof clutch.config.middleware.accesslog.v1.Config.StatusCodeFilter
                              * @instance
                              */
-                            StatusCodeFilter.prototype.equals = 0;
+                            StatusCodeFilter.prototype.equals = null;
 
                             // OneOf field names bound to virtual getters and setters
                             let $oneOfFields;
@@ -16939,11 +16939,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * EventFilter text.
-                         * @member {string} text
+                         * @member {string|null|undefined} text
                          * @memberof clutch.config.service.audit.v1.EventFilter
                          * @instance
                          */
-                        EventFilter.prototype.text = "";
+                        EventFilter.prototype.text = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -17352,19 +17352,19 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Config dbProvider.
-                         * @member {string} dbProvider
+                         * @member {string|null|undefined} dbProvider
                          * @memberof clutch.config.service.audit.v1.Config
                          * @instance
                          */
-                        Config.prototype.dbProvider = "";
+                        Config.prototype.dbProvider = null;
 
                         /**
                          * Config inMemory.
-                         * @member {boolean} inMemory
+                         * @member {boolean|null|undefined} inMemory
                          * @memberof clutch.config.service.audit.v1.Config
                          * @instance
                          */
-                        Config.prototype.inMemory = false;
+                        Config.prototype.inMemory = null;
 
                         /**
                          * Config filter.
@@ -18035,19 +18035,19 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Principal user.
-                         * @member {string} user
+                         * @member {string|null|undefined} user
                          * @memberof clutch.config.service.authz.v1.Principal
                          * @instance
                          */
-                        Principal.prototype.user = "";
+                        Principal.prototype.user = null;
 
                         /**
                          * Principal group.
-                         * @member {string} group
+                         * @member {string|null|undefined} group
                          * @memberof clutch.config.service.authz.v1.Principal
                          * @instance
                          */
-                        Principal.prototype.group = "";
+                        Principal.prototype.group = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -19750,11 +19750,11 @@ export const clutch = $root.clutch = (() => {
 
                             /**
                              * Connection password.
-                             * @member {string} password
+                             * @member {string|null|undefined} password
                              * @memberof clutch.config.service.db.postgres.v1.Connection
                              * @instance
                              */
-                            Connection.prototype.password = "";
+                            Connection.prototype.password = null;
 
                             // OneOf field names bound to virtual getters and setters
                             let $oneOfFields;
@@ -20264,11 +20264,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Config accessToken.
-                         * @member {string} accessToken
+                         * @member {string|null|undefined} accessToken
                          * @memberof clutch.config.service.github.v1.Config
                          * @instance
                          */
-                        Config.prototype.accessToken = "";
+                        Config.prototype.accessToken = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -24616,11 +24616,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Entry value.
-                     * @member {string} value
+                     * @member {string|null|undefined} value
                      * @memberof clutch.envoytriage.v1.Runtime.Entry
                      * @instance
                      */
-                    Entry.prototype.value = "";
+                    Entry.prototype.value = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -37343,19 +37343,19 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * NullableString null.
-                 * @member {google.protobuf.NullValue} null
+                 * @member {google.protobuf.NullValue|null|undefined} null
                  * @memberof clutch.k8s.v1.NullableString
                  * @instance
                  */
-                NullableString.prototype["null"] = 0;
+                NullableString.prototype["null"] = null;
 
                 /**
                  * NullableString value.
-                 * @member {string} value
+                 * @member {string|null|undefined} value
                  * @memberof clutch.k8s.v1.NullableString
                  * @instance
                  */
-                NullableString.prototype.value = "";
+                NullableString.prototype.value = null;
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -38965,11 +38965,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Option stringValue.
-                 * @member {string} stringValue
+                 * @member {string|null|undefined} stringValue
                  * @memberof clutch.resolver.v1.Option
                  * @instance
                  */
-                Option.prototype.stringValue = "";
+                Option.prototype.stringValue = null;
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -49886,83 +49886,83 @@ export const validate = $root.validate = (() => {
 
         /**
          * StringRules email.
-         * @member {boolean} email
+         * @member {boolean|null|undefined} email
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.email = false;
+        StringRules.prototype.email = null;
 
         /**
          * StringRules hostname.
-         * @member {boolean} hostname
+         * @member {boolean|null|undefined} hostname
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.hostname = false;
+        StringRules.prototype.hostname = null;
 
         /**
          * StringRules ip.
-         * @member {boolean} ip
+         * @member {boolean|null|undefined} ip
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.ip = false;
+        StringRules.prototype.ip = null;
 
         /**
          * StringRules ipv4.
-         * @member {boolean} ipv4
+         * @member {boolean|null|undefined} ipv4
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.ipv4 = false;
+        StringRules.prototype.ipv4 = null;
 
         /**
          * StringRules ipv6.
-         * @member {boolean} ipv6
+         * @member {boolean|null|undefined} ipv6
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.ipv6 = false;
+        StringRules.prototype.ipv6 = null;
 
         /**
          * StringRules uri.
-         * @member {boolean} uri
+         * @member {boolean|null|undefined} uri
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.uri = false;
+        StringRules.prototype.uri = null;
 
         /**
          * StringRules uriRef.
-         * @member {boolean} uriRef
+         * @member {boolean|null|undefined} uriRef
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.uriRef = false;
+        StringRules.prototype.uriRef = null;
 
         /**
          * StringRules address.
-         * @member {boolean} address
+         * @member {boolean|null|undefined} address
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.address = false;
+        StringRules.prototype.address = null;
 
         /**
          * StringRules uuid.
-         * @member {boolean} uuid
+         * @member {boolean|null|undefined} uuid
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.uuid = false;
+        StringRules.prototype.uuid = null;
 
         /**
          * StringRules wellKnownRegex.
-         * @member {validate.KnownRegex} wellKnownRegex
+         * @member {validate.KnownRegex|null|undefined} wellKnownRegex
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.wellKnownRegex = 0;
+        StringRules.prototype.wellKnownRegex = null;
 
         /**
          * StringRules strict.
@@ -50587,27 +50587,27 @@ export const validate = $root.validate = (() => {
 
         /**
          * BytesRules ip.
-         * @member {boolean} ip
+         * @member {boolean|null|undefined} ip
          * @memberof validate.BytesRules
          * @instance
          */
-        BytesRules.prototype.ip = false;
+        BytesRules.prototype.ip = null;
 
         /**
          * BytesRules ipv4.
-         * @member {boolean} ipv4
+         * @member {boolean|null|undefined} ipv4
          * @memberof validate.BytesRules
          * @instance
          */
-        BytesRules.prototype.ipv4 = false;
+        BytesRules.prototype.ipv4 = null;
 
         /**
          * BytesRules ipv6.
-         * @member {boolean} ipv6
+         * @member {boolean|null|undefined} ipv6
          * @memberof validate.BytesRules
          * @instance
          */
-        BytesRules.prototype.ipv6 = false;
+        BytesRules.prototype.ipv6 = null;
 
         /**
          * BytesRules ignoreEmpty.
@@ -58571,35 +58571,35 @@ export const google = $root.google = (() => {
 
             /**
              * Value nullValue.
-             * @member {google.protobuf.NullValue} nullValue
+             * @member {google.protobuf.NullValue|null|undefined} nullValue
              * @memberof google.protobuf.Value
              * @instance
              */
-            Value.prototype.nullValue = 0;
+            Value.prototype.nullValue = null;
 
             /**
              * Value numberValue.
-             * @member {number} numberValue
+             * @member {number|null|undefined} numberValue
              * @memberof google.protobuf.Value
              * @instance
              */
-            Value.prototype.numberValue = 0;
+            Value.prototype.numberValue = null;
 
             /**
              * Value stringValue.
-             * @member {string} stringValue
+             * @member {string|null|undefined} stringValue
              * @memberof google.protobuf.Value
              * @instance
              */
-            Value.prototype.stringValue = "";
+            Value.prototype.stringValue = null;
 
             /**
              * Value boolValue.
-             * @member {boolean} boolValue
+             * @member {boolean|null|undefined} boolValue
              * @memberof google.protobuf.Value
              * @instance
              */
-            Value.prototype.boolValue = false;
+            Value.prototype.boolValue = null;
 
             /**
              * Value structValue.
@@ -60218,43 +60218,43 @@ export const google = $root.google = (() => {
 
             /**
              * HttpRule get.
-             * @member {string} get
+             * @member {string|null|undefined} get
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype.get = "";
+            HttpRule.prototype.get = null;
 
             /**
              * HttpRule put.
-             * @member {string} put
+             * @member {string|null|undefined} put
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype.put = "";
+            HttpRule.prototype.put = null;
 
             /**
              * HttpRule post.
-             * @member {string} post
+             * @member {string|null|undefined} post
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype.post = "";
+            HttpRule.prototype.post = null;
 
             /**
              * HttpRule delete.
-             * @member {string} delete
+             * @member {string|null|undefined} delete
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype["delete"] = "";
+            HttpRule.prototype["delete"] = null;
 
             /**
              * HttpRule patch.
-             * @member {string} patch
+             * @member {string|null|undefined} patch
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype.patch = "";
+            HttpRule.prototype.patch = null;
 
             /**
              * HttpRule custom.
