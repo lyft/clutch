@@ -38,10 +38,11 @@ describe("error interceptor", () => {
 
     beforeAll(() => {
       global.window = Object.create(window);
-      const url = "/example?foo=bar";
       Object.defineProperty(window, "location", {
         value: {
-          href: url,
+          href: "/example?foo=bar",
+          pathname: "/example",
+          search: "?foo=bar",
         },
         writable: true,
       });
