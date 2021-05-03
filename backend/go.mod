@@ -27,7 +27,7 @@ require (
 	github.com/google/go-github/v35 v35.1.0
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.4.0
 	github.com/iancoleman/strcase v0.1.3
 	github.com/jhump/protoreflect v1.8.2
 	github.com/lib/pq v1.10.1
@@ -41,7 +41,7 @@ require (
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20210423184538-5f58ad60dda6
-	golang.org/x/oauth2 v0.0.0-20210413134643-5e61552d6c78
+	golang.org/x/oauth2 v0.0.0-20210427180440-81ed05c6b58c
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/genproto v0.0.0-20210426193834-eac7f76ac494
 	google.golang.org/grpc v1.37.0
