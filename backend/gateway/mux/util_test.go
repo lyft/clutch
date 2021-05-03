@@ -42,3 +42,12 @@ func TestRequestHeadersFromrResponseWriter(t *testing.T) {
 	ret := requestHeadersFromResponseWriter(m)
 	assert.EqualValues(t, headers, ret)
 }
+
+func TestRequestHeadersFromrResponseWriterMessed(t *testing.T) {
+	headers := http.Header{}
+	headers["foo"] = nil
+	m := &mockResponseWriter{req: &http.Request{Header: headers}}
+
+	ret := requestHeadersFromResponseWriter(m)
+	assert.Equal(t, "", ret.Get("foo"))
+}
