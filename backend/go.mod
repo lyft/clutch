@@ -18,7 +18,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/go-control-plane v0.9.9-0.20210304204206-e2b50f82e48e
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
-	github.com/fullstorydev/grpcurl v1.8.0
+	github.com/fullstorydev/grpcurl v1.8.1
 	github.com/go-git/go-billy/v5 v5.2.0
 	github.com/go-git/go-git/v5 v5.3.0
 	github.com/gobwas/glob v0.2.3
@@ -29,7 +29,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
 	github.com/iancoleman/strcase v0.1.3
-	github.com/jhump/protoreflect v1.8.1
+	github.com/jhump/protoreflect v1.8.2
 	github.com/lib/pq v1.10.1
 	github.com/mitchellh/hashstructure/v2 v2.0.1
 	github.com/shurcooL/githubv4 v0.0.0-20201206200315-234843c633fa
