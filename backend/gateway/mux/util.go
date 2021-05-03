@@ -24,7 +24,7 @@ func isBrowser(h http.Header) bool {
 
 // This is a hack, but it's the best way to get the Accept header from the response forwarder without significant plumbing
 // complexity and overhead via middleware. Do not invoke this in the normal request flow.
-func copyRequestHeadersFromResponseWriter(w http.ResponseWriter) http.Header {
+func requestHeadersFromResponseWriter(w http.ResponseWriter) http.Header {
 	req := reflect.ValueOf(w).Elem().FieldByName("req").Elem().FieldByName("Header")
 
 	h := make(http.Header, req.Len())

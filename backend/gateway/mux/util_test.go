@@ -33,12 +33,12 @@ type mockResponseWriter struct {
 	req *http.Request
 }
 
-func TestCopyHeadersFromrResponseWriter(t *testing.T) {
+func TestRequestHeadersFromrResponseWriter(t *testing.T) {
 	headers := http.Header{}
 	headers.Add("foo", "bar")
 	headers.Add("Accept", "text/html")
 	m := &mockResponseWriter{req: &http.Request{Header: headers}}
 
-	ret := copyRequestHeadersFromResponseWriter(m)
+	ret := requestHeadersFromResponseWriter(m)
 	assert.EqualValues(t, headers, ret)
 }

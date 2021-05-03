@@ -173,7 +173,7 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 
 	// Redirect if it's the browser (non-XHR).
 	redirects := md.HeaderMD.Get("Location")
-	if len(redirects) > 0 && isBrowser(copyRequestHeadersFromResponseWriter(w)) {
+	if len(redirects) > 0 && isBrowser(requestHeadersFromResponseWriter(w)) {
 		code := http.StatusFound
 		if st := md.HeaderMD.Get("Location-Status"); len(st) > 0 {
 			headerCodeOverride, err := strconv.Atoi(st[0])
