@@ -19,7 +19,7 @@ require (
 	github.com/envoyproxy/go-control-plane v0.9.9-0.20210304204206-e2b50f82e48e
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
 	github.com/fullstorydev/grpcurl v1.8.1
-	github.com/go-git/go-billy/v5 v5.2.0
+	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git/v5 v5.3.0
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.14.1
