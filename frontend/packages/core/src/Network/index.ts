@@ -41,7 +41,7 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   // This section handles authentication redirects.
   if (response?.status === 401) {
     // TODO: turn this in to silent refresh once refresh tokens are supported.
-    const redirectUrl = window.location.href.replace(window.location.origin, "");
+    const redirectUrl = window.location.pathname + window.location.search;
     window.location.href = `/v1/authn/login?redirect_url=${encodeURIComponent(redirectUrl)}`;
   }
 
