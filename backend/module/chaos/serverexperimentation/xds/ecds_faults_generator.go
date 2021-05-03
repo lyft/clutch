@@ -2,21 +2,19 @@ package xds
 
 import (
 	"fmt"
-	"sync"
-	"time"
+	"strings"
 
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	gcpRoute "github.com/envoyproxy/go-control-plane/envoy/config/route/v3"
 	gcpFilterCommon "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/common/fault/v3"
 	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	gcpType "github.com/envoyproxy/go-control-plane/envoy/type/v3"
-	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	proto "github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/duration"
-	"go.uber.org/zap"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
@@ -31,9 +29,6 @@ const (
 	abortHttpStatusRuntime = `ecds_runtime_override_do_not_use.http.abort.http_status`
 	abortPercentRuntime    = `ecds_runtime_override_do_not_use.http.abort.abort_percent`
 )
-
-// Serialized default fault filter
-var SerializedDefaultFaultFilter []byte
 
 // Default abort and delay fault configs
 var DefaultAbortFaultConfig = &gcpFilterFault.FaultAbort{
@@ -58,90 +53,58 @@ var DefaultDelayFaultConfig = &gcpFilterCommon.FaultDelay{
 	},
 }
 
-type SafeEcdsResourceMap struct {
-	mu                    sync.Mutex
-	requestedResourcesMap map[string]map[string]struct{}
+type ECDSFaultsGenerator struct {
+	serializedDefaultFaultFilter []byte
 }
 
-func (safeResource *SafeEcdsResourceMap) getResourcesFromCluster(cluster string) []string {
-	var resourceNames []string
-
-	safeResource.mu.Lock()
-	if _, exists := safeResource.requestedResourcesMap[cluster]; exists {
-		for resourceName := range safeResource.requestedResourcesMap[cluster] {
-			resourceNames = append(resourceNames, resourceName)
-		}
+func NewECDSFaultsGenerator() (*ECDSFaultsGenerator, error) {
+	faultFilter := &gcpFilterFault.HTTPFault{
+		Delay: DefaultDelayFaultConfig,
+		Abort: DefaultAbortFaultConfig,
+		// override runtimes so that default runtime is not used.
+		DelayPercentRuntime:    delayPercentRuntime,
+		DelayDurationRuntime:   delayDurationRuntime,
+		AbortHttpStatusRuntime: abortHttpStatusRuntime,
+		AbortPercentRuntime:    abortPercentRuntime,
 	}
-	safeResource.mu.Unlock()
-
-	return resourceNames
-}
-
-func (safeResource *SafeEcdsResourceMap) setResourcesForCluster(cluster string, newResources []string) {
-	safeResource.mu.Lock()
-	defer safeResource.mu.Unlock()
-
-	resources := make(map[string]struct{})
-	if _, exists := safeResource.requestedResourcesMap[cluster]; exists {
-		resources = safeResource.requestedResourcesMap[cluster]
+	marshaledFilter, err := proto.Marshal(faultFilter)
+	if err != nil {
+		return nil, err
 	}
 
-	for _, newResource := range newResources {
-		resources[newResource] = struct{}{}
+	return &ECDSFaultsGenerator{
+		serializedDefaultFaultFilter: marshaledFilter,
+	}, nil
+}
+
+func (g ECDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experiment) (*xds.ECDSResource, error) {
+	httpFaultConfig, ok := experiment.Config.Message.(*serverexperimentation.HTTPFaultConfig)
+	if !ok {
+		return nil, fmt.Errorf("ECDS server faults generator couldn't generate faults due to config type casting failure (experiment run ID: %s, experiment config ID %s)", experiment.Run.Id, experiment.Config.Id)
 	}
 
-	safeResource.requestedResourcesMap[cluster] = resources
-}
+	upstreamCluster, downstreamCluster, err := GetClusterPair(httpFaultConfig)
+	if err != nil {
+		return nil, err
+	}
+	enforcingCluster, err := GetEnforcingCluster(httpFaultConfig)
+	if err != nil {
+		return nil, err
+	}
 
-type ECDSConfig struct {
-	enabledClusters map[string]struct{}
-
-	ecdsResourceMap *SafeEcdsResourceMap
-}
-
-func generateECDSResource(experiments []*experimentstore.Experiment, cluster string, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
-	var downstreamCluster string
-	var upstreamCluster string
-	var isEgressFault = false
+	egressFault, abortFault, delayFault, err := g.createAbortDelayConfig(httpFaultConfig)
+	if err != nil {
+		return nil, err
+	}
 
 	abort := DefaultAbortFaultConfig
 	delay := DefaultDelayFaultConfig
-
-	if len(experiments) > 1 {
-		// We can only perform one fault test per cluster with ECDS
-		logger.Infow("Found multiple experiments per cluster. Only first one will be executed", "cluster", cluster, "experiments", experiments)
+	isEgressFault := egressFault
+	if abortFault != nil {
+		abort = abortFault
 	}
-
-	for _, experiment := range experiments {
-		httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
-		if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
-			continue
-		}
-
-		var err error
-		upstreamCluster, downstreamCluster, err = getClusterPair(httpFaultConfig)
-		if err != nil {
-			logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
-			continue
-		}
-
-		egressFault, abortFault, delayFault, err := createAbortDelayConfig(httpFaultConfig, downstreamCluster)
-		if err != nil {
-			logger.Errorw("Unable to create ECDS filter fault", "config", httpFaultConfig)
-			continue
-		}
-
-		isEgressFault = egressFault
-		if abortFault != nil {
-			abort = abortFault
-		}
-
-		if delayFault != nil {
-			delay = delayFault
-		}
-
-		// We can only perform one fault test per cluster with ECDS. Hence we break
-		break
+	if delayFault != nil {
+		delay = delayFault
 	}
 
 	faultFilter := &gcpFilterFault.HTTPFault{
@@ -160,7 +123,6 @@ func generateECDSResource(experiments []*experimentstore.Experiment, cluster str
 		faultFilterName = fmt.Sprintf(faultFilterConfigNameForEgressFault, upstreamCluster)
 	} else {
 		faultFilterName = faultFilterConfigNameForIngressFault
-
 		// We match against the EnvoyDownstreamServiceCluster header to only apply these faults to the specific downstream cluster
 		faultFilter.Headers = []*gcpRoute.HeaderMatcher{
 			{
@@ -172,69 +134,39 @@ func generateECDSResource(experiments []*experimentstore.Experiment, cluster str
 		}
 	}
 
-	logger.Debugw("ECDS Fault filter", "faultFilter", faultFilter, "upstreamcluster", upstreamCluster)
-
 	serializedFaultFilter, err := proto.Marshal(faultFilter)
 	if err != nil {
-		logger.Warnw("Unable to unmarshal fault filter", "faultFilter", faultFilter)
-		return []gcpTypes.ResourceWithTtl{}
+		return nil, err
 	}
 
-	return []gcpTypes.ResourceWithTtl{{
-		Resource: &gcpCoreV3.TypedExtensionConfig{
-			Name: faultFilterName,
-			TypedConfig: &any.Any{
-				TypeUrl: faultFilterTypeURL,
-				Value:   serializedFaultFilter,
-			},
+	config := &gcpCoreV3.TypedExtensionConfig{
+		Name: faultFilterName,
+		TypedConfig: &any.Any{
+			TypeUrl: faultFilterTypeURL,
+			Value:   serializedFaultFilter,
 		},
-		Ttl: ttl,
-	}}
+	}
+
+	return xds.NewECDSResource(enforcingCluster, config)
 }
 
-func generateEmptyECDSResource(cluster string, ecdsConfig *ECDSConfig, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
-	// cache serialized
-	if SerializedDefaultFaultFilter == nil {
-		faultFilter := &gcpFilterFault.HTTPFault{
-			Delay: DefaultDelayFaultConfig,
-			Abort: DefaultAbortFaultConfig,
-
-			// override runtimes so that default runtime is not used.
-			DelayPercentRuntime:    delayPercentRuntime,
-			DelayDurationRuntime:   delayDurationRuntime,
-			AbortHttpStatusRuntime: abortHttpStatusRuntime,
-			AbortPercentRuntime:    abortPercentRuntime,
-		}
-
-		SerializedDefaultFaultFilter, _ = proto.Marshal(faultFilter)
+func (g *ECDSFaultsGenerator) GenerateDefaultResource(cluster string, resourceName string) (*xds.ECDSResource, error) {
+	if resourceName != faultFilterConfigNameForIngressFault && !strings.HasPrefix(resourceName, fmt.Sprintf(faultFilterConfigNameForEgressFault, "")) {
+		return nil, nil
 	}
 
-	if _, exists := ecdsConfig.ecdsResourceMap.requestedResourcesMap[cluster]; !exists {
-		logger.Debugw("Cluster not found in ECDS resource map", "cluster", cluster)
-		return []gcpTypes.ResourceWithTtl{}
+	config := &gcpCoreV3.TypedExtensionConfig{
+		Name: resourceName,
+		TypedConfig: &any.Any{
+			TypeUrl: faultFilterTypeURL,
+			Value:   g.serializedDefaultFaultFilter,
+		},
 	}
 
-	resourceNames := ecdsConfig.ecdsResourceMap.getResourcesFromCluster(cluster)
-
-	var resources []gcpTypes.ResourceWithTtl
-	for _, resourceName := range resourceNames {
-		resource := gcpTypes.ResourceWithTtl{
-			Resource: &gcpCoreV3.TypedExtensionConfig{
-				Name: resourceName,
-				TypedConfig: &any.Any{
-					TypeUrl: faultFilterTypeURL,
-					Value:   SerializedDefaultFaultFilter,
-				},
-			},
-			Ttl: nil,
-		}
-		resources = append(resources, resource)
-	}
-
-	return resources
+	return xds.NewECDSResource(cluster, config)
 }
 
-func createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConfig, downstreamCluster string) (bool, *gcpFilterFault.FaultAbort, *gcpFilterCommon.FaultDelay, error) {
+func (g ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (bool, *gcpFilterFault.FaultAbort, *gcpFilterCommon.FaultDelay, error) {
 	var isEgressFault bool
 	var abort *gcpFilterFault.FaultAbort
 	var delay *gcpFilterCommon.FaultDelay

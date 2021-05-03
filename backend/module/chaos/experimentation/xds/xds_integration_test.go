@@ -22,52 +22,10 @@ import (
 	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds/internal/xdstest"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 )
-
-// These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
-// to run assertions against.
-func TestEnvoyFaults(t *testing.T) {
-	xdsConfig := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
-	}
-
-	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
-	defer ts.Stop()
-
-	e, err := envoytest.NewEnvoyHandle()
-	assert.NoError(t, err)
-
-	e.EnsureControlPlaneConnectivity(envoytest.RuntimeStatPrefix)
-	assert.NoError(t, err)
-
-	code, err := e.MakeSimpleCall()
-	assert.NoError(t, err)
-	assert.Equal(t, 503, code)
-
-	createTestExperiment(t, 400, ts.Storer)
-
-	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        4 * time.Second,
-		expectedStatus: 400,
-	})
-	assert.NoError(t, err, "did not see faults enabled")
-
-	// We know that faults have been applied, now try to kill the server and ensure that we eventually reset the faults.
-	// This verifies that we're properly setting TTLs and that Envoy will honor this.
-	ts.Stop()
-
-	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        10 * time.Second,
-		expectedStatus: 503,
-	})
-	assert.NoError(t, err, "did not see faults reverted")
-}
 
 func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	t.Skip("flaky")
@@ -75,11 +33,10 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
 		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
 	}
 
-	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	ts, err := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.NoError(t, err)
 	defer ts.Stop()
 
 	criterion := &testCriterion{}
@@ -131,46 +88,6 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	criterion.start()
 
 	// Since we've enabled a time based automatic termination, we expect to see faults get disabled on their own after some time.
-	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        10 * time.Second,
-		expectedStatus: 503,
-	})
-	assert.NoError(t, err, "did not see faults reverted")
-}
-
-func TestEnvoyECDSFaults(t *testing.T) {
-	xdsConfig := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
-		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
-	}
-
-	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
-	defer ts.Stop()
-
-	e, err := envoytest.NewEnvoyHandle()
-	assert.NoError(t, err)
-
-	err = e.EnsureControlPlaneConnectivity(envoytest.EcdsStatPrefix)
-	assert.NoError(t, err)
-
-	code, err := e.MakeSimpleCall()
-	assert.NoError(t, err)
-	assert.Equal(t, 503, code)
-
-	experiment := createTestExperiment(t, 404, ts.Storer)
-
-	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        4 * time.Second,
-		expectedStatus: 404,
-	})
-	assert.NoError(t, err, "did not see faults enabled")
-
-	// TODO(kathan24): Test TTL by stopping the server instead of canceling the experiment. Currently, TTL is not not supported for ECDS in the upstream Envoy
-	ts.Storer.CancelExperimentRun(context.Background(), experiment.Run.Id, "")
-
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        10 * time.Second,
 		expectedStatus: 503,
