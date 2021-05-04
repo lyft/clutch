@@ -41,7 +41,10 @@ func TestAPILogin(t *testing.T) {
 		issuer:   authnmock.MockIssuer{},
 	}
 
-	response, err := api.Login(context.Background(), &authnv1.LoginRequest{
+	transportStream := &grpcmock.MockServerTransportStream{}
+	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
+
+	response, err := api.Login(ctx, &authnv1.LoginRequest{
 		RedirectUrl: "foo.com",
 	})
 	assert.NoError(t, err)

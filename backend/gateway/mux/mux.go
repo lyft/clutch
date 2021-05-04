@@ -171,9 +171,9 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 		http.SetCookie(w, cookie)
 	}
 
-	if redirects := md.HeaderMD.Get("Location"); len(redirects) > 0 {
-		w.Header().Set("Location", redirects[0])
-
+	// Redirect if it's the browser (non-XHR).
+	redirects := md.HeaderMD.Get("Location")
+	if len(redirects) > 0 && isBrowser(requestHeadersFromResponseWriter(w)) {
 		code := http.StatusFound
 		if st := md.HeaderMD.Get("Location-Status"); len(st) > 0 {
 			headerCodeOverride, err := strconv.Atoi(st[0])
@@ -182,8 +182,11 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 			}
 			code = headerCodeOverride
 		}
+
+		w.Header().Set("Location", redirects[0])
 		w.WriteHeader(code)
 	}
+
 	return nil
 }
 
@@ -201,24 +204,14 @@ func customHeaderMatcher(key string) (string, bool) {
 }
 
 func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
-	//  TODO(maybe): once we have non-browser clients we probably want to avoid the redirect and directly return the error.
-	if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
-		referer := req.Referer()
-		redirectPath := "/v1/authn/login"
-		if len(referer) != 0 {
-			referer, err := url.Parse(referer)
-			if err != nil {
-				runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
-				return
-			}
-			if redirectPath != referer.Path {
-				redirectPath = fmt.Sprintf("%s?redirect_url=%s", redirectPath, referer.Path)
-			}
+	if isBrowser(req.Header) { // Redirect if it's the browser (non-XHR).
+		if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
+			redirectPath := fmt.Sprintf("/v1/authn/login?redirect_url=%s", url.QueryEscape(req.RequestURI))
+			http.Redirect(w, req, redirectPath, http.StatusFound)
+			return
 		}
-
-		http.Redirect(w, req, redirectPath, http.StatusFound)
-		return
 	}
+
 	runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 }
 
