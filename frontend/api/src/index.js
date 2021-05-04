@@ -9797,27 +9797,27 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Property stringValue.
-                     * @member {string} stringValue
+                     * @member {string|null|undefined} stringValue
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
-                    Property.prototype.stringValue = "";
+                    Property.prototype.stringValue = null;
 
                     /**
                      * Property intValue.
-                     * @member {number|Long} intValue
+                     * @member {number|Long|null|undefined} intValue
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
-                    Property.prototype.intValue = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                    Property.prototype.intValue = null;
 
                     /**
                      * Property urlValue.
-                     * @member {string} urlValue
+                     * @member {string|null|undefined} urlValue
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
-                    Property.prototype.urlValue = "";
+                    Property.prototype.urlValue = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -14627,11 +14627,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Logger pretty.
-                     * @member {boolean} pretty
+                     * @member {boolean|null|undefined} pretty
                      * @memberof clutch.config.gateway.v1.Logger
                      * @instance
                      */
-                    Logger.prototype.pretty = false;
+                    Logger.prototype.pretty = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -15456,11 +15456,11 @@ export const clutch = $root.clutch = (() => {
 
                             /**
                              * StatusCodeFilter equals.
-                             * @member {number} equals
+                             * @member {number|null|undefined} equals
                              * @memberof clutch.config.middleware.accesslog.v1.Config.StatusCodeFilter
                              * @instance
                              */
-                            StatusCodeFilter.prototype.equals = 0;
+                            StatusCodeFilter.prototype.equals = null;
 
                             // OneOf field names bound to virtual getters and setters
                             let $oneOfFields;
@@ -15782,10 +15782,8 @@ export const clutch = $root.clutch = (() => {
                                  * Properties of a Config.
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1
                                  * @interface IConfig
-                                 * @property {string|null} [rtdsLayerName] Config rtdsLayerName
                                  * @property {google.protobuf.IDuration|null} [cacheRefreshInterval] Config cacheRefreshInterval
-                                 * @property {string|null} [ingressFaultRuntimePrefix] Config ingressFaultRuntimePrefix
-                                 * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
+                                 * @property {string|null} [rtdsLayerName] Config rtdsLayerName
                                  * @property {google.protobuf.IDuration|null} [resourceTtl] Config resourceTtl
                                  * @property {google.protobuf.IDuration|null} [heartbeatInterval] Config heartbeatInterval
                                  * @property {clutch.config.module.chaos.experimentation.xds.v1.Config.IECDSAllowList|null} [ecdsAllowList] Config ecdsAllowList
@@ -15807,14 +15805,6 @@ export const clutch = $root.clutch = (() => {
                                 }
 
                                 /**
-                                 * Config rtdsLayerName.
-                                 * @member {string} rtdsLayerName
-                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
-                                 * @instance
-                                 */
-                                Config.prototype.rtdsLayerName = "";
-
-                                /**
                                  * Config cacheRefreshInterval.
                                  * @member {google.protobuf.IDuration|null|undefined} cacheRefreshInterval
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
@@ -15823,20 +15813,12 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.cacheRefreshInterval = null;
 
                                 /**
-                                 * Config ingressFaultRuntimePrefix.
-                                 * @member {string} ingressFaultRuntimePrefix
+                                 * Config rtdsLayerName.
+                                 * @member {string} rtdsLayerName
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
-                                Config.prototype.ingressFaultRuntimePrefix = "";
-
-                                /**
-                                 * Config egressFaultRuntimePrefix.
-                                 * @member {string} egressFaultRuntimePrefix
-                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
-                                 * @instance
-                                 */
-                                Config.prototype.egressFaultRuntimePrefix = "";
+                                Config.prototype.rtdsLayerName = "";
 
                                 /**
                                  * Config resourceTtl.
@@ -15873,20 +15855,14 @@ export const clutch = $root.clutch = (() => {
                                 Config.verify = function verify(message) {
                                     if (typeof message !== "object" || message === null)
                                         return "object expected";
-                                    if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
-                                        if (!$util.isString(message.rtdsLayerName))
-                                            return "rtdsLayerName: string expected";
                                     if (message.cacheRefreshInterval != null && message.hasOwnProperty("cacheRefreshInterval")) {
                                         let error = $root.google.protobuf.Duration.verify(message.cacheRefreshInterval);
                                         if (error)
                                             return "cacheRefreshInterval." + error;
                                     }
-                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
-                                        if (!$util.isString(message.ingressFaultRuntimePrefix))
-                                            return "ingressFaultRuntimePrefix: string expected";
-                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
-                                        if (!$util.isString(message.egressFaultRuntimePrefix))
-                                            return "egressFaultRuntimePrefix: string expected";
+                                    if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
+                                        if (!$util.isString(message.rtdsLayerName))
+                                            return "rtdsLayerName: string expected";
                                     if (message.resourceTtl != null && message.hasOwnProperty("resourceTtl")) {
                                         let error = $root.google.protobuf.Duration.verify(message.resourceTtl);
                                         if (error)
@@ -15917,17 +15893,13 @@ export const clutch = $root.clutch = (() => {
                                     if (object instanceof $root.clutch.config.module.chaos.experimentation.xds.v1.Config)
                                         return object;
                                     let message = new $root.clutch.config.module.chaos.experimentation.xds.v1.Config();
-                                    if (object.rtdsLayerName != null)
-                                        message.rtdsLayerName = String(object.rtdsLayerName);
                                     if (object.cacheRefreshInterval != null) {
                                         if (typeof object.cacheRefreshInterval !== "object")
                                             throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.cacheRefreshInterval: object expected");
                                         message.cacheRefreshInterval = $root.google.protobuf.Duration.fromObject(object.cacheRefreshInterval);
                                     }
-                                    if (object.ingressFaultRuntimePrefix != null)
-                                        message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
-                                    if (object.egressFaultRuntimePrefix != null)
-                                        message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
+                                    if (object.rtdsLayerName != null)
+                                        message.rtdsLayerName = String(object.rtdsLayerName);
                                     if (object.resourceTtl != null) {
                                         if (typeof object.resourceTtl !== "object")
                                             throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.resourceTtl: object expected");
@@ -15960,22 +15932,16 @@ export const clutch = $root.clutch = (() => {
                                         options = {};
                                     let object = {};
                                     if (options.defaults) {
-                                        object.rtdsLayerName = "";
                                         object.cacheRefreshInterval = null;
-                                        object.ingressFaultRuntimePrefix = "";
-                                        object.egressFaultRuntimePrefix = "";
+                                        object.rtdsLayerName = "";
                                         object.resourceTtl = null;
                                         object.heartbeatInterval = null;
                                         object.ecdsAllowList = null;
                                     }
-                                    if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
-                                        object.rtdsLayerName = message.rtdsLayerName;
                                     if (message.cacheRefreshInterval != null && message.hasOwnProperty("cacheRefreshInterval"))
                                         object.cacheRefreshInterval = $root.google.protobuf.Duration.toObject(message.cacheRefreshInterval, options);
-                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
-                                        object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
-                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
-                                        object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
+                                    if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
+                                        object.rtdsLayerName = message.rtdsLayerName;
                                     if (message.resourceTtl != null && message.hasOwnProperty("resourceTtl"))
                                         object.resourceTtl = $root.google.protobuf.Duration.toObject(message.resourceTtl, options);
                                     if (message.heartbeatInterval != null && message.hasOwnProperty("heartbeatInterval"))
@@ -16119,6 +16085,272 @@ export const clutch = $root.clutch = (() => {
                     })();
 
                     return experimentation;
+                })();
+
+                chaos.redisexperimentation = (function() {
+
+                    /**
+                     * Namespace redisexperimentation.
+                     * @memberof clutch.config.module.chaos
+                     * @namespace
+                     */
+                    const redisexperimentation = {};
+
+                    redisexperimentation.v1 = (function() {
+
+                        /**
+                         * Namespace v1.
+                         * @memberof clutch.config.module.chaos.redisexperimentation
+                         * @namespace
+                         */
+                        const v1 = {};
+
+                        v1.Config = (function() {
+
+                            /**
+                             * Properties of a Config.
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1
+                             * @interface IConfig
+                             * @property {string|null} [faultRuntimePrefix] Config faultRuntimePrefix
+                             */
+
+                            /**
+                             * Constructs a new Config.
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1
+                             * @classdesc Represents a Config.
+                             * @implements IConfig
+                             * @constructor
+                             * @param {clutch.config.module.chaos.redisexperimentation.v1.IConfig=} [properties] Properties to set
+                             */
+                            function Config(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * Config faultRuntimePrefix.
+                             * @member {string} faultRuntimePrefix
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.faultRuntimePrefix = "";
+
+                            /**
+                             * Verifies a Config message.
+                             * @function verify
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            Config.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                if (message.faultRuntimePrefix != null && message.hasOwnProperty("faultRuntimePrefix"))
+                                    if (!$util.isString(message.faultRuntimePrefix))
+                                        return "faultRuntimePrefix: string expected";
+                                return null;
+                            };
+
+                            /**
+                             * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.config.module.chaos.redisexperimentation.v1.Config} Config
+                             */
+                            Config.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.config.module.chaos.redisexperimentation.v1.Config)
+                                    return object;
+                                let message = new $root.clutch.config.module.chaos.redisexperimentation.v1.Config();
+                                if (object.faultRuntimePrefix != null)
+                                    message.faultRuntimePrefix = String(object.faultRuntimePrefix);
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a Config message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @static
+                             * @param {clutch.config.module.chaos.redisexperimentation.v1.Config} message Config
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            Config.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (options.defaults)
+                                    object.faultRuntimePrefix = "";
+                                if (message.faultRuntimePrefix != null && message.hasOwnProperty("faultRuntimePrefix"))
+                                    object.faultRuntimePrefix = message.faultRuntimePrefix;
+                                return object;
+                            };
+
+                            /**
+                             * Converts this Config to JSON.
+                             * @function toJSON
+                             * @memberof clutch.config.module.chaos.redisexperimentation.v1.Config
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            Config.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return Config;
+                        })();
+
+                        return v1;
+                    })();
+
+                    return redisexperimentation;
+                })();
+
+                chaos.serverexperimentation = (function() {
+
+                    /**
+                     * Namespace serverexperimentation.
+                     * @memberof clutch.config.module.chaos
+                     * @namespace
+                     */
+                    const serverexperimentation = {};
+
+                    serverexperimentation.v1 = (function() {
+
+                        /**
+                         * Namespace v1.
+                         * @memberof clutch.config.module.chaos.serverexperimentation
+                         * @namespace
+                         */
+                        const v1 = {};
+
+                        v1.Config = (function() {
+
+                            /**
+                             * Properties of a Config.
+                             * @memberof clutch.config.module.chaos.serverexperimentation.v1
+                             * @interface IConfig
+                             * @property {string|null} [ingressFaultRuntimePrefix] Config ingressFaultRuntimePrefix
+                             * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
+                             */
+
+                            /**
+                             * Constructs a new Config.
+                             * @memberof clutch.config.module.chaos.serverexperimentation.v1
+                             * @classdesc Represents a Config.
+                             * @implements IConfig
+                             * @constructor
+                             * @param {clutch.config.module.chaos.serverexperimentation.v1.IConfig=} [properties] Properties to set
+                             */
+                            function Config(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * Config ingressFaultRuntimePrefix.
+                             * @member {string} ingressFaultRuntimePrefix
+                             * @memberof clutch.config.module.chaos.serverexperimentation.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.ingressFaultRuntimePrefix = "";
+
+                            /**
+                             * Config egressFaultRuntimePrefix.
+                             * @member {string} egressFaultRuntimePrefix
+                             * @memberof clutch.config.module.chaos.serverexperimentation.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.egressFaultRuntimePrefix = "";
+
+                            /**
+                             * Verifies a Config message.
+                             * @function verify
+                             * @memberof clutch.config.module.chaos.serverexperimentation.v1.Config
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            Config.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                    if (!$util.isString(message.ingressFaultRuntimePrefix))
+                                        return "ingressFaultRuntimePrefix: string expected";
+                                if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                    if (!$util.isString(message.egressFaultRuntimePrefix))
+                                        return "egressFaultRuntimePrefix: string expected";
+                                return null;
+                            };
+
+                            /**
+                             * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.config.module.chaos.serverexperimentation.v1.Config
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.config.module.chaos.serverexperimentation.v1.Config} Config
+                             */
+                            Config.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.config.module.chaos.serverexperimentation.v1.Config)
+                                    return object;
+                                let message = new $root.clutch.config.module.chaos.serverexperimentation.v1.Config();
+                                if (object.ingressFaultRuntimePrefix != null)
+                                    message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
+                                if (object.egressFaultRuntimePrefix != null)
+                                    message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a Config message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.config.module.chaos.serverexperimentation.v1.Config
+                             * @static
+                             * @param {clutch.config.module.chaos.serverexperimentation.v1.Config} message Config
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            Config.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (options.defaults) {
+                                    object.ingressFaultRuntimePrefix = "";
+                                    object.egressFaultRuntimePrefix = "";
+                                }
+                                if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                    object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
+                                if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                    object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
+                                return object;
+                            };
+
+                            /**
+                             * Converts this Config to JSON.
+                             * @function toJSON
+                             * @memberof clutch.config.module.chaos.serverexperimentation.v1.Config
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            Config.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return Config;
+                        })();
+
+                        return v1;
+                    })();
+
+                    return serverexperimentation;
                 })();
 
                 return chaos;
@@ -16707,11 +16939,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * EventFilter text.
-                         * @member {string} text
+                         * @member {string|null|undefined} text
                          * @memberof clutch.config.service.audit.v1.EventFilter
                          * @instance
                          */
-                        EventFilter.prototype.text = "";
+                        EventFilter.prototype.text = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -17120,19 +17352,19 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Config dbProvider.
-                         * @member {string} dbProvider
+                         * @member {string|null|undefined} dbProvider
                          * @memberof clutch.config.service.audit.v1.Config
                          * @instance
                          */
-                        Config.prototype.dbProvider = "";
+                        Config.prototype.dbProvider = null;
 
                         /**
                          * Config inMemory.
-                         * @member {boolean} inMemory
+                         * @member {boolean|null|undefined} inMemory
                          * @memberof clutch.config.service.audit.v1.Config
                          * @instance
                          */
-                        Config.prototype.inMemory = false;
+                        Config.prototype.inMemory = null;
 
                         /**
                          * Config filter.
@@ -17803,19 +18035,19 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Principal user.
-                         * @member {string} user
+                         * @member {string|null|undefined} user
                          * @memberof clutch.config.service.authz.v1.Principal
                          * @instance
                          */
-                        Principal.prototype.user = "";
+                        Principal.prototype.user = null;
 
                         /**
                          * Principal group.
-                         * @member {string} group
+                         * @member {string|null|undefined} group
                          * @memberof clutch.config.service.authz.v1.Principal
                          * @instance
                          */
-                        Principal.prototype.group = "";
+                        Principal.prototype.group = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -19518,11 +19750,11 @@ export const clutch = $root.clutch = (() => {
 
                             /**
                              * Connection password.
-                             * @member {string} password
+                             * @member {string|null|undefined} password
                              * @memberof clutch.config.service.db.postgres.v1.Connection
                              * @instance
                              */
-                            Connection.prototype.password = "";
+                            Connection.prototype.password = null;
 
                             // OneOf field names bound to virtual getters and setters
                             let $oneOfFields;
@@ -20032,11 +20264,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Config accessToken.
-                         * @member {string} accessToken
+                         * @member {string|null|undefined} accessToken
                          * @memberof clutch.config.service.github.v1.Config
                          * @instance
                          */
-                        Config.prototype.accessToken = "";
+                        Config.prototype.accessToken = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -24384,11 +24616,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Entry value.
-                     * @member {string} value
+                     * @member {string|null|undefined} value
                      * @memberof clutch.envoytriage.v1.Runtime.Entry
                      * @instance
                      */
-                    Entry.prototype.value = "";
+                    Entry.prototype.value = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -37111,19 +37343,19 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * NullableString null.
-                 * @member {google.protobuf.NullValue} null
+                 * @member {google.protobuf.NullValue|null|undefined} null
                  * @memberof clutch.k8s.v1.NullableString
                  * @instance
                  */
-                NullableString.prototype["null"] = 0;
+                NullableString.prototype["null"] = null;
 
                 /**
                  * NullableString value.
-                 * @member {string} value
+                 * @member {string|null|undefined} value
                  * @memberof clutch.k8s.v1.NullableString
                  * @instance
                  */
-                NullableString.prototype.value = "";
+                NullableString.prototype.value = null;
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -38733,11 +38965,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Option stringValue.
-                 * @member {string} stringValue
+                 * @member {string|null|undefined} stringValue
                  * @memberof clutch.resolver.v1.Option
                  * @instance
                  */
-                Option.prototype.stringValue = "";
+                Option.prototype.stringValue = null;
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -49654,83 +49886,83 @@ export const validate = $root.validate = (() => {
 
         /**
          * StringRules email.
-         * @member {boolean} email
+         * @member {boolean|null|undefined} email
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.email = false;
+        StringRules.prototype.email = null;
 
         /**
          * StringRules hostname.
-         * @member {boolean} hostname
+         * @member {boolean|null|undefined} hostname
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.hostname = false;
+        StringRules.prototype.hostname = null;
 
         /**
          * StringRules ip.
-         * @member {boolean} ip
+         * @member {boolean|null|undefined} ip
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.ip = false;
+        StringRules.prototype.ip = null;
 
         /**
          * StringRules ipv4.
-         * @member {boolean} ipv4
+         * @member {boolean|null|undefined} ipv4
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.ipv4 = false;
+        StringRules.prototype.ipv4 = null;
 
         /**
          * StringRules ipv6.
-         * @member {boolean} ipv6
+         * @member {boolean|null|undefined} ipv6
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.ipv6 = false;
+        StringRules.prototype.ipv6 = null;
 
         /**
          * StringRules uri.
-         * @member {boolean} uri
+         * @member {boolean|null|undefined} uri
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.uri = false;
+        StringRules.prototype.uri = null;
 
         /**
          * StringRules uriRef.
-         * @member {boolean} uriRef
+         * @member {boolean|null|undefined} uriRef
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.uriRef = false;
+        StringRules.prototype.uriRef = null;
 
         /**
          * StringRules address.
-         * @member {boolean} address
+         * @member {boolean|null|undefined} address
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.address = false;
+        StringRules.prototype.address = null;
 
         /**
          * StringRules uuid.
-         * @member {boolean} uuid
+         * @member {boolean|null|undefined} uuid
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.uuid = false;
+        StringRules.prototype.uuid = null;
 
         /**
          * StringRules wellKnownRegex.
-         * @member {validate.KnownRegex} wellKnownRegex
+         * @member {validate.KnownRegex|null|undefined} wellKnownRegex
          * @memberof validate.StringRules
          * @instance
          */
-        StringRules.prototype.wellKnownRegex = 0;
+        StringRules.prototype.wellKnownRegex = null;
 
         /**
          * StringRules strict.
@@ -50355,27 +50587,27 @@ export const validate = $root.validate = (() => {
 
         /**
          * BytesRules ip.
-         * @member {boolean} ip
+         * @member {boolean|null|undefined} ip
          * @memberof validate.BytesRules
          * @instance
          */
-        BytesRules.prototype.ip = false;
+        BytesRules.prototype.ip = null;
 
         /**
          * BytesRules ipv4.
-         * @member {boolean} ipv4
+         * @member {boolean|null|undefined} ipv4
          * @memberof validate.BytesRules
          * @instance
          */
-        BytesRules.prototype.ipv4 = false;
+        BytesRules.prototype.ipv4 = null;
 
         /**
          * BytesRules ipv6.
-         * @member {boolean} ipv6
+         * @member {boolean|null|undefined} ipv6
          * @memberof validate.BytesRules
          * @instance
          */
-        BytesRules.prototype.ipv6 = false;
+        BytesRules.prototype.ipv6 = null;
 
         /**
          * BytesRules ignoreEmpty.
@@ -58339,35 +58571,35 @@ export const google = $root.google = (() => {
 
             /**
              * Value nullValue.
-             * @member {google.protobuf.NullValue} nullValue
+             * @member {google.protobuf.NullValue|null|undefined} nullValue
              * @memberof google.protobuf.Value
              * @instance
              */
-            Value.prototype.nullValue = 0;
+            Value.prototype.nullValue = null;
 
             /**
              * Value numberValue.
-             * @member {number} numberValue
+             * @member {number|null|undefined} numberValue
              * @memberof google.protobuf.Value
              * @instance
              */
-            Value.prototype.numberValue = 0;
+            Value.prototype.numberValue = null;
 
             /**
              * Value stringValue.
-             * @member {string} stringValue
+             * @member {string|null|undefined} stringValue
              * @memberof google.protobuf.Value
              * @instance
              */
-            Value.prototype.stringValue = "";
+            Value.prototype.stringValue = null;
 
             /**
              * Value boolValue.
-             * @member {boolean} boolValue
+             * @member {boolean|null|undefined} boolValue
              * @memberof google.protobuf.Value
              * @instance
              */
-            Value.prototype.boolValue = false;
+            Value.prototype.boolValue = null;
 
             /**
              * Value structValue.
@@ -59986,43 +60218,43 @@ export const google = $root.google = (() => {
 
             /**
              * HttpRule get.
-             * @member {string} get
+             * @member {string|null|undefined} get
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype.get = "";
+            HttpRule.prototype.get = null;
 
             /**
              * HttpRule put.
-             * @member {string} put
+             * @member {string|null|undefined} put
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype.put = "";
+            HttpRule.prototype.put = null;
 
             /**
              * HttpRule post.
-             * @member {string} post
+             * @member {string|null|undefined} post
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype.post = "";
+            HttpRule.prototype.post = null;
 
             /**
              * HttpRule delete.
-             * @member {string} delete
+             * @member {string|null|undefined} delete
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype["delete"] = "";
+            HttpRule.prototype["delete"] = null;
 
             /**
              * HttpRule patch.
-             * @member {string} patch
+             * @member {string|null|undefined} patch
              * @memberof google.api.HttpRule
              * @instance
              */
-            HttpRule.prototype.patch = "";
+            HttpRule.prototype.patch = null;
 
             /**
              * HttpRule custom.

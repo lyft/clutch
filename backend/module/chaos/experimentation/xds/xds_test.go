@@ -15,21 +15,19 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	xdsv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds/internal/xdstest"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestServerStats(t *testing.T) {
-	xdsConfig := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
+	xdsConfig := &xdsv1.Config{
+		RtdsLayerName:     "rtds",
+		HeartbeatInterval: durationpb.New(time.Second),
 	}
 
-	testServer := xdstest.NewTestModuleServer(New, false, xdsConfig)
+	testServer, err := xdstest.NewTestModuleServer(New, false, xdsConfig)
+	assert.NoError(t, err)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -59,48 +57,26 @@ func TestServerStats(t *testing.T) {
 
 // Verifies that TTL and heartbeating is done when configured to do so.
 func TestResourceTTL(t *testing.T) {
-	xdsConfig := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      durationpb.New(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
+	RTDSGeneratorsByTypeUrl[TypeUrl(&durationpb.Duration{})] = &MockRTDSResourceGenerator{
+		resource: &RTDSResource{
+			Cluster:          "cluster",
+			RuntimeKeyValues: []*RuntimeKeyValue{{Key: "foo", Value: 1}},
+		},
 	}
 
-	testServer := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	xdsConfig := &xdsv1.Config{
+		RtdsLayerName: "rtds",
+	}
+
+	testServer, err := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	assert.NoError(t, err)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	now := time.Now()
-	config := serverexperimentation.HTTPFaultConfig{
-		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
-			AbortFault: &serverexperimentation.AbortFault{
-				Percentage: &serverexperimentation.FaultPercentage{
-					Percentage: 10,
-				},
-				AbortStatus: &serverexperimentation.FaultAbortStatus{
-					HttpStatusCode: 503,
-				},
-			},
-		},
-		FaultTargeting: &serverexperimentation.FaultTargeting{
-			Enforcer: &serverexperimentation.FaultTargeting_UpstreamEnforcing{
-				UpstreamEnforcing: &serverexperimentation.UpstreamEnforcing{
-					UpstreamType: &serverexperimentation.UpstreamEnforcing_UpstreamCluster{
-						UpstreamCluster: &serverexperimentation.SingleCluster{
-							Name: "cluster",
-						},
-					},
-					DownstreamType: &serverexperimentation.UpstreamEnforcing_DownstreamCluster{
-						DownstreamCluster: &serverexperimentation.SingleCluster{
-							Name: "cluster",
-						},
-					},
-				},
-			},
-		},
-	}
+	config := durationpb.Duration{}
 	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 

@@ -12,9 +12,12 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	redisexperimentation "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	redisexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
+	configv1 "github.com/lyft/clutch/backend/api/config/module/chaos/redisexperimentation/v1"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
+	redisexperimentationxds "github.com/lyft/clutch/backend/module/chaos/redisexperimentation/xds"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -28,7 +31,12 @@ type Service struct {
 }
 
 // New instantiates a Service object.
-func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+	config := &configv1.Config{}
+	if err := untypedConfig.UnmarshalTo(config); err != nil {
+		return nil, err
+	}
+
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
 		return nil, errors.New("could not find experiment store service")
@@ -37,6 +45,10 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 	storer, ok := store.(experimentstore.Storer)
 	if !ok {
 		return nil, errors.New("service was not the correct type")
+	}
+
+	xds.RTDSGeneratorsByTypeUrl[xds.TypeUrl(&redisexperimentationv1.FaultConfig{})] = &redisexperimentationxds.RTDSFaultsGenerator{
+		FaultRuntimePrefix: config.FaultRuntimePrefix,
 	}
 
 	return &Service{
@@ -49,10 +61,10 @@ func (s *Service) Register(r module.Registrar) error {
 	return s.storer.RegisterTransformation(transformation)
 }
 
-func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
-	var experimentConfig = redisexperimentation.FaultConfig{}
+func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentationv1.Property, error) {
+	var experimentConfig = redisexperimentationv1.FaultConfig{}
 	if err := config.Config.UnmarshalTo(&experimentConfig); err != nil {
-		return []*experimentation.Property{}, err
+		return []*experimentationv1.Property{}, err
 	}
 
 	faultsDescription, err := experimentConfigToFaultString(&experimentConfig)
@@ -64,34 +76,34 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 	downstream = experimentConfig.GetFaultTargeting().GetDownstreamCluster().GetName()
 	upstream = experimentConfig.GetFaultTargeting().GetUpstreamCluster().GetName()
 
-	return []*experimentation.Property{
+	return []*experimentationv1.Property{
 		{
 			Id:    "type",
 			Label: "Type",
-			Value: &experimentation.Property_StringValue{StringValue: "Redis"},
+			Value: &experimentationv1.Property_StringValue{StringValue: "Redis"},
 		},
 		{
 			Id:    "target",
 			Label: "Target",
-			Value: &experimentation.Property_StringValue{StringValue: fmt.Sprintf("%s ➡️ %s", downstream, upstream)},
+			Value: &experimentationv1.Property_StringValue{StringValue: fmt.Sprintf("%s ➡️ %s", downstream, upstream)},
 		},
 		{
 			Id:    "fault_types",
 			Label: "Fault Types",
-			Value: &experimentation.Property_StringValue{StringValue: faultsDescription},
+			Value: &experimentationv1.Property_StringValue{StringValue: faultsDescription},
 		},
 	}, nil
 }
 
-func experimentConfigToFaultString(experiment *redisexperimentation.FaultConfig) (string, error) {
+func experimentConfigToFaultString(experiment *redisexperimentationv1.FaultConfig) (string, error) {
 	if experiment == nil {
 		return "", errors.New("experiment is nil")
 	}
 
 	switch experiment.GetFault().(type) {
-	case *redisexperimentation.FaultConfig_ErrorFault:
+	case *redisexperimentationv1.FaultConfig_ErrorFault:
 		return "Error", nil
-	case *redisexperimentation.FaultConfig_LatencyFault:
+	case *redisexperimentationv1.FaultConfig_LatencyFault:
 		return "Delay", nil
 	default:
 		return "", fmt.Errorf("unexpected fault type %v", experiment.GetFault())

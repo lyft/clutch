@@ -55,9 +55,9 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
       if ((newDataIsArray && !existingDataIsArray) || (!newDataIsArray && existingDataIsArray)) {
         data = newData;
       } else if (newDataIsArray) {
-        data = [...newData, ...existingData];
+        data = [...existingData, ...newData];
       } else {
-        data = { ...newData, ...existingData };
+        data = { ...existingData, ...newData };
       }
       const update = {
         isLoading: false,

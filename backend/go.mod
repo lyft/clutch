@@ -18,8 +18,8 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/go-control-plane v0.9.9-0.20210304204206-e2b50f82e48e
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
-	github.com/fullstorydev/grpcurl v1.8.0
-	github.com/go-git/go-billy/v5 v5.2.0
+	github.com/fullstorydev/grpcurl v1.8.1
+	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git/v5 v5.3.0
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.14.1
@@ -27,9 +27,9 @@ require (
 	github.com/google/go-github/v35 v35.1.0
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.4.0
 	github.com/iancoleman/strcase v0.1.3
-	github.com/jhump/protoreflect v1.8.1
+	github.com/jhump/protoreflect v1.8.2
 	github.com/lib/pq v1.10.1
 	github.com/mitchellh/hashstructure/v2 v2.0.1
 	github.com/shurcooL/githubv4 v0.0.0-20201206200315-234843c633fa
@@ -40,10 +40,10 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
-	golang.org/x/net v0.0.0-20210423184538-5f58ad60dda6
-	golang.org/x/oauth2 v0.0.0-20210413134643-5e61552d6c78
+	golang.org/x/net v0.0.0-20210503060351-7fd8e65b6420
+	golang.org/x/oauth2 v0.0.0-20210427180440-81ed05c6b58c
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20210426193834-eac7f76ac494
+	google.golang.org/genproto v0.0.0-20210503173045-b96a97608f20
 	google.golang.org/grpc v1.37.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0
