@@ -1,7 +1,7 @@
 {
   "protoc": {
       "options": [
-          "--proto_path=api" // support proto imports when opening vscode from the root or using workspaces
+          "--proto_path=api"
       ]
   }
 }
