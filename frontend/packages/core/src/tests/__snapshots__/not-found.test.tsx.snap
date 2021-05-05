@@ -17,7 +17,7 @@ exports[`Not Found component renders correctly 1`] = `
                     <WithStyles(ForwardRef(Grid)) item={true} className=\\"css-sm4uoy\\">
                       <ForwardRef(Grid) classes={{...}} item={true} className=\\"css-sm4uoy\\">
                         <div className=\\"MuiGrid-root css-sm4uoy MuiGrid-item\\">
-                          <ForwardRef fontSize=\\"inherit\\">
+                          <ThumbDownIcon fontSize=\\"inherit\\">
                             <WithStyles(ForwardRef(SvgIcon)) fontSize=\\"inherit\\">
                               <ForwardRef(SvgIcon) classes={{...}} fontSize=\\"inherit\\">
                                 <svg className=\\"MuiSvgIcon-root MuiSvgIcon-fontSizeInherit\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" color={[undefined]} aria-hidden={true} role={[undefined]}>
@@ -25,7 +25,7 @@ exports[`Not Found component renders correctly 1`] = `
                                 </svg>
                               </ForwardRef(SvgIcon)>
                             </WithStyles(ForwardRef(SvgIcon))>
-                          </ForwardRef>
+                          </ThumbDownIcon>
                         </div>
                       </ForwardRef(Grid)>
                     </WithStyles(ForwardRef(Grid))>
