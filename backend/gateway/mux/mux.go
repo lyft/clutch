@@ -171,6 +171,16 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 		http.SetCookie(w, cookie)
 	}
 
+	if cookies := md.HeaderMD.Get("Set-Cookie-Refresh-Token"); len(cookies) > 0 {
+		cookie := &http.Cookie{
+			Name:     "refreshToken",
+			Value:    cookies[0],
+			Path:     "/v1/authn/login",
+			HttpOnly: true, // Client cannot access refresh token, it is sent by browser only if login is attempted.
+		}
+		http.SetCookie(w, cookie)
+	}
+
 	// Redirect if it's the browser (non-XHR).
 	redirects := md.HeaderMD.Get("Location")
 	if len(redirects) > 0 && isBrowser(requestHeadersFromResponseWriter(w)) {

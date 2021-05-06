@@ -138,7 +138,7 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		}
 	}
 
-	return p.signNewToken(ctx, claims)
+	return p.issueAndStoreToken(ctx, claims, true)
 }
 
 func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (*oauth2.Token, error) {
@@ -169,25 +169,39 @@ func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenTyp
 		},
 	}
 
-	return p.signNewToken(ctx, claims)
+	return p.issueAndStoreToken(ctx, claims, false)
 }
 
-func (p *OIDCProvider) signNewToken(ctx context.Context, claims *Claims) (*oauth2.Token, error) {
+// Issues and stores a token based on the provided claims. If refresh is true and storage is enabled, a refresh
+// token will be issued as well.
+func (p *OIDCProvider) issueAndStoreToken(ctx context.Context, claims *Claims, refresh bool) (*oauth2.Token, error) {
 	// Sign and issue token.
 	accessToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(p.sessionSecret))
 	if err != nil {
 		return nil, err
 	}
 	t := &oauth2.Token{
-		AccessToken:  accessToken,
-		Expiry:       time.Unix(claims.ExpiresAt, 0),
-		RefreshToken: "", // TODO: implement refresh_token flow with stateful sessions.
-		TokenType:    "Bearer",
+		AccessToken: accessToken,
+		Expiry:      time.Unix(claims.ExpiresAt, 0),
+		TokenType:   "Bearer",
 	}
 
 	if p.tokenStorage != nil {
-		err := p.tokenStorage.Store(ctx, claims.Subject, clutchProvider, t)
-		if err != nil {
+		if refresh {
+			refreshClaims := &jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour * 12).Unix(), // TODO: configurable refresh token lifetime
+				Issuer:    claims.Issuer,
+				Subject:   claims.Subject,
+			}
+
+			refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims).SignedString([]byte(p.sessionSecret))
+			if err != nil {
+				return nil, err
+			}
+			t.RefreshToken = refreshToken
+		}
+
+		if err := p.tokenStorage.Store(ctx, claims.Subject, clutchProvider, t); err != nil {
 			return nil, err
 		}
 	}

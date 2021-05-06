@@ -2722,6 +2722,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.authn.v1
                  * @interface ICallbackResponse
                  * @property {string|null} [accessToken] CallbackResponse accessToken
+                 * @property {string|null} [refreshToken] CallbackResponse refreshToken
                  */
 
                 /**
@@ -2748,6 +2749,14 @@ export const clutch = $root.clutch = (() => {
                 CallbackResponse.prototype.accessToken = "";
 
                 /**
+                 * CallbackResponse refreshToken.
+                 * @member {string} refreshToken
+                 * @memberof clutch.authn.v1.CallbackResponse
+                 * @instance
+                 */
+                CallbackResponse.prototype.refreshToken = "";
+
+                /**
                  * Verifies a CallbackResponse message.
                  * @function verify
                  * @memberof clutch.authn.v1.CallbackResponse
@@ -2761,6 +2770,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.accessToken != null && message.hasOwnProperty("accessToken"))
                         if (!$util.isString(message.accessToken))
                             return "accessToken: string expected";
+                    if (message.refreshToken != null && message.hasOwnProperty("refreshToken"))
+                        if (!$util.isString(message.refreshToken))
+                            return "refreshToken: string expected";
                     return null;
                 };
 
@@ -2778,6 +2790,8 @@ export const clutch = $root.clutch = (() => {
                     let message = new $root.clutch.authn.v1.CallbackResponse();
                     if (object.accessToken != null)
                         message.accessToken = String(object.accessToken);
+                    if (object.refreshToken != null)
+                        message.refreshToken = String(object.refreshToken);
                     return message;
                 };
 
@@ -2794,10 +2808,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.defaults)
+                    if (options.defaults) {
                         object.accessToken = "";
+                        object.refreshToken = "";
+                    }
                     if (message.accessToken != null && message.hasOwnProperty("accessToken"))
                         object.accessToken = message.accessToken;
+                    if (message.refreshToken != null && message.hasOwnProperty("refreshToken"))
+                        object.refreshToken = message.refreshToken;
                     return object;
                 };
 

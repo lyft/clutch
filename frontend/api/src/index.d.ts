@@ -1194,6 +1194,9 @@ export namespace clutch {
 
                 /** CallbackResponse accessToken */
                 accessToken?: (string|null);
+
+                /** CallbackResponse refreshToken */
+                refreshToken?: (string|null);
             }
 
             /** Represents a CallbackResponse. */
@@ -1207,6 +1210,9 @@ export namespace clutch {
 
                 /** CallbackResponse accessToken. */
                 public accessToken: string;
+
+                /** CallbackResponse refreshToken. */
+                public refreshToken: string;
 
                 /**
                  * Verifies a CallbackResponse message.

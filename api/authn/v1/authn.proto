@@ -61,6 +61,9 @@ message CallbackResponse {
   // This is the token that the user should present. Note: this response is only valid in a gRPC context. In an HTTP
   // context the user will be redirected.
   string access_token = 1;
+
+  // The refresh token will be empty if no refresh token was issued.
+  string refresh_token = 2;
 }
 
 message CreateTokenRequest {
