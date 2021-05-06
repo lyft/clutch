@@ -197,10 +197,11 @@ func TestCustomResponseForwarderAuthCookies(t *testing.T) {
 	assert.Equal(t, "https://example.com", rec.Header().Get("Location"))
 }
 
-func TestCustomResponseForwarderLocationStatusOverride(t *testing.T) {
+func TestCustomResponseForwarderLocationStatusOverrideAndRefreshToken(t *testing.T) {
 	ctx := runtime.NewServerMetadataContext(context.Background(), runtime.ServerMetadata{
 		HeaderMD: metadata.Pairs(
 			"Set-Cookie-Token", "myToken",
+			"Set-Cookie-Refresh-Token", "myRefreshToken",
 			"Location", "https://example.com",
 			"Location-Status", "304",
 		),
@@ -213,7 +214,8 @@ func TestCustomResponseForwarderLocationStatusOverride(t *testing.T) {
 	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
 	assert.NoError(t, err)
 	assert.Equal(t, 304, rec.Code)
-	assert.Equal(t, "token=myToken; Path=/", rec.Header().Get("Set-Cookie"))
+	assert.Contains(t, rec.Header().Values("Set-Cookie"), "token=myToken; Path=/")
+	assert.Contains(t, rec.Header().Values("Set-Cookie"), "refreshToken=myRefreshToken; Path=/v1/authn/login; HttpOnly")
 	assert.Equal(t, "https://example.com", rec.Header().Get("Location"))
 }
 
