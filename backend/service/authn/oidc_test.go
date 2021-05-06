@@ -164,6 +164,7 @@ oidc:
 
 	claims, err = p.Verify(ctx, createdToken.AccessToken)
 	assert.NoError(t, err)
+	assert.Empty(t, createdToken.RefreshToken)
 
 	assert.NotZero(t, claims.StandardClaims.IssuedAt)
 	assert.Equal(t, claims.StandardClaims.ExpiresAt, int64(0))
@@ -298,6 +299,11 @@ oidc:
 	assert.NotEqual(t, providerToken, clutchToken)
 
 	c, err := p.Verify(context.Background(), token.AccessToken)
+	assert.NoError(t, err)
+	assert.NotNil(t, c)
+	assert.Equal(t, email, c.Subject)
+
+	c, err = p.Verify(context.Background(), token.RefreshToken)
 	assert.NoError(t, err)
 	assert.NotNil(t, c)
 	assert.Equal(t, email, c.Subject)
