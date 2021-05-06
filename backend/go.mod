@@ -24,7 +24,7 @@ require (
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.5.2
-	github.com/google/go-github/v35 v35.1.0
+	github.com/google/go-github/v35 v35.2.0
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.4.0
