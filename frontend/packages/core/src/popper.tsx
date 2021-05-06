@@ -100,7 +100,13 @@ const Popper = ({
   children,
 }: PopperProps) => (
   <Collapse in={open} timeout="auto" unmountOnExit>
-    <StyledPopper open={open} anchorEl={anchorRef.current} transition placement={placement}>
+    <StyledPopper
+      open={open}
+      anchorEl={anchorRef.current}
+      transition
+      placement={placement}
+      disablePortal
+    >
       <Paper>
         <ClickAwayListener onClickAway={onClickAway}>
           <List component="div" disablePadding id="workflow-options">
