@@ -73,7 +73,6 @@ func testPodClientset() *fake.Clientset {
 				Annotations: map[string]string{"baz": "quuz"},
 			},
 			Status: corev1.PodStatus{
-				StartTime: &metav1.Time{},
 				ContainerStatuses: []corev1.ContainerStatus{
 					{Name: "container1"},
 					{Name: "container2"},
@@ -560,7 +559,6 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
-					StartTime: &metav1.Time{},
 					ContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
@@ -584,7 +582,6 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
-					StartTime: &metav1.Time{},
 					ContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
@@ -608,8 +605,7 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
-					StartTime: &metav1.Time{},
-					Phase:     "Running",
+					Phase: "Running",
 					ContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
@@ -632,9 +628,6 @@ func TestPodStatus(t *testing.T) {
 				ObjectMeta: metav1.ObjectMeta{
 					DeletionTimestamp: &timeStamp,
 				},
-				Status: corev1.PodStatus{
-					StartTime: &metav1.Time{},
-				},
 			},
 		},
 		{
@@ -645,7 +638,6 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
-					StartTime: &metav1.Time{},
 					InitContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
@@ -669,7 +661,6 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
-					StartTime: &metav1.Time{},
 					ContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",

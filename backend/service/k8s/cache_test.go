@@ -30,9 +30,6 @@ func TestProcessInformerEvent(t *testing.T) {
 			Name:        "test-pod-1",
 			Namespace:   "testing-namespace",
 		},
-		Status: corev1.PodStatus{
-			StartTime: &metav1.Time{},
-		},
 	}
 
 	expectedClutchPod := podDescription(pod, "")
