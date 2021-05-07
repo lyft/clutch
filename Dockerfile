@@ -1,5 +1,5 @@
 # Frontend build.
-FROM node:14-buster as nodebuild
+FROM node:16-buster as nodebuild
 COPY ./frontend ./frontend
 COPY ./tools/install-yarn.sh ./tools/install-yarn.sh
 COPY Makefile .
