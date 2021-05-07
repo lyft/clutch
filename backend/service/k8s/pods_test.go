@@ -73,6 +73,7 @@ func testPodClientset() *fake.Clientset {
 				Annotations: map[string]string{"baz": "quuz"},
 			},
 			Status: corev1.PodStatus{
+				StartTime: &metav1.Time{},
 				ContainerStatuses: []corev1.ContainerStatus{
 					{Name: "container1"},
 					{Name: "container2"},
@@ -334,9 +335,6 @@ func TestUpdatePod(t *testing.T) {
 			ClusterName: "staging",
 			Labels:      map[string]string{"foo": "bar"},
 			Annotations: map[string]string{"baz": "quuz"},
-		},
-		Status: corev1.PodStatus{
-			StartTime: &metav1.Time{},
 		},
 	})
 
