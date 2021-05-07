@@ -252,6 +252,20 @@ func (s *svc) ListConfigMaps(_ context.Context, clientset, cluster, namespace st
 			Labels:      listOptions.Labels,
 			Annotations: map[string]string{"Key": "value"},
 		},
+		&k8sv1.ConfigMap{
+			Cluster:     "fake-cluster-name",
+			Namespace:   namespace,
+			Name:        "foo-bar",
+			Labels:      listOptions.Labels,
+			Annotations: map[string]string{"Key": "value"},
+		},
+		&k8sv1.ConfigMap{
+			Cluster:     "fake-cluster-name",
+			Namespace:   namespace,
+			Name:        "stuff-things",
+			Labels:      listOptions.Labels,
+			Annotations: map[string]string{"Key": "value"},
+		},
 	}
 	return configMaps, nil
 }
