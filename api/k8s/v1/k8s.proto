@@ -351,6 +351,11 @@ message Pod {
   // the status of its containers.
   // ref: https://github.com/kubernetes/kubernetes/blob/master/pkg/printers/internalversion/printers.go#L761
   string status = 14;
+
+  // This is here as a workound since protobufjs currently has serialization 
+  // issues for well-known types like google.protobuf.Timestamp
+  // Unix timestamp (seconds since Jan 01 1970)
+  int64 start_time_stamp = 15;
 }
 
 message ListOptions {

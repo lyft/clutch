@@ -319,6 +319,7 @@ func TestPodDescription(t *testing.T) {
 			assert.Equal(t, k8sv1.PodCondition_Type(1), pod.PodConditions[0].Type)
 			assert.Equal(t, k8sv1.PodCondition_Status(1), pod.PodConditions[0].Status)
 			assert.Equal(t, "Init: 0/0", pod.Status)
+			assert.NotNil(t, pod.StartTimeStamp)
 		})
 	}
 }
@@ -334,6 +335,9 @@ func TestUpdatePod(t *testing.T) {
 			ClusterName: "staging",
 			Labels:      map[string]string{"foo": "bar"},
 			Annotations: map[string]string{"baz": "quuz"},
+		},
+		Status: corev1.PodStatus{
+			StartTime: &metav1.Time{},
 		},
 	})
 
@@ -556,6 +560,7 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
 					ContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
@@ -579,6 +584,7 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
 					ContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
@@ -602,7 +608,8 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
-					Phase: "Running",
+					StartTime: &metav1.Time{},
+					Phase:     "Running",
 					ContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
@@ -625,6 +632,9 @@ func TestPodStatus(t *testing.T) {
 				ObjectMeta: metav1.ObjectMeta{
 					DeletionTimestamp: &timeStamp,
 				},
+				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
+				},
 			},
 		},
 		{
@@ -635,6 +645,7 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
 					InitContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
@@ -658,6 +669,7 @@ func TestPodStatus(t *testing.T) {
 					ClusterName: "production",
 				},
 				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
 					ContainerStatuses: []corev1.ContainerStatus{
 						corev1.ContainerStatus{
 							Name:         "container1",
