@@ -199,7 +199,7 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	// This is here as a workaround since we can't use StartTime
 	if k8spod.Status.StartTime != nil {
 		// Note .Unix() gives seconds, not milliseconds
-		pod.StartTimeMillis = k8spod.Status.StartTime.Unix() * 1000
+		pod.StartTimeMillis = k8spod.Status.StartTime.UnixNano() / 1e6
 	}
 
 	return pod
