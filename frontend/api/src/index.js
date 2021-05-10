@@ -27388,6 +27388,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {Array.<clutch.k8s.v1.IPodCondition>|null} [podConditions] Pod podConditions
                  * @property {Array.<clutch.k8s.v1.IContainer>|null} [initContainers] Pod initContainers
                  * @property {string|null} [status] Pod status
+                 * @property {number|Long|null} [startTimeMillis] Pod startTimeMillis
                  */
 
                 /**
@@ -27523,6 +27524,14 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.status = "";
 
                 /**
+                 * Pod startTimeMillis.
+                 * @member {number|Long} startTimeMillis
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.startTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
                  * Verifies a Pod message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Pod
@@ -27614,6 +27623,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.status != null && message.hasOwnProperty("status"))
                         if (!$util.isString(message.status))
                             return "status: string expected";
+                    if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
+                        if (!$util.isInteger(message.startTimeMillis) && !(message.startTimeMillis && $util.isInteger(message.startTimeMillis.low) && $util.isInteger(message.startTimeMillis.high)))
+                            return "startTimeMillis: integer|Long expected";
                     return null;
                 };
 
@@ -27718,6 +27730,15 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.status != null)
                         message.status = String(object.status);
+                    if (object.startTimeMillis != null)
+                        if ($util.Long)
+                            (message.startTimeMillis = $util.Long.fromValue(object.startTimeMillis)).unsigned = false;
+                        else if (typeof object.startTimeMillis === "string")
+                            message.startTimeMillis = parseInt(object.startTimeMillis, 10);
+                        else if (typeof object.startTimeMillis === "number")
+                            message.startTimeMillis = object.startTimeMillis;
+                        else if (typeof object.startTimeMillis === "object")
+                            message.startTimeMillis = new $util.LongBits(object.startTimeMillis.low >>> 0, object.startTimeMillis.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -27753,6 +27774,11 @@ export const clutch = $root.clutch = (() => {
                         object.startTime = null;
                         object.stateReason = "";
                         object.status = "";
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.startTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.startTimeMillis = options.longs === String ? "0" : 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -27798,6 +27824,11 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (message.status != null && message.hasOwnProperty("status"))
                         object.status = message.status;
+                    if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
+                        if (typeof message.startTimeMillis === "number")
+                            object.startTimeMillis = options.longs === String ? String(message.startTimeMillis) : message.startTimeMillis;
+                        else
+                            object.startTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeMillis) : options.longs === Number ? new $util.LongBits(message.startTimeMillis.low >>> 0, message.startTimeMillis.high >>> 0).toNumber() : message.startTimeMillis;
                     return object;
                 };
 
