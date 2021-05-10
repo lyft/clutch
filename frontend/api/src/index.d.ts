@@ -11680,8 +11680,8 @@ export namespace clutch {
                 /** Pod status */
                 status?: (string|null);
 
-                /** Pod startTimeStamp */
-                startTimeStamp?: (number|Long|null);
+                /** Pod startTimeMillis */
+                startTimeMillis?: (number|Long|null);
             }
 
             /** Represents a Pod. */
@@ -11735,8 +11735,8 @@ export namespace clutch {
                 /** Pod status. */
                 public status: string;
 
-                /** Pod startTimeStamp. */
-                public startTimeStamp: (number|Long);
+                /** Pod startTimeMillis. */
+                public startTimeMillis: (number|Long);
 
                 /**
                  * Verifies a Pod message.

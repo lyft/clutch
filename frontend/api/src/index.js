@@ -27388,7 +27388,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {Array.<clutch.k8s.v1.IPodCondition>|null} [podConditions] Pod podConditions
                  * @property {Array.<clutch.k8s.v1.IContainer>|null} [initContainers] Pod initContainers
                  * @property {string|null} [status] Pod status
-                 * @property {number|Long|null} [startTimeStamp] Pod startTimeStamp
+                 * @property {number|Long|null} [startTimeMillis] Pod startTimeMillis
                  */
 
                 /**
@@ -27524,12 +27524,12 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.status = "";
 
                 /**
-                 * Pod startTimeStamp.
-                 * @member {number|Long} startTimeStamp
+                 * Pod startTimeMillis.
+                 * @member {number|Long} startTimeMillis
                  * @memberof clutch.k8s.v1.Pod
                  * @instance
                  */
-                Pod.prototype.startTimeStamp = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                Pod.prototype.startTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
                  * Verifies a Pod message.
@@ -27623,9 +27623,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.status != null && message.hasOwnProperty("status"))
                         if (!$util.isString(message.status))
                             return "status: string expected";
-                    if (message.startTimeStamp != null && message.hasOwnProperty("startTimeStamp"))
-                        if (!$util.isInteger(message.startTimeStamp) && !(message.startTimeStamp && $util.isInteger(message.startTimeStamp.low) && $util.isInteger(message.startTimeStamp.high)))
-                            return "startTimeStamp: integer|Long expected";
+                    if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
+                        if (!$util.isInteger(message.startTimeMillis) && !(message.startTimeMillis && $util.isInteger(message.startTimeMillis.low) && $util.isInteger(message.startTimeMillis.high)))
+                            return "startTimeMillis: integer|Long expected";
                     return null;
                 };
 
@@ -27730,15 +27730,15 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.status != null)
                         message.status = String(object.status);
-                    if (object.startTimeStamp != null)
+                    if (object.startTimeMillis != null)
                         if ($util.Long)
-                            (message.startTimeStamp = $util.Long.fromValue(object.startTimeStamp)).unsigned = false;
-                        else if (typeof object.startTimeStamp === "string")
-                            message.startTimeStamp = parseInt(object.startTimeStamp, 10);
-                        else if (typeof object.startTimeStamp === "number")
-                            message.startTimeStamp = object.startTimeStamp;
-                        else if (typeof object.startTimeStamp === "object")
-                            message.startTimeStamp = new $util.LongBits(object.startTimeStamp.low >>> 0, object.startTimeStamp.high >>> 0).toNumber();
+                            (message.startTimeMillis = $util.Long.fromValue(object.startTimeMillis)).unsigned = false;
+                        else if (typeof object.startTimeMillis === "string")
+                            message.startTimeMillis = parseInt(object.startTimeMillis, 10);
+                        else if (typeof object.startTimeMillis === "number")
+                            message.startTimeMillis = object.startTimeMillis;
+                        else if (typeof object.startTimeMillis === "object")
+                            message.startTimeMillis = new $util.LongBits(object.startTimeMillis.low >>> 0, object.startTimeMillis.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -27776,9 +27776,9 @@ export const clutch = $root.clutch = (() => {
                         object.status = "";
                         if ($util.Long) {
                             let long = new $util.Long(0, 0, false);
-                            object.startTimeStamp = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            object.startTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
-                            object.startTimeStamp = options.longs === String ? "0" : 0;
+                            object.startTimeMillis = options.longs === String ? "0" : 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -27824,11 +27824,11 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (message.status != null && message.hasOwnProperty("status"))
                         object.status = message.status;
-                    if (message.startTimeStamp != null && message.hasOwnProperty("startTimeStamp"))
-                        if (typeof message.startTimeStamp === "number")
-                            object.startTimeStamp = options.longs === String ? String(message.startTimeStamp) : message.startTimeStamp;
+                    if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
+                        if (typeof message.startTimeMillis === "number")
+                            object.startTimeMillis = options.longs === String ? String(message.startTimeMillis) : message.startTimeMillis;
                         else
-                            object.startTimeStamp = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeStamp) : options.longs === Number ? new $util.LongBits(message.startTimeStamp.low >>> 0, message.startTimeStamp.high >>> 0).toNumber() : message.startTimeStamp;
+                            object.startTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeMillis) : options.longs === Number ? new $util.LongBits(message.startTimeMillis.low >>> 0, message.startTimeMillis.high >>> 0).toNumber() : message.startTimeMillis;
                     return object;
                 };
 
