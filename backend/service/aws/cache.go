@@ -109,7 +109,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 	c.log.Info("starting to process ec2 instances for region", zap.String("region", client.region))
 	// 1000 is the maximum amount of records per page allowed for this API
 	input := ec2.DescribeInstancesInput{
-		MaxResults: 1000,
+		MaxResults: aws.Int32(1000),
 	}
 
 	paginator := ec2.NewDescribeInstancesPaginator(client.ec2, &input)
