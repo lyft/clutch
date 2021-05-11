@@ -10496,7 +10496,6 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.redisexperimentation.v1
                      * @interface ILatencyFault
                      * @property {clutch.chaos.redisexperimentation.v1.IFaultPercentage|null} [percentage] LatencyFault percentage
-                     * @property {clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null} [latencyDuration] LatencyFault latencyDuration
                      */
 
                     /**
@@ -10523,14 +10522,6 @@ export const clutch = $root.clutch = (() => {
                     LatencyFault.prototype.percentage = null;
 
                     /**
-                     * LatencyFault latencyDuration.
-                     * @member {clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null|undefined} latencyDuration
-                     * @memberof clutch.chaos.redisexperimentation.v1.LatencyFault
-                     * @instance
-                     */
-                    LatencyFault.prototype.latencyDuration = null;
-
-                    /**
                      * Verifies a LatencyFault message.
                      * @function verify
                      * @memberof clutch.chaos.redisexperimentation.v1.LatencyFault
@@ -10545,11 +10536,6 @@ export const clutch = $root.clutch = (() => {
                             let error = $root.clutch.chaos.redisexperimentation.v1.FaultPercentage.verify(message.percentage);
                             if (error)
                                 return "percentage." + error;
-                        }
-                        if (message.latencyDuration != null && message.hasOwnProperty("latencyDuration")) {
-                            let error = $root.clutch.chaos.redisexperimentation.v1.FaultLatencyDuration.verify(message.latencyDuration);
-                            if (error)
-                                return "latencyDuration." + error;
                         }
                         return null;
                     };
@@ -10571,11 +10557,6 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.redisexperimentation.v1.LatencyFault.percentage: object expected");
                             message.percentage = $root.clutch.chaos.redisexperimentation.v1.FaultPercentage.fromObject(object.percentage);
                         }
-                        if (object.latencyDuration != null) {
-                            if (typeof object.latencyDuration !== "object")
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.LatencyFault.latencyDuration: object expected");
-                            message.latencyDuration = $root.clutch.chaos.redisexperimentation.v1.FaultLatencyDuration.fromObject(object.latencyDuration);
-                        }
                         return message;
                     };
 
@@ -10592,14 +10573,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults) {
+                        if (options.defaults)
                             object.percentage = null;
-                            object.latencyDuration = null;
-                        }
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
                             object.percentage = $root.clutch.chaos.redisexperimentation.v1.FaultPercentage.toObject(message.percentage, options);
-                        if (message.latencyDuration != null && message.hasOwnProperty("latencyDuration"))
-                            object.latencyDuration = $root.clutch.chaos.redisexperimentation.v1.FaultLatencyDuration.toObject(message.latencyDuration, options);
                         return object;
                     };
 
@@ -10943,106 +10920,6 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return FaultPercentage;
-                })();
-
-                v1.FaultLatencyDuration = (function() {
-
-                    /**
-                     * Properties of a FaultLatencyDuration.
-                     * @memberof clutch.chaos.redisexperimentation.v1
-                     * @interface IFaultLatencyDuration
-                     * @property {number|null} [fixedDurationMs] FaultLatencyDuration fixedDurationMs
-                     */
-
-                    /**
-                     * Constructs a new FaultLatencyDuration.
-                     * @memberof clutch.chaos.redisexperimentation.v1
-                     * @classdesc Represents a FaultLatencyDuration.
-                     * @implements IFaultLatencyDuration
-                     * @constructor
-                     * @param {clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration=} [properties] Properties to set
-                     */
-                    function FaultLatencyDuration(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * FaultLatencyDuration fixedDurationMs.
-                     * @member {number} fixedDurationMs
-                     * @memberof clutch.chaos.redisexperimentation.v1.FaultLatencyDuration
-                     * @instance
-                     */
-                    FaultLatencyDuration.prototype.fixedDurationMs = 0;
-
-                    /**
-                     * Verifies a FaultLatencyDuration message.
-                     * @function verify
-                     * @memberof clutch.chaos.redisexperimentation.v1.FaultLatencyDuration
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    FaultLatencyDuration.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.fixedDurationMs != null && message.hasOwnProperty("fixedDurationMs"))
-                            if (!$util.isInteger(message.fixedDurationMs))
-                                return "fixedDurationMs: integer expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a FaultLatencyDuration message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.chaos.redisexperimentation.v1.FaultLatencyDuration
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.redisexperimentation.v1.FaultLatencyDuration} FaultLatencyDuration
-                     */
-                    FaultLatencyDuration.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.redisexperimentation.v1.FaultLatencyDuration)
-                            return object;
-                        let message = new $root.clutch.chaos.redisexperimentation.v1.FaultLatencyDuration();
-                        if (object.fixedDurationMs != null)
-                            message.fixedDurationMs = object.fixedDurationMs >>> 0;
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a FaultLatencyDuration message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.chaos.redisexperimentation.v1.FaultLatencyDuration
-                     * @static
-                     * @param {clutch.chaos.redisexperimentation.v1.FaultLatencyDuration} message FaultLatencyDuration
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    FaultLatencyDuration.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults)
-                            object.fixedDurationMs = 0;
-                        if (message.fixedDurationMs != null && message.hasOwnProperty("fixedDurationMs"))
-                            object.fixedDurationMs = message.fixedDurationMs;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this FaultLatencyDuration to JSON.
-                     * @function toJSON
-                     * @memberof clutch.chaos.redisexperimentation.v1.FaultLatencyDuration
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    FaultLatencyDuration.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return FaultLatencyDuration;
                 })();
 
                 return v1;
