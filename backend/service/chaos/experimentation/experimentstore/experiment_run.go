@@ -108,16 +108,18 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentationv1.P
 		}
 	}
 
-	terminationReason := "N/A"
-	if er.TerminationReason != "" {
-		terminationReason = er.TerminationReason
-	}
+	if status == experimentationv1.Experiment_STATUS_CANCELED || status == experimentationv1.Experiment_STATUS_COMPLETED {
+		terminationReason := "N/A"
+		if er.TerminationReason != "" {
+			terminationReason = er.TerminationReason
+		}
 
-	properties = append(properties, &experimentationv1.Property{
-		Id:    "termination_reason",
-		Label: "Termination Reason",
-		Value: &experimentationv1.Property_StringValue{StringValue: terminationReason},
-	})
+		properties = append(properties, &experimentationv1.Property{
+			Id:    "termination_reason",
+			Label: "Termination Reason",
+			Value: &experimentationv1.Property_StringValue{StringValue: terminationReason},
+		})
+	}
 
 	return properties, nil
 }

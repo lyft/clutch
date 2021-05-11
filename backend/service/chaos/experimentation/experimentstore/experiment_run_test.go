@@ -114,18 +114,14 @@ func TestExperimentRunProperties(t *testing.T) {
 			endTime:           &future,
 			cancellationTime:  nil,
 			creationTime:      now,
-			now:               now,
-			terminationReason: "",
+			now:               past,
+			terminationReason: "foo",
 			expectedPropertyIds: []string{
 				"run_identifier",
 				"status",
 				"run_creation_time",
 				"start_time",
 				"end_time",
-				"termination_reason",
-			},
-			expectedPropertyValues: map[string]string{
-				"termination_reason": "N/A",
 			},
 		},
 		{
@@ -133,7 +129,7 @@ func TestExperimentRunProperties(t *testing.T) {
 			endTime:           nil,
 			cancellationTime:  nil,
 			creationTime:      now,
-			now:               now,
+			now:               past,
 			terminationReason: "",
 			expectedPropertyIds: []string{
 				"run_identifier",
@@ -141,10 +137,6 @@ func TestExperimentRunProperties(t *testing.T) {
 				"run_creation_time",
 				"start_time",
 				"end_time",
-				"termination_reason",
-			},
-			expectedPropertyValues: map[string]string{
-				"termination_reason": "N/A",
 			},
 		},
 		{
