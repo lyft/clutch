@@ -122,6 +122,10 @@ func TestExperimentRunProperties(t *testing.T) {
 				"run_creation_time",
 				"start_time",
 				"end_time",
+				"termination_reason",
+			},
+			expectedPropertyValues: map[string]string{
+				"termination_reason": "N/A",
 			},
 		},
 		{
@@ -137,6 +141,10 @@ func TestExperimentRunProperties(t *testing.T) {
 				"run_creation_time",
 				"start_time",
 				"end_time",
+				"termination_reason",
+			},
+			expectedPropertyValues: map[string]string{
+				"termination_reason": "N/A",
 			},
 		},
 		{
@@ -156,7 +164,7 @@ func TestExperimentRunProperties(t *testing.T) {
 				"termination_reason",
 			},
 			expectedPropertyValues: map[string]string{
-				"termination_reason": "Unknown",
+				"termination_reason": "N/A",
 			},
 		},
 		{
@@ -176,7 +184,7 @@ func TestExperimentRunProperties(t *testing.T) {
 				"termination_reason",
 			},
 			expectedPropertyValues: map[string]string{
-				"termination_reason": "Unknown",
+				"termination_reason": "N/A",
 			},
 		},
 		{
