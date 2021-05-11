@@ -173,7 +173,7 @@ func TestCustomResponseForwarder(t *testing.T) {
 	ctx := runtime.NewServerMetadataContext(context.Background(), runtime.ServerMetadata{})
 	rec := httptest.NewRecorder()
 	w := mockResponseWriter{ResponseWriter: rec}
-	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
+	err := newCustomResponseForwarder(false)(ctx, w, &healthcheckv1.HealthcheckResponse{})
 	assert.NoError(t, err)
 	assert.Equal(t, 200, rec.Code)
 }
@@ -190,10 +190,10 @@ func TestCustomResponseForwarderAuthCookies(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodGet, "https://example.com/bar", nil)
 	req.Header.Add("Accept", "text/html") // Is browser.
 	w := &mockResponseWriter{ResponseWriter: rec, req: req}
-	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
+	err := newCustomResponseForwarder(true)(ctx, w, &healthcheckv1.HealthcheckResponse{})
 	assert.NoError(t, err)
 	assert.Equal(t, 302, rec.Code)
-	assert.Equal(t, "token=myToken; Path=/", rec.Header().Get("Set-Cookie"))
+	assert.Equal(t, "token=myToken; Path=/; Secure", rec.Header().Get("Set-Cookie"))
 	assert.Equal(t, "https://example.com", rec.Header().Get("Location"))
 }
 
@@ -211,11 +211,11 @@ func TestCustomResponseForwarderLocationStatusOverrideAndRefreshToken(t *testing
 	req, _ := http.NewRequest(http.MethodGet, "https://example.com/bar", nil)
 	req.Header.Add("Accept", "text/html") // Is browser.
 	w := &mockResponseWriter{ResponseWriter: rec, req: req}
-	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
+	err := newCustomResponseForwarder(true)(ctx, w, &healthcheckv1.HealthcheckResponse{})
 	assert.NoError(t, err)
 	assert.Equal(t, 304, rec.Code)
-	assert.Contains(t, rec.Header().Values("Set-Cookie"), "token=myToken; Path=/")
-	assert.Contains(t, rec.Header().Values("Set-Cookie"), "refreshToken=myRefreshToken; Path=/v1/authn/login; HttpOnly")
+	assert.Contains(t, rec.Header().Values("Set-Cookie"), "token=myToken; Path=/; Secure")
+	assert.Contains(t, rec.Header().Values("Set-Cookie"), "refreshToken=myRefreshToken; Path=/v1/authn/login; HttpOnly; Secure")
 	assert.Equal(t, "https://example.com", rec.Header().Get("Location"))
 }
 
@@ -230,7 +230,7 @@ func TestCustomResponseForwarderAuthCookiesNonBrowser(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodGet, "https://example.com/bar", nil)
 	req.Header.Add("Accept", "*/*") // Not a browser!
 	w := &mockResponseWriter{ResponseWriter: rec, req: req}
-	err := customResponseForwarder(ctx, w, &healthcheckv1.HealthcheckResponse{})
+	err := newCustomResponseForwarder(false)(ctx, w, &healthcheckv1.HealthcheckResponse{})
 	assert.NoError(t, err)
 	assert.Equal(t, 200, rec.Code)
 	assert.Equal(t, "", rec.Header().Get("Location"))
