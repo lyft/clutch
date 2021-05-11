@@ -129,7 +129,7 @@ func TestExperimentRunProperties(t *testing.T) {
 			endTime:           nil,
 			cancellationTime:  nil,
 			creationTime:      now,
-			now:               past,
+			now:               future,
 			terminationReason: "",
 			expectedPropertyIds: []string{
 				"run_identifier",
