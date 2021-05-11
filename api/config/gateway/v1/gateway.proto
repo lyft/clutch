@@ -8,6 +8,7 @@ import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
 import "config/middleware/accesslog/v1/accesslog.proto";
+import "google/protobuf/wrappers.proto";
 
 message Config {
   GatewayOptions gateway = 1 [ (validate.rules).message = {required : true} ];
@@ -100,6 +101,9 @@ message GatewayOptions {
   bool enable_pprof = 8;
 
   clutch.config.middleware.accesslog.v1.Config accesslog = 9;
+
+  // Whether or not cookies should be sent with the 'Secure' flag. Default value is true.
+  google.protobuf.BoolValue secure_cookies = 10;
 }
 
 // Assets configuration provide a passthrough host for frontend static assets.

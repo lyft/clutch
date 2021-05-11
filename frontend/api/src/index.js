@@ -14075,6 +14075,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.IAssets|null} [assets] GatewayOptions assets
                      * @property {boolean|null} [enablePprof] GatewayOptions enablePprof
                      * @property {clutch.config.middleware.accesslog.v1.IConfig|null} [accesslog] GatewayOptions accesslog
+                     * @property {google.protobuf.IBoolValue|null} [secureCookies] GatewayOptions secureCookies
                      */
 
                     /**
@@ -14166,6 +14167,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.accesslog = null;
 
                     /**
+                     * GatewayOptions secureCookies.
+                     * @member {google.protobuf.IBoolValue|null|undefined} secureCookies
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.secureCookies = null;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -14222,6 +14231,11 @@ export const clutch = $root.clutch = (() => {
                             let error = $root.clutch.config.middleware.accesslog.v1.Config.verify(message.accesslog);
                             if (error)
                                 return "accesslog." + error;
+                        }
+                        if (message.secureCookies != null && message.hasOwnProperty("secureCookies")) {
+                            let error = $root.google.protobuf.BoolValue.verify(message.secureCookies);
+                            if (error)
+                                return "secureCookies." + error;
                         }
                         return null;
                     };
@@ -14285,6 +14299,11 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.config.gateway.v1.GatewayOptions.accesslog: object expected");
                             message.accesslog = $root.clutch.config.middleware.accesslog.v1.Config.fromObject(object.accesslog);
                         }
+                        if (object.secureCookies != null) {
+                            if (typeof object.secureCookies !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.GatewayOptions.secureCookies: object expected");
+                            message.secureCookies = $root.google.protobuf.BoolValue.fromObject(object.secureCookies);
+                        }
                         return message;
                     };
 
@@ -14312,6 +14331,7 @@ export const clutch = $root.clutch = (() => {
                             object.assets = null;
                             object.enablePprof = false;
                             object.accesslog = null;
+                            object.secureCookies = null;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -14334,6 +14354,8 @@ export const clutch = $root.clutch = (() => {
                             object.enablePprof = message.enablePprof;
                         if (message.accesslog != null && message.hasOwnProperty("accesslog"))
                             object.accesslog = $root.clutch.config.middleware.accesslog.v1.Config.toObject(message.accesslog, options);
+                        if (message.secureCookies != null && message.hasOwnProperty("secureCookies"))
+                            object.secureCookies = $root.google.protobuf.BoolValue.toObject(message.secureCookies, options);
                         return object;
                     };
 

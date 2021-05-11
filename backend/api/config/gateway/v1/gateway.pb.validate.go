@@ -671,6 +671,16 @@ func (m *GatewayOptions) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetSecureCookies()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GatewayOptionsValidationError{
+				field:  "SecureCookies",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

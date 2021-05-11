@@ -155,49 +155,53 @@ func getAssetProviderService(assetCfg *gatewayv1.Assets) (service.Service, error
 	}
 }
 
-func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp proto.Message) error {
-	md, ok := runtime.ServerMetadataFromContext(ctx)
-	if !ok {
+func newCustomResponseForwarder(secureCookies bool) func(context.Context, http.ResponseWriter, proto.Message) error {
+	return func(ctx context.Context, w http.ResponseWriter, resp proto.Message) error {
+		md, ok := runtime.ServerMetadataFromContext(ctx)
+		if !ok {
+			return nil
+		}
+
+		if cookies := md.HeaderMD.Get("Set-Cookie-Token"); len(cookies) > 0 {
+			cookie := &http.Cookie{
+				Name:     "token",
+				Value:    cookies[0],
+				Path:     "/",
+				HttpOnly: false,
+				Secure:   secureCookies,
+			}
+			http.SetCookie(w, cookie)
+		}
+
+		if cookies := md.HeaderMD.Get("Set-Cookie-Refresh-Token"); len(cookies) > 0 {
+			cookie := &http.Cookie{
+				Name:     "refreshToken",
+				Value:    cookies[0],
+				Path:     "/v1/authn/login",
+				HttpOnly: true, // Client cannot access refresh token, it is sent by browser only if login is attempted.
+				Secure:   secureCookies,
+			}
+			http.SetCookie(w, cookie)
+		}
+
+		// Redirect if it's the browser (non-XHR).
+		redirects := md.HeaderMD.Get("Location")
+		if len(redirects) > 0 && isBrowser(requestHeadersFromResponseWriter(w)) {
+			code := http.StatusFound
+			if st := md.HeaderMD.Get("Location-Status"); len(st) > 0 {
+				headerCodeOverride, err := strconv.Atoi(st[0])
+				if err != nil {
+					return err
+				}
+				code = headerCodeOverride
+			}
+
+			w.Header().Set("Location", redirects[0])
+			w.WriteHeader(code)
+		}
+
 		return nil
 	}
-
-	if cookies := md.HeaderMD.Get("Set-Cookie-Token"); len(cookies) > 0 {
-		cookie := &http.Cookie{
-			Name:     "token",
-			Value:    cookies[0],
-			Path:     "/",
-			HttpOnly: false,
-		}
-		http.SetCookie(w, cookie)
-	}
-
-	if cookies := md.HeaderMD.Get("Set-Cookie-Refresh-Token"); len(cookies) > 0 {
-		cookie := &http.Cookie{
-			Name:     "refreshToken",
-			Value:    cookies[0],
-			Path:     "/v1/authn/login",
-			HttpOnly: true, // Client cannot access refresh token, it is sent by browser only if login is attempted.
-		}
-		http.SetCookie(w, cookie)
-	}
-
-	// Redirect if it's the browser (non-XHR).
-	redirects := md.HeaderMD.Get("Location")
-	if len(redirects) > 0 && isBrowser(requestHeadersFromResponseWriter(w)) {
-		code := http.StatusFound
-		if st := md.HeaderMD.Get("Location-Status"); len(st) > 0 {
-			headerCodeOverride, err := strconv.Atoi(st[0])
-			if err != nil {
-				return err
-			}
-			code = headerCodeOverride
-		}
-
-		w.Header().Set("Location", redirects[0])
-		w.WriteHeader(code)
-	}
-
-	return nil
 }
 
 func customHeaderMatcher(key string) (string, bool) {
@@ -226,9 +230,14 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 }
 
 func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, gatewayCfg *gatewayv1.GatewayOptions) (*Mux, error) {
+	secureCookies := true
+	if gatewayCfg.SecureCookies != nil {
+		secureCookies = gatewayCfg.SecureCookies.Value
+	}
+
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
-		runtime.WithForwardResponseOption(customResponseForwarder),
+		runtime.WithForwardResponseOption(newCustomResponseForwarder(secureCookies)),
 		runtime.WithErrorHandler(customErrorHandler),
 		runtime.WithMarshalerOption(
 			runtime.MIMEWildcard,

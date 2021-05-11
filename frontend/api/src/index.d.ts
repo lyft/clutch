@@ -6014,6 +6014,9 @@ export namespace clutch {
 
                     /** GatewayOptions accesslog */
                     accesslog?: (clutch.config.middleware.accesslog.v1.IConfig|null);
+
+                    /** GatewayOptions secureCookies */
+                    secureCookies?: (google.protobuf.IBoolValue|null);
                 }
 
                 /** Represents a GatewayOptions. */
@@ -6051,6 +6054,9 @@ export namespace clutch {
 
                     /** GatewayOptions accesslog. */
                     public accesslog?: (clutch.config.middleware.accesslog.v1.IConfig|null);
+
+                    /** GatewayOptions secureCookies. */
+                    public secureCookies?: (google.protobuf.IBoolValue|null);
 
                     /**
                      * Verifies a GatewayOptions message.
