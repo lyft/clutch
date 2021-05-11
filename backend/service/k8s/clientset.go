@@ -143,7 +143,6 @@ func (m *managerImpl) Clientsets(ctx context.Context) (map[string]ContextClients
 }
 
 func (m *managerImpl) GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error) {
-
 	// Look for the exact clientset.
 	cs, ok := m.clientsets[clientset]
 	if !ok {
