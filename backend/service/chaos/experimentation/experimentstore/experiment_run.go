@@ -27,7 +27,7 @@ func (er *ExperimentRun) Status(now time.Time) experimentationv1.Experiment_Stat
 	} else {
 		if now.Before(er.StartTime) {
 			return experimentationv1.Experiment_STATUS_SCHEDULED
-		} else if now.After(er.StartTime) && (er.EndTime == nil || now.Before(*er.EndTime)) {
+		} else if (now.Equal(er.StartTime) || now.After(er.StartTime)) && (er.EndTime == nil || now.Before(*er.EndTime)) {
 			return experimentationv1.Experiment_STATUS_RUNNING
 		}
 		return experimentationv1.Experiment_STATUS_COMPLETED
