@@ -106,6 +106,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		<-sigc
 		c.log.Info("Caught shutdown signal, shutting down topology caching and releasing advisory lock")
 		ctxCancelFunc()
+		signal.Stop(sigc)
 	}()
 
 	c.log.Info("Topology caching is enabled")
