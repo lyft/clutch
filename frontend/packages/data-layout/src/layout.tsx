@@ -51,10 +51,7 @@ const useDataLayout = (key: string, shouldHydrate: boolean = true): DataLayout =
   }, []);
 
   React.useEffect(() => {
-    if (
-      shouldHydrate &&
-      !(manager.state[key].cache && !_.isEmpty(manager.state[key].data))
-    ) {
+    if (shouldHydrate && !(manager.state[key].cache && !_.isEmpty(manager.state[key].data))) {
       manager.hydrate(key);
     }
   }, [key]);
