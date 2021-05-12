@@ -31,8 +31,6 @@ message ErrorFault {
 message LatencyFault {
   // The percentage of requests the fault should be applied to.
   FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
-  // The latency duration to apply when applying a latency fault.
-  FaultLatencyDuration latency_duration = 2 [ (validate.rules).message.required = true ];
 }
 
 // Enforce faults on upstream redis cluster.
@@ -55,10 +53,4 @@ message FaultPercentage {
   // The numerator of a percentage with a fixed denumerator equal to 100
   // (i.e. percentage equal to 50 results in 50/100 = 50%)
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
-}
-
-// The latency duration to apply as part of a latency fault.
-message FaultLatencyDuration {
-  // The fixed latency duration in milliseconds.
-  uint32 fixed_duration_ms = 1 [ (validate.rules).uint32.gt = 0 ];
 }
