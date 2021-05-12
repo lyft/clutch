@@ -31,7 +31,7 @@ const update = (key: string, value: object): Thunk<ManagerLayout, Action> => {
   };
 };
 
-const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
+const hydrate = (key: string, overwrite: boolean = false): Thunk<ManagerLayout, Action> => {
   return (dispatch, getState) => {
     const state = getState();
     if (Object.keys(state[key]).includes("hydrator")) {
@@ -66,6 +66,7 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
             payload: {
               key,
               result: state[key].transformResponse(result),
+              overwrite: overwrite,
             },
           });
         })
@@ -85,7 +86,7 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
 export interface DataManager {
   state: object;
   assign: (key: string, value: object) => void;
-  hydrate: (key: string) => void;
+  hydrate: (key: string, overwrite?: boolean) => void;
   update: (key: string, value: object) => void;
   reset: () => void;
 }

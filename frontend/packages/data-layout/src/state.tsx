@@ -29,6 +29,7 @@ interface ActionPayload {
   value?: object;
   result?: object;
   error?: ClutchError;
+  overwrite?: boolean;
 }
 
 export interface Action {
@@ -52,7 +53,7 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
       const newDataIsArray = Array.isArray(newData);
       const existingDataIsArray = Array.isArray(existingData);
       let data: object;
-      if ((newDataIsArray && !existingDataIsArray) || (!newDataIsArray && existingDataIsArray)) {
+      if (((newDataIsArray && !existingDataIsArray) || (!newDataIsArray && existingDataIsArray)) || action.payload?.overwrite) {
         data = newData;
       } else if (newDataIsArray) {
         data = [...existingData, ...newData];
