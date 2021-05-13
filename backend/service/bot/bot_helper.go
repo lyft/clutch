@@ -29,7 +29,7 @@ func sanitize(botProvider botv1.Bot, text string) (string, error) {
 		return "", fmt.Errorf("bot type '%s' not implemented", botProvider)
 	}
 
-	sanitized = trimRedundantSpaces(sanitized)
+	sanitized = TrimRedundantSpaces(sanitized)
 	sanitized = strings.ToLower(sanitized)
 
 	return sanitized, nil
@@ -40,8 +40,8 @@ func defaultHelp() string {
 	return fmt.Sprintf("%s\n%s", HelpIntro, HelpDetails)
 }
 
-// replaces trailing/leading and duplicate whitespace
-func trimRedundantSpaces(text string) string {
+// TrimRedundantSpaces replaces trailing/leading and duplicate whitespaces
+func TrimRedundantSpaces(text string) string {
 	text = spaceRegex.ReplaceAllString(text, " ")
 	return strings.TrimSpace(text)
 }

@@ -55,7 +55,7 @@ func TestTrimRedundantSpaces(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := trimRedundantSpaces(test.input)
+		result := TrimRedundantSpaces(test.input)
 		assert.Equal(t, test.output, result)
 	}
 }
