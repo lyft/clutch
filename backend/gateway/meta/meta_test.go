@@ -357,3 +357,16 @@ func TestExtractProtoPatternFieldNames(t *testing.T) {
 		})
 	}
 }
+
+func TestToValue(t *testing.T) {
+	type customString string
+	type customSlice []bool
+
+	result, err := ToValue(customString("foo"))
+	assert.NoError(t, err)
+	assert.Equal(t, "foo", result.AsInterface())
+
+	result, err = ToValue(customSlice([]bool{true}))
+	assert.NoError(t, err)
+	assert.ElementsMatch(t, []bool{true}, result.AsInterface())
+}
