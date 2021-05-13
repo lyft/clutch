@@ -31,15 +31,16 @@ interface DataLayout {
 /**
  * Use a registered data layout.
  * 
- * If a hydrate function has been specified this and the layout's data has not been set and shouldHydrate is true this will 
+ * If a hydrate function has been specified this and the layout's data has not been set and hydrate is true this will 
  * populate it's data on the first invocation. If the layout has a cache key set to true and also has existing data OR
- * shouldHydrate is false, hydrate will not be invoked.
+ * hydrate is false, hydrate will not be invoked.
 
  * @param key The name of the layout registered with the manager.
- * @param shouldHydrate An option to not hydrate if we don't want to.
+ * @param opts An options object to allow for things like disabling hydration by default
  */
-const useDataLayout = (key: string, shouldHydrate: boolean = true): DataLayout => {
+const useDataLayout = (key: string, opts?: object): DataLayout => {
   const manager = useManagerContext();
+  const options = { hydrate: true, ...opts };
 
   if (!Object.keys(manager.state).includes(key)) {
     throw new Error(`Non-existant data layout key: ${key}`);
@@ -52,7 +53,7 @@ const useDataLayout = (key: string, shouldHydrate: boolean = true): DataLayout =
   }, []);
 
   React.useEffect(() => {
-    if (shouldHydrate && !(manager.state[key].cache && !_.isEmpty(manager.state[key].data))) {
+    if (options.hydrate && !(manager.state[key].cache && !_.isEmpty(manager.state[key].data))) {
       manager.hydrate(key);
     }
   }, [key]);
