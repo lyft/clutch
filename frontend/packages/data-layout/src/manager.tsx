@@ -82,12 +82,21 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
   };
 };
 
+const hydrateAll = () => {
+  return getState => {
+    const state = getState();
+    Object.keys(state).forEach(key => {
+      hydrate(key);
+    });
+  };
+};
 export interface DataManager {
   state: object;
   assign: (key: string, value: object) => void;
   hydrate: (key: string) => void;
   update: (key: string, value: object) => void;
   reset: () => void;
+  hydrateAll: () => void;
 }
 
 const defaultTransform = (data: object): object => data;
@@ -124,6 +133,7 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
     hydrate: key => dispatch(hydrate(key)),
     update: (key, value) => dispatch(update(key, value)),
     reset: () => dispatch(reset()),
+    hydrateAll: () => dispatch(hydrateAll()),
   };
 };
 
