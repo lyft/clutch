@@ -32,8 +32,8 @@ interface DataLayout {
  * Use a registered data layout.
  * 
  * If a hydrate function has been specified this and the layout's data has not been set and shouldHydrate is true this will 
- * populate it's data on the first invocation. If the layout has a cache key set to true and also has existing data 
- * hydrate will not be invoked.
+ * populate it's data on the first invocation. If the layout has a cache key set to true and also has existing data OR
+ * shouldHydrate is false, hydrate will not be invoked.
 
  * @param key The name of the layout registered with the manager.
  */
