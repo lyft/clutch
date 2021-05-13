@@ -36,6 +36,7 @@ interface DataLayout {
  * shouldHydrate is false, hydrate will not be invoked.
 
  * @param key The name of the layout registered with the manager.
+ * @param shouldHydrate An option to not hydrate if we don't want to.
  */
 const useDataLayout = (key: string, shouldHydrate: boolean = true): DataLayout => {
   const manager = useManagerContext();
