@@ -40,7 +40,7 @@ func defaultHelp() string {
 	return fmt.Sprintf("%s\n%s", HelpIntro, HelpDetails)
 }
 
-// replaces trailing/leading and duplicate whitespace
+// TrimRedundantSpaces replaces trailing/leading and duplicate whitespaces
 func TrimRedundantSpaces(text string) string {
 	text = spaceRegex.ReplaceAllString(text, " ")
 	return strings.TrimSpace(text)
