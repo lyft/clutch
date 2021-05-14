@@ -11,9 +11,9 @@
     "src/**/*",
   ],
   "references": [
-    {"path": "../../clutch/frontend/packages/core"},
-    {"path": "../../clutch/frontend/packages/data-layout"},
-    {"path": "../../clutch/frontend/packages/wizard"},
-    {"path": "../../clutch/frontend/workflows/experimentation"},
+    {"path": "../experimentation"},
+    {"path": "../../packages/core"},
+    {"path": "../../packages/data-layout"},
+    {"path": "../../packages/wizard"},
   ]
 }
