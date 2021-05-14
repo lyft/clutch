@@ -28,6 +28,10 @@ interface DataLayout {
   error: ClutchError;
 }
 
+interface UseDataLayoutOptions {
+  hydrate?: boolean;
+}
+
 /**
  * Use a registered data layout.
  * 
@@ -38,7 +42,7 @@ interface DataLayout {
  * @param key The name of the layout registered with the manager.
  * @param opts An options object to allow for things like disabling hydration by default
  */
-const useDataLayout = (key: string, opts?: object): DataLayout => {
+const useDataLayout = (key: string, opts?: UseDataLayoutOptions): DataLayout => {
   const manager = useManagerContext();
   const options = { hydrate: true, ...opts };
 
