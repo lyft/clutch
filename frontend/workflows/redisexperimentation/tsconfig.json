@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "incremental": true,
+    "noEmit": false
+  },
+  "include": [
+    "src/**/*",
+  ],
+  "references": [
+    {"path": "../../clutch/frontend/packages/core"},
+    {"path": "../../clutch/frontend/packages/data-layout"},
+    {"path": "../../clutch/frontend/packages/wizard"},
+    {"path": "../../clutch/frontend/workflows/experimentation"},
+  ]
+}
