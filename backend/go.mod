@@ -30,7 +30,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.4.0
 	github.com/iancoleman/strcase v0.1.3
 	github.com/jhump/protoreflect v1.8.2
-	github.com/lib/pq v1.10.1
+	github.com/lib/pq v1.10.2
 	github.com/mitchellh/hashstructure/v2 v2.0.1
 	github.com/shurcooL/githubv4 v0.0.0-20201206200315-234843c633fa
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
@@ -43,7 +43,7 @@ require (
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed
 	golang.org/x/oauth2 f6687ab2804c
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20210506142907-4a47615972c2
+	google.golang.org/genproto v0.0.0-20210517163617-5e0236093d7a
 	google.golang.org/grpc v1.37.1
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0
