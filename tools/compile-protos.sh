@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # https://github.com/protocolbuffers/protobuf/releases
-PROTOC_RELEASE=3.14.0
-PROTO_ZIP_RELEASE_MD5_LINUX=cef4dc2f438e44e5d1af64ba4f9dbaa6
-PROTO_ZIP_RELEASE_MD5_OSX=ac2977d94676a7371b9e92fa3a29bc21
+PROTOC_RELEASE=3.17.0
+PROTO_ZIP_RELEASE_MD5_LINUX=e38316c0db4f360688278e190290abf7
+PROTO_ZIP_RELEASE_MD5_OSX=2a09aedd88a76e1aa6e84c08f6ceebbd
 
 # https://github.com/protobufjs/protobuf.js/releases
 # NOTE: should match frontend/package.json
