@@ -101,17 +101,17 @@ const Popper = ({
   children,
   id,
 }: PopperProps) => (
-  // <Collapse in={open} timeout="auto" unmountOnExit>
-  <StyledPopper open={open} anchorEl={anchorRef.current} transition placement={placement}>
-    <Paper>
-      <ClickAwayListener onClickAway={onClickAway}>
-        <List component="div" disablePadding id={id}>
-          {children}
-        </List>
-      </ClickAwayListener>
-    </Paper>
-  </StyledPopper>
-  // </Collapse>
+  <Collapse in={open} timeout="auto" unmountOnExit>
+    <StyledPopper open={open} anchorEl={anchorRef.current} transition placement={placement}>
+      <Paper>
+        <ClickAwayListener onClickAway={onClickAway}>
+          <List component="div" disablePadding id={id}>
+            {children}
+          </List>
+        </ClickAwayListener>
+      </Paper>
+    </StyledPopper>
+  </Collapse>
 );
 
 export { Popper, PopperItem };
