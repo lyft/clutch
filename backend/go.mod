@@ -5,13 +5,13 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.0
-	github.com/aws/aws-sdk-go-v2 v1.3.4
-	github.com/aws/aws-sdk-go-v2/config v1.1.6
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.3.0
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.5.0
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.2.2
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.5.0
-	github.com/aws/smithy-go v1.3.1
+	github.com/aws/aws-sdk-go-v2 v1.4.0
+	github.com/aws/aws-sdk-go-v2/config v1.1.7
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.3.1
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.6.0
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.2.3
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.6.0
+	github.com/aws/smithy-go v1.4.0
 	github.com/bufbuild/buf v0.37.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.0.0
@@ -24,27 +24,27 @@ require (
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.5.2
-	github.com/google/go-github/v35 v35.1.0
+	github.com/google/go-github/v35 v35.2.0
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.4.0
 	github.com/iancoleman/strcase v0.1.3
 	github.com/jhump/protoreflect v1.8.2
-	github.com/lib/pq v1.10.1
+	github.com/lib/pq v1.10.2
 	github.com/mitchellh/hashstructure/v2 v2.0.1
 	github.com/shurcooL/githubv4 v0.0.0-20201206200315-234843c633fa
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
-	github.com/slack-go/slack v0.9.0
+	github.com/slack-go/slack v0.9.1
 	github.com/stretchr/testify v1.7.0
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
-	golang.org/x/net v0.0.0-20210503060351-7fd8e65b6420
-	golang.org/x/oauth2 v0.0.0-20210427180440-81ed05c6b58c
+	golang.org/x/net v0.0.0-20210510120150-4163338589ed
+	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20210503173045-b96a97608f20
-	google.golang.org/grpc v1.37.0
+	google.golang.org/genproto v0.0.0-20210517163617-5e0236093d7a
+	google.golang.org/grpc v1.37.1
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/square/go-jose.v2 v2.5.1

@@ -4500,9 +4500,6 @@ export namespace clutch {
 
                     /** LatencyFault percentage */
                     percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
-
-                    /** LatencyFault latencyDuration */
-                    latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
                 }
 
                 /** Represents a LatencyFault. */
@@ -4516,9 +4513,6 @@ export namespace clutch {
 
                     /** LatencyFault percentage. */
                     public percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
-
-                    /** LatencyFault latencyDuration. */
-                    public latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
 
                     /**
                      * Verifies a LatencyFault message.
@@ -4694,54 +4688,6 @@ export namespace clutch {
 
                     /**
                      * Converts this FaultPercentage to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a FaultLatencyDuration. */
-                interface IFaultLatencyDuration {
-
-                    /** FaultLatencyDuration fixedDurationMs */
-                    fixedDurationMs?: (number|null);
-                }
-
-                /** Represents a FaultLatencyDuration. */
-                class FaultLatencyDuration implements IFaultLatencyDuration {
-
-                    /**
-                     * Constructs a new FaultLatencyDuration.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration);
-
-                    /** FaultLatencyDuration fixedDurationMs. */
-                    public fixedDurationMs: number;
-
-                    /**
-                     * Verifies a FaultLatencyDuration message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a FaultLatencyDuration message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns FaultLatencyDuration
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultLatencyDuration;
-
-                    /**
-                     * Creates a plain object from a FaultLatencyDuration message. Also converts values to other types if specified.
-                     * @param message FaultLatencyDuration
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultLatencyDuration, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this FaultLatencyDuration to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -11679,6 +11625,9 @@ export namespace clutch {
 
                 /** Pod status */
                 status?: (string|null);
+
+                /** Pod startTimeMillis */
+                startTimeMillis?: (number|Long|null);
             }
 
             /** Represents a Pod. */
@@ -11731,6 +11680,9 @@ export namespace clutch {
 
                 /** Pod status. */
                 public status: string;
+
+                /** Pod startTimeMillis. */
+                public startTimeMillis: (number|Long);
 
                 /**
                  * Verifies a Pod message.
