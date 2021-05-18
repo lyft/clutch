@@ -1,6 +1,5 @@
 import React from "react";
-import { configure, shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { shallow } from "enzyme";
 
 import StartRedisExperiment from "../start-experiment";
 
@@ -11,7 +10,6 @@ jest.mock("react-router-dom", () => {
   };
 });
 
-configure({ adapter: new Adapter() });
 describe("Start Experiment Run workflow", () => {
   let component;
 
