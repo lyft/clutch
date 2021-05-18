@@ -1,6 +1,6 @@
 module.exports = {
   roots: ["./src"],
-  collectCoverageFrom: [ "src/*.*sx"],
+  collectCoverageFrom: ["src/*.*sx"],
   coverageDirectory: "/tmp",
   coverageReporters: ["text", "cobertura"],
   coverageThreshold: {
