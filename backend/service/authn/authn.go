@@ -67,6 +67,7 @@ type Issuer interface {
 	// CreateToken creates a new OAuth2 for the provided subject with the provided expiration. If expiry is nil,
 	// the token will never expire.
 	CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (token *oauth2.Token, err error)
+	RefreshToken(ctx context.Context, token *oauth2.Token) (*oauth2.Token, error)
 }
 
 type Service interface {
