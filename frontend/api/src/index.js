@@ -22369,6 +22369,248 @@ export const clutch = $root.clutch = (() => {
             return envoy;
         })();
 
+        core.project = (function() {
+
+            /**
+             * Namespace project.
+             * @memberof clutch.core
+             * @namespace
+             */
+            const project = {};
+
+            project.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.core.project
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.Project = (function() {
+
+                    /**
+                     * Properties of a Project.
+                     * @memberof clutch.core.project.v1
+                     * @interface IProject
+                     * @property {string|null} [name] Project name
+                     * @property {string|null} [tier] Project tier
+                     * @property {Array.<string>|null} [owners] Project owners
+                     * @property {Array.<string>|null} [languages] Project languages
+                     * @property {Object.<string,google.protobuf.IValue>|null} [data] Project data
+                     */
+
+                    /**
+                     * Constructs a new Project.
+                     * @memberof clutch.core.project.v1
+                     * @classdesc Represents a Project.
+                     * @implements IProject
+                     * @constructor
+                     * @param {clutch.core.project.v1.IProject=} [properties] Properties to set
+                     */
+                    function Project(properties) {
+                        this.owners = [];
+                        this.languages = [];
+                        this.data = {};
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Project name.
+                     * @member {string} name
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     */
+                    Project.prototype.name = "";
+
+                    /**
+                     * Project tier.
+                     * @member {string} tier
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     */
+                    Project.prototype.tier = "";
+
+                    /**
+                     * Project owners.
+                     * @member {Array.<string>} owners
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     */
+                    Project.prototype.owners = $util.emptyArray;
+
+                    /**
+                     * Project languages.
+                     * @member {Array.<string>} languages
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     */
+                    Project.prototype.languages = $util.emptyArray;
+
+                    /**
+                     * Project data.
+                     * @member {Object.<string,google.protobuf.IValue>} data
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     */
+                    Project.prototype.data = $util.emptyObject;
+
+                    /**
+                     * Verifies a Project message.
+                     * @function verify
+                     * @memberof clutch.core.project.v1.Project
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Project.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.tier != null && message.hasOwnProperty("tier"))
+                            if (!$util.isString(message.tier))
+                                return "tier: string expected";
+                        if (message.owners != null && message.hasOwnProperty("owners")) {
+                            if (!Array.isArray(message.owners))
+                                return "owners: array expected";
+                            for (let i = 0; i < message.owners.length; ++i)
+                                if (!$util.isString(message.owners[i]))
+                                    return "owners: string[] expected";
+                        }
+                        if (message.languages != null && message.hasOwnProperty("languages")) {
+                            if (!Array.isArray(message.languages))
+                                return "languages: array expected";
+                            for (let i = 0; i < message.languages.length; ++i)
+                                if (!$util.isString(message.languages[i]))
+                                    return "languages: string[] expected";
+                        }
+                        if (message.data != null && message.hasOwnProperty("data")) {
+                            if (!$util.isObject(message.data))
+                                return "data: object expected";
+                            let key = Object.keys(message.data);
+                            for (let i = 0; i < key.length; ++i) {
+                                let error = $root.google.protobuf.Value.verify(message.data[key[i]]);
+                                if (error)
+                                    return "data." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Project message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.core.project.v1.Project
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.core.project.v1.Project} Project
+                     */
+                    Project.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.project.v1.Project)
+                            return object;
+                        let message = new $root.clutch.core.project.v1.Project();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.tier != null)
+                            message.tier = String(object.tier);
+                        if (object.owners) {
+                            if (!Array.isArray(object.owners))
+                                throw TypeError(".clutch.core.project.v1.Project.owners: array expected");
+                            message.owners = [];
+                            for (let i = 0; i < object.owners.length; ++i)
+                                message.owners[i] = String(object.owners[i]);
+                        }
+                        if (object.languages) {
+                            if (!Array.isArray(object.languages))
+                                throw TypeError(".clutch.core.project.v1.Project.languages: array expected");
+                            message.languages = [];
+                            for (let i = 0; i < object.languages.length; ++i)
+                                message.languages[i] = String(object.languages[i]);
+                        }
+                        if (object.data) {
+                            if (typeof object.data !== "object")
+                                throw TypeError(".clutch.core.project.v1.Project.data: object expected");
+                            message.data = {};
+                            for (let keys = Object.keys(object.data), i = 0; i < keys.length; ++i) {
+                                if (typeof object.data[keys[i]] !== "object")
+                                    throw TypeError(".clutch.core.project.v1.Project.data: object expected");
+                                message.data[keys[i]] = $root.google.protobuf.Value.fromObject(object.data[keys[i]]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Project message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.core.project.v1.Project
+                     * @static
+                     * @param {clutch.core.project.v1.Project} message Project
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Project.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults) {
+                            object.owners = [];
+                            object.languages = [];
+                        }
+                        if (options.objects || options.defaults)
+                            object.data = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.tier = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.tier != null && message.hasOwnProperty("tier"))
+                            object.tier = message.tier;
+                        if (message.owners && message.owners.length) {
+                            object.owners = [];
+                            for (let j = 0; j < message.owners.length; ++j)
+                                object.owners[j] = message.owners[j];
+                        }
+                        if (message.languages && message.languages.length) {
+                            object.languages = [];
+                            for (let j = 0; j < message.languages.length; ++j)
+                                object.languages[j] = message.languages[j];
+                        }
+                        let keys2;
+                        if (message.data && (keys2 = Object.keys(message.data)).length) {
+                            object.data = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.data[keys2[j]] = $root.google.protobuf.Value.toObject(message.data[keys2[j]], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Project to JSON.
+                     * @function toJSON
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Project.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Project;
+                })();
+
+                return v1;
+            })();
+
+            return project;
+        })();
+
         return core;
     })();
 
