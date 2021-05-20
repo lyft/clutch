@@ -34,7 +34,8 @@
     "react-dom": "^16.8.0",
     "react-hook-form": "^6.11.0",
     "react-router-dom": "^6.0.0-beta",
-    "yup": "^0.32.8"
+    "yup": "^0.32.8",
+    "react-timeago": "^5.2.0"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"

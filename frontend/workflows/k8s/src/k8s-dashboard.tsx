@@ -49,7 +49,6 @@ const Placeholder = () => (
 );
 
 const defaultRequestData = inputData => {
-  // passing an empty cluster name to enforce fanout to all clusters
   return {
     clientset: inputData.clientset,
     cluster: inputData.clientset,
@@ -58,7 +57,6 @@ const defaultRequestData = inputData => {
 };
 
 const KubeDashboard: React.FC<WorkflowProps> = () => {
-  const [hasInputData, setHasInputData] = React.useState(false);
   const [error, setError] = React.useState<ClutchError | undefined>(undefined);
 
   const dataLayout = {
@@ -89,22 +87,24 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
   };
   const dataLayoutManager = useDataLayoutManager(dataLayout);
 
-  const clearData = () => {
+  const handleSubmit = (namespace, clientset) => {
+    dataLayoutManager.assign("inputData", { namespace, clientset });
+    dataLayoutManager.hydrate("podListData");
     setError(undefined);
-    dataLayoutManager.reset();
-    const { inputData } = dataLayoutManager.state as any;
-    setHasInputData(inputData?.data?.namespace !== undefined);
   };
+
+  const state = dataLayoutManager.state as any;
+  const hasData = state.inputData?.data?.namespace;
 
   return (
     <DataLayoutContext.Provider value={dataLayoutManager}>
       <Container>
         <K8sDashHeader />
-        <K8sDashSearch onSubmit={() => clearData()} />
+        <K8sDashSearch onSubmit={(namespace, clientset) => handleSubmit(namespace, clientset)} />
         <Content>
           {error !== undefined ? (
             <Error subject={error} />
-          ) : !hasInputData ? (
+          ) : !hasData ? (
             <Placeholder />
           ) : (
             <Paper>

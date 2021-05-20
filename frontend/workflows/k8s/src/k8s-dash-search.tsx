@@ -1,6 +1,15 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Form, FormRow, IconButton, Paper, TextField } from "@clutch-sh/core";
+import {
+  client,
+  ClutchError,
+  Error,
+  Form,
+  FormRow,
+  IconButton,
+  Paper,
+  TextField,
+} from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,6 +25,10 @@ const schema = yup.object().shape({
   clientset: yup.string().required("Clientset is required"),
 });
 
+const Content = styled.div({
+  margin: "32px 0",
+});
+
 const K8sDashSearch = ({ onSubmit }) => {
   const { errors, handleSubmit, register } = useForm({
     mode: "onChange",
@@ -23,13 +36,32 @@ const K8sDashSearch = ({ onSubmit }) => {
     resolver: yupResolver(schema),
   });
   const inputData = useDataLayout("inputData");
-  const podListData = useDataLayout("podListData");
+  const [error, setError] = React.useState<ClutchError | undefined>(undefined);
 
   const submitHandler = v => {
-    inputData.updateData("namespace", v.namespace);
-    inputData.updateData("clientset", v.clientset);
-    podListData.hydrate();
-    onSubmit();
+    client
+      .post("/v1/k8s/describeNamespace", {
+        clientset: v.clientset,
+        cluster: v.clientset,
+        name: v.namespace,
+      })
+      .then(res => {
+        if (res?.data?.length <= 0) {
+          setError({
+            status: {
+              code: 404,
+              text: "Not Found",
+            },
+            message: `Could not find ${v?.namespace}`,
+          } as ClutchError);
+        } else {
+          setError(undefined);
+          onSubmit(v.namespace, v.clientset);
+        }
+      })
+      .catch((err: ClutchError) => {
+        setError(err);
+      });
   };
 
   return (
@@ -59,6 +91,7 @@ const K8sDashSearch = ({ onSubmit }) => {
           </FormRow>
         </Form>
       </Paper>
+      <Content>{error !== undefined ? <Error subject={error} /> : <></>}</Content>
     </Container>
   );
 };
