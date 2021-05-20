@@ -9320,6 +9320,86 @@ export namespace clutch {
                 }
             }
         }
+
+        /** Namespace project. */
+        namespace project {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a Project. */
+                interface IProject {
+
+                    /** Project name */
+                    name?: (string|null);
+
+                    /** Project tier */
+                    tier?: (string|null);
+
+                    /** Project owners */
+                    owners?: (string[]|null);
+
+                    /** Project languages */
+                    languages?: (string[]|null);
+
+                    /** Project data */
+                    data?: ({ [k: string]: google.protobuf.IValue }|null);
+                }
+
+                /** Represents a Project. */
+                class Project implements IProject {
+
+                    /**
+                     * Constructs a new Project.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IProject);
+
+                    /** Project name. */
+                    public name: string;
+
+                    /** Project tier. */
+                    public tier: string;
+
+                    /** Project owners. */
+                    public owners: string[];
+
+                    /** Project languages. */
+                    public languages: string[];
+
+                    /** Project data. */
+                    public data: { [k: string]: google.protobuf.IValue };
+
+                    /**
+                     * Verifies a Project message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Project message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Project
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Project;
+
+                    /**
+                     * Creates a plain object from a Project message. Also converts values to other types if specified.
+                     * @param message Project
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.Project, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Project to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
     }
 
     /** Namespace envoytriage. */
