@@ -38,7 +38,8 @@ require (
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
 	github.com/slack-go/slack v0.9.1
 	github.com/stretchr/testify v1.7.0
-	github.com/uber-go/tally v3.3.17+incompatible
+	github.com/twmb/murmur3 v1.1.5 // indirect
+	github.com/uber-go/tally v3.4.0+incompatible
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed
 	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c
