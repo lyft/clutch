@@ -29,8 +29,11 @@ type GetPassthroughRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Service string          `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
-	Path    string          `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// The name of a service that is configured
+	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
+	// The URI path to call
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// The request body
 	Request *structpb.Value `protobuf:"bytes,3,opt,name=request,proto3" json:"request,omitempty"`
 }
 
@@ -92,8 +95,10 @@ type GetPassthroughResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	HttpStatus int32           `protobuf:"varint,1,opt,name=http_status,json=httpStatus,proto3" json:"http_status,omitempty"`
-	Response   *structpb.Value `protobuf:"bytes,2,opt,name=response,proto3" json:"response,omitempty"`
+	// The http response code from the service response
+	HttpStatus int32 `protobuf:"varint,1,opt,name=http_status,json=httpStatus,proto3" json:"http_status,omitempty"`
+	// The full repsonse body
+	Response *structpb.Value `protobuf:"bytes,2,opt,name=response,proto3" json:"response,omitempty"`
 }
 
 func (x *GetPassthroughResponse) Reset() {

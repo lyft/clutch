@@ -73,8 +73,11 @@ type Service struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name    string            `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Host    string            `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
+	// An identifier to reference the service
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The host URL to communicate with
+	Host string `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
+	// Additional headers can be set such as auth
 	Headers map[string]string `protobuf:"bytes,3,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 

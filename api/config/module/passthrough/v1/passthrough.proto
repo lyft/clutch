@@ -11,7 +11,10 @@ message Config {
 }
 
 message Service {
+  // An identifier to reference the service
   string name = 1 [ (validate.rules).string.min_len = 1 ];
+  // The host URL to communicate with
   string host = 2 [ (validate.rules).string.min_len = 1 ];
+  // Additional headers can be set such as auth
   map<string, string> headers = 3;
 }
