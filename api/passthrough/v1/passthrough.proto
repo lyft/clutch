@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package clutch.passthrough.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/passthrough/v1;passthrough";
+
+import "api/v1/annotations.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service PassthroughAPI {
+  rpc GetPassthrough(GetPassthroughRequest) returns (GetPassthroughResponse) {
+    option (google.api.http)= {
+      post : "/v1/passthrough/get"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message GetPassthroughRequest {
+  string service = 1 [ (validate.rules).string.min_len = 1 ];
+  string path = 2 [ (validate.rules).string.min_len = 1 ];
+  google.protobuf.Value request = 3;
+}
+
+message GetPassthroughResponse {
+  int32 http_status = 1;
+  google.protobuf.Value response = 2;
+}

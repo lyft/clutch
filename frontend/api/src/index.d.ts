@@ -6870,6 +6870,122 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace passthrough. */
+            namespace passthrough {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config services */
+                        services?: (clutch.config.module.passthrough.v1.IService[]|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.passthrough.v1.IConfig);
+
+                        /** Config services. */
+                        public services: clutch.config.module.passthrough.v1.IService[];
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.passthrough.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.passthrough.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a Service. */
+                    interface IService {
+
+                        /** Service name */
+                        name?: (string|null);
+
+                        /** Service host */
+                        host?: (string|null);
+
+                        /** Service headers */
+                        headers?: ({ [k: string]: string }|null);
+                    }
+
+                    /** Represents a Service. */
+                    class Service implements IService {
+
+                        /**
+                         * Constructs a new Service.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.passthrough.v1.IService);
+
+                        /** Service name. */
+                        public name: string;
+
+                        /** Service host. */
+                        public host: string;
+
+                        /** Service headers. */
+                        public headers: { [k: string]: string };
+
+                        /**
+                         * Verifies a Service message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Service
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.passthrough.v1.Service;
+
+                        /**
+                         * Creates a plain object from a Service message. Also converts values to other types if specified.
+                         * @param message Service
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.passthrough.v1.Service, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Service to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace sourcecontrol. */
             namespace sourcecontrol {
 
@@ -16199,6 +16315,164 @@ export namespace clutch {
 
                 /**
                  * Converts this StatusCause to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
+    /** Namespace passthrough. */
+    namespace passthrough {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a PassthroughAPI */
+            class PassthroughAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new PassthroughAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetPassthrough.
+                 * @param request GetPassthroughRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetPassthroughResponse
+                 */
+                public getPassthrough(request: clutch.passthrough.v1.IGetPassthroughRequest, callback: clutch.passthrough.v1.PassthroughAPI.GetPassthroughCallback): void;
+
+                /**
+                 * Calls GetPassthrough.
+                 * @param request GetPassthroughRequest message or plain object
+                 * @returns Promise
+                 */
+                public getPassthrough(request: clutch.passthrough.v1.IGetPassthroughRequest): Promise<clutch.passthrough.v1.GetPassthroughResponse>;
+            }
+
+            namespace PassthroughAPI {
+
+                /**
+                 * Callback as used by {@link clutch.passthrough.v1.PassthroughAPI#getPassthrough}.
+                 * @param error Error, if any
+                 * @param [response] GetPassthroughResponse
+                 */
+                type GetPassthroughCallback = (error: (Error|null), response?: clutch.passthrough.v1.GetPassthroughResponse) => void;
+            }
+
+            /** Properties of a GetPassthroughRequest. */
+            interface IGetPassthroughRequest {
+
+                /** GetPassthroughRequest service */
+                service?: (string|null);
+
+                /** GetPassthroughRequest path */
+                path?: (string|null);
+
+                /** GetPassthroughRequest request */
+                request?: (google.protobuf.IValue|null);
+            }
+
+            /** Represents a GetPassthroughRequest. */
+            class GetPassthroughRequest implements IGetPassthroughRequest {
+
+                /**
+                 * Constructs a new GetPassthroughRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.passthrough.v1.IGetPassthroughRequest);
+
+                /** GetPassthroughRequest service. */
+                public service: string;
+
+                /** GetPassthroughRequest path. */
+                public path: string;
+
+                /** GetPassthroughRequest request. */
+                public request?: (google.protobuf.IValue|null);
+
+                /**
+                 * Verifies a GetPassthroughRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetPassthroughRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetPassthroughRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.passthrough.v1.GetPassthroughRequest;
+
+                /**
+                 * Creates a plain object from a GetPassthroughRequest message. Also converts values to other types if specified.
+                 * @param message GetPassthroughRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.passthrough.v1.GetPassthroughRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetPassthroughRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetPassthroughResponse. */
+            interface IGetPassthroughResponse {
+
+                /** GetPassthroughResponse httpStatus */
+                httpStatus?: (number|null);
+
+                /** GetPassthroughResponse response */
+                response?: (google.protobuf.IValue|null);
+            }
+
+            /** Represents a GetPassthroughResponse. */
+            class GetPassthroughResponse implements IGetPassthroughResponse {
+
+                /**
+                 * Constructs a new GetPassthroughResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.passthrough.v1.IGetPassthroughResponse);
+
+                /** GetPassthroughResponse httpStatus. */
+                public httpStatus: number;
+
+                /** GetPassthroughResponse response. */
+                public response?: (google.protobuf.IValue|null);
+
+                /**
+                 * Verifies a GetPassthroughResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetPassthroughResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetPassthroughResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.passthrough.v1.GetPassthroughResponse;
+
+                /**
+                 * Creates a plain object from a GetPassthroughResponse message. Also converts values to other types if specified.
+                 * @param message GetPassthroughResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.passthrough.v1.GetPassthroughResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetPassthroughResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

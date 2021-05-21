@@ -16233,6 +16233,299 @@ export const clutch = $root.clutch = (() => {
                 return chaos;
             })();
 
+            module.passthrough = (function() {
+
+                /**
+                 * Namespace passthrough.
+                 * @memberof clutch.config.module
+                 * @namespace
+                 */
+                const passthrough = {};
+
+                passthrough.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.module.passthrough
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.module.passthrough.v1
+                         * @interface IConfig
+                         * @property {Array.<clutch.config.module.passthrough.v1.IService>|null} [services] Config services
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.module.passthrough.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.module.passthrough.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            this.services = [];
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config services.
+                         * @member {Array.<clutch.config.module.passthrough.v1.IService>} services
+                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.services = $util.emptyArray;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.services != null && message.hasOwnProperty("services")) {
+                                if (!Array.isArray(message.services))
+                                    return "services: array expected";
+                                for (let i = 0; i < message.services.length; ++i) {
+                                    let error = $root.clutch.config.module.passthrough.v1.Service.verify(message.services[i]);
+                                    if (error)
+                                        return "services." + error;
+                                }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.passthrough.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.passthrough.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.module.passthrough.v1.Config();
+                            if (object.services) {
+                                if (!Array.isArray(object.services))
+                                    throw TypeError(".clutch.config.module.passthrough.v1.Config.services: array expected");
+                                message.services = [];
+                                for (let i = 0; i < object.services.length; ++i) {
+                                    if (typeof object.services[i] !== "object")
+                                        throw TypeError(".clutch.config.module.passthrough.v1.Config.services: object expected");
+                                    message.services[i] = $root.clutch.config.module.passthrough.v1.Service.fromObject(object.services[i]);
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @static
+                         * @param {clutch.config.module.passthrough.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.arrays || options.defaults)
+                                object.services = [];
+                            if (message.services && message.services.length) {
+                                object.services = [];
+                                for (let j = 0; j < message.services.length; ++j)
+                                    object.services[j] = $root.clutch.config.module.passthrough.v1.Service.toObject(message.services[j], options);
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    v1.Service = (function() {
+
+                        /**
+                         * Properties of a Service.
+                         * @memberof clutch.config.module.passthrough.v1
+                         * @interface IService
+                         * @property {string|null} [name] Service name
+                         * @property {string|null} [host] Service host
+                         * @property {Object.<string,string>|null} [headers] Service headers
+                         */
+
+                        /**
+                         * Constructs a new Service.
+                         * @memberof clutch.config.module.passthrough.v1
+                         * @classdesc Represents a Service.
+                         * @implements IService
+                         * @constructor
+                         * @param {clutch.config.module.passthrough.v1.IService=} [properties] Properties to set
+                         */
+                        function Service(properties) {
+                            this.headers = {};
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Service name.
+                         * @member {string} name
+                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @instance
+                         */
+                        Service.prototype.name = "";
+
+                        /**
+                         * Service host.
+                         * @member {string} host
+                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @instance
+                         */
+                        Service.prototype.host = "";
+
+                        /**
+                         * Service headers.
+                         * @member {Object.<string,string>} headers
+                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @instance
+                         */
+                        Service.prototype.headers = $util.emptyObject;
+
+                        /**
+                         * Verifies a Service message.
+                         * @function verify
+                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Service.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.name != null && message.hasOwnProperty("name"))
+                                if (!$util.isString(message.name))
+                                    return "name: string expected";
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                if (!$util.isString(message.host))
+                                    return "host: string expected";
+                            if (message.headers != null && message.hasOwnProperty("headers")) {
+                                if (!$util.isObject(message.headers))
+                                    return "headers: object expected";
+                                let key = Object.keys(message.headers);
+                                for (let i = 0; i < key.length; ++i)
+                                    if (!$util.isString(message.headers[key[i]]))
+                                        return "headers: string{k:string} expected";
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.passthrough.v1.Service} Service
+                         */
+                        Service.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.passthrough.v1.Service)
+                                return object;
+                            let message = new $root.clutch.config.module.passthrough.v1.Service();
+                            if (object.name != null)
+                                message.name = String(object.name);
+                            if (object.host != null)
+                                message.host = String(object.host);
+                            if (object.headers) {
+                                if (typeof object.headers !== "object")
+                                    throw TypeError(".clutch.config.module.passthrough.v1.Service.headers: object expected");
+                                message.headers = {};
+                                for (let keys = Object.keys(object.headers), i = 0; i < keys.length; ++i)
+                                    message.headers[keys[i]] = String(object.headers[keys[i]]);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Service message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @static
+                         * @param {clutch.config.module.passthrough.v1.Service} message Service
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Service.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.objects || options.defaults)
+                                object.headers = {};
+                            if (options.defaults) {
+                                object.name = "";
+                                object.host = "";
+                            }
+                            if (message.name != null && message.hasOwnProperty("name"))
+                                object.name = message.name;
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                object.host = message.host;
+                            let keys2;
+                            if (message.headers && (keys2 = Object.keys(message.headers)).length) {
+                                object.headers = {};
+                                for (let j = 0; j < keys2.length; ++j)
+                                    object.headers[keys2[j]] = message.headers[keys2[j]];
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Service to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Service.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Service;
+                    })();
+
+                    return v1;
+                })();
+
+                return passthrough;
+            })();
+
             module.sourcecontrol = (function() {
 
                 /**
@@ -38564,6 +38857,347 @@ export const clutch = $root.clutch = (() => {
         })();
 
         return k8s;
+    })();
+
+    clutch.passthrough = (function() {
+
+        /**
+         * Namespace passthrough.
+         * @memberof clutch
+         * @namespace
+         */
+        const passthrough = {};
+
+        passthrough.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.passthrough
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.PassthroughAPI = (function() {
+
+                /**
+                 * Constructs a new PassthroughAPI service.
+                 * @memberof clutch.passthrough.v1
+                 * @classdesc Represents a PassthroughAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function PassthroughAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (PassthroughAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = PassthroughAPI;
+
+                /**
+                 * Callback as used by {@link clutch.passthrough.v1.PassthroughAPI#getPassthrough}.
+                 * @memberof clutch.passthrough.v1.PassthroughAPI
+                 * @typedef GetPassthroughCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.passthrough.v1.GetPassthroughResponse} [response] GetPassthroughResponse
+                 */
+
+                /**
+                 * Calls GetPassthrough.
+                 * @function getPassthrough
+                 * @memberof clutch.passthrough.v1.PassthroughAPI
+                 * @instance
+                 * @param {clutch.passthrough.v1.IGetPassthroughRequest} request GetPassthroughRequest message or plain object
+                 * @param {clutch.passthrough.v1.PassthroughAPI.GetPassthroughCallback} callback Node-style callback called with the error, if any, and GetPassthroughResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(PassthroughAPI.prototype.getPassthrough = function getPassthrough(request, callback) {
+                    return this.rpcCall(getPassthrough, $root.clutch.passthrough.v1.GetPassthroughRequest, $root.clutch.passthrough.v1.GetPassthroughResponse, request, callback);
+                }, "name", { value: "GetPassthrough" });
+
+                /**
+                 * Calls GetPassthrough.
+                 * @function getPassthrough
+                 * @memberof clutch.passthrough.v1.PassthroughAPI
+                 * @instance
+                 * @param {clutch.passthrough.v1.IGetPassthroughRequest} request GetPassthroughRequest message or plain object
+                 * @returns {Promise<clutch.passthrough.v1.GetPassthroughResponse>} Promise
+                 * @variation 2
+                 */
+
+                return PassthroughAPI;
+            })();
+
+            v1.GetPassthroughRequest = (function() {
+
+                /**
+                 * Properties of a GetPassthroughRequest.
+                 * @memberof clutch.passthrough.v1
+                 * @interface IGetPassthroughRequest
+                 * @property {string|null} [service] GetPassthroughRequest service
+                 * @property {string|null} [path] GetPassthroughRequest path
+                 * @property {google.protobuf.IValue|null} [request] GetPassthroughRequest request
+                 */
+
+                /**
+                 * Constructs a new GetPassthroughRequest.
+                 * @memberof clutch.passthrough.v1
+                 * @classdesc Represents a GetPassthroughRequest.
+                 * @implements IGetPassthroughRequest
+                 * @constructor
+                 * @param {clutch.passthrough.v1.IGetPassthroughRequest=} [properties] Properties to set
+                 */
+                function GetPassthroughRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetPassthroughRequest service.
+                 * @member {string} service
+                 * @memberof clutch.passthrough.v1.GetPassthroughRequest
+                 * @instance
+                 */
+                GetPassthroughRequest.prototype.service = "";
+
+                /**
+                 * GetPassthroughRequest path.
+                 * @member {string} path
+                 * @memberof clutch.passthrough.v1.GetPassthroughRequest
+                 * @instance
+                 */
+                GetPassthroughRequest.prototype.path = "";
+
+                /**
+                 * GetPassthroughRequest request.
+                 * @member {google.protobuf.IValue|null|undefined} request
+                 * @memberof clutch.passthrough.v1.GetPassthroughRequest
+                 * @instance
+                 */
+                GetPassthroughRequest.prototype.request = null;
+
+                /**
+                 * Verifies a GetPassthroughRequest message.
+                 * @function verify
+                 * @memberof clutch.passthrough.v1.GetPassthroughRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetPassthroughRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.service != null && message.hasOwnProperty("service"))
+                        if (!$util.isString(message.service))
+                            return "service: string expected";
+                    if (message.path != null && message.hasOwnProperty("path"))
+                        if (!$util.isString(message.path))
+                            return "path: string expected";
+                    if (message.request != null && message.hasOwnProperty("request")) {
+                        let error = $root.google.protobuf.Value.verify(message.request);
+                        if (error)
+                            return "request." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetPassthroughRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.passthrough.v1.GetPassthroughRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.passthrough.v1.GetPassthroughRequest} GetPassthroughRequest
+                 */
+                GetPassthroughRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.passthrough.v1.GetPassthroughRequest)
+                        return object;
+                    let message = new $root.clutch.passthrough.v1.GetPassthroughRequest();
+                    if (object.service != null)
+                        message.service = String(object.service);
+                    if (object.path != null)
+                        message.path = String(object.path);
+                    if (object.request != null) {
+                        if (typeof object.request !== "object")
+                            throw TypeError(".clutch.passthrough.v1.GetPassthroughRequest.request: object expected");
+                        message.request = $root.google.protobuf.Value.fromObject(object.request);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetPassthroughRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.passthrough.v1.GetPassthroughRequest
+                 * @static
+                 * @param {clutch.passthrough.v1.GetPassthroughRequest} message GetPassthroughRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetPassthroughRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.service = "";
+                        object.path = "";
+                        object.request = null;
+                    }
+                    if (message.service != null && message.hasOwnProperty("service"))
+                        object.service = message.service;
+                    if (message.path != null && message.hasOwnProperty("path"))
+                        object.path = message.path;
+                    if (message.request != null && message.hasOwnProperty("request"))
+                        object.request = $root.google.protobuf.Value.toObject(message.request, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this GetPassthroughRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.passthrough.v1.GetPassthroughRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetPassthroughRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetPassthroughRequest;
+            })();
+
+            v1.GetPassthroughResponse = (function() {
+
+                /**
+                 * Properties of a GetPassthroughResponse.
+                 * @memberof clutch.passthrough.v1
+                 * @interface IGetPassthroughResponse
+                 * @property {number|null} [httpStatus] GetPassthroughResponse httpStatus
+                 * @property {google.protobuf.IValue|null} [response] GetPassthroughResponse response
+                 */
+
+                /**
+                 * Constructs a new GetPassthroughResponse.
+                 * @memberof clutch.passthrough.v1
+                 * @classdesc Represents a GetPassthroughResponse.
+                 * @implements IGetPassthroughResponse
+                 * @constructor
+                 * @param {clutch.passthrough.v1.IGetPassthroughResponse=} [properties] Properties to set
+                 */
+                function GetPassthroughResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetPassthroughResponse httpStatus.
+                 * @member {number} httpStatus
+                 * @memberof clutch.passthrough.v1.GetPassthroughResponse
+                 * @instance
+                 */
+                GetPassthroughResponse.prototype.httpStatus = 0;
+
+                /**
+                 * GetPassthroughResponse response.
+                 * @member {google.protobuf.IValue|null|undefined} response
+                 * @memberof clutch.passthrough.v1.GetPassthroughResponse
+                 * @instance
+                 */
+                GetPassthroughResponse.prototype.response = null;
+
+                /**
+                 * Verifies a GetPassthroughResponse message.
+                 * @function verify
+                 * @memberof clutch.passthrough.v1.GetPassthroughResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetPassthroughResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.httpStatus != null && message.hasOwnProperty("httpStatus"))
+                        if (!$util.isInteger(message.httpStatus))
+                            return "httpStatus: integer expected";
+                    if (message.response != null && message.hasOwnProperty("response")) {
+                        let error = $root.google.protobuf.Value.verify(message.response);
+                        if (error)
+                            return "response." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetPassthroughResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.passthrough.v1.GetPassthroughResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.passthrough.v1.GetPassthroughResponse} GetPassthroughResponse
+                 */
+                GetPassthroughResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.passthrough.v1.GetPassthroughResponse)
+                        return object;
+                    let message = new $root.clutch.passthrough.v1.GetPassthroughResponse();
+                    if (object.httpStatus != null)
+                        message.httpStatus = object.httpStatus | 0;
+                    if (object.response != null) {
+                        if (typeof object.response !== "object")
+                            throw TypeError(".clutch.passthrough.v1.GetPassthroughResponse.response: object expected");
+                        message.response = $root.google.protobuf.Value.fromObject(object.response);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetPassthroughResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.passthrough.v1.GetPassthroughResponse
+                 * @static
+                 * @param {clutch.passthrough.v1.GetPassthroughResponse} message GetPassthroughResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetPassthroughResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.httpStatus = 0;
+                        object.response = null;
+                    }
+                    if (message.httpStatus != null && message.hasOwnProperty("httpStatus"))
+                        object.httpStatus = message.httpStatus;
+                    if (message.response != null && message.hasOwnProperty("response"))
+                        object.response = $root.google.protobuf.Value.toObject(message.response, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this GetPassthroughResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.passthrough.v1.GetPassthroughResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetPassthroughResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetPassthroughResponse;
+            })();
+
+            return v1;
+        })();
+
+        return passthrough;
     })();
 
     clutch.resolver = (function() {

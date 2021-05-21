@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package clutch.config.module.passthrough.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/module/passthrough/v1;passthroughv1";
+
+import "validate/validate.proto";
+
+message Config {
+  repeated Service services = 1;
+}
+
+message Service {
+  string name = 1 [ (validate.rules).string.min_len = 1 ];
+  string host = 2 [ (validate.rules).string.min_len = 1 ];
+  map<string, string> headers = 3;
+}
