@@ -24,3 +24,7 @@ func (MockIssuer) CreateToken(ctx context.Context, subject string, tokenType aut
 		Expiry:      time.Now().Add(*expiry),
 	}, nil
 }
+
+func (MockIssuer) RefreshToken(context.Context, *oauth2.Token) (*oauth2.Token, error) {
+	panic("not implemented")
+}

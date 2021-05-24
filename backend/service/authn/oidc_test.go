@@ -2,12 +2,16 @@ package authn
 
 import (
 	"context"
+	"crypto/rsa"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
+	"gopkg.in/square/go-jose.v2"
 
 	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
@@ -316,4 +320,66 @@ oidc:
 	c, err = p.Verify(context.Background(), token.AccessToken)
 	assert.Error(t, err)
 	assert.Nil(t, c)
+}
+
+func createIDToken(key *rsa.PrivateKey) string {
+	idToken := `{"iss":"http://foo.example.com","aud":"my_client_id","email":"user@example.com","exp":` + strconv.FormatInt(time.Now().Add(time.Hour).Unix(), 10) + `}`
+
+	jwk := &jose.JSONWebKey{Key: key, Algorithm: "RS256"}
+	signer, err := jose.NewSigner(jose.SigningKey{Algorithm: "RS256", Key: jwk}, nil)
+	if err != nil {
+		panic(err)
+	}
+	jws, err := signer.Sign([]byte(idToken))
+	if err != nil {
+		panic(err)
+	}
+	data, err := jws.CompactSerialize()
+	if err != nil {
+		panic(err)
+	}
+
+	return data
+}
+
+func TestIssuerRefresh(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	defer mockprovider.Close()
+
+	mockStorage := authnmock.NewMockStorage()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+
+	p, err := NewOIDCProvider(ctx, cfg, mockStorage)
+	assert.NoError(t, err)
+
+	refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{Subject: email}).SignedString([]byte("this_is_my_secret"))
+	assert.NoError(t, err)
+
+	pt := &oauth2.Token{AccessToken: "AAAA", RefreshToken: refreshToken}
+	pt = pt.WithExtra(map[string]interface{}{"id_token": createIDToken(mockprovider.Key)})
+
+	assert.NoError(t, mockStorage.Store(ctx, email, clutchProvider, &oauth2.Token{AccessToken: "AAAA", RefreshToken: refreshToken}))
+	assert.NoError(t, mockStorage.Store(ctx, email, "foo.example.com", pt))
+
+	tok, err := p.(*OIDCProvider).RefreshToken(ctx, &oauth2.Token{
+		RefreshToken: refreshToken,
+	})
+	assert.NoError(t, err)
+	assert.NotNil(t, tok)
 }
