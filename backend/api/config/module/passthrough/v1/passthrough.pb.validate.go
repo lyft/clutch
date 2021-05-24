@@ -133,18 +133,26 @@ func (m *Service) Validate() error {
 		}
 	}
 
-	if len(m.GetAllowedPaths()) < 1 {
+	if len(m.GetAllowedRequests()) < 1 {
 		return ServiceValidationError{
-			field:  "AllowedPaths",
+			field:  "AllowedRequests",
 			reason: "value must contain at least 1 item(s)",
 		}
 	}
 
-	if len(m.GetAllowedMethods()) < 1 {
-		return ServiceValidationError{
-			field:  "AllowedMethods",
-			reason: "value must contain at least 1 item(s)",
+	for idx, item := range m.GetAllowedRequests() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ServiceValidationError{
+					field:  fmt.Sprintf("AllowedRequests[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
 		}
+
 	}
 
 	// no validation rules for Headers
@@ -205,3 +213,82 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ServiceValidationError{}
+
+// Validate checks the field values on AllowRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *AllowRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if utf8.RuneCountInString(m.GetPath()) < 1 {
+		return AllowRequestValidationError{
+			field:  "Path",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
+	if utf8.RuneCountInString(m.GetMethod()) < 1 {
+		return AllowRequestValidationError{
+			field:  "Method",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
+	return nil
+}
+
+// AllowRequestValidationError is the validation error returned by
+// AllowRequest.Validate if the designated constraints aren't met.
+type AllowRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AllowRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AllowRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AllowRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AllowRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AllowRequestValidationError) ErrorName() string { return "AllowRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AllowRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAllowRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AllowRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AllowRequestValidationError{}

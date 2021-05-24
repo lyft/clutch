@@ -6933,11 +6933,8 @@ export namespace clutch {
                         /** Service host */
                         host?: (string|null);
 
-                        /** Service allowedPaths */
-                        allowedPaths?: (string[]|null);
-
-                        /** Service allowedMethods */
-                        allowedMethods?: (string[]|null);
+                        /** Service allowedRequests */
+                        allowedRequests?: (clutch.config.module.passthrough.v1.IAllowRequest[]|null);
 
                         /** Service headers */
                         headers?: ({ [k: string]: string }|null);
@@ -6958,11 +6955,8 @@ export namespace clutch {
                         /** Service host. */
                         public host: string;
 
-                        /** Service allowedPaths. */
-                        public allowedPaths: string[];
-
-                        /** Service allowedMethods. */
-                        public allowedMethods: string[];
+                        /** Service allowedRequests. */
+                        public allowedRequests: clutch.config.module.passthrough.v1.IAllowRequest[];
 
                         /** Service headers. */
                         public headers: { [k: string]: string };
@@ -6991,6 +6985,60 @@ export namespace clutch {
 
                         /**
                          * Converts this Service to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of an AllowRequest. */
+                    interface IAllowRequest {
+
+                        /** AllowRequest path */
+                        path?: (string|null);
+
+                        /** AllowRequest method */
+                        method?: (string|null);
+                    }
+
+                    /** Represents an AllowRequest. */
+                    class AllowRequest implements IAllowRequest {
+
+                        /**
+                         * Constructs a new AllowRequest.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.passthrough.v1.IAllowRequest);
+
+                        /** AllowRequest path. */
+                        public path: string;
+
+                        /** AllowRequest method. */
+                        public method: string;
+
+                        /**
+                         * Verifies an AllowRequest message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates an AllowRequest message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns AllowRequest
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.passthrough.v1.AllowRequest;
+
+                        /**
+                         * Creates a plain object from an AllowRequest message. Also converts values to other types if specified.
+                         * @param message AllowRequest
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.passthrough.v1.AllowRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this AllowRequest to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };

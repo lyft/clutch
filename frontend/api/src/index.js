@@ -16377,8 +16377,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface IService
                          * @property {string|null} [name] Service name
                          * @property {string|null} [host] Service host
-                         * @property {Array.<string>|null} [allowedPaths] Service allowedPaths
-                         * @property {Array.<string>|null} [allowedMethods] Service allowedMethods
+                         * @property {Array.<clutch.config.module.passthrough.v1.IAllowRequest>|null} [allowedRequests] Service allowedRequests
                          * @property {Object.<string,string>|null} [headers] Service headers
                          */
 
@@ -16391,8 +16390,7 @@ export const clutch = $root.clutch = (() => {
                          * @param {clutch.config.module.passthrough.v1.IService=} [properties] Properties to set
                          */
                         function Service(properties) {
-                            this.allowedPaths = [];
-                            this.allowedMethods = [];
+                            this.allowedRequests = [];
                             this.headers = {};
                             if (properties)
                                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -16417,20 +16415,12 @@ export const clutch = $root.clutch = (() => {
                         Service.prototype.host = "";
 
                         /**
-                         * Service allowedPaths.
-                         * @member {Array.<string>} allowedPaths
+                         * Service allowedRequests.
+                         * @member {Array.<clutch.config.module.passthrough.v1.IAllowRequest>} allowedRequests
                          * @memberof clutch.config.module.passthrough.v1.Service
                          * @instance
                          */
-                        Service.prototype.allowedPaths = $util.emptyArray;
-
-                        /**
-                         * Service allowedMethods.
-                         * @member {Array.<string>} allowedMethods
-                         * @memberof clutch.config.module.passthrough.v1.Service
-                         * @instance
-                         */
-                        Service.prototype.allowedMethods = $util.emptyArray;
+                        Service.prototype.allowedRequests = $util.emptyArray;
 
                         /**
                          * Service headers.
@@ -16457,19 +16447,14 @@ export const clutch = $root.clutch = (() => {
                             if (message.host != null && message.hasOwnProperty("host"))
                                 if (!$util.isString(message.host))
                                     return "host: string expected";
-                            if (message.allowedPaths != null && message.hasOwnProperty("allowedPaths")) {
-                                if (!Array.isArray(message.allowedPaths))
-                                    return "allowedPaths: array expected";
-                                for (let i = 0; i < message.allowedPaths.length; ++i)
-                                    if (!$util.isString(message.allowedPaths[i]))
-                                        return "allowedPaths: string[] expected";
-                            }
-                            if (message.allowedMethods != null && message.hasOwnProperty("allowedMethods")) {
-                                if (!Array.isArray(message.allowedMethods))
-                                    return "allowedMethods: array expected";
-                                for (let i = 0; i < message.allowedMethods.length; ++i)
-                                    if (!$util.isString(message.allowedMethods[i]))
-                                        return "allowedMethods: string[] expected";
+                            if (message.allowedRequests != null && message.hasOwnProperty("allowedRequests")) {
+                                if (!Array.isArray(message.allowedRequests))
+                                    return "allowedRequests: array expected";
+                                for (let i = 0; i < message.allowedRequests.length; ++i) {
+                                    let error = $root.clutch.config.module.passthrough.v1.AllowRequest.verify(message.allowedRequests[i]);
+                                    if (error)
+                                        return "allowedRequests." + error;
+                                }
                             }
                             if (message.headers != null && message.hasOwnProperty("headers")) {
                                 if (!$util.isObject(message.headers))
@@ -16498,19 +16483,15 @@ export const clutch = $root.clutch = (() => {
                                 message.name = String(object.name);
                             if (object.host != null)
                                 message.host = String(object.host);
-                            if (object.allowedPaths) {
-                                if (!Array.isArray(object.allowedPaths))
-                                    throw TypeError(".clutch.config.module.passthrough.v1.Service.allowedPaths: array expected");
-                                message.allowedPaths = [];
-                                for (let i = 0; i < object.allowedPaths.length; ++i)
-                                    message.allowedPaths[i] = String(object.allowedPaths[i]);
-                            }
-                            if (object.allowedMethods) {
-                                if (!Array.isArray(object.allowedMethods))
-                                    throw TypeError(".clutch.config.module.passthrough.v1.Service.allowedMethods: array expected");
-                                message.allowedMethods = [];
-                                for (let i = 0; i < object.allowedMethods.length; ++i)
-                                    message.allowedMethods[i] = String(object.allowedMethods[i]);
+                            if (object.allowedRequests) {
+                                if (!Array.isArray(object.allowedRequests))
+                                    throw TypeError(".clutch.config.module.passthrough.v1.Service.allowedRequests: array expected");
+                                message.allowedRequests = [];
+                                for (let i = 0; i < object.allowedRequests.length; ++i) {
+                                    if (typeof object.allowedRequests[i] !== "object")
+                                        throw TypeError(".clutch.config.module.passthrough.v1.Service.allowedRequests: object expected");
+                                    message.allowedRequests[i] = $root.clutch.config.module.passthrough.v1.AllowRequest.fromObject(object.allowedRequests[i]);
+                                }
                             }
                             if (object.headers) {
                                 if (typeof object.headers !== "object")
@@ -16535,10 +16516,8 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.arrays || options.defaults) {
-                                object.allowedPaths = [];
-                                object.allowedMethods = [];
-                            }
+                            if (options.arrays || options.defaults)
+                                object.allowedRequests = [];
                             if (options.objects || options.defaults)
                                 object.headers = {};
                             if (options.defaults) {
@@ -16549,15 +16528,10 @@ export const clutch = $root.clutch = (() => {
                                 object.name = message.name;
                             if (message.host != null && message.hasOwnProperty("host"))
                                 object.host = message.host;
-                            if (message.allowedPaths && message.allowedPaths.length) {
-                                object.allowedPaths = [];
-                                for (let j = 0; j < message.allowedPaths.length; ++j)
-                                    object.allowedPaths[j] = message.allowedPaths[j];
-                            }
-                            if (message.allowedMethods && message.allowedMethods.length) {
-                                object.allowedMethods = [];
-                                for (let j = 0; j < message.allowedMethods.length; ++j)
-                                    object.allowedMethods[j] = message.allowedMethods[j];
+                            if (message.allowedRequests && message.allowedRequests.length) {
+                                object.allowedRequests = [];
+                                for (let j = 0; j < message.allowedRequests.length; ++j)
+                                    object.allowedRequests[j] = $root.clutch.config.module.passthrough.v1.AllowRequest.toObject(message.allowedRequests[j], options);
                             }
                             let keys2;
                             if (message.headers && (keys2 = Object.keys(message.headers)).length) {
@@ -16580,6 +16554,124 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         return Service;
+                    })();
+
+                    v1.AllowRequest = (function() {
+
+                        /**
+                         * Properties of an AllowRequest.
+                         * @memberof clutch.config.module.passthrough.v1
+                         * @interface IAllowRequest
+                         * @property {string|null} [path] AllowRequest path
+                         * @property {string|null} [method] AllowRequest method
+                         */
+
+                        /**
+                         * Constructs a new AllowRequest.
+                         * @memberof clutch.config.module.passthrough.v1
+                         * @classdesc Represents an AllowRequest.
+                         * @implements IAllowRequest
+                         * @constructor
+                         * @param {clutch.config.module.passthrough.v1.IAllowRequest=} [properties] Properties to set
+                         */
+                        function AllowRequest(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * AllowRequest path.
+                         * @member {string} path
+                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @instance
+                         */
+                        AllowRequest.prototype.path = "";
+
+                        /**
+                         * AllowRequest method.
+                         * @member {string} method
+                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @instance
+                         */
+                        AllowRequest.prototype.method = "";
+
+                        /**
+                         * Verifies an AllowRequest message.
+                         * @function verify
+                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        AllowRequest.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.path != null && message.hasOwnProperty("path"))
+                                if (!$util.isString(message.path))
+                                    return "path: string expected";
+                            if (message.method != null && message.hasOwnProperty("method"))
+                                if (!$util.isString(message.method))
+                                    return "method: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates an AllowRequest message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.passthrough.v1.AllowRequest} AllowRequest
+                         */
+                        AllowRequest.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.passthrough.v1.AllowRequest)
+                                return object;
+                            let message = new $root.clutch.config.module.passthrough.v1.AllowRequest();
+                            if (object.path != null)
+                                message.path = String(object.path);
+                            if (object.method != null)
+                                message.method = String(object.method);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from an AllowRequest message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @static
+                         * @param {clutch.config.module.passthrough.v1.AllowRequest} message AllowRequest
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        AllowRequest.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.path = "";
+                                object.method = "";
+                            }
+                            if (message.path != null && message.hasOwnProperty("path"))
+                                object.path = message.path;
+                            if (message.method != null && message.hasOwnProperty("method"))
+                                object.method = message.method;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this AllowRequest to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        AllowRequest.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return AllowRequest;
                     })();
 
                     return v1;
