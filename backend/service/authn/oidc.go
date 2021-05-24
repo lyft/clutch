@@ -174,17 +174,12 @@ func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenTyp
 
 // Refresh the issuer token. If the provider token is not valid, refresh it. If any error occurs continue auth code flow.
 func (p *OIDCProvider) RefreshToken(ctx context.Context, t *oauth2.Token) (*oauth2.Token, error) {
-	// Extract claims from refresh token.
+	// Extract claims from refresh token. They are also validated by the parser (i.e. to check for expiry).
 	claims := &jwt.StandardClaims{}
 	_, err := jwt.ParseWithClaims(t.RefreshToken, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(p.sessionSecret), nil
 	})
 	if err != nil {
-		return nil, err
-	}
-
-	// Ensure refresh token is not expired.
-	if err := claims.Valid(); err != nil {
 		return nil, err
 	}
 

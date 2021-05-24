@@ -3,6 +3,7 @@ package authn
 import (
 	"context"
 	"crypto/rsa"
+	"fmt"
 	"strconv"
 	"strings"
 	"testing"
@@ -358,28 +359,75 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
-	defer mockprovider.Close()
+	testcases := []struct {
+		claims                  jwt.StandardClaims
+		invalidateProviderToken bool
+		storedTokenDontMatch    bool
+		expectError             string
+	}{
+		{
+			claims: jwt.StandardClaims{Subject: email},
+		},
+		{
+			claims:                  jwt.StandardClaims{Subject: email},
+			invalidateProviderToken: true,
+		},
+		{
+			claims:      jwt.StandardClaims{Subject: email, ExpiresAt: time.Now().Add(-1 * time.Hour).Unix()},
+			expectError: "token is expired",
+		},
+		{
+			claims:               jwt.StandardClaims{Subject: email},
+			storedTokenDontMatch: true,
+			expectError:          "did not match",
+		},
+	}
 
-	mockStorage := authnmock.NewMockStorage()
+	for idx, tc := range testcases {
+		tc := tc
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			mockprovider := authnmock.NewMockOIDCProviderServer(email)
+			defer mockprovider.Close()
+			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
 
-	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+			mockStorage := authnmock.NewMockStorage()
+			p, err := NewOIDCProvider(ctx, cfg, mockStorage)
+			assert.NoError(t, err)
 
-	p, err := NewOIDCProvider(ctx, cfg, mockStorage)
-	assert.NoError(t, err)
+			refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, tc.claims).SignedString([]byte("this_is_my_secret"))
+			assert.NoError(t, err)
 
-	refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{Subject: email}).SignedString([]byte("this_is_my_secret"))
-	assert.NoError(t, err)
+			providerToken := &oauth2.Token{AccessToken: "AAAA", RefreshToken: refreshToken}
+			providerToken = providerToken.WithExtra(map[string]interface{}{"id_token": createIDToken(mockprovider.Key)})
 
-	pt := &oauth2.Token{AccessToken: "AAAA", RefreshToken: refreshToken}
-	pt = pt.WithExtra(map[string]interface{}{"id_token": createIDToken(mockprovider.Key)})
+			if tc.invalidateProviderToken {
+				providerToken.Expiry = time.Now().Add(-1 * time.Hour)
+			}
 
-	assert.NoError(t, mockStorage.Store(ctx, email, clutchProvider, &oauth2.Token{AccessToken: "AAAA", RefreshToken: refreshToken}))
-	assert.NoError(t, mockStorage.Store(ctx, email, "foo.example.com", pt))
+			if tc.storedTokenDontMatch {
+				assert.NoError(t, mockStorage.Store(ctx, email, clutchProvider, &oauth2.Token{AccessToken: "AAAA", RefreshToken: refreshToken + "BADTOKEN"}))
+			} else {
+				assert.NoError(t, mockStorage.Store(ctx, email, clutchProvider, &oauth2.Token{AccessToken: "AAAA", RefreshToken: refreshToken}))
+			}
+			assert.NoError(t, mockStorage.Store(ctx, email, "foo.example.com", providerToken))
 
-	tok, err := p.(*OIDCProvider).RefreshToken(ctx, &oauth2.Token{
-		RefreshToken: refreshToken,
-	})
-	assert.NoError(t, err)
-	assert.NotNil(t, tok)
+			tok, err := p.(*OIDCProvider).RefreshToken(ctx, &oauth2.Token{
+				RefreshToken: refreshToken,
+			})
+
+			if tc.expectError != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tc.expectError)
+			} else {
+				assert.NoError(t, err)
+				assert.NotNil(t, tok)
+			}
+
+			if tc.invalidateProviderToken {
+				assert.Equal(t, 1, mockprovider.TokenCount)
+			} else {
+				assert.Equal(t, 0, mockprovider.TokenCount)
+			}
+		})
+	}
 }

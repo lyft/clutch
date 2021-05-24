@@ -43,6 +43,8 @@ type MockOIDCProviderServer struct {
 	client *http.Client
 
 	email string
+
+	TokenCount int
 }
 
 type testIdTokenClaims struct {
@@ -64,6 +66,7 @@ func (m *MockOIDCProviderServer) handle(w http.ResponseWriter, r *http.Request) 
 	case "/.well-known/openid-configuration":
 		fmt.Fprintln(w, openIDConfiguration)
 	case "/oauth2/v1/token":
+		m.TokenCount += 1
 		claims := &testIdTokenClaims{
 			StandardClaims: &jwt.StandardClaims{
 				Issuer:    "http://foo.example.com",
