@@ -1,0 +1,11 @@
+{
+  "protoc": {
+    "path": "../build/bin/protoc-v3.14.0",
+    "options": [
+      "--proto_path=../build/bin/protoc-v3.14.0-include",
+      "--proto_path=.",
+      "--proto_path=../build/bin/googleapis-d4cd8d96ed6eb5dd7c997aab68a1d6bb0825090c",
+      "--proto_path=${env.GOPATH}/pkg/mod/github.com/envoyproxy/protoc-gen-validate@v0.6.1"
+    ]
+  }
+}
