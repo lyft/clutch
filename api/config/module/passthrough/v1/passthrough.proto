@@ -16,9 +16,9 @@ message Service {
   // The host URL to communicate with
   string host = 2 [ (validate.rules).string.min_len = 1 ];
   // Paths that are allowed to be invoked
-  repeated string allowed_paths = 3 [ (validate.rules).repeated.min_items = 1 ];
+  repeated string allowed_paths = 3 [ (validate.rules).repeated = {min_items : 1} ];
   // HTTP methods that are allowed to be invoked
-  repeated string allowed_methods = 4 [ (validate.rules).repeated.min_items = 1 ];
+  repeated string allowed_methods = 4 [ (validate.rules).repeated = {min_items : 1} ];
   // Additional headers can be set such as auth
   map<string, string> headers = 5;
 }
