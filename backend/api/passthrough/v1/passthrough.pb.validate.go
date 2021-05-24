@@ -33,23 +33,30 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on GetPassthroughRequest with the rules
+// Validate checks the field values on RequestPassthroughRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *GetPassthroughRequest) Validate() error {
+func (m *RequestPassthroughRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if utf8.RuneCountInString(m.GetService()) < 1 {
-		return GetPassthroughRequestValidationError{
+		return RequestPassthroughRequestValidationError{
 			field:  "Service",
 			reason: "value length must be at least 1 runes",
 		}
 	}
 
+	if utf8.RuneCountInString(m.GetHttpMethod()) < 1 {
+		return RequestPassthroughRequestValidationError{
+			field:  "HttpMethod",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
 	if utf8.RuneCountInString(m.GetPath()) < 1 {
-		return GetPassthroughRequestValidationError{
+		return RequestPassthroughRequestValidationError{
 			field:  "Path",
 			reason: "value length must be at least 1 runes",
 		}
@@ -57,7 +64,7 @@ func (m *GetPassthroughRequest) Validate() error {
 
 	if v, ok := interface{}(m.GetRequest()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetPassthroughRequestValidationError{
+			return RequestPassthroughRequestValidationError{
 				field:  "Request",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -68,9 +75,9 @@ func (m *GetPassthroughRequest) Validate() error {
 	return nil
 }
 
-// GetPassthroughRequestValidationError is the validation error returned by
-// GetPassthroughRequest.Validate if the designated constraints aren't met.
-type GetPassthroughRequestValidationError struct {
+// RequestPassthroughRequestValidationError is the validation error returned by
+// RequestPassthroughRequest.Validate if the designated constraints aren't met.
+type RequestPassthroughRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -78,24 +85,24 @@ type GetPassthroughRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetPassthroughRequestValidationError) Field() string { return e.field }
+func (e RequestPassthroughRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetPassthroughRequestValidationError) Reason() string { return e.reason }
+func (e RequestPassthroughRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetPassthroughRequestValidationError) Cause() error { return e.cause }
+func (e RequestPassthroughRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetPassthroughRequestValidationError) Key() bool { return e.key }
+func (e RequestPassthroughRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetPassthroughRequestValidationError) ErrorName() string {
-	return "GetPassthroughRequestValidationError"
+func (e RequestPassthroughRequestValidationError) ErrorName() string {
+	return "RequestPassthroughRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetPassthroughRequestValidationError) Error() string {
+func (e RequestPassthroughRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -107,14 +114,14 @@ func (e GetPassthroughRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetPassthroughRequest.%s: %s%s",
+		"invalid %sRequestPassthroughRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetPassthroughRequestValidationError{}
+var _ error = RequestPassthroughRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -122,12 +129,12 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetPassthroughRequestValidationError{}
+} = RequestPassthroughRequestValidationError{}
 
-// Validate checks the field values on GetPassthroughResponse with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on RequestPassthroughResponse with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *GetPassthroughResponse) Validate() error {
+func (m *RequestPassthroughResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -136,7 +143,7 @@ func (m *GetPassthroughResponse) Validate() error {
 
 	if v, ok := interface{}(m.GetResponse()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetPassthroughResponseValidationError{
+			return RequestPassthroughResponseValidationError{
 				field:  "Response",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -147,9 +154,9 @@ func (m *GetPassthroughResponse) Validate() error {
 	return nil
 }
 
-// GetPassthroughResponseValidationError is the validation error returned by
-// GetPassthroughResponse.Validate if the designated constraints aren't met.
-type GetPassthroughResponseValidationError struct {
+// RequestPassthroughResponseValidationError is the validation error returned
+// by RequestPassthroughResponse.Validate if the designated constraints aren't met.
+type RequestPassthroughResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -157,24 +164,24 @@ type GetPassthroughResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetPassthroughResponseValidationError) Field() string { return e.field }
+func (e RequestPassthroughResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetPassthroughResponseValidationError) Reason() string { return e.reason }
+func (e RequestPassthroughResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetPassthroughResponseValidationError) Cause() error { return e.cause }
+func (e RequestPassthroughResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetPassthroughResponseValidationError) Key() bool { return e.key }
+func (e RequestPassthroughResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetPassthroughResponseValidationError) ErrorName() string {
-	return "GetPassthroughResponseValidationError"
+func (e RequestPassthroughResponseValidationError) ErrorName() string {
+	return "RequestPassthroughResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetPassthroughResponseValidationError) Error() string {
+func (e RequestPassthroughResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -186,14 +193,14 @@ func (e GetPassthroughResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetPassthroughResponse.%s: %s%s",
+		"invalid %sRequestPassthroughResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetPassthroughResponseValidationError{}
+var _ error = RequestPassthroughResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -201,4 +208,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetPassthroughResponseValidationError{}
+} = RequestPassthroughResponseValidationError{}

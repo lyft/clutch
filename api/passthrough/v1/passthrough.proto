@@ -12,25 +12,27 @@ import "validate/validate.proto";
 // The PassthroughAPI enabling calling external API's without minimal setup.
 // The services must be configured before calling external API's.
 service PassthroughAPI {
-  rpc GetPassthrough(GetPassthroughRequest) returns (GetPassthroughResponse) {
+  rpc RequestPassthrough(RequestPassthroughRequest) returns (RequestPassthroughResponse) {
     option (google.api.http) = {
-      post : "/v1/passthrough/get"
+      post : "/v1/passthrough/request"
       body : "*"
     };
-    option (clutch.api.v1.action).type = READ;
+    option (clutch.api.v1.action).type = CREATE;
   }
 }
 
-message GetPassthroughRequest {
+message RequestPassthroughRequest {
   // The name of a service that is configured
   string service = 1 [ (validate.rules).string.min_len = 1 ];
+  // The HTTP method that will be used for the request
+  string http_method = 2 [ (validate.rules).string.min_len = 1 ];
   // The URI path to call
-  string path = 2 [ (validate.rules).string.min_len = 1 ];
+  string path = 3 [ (validate.rules).string.min_len = 1 ];
   // The request body
-  google.protobuf.Value request = 3;
+  google.protobuf.Value request = 4;
 }
 
-message GetPassthroughResponse {
+message RequestPassthroughResponse {
   // The http response code from the service response
   int32 http_status = 1;
   // The full repsonse body

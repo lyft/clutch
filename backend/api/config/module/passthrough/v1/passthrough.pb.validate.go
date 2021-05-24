@@ -133,6 +133,20 @@ func (m *Service) Validate() error {
 		}
 	}
 
+	if len(m.GetAllowedPaths()) < 1 {
+		return ServiceValidationError{
+			field:  "AllowedPaths",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	if len(m.GetAllowedMethods()) < 1 {
+		return ServiceValidationError{
+			field:  "AllowedMethods",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
 	// no validation rules for Headers
 
 	return nil

@@ -6933,6 +6933,12 @@ export namespace clutch {
                         /** Service host */
                         host?: (string|null);
 
+                        /** Service allowedPaths */
+                        allowedPaths?: (string[]|null);
+
+                        /** Service allowedMethods */
+                        allowedMethods?: (string[]|null);
+
                         /** Service headers */
                         headers?: ({ [k: string]: string }|null);
                     }
@@ -6951,6 +6957,12 @@ export namespace clutch {
 
                         /** Service host. */
                         public host: string;
+
+                        /** Service allowedPaths. */
+                        public allowedPaths: string[];
+
+                        /** Service allowedMethods. */
+                        public allowedMethods: string[];
 
                         /** Service headers. */
                         public headers: { [k: string]: string };
@@ -16340,139 +16352,145 @@ export namespace clutch {
                 constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
 
                 /**
-                 * Calls GetPassthrough.
-                 * @param request GetPassthroughRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and GetPassthroughResponse
+                 * Calls RequestPassthrough.
+                 * @param request RequestPassthroughRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and RequestPassthroughResponse
                  */
-                public getPassthrough(request: clutch.passthrough.v1.IGetPassthroughRequest, callback: clutch.passthrough.v1.PassthroughAPI.GetPassthroughCallback): void;
+                public requestPassthrough(request: clutch.passthrough.v1.IRequestPassthroughRequest, callback: clutch.passthrough.v1.PassthroughAPI.RequestPassthroughCallback): void;
 
                 /**
-                 * Calls GetPassthrough.
-                 * @param request GetPassthroughRequest message or plain object
+                 * Calls RequestPassthrough.
+                 * @param request RequestPassthroughRequest message or plain object
                  * @returns Promise
                  */
-                public getPassthrough(request: clutch.passthrough.v1.IGetPassthroughRequest): Promise<clutch.passthrough.v1.GetPassthroughResponse>;
+                public requestPassthrough(request: clutch.passthrough.v1.IRequestPassthroughRequest): Promise<clutch.passthrough.v1.RequestPassthroughResponse>;
             }
 
             namespace PassthroughAPI {
 
                 /**
-                 * Callback as used by {@link clutch.passthrough.v1.PassthroughAPI#getPassthrough}.
+                 * Callback as used by {@link clutch.passthrough.v1.PassthroughAPI#requestPassthrough}.
                  * @param error Error, if any
-                 * @param [response] GetPassthroughResponse
+                 * @param [response] RequestPassthroughResponse
                  */
-                type GetPassthroughCallback = (error: (Error|null), response?: clutch.passthrough.v1.GetPassthroughResponse) => void;
+                type RequestPassthroughCallback = (error: (Error|null), response?: clutch.passthrough.v1.RequestPassthroughResponse) => void;
             }
 
-            /** Properties of a GetPassthroughRequest. */
-            interface IGetPassthroughRequest {
+            /** Properties of a RequestPassthroughRequest. */
+            interface IRequestPassthroughRequest {
 
-                /** GetPassthroughRequest service */
+                /** RequestPassthroughRequest service */
                 service?: (string|null);
 
-                /** GetPassthroughRequest path */
+                /** RequestPassthroughRequest httpMethod */
+                httpMethod?: (string|null);
+
+                /** RequestPassthroughRequest path */
                 path?: (string|null);
 
-                /** GetPassthroughRequest request */
+                /** RequestPassthroughRequest request */
                 request?: (google.protobuf.IValue|null);
             }
 
-            /** Represents a GetPassthroughRequest. */
-            class GetPassthroughRequest implements IGetPassthroughRequest {
+            /** Represents a RequestPassthroughRequest. */
+            class RequestPassthroughRequest implements IRequestPassthroughRequest {
 
                 /**
-                 * Constructs a new GetPassthroughRequest.
+                 * Constructs a new RequestPassthroughRequest.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.passthrough.v1.IGetPassthroughRequest);
+                constructor(properties?: clutch.passthrough.v1.IRequestPassthroughRequest);
 
-                /** GetPassthroughRequest service. */
+                /** RequestPassthroughRequest service. */
                 public service: string;
 
-                /** GetPassthroughRequest path. */
+                /** RequestPassthroughRequest httpMethod. */
+                public httpMethod: string;
+
+                /** RequestPassthroughRequest path. */
                 public path: string;
 
-                /** GetPassthroughRequest request. */
+                /** RequestPassthroughRequest request. */
                 public request?: (google.protobuf.IValue|null);
 
                 /**
-                 * Verifies a GetPassthroughRequest message.
+                 * Verifies a RequestPassthroughRequest message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a GetPassthroughRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a RequestPassthroughRequest message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns GetPassthroughRequest
+                 * @returns RequestPassthroughRequest
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.passthrough.v1.GetPassthroughRequest;
+                public static fromObject(object: { [k: string]: any }): clutch.passthrough.v1.RequestPassthroughRequest;
 
                 /**
-                 * Creates a plain object from a GetPassthroughRequest message. Also converts values to other types if specified.
-                 * @param message GetPassthroughRequest
+                 * Creates a plain object from a RequestPassthroughRequest message. Also converts values to other types if specified.
+                 * @param message RequestPassthroughRequest
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.passthrough.v1.GetPassthroughRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.passthrough.v1.RequestPassthroughRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this GetPassthroughRequest to JSON.
+                 * Converts this RequestPassthroughRequest to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a GetPassthroughResponse. */
-            interface IGetPassthroughResponse {
+            /** Properties of a RequestPassthroughResponse. */
+            interface IRequestPassthroughResponse {
 
-                /** GetPassthroughResponse httpStatus */
+                /** RequestPassthroughResponse httpStatus */
                 httpStatus?: (number|null);
 
-                /** GetPassthroughResponse response */
+                /** RequestPassthroughResponse response */
                 response?: (google.protobuf.IValue|null);
             }
 
-            /** Represents a GetPassthroughResponse. */
-            class GetPassthroughResponse implements IGetPassthroughResponse {
+            /** Represents a RequestPassthroughResponse. */
+            class RequestPassthroughResponse implements IRequestPassthroughResponse {
 
                 /**
-                 * Constructs a new GetPassthroughResponse.
+                 * Constructs a new RequestPassthroughResponse.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.passthrough.v1.IGetPassthroughResponse);
+                constructor(properties?: clutch.passthrough.v1.IRequestPassthroughResponse);
 
-                /** GetPassthroughResponse httpStatus. */
+                /** RequestPassthroughResponse httpStatus. */
                 public httpStatus: number;
 
-                /** GetPassthroughResponse response. */
+                /** RequestPassthroughResponse response. */
                 public response?: (google.protobuf.IValue|null);
 
                 /**
-                 * Verifies a GetPassthroughResponse message.
+                 * Verifies a RequestPassthroughResponse message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a GetPassthroughResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a RequestPassthroughResponse message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns GetPassthroughResponse
+                 * @returns RequestPassthroughResponse
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.passthrough.v1.GetPassthroughResponse;
+                public static fromObject(object: { [k: string]: any }): clutch.passthrough.v1.RequestPassthroughResponse;
 
                 /**
-                 * Creates a plain object from a GetPassthroughResponse message. Also converts values to other types if specified.
-                 * @param message GetPassthroughResponse
+                 * Creates a plain object from a RequestPassthroughResponse message. Also converts values to other types if specified.
+                 * @param message RequestPassthroughResponse
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.passthrough.v1.GetPassthroughResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.passthrough.v1.RequestPassthroughResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this GetPassthroughResponse to JSON.
+                 * Converts this RequestPassthroughResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

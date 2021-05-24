@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PassthroughAPIClient interface {
-	GetPassthrough(ctx context.Context, in *GetPassthroughRequest, opts ...grpc.CallOption) (*GetPassthroughResponse, error)
+	RequestPassthrough(ctx context.Context, in *RequestPassthroughRequest, opts ...grpc.CallOption) (*RequestPassthroughResponse, error)
 }
 
 type passthroughAPIClient struct {
@@ -29,9 +29,9 @@ func NewPassthroughAPIClient(cc grpc.ClientConnInterface) PassthroughAPIClient {
 	return &passthroughAPIClient{cc}
 }
 
-func (c *passthroughAPIClient) GetPassthrough(ctx context.Context, in *GetPassthroughRequest, opts ...grpc.CallOption) (*GetPassthroughResponse, error) {
-	out := new(GetPassthroughResponse)
-	err := c.cc.Invoke(ctx, "/clutch.passthrough.v1.PassthroughAPI/GetPassthrough", in, out, opts...)
+func (c *passthroughAPIClient) RequestPassthrough(ctx context.Context, in *RequestPassthroughRequest, opts ...grpc.CallOption) (*RequestPassthroughResponse, error) {
+	out := new(RequestPassthroughResponse)
+	err := c.cc.Invoke(ctx, "/clutch.passthrough.v1.PassthroughAPI/RequestPassthrough", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,15 +42,15 @@ func (c *passthroughAPIClient) GetPassthrough(ctx context.Context, in *GetPassth
 // All implementations should embed UnimplementedPassthroughAPIServer
 // for forward compatibility
 type PassthroughAPIServer interface {
-	GetPassthrough(context.Context, *GetPassthroughRequest) (*GetPassthroughResponse, error)
+	RequestPassthrough(context.Context, *RequestPassthroughRequest) (*RequestPassthroughResponse, error)
 }
 
 // UnimplementedPassthroughAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedPassthroughAPIServer struct {
 }
 
-func (UnimplementedPassthroughAPIServer) GetPassthrough(context.Context, *GetPassthroughRequest) (*GetPassthroughResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPassthrough not implemented")
+func (UnimplementedPassthroughAPIServer) RequestPassthrough(context.Context, *RequestPassthroughRequest) (*RequestPassthroughResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequestPassthrough not implemented")
 }
 
 // UnsafePassthroughAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -64,20 +64,20 @@ func RegisterPassthroughAPIServer(s grpc.ServiceRegistrar, srv PassthroughAPISer
 	s.RegisterService(&PassthroughAPI_ServiceDesc, srv)
 }
 
-func _PassthroughAPI_GetPassthrough_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPassthroughRequest)
+func _PassthroughAPI_RequestPassthrough_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RequestPassthroughRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassthroughAPIServer).GetPassthrough(ctx, in)
+		return srv.(PassthroughAPIServer).RequestPassthrough(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/clutch.passthrough.v1.PassthroughAPI/GetPassthrough",
+		FullMethod: "/clutch.passthrough.v1.PassthroughAPI/RequestPassthrough",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassthroughAPIServer).GetPassthrough(ctx, req.(*GetPassthroughRequest))
+		return srv.(PassthroughAPIServer).RequestPassthrough(ctx, req.(*RequestPassthroughRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -90,8 +90,8 @@ var PassthroughAPI_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PassthroughAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetPassthrough",
-			Handler:    _PassthroughAPI_GetPassthrough_Handler,
+			MethodName: "RequestPassthrough",
+			Handler:    _PassthroughAPI_RequestPassthrough_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
