@@ -16382,17 +16382,17 @@ export namespace clutch {
         }
     }
 
-    /** Namespace passthrough. */
-    namespace passthrough {
+    /** Namespace proxy. */
+    namespace proxy {
 
         /** Namespace v1. */
         namespace v1 {
 
-            /** Represents a PassthroughAPI */
-            class PassthroughAPI extends $protobuf.rpc.Service {
+            /** Represents a ProxyAPI */
+            class ProxyAPI extends $protobuf.rpc.Service {
 
                 /**
-                 * Constructs a new PassthroughAPI service.
+                 * Constructs a new ProxyAPI service.
                  * @param rpcImpl RPC implementation
                  * @param [requestDelimited=false] Whether requests are length-delimited
                  * @param [responseDelimited=false] Whether responses are length-delimited
@@ -16400,145 +16400,151 @@ export namespace clutch {
                 constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
 
                 /**
-                 * Calls RequestPassthrough.
-                 * @param request RequestPassthroughRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and RequestPassthroughResponse
+                 * Calls RequestProxy.
+                 * @param request RequestProxyRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and RequestProxyResponse
                  */
-                public requestPassthrough(request: clutch.passthrough.v1.IRequestPassthroughRequest, callback: clutch.passthrough.v1.PassthroughAPI.RequestPassthroughCallback): void;
+                public requestProxy(request: clutch.proxy.v1.IRequestProxyRequest, callback: clutch.proxy.v1.ProxyAPI.RequestProxyCallback): void;
 
                 /**
-                 * Calls RequestPassthrough.
-                 * @param request RequestPassthroughRequest message or plain object
+                 * Calls RequestProxy.
+                 * @param request RequestProxyRequest message or plain object
                  * @returns Promise
                  */
-                public requestPassthrough(request: clutch.passthrough.v1.IRequestPassthroughRequest): Promise<clutch.passthrough.v1.RequestPassthroughResponse>;
+                public requestProxy(request: clutch.proxy.v1.IRequestProxyRequest): Promise<clutch.proxy.v1.RequestProxyResponse>;
             }
 
-            namespace PassthroughAPI {
+            namespace ProxyAPI {
 
                 /**
-                 * Callback as used by {@link clutch.passthrough.v1.PassthroughAPI#requestPassthrough}.
+                 * Callback as used by {@link clutch.proxy.v1.ProxyAPI#requestProxy}.
                  * @param error Error, if any
-                 * @param [response] RequestPassthroughResponse
+                 * @param [response] RequestProxyResponse
                  */
-                type RequestPassthroughCallback = (error: (Error|null), response?: clutch.passthrough.v1.RequestPassthroughResponse) => void;
+                type RequestProxyCallback = (error: (Error|null), response?: clutch.proxy.v1.RequestProxyResponse) => void;
             }
 
-            /** Properties of a RequestPassthroughRequest. */
-            interface IRequestPassthroughRequest {
+            /** Properties of a RequestProxyRequest. */
+            interface IRequestProxyRequest {
 
-                /** RequestPassthroughRequest service */
+                /** RequestProxyRequest service */
                 service?: (string|null);
 
-                /** RequestPassthroughRequest httpMethod */
+                /** RequestProxyRequest httpMethod */
                 httpMethod?: (string|null);
 
-                /** RequestPassthroughRequest path */
+                /** RequestProxyRequest path */
                 path?: (string|null);
 
-                /** RequestPassthroughRequest request */
+                /** RequestProxyRequest request */
                 request?: (google.protobuf.IValue|null);
             }
 
-            /** Represents a RequestPassthroughRequest. */
-            class RequestPassthroughRequest implements IRequestPassthroughRequest {
+            /** Represents a RequestProxyRequest. */
+            class RequestProxyRequest implements IRequestProxyRequest {
 
                 /**
-                 * Constructs a new RequestPassthroughRequest.
+                 * Constructs a new RequestProxyRequest.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.passthrough.v1.IRequestPassthroughRequest);
+                constructor(properties?: clutch.proxy.v1.IRequestProxyRequest);
 
-                /** RequestPassthroughRequest service. */
+                /** RequestProxyRequest service. */
                 public service: string;
 
-                /** RequestPassthroughRequest httpMethod. */
+                /** RequestProxyRequest httpMethod. */
                 public httpMethod: string;
 
-                /** RequestPassthroughRequest path. */
+                /** RequestProxyRequest path. */
                 public path: string;
 
-                /** RequestPassthroughRequest request. */
+                /** RequestProxyRequest request. */
                 public request?: (google.protobuf.IValue|null);
 
                 /**
-                 * Verifies a RequestPassthroughRequest message.
+                 * Verifies a RequestProxyRequest message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a RequestPassthroughRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a RequestProxyRequest message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns RequestPassthroughRequest
+                 * @returns RequestProxyRequest
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.passthrough.v1.RequestPassthroughRequest;
+                public static fromObject(object: { [k: string]: any }): clutch.proxy.v1.RequestProxyRequest;
 
                 /**
-                 * Creates a plain object from a RequestPassthroughRequest message. Also converts values to other types if specified.
-                 * @param message RequestPassthroughRequest
+                 * Creates a plain object from a RequestProxyRequest message. Also converts values to other types if specified.
+                 * @param message RequestProxyRequest
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.passthrough.v1.RequestPassthroughRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.proxy.v1.RequestProxyRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this RequestPassthroughRequest to JSON.
+                 * Converts this RequestProxyRequest to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a RequestPassthroughResponse. */
-            interface IRequestPassthroughResponse {
+            /** Properties of a RequestProxyResponse. */
+            interface IRequestProxyResponse {
 
-                /** RequestPassthroughResponse httpStatus */
+                /** RequestProxyResponse httpStatus */
                 httpStatus?: (number|null);
 
-                /** RequestPassthroughResponse response */
+                /** RequestProxyResponse headers */
+                headers?: ({ [k: string]: string }|null);
+
+                /** RequestProxyResponse response */
                 response?: (google.protobuf.IValue|null);
             }
 
-            /** Represents a RequestPassthroughResponse. */
-            class RequestPassthroughResponse implements IRequestPassthroughResponse {
+            /** Represents a RequestProxyResponse. */
+            class RequestProxyResponse implements IRequestProxyResponse {
 
                 /**
-                 * Constructs a new RequestPassthroughResponse.
+                 * Constructs a new RequestProxyResponse.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.passthrough.v1.IRequestPassthroughResponse);
+                constructor(properties?: clutch.proxy.v1.IRequestProxyResponse);
 
-                /** RequestPassthroughResponse httpStatus. */
+                /** RequestProxyResponse httpStatus. */
                 public httpStatus: number;
 
-                /** RequestPassthroughResponse response. */
+                /** RequestProxyResponse headers. */
+                public headers: { [k: string]: string };
+
+                /** RequestProxyResponse response. */
                 public response?: (google.protobuf.IValue|null);
 
                 /**
-                 * Verifies a RequestPassthroughResponse message.
+                 * Verifies a RequestProxyResponse message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a RequestPassthroughResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a RequestProxyResponse message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns RequestPassthroughResponse
+                 * @returns RequestProxyResponse
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.passthrough.v1.RequestPassthroughResponse;
+                public static fromObject(object: { [k: string]: any }): clutch.proxy.v1.RequestProxyResponse;
 
                 /**
-                 * Creates a plain object from a RequestPassthroughResponse message. Also converts values to other types if specified.
-                 * @param message RequestPassthroughResponse
+                 * Creates a plain object from a RequestProxyResponse message. Also converts values to other types if specified.
+                 * @param message RequestProxyResponse
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.passthrough.v1.RequestPassthroughResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.proxy.v1.RequestProxyResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this RequestPassthroughResponse to JSON.
+                 * Converts this RequestProxyResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

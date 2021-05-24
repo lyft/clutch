@@ -39013,99 +39013,99 @@ export const clutch = $root.clutch = (() => {
         return k8s;
     })();
 
-    clutch.passthrough = (function() {
+    clutch.proxy = (function() {
 
         /**
-         * Namespace passthrough.
+         * Namespace proxy.
          * @memberof clutch
          * @namespace
          */
-        const passthrough = {};
+        const proxy = {};
 
-        passthrough.v1 = (function() {
+        proxy.v1 = (function() {
 
             /**
              * Namespace v1.
-             * @memberof clutch.passthrough
+             * @memberof clutch.proxy
              * @namespace
              */
             const v1 = {};
 
-            v1.PassthroughAPI = (function() {
+            v1.ProxyAPI = (function() {
 
                 /**
-                 * Constructs a new PassthroughAPI service.
-                 * @memberof clutch.passthrough.v1
-                 * @classdesc Represents a PassthroughAPI
+                 * Constructs a new ProxyAPI service.
+                 * @memberof clutch.proxy.v1
+                 * @classdesc Represents a ProxyAPI
                  * @extends $protobuf.rpc.Service
                  * @constructor
                  * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
                  * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
                  * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
                  */
-                function PassthroughAPI(rpcImpl, requestDelimited, responseDelimited) {
+                function ProxyAPI(rpcImpl, requestDelimited, responseDelimited) {
                     $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
                 }
 
-                (PassthroughAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = PassthroughAPI;
+                (ProxyAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = ProxyAPI;
 
                 /**
-                 * Callback as used by {@link clutch.passthrough.v1.PassthroughAPI#requestPassthrough}.
-                 * @memberof clutch.passthrough.v1.PassthroughAPI
-                 * @typedef RequestPassthroughCallback
+                 * Callback as used by {@link clutch.proxy.v1.ProxyAPI#requestProxy}.
+                 * @memberof clutch.proxy.v1.ProxyAPI
+                 * @typedef RequestProxyCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
-                 * @param {clutch.passthrough.v1.RequestPassthroughResponse} [response] RequestPassthroughResponse
+                 * @param {clutch.proxy.v1.RequestProxyResponse} [response] RequestProxyResponse
                  */
 
                 /**
-                 * Calls RequestPassthrough.
-                 * @function requestPassthrough
-                 * @memberof clutch.passthrough.v1.PassthroughAPI
+                 * Calls RequestProxy.
+                 * @function requestProxy
+                 * @memberof clutch.proxy.v1.ProxyAPI
                  * @instance
-                 * @param {clutch.passthrough.v1.IRequestPassthroughRequest} request RequestPassthroughRequest message or plain object
-                 * @param {clutch.passthrough.v1.PassthroughAPI.RequestPassthroughCallback} callback Node-style callback called with the error, if any, and RequestPassthroughResponse
+                 * @param {clutch.proxy.v1.IRequestProxyRequest} request RequestProxyRequest message or plain object
+                 * @param {clutch.proxy.v1.ProxyAPI.RequestProxyCallback} callback Node-style callback called with the error, if any, and RequestProxyResponse
                  * @returns {undefined}
                  * @variation 1
                  */
-                Object.defineProperty(PassthroughAPI.prototype.requestPassthrough = function requestPassthrough(request, callback) {
-                    return this.rpcCall(requestPassthrough, $root.clutch.passthrough.v1.RequestPassthroughRequest, $root.clutch.passthrough.v1.RequestPassthroughResponse, request, callback);
-                }, "name", { value: "RequestPassthrough" });
+                Object.defineProperty(ProxyAPI.prototype.requestProxy = function requestProxy(request, callback) {
+                    return this.rpcCall(requestProxy, $root.clutch.proxy.v1.RequestProxyRequest, $root.clutch.proxy.v1.RequestProxyResponse, request, callback);
+                }, "name", { value: "RequestProxy" });
 
                 /**
-                 * Calls RequestPassthrough.
-                 * @function requestPassthrough
-                 * @memberof clutch.passthrough.v1.PassthroughAPI
+                 * Calls RequestProxy.
+                 * @function requestProxy
+                 * @memberof clutch.proxy.v1.ProxyAPI
                  * @instance
-                 * @param {clutch.passthrough.v1.IRequestPassthroughRequest} request RequestPassthroughRequest message or plain object
-                 * @returns {Promise<clutch.passthrough.v1.RequestPassthroughResponse>} Promise
+                 * @param {clutch.proxy.v1.IRequestProxyRequest} request RequestProxyRequest message or plain object
+                 * @returns {Promise<clutch.proxy.v1.RequestProxyResponse>} Promise
                  * @variation 2
                  */
 
-                return PassthroughAPI;
+                return ProxyAPI;
             })();
 
-            v1.RequestPassthroughRequest = (function() {
+            v1.RequestProxyRequest = (function() {
 
                 /**
-                 * Properties of a RequestPassthroughRequest.
-                 * @memberof clutch.passthrough.v1
-                 * @interface IRequestPassthroughRequest
-                 * @property {string|null} [service] RequestPassthroughRequest service
-                 * @property {string|null} [httpMethod] RequestPassthroughRequest httpMethod
-                 * @property {string|null} [path] RequestPassthroughRequest path
-                 * @property {google.protobuf.IValue|null} [request] RequestPassthroughRequest request
+                 * Properties of a RequestProxyRequest.
+                 * @memberof clutch.proxy.v1
+                 * @interface IRequestProxyRequest
+                 * @property {string|null} [service] RequestProxyRequest service
+                 * @property {string|null} [httpMethod] RequestProxyRequest httpMethod
+                 * @property {string|null} [path] RequestProxyRequest path
+                 * @property {google.protobuf.IValue|null} [request] RequestProxyRequest request
                  */
 
                 /**
-                 * Constructs a new RequestPassthroughRequest.
-                 * @memberof clutch.passthrough.v1
-                 * @classdesc Represents a RequestPassthroughRequest.
-                 * @implements IRequestPassthroughRequest
+                 * Constructs a new RequestProxyRequest.
+                 * @memberof clutch.proxy.v1
+                 * @classdesc Represents a RequestProxyRequest.
+                 * @implements IRequestProxyRequest
                  * @constructor
-                 * @param {clutch.passthrough.v1.IRequestPassthroughRequest=} [properties] Properties to set
+                 * @param {clutch.proxy.v1.IRequestProxyRequest=} [properties] Properties to set
                  */
-                function RequestPassthroughRequest(properties) {
+                function RequestProxyRequest(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -39113,46 +39113,46 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * RequestPassthroughRequest service.
+                 * RequestProxyRequest service.
                  * @member {string} service
-                 * @memberof clutch.passthrough.v1.RequestPassthroughRequest
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
                  * @instance
                  */
-                RequestPassthroughRequest.prototype.service = "";
+                RequestProxyRequest.prototype.service = "";
 
                 /**
-                 * RequestPassthroughRequest httpMethod.
+                 * RequestProxyRequest httpMethod.
                  * @member {string} httpMethod
-                 * @memberof clutch.passthrough.v1.RequestPassthroughRequest
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
                  * @instance
                  */
-                RequestPassthroughRequest.prototype.httpMethod = "";
+                RequestProxyRequest.prototype.httpMethod = "";
 
                 /**
-                 * RequestPassthroughRequest path.
+                 * RequestProxyRequest path.
                  * @member {string} path
-                 * @memberof clutch.passthrough.v1.RequestPassthroughRequest
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
                  * @instance
                  */
-                RequestPassthroughRequest.prototype.path = "";
+                RequestProxyRequest.prototype.path = "";
 
                 /**
-                 * RequestPassthroughRequest request.
+                 * RequestProxyRequest request.
                  * @member {google.protobuf.IValue|null|undefined} request
-                 * @memberof clutch.passthrough.v1.RequestPassthroughRequest
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
                  * @instance
                  */
-                RequestPassthroughRequest.prototype.request = null;
+                RequestProxyRequest.prototype.request = null;
 
                 /**
-                 * Verifies a RequestPassthroughRequest message.
+                 * Verifies a RequestProxyRequest message.
                  * @function verify
-                 * @memberof clutch.passthrough.v1.RequestPassthroughRequest
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                RequestPassthroughRequest.verify = function verify(message) {
+                RequestProxyRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.service != null && message.hasOwnProperty("service"))
@@ -39173,17 +39173,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a RequestPassthroughRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a RequestProxyRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.passthrough.v1.RequestPassthroughRequest
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.passthrough.v1.RequestPassthroughRequest} RequestPassthroughRequest
+                 * @returns {clutch.proxy.v1.RequestProxyRequest} RequestProxyRequest
                  */
-                RequestPassthroughRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.passthrough.v1.RequestPassthroughRequest)
+                RequestProxyRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.proxy.v1.RequestProxyRequest)
                         return object;
-                    let message = new $root.clutch.passthrough.v1.RequestPassthroughRequest();
+                    let message = new $root.clutch.proxy.v1.RequestProxyRequest();
                     if (object.service != null)
                         message.service = String(object.service);
                     if (object.httpMethod != null)
@@ -39192,22 +39192,22 @@ export const clutch = $root.clutch = (() => {
                         message.path = String(object.path);
                     if (object.request != null) {
                         if (typeof object.request !== "object")
-                            throw TypeError(".clutch.passthrough.v1.RequestPassthroughRequest.request: object expected");
+                            throw TypeError(".clutch.proxy.v1.RequestProxyRequest.request: object expected");
                         message.request = $root.google.protobuf.Value.fromObject(object.request);
                     }
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a RequestPassthroughRequest message. Also converts values to other types if specified.
+                 * Creates a plain object from a RequestProxyRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.passthrough.v1.RequestPassthroughRequest
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
                  * @static
-                 * @param {clutch.passthrough.v1.RequestPassthroughRequest} message RequestPassthroughRequest
+                 * @param {clutch.proxy.v1.RequestProxyRequest} message RequestProxyRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                RequestPassthroughRequest.toObject = function toObject(message, options) {
+                RequestProxyRequest.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -39229,38 +39229,40 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this RequestPassthroughRequest to JSON.
+                 * Converts this RequestProxyRequest to JSON.
                  * @function toJSON
-                 * @memberof clutch.passthrough.v1.RequestPassthroughRequest
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                RequestPassthroughRequest.prototype.toJSON = function toJSON() {
+                RequestProxyRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return RequestPassthroughRequest;
+                return RequestProxyRequest;
             })();
 
-            v1.RequestPassthroughResponse = (function() {
+            v1.RequestProxyResponse = (function() {
 
                 /**
-                 * Properties of a RequestPassthroughResponse.
-                 * @memberof clutch.passthrough.v1
-                 * @interface IRequestPassthroughResponse
-                 * @property {number|null} [httpStatus] RequestPassthroughResponse httpStatus
-                 * @property {google.protobuf.IValue|null} [response] RequestPassthroughResponse response
+                 * Properties of a RequestProxyResponse.
+                 * @memberof clutch.proxy.v1
+                 * @interface IRequestProxyResponse
+                 * @property {number|null} [httpStatus] RequestProxyResponse httpStatus
+                 * @property {Object.<string,string>|null} [headers] RequestProxyResponse headers
+                 * @property {google.protobuf.IValue|null} [response] RequestProxyResponse response
                  */
 
                 /**
-                 * Constructs a new RequestPassthroughResponse.
-                 * @memberof clutch.passthrough.v1
-                 * @classdesc Represents a RequestPassthroughResponse.
-                 * @implements IRequestPassthroughResponse
+                 * Constructs a new RequestProxyResponse.
+                 * @memberof clutch.proxy.v1
+                 * @classdesc Represents a RequestProxyResponse.
+                 * @implements IRequestProxyResponse
                  * @constructor
-                 * @param {clutch.passthrough.v1.IRequestPassthroughResponse=} [properties] Properties to set
+                 * @param {clutch.proxy.v1.IRequestProxyResponse=} [properties] Properties to set
                  */
-                function RequestPassthroughResponse(properties) {
+                function RequestProxyResponse(properties) {
+                    this.headers = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -39268,35 +39270,51 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * RequestPassthroughResponse httpStatus.
+                 * RequestProxyResponse httpStatus.
                  * @member {number} httpStatus
-                 * @memberof clutch.passthrough.v1.RequestPassthroughResponse
+                 * @memberof clutch.proxy.v1.RequestProxyResponse
                  * @instance
                  */
-                RequestPassthroughResponse.prototype.httpStatus = 0;
+                RequestProxyResponse.prototype.httpStatus = 0;
 
                 /**
-                 * RequestPassthroughResponse response.
+                 * RequestProxyResponse headers.
+                 * @member {Object.<string,string>} headers
+                 * @memberof clutch.proxy.v1.RequestProxyResponse
+                 * @instance
+                 */
+                RequestProxyResponse.prototype.headers = $util.emptyObject;
+
+                /**
+                 * RequestProxyResponse response.
                  * @member {google.protobuf.IValue|null|undefined} response
-                 * @memberof clutch.passthrough.v1.RequestPassthroughResponse
+                 * @memberof clutch.proxy.v1.RequestProxyResponse
                  * @instance
                  */
-                RequestPassthroughResponse.prototype.response = null;
+                RequestProxyResponse.prototype.response = null;
 
                 /**
-                 * Verifies a RequestPassthroughResponse message.
+                 * Verifies a RequestProxyResponse message.
                  * @function verify
-                 * @memberof clutch.passthrough.v1.RequestPassthroughResponse
+                 * @memberof clutch.proxy.v1.RequestProxyResponse
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                RequestPassthroughResponse.verify = function verify(message) {
+                RequestProxyResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.httpStatus != null && message.hasOwnProperty("httpStatus"))
                         if (!$util.isInteger(message.httpStatus))
                             return "httpStatus: integer expected";
+                    if (message.headers != null && message.hasOwnProperty("headers")) {
+                        if (!$util.isObject(message.headers))
+                            return "headers: object expected";
+                        let key = Object.keys(message.headers);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.headers[key[i]]))
+                                return "headers: string{k:string} expected";
+                    }
                     if (message.response != null && message.hasOwnProperty("response")) {
                         let error = $root.google.protobuf.Value.verify(message.response);
                         if (error)
@@ -39306,69 +39324,84 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a RequestPassthroughResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a RequestProxyResponse message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.passthrough.v1.RequestPassthroughResponse
+                 * @memberof clutch.proxy.v1.RequestProxyResponse
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.passthrough.v1.RequestPassthroughResponse} RequestPassthroughResponse
+                 * @returns {clutch.proxy.v1.RequestProxyResponse} RequestProxyResponse
                  */
-                RequestPassthroughResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.passthrough.v1.RequestPassthroughResponse)
+                RequestProxyResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.proxy.v1.RequestProxyResponse)
                         return object;
-                    let message = new $root.clutch.passthrough.v1.RequestPassthroughResponse();
+                    let message = new $root.clutch.proxy.v1.RequestProxyResponse();
                     if (object.httpStatus != null)
                         message.httpStatus = object.httpStatus | 0;
+                    if (object.headers) {
+                        if (typeof object.headers !== "object")
+                            throw TypeError(".clutch.proxy.v1.RequestProxyResponse.headers: object expected");
+                        message.headers = {};
+                        for (let keys = Object.keys(object.headers), i = 0; i < keys.length; ++i)
+                            message.headers[keys[i]] = String(object.headers[keys[i]]);
+                    }
                     if (object.response != null) {
                         if (typeof object.response !== "object")
-                            throw TypeError(".clutch.passthrough.v1.RequestPassthroughResponse.response: object expected");
+                            throw TypeError(".clutch.proxy.v1.RequestProxyResponse.response: object expected");
                         message.response = $root.google.protobuf.Value.fromObject(object.response);
                     }
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a RequestPassthroughResponse message. Also converts values to other types if specified.
+                 * Creates a plain object from a RequestProxyResponse message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.passthrough.v1.RequestPassthroughResponse
+                 * @memberof clutch.proxy.v1.RequestProxyResponse
                  * @static
-                 * @param {clutch.passthrough.v1.RequestPassthroughResponse} message RequestPassthroughResponse
+                 * @param {clutch.proxy.v1.RequestProxyResponse} message RequestProxyResponse
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                RequestPassthroughResponse.toObject = function toObject(message, options) {
+                RequestProxyResponse.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
+                    if (options.objects || options.defaults)
+                        object.headers = {};
                     if (options.defaults) {
                         object.httpStatus = 0;
                         object.response = null;
                     }
                     if (message.httpStatus != null && message.hasOwnProperty("httpStatus"))
                         object.httpStatus = message.httpStatus;
+                    let keys2;
+                    if (message.headers && (keys2 = Object.keys(message.headers)).length) {
+                        object.headers = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.headers[keys2[j]] = message.headers[keys2[j]];
+                    }
                     if (message.response != null && message.hasOwnProperty("response"))
                         object.response = $root.google.protobuf.Value.toObject(message.response, options);
                     return object;
                 };
 
                 /**
-                 * Converts this RequestPassthroughResponse to JSON.
+                 * Converts this RequestProxyResponse to JSON.
                  * @function toJSON
-                 * @memberof clutch.passthrough.v1.RequestPassthroughResponse
+                 * @memberof clutch.proxy.v1.RequestProxyResponse
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                RequestPassthroughResponse.prototype.toJSON = function toJSON() {
+                RequestProxyResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return RequestPassthroughResponse;
+                return RequestProxyResponse;
             })();
 
             return v1;
         })();
 
-        return passthrough;
+        return proxy;
     })();
 
     clutch.resolver = (function() {

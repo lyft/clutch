@@ -1,27 +1,27 @@
 syntax = "proto3";
 
-package clutch.passthrough.v1;
+package clutch.proxy.v1;
 
-option go_package = "github.com/lyft/clutch/backend/api/passthrough/v1;passthrough";
+option go_package = "github.com/lyft/clutch/backend/api/proxy/v1;proxy";
 
 import "api/v1/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-// The PassthroughAPI enabling calling external API's without minimal setup.
+// The proxyAPI enabling calling external API's without minimal setup.
 // The services must be configured before calling external API's.
-service PassthroughAPI {
-  rpc RequestPassthrough(RequestPassthroughRequest) returns (RequestPassthroughResponse) {
+service ProxyAPI {
+  rpc RequestProxy(RequestProxyRequest) returns (RequestProxyResponse) {
     option (google.api.http) = {
-      post : "/v1/passthrough/request"
+      post : "/v1/proxy/request"
       body : "*"
     };
     option (clutch.api.v1.action).type = CREATE;
   }
 }
 
-message RequestPassthroughRequest {
+message RequestProxyRequest {
   // The name of a service that is configured
   string service = 1 [ (validate.rules).string.min_len = 1 ];
   // The HTTP method that will be used for the request
@@ -32,9 +32,11 @@ message RequestPassthroughRequest {
   google.protobuf.Value request = 4;
 }
 
-message RequestPassthroughResponse {
+message RequestProxyResponse {
   // The http response code from the service response
   int32 http_status = 1;
-  // The full repsonse body
-  google.protobuf.Value response = 2;
+  // All of the headers from teh service response
+  map<string, string> headers = 2;
+  // The full response body
+  google.protobuf.Value response = 3;
 }
