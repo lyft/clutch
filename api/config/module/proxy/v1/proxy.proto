@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package clutch.config.module.passthrough.v1;
+package clutch.config.module.proxy.v1;
 
-option go_package = "github.com/lyft/clutch/backend/api/config/module/passthrough/v1;passthroughv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/module/proxy/v1;proxyv1";
 
 import "validate/validate.proto";
 

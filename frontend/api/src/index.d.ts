@@ -6870,8 +6870,8 @@ export namespace clutch {
                 }
             }
 
-            /** Namespace passthrough. */
-            namespace passthrough {
+            /** Namespace proxy. */
+            namespace proxy {
 
                 /** Namespace v1. */
                 namespace v1 {
@@ -6880,7 +6880,7 @@ export namespace clutch {
                     interface IConfig {
 
                         /** Config services */
-                        services?: (clutch.config.module.passthrough.v1.IService[]|null);
+                        services?: (clutch.config.module.proxy.v1.IService[]|null);
                     }
 
                     /** Represents a Config. */
@@ -6890,10 +6890,10 @@ export namespace clutch {
                          * Constructs a new Config.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.config.module.passthrough.v1.IConfig);
+                        constructor(properties?: clutch.config.module.proxy.v1.IConfig);
 
                         /** Config services. */
-                        public services: clutch.config.module.passthrough.v1.IService[];
+                        public services: clutch.config.module.proxy.v1.IService[];
 
                         /**
                          * Verifies a Config message.
@@ -6907,7 +6907,7 @@ export namespace clutch {
                          * @param object Plain object
                          * @returns Config
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.module.passthrough.v1.Config;
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.proxy.v1.Config;
 
                         /**
                          * Creates a plain object from a Config message. Also converts values to other types if specified.
@@ -6915,7 +6915,7 @@ export namespace clutch {
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.config.module.passthrough.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.config.module.proxy.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
                          * Converts this Config to JSON.
@@ -6934,7 +6934,7 @@ export namespace clutch {
                         host?: (string|null);
 
                         /** Service allowedRequests */
-                        allowedRequests?: (clutch.config.module.passthrough.v1.IAllowRequest[]|null);
+                        allowedRequests?: (clutch.config.module.proxy.v1.IAllowRequest[]|null);
 
                         /** Service headers */
                         headers?: ({ [k: string]: string }|null);
@@ -6947,7 +6947,7 @@ export namespace clutch {
                          * Constructs a new Service.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.config.module.passthrough.v1.IService);
+                        constructor(properties?: clutch.config.module.proxy.v1.IService);
 
                         /** Service name. */
                         public name: string;
@@ -6956,7 +6956,7 @@ export namespace clutch {
                         public host: string;
 
                         /** Service allowedRequests. */
-                        public allowedRequests: clutch.config.module.passthrough.v1.IAllowRequest[];
+                        public allowedRequests: clutch.config.module.proxy.v1.IAllowRequest[];
 
                         /** Service headers. */
                         public headers: { [k: string]: string };
@@ -6973,7 +6973,7 @@ export namespace clutch {
                          * @param object Plain object
                          * @returns Service
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.module.passthrough.v1.Service;
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.proxy.v1.Service;
 
                         /**
                          * Creates a plain object from a Service message. Also converts values to other types if specified.
@@ -6981,7 +6981,7 @@ export namespace clutch {
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.config.module.passthrough.v1.Service, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.config.module.proxy.v1.Service, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
                          * Converts this Service to JSON.
@@ -7007,7 +7007,7 @@ export namespace clutch {
                          * Constructs a new AllowRequest.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.config.module.passthrough.v1.IAllowRequest);
+                        constructor(properties?: clutch.config.module.proxy.v1.IAllowRequest);
 
                         /** AllowRequest path. */
                         public path: string;
@@ -7027,7 +7027,7 @@ export namespace clutch {
                          * @param object Plain object
                          * @returns AllowRequest
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.module.passthrough.v1.AllowRequest;
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.proxy.v1.AllowRequest;
 
                         /**
                          * Creates a plain object from an AllowRequest message. Also converts values to other types if specified.
@@ -7035,7 +7035,7 @@ export namespace clutch {
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.config.module.passthrough.v1.AllowRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.config.module.proxy.v1.AllowRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
                          * Converts this AllowRequest to JSON.

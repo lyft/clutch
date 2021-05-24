@@ -16233,20 +16233,20 @@ export const clutch = $root.clutch = (() => {
                 return chaos;
             })();
 
-            module.passthrough = (function() {
+            module.proxy = (function() {
 
                 /**
-                 * Namespace passthrough.
+                 * Namespace proxy.
                  * @memberof clutch.config.module
                  * @namespace
                  */
-                const passthrough = {};
+                const proxy = {};
 
-                passthrough.v1 = (function() {
+                proxy.v1 = (function() {
 
                     /**
                      * Namespace v1.
-                     * @memberof clutch.config.module.passthrough
+                     * @memberof clutch.config.module.proxy
                      * @namespace
                      */
                     const v1 = {};
@@ -16255,18 +16255,18 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Properties of a Config.
-                         * @memberof clutch.config.module.passthrough.v1
+                         * @memberof clutch.config.module.proxy.v1
                          * @interface IConfig
-                         * @property {Array.<clutch.config.module.passthrough.v1.IService>|null} [services] Config services
+                         * @property {Array.<clutch.config.module.proxy.v1.IService>|null} [services] Config services
                          */
 
                         /**
                          * Constructs a new Config.
-                         * @memberof clutch.config.module.passthrough.v1
+                         * @memberof clutch.config.module.proxy.v1
                          * @classdesc Represents a Config.
                          * @implements IConfig
                          * @constructor
-                         * @param {clutch.config.module.passthrough.v1.IConfig=} [properties] Properties to set
+                         * @param {clutch.config.module.proxy.v1.IConfig=} [properties] Properties to set
                          */
                         function Config(properties) {
                             this.services = [];
@@ -16278,8 +16278,8 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Config services.
-                         * @member {Array.<clutch.config.module.passthrough.v1.IService>} services
-                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @member {Array.<clutch.config.module.proxy.v1.IService>} services
+                         * @memberof clutch.config.module.proxy.v1.Config
                          * @instance
                          */
                         Config.prototype.services = $util.emptyArray;
@@ -16287,7 +16287,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Verifies a Config message.
                          * @function verify
-                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @memberof clutch.config.module.proxy.v1.Config
                          * @static
                          * @param {Object.<string,*>} message Plain object to verify
                          * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -16299,7 +16299,7 @@ export const clutch = $root.clutch = (() => {
                                 if (!Array.isArray(message.services))
                                     return "services: array expected";
                                 for (let i = 0; i < message.services.length; ++i) {
-                                    let error = $root.clutch.config.module.passthrough.v1.Service.verify(message.services[i]);
+                                    let error = $root.clutch.config.module.proxy.v1.Service.verify(message.services[i]);
                                     if (error)
                                         return "services." + error;
                                 }
@@ -16310,23 +16310,23 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a Config message from a plain object. Also converts values to their respective internal types.
                          * @function fromObject
-                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @memberof clutch.config.module.proxy.v1.Config
                          * @static
                          * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.config.module.passthrough.v1.Config} Config
+                         * @returns {clutch.config.module.proxy.v1.Config} Config
                          */
                         Config.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.config.module.passthrough.v1.Config)
+                            if (object instanceof $root.clutch.config.module.proxy.v1.Config)
                                 return object;
-                            let message = new $root.clutch.config.module.passthrough.v1.Config();
+                            let message = new $root.clutch.config.module.proxy.v1.Config();
                             if (object.services) {
                                 if (!Array.isArray(object.services))
-                                    throw TypeError(".clutch.config.module.passthrough.v1.Config.services: array expected");
+                                    throw TypeError(".clutch.config.module.proxy.v1.Config.services: array expected");
                                 message.services = [];
                                 for (let i = 0; i < object.services.length; ++i) {
                                     if (typeof object.services[i] !== "object")
-                                        throw TypeError(".clutch.config.module.passthrough.v1.Config.services: object expected");
-                                    message.services[i] = $root.clutch.config.module.passthrough.v1.Service.fromObject(object.services[i]);
+                                        throw TypeError(".clutch.config.module.proxy.v1.Config.services: object expected");
+                                    message.services[i] = $root.clutch.config.module.proxy.v1.Service.fromObject(object.services[i]);
                                 }
                             }
                             return message;
@@ -16335,9 +16335,9 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a plain object from a Config message. Also converts values to other types if specified.
                          * @function toObject
-                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @memberof clutch.config.module.proxy.v1.Config
                          * @static
-                         * @param {clutch.config.module.passthrough.v1.Config} message Config
+                         * @param {clutch.config.module.proxy.v1.Config} message Config
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
@@ -16350,7 +16350,7 @@ export const clutch = $root.clutch = (() => {
                             if (message.services && message.services.length) {
                                 object.services = [];
                                 for (let j = 0; j < message.services.length; ++j)
-                                    object.services[j] = $root.clutch.config.module.passthrough.v1.Service.toObject(message.services[j], options);
+                                    object.services[j] = $root.clutch.config.module.proxy.v1.Service.toObject(message.services[j], options);
                             }
                             return object;
                         };
@@ -16358,7 +16358,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Converts this Config to JSON.
                          * @function toJSON
-                         * @memberof clutch.config.module.passthrough.v1.Config
+                         * @memberof clutch.config.module.proxy.v1.Config
                          * @instance
                          * @returns {Object.<string,*>} JSON object
                          */
@@ -16373,21 +16373,21 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Properties of a Service.
-                         * @memberof clutch.config.module.passthrough.v1
+                         * @memberof clutch.config.module.proxy.v1
                          * @interface IService
                          * @property {string|null} [name] Service name
                          * @property {string|null} [host] Service host
-                         * @property {Array.<clutch.config.module.passthrough.v1.IAllowRequest>|null} [allowedRequests] Service allowedRequests
+                         * @property {Array.<clutch.config.module.proxy.v1.IAllowRequest>|null} [allowedRequests] Service allowedRequests
                          * @property {Object.<string,string>|null} [headers] Service headers
                          */
 
                         /**
                          * Constructs a new Service.
-                         * @memberof clutch.config.module.passthrough.v1
+                         * @memberof clutch.config.module.proxy.v1
                          * @classdesc Represents a Service.
                          * @implements IService
                          * @constructor
-                         * @param {clutch.config.module.passthrough.v1.IService=} [properties] Properties to set
+                         * @param {clutch.config.module.proxy.v1.IService=} [properties] Properties to set
                          */
                         function Service(properties) {
                             this.allowedRequests = [];
@@ -16401,7 +16401,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Service name.
                          * @member {string} name
-                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @memberof clutch.config.module.proxy.v1.Service
                          * @instance
                          */
                         Service.prototype.name = "";
@@ -16409,15 +16409,15 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Service host.
                          * @member {string} host
-                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @memberof clutch.config.module.proxy.v1.Service
                          * @instance
                          */
                         Service.prototype.host = "";
 
                         /**
                          * Service allowedRequests.
-                         * @member {Array.<clutch.config.module.passthrough.v1.IAllowRequest>} allowedRequests
-                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @member {Array.<clutch.config.module.proxy.v1.IAllowRequest>} allowedRequests
+                         * @memberof clutch.config.module.proxy.v1.Service
                          * @instance
                          */
                         Service.prototype.allowedRequests = $util.emptyArray;
@@ -16425,7 +16425,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Service headers.
                          * @member {Object.<string,string>} headers
-                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @memberof clutch.config.module.proxy.v1.Service
                          * @instance
                          */
                         Service.prototype.headers = $util.emptyObject;
@@ -16433,7 +16433,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Verifies a Service message.
                          * @function verify
-                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @memberof clutch.config.module.proxy.v1.Service
                          * @static
                          * @param {Object.<string,*>} message Plain object to verify
                          * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -16451,7 +16451,7 @@ export const clutch = $root.clutch = (() => {
                                 if (!Array.isArray(message.allowedRequests))
                                     return "allowedRequests: array expected";
                                 for (let i = 0; i < message.allowedRequests.length; ++i) {
-                                    let error = $root.clutch.config.module.passthrough.v1.AllowRequest.verify(message.allowedRequests[i]);
+                                    let error = $root.clutch.config.module.proxy.v1.AllowRequest.verify(message.allowedRequests[i]);
                                     if (error)
                                         return "allowedRequests." + error;
                                 }
@@ -16470,32 +16470,32 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a Service message from a plain object. Also converts values to their respective internal types.
                          * @function fromObject
-                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @memberof clutch.config.module.proxy.v1.Service
                          * @static
                          * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.config.module.passthrough.v1.Service} Service
+                         * @returns {clutch.config.module.proxy.v1.Service} Service
                          */
                         Service.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.config.module.passthrough.v1.Service)
+                            if (object instanceof $root.clutch.config.module.proxy.v1.Service)
                                 return object;
-                            let message = new $root.clutch.config.module.passthrough.v1.Service();
+                            let message = new $root.clutch.config.module.proxy.v1.Service();
                             if (object.name != null)
                                 message.name = String(object.name);
                             if (object.host != null)
                                 message.host = String(object.host);
                             if (object.allowedRequests) {
                                 if (!Array.isArray(object.allowedRequests))
-                                    throw TypeError(".clutch.config.module.passthrough.v1.Service.allowedRequests: array expected");
+                                    throw TypeError(".clutch.config.module.proxy.v1.Service.allowedRequests: array expected");
                                 message.allowedRequests = [];
                                 for (let i = 0; i < object.allowedRequests.length; ++i) {
                                     if (typeof object.allowedRequests[i] !== "object")
-                                        throw TypeError(".clutch.config.module.passthrough.v1.Service.allowedRequests: object expected");
-                                    message.allowedRequests[i] = $root.clutch.config.module.passthrough.v1.AllowRequest.fromObject(object.allowedRequests[i]);
+                                        throw TypeError(".clutch.config.module.proxy.v1.Service.allowedRequests: object expected");
+                                    message.allowedRequests[i] = $root.clutch.config.module.proxy.v1.AllowRequest.fromObject(object.allowedRequests[i]);
                                 }
                             }
                             if (object.headers) {
                                 if (typeof object.headers !== "object")
-                                    throw TypeError(".clutch.config.module.passthrough.v1.Service.headers: object expected");
+                                    throw TypeError(".clutch.config.module.proxy.v1.Service.headers: object expected");
                                 message.headers = {};
                                 for (let keys = Object.keys(object.headers), i = 0; i < keys.length; ++i)
                                     message.headers[keys[i]] = String(object.headers[keys[i]]);
@@ -16506,9 +16506,9 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a plain object from a Service message. Also converts values to other types if specified.
                          * @function toObject
-                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @memberof clutch.config.module.proxy.v1.Service
                          * @static
-                         * @param {clutch.config.module.passthrough.v1.Service} message Service
+                         * @param {clutch.config.module.proxy.v1.Service} message Service
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
@@ -16531,7 +16531,7 @@ export const clutch = $root.clutch = (() => {
                             if (message.allowedRequests && message.allowedRequests.length) {
                                 object.allowedRequests = [];
                                 for (let j = 0; j < message.allowedRequests.length; ++j)
-                                    object.allowedRequests[j] = $root.clutch.config.module.passthrough.v1.AllowRequest.toObject(message.allowedRequests[j], options);
+                                    object.allowedRequests[j] = $root.clutch.config.module.proxy.v1.AllowRequest.toObject(message.allowedRequests[j], options);
                             }
                             let keys2;
                             if (message.headers && (keys2 = Object.keys(message.headers)).length) {
@@ -16545,7 +16545,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Converts this Service to JSON.
                          * @function toJSON
-                         * @memberof clutch.config.module.passthrough.v1.Service
+                         * @memberof clutch.config.module.proxy.v1.Service
                          * @instance
                          * @returns {Object.<string,*>} JSON object
                          */
@@ -16560,7 +16560,7 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Properties of an AllowRequest.
-                         * @memberof clutch.config.module.passthrough.v1
+                         * @memberof clutch.config.module.proxy.v1
                          * @interface IAllowRequest
                          * @property {string|null} [path] AllowRequest path
                          * @property {string|null} [method] AllowRequest method
@@ -16568,11 +16568,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Constructs a new AllowRequest.
-                         * @memberof clutch.config.module.passthrough.v1
+                         * @memberof clutch.config.module.proxy.v1
                          * @classdesc Represents an AllowRequest.
                          * @implements IAllowRequest
                          * @constructor
-                         * @param {clutch.config.module.passthrough.v1.IAllowRequest=} [properties] Properties to set
+                         * @param {clutch.config.module.proxy.v1.IAllowRequest=} [properties] Properties to set
                          */
                         function AllowRequest(properties) {
                             if (properties)
@@ -16584,7 +16584,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * AllowRequest path.
                          * @member {string} path
-                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @memberof clutch.config.module.proxy.v1.AllowRequest
                          * @instance
                          */
                         AllowRequest.prototype.path = "";
@@ -16592,7 +16592,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * AllowRequest method.
                          * @member {string} method
-                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @memberof clutch.config.module.proxy.v1.AllowRequest
                          * @instance
                          */
                         AllowRequest.prototype.method = "";
@@ -16600,7 +16600,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Verifies an AllowRequest message.
                          * @function verify
-                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @memberof clutch.config.module.proxy.v1.AllowRequest
                          * @static
                          * @param {Object.<string,*>} message Plain object to verify
                          * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -16620,15 +16620,15 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates an AllowRequest message from a plain object. Also converts values to their respective internal types.
                          * @function fromObject
-                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @memberof clutch.config.module.proxy.v1.AllowRequest
                          * @static
                          * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.config.module.passthrough.v1.AllowRequest} AllowRequest
+                         * @returns {clutch.config.module.proxy.v1.AllowRequest} AllowRequest
                          */
                         AllowRequest.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.config.module.passthrough.v1.AllowRequest)
+                            if (object instanceof $root.clutch.config.module.proxy.v1.AllowRequest)
                                 return object;
-                            let message = new $root.clutch.config.module.passthrough.v1.AllowRequest();
+                            let message = new $root.clutch.config.module.proxy.v1.AllowRequest();
                             if (object.path != null)
                                 message.path = String(object.path);
                             if (object.method != null)
@@ -16639,9 +16639,9 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a plain object from an AllowRequest message. Also converts values to other types if specified.
                          * @function toObject
-                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @memberof clutch.config.module.proxy.v1.AllowRequest
                          * @static
-                         * @param {clutch.config.module.passthrough.v1.AllowRequest} message AllowRequest
+                         * @param {clutch.config.module.proxy.v1.AllowRequest} message AllowRequest
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
@@ -16663,7 +16663,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Converts this AllowRequest to JSON.
                          * @function toJSON
-                         * @memberof clutch.config.module.passthrough.v1.AllowRequest
+                         * @memberof clutch.config.module.proxy.v1.AllowRequest
                          * @instance
                          * @returns {Object.<string,*>} JSON object
                          */
@@ -16677,7 +16677,7 @@ export const clutch = $root.clutch = (() => {
                     return v1;
                 })();
 
-                return passthrough;
+                return proxy;
             })();
 
             module.sourcecontrol = (function() {
