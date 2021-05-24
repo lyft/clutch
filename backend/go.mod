@@ -43,7 +43,7 @@ require (
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed
 	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20210517163617-5e0236093d7a
+	google.golang.org/genproto v0.0.0-20210524142926-3e3a6030be83
 	google.golang.org/grpc v1.38.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0
