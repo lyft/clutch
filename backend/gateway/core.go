@@ -22,6 +22,7 @@ import (
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
 	kinesismod "github.com/lyft/clutch/backend/module/kinesis"
+	proxymod "github.com/lyft/clutch/backend/module/proxy"
 	resolvermod "github.com/lyft/clutch/backend/module/resolver"
 	"github.com/lyft/clutch/backend/module/sourcecontrol"
 	topologymod "github.com/lyft/clutch/backend/module/topology"
@@ -72,6 +73,7 @@ var Modules = module.Factory{
 	slackbotmod.Name:           slackbotmod.New,
 	sourcecontrol.Name:         sourcecontrol.New,
 	topologymod.Name:           topologymod.New,
+	proxymod.Name:              proxymod.New,
 }
 
 var Services = service.Factory{
