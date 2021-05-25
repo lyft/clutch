@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,11 +30,8 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _experimentation_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on CreateExperimentRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -44,30 +41,17 @@ func (m *CreateExperimentRequest) Validate() error {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CreateExperimentRequestValidationError{
-				field:  "Config",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
+	if m.GetData() == nil {
+		return CreateExperimentRequestValidationError{
+			field:  "Data",
+			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CreateExperimentRequestValidationError{
-				field:  "StartTime",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetEndTime()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CreateExperimentRequestValidationError{
-				field:  "EndTime",
+				field:  "Data",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -210,6 +194,171 @@ var _ interface {
 	ErrorName() string
 } = CreateExperimentResponseValidationError{}
 
+// Validate checks the field values on CreateOrGetExperimentRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateOrGetExperimentRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetData() == nil {
+		return CreateOrGetExperimentRequestValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateOrGetExperimentRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// CreateOrGetExperimentRequestValidationError is the validation error returned
+// by CreateOrGetExperimentRequest.Validate if the designated constraints
+// aren't met.
+type CreateOrGetExperimentRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateOrGetExperimentRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateOrGetExperimentRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateOrGetExperimentRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateOrGetExperimentRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateOrGetExperimentRequestValidationError) ErrorName() string {
+	return "CreateOrGetExperimentRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateOrGetExperimentRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateOrGetExperimentRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateOrGetExperimentRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateOrGetExperimentRequestValidationError{}
+
+// Validate checks the field values on CreateOrGetExperimentResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateOrGetExperimentResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetExperiment()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateOrGetExperimentResponseValidationError{
+				field:  "Experiment",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Origin
+
+	return nil
+}
+
+// CreateOrGetExperimentResponseValidationError is the validation error
+// returned by CreateOrGetExperimentResponse.Validate if the designated
+// constraints aren't met.
+type CreateOrGetExperimentResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateOrGetExperimentResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateOrGetExperimentResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateOrGetExperimentResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateOrGetExperimentResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateOrGetExperimentResponseValidationError) ErrorName() string {
+	return "CreateOrGetExperimentResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateOrGetExperimentResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateOrGetExperimentResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateOrGetExperimentResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateOrGetExperimentResponseValidationError{}
+
 // Validate checks the field values on GetExperimentsRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -218,9 +367,26 @@ func (m *GetExperimentsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for ConfigType
+	if len(m.GetConfigType()) < 1 {
+		return GetExperimentsRequestValidationError{
+			field:  "ConfigType",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
-	// no validation rules for Status
+	if _, ok := _GetExperimentsRequest_Status_NotInLookup[m.GetStatus()]; ok {
+		return GetExperimentsRequestValidationError{
+			field:  "Status",
+			reason: "value must not be in list [0]",
+		}
+	}
+
+	if _, ok := GetExperimentsRequest_Status_name[int32(m.GetStatus())]; !ok {
+		return GetExperimentsRequestValidationError{
+			field:  "Status",
+			reason: "value must be one of the defined enum values",
+		}
+	}
 
 	return nil
 }
@@ -280,6 +446,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetExperimentsRequestValidationError{}
+
+var _GetExperimentsRequest_Status_NotInLookup = map[GetExperimentsRequest_Status]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on GetExperimentsResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -371,7 +541,26 @@ func (m *CancelExperimentRunRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
+	if len(m.GetId()) < 1 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Id",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if utf8.RuneCountInString(m.GetReason()) > 100 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Reason",
+			reason: "value length must be at most 100 runes",
+		}
+	}
+
+	if len(m.GetReason()) < 1 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Reason",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	return nil
 }
@@ -657,7 +846,12 @@ func (m *GetExperimentRunDetailsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
+	if len(m.GetId()) < 1 {
+		return GetExperimentRunDetailsRequestValidationError{
+			field:  "Id",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	return nil
 }

@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -27,7 +27,7 @@ func (s *svc) WriteRequestEvent(_ context.Context, req *auditv1.RequestEvent) (i
 	defer s.Unlock()
 
 	event := &auditv1.Event{
-		OccurredAt: ptypes.TimestampNow(),
+		OccurredAt: timestamppb.Now(),
 		EventType: &auditv1.Event_Event{
 			Event: req,
 		},
@@ -57,7 +57,7 @@ func (s *svc) ReadEvents(_ context.Context, start time.Time, end *time.Time) ([]
 
 	var events []*auditv1.Event
 	for _, event := range s.events {
-		eventTime, _ := ptypes.Timestamp(event.OccurredAt)
+		eventTime := event.OccurredAt.AsTime()
 
 		if start.After(eventTime) {
 			continue

@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -27,7 +26,7 @@ type Client interface {
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &authzcfgv1.Config{}
-	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
 	return newStaticImpl(logger, config)

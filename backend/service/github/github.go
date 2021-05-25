@@ -18,9 +18,8 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	githubv3 "github.com/google/go-github/v33/github"
+	githubv3 "github.com/google/go-github/v35/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -41,7 +40,7 @@ type FileMap map[string]io.ReadCloser
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &githubv1.Config{}
-	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
 	return newService(config), nil

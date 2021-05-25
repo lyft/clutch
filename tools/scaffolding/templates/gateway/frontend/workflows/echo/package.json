@@ -6,8 +6,9 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist",
-    "compile": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx --no-comments",
-    "compile:watch": "yarn run compile --watch",
+    "compile": "esbuild --target=es2019 --outdir=dist src/*.jsx",
+    "compile:dev": "yarn compile --sourcemap",
+    "compile:watch": "yarn run compile:dev --watch",
     "lint": "eslint --ext .js,.jsx .",
     "lint:fix": "yarn run lint --fix",
     "test": "jest --passWithNoTests",
@@ -26,5 +27,8 @@
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

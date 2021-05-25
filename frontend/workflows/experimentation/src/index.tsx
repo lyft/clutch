@@ -11,8 +11,8 @@ const register = (): WorkflowConfiguration => {
       contactUrl: "mailto:hello@clutch.sh",
     },
     path: "experimentation",
-    group: "Experimentation",
-    displayName: "Experimentation",
+    group: "Chaos Experimentation",
+    displayName: "Chaos Experimentation",
     routes: {
       listExperiments: {
         path: "list",

@@ -4,11 +4,11 @@ set -euo pipefail
 REPO_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 # Packages should be added to this list if there can only be one of them present when using Clutch as a submodule.
 LINKED_PACKAGES=(
+  "esbuild"
   "react"
   "react-dom"
   "react-router"
   "react-router-dom"
-  "styled-components"
   "@emotion/react"
   "@emotion/styled"
   "@material-ui/styles"
@@ -19,7 +19,6 @@ LINKED_PACKAGES=(
   "@types/node"
   "@types/react"
   "@types/react-dom"
-  "@types/styled-components"
   "typescript"
 )
 

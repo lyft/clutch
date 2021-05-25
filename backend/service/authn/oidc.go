@@ -13,13 +13,18 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"golang.org/x/oauth2"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
+	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 )
 
 // Default scopes, used if no scopes are provided in the configuration.
 // Compatible with Okta offline access, a holdover from previous defaults.
 var defaultScopes = []string{oidc.ScopeOpenID, oidc.ScopeOfflineAccess, "email"}
+
+const clutchProvider = "clutch"
 
 type OIDCProvider struct {
 	provider *oidc.Provider
@@ -34,6 +39,8 @@ type OIDCProvider struct {
 	providerAlias string
 
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
+
+	enableServiceTokenCreation bool
 }
 
 // Clutch's state token claims used during the exchange.
@@ -80,7 +87,7 @@ func (p *OIDCProvider) GetStateNonce(redirectURL string) (string, error) {
 	if u.Scheme != "" || u.Host != "" {
 		return "", errors.New("only relative redirects are supported")
 	}
-	dest := u.Path
+	dest := u.RequestURI()
 	if !strings.HasPrefix(dest, "/") {
 		dest = fmt.Sprintf("/%s", dest)
 	}
@@ -131,6 +138,41 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		}
 	}
 
+	return p.signNewToken(ctx, claims)
+}
+
+func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (*oauth2.Token, error) {
+	if !p.enableServiceTokenCreation {
+		return nil, errors.New("not configured to allow service token creation")
+	}
+
+	var prefixedSubject string
+	switch tokenType {
+	case authnmodulev1.CreateTokenRequest_SERVICE:
+		prefixedSubject = "service:" + subject
+	default:
+		return nil, errors.New("invalid token type")
+	}
+
+	issuedAt := time.Now()
+	var expiresAt int64
+	if expiry != nil {
+		expiresAt = issuedAt.Add(*expiry).Unix()
+	}
+
+	claims := &Claims{
+		StandardClaims: &jwt.StandardClaims{
+			ExpiresAt: expiresAt,
+			IssuedAt:  issuedAt.Unix(),
+			Issuer:    clutchProvider,
+			Subject:   prefixedSubject,
+		},
+	}
+
+	return p.signNewToken(ctx, claims)
+}
+
+func (p *OIDCProvider) signNewToken(ctx context.Context, claims *Claims) (*oauth2.Token, error) {
 	// Sign and issue token.
 	accessToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(p.sessionSecret))
 	if err != nil {
@@ -142,7 +184,15 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		RefreshToken: "", // TODO: implement refresh_token flow with stateful sessions.
 		TokenType:    "Bearer",
 	}
-	return t, err
+
+	if p.tokenStorage != nil {
+		err := p.tokenStorage.Store(ctx, claims.Subject, clutchProvider, t)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return t, nil
 }
 
 type ClaimsFromOIDCTokenFunc func(ctx context.Context, t *oidc.IDToken) (*Claims, error)
@@ -179,7 +229,56 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 		return nil, err
 	}
 
+	// If the token doesn't exist in the token storage anymore, it must have been revoked.
+	// Fail verification in this case.
+	// TODO(perf): Cache the lookup result in-memory for min(60, timeToExpiry) to prevent
+	// hitting the DB on each request. This should also cache whether we didn't find a token.
+	if p.tokenStorage != nil {
+		_, err := p.tokenStorage.Read(ctx, claims.Subject, clutchProvider)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return claims, nil
+}
+
+func (p *OIDCProvider) Read(ctx context.Context, userID, provider string) (*oauth2.Token, error) {
+	if p.tokenStorage == nil {
+		return nil, status.Error(codes.Internal, "token read attempted but storage is not configured")
+	}
+
+	if provider != p.providerAlias {
+		return nil, status.Errorf(codes.InvalidArgument, "provider '%s' cannot read '%s' tokens", p.providerAlias, provider)
+	}
+
+	// Get token from storage.
+	t, err := p.tokenStorage.Read(ctx, userID, provider)
+	if err != nil {
+		return nil, err
+	}
+
+	// Validate token and return it if valid.
+	if t.Valid() {
+		return t, nil
+	}
+
+	if t.RefreshToken == "" {
+		return nil, status.Error(codes.Unauthenticated, "the token has expired and no refresh token is present")
+	}
+
+	// If invalid, attempt refresh.
+	newToken, err := p.oauth2.TokenSource(ctx, t).Token()
+	if err != nil {
+		return nil, err
+	}
+
+	// Store new token if refresh succeeded.
+	if err := p.tokenStorage.Store(ctx, userID, provider, newToken); err != nil {
+		return nil, err
+	}
+
+	return newToken, nil
 }
 
 func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage Storage) (Provider, error) {
@@ -228,14 +327,15 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 	}
 
 	p := &OIDCProvider{
-		providerAlias:       alias,
-		provider:            provider,
-		verifier:            verifier,
-		oauth2:              oc,
-		httpClient:          ctx.Value(oauth2.HTTPClient).(*http.Client),
-		sessionSecret:       config.SessionSecret,
-		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
-		tokenStorage:        tokenStorage,
+		providerAlias:              alias,
+		provider:                   provider,
+		verifier:                   verifier,
+		oauth2:                     oc,
+		httpClient:                 ctx.Value(oauth2.HTTPClient).(*http.Client),
+		sessionSecret:              config.SessionSecret,
+		claimsFromOIDCToken:        DefaultClaimsFromOIDCToken,
+		tokenStorage:               tokenStorage,
+		enableServiceTokenCreation: tokenStorage != nil && config.EnableServiceTokenCreation,
 	}
 
 	return p, nil

@@ -1,7 +1,6 @@
 package experimentstore
 
 import (
-	"database/sql"
 	"testing"
 	"time"
 
@@ -13,9 +12,9 @@ import (
 )
 
 func TestListViewRunningExperimentRunProperties(t *testing.T) {
-	startTime := time.Now()
-	expectedRun := &ExperimentRun{Id: 1, StartTime: startTime, EndTime: sql.NullTime{}, CancellationTime: sql.NullTime{}, creationTime: creationTime}
-	expectedConfig := &ExperimentConfig{id: 2, Config: &any.Any{TypeUrl: "foo"}}
+	now := time.Now()
+	expectedRun := &ExperimentRun{Id: "1", StartTime: now, EndTime: nil, CancellationTime: nil, CreationTime: now}
+	expectedConfig := &ExperimentConfig{Id: "2", Config: &any.Any{TypeUrl: "foo"}}
 
 	expectedProperty := &experimentation.Property{
 		Id:    "foo",
@@ -37,8 +36,8 @@ func TestListViewRunningExperimentRunProperties(t *testing.T) {
 
 	assert.NoError(t, err)
 
-	assert.Equal(t, uint64(1), listView.Id)
-	assert.Equal(t, int64(1), listView.GetProperties().GetItems()["run_identifier"].GetIntValue())
-	assert.Equal(t, int64(2), listView.GetProperties().GetItems()["config_identifier"].GetIntValue())
+	assert.Equal(t, "1", listView.Id)
+	assert.Equal(t, "1", listView.GetProperties().GetItems()["run_identifier"].GetStringValue())
+	assert.Equal(t, "2", listView.GetProperties().GetItems()["config_identifier"].GetStringValue())
 	assert.Equal(t, expectedProperty, listView.GetProperties().GetItems()["foo"])
 }

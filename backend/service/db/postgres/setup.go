@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	_ "github.com/lib/pq"
 	"github.com/uber-go/tally"
@@ -36,7 +35,7 @@ func (c *client) DB() *sql.DB { return c.sqlDB }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	pgcfg := &postgresv1.Config{}
-	err := ptypes.UnmarshalAny(cfg, pgcfg)
+	err := cfg.UnmarshalTo(pgcfg)
 	if err != nil {
 		return nil, err
 	}

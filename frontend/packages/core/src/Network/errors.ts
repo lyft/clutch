@@ -1,6 +1,7 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { AxiosError } from "axios";
 
+import { grpcCodeToText } from "./grpc";
 import type { HttpStatus } from "./index";
 
 interface Details {
@@ -263,7 +264,7 @@ const grpcResponseToError = (clientError: AxiosError): ClutchError => {
     message: data.message,
     status: {
       code: clientError.response.status,
-      text: clientError.response.statusText,
+      text: grpcCodeToText(data.code),
     } as HttpStatus,
   } as ClutchError;
 

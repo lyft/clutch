@@ -1,4 +1,4 @@
-import type { AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 import axios from "axios";
 
 import type { ClutchError } from "./errors";
@@ -21,8 +21,13 @@ export interface HttpStatus {
   text: string;
 }
 
+const successInterceptor = (response: AxiosResponse) => {
+  return response;
+};
+
 const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
-  if (error.isAxiosError) {
+  const response = error?.response;
+  if (response === undefined) {
     const clientError = {
       status: {
         code: 500,
@@ -33,20 +38,31 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
     return Promise.reject(clientError);
   }
 
+  // This section handles authentication redirects.
+  if (response?.status === 401) {
+    // TODO: turn this in to silent refresh once refresh tokens are supported.
+    const redirectUrl = window.location.pathname + window.location.search;
+    window.location.href = `/v1/authn/login?redirect_url=${encodeURIComponent(redirectUrl)}`;
+  }
+
   // we are guaranteed to have a response object on the error from this point on
   // since we have already accounted for axios errors.
-  const responseData = error?.response.data;
+  const responseData = error?.response?.data;
   // if the response data has a code on it we know it's a gRPC response.
   let err;
   if (responseData?.code !== undefined) {
     err = grpcResponseToError(error);
   } else {
+    const message =
+      typeof error.response?.data === "string"
+        ? error.response.data
+        : error?.message || error.response.statusText;
     err = {
       status: {
         code: error.response.status,
         text: error.response.statusText,
       } as HttpStatus,
-      message: error?.message || error.response.statusText,
+      message,
       data: responseData,
     } as ClutchError;
   }
@@ -60,11 +76,11 @@ const createClient = () => {
       return status < 400;
     },
   });
-  axiosClient.interceptors.response.use(resp => resp, errorInterceptor);
+  axiosClient.interceptors.response.use(successInterceptor, errorInterceptor);
 
   return axiosClient;
 };
 
 const client = createClient();
 
-export { client, errorInterceptor };
+export { client, errorInterceptor, successInterceptor };

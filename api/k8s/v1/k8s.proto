@@ -212,6 +212,14 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = CREATE;
   }
+
+  rpc DescribeNamespace(DescribeNamespaceRequest) returns (DescribeNamespaceResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeNamespace"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message DescribePodRequest {
@@ -224,8 +232,6 @@ message DescribePodRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribePodResponse {
@@ -250,6 +256,51 @@ message Container {
   State state = 3;
   bool ready = 4;
   int32 restart_count = 5;
+
+  // ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerState
+  oneof state_details {
+    StateWaiting state_waiting = 6;
+    StateRunning state_running = 7;
+    StateTerminated state_terminated = 8;
+  }
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateWaiting
+message StateWaiting {
+  string reason = 1;
+  string message = 2;
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateRunning
+message StateRunning {
+  google.protobuf.Timestamp start_time = 1;
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateTerminated
+message StateTerminated {
+  string reason = 1;
+  string message = 2;
+  int32 exit_code = 3;
+  int32 signal = 4;
+}
+
+message PodCondition {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    CONTAINERS_READY = 1;
+    INITIALIZED = 2;
+    READY = 3;
+    POD_SCHEDULED = 4;
+  }
+  Type type = 1;
+
+  enum Status {
+    STATUS_UNSPECIFIED = 0;
+    TRUE = 1;
+    FALSE = 2;
+    UNKNOWN = 3;
+  }
+  Status status = 2;
 }
 
 message Pod {
@@ -282,13 +333,46 @@ message Pod {
 
   map<string, string> labels = 9;
   map<string, string> annotations = 10;
+
+  // message indicating details about why the pod is in this state.
+  // https://pkg.go.dev/k8s.io/api/core/v1#PodStatus
+  string state_reason = 11;
+
+  // current service state of pod.
+  // https://pkg.go.dev/k8s.io/api/core/v1#PodCondition
+  repeated PodCondition pod_conditions = 12;
+
+  // one entry per init container.
+  // ref: https://pkg.go.dev/k8s.io/api/core/v1#PodStatus
+  repeated Container init_containers = 13;
+
+  // status string calculated based on the same logic as kubectl
+  // which summarizes the current status of the pod depending on
+  // the status of its containers.
+  // ref: https://github.com/kubernetes/kubernetes/blob/master/pkg/printers/internalversion/printers.go#L761
+  string status = 14;
+
+  // This is here as a workound since protobufjs currently has serialization
+  // issues for well-known types like google.protobuf.Timestamp
+  // Unix timestamp (milliseconds since Jan 01 1970)
+  int64 start_time_millis = 15;
 }
 
 message ListOptions {
   map<string, string> labels = 9;
+  // This selector string will be concatenated to the string that is
+  // formed from formatting the labels.
+  // This is useful in the case of having Set-based selectors rather
+  // than just equality-based selectors which is how the map is formatted.
+  string supplemental_selector_string = 10;
 }
 
 message ListPodsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -413,6 +497,38 @@ message Deployment {
 
   map<string, string> labels = 4;
   map<string, string> annotations = 5;
+
+  message DeploymentStatus {
+    uint32 replicas = 1;
+    uint32 updated_replicas = 2;
+    uint32 ready_replicas = 3;
+    uint32 available_replicas = 4;
+    uint32 unavailable_replicas = 5;
+    message Condition {
+      // This is mirroring upstream values here:
+      // https://pkg.go.dev/k8s.io/api/apps/v1#DeploymentConditionType
+      enum Type {
+        UNSPECIFIED = 0;
+        UNKNOWN = 1;
+        AVAILABLE = 2;
+        PROGRESSING = 3;
+        REPLICA_FAILURE = 4;
+      }
+      Type type = 1;
+      enum ConditionStatus {
+        CONDITION_UNSPECIFIED = 0;
+        CONDITION_TRUE = 1;
+        CONDITION_FALSE = 2;
+        CONDITION_UNKNOWN = 3;
+      }
+      ConditionStatus condition_status = 2;
+
+      string reason = 5;
+      string message = 6;
+    }
+    repeated Condition deployment_conditions = 6;
+  }
+  DeploymentStatus deployment_status = 6;
 }
 
 message DescribeDeploymentRequest {
@@ -425,8 +541,6 @@ message DescribeDeploymentRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeDeploymentResponse {
@@ -436,6 +550,11 @@ message DescribeDeploymentResponse {
 }
 
 message ListDeploymentsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -515,8 +634,6 @@ message DescribeStatefulSetRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeStatefulSetResponse {
@@ -526,6 +643,11 @@ message DescribeStatefulSetResponse {
 }
 
 message ListStatefulSetsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -615,8 +737,6 @@ message DescribeServiceRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeServiceResponse {
@@ -679,8 +799,6 @@ message DescribeCronJobRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeCronJobResponse {
@@ -690,6 +808,11 @@ message DescribeCronJobResponse {
 }
 
 message ListCronJobsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -740,6 +863,11 @@ message ConfigMap {
 }
 
 message ListConfigMapsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -763,9 +891,6 @@ message DescribeConfigMapRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
-  map<string, string> annotations = 6 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeConfigMapResponse {
@@ -804,6 +929,11 @@ message Job {
 }
 
 message ListJobsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -850,6 +980,36 @@ message CreateJobRequest {
 
 message CreateJobResponse {
   Job job = 1;
+}
+
+message Namespace {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{name}"
+  };
+
+  string cluster = 1;
+  string name = 2;
+
+  map<string, string> annotations = 3;
+  map<string, string> labels = 4;
+}
+
+message DescribeNamespaceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 3 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DescribeNamespaceResponse {
+  option (clutch.api.v1.reference).fields = "namespace";
+
+  Namespace namespace = 1;
 }
 
 // This message type is used to add support for nullable strings and is an

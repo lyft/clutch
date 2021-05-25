@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -126,11 +125,7 @@ func ApplyRestClientConfig(restConfig *rest.Config, restClientConfig *k8sconfigv
 	}
 
 	if restClientConfig.Timeout != nil {
-		timeout, err := ptypes.Duration(restClientConfig.Timeout)
-		if err != nil {
-			return err
-		}
-		restConfig.Timeout = timeout
+		restConfig.Timeout = restClientConfig.Timeout.AsDuration()
 	}
 	return nil
 }
@@ -148,9 +143,26 @@ func (m *managerImpl) Clientsets(ctx context.Context) (map[string]ContextClients
 }
 
 func (m *managerImpl) GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error) {
+	// Look for the exact clientset.
 	cs, ok := m.clientsets[clientset]
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, "clientset '%s' not found", clientset)
+		// Look for a clientset that matches the provided cluster. If there is more than one that's an error, user
+		// will require a custom clientset manager to determine the proper clientset to use. This is complex so
+		// we refer them to the maintainers in the error message.
+		for _, ccs := range m.clientsets {
+			if ccs.Cluster() == cluster {
+				if ok { // already matched once
+					return nil, status.Errorf(codes.FailedPrecondition, "multiple clientsets matching cluster '%s' were found, impossible to determine the correct clientset; please raise this issue with the maintainers to understand options to fix", cluster)
+				}
+				ok = true
+				cs = ccs
+			}
+		}
+
+		// If neither found, error.
+		if !ok {
+			return nil, status.Errorf(codes.NotFound, "clientset '%s' not found", clientset)
+		}
 	}
 
 	if cluster != "" && cluster != cs.cluster {

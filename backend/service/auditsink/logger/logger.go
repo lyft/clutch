@@ -5,7 +5,6 @@ package logger
 // <!-- END clutchdoc -->
 
 import (
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -23,7 +22,7 @@ func New(cfg *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, erro
 	var filter *configv1.Filter
 
 	config := &configv1.SinkConfig{}
-	if err := ptypes.UnmarshalAny(cfg, config); err == nil {
+	if err := cfg.UnmarshalTo(config); err == nil {
 		filter = config.Filter
 	}
 

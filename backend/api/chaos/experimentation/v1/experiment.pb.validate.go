@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,11 +30,8 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _experiment_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on Experiment with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -43,7 +40,7 @@ func (m *Experiment) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
+	// no validation rules for RunId
 
 	if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
@@ -74,6 +71,8 @@ func (m *Experiment) Validate() error {
 			}
 		}
 	}
+
+	// no validation rules for Status
 
 	return nil
 }

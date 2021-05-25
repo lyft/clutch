@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -36,19 +36,31 @@ func (s *svc) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-ch
 		return nil, errors.New("TopologyCaching is already in progress")
 	}
 
+	// A channel that is used to signal a shutdown to the kubernetes informers
+	stop := make(chan struct{})
+
 	clientsets, err := s.manager.Clientsets(ctx)
 	if err != nil {
 		return nil, err
 	}
 	for name, cs := range clientsets {
 		s.log.Info("starting informer for", zap.String("cluster", name))
-		go s.startInformers(ctx, name, cs, ttl)
+		go s.startInformers(ctx, name, cs, ttl, stop)
 	}
+
+	go func() {
+		<-ctx.Done()
+		s.log.Info("Shutting down the kubernetes cache informers")
+		close(stop)
+		s.log.Info("Closing the kubernetes topologyObjectChan")
+		close(s.topologyObjectChan)
+		s.topologyInformerLock.Release(topologyInformerLockId)
+	}()
 
 	return s.topologyObjectChan, nil
 }
 
-func (s *svc) startInformers(ctx context.Context, clusterName string, cs ContextClientset, ttl time.Duration) {
+func (s *svc) startInformers(ctx context.Context, clusterName string, cs ContextClientset, ttl time.Duration, stop chan struct{}) {
 	informerHandlers := cache.ResourceEventHandlerFuncs{
 		AddFunc:    s.informerAddHandler,
 		UpdateFunc: s.informerUpdateHandler,
@@ -82,17 +94,10 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 		clusterName,
 	)
 
-	stop := make(chan struct{})
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
 	go hpaInformer.Run(stop)
 	go s.cacheFullRelist(ctx, clusterName, lwPod, lwDeployment, lwHPA, ttl)
-
-	<-ctx.Done()
-	s.log.Info("Shutting down the kubernetes cache informers")
-	close(stop)
-	close(s.topologyObjectChan)
-	s.topologyInformerLock.Release(topologyInformerLockId)
 }
 
 // cacheFullRelist will list all resources and push them to the topology cache for processing.
@@ -113,45 +118,46 @@ func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDep
 		case <-ticker.C:
 			pods, err := lwPods.List(metav1.ListOptions{})
 			if err != nil {
-				s.log.Error("Unable to list pods to populate Kubernetes cache", zap.Error(err))
-			}
-
-			podItems := pods.(*corev1.PodList).Items
-			for i := range podItems {
-				pod := &podItems[i]
-				if err := ApplyClusterMetadata(cluster, pod); err != nil {
-					s.log.Error("Unable to apply cluster name to pod object", zap.Error(err))
+				s.log.Error("Unable to list pods to populate Kubernetes cache", zap.String("cluster", cluster), zap.Error(err))
+			} else {
+				podItems := pods.(*corev1.PodList).Items
+				for i := range podItems {
+					pod := &podItems[i]
+					if err := ApplyClusterMetadata(cluster, pod); err != nil {
+						s.log.Error("Unable to apply cluster name to pod object", zap.Error(err))
+					}
+					s.processInformerEvent(pod, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 				}
-				s.processInformerEvent(pod, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 			}
 
 			deployments, err := lwDeployments.List(metav1.ListOptions{})
 			if err != nil {
-				s.log.Error("Unable to list deployments to populate Kubernetes cache", zap.Error(err))
-			}
-
-			deploymentItems := deployments.(*appsv1.DeploymentList).Items
-			for i := range deploymentItems {
-				deployment := &deploymentItems[i]
-				if err := ApplyClusterMetadata(cluster, deployment); err != nil {
-					s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
+				s.log.Error("Unable to list deployments to populate Kubernetes cache", zap.String("cluster", cluster), zap.Error(err))
+			} else {
+				deploymentItems := deployments.(*appsv1.DeploymentList).Items
+				for i := range deploymentItems {
+					deployment := &deploymentItems[i]
+					if err := ApplyClusterMetadata(cluster, deployment); err != nil {
+						s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
+					}
+					s.processInformerEvent(deployment, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 				}
-				s.processInformerEvent(deployment, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 			}
 
 			hpas, err := lwHPA.List(metav1.ListOptions{})
 			if err != nil {
-				s.log.Error("Unable to list HPAs to populate Kubernetes cache", zap.Error(err))
+				s.log.Error("Unable to list HPAs to populate Kubernetes cache", zap.String("cluster", cluster), zap.Error(err))
+			} else {
+				hpaItems := hpas.(*autoscalingv1.HorizontalPodAutoscalerList).Items
+				for i := range hpaItems {
+					hpa := &hpaItems[i]
+					if err := ApplyClusterMetadata(cluster, hpa); err != nil {
+						s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
+					}
+					s.processInformerEvent(hpa, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+				}
 			}
 
-			hpaItems := hpas.(*autoscalingv1.HorizontalPodAutoscalerList).Items
-			for i := range hpaItems {
-				hpa := &hpaItems[i]
-				if err := ApplyClusterMetadata(cluster, hpa); err != nil {
-					s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
-				}
-				s.processInformerEvent(hpa, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
-			}
 		case <-ctx.Done():
 			ticker.Stop()
 			return
@@ -175,7 +181,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 	switch objType := obj.(type) {
 	case *corev1.Pod:
 		pod := podDescription(objType, "")
-		protoPod, err := ptypes.MarshalAny(pod)
+		protoPod, err := anypb.New(pod)
 		if err != nil {
 			s.log.Error("unable to marshal pod", zap.Error(err))
 			return
@@ -196,7 +202,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 	case *appsv1.Deployment:
 		deployment := ProtoForDeployment("", objType)
-		protoDeployment, err := ptypes.MarshalAny(deployment)
+		protoDeployment, err := anypb.New(deployment)
 		if err != nil {
 			s.log.Error("unable to marshal deployment", zap.Error(err))
 			return
@@ -217,7 +223,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 	case *autoscalingv1.HorizontalPodAutoscaler:
 		hpa := ProtoForHPA("", objType)
-		protoHpa, err := ptypes.MarshalAny(hpa)
+		protoHpa, err := anypb.New(hpa)
 		if err != nil {
 			s.log.Error("unable to marshal hpa", zap.Error(err))
 			return

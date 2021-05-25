@@ -78,7 +78,7 @@ func (m *MockOIDCProviderServer) handle(w http.ResponseWriter, r *http.Request) 
 			panic(err)
 		}
 
-		fmt.Fprintf(w, `{"token_type":"bearer","access_token":"AAAAAAAAAAAA", "id_token": "%s"}`, tok)
+		fmt.Fprintf(w, `{"token_type":"bearer","access_token":"AAAAAAAAAAAA","refresh_token":"REFRESH","id_token":"%s"}`, tok)
 	case "/oauth2/v1/keys":
 		jwk := jose.JSONWebKey{KeyID: "foo", Key: m.key.Public()}
 		jwks := jose.JSONWebKeySet{Keys: []jose.JSONWebKey{jwk}}

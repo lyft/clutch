@@ -13,10 +13,11 @@ import (
 	authnmod "github.com/lyft/clutch/backend/module/authn"
 	authzmod "github.com/lyft/clutch/backend/module/authz"
 	awsmod "github.com/lyft/clutch/backend/module/aws"
+	slackbotmod "github.com/lyft/clutch/backend/module/bot/slackbot"
 	experimentationapi "github.com/lyft/clutch/backend/module/chaos/experimentation/api"
+	xdsmod "github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	"github.com/lyft/clutch/backend/module/chaos/redisexperimentation"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
-	xdsmod "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/featureflag"
 	"github.com/lyft/clutch/backend/module/healthcheck"
@@ -27,6 +28,7 @@ import (
 	topologymod "github.com/lyft/clutch/backend/module/topology"
 	"github.com/lyft/clutch/backend/resolver"
 	awsresolver "github.com/lyft/clutch/backend/resolver/aws"
+	coreresolver "github.com/lyft/clutch/backend/resolver/core"
 	k8sresolver "github.com/lyft/clutch/backend/resolver/k8s"
 	"github.com/lyft/clutch/backend/service"
 	auditservice "github.com/lyft/clutch/backend/service/audit"
@@ -35,7 +37,9 @@ import (
 	authnservice "github.com/lyft/clutch/backend/service/authn"
 	authzservice "github.com/lyft/clutch/backend/service/authz"
 	awsservice "github.com/lyft/clutch/backend/service/aws"
+	"github.com/lyft/clutch/backend/service/bot"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 	"github.com/lyft/clutch/backend/service/envoyadmin"
 	"github.com/lyft/clutch/backend/service/github"
@@ -67,6 +71,7 @@ var Modules = module.Factory{
 	xdsmod.Name:                xdsmod.New,
 	serverexperimentation.Name: serverexperimentation.New,
 	redisexperimentation.Name:  redisexperimentation.New,
+	slackbotmod.Name:           slackbotmod.New,
 	sourcecontrol.Name:         sourcecontrol.New,
 	topologymod.Name:           topologymod.New,
 }
@@ -77,8 +82,10 @@ var Services = service.Factory{
 	authnservice.StorageName: authnservice.NewStorage,
 	authzservice.Name:        authzservice.New,
 	awsservice.Name:          awsservice.New,
+	bot.Name:                 bot.New,
 	envoyadmin.Name:          envoyadmin.New,
 	experimentstore.Name:     experimentstore.New,
+	terminator.Name:          terminator.New,
 	github.Name:              github.New,
 	k8sservice.Name:          k8sservice.New,
 	loggingsink.Name:         loggingsink.New,
@@ -88,8 +95,9 @@ var Services = service.Factory{
 }
 
 var Resolvers = resolver.Factory{
-	awsresolver.Name: awsresolver.New,
-	k8sresolver.Name: k8sresolver.New,
+	awsresolver.Name:  awsresolver.New,
+	k8sresolver.Name:  k8sresolver.New,
+	coreresolver.Name: coreresolver.New,
 }
 
 var CoreComponentFactory = &ComponentFactory{

@@ -24,6 +24,37 @@ describe("error interceptor", () => {
     });
   });
 
+  describe("on auth error", () => {
+    const axiosError = {
+      response: {
+        status: 401,
+        statusText: "Not Authorized",
+        data: {
+          code: 16,
+          message: "Whoops!",
+        },
+      },
+    } as AxiosError;
+
+    beforeAll(() => {
+      global.window = Object.create(window);
+      Object.defineProperty(window, "location", {
+        value: {
+          href: "/example?foo=bar",
+          pathname: "/example",
+          search: "?foo=bar",
+        },
+        writable: true,
+      });
+
+      errorInterceptor(axiosError);
+    });
+
+    it("redirects to provided url", () => {
+      expect(window.location.href).toBe("/v1/authn/login?redirect_url=%2Fexample%3Ffoo%3Dbar");
+    });
+  });
+
   describe("on known error", () => {
     const axiosError = {
       response: {

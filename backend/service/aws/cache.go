@@ -9,8 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
-	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
@@ -82,7 +82,7 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 
 		for _, asg := range output.AutoScalingGroups {
 			protoAsg := newProtoForAutoscalingGroup(asg)
-			asgAny, err := ptypes.MarshalAny(protoAsg)
+			asgAny, err := anypb.New(protoAsg)
 			if err != nil {
 				c.log.Error("unable to marshal asg proto", zap.Error(err))
 				continue
@@ -109,7 +109,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 	c.log.Info("starting to process ec2 instances for region", zap.String("region", client.region))
 	// 1000 is the maximum amount of records per page allowed for this API
 	input := ec2.DescribeInstancesInput{
-		MaxResults: 1000,
+		MaxResults: aws.Int32(1000),
 	}
 
 	paginator := ec2.NewDescribeInstancesPaginator(client.ec2, &input)
@@ -123,7 +123,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 		for _, reservation := range output.Reservations {
 			for _, instance := range reservation.Instances {
 				protoInstance := newProtoForInstance(instance)
-				instanceAny, err := ptypes.MarshalAny(protoInstance)
+				instanceAny, err := anypb.New(protoInstance)
 				if err != nil {
 					c.log.Error("unable to marshal instance proto", zap.Error(err))
 					continue
@@ -175,7 +175,7 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 				continue
 			}
 
-			protoStream, err := ptypes.MarshalAny(v1Stream)
+			protoStream, err := anypb.New(v1Stream)
 			if err != nil {
 				c.log.Error("unable to marshal kinesis stream", zap.Error(err))
 				continue

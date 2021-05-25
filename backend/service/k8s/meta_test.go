@@ -38,6 +38,49 @@ func TestApplyListOptions(t *testing.T) {
 				LabelSelector: "foo=bar,key=value",
 			},
 		},
+		{
+			id: "map and selector string",
+			listOptions: &k8sapiv1.ListOptions{
+				Labels: map[string]string{
+					"foo": "bar",
+					"key": "value",
+				},
+				SupplementalSelectorString: "abc",
+			},
+			expectedListOptions: metav1.ListOptions{
+				LabelSelector: "foo=bar,key=value,abc",
+			},
+		},
+		{
+			id: "using selector string1",
+			listOptions: &k8sapiv1.ListOptions{
+				SupplementalSelectorString: "abc",
+			},
+			expectedListOptions: metav1.ListOptions{
+				LabelSelector: "abc",
+			},
+		},
+		{
+			id: "using selector string2",
+			listOptions: &k8sapiv1.ListOptions{
+				SupplementalSelectorString: "abc,def",
+			},
+			expectedListOptions: metav1.ListOptions{
+				LabelSelector: "abc,def",
+			},
+		},
+		{
+			id: "using selector string3",
+			listOptions: &k8sapiv1.ListOptions{
+				Labels: map[string]string{
+					"foo": "bar",
+				},
+				SupplementalSelectorString: "!abc",
+			},
+			expectedListOptions: metav1.ListOptions{
+				LabelSelector: "foo=bar,!abc",
+			},
+		},
 	}
 
 	for _, tt := range testCases {
@@ -45,8 +88,9 @@ func TestApplyListOptions(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			listOpts := ApplyListOptions(tt.listOptions)
+			listOpts, err := ApplyListOptions(tt.listOptions)
 			assert.Equal(t, listOpts, tt.expectedListOptions)
+			assert.Nil(t, err)
 		})
 	}
 }

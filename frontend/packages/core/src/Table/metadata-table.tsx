@@ -17,7 +17,7 @@ import type { BaseSchema } from "yup";
 import { object } from "yup";
 
 import { useWizardContext } from "../Contexts";
-import { TextField } from "../Input/text-field";
+import TextField from "../Input/text-field";
 
 interface RowData {
   input?: {

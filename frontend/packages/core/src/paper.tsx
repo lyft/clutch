@@ -12,4 +12,6 @@ const StyledPaper = styled(MuiPaper)({
   padding: "16px",
 });
 
-export const Paper = ({ children }: PaperProps) => <StyledPaper>{children}</StyledPaper>;
+const Paper = ({ children }: PaperProps) => <StyledPaper>{children}</StyledPaper>;
+
+export default Paper;

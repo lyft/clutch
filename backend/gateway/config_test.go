@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
@@ -79,36 +79,36 @@ func TestComputeMaximumTimeout(t *testing.T) {
 			expected: timeouts.DefaultTimeout,
 		},
 		{
-			c:        &gatewayv1.Timeouts{Default: ptypes.DurationProto(0)},
+			c:        &gatewayv1.Timeouts{Default: durationpb.New(0)},
 			expected: 0,
 		},
 		{
-			c:        &gatewayv1.Timeouts{Default: ptypes.DurationProto(time.Second)},
+			c:        &gatewayv1.Timeouts{Default: durationpb.New(time.Second)},
 			expected: time.Second,
 		},
 		{
 			c: &gatewayv1.Timeouts{
-				Default: ptypes.DurationProto(time.Second),
+				Default: durationpb.New(time.Second),
 				Overrides: []*gatewayv1.Timeouts_Entry{
-					{Timeout: ptypes.DurationProto(time.Second * 10)},
+					{Timeout: durationpb.New(time.Second * 10)},
 				},
 			},
 			expected: 10 * time.Second,
 		},
 		{
 			c: &gatewayv1.Timeouts{
-				Default: ptypes.DurationProto(time.Second),
+				Default: durationpb.New(time.Second),
 				Overrides: []*gatewayv1.Timeouts_Entry{
-					{Timeout: ptypes.DurationProto(0)},
+					{Timeout: durationpb.New(0)},
 				},
 			},
 			expected: 0,
 		},
 		{
 			c: &gatewayv1.Timeouts{
-				Default: ptypes.DurationProto(time.Second),
+				Default: durationpb.New(time.Second),
 				Overrides: []*gatewayv1.Timeouts_Entry{
-					{Timeout: ptypes.DurationProto(time.Millisecond)},
+					{Timeout: durationpb.New(time.Millisecond)},
 				},
 			},
 			expected: time.Second,

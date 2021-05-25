@@ -11,7 +11,7 @@ option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1
 // ExperimentRunDetails frontend-renderable details of an experiment run and experiment config associated with it.
 message ExperimentRunDetails {
   // The unique identifier of an experiment run.
-  fixed64 run_id = 1;
+  string run_id = 1;
   // The status of an experiment run.
   Experiment.Status status = 2;
   // The list of properties associated with the receiver that's created as a combination

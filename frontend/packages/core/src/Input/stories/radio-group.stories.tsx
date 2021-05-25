@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { RadioGroupProps } from "../radio-group";
-import { RadioGroup } from "../radio-group";
+import RadioGroup from "../radio-group";
 
 export default {
   title: "Core/Input/RadioGroup",

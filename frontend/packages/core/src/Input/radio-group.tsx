@@ -1,38 +1,36 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 import {
   FormControl as MuiFormControl,
   FormControlLabel,
   FormLabel as MuiFormLabel,
   RadioGroup as MuiRadioGroup,
 } from "@material-ui/core";
-import styled from "styled-components";
 
 import Radio from "./radio";
 
-const FormLabel = styled(MuiFormLabel)`
-  ${({ theme }) => `
-  && {
-    color: ${theme.palette.text.primary};
-  }
-  font-weight: bold;
-  position: relative;
-  &.Mui-disabled {
-    opacity: 0.75;
-  }
-  `}
-`;
+const FormLabel = styled(MuiFormLabel)({
+  "&&": {
+    color: "#2D3F50",
+  },
+  fontWeight: "bold",
+  position: "relative",
+  "&.Mui-disabled": {
+    opacity: "0.75",
+  },
+});
 
-const FormControl = styled(MuiFormControl)`
-  margin: 16px 0;
-  min-width: fit-content;
-`;
+const FormControl = styled(MuiFormControl)({
+  margin: "16px 0",
+  minWidth: "fit-content",
+});
 
 interface RadioGroupOption {
   label: string;
   value?: string;
 }
 
-interface RadioGroupProps {
+export interface RadioGroupProps {
   defaultOption?: number;
   label?: string;
   disabled?: boolean;
@@ -95,4 +93,4 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   );
 };
 
-export { RadioGroup, RadioGroupProps };
+export default RadioGroup;

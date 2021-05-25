@@ -14,8 +14,8 @@
     "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
-    "compile:dev": "tsc --sourceMap",
-    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
+    "compile:dev": "yarn workspace @clutch-sh/tools buildDev $PWD",
+    "compile:watch": "yarn workspace @clutch-sh/tools buildDev $PWD -w",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "prepublishOnly": "yarn run build",
@@ -43,15 +43,17 @@
     "material-table": "1.69.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "react-hook-form": "^6.9.2",
+    "react-hook-form": "^6.11.0",
     "react-is": "^16.8.0",
     "react-router": "^6.0.0-beta",
     "react-router-dom": "^6.0.0-beta",
-    "styled-components": "^5.1.1",
-    "superstruct": "~0.14.0",
+    "superstruct": "~0.15.0",
     "yup": "^0.32.8"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

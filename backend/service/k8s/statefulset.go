@@ -42,7 +42,11 @@ func (s *svc) ListStatefulSets(ctx context.Context, clientset, cluster, namespac
 		return nil, err
 	}
 
-	opts := ApplyListOptions(listOptions)
+	opts, err := ApplyListOptions(listOptions)
+	if err != nil {
+		return nil, err
+	}
+
 	statefulSetList, err := cs.AppsV1().StatefulSets(cs.Namespace()).List(ctx, opts)
 	if err != nil {
 		return nil, err

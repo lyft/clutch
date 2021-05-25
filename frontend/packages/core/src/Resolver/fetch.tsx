@@ -1,8 +1,9 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
 import * as $pbclutch from "@clutch-sh/api";
+import type { ClutchError } from "@clutch-sh/core";
 import _ from "lodash";
 
-import { client, parseErrorMessage } from "../network";
+import { client } from "../Network";
 
 const fetchResourceSchemas = async (type: string): Promise<IClutch.resolver.v1.Schema[]> => {
   const response = await client.post("/v1/resolver/getObjectSchemas", {
@@ -55,7 +56,7 @@ const resolveResource = async (
     [key: string]: any;
   },
   onResolve: (resultObjects: any[], failureMessages: string[]) => void,
-  onError: (message: string) => void,
+  onError: (message: ClutchError) => void,
   apiPackage?: any
 ) => {
   const resolver = fields?.query !== undefined ? resolveQuery : resolveFields;
@@ -68,20 +69,12 @@ const resolveResource = async (
         pbClutch = _.get(apiPackage, type);
       }
       const resultObjects = results.map(result => pbClutch.fromObject(result));
-      const failureMessages = failures.map(failure => parseErrorMessage(failure.message).summary);
+      const partialFailures = failures.map(failure => failure.message);
       if (_.some(resultObjects) !== undefined) {
-        onResolve(resultObjects, failureMessages);
+        onResolve(resultObjects, partialFailures);
       }
     })
-    .catch(err => {
-      if (err?.response === undefined) {
-        // Some runtime error we don't know how to handle.
-        onError(`Internal Client Error: '${err.message}'. Please contact the workflow developer.`);
-        return;
-      }
-
-      onError(err.response.displayText || err.response.statusText);
-    });
+    .catch(err => onError(err));
 };
 
 export { fetchResourceSchemas, resolveResource };

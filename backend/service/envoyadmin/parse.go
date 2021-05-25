@@ -12,16 +12,16 @@ import (
 
 	envoy_admin_v3 "github.com/envoyproxy/go-control-plane/envoy/admin/v3"
 	envoy_config_core_v3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
 	structpb "github.com/golang/protobuf/ptypes/struct"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 
 	envoytriagev1 "github.com/lyft/clutch/backend/api/envoytriage/v1"
 )
 
 func unmarshal(v []byte, pb proto.Message) error {
-	um := &jsonpb.Unmarshaler{AllowUnknownFields: true}
-	return um.Unmarshal(bytes.NewReader(v), pb)
+	um := &protojson.UnmarshalOptions{DiscardUnknown: true}
+	return um.Unmarshal(v, pb)
 }
 
 func nodeMetadataFromResponse(resp []byte) (*envoytriagev1.NodeMetadata, error) {

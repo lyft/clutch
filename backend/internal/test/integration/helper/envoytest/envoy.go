@@ -1,21 +1,25 @@
 package envoytest
 
 import (
-	"bytes"
 	"errors"
+	"io/ioutil"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 
 	bootstrap "github.com/envoyproxy/go-control-plane/envoy/config/bootstrap/v3"
 	cluster "github.com/envoyproxy/go-control-plane/envoy/config/cluster/v3"
 	listener "github.com/envoyproxy/go-control-plane/envoy/config/listener/v3"
 	hcm "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/network/http_connection_manager/v3"
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apimock "github.com/lyft/clutch/backend/mock/api"
 )
+
+const EcdsStatPrefix = "http.ingress_http.extension_config_discovery.envoy.extension_config"
+const RuntimeStatPrefix = "runtime"
 
 const baseConfig = `
 node:
@@ -59,7 +63,7 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: 127.0.0.1
+                address: 0.0.0.0
                 port_value: 1234
 `
 
@@ -106,6 +110,54 @@ func (e *EnvoyHandle) MakeSimpleCall() (int, error) {
 	return resp.StatusCode, nil
 }
 
+// EnsureControlPlaneConnectivity polls the Envoy stats endpoint to ensure that Envoy
+// has an active request against the control plane identified by the provided stat prefix.
+// This is useful in ensuring that Envoy has been able to reconnect to the control plane,
+// even after the exponential backoff that happens as Envoy is unable to connect to the
+// control plane.
+func (e *EnvoyHandle) EnsureControlPlaneConnectivity(prefix string) error {
+	client := &http.Client{}
+
+	r, err := http.NewRequest("GET", "http://envoy:9901/stats", nil)
+	if err != nil {
+		return err
+	}
+
+	timeout := time.NewTimer(20 * time.Second)
+	ticker := time.NewTicker(500 * time.Millisecond)
+
+	for {
+		select {
+		case <-timeout.C:
+			return errors.New("timed out waiting for control plane connectivity")
+		case <-ticker.C:
+			// TODO(snowp): Have this parse out a generic map of stats values to make it easier to query
+			// arbitrary stats.
+			// We intentionally ignore errors here, as the proxy might be periodically unavailable but we
+			// don't care as long as it recovers within the timeout.
+			resp, err := client.Do(r)
+			if err != nil {
+				continue
+			}
+			allStatsString, _ := ioutil.ReadAll(resp.Body)
+			resp.Body.Close()
+			splitStats := strings.Split(string(allStatsString), "\n")
+
+			for _, statString := range splitStats {
+				if !strings.HasPrefix(statString, prefix+".control_plane.connected_state") {
+					continue
+				}
+
+				nameAndValue := strings.Split(statString, ":")
+
+				if strings.TrimSpace(nameAndValue[1]) == "1" {
+					return nil
+				}
+			}
+		}
+	}
+}
+
 // EnvoyConfig provides a configuration builder that mirrors the upstream Envoy ConfigHelper:
 // a base configuration is used which can be modified by a series of modifiers to create the
 // final configuration.
@@ -128,11 +180,8 @@ func (e *EnvoyConfig) Generate() (string, error) {
 		e.finalConfig = b
 	}
 
-	m := jsonpb.Marshaler{}
-	out := bytes.NewBuffer([]byte{})
-	err := m.Marshal(out, e.finalConfig)
-
-	return out.String(), err
+	out, err := protojson.Marshal(e.finalConfig)
+	return string(out), err
 }
 
 // NewEnvoyConfig creates a new Envoy config builder, using a sensible default configuration that allows
@@ -186,7 +235,7 @@ func (e *EnvoyConfig) AddHTTPFilter(input string) error {
 
 		h.HttpFilters = append([]*hcm.HttpFilter{filter}, h.HttpFilters...)
 
-		a, _ := ptypes.MarshalAny(h)
+		a, _ := anypb.New(h)
 
 		b.StaticResources.Listeners[0].FilterChains[0].Filters[0].ConfigType = &listener.Filter_TypedConfig{
 			TypedConfig: a,

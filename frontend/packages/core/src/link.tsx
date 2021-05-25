@@ -16,16 +16,17 @@ const StyledLink = styled(MuiLink)(
   })
 );
 
-export interface LinkProps extends Pick<MuiLinkProps, "href"> {
+export interface LinkProps extends Pick<MuiLinkProps, "href" | "children"> {
   textTransform?: "none" | "capitalize" | "uppercase" | "lowercase" | "initial" | "inherit";
 }
 
-export const Link: React.FC<LinkProps> = ({ href, textTransform = "none", children }) => (
+export const Link = ({ href, textTransform = "none", children, ...props }: LinkProps) => (
   <StyledLink
     href={href}
     target="_blank"
     rel="noopener noreferrer"
     data-text-transform={textTransform}
+    {...props}
   >
     {children}
   </StyledLink>

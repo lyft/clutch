@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -27,7 +26,7 @@ const Name = "clutch.module.sourcecontrol"
 func New(cfg *any.Any, _ *zap.Logger, _ tally.Scope) (module.Module, error) {
 	config := &sourcecontrolconfigv1.Config{}
 	if cfg != nil {
-		if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+		if err := cfg.UnmarshalTo(config); err != nil {
 			return nil, err
 		}
 	}

@@ -3,17 +3,17 @@ package audit
 import (
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 )
 
 func TestNew(t *testing.T) {
-	cfg, _ := ptypes.MarshalAny(&auditconfigv1.Config{
+	cfg, _ := anypb.New(&auditconfigv1.Config{
 		StorageProvider: &auditconfigv1.Config_InMemory{InMemory: true},
 	})
 	log := zaptest.NewLogger(t)

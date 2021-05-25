@@ -4,7 +4,6 @@ import { createMuiTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@ma
 import { useTheme as useMuiTheme } from "@material-ui/core/styles";
 import type { PaletteOptions } from "@material-ui/core/styles/createPalette";
 import { StylesProvider } from "@material-ui/styles";
-import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
 interface ClutchPalette extends PaletteOptions {
   accent: {
@@ -17,13 +16,6 @@ interface ClutchPalette extends PaletteOptions {
 
 interface ClutchTheme extends ThemeOptions {
   palette: ClutchPalette;
-}
-
-declare module "styled-components" {
-  export interface ClutchTheme // eslint-disable-line @typescript-eslint/no-shadow
-    extends ThemeOptions {
-    palette: ClutchPalette;
-  }
 }
 
 const WHITE = "#ffffff";
@@ -104,10 +96,8 @@ const Theme: React.FC<ThemeProps> = ({ children }) => {
   return (
     <MuiThemeProvider theme={theme()}>
       <EmotionThemeProvider theme={theme()}>
-        <StyledThemeProvider theme={theme()}>
-          <CssBaseline />
-          <StylesProvider injectFirst>{children}</StylesProvider>
-        </StyledThemeProvider>
+        <CssBaseline />
+        <StylesProvider injectFirst>{children}</StylesProvider>
       </EmotionThemeProvider>
     </MuiThemeProvider>
   );

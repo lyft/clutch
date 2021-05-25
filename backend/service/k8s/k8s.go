@@ -7,7 +7,6 @@ package k8s
 import (
 	"context"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -31,7 +30,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	// Use the default kubeconfig (environment or well-known path) if kubeconfigs are not passed in.
 	// https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
 	if cfg != nil {
-		if err := ptypes.UnmarshalAny(cfg, k8sConfig); err != nil {
+		if err := cfg.UnmarshalTo(k8sConfig); err != nil {
 			return nil, err
 		}
 
@@ -95,6 +94,9 @@ type Service interface {
 	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
 	CreateJob(ctx context.Context, clientset, cluster, namespace string, job *batchv1.Job) (*k8sapiv1.Job, error)
+
+	// Namespace management functions.
+	DescribeNamespace(ctx context.Context, clientset, cluster, name string) (*k8sapiv1.Namespace, error)
 }
 
 type svc struct {

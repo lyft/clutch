@@ -5,7 +5,7 @@ import type { Meta } from "@storybook/react";
 import { Button } from "../button";
 import type { DialogProps } from "../dialog";
 import { Dialog, DialogActions, DialogContent } from "../dialog";
-import { TextField } from "../Input/text-field";
+import TextField from "../Input/text-field";
 
 export default {
   title: "Core/Dialog",

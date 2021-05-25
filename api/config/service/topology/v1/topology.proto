@@ -15,4 +15,14 @@ message Config {
 message Cache {
   // The time to live (ttl) for an item in cache, the default is 2 hours (7200 seconds).
   google.protobuf.Duration ttl = 1 [ (validate.rules).duration.gt.seconds = 1 ];
+
+  // Set the batch insert size for setCache() operations. By default this is set to 1.
+  // Depending on your database resource configuration and the number of items to cache,
+  // you can tune this value to improve write performance.
+  int32 batch_insert_size = 2;
+
+  // Defaults to 10 seconds.
+  // A periodic flush of the queued up items for batch inserts, ensuring that items do not get
+  // stuck in the batch waiting for batch_insert_size to be reached.
+  google.protobuf.Duration batch_insert_flush = 3;
 }

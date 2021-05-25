@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -29,13 +30,13 @@ func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 		return nil, errors.New("unable to get authn service")
 	}
 
-	p, ok := svc.(authn.Provider)
+	p, ok := svc.(authn.Service)
 	if !ok {
 		return nil, errors.New("authn service was not the correct type")
 	}
 
 	return &mod{
-		authnv1: &api{svc: p},
+		authnv1: &api{provider: p, issuer: p},
 	}, nil
 }
 
@@ -49,24 +50,23 @@ func (m *mod) Register(r module.Registrar) error {
 }
 
 type api struct {
-	svc authn.Provider
+	provider authn.Provider
+	issuer   authn.Issuer
 }
 
 func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv1.LoginResponse, error) {
-	state, err := a.svc.GetStateNonce(request.RedirectUrl)
+	state, err := a.provider.GetStateNonce(request.RedirectUrl)
 	if err != nil {
 		return nil, err
 	}
-	authURL, err := a.svc.GetAuthCodeURL(ctx, state)
+	authURL, err := a.provider.GetAuthCodeURL(ctx, state)
 	if err != nil {
 		return nil, err
 	}
 
-	if request.RedirectUrl == "" {
-		md := metadata.Pairs("Location", authURL)
-		if err := grpc.SendHeader(ctx, md); err != nil {
-			return nil, err
-		}
+	md := metadata.Pairs("Location", authURL)
+	if err := grpc.SendHeader(ctx, md); err != nil {
+		return nil, err
 	}
 
 	return &authnv1.LoginResponse{
@@ -79,12 +79,12 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 		return nil, fmt.Errorf("%s: %s", request.Error, request.ErrorDescription)
 	}
 
-	redirectURL, err := a.svc.ValidateStateNonce(request.State)
+	redirectURL, err := a.provider.ValidateStateNonce(request.State)
 	if err != nil {
 		return nil, err
 	}
 
-	token, err := a.svc.Exchange(ctx, request.Code)
+	token, err := a.provider.Exchange(ctx, request.Code)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,6 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	// redirect back to original location
 	md := metadata.New(map[string]string{
 		"Location":         redirectURL,
-		"Location-Status":  "303",
 		"Set-Cookie-Token": token.AccessToken,
 	})
 
@@ -102,6 +101,24 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	}
 
 	return &authnv1.CallbackResponse{
+		AccessToken: token.AccessToken,
+	}, nil
+}
+
+func (a *api) CreateToken(ctx context.Context, request *authnv1.CreateTokenRequest) (*authnv1.CreateTokenResponse, error) {
+	var expiry *time.Duration
+
+	if request.Expiry != nil {
+		convertedExpiry := request.Expiry.AsDuration()
+		expiry = &convertedExpiry
+	}
+
+	token, err := a.issuer.CreateToken(ctx, request.Subject, request.TokenType, expiry)
+	if err != nil {
+		return nil, err
+	}
+
+	return &authnv1.CreateTokenResponse{
 		AccessToken: token.AccessToken,
 	}, nil
 }

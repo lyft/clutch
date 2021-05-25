@@ -3,11 +3,11 @@ package postgres
 import (
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	postgresv1 "github.com/lyft/clutch/backend/api/config/service/db/postgres/v1"
 )
@@ -32,7 +32,7 @@ func TestNew(t *testing.T) {
 		},
 	}
 
-	cfg, err = ptypes.MarshalAny(pgconfig)
+	cfg, err = anypb.New(pgconfig)
 	assert.NoError(t, err)
 
 	svc, err = New(cfg, logger, scope)

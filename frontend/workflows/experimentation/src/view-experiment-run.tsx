@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
+import type { ClutchError } from "@clutch-sh/core";
 import {
   BaseWorkflowProps,
   Button,
@@ -18,7 +19,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const [experiment, setExperiment] = useState<
     IClutch.chaos.experimentation.v1.ExperimentRunDetails | undefined
   >(undefined);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ClutchError | undefined>(undefined);
 
   const { runID } = useParams();
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
     const goBack = () => {
       navigate("/experimentation/list");
     };
-    const goBackButton = <Button text="Back" variant="neutral" onClick={goBack} />;
+    const goBackButton = <Button key="back" text="Back" variant="neutral" onClick={goBack} />;
 
     const statusValue = IClutch.chaos.experimentation.v1.Experiment.Status[
       experiment.status
@@ -47,16 +48,20 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
         : "Cancel Experiment Run";
     const destructiveButton = (
       <Button
+        key={title}
         text={title}
         variant="destructive"
         onClick={() => {
           client
-            .post("/v1/chaos/experimentation/cancelExperimentRun", { id: runID })
+            .post("/v1/chaos/experimentation/cancelExperimentRun", {
+              id: runID,
+              reason: "Stopped manually by a user",
+            })
             .then(() => {
               setExperiment(undefined);
             })
-            .catch(err => {
-              setError(err.response.statusText);
+            .catch((err: ClutchError) => {
+              setError(err);
             });
         }}
       />
@@ -65,14 +70,14 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
     return [goBackButton, destructiveButton];
   }
 
-  if (experiment === undefined && error === "") {
+  if (experiment === undefined) {
     client
       .post("/v1/chaos/experimentation/getExperimentRunDetails", { id: runID })
       .then(response => {
         setExperiment(response?.data?.runDetails);
       })
-      .catch(err => {
-        setError(err.response.statusText);
+      .catch((err: ClutchError) => {
+        setError(err);
       });
   }
 

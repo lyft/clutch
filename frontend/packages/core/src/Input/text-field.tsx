@@ -182,7 +182,7 @@ export interface TextFieldProps
   autocompleteCallback?: (v: string) => Promise<any>;
 }
 
-export const TextField = ({
+const TextField = ({
   onChange,
   onReturn,
   error,
@@ -190,6 +190,7 @@ export const TextField = ({
   readOnly,
   endAdornment,
   autocompleteCallback,
+  defaultValue,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -254,6 +255,7 @@ export const TextField = ({
         onSelectCapture={e =>
           onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
         }
+        defaultValue={{ id: defaultValue, label: defaultValue }}
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
@@ -269,7 +271,14 @@ export const TextField = ({
     );
   }
 
-  return <StyledTextField {...textFieldProps} {...props} />;
+  return (
+    <StyledTextField
+      {...textFieldProps}
+      defaultValue={defaultValue}
+      onChange={onChange}
+      {...props}
+    />
+  );
 };
 
 export default TextField;

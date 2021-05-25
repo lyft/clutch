@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,17 +30,42 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _xds_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on Config with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Config) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if m.GetCacheRefreshInterval() == nil {
+		return ConfigValidationError{
+			field:  "CacheRefreshInterval",
+			reason: "value is required",
+		}
+	}
+
+	if d := m.GetCacheRefreshInterval(); d != nil {
+		dur, err := d.AsDuration(), d.CheckValid()
+		if err != nil {
+			return ConfigValidationError{
+				field:  "CacheRefreshInterval",
+				reason: "value is not a valid duration",
+				cause:  err,
+			}
+		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "CacheRefreshInterval",
+				reason: "value must be greater than 0s",
+			}
+		}
+
 	}
 
 	if len(m.GetRtdsLayerName()) < 1 {
@@ -50,38 +75,60 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetCacheRefreshInterval()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ConfigValidationError{
-				field:  "CacheRefreshInterval",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
+	if m.GetResourceTtl() == nil {
+		return ConfigValidationError{
+			field:  "ResourceTtl",
+			reason: "value is required",
 		}
 	}
 
-	// no validation rules for IngressFaultRuntimePrefix
-
-	// no validation rules for EgressFaultRuntimePrefix
-
-	if v, ok := interface{}(m.GetResourceTtl()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if d := m.GetResourceTtl(); d != nil {
+		dur, err := d.AsDuration(), d.CheckValid()
+		if err != nil {
 			return ConfigValidationError{
 				field:  "ResourceTtl",
-				reason: "embedded message failed validation",
+				reason: "value is not a valid duration",
 				cause:  err,
 			}
+		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "ResourceTtl",
+				reason: "value must be greater than 0s",
+			}
+		}
+
+	}
+
+	if m.GetHeartbeatInterval() == nil {
+		return ConfigValidationError{
+			field:  "HeartbeatInterval",
+			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetHeartbeatInterval()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if d := m.GetHeartbeatInterval(); d != nil {
+		dur, err := d.AsDuration(), d.CheckValid()
+		if err != nil {
 			return ConfigValidationError{
 				field:  "HeartbeatInterval",
-				reason: "embedded message failed validation",
+				reason: "value is not a valid duration",
 				cause:  err,
 			}
 		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "HeartbeatInterval",
+				reason: "value must be greater than 0s",
+			}
+		}
+
 	}
 
 	if v, ok := interface{}(m.GetEcdsAllowList()).(interface{ Validate() error }); ok {
@@ -157,6 +204,13 @@ var _ interface {
 func (m *Config_ECDSAllowList) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if len(m.GetEnabledClusters()) < 1 {
+		return Config_ECDSAllowListValidationError{
+			field:  "EnabledClusters",
+			reason: "value must contain at least 1 item(s)",
+		}
 	}
 
 	return nil

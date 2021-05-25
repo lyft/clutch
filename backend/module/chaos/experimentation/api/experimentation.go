@@ -1,7 +1,7 @@
 package api
 
 // <!-- START clutchdoc -->
-// description: Experimentation Framework Service implementation. Supports a CRUD API for managing experiments.
+// description: Chaos Experimentation Framework - Supports a CRUD API for managing experiments.
 // <!-- END clutchdoc -->
 
 import (
@@ -28,6 +28,7 @@ type Service struct {
 	storer                      experimentstore.Storer
 	logger                      *zap.SugaredLogger
 	createExperimentStat        tally.Counter
+	createOrGetExperimentStats  tally.Scope
 	cancelExperimentRunStat     tally.Counter
 	getExperimentsStat          tally.Counter
 	getListViewStat             tally.Counter
@@ -50,6 +51,7 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		storer:                      experimentStore,
 		logger:                      logger.Sugar(),
 		createExperimentStat:        scope.Counter("create_experiment"),
+		createOrGetExperimentStats:  scope.SubScope("create_or_get_experiment"),
 		cancelExperimentRunStat:     scope.Counter("cancel_experiment_run"),
 		getExperimentsStat:          scope.Counter("get_experiments"),
 		getListViewStat:             scope.Counter("get_list_view"),
@@ -66,33 +68,61 @@ func (s *Service) Register(r module.Registrar) error {
 func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.CreateExperimentRequest) (*experimentation.CreateExperimentResponse, error) {
 	s.createExperimentStat.Inc(1)
 
-	// If start time is not provided, default to starting now
-	now := time.Now()
-	startTime := &now
-	if req.StartTime != nil {
-		s := req.StartTime.AsTime()
-		startTime = &s
-	}
-
-	// If the end time is not provided, default to no end time
-	var endTime *time.Time = nil
-	if req.EndTime != nil {
-		s := req.EndTime.AsTime()
-		endTime = &s
-	}
-
-	experiment, err := s.storer.CreateExperiment(ctx, req.Config, startTime, endTime)
+	es, err := experimentstore.NewExperimentSpecification(req.Data, time.Now())
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.CreateExperimentResponse{Experiment: experiment}, nil
+	e, err := s.storer.CreateExperiment(ctx, es)
+	if err != nil {
+		return nil, err
+	}
+
+	ep, err := e.Proto(time.Now())
+	if err != nil {
+		return nil, err
+	}
+
+	return &experimentation.CreateExperimentResponse{Experiment: ep}, nil
+}
+
+func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentation.CreateOrGetExperimentRequest) (*experimentation.CreateOrGetExperimentResponse, error) {
+	s.createOrGetExperimentStats.Counter("request").Inc(1)
+
+	es, err := experimentstore.NewExperimentSpecification(req.Data, time.Now())
+	if err != nil {
+		return nil, err
+	}
+	createOrGetExperiment, err := s.storer.CreateOrGetExperiment(ctx, es)
+	if err != nil {
+		return nil, err
+	}
+
+	ep, err := createOrGetExperiment.Experiment.Proto(time.Now())
+	if err != nil {
+		return nil, err
+	}
+
+	r := s.createOrGetExperimentStats.SubScope("result")
+	switch createOrGetExperiment.Origin {
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_UNSPECIFIED:
+		r.Counter("unspecified").Inc(1)
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING:
+		r.Counter("get").Inc(1)
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW:
+		r.Counter("create").Inc(1)
+	}
+
+	return &experimentation.CreateOrGetExperimentResponse{
+		Experiment: ep,
+		Origin:     createOrGetExperiment.Origin,
+	}, nil
 }
 
 // CancelExperimentRun cancels experiment that is currently running or is scheduled to be run in the future.
 func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.CancelExperimentRunRequest) (*experimentation.CancelExperimentRunResponse, error) {
 	s.cancelExperimentRunStat.Inc(1)
-	err := s.storer.CancelExperimentRun(ctx, req.Id)
+	err := s.storer.CancelExperimentRun(ctx, req.Id, req.Reason)
 	if err != nil {
 		return nil, err
 	}
@@ -103,13 +133,21 @@ func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.
 // GetExperiments returns all experiments from the experiment store.
 func (s *Service) GetExperiments(ctx context.Context, request *experimentation.GetExperimentsRequest) (*experimentation.GetExperimentsResponse, error) {
 	s.getExperimentsStat.Inc(1)
-	experiments, err := s.storer.GetExperiments(ctx, request.GetConfigType(), request.GetStatus())
+	es, err := s.storer.GetExperiments(ctx, request.GetConfigType(), request.GetStatus())
 	if err != nil {
-		s.logger.Errorw("GetExperiments: Unable to retrieve experiments", "error", err)
 		return &experimentation.GetExperimentsResponse{}, err
 	}
 
-	return &experimentation.GetExperimentsResponse{Experiments: experiments}, nil
+	ee := make([]*experimentation.Experiment, len(es))
+	for i, e := range es {
+		ep, err := e.Proto(time.Now())
+		if err != nil {
+			return nil, err
+		}
+		ee[i] = ep
+	}
+
+	return &experimentation.GetExperimentsResponse{Experiments: ee}, nil
 }
 
 func (s *Service) GetListView(ctx context.Context, _ *experimentation.GetListViewRequest) (*experimentation.GetListViewResponse, error) {

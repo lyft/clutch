@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -54,14 +53,8 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 	switch req.GetWindow().(type) {
 	case *auditv1.GetEventsRequest_Range:
 		timerange := req.GetRange()
-		start, err := ptypes.Timestamp(timerange.StartTime)
-		if err != nil {
-			return nil, fmt.Errorf("problem parsing start of range: %w", err)
-		}
-		end, err := ptypes.Timestamp(timerange.EndTime)
-		if err != nil {
-			return nil, fmt.Errorf("problem parsing end of range: %w", err)
-		}
+		start := timerange.StartTime.AsTime()
+		end := timerange.EndTime.AsTime()
 
 		events, err := m.client.ReadEvents(ctx, start, &end)
 		if err != nil {
@@ -69,10 +62,11 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 		}
 		return &auditv1.GetEventsResponse{Events: events}, nil
 	case *auditv1.GetEventsRequest_Since:
-		window, err := ptypes.Duration(req.GetSince())
-		if err != nil {
+		if err := req.GetSince().CheckValid(); err != nil {
 			return nil, fmt.Errorf("problem parsing duration: %w", err)
 		}
+
+		window := req.GetSince().AsDuration()
 		start := time.Now().Add(-window)
 
 		events, err := m.client.ReadEvents(ctx, start, nil)

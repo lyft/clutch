@@ -44,7 +44,7 @@ interface RadioGroupOption {
   value: string;
 }
 
-interface FormItem {
+export interface FormItem {
   name?: string;
   label: string;
   type: string;
@@ -132,4 +132,4 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
   );
 };
 
-export { FormFields, FormItem };
+export default FormFields;

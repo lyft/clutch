@@ -9,7 +9,7 @@ option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1
 // ListViewItem an abstraction for a list item.
 message ListViewItem {
   // The unique identifier of a list item.
-  uint64 id = 1;
+  string id = 1;
   // The properties map.
   PropertiesMap properties = 2;
 }

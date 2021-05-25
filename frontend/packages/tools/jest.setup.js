@@ -3,6 +3,6 @@ import Adapter from "enzyme-adapter-react-16";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-HTMLCanvasElement.prototype.getContext = () => { 
+HTMLCanvasElement.prototype.getContext = () => {
   // return whatever getContext has to return
 };

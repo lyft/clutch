@@ -25,7 +25,7 @@ const DialogTitle = styled(MuiDialogTitle)({
   justifyContent: "space-between",
   fontSize: "20px",
   padding: "12px 12px 0 32px",
-  fontWeight: 400,
+  fontWeight: 500,
   color: "#0D1030",
 });
 
@@ -40,6 +40,8 @@ const IconButton = styled(MuiIconButton)({
 });
 
 const DialogContent = styled(MuiDialogContent)({
+  display: "flex",
+  flexDirection: "column",
   padding: "16px 32px 32px 32px",
   fontSize: "16px",
   fontWeight: 400,

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/http/pprof"
+	"net/textproto"
 	"net/url"
 	"path"
 	"regexp"
@@ -26,6 +27,12 @@ import (
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/service"
 	awsservice "github.com/lyft/clutch/backend/service/aws"
+)
+
+const (
+	xHeader        = "X-"
+	xForwardedFor  = "X-Forwarded-For"
+	xForwardedHost = "X-Forwarded-Host"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
@@ -164,39 +171,47 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 		http.SetCookie(w, cookie)
 	}
 
-	if redirects := md.HeaderMD.Get("Location"); len(redirects) > 0 {
-		w.Header().Set("Location", redirects[0])
-
+	// Redirect if it's the browser (non-XHR).
+	redirects := md.HeaderMD.Get("Location")
+	if len(redirects) > 0 && isBrowser(requestHeadersFromResponseWriter(w)) {
 		code := http.StatusFound
 		if st := md.HeaderMD.Get("Location-Status"); len(st) > 0 {
-			if newCode, err := strconv.Atoi(st[0]); err != nil {
-				code = newCode
+			headerCodeOverride, err := strconv.Atoi(st[0])
+			if err != nil {
+				return err
 			}
+			code = headerCodeOverride
 		}
+
+		w.Header().Set("Location", redirects[0])
 		w.WriteHeader(code)
 	}
+
 	return nil
 }
 
-func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
-	//  TODO(maybe): once we have non-browser clients we probably want to avoid the redirect and directly return the error.
-	if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
-		referer := req.Referer()
-		redirectPath := "/v1/authn/login"
-		if len(referer) != 0 {
-			referer, err := url.Parse(referer)
-			if err != nil {
-				runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
-				return
-			}
-			if redirectPath != referer.Path {
-				redirectPath = fmt.Sprintf("%s?redirect_url=%s", redirectPath, referer.Path)
-			}
+func customHeaderMatcher(key string) (string, bool) {
+	key = textproto.CanonicalMIMEHeaderKey(key)
+	if strings.HasPrefix(key, xHeader) {
+		// exclude handling these headers as they are looked up by grpc's annotate context flow and added to the context
+		// metadata if they're not found
+		if key != xForwardedFor && key != xForwardedHost {
+			return runtime.MetadataPrefix + key, true
 		}
-
-		http.Redirect(w, req, redirectPath, http.StatusFound)
-		return
 	}
+	// the the default header mapping rule
+	return runtime.DefaultHeaderMatcher(key)
+}
+
+func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
+	if isBrowser(req.Header) { // Redirect if it's the browser (non-XHR).
+		if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
+			redirectPath := fmt.Sprintf("/v1/authn/login?redirect_url=%s", url.QueryEscape(req.RequestURI))
+			http.Redirect(w, req, redirectPath, http.StatusFound)
+			return
+		}
+	}
+
 	runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 }
 
@@ -217,6 +232,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 				UnmarshalOptions: protojson.UnmarshalOptions{},
 			},
 		),
+		runtime.WithIncomingHeaderMatcher(customHeaderMatcher),
 	)
 
 	// If there is a configured asset provider, we check to see if the service is configured before proceeding.

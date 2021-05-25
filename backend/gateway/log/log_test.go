@@ -8,13 +8,13 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
@@ -28,7 +28,7 @@ func TestProtoField(t *testing.T) {
 	)
 
 	r := &healthcheckv1.HealthcheckRequest{}
-	a, _ := ptypes.MarshalAny(r)
+	a, _ := anypb.New(r)
 
 	logger.Info("test", ProtoField("key", a))
 	assert.NoError(t, logger.Sync())

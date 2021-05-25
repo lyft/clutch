@@ -50,23 +50,27 @@ const SelectedCenter = styled.div({
   margin: "5px 5px",
 });
 
-export interface RadioProps extends Pick<MuiRadioProps, "disabled" | "value"> {
+export interface RadioProps
+  extends Pick<MuiRadioProps, "disabled" | "name" | "onChange" | "required" | "value"> {
   selected?: boolean;
 }
 
-const Radio: React.FC<RadioProps> = ({ selected, disabled, value }) => {
+const Radio: React.FC<RadioProps> = ({ selected, disabled, name, onChange, required, value }) => {
   return (
     <StyledRadio
       checked={selected}
-      icon={<Icon data-disabled={disabled} />}
       checkedIcon={
         <SelectedIcon>
           <SelectedCenter />
         </SelectedIcon>
       }
       color="primary"
-      value={value}
+      icon={<Icon data-disabled={disabled} />}
       disabled={disabled}
+      name={name}
+      onChange={onChange}
+      required={required}
+      value={value}
     />
   );
 };

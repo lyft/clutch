@@ -49,7 +49,7 @@ func TestNoClaims(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestWhitelist(t *testing.T) {
+func TestAllowlist(t *testing.T) {
 	s := &svcMock{}
 	m, _ := newWithMock(s)
 	interceptor := m.UnaryInterceptor()
@@ -57,7 +57,7 @@ func TestWhitelist(t *testing.T) {
 	ctx := context.Background()
 
 	req := &healthcheckv1.HealthcheckRequest{}
-	info := &grpc.UnaryServerInfo{FullMethod: "/clutch.authn.v1.AuthnAPI/FooBar"}
+	info := &grpc.UnaryServerInfo{FullMethod: "/clutch.authn.v1.AuthnAPI/Callback"}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}

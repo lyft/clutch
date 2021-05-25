@@ -18,6 +18,7 @@ export default {
             setIsLoading: () => {},
             displayWarnings: () => {},
             onBack: () => {},
+            setHasError: () => {},
           };
         }}
       >

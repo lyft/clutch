@@ -30,7 +30,18 @@
         "development/custom-gateway",
         "development/feature",
         "development/api",
-        "development/frontend",
+        {
+          "type": "category",
+          "label": "Frontend",
+          "items": [
+            "development/frontend",
+            {
+              "type": "link",
+              "label": "Storybook",
+              "href": "https://storybook.clutch.sh"
+            }
+          ]
+        },
         "development/backend"
       ]
     },
@@ -39,6 +50,7 @@
       "label": "Advanced Features",
       "items": [
         "advanced/auth",
+        "advanced/chaos-experimentation",
         "advanced/security-auditing"
       ]
     },

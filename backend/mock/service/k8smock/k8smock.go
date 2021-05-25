@@ -252,6 +252,20 @@ func (s *svc) ListConfigMaps(_ context.Context, clientset, cluster, namespace st
 			Labels:      listOptions.Labels,
 			Annotations: map[string]string{"Key": "value"},
 		},
+		&k8sv1.ConfigMap{
+			Cluster:     "fake-cluster-name",
+			Namespace:   namespace,
+			Name:        "foo-bar",
+			Labels:      listOptions.Labels,
+			Annotations: map[string]string{"Key": "value"},
+		},
+		&k8sv1.ConfigMap{
+			Cluster:     "fake-cluster-name",
+			Namespace:   namespace,
+			Name:        "stuff-things",
+			Labels:      listOptions.Labels,
+			Annotations: map[string]string{"Key": "value"},
+		},
 	}
 	return configMaps, nil
 }
@@ -284,6 +298,14 @@ func (*svc) CreateJob(ctx context.Context, clientset, cluster, namespace string,
 	return &k8sv1.Job{
 		Cluster:   "fake-cluster-name",
 		Namespace: namespace,
+	}, nil
+}
+
+func (s *svc) DescribeNamespace(_ context.Context, clientset, cluster, name string) (*k8sv1.Namespace, error) {
+	return &k8sv1.Namespace{
+		Cluster: "fake-cluster-name",
+		Name:    name,
+		Labels:  map[string]string{"Key": "value"},
 	}, nil
 }
 

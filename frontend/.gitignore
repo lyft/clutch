@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# BE SURE TO ALSO UPDATE .dockerignore when adding ignore directives that could affect the build (probably all of them)!
+
 # tooling
 .yarn
 lerna-debug.log*

@@ -1,18 +1,23 @@
 package redisexperimentation
 
+// <!-- START clutchdoc -->
+// description: Chaos Experimentation Framework - Supports Redis specific experiments.
+// <!-- END clutchdoc -->
+
 import (
 	"errors"
 	"fmt"
-	"strings"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	redisexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
+	configv1 "github.com/lyft/clutch/backend/api/config/module/chaos/redisexperimentation/v1"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
+	redisexperimentationxds "github.com/lyft/clutch/backend/module/chaos/redisexperimentation/xds"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -26,7 +31,12 @@ type Service struct {
 }
 
 // New instantiates a Service object.
-func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+	config := &configv1.Config{}
+	if err := untypedConfig.UnmarshalTo(config); err != nil {
+		return nil, err
+	}
+
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
 		return nil, errors.New("could not find experiment store service")
@@ -37,20 +47,24 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		return nil, errors.New("service was not the correct type")
 	}
 
+	xds.RTDSGeneratorsByTypeUrl[xds.TypeUrl(&redisexperimentationv1.FaultConfig{})] = &redisexperimentationxds.RTDSFaultsGenerator{
+		FaultRuntimePrefix: config.FaultRuntimePrefix,
+	}
+
 	return &Service{
 		storer: storer,
 	}, nil
 }
 
 func (s *Service) Register(r module.Registrar) error {
-	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.serverexperimentation.v1.RedisFaultConfig", RunTransform: s.transform}
+	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.redisexperimentation.v1.FaultConfig", RunTransform: s.transform}
 	return s.storer.RegisterTransformation(transformation)
 }
 
-func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
-	var experimentConfig = serverexperimentation.RedisFaultConfig{}
-	if err := ptypes.UnmarshalAny(config.Config, &experimentConfig); err != nil {
-		return []*experimentation.Property{}, err
+func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentationv1.Property, error) {
+	var experimentConfig = redisexperimentationv1.FaultConfig{}
+	if err := config.Config.UnmarshalTo(&experimentConfig); err != nil {
+		return []*experimentationv1.Property{}, err
 	}
 
 	faultsDescription, err := experimentConfigToFaultString(&experimentConfig)
@@ -60,38 +74,37 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 
 	var downstream, upstream string
 	downstream = experimentConfig.GetFaultTargeting().GetDownstreamCluster().GetName()
-	upstream = experimentConfig.GetFaultTargeting().GetUpstreamCluster().GetName() +
-		strings.Join(experimentConfig.GetFaultTargeting().GetRedisCommands(), ",")
+	upstream = experimentConfig.GetFaultTargeting().GetUpstreamCluster().GetName()
 
-	return []*experimentation.Property{
+	return []*experimentationv1.Property{
 		{
 			Id:    "type",
 			Label: "Type",
-			Value: &experimentation.Property_StringValue{StringValue: "Redis"},
+			Value: &experimentationv1.Property_StringValue{StringValue: "Redis"},
 		},
 		{
 			Id:    "target",
 			Label: "Target",
-			Value: &experimentation.Property_StringValue{StringValue: fmt.Sprintf("%s ➡️ %s", downstream, upstream)},
+			Value: &experimentationv1.Property_StringValue{StringValue: fmt.Sprintf("%s ➡️ %s", downstream, upstream)},
 		},
 		{
 			Id:    "fault_types",
 			Label: "Fault Types",
-			Value: &experimentation.Property_StringValue{StringValue: faultsDescription},
+			Value: &experimentationv1.Property_StringValue{StringValue: faultsDescription},
 		},
 	}, nil
 }
 
-func experimentConfigToFaultString(experiment *serverexperimentation.RedisFaultConfig) (string, error) {
+func experimentConfigToFaultString(experiment *redisexperimentationv1.FaultConfig) (string, error) {
 	if experiment == nil {
 		return "", errors.New("experiment is nil")
 	}
 
 	switch experiment.GetFault().(type) {
-	case *serverexperimentation.RedisFaultConfig_ErrorFault:
-		return "Redis Error", nil
-	case *serverexperimentation.RedisFaultConfig_LatencyFault:
-		return "Redis Delay", nil
+	case *redisexperimentationv1.FaultConfig_ErrorFault:
+		return "Error", nil
+	case *redisexperimentationv1.FaultConfig_LatencyFault:
+		return "Delay", nil
 	default:
 		return "", fmt.Errorf("unexpected fault type %v", experiment.GetFault())
 	}

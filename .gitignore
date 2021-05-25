@@ -1,3 +1,5 @@
+# BE SURE TO ALSO UPDATE .dockerignore when adding ignore directives that could affect the build (probably all of them)!
+
 .idea/
 .DS_STORE
 

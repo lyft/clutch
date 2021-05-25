@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package clutch.config.module.chaos.redisexperimentation.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/module/chaos/redisexperimentation/v1;redisexperimentationv1";
+
+import "validate/validate.proto";
+
+message Config {
+  // A prefix to use for runtime variables that are used for the purpose of injecting redis faults.
+  string fault_runtime_prefix = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}

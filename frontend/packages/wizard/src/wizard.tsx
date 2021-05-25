@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button, ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
@@ -14,7 +15,7 @@ const Heading = styled(Typography)({
   fontSize: "26px",
 });
 
-interface WizardProps {
+interface WizardProps extends Pick<ContainerProps, "width"> {
   heading?: string;
   dataLayout: ManagerLayout;
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
@@ -32,21 +33,31 @@ interface WizardStepData {
   [index: string]: any;
 }
 
-const Container = styled(MuiContainer)({
-  padding: "32px",
-  maxWidth: "800px",
-});
+interface ContainerProps {
+  width?: "default" | "full";
+}
+
+const Container = styled(MuiContainer)<ContainerProps>(
+  {
+    padding: "32px",
+    maxWidth: "unset",
+  },
+  props => ({
+    width: props.width === "full" ? "100%" : "800px",
+  })
+);
 
 const Paper = styled(MuiPaper)({
   boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   padding: "32px",
 });
 
-const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
+const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
+  const [, setSearchParams] = useSearchParams();
 
   const updateStepData = (stepName: string, data: object) => {
     setWizardStepData(prevState => {
@@ -80,15 +91,19 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
       },
       onBack: () => {
         setGlobalWarnings([]);
+        setSearchParams({});
         dispatch(WizardAction.BACK);
       },
     };
   };
 
-  const lastStepIndex = React.Children.count(children) - 1;
+  // toArray will exclude any null Children.
+  const filteredChildren = React.Children.toArray(children);
+
+  const lastStepIndex = filteredChildren.length - 1;
   // If our wizard only has 1 step, it doesn't make sense to put a restart button
   const isMultistep = lastStepIndex > 0;
-  const steps = React.Children.map(children, (child: WizardChildren) => {
+  const steps = filteredChildren.map((child: WizardChildren) => {
     const isLoading = wizardStepData[child.type.name]?.isLoading || false;
     const hasError = wizardStepData[child.type.name]?.hasError;
     return (
@@ -103,7 +118,14 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
         <Grid container justify="center">
           {((state.activeStep === lastStepIndex && !isLoading && isMultistep) || hasError) && (
             <ButtonGroup>
-              <Button text="Start Over" onClick={() => dispatch(WizardAction.RESET)} />
+              <Button
+                text="Start Over"
+                onClick={() => {
+                  dataLayoutManager.reset();
+                  setSearchParams({});
+                  dispatch(WizardAction.RESET);
+                }}
+              />
             </ButtonGroup>
           )}
         </Grid>
@@ -116,7 +138,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
   };
 
   return (
-    <Container>
+    <Container width={width}>
       <Grid
         container
         direction="column"
@@ -127,7 +149,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
         {heading && <Heading>{heading}</Heading>}
         <Grid item>
           <Stepper activeStep={state.activeStep}>
-            {React.Children.map(children, (child: WizardChildren) => {
+            {filteredChildren.map((child: WizardChildren) => {
               const { name } = child.props;
               const hasError = wizardStepData[child.type.name]?.hasError;
               return <Step key={name} label={name} error={hasError} />;

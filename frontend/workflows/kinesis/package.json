@@ -13,8 +13,8 @@
     "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
-    "compile:dev": "tsc --sourceMap",
-    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
+    "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
+    "compile:watch": "esbuild --target=es2019 --outdir=dist --sourcemap --watch src/*.tsx",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh kinesis",
@@ -30,10 +30,13 @@
     "@material-ui/core": "^4.11.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "react-hook-form": "^6.0.8",
+    "react-hook-form": "^6.11.0",
     "react-is": "^16.8.0"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
