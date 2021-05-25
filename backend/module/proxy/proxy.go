@@ -5,11 +5,12 @@ import (
 	"errors"
 
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
+
 	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
 	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
 	"github.com/lyft/clutch/backend/module"
-	"github.com/uber-go/tally"
-	"go.uber.org/zap"
 )
 
 const Name = "clutch.module.proxy"
