@@ -16,6 +16,12 @@ extend google.protobuf.MessageOptions {
   bool redacted = 58903;
 }
 
+extend google.protobuf.FieldOptions {
+  // Use a random high number that won't conflict with annotations from other
+  // libraries.
+  bool redact = 58901;
+}
+
 extend google.protobuf.MethodOptions {
   // Use a random high number that won't conflict with annotations from other
   // libraries.
