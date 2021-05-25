@@ -1,4 +1,4 @@
-import type React from "react";
+import * as React from "react";
 
 import { client } from "./Network/index";
 
@@ -20,20 +20,19 @@ const featureFlags = (): FeatureFlags => {
 };
 
 export interface FeatureFlagProps {
-  name: string;
+  flagName: string;
   children: React.ReactNode;
 }
 
-const FeatureFlag = ({ name, children }: FeatureFlagProps) => {
-  featureFlags().then(flags => {
-    const flag = flags.find((f: { [name: string]: any }) => f.name === name);
+const FeatureFlag = ({ flagName, children }: FeatureFlagProps) => {
+  const [flags, setFlags] = React.useState({});
+  featureFlags().then(f => setFlags(f));
+  const flag = flags?.[flagName];
+  if (flag !== undefined && flag.booleanValue === true) {
+    return <>children</>;
+  }
 
-    if (flag && flag.active) {
-      return children;
-    }
-
-    return null;
-  });
+  return null;
 };
 
 export { featureFlags, FeatureFlag };
