@@ -4,12 +4,11 @@ import (
 	"context"
 	"testing"
 
-	featureflagv1 "github.com/lyft/clutch/backend/api/config/module/featureflag/v1"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 
+	featureflagv1 "github.com/lyft/clutch/backend/api/config/module/featureflag/v1"
 	"github.com/lyft/clutch/backend/module/moduletest"
 )
 

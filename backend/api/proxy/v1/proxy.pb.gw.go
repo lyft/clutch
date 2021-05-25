@@ -2,11 +2,11 @@
 // source: proxy/v1/proxy.proto
 
 /*
-Package proxy is a reverse proxy.
+Package proxyv1 is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package proxy
+package proxyv1
 
 import (
 	"context"
