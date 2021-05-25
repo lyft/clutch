@@ -91,6 +91,7 @@ export interface PopperProps
   open: boolean;
   anchorRef: React.MutableRefObject<HTMLElement>;
   children?: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
+  id?: string;
 }
 const Popper = ({
   open,
@@ -98,6 +99,7 @@ const Popper = ({
   onClickAway,
   placement = "right-start",
   children,
+  id,
 }: PopperProps) => (
   <Collapse in={open} timeout="auto" unmountOnExit>
     <StyledPopper
@@ -109,7 +111,7 @@ const Popper = ({
     >
       <Paper>
         <ClickAwayListener onClickAway={onClickAway}>
-          <List component="div" disablePadding id="workflow-options">
+          <List component="div" disablePadding id={id}>
             {children}
           </List>
         </ClickAwayListener>

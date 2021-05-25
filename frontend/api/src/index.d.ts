@@ -4500,9 +4500,6 @@ export namespace clutch {
 
                     /** LatencyFault percentage */
                     percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
-
-                    /** LatencyFault latencyDuration */
-                    latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
                 }
 
                 /** Represents a LatencyFault. */
@@ -4516,9 +4513,6 @@ export namespace clutch {
 
                     /** LatencyFault percentage. */
                     public percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
-
-                    /** LatencyFault latencyDuration. */
-                    public latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
 
                     /**
                      * Verifies a LatencyFault message.
@@ -4694,54 +4688,6 @@ export namespace clutch {
 
                     /**
                      * Converts this FaultPercentage to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a FaultLatencyDuration. */
-                interface IFaultLatencyDuration {
-
-                    /** FaultLatencyDuration fixedDurationMs */
-                    fixedDurationMs?: (number|null);
-                }
-
-                /** Represents a FaultLatencyDuration. */
-                class FaultLatencyDuration implements IFaultLatencyDuration {
-
-                    /**
-                     * Constructs a new FaultLatencyDuration.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration);
-
-                    /** FaultLatencyDuration fixedDurationMs. */
-                    public fixedDurationMs: number;
-
-                    /**
-                     * Verifies a FaultLatencyDuration message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a FaultLatencyDuration message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns FaultLatencyDuration
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultLatencyDuration;
-
-                    /**
-                     * Creates a plain object from a FaultLatencyDuration message. Also converts values to other types if specified.
-                     * @param message FaultLatencyDuration
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultLatencyDuration, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this FaultLatencyDuration to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -6920,6 +6866,182 @@ export namespace clutch {
                              */
                             public toJSON(): { [k: string]: any };
                         }
+                    }
+                }
+            }
+
+            /** Namespace proxy. */
+            namespace proxy {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config services */
+                        services?: (clutch.config.module.proxy.v1.IService[]|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.proxy.v1.IConfig);
+
+                        /** Config services. */
+                        public services: clutch.config.module.proxy.v1.IService[];
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.proxy.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.proxy.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a Service. */
+                    interface IService {
+
+                        /** Service name */
+                        name?: (string|null);
+
+                        /** Service host */
+                        host?: (string|null);
+
+                        /** Service allowedRequests */
+                        allowedRequests?: (clutch.config.module.proxy.v1.IAllowRequest[]|null);
+
+                        /** Service headers */
+                        headers?: ({ [k: string]: string }|null);
+                    }
+
+                    /** Represents a Service. */
+                    class Service implements IService {
+
+                        /**
+                         * Constructs a new Service.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.proxy.v1.IService);
+
+                        /** Service name. */
+                        public name: string;
+
+                        /** Service host. */
+                        public host: string;
+
+                        /** Service allowedRequests. */
+                        public allowedRequests: clutch.config.module.proxy.v1.IAllowRequest[];
+
+                        /** Service headers. */
+                        public headers: { [k: string]: string };
+
+                        /**
+                         * Verifies a Service message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Service
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.proxy.v1.Service;
+
+                        /**
+                         * Creates a plain object from a Service message. Also converts values to other types if specified.
+                         * @param message Service
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.proxy.v1.Service, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Service to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of an AllowRequest. */
+                    interface IAllowRequest {
+
+                        /** AllowRequest path */
+                        path?: (string|null);
+
+                        /** AllowRequest method */
+                        method?: (string|null);
+                    }
+
+                    /** Represents an AllowRequest. */
+                    class AllowRequest implements IAllowRequest {
+
+                        /**
+                         * Constructs a new AllowRequest.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.proxy.v1.IAllowRequest);
+
+                        /** AllowRequest path. */
+                        public path: string;
+
+                        /** AllowRequest method. */
+                        public method: string;
+
+                        /**
+                         * Verifies an AllowRequest message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates an AllowRequest message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns AllowRequest
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.proxy.v1.AllowRequest;
+
+                        /**
+                         * Creates a plain object from an AllowRequest message. Also converts values to other types if specified.
+                         * @param message AllowRequest
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.proxy.v1.AllowRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this AllowRequest to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
                     }
                 }
             }
@@ -9374,6 +9496,86 @@ export namespace clutch {
                 }
             }
         }
+
+        /** Namespace project. */
+        namespace project {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a Project. */
+                interface IProject {
+
+                    /** Project name */
+                    name?: (string|null);
+
+                    /** Project tier */
+                    tier?: (string|null);
+
+                    /** Project owners */
+                    owners?: (string[]|null);
+
+                    /** Project languages */
+                    languages?: (string[]|null);
+
+                    /** Project data */
+                    data?: ({ [k: string]: google.protobuf.IValue }|null);
+                }
+
+                /** Represents a Project. */
+                class Project implements IProject {
+
+                    /**
+                     * Constructs a new Project.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IProject);
+
+                    /** Project name. */
+                    public name: string;
+
+                    /** Project tier. */
+                    public tier: string;
+
+                    /** Project owners. */
+                    public owners: string[];
+
+                    /** Project languages. */
+                    public languages: string[];
+
+                    /** Project data. */
+                    public data: { [k: string]: google.protobuf.IValue };
+
+                    /**
+                     * Verifies a Project message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Project message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Project
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Project;
+
+                    /**
+                     * Creates a plain object from a Project message. Also converts values to other types if specified.
+                     * @param message Project
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.Project, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Project to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
     }
 
     /** Namespace envoytriage. */
@@ -11679,6 +11881,9 @@ export namespace clutch {
 
                 /** Pod status */
                 status?: (string|null);
+
+                /** Pod startTimeMillis */
+                startTimeMillis?: (number|Long|null);
             }
 
             /** Represents a Pod. */
@@ -11731,6 +11936,9 @@ export namespace clutch {
 
                 /** Pod status. */
                 public status: string;
+
+                /** Pod startTimeMillis. */
+                public startTimeMillis: (number|Long);
 
                 /**
                  * Verifies a Pod message.
@@ -16167,6 +16375,176 @@ export namespace clutch {
 
                 /**
                  * Converts this StatusCause to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
+    /** Namespace proxy. */
+    namespace proxy {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a ProxyAPI */
+            class ProxyAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new ProxyAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls RequestProxy.
+                 * @param request RequestProxyRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and RequestProxyResponse
+                 */
+                public requestProxy(request: clutch.proxy.v1.IRequestProxyRequest, callback: clutch.proxy.v1.ProxyAPI.RequestProxyCallback): void;
+
+                /**
+                 * Calls RequestProxy.
+                 * @param request RequestProxyRequest message or plain object
+                 * @returns Promise
+                 */
+                public requestProxy(request: clutch.proxy.v1.IRequestProxyRequest): Promise<clutch.proxy.v1.RequestProxyResponse>;
+            }
+
+            namespace ProxyAPI {
+
+                /**
+                 * Callback as used by {@link clutch.proxy.v1.ProxyAPI#requestProxy}.
+                 * @param error Error, if any
+                 * @param [response] RequestProxyResponse
+                 */
+                type RequestProxyCallback = (error: (Error|null), response?: clutch.proxy.v1.RequestProxyResponse) => void;
+            }
+
+            /** Properties of a RequestProxyRequest. */
+            interface IRequestProxyRequest {
+
+                /** RequestProxyRequest service */
+                service?: (string|null);
+
+                /** RequestProxyRequest httpMethod */
+                httpMethod?: (string|null);
+
+                /** RequestProxyRequest path */
+                path?: (string|null);
+
+                /** RequestProxyRequest request */
+                request?: (google.protobuf.IValue|null);
+            }
+
+            /** Represents a RequestProxyRequest. */
+            class RequestProxyRequest implements IRequestProxyRequest {
+
+                /**
+                 * Constructs a new RequestProxyRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.proxy.v1.IRequestProxyRequest);
+
+                /** RequestProxyRequest service. */
+                public service: string;
+
+                /** RequestProxyRequest httpMethod. */
+                public httpMethod: string;
+
+                /** RequestProxyRequest path. */
+                public path: string;
+
+                /** RequestProxyRequest request. */
+                public request?: (google.protobuf.IValue|null);
+
+                /**
+                 * Verifies a RequestProxyRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RequestProxyRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RequestProxyRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.proxy.v1.RequestProxyRequest;
+
+                /**
+                 * Creates a plain object from a RequestProxyRequest message. Also converts values to other types if specified.
+                 * @param message RequestProxyRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.proxy.v1.RequestProxyRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RequestProxyRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a RequestProxyResponse. */
+            interface IRequestProxyResponse {
+
+                /** RequestProxyResponse httpStatus */
+                httpStatus?: (number|null);
+
+                /** RequestProxyResponse headers */
+                headers?: ({ [k: string]: string }|null);
+
+                /** RequestProxyResponse response */
+                response?: (google.protobuf.IValue|null);
+            }
+
+            /** Represents a RequestProxyResponse. */
+            class RequestProxyResponse implements IRequestProxyResponse {
+
+                /**
+                 * Constructs a new RequestProxyResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.proxy.v1.IRequestProxyResponse);
+
+                /** RequestProxyResponse httpStatus. */
+                public httpStatus: number;
+
+                /** RequestProxyResponse headers. */
+                public headers: { [k: string]: string };
+
+                /** RequestProxyResponse response. */
+                public response?: (google.protobuf.IValue|null);
+
+                /**
+                 * Verifies a RequestProxyResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RequestProxyResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RequestProxyResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.proxy.v1.RequestProxyResponse;
+
+                /**
+                 * Creates a plain object from a RequestProxyResponse message. Also converts values to other types if specified.
+                 * @param message RequestProxyResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.proxy.v1.RequestProxyResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RequestProxyResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

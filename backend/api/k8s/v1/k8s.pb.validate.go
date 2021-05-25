@@ -691,6 +691,8 @@ func (m *Pod) Validate() error {
 
 	// no validation rules for Status
 
+	// no validation rules for StartTimeMillis
+
 	return nil
 }
 
