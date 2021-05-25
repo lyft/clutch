@@ -529,6 +529,11 @@ message Deployment {
     repeated Condition deployment_conditions = 6;
   }
   DeploymentStatus deployment_status = 6;
+
+  // This is a workound since protobufjs currently has serialization
+  // issues for well-known types like google.protobuf.Timestamp
+  // Unix timestamp (milliseconds since Jan 01 1970)
+  int64 creation_time_millis = 7;
 }
 
 message DescribeDeploymentRequest {
