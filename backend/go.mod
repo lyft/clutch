@@ -20,7 +20,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
 	github.com/fullstorydev/grpcurl v1.8.1
 	github.com/go-git/go-billy/v5 v5.3.1
-	github.com/go-git/go-git/v5 v5.4.0
+	github.com/go-git/go-git/v5 v5.4.1
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.5.2
