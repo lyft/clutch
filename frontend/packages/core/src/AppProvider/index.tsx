@@ -4,6 +4,7 @@ import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext } from "../Contexts/app-context";
+import { featureFlags } from "../flags";
 import Landing from "../landing";
 import NotFound from "../not-found";
 
@@ -12,11 +13,33 @@ import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
 
+const FF_POLL = +process.env.REACT_APP_FF_POLL || 300000;
+
 export interface UserConfiguration {
   [packageName: string]: {
     [key: string]: ConfiguredRoute;
   };
 }
+
+/**
+ * Filter workflow routes using available feature flags.
+ * @param workflows a list of valid Workflow objects.
+ */
+const featureFlagFilter = (workflows: Workflow[]): Workflow[] => {
+  return featureFlags().then(flags =>
+    workflows.filter(workflow => {
+      /* eslint-disable-next-line no-param-reassign */
+      workflow.routes = workflow.routes.filter(route => {
+        const show =
+          route.featureFlag === undefined ||
+          (flags?.[route.featureFlag] !== undefined &&
+            flags[route.featureFlag].booleanValue === true);
+        return show;
+      });
+      return workflow.routes.length !== 0;
+    })
+  );
+};
 
 interface ClutchAppProps {
   availableWorkflows: {
@@ -25,31 +48,52 @@ interface ClutchAppProps {
   configuration: UserConfiguration;
 }
 
-const ClutchApp: React.FC<ClutchAppProps> = ({ availableWorkflows, configuration }) => {
-  const workflows = registeredWorkflows(availableWorkflows, configuration);
+const ClutchApp: React.FC<ClutchAppProps> = ({
+  availableWorkflows,
+  configuration: userConfiguration,
+}) => {
+  const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-  /** Filter out all of the workflows that are configured to be `hideNav: true`.
-   * This prevents the workflows from being discoverable by the user from the UI,
-   * both search and drawer navigation.
-   *
-   * The routes for all configured workflows will still be reachable
-   * by manually providing the full path in the URI.
-   */
-  const publicWorkflows = _.cloneDeep(workflows).filter(workflow => {
-    const publicRoutes = workflow.routes.filter(route => {
-      return !(route?.hideNav !== undefined ? route.hideNav : false);
+  const loadWorkflows = () => {
+    registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
+      setWorkflows(w);
+      setIsLoading(false);
     });
-    workflow.routes = publicRoutes; /* eslint-disable-line no-param-reassign */
-    return publicRoutes.length !== 0;
-  });
+  };
+
+  React.useEffect(() => {
+    loadWorkflows();
+    const interval = setInterval(loadWorkflows, FF_POLL);
+    return () => clearInterval(interval);
+  }, []);
+
+  const [discoverableWorkflows, setDiscoverableWorkflows] = React.useState([]);
+  React.useEffect(() => {
+    /** Filter out all of the workflows that are configured to be `hideNav: true`.
+     * This prevents the workflows from being discoverable by the user from the UI,
+     * both search and drawer navigation.
+     *
+     * The routes for all configured workflows will still be reachable
+     * by manually providing the full path in the URI.
+     */
+    const pw = _.cloneDeep(workflows).filter(workflow => {
+      const publicRoutes = workflow.routes.filter(route => {
+        return !(route?.hideNav !== undefined ? route.hideNav : false);
+      });
+      workflow.routes = publicRoutes; /* eslint-disable-line no-param-reassign */
+      return publicRoutes.length !== 0;
+    });
+    setDiscoverableWorkflows(pw);
+  }, [workflows]);
 
   return (
     <Router>
       <Theme variant="light">
         <div id="App">
-          <ApplicationContext.Provider value={{ workflows: publicWorkflows }}>
+          <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
             <Routes>
-              <Route path="/*" element={<AppLayout />}>
+              <Route path="/*" element={<AppLayout isLoading={isLoading} />}>
                 <Route key="landing" path="/" element={<Landing />} />
                 {workflows.map((workflow: Workflow) => (
                   <ErrorBoundary workflow={workflow} key={workflow.path.split("/")[0]}>
