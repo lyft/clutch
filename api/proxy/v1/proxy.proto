@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.proxy.v1;
 
-option go_package = "github.com/lyft/clutch/backend/api/proxy/v1;proxy";
+option go_package = "github.com/lyft/clutch/backend/api/proxy/v1;proxyv1";
 
 import "api/v1/annotations.proto";
 import "google/protobuf/struct.proto";

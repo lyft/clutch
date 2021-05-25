@@ -22,6 +22,7 @@ import (
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
 	kinesismod "github.com/lyft/clutch/backend/module/kinesis"
+	proxymod "github.com/lyft/clutch/backend/module/proxy"
 	resolvermod "github.com/lyft/clutch/backend/module/resolver"
 	"github.com/lyft/clutch/backend/module/sourcecontrol"
 	topologymod "github.com/lyft/clutch/backend/module/topology"
@@ -62,16 +63,17 @@ var Modules = module.Factory{
 	awsmod.Name:                awsmod.New,
 	envoytriage.Name:           envoytriage.New,
 	experimentationapi.Name:    experimentationapi.New,
+	healthcheck.Name:           healthcheck.New,
 	k8smod.Name:                k8smod.New,
 	kinesismod.Name:            kinesismod.New,
-	healthcheck.Name:           healthcheck.New,
-	resolvermod.Name:           resolvermod.New,
-	xdsmod.Name:                xdsmod.New,
-	serverexperimentation.Name: serverexperimentation.New,
+	proxymod.Name:              proxymod.New,
 	redisexperimentation.Name:  redisexperimentation.New,
+	resolvermod.Name:           resolvermod.New,
+	serverexperimentation.Name: serverexperimentation.New,
 	slackbotmod.Name:           slackbotmod.New,
 	sourcecontrol.Name:         sourcecontrol.New,
 	topologymod.Name:           topologymod.New,
+	xdsmod.Name:                xdsmod.New,
 }
 
 var Services = service.Factory{
@@ -83,19 +85,19 @@ var Services = service.Factory{
 	bot.Name:                 bot.New,
 	envoyadmin.Name:          envoyadmin.New,
 	experimentstore.Name:     experimentstore.New,
-	terminator.Name:          terminator.New,
 	github.Name:              github.New,
 	k8sservice.Name:          k8sservice.New,
 	loggingsink.Name:         loggingsink.New,
 	pgservice.Name:           pgservice.New,
 	slack.Name:               slack.New,
+	terminator.Name:          terminator.New,
 	topologyservice.Name:     topologyservice.New,
 }
 
 var Resolvers = resolver.Factory{
 	awsresolver.Name:  awsresolver.New,
-	k8sresolver.Name:  k8sresolver.New,
 	coreresolver.Name: coreresolver.New,
+	k8sresolver.Name:  k8sresolver.New,
 }
 
 var CoreComponentFactory = &ComponentFactory{
