@@ -63,7 +63,7 @@ var Modules = module.Factory{
 	awsmod.Name:                awsmod.New,
 	envoytriage.Name:           envoytriage.New,
 	experimentationapi.Name:    experimentationapi.New,
-	featureflag.Name:        featureflag.New,
+	featureflag.Name:           featureflag.New,
 	k8smod.Name:                k8smod.New,
 	kinesismod.Name:            kinesismod.New,
 	healthcheck.Name:           healthcheck.New,
