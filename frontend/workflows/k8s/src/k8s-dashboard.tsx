@@ -7,10 +7,10 @@ import AppsIcon from "@material-ui/icons/Apps";
 import CropFreeIcon from "@material-ui/icons/CropFree";
 
 import type { WorkflowProps } from ".";
+import DeploymentTable from "./deployments-table";
 import K8sDashHeader from "./k8s-dash-header";
 import K8sDashSearch from "./k8s-dash-search";
 import PodTable from "./pods-table";
-import DeploymentTable from "./deployments-table";
 
 const Container = styled.div({
   flex: 1,
@@ -108,7 +108,7 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
             });
           });
       },
-	},
+    },
   };
   const dataLayoutManager = useDataLayoutManager(dataLayout);
 
@@ -138,7 +138,7 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
                 <Tab startAdornment={<AppsIcon />} label="Pods">
                   <PodTable />
                 </Tab>
-				<Tab startAdornment={<CropFreeIcon />} label="Deployments">
+                <Tab startAdornment={<CropFreeIcon />} label="Deployments">
                   <DeploymentTable />
                 </Tab>
               </Tabs>

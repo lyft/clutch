@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Table, TableRow } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -11,15 +10,9 @@ const DeploymentsContainer = styled.div({
   maxHeight: "50vh",
 });
 
-const getReadyCountString = containers => {
-  const readyCount = containers.filter(cont => cont.ready).length;
-  return `${readyCount.toString()}/${containers?.length?.toString()}`;
-};
-
 const DeploymentTable = () => {
   const deploymentListData = useDataLayout("deploymentListData", { hydrate: false });
   const deployments = deploymentListData.displayValue()?.deployments as IClutch.k8s.v1.Deployment[];
-  const navigate = useNavigate();
 
   return (
     <DeploymentsContainer>
