@@ -36,7 +36,11 @@ message RequestProxyResponse {
   // The http response code from the service response
   int32 http_status = 1;
   // All of the headers from teh service response
-  map<string, string> headers = 2;
+  map<string, HeaderValues> headers = 2;
   // The full response body
   google.protobuf.Value response = 3;
+}
+
+message HeaderValues {
+  repeated string values = 1;
 }
