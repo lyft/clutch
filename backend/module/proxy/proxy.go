@@ -22,6 +22,10 @@ import (
 
 const Name = "clutch.module.proxy"
 
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &proxyv1cfg.Config{}
 	err := cfg.UnmarshalTo(config)
@@ -30,6 +34,7 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 	}
 
 	m := &mod{
+		client:   &http.Client{},
 		services: config.Services,
 		logger:   log,
 		scope:    scope,
@@ -39,6 +44,7 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 }
 
 type mod struct {
+	client   HTTPClient
 	services []*proxyv1cfg.Service
 	logger   *zap.Logger
 	scope    tally.Scope
@@ -73,7 +79,8 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	// Parse the URL by joining both the HOST and PATH specifed by the config
 	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, req.Path))
 	if err != nil {
-		return nil, err
+		m.logger.Error("Unable to parse the configured URL", zap.Error(err))
+		return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", service.Name)
 	}
 
 	// Constructing the request object
@@ -83,9 +90,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		Header: headers,
 	}
 
-	// Using the default HTTP client make the request
-	client := http.DefaultClient
-	response, err := client.Do(request)
+	response, err := m.client.Do(request)
 	if err != nil {
 		m.logger.Error("proxy request error", zap.Error(err))
 		return nil, err
@@ -107,16 +112,18 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	var bodyData map[string]interface{}
 	err = json.NewDecoder(response.Body).Decode(&bodyData)
 	switch {
+	// There is no body data so do nothing
+	case err == io.EOF:
 	// Checks if the body is empty, if its not then we try and parse it.
 	case err != io.EOF:
 		str, err := structpb.NewStruct(bodyData)
 		if err != nil {
-			m.logger.Error("new strucpb error", zap.Error(err))
+			m.logger.Error("Unable to create structpb from body data", zap.Error(err))
 			return nil, err
 		}
 		proxyResponse.Response = structpb.NewStructValue(str)
 	case err != nil:
-		m.logger.Error("decode body error", zap.Error(err))
+		m.logger.Error("Unable to decode response body", zap.Error(err))
 		return nil, err
 	}
 
