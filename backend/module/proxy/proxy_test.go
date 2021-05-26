@@ -62,7 +62,7 @@ func TestRequestProxy(t *testing.T) {
 		doFunc         func() (*http.Response, error)
 		shouldError    bool
 		assertStatus   int32
-		assertHeaders  map[string]*proxyv1.HeaderValues
+		assertHeaders  map[string]*structpb.ListValue
 		assertBodyData bool
 	}{
 		{
@@ -77,15 +77,18 @@ func TestRequestProxy(t *testing.T) {
 					StatusCode: 200,
 					Body:       http.NoBody,
 					Header: http.Header{
-						"key": []string{"value1", "value2"},
+						"key1": []string{"value1", "value2"},
 					},
 				}, nil
 			},
 			shouldError:  false,
 			assertStatus: 200,
-			assertHeaders: map[string]*proxyv1.HeaderValues{
-				"key": {
-					Values: []string{"value1", "value2"},
+			assertHeaders: map[string]*structpb.ListValue{
+				"key1": {
+					Values: []*structpb.Value{
+						structpb.NewStringValue("value1"),
+						structpb.NewStringValue("value2"),
+					},
 				},
 			},
 			assertBodyData: false,
@@ -102,15 +105,18 @@ func TestRequestProxy(t *testing.T) {
 					StatusCode: 200,
 					Body:       ioutil.NopCloser(bytes.NewReader([]byte("{}"))),
 					Header: http.Header{
-						"key": []string{"value1", "value2"},
+						"key1": []string{"value1", "value2"},
 					},
 				}, nil
 			},
 			shouldError:  false,
 			assertStatus: 200,
-			assertHeaders: map[string]*proxyv1.HeaderValues{
-				"key": {
-					Values: []string{"value1", "value2"},
+			assertHeaders: map[string]*structpb.ListValue{
+				"key1": {
+					Values: []*structpb.Value{
+						structpb.NewStringValue("value1"),
+						structpb.NewStringValue("value2"),
+					},
 				},
 			},
 			assertBodyData: true,

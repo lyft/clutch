@@ -16497,7 +16497,7 @@ export namespace clutch {
                 httpStatus?: (number|null);
 
                 /** RequestProxyResponse headers */
-                headers?: ({ [k: string]: clutch.proxy.v1.IHeaderValues }|null);
+                headers?: ({ [k: string]: google.protobuf.IListValue }|null);
 
                 /** RequestProxyResponse response */
                 response?: (google.protobuf.IValue|null);
@@ -16516,7 +16516,7 @@ export namespace clutch {
                 public httpStatus: number;
 
                 /** RequestProxyResponse headers. */
-                public headers: { [k: string]: clutch.proxy.v1.IHeaderValues };
+                public headers: { [k: string]: google.protobuf.IListValue };
 
                 /** RequestProxyResponse response. */
                 public response?: (google.protobuf.IValue|null);
@@ -16545,54 +16545,6 @@ export namespace clutch {
 
                 /**
                  * Converts this RequestProxyResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a HeaderValues. */
-            interface IHeaderValues {
-
-                /** HeaderValues values */
-                values?: (string[]|null);
-            }
-
-            /** Represents a HeaderValues. */
-            class HeaderValues implements IHeaderValues {
-
-                /**
-                 * Constructs a new HeaderValues.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.proxy.v1.IHeaderValues);
-
-                /** HeaderValues values. */
-                public values: string[];
-
-                /**
-                 * Verifies a HeaderValues message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a HeaderValues message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns HeaderValues
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.proxy.v1.HeaderValues;
-
-                /**
-                 * Creates a plain object from a HeaderValues message. Also converts values to other types if specified.
-                 * @param message HeaderValues
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.proxy.v1.HeaderValues, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this HeaderValues to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

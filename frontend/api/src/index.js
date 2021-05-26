@@ -39249,7 +39249,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.proxy.v1
                  * @interface IRequestProxyResponse
                  * @property {number|null} [httpStatus] RequestProxyResponse httpStatus
-                 * @property {Object.<string,clutch.proxy.v1.IHeaderValues>|null} [headers] RequestProxyResponse headers
+                 * @property {Object.<string,google.protobuf.IListValue>|null} [headers] RequestProxyResponse headers
                  * @property {google.protobuf.IValue|null} [response] RequestProxyResponse response
                  */
 
@@ -39279,7 +39279,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * RequestProxyResponse headers.
-                 * @member {Object.<string,clutch.proxy.v1.IHeaderValues>} headers
+                 * @member {Object.<string,google.protobuf.IListValue>} headers
                  * @memberof clutch.proxy.v1.RequestProxyResponse
                  * @instance
                  */
@@ -39312,7 +39312,7 @@ export const clutch = $root.clutch = (() => {
                             return "headers: object expected";
                         let key = Object.keys(message.headers);
                         for (let i = 0; i < key.length; ++i) {
-                            let error = $root.clutch.proxy.v1.HeaderValues.verify(message.headers[key[i]]);
+                            let error = $root.google.protobuf.ListValue.verify(message.headers[key[i]]);
                             if (error)
                                 return "headers." + error;
                         }
@@ -39346,7 +39346,7 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.headers), i = 0; i < keys.length; ++i) {
                             if (typeof object.headers[keys[i]] !== "object")
                                 throw TypeError(".clutch.proxy.v1.RequestProxyResponse.headers: object expected");
-                            message.headers[keys[i]] = $root.clutch.proxy.v1.HeaderValues.fromObject(object.headers[keys[i]]);
+                            message.headers[keys[i]] = $root.google.protobuf.ListValue.fromObject(object.headers[keys[i]]);
                         }
                     }
                     if (object.response != null) {
@@ -39382,7 +39382,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.headers && (keys2 = Object.keys(message.headers)).length) {
                         object.headers = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.headers[keys2[j]] = $root.clutch.proxy.v1.HeaderValues.toObject(message.headers[keys2[j]], options);
+                            object.headers[keys2[j]] = $root.google.protobuf.ListValue.toObject(message.headers[keys2[j]], options);
                     }
                     if (message.response != null && message.hasOwnProperty("response"))
                         object.response = $root.google.protobuf.Value.toObject(message.response, options);
@@ -39401,119 +39401,6 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return RequestProxyResponse;
-            })();
-
-            v1.HeaderValues = (function() {
-
-                /**
-                 * Properties of a HeaderValues.
-                 * @memberof clutch.proxy.v1
-                 * @interface IHeaderValues
-                 * @property {Array.<string>|null} [values] HeaderValues values
-                 */
-
-                /**
-                 * Constructs a new HeaderValues.
-                 * @memberof clutch.proxy.v1
-                 * @classdesc Represents a HeaderValues.
-                 * @implements IHeaderValues
-                 * @constructor
-                 * @param {clutch.proxy.v1.IHeaderValues=} [properties] Properties to set
-                 */
-                function HeaderValues(properties) {
-                    this.values = [];
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * HeaderValues values.
-                 * @member {Array.<string>} values
-                 * @memberof clutch.proxy.v1.HeaderValues
-                 * @instance
-                 */
-                HeaderValues.prototype.values = $util.emptyArray;
-
-                /**
-                 * Verifies a HeaderValues message.
-                 * @function verify
-                 * @memberof clutch.proxy.v1.HeaderValues
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                HeaderValues.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.values != null && message.hasOwnProperty("values")) {
-                        if (!Array.isArray(message.values))
-                            return "values: array expected";
-                        for (let i = 0; i < message.values.length; ++i)
-                            if (!$util.isString(message.values[i]))
-                                return "values: string[] expected";
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a HeaderValues message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.proxy.v1.HeaderValues
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.proxy.v1.HeaderValues} HeaderValues
-                 */
-                HeaderValues.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.proxy.v1.HeaderValues)
-                        return object;
-                    let message = new $root.clutch.proxy.v1.HeaderValues();
-                    if (object.values) {
-                        if (!Array.isArray(object.values))
-                            throw TypeError(".clutch.proxy.v1.HeaderValues.values: array expected");
-                        message.values = [];
-                        for (let i = 0; i < object.values.length; ++i)
-                            message.values[i] = String(object.values[i]);
-                    }
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a HeaderValues message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.proxy.v1.HeaderValues
-                 * @static
-                 * @param {clutch.proxy.v1.HeaderValues} message HeaderValues
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                HeaderValues.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.arrays || options.defaults)
-                        object.values = [];
-                    if (message.values && message.values.length) {
-                        object.values = [];
-                        for (let j = 0; j < message.values.length; ++j)
-                            object.values[j] = message.values[j];
-                    }
-                    return object;
-                };
-
-                /**
-                 * Converts this HeaderValues to JSON.
-                 * @function toJSON
-                 * @memberof clutch.proxy.v1.HeaderValues
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                HeaderValues.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return HeaderValues;
             })();
 
             return v1;
