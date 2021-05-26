@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -86,17 +87,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	client := http.DefaultClient
 	response, err := client.Do(request)
 	if err != nil {
-		return nil, err
-	}
-
-	var bodyData map[string]interface{}
-	err = json.NewDecoder(response.Body).Decode(&bodyData)
-	if err != nil {
-		return nil, err
-	}
-
-	str, err := structpb.NewStruct(bodyData)
-	if err != nil {
+		m.logger.Error("proxy request error", zap.Error(err))
 		return nil, err
 	}
 
@@ -108,18 +99,35 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		}
 	}
 
-	return &proxyv1.RequestProxyResponse{
+	proxyResponse := &proxyv1.RequestProxyResponse{
 		HttpStatus: int32(response.StatusCode),
-		Response:   structpb.NewStructValue(str),
 		Headers:    resHeaders,
-	}, nil
+	}
+
+	var bodyData map[string]interface{}
+	err = json.NewDecoder(response.Body).Decode(&bodyData)
+	switch {
+	// Checks if the body is empty, if its not then we try and parse it.
+	case err != io.EOF:
+		str, err := structpb.NewStruct(bodyData)
+		if err != nil {
+			m.logger.Error("new strucpb error", zap.Error(err))
+			return nil, err
+		}
+		proxyResponse.Response = structpb.NewStructValue(str)
+	case err != nil:
+		m.logger.Error("decode body error", zap.Error(err))
+		return nil, err
+	}
+
+	return proxyResponse, nil
 }
 
 func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method string) bool {
 	for _, s := range services {
 		if s.Name == service {
 			for _, ar := range s.AllowedRequests {
-				// if the path has query prams chop them off and eval only the path
+				// if the path has query params chop them off and eval only the path
 				finalPath := path
 				if strings.Contains(path, "?") {
 					finalPath = strings.Split(path, "?")[0]
