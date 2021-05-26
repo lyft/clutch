@@ -114,19 +114,19 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		Headers:    resHeaders,
 	}
 
-	var bodyData map[string]interface{}
+	var bodyData interface{}
 	err = json.NewDecoder(response.Body).Decode(&bodyData)
 	switch {
 	// There is no body data so do nothing
 	case err == io.EOF:
 	// Checks if the body is empty, if its not then we try and parse it.
 	case err != io.EOF:
-		str, err := structpb.NewStruct(bodyData)
+		str, err := structpb.NewValue(bodyData)
 		if err != nil {
 			m.logger.Error("Unable to create structpb from body data", zap.Error(err))
 			return nil, err
 		}
-		proxyResponse.Response = structpb.NewStructValue(str)
+		proxyResponse.Response = str
 	case err != nil:
 		m.logger.Error("Unable to decode response body", zap.Error(err))
 		return nil, err
