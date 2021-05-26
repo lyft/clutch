@@ -29,7 +29,6 @@ var (
 	auditDisabledTypeDescriptor   = apiv1.E_DisableAudit.TypeDescriptor()
 	identifierTypeDescriptor      = apiv1.E_Id.TypeDescriptor()
 	redactedMessageTypeDescriptor = apiv1.E_Redacted.TypeDescriptor()
-	redactedFieldTypeDescriptor   = apiv1.E_Log.TypeDescriptor()
 	referenceTypeDescriptor       = apiv1.E_Reference.TypeDescriptor()
 )
 
@@ -77,7 +76,6 @@ func IsAuditDisabled(method string) bool {
 	}
 	opts := md.GetMethodOptions().ProtoReflect()
 	return opts.Has(auditDisabledTypeDescriptor) && opts.Get(auditDisabledTypeDescriptor).Bool()
-
 }
 
 // If fields have the option log set to false,

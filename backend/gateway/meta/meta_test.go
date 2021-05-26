@@ -149,15 +149,14 @@ func TestLogOptionClearing(t *testing.T) {
 	result := ClearLogDisabledFields(msg)
 
 	assert.True(t, proto.Equal(result, &testpb.LogOptionsTester{
-		StrLogTrue: "test",
+		StrLogTrue:       "test",
 		StrWithoutOption: "test",
 		Nested: &testpb.NestedLogOptionTester{
 			StrWithoutOption: "test",
 		},
-		MessageMap: map[string]*testpb.NestedLogOptionTester{"test": {StrWithoutOption: "test"}, "nil": nil},
+		MessageMap:      map[string]*testpb.NestedLogOptionTester{"test": {StrWithoutOption: "test"}, "nil": nil},
 		RepeatedMessage: []*testpb.NestedLogOptionTester{{StrWithoutOption: "test"}, nil},
 	}))
-
 
 	assert.Nil(t, ClearLogDisabledFields(nil))
 }
