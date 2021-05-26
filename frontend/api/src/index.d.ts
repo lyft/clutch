@@ -13122,6 +13122,9 @@ export namespace clutch {
 
                 /** Deployment deploymentStatus */
                 deploymentStatus?: (clutch.k8s.v1.Deployment.IDeploymentStatus|null);
+
+                /** Deployment creationTimeMillis */
+                creationTimeMillis?: (number|Long|null);
             }
 
             /** Represents a Deployment. */
@@ -13150,6 +13153,9 @@ export namespace clutch {
 
                 /** Deployment deploymentStatus. */
                 public deploymentStatus?: (clutch.k8s.v1.Deployment.IDeploymentStatus|null);
+
+                /** Deployment creationTimeMillis. */
+                public creationTimeMillis: (number|Long);
 
                 /**
                  * Verifies a Deployment message.

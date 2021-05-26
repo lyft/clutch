@@ -3,6 +3,7 @@ package k8s
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	appsv1 "k8s.io/api/apps/v1"
@@ -14,13 +15,18 @@ import (
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
+var (
+	t1 = time.Date(2021, time.May, 4, 0, 0, 0, 0, time.UTC)
+)
+
 func testDeploymentClientset() k8s.Interface {
 	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:        "testing-deployment-name",
-			Namespace:   "testing-namespace",
-			Labels:      map[string]string{"foo": "bar"},
-			Annotations: map[string]string{"baz": "quuz"},
+			Name:              "testing-deployment-name",
+			Namespace:         "testing-namespace",
+			Labels:            map[string]string{"foo": "bar"},
+			Annotations:       map[string]string{"baz": "quuz"},
+			CreationTimestamp: metav1.NewTime(t1),
 		},
 	}
 
@@ -42,6 +48,7 @@ func TestDescribeDeployment(t *testing.T) {
 	d, err := s.DescribeDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "testing-deployment-name")
 	assert.NoError(t, err)
 	assert.Equal(t, "testing-deployment-name", d.Name)
+	assert.NotNil(t, d.CreationTimeMillis)
 	// Not found.
 	_, err = s.DescribeDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
 	assert.NoError(t, err)

@@ -31011,6 +31011,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {Object.<string,string>|null} [labels] Deployment labels
                  * @property {Object.<string,string>|null} [annotations] Deployment annotations
                  * @property {clutch.k8s.v1.Deployment.IDeploymentStatus|null} [deploymentStatus] Deployment deploymentStatus
+                 * @property {number|Long|null} [creationTimeMillis] Deployment creationTimeMillis
                  */
 
                 /**
@@ -31079,6 +31080,14 @@ export const clutch = $root.clutch = (() => {
                 Deployment.prototype.deploymentStatus = null;
 
                 /**
+                 * Deployment creationTimeMillis.
+                 * @member {number|Long} creationTimeMillis
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.creationTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
                  * Verifies a Deployment message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Deployment
@@ -31119,6 +31128,9 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "deploymentStatus." + error;
                     }
+                    if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
+                        if (!$util.isInteger(message.creationTimeMillis) && !(message.creationTimeMillis && $util.isInteger(message.creationTimeMillis.low) && $util.isInteger(message.creationTimeMillis.high)))
+                            return "creationTimeMillis: integer|Long expected";
                     return null;
                 };
 
@@ -31159,6 +31171,15 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.k8s.v1.Deployment.deploymentStatus: object expected");
                         message.deploymentStatus = $root.clutch.k8s.v1.Deployment.DeploymentStatus.fromObject(object.deploymentStatus);
                     }
+                    if (object.creationTimeMillis != null)
+                        if ($util.Long)
+                            (message.creationTimeMillis = $util.Long.fromValue(object.creationTimeMillis)).unsigned = false;
+                        else if (typeof object.creationTimeMillis === "string")
+                            message.creationTimeMillis = parseInt(object.creationTimeMillis, 10);
+                        else if (typeof object.creationTimeMillis === "number")
+                            message.creationTimeMillis = object.creationTimeMillis;
+                        else if (typeof object.creationTimeMillis === "object")
+                            message.creationTimeMillis = new $util.LongBits(object.creationTimeMillis.low >>> 0, object.creationTimeMillis.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -31184,6 +31205,11 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = "";
                         object.name = "";
                         object.deploymentStatus = null;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.creationTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.creationTimeMillis = options.longs === String ? "0" : 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -31204,6 +31230,11 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (message.deploymentStatus != null && message.hasOwnProperty("deploymentStatus"))
                         object.deploymentStatus = $root.clutch.k8s.v1.Deployment.DeploymentStatus.toObject(message.deploymentStatus, options);
+                    if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
+                        if (typeof message.creationTimeMillis === "number")
+                            object.creationTimeMillis = options.longs === String ? String(message.creationTimeMillis) : message.creationTimeMillis;
+                        else
+                            object.creationTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.creationTimeMillis) : options.longs === Number ? new $util.LongBits(message.creationTimeMillis.low >>> 0, message.creationTimeMillis.high >>> 0).toNumber() : message.creationTimeMillis;
                     return object;
                 };
 

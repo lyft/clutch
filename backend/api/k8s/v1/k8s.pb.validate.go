@@ -1800,6 +1800,8 @@ func (m *Deployment) Validate() error {
 		}
 	}
 
+	// no validation rules for CreationTimeMillis
+
 	return nil
 }
 
