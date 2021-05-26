@@ -1,8 +1,10 @@
 package proxy
 
 import (
+	"bytes"
 	"context"
-	"fmt"
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"testing"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/structpb"
 
 	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
 	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
@@ -22,6 +25,17 @@ type MockClient struct {
 
 func (m *MockClient) Do(req *http.Request) (*http.Response, error) {
 	return m.DoFunc()
+}
+
+var services []*proxyv1cfg.Service = []*proxyv1cfg.Service{
+	{
+		Name: "cat",
+		Host: "http://cat.cat",
+		AllowedRequests: []*proxyv1cfg.AllowRequest{
+			{Path: "/meow", Method: "GET"},
+			{Path: "/nom", Method: "POST"},
+		},
+	},
 }
 
 func TestModule(t *testing.T) {
@@ -39,55 +53,104 @@ func TestModule(t *testing.T) {
 }
 
 func TestRequestProxy(t *testing.T) {
-	services := []*proxyv1cfg.Service{
-		{
-			Name: "cat",
-			Host: "http://cat.cat",
-			AllowedRequests: []*proxyv1cfg.AllowRequest{
-				{Path: "/meow", Method: "GET"},
-				{Path: "/nom", Method: "POST"},
-			},
-		},
-	}
 	log := zaptest.NewLogger(t)
 	scope := tally.NewTestScope("", nil)
-	mockClient := &MockClient{}
 
-	m := &mod{
-		client:   mockClient,
-		services: services,
-		logger:   log,
-		scope:    scope,
+	tests := []struct {
+		id             string
+		request        *proxyv1.RequestProxyRequest
+		doFunc         func() (*http.Response, error)
+		shouldError    bool
+		assertStatus   int32
+		assertHeaders  map[string]*proxyv1.HeaderValues
+		assertBodyData bool
+	}{
+		{
+			id: "GET Request with no body return",
+			request: &proxyv1.RequestProxyRequest{
+				Service:    "cat",
+				HttpMethod: "GET",
+				Path:       "/meow",
+			},
+			doFunc: func() (*http.Response, error) {
+				return &http.Response{
+					StatusCode: 200,
+					Body:       http.NoBody,
+					Header: http.Header{
+						"key": []string{"value1", "value2"},
+					},
+				}, nil
+			},
+			shouldError:  false,
+			assertStatus: 200,
+			assertHeaders: map[string]*proxyv1.HeaderValues{
+				"key": {
+					Values: []string{"value1", "value2"},
+				},
+			},
+			assertBodyData: false,
+		},
+		{
+			id: "POST Request with body data",
+			request: &proxyv1.RequestProxyRequest{
+				Service:    "cat",
+				HttpMethod: "POST",
+				Path:       "/nom",
+			},
+			doFunc: func() (*http.Response, error) {
+				return &http.Response{
+					StatusCode: 200,
+					Body:       ioutil.NopCloser(bytes.NewReader([]byte("{}"))),
+					Header: http.Header{
+						"key": []string{"value1", "value2"},
+					},
+				}, nil
+			},
+			shouldError:  false,
+			assertStatus: 200,
+			assertHeaders: map[string]*proxyv1.HeaderValues{
+				"key": {
+					Values: []string{"value1", "value2"},
+				},
+			},
+			assertBodyData: true,
+		},
 	}
 
-	mockClient.DoFunc = func() (*http.Response, error) {
-		return &http.Response{
-			Status: "200",
-			Body:   http.NoBody,
-		}, nil
-	}
+	for _, test := range tests {
+		m := &mod{
+			client: &MockClient{
+				DoFunc: test.doFunc,
+			},
+			services: services,
+			logger:   log,
+			scope:    scope,
+		}
 
-	response, err := m.RequestProxy(context.Background(), &proxyv1.RequestProxyRequest{
-		Service:    "cat",
-		HttpMethod: "GET",
-		Path:       "/meow",
-	})
-	assert.NoError(t, err)
-	fmt.Printf("%v", response)
+		res, err := m.RequestProxy(context.Background(), test.request)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.Equal(t, test.assertStatus, res.HttpStatus)
+			assert.Equal(t, test.assertHeaders, res.Headers)
+			if test.assertBodyData {
+				resData, err := test.doFunc()
+				assert.NoError(t, err)
+
+				var bodyData map[string]interface{}
+				err = json.NewDecoder(resData.Body).Decode(&bodyData)
+				assert.NoError(t, err)
+
+				str, err := structpb.NewStruct(bodyData)
+				assert.NoError(t, err)
+
+				assert.Equal(t, structpb.NewStructValue(str), res.Response)
+			}
+		}
+	}
 }
 
 func TestIsAllowedRequest(t *testing.T) {
-	services := []*proxyv1cfg.Service{
-		{
-			Name: "cat",
-			Host: "http://cat.cat",
-			AllowedRequests: []*proxyv1cfg.AllowRequest{
-				{Path: "/meow", Method: "GET"},
-				{Path: "/nom", Method: "POST"},
-			},
-		},
-	}
-
 	tests := []struct {
 		id      string
 		service string
