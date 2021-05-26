@@ -4,8 +4,10 @@ import { client, ClutchError, Error, Paper, Tab, Tabs } from "@clutch-sh/core";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
 import AppsIcon from "@material-ui/icons/Apps";
+import CropFreeIcon from "@material-ui/icons/CropFree";
 
 import type { WorkflowProps } from ".";
+import DeploymentTable from "./deployments-table";
 import K8sDashHeader from "./k8s-dash-header";
 import K8sDashSearch from "./k8s-dash-search";
 import PodTable from "./pods-table";
@@ -84,12 +86,36 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
           });
       },
     },
+    deploymentListData: {
+      deps: ["inputData"],
+      hydrator: inputData => {
+        return client
+          .post("/v1/k8s/listDeployments", {
+            ...defaultRequestData(inputData),
+            options: {
+              labels: {},
+            },
+          } as IClutch.k8s.v1.IListDeploymentsRequest)
+          .then(response => {
+            return response?.data;
+          })
+          .catch((err: ClutchError) => {
+            setError(existingError => {
+              if (existingError === undefined) {
+                return err;
+              }
+              return existingError;
+            });
+          });
+      },
+    },
   };
   const dataLayoutManager = useDataLayoutManager(dataLayout);
 
   const handleSubmit = (namespace, clientset) => {
     dataLayoutManager.assign("inputData", { namespace, clientset });
     dataLayoutManager.hydrate("podListData");
+    dataLayoutManager.hydrate("deploymentListData");
     setError(undefined);
   };
 
@@ -111,6 +137,9 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
               <Tabs variant="fullWidth">
                 <Tab startAdornment={<AppsIcon />} label="Pods">
                   <PodTable />
+                </Tab>
+                <Tab startAdornment={<CropFreeIcon />} label="Deployments">
+                  <DeploymentTable />
                 </Tab>
               </Tabs>
             </Paper>
