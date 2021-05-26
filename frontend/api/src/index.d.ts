@@ -22861,8 +22861,8 @@ export namespace google {
             /** FieldOptions uninterpretedOption */
             uninterpretedOption?: (google.protobuf.IUninterpretedOption[]|null);
 
-            /** FieldOptions .clutch.api.v1.redact */
-            ".clutch.api.v1.redact"?: (boolean|null);
+            /** FieldOptions .clutch.api.v1.log */
+            ".clutch.api.v1.log"?: (boolean|null);
 
             /** FieldOptions .validate.rules */
             ".validate.rules"?: (validate.IFieldRules|null);

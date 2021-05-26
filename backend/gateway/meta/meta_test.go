@@ -15,6 +15,7 @@ import (
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	testpb "github.com/lyft/clutch/backend/internal/test/pb"
 	modulemock "github.com/lyft/clutch/backend/mock/module"
 	"github.com/lyft/clutch/backend/module/assets"
 	"github.com/lyft/clutch/backend/module/healthcheck"
@@ -115,6 +116,50 @@ func TestResourceNames(t *testing.T) {
 func TestIsRedacted(t *testing.T) {
 	assert.True(t, IsRedacted(&authnv1.CallbackResponse{}))
 	assert.False(t, IsRedacted(&healthcheckv1.HealthcheckRequest{}))
+}
+
+func TestLogOptionClearing(t *testing.T) {
+	msg := &testpb.LogOptionsTester{
+		StrLogFalse:      "test",
+		StrLogTrue:       "test",
+		StrWithoutOption: "test",
+		NestedNoLog: &testpb.NestedLogOptionTester{
+			StrWithoutOption: "test",
+		},
+		Nested: &testpb.NestedLogOptionTester{
+			StrLogFalse:      "test",
+			StrWithoutOption: "test",
+		},
+		MessageMap: map[string]*testpb.NestedLogOptionTester{
+			"test": {
+				StrLogFalse:      "test",
+				StrWithoutOption: "test",
+			},
+			"nil": nil,
+		},
+		RepeatedMessage: []*testpb.NestedLogOptionTester{
+			{
+				StrLogFalse:      "test",
+				StrWithoutOption: "test",
+			},
+			nil,
+		},
+	}
+
+	result := ClearLogDisabledFields(msg)
+
+	assert.True(t, proto.Equal(result, &testpb.LogOptionsTester{
+		StrLogTrue: "test",
+		StrWithoutOption: "test",
+		Nested: &testpb.NestedLogOptionTester{
+			StrWithoutOption: "test",
+		},
+		MessageMap: map[string]*testpb.NestedLogOptionTester{"test": {StrWithoutOption: "test"}, "nil": nil},
+		RepeatedMessage: []*testpb.NestedLogOptionTester{{StrWithoutOption: "test"}, nil},
+	}))
+
+
+	assert.Nil(t, ClearLogDisabledFields(nil))
 }
 
 func TestAPIBodyRedaction(t *testing.T) {

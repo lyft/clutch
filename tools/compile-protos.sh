@@ -153,6 +153,21 @@ main() {
       "${proto_dir}"/*.proto
   done
 
+  # Compile the test proto if we're in the core repository.
+  if [[ "${SCRIPT_ROOT}" == "${REPO_ROOT}" ]]; then
+    "${PROTOC_BIN}" \
+    -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${googleapis_include_path}" \
+    -I "${REPO_ROOT}"/backend/internal/test/pb/ \
+    --go_out "${REPO_ROOT}"/backend/internal/test/pb \
+    --go_opt paths=source_relative \
+    --plugin protoc-gen-go="${GOBIN}/protoc-gen-go" \
+    --plugin protoc-gen-go-grpc="${GOBIN}/protoc-gen-go-grpc" \
+    --plugin protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
+    --plugin protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
+    "${REPO_ROOT}"/backend/internal/test/pb/test.proto
+  fi
+
+
   echo "info: compiling javascript bundle"
   cd ..
   mkdir -p "${REPO_ROOT}/frontend/api/src"
