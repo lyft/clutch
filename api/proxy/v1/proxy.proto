@@ -41,6 +41,8 @@ message RequestProxyResponse {
   google.protobuf.Value response = 3;
 }
 
+// Header values can have multiple values for the same name
+// https://datatracker.ietf.org/doc/html/rfc2616#section-4.2
 message HeaderValues {
   repeated string values = 1;
 }

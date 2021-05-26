@@ -165,6 +165,8 @@ func (x *RequestProxyResponse) GetResponse() *structpb.Value {
 	return nil
 }
 
+// Header values can have multiple values for the same name
+// https://datatracker.ietf.org/doc/html/rfc2616#section-4.2
 type HeaderValues struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
