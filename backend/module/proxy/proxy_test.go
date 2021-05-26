@@ -22,5 +22,61 @@ func TestModule(t *testing.T) {
 
 	r := moduletest.NewRegisterChecker()
 	assert.NoError(t, m.Register(r))
+	assert.NoError(t, r.HasAPI("clutch.proxy.v1.ProxyAPI"))
 	assert.True(t, r.JSONRegistered())
+}
+
+func TestIsAllowedRequest(t *testing.T) {
+	services := []*proxyv1cfg.Service{
+		{
+			Name: "cat",
+			Host: "http://cat.cat",
+			AllowedRequests: []*proxyv1cfg.AllowRequest{
+				{Path: "/meow", Method: "GET"},
+				{Path: "/nom", Method: "POST"},
+			},
+		},
+	}
+
+	tests := []struct {
+		id      string
+		service string
+		path    string
+		method  string
+		expect  bool
+	}{
+		{
+			id:      "Allowed request",
+			service: "cat",
+			path:    "/meow",
+			method:  "GET",
+			expect:  true,
+		},
+		{
+			id:      "Deined request method does not match",
+			service: "cat",
+			path:    "/meow",
+			method:  "POST",
+			expect:  false,
+		},
+		{
+			id:      "Service does not exist",
+			service: "foo",
+			path:    "/meow",
+			method:  "POST",
+			expect:  false,
+		},
+		{
+			id:      "Path with query params",
+			service: "cat",
+			path:    "/nom?food=fancyfeast",
+			method:  "POST",
+			expect:  true,
+		},
+	}
+
+	for _, test := range tests {
+		isAllowed := isAllowedRequest(services, test.service, test.path, test.method)
+		assert.Equal(t, test.expect, isAllowed)
+	}
 }
