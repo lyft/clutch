@@ -3,7 +3,6 @@ package proxy
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -13,6 +12,8 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/structpb"
 
 	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
@@ -57,11 +58,11 @@ func (m *mod) Register(r module.Registrar) error {
 
 func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest) (*proxyv1.RequestProxyResponse, error) {
 	if !isAllowedRequest(m.services, req.Service, req.Path, req.HttpMethod) {
-		return nil, errors.New("This request is not allowed, check the proxy configuration.")
+		return nil, status.Error(codes.InvalidArgument, "This request is not allowed, check the proxy configuration.")
 	}
 
 	// If its allowed lookup the service
-	service := &proxyv1cfg.Service{}
+	var service *proxyv1cfg.Service
 	for _, s := range m.services {
 		if s.Name == req.Service {
 			service = s
@@ -70,10 +71,8 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 
 	// Set all additional headers if specified
 	headers := http.Header{}
-	if len(service.Headers) > 0 {
-		for k, v := range service.Headers {
-			headers.Add(k, v)
-		}
+	for k, v := range service.Headers {
+		headers.Add(k, v)
 	}
 
 	// Parse the URL by joining both the HOST and PATH specifed by the config
@@ -119,17 +118,16 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	switch {
 	// There is no body data so do nothing
 	case err == io.EOF:
-	// Checks if the body is empty, if its not then we try and parse it.
-	case err != io.EOF:
-		str, err := structpb.NewValue(bodyData)
+	case err != nil:
+		m.logger.Error("Unable to decode response body", zap.Error(err))
+		return nil, err
+	default:
+		bodyStruct, err := structpb.NewValue(bodyData)
 		if err != nil {
 			m.logger.Error("Unable to create structpb from body data", zap.Error(err))
 			return nil, err
 		}
-		proxyResponse.Response = str
-	case err != nil:
-		m.logger.Error("Unable to decode response body", zap.Error(err))
-		return nil, err
+		proxyResponse.Response = bodyStruct
 	}
 
 	return proxyResponse, nil
