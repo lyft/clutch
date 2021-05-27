@@ -22,7 +22,7 @@ import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
 import { Alert, Error, Hint, Note, NotePanel, Warning } from "./Feedback";
-import { FeatureFlag } from "./flags";
+import { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
 import { AvatarIcon, StatusIcon } from "./icon";
 import { Link } from "./link";
 import Loadable from "./loading";
@@ -74,7 +74,8 @@ export {
   DialogContent,
   Error,
   ExpansionPanel,
-  FeatureFlag,
+  FeatureOff,
+  FeatureOn,
   Form,
   FormRow,
   Grid,
@@ -92,6 +93,7 @@ export {
   RadioGroup,
   Resolver,
   Select,
+  SimpleFeatureFlag,
   StatusIcon,
   Step,
   Stepper,
