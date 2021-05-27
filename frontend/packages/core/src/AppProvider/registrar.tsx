@@ -43,7 +43,7 @@ const workflowRoutes = (
 const registeredWorkflows = async (
   workflows: { [key: string]: () => WorkflowConfiguration },
   configuration: UserConfiguration,
-  filters: { (workflows: Workflow[]): Workflow[] }[] = []
+  filters: { (workflows: Workflow[]): Promise<Workflow[]> }[] = []
 ): Promise<Workflow[]> => {
   let validWorkflows = Object.keys(workflows || [])
     .map((workflowId: string) => {
@@ -61,7 +61,9 @@ const registeredWorkflows = async (
     })
     .filter(workflow => workflow !== null);
   filters.forEach(f => {
-    validWorkflows = f(validWorkflows);
+    f(validWorkflows).then(w => {
+      validWorkflows = w;
+    });
   });
   return validWorkflows;
 };

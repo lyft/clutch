@@ -25,7 +25,7 @@ export interface UserConfiguration {
  * Filter workflow routes using available feature flags.
  * @param workflows a list of valid Workflow objects.
  */
-const featureFlagFilter = (workflows: Workflow[]): Workflow[] => {
+const featureFlagFilter = (workflows: Workflow[]): Promise<Workflow[]> => {
   return featureFlags().then(flags =>
     workflows.filter(workflow => {
       /* eslint-disable-next-line no-param-reassign */
