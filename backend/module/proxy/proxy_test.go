@@ -158,44 +158,54 @@ func TestRequestProxy(t *testing.T) {
 
 func TestIsAllowedRequest(t *testing.T) {
 	tests := []struct {
-		id      string
-		service string
-		path    string
-		method  string
-		expect  bool
+		id          string
+		service     string
+		path        string
+		method      string
+		expect      bool
+		shouldError bool
 	}{
 		{
-			id:      "Allowed request",
-			service: "cat",
-			path:    "/meow",
-			method:  "GET",
-			expect:  true,
+			id:          "Allowed request",
+			service:     "cat",
+			path:        "/meow",
+			method:      "GET",
+			expect:      true,
+			shouldError: false,
 		},
 		{
-			id:      "Deined request method does not match",
-			service: "cat",
-			path:    "/meow",
-			method:  "POST",
-			expect:  false,
+			id:          "Deined request method does not match",
+			service:     "cat",
+			path:        "/meow",
+			method:      "POST",
+			expect:      false,
+			shouldError: false,
 		},
 		{
-			id:      "Service does not exist",
-			service: "foo",
-			path:    "/meow",
-			method:  "POST",
-			expect:  false,
+			id:          "Service does not exist",
+			service:     "foo",
+			path:        "/meow",
+			method:      "POST",
+			expect:      false,
+			shouldError: false,
 		},
 		{
-			id:      "Path with query params",
-			service: "cat",
-			path:    "/nom?food=fancyfeast",
-			method:  "POST",
-			expect:  true,
+			id:          "Path with query params",
+			service:     "cat",
+			path:        "/nom?food=fancyfeast",
+			method:      "POST",
+			expect:      true,
+			shouldError: false,
 		},
 	}
 
 	for _, test := range tests {
-		isAllowed := isAllowedRequest(services, test.service, test.path, test.method)
-		assert.Equal(t, test.expect, isAllowed)
+		isAllowed, err := isAllowedRequest(services, test.service, test.path, test.method)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+			assert.Equal(t, test.expect, isAllowed)
+		}
 	}
 }

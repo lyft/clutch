@@ -34,6 +34,16 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 		return nil, err
 	}
 
+	// Validate that each services constructs a parsable URL
+	for _, service := range config.Services {
+		for _, ar := range service.AllowedRequests {
+			_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, ar.Path))
+			if err != nil {
+				return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", service.Name)
+			}
+		}
+	}
+
 	m := &mod{
 		client:   &http.Client{},
 		services: config.Services,
@@ -57,7 +67,13 @@ func (m *mod) Register(r module.Registrar) error {
 }
 
 func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest) (*proxyv1.RequestProxyResponse, error) {
-	if !isAllowedRequest(m.services, req.Service, req.Path, req.HttpMethod) {
+	isAllowed, err := isAllowedRequest(m.services, req.Service, req.Path, req.HttpMethod)
+	if err != nil {
+		m.logger.Error("Unable to parse the configured URL", zap.Error(err))
+		return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", req.Service)
+	}
+
+	if !isAllowed {
 		return nil, status.Error(codes.InvalidArgument, "This request is not allowed, check the proxy configuration.")
 	}
 
@@ -133,23 +149,22 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	return proxyResponse, nil
 }
 
-func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method string) bool {
+func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method string) (bool, error) {
 	for _, s := range services {
 		if s.Name == service {
 			for _, ar := range s.AllowedRequests {
-				// if the path has query params chop them off and eval only the path
-				finalPath := path
-				if strings.Contains(path, "?") {
-					finalPath = strings.Split(path, "?")[0]
+				parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", s.Host, path))
+				if err != nil {
+					return false, err
 				}
 
-				if finalPath == ar.Path && strings.EqualFold(method, ar.Method) {
-					return true
+				if parsedUrl.Path == ar.Path && strings.EqualFold(method, ar.Method) {
+					return true, nil
 				}
 			}
 			// return early here as were done checking allowed request for this service
-			return false
+			return false, nil
 		}
 	}
-	return false
+	return false, nil
 }
