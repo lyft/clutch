@@ -234,12 +234,6 @@ func (p *OIDCProvider) RefreshToken(ctx context.Context, t *oauth2.Token) (*oaut
 		return nil, err
 	}
 
-	// Store token.
-	err = p.tokenStorage.Store(ctx, claims.Subject, p.providerAlias, newToken)
-	if err != nil {
-		return nil, err
-	}
-
 	// Return token.
 	return newToken, nil
 }
