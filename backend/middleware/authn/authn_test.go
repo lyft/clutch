@@ -9,12 +9,15 @@ import (
 )
 
 func TestGetCookieValue(t *testing.T) {
-	cookie := "foo=bar;baz=bang;foo=qux"
-	res, err := getCookieValue(cookie, "foo")
+	cookies := []string{
+		"foo=bar;baz=bang",
+		"baz=bloop",
+	}
+	res, err := GetCookieValue(cookies, "foo")
 	assert.NoError(t, err)
 	assert.Equal(t, "bar", res)
 
-	res, err = getCookieValue(cookie, "baz")
+	res, err = GetCookieValue(cookies, "baz")
 	assert.NoError(t, err)
 	assert.Equal(t, "bang", res)
 }

@@ -78,10 +78,9 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	}
 }
 
-// getCookieValue is the easiest way to parse a cookie string in a non-HTTP request context.
-func getCookieValue(raw, key string) (string, error) {
-	request := http.Request{Header: http.Header{}}
-	request.Header.Add("Cookie", raw)
+// GetCookieValue is the easiest way to parse a cookie string in a non-HTTP request context.
+func GetCookieValue(headerValues []string, key string) (string, error) {
+	request := http.Request{Header: http.Header{"Cookie": headerValues}}
 	c, err := request.Cookie(key)
 	if err != nil {
 		return "", err
@@ -104,7 +103,7 @@ func getToken(md metadata.MD) (string, error) {
 		return "", errors.New("token not present in authorization header or cookies")
 	}
 
-	return getCookieValue(v[0], "token")
+	return GetCookieValue(v, "token")
 }
 
 func (m *mid) authenticate(ctx context.Context) (context.Context, error) {
