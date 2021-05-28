@@ -57,7 +57,7 @@ type api struct {
 }
 
 func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv1.LoginResponse, error) {
-	// Attempt refresh.
+	// Attempt refresh. If refresh fails for any reason continue the regular auth flow.
 	md, _ := metadata.FromIncomingContext(ctx)
 	if v := md.Get("grpcgateway-cookie"); len(v) > 0 {
 		if refreshToken, err := mux.GetCookieValue(v, "refreshToken"); err == nil {
@@ -84,7 +84,7 @@ func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv
 		}
 	}
 
-	// Full login flow.
+	// Full login exchange flow.
 	state, err := a.provider.GetStateNonce(request.RedirectUrl)
 	if err != nil {
 		return nil, err

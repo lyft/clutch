@@ -26,5 +26,8 @@ func (MockIssuer) CreateToken(ctx context.Context, subject string, tokenType aut
 }
 
 func (MockIssuer) RefreshToken(context.Context, *oauth2.Token) (*oauth2.Token, error) {
-	panic("not implemented")
+	return &oauth2.Token{
+		AccessToken: "newAccess",
+		RefreshToken: "refreshed",
+	}, nil
 }
