@@ -63,8 +63,8 @@ func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv
 		if refreshToken, err := mux.GetCookieValue(v, "refreshToken"); err == nil {
 			if t, err := a.issuer.RefreshToken(ctx, &oauth2.Token{RefreshToken: refreshToken}); err == nil {
 				md := metadata.New(map[string]string{
-					"Location":         request.RedirectUrl,
-					"Set-Cookie-Token": t.AccessToken,
+					"Location":                 request.RedirectUrl,
+					"Set-Cookie-Token":         t.AccessToken,
 					"Set-Cookie-Refresh-Token": t.RefreshToken,
 				})
 				if err := grpc.SendHeader(ctx, md); err != nil {
@@ -79,7 +79,6 @@ func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv
 						},
 					},
 				}, nil
-
 			}
 		}
 	}

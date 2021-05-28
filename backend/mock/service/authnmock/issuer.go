@@ -33,7 +33,7 @@ func (m MockIssuer) RefreshToken(context.Context, *oauth2.Token) (*oauth2.Token,
 	}
 
 	return &oauth2.Token{
-		AccessToken: "newAccess",
+		AccessToken:  "newAccess",
 		RefreshToken: "refreshed",
 	}, nil
 }

@@ -56,4 +56,3 @@ func GetCookieValue(headerValues []string, key string) (string, error) {
 	}
 	return c.Value, nil
 }
-
