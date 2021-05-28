@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	envoyv1 "github.com/lyft/clutch/backend/api/core/envoy/v1"
+	projectv1 "github.com/lyft/clutch/backend/api/core/project/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
@@ -22,9 +23,11 @@ import (
 var Name = "clutch.resolver.core"
 
 var typeURLEnvoyCluster = meta.TypeURL((*envoyv1.Cluster)(nil))
+var typeURLProject = meta.TypeURL((*projectv1.Project)(nil))
 
 var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	typeURLEnvoyCluster: {},
+	typeURLProject:      {},
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {

@@ -68,7 +68,7 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 	if clusterName == "" {
 		clusterName = cluster
 	}
-	return &k8sapiv1.Deployment{
+	k8sDeployment := &k8sapiv1.Deployment{
 		Cluster:          clusterName,
 		Namespace:        deployment.Namespace,
 		Name:             deployment.Name,
@@ -76,6 +76,13 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 		Annotations:      deployment.Annotations,
 		DeploymentStatus: ProtoForDeploymentStatus(deployment.Status),
 	}
+
+	if !deployment.CreationTimestamp.IsZero() {
+		// Convert Unix Timestamp to milliseconds
+		k8sDeployment.CreationTimeMillis = deployment.CreationTimestamp.UnixNano() / 1e6
+	}
+
+	return k8sDeployment
 }
 
 func ProtoForDeploymentStatus(deploymentStatus appsv1.DeploymentStatus) *k8sapiv1.Deployment_DeploymentStatus {
