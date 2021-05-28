@@ -141,7 +141,22 @@ func (m *RequestProxyResponse) Validate() error {
 
 	// no validation rules for HttpStatus
 
-	// no validation rules for Headers
+	for key, val := range m.GetHeaders() {
+		_ = val
+
+		// no validation rules for Headers[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return RequestProxyResponseValidationError{
+					field:  fmt.Sprintf("Headers[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	if v, ok := interface{}(m.GetResponse()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {

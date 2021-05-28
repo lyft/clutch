@@ -16795,7 +16795,7 @@ export namespace clutch {
                 httpStatus?: (number|null);
 
                 /** RequestProxyResponse headers */
-                headers?: ({ [k: string]: string }|null);
+                headers?: ({ [k: string]: google.protobuf.IListValue }|null);
 
                 /** RequestProxyResponse response */
                 response?: (google.protobuf.IValue|null);
@@ -16814,7 +16814,7 @@ export namespace clutch {
                 public httpStatus: number;
 
                 /** RequestProxyResponse headers. */
-                public headers: { [k: string]: string };
+                public headers: { [k: string]: google.protobuf.IListValue };
 
                 /** RequestProxyResponse response. */
                 public response?: (google.protobuf.IValue|null);

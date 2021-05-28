@@ -39937,7 +39937,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.proxy.v1
                  * @interface IRequestProxyResponse
                  * @property {number|null} [httpStatus] RequestProxyResponse httpStatus
-                 * @property {Object.<string,string>|null} [headers] RequestProxyResponse headers
+                 * @property {Object.<string,google.protobuf.IListValue>|null} [headers] RequestProxyResponse headers
                  * @property {google.protobuf.IValue|null} [response] RequestProxyResponse response
                  */
 
@@ -39967,7 +39967,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * RequestProxyResponse headers.
-                 * @member {Object.<string,string>} headers
+                 * @member {Object.<string,google.protobuf.IListValue>} headers
                  * @memberof clutch.proxy.v1.RequestProxyResponse
                  * @instance
                  */
@@ -39999,9 +39999,11 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isObject(message.headers))
                             return "headers: object expected";
                         let key = Object.keys(message.headers);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.headers[key[i]]))
-                                return "headers: string{k:string} expected";
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.google.protobuf.ListValue.verify(message.headers[key[i]]);
+                            if (error)
+                                return "headers." + error;
+                        }
                     }
                     if (message.response != null && message.hasOwnProperty("response")) {
                         let error = $root.google.protobuf.Value.verify(message.response);
@@ -40029,8 +40031,11 @@ export const clutch = $root.clutch = (() => {
                         if (typeof object.headers !== "object")
                             throw TypeError(".clutch.proxy.v1.RequestProxyResponse.headers: object expected");
                         message.headers = {};
-                        for (let keys = Object.keys(object.headers), i = 0; i < keys.length; ++i)
-                            message.headers[keys[i]] = String(object.headers[keys[i]]);
+                        for (let keys = Object.keys(object.headers), i = 0; i < keys.length; ++i) {
+                            if (typeof object.headers[keys[i]] !== "object")
+                                throw TypeError(".clutch.proxy.v1.RequestProxyResponse.headers: object expected");
+                            message.headers[keys[i]] = $root.google.protobuf.ListValue.fromObject(object.headers[keys[i]]);
+                        }
                     }
                     if (object.response != null) {
                         if (typeof object.response !== "object")
@@ -40065,7 +40070,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.headers && (keys2 = Object.keys(message.headers)).length) {
                         object.headers = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.headers[keys2[j]] = message.headers[keys2[j]];
+                            object.headers[keys2[j]] = $root.google.protobuf.ListValue.toObject(message.headers[keys2[j]], options);
                     }
                     if (message.response != null && message.hasOwnProperty("response"))
                         object.response = $root.google.protobuf.Value.toObject(message.response, options);
