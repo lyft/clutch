@@ -110,9 +110,9 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	}
 
 	// Extract headers from response
-	resHeaders := map[string]*structpb.ListValue{}
+	resHeaders := make(map[string]*structpb.ListValue, len(response.Header))
 	for key, headers := range response.Header {
-		headerValues := []*structpb.Value{}
+		headerValues := make([]*structpb.Value, len(headers))
 		for _, h := range headers {
 			headerValues = append(headerValues, structpb.NewStringValue(h))
 		}
