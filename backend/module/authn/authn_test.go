@@ -55,7 +55,7 @@ func TestAPILogin(t *testing.T) {
 func TestAPILoginRefresh(t *testing.T) {
 	api := api{
 		provider: MockProvider{},
-		issuer:   authnmock.MockIssuer{},
+		issuer:   authnmock.MockIssuer{AllowRefresh: true},
 	}
 
 	transportStream := &grpcmock.MockServerTransportStream{}
@@ -69,7 +69,24 @@ func TestAPILoginRefresh(t *testing.T) {
 
 	assert.Equal(t, "newAccess", response.GetToken().AccessToken)
 	assert.Equal(t, "refreshed", response.GetToken().RefreshToken)
+}
 
+func TestAPILoginRefreshFailsFlowContinues(t *testing.T) {
+	api := api{
+		provider: MockProvider{},
+		issuer:   authnmock.MockIssuer{AllowRefresh: false},
+	}
+
+	transportStream := &grpcmock.MockServerTransportStream{}
+	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
+	ctx = metadata.NewIncomingContext(ctx, metadata.Pairs("grpcgateway-cookie", "token=zoom;refreshToken=zip"))
+
+	response, err := api.Login(ctx, &authnv1.LoginRequest{
+		RedirectUrl: "foo.com",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, "https://auth.com/?param=nonce-foo.com", response.GetAuthUrl())
 }
 
 func TestAPICallback(t *testing.T) {
