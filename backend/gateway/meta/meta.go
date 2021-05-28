@@ -301,7 +301,8 @@ func resolvePattern(pb proto.Message, pattern *apiv1.Pattern) *auditv1.Resource 
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
 }
 
-// APIBody returns a API request/response interface as an anypb.Any message.
+// APIBody returns a API request/response interface as an anypb.Any message, with any redaction or clearing based on
+// message or field annotations.
 func APIBody(body interface{}) (*anypb.Any, error) {
 	m, ok := body.(proto.Message)
 	if !ok {
@@ -313,7 +314,7 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 		return anypb.New(&apiv1.Redacted{RedactedTypeUrl: TypeURL(m)})
 	}
 
-	return anypb.New(m)
+	return anypb.New(ClearLogDisabledFields(m))
 }
 
 /* ToValue converts custom types to a structpb.Value. This helper was added

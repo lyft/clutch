@@ -1,6 +1,7 @@
 package meta
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -162,15 +163,32 @@ func TestLogOptionClearing(t *testing.T) {
 }
 
 func TestAPIBodyRedaction(t *testing.T) {
-	b, err := APIBody(&authnv1.CallbackResponse{AccessToken: "secret"})
-	assert.NoError(t, err)
+	testcases := []struct {
+		message proto.Message
+		expect  proto.Message
+	}{
+		{
+			message: &authnv1.CallbackResponse{AccessToken: "secret"},
+			expect:  &apiv1.Redacted{RedactedTypeUrl: "type.googleapis.com/clutch.authn.v1.CallbackResponse"},
+		},
+		{
+			message: &testpb.LogOptionsTester{StrLogTrue: "foo", StrLogFalse: "bar"},
+			expect:  &testpb.LogOptionsTester{StrLogTrue: "foo"},
+		},
+	}
 
-	m, err := b.UnmarshalNew()
-	assert.NoError(t, err)
-	assert.IsType(t, (*apiv1.Redacted)(nil), m)
+	for idx, tc := range testcases {
+		tc := tc
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			b, err := APIBody(tc.message)
+			assert.NoError(t, err)
 
-	r := m.(*apiv1.Redacted)
-	assert.Equal(t, r.RedactedTypeUrl, "type.googleapis.com/clutch.authn.v1.CallbackResponse")
+			m, err := b.UnmarshalNew()
+			assert.NoError(t, err)
+
+			assert.True(t, proto.Equal(m, tc.expect))
+		})
+	}
 }
 
 func TestAPIBody(t *testing.T) {
