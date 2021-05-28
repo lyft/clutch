@@ -202,30 +202,9 @@ func TestListPods(t *testing.T) {
 			}},
 		},
 	}
-	// Clientset not found
-	result, err := s.ListPods(
-		context.Background(),
-		"unknown-clientset",
-		"testing-cluster",
-		"testing-namespace",
-		&k8sv1.ListOptions{},
-	)
-	assert.Error(t, err)
-	assert.Nil(t, result)
-
-	// No matching pods
-	result, err = s.ListPods(
-		context.Background(),
-		"testing-clientset",
-		"testing-cluster",
-		"testing-namespace",
-		&k8sv1.ListOptions{Labels: map[string]string{"unknown-annotation": "bar"}},
-	)
-	assert.NoError(t, err)
-	assert.Empty(t, result)
 
 	// Two matching pods
-	result, err = s.ListPods(
+	result, err := s.ListPods(
 		context.Background(),
 		"testing-clientset",
 		"testing-cluster",
@@ -319,6 +298,7 @@ func TestPodDescription(t *testing.T) {
 			assert.Equal(t, k8sv1.PodCondition_Type(1), pod.PodConditions[0].Type)
 			assert.Equal(t, k8sv1.PodCondition_Status(1), pod.PodConditions[0].Status)
 			assert.Equal(t, "Init: 0/0", pod.Status)
+			assert.NotNil(t, pod.StartTimeMillis)
 		})
 	}
 }

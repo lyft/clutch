@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@material-ui/core": "^4.11.0",
+    "@material-ui/core": "^4.11.4",
     "@storybook/addon-a11y": "^6.2.9",
     "@storybook/addon-actions": "^6.1.15",
     "@storybook/addon-essentials": "^6.1.15",
@@ -77,10 +77,11 @@
     "lerna": "^4.0.0",
     "license-checker": "^25.0.1",
     "prettier": "^2.2.1",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "react-is": "^16.8.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-is": "^17.0.2",
     "react-scripts": "^4.0.1",
+    "react-timeago": "^6.0.0",
     "sort-package-json": "^1.48.1",
     "typescript": "^4.2.3",
     "webpack": "4.44.2"

@@ -179,7 +179,7 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	if clusterName == "" {
 		clusterName = cluster
 	}
-	return &k8sapiv1.Pod{
+	pod := &k8sapiv1.Pod{
 		Cluster:    clusterName,
 		Namespace:  k8spod.Namespace,
 		Name:       k8spod.Name,
@@ -195,6 +195,14 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 		InitContainers: makeContainers(k8spod.Status.InitContainerStatuses),
 		Status:         getPodStatus(k8spod),
 	}
+
+	// This is here as a workaround since we can't use StartTime
+	if k8spod.Status.StartTime != nil {
+		// Note .Unix() gives seconds, not milliseconds
+		pod.StartTimeMillis = k8spod.Status.StartTime.UnixNano() / 1e6
+	}
+
+	return pod
 }
 
 func makeConditions(conditions []corev1.PodCondition) []*k8sapiv1.PodCondition {

@@ -24,22 +24,27 @@ interface DataLayout {
   displayValue: () => any;
   /** Loading state of the layout. This is true when data is being hydrated. */
   isLoading: boolean;
-  /** Error state of the layout. This will be a message containing the error encountered when trying to hydrate the lyaout. */
+  /** Error state of the layout. This will be a message containing the error encountered when trying to hydrate the layout. */
   error: ClutchError;
+}
+
+interface UseDataLayoutOptions {
+  hydrate?: boolean;
 }
 
 /**
  * Use a registered data layout.
  * 
- * If a hydrate function has been specified this and the layout's data has not been set this will populate it's data
- * on the first invocation. If the layout has a cache key set to true and also has existing data hydrate will not be invoked.
+ * If a hydrate function has been specified this and the layout's data has not been set and hydrate is true this will 
+ * populate it's data on the first invocation. If the layout has a cache key set to true and also has existing data OR
+ * hydrate is false, hydrate will not be invoked.
 
  * @param key The name of the layout registered with the manager.
+ * @param opts An options object to allow for things like disabling hydration by default
  */
-const useDataLayout = (key: string): DataLayout => {
+const useDataLayout = (key: string, opts?: UseDataLayoutOptions): DataLayout => {
   const manager = useManagerContext();
-
-  const options = { hydrate: true };
+  const options = { hydrate: true, ...opts };
 
   if (!Object.keys(manager.state).includes(key)) {
     throw new Error(`Non-existant data layout key: ${key}`);
@@ -52,10 +57,7 @@ const useDataLayout = (key: string): DataLayout => {
   }, []);
 
   React.useEffect(() => {
-    if (
-      options.hydrate !== undefined &&
-      !(manager.state[key].cache && !_.isEmpty(manager.state[key].data))
-    ) {
+    if (options.hydrate && !(manager.state[key].cache && !_.isEmpty(manager.state[key].data))) {
       manager.hydrate(key);
     }
   }, [key]);

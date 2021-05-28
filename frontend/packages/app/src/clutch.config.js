@@ -57,5 +57,8 @@ module.exports = {
         resolverType: "clutch.k8s.v1.HPA",
       },
     },
+    kubeDashboard: {
+      trending: true,
+    },
   },
 };

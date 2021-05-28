@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package clutch.proxy.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/proxy/v1;proxyv1";
+
+import "api/v1/annotations.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+// The proxyAPI enabling calling external API's without minimal setup.
+// The services must be configured before calling external API's.
+service ProxyAPI {
+  rpc RequestProxy(RequestProxyRequest) returns (RequestProxyResponse) {
+    option (google.api.http) = {
+      post : "/v1/proxy/request"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+}
+
+message RequestProxyRequest {
+  // The name of a service that is configured
+  string service = 1 [ (validate.rules).string.min_len = 1 ];
+  // The HTTP method that will be used for the request
+  string http_method = 2 [ (validate.rules).string.min_len = 1 ];
+  // The URI path to call
+  string path = 3 [ (validate.rules).string.min_len = 1 ];
+  // The request body
+  google.protobuf.Value request = 4;
+}
+
+message RequestProxyResponse {
+  // The http response code from the service response
+  int32 http_status = 1;
+  // All of the headers from the service response
+  // Header values can have multiple values for the same name
+  // https://datatracker.ietf.org/doc/html/rfc2616#section-4.2
+  map<string, google.protobuf.ListValue> headers = 2;
+  // The full response body
+  google.protobuf.Value response = 3;
+}

@@ -1,6 +1,7 @@
 package meta
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"strings"
@@ -11,6 +12,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/structpb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -273,4 +275,23 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 	}
 
 	return anypb.New(m)
+}
+
+/* ToValue converts custom types to a structpb.Value. This helper was added
+since structpb.NewValue has a limited set of types that it supports.
+More details here: https://github.com/golang/protobuf/issues/1302#issuecomment-805453221
+*/
+func ToValue(data interface{}) (*structpb.Value, error) {
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	v := &structpb.Value{}
+	err = v.UnmarshalJSON(b)
+	if err != nil {
+		return nil, err
+	}
+
+	return v, nil
 }

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package clutch.config.module.proxy.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/module/proxy/v1;proxyv1";
+
+import "validate/validate.proto";
+
+message Config {
+  repeated Service services = 1;
+}
+
+message Service {
+  // An identifier to reference the service
+  string name = 1 [ (validate.rules).string.min_len = 1 ];
+  // The host URL to communicate with
+  string host = 2 [ (validate.rules).string.min_len = 1 ];
+  // Paths and associated http methods that are allowed to be invoked
+  repeated AllowRequest allowed_requests = 3 [ (validate.rules).repeated = {min_items : 1} ];
+  // Additional headers can be set such as auth
+  map<string, string> headers = 4;
+}
+
+message AllowRequest {
+  string path = 1 [ (validate.rules).string.min_len = 1 ];
+  string method = 2 [ (validate.rules).string.min_len = 1 ];
+}

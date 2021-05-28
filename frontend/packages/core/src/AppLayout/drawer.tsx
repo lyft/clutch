@@ -118,7 +118,7 @@ const Group = ({ heading, open = false, updateOpenGroup, closeGroup, children }:
       >
         <Avatar>{heading.charAt(0)}</Avatar>
         <GroupHeading align="center">{heading}</GroupHeading>
-        <Popper open={open} onClickAway={closeGroup} anchorRef={anchorRef}>
+        <Popper open={open} onClickAway={closeGroup} anchorRef={anchorRef} id="workflow-options">
           {children}
         </Popper>
       </GroupListItem>
