@@ -22,6 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// https://clutch.sh/docs/advanced/security-auditing#slack-sink
 type SlackConfig struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -93,10 +94,6 @@ func (x *SlackConfig) GetOverrides() []*CustomMessage {
 	return nil
 }
 
-//
-//By default, the sink provides a formatted message using a subset of info in an audit event. A custom
-//message can alo be created for a /SERVICE/METHOD using the audit event's metadata (API Request/Response).
-//The custom message will be appended to the default message for a richer slack audit.
 type CustomMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

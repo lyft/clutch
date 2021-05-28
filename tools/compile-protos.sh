@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+########
+# Note: When updating any of these versions be sure to also
+# update the corresponding version in .vscode/settings.json
+# and api/.vscode/settings.json
+########
+
 # https://github.com/protocolbuffers/protobuf/releases
 PROTOC_RELEASE=3.14.0
 PROTO_ZIP_RELEASE_MD5_LINUX=cef4dc2f438e44e5d1af64ba4f9dbaa6
