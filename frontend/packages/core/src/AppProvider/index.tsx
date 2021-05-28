@@ -4,7 +4,7 @@ import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext } from "../Contexts/app-context";
-import { featureFlags } from "../flags";
+import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
 import NotFound from "../not-found";
 
@@ -12,8 +12,6 @@ import registeredWorkflows from "./registrar";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
-
-const FF_POLL = +process.env.REACT_APP_FF_POLL || 300000;
 
 export interface UserConfiguration {
   [packageName: string]: {
@@ -64,7 +62,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 
   React.useEffect(() => {
     loadWorkflows();
-    const interval = setInterval(loadWorkflows, FF_POLL);
+    const interval = setInterval(loadWorkflows, FEATURE_FLAG_POLL_RATE);
     return () => clearInterval(interval);
   }, []);
 

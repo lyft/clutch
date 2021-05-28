@@ -4,7 +4,7 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "./Network/errors";
 import { client } from "./Network/index";
 
-const FF_POLL = +process.env.REACT_APP_FF_POLL || 300000;
+const FEATURE_FLAG_POLL_RATE = +process.env.REACT_APP_FF_POLL || 300000;
 const FF_CACHE_TTL = +process.env.REACT_APP_FF_CACHE_TTL || 60000;
 
 export interface FeatureFlags {
@@ -89,7 +89,7 @@ const SimpleFeatureFlag = ({ feature, children }: SimpleFeatureFlagProps) => {
 
   React.useEffect(() => {
     loadFlags();
-    const interval = setInterval(loadFlags, FF_POLL);
+    const interval = setInterval(loadFlags, FEATURE_FLAG_POLL_RATE);
     return () => clearInterval(interval);
   }, []);
 
@@ -112,4 +112,4 @@ const SimpleFeatureFlag = ({ feature, children }: SimpleFeatureFlagProps) => {
   return <>{statefulChildren}</>;
 };
 
-export { featureFlags, FeatureOff, FeatureOn, SimpleFeatureFlag };
+export { FEATURE_FLAG_POLL_RATE, featureFlags, FeatureOff, FeatureOn, SimpleFeatureFlag };
