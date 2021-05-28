@@ -13,10 +13,12 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
+	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/authn"
@@ -55,6 +57,34 @@ type api struct {
 }
 
 func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv1.LoginResponse, error) {
+	// Attempt refresh.
+	md, _ := metadata.FromIncomingContext(ctx)
+	if v := md.Get("grpcgateway-cookie"); len(v) > 0 {
+		if refreshToken, err := mux.GetCookieValue(v, "refreshToken"); err == nil {
+			if t, err := a.issuer.RefreshToken(ctx, &oauth2.Token{RefreshToken: refreshToken}); err == nil {
+				md := metadata.New(map[string]string{
+					"Location":         request.RedirectUrl,
+					"Set-Cookie-Token": t.AccessToken,
+					"Set-Cookie-Refresh-Token": t.RefreshToken,
+				})
+				if err := grpc.SendHeader(ctx, md); err != nil {
+					return nil, err
+				}
+
+				return &authnv1.LoginResponse{
+					Return: &authnv1.LoginResponse_Token_{
+						Token: &authnv1.LoginResponse_Token{
+							AccessToken:  t.AccessToken,
+							RefreshToken: t.RefreshToken,
+						},
+					},
+				}, nil
+
+			}
+		}
+	}
+
+	// Full login flow.
 	state, err := a.provider.GetStateNonce(request.RedirectUrl)
 	if err != nil {
 		return nil, err
@@ -64,13 +94,12 @@ func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv
 		return nil, err
 	}
 
-	md := metadata.Pairs("Location", authURL)
-	if err := grpc.SendHeader(ctx, md); err != nil {
+	if err := grpc.SendHeader(ctx, metadata.Pairs("Location", authURL)); err != nil {
 		return nil, err
 	}
 
 	return &authnv1.LoginResponse{
-		AuthUrl: authURL,
+		Return: &authnv1.LoginResponse_AuthUrl{AuthUrl: authURL},
 	}, nil
 }
 

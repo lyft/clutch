@@ -2470,6 +2470,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.authn.v1
                  * @interface ILoginResponse
                  * @property {string|null} [authUrl] LoginResponse authUrl
+                 * @property {clutch.authn.v1.LoginResponse.IToken|null} [token] LoginResponse token
                  */
 
                 /**
@@ -2489,11 +2490,33 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * LoginResponse authUrl.
-                 * @member {string} authUrl
+                 * @member {string|null|undefined} authUrl
                  * @memberof clutch.authn.v1.LoginResponse
                  * @instance
                  */
-                LoginResponse.prototype.authUrl = "";
+                LoginResponse.prototype.authUrl = null;
+
+                /**
+                 * LoginResponse token.
+                 * @member {clutch.authn.v1.LoginResponse.IToken|null|undefined} token
+                 * @memberof clutch.authn.v1.LoginResponse
+                 * @instance
+                 */
+                LoginResponse.prototype.token = null;
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * LoginResponse return.
+                 * @member {"authUrl"|"token"|undefined} return_
+                 * @memberof clutch.authn.v1.LoginResponse
+                 * @instance
+                 */
+                Object.defineProperty(LoginResponse.prototype, "return", {
+                    get: $util.oneOfGetter($oneOfFields = ["authUrl", "token"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
 
                 /**
                  * Verifies a LoginResponse message.
@@ -2506,9 +2529,22 @@ export const clutch = $root.clutch = (() => {
                 LoginResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.authUrl != null && message.hasOwnProperty("authUrl"))
+                    let properties = {};
+                    if (message.authUrl != null && message.hasOwnProperty("authUrl")) {
+                        properties["return"] = 1;
                         if (!$util.isString(message.authUrl))
                             return "authUrl: string expected";
+                    }
+                    if (message.token != null && message.hasOwnProperty("token")) {
+                        if (properties["return"] === 1)
+                            return "return: multiple values";
+                        properties["return"] = 1;
+                        {
+                            let error = $root.clutch.authn.v1.LoginResponse.Token.verify(message.token);
+                            if (error)
+                                return "token." + error;
+                        }
+                    }
                     return null;
                 };
 
@@ -2526,6 +2562,11 @@ export const clutch = $root.clutch = (() => {
                     let message = new $root.clutch.authn.v1.LoginResponse();
                     if (object.authUrl != null)
                         message.authUrl = String(object.authUrl);
+                    if (object.token != null) {
+                        if (typeof object.token !== "object")
+                            throw TypeError(".clutch.authn.v1.LoginResponse.token: object expected");
+                        message.token = $root.clutch.authn.v1.LoginResponse.Token.fromObject(object.token);
+                    }
                     return message;
                 };
 
@@ -2542,10 +2583,16 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.defaults)
-                        object.authUrl = "";
-                    if (message.authUrl != null && message.hasOwnProperty("authUrl"))
+                    if (message.authUrl != null && message.hasOwnProperty("authUrl")) {
                         object.authUrl = message.authUrl;
+                        if (options.oneofs)
+                            object["return"] = "authUrl";
+                    }
+                    if (message.token != null && message.hasOwnProperty("token")) {
+                        object.token = $root.clutch.authn.v1.LoginResponse.Token.toObject(message.token, options);
+                        if (options.oneofs)
+                            object["return"] = "token";
+                    }
                     return object;
                 };
 
@@ -2559,6 +2606,124 @@ export const clutch = $root.clutch = (() => {
                 LoginResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                LoginResponse.Token = (function() {
+
+                    /**
+                     * Properties of a Token.
+                     * @memberof clutch.authn.v1.LoginResponse
+                     * @interface IToken
+                     * @property {string|null} [accessToken] Token accessToken
+                     * @property {string|null} [refreshToken] Token refreshToken
+                     */
+
+                    /**
+                     * Constructs a new Token.
+                     * @memberof clutch.authn.v1.LoginResponse
+                     * @classdesc Represents a Token.
+                     * @implements IToken
+                     * @constructor
+                     * @param {clutch.authn.v1.LoginResponse.IToken=} [properties] Properties to set
+                     */
+                    function Token(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Token accessToken.
+                     * @member {string} accessToken
+                     * @memberof clutch.authn.v1.LoginResponse.Token
+                     * @instance
+                     */
+                    Token.prototype.accessToken = "";
+
+                    /**
+                     * Token refreshToken.
+                     * @member {string} refreshToken
+                     * @memberof clutch.authn.v1.LoginResponse.Token
+                     * @instance
+                     */
+                    Token.prototype.refreshToken = "";
+
+                    /**
+                     * Verifies a Token message.
+                     * @function verify
+                     * @memberof clutch.authn.v1.LoginResponse.Token
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Token.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                            if (!$util.isString(message.accessToken))
+                                return "accessToken: string expected";
+                        if (message.refreshToken != null && message.hasOwnProperty("refreshToken"))
+                            if (!$util.isString(message.refreshToken))
+                                return "refreshToken: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Token message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.authn.v1.LoginResponse.Token
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.authn.v1.LoginResponse.Token} Token
+                     */
+                    Token.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.authn.v1.LoginResponse.Token)
+                            return object;
+                        let message = new $root.clutch.authn.v1.LoginResponse.Token();
+                        if (object.accessToken != null)
+                            message.accessToken = String(object.accessToken);
+                        if (object.refreshToken != null)
+                            message.refreshToken = String(object.refreshToken);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Token message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.authn.v1.LoginResponse.Token
+                     * @static
+                     * @param {clutch.authn.v1.LoginResponse.Token} message Token
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Token.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.accessToken = "";
+                            object.refreshToken = "";
+                        }
+                        if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                            object.accessToken = message.accessToken;
+                        if (message.refreshToken != null && message.hasOwnProperty("refreshToken"))
+                            object.refreshToken = message.refreshToken;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Token to JSON.
+                     * @function toJSON
+                     * @memberof clutch.authn.v1.LoginResponse.Token
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Token.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Token;
+                })();
 
                 return LoginResponse;
             })();

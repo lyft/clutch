@@ -8,20 +8,6 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func TestGetCookieValue(t *testing.T) {
-	cookies := []string{
-		"foo=bar;baz=bang",
-		"baz=bloop",
-	}
-	res, err := GetCookieValue(cookies, "foo")
-	assert.NoError(t, err)
-	assert.Equal(t, "bar", res)
-
-	res, err = GetCookieValue(cookies, "baz")
-	assert.NoError(t, err)
-	assert.Equal(t, "bang", res)
-}
-
 func TestGetToken(t *testing.T) {
 	tokenVal := "quux"
 

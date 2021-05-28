@@ -7,7 +7,6 @@ package authn
 import (
 	"context"
 	"errors"
-	"net/http"
 	"strings"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -18,6 +17,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
+	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/authn"
@@ -78,16 +78,6 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	}
 }
 
-// GetCookieValue is the easiest way to parse a cookie string in a non-HTTP request context.
-func GetCookieValue(headerValues []string, key string) (string, error) {
-	request := http.Request{Header: http.Header{"Cookie": headerValues}}
-	c, err := request.Cookie(key)
-	if err != nil {
-		return "", err
-	}
-	return c.Value, nil
-}
-
 // getToken looks for the token in the authorization header or cookies.
 func getToken(md metadata.MD) (string, error) {
 	if tokens := md.Get("authorization"); len(tokens) > 0 {
@@ -103,7 +93,7 @@ func getToken(md metadata.MD) (string, error) {
 		return "", errors.New("token not present in authorization header or cookies")
 	}
 
-	return GetCookieValue(v, "token")
+	return mux.GetCookieValue(v, "token")
 }
 
 func (m *mid) authenticate(ctx context.Context) (context.Context, error) {

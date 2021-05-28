@@ -51,3 +51,18 @@ func TestRequestHeadersFromrResponseWriterMessed(t *testing.T) {
 	ret := requestHeadersFromResponseWriter(m)
 	assert.Equal(t, "", ret.Get("foo"))
 }
+
+func TestGetCookieValue(t *testing.T) {
+	cookies := []string{
+		"foo=bar;baz=bang",
+		"baz=bloop",
+	}
+	res, err := GetCookieValue(cookies, "foo")
+	assert.NoError(t, err)
+	assert.Equal(t, "bar", res)
+
+	res, err = GetCookieValue(cookies, "baz")
+	assert.NoError(t, err)
+	assert.Equal(t, "bang", res)
+}
+

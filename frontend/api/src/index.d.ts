@@ -1080,6 +1080,9 @@ export namespace clutch {
 
                 /** LoginResponse authUrl */
                 authUrl?: (string|null);
+
+                /** LoginResponse token */
+                token?: (clutch.authn.v1.LoginResponse.IToken|null);
             }
 
             /** Represents a LoginResponse. */
@@ -1092,7 +1095,13 @@ export namespace clutch {
                 constructor(properties?: clutch.authn.v1.ILoginResponse);
 
                 /** LoginResponse authUrl. */
-                public authUrl: string;
+                public authUrl?: (string|null);
+
+                /** LoginResponse token. */
+                public token?: (clutch.authn.v1.LoginResponse.IToken|null);
+
+                /** LoginResponse return. */
+                public return_?: ("authUrl"|"token");
 
                 /**
                  * Verifies a LoginResponse message.
@@ -1121,6 +1130,63 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace LoginResponse {
+
+                /** Properties of a Token. */
+                interface IToken {
+
+                    /** Token accessToken */
+                    accessToken?: (string|null);
+
+                    /** Token refreshToken */
+                    refreshToken?: (string|null);
+                }
+
+                /** Represents a Token. */
+                class Token implements IToken {
+
+                    /**
+                     * Constructs a new Token.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.authn.v1.LoginResponse.IToken);
+
+                    /** Token accessToken. */
+                    public accessToken: string;
+
+                    /** Token refreshToken. */
+                    public refreshToken: string;
+
+                    /**
+                     * Verifies a Token message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Token message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Token
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.authn.v1.LoginResponse.Token;
+
+                    /**
+                     * Creates a plain object from a Token message. Also converts values to other types if specified.
+                     * @param message Token
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.authn.v1.LoginResponse.Token, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Token to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
 
             /** Properties of a CallbackRequest. */

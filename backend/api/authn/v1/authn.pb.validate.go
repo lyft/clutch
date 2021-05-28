@@ -108,7 +108,24 @@ func (m *LoginResponse) Validate() error {
 		return nil
 	}
 
-	// no validation rules for AuthUrl
+	switch m.Return.(type) {
+
+	case *LoginResponse_AuthUrl:
+		// no validation rules for AuthUrl
+
+	case *LoginResponse_Token_:
+
+		if v, ok := interface{}(m.GetToken()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return LoginResponseValidationError{
+					field:  "Token",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	return nil
 }
@@ -479,3 +496,74 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateTokenResponseValidationError{}
+
+// Validate checks the field values on LoginResponse_Token with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *LoginResponse_Token) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for AccessToken
+
+	// no validation rules for RefreshToken
+
+	return nil
+}
+
+// LoginResponse_TokenValidationError is the validation error returned by
+// LoginResponse_Token.Validate if the designated constraints aren't met.
+type LoginResponse_TokenValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LoginResponse_TokenValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LoginResponse_TokenValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LoginResponse_TokenValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LoginResponse_TokenValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LoginResponse_TokenValidationError) ErrorName() string {
+	return "LoginResponse_TokenValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e LoginResponse_TokenValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLoginResponse_Token.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LoginResponse_TokenValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LoginResponse_TokenValidationError{}
