@@ -14,8 +14,8 @@ export interface FeatureFlags {
 const featureFlags = (): Promise<FeatureFlags> => {
   const cachedFlags = JSON.parse(sessionStorage.getItem("featureFlags"));
   if (cachedFlags) {
-    const elapsedSeconds = new Date(new Date().getTime() - cachedFlags.timestamp).getTime();
-    if (elapsedSeconds < FF_CACHE_TTL) {
+    const elapsedTime = new Date(new Date().getTime() - cachedFlags.timestamp).getTime();
+    if (elapsedTime < FF_CACHE_TTL) {
       return new Promise(resolve => resolve(cachedFlags.flags));
     }
   }
