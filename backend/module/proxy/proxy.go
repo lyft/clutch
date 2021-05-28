@@ -110,6 +110,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	}
 
 	// Extract headers from response
+	// TODO: It might make sense to provide a list of allowed headers, as there can be a lot.
 	resHeaders := make(map[string]*structpb.ListValue, len(response.Header))
 	for key, headers := range response.Header {
 		headerValues := make([]*structpb.Value, len(headers))
