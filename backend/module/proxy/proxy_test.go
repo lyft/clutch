@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -19,23 +19,40 @@ import (
 	"github.com/lyft/clutch/backend/module/moduletest"
 )
 
-type MockClient struct {
-	DoFunc func() (*http.Response, error)
-}
-
-func (m *MockClient) Do(req *http.Request) (*http.Response, error) {
-	return m.DoFunc()
-}
-
-var services []*proxyv1cfg.Service = []*proxyv1cfg.Service{
-	{
-		Name: "cat",
-		Host: "http://cat.cat",
-		AllowedRequests: []*proxyv1cfg.AllowRequest{
-			{Path: "/meow", Method: "GET"},
-			{Path: "/nom", Method: "POST"},
+func generateServicesConfig(host string) []*proxyv1cfg.Service {
+	return []*proxyv1cfg.Service{
+		{
+			Name: "cat",
+			Host: host,
+			AllowedRequests: []*proxyv1cfg.AllowRequest{
+				{Path: "/meow", Method: "GET"},
+				{Path: "/nom", Method: "POST"},
+			},
 		},
-	},
+		{
+			Name: "meow",
+			Host: host,
+			AllowedRequests: []*proxyv1cfg.AllowRequest{
+				{Path: "/meow", Method: "GET"},
+				{Path: "/nom", Method: "POST"},
+			},
+		},
+	}
+}
+
+func structpbFromBody(body []byte) *structpb.Value {
+	var bodyData interface{}
+	err := json.NewDecoder(bytes.NewReader(body)).Decode(&bodyData)
+	if err != nil {
+		panic(err)
+	}
+
+	str, err := structpb.NewValue(bodyData)
+	if err != nil {
+		panic(err)
+	}
+
+	return str
 }
 
 func TestModule(t *testing.T) {
@@ -59,39 +76,46 @@ func TestRequestProxy(t *testing.T) {
 	tests := []struct {
 		id             string
 		request        *proxyv1.RequestProxyRequest
-		doFunc         func() (*http.Response, error)
+		handler        func(http.ResponseWriter, *http.Request)
 		shouldError    bool
 		assertStatus   int32
 		assertHeaders  map[string]*structpb.ListValue
-		assertBodyData bool
+		assertBodyData *structpb.Value
 	}{
 		{
-			id: "GET Request with no body return",
+			id: "GET Request with no body return with headers",
 			request: &proxyv1.RequestProxyRequest{
 				Service:    "cat",
 				HttpMethod: "GET",
 				Path:       "/meow",
 			},
-			doFunc: func() (*http.Response, error) {
-				return &http.Response{
-					StatusCode: 200,
-					Body:       http.NoBody,
-					Header: http.Header{
-						"key1": []string{"value1", "value2"},
-					},
-				}, nil
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Add("Key1", "value1")
+				w.Header().Add("Key1", "value2")
+				w.Header().Set("Content-Length", "0")
+				w.Header().Set("Date", "0")
+				w.WriteHeader(200)
 			},
 			shouldError:  false,
 			assertStatus: 200,
 			assertHeaders: map[string]*structpb.ListValue{
-				"key1": {
+				"Key1": {
 					Values: []*structpb.Value{
 						structpb.NewStringValue("value1"),
 						structpb.NewStringValue("value2"),
 					},
 				},
+				"Content-Length": {
+					Values: []*structpb.Value{
+						structpb.NewStringValue("0"),
+					},
+				},
+				"Date": {
+					Values: []*structpb.Value{
+						structpb.NewStringValue("0"),
+					},
+				},
 			},
-			assertBodyData: false,
 		},
 		{
 			id: "POST Request with body data",
@@ -100,35 +124,23 @@ func TestRequestProxy(t *testing.T) {
 				HttpMethod: "POST",
 				Path:       "/nom",
 			},
-			doFunc: func() (*http.Response, error) {
-				return &http.Response{
-					StatusCode: 200,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte("{}"))),
-					Header: http.Header{
-						"key1": []string{"value1", "value2"},
-					},
-				}, nil
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(200)
+				_, _ = w.Write([]byte("{}"))
 			},
-			shouldError:  false,
-			assertStatus: 200,
-			assertHeaders: map[string]*structpb.ListValue{
-				"key1": {
-					Values: []*structpb.Value{
-						structpb.NewStringValue("value1"),
-						structpb.NewStringValue("value2"),
-					},
-				},
-			},
-			assertBodyData: true,
+			shouldError:    false,
+			assertStatus:   200,
+			assertBodyData: structpbFromBody([]byte("{}")),
 		},
 	}
 
 	for _, test := range tests {
+		srv := httptest.NewServer(http.HandlerFunc(test.handler))
+		defer srv.Close()
+
 		m := &mod{
-			client: &MockClient{
-				DoFunc: test.doFunc,
-			},
-			services: services,
+			client:   srv.Client(),
+			services: generateServicesConfig(srv.URL),
 			logger:   log,
 			scope:    scope,
 		}
@@ -138,19 +150,13 @@ func TestRequestProxy(t *testing.T) {
 			assert.Error(t, err)
 		} else {
 			assert.Equal(t, test.assertStatus, res.HttpStatus)
-			assert.Equal(t, test.assertHeaders, res.Headers)
-			if test.assertBodyData {
-				resData, err := test.doFunc()
-				assert.NoError(t, err)
 
-				var bodyData map[string]interface{}
-				err = json.NewDecoder(resData.Body).Decode(&bodyData)
-				assert.NoError(t, err)
+			if test.assertHeaders != nil {
+				assert.Equal(t, test.assertHeaders, res.Headers)
+			}
 
-				str, err := structpb.NewStruct(bodyData)
-				assert.NoError(t, err)
-
-				assert.Equal(t, structpb.NewStructValue(str), res.Response)
+			if test.assertBodyData != nil {
+				assert.Equal(t, test.assertBodyData, res.Response)
 			}
 		}
 	}
@@ -197,7 +203,17 @@ func TestIsAllowedRequest(t *testing.T) {
 			expect:      true,
 			shouldError: false,
 		},
+		{
+			id:          "Path with no /",
+			service:     "cat",
+			path:        "nom?food=fancyfeast",
+			method:      "POST",
+			expect:      false,
+			shouldError: false,
+		},
 	}
+
+	services := generateServicesConfig("http://test.test")
 
 	for _, test := range tests {
 		isAllowed, err := isAllowedRequest(services, test.service, test.path, test.method)

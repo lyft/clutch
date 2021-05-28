@@ -21,11 +21,9 @@ import (
 	"github.com/lyft/clutch/backend/module"
 )
 
-const Name = "clutch.module.proxy"
-
-type HTTPClient interface {
-	Do(req *http.Request) (*http.Response, error)
-}
+const (
+	Name = "clutch.module.proxy"
+)
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &proxyv1cfg.Config{}
@@ -55,7 +53,7 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 }
 
 type mod struct {
-	client   HTTPClient
+	client   *http.Client
 	services []*proxyv1cfg.Service
 	logger   *zap.Logger
 	scope    tally.Scope
