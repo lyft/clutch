@@ -31,7 +31,7 @@ require (
 	github.com/iancoleman/strcase v0.1.3
 	github.com/jhump/protoreflect v1.8.2
 	github.com/lib/pq v1.10.2
-	github.com/mitchellh/hashstructure/v2 v2.0.1
+	github.com/mitchellh/hashstructure/v2 v2.0.2
 	github.com/shurcooL/githubv4 v0.0.0-20201206200315-234843c633fa
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
