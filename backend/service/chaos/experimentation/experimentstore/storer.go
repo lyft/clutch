@@ -113,7 +113,7 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 
 func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecification) (*CreateOrGetExperimentResult, error) {
 	var exists bool
-	query := `SELECT exists (select id from experiment_run where id == $1)`
+	query := `SELECT exists (select id from experiment_run where id = $1)`
 	err := s.db.QueryRow(query, es.RunId).Scan(&exists)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)
