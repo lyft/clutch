@@ -100,6 +100,9 @@ message GatewayOptions {
   bool enable_pprof = 8;
 
   clutch.config.middleware.accesslog.v1.Config accesslog = 9;
+
+  // Maximum allowed size of a gRPC response (before transcoding to JSON). Defaults to 4MB (i.e. 4194304 bytes).
+  uint32 max_response_size_bytes = 10;
 }
 
 // Assets configuration provide a passthrough host for frontend static assets.
