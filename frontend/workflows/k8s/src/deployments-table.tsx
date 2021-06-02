@@ -3,7 +3,9 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { Table, TableRow } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
+import TimeAgo from "react-timeago";
 import _ from "lodash";
+import { convertTime, timeFormatter } from "./pods-table"
 
 const DeploymentsContainer = styled.div({
   display: "flex",
@@ -25,6 +27,7 @@ const DeploymentTable = () => {
           "Replicas Ready",
           "Replicas Available",
           "Replicas Up-To-Date",
+		  "Age",
         ]}
       >
         {_.sortBy(deployments, [
@@ -38,6 +41,7 @@ const DeploymentTable = () => {
             {deployment.deploymentStatus?.readyReplicas}
             {deployment.deploymentStatus?.availableReplicas}
             {deployment.deploymentStatus?.updatedReplicas}
+			<TimeAgo date={convertTime(deployment.creationTimeMillis)} formatter={timeFormatter} />
           </TableRow>
         ))}
       </Table>
