@@ -106,4 +106,4 @@ const PodTable = () => {
   );
 };
 
-export default PodTable;
+export { PodTable as default, timeFormatter, convertTime };
