@@ -13934,6 +13934,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.IAssets|null} [assets] GatewayOptions assets
                      * @property {boolean|null} [enablePprof] GatewayOptions enablePprof
                      * @property {clutch.config.middleware.accesslog.v1.IConfig|null} [accesslog] GatewayOptions accesslog
+                     * @property {number|null} [maxResponseSizeBytes] GatewayOptions maxResponseSizeBytes
                      */
 
                     /**
@@ -14025,6 +14026,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.accesslog = null;
 
                     /**
+                     * GatewayOptions maxResponseSizeBytes.
+                     * @member {number} maxResponseSizeBytes
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.maxResponseSizeBytes = 0;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -14082,6 +14091,9 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "accesslog." + error;
                         }
+                        if (message.maxResponseSizeBytes != null && message.hasOwnProperty("maxResponseSizeBytes"))
+                            if (!$util.isInteger(message.maxResponseSizeBytes))
+                                return "maxResponseSizeBytes: integer expected";
                         return null;
                     };
 
@@ -14144,6 +14156,8 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.config.gateway.v1.GatewayOptions.accesslog: object expected");
                             message.accesslog = $root.clutch.config.middleware.accesslog.v1.Config.fromObject(object.accesslog);
                         }
+                        if (object.maxResponseSizeBytes != null)
+                            message.maxResponseSizeBytes = object.maxResponseSizeBytes >>> 0;
                         return message;
                     };
 
@@ -14171,6 +14185,7 @@ export const clutch = $root.clutch = (() => {
                             object.assets = null;
                             object.enablePprof = false;
                             object.accesslog = null;
+                            object.maxResponseSizeBytes = 0;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -14193,6 +14208,8 @@ export const clutch = $root.clutch = (() => {
                             object.enablePprof = message.enablePprof;
                         if (message.accesslog != null && message.hasOwnProperty("accesslog"))
                             object.accesslog = $root.clutch.config.middleware.accesslog.v1.Config.toObject(message.accesslog, options);
+                        if (message.maxResponseSizeBytes != null && message.hasOwnProperty("maxResponseSizeBytes"))
+                            object.maxResponseSizeBytes = message.maxResponseSizeBytes;
                         return object;
                     };
 
