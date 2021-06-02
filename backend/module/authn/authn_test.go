@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zaptest"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -56,6 +58,7 @@ func TestAPILoginRefresh(t *testing.T) {
 	api := api{
 		provider: MockProvider{},
 		issuer:   authnmock.MockIssuer{AllowRefresh: true},
+		logger:   zaptest.NewLogger(t, zaptest.Level(zap.WarnLevel)),
 	}
 
 	transportStream := &grpcmock.MockServerTransportStream{}
@@ -75,6 +78,7 @@ func TestAPILoginRefreshFailsFlowContinues(t *testing.T) {
 	api := api{
 		provider: MockProvider{},
 		issuer:   authnmock.MockIssuer{AllowRefresh: false},
+		logger:   zaptest.NewLogger(t, zaptest.Level(zap.WarnLevel)),
 	}
 
 	transportStream := &grpcmock.MockServerTransportStream{}
