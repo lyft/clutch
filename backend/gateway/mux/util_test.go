@@ -64,4 +64,12 @@ func TestGetCookieValue(t *testing.T) {
 	res, err = GetCookieValue(cookies, "baz")
 	assert.NoError(t, err)
 	assert.Equal(t, "bang", res)
+
+	res, err = GetCookieValue(cookies, "xyz")
+	assert.Empty(t, res)
+	assert.Error(t, err)
+
+	res, err = GetCookieValue(cookies, "")
+	assert.Empty(t, res)
+	assert.Error(t, err)
 }

@@ -78,7 +78,7 @@ func (a *api) loginViaRefresh(ctx context.Context, redirectURL string) (*authnv1
 		return nil, err
 	}
 
-	err = grpc.SendHeader(ctx, metadata.New(map[string]string{
+	err = grpc.SetHeader(ctx, metadata.New(map[string]string{
 		"Location":                 redirectURL,
 		"Set-Cookie-Token":         token.AccessToken,
 		"Set-Cookie-Refresh-Token": token.RefreshToken,
@@ -116,7 +116,7 @@ func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv
 		return nil, err
 	}
 
-	if err := grpc.SendHeader(ctx, metadata.Pairs("Location", authURL)); err != nil {
+	if err := grpc.SetHeader(ctx, metadata.Pairs("Location", authURL)); err != nil {
 		return nil, err
 	}
 
@@ -151,7 +151,7 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 		md.Set("Set-Cookie-Refresh-Token", token.RefreshToken)
 	}
 
-	if err := grpc.SendHeader(ctx, md); err != nil {
+	if err := grpc.SetHeader(ctx, md); err != nil {
 		return nil, err
 	}
 
