@@ -201,13 +201,14 @@ const Select = ({
   options,
   onChange,
 }: SelectProps) => {
-  const defaultIdx = defaultOption < options.length ? defaultOption : 0;
+  const optionLength = options ? options.length : 0;
+  const defaultIdx = defaultOption < optionLength ? defaultOption : 0;
   const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
   React.useEffect(() => {
-    onChange && onChange(options[selectedIdx]?.value || options[selectedIdx].label);
-  }, []);
+    optionLength > 0 && onChange && onChange(options[selectedIdx]?.value || options[selectedIdx].label);
+  }, [options]);
 
-  if (options?.length === undefined || options?.length === 0) {
+  if (optionLength === 0) {
     return null;
   }
 
