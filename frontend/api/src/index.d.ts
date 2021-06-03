@@ -5961,6 +5961,9 @@ export namespace clutch {
                     /** GatewayOptions accesslog */
                     accesslog?: (clutch.config.middleware.accesslog.v1.IConfig|null);
 
+                    /** GatewayOptions maxResponseSizeBytes */
+                    maxResponseSizeBytes?: (number|null);
+
                     /** GatewayOptions secureCookies */
                     secureCookies?: (google.protobuf.IBoolValue|null);
                 }
@@ -6000,6 +6003,9 @@ export namespace clutch {
 
                     /** GatewayOptions accesslog. */
                     public accesslog?: (clutch.config.middleware.accesslog.v1.IConfig|null);
+
+                    /** GatewayOptions maxResponseSizeBytes. */
+                    public maxResponseSizeBytes: number;
 
                     /** GatewayOptions secureCookies. */
                     public secureCookies?: (google.protobuf.IBoolValue|null);
@@ -23170,6 +23176,9 @@ export namespace google {
 
             /** FieldOptions uninterpretedOption */
             uninterpretedOption?: (google.protobuf.IUninterpretedOption[]|null);
+
+            /** FieldOptions .clutch.api.v1.log */
+            ".clutch.api.v1.log"?: (boolean|null);
 
             /** FieldOptions .validate.rules */
             ".validate.rules"?: (validate.IFieldRules|null);
