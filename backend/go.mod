@@ -20,7 +20,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
 	github.com/fullstorydev/grpcurl v1.8.1
 	github.com/go-git/go-billy/v5 v5.3.1
-	github.com/go-git/go-git/v5 v5.4.1
+	github.com/go-git/go-git/v5 v5.4.2
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.5.2
@@ -41,10 +41,10 @@ require (
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/uber-go/tally v3.4.1+incompatible
 	go.uber.org/zap v1.17.0
-	golang.org/x/net v0.0.0-20210521195947-fe42d452be8f
+	golang.org/x/net v0.0.0-20210525063256-abc453219eb5
 	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20210524142926-3e3a6030be83
+	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c
 	google.golang.org/grpc v1.38.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0

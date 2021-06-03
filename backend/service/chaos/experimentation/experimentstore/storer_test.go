@@ -188,7 +188,7 @@ func TestCreateOrGetExperiment(t *testing.T) {
 			runId: "1",
 			beforeExecsQueries: []*query{
 				{
-					sql:    `SELECT exists (select id from experiment_run where id == $1)`,
+					sql:    `SELECT exists (select id from experiment_run where id = $1)`,
 					args:   []driver.Value{sqlmock.AnyArg()},
 					result: sqlmock.NewRows([]string{"exists"}).AddRow(true),
 				},
@@ -204,7 +204,7 @@ func TestCreateOrGetExperiment(t *testing.T) {
 			runId: "1",
 			beforeExecsQueries: []*query{
 				{
-					sql:    `SELECT exists (select id from experiment_run where id == $1)`,
+					sql:    `SELECT exists (select id from experiment_run where id = $1)`,
 					args:   []driver.Value{sqlmock.AnyArg()},
 					result: sqlmock.NewRows([]string{"exists"}).AddRow(false),
 				},
