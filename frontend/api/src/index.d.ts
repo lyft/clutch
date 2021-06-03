@@ -1194,6 +1194,9 @@ export namespace clutch {
 
                 /** CallbackResponse accessToken */
                 accessToken?: (string|null);
+
+                /** CallbackResponse refreshToken */
+                refreshToken?: (string|null);
             }
 
             /** Represents a CallbackResponse. */
@@ -1207,6 +1210,9 @@ export namespace clutch {
 
                 /** CallbackResponse accessToken. */
                 public accessToken: string;
+
+                /** CallbackResponse refreshToken. */
+                public refreshToken: string;
 
                 /**
                  * Verifies a CallbackResponse message.
@@ -5957,6 +5963,9 @@ export namespace clutch {
 
                     /** GatewayOptions maxResponseSizeBytes */
                     maxResponseSizeBytes?: (number|null);
+
+                    /** GatewayOptions secureCookies */
+                    secureCookies?: (google.protobuf.IBoolValue|null);
                 }
 
                 /** Represents a GatewayOptions. */
@@ -5997,6 +6006,9 @@ export namespace clutch {
 
                     /** GatewayOptions maxResponseSizeBytes. */
                     public maxResponseSizeBytes: number;
+
+                    /** GatewayOptions secureCookies. */
+                    public secureCookies?: (google.protobuf.IBoolValue|null);
 
                     /**
                      * Verifies a GatewayOptions message.

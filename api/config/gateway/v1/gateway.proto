@@ -8,6 +8,7 @@ import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
 import "config/middleware/accesslog/v1/accesslog.proto";
+import "google/protobuf/wrappers.proto";
 
 message Config {
   GatewayOptions gateway = 1 [ (validate.rules).message = {required : true} ];
@@ -103,6 +104,9 @@ message GatewayOptions {
 
   // Maximum allowed size of a gRPC response (before transcoding to JSON). Defaults to 4MB (i.e. 4194304 bytes).
   uint32 max_response_size_bytes = 10;
+
+  // Whether or not cookies should be sent with the 'Secure' flag. Default value is true.
+  google.protobuf.BoolValue secure_cookies = 11;
 }
 
 // Assets configuration provide a passthrough host for frontend static assets.

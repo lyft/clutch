@@ -96,12 +96,17 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 		"Set-Cookie-Token": token.AccessToken,
 	})
 
+	if token.RefreshToken != "" {
+		md.Set("Set-Cookie-Refresh-Token", token.RefreshToken)
+	}
+
 	if err := grpc.SendHeader(ctx, md); err != nil {
 		return nil, err
 	}
 
 	return &authnv1.CallbackResponse{
-		AccessToken: token.AccessToken,
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
 	}, nil
 }
 

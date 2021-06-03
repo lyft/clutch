@@ -2722,6 +2722,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.authn.v1
                  * @interface ICallbackResponse
                  * @property {string|null} [accessToken] CallbackResponse accessToken
+                 * @property {string|null} [refreshToken] CallbackResponse refreshToken
                  */
 
                 /**
@@ -2748,6 +2749,14 @@ export const clutch = $root.clutch = (() => {
                 CallbackResponse.prototype.accessToken = "";
 
                 /**
+                 * CallbackResponse refreshToken.
+                 * @member {string} refreshToken
+                 * @memberof clutch.authn.v1.CallbackResponse
+                 * @instance
+                 */
+                CallbackResponse.prototype.refreshToken = "";
+
+                /**
                  * Verifies a CallbackResponse message.
                  * @function verify
                  * @memberof clutch.authn.v1.CallbackResponse
@@ -2761,6 +2770,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.accessToken != null && message.hasOwnProperty("accessToken"))
                         if (!$util.isString(message.accessToken))
                             return "accessToken: string expected";
+                    if (message.refreshToken != null && message.hasOwnProperty("refreshToken"))
+                        if (!$util.isString(message.refreshToken))
+                            return "refreshToken: string expected";
                     return null;
                 };
 
@@ -2778,6 +2790,8 @@ export const clutch = $root.clutch = (() => {
                     let message = new $root.clutch.authn.v1.CallbackResponse();
                     if (object.accessToken != null)
                         message.accessToken = String(object.accessToken);
+                    if (object.refreshToken != null)
+                        message.refreshToken = String(object.refreshToken);
                     return message;
                 };
 
@@ -2794,10 +2808,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.defaults)
+                    if (options.defaults) {
                         object.accessToken = "";
+                        object.refreshToken = "";
+                    }
                     if (message.accessToken != null && message.hasOwnProperty("accessToken"))
                         object.accessToken = message.accessToken;
+                    if (message.refreshToken != null && message.hasOwnProperty("refreshToken"))
+                        object.refreshToken = message.refreshToken;
                     return object;
                 };
 
@@ -13935,6 +13953,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {boolean|null} [enablePprof] GatewayOptions enablePprof
                      * @property {clutch.config.middleware.accesslog.v1.IConfig|null} [accesslog] GatewayOptions accesslog
                      * @property {number|null} [maxResponseSizeBytes] GatewayOptions maxResponseSizeBytes
+                     * @property {google.protobuf.IBoolValue|null} [secureCookies] GatewayOptions secureCookies
                      */
 
                     /**
@@ -14034,6 +14053,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.maxResponseSizeBytes = 0;
 
                     /**
+                     * GatewayOptions secureCookies.
+                     * @member {google.protobuf.IBoolValue|null|undefined} secureCookies
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.secureCookies = null;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -14094,6 +14121,11 @@ export const clutch = $root.clutch = (() => {
                         if (message.maxResponseSizeBytes != null && message.hasOwnProperty("maxResponseSizeBytes"))
                             if (!$util.isInteger(message.maxResponseSizeBytes))
                                 return "maxResponseSizeBytes: integer expected";
+                        if (message.secureCookies != null && message.hasOwnProperty("secureCookies")) {
+                            let error = $root.google.protobuf.BoolValue.verify(message.secureCookies);
+                            if (error)
+                                return "secureCookies." + error;
+                        }
                         return null;
                     };
 
@@ -14158,6 +14190,11 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.maxResponseSizeBytes != null)
                             message.maxResponseSizeBytes = object.maxResponseSizeBytes >>> 0;
+                        if (object.secureCookies != null) {
+                            if (typeof object.secureCookies !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.GatewayOptions.secureCookies: object expected");
+                            message.secureCookies = $root.google.protobuf.BoolValue.fromObject(object.secureCookies);
+                        }
                         return message;
                     };
 
@@ -14186,6 +14223,7 @@ export const clutch = $root.clutch = (() => {
                             object.enablePprof = false;
                             object.accesslog = null;
                             object.maxResponseSizeBytes = 0;
+                            object.secureCookies = null;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -14210,6 +14248,8 @@ export const clutch = $root.clutch = (() => {
                             object.accesslog = $root.clutch.config.middleware.accesslog.v1.Config.toObject(message.accesslog, options);
                         if (message.maxResponseSizeBytes != null && message.hasOwnProperty("maxResponseSizeBytes"))
                             object.maxResponseSizeBytes = message.maxResponseSizeBytes;
+                        if (message.secureCookies != null && message.hasOwnProperty("secureCookies"))
+                            object.secureCookies = $root.google.protobuf.BoolValue.toObject(message.secureCookies, options);
                         return object;
                     };
 

@@ -250,6 +250,8 @@ func (m *CallbackResponse) Validate() error {
 
 	// no validation rules for AccessToken
 
+	// no validation rules for RefreshToken
+
 	return nil
 }
 
