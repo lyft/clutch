@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
 
@@ -24,11 +25,11 @@ var (
 
 	fieldNameRegexp = regexp.MustCompile(`{(\w+)}`)
 
-	actionTypeDescriptor        = apiv1.E_Action.TypeDescriptor()
-	auditDisabledTypeDescriptor = apiv1.E_DisableAudit.TypeDescriptor()
-	identifierTypeDescriptor    = apiv1.E_Id.TypeDescriptor()
-	redactedTypeDescriptor      = apiv1.E_Redacted.TypeDescriptor()
-	referenceTypeDescriptor     = apiv1.E_Reference.TypeDescriptor()
+	actionTypeDescriptor          = apiv1.E_Action.TypeDescriptor()
+	auditDisabledTypeDescriptor   = apiv1.E_DisableAudit.TypeDescriptor()
+	identifierTypeDescriptor      = apiv1.E_Id.TypeDescriptor()
+	redactedMessageTypeDescriptor = apiv1.E_Redacted.TypeDescriptor()
+	referenceTypeDescriptor       = apiv1.E_Reference.TypeDescriptor()
 )
 
 const typePrefix = "type.googleapis.com/"
@@ -77,10 +78,48 @@ func IsAuditDisabled(method string) bool {
 	return opts.Has(auditDisabledTypeDescriptor) && opts.Get(auditDisabledTypeDescriptor).Bool()
 }
 
+// If fields have the option log set to false,
+func ClearLogDisabledFields(m proto.Message) proto.Message {
+	if m == nil {
+		return m
+	}
+
+	pb := m.ProtoReflect()
+	pb.Range(func(fd protoreflect.FieldDescriptor, v protoreflect.Value) bool {
+		opts := fd.Options().(*descriptorpb.FieldOptions)
+		if proto.HasExtension(opts, apiv1.E_Log) && !proto.GetExtension(opts, apiv1.E_Log).(bool) {
+			pb.Clear(fd)
+			return true // Continue.
+		}
+
+		// Handle nested types.
+		switch t := v.Interface().(type) {
+		case protoreflect.Message:
+			ClearLogDisabledFields(t.Interface())
+		case protoreflect.Map:
+			t.Range(func(k protoreflect.MapKey, v protoreflect.Value) bool {
+				if _, ok := v.Interface().(protoreflect.Message); ok {
+					ClearLogDisabledFields(v.Message().Interface())
+				}
+				return true
+			})
+		case protoreflect.List: // i.e. `repeated`.
+			for i := 0; i < t.Len(); i++ {
+				if _, ok := t.Get(i).Interface().(protoreflect.Message); ok {
+					ClearLogDisabledFields(t.Get(i).Message().Interface())
+				}
+			}
+		}
+		return true
+	})
+
+	return m
+}
+
 func IsRedacted(pb proto.Message) bool {
 	m := pb.ProtoReflect()
 	opts := m.Descriptor().Options().ProtoReflect()
-	return opts.Has(redactedTypeDescriptor) && opts.Get(redactedTypeDescriptor).Bool()
+	return opts.Has(redactedMessageTypeDescriptor) && opts.Get(redactedMessageTypeDescriptor).Bool()
 }
 
 func ResourceNames(pb proto.Message) []*auditv1.Resource {
@@ -262,7 +301,8 @@ func resolvePattern(pb proto.Message, pattern *apiv1.Pattern) *auditv1.Resource 
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
 }
 
-// APIBody returns a API request/response interface as an anypb.Any message.
+// APIBody returns a API request/response interface as an anypb.Any message, with any redaction or clearing based on
+// message or field annotations.
 func APIBody(body interface{}) (*anypb.Any, error) {
 	m, ok := body.(proto.Message)
 	if !ok {
@@ -274,7 +314,7 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 		return anypb.New(&apiv1.Redacted{RedactedTypeUrl: TypeURL(m)})
 	}
 
-	return anypb.New(m)
+	return anypb.New(ClearLogDisabledFields(m))
 }
 
 /* ToValue converts custom types to a structpb.Value. This helper was added

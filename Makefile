@@ -34,8 +34,9 @@ api-lint-fix:
 api-verify:
 	find backend/api -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
 	find frontend/api/src -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
+	rm backend/internal/test/pb/*.go
 	$(MAKE) api
-	tools/ensure-no-diff.sh backend/api frontend/api/src
+	tools/ensure-no-diff.sh backend/api backend/internal/test/pb frontend/api/src
 
 .PHONY: backend # Build the standalone backend.
 backend:

@@ -57608,6 +57608,7 @@ export const google = $root.google = (() => {
              * @property {boolean|null} [deprecated] FieldOptions deprecated
              * @property {boolean|null} [weak] FieldOptions weak
              * @property {Array.<google.protobuf.IUninterpretedOption>|null} [uninterpretedOption] FieldOptions uninterpretedOption
+             * @property {boolean|null} [".clutch.api.v1.log"] FieldOptions .clutch.api.v1.log
              * @property {validate.IFieldRules|null} [".validate.rules"] FieldOptions .validate.rules
              * @property {clutch.resolver.v1.IFieldMetadata|null} [".clutch.resolver.v1.schemaField"] FieldOptions .clutch.resolver.v1.schemaField
              */
@@ -57685,6 +57686,14 @@ export const google = $root.google = (() => {
             FieldOptions.prototype.uninterpretedOption = $util.emptyArray;
 
             /**
+             * FieldOptions .clutch.api.v1.log.
+             * @member {boolean} .clutch.api.v1.log
+             * @memberof google.protobuf.FieldOptions
+             * @instance
+             */
+            FieldOptions.prototype[".clutch.api.v1.log"] = false;
+
+            /**
              * FieldOptions .validate.rules.
              * @member {validate.IFieldRules|null|undefined} .validate.rules
              * @memberof google.protobuf.FieldOptions
@@ -57750,6 +57759,9 @@ export const google = $root.google = (() => {
                             return "uninterpretedOption." + error;
                     }
                 }
+                if (message[".clutch.api.v1.log"] != null && message.hasOwnProperty(".clutch.api.v1.log"))
+                    if (typeof message[".clutch.api.v1.log"] !== "boolean")
+                        return ".clutch.api.v1.log: boolean expected";
                 if (message[".validate.rules"] != null && message.hasOwnProperty(".validate.rules")) {
                     let error = $root.validate.FieldRules.verify(message[".validate.rules"]);
                     if (error)
@@ -57821,6 +57833,8 @@ export const google = $root.google = (() => {
                         message.uninterpretedOption[i] = $root.google.protobuf.UninterpretedOption.fromObject(object.uninterpretedOption[i]);
                     }
                 }
+                if (object[".clutch.api.v1.log"] != null)
+                    message[".clutch.api.v1.log"] = Boolean(object[".clutch.api.v1.log"]);
                 if (object[".validate.rules"] != null) {
                     if (typeof object[".validate.rules"] !== "object")
                         throw TypeError(".google.protobuf.FieldOptions..validate.rules: object expected");
@@ -57857,6 +57871,7 @@ export const google = $root.google = (() => {
                     object.jstype = options.enums === String ? "JS_NORMAL" : 0;
                     object.weak = false;
                     object[".validate.rules"] = null;
+                    object[".clutch.api.v1.log"] = false;
                     object[".clutch.resolver.v1.schemaField"] = null;
                 }
                 if (message.ctype != null && message.hasOwnProperty("ctype"))
@@ -57878,6 +57893,8 @@ export const google = $root.google = (() => {
                 }
                 if (message[".validate.rules"] != null && message.hasOwnProperty(".validate.rules"))
                     object[".validate.rules"] = $root.validate.FieldRules.toObject(message[".validate.rules"], options);
+                if (message[".clutch.api.v1.log"] != null && message.hasOwnProperty(".clutch.api.v1.log"))
+                    object[".clutch.api.v1.log"] = message[".clutch.api.v1.log"];
                 if (message[".clutch.resolver.v1.schemaField"] != null && message.hasOwnProperty(".clutch.resolver.v1.schemaField"))
                     object[".clutch.resolver.v1.schemaField"] = $root.clutch.resolver.v1.FieldMetadata.toObject(message[".clutch.resolver.v1.schemaField"], options);
                 return object;
