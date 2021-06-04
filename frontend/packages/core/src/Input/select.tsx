@@ -201,12 +201,16 @@ const Select = ({
   options,
   onChange,
 }: SelectProps) => {
-  if (options?.length === undefined || options?.length === 0) {
-    return null;
-  }
-
-  const defaultIdx = defaultOption < options.length ? defaultOption : 0;
+  const [defaultIdx] = React.useState(
+    defaultOption < options.length && defaultOption > 0 ? defaultOption : 0
+  );
   const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
+
+  React.useEffect(() => {
+    if (options.length !== 0) {
+      onChange && onChange(options[selectedIdx]?.value || options[selectedIdx].label);
+    }
+  }, []);
 
   const updateSelectedOption = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
     const { value } = event.target;
@@ -215,9 +219,9 @@ const Select = ({
     onChange && onChange(value);
   };
 
-  React.useEffect(() => {
-    onChange && onChange(options[selectedIdx]?.value || options[selectedIdx].label);
-  }, []);
+  if (options.length === 0) {
+    return null;
+  }
 
   return (
     <StyledFormControl key={name} fullWidth disabled={disabled} error={error}>
