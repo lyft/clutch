@@ -99,7 +99,7 @@ const defaultState = (layouts: ManagerLayout) => {
   const initializedLayouts = {};
   Object.keys(layouts).forEach(key => {
     const layout = layouts[key];
-    initializedLayouts[key] = initialLayoutStepState;
+    initializedLayouts[key] = _.cloneDeep(initialLayoutStepState);
     if (layout?.hydrator !== undefined) {
       initializedLayouts[key] = {
         ...initializedLayouts[key],
