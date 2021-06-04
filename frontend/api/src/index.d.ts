@@ -13898,6 +13898,12 @@ export namespace clutch {
 
                 /** StatefulSet annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** StatefulSet status */
+                status?: (clutch.k8s.v1.StatefulSet.IStatus|null);
+
+                /** StatefulSet creationTimeMillis */
+                creationTimeMillis?: (number|Long|null);
             }
 
             /** Represents a StatefulSet. */
@@ -13923,6 +13929,12 @@ export namespace clutch {
 
                 /** StatefulSet annotations. */
                 public annotations: { [k: string]: string };
+
+                /** StatefulSet status. */
+                public status?: (clutch.k8s.v1.StatefulSet.IStatus|null);
+
+                /** StatefulSet creationTimeMillis. */
+                public creationTimeMillis: (number|Long);
 
                 /**
                  * Verifies a StatefulSet message.
@@ -13951,6 +13963,69 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace StatefulSet {
+
+                /** Properties of a Status. */
+                interface IStatus {
+
+                    /** Status replicas */
+                    replicas?: (number|null);
+
+                    /** Status updatedReplicas */
+                    updatedReplicas?: (number|null);
+
+                    /** Status readyReplicas */
+                    readyReplicas?: (number|null);
+                }
+
+                /** Represents a Status. */
+                class Status implements IStatus {
+
+                    /**
+                     * Constructs a new Status.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.k8s.v1.StatefulSet.IStatus);
+
+                    /** Status replicas. */
+                    public replicas: number;
+
+                    /** Status updatedReplicas. */
+                    public updatedReplicas: number;
+
+                    /** Status readyReplicas. */
+                    public readyReplicas: number;
+
+                    /**
+                     * Verifies a Status message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Status
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StatefulSet.Status;
+
+                    /**
+                     * Creates a plain object from a Status message. Also converts values to other types if specified.
+                     * @param message Status
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.k8s.v1.StatefulSet.Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Status to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
 
             /** Properties of a DescribeStatefulSetRequest. */

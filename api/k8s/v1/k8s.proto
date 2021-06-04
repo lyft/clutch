@@ -627,6 +627,18 @@ message StatefulSet {
 
   map<string, string> labels = 4;
   map<string, string> annotations = 5;
+
+  message Status {
+    uint32 replicas = 1;
+    uint32 updated_replicas = 2;
+    uint32 ready_replicas = 3;
+  }
+  Status status = 6;
+
+  // This is a workound since protobufjs currently has serialization
+  // issues for well-known types like google.protobuf.Timestamp
+  // Unix timestamp (milliseconds since Jan 01 1970)
+  int64 creation_time_millis = 7;
 }
 
 message DescribeStatefulSetRequest {
