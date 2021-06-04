@@ -224,9 +224,10 @@ const Select = ({
   }
 
   return (
-    <StyledFormControl key={name} fullWidth disabled={disabled} error={error}>
+    <StyledFormControl id={name} key={name} fullWidth disabled={disabled} error={error}>
       {label && <StyledInputLabel>{label}</StyledInputLabel>}
       <StyledSelect
+        id={`${name}-select`}
         value={options[selectedIdx]?.value || options[selectedIdx].label}
         onChange={updateSelectedOption}
       >
