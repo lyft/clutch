@@ -201,9 +201,7 @@ const Select = ({
   options,
   onChange,
 }: SelectProps) => {
-  const [defaultIdx] = React.useState(
-    defaultOption < options.length && defaultOption > 0 ? defaultOption : 0
-  );
+  const defaultIdx = defaultOption < options.length && defaultOption > 0 ? defaultOption : 0;
   const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
 
   React.useEffect(() => {
