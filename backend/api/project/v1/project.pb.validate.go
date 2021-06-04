@@ -41,6 +41,13 @@ func (m *GetProjectsRequest) Validate() error {
 		return nil
 	}
 
+	if len(m.GetNames()) < 1 {
+		return GetProjectsRequestValidationError{
+			field:  "Names",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
 	return nil
 }
 

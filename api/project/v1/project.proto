@@ -4,9 +4,10 @@ package clutch.project.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/project/v1;projectv1";
 
-import "google/api/annotations.proto";
 import "api/v1/annotations.proto";
 import "core/project/v1/project.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
 
 service ProjectAPI {
   rpc GetProjects(GetProjectsRequest) returns (GetProjectsResponse) {
@@ -19,7 +20,7 @@ service ProjectAPI {
 }
 
 message GetProjectsRequest {
-  repeated string names = 1;
+  repeated string names = 1 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
 message GetProjectsResponse {
