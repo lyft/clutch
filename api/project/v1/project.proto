@@ -19,7 +19,7 @@ service ProjectAPI {
 }
 
 message GetProjectsRequest {
-  repeated string name = 1;
+  repeated string names = 1;
 }
 
 message GetProjectsResponse {

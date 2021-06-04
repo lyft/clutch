@@ -39836,7 +39836,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a GetProjectsRequest.
                  * @memberof clutch.project.v1
                  * @interface IGetProjectsRequest
-                 * @property {Array.<string>|null} [name] GetProjectsRequest name
+                 * @property {Array.<string>|null} [names] GetProjectsRequest names
                  */
 
                 /**
@@ -39848,7 +39848,7 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.project.v1.IGetProjectsRequest=} [properties] Properties to set
                  */
                 function GetProjectsRequest(properties) {
-                    this.name = [];
+                    this.names = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -39856,12 +39856,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetProjectsRequest name.
-                 * @member {Array.<string>} name
+                 * GetProjectsRequest names.
+                 * @member {Array.<string>} names
                  * @memberof clutch.project.v1.GetProjectsRequest
                  * @instance
                  */
-                GetProjectsRequest.prototype.name = $util.emptyArray;
+                GetProjectsRequest.prototype.names = $util.emptyArray;
 
                 /**
                  * Verifies a GetProjectsRequest message.
@@ -39874,12 +39874,12 @@ export const clutch = $root.clutch = (() => {
                 GetProjectsRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.name != null && message.hasOwnProperty("name")) {
-                        if (!Array.isArray(message.name))
-                            return "name: array expected";
-                        for (let i = 0; i < message.name.length; ++i)
-                            if (!$util.isString(message.name[i]))
-                                return "name: string[] expected";
+                    if (message.names != null && message.hasOwnProperty("names")) {
+                        if (!Array.isArray(message.names))
+                            return "names: array expected";
+                        for (let i = 0; i < message.names.length; ++i)
+                            if (!$util.isString(message.names[i]))
+                                return "names: string[] expected";
                     }
                     return null;
                 };
@@ -39896,12 +39896,12 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.project.v1.GetProjectsRequest)
                         return object;
                     let message = new $root.clutch.project.v1.GetProjectsRequest();
-                    if (object.name) {
-                        if (!Array.isArray(object.name))
-                            throw TypeError(".clutch.project.v1.GetProjectsRequest.name: array expected");
-                        message.name = [];
-                        for (let i = 0; i < object.name.length; ++i)
-                            message.name[i] = String(object.name[i]);
+                    if (object.names) {
+                        if (!Array.isArray(object.names))
+                            throw TypeError(".clutch.project.v1.GetProjectsRequest.names: array expected");
+                        message.names = [];
+                        for (let i = 0; i < object.names.length; ++i)
+                            message.names[i] = String(object.names[i]);
                     }
                     return message;
                 };
@@ -39920,11 +39920,11 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.arrays || options.defaults)
-                        object.name = [];
-                    if (message.name && message.name.length) {
-                        object.name = [];
-                        for (let j = 0; j < message.name.length; ++j)
-                            object.name[j] = message.name[j];
+                        object.names = [];
+                    if (message.names && message.names.length) {
+                        object.names = [];
+                        for (let j = 0; j < message.names.length; ++j)
+                            object.names[j] = message.names[j];
                     }
                     return object;
                 };

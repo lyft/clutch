@@ -16743,8 +16743,8 @@ export namespace clutch {
             /** Properties of a GetProjectsRequest. */
             interface IGetProjectsRequest {
 
-                /** GetProjectsRequest name */
-                name?: (string[]|null);
+                /** GetProjectsRequest names */
+                names?: (string[]|null);
             }
 
             /** Represents a GetProjectsRequest. */
@@ -16756,8 +16756,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.project.v1.IGetProjectsRequest);
 
-                /** GetProjectsRequest name. */
-                public name: string[];
+                /** GetProjectsRequest names. */
+                public names: string[];
 
                 /**
                  * Verifies a GetProjectsRequest message.
