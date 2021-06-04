@@ -16698,6 +16698,146 @@ export namespace clutch {
         }
     }
 
+    /** Namespace project. */
+    namespace project {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a ProjectAPI */
+            class ProjectAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new ProjectAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetProjects.
+                 * @param request GetProjectsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetProjectsResponse
+                 */
+                public getProjects(request: clutch.project.v1.IGetProjectsRequest, callback: clutch.project.v1.ProjectAPI.GetProjectsCallback): void;
+
+                /**
+                 * Calls GetProjects.
+                 * @param request GetProjectsRequest message or plain object
+                 * @returns Promise
+                 */
+                public getProjects(request: clutch.project.v1.IGetProjectsRequest): Promise<clutch.project.v1.GetProjectsResponse>;
+            }
+
+            namespace ProjectAPI {
+
+                /**
+                 * Callback as used by {@link clutch.project.v1.ProjectAPI#getProjects}.
+                 * @param error Error, if any
+                 * @param [response] GetProjectsResponse
+                 */
+                type GetProjectsCallback = (error: (Error|null), response?: clutch.project.v1.GetProjectsResponse) => void;
+            }
+
+            /** Properties of a GetProjectsRequest. */
+            interface IGetProjectsRequest {
+
+                /** GetProjectsRequest name */
+                name?: (string[]|null);
+            }
+
+            /** Represents a GetProjectsRequest. */
+            class GetProjectsRequest implements IGetProjectsRequest {
+
+                /**
+                 * Constructs a new GetProjectsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.project.v1.IGetProjectsRequest);
+
+                /** GetProjectsRequest name. */
+                public name: string[];
+
+                /**
+                 * Verifies a GetProjectsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetProjectsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetProjectsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.project.v1.GetProjectsRequest;
+
+                /**
+                 * Creates a plain object from a GetProjectsRequest message. Also converts values to other types if specified.
+                 * @param message GetProjectsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.project.v1.GetProjectsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetProjectsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetProjectsResponse. */
+            interface IGetProjectsResponse {
+
+                /** GetProjectsResponse projects */
+                projects?: (clutch.core.project.v1.IProject[]|null);
+            }
+
+            /** Represents a GetProjectsResponse. */
+            class GetProjectsResponse implements IGetProjectsResponse {
+
+                /**
+                 * Constructs a new GetProjectsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.project.v1.IGetProjectsResponse);
+
+                /** GetProjectsResponse projects. */
+                public projects: clutch.core.project.v1.IProject[];
+
+                /**
+                 * Verifies a GetProjectsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetProjectsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetProjectsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.project.v1.GetProjectsResponse;
+
+                /**
+                 * Creates a plain object from a GetProjectsResponse message. Also converts values to other types if specified.
+                 * @param message GetProjectsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.project.v1.GetProjectsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetProjectsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
     /** Namespace proxy. */
     namespace proxy {
 

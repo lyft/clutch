@@ -39758,6 +39758,315 @@ export const clutch = $root.clutch = (() => {
         return k8s;
     })();
 
+    clutch.project = (function() {
+
+        /**
+         * Namespace project.
+         * @memberof clutch
+         * @namespace
+         */
+        const project = {};
+
+        project.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.project
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.ProjectAPI = (function() {
+
+                /**
+                 * Constructs a new ProjectAPI service.
+                 * @memberof clutch.project.v1
+                 * @classdesc Represents a ProjectAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function ProjectAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (ProjectAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = ProjectAPI;
+
+                /**
+                 * Callback as used by {@link clutch.project.v1.ProjectAPI#getProjects}.
+                 * @memberof clutch.project.v1.ProjectAPI
+                 * @typedef GetProjectsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.project.v1.GetProjectsResponse} [response] GetProjectsResponse
+                 */
+
+                /**
+                 * Calls GetProjects.
+                 * @function getProjects
+                 * @memberof clutch.project.v1.ProjectAPI
+                 * @instance
+                 * @param {clutch.project.v1.IGetProjectsRequest} request GetProjectsRequest message or plain object
+                 * @param {clutch.project.v1.ProjectAPI.GetProjectsCallback} callback Node-style callback called with the error, if any, and GetProjectsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(ProjectAPI.prototype.getProjects = function getProjects(request, callback) {
+                    return this.rpcCall(getProjects, $root.clutch.project.v1.GetProjectsRequest, $root.clutch.project.v1.GetProjectsResponse, request, callback);
+                }, "name", { value: "GetProjects" });
+
+                /**
+                 * Calls GetProjects.
+                 * @function getProjects
+                 * @memberof clutch.project.v1.ProjectAPI
+                 * @instance
+                 * @param {clutch.project.v1.IGetProjectsRequest} request GetProjectsRequest message or plain object
+                 * @returns {Promise<clutch.project.v1.GetProjectsResponse>} Promise
+                 * @variation 2
+                 */
+
+                return ProjectAPI;
+            })();
+
+            v1.GetProjectsRequest = (function() {
+
+                /**
+                 * Properties of a GetProjectsRequest.
+                 * @memberof clutch.project.v1
+                 * @interface IGetProjectsRequest
+                 * @property {Array.<string>|null} [name] GetProjectsRequest name
+                 */
+
+                /**
+                 * Constructs a new GetProjectsRequest.
+                 * @memberof clutch.project.v1
+                 * @classdesc Represents a GetProjectsRequest.
+                 * @implements IGetProjectsRequest
+                 * @constructor
+                 * @param {clutch.project.v1.IGetProjectsRequest=} [properties] Properties to set
+                 */
+                function GetProjectsRequest(properties) {
+                    this.name = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetProjectsRequest name.
+                 * @member {Array.<string>} name
+                 * @memberof clutch.project.v1.GetProjectsRequest
+                 * @instance
+                 */
+                GetProjectsRequest.prototype.name = $util.emptyArray;
+
+                /**
+                 * Verifies a GetProjectsRequest message.
+                 * @function verify
+                 * @memberof clutch.project.v1.GetProjectsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetProjectsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name")) {
+                        if (!Array.isArray(message.name))
+                            return "name: array expected";
+                        for (let i = 0; i < message.name.length; ++i)
+                            if (!$util.isString(message.name[i]))
+                                return "name: string[] expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetProjectsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.project.v1.GetProjectsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.project.v1.GetProjectsRequest} GetProjectsRequest
+                 */
+                GetProjectsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.project.v1.GetProjectsRequest)
+                        return object;
+                    let message = new $root.clutch.project.v1.GetProjectsRequest();
+                    if (object.name) {
+                        if (!Array.isArray(object.name))
+                            throw TypeError(".clutch.project.v1.GetProjectsRequest.name: array expected");
+                        message.name = [];
+                        for (let i = 0; i < object.name.length; ++i)
+                            message.name[i] = String(object.name[i]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetProjectsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.project.v1.GetProjectsRequest
+                 * @static
+                 * @param {clutch.project.v1.GetProjectsRequest} message GetProjectsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetProjectsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.name = [];
+                    if (message.name && message.name.length) {
+                        object.name = [];
+                        for (let j = 0; j < message.name.length; ++j)
+                            object.name[j] = message.name[j];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetProjectsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.project.v1.GetProjectsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetProjectsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetProjectsRequest;
+            })();
+
+            v1.GetProjectsResponse = (function() {
+
+                /**
+                 * Properties of a GetProjectsResponse.
+                 * @memberof clutch.project.v1
+                 * @interface IGetProjectsResponse
+                 * @property {Array.<clutch.core.project.v1.IProject>|null} [projects] GetProjectsResponse projects
+                 */
+
+                /**
+                 * Constructs a new GetProjectsResponse.
+                 * @memberof clutch.project.v1
+                 * @classdesc Represents a GetProjectsResponse.
+                 * @implements IGetProjectsResponse
+                 * @constructor
+                 * @param {clutch.project.v1.IGetProjectsResponse=} [properties] Properties to set
+                 */
+                function GetProjectsResponse(properties) {
+                    this.projects = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetProjectsResponse projects.
+                 * @member {Array.<clutch.core.project.v1.IProject>} projects
+                 * @memberof clutch.project.v1.GetProjectsResponse
+                 * @instance
+                 */
+                GetProjectsResponse.prototype.projects = $util.emptyArray;
+
+                /**
+                 * Verifies a GetProjectsResponse message.
+                 * @function verify
+                 * @memberof clutch.project.v1.GetProjectsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetProjectsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.projects != null && message.hasOwnProperty("projects")) {
+                        if (!Array.isArray(message.projects))
+                            return "projects: array expected";
+                        for (let i = 0; i < message.projects.length; ++i) {
+                            let error = $root.clutch.core.project.v1.Project.verify(message.projects[i]);
+                            if (error)
+                                return "projects." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetProjectsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.project.v1.GetProjectsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.project.v1.GetProjectsResponse} GetProjectsResponse
+                 */
+                GetProjectsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.project.v1.GetProjectsResponse)
+                        return object;
+                    let message = new $root.clutch.project.v1.GetProjectsResponse();
+                    if (object.projects) {
+                        if (!Array.isArray(object.projects))
+                            throw TypeError(".clutch.project.v1.GetProjectsResponse.projects: array expected");
+                        message.projects = [];
+                        for (let i = 0; i < object.projects.length; ++i) {
+                            if (typeof object.projects[i] !== "object")
+                                throw TypeError(".clutch.project.v1.GetProjectsResponse.projects: object expected");
+                            message.projects[i] = $root.clutch.core.project.v1.Project.fromObject(object.projects[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetProjectsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.project.v1.GetProjectsResponse
+                 * @static
+                 * @param {clutch.project.v1.GetProjectsResponse} message GetProjectsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetProjectsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.projects = [];
+                    if (message.projects && message.projects.length) {
+                        object.projects = [];
+                        for (let j = 0; j < message.projects.length; ++j)
+                            object.projects[j] = $root.clutch.core.project.v1.Project.toObject(message.projects[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetProjectsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.project.v1.GetProjectsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetProjectsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetProjectsResponse;
+            })();
+
+            return v1;
+        })();
+
+        return project;
+    })();
+
     clutch.proxy = (function() {
 
         /**

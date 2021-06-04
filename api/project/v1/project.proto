@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package clutch.project.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/project/v1;projectv1";
+
+import "google/api/annotations.proto";
+import "api/v1/annotations.proto";
+import "core/project/v1/project.proto";
+
+service ProjectAPI {
+  rpc GetProjects(GetProjectsRequest) returns (GetProjectsResponse) {
+    option (google.api.http) = {
+      post : "/v1/project/getProjects"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message GetProjectsRequest {
+  repeated string name = 1;
+}
+
+message GetProjectsResponse {
+  repeated clutch.core.project.v1.Project projects = 1;
+}
