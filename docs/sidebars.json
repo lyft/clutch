@@ -29,6 +29,7 @@
         "development/guide",
         "development/custom-gateway",
         "development/feature",
+        "development/feature-flags",
         "development/api",
         {
           "type": "category",
