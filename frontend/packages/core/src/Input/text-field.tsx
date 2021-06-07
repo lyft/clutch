@@ -179,7 +179,7 @@ export interface TextFieldProps
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
-  autocompleteCallback?: (v: string) => Promise<any>;
+  autocompleteCallback?: (v: string) => Promise<{ results: { id?: string; label: string }[] }>;
 }
 
 const TextField = ({
@@ -228,10 +228,10 @@ const TextField = ({
     },
   };
 
-  if (autocompleteCallback !== undefined) {
-    const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
-    const autoCompleteDebounce = React.useRef(
-      _.debounce(value => {
+  const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
+  const autoCompleteDebounce = React.useRef(
+    _.debounce(value => {
+      if (autocompleteCallback !== undefined) {
         autocompleteCallback(value)
           .then(data => {
             setAutoCompleteOptions(data.results);
@@ -239,9 +239,10 @@ const TextField = ({
           .catch(err => {
             helpText = err;
           });
-      }, 500)
-    ).current;
-
+      }
+    }, 500)
+  ).current;
+  if (autocompleteCallback !== undefined) {
     // TODO (mcutalo): support option.label in the renderOption
     return (
       <Autocomplete
@@ -249,7 +250,7 @@ const TextField = ({
         size="small"
         options={autoCompleteOptions}
         PopperComponent={Popper}
-        getOptionLabel={option => (option?.id ? option.id : option)}
+        getOptionLabel={option => (option?.id ? option.id : option.label)}
         onInputChange={(__, v) => autoCompleteDebounce(v)}
         renderOption={option => <AutocompleteResult id={option.id} label={option.label} />}
         onSelectCapture={e =>
