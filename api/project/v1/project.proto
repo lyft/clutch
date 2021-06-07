@@ -24,5 +24,7 @@ message GetProjectsRequest {
 }
 
 message GetProjectsResponse {
+  // TODO: Consider wrapping the result in a message to more easily extend the results
+  // response without having to modify the project proto.
   repeated clutch.core.project.v1.Project projects = 1;
 }

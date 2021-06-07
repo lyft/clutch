@@ -76,6 +76,8 @@ type GetProjectsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// TODO: Consider wrapping the result in a message to more easily extend the results
+	// response without having to modify the project proto.
 	Projects []*v1.Project `protobuf:"bytes,1,rep,name=projects,proto3" json:"projects,omitempty"`
 }
 
