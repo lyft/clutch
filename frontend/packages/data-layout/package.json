@@ -2,7 +2,7 @@
   "name": "@clutch-sh/data-layout",
   "version": "1.0.0-beta",
   "description": "Data Layout manager for clutch",
-  "homepage": "https://clutch.sh/docs/development/frontend#clutch-shdata-layout",
+  "homepage": "https://clutch.sh/docs/development/frontend/overview#clutch-shdata-layout",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "main": "dist/index.js",
