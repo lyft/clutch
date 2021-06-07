@@ -46,3 +46,17 @@ func requestHeadersFromResponseWriter(w http.ResponseWriter) http.Header {
 	}
 	return ret
 }
+
+// GetCookieValue is the easiest way to parse a cookie string in a non-HTTP request context.
+func GetCookieValue(headerValues []string, key string) (string, error) {
+	if key == "" {
+		return "", http.ErrNoCookie
+	}
+
+	request := http.Request{Header: http.Header{"Cookie": headerValues}}
+	c, err := request.Cookie(key)
+	if err != nil {
+		return "", err
+	}
+	return c.Value, nil
+}

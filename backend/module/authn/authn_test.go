@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zaptest"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -49,7 +51,46 @@ func TestAPILogin(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	assert.Equal(t, "https://auth.com/?param=nonce-foo.com", response.AuthUrl)
+	assert.Equal(t, "https://auth.com/?param=nonce-foo.com", response.GetAuthUrl())
+}
+
+func TestAPILoginRefresh(t *testing.T) {
+	api := api{
+		provider: MockProvider{},
+		issuer:   authnmock.MockIssuer{AllowRefresh: true},
+		logger:   zaptest.NewLogger(t, zaptest.Level(zap.WarnLevel)),
+	}
+
+	transportStream := &grpcmock.MockServerTransportStream{}
+	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
+	ctx = metadata.NewIncomingContext(ctx, metadata.Pairs("grpcgateway-cookie", "token=zoom;refreshToken=zip"))
+
+	response, err := api.Login(ctx, &authnv1.LoginRequest{
+		RedirectUrl: "foo.com",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, "newAccess", response.GetToken().AccessToken)
+	assert.Equal(t, "refreshed", response.GetToken().RefreshToken)
+}
+
+func TestAPILoginRefreshFailsFlowContinues(t *testing.T) {
+	api := api{
+		provider: MockProvider{},
+		issuer:   authnmock.MockIssuer{AllowRefresh: false},
+		logger:   zaptest.NewLogger(t, zaptest.Level(zap.WarnLevel)),
+	}
+
+	transportStream := &grpcmock.MockServerTransportStream{}
+	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
+	ctx = metadata.NewIncomingContext(ctx, metadata.Pairs("grpcgateway-cookie", "token=zoom;refreshToken=zip"))
+
+	response, err := api.Login(ctx, &authnv1.LoginRequest{
+		RedirectUrl: "foo.com",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, "https://auth.com/?param=nonce-foo.com", response.GetAuthUrl())
 }
 
 func TestAPICallback(t *testing.T) {
