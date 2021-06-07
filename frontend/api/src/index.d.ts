@@ -6027,6 +6027,9 @@ export namespace clutch {
                     /** GatewayOptions accesslog */
                     accesslog?: (clutch.config.middleware.accesslog.v1.IConfig|null);
 
+                    /** GatewayOptions maxResponseSizeBytes */
+                    maxResponseSizeBytes?: (number|null);
+
                     /** GatewayOptions secureCookies */
                     secureCookies?: (google.protobuf.IBoolValue|null);
                 }
@@ -6066,6 +6069,9 @@ export namespace clutch {
 
                     /** GatewayOptions accesslog. */
                     public accesslog?: (clutch.config.middleware.accesslog.v1.IConfig|null);
+
+                    /** GatewayOptions maxResponseSizeBytes. */
+                    public maxResponseSizeBytes: number;
 
                     /** GatewayOptions secureCookies. */
                     public secureCookies?: (google.protobuf.IBoolValue|null);
@@ -13958,6 +13964,12 @@ export namespace clutch {
 
                 /** StatefulSet annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** StatefulSet status */
+                status?: (clutch.k8s.v1.StatefulSet.IStatus|null);
+
+                /** StatefulSet creationTimeMillis */
+                creationTimeMillis?: (number|Long|null);
             }
 
             /** Represents a StatefulSet. */
@@ -13983,6 +13995,12 @@ export namespace clutch {
 
                 /** StatefulSet annotations. */
                 public annotations: { [k: string]: string };
+
+                /** StatefulSet status. */
+                public status?: (clutch.k8s.v1.StatefulSet.IStatus|null);
+
+                /** StatefulSet creationTimeMillis. */
+                public creationTimeMillis: (number|Long);
 
                 /**
                  * Verifies a StatefulSet message.
@@ -14011,6 +14029,69 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace StatefulSet {
+
+                /** Properties of a Status. */
+                interface IStatus {
+
+                    /** Status replicas */
+                    replicas?: (number|null);
+
+                    /** Status updatedReplicas */
+                    updatedReplicas?: (number|null);
+
+                    /** Status readyReplicas */
+                    readyReplicas?: (number|null);
+                }
+
+                /** Represents a Status. */
+                class Status implements IStatus {
+
+                    /**
+                     * Constructs a new Status.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.k8s.v1.StatefulSet.IStatus);
+
+                    /** Status replicas. */
+                    public replicas: number;
+
+                    /** Status updatedReplicas. */
+                    public updatedReplicas: number;
+
+                    /** Status readyReplicas. */
+                    public readyReplicas: number;
+
+                    /**
+                     * Verifies a Status message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Status
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StatefulSet.Status;
+
+                    /**
+                     * Creates a plain object from a Status message. Also converts values to other types if specified.
+                     * @param message Status
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.k8s.v1.StatefulSet.Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Status to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
 
             /** Properties of a DescribeStatefulSetRequest. */
@@ -16751,6 +16832,146 @@ export namespace clutch {
 
                 /**
                  * Converts this StatusCause to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
+    /** Namespace project. */
+    namespace project {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a ProjectAPI */
+            class ProjectAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new ProjectAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetProjects.
+                 * @param request GetProjectsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetProjectsResponse
+                 */
+                public getProjects(request: clutch.project.v1.IGetProjectsRequest, callback: clutch.project.v1.ProjectAPI.GetProjectsCallback): void;
+
+                /**
+                 * Calls GetProjects.
+                 * @param request GetProjectsRequest message or plain object
+                 * @returns Promise
+                 */
+                public getProjects(request: clutch.project.v1.IGetProjectsRequest): Promise<clutch.project.v1.GetProjectsResponse>;
+            }
+
+            namespace ProjectAPI {
+
+                /**
+                 * Callback as used by {@link clutch.project.v1.ProjectAPI#getProjects}.
+                 * @param error Error, if any
+                 * @param [response] GetProjectsResponse
+                 */
+                type GetProjectsCallback = (error: (Error|null), response?: clutch.project.v1.GetProjectsResponse) => void;
+            }
+
+            /** Properties of a GetProjectsRequest. */
+            interface IGetProjectsRequest {
+
+                /** GetProjectsRequest names */
+                names?: (string[]|null);
+            }
+
+            /** Represents a GetProjectsRequest. */
+            class GetProjectsRequest implements IGetProjectsRequest {
+
+                /**
+                 * Constructs a new GetProjectsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.project.v1.IGetProjectsRequest);
+
+                /** GetProjectsRequest names. */
+                public names: string[];
+
+                /**
+                 * Verifies a GetProjectsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetProjectsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetProjectsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.project.v1.GetProjectsRequest;
+
+                /**
+                 * Creates a plain object from a GetProjectsRequest message. Also converts values to other types if specified.
+                 * @param message GetProjectsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.project.v1.GetProjectsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetProjectsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetProjectsResponse. */
+            interface IGetProjectsResponse {
+
+                /** GetProjectsResponse projects */
+                projects?: (clutch.core.project.v1.IProject[]|null);
+            }
+
+            /** Represents a GetProjectsResponse. */
+            class GetProjectsResponse implements IGetProjectsResponse {
+
+                /**
+                 * Constructs a new GetProjectsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.project.v1.IGetProjectsResponse);
+
+                /** GetProjectsResponse projects. */
+                public projects: clutch.core.project.v1.IProject[];
+
+                /**
+                 * Verifies a GetProjectsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetProjectsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetProjectsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.project.v1.GetProjectsResponse;
+
+                /**
+                 * Creates a plain object from a GetProjectsResponse message. Also converts values to other types if specified.
+                 * @param message GetProjectsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.project.v1.GetProjectsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetProjectsResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -23236,6 +23457,9 @@ export namespace google {
 
             /** FieldOptions uninterpretedOption */
             uninterpretedOption?: (google.protobuf.IUninterpretedOption[]|null);
+
+            /** FieldOptions .clutch.api.v1.log */
+            ".clutch.api.v1.log"?: (boolean|null);
 
             /** FieldOptions .validate.rules */
             ".validate.rules"?: (validate.IFieldRules|null);

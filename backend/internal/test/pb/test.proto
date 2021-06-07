@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package clutch.internal.testpb;
+
+option go_package = "github.com/lyft/clutch/backend/internal/test/pb;testpb";
+
+import "api/v1/annotations.proto";
+
+message LogOptionsTester {
+  string str_log_false = 1 [ (clutch.api.v1.log) = false ];
+  string str_log_true = 2 [ (clutch.api.v1.log) = true ];
+  string str_without_option = 3;
+
+  NestedLogOptionTester nested_no_log = 4 [ (clutch.api.v1.log) = false ];
+  NestedLogOptionTester nested = 5;
+
+  map<string, NestedLogOptionTester> message_map = 6;
+  repeated NestedLogOptionTester repeated_message = 7;
+}
+
+message NestedLogOptionTester {
+  string str_log_false = 1 [ (clutch.api.v1.log) = false ];
+  string str_without_option = 2;
+}
