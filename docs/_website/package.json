@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "docusaurus start",
+    "start": "node watcher.ts & docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle"
   },
@@ -36,6 +36,7 @@
     "@types/react": "^17.0.0",
     "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.1.7",
+    "chokidar": "^3.5.1",
     "typescript": "^4.1.3"
   }
 }

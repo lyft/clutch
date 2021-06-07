@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -123,12 +124,17 @@ func main() {
 
 	docsRoot := "../../"
 	destRoot := filepath.Join(docsRoot, "_website/generated/docs")
+	progressive := flag.Bool("progressive", false, "Regenerate documentation without removing existing builds")
 
-	// Delete any old files.
-	subdirs, _ := ioutil.ReadDir(destRoot)
-	for _, f := range subdirs {
-		if err := os.RemoveAll(filepath.Join(destRoot, f.Name())); err != nil {
-			log.Fatal(err)
+	flag.Parse()
+
+	// Delete any old files if progressive flag is not passed in.
+	if !*progressive {
+		subdirs, _ := ioutil.ReadDir(destRoot)
+		for _, f := range subdirs {
+			if err := os.RemoveAll(filepath.Join(destRoot, f.Name())); err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 
