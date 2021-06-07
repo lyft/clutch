@@ -7,16 +7,17 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/golang/protobuf/ptypes/any"
-	projectv1core "github.com/lyft/clutch/backend/api/core/project/v1"
-	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
-	"github.com/lyft/clutch/backend/gateway/meta"
-	"github.com/lyft/clutch/backend/service"
-	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	projectv1core "github.com/lyft/clutch/backend/api/core/project/v1"
+	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
+	"github.com/lyft/clutch/backend/service"
+	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 )
 
 const (
