@@ -130,7 +130,6 @@ func main() {
 
 	// Delete any old files if progressive flag is not passed in.
 	if !*progressive {
-		fmt.Println("Removing existing generated docs...")
 		subdirs, _ := ioutil.ReadDir(destRoot)
 		for _, f := range subdirs {
 			if err := os.RemoveAll(filepath.Join(destRoot, f.Name())); err != nil {
