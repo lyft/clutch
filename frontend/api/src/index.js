@@ -32927,6 +32927,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [name] StatefulSet name
                  * @property {Object.<string,string>|null} [labels] StatefulSet labels
                  * @property {Object.<string,string>|null} [annotations] StatefulSet annotations
+                 * @property {clutch.k8s.v1.StatefulSet.IStatus|null} [status] StatefulSet status
+                 * @property {number|Long|null} [creationTimeMillis] StatefulSet creationTimeMillis
                  */
 
                 /**
@@ -32987,6 +32989,22 @@ export const clutch = $root.clutch = (() => {
                 StatefulSet.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * StatefulSet status.
+                 * @member {clutch.k8s.v1.StatefulSet.IStatus|null|undefined} status
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.status = null;
+
+                /**
+                 * StatefulSet creationTimeMillis.
+                 * @member {number|Long} creationTimeMillis
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.creationTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
                  * Verifies a StatefulSet message.
                  * @function verify
                  * @memberof clutch.k8s.v1.StatefulSet
@@ -33022,6 +33040,14 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
                     }
+                    if (message.status != null && message.hasOwnProperty("status")) {
+                        let error = $root.clutch.k8s.v1.StatefulSet.Status.verify(message.status);
+                        if (error)
+                            return "status." + error;
+                    }
+                    if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
+                        if (!$util.isInteger(message.creationTimeMillis) && !(message.creationTimeMillis && $util.isInteger(message.creationTimeMillis.low) && $util.isInteger(message.creationTimeMillis.high)))
+                            return "creationTimeMillis: integer|Long expected";
                     return null;
                 };
 
@@ -33057,6 +33083,20 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.status != null) {
+                        if (typeof object.status !== "object")
+                            throw TypeError(".clutch.k8s.v1.StatefulSet.status: object expected");
+                        message.status = $root.clutch.k8s.v1.StatefulSet.Status.fromObject(object.status);
+                    }
+                    if (object.creationTimeMillis != null)
+                        if ($util.Long)
+                            (message.creationTimeMillis = $util.Long.fromValue(object.creationTimeMillis)).unsigned = false;
+                        else if (typeof object.creationTimeMillis === "string")
+                            message.creationTimeMillis = parseInt(object.creationTimeMillis, 10);
+                        else if (typeof object.creationTimeMillis === "number")
+                            message.creationTimeMillis = object.creationTimeMillis;
+                        else if (typeof object.creationTimeMillis === "object")
+                            message.creationTimeMillis = new $util.LongBits(object.creationTimeMillis.low >>> 0, object.creationTimeMillis.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -33081,6 +33121,12 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = "";
                         object.namespace = "";
                         object.name = "";
+                        object.status = null;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.creationTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.creationTimeMillis = options.longs === String ? "0" : 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -33099,6 +33145,13 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        object.status = $root.clutch.k8s.v1.StatefulSet.Status.toObject(message.status, options);
+                    if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
+                        if (typeof message.creationTimeMillis === "number")
+                            object.creationTimeMillis = options.longs === String ? String(message.creationTimeMillis) : message.creationTimeMillis;
+                        else
+                            object.creationTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.creationTimeMillis) : options.longs === Number ? new $util.LongBits(message.creationTimeMillis.low >>> 0, message.creationTimeMillis.high >>> 0).toNumber() : message.creationTimeMillis;
                     return object;
                 };
 
@@ -33112,6 +33165,141 @@ export const clutch = $root.clutch = (() => {
                 StatefulSet.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                StatefulSet.Status = (function() {
+
+                    /**
+                     * Properties of a Status.
+                     * @memberof clutch.k8s.v1.StatefulSet
+                     * @interface IStatus
+                     * @property {number|null} [replicas] Status replicas
+                     * @property {number|null} [updatedReplicas] Status updatedReplicas
+                     * @property {number|null} [readyReplicas] Status readyReplicas
+                     */
+
+                    /**
+                     * Constructs a new Status.
+                     * @memberof clutch.k8s.v1.StatefulSet
+                     * @classdesc Represents a Status.
+                     * @implements IStatus
+                     * @constructor
+                     * @param {clutch.k8s.v1.StatefulSet.IStatus=} [properties] Properties to set
+                     */
+                    function Status(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Status replicas.
+                     * @member {number} replicas
+                     * @memberof clutch.k8s.v1.StatefulSet.Status
+                     * @instance
+                     */
+                    Status.prototype.replicas = 0;
+
+                    /**
+                     * Status updatedReplicas.
+                     * @member {number} updatedReplicas
+                     * @memberof clutch.k8s.v1.StatefulSet.Status
+                     * @instance
+                     */
+                    Status.prototype.updatedReplicas = 0;
+
+                    /**
+                     * Status readyReplicas.
+                     * @member {number} readyReplicas
+                     * @memberof clutch.k8s.v1.StatefulSet.Status
+                     * @instance
+                     */
+                    Status.prototype.readyReplicas = 0;
+
+                    /**
+                     * Verifies a Status message.
+                     * @function verify
+                     * @memberof clutch.k8s.v1.StatefulSet.Status
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Status.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.replicas != null && message.hasOwnProperty("replicas"))
+                            if (!$util.isInteger(message.replicas))
+                                return "replicas: integer expected";
+                        if (message.updatedReplicas != null && message.hasOwnProperty("updatedReplicas"))
+                            if (!$util.isInteger(message.updatedReplicas))
+                                return "updatedReplicas: integer expected";
+                        if (message.readyReplicas != null && message.hasOwnProperty("readyReplicas"))
+                            if (!$util.isInteger(message.readyReplicas))
+                                return "readyReplicas: integer expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.k8s.v1.StatefulSet.Status
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.k8s.v1.StatefulSet.Status} Status
+                     */
+                    Status.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.k8s.v1.StatefulSet.Status)
+                            return object;
+                        let message = new $root.clutch.k8s.v1.StatefulSet.Status();
+                        if (object.replicas != null)
+                            message.replicas = object.replicas >>> 0;
+                        if (object.updatedReplicas != null)
+                            message.updatedReplicas = object.updatedReplicas >>> 0;
+                        if (object.readyReplicas != null)
+                            message.readyReplicas = object.readyReplicas >>> 0;
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Status message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.k8s.v1.StatefulSet.Status
+                     * @static
+                     * @param {clutch.k8s.v1.StatefulSet.Status} message Status
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Status.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.replicas = 0;
+                            object.updatedReplicas = 0;
+                            object.readyReplicas = 0;
+                        }
+                        if (message.replicas != null && message.hasOwnProperty("replicas"))
+                            object.replicas = message.replicas;
+                        if (message.updatedReplicas != null && message.hasOwnProperty("updatedReplicas"))
+                            object.updatedReplicas = message.updatedReplicas;
+                        if (message.readyReplicas != null && message.hasOwnProperty("readyReplicas"))
+                            object.readyReplicas = message.readyReplicas;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Status to JSON.
+                     * @function toJSON
+                     * @memberof clutch.k8s.v1.StatefulSet.Status
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Status.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Status;
+                })();
 
                 return StatefulSet;
             })();
