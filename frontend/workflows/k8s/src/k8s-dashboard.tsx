@@ -5,6 +5,7 @@ import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout"
 import styled from "@emotion/styled";
 import AppsIcon from "@material-ui/icons/Apps";
 import CropFreeIcon from "@material-ui/icons/CropFree";
+import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined";
 import LoopOutlinedIcon from "@material-ui/icons/LoopOutlined";
 
 import type { WorkflowProps } from ".";
@@ -13,6 +14,7 @@ import DeploymentTable from "./deployments-table";
 import K8sDashHeader from "./k8s-dash-header";
 import K8sDashSearch from "./k8s-dash-search";
 import PodTable from "./pods-table";
+import StatefulSetTable from "./stateful-sets-table";
 
 const Container = styled.div({
   flex: 1,
@@ -134,6 +136,29 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
           });
       },
     },
+    statefulSetListData: {
+      deps: ["inputData"],
+      hydrator: inputData => {
+        return client
+          .post("/v1/k8s/listStatefulSets", {
+            ...defaultRequestData(inputData),
+            options: {
+              labels: {},
+            },
+          } as IClutch.k8s.v1.IListStatefulSetsRequest)
+          .then(response => {
+            return response?.data;
+          })
+          .catch((err: ClutchError) => {
+            setError(existingError => {
+              if (existingError === undefined) {
+                return err;
+              }
+              return existingError;
+            });
+          });
+      },
+    },
   };
   const dataLayoutManager = useDataLayoutManager(dataLayout);
 
@@ -142,6 +167,7 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
     dataLayoutManager.hydrate("podListData");
     dataLayoutManager.hydrate("deploymentListData");
     dataLayoutManager.hydrate("cronListData");
+    dataLayoutManager.hydrate("statefulSetListData");
     setError(undefined);
   };
 
@@ -169,6 +195,9 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
                 </Tab>
                 <Tab startAdornment={<LoopOutlinedIcon />} label="Cron Jobs">
                   <CronTable />
+                </Tab>
+                <Tab startAdornment={<DnsOutlinedIcon />} label="Stateful Sets">
+                  <StatefulSetTable />
                 </Tab>
               </Tabs>
             </Paper>

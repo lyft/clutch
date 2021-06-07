@@ -172,6 +172,72 @@ func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenTyp
 	return p.issueAndStoreToken(ctx, claims, false)
 }
 
+// Refresh the issuer token. If the provider token is not valid, refresh it. If any error occurs continue auth code flow.
+func (p *OIDCProvider) RefreshToken(ctx context.Context, t *oauth2.Token) (*oauth2.Token, error) {
+	// Extract claims from refresh token. They are also validated by the parser (i.e. to check for expiry).
+	claims := &jwt.StandardClaims{}
+	_, err := jwt.ParseWithClaims(t.RefreshToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(p.sessionSecret), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// Look up refresh token and verify it matches the one stored in the database.
+	rt, err := p.tokenStorage.Read(ctx, claims.Subject, clutchProvider)
+	if err != nil {
+		return nil, err
+	}
+	if rt.RefreshToken != t.RefreshToken {
+		return nil, errors.New("refresh token did not match")
+	}
+
+	// Verify provider token is still valid.
+	pt, err := p.tokenStorage.Read(ctx, claims.Subject, p.providerAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	// Attempt to refresh provider token if not valid.
+	if !pt.Valid() {
+		pt, err = p.oauth2.TokenSource(ctx, pt).Token()
+		if err != nil {
+			return nil, err
+		}
+
+		// Store refreshed provider token.
+		if err := p.tokenStorage.Store(ctx, claims.Subject, p.providerAlias, pt); err != nil {
+			return nil, err
+		}
+	}
+
+	// Create a new token.
+	rawIDToken, ok := pt.Extra("id_token").(string)
+	if !ok {
+		return nil, errors.New("'id_token' was not present in provider token")
+	}
+
+	// Verify. This is superfluous since the token was just issued but it can't hurt.
+	idToken, err := p.verifier.Verify(ctx, rawIDToken)
+	if err != nil {
+		return nil, err
+	}
+
+	// Issue token with claims.
+	newClaims, err := p.claimsFromOIDCToken(ctx, idToken)
+	if err != nil {
+		return nil, err
+	}
+
+	newToken, err := p.issueAndStoreToken(ctx, newClaims, true)
+	if err != nil {
+		return nil, err
+	}
+
+	// Return token.
+	return newToken, nil
+}
+
 // Issues and stores a token based on the provided claims. If refresh is true and storage is enabled, a refresh
 // token will be issued as well.
 func (p *OIDCProvider) issueAndStoreToken(ctx context.Context, claims *Claims, refresh bool) (*oauth2.Token, error) {

@@ -93,13 +93,13 @@ export interface DataManager {
 const defaultTransform = (data: object): object => data;
 const defaultErrorTransform = (err: any): ClutchError => err;
 
-const initialLayoutStepState = { data: {}, isLoading: true, error: null };
+const initialLayoutStepState = () => ({ data: {}, isLoading: true, error: null });
 
 const defaultState = (layouts: ManagerLayout) => {
   const initializedLayouts = {};
   Object.keys(layouts).forEach(key => {
     const layout = layouts[key];
-    initializedLayouts[key] = initialLayoutStepState;
+    initializedLayouts[key] = initialLayoutStepState();
     if (layout?.hydrator !== undefined) {
       initializedLayouts[key] = {
         ...initializedLayouts[key],

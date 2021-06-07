@@ -24,7 +24,7 @@ func NewMockOIDCProviderServer(email string) *MockOIDCProviderServer {
 	}
 
 	m := &MockOIDCProviderServer{
-		key:   key,
+		Key:   key,
 		email: email,
 	}
 	m.srv = httptest.NewServer(http.HandlerFunc(m.handle))
@@ -38,11 +38,13 @@ func NewMockOIDCProviderServer(email string) *MockOIDCProviderServer {
 }
 
 type MockOIDCProviderServer struct {
-	key    *rsa.PrivateKey
+	Key    *rsa.PrivateKey
 	srv    *httptest.Server
 	client *http.Client
 
 	email string
+
+	TokenCount int
 }
 
 type testIdTokenClaims struct {
@@ -64,6 +66,7 @@ func (m *MockOIDCProviderServer) handle(w http.ResponseWriter, r *http.Request) 
 	case "/.well-known/openid-configuration":
 		fmt.Fprintln(w, openIDConfiguration)
 	case "/oauth2/v1/token":
+		m.TokenCount += 1
 		claims := &testIdTokenClaims{
 			StandardClaims: &jwt.StandardClaims{
 				Issuer:    "http://foo.example.com",
@@ -73,14 +76,14 @@ func (m *MockOIDCProviderServer) handle(w http.ResponseWriter, r *http.Request) 
 			Email: m.email,
 		}
 
-		tok, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(m.key)
+		tok, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(m.Key)
 		if err != nil {
 			panic(err)
 		}
 
 		fmt.Fprintf(w, `{"token_type":"bearer","access_token":"AAAAAAAAAAAA","refresh_token":"REFRESH","id_token":"%s"}`, tok)
 	case "/oauth2/v1/keys":
-		jwk := jose.JSONWebKey{KeyID: "foo", Key: m.key.Public()}
+		jwk := jose.JSONWebKey{KeyID: "foo", Key: m.Key.Public()}
 		jwks := jose.JSONWebKeySet{Keys: []jose.JSONWebKey{jwk}}
 		jks, _ := json.Marshal(jwks)
 		_, _ = w.Write(jks)
