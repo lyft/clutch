@@ -42,6 +42,12 @@ interface Route {
   requiredConfigProps?: string[];
   /** Is the workflow discoverable via search and drawer navigation. This defaults to false. */
   hideNav?: boolean;
+  /**
+   * The feature flag used to determine if the route should be registered.
+   *
+   * If this is not set the route will always be registered.
+   */
+  featureFlag?: string;
 }
 
 export interface ConfiguredRoute extends Route {

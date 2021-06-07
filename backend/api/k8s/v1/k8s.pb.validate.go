@@ -2577,6 +2577,18 @@ func (m *StatefulSet) Validate() error {
 
 	// no validation rules for Annotations
 
+	if v, ok := interface{}(m.GetStatus()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatefulSetValidationError{
+				field:  "Status",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for CreationTimeMillis
+
 	return nil
 }
 
@@ -6641,6 +6653,79 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UpdateDeploymentRequest_FieldsValidationError{}
+
+// Validate checks the field values on StatefulSet_Status with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *StatefulSet_Status) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Replicas
+
+	// no validation rules for UpdatedReplicas
+
+	// no validation rules for ReadyReplicas
+
+	return nil
+}
+
+// StatefulSet_StatusValidationError is the validation error returned by
+// StatefulSet_Status.Validate if the designated constraints aren't met.
+type StatefulSet_StatusValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatefulSet_StatusValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatefulSet_StatusValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatefulSet_StatusValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatefulSet_StatusValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatefulSet_StatusValidationError) ErrorName() string {
+	return "StatefulSet_StatusValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StatefulSet_StatusValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatefulSet_Status.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatefulSet_StatusValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatefulSet_StatusValidationError{}
 
 // Validate checks the field values on UpdateStatefulSetRequest_Fields with the
 // rules defined in the proto definition for this message. If any rules are

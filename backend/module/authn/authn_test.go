@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zaptest"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -49,7 +51,46 @@ func TestAPILogin(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	assert.Equal(t, "https://auth.com/?param=nonce-foo.com", response.AuthUrl)
+	assert.Equal(t, "https://auth.com/?param=nonce-foo.com", response.GetAuthUrl())
+}
+
+func TestAPILoginRefresh(t *testing.T) {
+	api := api{
+		provider: MockProvider{},
+		issuer:   authnmock.MockIssuer{AllowRefresh: true},
+		logger:   zaptest.NewLogger(t, zaptest.Level(zap.WarnLevel)),
+	}
+
+	transportStream := &grpcmock.MockServerTransportStream{}
+	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
+	ctx = metadata.NewIncomingContext(ctx, metadata.Pairs("grpcgateway-cookie", "token=zoom;refreshToken=zip"))
+
+	response, err := api.Login(ctx, &authnv1.LoginRequest{
+		RedirectUrl: "foo.com",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, "newAccess", response.GetToken().AccessToken)
+	assert.Equal(t, "refreshed", response.GetToken().RefreshToken)
+}
+
+func TestAPILoginRefreshFailsFlowContinues(t *testing.T) {
+	api := api{
+		provider: MockProvider{},
+		issuer:   authnmock.MockIssuer{AllowRefresh: false},
+		logger:   zaptest.NewLogger(t, zaptest.Level(zap.WarnLevel)),
+	}
+
+	transportStream := &grpcmock.MockServerTransportStream{}
+	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
+	ctx = metadata.NewIncomingContext(ctx, metadata.Pairs("grpcgateway-cookie", "token=zoom;refreshToken=zip"))
+
+	response, err := api.Login(ctx, &authnv1.LoginRequest{
+		RedirectUrl: "foo.com",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, "https://auth.com/?param=nonce-foo.com", response.GetAuthUrl())
 }
 
 func TestAPICallback(t *testing.T) {
@@ -73,8 +114,38 @@ func TestAPICallback(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, response.AccessToken, "test-access")
+	assert.Equal(t, response.RefreshToken, "")
 	assert.Len(t, transportStream.SentHeaders, 1)
-	assert.Equal(t, metadata.MD{"location": []string{"foo.com"}, "set-cookie-token": []string{"test-access"}}, transportStream.SentHeaders[0])
+	assert.EqualValues(t, metadata.MD{"location": []string{"foo.com"}, "set-cookie-token": []string{"test-access"}}, transportStream.SentHeaders[0])
+}
+
+func TestAPICallbackWithRefresh(t *testing.T) {
+	api := api{
+		provider: MockProvider{IssueRefresh: true},
+		issuer:   authnmock.MockIssuer{},
+	}
+
+	response, err := api.Callback(context.Background(), &authnv1.CallbackRequest{
+		Error:            "error",
+		ErrorDescription: "description",
+	})
+	assert.Nil(t, response)
+	assert.Error(t, err, "error: description")
+
+	transportStream := &grpcmock.MockServerTransportStream{}
+	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
+	response, err = api.Callback(ctx, &authnv1.CallbackRequest{
+		State: "nonce-foo.com",
+		Code:  "whatever",
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, response.AccessToken, "test-access")
+	assert.Equal(t, response.RefreshToken, "test-refresh")
+	assert.Len(t, transportStream.SentHeaders, 1)
+
+	assert.EqualValues(t,
+		metadata.MD{"location": []string{"foo.com"}, "set-cookie-token": []string{"test-access"}, "set-cookie-refresh-token": []string{"test-refresh"}},
+		transportStream.SentHeaders[0])
 }
 
 func TestAPICreateToken(t *testing.T) {
@@ -102,7 +173,8 @@ func TestAPICreateToken(t *testing.T) {
 // TODO(snowp): Ideally this should be in the authmocks package, but this introduces a circular dep
 // due to the dependency on authn.Claims.
 type MockProvider struct {
-	MockClaims authn.Claims
+	MockClaims   authn.Claims
+	IssueRefresh bool
 }
 
 func (MockProvider) GetStateNonce(redirectURL string) (string, error) {
@@ -126,8 +198,13 @@ func (MockProvider) GetAuthCodeURL(ctx context.Context, state string) (string, e
 	return "https://auth.com/?param=" + state, nil
 }
 
-func (MockProvider) Exchange(ctx context.Context, code string) (token *oauth2.Token, err error) {
-	return &oauth2.Token{
+func (m MockProvider) Exchange(ctx context.Context, code string) (*oauth2.Token, error) {
+	t := &oauth2.Token{
 		AccessToken: "test-access",
-	}, err
+	}
+
+	if m.IssueRefresh {
+		t.RefreshToken = "test-refresh"
+	}
+	return t, nil
 }

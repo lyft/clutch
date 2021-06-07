@@ -9,6 +9,7 @@ module.exports = {
     "plugin:jest/recommended",
     "plugin:jest/style",
     "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
   ],
   plugins: ["simple-import-sort"],
   env: {

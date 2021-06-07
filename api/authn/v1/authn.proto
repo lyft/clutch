@@ -35,14 +35,23 @@ service AuthnAPI {
 
 message LoginRequest {
   option (clutch.api.v1.redacted) = true;
-
   string redirect_url = 1;
 }
 
 message LoginResponse {
   option (clutch.api.v1.redacted) = true;
 
-  string auth_url = 1;
+  message Token {
+    string access_token = 1;
+    string refresh_token = 2;
+  }
+
+  // If the user presents a refresh token and refresh succeeds, they will receive the token in response. Otherwise,
+  // they will be redirected through the authentication flow.
+  oneof return {
+    string auth_url = 1;
+    Token token = 2;
+  }
 }
 
 // See https://www.oauth.com/oauth2-servers/authorization/the-authorization-response/ for description of the parameters.
@@ -61,6 +70,9 @@ message CallbackResponse {
   // This is the token that the user should present. Note: this response is only valid in a gRPC context. In an HTTP
   // context the user will be redirected.
   string access_token = 1;
+
+  // The refresh token will be empty if no refresh token was issued.
+  string refresh_token = 2;
 }
 
 message CreateTokenRequest {

@@ -2,7 +2,7 @@ package authnmock
 
 import (
 	"context"
-	"errors"
+	"fmt"
 
 	"golang.org/x/oauth2"
 )
@@ -24,12 +24,12 @@ func (m MockAuthnStorage) Store(ctx context.Context, userID, provider string, to
 
 func (m MockAuthnStorage) Read(ctx context.Context, userID, provider string) (*oauth2.Token, error) {
 	if _, ok := m.Tokens[provider]; !ok {
-		return nil, errors.New("token not found")
+		return nil, fmt.Errorf("token provider '%s' not found for user '%s'", provider, userID)
 	}
 
 	token, ok := m.Tokens[provider][userID]
 	if !ok {
-		return nil, errors.New("token not found")
+		return nil, fmt.Errorf("token user '%s' not found for provider '%s'", userID, provider)
 	}
 
 	return token, nil

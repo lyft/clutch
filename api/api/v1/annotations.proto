@@ -16,6 +16,14 @@ extend google.protobuf.MessageOptions {
   bool redacted = 58903;
 }
 
+extend google.protobuf.FieldOptions {
+  // Use a random high number that won't conflict with annotations from other
+  // libraries.
+
+  // Fields with the log option set to false will be cleared during auditing. Defaults to true.
+  bool log = 58901;
+}
+
 extend google.protobuf.MethodOptions {
   // Use a random high number that won't conflict with annotations from other
   // libraries.
