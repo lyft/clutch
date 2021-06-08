@@ -16,7 +16,7 @@ If you're interested in learning more about Storybook be sure to read their [int
 
 <Image alt="button story" src={useBaseUrl('img/docs/feature-development/frontend/storybook/button.png ')} variant="centered" />
 
-All available Clutch components can be found on [Clutch's Storybook site](https://storybook.clutch.sh). This site is automatically published on merges to master and should always be up to date.
+All available Clutch components can be found on [Clutch's Storybook site](https://storybook.clutch.sh). This site is automatically published on merges to main and should always be up to date.
 
 ### Controls
 
