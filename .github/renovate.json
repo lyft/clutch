@@ -25,12 +25,17 @@
   "packageRules": [
     {
       "extends": ["schedule:weekly"],
+      "matchPackagePatterns": [
+        "^github.com/aws/"
+      ]
+    },
+    {
+      "extends": ["schedule:monthly"],
       "matchPackageNames": [
         "google.golang.org/genproto"
       ],
       "matchPackagePatterns": [
-        "^golang.org/x/",
-        "^github.com/aws/"
+        "^golang.org/x/"
       ]
     },
     {
