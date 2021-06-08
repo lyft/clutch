@@ -16,7 +16,7 @@ const ProjectSelector = () => {
 
   React.useEffect(() => {
     console.log("effect fired");
-
+    // Here we would call the API and load the initial set of projects.
     setProjects({"users": true, "books": true});
 
     }, []);
@@ -26,15 +26,16 @@ const ProjectSelector = () => {
 
   const changeHandler = ({target}) => {
     setProjects({...projects, [target.name]: target.checked});
-    console.log("the selected projects were changed", projects);
   }
+
+  console.log("the selected projects were changed", projects);
 
   return (
     <div>
       My projects
       <div>
       {Object.keys(projects).map(key => <div key={key}>
-        <Checkbox name={key} onChange={changeHandler}/> {key}
+        <Checkbox name={key} onChange={changeHandler} checked={projects[key]}/> {key}
         </div>)}
 
       </div>
