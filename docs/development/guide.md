@@ -20,7 +20,7 @@ Familiarizing yourself with concepts in the [Architecture Reference](/docs/about
 ### In-depth
 
 <LinkCard title="API Definitions" description="Define API endpoints and objects plus backend config in Protobuf and generate the corresponding backend code." to="/docs/development/api" />
-<LinkCard title="Frontend" description="Develop new features and workflows using React that users can interact with from the web UI." to="/docs/development/frontend" />
+<LinkCard title="Frontend" description="Develop new features and workflows using React that users can interact with from the web UI." to="/docs/development/frontend/overview" />
 <LinkCard title="Backend" description="Integrate with other systems, execute tasks, and store data." to="/docs/development/backend" />
 
 ## Recommended Editors

@@ -29,7 +29,7 @@ An interactive playground of our component library is available at [storybook.cl
 
 ### @clutch-sh/core
 
-The Core package consists of various reusable components that are shared between workflows and/or other Clutch packages. This can span from things like the application provider, which renders the Clutch app, and resolver component ([see above](./###Resolver)) to something as simple as a centralized button component.
+The Core package consists of various reusable components that are shared between workflows and/or other Clutch packages. This can span from things like the application provider, which renders the Clutch app, and resolver component ([see below](#using-the-resolver-component)) to something as simple as a centralized button component.
 
 It’s important to note that all components which reside in this package should be developed in a reusable manner and should have a wide application. Workflow-specific code should not be contributed to the core package.
 

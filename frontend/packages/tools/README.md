@@ -12,4 +12,4 @@ only used in development) to allow yarn to pull them upward.
 Since this package is meant only for development this shouldn't be an
 issue.
 
-For more information see the [documentation](https://clutch.sh/docs/development/frontend#clutch-shtools).
+For more information see the [documentation](https://clutch.sh/docs/development/frontend/overview#clutch-shtools).

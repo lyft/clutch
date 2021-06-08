@@ -11,7 +11,7 @@ A framework to perform Chaos experiments built on top of [EnvoyProxy](https://ww
 
 Chaos Experimentation Framework consists of a few parts - frontend, a backend server and a xDS management server. 
 
-The Frontend uses [Clutch's core frontend](https://clutch.sh/docs/development/frontend). It can be customized by using the frontend config. 
+The Frontend uses [Clutch's core frontend](https://clutch.sh/docs/development/frontend/overview). It can be customized by using the frontend config. 
 
 The Backend server is responsible for performing CRUD operations of the experimentation package - [CreateExperiment](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L68), [GetExperiments](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L134), [CancelExperimentRun](https://github.com/lyft/clutch/blob/71f84e4bb3f642a17b831019f188a87dcc63f2cf/backend/module/chaos/experimentation/api/experimentation.go#L123), etc. It stores Chaos experiments in its tables in the Postgres database. 
 
