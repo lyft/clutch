@@ -5,15 +5,16 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	projectv1core "github.com/lyft/clutch/backend/api/core/project/v1"
-	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
-	"github.com/lyft/clutch/backend/mock/service/dbmock"
-	"github.com/lyft/clutch/backend/service"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	projectv1core "github.com/lyft/clutch/backend/api/core/project/v1"
+	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
+	"github.com/lyft/clutch/backend/mock/service/dbmock"
+	"github.com/lyft/clutch/backend/service"
 )
 
 func TestNew(t *testing.T) {
