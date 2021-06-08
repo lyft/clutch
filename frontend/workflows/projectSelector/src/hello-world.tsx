@@ -4,7 +4,6 @@ import _ from "lodash";
 
 import { Checkbox } from "@clutch-sh/core";
 
-
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
@@ -17,16 +16,15 @@ const ProjectSelector = () => {
   React.useEffect(() => {
     console.log("effect fired");
     // Here we would call the API and load the initial set of projects.
-    setProjects({"users": true, "books": true});
-
-    }, []);
+    setProjects({ users: true, books: true });
+  }, []);
 
   const upstreams = ["authors", "thumbnails"];
-  const downstreams = ["coffee", "shelves"]
+  const downstreams = ["coffee", "shelves"];
 
-  const changeHandler = ({target}) => {
-    setProjects({...projects, [target.name]: target.checked});
-  }
+  const changeHandler = ({ target }) => {
+    setProjects({ ...projects, [target.name]: target.checked });
+  };
 
   console.log("the selected projects were changed", projects);
 
@@ -34,20 +32,38 @@ const ProjectSelector = () => {
     <div>
       My projects
       <div>
-      {Object.keys(projects).map(key => <div key={key}>
-        <Checkbox name={key} onChange={changeHandler} checked={projects[key]}/> {key}
-        </div>)}
-
+        {Object.keys(projects).map(key => (
+          <div key={key}>
+            <Checkbox name={key} onChange={changeHandler} checked={projects[key]} /> {key}
+          </div>
+        ))}
       </div>
-      Upsteam
-      <div>{upstreams.map((v) => <div key={v}> <Checkbox /> {v}</div>)}
+      Upstream
+      <div>
+        {upstreams.map(v => (
+          <div key={v}>
+            {" "}
+            <Checkbox /> {v}
+          </div>
+        ))}
       </div>
       Downstream
-      <div>{downstreams.map((v) => <div key={v}> <Checkbox /> {v}</div>)}</div>
+      <div>
+        {downstreams.map(v => (
+          <div key={v}>
+            {" "}
+            <Checkbox /> {v}
+          </div>
+        ))}
       </div>
-  )
-}
+    </div>
+  );
+};
 
-const HelloWorld = () => <>Hello from workflow! <ProjectSelector /> </>
+const HelloWorld = () => (
+  <>
+    <ProjectSelector />{" "}
+  </>
+);
 
 export default HelloWorld;
