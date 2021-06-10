@@ -25,7 +25,10 @@ import (
 	"github.com/lyft/clutch/backend/service/auditsink"
 )
 
-const Name = "clutch.service.audit"
+const (
+	Name                 = "clutch.service.audit"
+	auditEventSinkLockId = "audit:eventsink"
+)
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &auditconfigv1.Config{}
@@ -156,9 +159,22 @@ func (c *client) poll(interval time.Duration) {
 		}
 	}
 
+	lockID := c.storage.GetLockID(auditEventSinkLockId)
 	ticker := time.NewTicker(interval)
 	for {
 		<-ticker.C
-		readAndFanout()
+
+		isLocked, err := c.storage.AttemptLock(context.TODO(), lockID)
+		if err != nil {
+			c.logger.Error("Error while attempting to get lock", zap.Error(err))
+		}
+
+		if isLocked {
+			readAndFanout()
+			_, err := c.storage.ReleaseLock(context.TODO(), lockID)
+			if err != nil {
+				c.logger.Error("Error trying to release lock", zap.Error(err))
+			}
+		}
 	}
 }

@@ -2,6 +2,8 @@ package local
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/binary"
 	"fmt"
 	"sync"
 	"time"
@@ -97,4 +99,17 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 	}
 
 	return events, nil
+}
+
+func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {
+	return true, nil
+}
+
+func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
+	return true, nil
+}
+
+func (c *client) GetLockID(lockID string) uint32 {
+	x := sha256.New().Sum([]byte(lockID))
+	return binary.BigEndian.Uint32(x)
 }

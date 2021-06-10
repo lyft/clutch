@@ -2,7 +2,9 @@ package sql
 
 import (
 	"context"
+	"crypto/sha256"
 	"database/sql"
+	"encoding/binary"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -185,6 +187,29 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 	}
 
 	return events, nil
+}
+
+func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {
+	var lock bool
+	if err := c.db.QueryRowContext(ctx, "SELECT pg_try_advisory_lock($1);", lockID).Scan(&lock); err != nil {
+		c.logger.Error("Unable to query for a advisory lock", zap.Error(err))
+		return false, err
+	}
+	return lock, nil
+}
+
+func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
+	var unlock bool
+	if err := c.db.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockID).Scan(&unlock); err != nil {
+		c.logger.Error("Unable to perform an advisory unlock", zap.Error(err))
+		return false, err
+	}
+	return unlock, nil
+}
+
+func (c *client) GetLockID(lockID string) uint32 {
+	x := sha256.New().Sum([]byte(lockID))
+	return binary.BigEndian.Uint32(x)
 }
 
 type status struct {
