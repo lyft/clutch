@@ -7,9 +7,6 @@ exports[`Start Experiment workflow renders correctly 1`] = `
   </h3>
   <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
-  <h3 style={{...}}>
-    Targeting
-  </h3>
   <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
@@ -26,11 +23,7 @@ exports[`Start Experiment workflow renders correctly with host percentage based 
   </h3>
   <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
-  <RadioGroup name=\\"upstreamClusterType\\" label=\\"Upstream Cluster Type\\" disabled={false} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <h3 style={{...}}>
-    Targeting
-  </h3>
-  <Select name=\\"targetType\\" label=\\"Target Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+  <RadioGroup name={[undefined]} label=\\"Upstream Cluster Type\\" disabled={[undefined]} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
@@ -47,9 +40,6 @@ exports[`Start Experiment workflow renders correctly with host percentage based 
   </h3>
   <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
-  <h3 style={{...}}>
-    Targeting
-  </h3>
   <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
@@ -66,10 +56,7 @@ exports[`Start Experiment workflow renders correctly with upstream cluster type 
   </h3>
   <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
-  <RadioGroup name=\\"upstreamClusterType\\" label=\\"Upstream Cluster Type\\" disabled={false} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <h3 style={{...}}>
-    Targeting
-  </h3>
+  <RadioGroup name={[undefined]} label=\\"Upstream Cluster Type\\" disabled={[undefined]} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
