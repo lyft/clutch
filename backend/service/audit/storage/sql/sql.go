@@ -148,7 +148,7 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 func (c *client) query(ctx context.Context, query string, args ...interface{}) ([]*auditv1.Event, error) {
 	rows, err := c.db.QueryContext(ctx, query, args...)
 	if err != nil {
-		c.logger.Error("error querying db", zap.Error(err))
+		c.logger.Error("error querying db", zap.Error(err), zap.String("errr", err.Error()))
 		return nil, err
 	}
 	defer rows.Close()
