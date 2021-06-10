@@ -127,8 +127,8 @@ func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
 	const unsentEventsQuery = `
 		UPDATE audit_events
 		SET sent = TRUE
-		WHERE sent = FALSE
-		RETURNING id, occurred_at, details
+		WHERE id IN (SELECT id FROM audit_events WHERE sent = FALSE LIMIT 100)
+		RETURNING id, occurred_at, details;
 	`
 
 	return c.query(ctx, unsentEventsQuery)
