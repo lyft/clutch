@@ -5007,9 +5007,6 @@ export namespace clutch {
                     /** UpstreamEnforcing upstreamCluster */
                     upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
-                    /** UpstreamEnforcing upstreamPartialSingleCluster */
-                    upstreamPartialSingleCluster?: (clutch.chaos.serverexperimentation.v1.IPartialSingleCluster|null);
-
                     /** UpstreamEnforcing downstreamCluster */
                     downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
                 }
@@ -5026,14 +5023,11 @@ export namespace clutch {
                     /** UpstreamEnforcing upstreamCluster. */
                     public upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
-                    /** UpstreamEnforcing upstreamPartialSingleCluster. */
-                    public upstreamPartialSingleCluster?: (clutch.chaos.serverexperimentation.v1.IPartialSingleCluster|null);
-
                     /** UpstreamEnforcing downstreamCluster. */
                     public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
                     /** UpstreamEnforcing upstreamType. */
-                    public upstreamType?: ("upstreamCluster"|"upstreamPartialSingleCluster");
+                    public upstreamType?: "upstreamCluster";
 
                     /** UpstreamEnforcing downstreamType. */
                     public downstreamType?: "downstreamCluster";
@@ -5170,60 +5164,6 @@ export namespace clutch {
 
                     /**
                      * Converts this SingleCluster to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a PartialSingleCluster. */
-                interface IPartialSingleCluster {
-
-                    /** PartialSingleCluster name */
-                    name?: (string|null);
-
-                    /** PartialSingleCluster clusterPercentage */
-                    clusterPercentage?: (clutch.chaos.serverexperimentation.v1.IClusterPercentage|null);
-                }
-
-                /** Represents a PartialSingleCluster. */
-                class PartialSingleCluster implements IPartialSingleCluster {
-
-                    /**
-                     * Constructs a new PartialSingleCluster.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IPartialSingleCluster);
-
-                    /** PartialSingleCluster name. */
-                    public name: string;
-
-                    /** PartialSingleCluster clusterPercentage. */
-                    public clusterPercentage?: (clutch.chaos.serverexperimentation.v1.IClusterPercentage|null);
-
-                    /**
-                     * Verifies a PartialSingleCluster message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a PartialSingleCluster message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns PartialSingleCluster
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.PartialSingleCluster;
-
-                    /**
-                     * Creates a plain object from a PartialSingleCluster message. Also converts values to other types if specified.
-                     * @param message PartialSingleCluster
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.PartialSingleCluster, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this PartialSingleCluster to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

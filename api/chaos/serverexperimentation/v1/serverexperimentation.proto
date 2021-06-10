@@ -62,8 +62,6 @@ message UpstreamEnforcing {
 
     // A single upstream cluster.
     SingleCluster upstream_cluster = 1;
-    // A partial single upstream cluster.
-    PartialSingleCluster upstream_partial_single_cluster = 2;
   }
 
   // A downstream responsible for enforcing a fault. Only requests that are started
@@ -101,21 +99,6 @@ message DownstreamEnforcing {
 message SingleCluster {
   // The name of a cluster.
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
-}
-
-// A partial single cluster - the part of a single cluster that's partaking
-// in the fault injection. It allows the user of the API to specify the subset
-// of the cluster whose requests should be considered for a fault injection.
-message PartialSingleCluster {
-  // The name of a cluster.
-  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  // The percentage controlling what part of a cluster should be considered for fault
-  // injection. The portion of the cluster is supposed to be consistent, meaning that
-  // any given part of a cluster should be either included or excluded for the whole duration of
-  // a given fault injection test. In other words, for every part of the cluster, we toss a
-  // coin once to decide whether it should participate in a given fault injection test or not
-  // and we stick to our decision.
-  ClusterPercentage cluster_percentage = 2 [ (validate.rules).message.required = true ];
 }
 
 // The percentage controlling what portion of a given cluster should be applying faults.
