@@ -10,11 +10,21 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import ClearIcon from "@material-ui/icons/Clear";
 import LayersIcon from "@material-ui/icons/Layers";
 
+import styled from "@emotion/styled";
+
 enum ActionKind {
   ADD_PROJECTS,
   REMOVE_PROJECTS,
   TOGGLE_PROJECTS,
+  TOGGLE_ENTIRE_GROUP,
   ONLY_PROJECTS,
+}
+
+enum Group {
+  PROJECTS,
+  CUSTOM,
+  UPSTREAM,
+  DOWNSTREAM,
 }
 
 interface Action {
@@ -23,14 +33,24 @@ interface Action {
 }
 
 interface Payload {
+  group: Group;
   projects?: string[];
 }
 
 interface State {
-  projects: any;
-  customProjects: any;
-  upstreams: any;
-  downstreams: any;
+  [Group.PROJECTS]: GroupState;
+  [Group.CUSTOM]: GroupState;
+  [Group.UPSTREAM]: GroupState;
+  [Group.DOWNSTREAM]: GroupState;
+}
+
+interface GroupState {
+  [s: string]: ProjectState;
+}
+
+interface ProjectState {
+  checked: boolean;
+  hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
 }
 
 const selectorReducer = (state: State, action: Action): State => {
@@ -38,37 +58,107 @@ const selectorReducer = (state: State, action: Action): State => {
 
   switch (type) {
     case ActionKind.ADD_PROJECTS:
+      // TODO: don't allow adding a group to CUSTOM if it's already in PROJECTS.
       return {
         ...state,
-        customProjects: {
-          ...state.customProjects,
-          ...Object.fromEntries(payload.projects.map(v => [v, null])),
+        [payload.group]: {
+          ...state[payload.group],
+          ...Object.fromEntries(payload.projects.map(v => [v, { checked: true }])),
         },
       };
     case ActionKind.REMOVE_PROJECTS:
+      // TODO: also remove any upstreams or downstreams related (only) to the project.
       return {
         ...state,
-        customProjects: _.omit(state.customProjects, payload.projects),
+        [payload.group]: _.omit(state[payload.group], payload.projects),
       };
+    case ActionKind.TOGGLE_PROJECTS:
+      // TODO: hide upstreams and downstreams if group is PROJECTS OR CUSTOM
+      const { group, projects } = payload;
+      return {
+        ...state,
+        [group]: {
+          ...state[group],
+          ...Object.fromEntries(
+            projects.map(key => [
+              key,
+              { ...state[group][key], checked: !state[group][key].checked },
+            ])
+          ),
+        },
+      };
+    case ActionKind.ONLY_PROJECTS:
+      const applyOnlyToGroups = [payload.group];
+      if (payload.group === Group.PROJECTS) {
+        // If the group is the PROJECTS group, toggle both PROJECTS and CUSTOM.
+        applyOnlyToGroups.push(Group.CUSTOM);
+      } else if (payload.group === Group.CUSTOM) {
+        applyOnlyToGroups.push(Group.PROJECTS);
+      }
+
+      const newOnlyProjectState = { ...state };
+
+      applyOnlyToGroups.forEach(group => {
+        newOnlyProjectState[group] = Object.fromEntries(
+          Object.keys(state[group]).map(key => [
+            key,
+            { ...state[group][key], checked: payload.projects.includes(key) },
+          ])
+        );
+      });
+
+      return newOnlyProjectState;
+
+    case ActionKind.TOGGLE_ENTIRE_GROUP:
+      const applicableGroups = [payload.group];
+      if (payload.group === Group.PROJECTS) {
+        // If the group is the PROJECTS group, toggle both PROJECTS and CUSTOM.
+        applicableGroups.push(Group.CUSTOM);
+      }
+
+      const newCheckedValue = !determineSwitchStatus(state, applicableGroups);
+      const newGroupToggledState = { ...state };
+      applicableGroups.forEach(group => {
+        newGroupToggledState[group] = Object.fromEntries(
+          Object.keys(state[group]).map(key => [
+            key,
+            { ...state[group][key], checked: newCheckedValue },
+          ])
+        );
+      });
+
+      return newGroupToggledState;
     default:
       throw new Error(`unknown resolver action: ${type}`);
   }
 };
 
-enum GroupSelectedStatus {
-  NONE,
-  SOME,
-  ALL,
-}
-
-const determineSelectedStatus = (group: string): GroupSelectedStatus => {};
+// TODO(perf): call with useMemo().
+const determineSwitchStatus = (state: State, groups: Group[]): boolean => {
+  return (
+    Object.keys(state[Group.CUSTOM]).length > 0 &&
+    Object.keys(state[Group.CUSTOM]).every(key => state[Group.CUSTOM][key].checked)
+  );
+};
 
 const initialState: State = {
-  projects: {},
-  customProjects: {},
-  upstreams: {},
-  downstreams: {},
+  [Group.PROJECTS]: {},
+  [Group.CUSTOM]: {},
+  [Group.UPSTREAM]: {},
+  [Group.DOWNSTREAM]: {},
 };
+
+const Selector = styled.div({
+  backgroundColor: "#F5F6FD",
+  ".project": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  ".only": {
+    color: "#3548D4",
+  },
+});
 
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
@@ -96,12 +186,15 @@ const ProjectSelector = () => {
     if (customProject === "") {
       return;
     }
-    dispatch({ type: ActionKind.ADD_PROJECTS, payload: { projects: [customProject] } });
+    dispatch({
+      type: ActionKind.ADD_PROJECTS,
+      payload: { group: Group.CUSTOM, projects: [customProject] },
+    });
     setCustomProject("");
   };
 
   return (
-    <div>
+    <Selector>
       <div>
         <LayersIcon />
         Dash
@@ -113,13 +206,18 @@ const ProjectSelector = () => {
           onChange={e => setCustomProject(e.target.value)}
           onKeyDown={e => e.key === "Enter" && handleAdd()}
         />
-        <IconButton onClick={handleAdd}>
-          <AddIcon />
-        </IconButton>
       </div>
       <div>
         Projects
-        <Switch />
+        <Switch
+          onChange={() =>
+            dispatch({ type: ActionKind.TOGGLE_ENTIRE_GROUP, payload: { group: Group.PROJECTS } })
+          }
+          checked={determineSwitchStatus(state, [Group.PROJECTS, Group.CUSTOM])}
+          disabled={
+            Object.keys(state[Group.PROJECTS]).length + Object.keys(state[Group.CUSTOM]).length == 0
+          }
+        />
       </div>
       <div>
         {/* {Object.keys(projects).map(key => (
@@ -127,13 +225,33 @@ const ProjectSelector = () => {
             <Checkbox name={key} onChange={changeHandler} checked={projects[key]} /> {key}
           </div>
         ))} */}
-        {Object.keys(state.customProjects).map(key => (
-          <div key={key}>
-            <Checkbox name={key} onChange={changeHandler} checked />
+        {Object.keys(state[Group.CUSTOM]).map(key => (
+          <div key={key} className="project">
+            <Checkbox
+              name={key}
+              onChange={() =>
+                dispatch({
+                  type: ActionKind.TOGGLE_PROJECTS,
+                  payload: { group: Group.CUSTOM, projects: [key] },
+                })
+              }
+              checked={state[Group.CUSTOM][key].checked ? true : false}
+            />
             {key}
+            <div
+              className="only"
+              onClick={() => 
+                dispatch({type: ActionKind.ONLY_PROJECTS, payload: {group: Group.CUSTOM, projects: [key]}})
+              }
+            >
+              Only
+            </div>
             <ClearIcon
               onClick={() =>
-                dispatch({ type: ActionKind.REMOVE_PROJECTS, payload: { projects: [key] } })
+                dispatch({
+                  type: ActionKind.REMOVE_PROJECTS,
+                  payload: { group: Group.CUSTOM, projects: [key] },
+                })
               }
             />
           </div>
@@ -165,7 +283,7 @@ const ProjectSelector = () => {
           </div>
         ))}
       </div>
-    </div>
+    </Selector>
   );
 };
 
