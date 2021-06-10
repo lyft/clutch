@@ -467,18 +467,6 @@ func (m *UpstreamEnforcing) Validate() error {
 			}
 		}
 
-	case *UpstreamEnforcing_UpstreamPartialSingleCluster:
-
-		if v, ok := interface{}(m.GetUpstreamPartialSingleCluster()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return UpstreamEnforcingValidationError{
-					field:  "UpstreamPartialSingleCluster",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
 	default:
 		return UpstreamEnforcingValidationError{
 			field:  "UpstreamType",
@@ -750,97 +738,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SingleClusterValidationError{}
-
-// Validate checks the field values on PartialSingleCluster with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *PartialSingleCluster) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if len(m.GetName()) < 1 {
-		return PartialSingleClusterValidationError{
-			field:  "Name",
-			reason: "value length must be at least 1 bytes",
-		}
-	}
-
-	if m.GetClusterPercentage() == nil {
-		return PartialSingleClusterValidationError{
-			field:  "ClusterPercentage",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetClusterPercentage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return PartialSingleClusterValidationError{
-				field:  "ClusterPercentage",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// PartialSingleClusterValidationError is the validation error returned by
-// PartialSingleCluster.Validate if the designated constraints aren't met.
-type PartialSingleClusterValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e PartialSingleClusterValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e PartialSingleClusterValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e PartialSingleClusterValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e PartialSingleClusterValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e PartialSingleClusterValidationError) ErrorName() string {
-	return "PartialSingleClusterValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e PartialSingleClusterValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sPartialSingleCluster.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = PartialSingleClusterValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = PartialSingleClusterValidationError{}
 
 // Validate checks the field values on ClusterPercentage with the rules defined
 // in the proto definition for this message. If any rules are violated, an

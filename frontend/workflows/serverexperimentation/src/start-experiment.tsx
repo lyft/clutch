@@ -24,11 +24,6 @@ enum FaultType {
   LATENCY = "Latency",
 }
 
-enum TargetType {
-  REQUESTS = "requests",
-  HOSTS = "hosts",
-}
-
 enum UpstreamClusterType {
   INTERNAL = "internal",
   EXTERNAL = "external",
@@ -38,7 +33,6 @@ type ExperimentData = {
   downstreamCluster: string;
   upstreamCluster: string;
   upstreamClusterType: UpstreamClusterType;
-  targetType: TargetType;
   requestsPercentage: number;
   hostsPercentage: number;
   faultType: FaultType;
@@ -48,19 +42,16 @@ type ExperimentData = {
 
 interface ExperimentDetailsProps {
   upstreamClusterTypeSelectionEnabled: boolean;
-  hostsPercentageBasedTargetingEnabled: boolean;
   onStart: (ExperimentData) => void;
 }
 
 const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   upstreamClusterTypeSelectionEnabled,
-  hostsPercentageBasedTargetingEnabled,
   onStart,
 }) => {
   const initialExperimentData = {
     upstreamClusterType: UpstreamClusterType.INTERNAL,
     faultType: FaultType.ABORT,
-    targetType: TargetType.REQUESTS,
   } as ExperimentData;
 
   const experimentDataState = useState<ExperimentData>(initialExperimentData);
@@ -77,11 +68,9 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   };
 
   const faultInjectionClusterRadioGroup = {
-    name: "upstreamClusterType",
     label: "Upstream Cluster Type",
     type: "radio-group",
-    visible:
-      upstreamClusterTypeSelectionEnabled && experimentData.targetType === TargetType.REQUESTS,
+    visible: upstreamClusterTypeSelectionEnabled,
     inputProps: {
       options: [
         {
@@ -94,13 +83,8 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
         },
       ],
       defaultValue: initialExperimentData.upstreamClusterType,
-      disabled: experimentData.targetType !== TargetType.REQUESTS,
     },
   };
-  const fakeFaultInjectionClusterRadioGroup = { ...faultInjectionClusterRadioGroup };
-  fakeFaultInjectionClusterRadioGroup.name = "fakeFaultInjectionCluster";
-  fakeFaultInjectionClusterRadioGroup.visible =
-    upstreamClusterTypeSelectionEnabled && experimentData.targetType === TargetType.HOSTS;
 
   const isAbort = experimentData.faultType === FaultType.ABORT;
   const fields = [
@@ -123,44 +107,11 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       inputProps: { defaultValue: undefined },
     },
     faultInjectionClusterRadioGroup,
-    fakeFaultInjectionClusterRadioGroup,
-    {
-      label: "Targeting",
-      type: "title",
-    },
-    {
-      name: "targetType",
-      label: "Target Type",
-      type: "select",
-      visible: hostsPercentageBasedTargetingEnabled,
-      inputProps: {
-        options: [
-          {
-            label: "Requests",
-            value: TargetType.REQUESTS,
-          },
-          {
-            label: "Hosts",
-            value: TargetType.HOSTS,
-          },
-        ],
-        defaultValue: initialExperimentData.targetType,
-      },
-    },
     {
       name: "requestsPercentage",
       label: "Percentage of Requests Served by All Hosts",
       type: "number",
       validation: yup.number().label("Percentage").integer().min(1).max(100).required(),
-      visible: experimentData.targetType === TargetType.REQUESTS,
-      inputProps: { defaultValue: "0" },
-    },
-    {
-      name: "hostsPercentage",
-      label: "Percentage of Hosts",
-      type: "number",
-      validation: yup.number().label("Percentage").integer().min(1).max(100).required(),
-      visible: experimentData.targetType === TargetType.HOSTS,
       inputProps: { defaultValue: "0" },
     },
     {
@@ -230,13 +181,11 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
 
 interface StartExperimentProps extends BaseWorkflowProps {
   upstreamClusterTypeSelectionEnabled?: boolean;
-  hostsPercentageBasedTargetingEnabled?: boolean;
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
   upstreamClusterTypeSelectionEnabled = false,
-  hostsPercentageBasedTargetingEnabled = false,
 }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(undefined);
@@ -253,8 +202,6 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
 
   const createExperiment = (data: ExperimentData) => {
     const isUpstreamEnforcing = data.upstreamClusterType === UpstreamClusterType.INTERNAL;
-    const isTargetingRequests = data.targetType === TargetType.REQUESTS;
-    const isTargetingHosts = data.targetType === TargetType.HOSTS;
 
     const faultTargeting = {} as IClutch.chaos.serverexperimentation.v1.FaultTargeting;
     if (isUpstreamEnforcing) {
@@ -262,19 +209,10 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         downstreamCluster: {
           name: data.downstreamCluster,
         },
+        upstreamCluster: {
+          name: data.upstreamCluster,
+        },
       };
-      if (isTargetingRequests) {
-        faultTargeting.upstreamEnforcing.upstreamCluster = {
-          name: data.upstreamCluster,
-        };
-      } else {
-        faultTargeting.upstreamEnforcing.upstreamPartialSingleCluster = {
-          name: data.upstreamCluster,
-          clusterPercentage: {
-            percentage: isTargetingHosts ? data.hostsPercentage : 100,
-          },
-        };
-      }
     } else {
       faultTargeting.downstreamEnforcing = {
         downstreamCluster: {
@@ -295,7 +233,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           httpStatusCode: data.httpStatus,
         },
         percentage: {
-          percentage: isTargetingRequests ? data.requestsPercentage : 100,
+          percentage: data.requestsPercentage,
         },
       } as IClutch.chaos.serverexperimentation.v1.AbortFault;
     } else {
@@ -304,7 +242,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           fixedDurationMs: data.durationMs,
         },
         percentage: {
-          percentage: isTargetingRequests ? data.requestsPercentage : 100,
+          percentage: data.requestsPercentage,
         },
       } as IClutch.chaos.serverexperimentation.v1.LatencyFault;
     }
@@ -332,7 +270,6 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
     <PageLayout heading={heading} error={error}>
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
-        hostsPercentageBasedTargetingEnabled={hostsPercentageBasedTargetingEnabled}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
       />
       <Dialog

@@ -11721,7 +11721,6 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface IUpstreamEnforcing
                      * @property {clutch.chaos.serverexperimentation.v1.ISingleCluster|null} [upstreamCluster] UpstreamEnforcing upstreamCluster
-                     * @property {clutch.chaos.serverexperimentation.v1.IPartialSingleCluster|null} [upstreamPartialSingleCluster] UpstreamEnforcing upstreamPartialSingleCluster
                      * @property {clutch.chaos.serverexperimentation.v1.ISingleCluster|null} [downstreamCluster] UpstreamEnforcing downstreamCluster
                      */
 
@@ -11749,14 +11748,6 @@ export const clutch = $root.clutch = (() => {
                     UpstreamEnforcing.prototype.upstreamCluster = null;
 
                     /**
-                     * UpstreamEnforcing upstreamPartialSingleCluster.
-                     * @member {clutch.chaos.serverexperimentation.v1.IPartialSingleCluster|null|undefined} upstreamPartialSingleCluster
-                     * @memberof clutch.chaos.serverexperimentation.v1.UpstreamEnforcing
-                     * @instance
-                     */
-                    UpstreamEnforcing.prototype.upstreamPartialSingleCluster = null;
-
-                    /**
                      * UpstreamEnforcing downstreamCluster.
                      * @member {clutch.chaos.serverexperimentation.v1.ISingleCluster|null|undefined} downstreamCluster
                      * @memberof clutch.chaos.serverexperimentation.v1.UpstreamEnforcing
@@ -11769,12 +11760,12 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * UpstreamEnforcing upstreamType.
-                     * @member {"upstreamCluster"|"upstreamPartialSingleCluster"|undefined} upstreamType
+                     * @member {"upstreamCluster"|undefined} upstreamType
                      * @memberof clutch.chaos.serverexperimentation.v1.UpstreamEnforcing
                      * @instance
                      */
                     Object.defineProperty(UpstreamEnforcing.prototype, "upstreamType", {
-                        get: $util.oneOfGetter($oneOfFields = ["upstreamCluster", "upstreamPartialSingleCluster"]),
+                        get: $util.oneOfGetter($oneOfFields = ["upstreamCluster"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
@@ -11809,16 +11800,6 @@ export const clutch = $root.clutch = (() => {
                                     return "upstreamCluster." + error;
                             }
                         }
-                        if (message.upstreamPartialSingleCluster != null && message.hasOwnProperty("upstreamPartialSingleCluster")) {
-                            if (properties.upstreamType === 1)
-                                return "upstreamType: multiple values";
-                            properties.upstreamType = 1;
-                            {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.PartialSingleCluster.verify(message.upstreamPartialSingleCluster);
-                                if (error)
-                                    return "upstreamPartialSingleCluster." + error;
-                            }
-                        }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster")) {
                             properties.downstreamType = 1;
                             {
@@ -11847,11 +11828,6 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.upstreamCluster: object expected");
                             message.upstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.fromObject(object.upstreamCluster);
                         }
-                        if (object.upstreamPartialSingleCluster != null) {
-                            if (typeof object.upstreamPartialSingleCluster !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.upstreamPartialSingleCluster: object expected");
-                            message.upstreamPartialSingleCluster = $root.clutch.chaos.serverexperimentation.v1.PartialSingleCluster.fromObject(object.upstreamPartialSingleCluster);
-                        }
                         if (object.downstreamCluster != null) {
                             if (typeof object.downstreamCluster !== "object")
                                 throw TypeError(".clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.downstreamCluster: object expected");
@@ -11877,11 +11853,6 @@ export const clutch = $root.clutch = (() => {
                             object.upstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.toObject(message.upstreamCluster, options);
                             if (options.oneofs)
                                 object.upstreamType = "upstreamCluster";
-                        }
-                        if (message.upstreamPartialSingleCluster != null && message.hasOwnProperty("upstreamPartialSingleCluster")) {
-                            object.upstreamPartialSingleCluster = $root.clutch.chaos.serverexperimentation.v1.PartialSingleCluster.toObject(message.upstreamPartialSingleCluster, options);
-                            if (options.oneofs)
-                                object.upstreamType = "upstreamPartialSingleCluster";
                         }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster")) {
                             object.downstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.toObject(message.downstreamCluster, options);
@@ -12165,129 +12136,6 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return SingleCluster;
-                })();
-
-                v1.PartialSingleCluster = (function() {
-
-                    /**
-                     * Properties of a PartialSingleCluster.
-                     * @memberof clutch.chaos.serverexperimentation.v1
-                     * @interface IPartialSingleCluster
-                     * @property {string|null} [name] PartialSingleCluster name
-                     * @property {clutch.chaos.serverexperimentation.v1.IClusterPercentage|null} [clusterPercentage] PartialSingleCluster clusterPercentage
-                     */
-
-                    /**
-                     * Constructs a new PartialSingleCluster.
-                     * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents a PartialSingleCluster.
-                     * @implements IPartialSingleCluster
-                     * @constructor
-                     * @param {clutch.chaos.serverexperimentation.v1.IPartialSingleCluster=} [properties] Properties to set
-                     */
-                    function PartialSingleCluster(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * PartialSingleCluster name.
-                     * @member {string} name
-                     * @memberof clutch.chaos.serverexperimentation.v1.PartialSingleCluster
-                     * @instance
-                     */
-                    PartialSingleCluster.prototype.name = "";
-
-                    /**
-                     * PartialSingleCluster clusterPercentage.
-                     * @member {clutch.chaos.serverexperimentation.v1.IClusterPercentage|null|undefined} clusterPercentage
-                     * @memberof clutch.chaos.serverexperimentation.v1.PartialSingleCluster
-                     * @instance
-                     */
-                    PartialSingleCluster.prototype.clusterPercentage = null;
-
-                    /**
-                     * Verifies a PartialSingleCluster message.
-                     * @function verify
-                     * @memberof clutch.chaos.serverexperimentation.v1.PartialSingleCluster
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    PartialSingleCluster.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.name != null && message.hasOwnProperty("name"))
-                            if (!$util.isString(message.name))
-                                return "name: string expected";
-                        if (message.clusterPercentage != null && message.hasOwnProperty("clusterPercentage")) {
-                            let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPercentage.verify(message.clusterPercentage);
-                            if (error)
-                                return "clusterPercentage." + error;
-                        }
-                        return null;
-                    };
-
-                    /**
-                     * Creates a PartialSingleCluster message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.PartialSingleCluster
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.serverexperimentation.v1.PartialSingleCluster} PartialSingleCluster
-                     */
-                    PartialSingleCluster.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.PartialSingleCluster)
-                            return object;
-                        let message = new $root.clutch.chaos.serverexperimentation.v1.PartialSingleCluster();
-                        if (object.name != null)
-                            message.name = String(object.name);
-                        if (object.clusterPercentage != null) {
-                            if (typeof object.clusterPercentage !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.PartialSingleCluster.clusterPercentage: object expected");
-                            message.clusterPercentage = $root.clutch.chaos.serverexperimentation.v1.ClusterPercentage.fromObject(object.clusterPercentage);
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a PartialSingleCluster message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.PartialSingleCluster
-                     * @static
-                     * @param {clutch.chaos.serverexperimentation.v1.PartialSingleCluster} message PartialSingleCluster
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    PartialSingleCluster.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults) {
-                            object.name = "";
-                            object.clusterPercentage = null;
-                        }
-                        if (message.name != null && message.hasOwnProperty("name"))
-                            object.name = message.name;
-                        if (message.clusterPercentage != null && message.hasOwnProperty("clusterPercentage"))
-                            object.clusterPercentage = $root.clutch.chaos.serverexperimentation.v1.ClusterPercentage.toObject(message.clusterPercentage, options);
-                        return object;
-                    };
-
-                    /**
-                     * Converts this PartialSingleCluster to JSON.
-                     * @function toJSON
-                     * @memberof clutch.chaos.serverexperimentation.v1.PartialSingleCluster
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    PartialSingleCluster.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return PartialSingleCluster;
                 })();
 
                 v1.ClusterPercentage = (function() {

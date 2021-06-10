@@ -111,8 +111,6 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 		switch upstreamEnforcing.GetUpstreamType().(type) {
 		case *serverexperimentationv1.UpstreamEnforcing_UpstreamCluster:
 			upstream = upstreamEnforcing.GetUpstreamCluster().GetName()
-		case *serverexperimentationv1.UpstreamEnforcing_UpstreamPartialSingleCluster:
-			upstream = upstreamEnforcing.GetUpstreamPartialSingleCluster().GetName()
 		default:
 			return nil, fmt.Errorf("unknown upstream type of upstream enforcing %v", upstreamEnforcing.GetUpstreamType())
 		}
