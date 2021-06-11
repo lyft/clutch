@@ -179,14 +179,14 @@ const ProjectGroup = ({ title, group, collapsible }: { title: string; group: Gro
             >
               Only
             </div>
-            <ClearIcon
+            {state[group][key].custom && <ClearIcon
               onClick={() =>
                 dispatch({
                   type: ActionKind.REMOVE_PROJECTS,
                   payload: { group, projects: [key] },
                 })
               }
-            />
+            />}
           </div>
         ))}
       </div>
