@@ -52,6 +52,16 @@ interface ProjectState {
   custom?: boolean;
 }
 
+const StateContext = React.createContext<State | undefined>(undefined);
+const useReducerState = () => {
+  return React.useContext(StateContext);
+};
+
+const DispatchContext = React.createContext<(action: Action) => void | undefined>(undefined);
+const useDispatch = () => {
+  return React.useContext(DispatchContext);
+};
+
 const selectorReducer = (state: State, action: Action): State => {
   const { type, payload } = action;
 
@@ -62,7 +72,7 @@ const selectorReducer = (state: State, action: Action): State => {
         ...state,
         [payload.group]: {
           ...state[payload.group],
-          ...Object.fromEntries(payload.projects.map(v => [v, { checked: true }])),
+          ...Object.fromEntries(payload.projects.map(v => [v, { checked: true, custom: true }])),
         },
       };
     case ActionKind.REMOVE_PROJECTS:
@@ -73,15 +83,14 @@ const selectorReducer = (state: State, action: Action): State => {
       };
     case ActionKind.TOGGLE_PROJECTS:
       // TODO: hide upstreams and downstreams if group is PROJECTS
-      const { group, projects } = payload;
       return {
         ...state,
-        [group]: {
-          ...state[group],
+        [payload.group]: {
+          ...state[payload.group],
           ...Object.fromEntries(
-            projects.map(key => [
+            payload.projects.map(key => [
               key,
-              { ...state[group][key], checked: !state[group][key].checked },
+              { ...state[payload.group][key], checked: !state[payload.group][key].checked },
             ])
           ),
         },
@@ -89,22 +98,22 @@ const selectorReducer = (state: State, action: Action): State => {
     case ActionKind.ONLY_PROJECTS:
       const newOnlyProjectState = { ...state };
 
-      newOnlyProjectState[group] = Object.fromEntries(
-        Object.keys(state[group]).map(key => [
+      newOnlyProjectState[payload.group] = Object.fromEntries(
+        Object.keys(state[payload.group]).map(key => [
           key,
-          { ...state[group][key], checked: payload.projects.includes(key) },
+          { ...state[payload.group][key], checked: payload.projects.includes(key) },
         ])
       );
 
       return newOnlyProjectState;
 
     case ActionKind.TOGGLE_ENTIRE_GROUP:
-      const newCheckedValue = !determineSwitchStatus(state, payload.group);
+      const newCheckedValue = !deriveSwitchStatus(state, payload.group);
       const newGroupToggledState = { ...state };
-      newGroupToggledState[group] = Object.fromEntries(
-        Object.keys(state[group]).map(key => [
+      newGroupToggledState[payload.group] = Object.fromEntries(
+        Object.keys(state[payload.group]).map(key => [
           key,
-          { ...state[group][key], checked: newCheckedValue },
+          { ...state[payload.group][key], checked: newCheckedValue },
         ])
       );
 
@@ -115,7 +124,7 @@ const selectorReducer = (state: State, action: Action): State => {
 };
 
 // TODO(perf): call with useMemo().
-const determineSwitchStatus = (state: State, group: Group): boolean => {
+const deriveSwitchStatus = (state: State, group: Group): boolean => {
   return (
     Object.keys(state[group]).length > 0 &&
     Object.keys(state[group]).every(key => state[group][key].checked)
@@ -128,13 +137,64 @@ const initialState: State = {
   [Group.DOWNSTREAM]: {},
 };
 
-const ProjectGroup = ({title}) => {
-  return <div>
-    {title}
-  </div>
-}
+const ProjectGroup = ({ title, group, collapsible }: { title: string; group: Group; collapsible?: boolean }) => {
+  const dispatch = useDispatch();
+  const state = useReducerState();
 
-const Selector = styled.div({
+  return (
+    <div>
+      {collapsible && <ExpandMoreIcon />} {title}
+      <Switch
+        onChange={() =>
+          dispatch({
+            type: ActionKind.TOGGLE_ENTIRE_GROUP,
+            payload: { group: group },
+          })
+        }
+        checked={deriveSwitchStatus(state, group)}
+        disabled={Object.keys(state[group]).length == 0}
+      />
+      <div>
+        {Object.keys(state[group]).map(key => (
+          <div key={key} className="project">
+            <Checkbox
+              name={key}
+              onChange={() =>
+                dispatch({
+                  type: ActionKind.TOGGLE_PROJECTS,
+                  payload: { group, projects: [key] },
+                })
+              }
+              checked={state[group][key].checked ? true : false}
+            />
+            {key}
+            <div
+              className="only"
+              onClick={() =>
+                dispatch({
+                  type: ActionKind.ONLY_PROJECTS,
+                  payload: { group, projects: [key] },
+                })
+              }
+            >
+              Only
+            </div>
+            <ClearIcon
+              onClick={() =>
+                dispatch({
+                  type: ActionKind.REMOVE_PROJECTS,
+                  payload: { group, projects: [key] },
+                })
+              }
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const SelectorContainer = styled.div({
   backgroundColor: "#F5F6FD",
   ".project": {
     display: "flex",
@@ -176,96 +236,29 @@ const ProjectSelector = () => {
   };
 
   return (
-    <Selector>
-      <div>
-        <LayersIcon />
-        Dash
-      </div>
-      <div>
-        <TextField
-          placeholder="Add a project"
-          value={customProject}
-          onChange={e => setCustomProject(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && handleAdd()}
-        />
-      </div>
-      <ProjectGroup title="Projects" />
-      <div>
-        Projects
-        <Switch
-          onChange={() =>
-            dispatch({ type: ActionKind.TOGGLE_ENTIRE_GROUP, payload: { group: Group.PROJECTS } })
-          }
-          checked={determineSwitchStatus(state, Group.PROJECTS)}
-          disabled={
-            Object.keys(state[Group.PROJECTS]).length + Object.keys(state[Group.PROJECTS]).length ==
-            0
-          }
-        />
-      </div>
-      <div>
-        {Object.keys(state[Group.PROJECTS]).map(key => (
-          <div key={key} className="project">
-            <Checkbox
-              name={key}
-              onChange={() =>
-                dispatch({
-                  type: ActionKind.TOGGLE_PROJECTS,
-                  payload: { group: Group.PROJECTS, projects: [key] },
-                })
-              }
-              checked={state[Group.PROJECTS][key].checked ? true : false}
-            />
-            {key}
-            <div
-              className="only"
-              onClick={() =>
-                dispatch({
-                  type: ActionKind.ONLY_PROJECTS,
-                  payload: { group: Group.PROJECTS, projects: [key] },
-                })
-              }
-            >
-              Only
-            </div>
-            <ClearIcon
-              onClick={() =>
-                dispatch({
-                  type: ActionKind.REMOVE_PROJECTS,
-                  payload: { group: Group.PROJECTS, projects: [key] },
-                })
-              }
+    <DispatchContext.Provider value={dispatch}>
+      <StateContext.Provider value={state}>
+        <SelectorContainer>
+          <div>
+            <LayersIcon />
+            Dash
+          </div>
+          <div>
+            <TextField
+              placeholder="Add a project"
+              value={customProject}
+              onChange={e => setCustomProject(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleAdd()}
             />
           </div>
-        ))}
-      </div>
-      <Divider />
-      <div>
-        <ExpandMoreIcon />
-        Downstreams
-        <Switch />
-      </div>
-      <div>
-        {upstreams.map(v => (
-          <div key={v}>
-            <Checkbox /> {v}
-          </div>
-        ))}
-      </div>
-      <Divider />
-      <div>
-        <ExpandMoreIcon />
-        Upstreams
-        <Switch />
-      </div>
-      <div>
-        {downstreams.map(v => (
-          <div key={v}>
-            <Checkbox /> {v}
-          </div>
-        ))}
-      </div>
-    </Selector>
+          <ProjectGroup title="Projects" group={Group.PROJECTS} />
+          <Divider />
+          <ProjectGroup title="Upstreams" group={Group.UPSTREAM} collapsible />
+          <Divider />
+          <ProjectGroup title="Downstreams" group={Group.DOWNSTREAM} collapsible />
+        </SelectorContainer>
+      </StateContext.Provider>
+    </DispatchContext.Provider>
   );
 };
 
