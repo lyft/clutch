@@ -31,6 +31,7 @@ enum UpstreamClusterType {
 type ExperimentData = {
   downstreamCluster: string;
   upstreamCluster: string;
+  environmentValue: string;
   upstreamClusterType: UpstreamClusterType;
   requestsPercentage: number;
   hostsPercentage: number;
@@ -40,12 +41,16 @@ type ExperimentData = {
 };
 
 interface ExperimentDetailsProps {
+  upstreamClusterTemplate: string;
+  downstreamClusterTemplate: string;
   upstreamClusterTypeSelectionEnabled: boolean;
   environments: Environment[];
   onStart: (ExperimentData) => void;
 }
 
 const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
+  upstreamClusterTemplate,
+  downstreamClusterTemplate,
   upstreamClusterTypeSelectionEnabled,
   environments,
   onStart,
@@ -60,11 +65,31 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   const experimentData = experimentDataState[0];
   const navigate = useNavigate();
 
+  const evaluateClusterTemplate = (
+    clusterTemplate: string,
+    cluster: string,
+    environment: string
+  ) => {
+    return clusterTemplate.replace("$CLUSTER", cluster).replace("$ENVIRONMENT", environment);
+  };
+
   const handleOnCancel = () => {
     navigate("/experimentation/list");
   };
 
   const handleOnSubmit = () => {
+    const environment = experimentData.environmentValue;
+    experimentData.upstreamCluster = evaluateClusterTemplate(
+      upstreamClusterTemplate,
+      experimentData.upstreamCluster,
+      environment
+    );
+    experimentData.downstreamCluster = evaluateClusterTemplate(
+      downstreamClusterTemplate,
+      experimentData.downstreamCluster,
+      environment
+    );
+
     onStart(experimentData);
   };
 
@@ -108,16 +133,16 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       inputProps: { defaultValue: undefined },
     },
     {
-      name: "environment",
+      name: "environmentValue",
       label: "Environment",
       type: "select",
       inputProps: {
-        options: environments.map((env) => {
-            return {
-              label: env.label,
-              value: env.value,
-            }
-          }),
+        options: environments.map(env => {
+          return {
+            label: env.label,
+            value: env.value,
+          };
+        }),
         defaultValue: environments.length > 0 ? environments[0].value : "",
       },
       visible: environments.length > 0,
@@ -196,17 +221,35 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
 };
 
 type Environment = {
-  label: string;
+  // If provided, it's displayed to the user instead of environment's value.
+  label?: string;
+  // The value that's represents the environment i.e. staging or production.
   value: string;
-}
+};
 
 interface StartExperimentProps extends BaseWorkflowProps {
+  // The template that's used to resolve the final name of a upstream cluster i.e., "$CLUSTER-$ENVIRONMENT".
+  // It supports the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to 'undefined' otherwise.
+  upstreamClusterTemplate?: string;
+  // The template that's used to resolve the final name of a downstream cluster i.e., "$CLUSTER-$ENVIRONMENT".
+  // It supports the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to 'undefined' otherwise.
+  downstreamClusterTemplate?: string;
+  // Whether a user should be able to select if an upstream cluster is an external or internal dependency.
   upstreamClusterTypeSelectionEnabled?: boolean;
+  // The list of environments that a user should be able to choose from
   environments?: Environment[];
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
+  upstreamClusterTemplate = `$CLUSTER`,
+  downstreamClusterTemplate = `$CLUSTER`,
   upstreamClusterTypeSelectionEnabled = false,
   environments = [],
 }) => {
@@ -292,6 +335,8 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   return (
     <PageLayout heading={heading} error={error}>
       <ExperimentDetails
+        upstreamClusterTemplate={upstreamClusterTemplate}
+        downstreamClusterTemplate={downstreamClusterTemplate}
         upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
         environments={environments}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
