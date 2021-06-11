@@ -56,7 +56,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
     cluster: string,
     environment: string
   ) => {
-    return clusterTemplate.replace("$CLUSTER", cluster).replace("$ENVIRONMENT", environment);
+    return clusterTemplate.replace("$[CLUSTER]", cluster).replace("$[ENVIRONMENT]", environment);
   };
 
   const handleOnCancel = () => {
