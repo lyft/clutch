@@ -125,8 +125,8 @@ func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
 	const unsentEventsQuery = `
 		UPDATE audit_events
 		SET sent = TRUE
-		WHERE sent = FALSE
-		RETURNING id, occurred_at, details
+		WHERE id IN (SELECT id FROM audit_events WHERE sent = FALSE LIMIT 100)
+		RETURNING id, occurred_at, details;
 	`
 
 	return c.query(ctx, unsentEventsQuery)
@@ -185,6 +185,24 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 	}
 
 	return events, nil
+}
+
+func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {
+	var lock bool
+	if err := c.db.QueryRowContext(ctx, "SELECT pg_try_advisory_lock($1);", lockID).Scan(&lock); err != nil {
+		c.logger.Error("Unable to query for a advisory lock", zap.Error(err))
+		return false, err
+	}
+	return lock, nil
+}
+
+func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
+	var unlock bool
+	if err := c.db.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockID).Scan(&unlock); err != nil {
+		c.logger.Error("Unable to perform an advisory unlock", zap.Error(err))
+		return false, err
+	}
+	return unlock, nil
 }
 
 type status struct {
