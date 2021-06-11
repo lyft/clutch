@@ -98,3 +98,11 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 
 	return events, nil
 }
+
+func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {
+	return true, nil
+}
+
+func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
+	return true, nil
+}

@@ -18,4 +18,8 @@ type Storage interface {
 	// Used for services and modules to read past events within a timerange.
 	// If end is nil, should search until the current time.
 	ReadEvents(ctx context.Context, start time.Time, end *time.Time) ([]*auditv1.Event, error)
+
+	// Basic Locking functions to provide concurrency control.
+	AttemptLock(ctx context.Context, lockID uint32) (bool, error)
+	ReleaseLock(ctx context.Context, lockID uint32) (bool, error)
 }
