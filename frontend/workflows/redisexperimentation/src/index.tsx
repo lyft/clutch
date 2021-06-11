@@ -1,6 +1,6 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
-import StartRedisExperiment from "./start-experiment";
+import { StartExperiment } from "./start-experiment";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
