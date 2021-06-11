@@ -23,5 +23,3 @@ type Storage interface {
 	AttemptLock(ctx context.Context, lockID uint32) (bool, error)
 	ReleaseLock(ctx context.Context, lockID uint32) (bool, error)
 }
-
-
