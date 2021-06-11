@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import StartRedisExperiment from "../start-experiment";
+import { StartExperiment } from "../start-experiment";
 
 jest.mock("react-router-dom", () => {
   return {
@@ -14,7 +14,7 @@ describe("Start Experiment Run workflow", () => {
   let component;
 
   beforeAll(() => {
-    component = shallow(<StartRedisExperiment heading="testing" />);
+    component = shallow(<StartExperiment heading="testing" />);
   });
 
   it("renders correctly", () => {

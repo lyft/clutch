@@ -12,12 +12,11 @@ import {
   DialogContent,
   Form,
 } from "@clutch-sh/core";
-import { PageLayout } from "@clutch-sh/experimentation";
+import { FormFields, PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import type { FormItem } from "./form-fields";
-import FormFields from "./form-fields";
+import type { FormItem } from "../../experimentation/src/core/form-fields";
 
 enum FaultType {
   ABORT = "Abort",

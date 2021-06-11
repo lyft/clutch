@@ -1,5 +1,6 @@
 import type { WorkflowConfiguration } from "@clutch-sh/core";
 
+import FormFields from "./core/form-fields";
 import PageLayout from "./core/page-layout";
 import ListExperiments from "./list-experiments";
 import ViewExperimentRun from "./view-experiment-run";
@@ -33,4 +34,4 @@ const register = (): WorkflowConfiguration => {
 
 export default register;
 
-export { PageLayout };
+export { PageLayout, FormFields };
