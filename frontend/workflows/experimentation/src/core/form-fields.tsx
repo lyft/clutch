@@ -57,7 +57,7 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
   const [data, setData] = state;
 
   return (
-    <FieldContainer key="field_container">
+    <FieldContainer>
       {items.map(field => {
         if (field.type === "title") {
           return (
