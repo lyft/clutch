@@ -137,7 +137,15 @@ const initialState: State = {
   [Group.DOWNSTREAM]: {},
 };
 
-const ProjectGroup = ({ title, group, collapsible }: { title: string; group: Group; collapsible?: boolean }) => {
+const ProjectGroup = ({
+  title,
+  group,
+  collapsible,
+}: {
+  title: string;
+  group: Group;
+  collapsible?: boolean;
+}) => {
   const dispatch = useDispatch();
   const state = useReducerState();
 
@@ -155,6 +163,7 @@ const ProjectGroup = ({ title, group, collapsible }: { title: string; group: Gro
         disabled={Object.keys(state[group]).length == 0}
       />
       <div>
+        {Object.keys(state[group]).length == 0 && <div>No projects in this group.</div>}
         {Object.keys(state[group]).map(key => (
           <div key={key} className="project">
             <Checkbox
@@ -179,14 +188,16 @@ const ProjectGroup = ({ title, group, collapsible }: { title: string; group: Gro
             >
               Only
             </div>
-            {state[group][key].custom && <ClearIcon
-              onClick={() =>
-                dispatch({
-                  type: ActionKind.REMOVE_PROJECTS,
-                  payload: { group, projects: [key] },
-                })
-              }
-            />}
+            {state[group][key].custom && (
+              <ClearIcon
+                onClick={() =>
+                  dispatch({
+                    type: ActionKind.REMOVE_PROJECTS,
+                    payload: { group, projects: [key] },
+                  })
+                }
+              />
+            )}
           </div>
         ))}
       </div>
