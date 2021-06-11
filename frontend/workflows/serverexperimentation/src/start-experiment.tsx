@@ -41,11 +41,13 @@ type ExperimentData = {
 
 interface ExperimentDetailsProps {
   upstreamClusterTypeSelectionEnabled: boolean;
+  environments: Environment[];
   onStart: (ExperimentData) => void;
 }
 
 const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   upstreamClusterTypeSelectionEnabled,
+  environments,
   onStart,
 }) => {
   const initialExperimentData = {
@@ -104,6 +106,21 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       type: "text",
       validation: yup.string().label("Upstream Cluster").required(),
       inputProps: { defaultValue: undefined },
+    },
+    {
+      name: "environment",
+      label: "Environment",
+      type: "select",
+      inputProps: {
+        options: environments.map((env) => {
+            return {
+              label: env.label,
+              value: env.value,
+            }
+          }),
+        defaultValue: environments.length > 0 ? environments[0].value : "",
+      },
+      visible: environments.length > 0,
     },
     faultInjectionClusterRadioGroup,
     {
@@ -178,13 +195,20 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   );
 };
 
+type Environment = {
+  label: string;
+  value: string;
+}
+
 interface StartExperimentProps extends BaseWorkflowProps {
   upstreamClusterTypeSelectionEnabled?: boolean;
+  environments?: Environment[];
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
   upstreamClusterTypeSelectionEnabled = false,
+  environments = [],
 }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(undefined);
@@ -269,6 +293,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
     <PageLayout heading={heading} error={error}>
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
+        environments={environments}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
       />
       <Dialog
