@@ -3,7 +3,7 @@ import * as React from "react";
 import _ from "lodash";
 
 import { Button, Checkbox, Switch, TextField } from "@clutch-sh/core";
-import { Divider, IconButton } from "@material-ui/core";
+import { Divider, IconButton, LinearProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
@@ -12,34 +12,54 @@ import LayersIcon from "@material-ui/icons/Layers";
 
 import styled from "@emotion/styled";
 
-enum ActionKind {
-  ADD_PROJECTS,
-  REMOVE_PROJECTS,
-  TOGGLE_PROJECTS,
-  TOGGLE_ENTIRE_GROUP,
-  ONLY_PROJECTS,
-}
-
 enum Group {
   PROJECTS,
   UPSTREAM,
   DOWNSTREAM,
 }
 
-interface Action {
-  type: ActionKind;
-  payload: Payload;
+type UserActionKind =
+  | "ADD_PROJECTS"
+  | "REMOVE_PROJECTS"
+  | "TOGGLE_PROJECTS"
+  | "TOGGLE_ENTIRE_GROUP"
+  | "ONLY_PROJECTS";
+
+interface UserAction {
+  type: UserActionKind;
+  payload: UserPayload;
 }
 
-interface Payload {
+interface UserPayload {
   group: Group;
   projects?: string[];
 }
+
+type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END";
+
+interface BackgroundAction {
+  type: BackgroundActionKind;
+  payload?: BackgroundPayload;
+}
+
+interface BackgroundPayload {
+  result: any;
+}
+
+type Action = BackgroundAction | UserAction;
 
 interface State {
   [Group.PROJECTS]: GroupState;
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
+
+  projectData: { [key: string]: Project };
+  loading: boolean;
+}
+
+interface Project {
+  upstreams: string[];
+  downstreams: string[];
 }
 
 interface GroupState {
@@ -63,63 +83,70 @@ const useDispatch = () => {
 };
 
 const selectorReducer = (state: State, action: Action): State => {
-  const { type, payload } = action;
 
-  switch (type) {
-    case ActionKind.ADD_PROJECTS:
-      // TODO: don't allow adding if it already exists.
+  switch (action.type) {
+    case "ADD_PROJECTS":
+      // TODO: don't add if it already exists.
+      // TODO: refresh API if project or its upstreams and downstreams are not present in state.
       return {
         ...state,
-        [payload.group]: {
-          ...state[payload.group],
-          ...Object.fromEntries(payload.projects.map(v => [v, { checked: true, custom: true }])),
+        [action.payload.group]: {
+          ...state[action.payload.group],
+          ...Object.fromEntries(action.payload.projects.map(v => [v, { checked: true, custom: true }])),
         },
       };
-    case ActionKind.REMOVE_PROJECTS:
+    case "REMOVE_PROJECTS":
       // TODO: also remove any upstreams or downstreams related (only) to the project.
       return {
         ...state,
-        [payload.group]: _.omit(state[payload.group], payload.projects),
+        [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
       };
-    case ActionKind.TOGGLE_PROJECTS:
+    case "TOGGLE_PROJECTS":
       // TODO: hide upstreams and downstreams if group is PROJECTS
       return {
         ...state,
-        [payload.group]: {
-          ...state[payload.group],
+        [action.payload.group]: {
+          ...state[action.payload.group],
           ...Object.fromEntries(
-            payload.projects.map(key => [
+            action.payload.projects.map(key => [
               key,
-              { ...state[payload.group][key], checked: !state[payload.group][key].checked },
+              { ...state[action.payload.group][key], checked: !state[action.payload.group][key].checked },
             ])
           ),
         },
       };
-    case ActionKind.ONLY_PROJECTS:
+    case "ONLY_PROJECTS":
       const newOnlyProjectState = { ...state };
 
-      newOnlyProjectState[payload.group] = Object.fromEntries(
-        Object.keys(state[payload.group]).map(key => [
+      newOnlyProjectState[action.payload.group] = Object.fromEntries(
+        Object.keys(state[action.payload.group]).map(key => [
           key,
-          { ...state[payload.group][key], checked: payload.projects.includes(key) },
+          { ...state[action.payload.group][key], checked: action.payload.projects.includes(key) },
         ])
       );
 
       return newOnlyProjectState;
 
-    case ActionKind.TOGGLE_ENTIRE_GROUP:
-      const newCheckedValue = !deriveSwitchStatus(state, payload.group);
+    case "TOGGLE_ENTIRE_GROUP":
+      const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
       const newGroupToggledState = { ...state };
-      newGroupToggledState[payload.group] = Object.fromEntries(
-        Object.keys(state[payload.group]).map(key => [
+      newGroupToggledState[action.payload.group] = Object.fromEntries(
+        Object.keys(state[action.payload.group]).map(key => [
           key,
-          { ...state[payload.group][key], checked: newCheckedValue },
+          { ...state[action.payload.group][key], checked: newCheckedValue },
         ])
       );
 
       return newGroupToggledState;
+
+    // Background actions.
+    case "HYDRATE_START":
+      return { ...state, loading: true };
+
+    case "HYDRATE_END":
+      return { ...state, loading: false };
     default:
-      throw new Error(`unknown resolver action: ${type}`);
+      throw new Error(`unknown resolver action`);
   }
 };
 
@@ -135,6 +162,8 @@ const initialState: State = {
   [Group.PROJECTS]: {},
   [Group.UPSTREAM]: {},
   [Group.DOWNSTREAM]: {},
+  loading: true,
+  projectData: {}
 };
 
 const ProjectGroup = ({
@@ -151,17 +180,21 @@ const ProjectGroup = ({
 
   return (
     <div>
-      {collapsible && <ExpandMoreIcon />} {title}
-      <Switch
-        onChange={() =>
-          dispatch({
-            type: ActionKind.TOGGLE_ENTIRE_GROUP,
-            payload: { group: group },
-          })
-        }
-        checked={deriveSwitchStatus(state, group)}
-        disabled={Object.keys(state[group]).length == 0}
-      />
+      <div>
+        {collapsible && <ExpandMoreIcon />}
+        {title}
+        {!collapsible && "All"}
+        <Switch
+          onChange={() =>
+            dispatch({
+              type: "TOGGLE_ENTIRE_GROUP",
+              payload: { group: group },
+            })
+          }
+          checked={deriveSwitchStatus(state, group)}
+          disabled={Object.keys(state[group]).length == 0}
+        />
+      </div>
       <div>
         {Object.keys(state[group]).length == 0 && <div>No projects in this group.</div>}
         {Object.keys(state[group]).map(key => (
@@ -170,7 +203,7 @@ const ProjectGroup = ({
               name={key}
               onChange={() =>
                 dispatch({
-                  type: ActionKind.TOGGLE_PROJECTS,
+                  type: "TOGGLE_PROJECTS",
                   payload: { group, projects: [key] },
                 })
               }
@@ -181,7 +214,7 @@ const ProjectGroup = ({
               className="only"
               onClick={() =>
                 dispatch({
-                  type: ActionKind.ONLY_PROJECTS,
+                  type: "ONLY_PROJECTS",
                   payload: { group, projects: [key] },
                 })
               }
@@ -192,7 +225,7 @@ const ProjectGroup = ({
               <ClearIcon
                 onClick={() =>
                   dispatch({
-                    type: ActionKind.REMOVE_PROJECTS,
+                    type: "REMOVE_PROJECTS",
                     payload: { group, projects: [key] },
                   })
                 }
@@ -229,18 +262,31 @@ const ProjectSelector = () => {
   const [state, dispatch] = React.useReducer(selectorReducer, initialState);
 
   React.useEffect(() => {
-    // Here we would call the API and load the initial set of projects.
-  }, []);
+    console.log("effect");
+    // Determine if any hydration is required.
+    // - Are any services missing from state.projectdata?
+    // - Are projects empty?
+    let allPresent = true;
+    Object.keys(state[Group.PROJECTS]).forEach(p => {
+      if (allPresent && !(p in state.projectData)) {
+        allPresent = false;
+      }
+    });
 
-  const upstreams = ["authors", "thumbnails"];
-  const downstreams = ["coffee", "shelves"];
+    if (Object.keys(state[Group.PROJECTS]).length == 0 || !allPresent) {
+      console.log("calling API!")
+      dispatch({ type: "HYDRATE_START"});
+      // Here we would call the API and load projects if needed.
+      dispatch({ type: "HYDRATE_END", payload: {result: {}} });
+    }
+  }, [state[Group.PROJECTS]]);
 
   const handleAdd = () => {
     if (customProject === "") {
       return;
     }
     dispatch({
-      type: ActionKind.ADD_PROJECTS,
+      type: "ADD_PROJECTS",
       payload: { group: Group.PROJECTS, projects: [customProject] },
     });
     setCustomProject("");
@@ -250,12 +296,14 @@ const ProjectSelector = () => {
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
         <SelectorContainer>
+          {state.loading && <LinearProgress color="secondary" />}
           <div>
             <LayersIcon />
             Dash
           </div>
           <div>
             <TextField
+              disabled={state.loading}
               placeholder="Add a project"
               value={customProject}
               onChange={e => setCustomProject(e.target.value)}
