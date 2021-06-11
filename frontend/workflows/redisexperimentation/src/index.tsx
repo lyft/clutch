@@ -18,7 +18,7 @@ const register = (): WorkflowConfiguration => {
         path: "/start",
         displayName: "Start Experiment",
         description: "Start Redis Experiment.",
-        component: StartRedisExperiment,
+        component: StartExperiment,
       },
     },
   };
