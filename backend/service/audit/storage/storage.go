@@ -2,8 +2,6 @@ package storage
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/binary"
 	"time"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -22,12 +20,8 @@ type Storage interface {
 	ReadEvents(ctx context.Context, start time.Time, end *time.Time) ([]*auditv1.Event, error)
 
 	// Basic Locking functions to provide concurrency control.
-	GetLockID(lockID string) uint32
 	AttemptLock(ctx context.Context, lockID uint32) (bool, error)
 	ReleaseLock(ctx context.Context, lockID uint32) (bool, error)
 }
 
-func ConvertLockToUint32(lockID string) uint32 {
-	x := sha256.New().Sum([]byte(lockID))
-	return binary.BigEndian.Uint32(x)
-}
+

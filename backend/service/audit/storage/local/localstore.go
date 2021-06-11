@@ -106,7 +106,3 @@ func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {
 func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
 	return true, nil
 }
-
-func (c *client) GetLockID(lockID string) uint32 {
-	return storage.ConvertLockToUint32(lockID)
-}

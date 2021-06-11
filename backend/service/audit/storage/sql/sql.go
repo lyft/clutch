@@ -205,10 +205,6 @@ func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
 	return unlock, nil
 }
 
-func (c *client) GetLockID(lockID string) uint32 {
-	return storage.ConvertLockToUint32(lockID)
-}
-
 type status struct {
 	Code    int    `json:"code"`
 	Message string `json:"message,omitempty"`
