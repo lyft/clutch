@@ -171,7 +171,7 @@ func (c *client) poll() {
 	ticker := time.NewTicker(time.Second * time.Duration(ran.Int64()+minTime))
 	for {
 		<-ticker.C
-		ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(10*time.Second))
+		ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(30*time.Second))
 
 		isLocked, err := c.storage.AttemptLock(ctx, lockID)
 		if err != nil {
@@ -179,11 +179,11 @@ func (c *client) poll() {
 		}
 
 		if isLocked {
-			readAndFanout(ctx)
 			_, err := c.storage.ReleaseLock(ctx, lockID)
 			if err != nil {
 				c.logger.Error("Error trying to release lock", zap.Error(err))
 			}
+			readAndFanout(ctx)
 		}
 
 		cancel()
