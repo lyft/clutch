@@ -21,11 +21,6 @@ enum FaultType {
   LATENCY = "Latency",
 }
 
-interface RedisServiceCommandTargettingState {
-  downstreamCluster: string;
-  upstreamRedisCluster: string;
-}
-
 type ExperimentData = {
   downstreamCluster: string;
   upstreamRedisCluster: string;
@@ -45,8 +40,8 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   upstreamRedisClusterTemplate,
   downstreamClusterTemplate,
   environments,
-  onStart
- }) => {
+  onStart,
+}) => {
   const initialExperimentData = {
     faultType: FaultType.ERROR,
     environmentValue: environments.length > 0 ? environments[0].value : "",

@@ -14,14 +14,39 @@ jest.mock("react-router-dom", () => {
 describe("Start Experiment workflow", () => {
   it("renders correctly", () => {
     const component = shallow(
-      <ExperimentDetails upstreamClusterTypeSelectionEnabled={false} onStart={() => {}} />
+      <ExperimentDetails
+        upstreamClusterTemplate=""
+        downstreamClusterTemplate=""
+        upstreamClusterTypeSelectionEnabled={false}
+        environments={[]}
+        onStart={() => {}}
+      />
     );
     expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
   });
 
   it("renders correctly with upstream cluster type selection enabled", () => {
     const component = shallow(
-      <ExperimentDetails upstreamClusterTypeSelectionEnabled onStart={() => {}} />
+      <ExperimentDetails
+        upstreamClusterTemplate=""
+        downstreamClusterTemplate=""
+        upstreamClusterTypeSelectionEnabled
+        environments={[]}
+        onStart={() => {}}
+      />
+    );
+    expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
+  });
+
+  it("renders correctly with environments", () => {
+    const component = shallow(
+      <ExperimentDetails
+        upstreamClusterTemplate=""
+        downstreamClusterTemplate=""
+        upstreamClusterTypeSelectionEnabled={false}
+        environments={[{ value: "staging" }]}
+        onStart={() => {}}
+      />
     );
     expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
   });

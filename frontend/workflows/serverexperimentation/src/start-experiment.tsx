@@ -222,9 +222,9 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
 };
 
 type Environment = {
-  // If provided, it's displayed to the user instead of environment's value i.e. 'Staging' or 'Production'.
+  // If provided, it's displayed to the user instead of environment's value i.e., 'Staging' or 'Production'.
   label?: string;
-  // The value that represents the environment i.e. 'staging' or 'production'.
+  // The value that represents the environment i.e., 'staging' or 'production'.
   value: string;
 };
 
