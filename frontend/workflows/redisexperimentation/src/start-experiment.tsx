@@ -26,29 +26,61 @@ interface RedisServiceCommandTargettingState {
   upstreamRedisCluster: string;
 }
 
-type ExperimentData = RedisServiceCommandTargettingState & {
+type ExperimentData = {
+  downstreamCluster: string;
+  upstreamRedisCluster: string;
+  environmentValue: string;
   faultType: FaultType;
   percentage: number;
 };
 
 interface ExperimentDetailsProps {
+  upstreamRedisClusterTemplate: string;
+  downstreamClusterTemplate: string;
+  environments: Environment[];
   onStart: (ExperimentData) => void;
 }
 
-const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({ onStart }) => {
+const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
+  upstreamRedisClusterTemplate,
+  downstreamClusterTemplate,
+  environments,
+  onStart
+ }) => {
   const initialExperimentData = {
     faultType: FaultType.ERROR,
+    environmentValue: environments.length > 0 ? environments[0].value : "",
   } as ExperimentData;
 
   const experimentDataState = useState<ExperimentData>(initialExperimentData);
   const experimentData = experimentDataState[0];
   const navigate = useNavigate();
 
+  const evaluateClusterTemplate = (
+    clusterTemplate: string,
+    cluster: string,
+    environment: string
+  ) => {
+    return clusterTemplate.replace("$CLUSTER", cluster).replace("$ENVIRONMENT", environment);
+  };
+
   const handleOnCancel = () => {
     navigate("/experimentation/list");
   };
 
   const handleOnSubmit = () => {
+    const environment = experimentData.environmentValue;
+    experimentData.upstreamRedisCluster = evaluateClusterTemplate(
+      upstreamRedisClusterTemplate,
+      experimentData.upstreamRedisCluster,
+      environment
+    );
+    experimentData.downstreamCluster = evaluateClusterTemplate(
+      downstreamClusterTemplate,
+      experimentData.downstreamCluster,
+      environment
+    );
+
     onStart(experimentData);
   };
 
@@ -66,6 +98,21 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({ onStart }) => {
       type: "text",
       validation: yup.string().label("Upstream Redis Cluster").required(),
       inputProps: { defaultValue: undefined },
+    },
+    {
+      name: "environmentValue",
+      label: "Environment",
+      type: "select",
+      inputProps: {
+        options: environments.map(env => {
+          return {
+            label: env.label,
+            value: env.value,
+          };
+        }),
+        defaultValue: initialExperimentData.environmentValue,
+      },
+      visible: environments.length > 0,
     },
     {
       name: "percentage",
@@ -113,7 +160,36 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({ onStart }) => {
   );
 };
 
-const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
+type Environment = {
+  // If provided, it's displayed to the user instead of environment's value i.e. 'Staging' or 'Production'.
+  label?: string;
+  // The value that represents the environment i.e. 'staging' or 'production'.
+  value: string;
+};
+
+interface StartExperimentProps extends BaseWorkflowProps {
+  // The template that's used to resolve the final name of an upstream redis cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
+  // It defaults to '$[CLUSTER]' and supports the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to an empty string otherwise.
+  upstreamRedisClusterTemplate?: string;
+  // The template that's used to resolve the final name of a downstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
+  // It defaults to '$[CLUSTER]' and supports the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to an empty string otherwise.
+  downstreamClusterTemplate?: string;
+  // The list of environments that a user should be able to choose from
+  environments?: Environment[];
+}
+
+const StartExperiment: React.FC<StartExperimentProps> = ({
+  heading,
+  upstreamRedisClusterTemplate = "$[CLUSTER]",
+  downstreamClusterTemplate = "$[CLUSTER]",
+  environments = [],
+}) => {
   const navigate = useNavigate();
   const [error, setError] = useState<ClutchError | undefined>(undefined);
   const [experimentData, setExperimentData] = useState<ExperimentData | undefined>(undefined);
@@ -177,7 +253,12 @@ const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
 
   return (
     <PageLayout heading={heading} error={error}>
-      <ExperimentDetails onStart={experimentDetails => setExperimentData(experimentDetails)} />
+      <ExperimentDetails
+        upstreamRedisClusterTemplate={upstreamRedisClusterTemplate}
+        downstreamClusterTemplate={downstreamClusterTemplate}
+        environments={environments}
+        onStart={experimentDetails => setExperimentData(experimentDetails)}
+      />
       <Dialog
         title="Experiment Start Confirmation"
         open={experimentData !== undefined}

@@ -58,6 +58,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   const initialExperimentData = {
     upstreamClusterType: UpstreamClusterType.INTERNAL,
     faultType: FaultType.ABORT,
+    environmentValue: environments.length > 0 ? environments[0].value : "",
   } as ExperimentData;
 
   const experimentDataState = useState<ExperimentData>(initialExperimentData);
@@ -70,7 +71,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
     cluster: string,
     environment: string
   ) => {
-    return clusterTemplate.replace("$CLUSTER", cluster).replace("$ENVIRONMENT", environment);
+    return clusterTemplate.replace("$[CLUSTER]", cluster).replace("$[ENVIRONMENT]", environment);
   };
 
   const handleOnCancel = () => {
@@ -143,7 +144,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
             value: env.value,
           };
         }),
-        defaultValue: environments.length > 0 ? environments[0].value : "",
+        defaultValue: initialExperimentData.environmentValue,
       },
       visible: environments.length > 0,
     },
@@ -221,24 +222,24 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
 };
 
 type Environment = {
-  // If provided, it's displayed to the user instead of environment's value.
+  // If provided, it's displayed to the user instead of environment's value i.e. 'Staging' or 'Production'.
   label?: string;
-  // The value that's represents the environment i.e. staging or production.
+  // The value that represents the environment i.e. 'staging' or 'production'.
   value: string;
 };
 
 interface StartExperimentProps extends BaseWorkflowProps {
-  // The template that's used to resolve the final name of a upstream cluster i.e., "$CLUSTER-$ENVIRONMENT".
-  // It supports the following variables:
+  // The template that's used to resolve the final name of an upstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
+  // It defaults to '$[CLUSTER]' and  supports the following variables:
   //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
   //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
-  //                    'environments' is provided. Resolves to 'undefined' otherwise.
+  //                    'environments' is provided. Resolves to an empty string otherwise.
   upstreamClusterTemplate?: string;
-  // The template that's used to resolve the final name of a downstream cluster i.e., "$CLUSTER-$ENVIRONMENT".
-  // It supports the following variables:
+  // The template that's used to resolve the final name of a downstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
+  // It defaults to '$[CLUSTER]' and supports the following variables:
   //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
   //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
-  //                    'environments' is provided. Resolves to 'undefined' otherwise.
+  //                    'environments' is provided. Resolves to an empty string otherwise.
   downstreamClusterTemplate?: string;
   // Whether a user should be able to select if an upstream cluster is an external or internal dependency.
   upstreamClusterTypeSelectionEnabled?: boolean;
@@ -248,8 +249,8 @@ interface StartExperimentProps extends BaseWorkflowProps {
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
-  upstreamClusterTemplate = `$CLUSTER`,
-  downstreamClusterTemplate = `$CLUSTER`,
+  upstreamClusterTemplate = "$[CLUSTER]",
+  downstreamClusterTemplate = "$[CLUSTER]",
   upstreamClusterTypeSelectionEnabled = false,
   environments = [],
 }) => {
