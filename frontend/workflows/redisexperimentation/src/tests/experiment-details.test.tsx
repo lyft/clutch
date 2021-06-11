@@ -1,7 +1,7 @@
 import React from "react";
+import { FormFields } from "@clutch-sh/experimentation";
 import { shallow } from "enzyme";
 
-import { FormFields } from "@clutch-sh/experimentation";
 import { ExperimentDetails } from "../start-experiment";
 
 jest.mock("react-router-dom", () => {
@@ -13,16 +13,12 @@ jest.mock("react-router-dom", () => {
 
 describe("Start Experiment workflow", () => {
   it("renders correctly", () => {
-    const component = shallow(
-      <ExperimentDetails onStart={() => {}} />
-    );
+    const component = shallow(<ExperimentDetails onStart={() => {}} />);
     expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
   });
 
   it("renders correctly with upstream cluster type selection enabled", () => {
-    const component = shallow(
-      <ExperimentDetails onStart={() => {}} />
-    );
+    const component = shallow(<ExperimentDetails onStart={() => {}} />);
     expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
   });
 });
