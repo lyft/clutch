@@ -22,7 +22,6 @@ enum ActionKind {
 
 enum Group {
   PROJECTS,
-  CUSTOM,
   UPSTREAM,
   DOWNSTREAM,
 }
@@ -39,7 +38,6 @@ interface Payload {
 
 interface State {
   [Group.PROJECTS]: GroupState;
-  [Group.CUSTOM]: GroupState;
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
 }
@@ -51,6 +49,7 @@ interface GroupState {
 interface ProjectState {
   checked: boolean;
   hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
+  custom?: boolean;
 }
 
 const selectorReducer = (state: State, action: Action): State => {
@@ -58,7 +57,7 @@ const selectorReducer = (state: State, action: Action): State => {
 
   switch (type) {
     case ActionKind.ADD_PROJECTS:
-      // TODO: don't allow adding a group to CUSTOM if it's already in PROJECTS.
+      // TODO: don't allow adding if it already exists.
       return {
         ...state,
         [payload.group]: {
@@ -73,7 +72,7 @@ const selectorReducer = (state: State, action: Action): State => {
         [payload.group]: _.omit(state[payload.group], payload.projects),
       };
     case ActionKind.TOGGLE_PROJECTS:
-      // TODO: hide upstreams and downstreams if group is PROJECTS OR CUSTOM
+      // TODO: hide upstreams and downstreams if group is PROJECTS
       const { group, projects } = payload;
       return {
         ...state,
@@ -88,44 +87,26 @@ const selectorReducer = (state: State, action: Action): State => {
         },
       };
     case ActionKind.ONLY_PROJECTS:
-      const applyOnlyToGroups = [payload.group];
-      if (payload.group === Group.PROJECTS) {
-        // If the group is the PROJECTS group, toggle both PROJECTS and CUSTOM.
-        applyOnlyToGroups.push(Group.CUSTOM);
-      } else if (payload.group === Group.CUSTOM) {
-        applyOnlyToGroups.push(Group.PROJECTS);
-      }
-
       const newOnlyProjectState = { ...state };
 
-      applyOnlyToGroups.forEach(group => {
-        newOnlyProjectState[group] = Object.fromEntries(
-          Object.keys(state[group]).map(key => [
-            key,
-            { ...state[group][key], checked: payload.projects.includes(key) },
-          ])
-        );
-      });
+      newOnlyProjectState[group] = Object.fromEntries(
+        Object.keys(state[group]).map(key => [
+          key,
+          { ...state[group][key], checked: payload.projects.includes(key) },
+        ])
+      );
 
       return newOnlyProjectState;
 
     case ActionKind.TOGGLE_ENTIRE_GROUP:
-      const applicableGroups = [payload.group];
-      if (payload.group === Group.PROJECTS) {
-        // If the group is the PROJECTS group, toggle both PROJECTS and CUSTOM.
-        applicableGroups.push(Group.CUSTOM);
-      }
-
-      const newCheckedValue = !determineSwitchStatus(state, applicableGroups);
+      const newCheckedValue = !determineSwitchStatus(state, payload.group);
       const newGroupToggledState = { ...state };
-      applicableGroups.forEach(group => {
-        newGroupToggledState[group] = Object.fromEntries(
-          Object.keys(state[group]).map(key => [
-            key,
-            { ...state[group][key], checked: newCheckedValue },
-          ])
-        );
-      });
+      newGroupToggledState[group] = Object.fromEntries(
+        Object.keys(state[group]).map(key => [
+          key,
+          { ...state[group][key], checked: newCheckedValue },
+        ])
+      );
 
       return newGroupToggledState;
     default:
@@ -134,19 +115,24 @@ const selectorReducer = (state: State, action: Action): State => {
 };
 
 // TODO(perf): call with useMemo().
-const determineSwitchStatus = (state: State, groups: Group[]): boolean => {
+const determineSwitchStatus = (state: State, group: Group): boolean => {
   return (
-    Object.keys(state[Group.CUSTOM]).length > 0 &&
-    Object.keys(state[Group.CUSTOM]).every(key => state[Group.CUSTOM][key].checked)
+    Object.keys(state[group]).length > 0 &&
+    Object.keys(state[group]).every(key => state[group][key].checked)
   );
 };
 
 const initialState: State = {
   [Group.PROJECTS]: {},
-  [Group.CUSTOM]: {},
   [Group.UPSTREAM]: {},
   [Group.DOWNSTREAM]: {},
 };
+
+const ProjectGroup = ({title}) => {
+  return <div>
+    {title}
+  </div>
+}
 
 const Selector = styled.div({
   backgroundColor: "#F5F6FD",
@@ -178,17 +164,13 @@ const ProjectSelector = () => {
   const upstreams = ["authors", "thumbnails"];
   const downstreams = ["coffee", "shelves"];
 
-  const changeHandler = ({ target }) => {
-    // setProjects({ ...projects, [target.name]: target.checked });
-  };
-
   const handleAdd = () => {
     if (customProject === "") {
       return;
     }
     dispatch({
       type: ActionKind.ADD_PROJECTS,
-      payload: { group: Group.CUSTOM, projects: [customProject] },
+      payload: { group: Group.PROJECTS, projects: [customProject] },
     });
     setCustomProject("");
   };
@@ -207,41 +189,41 @@ const ProjectSelector = () => {
           onKeyDown={e => e.key === "Enter" && handleAdd()}
         />
       </div>
+      <ProjectGroup title="Projects" />
       <div>
         Projects
         <Switch
           onChange={() =>
             dispatch({ type: ActionKind.TOGGLE_ENTIRE_GROUP, payload: { group: Group.PROJECTS } })
           }
-          checked={determineSwitchStatus(state, [Group.PROJECTS, Group.CUSTOM])}
+          checked={determineSwitchStatus(state, Group.PROJECTS)}
           disabled={
-            Object.keys(state[Group.PROJECTS]).length + Object.keys(state[Group.CUSTOM]).length == 0
+            Object.keys(state[Group.PROJECTS]).length + Object.keys(state[Group.PROJECTS]).length ==
+            0
           }
         />
       </div>
       <div>
-        {/* {Object.keys(projects).map(key => (
-          <div key={key}>
-            <Checkbox name={key} onChange={changeHandler} checked={projects[key]} /> {key}
-          </div>
-        ))} */}
-        {Object.keys(state[Group.CUSTOM]).map(key => (
+        {Object.keys(state[Group.PROJECTS]).map(key => (
           <div key={key} className="project">
             <Checkbox
               name={key}
               onChange={() =>
                 dispatch({
                   type: ActionKind.TOGGLE_PROJECTS,
-                  payload: { group: Group.CUSTOM, projects: [key] },
+                  payload: { group: Group.PROJECTS, projects: [key] },
                 })
               }
-              checked={state[Group.CUSTOM][key].checked ? true : false}
+              checked={state[Group.PROJECTS][key].checked ? true : false}
             />
             {key}
             <div
               className="only"
-              onClick={() => 
-                dispatch({type: ActionKind.ONLY_PROJECTS, payload: {group: Group.CUSTOM, projects: [key]}})
+              onClick={() =>
+                dispatch({
+                  type: ActionKind.ONLY_PROJECTS,
+                  payload: { group: Group.PROJECTS, projects: [key] },
+                })
               }
             >
               Only
@@ -250,7 +232,7 @@ const ProjectSelector = () => {
               onClick={() =>
                 dispatch({
                   type: ActionKind.REMOVE_PROJECTS,
-                  payload: { group: Group.CUSTOM, projects: [key] },
+                  payload: { group: Group.PROJECTS, projects: [key] },
                 })
               }
             />
