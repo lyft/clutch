@@ -84,7 +84,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
         ]}
       />
       <ButtonGroup>
-        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Back" variant="neutral" onClick={() => onBack()} />
         <Button text="Resize" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
     </WizardStep>
