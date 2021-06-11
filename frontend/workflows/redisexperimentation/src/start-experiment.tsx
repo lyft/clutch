@@ -12,11 +12,9 @@ import {
   DialogContent,
   Form,
 } from "@clutch-sh/core";
-import { PageLayout } from "@clutch-sh/experimentation";
+import { FormFields, PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
-import FormFields from "./form-fields";
 
 enum FaultType {
   ERROR = "Error",
@@ -198,4 +196,4 @@ const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
   );
 };
 
-export default StartExperiment;
+export { StartExperiment, ExperimentDetails };

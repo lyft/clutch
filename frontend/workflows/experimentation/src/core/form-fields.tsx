@@ -57,7 +57,7 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
   const [data, setData] = state;
 
   return (
-    <FieldContainer>
+    <FieldContainer key="field_container">
       {items.map(field => {
         if (field.type === "title") {
           return (
@@ -70,7 +70,7 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
           const customProps: TextFieldProps = field.inputProps as TextFieldProps;
           return (
             <TextField
-              key={field.name}
+              key={field.label}
               name={field.name}
               label={field.label}
               defaultValue={customProps.defaultValue}
@@ -90,7 +90,7 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
           const customProps: RadioGroupProps = field.inputProps as RadioGroupProps;
           return (
             <RadioGroup
-              key={field.name}
+              key={field.label}
               name={field.name}
               label={field.label}
               disabled={customProps.disabled}
@@ -110,8 +110,8 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
           const customProps: SelectProps = field.inputProps as SelectProps;
           return (
             <Select
+              key={field.label}
               name={field.name}
-              key={field.name}
               label={field.label}
               options={customProps.options}
               defaultOption={customProps.options
