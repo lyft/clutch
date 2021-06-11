@@ -2,9 +2,7 @@ package sql
 
 import (
 	"context"
-	"crypto/sha256"
 	"database/sql"
-	"encoding/binary"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -208,8 +206,7 @@ func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
 }
 
 func (c *client) GetLockID(lockID string) uint32 {
-	x := sha256.New().Sum([]byte(lockID))
-	return binary.BigEndian.Uint32(x)
+	return storage.ConvertLockToUint32(lockID)
 }
 
 type status struct {
