@@ -196,7 +196,7 @@ const ProjectGroup = ({
             })
           }
           checked={deriveSwitchStatus(state, group)}
-          disabled={Object.keys(state[group]).length == 0}
+          disabled={Object.keys(state[group]).length == 0 || state.loading}
         />
       </div>
       <div>
@@ -205,6 +205,7 @@ const ProjectGroup = ({
           <div key={key} className="project">
             <Checkbox
               name={key}
+              disabled={state.loading}
               onChange={() =>
                 dispatch({
                   type: "TOGGLE_PROJECTS",
@@ -217,7 +218,7 @@ const ProjectGroup = ({
             <div
               className="only"
               onClick={() =>
-                dispatch({
+                !state.loading && dispatch({
                   type: "ONLY_PROJECTS",
                   payload: { group, projects: [key] },
                 })
@@ -228,7 +229,7 @@ const ProjectGroup = ({
             {state[group][key].custom && (
               <ClearIcon
                 onClick={() =>
-                  dispatch({
+                  !state.loading && dispatch({
                     type: "REMOVE_PROJECTS",
                     payload: { group, projects: [key] },
                   })
