@@ -16881,8 +16881,8 @@ export namespace clutch {
                 /** ProjectResult from */
                 from?: (clutch.project.v1.ProjectResult.IFrom|null);
 
-                /** ProjectResult projects */
-                projects?: (clutch.core.project.v1.IProject|null);
+                /** ProjectResult project */
+                project?: (clutch.core.project.v1.IProject|null);
             }
 
             /** Represents a ProjectResult. */
@@ -16897,8 +16897,8 @@ export namespace clutch {
                 /** ProjectResult from. */
                 public from?: (clutch.project.v1.ProjectResult.IFrom|null);
 
-                /** ProjectResult projects. */
-                public projects?: (clutch.core.project.v1.IProject|null);
+                /** ProjectResult project. */
+                public project?: (clutch.core.project.v1.IProject|null);
 
                 /**
                  * Verifies a ProjectResult message.

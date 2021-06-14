@@ -118,10 +118,10 @@ func (m *ProjectResult) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetProjects()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetProject()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ProjectResultValidationError{
-				field:  "Projects",
+				field:  "Project",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

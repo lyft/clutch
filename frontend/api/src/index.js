@@ -40182,7 +40182,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.project.v1
                  * @interface IProjectResult
                  * @property {clutch.project.v1.ProjectResult.IFrom|null} [from] ProjectResult from
-                 * @property {clutch.core.project.v1.IProject|null} [projects] ProjectResult projects
+                 * @property {clutch.core.project.v1.IProject|null} [project] ProjectResult project
                  */
 
                 /**
@@ -40209,12 +40209,12 @@ export const clutch = $root.clutch = (() => {
                 ProjectResult.prototype.from = null;
 
                 /**
-                 * ProjectResult projects.
-                 * @member {clutch.core.project.v1.IProject|null|undefined} projects
+                 * ProjectResult project.
+                 * @member {clutch.core.project.v1.IProject|null|undefined} project
                  * @memberof clutch.project.v1.ProjectResult
                  * @instance
                  */
-                ProjectResult.prototype.projects = null;
+                ProjectResult.prototype.project = null;
 
                 /**
                  * Verifies a ProjectResult message.
@@ -40232,10 +40232,10 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "from." + error;
                     }
-                    if (message.projects != null && message.hasOwnProperty("projects")) {
-                        let error = $root.clutch.core.project.v1.Project.verify(message.projects);
+                    if (message.project != null && message.hasOwnProperty("project")) {
+                        let error = $root.clutch.core.project.v1.Project.verify(message.project);
                         if (error)
-                            return "projects." + error;
+                            return "project." + error;
                     }
                     return null;
                 };
@@ -40257,10 +40257,10 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.project.v1.ProjectResult.from: object expected");
                         message.from = $root.clutch.project.v1.ProjectResult.From.fromObject(object.from);
                     }
-                    if (object.projects != null) {
-                        if (typeof object.projects !== "object")
-                            throw TypeError(".clutch.project.v1.ProjectResult.projects: object expected");
-                        message.projects = $root.clutch.core.project.v1.Project.fromObject(object.projects);
+                    if (object.project != null) {
+                        if (typeof object.project !== "object")
+                            throw TypeError(".clutch.project.v1.ProjectResult.project: object expected");
+                        message.project = $root.clutch.core.project.v1.Project.fromObject(object.project);
                     }
                     return message;
                 };
@@ -40280,12 +40280,12 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.defaults) {
                         object.from = null;
-                        object.projects = null;
+                        object.project = null;
                     }
                     if (message.from != null && message.hasOwnProperty("from"))
                         object.from = $root.clutch.project.v1.ProjectResult.From.toObject(message.from, options);
-                    if (message.projects != null && message.hasOwnProperty("projects"))
-                        object.projects = $root.clutch.core.project.v1.Project.toObject(message.projects, options);
+                    if (message.project != null && message.hasOwnProperty("project"))
+                        object.project = $root.clutch.core.project.v1.Project.toObject(message.project, options);
                     return object;
                 };
 
