@@ -41,13 +41,6 @@ func (m *GetProjectsRequest) Validate() error {
 		return nil
 	}
 
-	if len(m.GetNames()) < 1 {
-		return GetProjectsRequestValidationError{
-			field:  "Names",
-			reason: "value must contain at least 1 item(s)",
-		}
-	}
-
 	return nil
 }
 
@@ -107,6 +100,91 @@ var _ interface {
 	ErrorName() string
 } = GetProjectsRequestValidationError{}
 
+// Validate checks the field values on ProjectResult with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *ProjectResult) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetFrom()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ProjectResultValidationError{
+				field:  "From",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetProjects()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ProjectResultValidationError{
+				field:  "Projects",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ProjectResultValidationError is the validation error returned by
+// ProjectResult.Validate if the designated constraints aren't met.
+type ProjectResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ProjectResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ProjectResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ProjectResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ProjectResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ProjectResultValidationError) ErrorName() string { return "ProjectResultValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ProjectResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sProjectResult.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ProjectResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ProjectResultValidationError{}
+
 // Validate checks the field values on GetProjectsResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -115,13 +193,13 @@ func (m *GetProjectsResponse) Validate() error {
 		return nil
 	}
 
-	for idx, item := range m.GetProjects() {
+	for idx, item := range m.GetResults() {
 		_, _ = idx, item
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return GetProjectsResponseValidationError{
-					field:  fmt.Sprintf("Projects[%v]", idx),
+					field:  fmt.Sprintf("Results[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -188,3 +266,72 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetProjectsResponseValidationError{}
+
+// Validate checks the field values on ProjectResult_From with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ProjectResult_From) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Selected
+
+	return nil
+}
+
+// ProjectResult_FromValidationError is the validation error returned by
+// ProjectResult_From.Validate if the designated constraints aren't met.
+type ProjectResult_FromValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ProjectResult_FromValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ProjectResult_FromValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ProjectResult_FromValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ProjectResult_FromValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ProjectResult_FromValidationError) ErrorName() string {
+	return "ProjectResult_FromValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ProjectResult_FromValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sProjectResult_From.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ProjectResult_FromValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ProjectResult_FromValidationError{}
