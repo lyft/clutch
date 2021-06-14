@@ -147,11 +147,30 @@ const selectorReducer = (state: State, action: Action): State => {
       return { ...state, loading: true };
 
     case "HYDRATE_END":
+      const newPostAPICallState = { ...state, loading: false };
       // TODO: handle payload.
-      return { ...state, loading: false };
+      _.forIn(action.payload.result, (v, k) => {
+        state[Group.PROJECTS][k] = { checked: true };
+        v.upstreams.forEach(v => {
+          state[Group.UPSTREAM][v] = { checked: false };
+        });
+        v.downstreams.forEach(v => {
+          state[Group.DOWNSTREAM][v] = { checked: false };
+        });
+      });
+      return newPostAPICallState;
     default:
       throw new Error(`unknown resolver action`);
   }
+};
+
+const fakeAPI = (state: State) => {
+  return {
+    clutch: {
+      upstreams: ["rides", "locations"],
+      downstreams: ["queueworker"],
+    },
+  };
 };
 
 // TODO(perf): call with useMemo().
@@ -218,7 +237,8 @@ const ProjectGroup = ({
             <div
               className="only"
               onClick={() =>
-                !state.loading && dispatch({
+                !state.loading &&
+                dispatch({
                   type: "ONLY_PROJECTS",
                   payload: { group, projects: [key] },
                 })
@@ -229,7 +249,8 @@ const ProjectGroup = ({
             {state[group][key].custom && (
               <ClearIcon
                 onClick={() =>
-                  !state.loading && dispatch({
+                  !state.loading &&
+                  dispatch({
                     type: "REMOVE_PROJECTS",
                     payload: { group, projects: [key] },
                   })
@@ -286,7 +307,10 @@ const ProjectSelector = () => {
       console.log("calling API!", state.loading);
       dispatch({ type: "HYDRATE_START" });
       // TODO: call API and use payload.
-      setTimeout(() => dispatch({ type: "HYDRATE_END", payload: { result: {} } }), 1000);
+      setTimeout(
+        () => dispatch({ type: "HYDRATE_END", payload: { result: fakeAPI(state) } }),
+        1000
+      );
     }
   }, [state[Group.PROJECTS]]);
 
