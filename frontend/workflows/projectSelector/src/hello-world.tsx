@@ -53,21 +53,23 @@ interface State {
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
 
-  projectData: { [key: string]: Project };
+  projectData: { [projectName: string]: Project };
   loading: boolean;
 }
 
+// TODO: subout with full manifest structure (from proto def)
 interface Project {
   upstreams: string[];
   downstreams: string[];
 }
 
 interface GroupState {
-  [s: string]: ProjectState;
+  [projectName: string]: ProjectState;
 }
 
 interface ProjectState {
   checked: boolean;
+  // TODO: hidden should be derived?
   hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
   custom?: boolean;
 }
@@ -97,6 +99,8 @@ const selectorReducer = (state: State, action: Action): State => {
       };
     case "REMOVE_PROJECTS":
       // TODO: also remove any upstreams or downstreams related (only) to the project.
+      // if group == Groups.PROJECT, hide exclusive downstream upstreams
+      //
       return {
         ...state,
         [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
