@@ -83,16 +83,16 @@ const useDispatch = () => {
 };
 
 const selectorReducer = (state: State, action: Action): State => {
-
   switch (action.type) {
     case "ADD_PROJECTS":
       // TODO: don't add if it already exists.
-      // TODO: refresh API if project or its upstreams and downstreams are not present in state.
       return {
         ...state,
         [action.payload.group]: {
           ...state[action.payload.group],
-          ...Object.fromEntries(action.payload.projects.map(v => [v, { checked: true, custom: true }])),
+          ...Object.fromEntries(
+            action.payload.projects.map(v => [v, { checked: true, custom: true }])
+          ),
         },
       };
     case "REMOVE_PROJECTS":
@@ -102,7 +102,7 @@ const selectorReducer = (state: State, action: Action): State => {
         [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
       };
     case "TOGGLE_PROJECTS":
-      // TODO: hide upstreams and downstreams if group is PROJECTS
+      // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
       return {
         ...state,
         [action.payload.group]: {
@@ -110,7 +110,10 @@ const selectorReducer = (state: State, action: Action): State => {
           ...Object.fromEntries(
             action.payload.projects.map(key => [
               key,
-              { ...state[action.payload.group][key], checked: !state[action.payload.group][key].checked },
+              {
+                ...state[action.payload.group][key],
+                checked: !state[action.payload.group][key].checked,
+              },
             ])
           ),
         },
@@ -144,6 +147,7 @@ const selectorReducer = (state: State, action: Action): State => {
       return { ...state, loading: true };
 
     case "HYDRATE_END":
+      // TODO: handle payload.
       return { ...state, loading: false };
     default:
       throw new Error(`unknown resolver action`);
@@ -162,8 +166,8 @@ const initialState: State = {
   [Group.PROJECTS]: {},
   [Group.UPSTREAM]: {},
   [Group.DOWNSTREAM]: {},
-  loading: true,
-  projectData: {}
+  projectData: {},
+  loading: false,
 };
 
 const ProjectGroup = ({
@@ -265,19 +269,23 @@ const ProjectSelector = () => {
     console.log("effect");
     // Determine if any hydration is required.
     // - Are any services missing from state.projectdata?
-    // - Are projects empty?
+    // - Are projects empty (first load)?
+    // - Is loading not already in progress?
+
     let allPresent = true;
-    Object.keys(state[Group.PROJECTS]).forEach(p => {
-      if (allPresent && !(p in state.projectData)) {
+    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+      if (!(p in state.projectData)) {
         allPresent = false;
+        return false; // Stop iteration.
       }
+      return true; // Continue.
     });
 
-    if (Object.keys(state[Group.PROJECTS]).length == 0 || !allPresent) {
-      console.log("calling API!")
-      dispatch({ type: "HYDRATE_START"});
-      // Here we would call the API and load projects if needed.
-      dispatch({ type: "HYDRATE_END", payload: {result: {}} });
+    if (!state.loading && (Object.keys(state[Group.PROJECTS]).length == 0 || !allPresent)) {
+      console.log("calling API!", state.loading);
+      dispatch({ type: "HYDRATE_START" });
+      // TODO: call API and use payload.
+      setTimeout(() => dispatch({ type: "HYDRATE_END", payload: { result: {} } }), 1000);
     }
   }, [state[Group.PROJECTS]]);
 
