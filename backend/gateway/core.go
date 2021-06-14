@@ -23,7 +23,6 @@ import (
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
 	kinesismod "github.com/lyft/clutch/backend/module/kinesis"
-	projectmod "github.com/lyft/clutch/backend/module/project"
 	proxymod "github.com/lyft/clutch/backend/module/proxy"
 	resolvermod "github.com/lyft/clutch/backend/module/resolver"
 	"github.com/lyft/clutch/backend/module/sourcecontrol"
@@ -46,7 +45,6 @@ import (
 	"github.com/lyft/clutch/backend/service/envoyadmin"
 	"github.com/lyft/clutch/backend/service/github"
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
-	projectservice "github.com/lyft/clutch/backend/service/project"
 	topologyservice "github.com/lyft/clutch/backend/service/topology"
 )
 
@@ -70,7 +68,6 @@ var Modules = module.Factory{
 	healthcheck.Name:           healthcheck.New,
 	k8smod.Name:                k8smod.New,
 	kinesismod.Name:            kinesismod.New,
-	projectmod.Name:            projectmod.New,
 	proxymod.Name:              proxymod.New,
 	redisexperimentation.Name:  redisexperimentation.New,
 	resolvermod.Name:           resolvermod.New,
@@ -94,7 +91,6 @@ var Services = service.Factory{
 	k8sservice.Name:          k8sservice.New,
 	loggingsink.Name:         loggingsink.New,
 	pgservice.Name:           pgservice.New,
-	projectservice.Name:      projectservice.New,
 	slack.Name:               slack.New,
 	terminator.Name:          terminator.New,
 	topologyservice.Name:     topologyservice.New,
