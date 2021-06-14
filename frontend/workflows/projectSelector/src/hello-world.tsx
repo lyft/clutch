@@ -150,13 +150,23 @@ const selectorReducer = (state: State, action: Action): State => {
       const newPostAPICallState = { ...state, loading: false };
       // TODO: handle payload.
       _.forIn(action.payload.result, (v, k) => {
+        // Add each project to the projects list.
         state[Group.PROJECTS][k] = { checked: true };
+        state.projectData[k] = {};
+
+        // Add each upstream.
         v.upstreams.forEach(v => {
           state[Group.UPSTREAM][v] = { checked: false };
+          state.projectData[v] = {};
         });
+
+        // Add each downstream.
         v.downstreams.forEach(v => {
           state[Group.DOWNSTREAM][v] = { checked: false };
+          state.projectData[v] = {};
         });
+
+        // Update project data for each.
       });
       return newPostAPICallState;
     default:
