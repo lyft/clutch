@@ -40440,7 +40440,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a GetProjectsResponse.
                  * @memberof clutch.project.v1
                  * @interface IGetProjectsResponse
-                 * @property {Array.<clutch.project.v1.IProjectResult>|null} [results] GetProjectsResponse results
+                 * @property {Object.<string,clutch.project.v1.IProjectResult>|null} [results] GetProjectsResponse results
                  */
 
                 /**
@@ -40452,7 +40452,7 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.project.v1.IGetProjectsResponse=} [properties] Properties to set
                  */
                 function GetProjectsResponse(properties) {
-                    this.results = [];
+                    this.results = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -40461,11 +40461,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * GetProjectsResponse results.
-                 * @member {Array.<clutch.project.v1.IProjectResult>} results
+                 * @member {Object.<string,clutch.project.v1.IProjectResult>} results
                  * @memberof clutch.project.v1.GetProjectsResponse
                  * @instance
                  */
-                GetProjectsResponse.prototype.results = $util.emptyArray;
+                GetProjectsResponse.prototype.results = $util.emptyObject;
 
                 /**
                  * Verifies a GetProjectsResponse message.
@@ -40479,10 +40479,11 @@ export const clutch = $root.clutch = (() => {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.results != null && message.hasOwnProperty("results")) {
-                        if (!Array.isArray(message.results))
-                            return "results: array expected";
-                        for (let i = 0; i < message.results.length; ++i) {
-                            let error = $root.clutch.project.v1.ProjectResult.verify(message.results[i]);
+                        if (!$util.isObject(message.results))
+                            return "results: object expected";
+                        let key = Object.keys(message.results);
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.clutch.project.v1.ProjectResult.verify(message.results[key[i]]);
                             if (error)
                                 return "results." + error;
                         }
@@ -40503,13 +40504,13 @@ export const clutch = $root.clutch = (() => {
                         return object;
                     let message = new $root.clutch.project.v1.GetProjectsResponse();
                     if (object.results) {
-                        if (!Array.isArray(object.results))
-                            throw TypeError(".clutch.project.v1.GetProjectsResponse.results: array expected");
-                        message.results = [];
-                        for (let i = 0; i < object.results.length; ++i) {
-                            if (typeof object.results[i] !== "object")
+                        if (typeof object.results !== "object")
+                            throw TypeError(".clutch.project.v1.GetProjectsResponse.results: object expected");
+                        message.results = {};
+                        for (let keys = Object.keys(object.results), i = 0; i < keys.length; ++i) {
+                            if (typeof object.results[keys[i]] !== "object")
                                 throw TypeError(".clutch.project.v1.GetProjectsResponse.results: object expected");
-                            message.results[i] = $root.clutch.project.v1.ProjectResult.fromObject(object.results[i]);
+                            message.results[keys[i]] = $root.clutch.project.v1.ProjectResult.fromObject(object.results[keys[i]]);
                         }
                     }
                     return message;
@@ -40528,12 +40529,13 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.arrays || options.defaults)
-                        object.results = [];
-                    if (message.results && message.results.length) {
-                        object.results = [];
-                        for (let j = 0; j < message.results.length; ++j)
-                            object.results[j] = $root.clutch.project.v1.ProjectResult.toObject(message.results[j], options);
+                    if (options.objects || options.defaults)
+                        object.results = {};
+                    let keys2;
+                    if (message.results && (keys2 = Object.keys(message.results)).length) {
+                        object.results = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.results[keys2[j]] = $root.clutch.project.v1.ProjectResult.toObject(message.results[keys2[j]], options);
                     }
                     return object;
                 };

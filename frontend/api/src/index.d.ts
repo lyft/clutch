@@ -16990,7 +16990,7 @@ export namespace clutch {
             interface IGetProjectsResponse {
 
                 /** GetProjectsResponse results */
-                results?: (clutch.project.v1.IProjectResult[]|null);
+                results?: ({ [k: string]: clutch.project.v1.IProjectResult }|null);
             }
 
             /** Represents a GetProjectsResponse. */
@@ -17003,7 +17003,7 @@ export namespace clutch {
                 constructor(properties?: clutch.project.v1.IGetProjectsResponse);
 
                 /** GetProjectsResponse results. */
-                public results: clutch.project.v1.IProjectResult[];
+                public results: { [k: string]: clutch.project.v1.IProjectResult };
 
                 /**
                  * Verifies a GetProjectsResponse message.

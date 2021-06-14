@@ -193,13 +193,15 @@ func (m *GetProjectsResponse) Validate() error {
 		return nil
 	}
 
-	for idx, item := range m.GetResults() {
-		_, _ = idx, item
+	for key, val := range m.GetResults() {
+		_ = val
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		// no validation rules for Results[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return GetProjectsResponseValidationError{
-					field:  fmt.Sprintf("Results[%v]", idx),
+					field:  fmt.Sprintf("Results[%v]", key),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
