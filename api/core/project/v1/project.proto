@@ -16,4 +16,8 @@ message Project {
   repeated string languages = 4;
   // Allows an organization to populate any information they see fit that does not fit our schema
   map<string, google.protobuf.Value> data = 5;
+
+  // Projects that are Upstreams and Downstreams of this project
+  repeated string project_upstreams = 6;
+  repeated string project_downstreams = 7;
 }

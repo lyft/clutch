@@ -9651,6 +9651,12 @@ export namespace clutch {
 
                     /** Project data */
                     data?: ({ [k: string]: google.protobuf.IValue }|null);
+
+                    /** Project projectUpstreams */
+                    projectUpstreams?: (string[]|null);
+
+                    /** Project projectDownstreams */
+                    projectDownstreams?: (string[]|null);
                 }
 
                 /** Represents a Project. */
@@ -9676,6 +9682,12 @@ export namespace clutch {
 
                     /** Project data. */
                     public data: { [k: string]: google.protobuf.IValue };
+
+                    /** Project projectUpstreams. */
+                    public projectUpstreams: string[];
+
+                    /** Project projectDownstreams. */
+                    public projectDownstreams: string[];
 
                     /**
                      * Verifies a Project message.

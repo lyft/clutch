@@ -23178,6 +23178,8 @@ export const clutch = $root.clutch = (() => {
                      * @property {Array.<string>|null} [owners] Project owners
                      * @property {Array.<string>|null} [languages] Project languages
                      * @property {Object.<string,google.protobuf.IValue>|null} [data] Project data
+                     * @property {Array.<string>|null} [projectUpstreams] Project projectUpstreams
+                     * @property {Array.<string>|null} [projectDownstreams] Project projectDownstreams
                      */
 
                     /**
@@ -23192,6 +23194,8 @@ export const clutch = $root.clutch = (() => {
                         this.owners = [];
                         this.languages = [];
                         this.data = {};
+                        this.projectUpstreams = [];
+                        this.projectDownstreams = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -23239,6 +23243,22 @@ export const clutch = $root.clutch = (() => {
                     Project.prototype.data = $util.emptyObject;
 
                     /**
+                     * Project projectUpstreams.
+                     * @member {Array.<string>} projectUpstreams
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     */
+                    Project.prototype.projectUpstreams = $util.emptyArray;
+
+                    /**
+                     * Project projectDownstreams.
+                     * @member {Array.<string>} projectDownstreams
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     */
+                    Project.prototype.projectDownstreams = $util.emptyArray;
+
+                    /**
                      * Verifies a Project message.
                      * @function verify
                      * @memberof clutch.core.project.v1.Project
@@ -23278,6 +23298,20 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "data." + error;
                             }
+                        }
+                        if (message.projectUpstreams != null && message.hasOwnProperty("projectUpstreams")) {
+                            if (!Array.isArray(message.projectUpstreams))
+                                return "projectUpstreams: array expected";
+                            for (let i = 0; i < message.projectUpstreams.length; ++i)
+                                if (!$util.isString(message.projectUpstreams[i]))
+                                    return "projectUpstreams: string[] expected";
+                        }
+                        if (message.projectDownstreams != null && message.hasOwnProperty("projectDownstreams")) {
+                            if (!Array.isArray(message.projectDownstreams))
+                                return "projectDownstreams: array expected";
+                            for (let i = 0; i < message.projectDownstreams.length; ++i)
+                                if (!$util.isString(message.projectDownstreams[i]))
+                                    return "projectDownstreams: string[] expected";
                         }
                         return null;
                     };
@@ -23322,6 +23356,20 @@ export const clutch = $root.clutch = (() => {
                                 message.data[keys[i]] = $root.google.protobuf.Value.fromObject(object.data[keys[i]]);
                             }
                         }
+                        if (object.projectUpstreams) {
+                            if (!Array.isArray(object.projectUpstreams))
+                                throw TypeError(".clutch.core.project.v1.Project.projectUpstreams: array expected");
+                            message.projectUpstreams = [];
+                            for (let i = 0; i < object.projectUpstreams.length; ++i)
+                                message.projectUpstreams[i] = String(object.projectUpstreams[i]);
+                        }
+                        if (object.projectDownstreams) {
+                            if (!Array.isArray(object.projectDownstreams))
+                                throw TypeError(".clutch.core.project.v1.Project.projectDownstreams: array expected");
+                            message.projectDownstreams = [];
+                            for (let i = 0; i < object.projectDownstreams.length; ++i)
+                                message.projectDownstreams[i] = String(object.projectDownstreams[i]);
+                        }
                         return message;
                     };
 
@@ -23341,6 +23389,8 @@ export const clutch = $root.clutch = (() => {
                         if (options.arrays || options.defaults) {
                             object.owners = [];
                             object.languages = [];
+                            object.projectUpstreams = [];
+                            object.projectDownstreams = [];
                         }
                         if (options.objects || options.defaults)
                             object.data = {};
@@ -23367,6 +23417,16 @@ export const clutch = $root.clutch = (() => {
                             object.data = {};
                             for (let j = 0; j < keys2.length; ++j)
                                 object.data[keys2[j]] = $root.google.protobuf.Value.toObject(message.data[keys2[j]], options);
+                        }
+                        if (message.projectUpstreams && message.projectUpstreams.length) {
+                            object.projectUpstreams = [];
+                            for (let j = 0; j < message.projectUpstreams.length; ++j)
+                                object.projectUpstreams[j] = message.projectUpstreams[j];
+                        }
+                        if (message.projectDownstreams && message.projectDownstreams.length) {
+                            object.projectDownstreams = [];
+                            for (let j = 0; j < message.projectDownstreams.length; ++j)
+                                object.projectDownstreams[j] = message.projectDownstreams[j];
                         }
                         return object;
                     };
