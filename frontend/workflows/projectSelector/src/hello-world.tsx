@@ -372,6 +372,27 @@ const ProjectGroup = ({
 
 const SelectorContainer = styled.div({
   backgroundColor: "#F9FAFE",
+  border: "1px solid rgba(13, 16, 48, 0.1)",
+  boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
+  width: "245px",
+  padding: "16px",
+});
+
+// TODO: change icon, center align icon and title
+const StyledWorkflowHeader = styled.div({
+  paddingBottom: "16px",
+});
+
+const StyledWorkflowTitle = styled.span({
+  fontWeight: "bold",
+  fontSize: "20px",
+  lineHeight: "24px",
+  margin: "0px 8px",
+});
+
+// TODO: add plus icon in the text field
+const StyledProjectTextField = styled.div({
+  paddingTop: "16px",
 });
 
 const ProjectSelector = () => {
@@ -428,11 +449,12 @@ const ProjectSelector = () => {
       <StateContext.Provider value={state}>
         <SelectorContainer>
           {state.loading && <LinearProgress color="secondary" />}
-          <div>
+          <StyledWorkflowHeader>
             <LayersIcon />
-            Dash
-          </div>
-          <div>
+            <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
+          </StyledWorkflowHeader>
+          <Divider />
+          <StyledProjectTextField>
             <TextField
               disabled={state.loading}
               placeholder="Add a project"
@@ -440,7 +462,7 @@ const ProjectSelector = () => {
               onChange={e => setCustomProject(e.target.value)}
               onKeyDown={e => e.key === "Enter" && handleAdd()}
             />
-          </div>
+          </StyledProjectTextField>
           <ProjectGroup title="Projects" group={Group.PROJECTS} />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} collapsible />
