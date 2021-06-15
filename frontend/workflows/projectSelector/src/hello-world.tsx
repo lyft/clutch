@@ -228,10 +228,9 @@ const MenuItem = styled.div({
   alignItems: "center",
   "&:hover": {
     backgroundColor: "rgba(13, 16, 48, 0.03)",
-    span: {
-      // Unhide the "only" hidden child.
-      display: "inline-flex",
-    },
+  },
+  "&:hover > span": {
+    display: "inline-flex", // Unhide "only" hidden span.
   },
 });
 
