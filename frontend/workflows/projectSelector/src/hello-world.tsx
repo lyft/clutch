@@ -262,7 +262,7 @@ const initialState: State = {
 };
 
 const StyledClearIcon = styled.span({
-  color: "grey",
+  color: "rgba(13, 16, 48, 0.38)",
   display: "inline-flex",
   width: "24px",
 });
