@@ -16824,8 +16824,11 @@ export namespace clutch {
             /** Properties of a GetProjectsRequest. */
             interface IGetProjectsRequest {
 
-                /** GetProjectsRequest names */
-                names?: (string[]|null);
+                /** GetProjectsRequest projects */
+                projects?: (string[]|null);
+
+                /** GetProjectsRequest users */
+                users?: (string[]|null);
             }
 
             /** Represents a GetProjectsRequest. */
@@ -16837,8 +16840,11 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.project.v1.IGetProjectsRequest);
 
-                /** GetProjectsRequest names. */
-                public names: string[];
+                /** GetProjectsRequest projects. */
+                public projects: string[];
+
+                /** GetProjectsRequest users. */
+                public users: string[];
 
                 /**
                  * Verifies a GetProjectsRequest message.
@@ -16869,11 +16875,122 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a ProjectResult. */
+            interface IProjectResult {
+
+                /** ProjectResult from */
+                from?: (clutch.project.v1.ProjectResult.IFrom|null);
+
+                /** ProjectResult project */
+                project?: (clutch.core.project.v1.IProject|null);
+            }
+
+            /** Represents a ProjectResult. */
+            class ProjectResult implements IProjectResult {
+
+                /**
+                 * Constructs a new ProjectResult.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.project.v1.IProjectResult);
+
+                /** ProjectResult from. */
+                public from?: (clutch.project.v1.ProjectResult.IFrom|null);
+
+                /** ProjectResult project. */
+                public project?: (clutch.core.project.v1.IProject|null);
+
+                /**
+                 * Verifies a ProjectResult message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ProjectResult message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ProjectResult
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.project.v1.ProjectResult;
+
+                /**
+                 * Creates a plain object from a ProjectResult message. Also converts values to other types if specified.
+                 * @param message ProjectResult
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.project.v1.ProjectResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ProjectResult to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace ProjectResult {
+
+                /** Properties of a From. */
+                interface IFrom {
+
+                    /** From selected */
+                    selected?: (boolean|null);
+
+                    /** From users */
+                    users?: (string[]|null);
+                }
+
+                /** Represents a From. */
+                class From implements IFrom {
+
+                    /**
+                     * Constructs a new From.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.project.v1.ProjectResult.IFrom);
+
+                    /** From selected. */
+                    public selected: boolean;
+
+                    /** From users. */
+                    public users: string[];
+
+                    /**
+                     * Verifies a From message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a From message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns From
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.project.v1.ProjectResult.From;
+
+                    /**
+                     * Creates a plain object from a From message. Also converts values to other types if specified.
+                     * @param message From
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.project.v1.ProjectResult.From, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this From to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+
             /** Properties of a GetProjectsResponse. */
             interface IGetProjectsResponse {
 
-                /** GetProjectsResponse projects */
-                projects?: (clutch.core.project.v1.IProject[]|null);
+                /** GetProjectsResponse results */
+                results?: ({ [k: string]: clutch.project.v1.IProjectResult }|null);
             }
 
             /** Represents a GetProjectsResponse. */
@@ -16885,8 +17002,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.project.v1.IGetProjectsResponse);
 
-                /** GetProjectsResponse projects. */
-                public projects: clutch.core.project.v1.IProject[];
+                /** GetProjectsResponse results. */
+                public results: { [k: string]: clutch.project.v1.IProjectResult };
 
                 /**
                  * Verifies a GetProjectsResponse message.
