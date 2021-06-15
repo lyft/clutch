@@ -5,6 +5,7 @@ import _ from "lodash";
 import { Button, Checkbox, Switch, TextField } from "@clutch-sh/core";
 import { Divider, IconButton, LinearProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
@@ -206,6 +207,53 @@ const deriveSwitchStatus = (state: State, group: Group): boolean => {
   );
 };
 
+const StyledCount = styled.span({
+  color: "rgba(13, 16, 48, 0.6)",
+  backgroundColor: "rgba(13, 16, 48, 0.03)",
+  fontVariantNumeric: "tabular-nums",
+  letterSpacing: "2px",
+  borderRadius: "4px",
+  fontWeight: "bold",
+  fontSize: "12px",
+  padding: "1px 2px 1px 4px",
+  margin: "0 4px",
+});
+
+const StyledTitle = styled.span({
+  fontWeight: 500,
+});
+
+const MenuItem = styled.div({
+  display: "flex",
+  alignItems: "center",
+  "&:hover": {
+    backgroundColor: "rgba(13, 16, 48, 0.03)",
+    span: {
+      // Unhide the "only" hidden child.
+      display: "inline-flex",
+    },
+  },
+});
+
+const StyledHeader = styled.div({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+});
+
+const StyledHeaderColumn = styled.div({
+  display: "flex",
+  alignItems: "center",
+});
+
+const StyledAllText = styled.div({
+  color: "rgba(13, 16, 48, 0.38)",
+});
+
+const StyledMenuItemName = styled.span({
+  flexGrow: 1,
+});
+
 const initialState: State = {
   [Group.PROJECTS]: {},
   [Group.UPSTREAM]: {},
@@ -213,6 +261,17 @@ const initialState: State = {
   projectData: {},
   loading: false,
 };
+
+const StyledClearIcon = styled.span({
+  color: "grey",
+  display: "inline-flex",
+  width: "24px",
+});
+
+const StyledOnlyButton = styled.span({
+  marginRight: "10px",
+  color: "rgba(53, 72, 212, 1)",
+});
 
 const ProjectGroup = ({
   title,
@@ -233,32 +292,40 @@ const ProjectGroup = ({
 
   return (
     <>
-      <div>
-        <span onClick={() => setCollapsed(!collapsed)}>
-          {collapsible && (collapsed ? <ExpandMoreIcon /> : <ExpandLessIcon />)}
-        </span>
-        <span>{title}</span>
-        <span>
-          ({checkedProjects.length}
-          {numProjects > 0 && "/" + numProjects})
-        </span>
-        {!collapsible && <span>All</span>}
-        <Switch
-          onChange={() =>
-            dispatch({
-              type: "TOGGLE_ENTIRE_GROUP",
-              payload: { group: group },
-            })
-          }
-          checked={deriveSwitchStatus(state, group)}
-          disabled={numProjects == 0 || state.loading}
-        />
-      </div>
+      <StyledHeader>
+        <StyledHeaderColumn>
+          {collapsible && (
+            <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
+              {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
+            </StyledHeaderColumn>
+          )}
+          <StyledTitle>
+            {title}
+            <StyledCount>
+              {checkedProjects.length}
+              {numProjects > 0 && "/" + numProjects}
+            </StyledCount>
+          </StyledTitle>
+        </StyledHeaderColumn>
+        <StyledHeaderColumn>
+          {!collapsible && <StyledAllText>All</StyledAllText>}
+          <Switch
+            onChange={() =>
+              dispatch({
+                type: "TOGGLE_ENTIRE_GROUP",
+                payload: { group: group },
+              })
+            }
+            checked={deriveSwitchStatus(state, group)}
+            disabled={numProjects == 0 || state.loading}
+          />
+        </StyledHeaderColumn>
+      </StyledHeader>
       {!collapsed && (
         <div>
           {numProjects == 0 && <div>No projects in this group.</div>}
           {Object.keys(state[group]).map(key => (
-            <div key={key}>
+            <MenuItem key={key}>
               <Checkbox
                 name={key}
                 disabled={state.loading}
@@ -270,8 +337,9 @@ const ProjectGroup = ({
                 }
                 checked={state[group][key].checked ? true : false}
               />
-              {key}
-              <span
+              <StyledMenuItemName>{key}</StyledMenuItemName>
+              <StyledOnlyButton
+                hidden={true}
                 onClick={() =>
                   !state.loading &&
                   dispatch({
@@ -281,19 +349,21 @@ const ProjectGroup = ({
                 }
               >
                 Only
-              </span>
-              {state[group][key].custom && (
-                <ClearIcon
-                  onClick={() =>
-                    !state.loading &&
-                    dispatch({
-                      type: "REMOVE_PROJECTS",
-                      payload: { group, projects: [key] },
-                    })
-                  }
-                />
-              )}
-            </div>
+              </StyledOnlyButton>
+              <StyledClearIcon>
+                {state[group][key].custom && (
+                  <ClearIcon
+                    onClick={() =>
+                      !state.loading &&
+                      dispatch({
+                        type: "REMOVE_PROJECTS",
+                        payload: { group, projects: [key] },
+                      })
+                    }
+                  />
+                )}
+              </StyledClearIcon>
+            </MenuItem>
           ))}
         </div>
       )}
@@ -302,15 +372,7 @@ const ProjectGroup = ({
 };
 
 const SelectorContainer = styled.div({
-  backgroundColor: "#F5F6FD",
-  ".project": {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  ".only": {
-    color: "#3548D4",
-  },
+  backgroundColor: "#F9FAFE",
 });
 
 const ProjectSelector = () => {
