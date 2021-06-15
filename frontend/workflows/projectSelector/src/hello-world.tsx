@@ -2,7 +2,6 @@ import * as React from "react";
 
 import _ from "lodash";
 
-
 import { Button, Checkbox, Switch, TextField } from "@clutch-sh/core";
 import { Divider, IconButton, LinearProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -205,10 +204,6 @@ const initialState: State = {
   loading: false,
 };
 
-const CollapseIcon = () => {
-
-}
-
 const ProjectGroup = ({
   title,
   group,
@@ -300,8 +295,6 @@ const SelectorContainer = styled.div({
     color: "#3548D4",
   },
 });
-
-
 
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
