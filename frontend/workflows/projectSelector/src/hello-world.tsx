@@ -218,13 +218,20 @@ const ProjectGroup = ({
 
   const [collapsed, setCollapsed] = React.useState(false);
 
+  const numProjects = Object.keys(state[group]).length;
+  const checkedProjects = Object.keys(state[group]).filter(k => state[group][k].checked);
+
   return (
     <>
       <div>
         <span onClick={() => setCollapsed(!collapsed)}>
           {collapsible && (collapsed ? <ExpandMoreIcon /> : <ExpandLessIcon />)}
         </span>
-        {title}
+        <span>{title}</span>
+        <span>
+          ({checkedProjects.length}
+          {numProjects > 0 && "/" + numProjects})
+        </span>
         {!collapsible && <span>All</span>}
         <Switch
           onChange={() =>
@@ -234,12 +241,12 @@ const ProjectGroup = ({
             })
           }
           checked={deriveSwitchStatus(state, group)}
-          disabled={Object.keys(state[group]).length == 0 || state.loading}
+          disabled={numProjects == 0 || state.loading}
         />
       </div>
       {!collapsed && (
         <div>
-          {Object.keys(state[group]).length == 0 && <div>No projects in this group.</div>}
+          {numProjects == 0 && <div>No projects in this group.</div>}
           {Object.keys(state[group]).map(key => (
             <div key={key}>
               <Checkbox
