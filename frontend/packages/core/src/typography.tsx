@@ -6,67 +6,67 @@ const MEDIUM = 500;
 const BOLD = 700;
 
 const STYLE_MAP = {
-  "h1": {
+  h1: {
     size: "36",
     weight: MEDIUM,
     lineHeight: "44",
   },
-  "h2": {
+  h2: {
     size: "26",
     weight: BOLD,
     lineHeight: "32",
   },
-  "h3": {
+  h3: {
     size: "22",
     weight: BOLD,
     lineHeight: "28",
   },
-  "h4": {
+  h4: {
     size: "20",
     weight: BOLD,
     lineHeight: "24",
   },
-  "h5": {
+  h5: {
     size: "16",
     weight: BOLD,
     lineHeight: "20",
   },
-  "h6": {
+  h6: {
     size: "14",
     weight: BOLD,
     lineHeight: "18",
   },
-  "subtitle1": {
+  subtitle1: {
     size: "20",
     weight: MEDIUM,
     lineHeight: "24",
   },
-  "subtitle2": {
+  subtitle2: {
     size: "16",
     weight: MEDIUM,
     lineHeight: "20",
   },
-  "subtitle3": {
+  subtitle3: {
     size: "14",
     weight: MEDIUM,
     lineHeight: "18",
   },
-  "body1": {
+  body1: {
     size: "20",
     weight: REGULAR,
     lineHeight: "26",
   },
-  "body2": {
+  body2: {
     size: "16",
     weight: REGULAR,
     lineHeight: "22",
   },
-  "body3": {
+  body3: {
     size: "12",
     weight: REGULAR,
     lineHeight: "20",
   },
-  "caption1": {
+  caption1: {
     size: "16",
     weight: BOLD,
     lineHeight: "20",
@@ -74,7 +74,7 @@ const STYLE_MAP = {
       textTransform: "uppercase",
     },
   },
-  "caption2": {
+  caption2: {
     size: "12",
     weight: BOLD,
     lineHeight: "16",
@@ -82,7 +82,7 @@ const STYLE_MAP = {
       textTransform: "uppercase",
     },
   },
-  "overline": {
+  overline: {
     size: "10",
     weight: REGULAR,
     lineHeight: "10",
@@ -91,12 +91,12 @@ const STYLE_MAP = {
       letterSpacing: "1.5px",
     },
   },
-  "input": {
-    size:"14",
+  input: {
+    size: "14",
     weight: REGULAR,
     lineHeight: "18",
   },
-}
+};
 
 const StyledTypography = styled.div(
   {
@@ -113,12 +113,28 @@ const StyledTypography = styled.div(
 export const VARIANTS = Object.keys(STYLE_MAP);
 
 export interface TypographyProps {
-  variant: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "subtitle1" | "subtitle2" | "subtitle3" | "body1" | "body2" | "body3" | "caption1" | "caption2" | "overline" | "input";
+  variant:
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "h5"
+    | "h6"
+    | "subtitle1"
+    | "subtitle2"
+    | "subtitle3"
+    | "body1"
+    | "body2"
+    | "body3"
+    | "caption1"
+    | "caption2"
+    | "overline"
+    | "input";
   children: React.ReactNode;
 }
 
 const Typography = ({ variant, children }: TypographyProps) => {
- return <StyledTypography data-variant={variant}>{children}</StyledTypography>
-}
+  return <StyledTypography data-variant={variant}>{children}</StyledTypography>;
+};
 
 export default Typography;
