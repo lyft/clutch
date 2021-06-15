@@ -318,12 +318,12 @@ const StyledWorkflowTitle = styled.span({
   fontWeight: "bold",
   fontSize: "20px",
   lineHeight: "24px",
-  margin: "0px 8px"
+  margin: "0px 8px",
 });
 
+// TODO: add plus icon in the text field
 const StyledProjectTextField = styled.div({
   paddingTop: "16px",
-  paddingBottom: "16px",
 });
 
 const ProjectSelector = () => {
