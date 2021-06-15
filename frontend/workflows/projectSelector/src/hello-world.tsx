@@ -85,7 +85,6 @@ const useDispatch = () => {
 const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_PROJECTS":
-      // TODO: don't add if it already exists.
       return {
         ...state,
         [action.payload.group]: {
@@ -317,6 +316,10 @@ const ProjectSelector = () => {
   const handleAdd = () => {
     if (customProject === "") {
       return;
+    }
+    if (customProject in state[Group.PROJECTS]){
+      // TODO: alert/show an "error" that the project is already in the list
+      return setCustomProject("");
     }
     dispatch({
       type: "ADD_PROJECTS",
