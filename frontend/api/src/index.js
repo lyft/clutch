@@ -23178,8 +23178,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Array.<string>|null} [owners] Project owners
                      * @property {Array.<string>|null} [languages] Project languages
                      * @property {Object.<string,google.protobuf.IValue>|null} [data] Project data
-                     * @property {Array.<string>|null} [projectUpstreams] Project projectUpstreams
-                     * @property {Array.<string>|null} [projectDownstreams] Project projectDownstreams
+                     * @property {clutch.core.project.v1.IProjectDependencies|null} [dependencies] Project dependencies
                      */
 
                     /**
@@ -23194,8 +23193,6 @@ export const clutch = $root.clutch = (() => {
                         this.owners = [];
                         this.languages = [];
                         this.data = {};
-                        this.projectUpstreams = [];
-                        this.projectDownstreams = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -23243,20 +23240,12 @@ export const clutch = $root.clutch = (() => {
                     Project.prototype.data = $util.emptyObject;
 
                     /**
-                     * Project projectUpstreams.
-                     * @member {Array.<string>} projectUpstreams
+                     * Project dependencies.
+                     * @member {clutch.core.project.v1.IProjectDependencies|null|undefined} dependencies
                      * @memberof clutch.core.project.v1.Project
                      * @instance
                      */
-                    Project.prototype.projectUpstreams = $util.emptyArray;
-
-                    /**
-                     * Project projectDownstreams.
-                     * @member {Array.<string>} projectDownstreams
-                     * @memberof clutch.core.project.v1.Project
-                     * @instance
-                     */
-                    Project.prototype.projectDownstreams = $util.emptyArray;
+                    Project.prototype.dependencies = null;
 
                     /**
                      * Verifies a Project message.
@@ -23299,19 +23288,10 @@ export const clutch = $root.clutch = (() => {
                                     return "data." + error;
                             }
                         }
-                        if (message.projectUpstreams != null && message.hasOwnProperty("projectUpstreams")) {
-                            if (!Array.isArray(message.projectUpstreams))
-                                return "projectUpstreams: array expected";
-                            for (let i = 0; i < message.projectUpstreams.length; ++i)
-                                if (!$util.isString(message.projectUpstreams[i]))
-                                    return "projectUpstreams: string[] expected";
-                        }
-                        if (message.projectDownstreams != null && message.hasOwnProperty("projectDownstreams")) {
-                            if (!Array.isArray(message.projectDownstreams))
-                                return "projectDownstreams: array expected";
-                            for (let i = 0; i < message.projectDownstreams.length; ++i)
-                                if (!$util.isString(message.projectDownstreams[i]))
-                                    return "projectDownstreams: string[] expected";
+                        if (message.dependencies != null && message.hasOwnProperty("dependencies")) {
+                            let error = $root.clutch.core.project.v1.ProjectDependencies.verify(message.dependencies);
+                            if (error)
+                                return "dependencies." + error;
                         }
                         return null;
                     };
@@ -23356,19 +23336,10 @@ export const clutch = $root.clutch = (() => {
                                 message.data[keys[i]] = $root.google.protobuf.Value.fromObject(object.data[keys[i]]);
                             }
                         }
-                        if (object.projectUpstreams) {
-                            if (!Array.isArray(object.projectUpstreams))
-                                throw TypeError(".clutch.core.project.v1.Project.projectUpstreams: array expected");
-                            message.projectUpstreams = [];
-                            for (let i = 0; i < object.projectUpstreams.length; ++i)
-                                message.projectUpstreams[i] = String(object.projectUpstreams[i]);
-                        }
-                        if (object.projectDownstreams) {
-                            if (!Array.isArray(object.projectDownstreams))
-                                throw TypeError(".clutch.core.project.v1.Project.projectDownstreams: array expected");
-                            message.projectDownstreams = [];
-                            for (let i = 0; i < object.projectDownstreams.length; ++i)
-                                message.projectDownstreams[i] = String(object.projectDownstreams[i]);
+                        if (object.dependencies != null) {
+                            if (typeof object.dependencies !== "object")
+                                throw TypeError(".clutch.core.project.v1.Project.dependencies: object expected");
+                            message.dependencies = $root.clutch.core.project.v1.ProjectDependencies.fromObject(object.dependencies);
                         }
                         return message;
                     };
@@ -23389,14 +23360,13 @@ export const clutch = $root.clutch = (() => {
                         if (options.arrays || options.defaults) {
                             object.owners = [];
                             object.languages = [];
-                            object.projectUpstreams = [];
-                            object.projectDownstreams = [];
                         }
                         if (options.objects || options.defaults)
                             object.data = {};
                         if (options.defaults) {
                             object.name = "";
                             object.tier = "";
+                            object.dependencies = null;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -23418,16 +23388,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < keys2.length; ++j)
                                 object.data[keys2[j]] = $root.google.protobuf.Value.toObject(message.data[keys2[j]], options);
                         }
-                        if (message.projectUpstreams && message.projectUpstreams.length) {
-                            object.projectUpstreams = [];
-                            for (let j = 0; j < message.projectUpstreams.length; ++j)
-                                object.projectUpstreams[j] = message.projectUpstreams[j];
-                        }
-                        if (message.projectDownstreams && message.projectDownstreams.length) {
-                            object.projectDownstreams = [];
-                            for (let j = 0; j < message.projectDownstreams.length; ++j)
-                                object.projectDownstreams[j] = message.projectDownstreams[j];
-                        }
+                        if (message.dependencies != null && message.hasOwnProperty("dependencies"))
+                            object.dependencies = $root.clutch.core.project.v1.ProjectDependencies.toObject(message.dependencies, options);
                         return object;
                     };
 
@@ -23443,6 +23405,150 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return Project;
+                })();
+
+                v1.ProjectDependencies = (function() {
+
+                    /**
+                     * Properties of a ProjectDependencies.
+                     * @memberof clutch.core.project.v1
+                     * @interface IProjectDependencies
+                     * @property {Array.<string>|null} [upstreams] ProjectDependencies upstreams
+                     * @property {Array.<string>|null} [downstreams] ProjectDependencies downstreams
+                     */
+
+                    /**
+                     * Constructs a new ProjectDependencies.
+                     * @memberof clutch.core.project.v1
+                     * @classdesc Represents a ProjectDependencies.
+                     * @implements IProjectDependencies
+                     * @constructor
+                     * @param {clutch.core.project.v1.IProjectDependencies=} [properties] Properties to set
+                     */
+                    function ProjectDependencies(properties) {
+                        this.upstreams = [];
+                        this.downstreams = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ProjectDependencies upstreams.
+                     * @member {Array.<string>} upstreams
+                     * @memberof clutch.core.project.v1.ProjectDependencies
+                     * @instance
+                     */
+                    ProjectDependencies.prototype.upstreams = $util.emptyArray;
+
+                    /**
+                     * ProjectDependencies downstreams.
+                     * @member {Array.<string>} downstreams
+                     * @memberof clutch.core.project.v1.ProjectDependencies
+                     * @instance
+                     */
+                    ProjectDependencies.prototype.downstreams = $util.emptyArray;
+
+                    /**
+                     * Verifies a ProjectDependencies message.
+                     * @function verify
+                     * @memberof clutch.core.project.v1.ProjectDependencies
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ProjectDependencies.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.upstreams != null && message.hasOwnProperty("upstreams")) {
+                            if (!Array.isArray(message.upstreams))
+                                return "upstreams: array expected";
+                            for (let i = 0; i < message.upstreams.length; ++i)
+                                if (!$util.isString(message.upstreams[i]))
+                                    return "upstreams: string[] expected";
+                        }
+                        if (message.downstreams != null && message.hasOwnProperty("downstreams")) {
+                            if (!Array.isArray(message.downstreams))
+                                return "downstreams: array expected";
+                            for (let i = 0; i < message.downstreams.length; ++i)
+                                if (!$util.isString(message.downstreams[i]))
+                                    return "downstreams: string[] expected";
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ProjectDependencies message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.core.project.v1.ProjectDependencies
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.core.project.v1.ProjectDependencies} ProjectDependencies
+                     */
+                    ProjectDependencies.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.project.v1.ProjectDependencies)
+                            return object;
+                        let message = new $root.clutch.core.project.v1.ProjectDependencies();
+                        if (object.upstreams) {
+                            if (!Array.isArray(object.upstreams))
+                                throw TypeError(".clutch.core.project.v1.ProjectDependencies.upstreams: array expected");
+                            message.upstreams = [];
+                            for (let i = 0; i < object.upstreams.length; ++i)
+                                message.upstreams[i] = String(object.upstreams[i]);
+                        }
+                        if (object.downstreams) {
+                            if (!Array.isArray(object.downstreams))
+                                throw TypeError(".clutch.core.project.v1.ProjectDependencies.downstreams: array expected");
+                            message.downstreams = [];
+                            for (let i = 0; i < object.downstreams.length; ++i)
+                                message.downstreams[i] = String(object.downstreams[i]);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ProjectDependencies message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.core.project.v1.ProjectDependencies
+                     * @static
+                     * @param {clutch.core.project.v1.ProjectDependencies} message ProjectDependencies
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ProjectDependencies.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults) {
+                            object.upstreams = [];
+                            object.downstreams = [];
+                        }
+                        if (message.upstreams && message.upstreams.length) {
+                            object.upstreams = [];
+                            for (let j = 0; j < message.upstreams.length; ++j)
+                                object.upstreams[j] = message.upstreams[j];
+                        }
+                        if (message.downstreams && message.downstreams.length) {
+                            object.downstreams = [];
+                            for (let j = 0; j < message.downstreams.length; ++j)
+                                object.downstreams[j] = message.downstreams[j];
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ProjectDependencies to JSON.
+                     * @function toJSON
+                     * @memberof clutch.core.project.v1.ProjectDependencies
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ProjectDependencies.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ProjectDependencies;
                 })();
 
                 return v1;

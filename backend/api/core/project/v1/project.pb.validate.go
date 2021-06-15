@@ -61,6 +61,16 @@ func (m *Project) Validate() error {
 
 	}
 
+	if v, ok := interface{}(m.GetDependencies()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ProjectValidationError{
+				field:  "Dependencies",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -117,3 +127,70 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ProjectValidationError{}
+
+// Validate checks the field values on ProjectDependencies with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ProjectDependencies) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// ProjectDependenciesValidationError is the validation error returned by
+// ProjectDependencies.Validate if the designated constraints aren't met.
+type ProjectDependenciesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ProjectDependenciesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ProjectDependenciesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ProjectDependenciesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ProjectDependenciesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ProjectDependenciesValidationError) ErrorName() string {
+	return "ProjectDependenciesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ProjectDependenciesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sProjectDependencies.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ProjectDependenciesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ProjectDependenciesValidationError{}

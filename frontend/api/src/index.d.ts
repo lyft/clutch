@@ -9652,11 +9652,8 @@ export namespace clutch {
                     /** Project data */
                     data?: ({ [k: string]: google.protobuf.IValue }|null);
 
-                    /** Project projectUpstreams */
-                    projectUpstreams?: (string[]|null);
-
-                    /** Project projectDownstreams */
-                    projectDownstreams?: (string[]|null);
+                    /** Project dependencies */
+                    dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
                 }
 
                 /** Represents a Project. */
@@ -9683,11 +9680,8 @@ export namespace clutch {
                     /** Project data. */
                     public data: { [k: string]: google.protobuf.IValue };
 
-                    /** Project projectUpstreams. */
-                    public projectUpstreams: string[];
-
-                    /** Project projectDownstreams. */
-                    public projectDownstreams: string[];
+                    /** Project dependencies. */
+                    public dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
 
                     /**
                      * Verifies a Project message.
@@ -9713,6 +9707,60 @@ export namespace clutch {
 
                     /**
                      * Converts this Project to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ProjectDependencies. */
+                interface IProjectDependencies {
+
+                    /** ProjectDependencies upstreams */
+                    upstreams?: (string[]|null);
+
+                    /** ProjectDependencies downstreams */
+                    downstreams?: (string[]|null);
+                }
+
+                /** Represents a ProjectDependencies. */
+                class ProjectDependencies implements IProjectDependencies {
+
+                    /**
+                     * Constructs a new ProjectDependencies.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IProjectDependencies);
+
+                    /** ProjectDependencies upstreams. */
+                    public upstreams: string[];
+
+                    /** ProjectDependencies downstreams. */
+                    public downstreams: string[];
+
+                    /**
+                     * Verifies a ProjectDependencies message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ProjectDependencies message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ProjectDependencies
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.ProjectDependencies;
+
+                    /**
+                     * Creates a plain object from a ProjectDependencies message. Also converts values to other types if specified.
+                     * @param message ProjectDependencies
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.ProjectDependencies, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ProjectDependencies to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
