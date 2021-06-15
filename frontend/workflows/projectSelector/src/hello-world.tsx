@@ -219,11 +219,11 @@ const StyledCount = styled.span({
   margin: "0 4px",
 });
 
-const StyledTitle = styled.span({
+const StyledProjectTitle = styled.span({
   fontWeight: 500,
 });
 
-const MenuItem = styled.div({
+const StyledMenuItem = styled.div({
   display: "flex",
   alignItems: "center",
   "&:hover": {
@@ -234,7 +234,7 @@ const MenuItem = styled.div({
   },
 });
 
-const StyledHeader = styled.div({
+const StyledProjectHeader = styled.div({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
@@ -291,20 +291,20 @@ const ProjectGroup = ({
 
   return (
     <>
-      <StyledHeader>
+      <StyledProjectHeader>
         <StyledHeaderColumn>
           {collapsible && (
             <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
               {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
             </StyledHeaderColumn>
           )}
-          <StyledTitle>
+          <StyledProjectTitle>
             {title}
             <StyledCount>
               {checkedProjects.length}
               {numProjects > 0 && "/" + numProjects}
             </StyledCount>
-          </StyledTitle>
+          </StyledProjectTitle>
         </StyledHeaderColumn>
         <StyledHeaderColumn>
           {!collapsible && <StyledAllText>All</StyledAllText>}
@@ -319,12 +319,12 @@ const ProjectGroup = ({
             disabled={numProjects == 0 || state.loading}
           />
         </StyledHeaderColumn>
-      </StyledHeader>
+      </StyledProjectHeader>
       {!collapsed && (
         <div>
           {numProjects == 0 && <div>No projects in this group.</div>}
           {Object.keys(state[group]).map(key => (
-            <MenuItem key={key}>
+            <StyledMenuItem key={key}>
               <Checkbox
                 name={key}
                 disabled={state.loading}
@@ -362,7 +362,7 @@ const ProjectGroup = ({
                   />
                 )}
               </StyledClearIcon>
-            </MenuItem>
+            </StyledMenuItem>
           ))}
         </div>
       )}
