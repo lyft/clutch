@@ -87,18 +87,25 @@ const useDispatch = () => {
 
 const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "ADD_PROJECTS":
-      // TODO: don't add if it already exists.
+    case "ADD_PROJECTS": {
+      // a given custom project may already exist in the group so don't trigger a state update for those duplicates
+      const uniqueCustomProjects = action.payload.projects.filter(
+        (project: string) => !(project in state[action.payload.group])
+      );
+      if (uniqueCustomProjects.length === 0) {
+        return state;
+      }
       return {
         ...state,
         [action.payload.group]: {
           ...state[action.payload.group],
           ...Object.fromEntries(
-            action.payload.projects.map(v => [v, { checked: true, custom: true }])
+            uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])
           ),
         },
       };
-    case "REMOVE_PROJECTS":
+    }
+    case "REMOVE_PROJECTS": {
       // TODO: also remove any upstreams or downstreams related (only) to the project.
       // if group == Groups.PROJECT, hide exclusive downstream upstreams
       //
@@ -106,7 +113,8 @@ const selectorReducer = (state: State, action: Action): State => {
         ...state,
         [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
       };
-    case "TOGGLE_PROJECTS":
+    }
+    case "TOGGLE_PROJECTS": {
       // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
       return {
         ...state,
@@ -123,7 +131,8 @@ const selectorReducer = (state: State, action: Action): State => {
           ),
         },
       };
-    case "ONLY_PROJECTS":
+    }
+    case "ONLY_PROJECTS": {
       const newOnlyProjectState = { ...state };
 
       newOnlyProjectState[action.payload.group] = Object.fromEntries(
@@ -134,8 +143,8 @@ const selectorReducer = (state: State, action: Action): State => {
       );
 
       return newOnlyProjectState;
-
-    case "TOGGLE_ENTIRE_GROUP":
+    }
+    case "TOGGLE_ENTIRE_GROUP": {
       const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
       const newGroupToggledState = { ...state };
       newGroupToggledState[action.payload.group] = Object.fromEntries(
@@ -146,12 +155,12 @@ const selectorReducer = (state: State, action: Action): State => {
       );
 
       return newGroupToggledState;
-
+    }
     // Background actions.
-    case "HYDRATE_START":
+    case "HYDRATE_START": {
       return { ...state, loading: true };
-
-    case "HYDRATE_END":
+    }
+    case "HYDRATE_END": {
       const newPostAPICallState = { ...state, loading: false };
       // TODO: handle payload.
       _.forIn(action.payload.result, (v, k) => {
@@ -174,6 +183,7 @@ const selectorReducer = (state: State, action: Action): State => {
         // Update project data for each.
       });
       return newPostAPICallState;
+    }
     default:
       throw new Error(`unknown resolver action`);
   }
