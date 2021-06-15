@@ -226,6 +226,7 @@ const StyledProjectTitle = styled.span({
 const StyledMenuItem = styled.div({
   display: "flex",
   alignItems: "center",
+  margin: "0 -17px",
   "&:hover": {
     backgroundColor: "rgba(13, 16, 48, 0.03)",
   },
@@ -372,15 +373,17 @@ const ProjectGroup = ({
 
 const SelectorContainer = styled.div({
   backgroundColor: "#F9FAFE",
-  border: "1px solid rgba(13, 16, 48, 0.1)",
+  borderRight: "1px solid rgba(13, 16, 48, 0.1)",
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
   width: "245px",
-  padding: "16px",
+  padding: "0 16px",
 });
 
 // TODO: change icon, center align icon and title
 const StyledWorkflowHeader = styled.div({
-  paddingBottom: "16px",
+  margin: "16px 0",
+  display: "flex",
+  alignItems: "center",
 });
 
 const StyledWorkflowTitle = styled.span({
@@ -393,6 +396,22 @@ const StyledWorkflowTitle = styled.span({
 // TODO: add plus icon in the text field
 const StyledProjectTextField = styled.div({
   paddingTop: "16px",
+});
+
+const StyledMenuDivider = styled(Divider)({
+  margin: "0 -17px",
+});
+
+const StyledProgressIndicator = styled.div({
+  height: "4px",
+  margin: "0 -17px",
+
+  ".MuiLinearProgress-indeterminate": {
+    backgroundColor: "#C2C8F2",
+  },
+  ".MuiLinearProgress-bar": {
+    backgroundColor: "#3548D4",
+  },
 });
 
 const ProjectSelector = () => {
@@ -448,12 +467,14 @@ const ProjectSelector = () => {
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
         <SelectorContainer>
-          {state.loading && <LinearProgress color="secondary" />}
+          <StyledProgressIndicator>
+            {state.loading && <LinearProgress color="secondary" />}
+          </StyledProgressIndicator>
           <StyledWorkflowHeader>
             <LayersIcon />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
           </StyledWorkflowHeader>
-          <Divider />
+          <StyledMenuDivider />
           <StyledProjectTextField>
             <TextField
               disabled={state.loading}
@@ -464,9 +485,9 @@ const ProjectSelector = () => {
             />
           </StyledProjectTextField>
           <ProjectGroup title="Projects" group={Group.PROJECTS} />
-          <Divider />
+          <StyledMenuDivider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} collapsible />
-          <Divider />
+          <StyledMenuDivider />
           <ProjectGroup title="Downstreams" group={Group.DOWNSTREAM} collapsible />
         </SelectorContainer>
       </StateContext.Provider>
