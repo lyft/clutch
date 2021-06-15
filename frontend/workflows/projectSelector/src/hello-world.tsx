@@ -84,16 +84,24 @@ const useDispatch = () => {
 
 const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "ADD_PROJECTS":
+    case "ADD_PROJECTS": {
+      // a given custom project may already exist in the group so don't trigger a state update for those duplicates
+      const uniqueCustomProjects = action.payload.projects.filter(
+        (project: string) => !(project in state[action.payload.group])
+      );
+      if (uniqueCustomProjects.length === 0) {
+        return { ...state };
+      }
       return {
         ...state,
         [action.payload.group]: {
           ...state[action.payload.group],
           ...Object.fromEntries(
-            action.payload.projects.map(v => [v, { checked: true, custom: true }])
+            uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])
           ),
         },
       };
+    }
     case "REMOVE_PROJECTS":
       // TODO: also remove any upstreams or downstreams related (only) to the project.
       return {
@@ -316,10 +324,6 @@ const ProjectSelector = () => {
   const handleAdd = () => {
     if (customProject === "") {
       return;
-    }
-    if (customProject in state[Group.PROJECTS]){
-      // TODO: alert/show an "error" that the project is already in the list
-      return setCustomProject("");
     }
     dispatch({
       type: "ADD_PROJECTS",
