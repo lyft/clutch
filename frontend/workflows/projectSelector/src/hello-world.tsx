@@ -6,6 +6,7 @@ import { Button, Checkbox, Switch, TextField } from "@clutch-sh/core";
 import { Divider, IconButton, LinearProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import ClearIcon from "@material-ui/icons/Clear";
 import LayersIcon from "@material-ui/icons/Layers";
@@ -215,12 +216,16 @@ const ProjectGroup = ({
   const dispatch = useDispatch();
   const state = useReducerState();
 
+  const [collapsed, setCollapsed] = React.useState(false);
+
   return (
-    <div>
+    <>
       <div>
-        {collapsible && <ExpandMoreIcon />}
+        <span onClick={() => setCollapsed(!collapsed)}>
+          {collapsible && (collapsed ? <ExpandMoreIcon /> : <ExpandLessIcon />)}
+        </span>
         {title}
-        {!collapsible && "All"}
+        {!collapsible && <span>All</span>}
         <Switch
           onChange={() =>
             dispatch({
@@ -232,49 +237,50 @@ const ProjectGroup = ({
           disabled={Object.keys(state[group]).length == 0 || state.loading}
         />
       </div>
-      <div>
-        {Object.keys(state[group]).length == 0 && <div>No projects in this group.</div>}
-        {Object.keys(state[group]).map(key => (
-          <div key={key} className="project">
-            <Checkbox
-              name={key}
-              disabled={state.loading}
-              onChange={() =>
-                dispatch({
-                  type: "TOGGLE_PROJECTS",
-                  payload: { group, projects: [key] },
-                })
-              }
-              checked={state[group][key].checked ? true : false}
-            />
-            {key}
-            <div
-              className="only"
-              onClick={() =>
-                !state.loading &&
-                dispatch({
-                  type: "ONLY_PROJECTS",
-                  payload: { group, projects: [key] },
-                })
-              }
-            >
-              Only
-            </div>
-            {state[group][key].custom && (
-              <ClearIcon
-                onClick={() =>
-                  !state.loading &&
+      {!collapsed && (
+        <div>
+          {Object.keys(state[group]).length == 0 && <div>No projects in this group.</div>}
+          {Object.keys(state[group]).map(key => (
+            <div key={key}>
+              <Checkbox
+                name={key}
+                disabled={state.loading}
+                onChange={() =>
                   dispatch({
-                    type: "REMOVE_PROJECTS",
+                    type: "TOGGLE_PROJECTS",
                     payload: { group, projects: [key] },
                   })
                 }
+                checked={state[group][key].checked ? true : false}
               />
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
+              {key}
+              <span
+                onClick={() =>
+                  !state.loading &&
+                  dispatch({
+                    type: "ONLY_PROJECTS",
+                    payload: { group, projects: [key] },
+                  })
+                }
+              >
+                Only
+              </span>
+              {state[group][key].custom && (
+                <ClearIcon
+                  onClick={() =>
+                    !state.loading &&
+                    dispatch({
+                      type: "REMOVE_PROJECTS",
+                      payload: { group, projects: [key] },
+                    })
+                  }
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </>
   );
 };
 
