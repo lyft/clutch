@@ -136,7 +136,7 @@ const StyledProgressContainer = styled.div({
   ".MuiLinearProgress-root": {
     backgroundColor: "rgb(194, 200, 242)",
   },
-  ".MuiLinearProgress-bar	": {
+  ".MuiLinearProgress-bar": {
     backgroundColor: "#3548D4",
   }
 });
