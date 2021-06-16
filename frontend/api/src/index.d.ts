@@ -9716,10 +9716,10 @@ export namespace clutch {
                 interface IProjectDependencies {
 
                     /** ProjectDependencies upstreams */
-                    upstreams?: (string[]|null);
+                    upstreams?: (clutch.core.project.v1.IDependency[]|null);
 
                     /** ProjectDependencies downstreams */
-                    downstreams?: (string[]|null);
+                    downstreams?: (clutch.core.project.v1.IDependency[]|null);
                 }
 
                 /** Represents a ProjectDependencies. */
@@ -9732,10 +9732,10 @@ export namespace clutch {
                     constructor(properties?: clutch.core.project.v1.IProjectDependencies);
 
                     /** ProjectDependencies upstreams. */
-                    public upstreams: string[];
+                    public upstreams: clutch.core.project.v1.IDependency[];
 
                     /** ProjectDependencies downstreams. */
-                    public downstreams: string[];
+                    public downstreams: clutch.core.project.v1.IDependency[];
 
                     /**
                      * Verifies a ProjectDependencies message.
@@ -9761,6 +9761,60 @@ export namespace clutch {
 
                     /**
                      * Converts this ProjectDependencies to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Dependency. */
+                interface IDependency {
+
+                    /** Dependency id */
+                    id?: (string|null);
+
+                    /** Dependency typeUrl */
+                    typeUrl?: (string|null);
+                }
+
+                /** Represents a Dependency. */
+                class Dependency implements IDependency {
+
+                    /**
+                     * Constructs a new Dependency.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IDependency);
+
+                    /** Dependency id. */
+                    public id: string;
+
+                    /** Dependency typeUrl. */
+                    public typeUrl: string;
+
+                    /**
+                     * Verifies a Dependency message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Dependency message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Dependency
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Dependency;
+
+                    /**
+                     * Creates a plain object from a Dependency message. Also converts values to other types if specified.
+                     * @param message Dependency
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.Dependency, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Dependency to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
