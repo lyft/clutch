@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import IconButton from "@material-ui/core/IconButton";
 
 import type { Group } from "./hello-world";
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./hello-world";
@@ -22,16 +23,19 @@ const StyledCount = styled.span({
 
 const StyledProjectTitle = styled.span({
   fontWeight: 500,
+  marginLeft: "4px",
 });
 
 const StyledMenuItem = styled.div({
+  padding: "0 25px 0 8px",
+  height: "48px",
   display: "flex",
   alignItems: "center",
   "&:hover": {
     backgroundColor: "rgba(13, 16, 48, 0.03)",
   },
   "&:hover > span": {
-    display: "inline-flex", // Unhide "only" hidden span.
+    display: "inline-flex", // Unhide hidden button spans.
   },
 });
 
@@ -39,11 +43,20 @@ const StyledProjectHeader = styled.div({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  height: "48px",
+  padding: "0 12px",
 });
 
 const StyledHeaderColumn = styled.div({
   display: "flex",
   alignItems: "center",
+});
+
+const StyledNoProjectsText = styled.div({
+  color: "rgba(13, 16, 48, 0.38)",
+  textAlign: "center",
+  fontSize: "12px",
+  marginBottom: "16px",
 });
 
 const StyledAllText = styled.div({
@@ -52,26 +65,52 @@ const StyledAllText = styled.div({
 
 const StyledMenuItemName = styled.span({
   flexGrow: 1,
+  marginLeft: "8px",
 });
 
 const StyledClearIcon = styled.span({
-  color: "rgba(13, 16, 48, 0.38)",
-  display: "inline-flex",
   width: "24px",
+  ".MuiIconButton-root": {
+    padding: "6px",
+    color: "rgba(13, 16, 48, 0.38)",
+  },
+  ".MuiIconButton-root:hover": {
+    backgroundColor: "rgb(245, 246, 253)",
+  },
+  ".MuiIconButton-root:active": {
+    backgroundColor: "rgba(0,0,0, 0.1)",
+  },
 });
 
-const StyledOnlyButton = styled.span({
-  marginRight: "10px",
+const StyledOnlyButton = styled.button({
+  border: "none",
+  cursor: "pointer",
+  borderRadius: "4px",
+  fontSize: "14px",
+  padding: "5px",
+  marginRight: "4px",
   color: "rgba(53, 72, 212, 1)",
+  backgroundColor: "unset",
+  fontFamily: "inherit",
+  "&:hover": {
+    backgroundColor: "#f5f6fd",
+  },
+  "&:active": {
+    backgroundColor: "#D7DAF6",
+  },
+});
+
+const StyledHoverOptions = styled.span({
+  alignItems: "center",
 });
 
 interface ProjectGroupProps {
   title: string;
   group: Group;
-  collapsible?: boolean;
+  displayToggleHelperText?: boolean;
 }
 
-const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, collapsible }) => {
+const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggleHelperText }) => {
   const dispatch = useDispatch();
   const state = useReducerState();
 
@@ -84,11 +123,9 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, collapsible }
     <>
       <StyledProjectHeader>
         <StyledHeaderColumn>
-          {collapsible && (
-            <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
-              {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
-            </StyledHeaderColumn>
-          )}
+          <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
+            {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
+          </StyledHeaderColumn>
           <StyledProjectTitle>
             {title}
             <StyledCount>
@@ -98,7 +135,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, collapsible }
           </StyledProjectTitle>
         </StyledHeaderColumn>
         <StyledHeaderColumn>
-          {!collapsible && <StyledAllText>All</StyledAllText>}
+          {displayToggleHelperText && <StyledAllText>All</StyledAllText>}
           <Switch
             onChange={() =>
               dispatch({
@@ -113,11 +150,14 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, collapsible }
       </StyledProjectHeader>
       {!collapsed && (
         <div>
-          {numProjects == 0 && <div>No projects in this group.</div>}
+          {numProjects == 0 && (
+            <StyledNoProjectsText>No projects in this group yet.</StyledNoProjectsText>
+          )}
           {Object.keys(state[group]).map(key => (
             <StyledMenuItem key={key}>
               <Checkbox
                 name={key}
+                size="small"
                 disabled={state.loading}
                 onChange={() =>
                   dispatch({
@@ -128,31 +168,34 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, collapsible }
                 checked={state[group][key].checked ? true : false}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledOnlyButton
-                hidden={true}
-                onClick={() =>
-                  !state.loading &&
-                  dispatch({
-                    type: "ONLY_PROJECTS",
-                    payload: { group, projects: [key] },
-                  })
-                }
-              >
-                Only
-              </StyledOnlyButton>
-              <StyledClearIcon>
-                {state[group][key].custom && (
-                  <ClearIcon
-                    onClick={() =>
-                      !state.loading &&
-                      dispatch({
-                        type: "REMOVE_PROJECTS",
-                        payload: { group, projects: [key] },
-                      })
-                    }
-                  />
-                )}
-              </StyledClearIcon>
+              <StyledHoverOptions hidden={true}>
+                <StyledOnlyButton
+                  onClick={() =>
+                    !state.loading &&
+                    dispatch({
+                      type: "ONLY_PROJECTS",
+                      payload: { group, projects: [key] },
+                    })
+                  }
+                >
+                  Only
+                </StyledOnlyButton>
+                <StyledClearIcon>
+                  {state[group][key].custom && (
+                    <IconButton
+                      onClick={() =>
+                        !state.loading &&
+                        dispatch({
+                          type: "REMOVE_PROJECTS",
+                          payload: { group, projects: [key] },
+                        })
+                      }
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  )}
+                </StyledClearIcon>
+              </StyledHoverOptions>
             </StyledMenuItem>
           ))}
         </div>
