@@ -41,16 +41,12 @@ type ExperimentData = {
 };
 
 interface ExperimentDetailsProps {
-  upstreamClusterTemplate: string;
-  downstreamClusterTemplate: string;
   upstreamClusterTypeSelectionEnabled: boolean;
   environments: Environment[];
   onStart: (ExperimentData) => void;
 }
 
 const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
-  upstreamClusterTemplate,
-  downstreamClusterTemplate,
   upstreamClusterTypeSelectionEnabled,
   environments,
   onStart,
@@ -66,51 +62,12 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   const experimentData = experimentDataState[0];
   const navigate = useNavigate();
 
-  const evaluateClusterTemplate = (
-    clusterTemplate: string,
-    cluster: string,
-    environment: string
-  ) => {
-    return clusterTemplate.replace("$[CLUSTER]", cluster).replace("$[ENVIRONMENT]", environment);
-  };
-
   const handleOnCancel = () => {
     navigate("/experimentation/list");
   };
 
   const handleOnSubmit = () => {
-    const environment = experimentData.environmentValue;
-    experimentData.upstreamCluster = evaluateClusterTemplate(
-      upstreamClusterTemplate,
-      experimentData.upstreamCluster,
-      environment
-    );
-    experimentData.downstreamCluster = evaluateClusterTemplate(
-      downstreamClusterTemplate,
-      experimentData.downstreamCluster,
-      environment
-    );
-
     onStart(experimentData);
-  };
-
-  const faultInjectionClusterRadioGroup = {
-    label: "Upstream Cluster Type",
-    type: "radio-group",
-    visible: upstreamClusterTypeSelectionEnabled,
-    inputProps: {
-      options: [
-        {
-          label: "Internal",
-          value: UpstreamClusterType.INTERNAL,
-        },
-        {
-          label: "External (3rd party)",
-          value: UpstreamClusterType.EXTERNAL,
-        },
-      ],
-      defaultValue: initialExperimentData.upstreamClusterType,
-    },
   };
 
   const isAbort = experimentData.faultType === FaultType.ABORT;
@@ -148,7 +105,25 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       },
       visible: environments.length > 0,
     },
-    faultInjectionClusterRadioGroup,
+    {
+      name: "upstreamClusterType",
+      label: "Upstream Cluster Type",
+      type: "radio-group",
+      visible: upstreamClusterTypeSelectionEnabled,
+      inputProps: {
+        options: [
+          {
+            label: "Internal",
+            value: UpstreamClusterType.INTERNAL,
+          },
+          {
+            label: "External (3rd party)",
+            value: UpstreamClusterType.EXTERNAL,
+          },
+        ],
+        defaultValue: initialExperimentData.upstreamClusterType,
+      },
+    },
     {
       name: "requestsPercentage",
       label: "Percentage of Requests Served by All Hosts",
@@ -228,14 +203,31 @@ type Environment = {
   value: string;
 };
 
-interface StartExperimentProps extends BaseWorkflowProps {
-  // The template that's used to resolve the final name of an upstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
-  // It defaults to '$[CLUSTER]' and  supports the following variables:
+// The set of templates for upstream cluster.
+type UpstreamClusterTemplates = {
+  // The template that's used to resolve the final name of an internal upstream cluster.
+  // It supports the following variables:
   //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
   //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
   //                    'environments' is provided. Resolves to an empty string otherwise.
-  upstreamClusterTemplate?: string;
-  // The template that's used to resolve the final name of a downstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
+  internalClusterTemplate: string;
+  // The template that's used to resolve the final name of an external upstream cluster.
+  // It supports the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to an empty string otherwise.
+  externalClusterTemplate?: string;
+};
+
+interface StartExperimentProps extends BaseWorkflowProps {
+  // Templates that are used to resolve the final name of an upstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
+  // It supports providing separate templates for internal and external upstream clusters. Both default to
+  // '$[CLUSTER]' and support the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to an empty string otherwise.
+  upstreamClusterTemplates?: UpstreamClusterTemplates;
+  // The templates that's used to resolve the final name of a downstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
   // It defaults to '$[CLUSTER]' and supports the following variables:
   //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
   //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
@@ -243,16 +235,17 @@ interface StartExperimentProps extends BaseWorkflowProps {
   downstreamClusterTemplate?: string;
   // Whether a user should be able to select if an upstream cluster is an external or internal dependency.
   upstreamClusterTypeSelectionEnabled?: boolean;
-  // The list of environments that a user should be able to choose from
+  // The list of environments that a user should be able to choose from. Defaults to empty list. If not present or empty,
+  // a user is not asked for environment.
   environments?: Environment[];
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
-  upstreamClusterTemplate = "$[CLUSTER]",
-  downstreamClusterTemplate = "$[CLUSTER]",
-  upstreamClusterTypeSelectionEnabled = false,
-  environments = [],
+  upstreamClusterTemplates,
+  downstreamClusterTemplate,
+  upstreamClusterTypeSelectionEnabled,
+  environments,
 }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(undefined);
@@ -265,6 +258,14 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   const handleOnCreatedExperimentFailure = (err: ClutchError) => {
     setExperimentData(undefined);
     setError(err);
+  };
+
+  const evaluateClusterTemplate = (
+    clusterTemplate: string,
+    cluster: string,
+    environment: string
+  ) => {
+    return clusterTemplate.replace("$[CLUSTER]", cluster).replace("$[ENVIRONMENT]", environment);
   };
 
   const createExperiment = (data: ExperimentData) => {
@@ -336,10 +337,8 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   return (
     <PageLayout heading={heading} error={error}>
       <ExperimentDetails
-        upstreamClusterTemplate={upstreamClusterTemplate}
-        downstreamClusterTemplate={downstreamClusterTemplate}
-        upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
-        environments={environments}
+        upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled ?? false}
+        environments={environments ?? []}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
       />
       <Dialog
@@ -356,6 +355,22 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           <Button
             text="Yes"
             onClick={() => {
+              const environment = experimentData.environmentValue;
+              let upstreamClusterTemplate = upstreamClusterTemplates?.internalClusterTemplate;
+              if (experimentData.upstreamClusterType === UpstreamClusterType.EXTERNAL) {
+                upstreamClusterTemplate = upstreamClusterTemplates?.externalClusterTemplate;
+              }
+              experimentData.upstreamCluster = evaluateClusterTemplate(
+                upstreamClusterTemplate ?? "$[CLUSTER]",
+                experimentData.upstreamCluster,
+                environment
+              );
+              experimentData.downstreamCluster = evaluateClusterTemplate(
+                downstreamClusterTemplate ?? "$[CLUSTER]",
+                experimentData.downstreamCluster,
+                environment
+              );
+
               createExperiment(experimentData);
             }}
           />

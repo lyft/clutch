@@ -30,18 +30,11 @@ type ExperimentData = {
 };
 
 interface ExperimentDetailsProps {
-  upstreamRedisClusterTemplate: string;
-  downstreamClusterTemplate: string;
   environments: Environment[];
   onStart: (ExperimentData) => void;
 }
 
-const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
-  upstreamRedisClusterTemplate,
-  downstreamClusterTemplate,
-  environments,
-  onStart,
-}) => {
+const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({ environments, onStart }) => {
   const initialExperimentData = {
     faultType: FaultType.ERROR,
     environmentValue: environments.length > 0 ? environments[0].value : "",
@@ -51,31 +44,11 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   const experimentData = experimentDataState[0];
   const navigate = useNavigate();
 
-  const evaluateClusterTemplate = (
-    clusterTemplate: string,
-    cluster: string,
-    environment: string
-  ) => {
-    return clusterTemplate.replace("$[CLUSTER]", cluster).replace("$[ENVIRONMENT]", environment);
-  };
-
   const handleOnCancel = () => {
     navigate("/experimentation/list");
   };
 
   const handleOnSubmit = () => {
-    const environment = experimentData.environmentValue;
-    experimentData.upstreamRedisCluster = evaluateClusterTemplate(
-      upstreamRedisClusterTemplate,
-      experimentData.upstreamRedisCluster,
-      environment
-    );
-    experimentData.downstreamCluster = evaluateClusterTemplate(
-      downstreamClusterTemplate,
-      experimentData.downstreamCluster,
-      environment
-    );
-
     onStart(experimentData);
   };
 
@@ -181,9 +154,9 @@ interface StartExperimentProps extends BaseWorkflowProps {
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
-  upstreamRedisClusterTemplate = "$[CLUSTER]",
-  downstreamClusterTemplate = "$[CLUSTER]",
-  environments = [],
+  upstreamRedisClusterTemplate,
+  downstreamClusterTemplate,
+  environments,
 }) => {
   const navigate = useNavigate();
   const [error, setError] = useState<ClutchError | undefined>(undefined);
@@ -198,8 +171,15 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
     setError(err);
   };
 
-  const createExperiment = () => {
-    const data = experimentData;
+  const evaluateClusterTemplate = (
+    clusterTemplate: string,
+    cluster: string,
+    environment: string
+  ) => {
+    return clusterTemplate.replace("$[CLUSTER]", cluster).replace("$[ENVIRONMENT]", environment);
+  };
+
+  const createExperiment = (data: ExperimentData) => {
     const faultTargeting = {
       upstreamCluster: {
         name: data?.upstreamRedisCluster,
@@ -249,9 +229,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   return (
     <PageLayout heading={heading} error={error}>
       <ExperimentDetails
-        upstreamRedisClusterTemplate={upstreamRedisClusterTemplate}
-        downstreamClusterTemplate={downstreamClusterTemplate}
-        environments={environments}
+        environments={environments ?? []}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
       />
       <Dialog
@@ -265,7 +243,23 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         </DialogContent>
         <DialogActions>
           <Button text="No" variant="neutral" onClick={() => setExperimentData(undefined)} />
-          <Button text="Yes" onClick={createExperiment} />
+          <Button
+            text="Yes"
+            onClick={() => {
+              const environment = experimentData.environmentValue;
+              experimentData.upstreamRedisCluster = evaluateClusterTemplate(
+                upstreamRedisClusterTemplate,
+                experimentData.upstreamRedisCluster,
+                environment
+              );
+              experimentData.downstreamCluster = evaluateClusterTemplate(
+                downstreamClusterTemplate,
+                experimentData.downstreamCluster,
+                environment
+              );
+              createExperiment(experimentData);
+            }}
+          />
         </DialogActions>
       </Dialog>
     </PageLayout>
