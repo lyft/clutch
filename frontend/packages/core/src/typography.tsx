@@ -98,43 +98,45 @@ const STYLE_MAP = {
   },
 };
 
-const StyledTypography = styled.div(
+export const VARIANTS = Object.keys(STYLE_MAP);
+
+type TextVariant =
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "subtitle1"
+  | "subtitle2"
+  | "subtitle3"
+  | "body1"
+  | "body2"
+  | "body3"
+  | "caption1"
+  | "caption2"
+  | "overline"
+  | "input";
+
+const StyledTypography = styled.div<{ variant: TextVariant }>(
   {
     color: "#0D1030",
   },
   props => ({
-    fontSize: `${STYLE_MAP[props?.["data-variant"] || 0].size}px`,
-    fontWeight: STYLE_MAP[props?.["data-variant"] || 0].weight,
-    lineHeight: `${STYLE_MAP[props?.["data-variant"] || 0].lineHeight}px`,
-    ...STYLE_MAP[props?.["data-variant"] || 0].props,
+    fontSize: `${STYLE_MAP[props?.variant || 0].size}px`,
+    fontWeight: STYLE_MAP[props?.variant || 0].weight,
+    lineHeight: `${STYLE_MAP[props?.variant || 0].lineHeight}px`,
+    ...STYLE_MAP[props?.variant || 0].props,
   })
 );
 
-export const VARIANTS = Object.keys(STYLE_MAP);
-
 export interface TypographyProps {
-  variant:
-    | "h1"
-    | "h2"
-    | "h3"
-    | "h4"
-    | "h5"
-    | "h6"
-    | "subtitle1"
-    | "subtitle2"
-    | "subtitle3"
-    | "body1"
-    | "body2"
-    | "body3"
-    | "caption1"
-    | "caption2"
-    | "overline"
-    | "input";
+  variant: TextVariant;
   children: React.ReactNode;
 }
 
 const Typography = ({ variant, children }: TypographyProps) => {
-  return <StyledTypography data-variant={variant}>{children}</StyledTypography>;
+  return <StyledTypography variant={variant}>{children}</StyledTypography>;
 };
 
 export default Typography;
