@@ -1,20 +1,14 @@
 import * as React from "react";
-
+import { TextField } from "@clutch-sh/core";
+import styled from "@emotion/styled";
+import { Divider, LinearProgress } from "@material-ui/core";
+import LayersIcon from "@material-ui/icons/Layers";
 import _ from "lodash";
 
-import { Button, Checkbox, Switch, TextField } from "@clutch-sh/core";
-import { Divider, IconButton, LinearProgress } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import ClearIcon from "@material-ui/icons/Clear";
-import LayersIcon from "@material-ui/icons/Layers";
+import ProjectGroup from "./project-group";
+import { selectorReducer } from "./selector-reducer";
 
-import styled from "@emotion/styled";
-
-enum Group {
+export enum Group {
   PROJECTS,
   UPSTREAM,
   DOWNSTREAM,
@@ -48,9 +42,9 @@ interface BackgroundPayload {
   result: any;
 }
 
-type Action = BackgroundAction | UserAction;
+export type Action = BackgroundAction | UserAction;
 
-interface State {
+export interface State {
   [Group.PROJECTS]: GroupState;
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
@@ -77,117 +71,13 @@ interface ProjectState {
 }
 
 const StateContext = React.createContext<State | undefined>(undefined);
-const useReducerState = () => {
+export const useReducerState = () => {
   return React.useContext(StateContext);
 };
 
 const DispatchContext = React.createContext<(action: Action) => void | undefined>(undefined);
-const useDispatch = () => {
+export const useDispatch = () => {
   return React.useContext(DispatchContext);
-};
-
-const selectorReducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case "ADD_PROJECTS": {
-      // a given custom project may already exist in the group so don't trigger a state update for those duplicates
-      const uniqueCustomProjects = action.payload.projects.filter(
-        (project: string) => !(project in state[action.payload.group])
-      );
-      if (uniqueCustomProjects.length === 0) {
-        return state;
-      }
-      return {
-        ...state,
-        [action.payload.group]: {
-          ...state[action.payload.group],
-          ...Object.fromEntries(
-            uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])
-          ),
-        },
-      };
-    }
-    case "REMOVE_PROJECTS": {
-      // TODO: also remove any upstreams or downstreams related (only) to the project.
-      // if group == Groups.PROJECT, hide exclusive downstream upstreams
-      //
-      return {
-        ...state,
-        [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
-      };
-    }
-    case "TOGGLE_PROJECTS": {
-      // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
-      return {
-        ...state,
-        [action.payload.group]: {
-          ...state[action.payload.group],
-          ...Object.fromEntries(
-            action.payload.projects.map(key => [
-              key,
-              {
-                ...state[action.payload.group][key],
-                checked: !state[action.payload.group][key].checked,
-              },
-            ])
-          ),
-        },
-      };
-    }
-    case "ONLY_PROJECTS": {
-      const newOnlyProjectState = { ...state };
-
-      newOnlyProjectState[action.payload.group] = Object.fromEntries(
-        Object.keys(state[action.payload.group]).map(key => [
-          key,
-          { ...state[action.payload.group][key], checked: action.payload.projects.includes(key) },
-        ])
-      );
-
-      return newOnlyProjectState;
-    }
-    case "TOGGLE_ENTIRE_GROUP": {
-      const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
-      const newGroupToggledState = { ...state };
-      newGroupToggledState[action.payload.group] = Object.fromEntries(
-        Object.keys(state[action.payload.group]).map(key => [
-          key,
-          { ...state[action.payload.group][key], checked: newCheckedValue },
-        ])
-      );
-
-      return newGroupToggledState;
-    }
-    // Background actions.
-    case "HYDRATE_START": {
-      return { ...state, loading: true };
-    }
-    case "HYDRATE_END": {
-      const newPostAPICallState = { ...state, loading: false };
-      // TODO: handle payload.
-      _.forIn(action.payload.result, (v, k) => {
-        // Add each project to the projects list.
-        state[Group.PROJECTS][k] = { checked: true };
-        state.projectData[k] = {};
-
-        // Add each upstream.
-        v.upstreams.forEach(v => {
-          state[Group.UPSTREAM][v] = { checked: false };
-          state.projectData[v] = {};
-        });
-
-        // Add each downstream.
-        v.downstreams.forEach(v => {
-          state[Group.DOWNSTREAM][v] = { checked: false };
-          state.projectData[v] = {};
-        });
-
-        // Update project data for each.
-      });
-      return newPostAPICallState;
-    }
-    default:
-      throw new Error(`unknown resolver action`);
-  }
 };
 
 const fakeAPI = (state: State) => {
@@ -200,58 +90,12 @@ const fakeAPI = (state: State) => {
 };
 
 // TODO(perf): call with useMemo().
-const deriveSwitchStatus = (state: State, group: Group): boolean => {
+export const deriveSwitchStatus = (state: State, group: Group): boolean => {
   return (
     Object.keys(state[group]).length > 0 &&
     Object.keys(state[group]).every(key => state[group][key].checked)
   );
 };
-
-const StyledCount = styled.span({
-  color: "rgba(13, 16, 48, 0.6)",
-  backgroundColor: "rgba(13, 16, 48, 0.03)",
-  fontVariantNumeric: "tabular-nums",
-  letterSpacing: "2px",
-  borderRadius: "4px",
-  fontWeight: "bold",
-  fontSize: "12px",
-  padding: "1px 2px 1px 4px",
-  margin: "0 4px",
-});
-
-const StyledProjectTitle = styled.span({
-  fontWeight: 500,
-});
-
-const StyledMenuItem = styled.div({
-  display: "flex",
-  alignItems: "center",
-  "&:hover": {
-    backgroundColor: "rgba(13, 16, 48, 0.03)",
-  },
-  "&:hover > span": {
-    display: "inline-flex", // Unhide "only" hidden span.
-  },
-});
-
-const StyledProjectHeader = styled.div({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-});
-
-const StyledHeaderColumn = styled.div({
-  display: "flex",
-  alignItems: "center",
-});
-
-const StyledAllText = styled.div({
-  color: "rgba(13, 16, 48, 0.38)",
-});
-
-const StyledMenuItemName = styled.span({
-  flexGrow: 1,
-});
 
 const initialState: State = {
   [Group.PROJECTS]: {},
@@ -259,115 +103,6 @@ const initialState: State = {
   [Group.DOWNSTREAM]: {},
   projectData: {},
   loading: false,
-};
-
-const StyledClearIcon = styled.span({
-  color: "rgba(13, 16, 48, 0.38)",
-  display: "inline-flex",
-  width: "24px",
-});
-
-const StyledOnlyButton = styled.span({
-  marginRight: "10px",
-  color: "rgba(53, 72, 212, 1)",
-});
-
-const ProjectGroup = ({
-  title,
-  group,
-  collapsible,
-}: {
-  title: string;
-  group: Group;
-  collapsible?: boolean;
-}) => {
-  const dispatch = useDispatch();
-  const state = useReducerState();
-
-  const [collapsed, setCollapsed] = React.useState(false);
-
-  const numProjects = Object.keys(state[group]).length;
-  const checkedProjects = Object.keys(state[group]).filter(k => state[group][k].checked);
-
-  return (
-    <>
-      <StyledProjectHeader>
-        <StyledHeaderColumn>
-          {collapsible && (
-            <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
-              {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
-            </StyledHeaderColumn>
-          )}
-          <StyledProjectTitle>
-            {title}
-            <StyledCount>
-              {checkedProjects.length}
-              {numProjects > 0 && "/" + numProjects}
-            </StyledCount>
-          </StyledProjectTitle>
-        </StyledHeaderColumn>
-        <StyledHeaderColumn>
-          {!collapsible && <StyledAllText>All</StyledAllText>}
-          <Switch
-            onChange={() =>
-              dispatch({
-                type: "TOGGLE_ENTIRE_GROUP",
-                payload: { group: group },
-              })
-            }
-            checked={deriveSwitchStatus(state, group)}
-            disabled={numProjects == 0 || state.loading}
-          />
-        </StyledHeaderColumn>
-      </StyledProjectHeader>
-      {!collapsed && (
-        <div>
-          {numProjects == 0 && <div>No projects in this group.</div>}
-          {Object.keys(state[group]).map(key => (
-            <StyledMenuItem key={key}>
-              <Checkbox
-                name={key}
-                disabled={state.loading}
-                onChange={() =>
-                  dispatch({
-                    type: "TOGGLE_PROJECTS",
-                    payload: { group, projects: [key] },
-                  })
-                }
-                checked={state[group][key].checked ? true : false}
-              />
-              <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledOnlyButton
-                hidden={true}
-                onClick={() =>
-                  !state.loading &&
-                  dispatch({
-                    type: "ONLY_PROJECTS",
-                    payload: { group, projects: [key] },
-                  })
-                }
-              >
-                Only
-              </StyledOnlyButton>
-              <StyledClearIcon>
-                {state[group][key].custom && (
-                  <ClearIcon
-                    onClick={() =>
-                      !state.loading &&
-                      dispatch({
-                        type: "REMOVE_PROJECTS",
-                        payload: { group, projects: [key] },
-                      })
-                    }
-                  />
-                )}
-              </StyledClearIcon>
-            </StyledMenuItem>
-          ))}
-        </div>
-      )}
-    </>
-  );
 };
 
 const SelectorContainer = styled.div({
