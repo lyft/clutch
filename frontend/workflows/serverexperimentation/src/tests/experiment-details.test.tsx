@@ -15,8 +15,6 @@ describe("Start Experiment workflow", () => {
   it("renders correctly", () => {
     const component = shallow(
       <ExperimentDetails
-        upstreamClusterTemplate=""
-        downstreamClusterTemplate=""
         upstreamClusterTypeSelectionEnabled={false}
         environments={[]}
         onStart={() => {}}
@@ -27,13 +25,7 @@ describe("Start Experiment workflow", () => {
 
   it("renders correctly with upstream cluster type selection enabled", () => {
     const component = shallow(
-      <ExperimentDetails
-        upstreamClusterTemplate=""
-        downstreamClusterTemplate=""
-        upstreamClusterTypeSelectionEnabled
-        environments={[]}
-        onStart={() => {}}
-      />
+      <ExperimentDetails upstreamClusterTypeSelectionEnabled environments={[]} onStart={() => {}} />
     );
     expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
   });
@@ -41,8 +33,6 @@ describe("Start Experiment workflow", () => {
   it("renders correctly with environments", () => {
     const component = shallow(
       <ExperimentDetails
-        upstreamClusterTemplate=""
-        downstreamClusterTemplate=""
         upstreamClusterTypeSelectionEnabled={false}
         environments={[{ value: "staging" }]}
         onStart={() => {}}

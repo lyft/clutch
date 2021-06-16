@@ -2,14 +2,14 @@
 
 exports[`Start Experiment Run workflow renders correctly 1`] = `
 "<PageLayout heading=\\"testing\\" error={[undefined]}>
-  <ExperimentDetails upstreamRedisClusterTemplate=\\"$[CLUSTER]\\" downstreamClusterTemplate=\\"$[CLUSTER]\\" environments={{...}} onStart={[Function: onStart]} />
+  <ExperimentDetails environments={{...}} onStart={[Function: onStart]} />
   <Dialog title=\\"Experiment Start Confirmation\\" open={false} onClose={[Function: onClose]}>
     <Styled(WithStyles(ForwardRef(DialogContent)))>
       Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.
     </Styled(WithStyles(ForwardRef(DialogContent)))>
     <Styled(WithStyles(ForwardRef(DialogActions)))>
       <Button text=\\"No\\" variant=\\"neutral\\" onClick={[Function: onClick]} />
-      <Button text=\\"Yes\\" onClick={[Function: createExperiment]} />
+      <Button text=\\"Yes\\" onClick={[Function: onClick]} />
     </Styled(WithStyles(ForwardRef(DialogActions)))>
   </Dialog>
 </PageLayout>"
