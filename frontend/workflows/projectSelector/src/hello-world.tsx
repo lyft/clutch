@@ -83,8 +83,8 @@ export const useDispatch = () => {
 const fakeAPI = (state: State) => {
   return {
     clutch: {
-      upstreams: ["rides", "locations"],
-      downstreams: ["queueworker"],
+      upstreams: [],
+      downstreams: ["rides", "locations"],
     },
   };
 };
@@ -105,17 +105,18 @@ const initialState: State = {
   loading: false,
 };
 
-const SelectorContainer = styled.div({
+const StyledSelectorContainer = styled.div({
   backgroundColor: "#F9FAFE",
-  border: "1px solid rgba(13, 16, 48, 0.1)",
+  borderRight: "1px solid rgba(13, 16, 48, 0.1)",
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
   width: "245px",
-  padding: "16px",
 });
 
 // TODO: change icon, center align icon and title
 const StyledWorkflowHeader = styled.div({
-  paddingBottom: "16px",
+  margin: "16px 16px 12px 16px",
+  display: "flex",
+  alignItems: "center"
 });
 
 const StyledWorkflowTitle = styled.span({
@@ -126,8 +127,18 @@ const StyledWorkflowTitle = styled.span({
 });
 
 // TODO: add plus icon in the text field
-const StyledProjectTextField = styled.div({
-  paddingTop: "16px",
+const StyledProjectTextField = styled(TextField)({
+  padding: "16px 16px 8px 16px",
+});
+
+const StyledProgressContainer = styled.div({
+  height: "4px",
+  ".MuiLinearProgress-root": {
+    backgroundColor: "rgb(194, 200, 242)",
+  },
+  ".MuiLinearProgress-bar	": {
+    backgroundColor: "#3548D4",
+  }
 });
 
 const ProjectSelector = () => {
@@ -182,28 +193,28 @@ const ProjectSelector = () => {
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
-        <SelectorContainer>
-          {state.loading && <LinearProgress color="secondary" />}
+        <StyledSelectorContainer>
           <StyledWorkflowHeader>
             <LayersIcon />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
           </StyledWorkflowHeader>
+          <StyledProgressContainer>
+            {state.loading && <LinearProgress color="secondary" />}
+          </StyledProgressContainer>
           <Divider />
-          <StyledProjectTextField>
-            <TextField
+            <StyledProjectTextField
               disabled={state.loading}
               placeholder="Add a project"
               value={customProject}
               onChange={e => setCustomProject(e.target.value)}
               onKeyDown={e => e.key === "Enter" && handleAdd()}
             />
-          </StyledProjectTextField>
-          <ProjectGroup title="Projects" group={Group.PROJECTS} />
+          <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
-          <ProjectGroup title="Upstreams" group={Group.UPSTREAM} collapsible />
+          <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
           <Divider />
-          <ProjectGroup title="Downstreams" group={Group.DOWNSTREAM} collapsible />
-        </SelectorContainer>
+          <ProjectGroup title="Downstreams" group={Group.DOWNSTREAM} />
+        </StyledSelectorContainer>
       </StateContext.Provider>
     </DispatchContext.Provider>
   );
