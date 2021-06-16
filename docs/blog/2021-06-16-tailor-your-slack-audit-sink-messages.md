@@ -9,7 +9,7 @@ image: https://user-images.githubusercontent.com/39421794/122236354-734b7380-ce8
 hide_table_of_contents: false
 ---
 
-Imagine being on call for a service and getting paged for high CPU but not knowing why. Traffic hasn't increased and no recent deployments happened. However, through Clutch’s Slack sink, you can see in Slack that a teammate resized your service’s HPA/ASG. Visibility into infrastructure changes is a top level concern for Clutch, and this is why one of the out-of-the-box features is the Slack sink.
+Imagine being on call for a service and getting paged for high CPU but not knowing why. Traffic hasn't increased and no recent deployments happened. However, through the Clutch Slack sink, you can see in Slack that a teammate resized your service’s HPA/ASG. Visibility into infrastructure changes is a top level concern for Clutch, and this is why one of the out-of-the-box features is the Slack sink.
 
 <!--truncate-->
 
@@ -58,13 +58,10 @@ Below is an example of an audit event with the stored metadata for [DescribePod]
 ```json
 {
 ...
-"event":{
+"requestMetadata":{"body":{"@type":"type.googleapis.com/clutch.k8s.v1.DescribePodRequest","clientset":"kind-clutch-local","cluster":"kind-clutch-local","namespace":"envoy-staging","name":"envoy-58d647f457-5b2k4"}},
+"responseMetadata":{"body":{"@type":"type.googleapis.com/clutch.k8s.v1.DescribePodResponse","pod":{"cluster":"kind-clutch-local","namespace":"envoy-staging","name":"envoy-58d647f457-5b2k4","containers":[{"name":"envoy","image":"docker.io/envoyproxy/envoy:v1.14-latest","state":"RUNNING","ready":true,"restartCount":65,"stateRunning":{}}],"nodeIp":"172.18.0.2","podIp":"10.244.0.5","state":"RUNNING","labels":{"app":"envoy","bar":"value","env":"newstaging","foo":"value","pod-template-hash":"58d647f457","yett":"yes"},"podConditions":[{"type":"INITIALIZED","status":"TRUE"},{"type":"READY","status":"TRUE"},{"type":"CONTAINERS_READY","status":"TRUE"},{"type":"POD_SCHEDULED","status":"TRUE"}],"status":"Running","startTimeMillis":"1616607169000"}}}
 ...
-"requestMetadata":{
-"body":{"@type":"type.googleapis.com/clutch.k8s.v1.DescribePodRequest","clientset":"kind-clutch-local","cluster":"kind-clutch-local","namespace":"envoy-staging","name":"envoy-58d647f457-5b2k4"}},
-"responseMetadata":{
-"body":{"@type":"type.googleapis.com/clutch.k8s.v1.DescribePodResponse","pod":{"cluster":"kind-clutch-local","namespace":"envoy-staging","name":"envoy-58d647f457-5b2k4","containers":[{"name":"envoy","image":"docker.io/envoyproxy/envoy:v1.14-latest","state":"RUNNING","ready":true,"restartCount":65,"stateRunning":{}}],"nodeIp":"172.18.0.2","podIp":"10.244.0.5","state":"RUNNING","labels":{"app":"envoy","bar":"value","env":"newstaging","foo":"value","pod-template-hash":"58d647f457","yett":"yes"},"podConditions":[{"type":"INITIALIZED","status":"TRUE"},{"type":"READY","status":"TRUE"},{"type":"CONTAINERS_READY","status":"TRUE"},{"type":"POD_SCHEDULED","status":"TRUE"}],"status":"Running","startTimeMillis":"1616607169000"}}
-}}}
+}
 ```
 
 ## Richer Slack Audits
@@ -97,7 +94,7 @@ services:
 
 A few things to highlight from the example:
   * `.Request.<field name>` is used to retrieve data from the API request.
-  * Clutch-specific [templating token](https://github.com/lyft/clutch/blob/0aa1c00b37513900c351be1106cc131498b1aad0/backend/gateway/config.go#L110-L122) is used in lieu of the standard Golang template [Action](https://golang.org/pkg/text/template/#hdr-Actions) syntax. This is to avoid conflicts during preprocessing of the clutch-config.
+  * Clutch-specific [templating token](https://github.com/lyft/clutch/blob/0aa1c00b37513900c351be1106cc131498b1aad0/backend/gateway/config.go#L110-L122) is used in lieu of the standard Golang template [Actions](https://golang.org/pkg/text/template/#hdr-Actions) syntax. This is to avoid conflicts during preprocessing of the clutch-config.
   * Slack [markdown](https://api.slack.com/reference/surfaces/formatting#basics) formatting can be added for useful visual highlights to the custom message.
   * Users can provide one custom message per gRPC method.
 
@@ -126,7 +123,7 @@ json.Unmarshal(reqJSON, &requestMetadata)
 json.Unmarshal(respJSON, &responseMetadata)
 ```
 
-API request/response messages can be complex types, so we unmarshaled the metadata into a map[string]interface{}. This form can be used with many other packages and in particular we wanted to support any of the Golang template [functions](https://golang.org/pkg/text/template/#hdr-Functions) (and make it easy for contributors to enable template helpers like [Sprig](http://masterminds.github.io/sprig/)) so that users can easily retrieve the metadata for their custom Slack audits.
+API request/response messages can be complex types, so we unmarshaled the metadata into a `map[string]interface{}`. This form can be used with many other packages and in particular we wanted to support any of the Golang template [functions](https://golang.org/pkg/text/template/#hdr-Functions) (and make it easy for contributors to enable template helpers like [Sprig](http://masterminds.github.io/sprig/)) so that users can easily retrieve the metadata for their custom Slack audits.
 
 ```go
 return &auditTemplateData{
