@@ -91,21 +91,6 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       inputProps: { defaultValue: undefined },
     },
     {
-      name: "environmentValue",
-      label: "Environment",
-      type: "select",
-      inputProps: {
-        options: environments.map(env => {
-          return {
-            label: env.label,
-            value: env.value,
-          };
-        }),
-        defaultValue: initialExperimentData.environmentValue,
-      },
-      visible: environments.length > 0,
-    },
-    {
       name: "upstreamClusterType",
       label: "Upstream Cluster Type",
       type: "radio-group",
@@ -123,6 +108,21 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
         ],
         defaultValue: initialExperimentData.upstreamClusterType,
       },
+    },
+    {
+      name: "environmentValue",
+      label: "Environment",
+      type: "select",
+      inputProps: {
+        options: environments.map(env => {
+          return {
+            label: env.label,
+            value: env.value,
+          };
+        }),
+        defaultValue: initialExperimentData.environmentValue,
+      },
+      visible: environments.length > 0,
     },
     {
       name: "requestsPercentage",
