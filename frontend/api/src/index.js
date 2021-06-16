@@ -40037,7 +40037,8 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a GetProjectsRequest.
                  * @memberof clutch.project.v1
                  * @interface IGetProjectsRequest
-                 * @property {Array.<string>|null} [names] GetProjectsRequest names
+                 * @property {Array.<string>|null} [projects] GetProjectsRequest projects
+                 * @property {Array.<string>|null} [users] GetProjectsRequest users
                  */
 
                 /**
@@ -40049,7 +40050,8 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.project.v1.IGetProjectsRequest=} [properties] Properties to set
                  */
                 function GetProjectsRequest(properties) {
-                    this.names = [];
+                    this.projects = [];
+                    this.users = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -40057,12 +40059,20 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetProjectsRequest names.
-                 * @member {Array.<string>} names
+                 * GetProjectsRequest projects.
+                 * @member {Array.<string>} projects
                  * @memberof clutch.project.v1.GetProjectsRequest
                  * @instance
                  */
-                GetProjectsRequest.prototype.names = $util.emptyArray;
+                GetProjectsRequest.prototype.projects = $util.emptyArray;
+
+                /**
+                 * GetProjectsRequest users.
+                 * @member {Array.<string>} users
+                 * @memberof clutch.project.v1.GetProjectsRequest
+                 * @instance
+                 */
+                GetProjectsRequest.prototype.users = $util.emptyArray;
 
                 /**
                  * Verifies a GetProjectsRequest message.
@@ -40075,12 +40085,19 @@ export const clutch = $root.clutch = (() => {
                 GetProjectsRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.names != null && message.hasOwnProperty("names")) {
-                        if (!Array.isArray(message.names))
-                            return "names: array expected";
-                        for (let i = 0; i < message.names.length; ++i)
-                            if (!$util.isString(message.names[i]))
-                                return "names: string[] expected";
+                    if (message.projects != null && message.hasOwnProperty("projects")) {
+                        if (!Array.isArray(message.projects))
+                            return "projects: array expected";
+                        for (let i = 0; i < message.projects.length; ++i)
+                            if (!$util.isString(message.projects[i]))
+                                return "projects: string[] expected";
+                    }
+                    if (message.users != null && message.hasOwnProperty("users")) {
+                        if (!Array.isArray(message.users))
+                            return "users: array expected";
+                        for (let i = 0; i < message.users.length; ++i)
+                            if (!$util.isString(message.users[i]))
+                                return "users: string[] expected";
                     }
                     return null;
                 };
@@ -40097,12 +40114,19 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.project.v1.GetProjectsRequest)
                         return object;
                     let message = new $root.clutch.project.v1.GetProjectsRequest();
-                    if (object.names) {
-                        if (!Array.isArray(object.names))
-                            throw TypeError(".clutch.project.v1.GetProjectsRequest.names: array expected");
-                        message.names = [];
-                        for (let i = 0; i < object.names.length; ++i)
-                            message.names[i] = String(object.names[i]);
+                    if (object.projects) {
+                        if (!Array.isArray(object.projects))
+                            throw TypeError(".clutch.project.v1.GetProjectsRequest.projects: array expected");
+                        message.projects = [];
+                        for (let i = 0; i < object.projects.length; ++i)
+                            message.projects[i] = String(object.projects[i]);
+                    }
+                    if (object.users) {
+                        if (!Array.isArray(object.users))
+                            throw TypeError(".clutch.project.v1.GetProjectsRequest.users: array expected");
+                        message.users = [];
+                        for (let i = 0; i < object.users.length; ++i)
+                            message.users[i] = String(object.users[i]);
                     }
                     return message;
                 };
@@ -40120,12 +40144,19 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.arrays || options.defaults)
-                        object.names = [];
-                    if (message.names && message.names.length) {
-                        object.names = [];
-                        for (let j = 0; j < message.names.length; ++j)
-                            object.names[j] = message.names[j];
+                    if (options.arrays || options.defaults) {
+                        object.projects = [];
+                        object.users = [];
+                    }
+                    if (message.projects && message.projects.length) {
+                        object.projects = [];
+                        for (let j = 0; j < message.projects.length; ++j)
+                            object.projects[j] = message.projects[j];
+                    }
+                    if (message.users && message.users.length) {
+                        object.users = [];
+                        for (let j = 0; j < message.users.length; ++j)
+                            object.users[j] = message.users[j];
                     }
                     return object;
                 };
@@ -40144,13 +40175,272 @@ export const clutch = $root.clutch = (() => {
                 return GetProjectsRequest;
             })();
 
+            v1.ProjectResult = (function() {
+
+                /**
+                 * Properties of a ProjectResult.
+                 * @memberof clutch.project.v1
+                 * @interface IProjectResult
+                 * @property {clutch.project.v1.ProjectResult.IFrom|null} [from] ProjectResult from
+                 * @property {clutch.core.project.v1.IProject|null} [project] ProjectResult project
+                 */
+
+                /**
+                 * Constructs a new ProjectResult.
+                 * @memberof clutch.project.v1
+                 * @classdesc Represents a ProjectResult.
+                 * @implements IProjectResult
+                 * @constructor
+                 * @param {clutch.project.v1.IProjectResult=} [properties] Properties to set
+                 */
+                function ProjectResult(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ProjectResult from.
+                 * @member {clutch.project.v1.ProjectResult.IFrom|null|undefined} from
+                 * @memberof clutch.project.v1.ProjectResult
+                 * @instance
+                 */
+                ProjectResult.prototype.from = null;
+
+                /**
+                 * ProjectResult project.
+                 * @member {clutch.core.project.v1.IProject|null|undefined} project
+                 * @memberof clutch.project.v1.ProjectResult
+                 * @instance
+                 */
+                ProjectResult.prototype.project = null;
+
+                /**
+                 * Verifies a ProjectResult message.
+                 * @function verify
+                 * @memberof clutch.project.v1.ProjectResult
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ProjectResult.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.from != null && message.hasOwnProperty("from")) {
+                        let error = $root.clutch.project.v1.ProjectResult.From.verify(message.from);
+                        if (error)
+                            return "from." + error;
+                    }
+                    if (message.project != null && message.hasOwnProperty("project")) {
+                        let error = $root.clutch.core.project.v1.Project.verify(message.project);
+                        if (error)
+                            return "project." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ProjectResult message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.project.v1.ProjectResult
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.project.v1.ProjectResult} ProjectResult
+                 */
+                ProjectResult.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.project.v1.ProjectResult)
+                        return object;
+                    let message = new $root.clutch.project.v1.ProjectResult();
+                    if (object.from != null) {
+                        if (typeof object.from !== "object")
+                            throw TypeError(".clutch.project.v1.ProjectResult.from: object expected");
+                        message.from = $root.clutch.project.v1.ProjectResult.From.fromObject(object.from);
+                    }
+                    if (object.project != null) {
+                        if (typeof object.project !== "object")
+                            throw TypeError(".clutch.project.v1.ProjectResult.project: object expected");
+                        message.project = $root.clutch.core.project.v1.Project.fromObject(object.project);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ProjectResult message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.project.v1.ProjectResult
+                 * @static
+                 * @param {clutch.project.v1.ProjectResult} message ProjectResult
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ProjectResult.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.from = null;
+                        object.project = null;
+                    }
+                    if (message.from != null && message.hasOwnProperty("from"))
+                        object.from = $root.clutch.project.v1.ProjectResult.From.toObject(message.from, options);
+                    if (message.project != null && message.hasOwnProperty("project"))
+                        object.project = $root.clutch.core.project.v1.Project.toObject(message.project, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ProjectResult to JSON.
+                 * @function toJSON
+                 * @memberof clutch.project.v1.ProjectResult
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ProjectResult.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                ProjectResult.From = (function() {
+
+                    /**
+                     * Properties of a From.
+                     * @memberof clutch.project.v1.ProjectResult
+                     * @interface IFrom
+                     * @property {boolean|null} [selected] From selected
+                     * @property {Array.<string>|null} [users] From users
+                     */
+
+                    /**
+                     * Constructs a new From.
+                     * @memberof clutch.project.v1.ProjectResult
+                     * @classdesc Represents a From.
+                     * @implements IFrom
+                     * @constructor
+                     * @param {clutch.project.v1.ProjectResult.IFrom=} [properties] Properties to set
+                     */
+                    function From(properties) {
+                        this.users = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * From selected.
+                     * @member {boolean} selected
+                     * @memberof clutch.project.v1.ProjectResult.From
+                     * @instance
+                     */
+                    From.prototype.selected = false;
+
+                    /**
+                     * From users.
+                     * @member {Array.<string>} users
+                     * @memberof clutch.project.v1.ProjectResult.From
+                     * @instance
+                     */
+                    From.prototype.users = $util.emptyArray;
+
+                    /**
+                     * Verifies a From message.
+                     * @function verify
+                     * @memberof clutch.project.v1.ProjectResult.From
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    From.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.selected != null && message.hasOwnProperty("selected"))
+                            if (typeof message.selected !== "boolean")
+                                return "selected: boolean expected";
+                        if (message.users != null && message.hasOwnProperty("users")) {
+                            if (!Array.isArray(message.users))
+                                return "users: array expected";
+                            for (let i = 0; i < message.users.length; ++i)
+                                if (!$util.isString(message.users[i]))
+                                    return "users: string[] expected";
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a From message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.project.v1.ProjectResult.From
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.project.v1.ProjectResult.From} From
+                     */
+                    From.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.project.v1.ProjectResult.From)
+                            return object;
+                        let message = new $root.clutch.project.v1.ProjectResult.From();
+                        if (object.selected != null)
+                            message.selected = Boolean(object.selected);
+                        if (object.users) {
+                            if (!Array.isArray(object.users))
+                                throw TypeError(".clutch.project.v1.ProjectResult.From.users: array expected");
+                            message.users = [];
+                            for (let i = 0; i < object.users.length; ++i)
+                                message.users[i] = String(object.users[i]);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a From message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.project.v1.ProjectResult.From
+                     * @static
+                     * @param {clutch.project.v1.ProjectResult.From} message From
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    From.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults)
+                            object.users = [];
+                        if (options.defaults)
+                            object.selected = false;
+                        if (message.selected != null && message.hasOwnProperty("selected"))
+                            object.selected = message.selected;
+                        if (message.users && message.users.length) {
+                            object.users = [];
+                            for (let j = 0; j < message.users.length; ++j)
+                                object.users[j] = message.users[j];
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this From to JSON.
+                     * @function toJSON
+                     * @memberof clutch.project.v1.ProjectResult.From
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    From.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return From;
+                })();
+
+                return ProjectResult;
+            })();
+
             v1.GetProjectsResponse = (function() {
 
                 /**
                  * Properties of a GetProjectsResponse.
                  * @memberof clutch.project.v1
                  * @interface IGetProjectsResponse
-                 * @property {Array.<clutch.core.project.v1.IProject>|null} [projects] GetProjectsResponse projects
+                 * @property {Object.<string,clutch.project.v1.IProjectResult>|null} [results] GetProjectsResponse results
                  */
 
                 /**
@@ -40162,7 +40452,7 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.project.v1.IGetProjectsResponse=} [properties] Properties to set
                  */
                 function GetProjectsResponse(properties) {
-                    this.projects = [];
+                    this.results = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -40170,12 +40460,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetProjectsResponse projects.
-                 * @member {Array.<clutch.core.project.v1.IProject>} projects
+                 * GetProjectsResponse results.
+                 * @member {Object.<string,clutch.project.v1.IProjectResult>} results
                  * @memberof clutch.project.v1.GetProjectsResponse
                  * @instance
                  */
-                GetProjectsResponse.prototype.projects = $util.emptyArray;
+                GetProjectsResponse.prototype.results = $util.emptyObject;
 
                 /**
                  * Verifies a GetProjectsResponse message.
@@ -40188,13 +40478,14 @@ export const clutch = $root.clutch = (() => {
                 GetProjectsResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.projects != null && message.hasOwnProperty("projects")) {
-                        if (!Array.isArray(message.projects))
-                            return "projects: array expected";
-                        for (let i = 0; i < message.projects.length; ++i) {
-                            let error = $root.clutch.core.project.v1.Project.verify(message.projects[i]);
+                    if (message.results != null && message.hasOwnProperty("results")) {
+                        if (!$util.isObject(message.results))
+                            return "results: object expected";
+                        let key = Object.keys(message.results);
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.clutch.project.v1.ProjectResult.verify(message.results[key[i]]);
                             if (error)
-                                return "projects." + error;
+                                return "results." + error;
                         }
                     }
                     return null;
@@ -40212,14 +40503,14 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.project.v1.GetProjectsResponse)
                         return object;
                     let message = new $root.clutch.project.v1.GetProjectsResponse();
-                    if (object.projects) {
-                        if (!Array.isArray(object.projects))
-                            throw TypeError(".clutch.project.v1.GetProjectsResponse.projects: array expected");
-                        message.projects = [];
-                        for (let i = 0; i < object.projects.length; ++i) {
-                            if (typeof object.projects[i] !== "object")
-                                throw TypeError(".clutch.project.v1.GetProjectsResponse.projects: object expected");
-                            message.projects[i] = $root.clutch.core.project.v1.Project.fromObject(object.projects[i]);
+                    if (object.results) {
+                        if (typeof object.results !== "object")
+                            throw TypeError(".clutch.project.v1.GetProjectsResponse.results: object expected");
+                        message.results = {};
+                        for (let keys = Object.keys(object.results), i = 0; i < keys.length; ++i) {
+                            if (typeof object.results[keys[i]] !== "object")
+                                throw TypeError(".clutch.project.v1.GetProjectsResponse.results: object expected");
+                            message.results[keys[i]] = $root.clutch.project.v1.ProjectResult.fromObject(object.results[keys[i]]);
                         }
                     }
                     return message;
@@ -40238,12 +40529,13 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.arrays || options.defaults)
-                        object.projects = [];
-                    if (message.projects && message.projects.length) {
-                        object.projects = [];
-                        for (let j = 0; j < message.projects.length; ++j)
-                            object.projects[j] = $root.clutch.core.project.v1.Project.toObject(message.projects[j], options);
+                    if (options.objects || options.defaults)
+                        object.results = {};
+                    let keys2;
+                    if (message.results && (keys2 = Object.keys(message.results)).length) {
+                        object.results = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.results[keys2[j]] = $root.clutch.project.v1.ProjectResult.toObject(message.results[keys2[j]], options);
                     }
                     return object;
                 };
