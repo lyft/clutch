@@ -248,12 +248,12 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
             onClick={() => {
               const environment = experimentData.environmentValue;
               experimentData.upstreamRedisCluster = evaluateClusterTemplate(
-                upstreamRedisClusterTemplate,
+                upstreamRedisClusterTemplate ?? "$[CLUSTER]",
                 experimentData.upstreamRedisCluster,
                 environment
               );
               experimentData.downstreamCluster = evaluateClusterTemplate(
-                downstreamClusterTemplate,
+                downstreamClusterTemplate ?? "$[CLUSTER]",
                 experimentData.downstreamCluster,
                 environment
               );
