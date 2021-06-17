@@ -9,23 +9,25 @@ image: https://user-images.githubusercontent.com/39421794/122236354-734b7380-ce8
 hide_table_of_contents: false
 ---
 
-Imagine being on call for a service and getting paged for high CPU but not knowing why. Traffic hasn't increased and no recent deployments happened. However, through the Clutch Slack sink, you can see in Slack that a teammate resized your service’s HPA/ASG. Visibility into infrastructure changes is a top level concern for Clutch, and this is why one of the out-of-the-box features is the Slack sink.
+import Image from '@site/src/components/Image';
+
+Imagine being on call for a service and getting paged for high CPU but not knowing why. Traffic hasn't increased and no recent deployments have happened. However, through the Clutch Slack sink, you can see in Slack that a teammate resized your service’s [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale)/[ASG](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html). Visibility into infrastructure changes is a top level concern for Clutch, which is why the Slack sink is one of the out-of-the-box features.
 
 <!--truncate-->
 
-For each operation performed in Clutch, you can forward the audit to a channel in your Slack workspace. The Slack sink creates a default message for all workflows, which answers the questions: what operation was performed, what resources were modified, and who performed the operation.
+For each operation performed in Clutch, an audit event is created and can be forward to a channel in your Slack workspace. The Slack sink creates a standard message for all workflows, which answers the questions: what operation was performed, what resources were modified, and who performed the operation.
 
-<img alt="Clutch Default Slack Audit Message" src="https://user-images.githubusercontent.com/39421794/122236235-57e06880-ce8c-11eb-8ec7-52963f23c4b9.png" />
+<Image alt="Clutch Standard Slack Audit Message" src="https://user-images.githubusercontent.com/39421794/122236235-57e06880-ce8c-11eb-8ec7-52963f23c4b9.png" />
 
-The default message captures key security information, but what if you wanted to add even more information that was specific to a workflow? What if you wanted to customize the information to suit your team's needs? We had the same thoughts and embarked on the next iteration of the Slack sink to support these use cases. Read on to learn more about this recent extension!
+The standard message captures key security information, but what if you wanted to add even more information that was specific to a workflow? What if you wanted to customize the information to suit your team's needs? We had the same thoughts and embarked on the next iteration of the Slack sink to support these use cases. Read on to learn more about this recent extension!
 
 ## Background
 
-<img alt="Clutch Audit Architecture" src="https://user-images.githubusercontent.com/39421794/122236515-937b3280-ce8c-11eb-9144-67058f4ef78e.png" />
+<Image alt="Clutch Audit Architecture" src="https://user-images.githubusercontent.com/39421794/122236515-937b3280-ce8c-11eb-9144-67058f4ef78e.png" variant="centered" />
 
-For each incoming API request into Clutch, an audit event is [created, persisted, and then forwarded](https://clutch.sh/docs/advanced/security-auditing/) to the sinks. The role of a sink is simple: process the audit event appropriately for your needs and forward the event to other systems (Clutch ships with a logging and Slack sink and you can add integration for new ones, such as Microsoft Teams). The sinks utilize the recorded information in an audit event to create an output. For example, the Slack sink’s [default message](https://github.com/lyft/clutch/blob/b56d9a929361fb590144bd8fd25d6b34d0fd5289/backend/service/auditsink/slack/slack.go#L114-L131) is created using the [event's](https://github.com/lyft/clutch/blob/b56d9a929361fb590144bd8fd25d6b34d0fd5289/api/audit/v1/audit.proto#L60-L76) `username`, `service_name`, `method_name`, and `resources` fields.
+For each incoming API request into Clutch, an audit event is [created, persisted, and then forwarded](https://clutch.sh/docs/advanced/security-auditing/) to the sinks. The role of a sink is simple: process the audit event appropriately for your needs and forward the event to other systems (Clutch ships with logging and Slack sinks and you can easily add new ones, such as Microsoft Teams). The sinks utilize the recorded information in an audit event to create an output. For example, the Slack sink’s [standard message](https://github.com/lyft/clutch/blob/b56d9a929361fb590144bd8fd25d6b34d0fd5289/backend/service/auditsink/slack/slack.go#L114-L131) is created using the [event's](https://github.com/lyft/clutch/blob/b56d9a929361fb590144bd8fd25d6b34d0fd5289/api/audit/v1/audit.proto#L60-L76) `username`, `service_name`, `method_name`, and `resources` fields.
 
-The first version of the audit middleware (runs on each request) collected only a subset of information from the incoming API calls. In order to support richer output in the audit sinks (ex. customized Slack messages), the audit middleware needed to be modified to record the entire API request/response body, which serves as metadata in the audit event.
+The first version of the audit middleware (that runs on each request) collected only a subset of information from the incoming API calls. In order to support richer output in the audit sinks (e.g. customized Slack messages), the audit middleware needed to be modified to record the entire API request/response body, which serves as metadata in the audit event.
 
 ## The Any
 
@@ -53,14 +55,33 @@ message ResponseMetadata {
 
 The event’s Any fields can then be unpacked into its underlying message type by the audit sinks.
 
-Below is an example of an audit event with the stored metadata for [DescribePod](https://github.com/lyft/clutch/blob/a07d897dc69229ad1453fea6dcaf36ad50d2f6a6/api/k8s/v1/k8s.proto#L16-L22):
+Below is a snippet of an audit event with the stored metadata for [DescribePod](https://github.com/lyft/clutch/blob/a07d897dc69229ad1453fea6dcaf36ad50d2f6a6/api/k8s/v1/k8s.proto#L16-L22):
 
 ```json
-{
-...
-"requestMetadata":{"body":{"@type":"type.googleapis.com/clutch.k8s.v1.DescribePodRequest","clientset":"kind-clutch-local","cluster":"kind-clutch-local","namespace":"envoy-staging","name":"envoy-58d647f457-5b2k4"}},
-"responseMetadata":{"body":{"@type":"type.googleapis.com/clutch.k8s.v1.DescribePodResponse","pod":{"cluster":"kind-clutch-local","namespace":"envoy-staging","name":"envoy-58d647f457-5b2k4","containers":[{"name":"envoy","image":"docker.io/envoyproxy/envoy:v1.14-latest","state":"RUNNING","ready":true,"restartCount":65,"stateRunning":{}}],"nodeIp":"172.18.0.2","podIp":"10.244.0.5","state":"RUNNING","labels":{"app":"envoy","bar":"value","env":"newstaging","foo":"value","pod-template-hash":"58d647f457","yett":"yes"},"podConditions":[{"type":"INITIALIZED","status":"TRUE"},{"type":"READY","status":"TRUE"},{"type":"CONTAINERS_READY","status":"TRUE"},{"type":"POD_SCHEDULED","status":"TRUE"}],"status":"Running","startTimeMillis":"1616607169000"}}}
-...
+"requestMetadata":{
+  "body":{
+    "@type":"type.googleapis.com/clutch.k8s.v1.DescribePodRequest",
+    "clientset":"kind-clutch-local",
+    "cluster":"kind-clutch-local",
+    "namespace":"envoy-staging",
+    "name":"envoy-58d647f457-5b2k4"
+  }
+},
+"responseMetadata":{
+  "body":{
+    "@type":"type.googleapis.com/clutch.k8s.v1.DescribePodResponse",
+    "pod":{
+      "containers":[{"name":"envoy","ready":true,...}],
+      "nodeIp":"172.18.0.2",
+      "podIp":"10.244.0.5",
+      "state":"RUNNING",
+      "labels":{"app":"envoy","pod-template-hash":"58d647f457"},
+      "podConditions":[{"type":"POD_SCHEDULED","status":"TRUE"},...],
+      "status":"Running",
+      "startTimeMillis":"1616607169000",
+      ...
+    }
+  }
 }
 ```
 
@@ -68,7 +89,7 @@ Below is an example of an audit event with the stored metadata for [DescribePod]
 
 With new metadata on hand in the audit event, we could support customized Slack messages. Our goals for the feature were to 1) avoid code duplication and 2) make it easy for users to set up for their workflows. Let’s dive into the latter point first.
 
-We [updated](https://github.com/lyft/clutch/blob/c50f64a6a487f7a961a333251afe2cdede3addb7/api/config/service/auditsink/slack/v1/slack.proto#L18-L43) the Slack configuration to allow users to specify a custom message for a `service/method` in the [clutch-config](https://github.com/lyft/clutch/blob/main/backend/clutch-config.yaml). The feature is powered by the Golang [template](https://golang.org/pkg/text/template/) package, so in the freeform message field you’d provide the names of the fields from the workflow’s API request/response. These fields will be replaced by their values when parsed by the Slack sink. We intentionally chose to append the custom message to the default Slack message for a richer Slack audit to prevent users from removing basic auditing with a bad override.
+We [updated](https://github.com/lyft/clutch/blob/c50f64a6a487f7a961a333251afe2cdede3addb7/api/config/service/auditsink/slack/v1/slack.proto#L18-L43) the Slack configuration to allow users to specify a custom message for a `service/method` in the [clutch-config](https://github.com/lyft/clutch/blob/main/backend/clutch-config.yaml). The feature is powered by the Golang [template](https://golang.org/pkg/text/template/) package, so in the freeform message field you’d provide the names of the fields from the workflow’s API request/response. These fields will be replaced by their values when parsed by the Slack sink. We intentionally chose to append the custom message to the standard Slack message to prevent users from removing basic auditing with a less detailed override.
 
 Here’s an example of setting up a message that logs out the min/max size sent in the K8s Resize HPA [request](https://github.com/lyft/clutch/blob/9765a88f042c306b0a9d63fb55a8b2ed552b1c18/api/k8s/v1/k8s.proto#L452-L468):
 
@@ -100,20 +121,20 @@ A few things to highlight from the example:
 
 That minimal configuration is all that’s needed to set up this feature for any Clutch workflow!
 
-<img alt="Clutch Custom Slack Audit Message" src="https://user-images.githubusercontent.com/39421794/122236354-734b7380-ce8c-11eb-97e4-146222eda962.png" />
+<Image alt="Clutch Custom Slack Audit Message" src="https://user-images.githubusercontent.com/39421794/122236354-734b7380-ce8c-11eb-97e4-146222eda962.png" />
 
 ## Under the Hood
 
 In the Slack sink, we check if a user has provided a custom Slack message for a given workflow  event and if so, inject the metadata values from the audit event into the custom message and [execute](https://golang.org/pkg/text/template/#Template.Execute) the message template.
 
-As mentioned earlier, one of our goals for the customized Slack message feature was to reduce code duplication. By saving the API request/response body as Any type in the audit event, we can retrieve the metadata values for any custom message with just this flow [here](https://github.com/lyft/clutch/blob/9765a88f042c306b0a9d63fb55a8b2ed552b1c18/backend/service/auditsink/slack/slack.go#L174-L202) in the Slack sink. Let’s focus on the important pieces.
+As mentioned earlier, one of our goals for the customized Slack message feature was to reduce code duplication. By saving the API request/response body as Any type in the audit event, we can retrieve the metadata values for any custom message with just [this flow](https://github.com/lyft/clutch/blob/9765a88f042c306b0a9d63fb55a8b2ed552b1c18/backend/service/auditsink/slack/slack.go#L174-L202) in the Slack sink. Let’s focus on the important pieces.
 
 ```go
 reqJSON, err := protojson.Marshal(event.RequestMetadata.Body)
 respJSON, err := protojson.Marshal(event.ResponseMetadata.Body)
 ```
 
-The aim here is to unpack the metadata (Any type) into its underlying message. We looked into using anypb’s [UnmarshalNew](https://pkg.go.dev/google.golang.org/protobuf/types/known/anypb#Any.UnmarshalNew) but ultimately decided upon protojson’s [Marshal](https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson#Marshal). The main reason for this choice was that we wanted to use the json format as the basis for the context in order to simplify the metadata structure a bit. For example, protojson flattens oneOf fields into its top level field. Since custom messages need to specify what exact data is needed from the request/response, simplifications like these can help make writing a custom message simpler/easier.
+The aim here is to unpack the metadata (Any type) into its underlying message. We looked into using anypb’s [UnmarshalNew](https://pkg.go.dev/google.golang.org/protobuf/types/known/anypb#Any.UnmarshalNew) but ultimately decided upon protojson’s [Marshal](https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson#Marshal). The main reason for this choice was that we wanted to use the json format as the basis for the context in order to simplify the metadata structure a bit. For example, protojson flattens `oneOf` fields into its top level field. Since custom messages need to specify what exact data is needed from the request/response, simplifications like these can help make writing a custom message easier.
 
 ```go
 var requestMetadata map[string]interface{}
@@ -137,13 +158,12 @@ Lastly, we didn’t want the users to need to know anything about the schema of 
 
 ## Conclusion
 
-The Clutch team values building features generically as possible so that it can serve many current and future use cases. We didn’t want workflow admins/creators to need to add custom logic to the audit architecture per Clutch workflow to support this feature. Our aim was for it to be intuitive for someone to use without needing to know what’s happening under the hood (like the specifics of the audit flow or Slack sink).
+The Clutch team values building features as generically as possible so that they can serve many current and future use cases. We didn’t want workflow admins/creators to need to add custom logic to the audit architecture per Clutch workflow to support this feature. Our aim was for it to be intuitive for someone to use without needing to know what’s happening under the hood (like the specifics of the audit flow or Slack sink).
 
-What’s next? In next iterations, we’d like to move the custom messages alongside API code so that there’s less configuration in the clutch-config and experiment with creating a default customized Slack message for workflows. Also, a new feature we’d like to add is targeted Slack notifications, so that you can route your audits to various channels in your Slack workspace.
+What’s next? In future iterations, we’d like to move the custom messages [alongside API code](https://github.com/lyft/clutch/issues/1519) so that there’s less configuration in the clutch-config and experiment with creating a [standard customized Slack message](https://github.com/lyft/clutch/issues/1520) for workflows. We would also like to add [targeted Slack notifications](https://github.com/lyft/clutch/issues/803), so that you can route your audits to various channels in your Slack workspace.
 
 ## Want to get involved?
 
 To learn more about Clutch, contribute, or follow along:
   * Check our [documentation](https://clutch.sh/) and [code](https://github.com/lyft/clutch)
-  * Join us on [Slack](https://lyftoss.slack.com/)
-  * Follow us on [Twitter](https://twitter.com/clutchdotsh)
+  * Join the [Community](https://clutch.sh/docs/community/)
