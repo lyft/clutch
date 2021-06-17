@@ -143,8 +143,8 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 }
 
 func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason string) error {
-	if len(reason) > 100 {
-		reason = reason[0:100]
+	if len(reason) > 150 {
+		reason = reason[0:150]
 	}
 	sql :=
 		`UPDATE experiment_run
