@@ -9,6 +9,8 @@ import (
 	"google.golang.org/grpc/status"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes/scheme"
+	"k8s.io/client-go/tools/reference"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
@@ -27,11 +29,24 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	}
 
 	if len(pods.Items) == 1 {
-		return podDescription(&pods.Items[0], cs.Cluster()), nil
+		return podDescription(&pods.Items[0], cs.Cluster(), getPodEvents(&pods.Items[0], cs)), nil
 	} else if len(pods.Items) > 1 {
 		return nil, status.Error(codes.FailedPrecondition, "located multiple pods")
 	}
 	return nil, status.Error(codes.NotFound, "unable to locate specified pod")
+}
+
+func getPodEvents(pod *corev1.Pod, cs ContextClientset) []corev1.Event {
+	var k8sEvents []corev1.Event
+	ref, err := reference.GetReference(scheme.Scheme, pod)
+	if err != nil {
+		return k8sEvents
+	}
+	eventList, err := cs.CoreV1().Events(pod.Namespace).Search(scheme.Scheme, ref)
+	if err != nil {
+		return k8sEvents
+	}
+	return eventList.Items
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
@@ -66,7 +81,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 	var pods []*k8sapiv1.Pod
 	for _, p := range podList.Items {
 		pod := p
-		pods = append(pods, podDescription(&pod, cs.Cluster()))
+		pods = append(pods, podDescription(&pod, cs.Cluster(), getPodEvents(&pod, cs)))
 	}
 
 	return pods, nil
@@ -168,7 +183,7 @@ func (s *svc) checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.E
 	return &ExpectedObjectMetaFieldsCheckError{MismatchedAnnotations: mismatchedAnnotations}
 }
 
-func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
+func podDescription(k8spod *corev1.Pod, cluster string, k8sEvents []corev1.Event) *k8sapiv1.Pod {
 	// TODO: There's a mismatch between the serialization of the timestamp here and what's expected
 	// on the frontend.
 	// var launch *timestamp.Timestamp
@@ -202,7 +217,24 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 		pod.StartTimeMillis = k8spod.Status.StartTime.UnixNano() / 1e6
 	}
 
+	if len(k8sEvents) > 0 {
+		pod.Events = makeEvents(k8sEvents)
+	}
+
 	return pod
+}
+
+func makeEvents(k8sEvents []corev1.Event) []*k8sapiv1.Event {
+	events := make([]*k8sapiv1.Event, 0, len(k8sEvents))
+	for _, k8sEvent := range k8sEvents {
+		event := &k8sapiv1.Event{
+			Name:        k8sEvent.Name,
+			Reason:      k8sEvent.Reason,
+			Description: k8sEvent.Message,
+		}
+		events = append(events, event)
+	}
+	return events
 }
 
 func makeConditions(conditions []corev1.PodCondition) []*k8sapiv1.PodCondition {

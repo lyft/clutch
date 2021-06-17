@@ -223,6 +223,7 @@ func TestPodDescription(t *testing.T) {
 		inputClusterName    string
 		expectedClusterName string
 		pod                 *corev1.Pod
+		events              []corev1.Event
 	}{
 		{
 			id:                  "clustername already set",
@@ -251,6 +252,15 @@ func TestPodDescription(t *testing.T) {
 							Status: corev1.ConditionTrue,
 						},
 					},
+				},
+			},
+			events: []corev1.Event{
+				corev1.Event{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "event-test-1",
+					},
+					Reason:  "reason-test-1",
+					Message: "description-test-1",
 				},
 			},
 		},
@@ -283,6 +293,15 @@ func TestPodDescription(t *testing.T) {
 					},
 				},
 			},
+			events: []corev1.Event{
+				corev1.Event{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "event-test-2",
+					},
+					Reason:  "reason-test-2",
+					Message: "description-test-2",
+				},
+			},
 		},
 	}
 
@@ -291,7 +310,7 @@ func TestPodDescription(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			pod := podDescription(tt.pod, tt.inputClusterName)
+			pod := podDescription(tt.pod, tt.inputClusterName, tt.events)
 			assert.Equal(t, tt.expectedClusterName, pod.Cluster)
 			assert.Equal(t, tt.pod.Status.Reason, pod.StateReason)
 			assert.Equal(t, tt.pod.Status.InitContainerStatuses[0].Name, pod.InitContainers[0].Name)
@@ -299,6 +318,7 @@ func TestPodDescription(t *testing.T) {
 			assert.Equal(t, k8sv1.PodCondition_Status(1), pod.PodConditions[0].Status)
 			assert.Equal(t, "Init: 0/0", pod.Status)
 			assert.NotNil(t, pod.StartTimeMillis)
+			assert.Equal(t, 1, len(pod.Events))
 		})
 	}
 }
@@ -527,6 +547,7 @@ func TestPodStatus(t *testing.T) {
 		id                string
 		expectedPodStatus string
 		pod               *corev1.Pod
+		events            []corev1.Event
 	}{
 		{
 			id:                "Error Status",
@@ -550,6 +571,15 @@ func TestPodStatus(t *testing.T) {
 					},
 				},
 			},
+			events: []corev1.Event{
+				corev1.Event{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "event-test",
+					},
+					Reason:  "reason-test",
+					Message: "description-test",
+				},
+			},
 		},
 		{
 			id:                "Error Status",
@@ -571,6 +601,15 @@ func TestPodStatus(t *testing.T) {
 							},
 						},
 					},
+				},
+			},
+			events: []corev1.Event{
+				corev1.Event{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "event-test",
+					},
+					Reason:  "reason-test",
+					Message: "description-test",
 				},
 			},
 		},
@@ -597,6 +636,15 @@ func TestPodStatus(t *testing.T) {
 					},
 				},
 			},
+			events: []corev1.Event{
+				corev1.Event{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "event-test",
+					},
+					Reason:  "reason-test",
+					Message: "description-test",
+				},
+			},
 		},
 		{
 			id:                "Terminating",
@@ -604,6 +652,15 @@ func TestPodStatus(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					DeletionTimestamp: &timeStamp,
+				},
+			},
+			events: []corev1.Event{
+				corev1.Event{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "event-test",
+					},
+					Reason:  "reason-test",
+					Message: "description-test",
 				},
 			},
 		},
@@ -629,6 +686,15 @@ func TestPodStatus(t *testing.T) {
 					},
 				},
 			},
+			events: []corev1.Event{
+				corev1.Event{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "event-test",
+					},
+					Reason:  "reason-test",
+					Message: "description-test",
+				},
+			},
 		},
 		{
 			id:                "PodTerminating",
@@ -652,6 +718,15 @@ func TestPodStatus(t *testing.T) {
 					},
 				},
 			},
+			events: []corev1.Event{
+				corev1.Event{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "event-test",
+					},
+					Reason:  "reason-test",
+					Message: "description-test",
+				},
+			},
 		},
 	}
 
@@ -660,8 +735,12 @@ func TestPodStatus(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			pod := podDescription(tt.pod, "staging")
+			pod := podDescription(tt.pod, "staging", tt.events)
 			assert.Equal(t, tt.expectedPodStatus, pod.Status)
+			assert.Equal(t, 1, len(pod.Events))
+			assert.Equal(t, tt.events[0].Name, pod.Events[0].Name)
+			assert.Equal(t, tt.events[0].Reason, pod.Events[0].Reason)
+			assert.Equal(t, tt.events[0].Message, pod.Events[0].Description)
 		})
 	}
 }
