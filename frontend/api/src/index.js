@@ -23413,8 +23413,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a ProjectDependencies.
                      * @memberof clutch.core.project.v1
                      * @interface IProjectDependencies
-                     * @property {Array.<clutch.core.project.v1.IDependency>|null} [upstreams] ProjectDependencies upstreams
-                     * @property {Array.<clutch.core.project.v1.IDependency>|null} [downstreams] ProjectDependencies downstreams
+                     * @property {Object.<string,clutch.core.project.v1.IDependency>|null} [upstreams] ProjectDependencies upstreams
+                     * @property {Object.<string,clutch.core.project.v1.IDependency>|null} [downstreams] ProjectDependencies downstreams
                      */
 
                     /**
@@ -23426,8 +23426,8 @@ export const clutch = $root.clutch = (() => {
                      * @param {clutch.core.project.v1.IProjectDependencies=} [properties] Properties to set
                      */
                     function ProjectDependencies(properties) {
-                        this.upstreams = [];
-                        this.downstreams = [];
+                        this.upstreams = {};
+                        this.downstreams = {};
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -23436,19 +23436,19 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * ProjectDependencies upstreams.
-                     * @member {Array.<clutch.core.project.v1.IDependency>} upstreams
+                     * @member {Object.<string,clutch.core.project.v1.IDependency>} upstreams
                      * @memberof clutch.core.project.v1.ProjectDependencies
                      * @instance
                      */
-                    ProjectDependencies.prototype.upstreams = $util.emptyArray;
+                    ProjectDependencies.prototype.upstreams = $util.emptyObject;
 
                     /**
                      * ProjectDependencies downstreams.
-                     * @member {Array.<clutch.core.project.v1.IDependency>} downstreams
+                     * @member {Object.<string,clutch.core.project.v1.IDependency>} downstreams
                      * @memberof clutch.core.project.v1.ProjectDependencies
                      * @instance
                      */
-                    ProjectDependencies.prototype.downstreams = $util.emptyArray;
+                    ProjectDependencies.prototype.downstreams = $util.emptyObject;
 
                     /**
                      * Verifies a ProjectDependencies message.
@@ -23462,19 +23462,21 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.upstreams != null && message.hasOwnProperty("upstreams")) {
-                            if (!Array.isArray(message.upstreams))
-                                return "upstreams: array expected";
-                            for (let i = 0; i < message.upstreams.length; ++i) {
-                                let error = $root.clutch.core.project.v1.Dependency.verify(message.upstreams[i]);
+                            if (!$util.isObject(message.upstreams))
+                                return "upstreams: object expected";
+                            let key = Object.keys(message.upstreams);
+                            for (let i = 0; i < key.length; ++i) {
+                                let error = $root.clutch.core.project.v1.Dependency.verify(message.upstreams[key[i]]);
                                 if (error)
                                     return "upstreams." + error;
                             }
                         }
                         if (message.downstreams != null && message.hasOwnProperty("downstreams")) {
-                            if (!Array.isArray(message.downstreams))
-                                return "downstreams: array expected";
-                            for (let i = 0; i < message.downstreams.length; ++i) {
-                                let error = $root.clutch.core.project.v1.Dependency.verify(message.downstreams[i]);
+                            if (!$util.isObject(message.downstreams))
+                                return "downstreams: object expected";
+                            let key = Object.keys(message.downstreams);
+                            for (let i = 0; i < key.length; ++i) {
+                                let error = $root.clutch.core.project.v1.Dependency.verify(message.downstreams[key[i]]);
                                 if (error)
                                     return "downstreams." + error;
                             }
@@ -23495,23 +23497,23 @@ export const clutch = $root.clutch = (() => {
                             return object;
                         let message = new $root.clutch.core.project.v1.ProjectDependencies();
                         if (object.upstreams) {
-                            if (!Array.isArray(object.upstreams))
-                                throw TypeError(".clutch.core.project.v1.ProjectDependencies.upstreams: array expected");
-                            message.upstreams = [];
-                            for (let i = 0; i < object.upstreams.length; ++i) {
-                                if (typeof object.upstreams[i] !== "object")
+                            if (typeof object.upstreams !== "object")
+                                throw TypeError(".clutch.core.project.v1.ProjectDependencies.upstreams: object expected");
+                            message.upstreams = {};
+                            for (let keys = Object.keys(object.upstreams), i = 0; i < keys.length; ++i) {
+                                if (typeof object.upstreams[keys[i]] !== "object")
                                     throw TypeError(".clutch.core.project.v1.ProjectDependencies.upstreams: object expected");
-                                message.upstreams[i] = $root.clutch.core.project.v1.Dependency.fromObject(object.upstreams[i]);
+                                message.upstreams[keys[i]] = $root.clutch.core.project.v1.Dependency.fromObject(object.upstreams[keys[i]]);
                             }
                         }
                         if (object.downstreams) {
-                            if (!Array.isArray(object.downstreams))
-                                throw TypeError(".clutch.core.project.v1.ProjectDependencies.downstreams: array expected");
-                            message.downstreams = [];
-                            for (let i = 0; i < object.downstreams.length; ++i) {
-                                if (typeof object.downstreams[i] !== "object")
+                            if (typeof object.downstreams !== "object")
+                                throw TypeError(".clutch.core.project.v1.ProjectDependencies.downstreams: object expected");
+                            message.downstreams = {};
+                            for (let keys = Object.keys(object.downstreams), i = 0; i < keys.length; ++i) {
+                                if (typeof object.downstreams[keys[i]] !== "object")
                                     throw TypeError(".clutch.core.project.v1.ProjectDependencies.downstreams: object expected");
-                                message.downstreams[i] = $root.clutch.core.project.v1.Dependency.fromObject(object.downstreams[i]);
+                                message.downstreams[keys[i]] = $root.clutch.core.project.v1.Dependency.fromObject(object.downstreams[keys[i]]);
                             }
                         }
                         return message;
@@ -23530,19 +23532,20 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults) {
-                            object.upstreams = [];
-                            object.downstreams = [];
+                        if (options.objects || options.defaults) {
+                            object.upstreams = {};
+                            object.downstreams = {};
                         }
-                        if (message.upstreams && message.upstreams.length) {
-                            object.upstreams = [];
-                            for (let j = 0; j < message.upstreams.length; ++j)
-                                object.upstreams[j] = $root.clutch.core.project.v1.Dependency.toObject(message.upstreams[j], options);
+                        let keys2;
+                        if (message.upstreams && (keys2 = Object.keys(message.upstreams)).length) {
+                            object.upstreams = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.upstreams[keys2[j]] = $root.clutch.core.project.v1.Dependency.toObject(message.upstreams[keys2[j]], options);
                         }
-                        if (message.downstreams && message.downstreams.length) {
-                            object.downstreams = [];
-                            for (let j = 0; j < message.downstreams.length; ++j)
-                                object.downstreams[j] = $root.clutch.core.project.v1.Dependency.toObject(message.downstreams[j], options);
+                        if (message.downstreams && (keys2 = Object.keys(message.downstreams)).length) {
+                            object.downstreams = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.downstreams[keys2[j]] = $root.clutch.core.project.v1.Dependency.toObject(message.downstreams[keys2[j]], options);
                         }
                         return object;
                     };
@@ -23567,8 +23570,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a Dependency.
                      * @memberof clutch.core.project.v1
                      * @interface IDependency
-                     * @property {string|null} [id] Dependency id
-                     * @property {string|null} [typeUrl] Dependency typeUrl
+                     * @property {Array.<string>|null} [id] Dependency id
                      */
 
                     /**
@@ -23580,6 +23582,7 @@ export const clutch = $root.clutch = (() => {
                      * @param {clutch.core.project.v1.IDependency=} [properties] Properties to set
                      */
                     function Dependency(properties) {
+                        this.id = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -23588,19 +23591,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Dependency id.
-                     * @member {string} id
+                     * @member {Array.<string>} id
                      * @memberof clutch.core.project.v1.Dependency
                      * @instance
                      */
-                    Dependency.prototype.id = "";
-
-                    /**
-                     * Dependency typeUrl.
-                     * @member {string} typeUrl
-                     * @memberof clutch.core.project.v1.Dependency
-                     * @instance
-                     */
-                    Dependency.prototype.typeUrl = "";
+                    Dependency.prototype.id = $util.emptyArray;
 
                     /**
                      * Verifies a Dependency message.
@@ -23613,12 +23608,13 @@ export const clutch = $root.clutch = (() => {
                     Dependency.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            if (!$util.isString(message.id))
-                                return "id: string expected";
-                        if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
-                            if (!$util.isString(message.typeUrl))
-                                return "typeUrl: string expected";
+                        if (message.id != null && message.hasOwnProperty("id")) {
+                            if (!Array.isArray(message.id))
+                                return "id: array expected";
+                            for (let i = 0; i < message.id.length; ++i)
+                                if (!$util.isString(message.id[i]))
+                                    return "id: string[] expected";
+                        }
                         return null;
                     };
 
@@ -23634,10 +23630,13 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.core.project.v1.Dependency)
                             return object;
                         let message = new $root.clutch.core.project.v1.Dependency();
-                        if (object.id != null)
-                            message.id = String(object.id);
-                        if (object.typeUrl != null)
-                            message.typeUrl = String(object.typeUrl);
+                        if (object.id) {
+                            if (!Array.isArray(object.id))
+                                throw TypeError(".clutch.core.project.v1.Dependency.id: array expected");
+                            message.id = [];
+                            for (let i = 0; i < object.id.length; ++i)
+                                message.id[i] = String(object.id[i]);
+                        }
                         return message;
                     };
 
@@ -23654,14 +23653,13 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults) {
-                            object.id = "";
-                            object.typeUrl = "";
+                        if (options.arrays || options.defaults)
+                            object.id = [];
+                        if (message.id && message.id.length) {
+                            object.id = [];
+                            for (let j = 0; j < message.id.length; ++j)
+                                object.id[j] = message.id[j];
                         }
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            object.id = message.id;
-                        if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
-                            object.typeUrl = message.typeUrl;
                         return object;
                     };
 
@@ -28955,6 +28953,141 @@ export const clutch = $root.clutch = (() => {
                 return PodCondition;
             })();
 
+            v1.Event = (function() {
+
+                /**
+                 * Properties of an Event.
+                 * @memberof clutch.k8s.v1
+                 * @interface IEvent
+                 * @property {string|null} [name] Event name
+                 * @property {string|null} [reason] Event reason
+                 * @property {string|null} [description] Event description
+                 */
+
+                /**
+                 * Constructs a new Event.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an Event.
+                 * @implements IEvent
+                 * @constructor
+                 * @param {clutch.k8s.v1.IEvent=} [properties] Properties to set
+                 */
+                function Event(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Event name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.name = "";
+
+                /**
+                 * Event reason.
+                 * @member {string} reason
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.reason = "";
+
+                /**
+                 * Event description.
+                 * @member {string} description
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.description = "";
+
+                /**
+                 * Verifies an Event message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Event.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        if (!$util.isString(message.reason))
+                            return "reason: string expected";
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        if (!$util.isString(message.description))
+                            return "description: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Event} Event
+                 */
+                Event.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Event)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Event();
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.reason != null)
+                        message.reason = String(object.reason);
+                    if (object.description != null)
+                        message.description = String(object.description);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an Event message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {clutch.k8s.v1.Event} message Event
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Event.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.name = "";
+                        object.reason = "";
+                        object.description = "";
+                    }
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        object.reason = message.reason;
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        object.description = message.description;
+                    return object;
+                };
+
+                /**
+                 * Converts this Event to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Event.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Event;
+            })();
+
             v1.Pod = (function() {
 
                 /**
@@ -28976,6 +29109,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {Array.<clutch.k8s.v1.IContainer>|null} [initContainers] Pod initContainers
                  * @property {string|null} [status] Pod status
                  * @property {number|Long|null} [startTimeMillis] Pod startTimeMillis
+                 * @property {Array.<clutch.k8s.v1.IEvent>|null} [events] Pod events
                  */
 
                 /**
@@ -28992,6 +29126,7 @@ export const clutch = $root.clutch = (() => {
                     this.annotations = {};
                     this.podConditions = [];
                     this.initContainers = [];
+                    this.events = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -29119,6 +29254,14 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.startTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
+                 * Pod events.
+                 * @member {Array.<clutch.k8s.v1.IEvent>} events
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.events = $util.emptyArray;
+
+                /**
                  * Verifies a Pod message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Pod
@@ -29213,6 +29356,15 @@ export const clutch = $root.clutch = (() => {
                     if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
                         if (!$util.isInteger(message.startTimeMillis) && !(message.startTimeMillis && $util.isInteger(message.startTimeMillis.low) && $util.isInteger(message.startTimeMillis.high)))
                             return "startTimeMillis: integer|Long expected";
+                    if (message.events != null && message.hasOwnProperty("events")) {
+                        if (!Array.isArray(message.events))
+                            return "events: array expected";
+                        for (let i = 0; i < message.events.length; ++i) {
+                            let error = $root.clutch.k8s.v1.Event.verify(message.events[i]);
+                            if (error)
+                                return "events." + error;
+                        }
+                    }
                     return null;
                 };
 
@@ -29326,6 +29478,16 @@ export const clutch = $root.clutch = (() => {
                             message.startTimeMillis = object.startTimeMillis;
                         else if (typeof object.startTimeMillis === "object")
                             message.startTimeMillis = new $util.LongBits(object.startTimeMillis.low >>> 0, object.startTimeMillis.high >>> 0).toNumber();
+                    if (object.events) {
+                        if (!Array.isArray(object.events))
+                            throw TypeError(".clutch.k8s.v1.Pod.events: array expected");
+                        message.events = [];
+                        for (let i = 0; i < object.events.length; ++i) {
+                            if (typeof object.events[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.Pod.events: object expected");
+                            message.events[i] = $root.clutch.k8s.v1.Event.fromObject(object.events[i]);
+                        }
+                    }
                     return message;
                 };
 
@@ -29346,6 +29508,7 @@ export const clutch = $root.clutch = (() => {
                         object.containers = [];
                         object.podConditions = [];
                         object.initContainers = [];
+                        object.events = [];
                     }
                     if (options.objects || options.defaults) {
                         object.labels = {};
@@ -29416,6 +29579,11 @@ export const clutch = $root.clutch = (() => {
                             object.startTimeMillis = options.longs === String ? String(message.startTimeMillis) : message.startTimeMillis;
                         else
                             object.startTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeMillis) : options.longs === Number ? new $util.LongBits(message.startTimeMillis.low >>> 0, message.startTimeMillis.high >>> 0).toNumber() : message.startTimeMillis;
+                    if (message.events && message.events.length) {
+                        object.events = [];
+                        for (let j = 0; j < message.events.length; ++j)
+                            object.events[j] = $root.clutch.k8s.v1.Event.toObject(message.events[j], options);
+                    }
                     return object;
                 };
 

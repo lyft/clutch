@@ -51,6 +51,11 @@ module.exports = {
         resolverType: "clutch.k8s.v1.Pod",
       },
     },
+    describePod: {
+      componentProps: {
+        resolverType: "clutch.k8s.v1.Pod",
+      },
+    },
     resizeHPA: {
       trending: true,
       componentProps: {

@@ -32,7 +32,7 @@ func TestProcessInformerEvent(t *testing.T) {
 		},
 	}
 
-	expectedClutchPod := podDescription(pod, "")
+	expectedClutchPod := podDescription(pod, "", []corev1.Event{})
 	protoPod, err := anypb.New(expectedClutchPod)
 	assert.NoError(t, err)
 
