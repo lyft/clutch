@@ -27,7 +27,7 @@ const PodDetails: React.FC<WizardChild> = () => {
   const resourceData = useDataLayout("resourceData");
   const instance = resourceData.displayValue() as IClutch.k8s.v1.Pod;
   const { containers } = instance;
-
+  const { events } = instance;
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <strong>Pod Details</strong>
@@ -52,6 +52,23 @@ const PodDetails: React.FC<WizardChild> = () => {
                     {container.name}
                     {container.state}
                     {container.restartCount}
+                  </TableRow>
+                ))}
+              </Table>
+            ),
+          },
+          {
+            name: "Events",
+            value: (
+              <Table stickyHeader headings={["Reason", "Description"]}>
+                {_.sortBy(events, [
+                  o => {
+                    return o.name;
+                  },
+                ]).map(container => (
+                  <TableRow key={container.name} defaultCellValue="nil">
+                    {container.reason}
+                    {container.description}
                   </TableRow>
                 ))}
               </Table>
