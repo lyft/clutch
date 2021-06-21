@@ -9716,10 +9716,10 @@ export namespace clutch {
                 interface IProjectDependencies {
 
                     /** ProjectDependencies upstreams */
-                    upstreams?: (clutch.core.project.v1.IDependency[]|null);
+                    upstreams?: ({ [k: string]: clutch.core.project.v1.IDependency }|null);
 
                     /** ProjectDependencies downstreams */
-                    downstreams?: (clutch.core.project.v1.IDependency[]|null);
+                    downstreams?: ({ [k: string]: clutch.core.project.v1.IDependency }|null);
                 }
 
                 /** Represents a ProjectDependencies. */
@@ -9732,10 +9732,10 @@ export namespace clutch {
                     constructor(properties?: clutch.core.project.v1.IProjectDependencies);
 
                     /** ProjectDependencies upstreams. */
-                    public upstreams: clutch.core.project.v1.IDependency[];
+                    public upstreams: { [k: string]: clutch.core.project.v1.IDependency };
 
                     /** ProjectDependencies downstreams. */
-                    public downstreams: clutch.core.project.v1.IDependency[];
+                    public downstreams: { [k: string]: clutch.core.project.v1.IDependency };
 
                     /**
                      * Verifies a ProjectDependencies message.
@@ -9770,10 +9770,7 @@ export namespace clutch {
                 interface IDependency {
 
                     /** Dependency id */
-                    id?: (string|null);
-
-                    /** Dependency typeUrl */
-                    typeUrl?: (string|null);
+                    id?: (string[]|null);
                 }
 
                 /** Represents a Dependency. */
@@ -9786,10 +9783,7 @@ export namespace clutch {
                     constructor(properties?: clutch.core.project.v1.IDependency);
 
                     /** Dependency id. */
-                    public id: string;
-
-                    /** Dependency typeUrl. */
-                    public typeUrl: string;
+                    public id: string[];
 
                     /**
                      * Verifies a Dependency message.

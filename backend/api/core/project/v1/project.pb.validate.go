@@ -136,13 +136,15 @@ func (m *ProjectDependencies) Validate() error {
 		return nil
 	}
 
-	for idx, item := range m.GetUpstreams() {
-		_, _ = idx, item
+	for key, val := range m.GetUpstreams() {
+		_ = val
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		// no validation rules for Upstreams[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ProjectDependenciesValidationError{
-					field:  fmt.Sprintf("Upstreams[%v]", idx),
+					field:  fmt.Sprintf("Upstreams[%v]", key),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -151,13 +153,15 @@ func (m *ProjectDependencies) Validate() error {
 
 	}
 
-	for idx, item := range m.GetDownstreams() {
-		_, _ = idx, item
+	for key, val := range m.GetDownstreams() {
+		_ = val
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		// no validation rules for Downstreams[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ProjectDependenciesValidationError{
-					field:  fmt.Sprintf("Downstreams[%v]", idx),
+					field:  fmt.Sprintf("Downstreams[%v]", key),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -231,10 +235,6 @@ func (m *Dependency) Validate() error {
 	if m == nil {
 		return nil
 	}
-
-	// no validation rules for Id
-
-	// no validation rules for TypeUrl
 
 	return nil
 }

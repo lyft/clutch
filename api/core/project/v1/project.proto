@@ -21,11 +21,11 @@ message Project {
 
 // Dependencies could be either upstream or downstream of this project.
 message ProjectDependencies {
-  repeated Dependency upstreams = 1;
-  repeated Dependency downstreams = 2;
+  // The key in this map is the type_url of the dependency
+  map<string, Dependency> upstreams = 1;
+  map<string, Dependency> downstreams = 2;
 }
 
 message Dependency {
-  string id = 1;
-  string type_url = 2;
+  repeated string id = 1;
 }
