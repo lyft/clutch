@@ -134,7 +134,7 @@ reqJSON, err := protojson.Marshal(event.RequestMetadata.Body)
 respJSON, err := protojson.Marshal(event.ResponseMetadata.Body)
 ```
 
-The aim here is to unpack the metadata (Any type) into its underlying message. We looked into using anypb’s [UnmarshalNew](https://pkg.go.dev/google.golang.org/protobuf/types/known/anypb#Any.UnmarshalNew) but ultimately decided upon protojson’s [Marshal](https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson#Marshal). The main reason for this choice was that we wanted to use the json format as the basis for the context in order to simplify the metadata structure a bit. For example, protojson flattens `oneOf` fields into its top level field. Since custom messages need to specify what exact data is needed from the request/response, simplifications like these can help make writing a custom message easier.
+The aim here is to unpack the metadata (Any type) into its underlying message. We looked into using anypb’s [UnmarshalNew](https://pkg.go.dev/google.golang.org/protobuf/types/known/anypb#Any.UnmarshalNew) but ultimately decided upon protojson’s [Marshal](https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson#Marshal). The main reason for this choice was that we wanted to use the json format as the basis for the context in order to simplify the metadata structure a bit. For example, protojson flattens [`oneOf`](https://developers.google.com/protocol-buffers/docs/proto3#oneof) fields into its top level field. Since custom messages need to specify what exact data is needed from the request/response, simplifications like these can help make writing a custom message easier.
 
 ```go
 var requestMetadata map[string]interface{}
