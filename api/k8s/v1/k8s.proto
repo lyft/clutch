@@ -303,12 +303,6 @@ message PodCondition {
   Status status = 2;
 }
 
-message Event {
-  string name = 1;
-  string reason = 2;
-  string description = 3;
-}
-
 message Pod {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Pod",
@@ -362,9 +356,6 @@ message Pod {
   // issues for well-known types like google.protobuf.Timestamp
   // Unix timestamp (milliseconds since Jan 01 1970)
   int64 start_time_millis = 15;
-
-  // pod events that represent state changes
-  repeated Event events = 16;
 }
 
 message ListOptions {
