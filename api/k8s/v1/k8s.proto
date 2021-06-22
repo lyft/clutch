@@ -237,7 +237,7 @@ message DescribePodRequest {
 message DescribePodResponse {
   option (clutch.api.v1.reference).fields = "pod";
 
-  Pod pod = 1 [ (clutch.api.v1.log) = false ];
+  Pod pod = 1;
 }
 
 // TODO(maybe): Identify with resource annotations.
@@ -392,7 +392,7 @@ message ListPodsRequest {
 message ListPodsResponse {
   option (clutch.api.v1.reference).fields = "pods";
 
-  repeated Pod pods = 1 [ (clutch.api.v1.log) = false ];
+  repeated Pod pods = 1;
 }
 
 message DeletePodRequest {
@@ -560,7 +560,7 @@ message DescribeDeploymentRequest {
 message DescribeDeploymentResponse {
   option (clutch.api.v1.reference).fields = "deployment";
 
-  Deployment deployment = 1 [ (clutch.api.v1.log) = false ];
+  Deployment deployment = 1;
 }
 
 message ListDeploymentsRequest {
@@ -579,7 +579,7 @@ message ListDeploymentsRequest {
 message ListDeploymentsResponse {
   option (clutch.api.v1.reference).fields = "deployments";
 
-  repeated Deployment deployments = 1 [ (clutch.api.v1.log) = false ];
+  repeated Deployment deployments = 1;
 }
 
 message UpdateDeploymentRequest {
@@ -665,7 +665,7 @@ message DescribeStatefulSetRequest {
 message DescribeStatefulSetResponse {
   option (clutch.api.v1.reference).fields = "stateful_set";
 
-  StatefulSet stateful_set = 1 [ (clutch.api.v1.log) = false ];
+  StatefulSet stateful_set = 1;
 }
 
 message ListStatefulSetsRequest {
@@ -684,7 +684,7 @@ message ListStatefulSetsRequest {
 message ListStatefulSetsResponse {
   option (clutch.api.v1.reference).fields = "stateful_sets";
 
-  repeated StatefulSet stateful_sets = 1 [ (clutch.api.v1.log) = false ];
+  repeated StatefulSet stateful_sets = 1;
 }
 
 message DeleteStatefulSetRequest {
@@ -768,7 +768,7 @@ message DescribeServiceRequest {
 message DescribeServiceResponse {
   option (clutch.api.v1.reference).fields = "service";
 
-  Service service = 1 [ (clutch.api.v1.log) = false ];
+  Service service = 1;
 }
 
 message DeleteServiceRequest {
@@ -830,7 +830,7 @@ message DescribeCronJobRequest {
 message DescribeCronJobResponse {
   option (clutch.api.v1.reference).fields = "cron";
 
-  CronJob cronjob = 1 [ (clutch.api.v1.log) = false ];
+  CronJob cronjob = 1;
 }
 
 message ListCronJobsRequest {
@@ -849,7 +849,7 @@ message ListCronJobsRequest {
 message ListCronJobsResponse {
   option (clutch.api.v1.reference).fields = "cron_jobs";
 
-  repeated CronJob cron_jobs = 1 [ (clutch.api.v1.log) = false ];
+  repeated CronJob cron_jobs = 1;
 }
 
 message DeleteCronJobRequest {
@@ -904,7 +904,7 @@ message ListConfigMapsRequest {
 message ListConfigMapsResponse {
   option (clutch.api.v1.reference).fields = "config_maps";
 
-  repeated ConfigMap config_maps = 1 [ (clutch.api.v1.log) = false ];
+  repeated ConfigMap config_maps = 1;
 }
 
 message DescribeConfigMapRequest {
@@ -922,7 +922,7 @@ message DescribeConfigMapRequest {
 message DescribeConfigMapResponse {
   option (clutch.api.v1.reference).fields = "config_map";
 
-  ConfigMap config_map = 1 [ (clutch.api.v1.log) = false ];
+  ConfigMap config_map = 1;
 }
 
 message DeleteConfigMapRequest {
@@ -970,7 +970,7 @@ message ListJobsRequest {
 message ListJobsResponse {
   option (clutch.api.v1.reference).fields = "jobs";
 
-  repeated Job jobs = 1 [ (clutch.api.v1.log) = false ];
+  repeated Job jobs = 1;
 }
 
 message DeleteJobRequest {
@@ -1001,11 +1001,11 @@ message CreateJobRequest {
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
-  JobConfig job_config = 4 [ (clutch.api.v1.log) = false ];
+  JobConfig job_config = 4;
 }
 
 message CreateJobResponse {
-  Job job = 1 [ (clutch.api.v1.log) = false ];
+  Job job = 1;
 }
 
 message Namespace {
@@ -1035,7 +1035,7 @@ message DescribeNamespaceRequest {
 message DescribeNamespaceResponse {
   option (clutch.api.v1.reference).fields = "namespace";
 
-  Namespace namespace = 1 [ (clutch.api.v1.log) = false ];
+  Namespace namespace = 1;
 }
 
 // This message type is used to add support for nullable strings and is an
