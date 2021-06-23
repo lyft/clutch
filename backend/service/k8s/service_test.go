@@ -10,6 +10,7 @@ import (
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
@@ -64,6 +65,24 @@ func TestDeleteService(t *testing.T) {
 	// Not found.
 	_, err = s.DescribeService(context.Background(), "foo", "core-testing", "testing-namespace", "testing-service-name")
 	assert.Error(t, err)
+}
+
+func TestListServices(t *testing.T) {
+	cs := testServiceClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	opts := &k8sapiv1.ListOptions{}
+	list, err := s.ListServices(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(list))
 }
 
 func TestProtoForServiceClusterName(t *testing.T) {

@@ -181,6 +181,22 @@ func (s *svc) DescribeService(_ context.Context, clientset, cluster, namespace, 
 	}, nil
 }
 
+func (s *svc) ListServices(_ context.Context, clientset, cluster, namespace string, listOptions *k8sv1.ListOptions) ([]*k8sv1.Service, error) {
+	services := []*k8sv1.Service{
+		&k8sv1.Service{
+			Cluster:   "fake-cluster-name",
+			Namespace: namespace,
+			Name:      "service1",
+		},
+		&k8sv1.Service{
+			Cluster:   "fake-cluster-name",
+			Namespace: namespace,
+			Name:      "service2",
+		},
+	}
+	return services, nil
+}
+
 func (*svc) DeleteService(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
 }

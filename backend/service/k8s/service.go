@@ -33,6 +33,31 @@ func (s *svc) DescribeService(ctx context.Context, clientset, cluster, namespace
 	return nil, status.Error(codes.NotFound, "unable to locate specified service")
 }
 
+func (s *svc) ListServices(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Service, error) {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	opts, err := ApplyListOptions(listOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	serviceList, err := cs.CoreV1().Services(cs.Namespace()).List(ctx, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	var services []*k8sapiv1.Service
+	for _, d := range serviceList.Items {
+		service := d
+		services = append(services, ProtoForService(cs.Cluster(), &service))
+	}
+
+	return services, nil
+}
+
 func (s *svc) DeleteService(ctx context.Context, clientset, cluster, namespace, name string) error {
 	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
