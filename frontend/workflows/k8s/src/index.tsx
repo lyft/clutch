@@ -2,7 +2,6 @@ import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clut
 import type { WizardChild } from "@clutch-sh/wizard";
 
 import DeletePod from "./delete-pod";
-import DescribePod from "./describe-pod";
 import KubeDashboard from "./k8s-dashboard";
 import ResizeHPA from "./resize-hpa";
 
@@ -33,13 +32,6 @@ const register = (): WorkflowConfiguration => {
         displayName: "Delete Pod",
         description: "Delete a K8s pod.",
         component: DeletePod,
-        requiredConfigProps: ["resolverType"],
-      },
-      describePod: {
-        path: "pod/describe",
-        displayName: "Describe Pod",
-        description: "Describe a K8s pod.",
-        component: DescribePod,
         requiredConfigProps: ["resolverType"],
       },
       resizeHPA: {
