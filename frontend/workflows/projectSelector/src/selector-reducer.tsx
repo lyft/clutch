@@ -5,6 +5,8 @@ import { deriveSwitchStatus, Group } from "./hello-world";
 
 const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
+    // User actions.
+
     case "ADD_PROJECTS": {
       // a given custom project may already exist in the group so don't trigger a state update for those duplicates
       const uniqueCustomProjects = action.payload.projects.filter(
@@ -75,33 +77,64 @@ const selectorReducer = (state: State, action: Action): State => {
       return newGroupToggledState;
     }
     // Background actions.
+
     case "HYDRATE_START": {
       return { ...state, loading: true };
     }
     case "HYDRATE_END": {
       const newPostAPICallState = { ...state, loading: false };
-      // TODO: handle payload.
+
       _.forIn(action.payload.result, (v, k) => {
-        // Add each project to the projects list.
-        state[Group.PROJECTS][k] = { checked: true };
-        state.projectData[k] = {};
+        // TODO: handle v.from.user
+        if (v.from.selected){
+          state[Group.PROJECTS][k] = { checked: true, custom: true };
+        }
 
-        // Add each upstream.
-        v.upstreams.forEach(v => {
-          state[Group.UPSTREAM][v] = { checked: false };
-          state.projectData[v] = {};
+        let upstreamsDeps = []
+        // collect upstreams for each project in the results
+        _.forIn(v.project.dependencies.upstreams, (v) => {
+          upstreamsDeps = v.id
         });
+        // TODO: handle v.from.user
+        if (v.from.selected){
+          upstreamsDeps.forEach(v => {
+            // Add each upstream for the selected or user project
+            state[Group.UPSTREAM][v] = { checked: false };
+          })
+        }
 
-        // Add each downstream.
-        v.downstreams.forEach(v => {
-          state[Group.DOWNSTREAM][v] = { checked: false };
-          state.projectData[v] = {};
+        let downstreamsDeps = []
+        // collect downstreams for each project in the results
+        _.forIn(v.project.dependencies.downstreams, (v) => {
+          downstreamsDeps = v.id
         });
+        // TODO: handle v.from.user
+        if (v.from?.selected){
+          downstreamsDeps.forEach(v => {
+            // Add each downstream for the selected or user project
+            state[Group.DOWNSTREAM][v] = { checked: false };
+          })
+        }
 
-        // Update project data for each.
+        // stores the raw project data for each project in the API result
+        state.projectData[k] = {
+          name: v.project.name,
+          tier: v.project.tier,
+          owners: v.project.owners,
+          languages: v.project.languages,
+          data: v.project.data,
+          upstreams: upstreamsDeps,
+          downstreams: downstreamsDeps,
+        };
+
+
+
       });
       return newPostAPICallState;
     }
+    // TODO: test out an error case
+    case "HYDRATE_ERROR":
+      return { ...state, loading: false, error: action.payload.result };
     default:
       throw new Error(`unknown resolver action`);
   }

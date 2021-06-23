@@ -1,5 +1,6 @@
 import * as React from "react";
-import { TextField } from "@clutch-sh/core";
+import type { ClutchError } from "@clutch-sh/core";
+import { client, TextField, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
@@ -31,7 +32,7 @@ interface UserPayload {
   projects?: string[];
 }
 
-type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END";
+type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END" | "HYDRATE_ERROR";
 
 interface BackgroundAction {
   type: BackgroundActionKind;
@@ -51,10 +52,15 @@ export interface State {
 
   projectData: { [projectName: string]: Project };
   loading: boolean;
+  error: ClutchError | undefined;
 }
 
-// TODO: subout with full manifest structure (from proto def)
 interface Project {
+  name: string;
+  tier: string;
+  owners: string[];
+  languages: string[];
+  data: any;
   upstreams: string[];
   downstreams: string[];
 }
@@ -80,15 +86,6 @@ export const useDispatch = () => {
   return React.useContext(DispatchContext);
 };
 
-const fakeAPI = (state: State) => {
-  return {
-    clutch: {
-      upstreams: [],
-      downstreams: ["rides", "locations"],
-    },
-  };
-};
-
 // TODO(perf): call with useMemo().
 export const deriveSwitchStatus = (state: State, group: Group): boolean => {
   return (
@@ -103,6 +100,7 @@ const initialState: State = {
   [Group.DOWNSTREAM]: {},
   projectData: {},
   loading: false,
+  error: undefined,
 };
 
 const StyledSelectorContainer = styled.div({
@@ -112,7 +110,6 @@ const StyledSelectorContainer = styled.div({
   width: "245px",
 });
 
-// TODO: change icon, center align icon and title
 const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
   display: "flex",
@@ -126,7 +123,6 @@ const StyledWorkflowTitle = styled.span({
   margin: "0px 8px",
 });
 
-// TODO: add plus icon in the text field
 const StyledProjectTextField = styled(TextField)({
   padding: "16px 16px 8px 16px",
 });
@@ -145,8 +141,8 @@ const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
-  // If a project is unchecked, the upstream and downstreams related to it disappear from the list.
-  // If a project is rechecked, the checks were preserved.
+  // TODO: If a project is unchecked, the upstream and downstreams related to it disappear from the list.
+  // TODO: If a project is rechecked, the checks were preserved.
 
   const [customProject, setCustomProject] = React.useState("");
 
@@ -171,11 +167,25 @@ const ProjectSelector = () => {
     if (!state.loading && (Object.keys(state[Group.PROJECTS]).length == 0 || !allPresent)) {
       console.log("calling API!", state.loading);
       dispatch({ type: "HYDRATE_START" });
-      // TODO: call API and use payload.
-      setTimeout(
-        () => dispatch({ type: "HYDRATE_END", payload: { result: fakeAPI(state) } }),
-        1000
-      );
+      let requestParams = {"users": [userId()], "projects": []}
+
+      let customProjects = []
+      _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+        // if the project is custom and missing from state.projectdata
+        if (state[Group.PROJECTS][p].custom && !(p in state.projectData)){
+          customProjects.push(p)
+        }
+      });
+      if (customProjects.length > 0){
+        requestParams.projects = customProjects
+      }
+
+      client
+        .post("/v1/project/getProjects", requestParams)
+        .then(resp => dispatch({ type: "HYDRATE_END", payload: { result: resp.data.results } }))
+        .catch((err: ClutchError) => {
+          dispatch({ type: "HYDRATE_ERROR", payload: {result: err}})
+        })
     }
   }, [state[Group.PROJECTS]]);
 
@@ -195,6 +205,7 @@ const ProjectSelector = () => {
       <StateContext.Provider value={state}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
+            {/* TODO: change icon to match design */}
             <LayersIcon />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
           </StyledWorkflowHeader>
@@ -202,13 +213,14 @@ const ProjectSelector = () => {
             {state.loading && <LinearProgress color="secondary" />}
           </StyledProgressContainer>
           <Divider />
-            <StyledProjectTextField
-              disabled={state.loading}
-              placeholder="Add a project"
-              value={customProject}
-              onChange={e => setCustomProject(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && handleAdd()}
-            />
+          {/* TODO: add plus icon in the text field */}
+          <StyledProjectTextField
+            disabled={state.loading}
+            placeholder="Add a project"
+            value={customProject}
+            onChange={e => setCustomProject(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleAdd()}
+          />
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
