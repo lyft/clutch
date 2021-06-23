@@ -84,7 +84,7 @@ function BlogPostItem(props) {
 
       <Seo {...{keywords, image}} />
 
-      <article   className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
+      <article className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
         {renderPostHeader()}
         <section className="markdown">
           <MDXProvider components={MDXComponents}>{children}</MDXProvider>
