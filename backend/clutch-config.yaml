@@ -21,6 +21,7 @@ gateway:
   middleware:
     - name: clutch.middleware.stats
     - name: clutch.middleware.validate
+    - name: clutch.middleware.audit
   listener:
     tcp:
       address: 0.0.0.0
@@ -28,6 +29,7 @@ gateway:
       secure: false
 modules:
   - name: clutch.module.assets
+  - name: clutch.module.audit
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
   - name: clutch.module.aws
@@ -35,6 +37,13 @@ modules:
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
 services:
+  - name: clutch.service.audit.sink.logger
+  - name: clutch.service.audit
+    typed_config:
+      "@type": types.google.com/clutch.config.service.audit.v1.Config
+      in_memory: true
+      sinks:
+        - clutch.service.audit.sink.logger
   - name: clutch.service.aws
     typed_config:
       "@type": types.google.com/clutch.config.service.aws.v1.Config
