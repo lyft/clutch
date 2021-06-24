@@ -10,7 +10,6 @@ import (
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
@@ -79,7 +78,7 @@ func TestListServices(t *testing.T) {
 		},
 	}
 
-	opts := &k8sapiv1.ListOptions{}
+	opts := &k8sv1.ListOptions{}
 	list, err := s.ListServices(context.Background(), "foo", "core-testing", "testing-namespace", opts)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(list))
