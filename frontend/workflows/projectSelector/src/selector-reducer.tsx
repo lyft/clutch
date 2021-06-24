@@ -133,11 +133,10 @@ const selectorReducer = (state: State, action: Action): State => {
       /*
        TODO: do we want to handle the error state differently? For example, when we render the error on the UI,
        it won't disapper unless there's a successful API call or if the user refreshes the page. If a user performs other
-       actions, such as use the toggle/checkbox/click into the text box etc. the error message will be still be on the page
+       actions, such as use the toggle/checkbox/ etc. the error message will be still be on the page
 
-       TODO: when we add error handling for projects not found, we'll need to make sure we don't add the project sent in the request
-       to the project list as that's confusing to the user and the not-found project will continue to be added to consectutive API requests
-       as we don't have the project data for it.
+       TODO: when we add error handling for projects not found, we'll need to make sure we remove the not-found-project from project group
+       (it's added automatically in the "ADD_PROJECTS" state)
       */
       return { ...state, loading: false, error: action.payload.result };
     default:

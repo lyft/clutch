@@ -196,6 +196,7 @@ const ProjectSelector = () => {
         .catch((err: ClutchError) => {
           dispatch({ type: "HYDRATE_ERROR", payload: { result: err } });
         });
+
     }
   }, [state[Group.PROJECTS]]);
 
