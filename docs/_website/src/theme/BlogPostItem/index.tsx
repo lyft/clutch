@@ -49,8 +49,7 @@ function BlogPostItem(props) {
             {month} {day}, {year}{' '}
             {readingTime && <> · {Math.ceil(readingTime)} min read</>}
           </time>
-          <>&nbsp;·&nbsp;</>
-          <Share title={title} authors={authors} style={{margin: "0 7px"}} />
+          {!truncated && <>&nbsp;·&nbsp;<Share title={title} authors={authors} style={{margin: "0 7px"}} /></>}
         </div>
 
 
