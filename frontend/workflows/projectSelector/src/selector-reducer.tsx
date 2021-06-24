@@ -86,28 +86,28 @@ const selectorReducer = (state: State, action: Action): State => {
 
       // TODO: Add the projects, but if the project already exists in this group preserve its existing checked value.
       _.forIn(action.payload.result, (v, k) => {
-        if (v.from.users.length > 0) {
+        if (v.from?.users?.length > 0) {
           // a user owned project
           state[Group.PROJECTS][k] = { checked: true };
-        } else if (v.from.selected) {
+        } else if (v.from?.selected) {
           // a custom project
           state[Group.PROJECTS][k] = { checked: true, custom: true };
         }
 
         // collect upstreams for each project in the results
         let upstreamsDeps = [];
-        _.forIn(v.project.dependencies.upstreams, v => {
+        _.forIn(v.project?.dependencies?.upstreams, v => {
           upstreamsDeps = v.id;
         });
 
         // collect downstreams for each project in the results
         let downstreamsDeps = [];
-        _.forIn(v.project.dependencies.downstreams, v => {
+        _.forIn(v.project?.dependencies?.downstreams, v => {
           downstreamsDeps = v.id;
         });
 
         // Add each upstream/downstream for the selected or user project
-        if (v.from.users.length > 0 || v.from.selected) {
+        if (v.from?.users?.length > 0 || v.from?.selected) {
           upstreamsDeps.forEach(v => {
             state[Group.UPSTREAM][v] = { checked: false };
           });
@@ -118,11 +118,11 @@ const selectorReducer = (state: State, action: Action): State => {
 
         // stores the raw project data for each project in the API result
         state.projectData[k] = {
-          name: v.project.name,
-          tier: v.project.tier,
-          owners: v.project.owners,
-          languages: v.project.languages,
-          data: v.project.data,
+          name: v.project?.name,
+          tier: v.project?.tier,
+          owners: v.project?.owners,
+          languages: v.project?.languages,
+          data: v.project?.data,
           upstreams: upstreamsDeps,
           downstreams: downstreamsDeps,
         };

@@ -173,7 +173,7 @@ const ProjectSelector = () => {
       dispatch({ type: "HYDRATE_START" });
 
       // TODO: have userId check be server driven
-      const requestParams = {"users": [userId()], "projects": []}
+      const requestParams = { users: [userId()], projects: [] };
 
       const customProjects = [];
       _.forEach(Object.keys(state[Group.PROJECTS]), p => {
@@ -192,11 +192,12 @@ const ProjectSelector = () => {
       */
       client
         .post("/v1/project/getProjects", requestParams)
-        .then(resp => dispatch({ type: "HYDRATE_END", payload: { result: resp.data.results } }))
+        .then(resp =>
+          dispatch({ type: "HYDRATE_END", payload: { result: resp?.data?.results || {} } })
+        )
         .catch((err: ClutchError) => {
           dispatch({ type: "HYDRATE_ERROR", payload: { result: err } });
         });
-
     }
   }, [state[Group.PROJECTS]]);
 
