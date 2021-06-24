@@ -29,6 +29,7 @@ type K8SAPIClient interface {
 	UpdateDeployment(ctx context.Context, in *UpdateDeploymentRequest, opts ...grpc.CallOption) (*UpdateDeploymentResponse, error)
 	DeleteDeployment(ctx context.Context, in *DeleteDeploymentRequest, opts ...grpc.CallOption) (*DeleteDeploymentResponse, error)
 	DescribeService(ctx context.Context, in *DescribeServiceRequest, opts ...grpc.CallOption) (*DescribeServiceResponse, error)
+	ListServices(ctx context.Context, in *ListServicesRequest, opts ...grpc.CallOption) (*ListServicesResponse, error)
 	DeleteService(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
 	DescribeStatefulSet(ctx context.Context, in *DescribeStatefulSetRequest, opts ...grpc.CallOption) (*DescribeStatefulSetResponse, error)
 	ListStatefulSets(ctx context.Context, in *ListStatefulSetsRequest, opts ...grpc.CallOption) (*ListStatefulSetsResponse, error)
@@ -147,6 +148,15 @@ func (c *k8SAPIClient) DeleteDeployment(ctx context.Context, in *DeleteDeploymen
 func (c *k8SAPIClient) DescribeService(ctx context.Context, in *DescribeServiceRequest, opts ...grpc.CallOption) (*DescribeServiceResponse, error) {
 	out := new(DescribeServiceResponse)
 	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DescribeService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SAPIClient) ListServices(ctx context.Context, in *ListServicesRequest, opts ...grpc.CallOption) (*ListServicesResponse, error) {
+	out := new(ListServicesResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/ListServices", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -303,6 +313,7 @@ type K8SAPIServer interface {
 	UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error)
 	DeleteDeployment(context.Context, *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error)
 	DescribeService(context.Context, *DescribeServiceRequest) (*DescribeServiceResponse, error)
+	ListServices(context.Context, *ListServicesRequest) (*ListServicesResponse, error)
 	DeleteService(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
 	DescribeStatefulSet(context.Context, *DescribeStatefulSetRequest) (*DescribeStatefulSetResponse, error)
 	ListStatefulSets(context.Context, *ListStatefulSetsRequest) (*ListStatefulSetsResponse, error)
@@ -356,6 +367,9 @@ func (UnimplementedK8SAPIServer) DeleteDeployment(context.Context, *DeleteDeploy
 }
 func (UnimplementedK8SAPIServer) DescribeService(context.Context, *DescribeServiceRequest) (*DescribeServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeService not implemented")
+}
+func (UnimplementedK8SAPIServer) ListServices(context.Context, *ListServicesRequest) (*ListServicesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListServices not implemented")
 }
 func (UnimplementedK8SAPIServer) DeleteService(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteService not implemented")
@@ -608,6 +622,24 @@ func _K8SAPI_DescribeService_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(K8SAPIServer).DescribeService(ctx, req.(*DescribeServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SAPI_ListServices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListServicesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).ListServices(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/ListServices",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).ListServices(ctx, req.(*ListServicesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -932,6 +964,10 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DescribeService",
 			Handler:    _K8SAPI_DescribeService_Handler,
+		},
+		{
+			MethodName: "ListServices",
+			Handler:    _K8SAPI_ListServices_Handler,
 		},
 		{
 			MethodName: "DeleteService",

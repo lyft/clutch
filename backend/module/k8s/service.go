@@ -21,3 +21,11 @@ func (a *k8sAPI) DeleteService(ctx context.Context, req *k8sapiv1.DeleteServiceR
 	}
 	return &k8sapiv1.DeleteServiceResponse{}, nil
 }
+
+func (a *k8sAPI) ListServices(ctx context.Context, req *k8sapiv1.ListServicesRequest) (*k8sapiv1.ListServicesResponse, error) {
+	services, err := a.k8s.ListServices(ctx, req.Clientset, req.Cluster, req.Namespace, req.Options)
+	if err != nil {
+		return nil, err
+	}
+	return &k8sapiv1.ListServicesResponse{Services: services}, nil
+}

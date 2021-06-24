@@ -66,6 +66,24 @@ func TestDeleteService(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestListServices(t *testing.T) {
+	cs := testServiceClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	opts := &k8sv1.ListOptions{}
+	list, err := s.ListServices(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(list))
+}
+
 func TestProtoForServiceClusterName(t *testing.T) {
 	t.Parallel()
 
