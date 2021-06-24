@@ -157,6 +157,10 @@ const ProjectSelector = () => {
 
     let allPresent = true;
     _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+      /*
+      TODO: b/c of this conditional, if a user adds an upstream/downstream we already have the project data for
+      to the custom project group, allPresent will be true and we wont trigger an api call
+      */
       if (!(p in state.projectData)) {
         allPresent = false;
         return false; // Stop iteration.
@@ -167,6 +171,8 @@ const ProjectSelector = () => {
     if (!state.loading && (Object.keys(state[Group.PROJECTS]).length == 0 || !allPresent)) {
       console.log("calling API!", state.loading);
       dispatch({ type: "HYDRATE_START" });
+
+      // TODO: have userId check be server driven
       let requestParams = {"users": [userId()], "projects": []}
 
       let customProjects = []
@@ -180,6 +186,10 @@ const ProjectSelector = () => {
         requestParams.projects = customProjects
       }
 
+      /*
+      TODO: the API doesn't return an error if a custom project is not found so we should first
+      check if the API returns empty results and process that as an error
+      */
       client
         .post("/v1/project/getProjects", requestParams)
         .then(resp => dispatch({ type: "HYDRATE_END", payload: { result: resp.data.results } }))
