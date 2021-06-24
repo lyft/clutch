@@ -159,7 +159,9 @@ const ProjectSelector = () => {
     _.forEach(Object.keys(state[Group.PROJECTS]), p => {
       /*
       TODO: b/c of this conditional, if a user adds an upstream/downstream we already have the project data for
-      to the custom project group, allPresent will be true and we wont trigger an api call
+      to the custom project group, allPresent will be true and we wont trigger an api call. One way to account for this
+      is updating the conditional to additionally check if the project is included in state[Group.Downstreams]/state[Group.Upstreams]
+      and if so, mark allPresent as false.
       */
       if (!(p in state.projectData)) {
         allPresent = false;
@@ -234,9 +236,9 @@ const ProjectSelector = () => {
             value={customProject}
             onChange={e => setCustomProject(e.target.value)}
             onKeyDown={e => e.key === "Enter" && handleAdd()}
+            helperText={state.error?.message}
+            error={hasError}
           />
-          {/* TODO: styling for the error */}
-          {hasError && <Error subject={state.error} />}
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
