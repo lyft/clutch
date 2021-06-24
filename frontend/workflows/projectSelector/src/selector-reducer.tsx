@@ -84,34 +84,34 @@ const selectorReducer = (state: State, action: Action): State => {
     case "HYDRATE_END": {
       const newPostAPICallState = { ...state, loading: false };
 
+      // TODO: Add the projects, but if the project already exists in this group preserve its existing checked value.
       _.forIn(action.payload.result, (v, k) => {
-        // TODO: handle v.from.user
-        if (v.from.selected){
+        if (v.from.users.length > 0){
+          // a user owned project
+          state[Group.PROJECTS][k] = { checked: true };
+        } else if (v.from.selected){
+          // a custom project
           state[Group.PROJECTS][k] = { checked: true, custom: true };
         }
 
-        let upstreamsDeps = []
         // collect upstreams for each project in the results
+        let upstreamsDeps = []
         _.forIn(v.project.dependencies.upstreams, (v) => {
           upstreamsDeps = v.id
         });
-        // TODO: handle v.from.user
-        if (v.from.selected){
-          upstreamsDeps.forEach(v => {
-            // Add each upstream for the selected or user project
-            state[Group.UPSTREAM][v] = { checked: false };
-          })
-        }
 
-        let downstreamsDeps = []
         // collect downstreams for each project in the results
+        let downstreamsDeps = []
         _.forIn(v.project.dependencies.downstreams, (v) => {
           downstreamsDeps = v.id
         });
-        // TODO: handle v.from.user
-        if (v.from?.selected){
+
+        // Add each upstream/downstream for the selected or user project
+        if (v.from.users.length > 0 || v.from.selected){
+          upstreamsDeps.forEach(v => {
+            state[Group.UPSTREAM][v] = { checked: false };
+          })
           downstreamsDeps.forEach(v => {
-            // Add each downstream for the selected or user project
             state[Group.DOWNSTREAM][v] = { checked: false };
           })
         }
@@ -126,8 +126,6 @@ const selectorReducer = (state: State, action: Action): State => {
           upstreams: upstreamsDeps,
           downstreams: downstreamsDeps,
         };
-
-
 
       });
       return newPostAPICallState;
