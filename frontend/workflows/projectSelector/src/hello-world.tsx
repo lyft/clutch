@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { ClutchError } from "@clutch-sh/core";
-import { client, TextField, userId } from "@clutch-sh/core";
+import { client, Error, TextField, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
@@ -113,7 +113,7 @@ const StyledSelectorContainer = styled.div({
 const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
   display: "flex",
-  alignItems: "center"
+  alignItems: "center",
 });
 
 const StyledWorkflowTitle = styled.span({
@@ -134,7 +134,7 @@ const StyledProgressContainer = styled.div({
   },
   ".MuiLinearProgress-bar": {
     backgroundColor: "#3548D4",
-  }
+  },
 });
 
 const ProjectSelector = () => {
@@ -173,17 +173,17 @@ const ProjectSelector = () => {
       dispatch({ type: "HYDRATE_START" });
 
       // TODO: have userId check be server driven
-      let requestParams = {"users": [userId()], "projects": []}
+      const requestParams = {"users": [userId()], "projects": []}
 
-      let customProjects = []
+      const customProjects = [];
       _.forEach(Object.keys(state[Group.PROJECTS]), p => {
         // if the project is custom and missing from state.projectdata
-        if (state[Group.PROJECTS][p].custom && !(p in state.projectData)){
-          customProjects.push(p)
+        if (state[Group.PROJECTS][p].custom && !(p in state.projectData)) {
+          customProjects.push(p);
         }
       });
-      if (customProjects.length > 0){
-        requestParams.projects = customProjects
+      if (customProjects.length > 0) {
+        requestParams.projects = customProjects;
       }
 
       /*
@@ -194,8 +194,8 @@ const ProjectSelector = () => {
         .post("/v1/project/getProjects", requestParams)
         .then(resp => dispatch({ type: "HYDRATE_END", payload: { result: resp.data.results } }))
         .catch((err: ClutchError) => {
-          dispatch({ type: "HYDRATE_ERROR", payload: {result: err}})
-        })
+          dispatch({ type: "HYDRATE_ERROR", payload: { result: err } });
+        });
     }
   }, [state[Group.PROJECTS]]);
 
@@ -209,6 +209,8 @@ const ProjectSelector = () => {
     });
     setCustomProject("");
   };
+
+  const hasError = state.error !== undefined && state.error !== null;
 
   return (
     <DispatchContext.Provider value={dispatch}>
@@ -231,6 +233,8 @@ const ProjectSelector = () => {
             onChange={e => setCustomProject(e.target.value)}
             onKeyDown={e => e.key === "Enter" && handleAdd()}
           />
+          {/* TODO: styling for the error */}
+          {hasError && <Error subject={state.error} />}
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
