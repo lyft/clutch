@@ -84,14 +84,23 @@ const selectorReducer = (state: State, action: Action): State => {
     case "HYDRATE_END": {
       const newPostAPICallState = { ...state, loading: false, error: undefined };
 
-      // TODO: Add the projects, but if the project already exists in this group preserve its existing checked value.
       _.forIn(action.payload.result, (v, k) => {
+        // a user owned project
         if (v.from?.users?.length > 0) {
-          // a user owned project
-          state[Group.PROJECTS][k] = { checked: true };
+          // preserve the current checked state if the project already exists in this group
+          if (k in state[Group.PROJECTS]) {
+            state[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked };
+          } else {
+            state[Group.PROJECTS][k] = { checked: true };
+          }
         } else if (v.from?.selected) {
           // a custom project
-          state[Group.PROJECTS][k] = { checked: true, custom: true };
+          // preserve the current checked state if the project already exists in this group
+          if (k in state[Group.PROJECTS]) {
+            state[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked, custom: true };
+          } else {
+            state[Group.PROJECTS][k] = { checked: true, custom: true };
+          }
         }
 
         // collect upstreams for each project in the results
@@ -109,10 +118,20 @@ const selectorReducer = (state: State, action: Action): State => {
         // Add each upstream/downstream for the selected or user project
         if (v.from?.users?.length > 0 || v.from?.selected) {
           upstreamsDeps.forEach(v => {
-            state[Group.UPSTREAM][v] = { checked: false };
+            // preserve the current checked state if the project already exists in this group
+            if (v in state[Group.UPSTREAM]) {
+              state[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
+            } else {
+              state[Group.UPSTREAM][v] = { checked: false };
+            }
           });
           downstreamsDeps.forEach(v => {
-            state[Group.DOWNSTREAM][v] = { checked: false };
+            // preserve the current checked state if the project already exists in this group
+            if (v in state[Group.DOWNSTREAM]) {
+              state[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
+            } else {
+              state[Group.DOWNSTREAM][v] = { checked: false };
+            }
           });
         }
 
