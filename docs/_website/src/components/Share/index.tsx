@@ -30,7 +30,7 @@ interface ShareProps {
   authors: {
     name: string;
     url: string;
-    twitter_username: string;
+    twitter_username?: string;
   }[];
 }
 
