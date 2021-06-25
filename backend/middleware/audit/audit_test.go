@@ -13,6 +13,7 @@ import (
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
+	testpb "github.com/lyft/clutch/backend/internal/test/pb"
 	modulemock "github.com/lyft/clutch/backend/mock/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	"github.com/lyft/clutch/backend/service/audit"
@@ -107,6 +108,58 @@ func TestInterceptorShortCircuitDisabled(t *testing.T) {
 
 	assert.EqualValues(t, 0, a.writeCount)
 	assert.EqualValues(t, 0, a.updateCount)
+}
+
+func TestInterceptorResponseWithRedaction(t *testing.T) {
+	a := &mockAuditor{}
+	m := &mid{
+		audit: a,
+	}
+
+	interceptor := m.UnaryInterceptor()
+	resp, err := interceptor(
+		context.Background(),
+		&healthcheckv1.HealthcheckRequest{},
+		&grpc.UnaryServerInfo{FullMethod: "/foo/bar"},
+		func(ctx context.Context, req interface{}) (interface{}, error) {
+			responseProto := testpb.LogOptionsTester{
+				StrLogFalse:      "test",
+				StrLogTrue:       "test",
+				StrWithoutOption: "test",
+				NestedNoLog: &testpb.NestedLogOptionTester{
+					StrWithoutOption: "test",
+				},
+				Nested: &testpb.NestedLogOptionTester{
+					StrLogFalse:      "test",
+					StrWithoutOption: "test",
+				},
+				MessageMap: map[string]*testpb.NestedLogOptionTester{
+					"test": {
+						StrLogFalse:      "test",
+						StrWithoutOption: "test",
+					},
+					"nil": nil,
+				},
+				RepeatedMessage: []*testpb.NestedLogOptionTester{
+					{
+						StrLogFalse:      "test",
+						StrWithoutOption: "test",
+					},
+					nil,
+				},
+			}
+			return responseProto.ProtoReflect().Interface(), nil
+		})
+
+	assert.NotNil(t, resp)
+	assert.NoError(t, err)
+
+	// We must assert that the fileds that were redact are still present on the response object
+	assert.Equal(t, "test", resp.(*testpb.LogOptionsTester).StrLogFalse)
+	assert.Equal(t, "test", resp.(*testpb.LogOptionsTester).Nested.StrLogFalse)
+
+	assert.EqualValues(t, 1, a.writeCount)
+	assert.EqualValues(t, 1, a.updateCount)
 }
 
 func BenchmarkUnaryInterceptor(b *testing.B) {
