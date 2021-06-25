@@ -69,10 +69,10 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 
 		ctx = context.WithValue(ctx, auditEntryContextKey{}, id)
 		resp, err := handler(ctx, req)
-		auditResponse := proto.Clone(resp.(proto.Message))
 
 		// TODO (sperry): move the response recording into a goroutine so it's async
 		if id != -1 {
+			auditResponse := proto.Clone(resp.(proto.Message))
 			update, err := m.eventFromResponse(auditResponse, err)
 			if err != nil {
 				return nil, err

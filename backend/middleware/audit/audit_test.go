@@ -108,3 +108,26 @@ func TestInterceptorShortCircuitDisabled(t *testing.T) {
 	assert.EqualValues(t, 0, a.writeCount)
 	assert.EqualValues(t, 0, a.updateCount)
 }
+
+func BenchmarkUnaryInterceptor(b *testing.B) {
+	a := &mockAuditor{}
+	m := &mid{
+		audit: a,
+	}
+	server := grpc.NewServer()
+	r := &modulemock.MockRegistrar{Server: server}
+	hc, _ := healthcheck.New(nil, nil, nil)
+	assert.NoError(b, hc.Register(r))
+	assert.NoError(b, meta.GenerateGRPCMetadata(server))
+
+	interceptor := m.UnaryInterceptor()
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = interceptor(
+			context.Background(),
+			&healthcheckv1.HealthcheckRequest{},
+			&grpc.UnaryServerInfo{FullMethod: "/foo/bar"},
+			fakeHandler)
+	}
+}
