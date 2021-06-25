@@ -1,6 +1,7 @@
 import * as React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
-import { client, Error, TextField, userId } from "@clutch-sh/core";
+import { client, TextField, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
@@ -50,19 +51,9 @@ export interface State {
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
 
-  projectData: { [projectName: string]: Project };
+  projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
   loading: boolean;
   error: ClutchError | undefined;
-}
-
-interface Project {
-  name: string;
-  tier: string;
-  owners: string[];
-  languages: string[];
-  data: any;
-  upstreams: string[];
-  downstreams: string[];
 }
 
 interface GroupState {
@@ -176,27 +167,23 @@ const ProjectSelector = () => {
 
       // TODO: have userId check be server driven
       const requestParams = { users: [userId()], projects: [] };
-
-      const customProjects = [];
       _.forEach(Object.keys(state[Group.PROJECTS]), p => {
         // if the project is custom and missing from state.projectdata
         if (state[Group.PROJECTS][p].custom && !(p in state.projectData)) {
-          customProjects.push(p);
+          requestParams.projects.push(p);
         }
       });
-      if (customProjects.length > 0) {
-        requestParams.projects = customProjects;
-      }
 
       /*
       TODO: the API doesn't return an error if a custom project is not found so we should first
       check if the API returns empty results and process that as an error
       */
       client
-        .post("/v1/project/getProjects", requestParams)
-        .then(resp =>
-          dispatch({ type: "HYDRATE_END", payload: { result: resp?.data?.results || {} } })
-        )
+        .post("/v1/project/getProjects", requestParams as IClutch.project.v1.GetProjectsRequest)
+        .then(resp => {
+          const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
+          dispatch({ type: "HYDRATE_END", payload: { result: results || {} } });
+        })
         .catch((err: ClutchError) => {
           dispatch({ type: "HYDRATE_ERROR", payload: { result: err } });
         });

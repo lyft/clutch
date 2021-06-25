@@ -104,34 +104,32 @@ const selectorReducer = (state: State, action: Action): State => {
         }
 
         // collect upstreams for each project in the results
-        let upstreamsDeps = [];
-        _.forIn(v.project?.dependencies?.upstreams, v => {
-          upstreamsDeps = v.id;
-        });
+        const upstreamsDeps = v.project?.dependencies?.upstreams;
 
         // collect downstreams for each project in the results
-        let downstreamsDeps = [];
-        _.forIn(v.project?.dependencies?.downstreams, v => {
-          downstreamsDeps = v.id;
-        });
+        const downstreamsDeps = v.project?.dependencies?.downstreams;
 
         // Add each upstream/downstream for the selected or user project
         if (v.from?.users?.length > 0 || v.from?.selected) {
-          upstreamsDeps.forEach(v => {
-            // preserve the current checked state if the project already exists in this group
-            if (v in state[Group.UPSTREAM]) {
-              state[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
-            } else {
-              state[Group.UPSTREAM][v] = { checked: false };
-            }
+          _.forIn(upstreamsDeps, v => {
+            v.id.forEach(v => {
+              // preserve the current checked state if the project already exists in this group
+              if (v in state[Group.UPSTREAM]) {
+                state[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
+              } else {
+                state[Group.UPSTREAM][v] = { checked: false };
+              }
+            });
           });
-          downstreamsDeps.forEach(v => {
-            // preserve the current checked state if the project already exists in this group
-            if (v in state[Group.DOWNSTREAM]) {
-              state[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
-            } else {
-              state[Group.DOWNSTREAM][v] = { checked: false };
-            }
+          _.forIn(downstreamsDeps, v => {
+            v.id.forEach(v => {
+              // preserve the current checked state if the project already exists in this group
+              if (v in state[Group.DOWNSTREAM]) {
+                state[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
+              } else {
+                state[Group.DOWNSTREAM][v] = { checked: false };
+              }
+            });
           });
         }
 
@@ -142,8 +140,10 @@ const selectorReducer = (state: State, action: Action): State => {
           owners: v.project?.owners,
           languages: v.project?.languages,
           data: v.project?.data,
-          upstreams: upstreamsDeps,
-          downstreams: downstreamsDeps,
+          dependencies: {
+            upstreams: upstreamsDeps,
+            downstreams: downstreamsDeps,
+          },
         };
       });
       return newPostAPICallState;
