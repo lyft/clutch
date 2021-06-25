@@ -753,7 +753,7 @@ message Service {
   // service traffic routed to pods with label keys
   // and values matching this selector.
   // ref: https://pkg.go.dev/k8s.io/api/core/v1#ServiceSpec
-  map<string, string>  selector = 7;
+  map<string, string> selector = 7;
 }
 
 message DescribeServiceRequest {
