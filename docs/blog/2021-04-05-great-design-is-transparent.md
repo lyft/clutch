@@ -4,6 +4,7 @@ authors:
   - name: Derek Schaller
     url: https://github.com/dschaller
     avatar: https://avatars1.githubusercontent.com/u/1004789?s=460&u=24deb32096e9f892cc91a6ff1ca1af50193b1fbd&v=4
+    twitter_username: _derek_
 description: How we designed and then redesigned the Frontend of Clutch.
 image: https://user-images.githubusercontent.com/1004789/113597092-0eec7800-95f0-11eb-8f94-b953dd790c23.png
 hide_table_of_contents: false
