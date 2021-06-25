@@ -118,7 +118,7 @@ const Resolver: React.FC<ResolverProps> = ({
                 inputType={type}
                 schemas={state.searchableSchemas}
                 submitHandler={data => {
-                  setSearchParams({ q: data.query });
+                  setSearchParams({ q: data.query, ...searchParams });
                   submitHandler(data);
                 }}
                 enableAutocomplete={enableAutocomplete}
