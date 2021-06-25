@@ -56,8 +56,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			return handler(ctx, req)
 		}
 
-		auditRequest := proto.Clone(req.(proto.Message))
-		event, err := m.eventFromRequest(ctx, auditRequest, info)
+		event, err := m.eventFromRequest(ctx, req, info)
 		if err != nil {
 			return nil, err
 		}
@@ -72,8 +71,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 
 		// TODO (sperry): move the response recording into a goroutine so it's async
 		if id != -1 {
-			auditResponse := proto.Clone(resp.(proto.Message))
-			update, err := m.eventFromResponse(auditResponse, err)
+			update, err := m.eventFromResponse(resp, err)
 			if err != nil {
 				return nil, err
 			}
@@ -101,7 +99,10 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 		username = claims.Subject
 	}
 
-	reqBody, err := meta.APIBody(req)
+	// Deep copy before field redaction so we do not unintentionally remove fields
+	// from the request object that were passed by reference
+	auditRequest := proto.Clone(req.(proto.Message))
+	reqBody, err := meta.APIBody(auditRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +137,10 @@ func (m *mid) eventFromResponse(resp interface{}, err error) (*auditv1.RequestEv
 		}, nil
 	}
 
-	respBody, err := meta.APIBody(resp)
+	// Deep copy before field redaction so we do not unintentionally remove fields
+	// from the response object that were passed by reference
+	auditResponse := proto.Clone(resp.(proto.Message))
+	respBody, err := meta.APIBody(auditResponse)
 	if err != nil {
 		return nil, err
 	}
