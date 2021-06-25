@@ -110,53 +110,63 @@ func TestInterceptorShortCircuitDisabled(t *testing.T) {
 	assert.EqualValues(t, 0, a.updateCount)
 }
 
-func TestInterceptorResponseWithRedaction(t *testing.T) {
+func TestInterceptorWithRedaction(t *testing.T) {
 	a := &mockAuditor{}
 	m := &mid{
 		audit: a,
 	}
 
+	logTestProto := &testpb.LogOptionsTester{
+		StrLogFalse:      "test",
+		StrLogTrue:       "test",
+		StrWithoutOption: "test",
+		NestedNoLog: &testpb.NestedLogOptionTester{
+			StrWithoutOption: "test",
+		},
+		Nested: &testpb.NestedLogOptionTester{
+			StrLogFalse:      "test",
+			StrWithoutOption: "test",
+		},
+		MessageMap: map[string]*testpb.NestedLogOptionTester{
+			"test": {
+				StrLogFalse:      "test",
+				StrWithoutOption: "test",
+			},
+			"nil": nil,
+		},
+		RepeatedMessage: []*testpb.NestedLogOptionTester{
+			{
+				StrLogFalse:      "test",
+				StrWithoutOption: "test",
+			},
+			nil,
+		},
+	}
+
 	interceptor := m.UnaryInterceptor()
 	resp, err := interceptor(
 		context.Background(),
-		&healthcheckv1.HealthcheckRequest{},
+		logTestProto,
 		&grpc.UnaryServerInfo{FullMethod: "/foo/bar"},
 		func(ctx context.Context, req interface{}) (interface{}, error) {
-			responseProto := testpb.LogOptionsTester{
-				StrLogFalse:      "test",
-				StrLogTrue:       "test",
-				StrWithoutOption: "test",
-				NestedNoLog: &testpb.NestedLogOptionTester{
-					StrWithoutOption: "test",
-				},
-				Nested: &testpb.NestedLogOptionTester{
-					StrLogFalse:      "test",
-					StrWithoutOption: "test",
-				},
-				MessageMap: map[string]*testpb.NestedLogOptionTester{
-					"test": {
-						StrLogFalse:      "test",
-						StrWithoutOption: "test",
-					},
-					"nil": nil,
-				},
-				RepeatedMessage: []*testpb.NestedLogOptionTester{
-					{
-						StrLogFalse:      "test",
-						StrWithoutOption: "test",
-					},
-					nil,
-				},
-			}
-			return responseProto.ProtoReflect().Interface(), nil
+			// We must assert that the fields that were redacted are still present on the request object
+			assert.Equal(t, "test", req.(*testpb.LogOptionsTester).StrLogFalse)
+			assert.Equal(t, "test", req.(*testpb.LogOptionsTester).Nested.StrLogFalse)
+			assert.Equal(t, "test", req.(*testpb.LogOptionsTester).MessageMap["test"].StrLogFalse)
+			assert.Equal(t, "test", req.(*testpb.LogOptionsTester).RepeatedMessage[0].StrLogFalse)
+
+			// Passthrough the orginal request to the response to assert again
+			return req, nil
 		})
 
 	assert.NotNil(t, resp)
 	assert.NoError(t, err)
 
-	// We must assert that the fileds that were redact are still present on the response object
+	// We must assert that the fields that were redacted are still present on the response object
 	assert.Equal(t, "test", resp.(*testpb.LogOptionsTester).StrLogFalse)
 	assert.Equal(t, "test", resp.(*testpb.LogOptionsTester).Nested.StrLogFalse)
+	assert.Equal(t, "test", resp.(*testpb.LogOptionsTester).MessageMap["test"].StrLogFalse)
+	assert.Equal(t, "test", resp.(*testpb.LogOptionsTester).RepeatedMessage[0].StrLogFalse)
 
 	assert.EqualValues(t, 1, a.writeCount)
 	assert.EqualValues(t, 1, a.updateCount)
