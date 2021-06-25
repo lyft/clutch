@@ -4,6 +4,19 @@ import { ArrowContainer, Popover } from "react-tiny-popover"
 
 import "./styles.css";
 
+const trackShare = (source) => {
+  // @ts-ignore
+  if (window.ga) {
+    // @ts-ignore
+    window.ga('send', {
+      hitType: 'event',
+      eventCategory: 'Blog',
+      eventAction: `share via ${source}`,
+      eventLabel: window.location.pathname,
+    });
+  }
+};
+
 interface ShareLinkProps {
   className: string;
   label: string;
@@ -68,14 +81,20 @@ const Share = ({title, authors}: ShareProps) => {
                         className="fe-twitter"
                         label="Twitter" color="#1DA1F2"
                         link={tweet}
-                        onClick={() => setOpen(false)}
+                        onClick={() => {
+                          setOpen(false);
+                          trackShare("twitter");
+                        }}
                       />
                       <ShareLink
                         className="fe-linkedin"
                         label="LinkedIn"
                         color="#0072b1"
                         link={`https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}`}
-                        onClick={() => setOpen(false)}
+                        onClick={() => {
+                          setOpen(false);
+                          trackShare("linkedin");
+                        }}
                       />
                       <ShareLink
                         className="fe-link"
