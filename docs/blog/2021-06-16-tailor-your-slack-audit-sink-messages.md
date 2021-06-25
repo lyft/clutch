@@ -4,6 +4,7 @@ authors:
   - name: Scarlett Perry
     url: https://github.com/scarlettperry
     avatar: https://user-images.githubusercontent.com/39421794/122237227-2a47ef00-ce8d-11eb-95c9-1b95df5d7706.jpeg
+    twitter_username: scarlettp3rry
 description: How we extended the Clutch Slack sink to support customized Slack audit messages
 image: https://user-images.githubusercontent.com/39421794/122236515-937b3280-ce8c-11eb-9144-67058f4ef78e.png
 hide_table_of_contents: false

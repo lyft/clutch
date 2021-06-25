@@ -4,6 +4,7 @@ authors:
   - name: Mike Cutalo
     url: https://github.com/mikecutalo
     avatar: https://avatars1.githubusercontent.com/u/2250844?s=460&u=24deb32096e9f892cc91a6ff1ca1af50193b1fbd&v=4
+    twitter_username: mikecutalo
 description: How caching and hashed frontend builds can lead to a blank screen; and how to fix it.
 image: https://user-images.githubusercontent.com/2250844/106201558-7956e700-616d-11eb-887d-28410b67d558.png
 hide_table_of_contents: false
