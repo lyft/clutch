@@ -30,6 +30,7 @@ interface ShareProps {
   authors: {
     name: string;
     url: string;
+    twitter_username?: string;
   }[];
 }
 
@@ -39,7 +40,10 @@ const Share = ({title, authors}: ShareProps) => {
   return (
       <BrowserOnly>
         {() => {
-          const tweet = encodeURI(`https://twitter.com/intent/tweet?text=${title} by ${authors.map(a => a.name).join(", ")} ${window.location.href}`);
+          const twitter_authors = authors.map(a => a.twitter_username ? `@${a.twitter_username}` : a.name);
+          const tweet = encodeURI(
+            `https://twitter.com/intent/tweet?text=${title} by ${twitter_authors.join(", ")} ${window.location.href}`
+          );
           return (
             <Popover
               isOpen={open}

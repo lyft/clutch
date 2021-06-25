@@ -4,9 +4,11 @@ authors:
   - name: Daniel Hochman
     url: https://github.com/danielhochman
     avatar: https://user-images.githubusercontent.com/4712430/87979981-839a7900-ca98-11ea-9d35-07c01b4cec14.png
+    twitter_username: danielhochman
   - name: Derek Schaller
     url: https://github.com/dschaller
     avatar: https://avatars2.githubusercontent.com/u/1004789?s=460&u=e4028c0a2f8c51aa78d9ce90288ee99451e80b71&v=4
+    twitter_username: _derek_
 description: Announcing Clutch, the Open-source Platform for Infrastructure Tooling.
 image: https://user-images.githubusercontent.com/4712430/104760766-7a2c5980-5727-11eb-93f5-3296b23ba3a0.png
 hide_table_of_contents: false
