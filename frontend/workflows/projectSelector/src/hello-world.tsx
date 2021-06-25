@@ -1,5 +1,7 @@
 import * as React from "react";
-import { TextField } from "@clutch-sh/core";
+import type { clutch as IClutch } from "@clutch-sh/api";
+import type { ClutchError } from "@clutch-sh/core";
+import { client, TextField, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
@@ -31,7 +33,7 @@ interface UserPayload {
   projects?: string[];
 }
 
-type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END";
+type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END" | "HYDRATE_ERROR";
 
 interface BackgroundAction {
   type: BackgroundActionKind;
@@ -49,14 +51,9 @@ export interface State {
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
 
-  projectData: { [projectName: string]: Project };
+  projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
   loading: boolean;
-}
-
-// TODO: subout with full manifest structure (from proto def)
-interface Project {
-  upstreams: string[];
-  downstreams: string[];
+  error: ClutchError | undefined;
 }
 
 interface GroupState {
@@ -80,15 +77,6 @@ export const useDispatch = () => {
   return React.useContext(DispatchContext);
 };
 
-const fakeAPI = (state: State) => {
-  return {
-    clutch: {
-      upstreams: [],
-      downstreams: ["rides", "locations"],
-    },
-  };
-};
-
 // TODO(perf): call with useMemo().
 export const deriveSwitchStatus = (state: State, group: Group): boolean => {
   return (
@@ -103,6 +91,7 @@ const initialState: State = {
   [Group.DOWNSTREAM]: {},
   projectData: {},
   loading: false,
+  error: undefined,
 };
 
 const StyledSelectorContainer = styled.div({
@@ -112,11 +101,10 @@ const StyledSelectorContainer = styled.div({
   width: "245px",
 });
 
-// TODO: change icon, center align icon and title
 const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
   display: "flex",
-  alignItems: "center"
+  alignItems: "center",
 });
 
 const StyledWorkflowTitle = styled.span({
@@ -126,7 +114,6 @@ const StyledWorkflowTitle = styled.span({
   margin: "0px 8px",
 });
 
-// TODO: add plus icon in the text field
 const StyledProjectTextField = styled(TextField)({
   padding: "16px 16px 8px 16px",
 });
@@ -138,15 +125,15 @@ const StyledProgressContainer = styled.div({
   },
   ".MuiLinearProgress-bar": {
     backgroundColor: "#3548D4",
-  }
+  },
 });
 
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
-  // If a project is unchecked, the upstream and downstreams related to it disappear from the list.
-  // If a project is rechecked, the checks were preserved.
+  // TODO: If a project is unchecked, the upstream and downstreams related to it disappear from the list.
+  // TODO: If a project is rechecked, the checks were preserved.
 
   const [customProject, setCustomProject] = React.useState("");
 
@@ -161,6 +148,12 @@ const ProjectSelector = () => {
 
     let allPresent = true;
     _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+      /*
+      TODO: b/c of this conditional, if a user adds an upstream/downstream we already have the project data for
+      to the custom project group, allPresent will be true and we wont trigger an api call. One way to account for this
+      is updating the conditional to additionally check if the project is included in state[Group.Downstreams]/state[Group.Upstreams]
+      and if so, mark allPresent as false.
+      */
       if (!(p in state.projectData)) {
         allPresent = false;
         return false; // Stop iteration.
@@ -171,11 +164,29 @@ const ProjectSelector = () => {
     if (!state.loading && (Object.keys(state[Group.PROJECTS]).length == 0 || !allPresent)) {
       console.log("calling API!", state.loading);
       dispatch({ type: "HYDRATE_START" });
-      // TODO: call API and use payload.
-      setTimeout(
-        () => dispatch({ type: "HYDRATE_END", payload: { result: fakeAPI(state) } }),
-        1000
-      );
+
+      // TODO: have userId check be server driven
+      const requestParams = { users: [userId()], projects: [] };
+      _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+        // if the project is custom and missing from state.projectdata
+        if (state[Group.PROJECTS][p].custom && !(p in state.projectData)) {
+          requestParams.projects.push(p);
+        }
+      });
+
+      /*
+      TODO: the API doesn't return an error if a custom project is not found so we should first
+      check if the API returns empty results and process that as an error
+      */
+      client
+        .post("/v1/project/getProjects", requestParams as IClutch.project.v1.GetProjectsRequest)
+        .then(resp => {
+          const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
+          dispatch({ type: "HYDRATE_END", payload: { result: results || {} } });
+        })
+        .catch((err: ClutchError) => {
+          dispatch({ type: "HYDRATE_ERROR", payload: { result: err } });
+        });
     }
   }, [state[Group.PROJECTS]]);
 
@@ -190,11 +201,14 @@ const ProjectSelector = () => {
     setCustomProject("");
   };
 
+  const hasError = state.error !== undefined && state.error !== null;
+
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
+            {/* TODO: change icon to match design */}
             <LayersIcon />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
           </StyledWorkflowHeader>
@@ -202,13 +216,16 @@ const ProjectSelector = () => {
             {state.loading && <LinearProgress color="secondary" />}
           </StyledProgressContainer>
           <Divider />
-            <StyledProjectTextField
-              disabled={state.loading}
-              placeholder="Add a project"
-              value={customProject}
-              onChange={e => setCustomProject(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && handleAdd()}
-            />
+          {/* TODO: add plus icon in the text field */}
+          <StyledProjectTextField
+            disabled={state.loading}
+            placeholder="Add a project"
+            value={customProject}
+            onChange={e => setCustomProject(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleAdd()}
+            helperText={state.error?.message}
+            error={hasError}
+          />
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
