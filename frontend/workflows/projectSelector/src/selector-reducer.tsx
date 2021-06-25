@@ -1,3 +1,4 @@
+import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
 import type { Action, State } from "./hello-world";
@@ -84,68 +85,74 @@ const selectorReducer = (state: State, action: Action): State => {
     case "HYDRATE_END": {
       const newPostAPICallState = { ...state, loading: false, error: undefined };
 
-      _.forIn(action.payload.result, (v, k) => {
-        // a user owned project
-        if (v.from?.users?.length > 0) {
-          // preserve the current checked state if the project already exists in this group
-          if (k in state[Group.PROJECTS]) {
-            state[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked };
-          } else {
-            state[Group.PROJECTS][k] = { checked: true };
+      _.forIn(
+        action.payload.result as IClutch.project.v1.IGetProjectsResponse,
+        (v: IClutch.project.v1.IProjectResult, k: string) => {
+          // a user owned project
+          if (v.from.users.length > 0) {
+            // preserve the current checked state if the project already exists in this group
+            if (k in state[Group.PROJECTS]) {
+              state[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked };
+            } else {
+              state[Group.PROJECTS][k] = { checked: true };
+            }
+          } else if (v.from.selected) {
+            // a custom project
+            // preserve the current checked state if the project already exists in this group
+            if (k in state[Group.PROJECTS]) {
+              state[Group.PROJECTS][k] = {
+                checked: state[Group.PROJECTS][k].checked,
+                custom: true,
+              };
+            } else {
+              state[Group.PROJECTS][k] = { checked: true, custom: true };
+            }
           }
-        } else if (v.from?.selected) {
-          // a custom project
-          // preserve the current checked state if the project already exists in this group
-          if (k in state[Group.PROJECTS]) {
-            state[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked, custom: true };
-          } else {
-            state[Group.PROJECTS][k] = { checked: true, custom: true };
+
+          // collect upstreams for each project in the results
+          const upstreamsDeps = v.project.dependencies.upstreams;
+
+          // collect downstreams for each project in the results
+          const downstreamsDeps = v.project.dependencies.downstreams;
+
+          // Add each upstream/downstream for the selected or user project
+          if (v.from.users.length > 0 || v.from.selected) {
+            _.forIn(upstreamsDeps, v => {
+              v.id.forEach(v => {
+                // preserve the current checked state if the project already exists in this group
+                if (v in state[Group.UPSTREAM]) {
+                  state[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
+                } else {
+                  state[Group.UPSTREAM][v] = { checked: false };
+                }
+              });
+            });
+            _.forIn(downstreamsDeps, v => {
+              v.id.forEach(v => {
+                // preserve the current checked state if the project already exists in this group
+                if (v in state[Group.DOWNSTREAM]) {
+                  state[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
+                } else {
+                  state[Group.DOWNSTREAM][v] = { checked: false };
+                }
+              });
+            });
           }
+
+          // stores the raw project data for each project in the API result
+          state.projectData[k] = {
+            name: v.project.name,
+            tier: v.project.tier,
+            owners: v.project.owners,
+            languages: v.project.languages,
+            data: v.project.data,
+            dependencies: {
+              upstreams: upstreamsDeps,
+              downstreams: downstreamsDeps,
+            },
+          };
         }
-
-        // collect upstreams for each project in the results
-        const upstreamsDeps = v.project?.dependencies?.upstreams;
-
-        // collect downstreams for each project in the results
-        const downstreamsDeps = v.project?.dependencies?.downstreams;
-
-        // Add each upstream/downstream for the selected or user project
-        if (v.from?.users?.length > 0 || v.from?.selected) {
-          _.forIn(upstreamsDeps, v => {
-            v.id.forEach(v => {
-              // preserve the current checked state if the project already exists in this group
-              if (v in state[Group.UPSTREAM]) {
-                state[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
-              } else {
-                state[Group.UPSTREAM][v] = { checked: false };
-              }
-            });
-          });
-          _.forIn(downstreamsDeps, v => {
-            v.id.forEach(v => {
-              // preserve the current checked state if the project already exists in this group
-              if (v in state[Group.DOWNSTREAM]) {
-                state[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
-              } else {
-                state[Group.DOWNSTREAM][v] = { checked: false };
-              }
-            });
-          });
-        }
-
-        // stores the raw project data for each project in the API result
-        state.projectData[k] = {
-          name: v.project?.name,
-          tier: v.project?.tier,
-          owners: v.project?.owners,
-          languages: v.project?.languages,
-          data: v.project?.data,
-          dependencies: {
-            upstreams: upstreamsDeps,
-            downstreams: downstreamsDeps,
-          },
-        };
-      });
+      );
       return newPostAPICallState;
     }
     case "HYDRATE_ERROR":
