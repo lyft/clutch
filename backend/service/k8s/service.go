@@ -80,6 +80,7 @@ func ProtoForService(cluster string, k8sservice *corev1.Service) *k8sapiv1.Servi
 		Type:        protoForServiceType(k8sservice.Spec.Type),
 		Labels:      k8sservice.Labels,
 		Annotations: k8sservice.Annotations,
+		Selector:    k8sservice.Spec.Selector,
 	}
 }
 
