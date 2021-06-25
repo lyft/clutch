@@ -34815,6 +34815,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {clutch.k8s.v1.Service.Type|null} [type] Service type
                  * @property {Object.<string,string>|null} [labels] Service labels
                  * @property {Object.<string,string>|null} [annotations] Service annotations
+                 * @property {Object.<string,string>|null} [selector] Service selector
                  */
 
                 /**
@@ -34828,6 +34829,7 @@ export const clutch = $root.clutch = (() => {
                 function Service(properties) {
                     this.labels = {};
                     this.annotations = {};
+                    this.selector = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -34883,6 +34885,14 @@ export const clutch = $root.clutch = (() => {
                 Service.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * Service selector.
+                 * @member {Object.<string,string>} selector
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.selector = $util.emptyObject;
+
+                /**
                  * Verifies a Service message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Service
@@ -34929,6 +34939,14 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < key.length; ++i)
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
+                    }
+                    if (message.selector != null && message.hasOwnProperty("selector")) {
+                        if (!$util.isObject(message.selector))
+                            return "selector: object expected";
+                        let key = Object.keys(message.selector);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.selector[key[i]]))
+                                return "selector: string{k:string} expected";
                     }
                     return null;
                 };
@@ -34991,6 +35009,13 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.selector) {
+                        if (typeof object.selector !== "object")
+                            throw TypeError(".clutch.k8s.v1.Service.selector: object expected");
+                        message.selector = {};
+                        for (let keys = Object.keys(object.selector), i = 0; i < keys.length; ++i)
+                            message.selector[keys[i]] = String(object.selector[keys[i]]);
+                    }
                     return message;
                 };
 
@@ -35010,6 +35035,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.objects || options.defaults) {
                         object.labels = {};
                         object.annotations = {};
+                        object.selector = {};
                     }
                     if (options.defaults) {
                         object.cluster = "";
@@ -35035,6 +35061,11 @@ export const clutch = $root.clutch = (() => {
                         object.annotations = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    if (message.selector && (keys2 = Object.keys(message.selector)).length) {
+                        object.selector = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.selector[keys2[j]] = message.selector[keys2[j]];
                     }
                     return object;
                 };

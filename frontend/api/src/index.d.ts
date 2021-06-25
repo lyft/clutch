@@ -14690,6 +14690,9 @@ export namespace clutch {
 
                 /** Service annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Service selector */
+                selector?: ({ [k: string]: string }|null);
             }
 
             /** Represents a Service. */
@@ -14718,6 +14721,9 @@ export namespace clutch {
 
                 /** Service annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Service selector. */
+                public selector: { [k: string]: string };
 
                 /**
                  * Verifies a Service message.

@@ -3366,6 +3366,8 @@ func (m *Service) Validate() error {
 
 	// no validation rules for Annotations
 
+	// no validation rules for Selector
+
 	return nil
 }
 
