@@ -111,7 +111,7 @@ func RegisterSourceControlAPIHandlerServer(ctx context.Context, mux *runtime.Ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.sourcecontrol.v1.SourceControlAPI/GetRepositoryOptions")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.sourcecontrol.v1.SourceControlAPI/GetRepositoryOptions", runtime.WithHTTPPathPattern("/v1/sourcecontrol/getRepositoryOptions"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -134,7 +134,7 @@ func RegisterSourceControlAPIHandlerServer(ctx context.Context, mux *runtime.Ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.sourcecontrol.v1.SourceControlAPI/CreateRepository")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.sourcecontrol.v1.SourceControlAPI/CreateRepository", runtime.WithHTTPPathPattern("/v1/sourcecontrol/createRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -196,7 +196,7 @@ func RegisterSourceControlAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.sourcecontrol.v1.SourceControlAPI/GetRepositoryOptions")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.sourcecontrol.v1.SourceControlAPI/GetRepositoryOptions", runtime.WithHTTPPathPattern("/v1/sourcecontrol/getRepositoryOptions"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -216,7 +216,7 @@ func RegisterSourceControlAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.sourcecontrol.v1.SourceControlAPI/CreateRepository")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.sourcecontrol.v1.SourceControlAPI/CreateRepository", runtime.WithHTTPPathPattern("/v1/sourcecontrol/createRepository"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

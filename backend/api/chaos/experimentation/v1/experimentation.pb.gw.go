@@ -247,7 +247,7 @@ func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateExperiment")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateExperiment", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/createExperiment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -270,7 +270,7 @@ func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateOrGetExperiment")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateOrGetExperiment", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/createOrGetExperiment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -293,7 +293,7 @@ func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CancelExperimentRun")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CancelExperimentRun", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/cancelExperimentRun"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -316,7 +316,7 @@ func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperiments")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperiments", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/getExperiments"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -339,7 +339,7 @@ func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetListView")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetListView", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/getListView"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -362,7 +362,7 @@ func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperimentRunDetails")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperimentRunDetails", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/getExperimentRunDetails"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -424,7 +424,7 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateExperiment")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateExperiment", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/createExperiment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -444,7 +444,7 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateOrGetExperiment")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateOrGetExperiment", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/createOrGetExperiment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -464,7 +464,7 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CancelExperimentRun")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CancelExperimentRun", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/cancelExperimentRun"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -484,7 +484,7 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperiments")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperiments", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/getExperiments"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -504,7 +504,7 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetListView")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetListView", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/getListView"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -524,7 +524,7 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperimentRunDetails")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperimentRunDetails", runtime.WithHTTPPathPattern("/v1/chaos/experimentation/getExperimentRunDetails"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
