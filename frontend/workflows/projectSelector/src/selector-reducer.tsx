@@ -27,13 +27,65 @@ const selectorReducer = (state: State, action: Action): State => {
       };
     }
     case "REMOVE_PROJECTS": {
-      // TODO: also remove any upstreams or downstreams related (only) to the project.
-      // if group == Groups.PROJECT, hide exclusive downstream upstreams
-      //
-      return {
-        ...state,
-        [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
-      };
+      const newRemoveProjectsState = { ...state };
+
+      newRemoveProjectsState[action.payload.group] = _.omit(
+        state[action.payload.group],
+        action.payload.projects
+      );
+
+      const upstreamsToRemove = [];
+      const downstreamsToRemove = [];
+
+      // remove any upstreams or downstreams exclusive to the project from Group.UPSTREAM/Group.DOWNSTREAM
+      if (action.payload.group == Group.PROJECTS) {
+        action.payload.projects.forEach(p => {
+          _.forIn(state.upstreamToProject, (v, k) => {
+            // if an upstream is associated to the project
+            if (v[p]) {
+              // if the upstream is exclusive to project
+              if (Object.keys(v).length == 1) {
+                upstreamsToRemove.push(k);
+                // remove as it was only tied to this project and b/c both the project and upstream will be removed from the state
+                // otherwise we'll end up with stale information
+                delete state.upstreamToProject[k];
+              } else {
+                // project is not exclusive to the upstream but let's remove as it will be removed from Group.PROJECTS state
+                // otherwise we'll end up with stale information
+                delete v[p];
+              }
+            }
+          });
+          _.forIn(state.downstreamToProject, (v, k) => {
+            // if a downstream is associated to the project
+            if (v[p]) {
+              // if the downstream is exclusive to project
+              if (Object.keys(v).length == 1) {
+                downstreamsToRemove.push(k);
+                // remove as it was only tied to this project and b/c both the project and downstream will be removed from the state
+                // otherwise we'll end up with stale information
+                delete state.downstreamToProject[k];
+              } else {
+                // project is not exclusive to the downstream but let's remove as it will be removed from Group.PROJECTS state
+                // otherwise we'll end up with stale information
+                delete v[p];
+              }
+            }
+          });
+        });
+
+        if (upstreamsToRemove.length > 0) {
+          newRemoveProjectsState[Group.UPSTREAM] = _.omit(state[Group.UPSTREAM], upstreamsToRemove);
+        }
+        if (downstreamsToRemove.length > 0) {
+          newRemoveProjectsState[Group.DOWNSTREAM] = _.omit(
+            state[Group.DOWNSTREAM],
+            downstreamsToRemove
+          );
+        }
+      }
+
+      return newRemoveProjectsState;
     }
     case "TOGGLE_PROJECTS": {
       // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
@@ -125,6 +177,13 @@ const selectorReducer = (state: State, action: Action): State => {
                 } else {
                   state[Group.UPSTREAM][v] = { checked: false };
                 }
+
+                // create the mapping of upstream --> project(s)
+                if (!state.upstreamToProject[v]) {
+                  state.upstreamToProject[v] = { [k]: true };
+                } else {
+                  state.upstreamToProject[v][k] = true;
+                }
               });
             });
             _.forIn(downstreamsDeps, v => {
@@ -134,6 +193,13 @@ const selectorReducer = (state: State, action: Action): State => {
                   state[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
                 } else {
                   state[Group.DOWNSTREAM][v] = { checked: false };
+                }
+
+                // create the mapping of downstreams --> project(s)
+                if (!state.downstreamToProject[v]) {
+                  state.downstreamToProject[v] = { [k]: true };
+                } else {
+                  state.downstreamToProject[v][k] = true;
                 }
               });
             });

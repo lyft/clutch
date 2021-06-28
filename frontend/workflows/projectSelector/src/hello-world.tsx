@@ -52,6 +52,8 @@ export interface State {
   [Group.DOWNSTREAM]: GroupState;
 
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
+  upstreamToProject: { [upstreamName: string]: { [projectName: string]: boolean } };
+  downstreamToProject: { [downstreamName: string]: { [projectName: string]: boolean } };
   loading: boolean;
   error: ClutchError | undefined;
 }
@@ -90,6 +92,8 @@ const initialState: State = {
   [Group.UPSTREAM]: {},
   [Group.DOWNSTREAM]: {},
   projectData: {},
+  upstreamToProject: {},
+  downstreamToProject: {},
   loading: false,
   error: undefined,
 };
