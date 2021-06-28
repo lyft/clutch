@@ -99,10 +99,7 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 		username = claims.Subject
 	}
 
-	// Deep copy before field redaction so we do not unintentionally remove fields
-	// from the request object that were passed by reference
-	auditRequest := proto.Clone(req.(proto.Message))
-	reqBody, err := meta.APIBody(auditRequest)
+	reqBody, err := meta.APIBody(req)
 	if err != nil {
 		return nil, err
 	}
@@ -137,10 +134,7 @@ func (m *mid) eventFromResponse(resp interface{}, err error) (*auditv1.RequestEv
 		}, nil
 	}
 
-	// Deep copy before field redaction so we do not unintentionally remove fields
-	// from the response object that were passed by reference
-	auditResponse := proto.Clone(resp.(proto.Message))
-	respBody, err := meta.APIBody(auditResponse)
+	respBody, err := meta.APIBody(resp)
 	if err != nil {
 		return nil, err
 	}
