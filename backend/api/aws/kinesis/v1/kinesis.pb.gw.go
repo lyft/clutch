@@ -111,7 +111,7 @@ func RegisterKinesisAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.kinesis.v1.KinesisAPI/GetStream")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.kinesis.v1.KinesisAPI/GetStream", runtime.WithHTTPPathPattern("/v1/aws/kinesis/getStream"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -134,7 +134,7 @@ func RegisterKinesisAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.kinesis.v1.KinesisAPI/UpdateShardCount")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.kinesis.v1.KinesisAPI/UpdateShardCount", runtime.WithHTTPPathPattern("/v1/aws/kinesis/updateShardCount"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -196,7 +196,7 @@ func RegisterKinesisAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.kinesis.v1.KinesisAPI/GetStream")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.kinesis.v1.KinesisAPI/GetStream", runtime.WithHTTPPathPattern("/v1/aws/kinesis/getStream"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -216,7 +216,7 @@ func RegisterKinesisAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.kinesis.v1.KinesisAPI/UpdateShardCount")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.kinesis.v1.KinesisAPI/UpdateShardCount", runtime.WithHTTPPathPattern("/v1/aws/kinesis/updateShardCount"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
