@@ -7011,6 +7011,11 @@ react-textarea-autosize@^8.3.2:
     use-composed-ref "^1.0.0"
     use-latest "^1.0.0"
 
+react-tiny-popover@^6.0.5:
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/react-tiny-popover/-/react-tiny-popover-6.0.5.tgz#2d5eb21d8a2758396ffa5bf5b761baac87dd6297"
+  integrity sha512-na6ZghMy5kqTPFSATb1pdSHO+/MikZvUxNk+zjXlz+gMXgiaOVuik5AiC5Oyj4yHpPf0nxoOmVQOmOmuDob6+A==
+
 react@^16.8.4:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"

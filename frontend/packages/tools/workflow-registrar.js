@@ -1,10 +1,13 @@
 const childProcess = require("child_process");
 const fs = require("fs");
 
-const config = require(`${process.argv[2]}/clutch.config.js`); // eslint-disable-line import/no-dynamic-require
-const rootFrontendDir = `${process.argv[2]}/..`;
+const srcDir = process.argv[2];
+const configFile = process.argv[3] || "clutch.config.js";
 
-const WORKFLOW_MODULE_PATH = `${process.argv[2]}/workflows.jsx`;
+const config = require(`${srcDir}/${configFile}`); // eslint-disable-line import/no-dynamic-require
+const rootFrontendDir = `${srcDir}/..`;
+
+const WORKFLOW_MODULE_PATH = `${srcDir}/workflows.jsx`;
 
 const addImport = workflow => {
   let moduleNameParts = [workflow];

@@ -11405,6 +11405,20 @@ export namespace clutch {
                 public describeService(request: clutch.k8s.v1.IDescribeServiceRequest): Promise<clutch.k8s.v1.DescribeServiceResponse>;
 
                 /**
+                 * Calls ListServices.
+                 * @param request ListServicesRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListServicesResponse
+                 */
+                public listServices(request: clutch.k8s.v1.IListServicesRequest, callback: clutch.k8s.v1.K8sAPI.ListServicesCallback): void;
+
+                /**
+                 * Calls ListServices.
+                 * @param request ListServicesRequest message or plain object
+                 * @returns Promise
+                 */
+                public listServices(request: clutch.k8s.v1.IListServicesRequest): Promise<clutch.k8s.v1.ListServicesResponse>;
+
+                /**
                  * Calls DeleteService.
                  * @param request DeleteServiceRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and DeleteServiceResponse
@@ -11693,6 +11707,13 @@ export namespace clutch {
                  * @param [response] DescribeServiceResponse
                  */
                 type DescribeServiceCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeServiceResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listServices}.
+                 * @param error Error, if any
+                 * @param [response] ListServicesResponse
+                 */
+                type ListServicesCallback = (error: (Error|null), response?: clutch.k8s.v1.ListServicesResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteService}.
@@ -12261,66 +12282,6 @@ export namespace clutch {
                 }
             }
 
-            /** Properties of an Event. */
-            interface IEvent {
-
-                /** Event name */
-                name?: (string|null);
-
-                /** Event reason */
-                reason?: (string|null);
-
-                /** Event description */
-                description?: (string|null);
-            }
-
-            /** Represents an Event. */
-            class Event implements IEvent {
-
-                /**
-                 * Constructs a new Event.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.k8s.v1.IEvent);
-
-                /** Event name. */
-                public name: string;
-
-                /** Event reason. */
-                public reason: string;
-
-                /** Event description. */
-                public description: string;
-
-                /**
-                 * Verifies an Event message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates an Event message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns Event
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Event;
-
-                /**
-                 * Creates a plain object from an Event message. Also converts values to other types if specified.
-                 * @param message Event
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.k8s.v1.Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this Event to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
             /** Properties of a Pod. */
             interface IPod {
 
@@ -12368,9 +12329,6 @@ export namespace clutch {
 
                 /** Pod startTimeMillis */
                 startTimeMillis?: (number|Long|null);
-
-                /** Pod events */
-                events?: (clutch.k8s.v1.IEvent[]|null);
             }
 
             /** Represents a Pod. */
@@ -12426,9 +12384,6 @@ export namespace clutch {
 
                 /** Pod startTimeMillis. */
                 public startTimeMillis: (number|Long);
-
-                /** Pod events. */
-                public events: clutch.k8s.v1.IEvent[];
 
                 /**
                  * Verifies a Pod message.
@@ -14735,6 +14690,9 @@ export namespace clutch {
 
                 /** Service annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Service selector */
+                selector?: ({ [k: string]: string }|null);
             }
 
             /** Represents a Service. */
@@ -14763,6 +14721,9 @@ export namespace clutch {
 
                 /** Service annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Service selector. */
+                public selector: { [k: string]: string };
 
                 /**
                  * Verifies a Service message.
@@ -14915,6 +14876,120 @@ export namespace clutch {
 
                 /**
                  * Converts this DescribeServiceResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListServicesRequest. */
+            interface IListServicesRequest {
+
+                /** ListServicesRequest clientset */
+                clientset?: (string|null);
+
+                /** ListServicesRequest cluster */
+                cluster?: (string|null);
+
+                /** ListServicesRequest namespace */
+                namespace?: (string|null);
+
+                /** ListServicesRequest options */
+                options?: (clutch.k8s.v1.IListOptions|null);
+            }
+
+            /** Represents a ListServicesRequest. */
+            class ListServicesRequest implements IListServicesRequest {
+
+                /**
+                 * Constructs a new ListServicesRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListServicesRequest);
+
+                /** ListServicesRequest clientset. */
+                public clientset: string;
+
+                /** ListServicesRequest cluster. */
+                public cluster: string;
+
+                /** ListServicesRequest namespace. */
+                public namespace: string;
+
+                /** ListServicesRequest options. */
+                public options?: (clutch.k8s.v1.IListOptions|null);
+
+                /**
+                 * Verifies a ListServicesRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListServicesRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListServicesRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListServicesRequest;
+
+                /**
+                 * Creates a plain object from a ListServicesRequest message. Also converts values to other types if specified.
+                 * @param message ListServicesRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListServicesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListServicesRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListServicesResponse. */
+            interface IListServicesResponse {
+
+                /** ListServicesResponse services */
+                services?: (clutch.k8s.v1.IService[]|null);
+            }
+
+            /** Represents a ListServicesResponse. */
+            class ListServicesResponse implements IListServicesResponse {
+
+                /**
+                 * Constructs a new ListServicesResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListServicesResponse);
+
+                /** ListServicesResponse services. */
+                public services: clutch.k8s.v1.IService[];
+
+                /**
+                 * Verifies a ListServicesResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListServicesResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListServicesResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListServicesResponse;
+
+                /**
+                 * Creates a plain object from a ListServicesResponse message. Also converts values to other types if specified.
+                 * @param message ListServicesResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListServicesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListServicesResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

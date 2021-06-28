@@ -21,6 +21,9 @@ func testServiceClientset() k8s.Interface {
 			Labels:      map[string]string{"foo": "bar"},
 			Annotations: map[string]string{"baz": "quuz"},
 		},
+		Spec: corev1.ServiceSpec{
+			Selector: map[string]string{"key1": "value1"},
+		},
 	}
 
 	return fake.NewSimpleClientset(svc)
@@ -64,6 +67,26 @@ func TestDeleteService(t *testing.T) {
 	// Not found.
 	_, err = s.DescribeService(context.Background(), "foo", "core-testing", "testing-namespace", "testing-service-name")
 	assert.Error(t, err)
+}
+
+func TestListServices(t *testing.T) {
+	cs := testServiceClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	opts := &k8sv1.ListOptions{}
+	list, err := s.ListServices(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(list))
+	assert.Equal(t, 1, len(list[0].Selector))
+	assert.Equal(t, "value1", list[0].Selector["key1"])
 }
 
 func TestProtoForServiceClusterName(t *testing.T) {

@@ -101,6 +101,13 @@ service K8sAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
+  rpc ListServices(ListServicesRequest) returns (ListServicesResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listServices"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
   rpc DeleteService(DeleteServiceRequest) returns (DeleteServiceResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/deleteService"
@@ -303,12 +310,6 @@ message PodCondition {
   Status status = 2;
 }
 
-message Event {
-  string name = 1;
-  string reason = 2;
-  string description = 3;
-}
-
 message Pod {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Pod",
@@ -362,9 +363,6 @@ message Pod {
   // issues for well-known types like google.protobuf.Timestamp
   // Unix timestamp (milliseconds since Jan 01 1970)
   int64 start_time_millis = 15;
-
-  // pod events that represent state changes
-  repeated Event events = 16;
 }
 
 message ListOptions {
@@ -751,6 +749,11 @@ message Service {
 
   map<string, string> labels = 5;
   map<string, string> annotations = 6;
+
+  // service traffic routed to pods with label keys
+  // and values matching this selector.
+  // ref: https://pkg.go.dev/k8s.io/api/core/v1#ServiceSpec
+  map<string, string> selector = 7;
 }
 
 message DescribeServiceRequest {
@@ -769,6 +772,20 @@ message DescribeServiceResponse {
   option (clutch.api.v1.reference).fields = "service";
 
   Service service = 1;
+}
+
+message ListServicesRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListServicesResponse {
+  option (clutch.api.v1.reference).fields = "services";
+
+  repeated Service services = 1;
 }
 
 message DeleteServiceRequest {

@@ -72,6 +72,7 @@ type Service interface {
 
 	// Service management functions.
 	DescribeService(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Service, error)
+	ListServices(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Service, error)
 	DeleteService(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// StatefulSet management functions.
