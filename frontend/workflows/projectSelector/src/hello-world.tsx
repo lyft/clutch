@@ -168,16 +168,12 @@ const ProjectSelector = () => {
       // TODO: have userId check be server driven
       const requestParams = { users: [userId()], projects: [] };
       _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-        // if the project is custom and missing from state.projectdata
-        if (state[Group.PROJECTS][p].custom && !(p in state.projectData)) {
+        // if the project is custom
+        if (state[Group.PROJECTS][p].custom) {
           requestParams.projects.push(p);
         }
       });
 
-      /*
-      TODO: the API doesn't return an error if a custom project is not found so we should first
-      check if the API returns empty results and process that as an error
-      */
       client
         .post("/v1/project/getProjects", requestParams as IClutch.project.v1.GetProjectsRequest)
         .then(resp => {
