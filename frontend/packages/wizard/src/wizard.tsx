@@ -58,7 +58,7 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
   const [, setSearchParams] = useSearchParams();
-  const locationState = useLocation().state as { origin?: string; autosubmit?: boolean };
+  const locationState = useLocation().state as { origin?: string };
   const navigate = useNavigate();
   const [origin] = React.useState(locationState?.origin);
 
