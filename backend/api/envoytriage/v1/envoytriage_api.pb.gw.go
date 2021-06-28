@@ -77,7 +77,7 @@ func RegisterEnvoyTriageAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.envoytriage.v1.EnvoyTriageAPI/Read")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.envoytriage.v1.EnvoyTriageAPI/Read", runtime.WithHTTPPathPattern("/v1/envoytriage/read"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -139,7 +139,7 @@ func RegisterEnvoyTriageAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.envoytriage.v1.EnvoyTriageAPI/Read")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.envoytriage.v1.EnvoyTriageAPI/Read", runtime.WithHTTPPathPattern("/v1/envoytriage/read"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

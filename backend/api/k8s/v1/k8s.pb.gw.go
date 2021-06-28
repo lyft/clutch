@@ -961,7 +961,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribePod")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribePod", runtime.WithHTTPPathPattern("/v1/k8s/describePod"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -984,7 +984,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListPods")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListPods", runtime.WithHTTPPathPattern("/v1/k8s/listPods"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1007,7 +1007,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeletePod")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeletePod", runtime.WithHTTPPathPattern("/v1/k8s/deletePod"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1030,7 +1030,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdatePod")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdatePod", runtime.WithHTTPPathPattern("/v1/k8s/updatePod"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1053,7 +1053,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ResizeHPA")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ResizeHPA", runtime.WithHTTPPathPattern("/v1/k8s/resizeHPA"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1076,7 +1076,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteHPA")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteHPA", runtime.WithHTTPPathPattern("/v1/k8s/deleteHPA"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1099,7 +1099,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeDeployment")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeDeployment", runtime.WithHTTPPathPattern("/v1/k8s/describeDeployment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1122,7 +1122,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListDeployments")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListDeployments", runtime.WithHTTPPathPattern("/v1/k8s/listDeployments"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1145,7 +1145,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdateDeployment")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdateDeployment", runtime.WithHTTPPathPattern("/v1/k8s/updateDeployment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1168,7 +1168,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteDeployment")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteDeployment", runtime.WithHTTPPathPattern("/v1/k8s/deleteDeployment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1191,7 +1191,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeService")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeService", runtime.WithHTTPPathPattern("/v1/k8s/describeService"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1214,7 +1214,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListServices")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListServices", runtime.WithHTTPPathPattern("/v1/k8s/listServices"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1237,7 +1237,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteService")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteService", runtime.WithHTTPPathPattern("/v1/k8s/deleteService"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1260,7 +1260,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeStatefulSet")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeStatefulSet", runtime.WithHTTPPathPattern("/v1/k8s/describeStatefulSet"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1283,7 +1283,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListStatefulSets")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListStatefulSets", runtime.WithHTTPPathPattern("/v1/k8s/listStatefulSets"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1306,7 +1306,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdateStatefulSet")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdateStatefulSet", runtime.WithHTTPPathPattern("/v1/k8s/updateStatefulSet"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1329,7 +1329,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteStatefulSet")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteStatefulSet", runtime.WithHTTPPathPattern("/v1/k8s/deleteStatefulSet"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1352,7 +1352,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeCronJob")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeCronJob", runtime.WithHTTPPathPattern("/v1/k8s/describeCronJob"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1375,7 +1375,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListCronJobs")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListCronJobs", runtime.WithHTTPPathPattern("/v1/k8s/listCronJobs"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1398,7 +1398,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteCronJob")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteCronJob", runtime.WithHTTPPathPattern("/v1/k8s/deleteCronJob"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1421,7 +1421,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListConfigMaps")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListConfigMaps", runtime.WithHTTPPathPattern("/v1/k8s/listConfigMaps"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1444,7 +1444,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeConfigMap")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeConfigMap", runtime.WithHTTPPathPattern("/v1/k8s/describeConfigMap"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1467,7 +1467,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteConfigMap")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteConfigMap", runtime.WithHTTPPathPattern("/v1/k8s/deleteConfigMap"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1490,7 +1490,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListJobs")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListJobs", runtime.WithHTTPPathPattern("/v1/k8s/listJobs"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1513,7 +1513,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteJob")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteJob", runtime.WithHTTPPathPattern("/v1/k8s/deleteJob"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1536,7 +1536,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/CreateJob")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/CreateJob", runtime.WithHTTPPathPattern("/v1/k8s/createJob"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1559,7 +1559,7 @@ func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeNamespace")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeNamespace", runtime.WithHTTPPathPattern("/v1/k8s/describeNamespace"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1621,7 +1621,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribePod")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribePod", runtime.WithHTTPPathPattern("/v1/k8s/describePod"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1641,7 +1641,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListPods")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListPods", runtime.WithHTTPPathPattern("/v1/k8s/listPods"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1661,7 +1661,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeletePod")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeletePod", runtime.WithHTTPPathPattern("/v1/k8s/deletePod"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1681,7 +1681,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdatePod")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdatePod", runtime.WithHTTPPathPattern("/v1/k8s/updatePod"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1701,7 +1701,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ResizeHPA")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ResizeHPA", runtime.WithHTTPPathPattern("/v1/k8s/resizeHPA"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1721,7 +1721,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteHPA")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteHPA", runtime.WithHTTPPathPattern("/v1/k8s/deleteHPA"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1741,7 +1741,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeDeployment")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeDeployment", runtime.WithHTTPPathPattern("/v1/k8s/describeDeployment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1761,7 +1761,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListDeployments")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListDeployments", runtime.WithHTTPPathPattern("/v1/k8s/listDeployments"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1781,7 +1781,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdateDeployment")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdateDeployment", runtime.WithHTTPPathPattern("/v1/k8s/updateDeployment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1801,7 +1801,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteDeployment")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteDeployment", runtime.WithHTTPPathPattern("/v1/k8s/deleteDeployment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1821,7 +1821,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeService")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeService", runtime.WithHTTPPathPattern("/v1/k8s/describeService"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1841,7 +1841,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListServices")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListServices", runtime.WithHTTPPathPattern("/v1/k8s/listServices"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1861,7 +1861,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteService")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteService", runtime.WithHTTPPathPattern("/v1/k8s/deleteService"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1881,7 +1881,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeStatefulSet")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeStatefulSet", runtime.WithHTTPPathPattern("/v1/k8s/describeStatefulSet"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1901,7 +1901,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListStatefulSets")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListStatefulSets", runtime.WithHTTPPathPattern("/v1/k8s/listStatefulSets"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1921,7 +1921,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdateStatefulSet")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/UpdateStatefulSet", runtime.WithHTTPPathPattern("/v1/k8s/updateStatefulSet"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1941,7 +1941,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteStatefulSet")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteStatefulSet", runtime.WithHTTPPathPattern("/v1/k8s/deleteStatefulSet"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1961,7 +1961,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeCronJob")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeCronJob", runtime.WithHTTPPathPattern("/v1/k8s/describeCronJob"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1981,7 +1981,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListCronJobs")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListCronJobs", runtime.WithHTTPPathPattern("/v1/k8s/listCronJobs"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -2001,7 +2001,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteCronJob")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteCronJob", runtime.WithHTTPPathPattern("/v1/k8s/deleteCronJob"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -2021,7 +2021,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListConfigMaps")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListConfigMaps", runtime.WithHTTPPathPattern("/v1/k8s/listConfigMaps"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -2041,7 +2041,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeConfigMap")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeConfigMap", runtime.WithHTTPPathPattern("/v1/k8s/describeConfigMap"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -2061,7 +2061,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteConfigMap")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteConfigMap", runtime.WithHTTPPathPattern("/v1/k8s/deleteConfigMap"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -2081,7 +2081,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListJobs")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/ListJobs", runtime.WithHTTPPathPattern("/v1/k8s/listJobs"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -2101,7 +2101,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteJob")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DeleteJob", runtime.WithHTTPPathPattern("/v1/k8s/deleteJob"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -2121,7 +2121,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/CreateJob")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/CreateJob", runtime.WithHTTPPathPattern("/v1/k8s/createJob"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -2141,7 +2141,7 @@ func RegisterK8SAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeNamespace")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.k8s.v1.K8SAPI/DescribeNamespace", runtime.WithHTTPPathPattern("/v1/k8s/describeNamespace"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

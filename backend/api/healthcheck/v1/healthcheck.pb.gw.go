@@ -79,7 +79,7 @@ func RegisterHealthcheckAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck", runtime.WithHTTPPathPattern("/v1/healthcheck"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -102,7 +102,7 @@ func RegisterHealthcheckAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck", runtime.WithHTTPPathPattern("/healthcheck"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -164,7 +164,7 @@ func RegisterHealthcheckAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck", runtime.WithHTTPPathPattern("/v1/healthcheck"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -184,7 +184,7 @@ func RegisterHealthcheckAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck", runtime.WithHTTPPathPattern("/healthcheck"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
