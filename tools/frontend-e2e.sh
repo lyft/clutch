@@ -8,6 +8,15 @@ FE_STARTUP_COUNT=0
 STARTUP_WAIT=30
 
 make backend-dev-mock &
+until curl --output /dev/null --silent --fail http://localhost:8080/healthcheck; do
+    if [ "$BE_STARTUP_COUNT" -ge "$STARTUP_WAIT" ]; then
+        echo "Error: could not start backend mock server"
+        exit 1
+    fi;
+    BE_STARTUP_COUNT=$((BE_STARTUP_COUNT+1))
+    sleep 1
+done
+
 yarn --cwd frontend workspace @clutch-sh/app start &
 until curl --output /dev/null --silent --head --fail http://localhost:3000; do
     if [ "$FE_STARTUP_COUNT" -ge "$STARTUP_WAIT" ]; then
@@ -18,14 +27,6 @@ until curl --output /dev/null --silent --head --fail http://localhost:3000; do
     sleep 1
 done
 
-until curl --output /dev/null --silent --fail http://localhost:8080/healthcheck; do
-    if [ "$BE_STARTUP_COUNT" -ge "$STARTUP_WAIT" ]; then
-        echo "Error: could not start backend mock server"
-        exit 1
-    fi;
-    BE_STARTUP_COUNT=$((BE_STARTUP_COUNT+1))
-    sleep 1
-done
 (
   yarn --cwd frontend test:e2e
 )
