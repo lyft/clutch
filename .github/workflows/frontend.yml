@@ -108,10 +108,9 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mock-mod-${{ hashFiles('**/go.sum') }}  
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
           restore-keys: |
             ${{ runner.os }}-go-mod-
-            ${{ runner.os }}-go-mock-mod-
       - name: go build cache
         uses: actions/cache@v2
         with:
@@ -119,8 +118,8 @@ jobs:
             ~/.cache/go-build
           key: ${{ runner.os }}-go-mock-build-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-go-build-
             ${{ runner.os }}-go-mock-build-
+            ${{ runner.os }}-go-build-
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
