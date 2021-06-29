@@ -23570,7 +23570,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a Dependency.
                      * @memberof clutch.core.project.v1
                      * @interface IDependency
-                     * @property {Array.<string>|null} [id] Dependency id
+                     * @property {Array.<string>|null} [ids] Dependency ids
                      */
 
                     /**
@@ -23582,7 +23582,7 @@ export const clutch = $root.clutch = (() => {
                      * @param {clutch.core.project.v1.IDependency=} [properties] Properties to set
                      */
                     function Dependency(properties) {
-                        this.id = [];
+                        this.ids = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -23590,12 +23590,12 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Dependency id.
-                     * @member {Array.<string>} id
+                     * Dependency ids.
+                     * @member {Array.<string>} ids
                      * @memberof clutch.core.project.v1.Dependency
                      * @instance
                      */
-                    Dependency.prototype.id = $util.emptyArray;
+                    Dependency.prototype.ids = $util.emptyArray;
 
                     /**
                      * Verifies a Dependency message.
@@ -23608,12 +23608,12 @@ export const clutch = $root.clutch = (() => {
                     Dependency.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.id != null && message.hasOwnProperty("id")) {
-                            if (!Array.isArray(message.id))
-                                return "id: array expected";
-                            for (let i = 0; i < message.id.length; ++i)
-                                if (!$util.isString(message.id[i]))
-                                    return "id: string[] expected";
+                        if (message.ids != null && message.hasOwnProperty("ids")) {
+                            if (!Array.isArray(message.ids))
+                                return "ids: array expected";
+                            for (let i = 0; i < message.ids.length; ++i)
+                                if (!$util.isString(message.ids[i]))
+                                    return "ids: string[] expected";
                         }
                         return null;
                     };
@@ -23630,12 +23630,12 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.core.project.v1.Dependency)
                             return object;
                         let message = new $root.clutch.core.project.v1.Dependency();
-                        if (object.id) {
-                            if (!Array.isArray(object.id))
-                                throw TypeError(".clutch.core.project.v1.Dependency.id: array expected");
-                            message.id = [];
-                            for (let i = 0; i < object.id.length; ++i)
-                                message.id[i] = String(object.id[i]);
+                        if (object.ids) {
+                            if (!Array.isArray(object.ids))
+                                throw TypeError(".clutch.core.project.v1.Dependency.ids: array expected");
+                            message.ids = [];
+                            for (let i = 0; i < object.ids.length; ++i)
+                                message.ids[i] = String(object.ids[i]);
                         }
                         return message;
                     };
@@ -23654,11 +23654,11 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.arrays || options.defaults)
-                            object.id = [];
-                        if (message.id && message.id.length) {
-                            object.id = [];
-                            for (let j = 0; j < message.id.length; ++j)
-                                object.id[j] = message.id[j];
+                            object.ids = [];
+                        if (message.ids && message.ids.length) {
+                            object.ids = [];
+                            for (let j = 0; j < message.ids.length; ++j)
+                                object.ids[j] = message.ids[j];
                         }
                         return object;
                     };

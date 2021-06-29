@@ -9769,8 +9769,8 @@ export namespace clutch {
                 /** Properties of a Dependency. */
                 interface IDependency {
 
-                    /** Dependency id */
-                    id?: (string[]|null);
+                    /** Dependency ids */
+                    ids?: (string[]|null);
                 }
 
                 /** Represents a Dependency. */
@@ -9782,8 +9782,8 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.core.project.v1.IDependency);
 
-                    /** Dependency id. */
-                    public id: string[];
+                    /** Dependency ids. */
+                    public ids: string[];
 
                     /**
                      * Verifies a Dependency message.
