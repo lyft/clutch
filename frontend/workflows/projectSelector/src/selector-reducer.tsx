@@ -118,7 +118,7 @@ const selectorReducer = (state: State, action: Action): State => {
           // Add each upstream/downstream for the selected or user project
           if (v.from.users.length > 0 || v.from.selected) {
             _.forIn(upstreamsDeps, v => {
-              v.id.forEach(v => {
+              v.ids.forEach(v => {
                 // preserve the current checked state if the project already exists in this group
                 if (v in state[Group.UPSTREAM]) {
                   newState[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
@@ -128,7 +128,7 @@ const selectorReducer = (state: State, action: Action): State => {
               });
             });
             _.forIn(downstreamsDeps, v => {
-              v.id.forEach(v => {
+              v.ids.forEach(v => {
                 // preserve the current checked state if the project already exists in this group
                 if (v in state[Group.DOWNSTREAM]) {
                   newState[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
