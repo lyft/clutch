@@ -79,8 +79,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Node
-        uses: actions/setup-node@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.16.0
+      - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
           check-latest: true
@@ -106,9 +108,10 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          key: ${{ runner.os }}-go-mock-mod-${{ hashFiles('**/go.sum') }}  
           restore-keys: |
             ${{ runner.os }}-go-mod-
+            ${{ runner.os }}-go-mock-mod-
       - name: go build cache
         uses: actions/cache@v2
         with:
