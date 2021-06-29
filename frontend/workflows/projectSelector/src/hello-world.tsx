@@ -9,6 +9,7 @@ import _ from "lodash";
 
 import ProjectGroup from "./project-group";
 import { selectorReducer } from "./selector-reducer";
+import StateStore from "./state-store"
 
 export enum Group {
   PROJECTS,
@@ -56,7 +57,7 @@ export interface State {
   error: ClutchError | undefined;
 }
 
-interface GroupState {
+export interface GroupState {
   [projectName: string]: ProjectState;
 }
 
@@ -136,8 +137,9 @@ const ProjectSelector = () => {
   // TODO: If a project is rechecked, the checks were preserved.
 
   const [customProject, setCustomProject] = React.useState("");
+  const stateStore = new StateStore(initialState);
 
-  const [state, dispatch] = React.useReducer(selectorReducer, initialState);
+  const [state, dispatch] = React.useReducer(selectorReducer, stateStore);
 
   React.useEffect(() => {
     console.log("effect");
