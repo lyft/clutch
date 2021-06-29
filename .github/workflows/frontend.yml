@@ -79,8 +79,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Node
-        uses: actions/setup-node@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.16.0
+      - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
           check-latest: true
@@ -116,8 +118,8 @@ jobs:
             ~/.cache/go-build
           key: ${{ runner.os }}-go-mock-build-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-go-build-
             ${{ runner.os }}-go-mock-build-
+            ${{ runner.os }}-go-build-
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
