@@ -111,7 +111,7 @@ func RegisterTopologyAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/GetTopology")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/GetTopology", runtime.WithHTTPPathPattern("/v1/topology/getTopology"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -134,7 +134,7 @@ func RegisterTopologyAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/Search")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/Search", runtime.WithHTTPPathPattern("/v1/topology/search"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -196,7 +196,7 @@ func RegisterTopologyAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/GetTopology")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/GetTopology", runtime.WithHTTPPathPattern("/v1/topology/getTopology"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -216,7 +216,7 @@ func RegisterTopologyAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/Search")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/Search", runtime.WithHTTPPathPattern("/v1/topology/search"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

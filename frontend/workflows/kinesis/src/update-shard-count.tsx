@@ -104,7 +104,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
         ]}
       />
       <ButtonGroup>
-        <Button text="Back" onClick={onBack} />
+        <Button text="Back" onClick={() => onBack()} />
         <Button text="Update" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
     </WizardStep>

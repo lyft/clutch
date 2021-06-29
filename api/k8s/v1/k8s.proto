@@ -390,7 +390,7 @@ message ListPodsRequest {
 message ListPodsResponse {
   option (clutch.api.v1.reference).fields = "pods";
 
-  repeated Pod pods = 1;
+  repeated Pod pods = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message DeletePodRequest {
@@ -558,7 +558,7 @@ message DescribeDeploymentRequest {
 message DescribeDeploymentResponse {
   option (clutch.api.v1.reference).fields = "deployment";
 
-  Deployment deployment = 1;
+  Deployment deployment = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message ListDeploymentsRequest {
@@ -577,7 +577,7 @@ message ListDeploymentsRequest {
 message ListDeploymentsResponse {
   option (clutch.api.v1.reference).fields = "deployments";
 
-  repeated Deployment deployments = 1;
+  repeated Deployment deployments = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message UpdateDeploymentRequest {
@@ -663,7 +663,7 @@ message DescribeStatefulSetRequest {
 message DescribeStatefulSetResponse {
   option (clutch.api.v1.reference).fields = "stateful_set";
 
-  StatefulSet stateful_set = 1;
+  StatefulSet stateful_set = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message ListStatefulSetsRequest {
@@ -682,7 +682,7 @@ message ListStatefulSetsRequest {
 message ListStatefulSetsResponse {
   option (clutch.api.v1.reference).fields = "stateful_sets";
 
-  repeated StatefulSet stateful_sets = 1;
+  repeated StatefulSet stateful_sets = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message DeleteStatefulSetRequest {
@@ -771,7 +771,7 @@ message DescribeServiceRequest {
 message DescribeServiceResponse {
   option (clutch.api.v1.reference).fields = "service";
 
-  Service service = 1;
+  Service service = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message ListServicesRequest {
@@ -785,7 +785,7 @@ message ListServicesRequest {
 message ListServicesResponse {
   option (clutch.api.v1.reference).fields = "services";
 
-  repeated Service services = 1;
+  repeated Service services = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message DeleteServiceRequest {
@@ -847,7 +847,7 @@ message DescribeCronJobRequest {
 message DescribeCronJobResponse {
   option (clutch.api.v1.reference).fields = "cron";
 
-  CronJob cronjob = 1;
+  CronJob cronjob = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message ListCronJobsRequest {
@@ -866,7 +866,7 @@ message ListCronJobsRequest {
 message ListCronJobsResponse {
   option (clutch.api.v1.reference).fields = "cron_jobs";
 
-  repeated CronJob cron_jobs = 1;
+  repeated CronJob cron_jobs = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message DeleteCronJobRequest {
@@ -921,7 +921,7 @@ message ListConfigMapsRequest {
 message ListConfigMapsResponse {
   option (clutch.api.v1.reference).fields = "config_maps";
 
-  repeated ConfigMap config_maps = 1;
+  repeated ConfigMap config_maps = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message DescribeConfigMapRequest {
@@ -939,7 +939,7 @@ message DescribeConfigMapRequest {
 message DescribeConfigMapResponse {
   option (clutch.api.v1.reference).fields = "config_map";
 
-  ConfigMap config_map = 1;
+  ConfigMap config_map = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message DeleteConfigMapRequest {
@@ -987,7 +987,7 @@ message ListJobsRequest {
 message ListJobsResponse {
   option (clutch.api.v1.reference).fields = "jobs";
 
-  repeated Job jobs = 1;
+  repeated Job jobs = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message DeleteJobRequest {
@@ -1022,7 +1022,7 @@ message CreateJobRequest {
 }
 
 message CreateJobResponse {
-  Job job = 1;
+  Job job = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message Namespace {
@@ -1052,7 +1052,7 @@ message DescribeNamespaceRequest {
 message DescribeNamespaceResponse {
   option (clutch.api.v1.reference).fields = "namespace";
 
-  Namespace namespace = 1;
+  Namespace namespace = 1 [ (clutch.api.v1.log) = false ];
 }
 
 // This message type is used to add support for nullable strings and is an

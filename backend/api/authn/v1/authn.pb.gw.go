@@ -149,7 +149,7 @@ func RegisterAuthnAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/Login")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/Login", runtime.WithHTTPPathPattern("/v1/authn/login"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -172,7 +172,7 @@ func RegisterAuthnAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/Callback")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/Callback", runtime.WithHTTPPathPattern("/v1/authn/callback"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -195,7 +195,7 @@ func RegisterAuthnAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/CreateToken")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/CreateToken", runtime.WithHTTPPathPattern("/v1/authn/createToken"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -257,7 +257,7 @@ func RegisterAuthnAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/Login")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/Login", runtime.WithHTTPPathPattern("/v1/authn/login"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -277,7 +277,7 @@ func RegisterAuthnAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/Callback")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/Callback", runtime.WithHTTPPathPattern("/v1/authn/callback"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -297,7 +297,7 @@ func RegisterAuthnAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/CreateToken")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.authn.v1.AuthnAPI/CreateToken", runtime.WithHTTPPathPattern("/v1/authn/createToken"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

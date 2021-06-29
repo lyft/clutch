@@ -93,7 +93,9 @@ const PodTable = () => {
               <TableRowAction
                 icon={<DeleteIcon />}
                 onClick={() =>
-                  navigate(`/k8s/pod/delete?q=${pod.cluster}/${pod.namespace}/${pod.name}`)
+                  navigate(`/k8s/pod/delete?q=${pod.cluster}/${pod.namespace}/${pod.name}`, {
+                    state: { origin: `${window.location.pathname}${window.location.search}` },
+                  })
                 }
               >
                 Delete

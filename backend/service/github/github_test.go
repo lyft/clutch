@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	githubv3 "github.com/google/go-github/v35/github"
+	githubv3 "github.com/google/go-github/v36/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"
 
