@@ -54,28 +54,28 @@ const selectorReducer = (state: State, action: Action): State => {
       };
     }
     case "ONLY_PROJECTS": {
-      const newOnlyProjectState = { ...state };
+      const newState = { ...state };
 
-      newOnlyProjectState[action.payload.group] = Object.fromEntries(
+      newState[action.payload.group] = Object.fromEntries(
         Object.keys(state[action.payload.group]).map(key => [
           key,
           { ...state[action.payload.group][key], checked: action.payload.projects.includes(key) },
         ])
       );
 
-      return newOnlyProjectState;
+      return newState;
     }
     case "TOGGLE_ENTIRE_GROUP": {
       const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
-      const newGroupToggledState = { ...state };
-      newGroupToggledState[action.payload.group] = Object.fromEntries(
+      const newState = { ...state };
+      newState[action.payload.group] = Object.fromEntries(
         Object.keys(state[action.payload.group]).map(key => [
           key,
           { ...state[action.payload.group][key], checked: newCheckedValue },
         ])
       );
 
-      return newGroupToggledState;
+      return newState;
     }
     // Background actions.
 
@@ -83,7 +83,7 @@ const selectorReducer = (state: State, action: Action): State => {
       return { ...state, loading: true };
     }
     case "HYDRATE_END": {
-      const newPostAPICallState = { ...state, loading: false, error: undefined };
+      const newState = { ...state, loading: false, error: undefined };
 
       _.forIn(
         action.payload.result as IClutch.project.v1.IGetProjectsResponse,
@@ -92,20 +92,20 @@ const selectorReducer = (state: State, action: Action): State => {
           if (v.from.users.length > 0) {
             // preserve the current checked state if the project already exists in this group
             if (k in state[Group.PROJECTS]) {
-              state[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked };
+              newState[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked };
             } else {
-              state[Group.PROJECTS][k] = { checked: true };
+              newState[Group.PROJECTS][k] = { checked: true };
             }
           } else if (v.from.selected) {
             // a custom project
             // preserve the current checked state if the project already exists in this group
             if (k in state[Group.PROJECTS]) {
-              state[Group.PROJECTS][k] = {
+              newState[Group.PROJECTS][k] = {
                 checked: state[Group.PROJECTS][k].checked,
                 custom: true,
               };
             } else {
-              state[Group.PROJECTS][k] = { checked: true, custom: true };
+              newState[Group.PROJECTS][k] = { checked: true, custom: true };
             }
           }
 
@@ -121,9 +121,9 @@ const selectorReducer = (state: State, action: Action): State => {
               v.id.forEach(v => {
                 // preserve the current checked state if the project already exists in this group
                 if (v in state[Group.UPSTREAM]) {
-                  state[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
+                  newState[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
                 } else {
-                  state[Group.UPSTREAM][v] = { checked: false };
+                  newState[Group.UPSTREAM][v] = { checked: false };
                 }
               });
             });
@@ -131,29 +131,19 @@ const selectorReducer = (state: State, action: Action): State => {
               v.id.forEach(v => {
                 // preserve the current checked state if the project already exists in this group
                 if (v in state[Group.DOWNSTREAM]) {
-                  state[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
+                  newState[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
                 } else {
-                  state[Group.DOWNSTREAM][v] = { checked: false };
+                  newState[Group.DOWNSTREAM][v] = { checked: false };
                 }
               });
             });
           }
 
           // stores the raw project data for each project in the API result
-          state.projectData[k] = {
-            name: v.project.name,
-            tier: v.project.tier,
-            owners: v.project.owners,
-            languages: v.project.languages,
-            data: v.project.data,
-            dependencies: {
-              upstreams: upstreamsDeps,
-              downstreams: downstreamsDeps,
-            },
-          };
+          newState.projectData[k] = v.project;
         }
       );
-      return newPostAPICallState;
+      return newState;
     }
     case "HYDRATE_ERROR":
       /*
