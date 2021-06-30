@@ -9,35 +9,22 @@ const selectorReducer = (state: State, action: Action): State => {
     // User actions.
 
     case "ADD_PROJECTS": {
-      const newAddProjectsState = { ...state };
-
       // a given custom project may already exist in the group so don't trigger a state update for those duplicates
       const uniqueCustomProjects = action.payload.projects.filter(
-        (project: string) => !(project in newAddProjectsState[action.payload.group])
+        (project: string) => !(project in state[action.payload.group])
       );
       if (uniqueCustomProjects.length === 0) {
-        return newAddProjectsState;
+        return state;
       }
-
-      uniqueCustomProjects.forEach(v => {
-        newAddProjectsState[Group.PROJECTS][v] = { checked: true, custom: true };
-        // check if we already have project data for this project. if so, add the upstreamds/downstreams
-        if (v in newAddProjectsState.projectData) {
-          _.forIn(newAddProjectsState.projectData[v].dependencies.upstreams, v => {
-            v.ids.forEach(v => {
-              stateHelper.setChecked(newAddProjectsState, Group.UPSTREAM, v);
-            });
-          });
-
-          _.forIn(newAddProjectsState.projectData[v].dependencies.downstreams, v => {
-            v.ids.forEach(v => {
-              stateHelper.setChecked(newAddProjectsState, Group.DOWNSTREAM, v);
-            });
-          });
-        }
-      });
-
-      return newAddProjectsState;
+      return {
+        ...state,
+        [action.payload.group]: {
+          ...state[action.payload.group],
+          ...Object.fromEntries(
+            uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])
+          ),
+        },
+      };
     }
     case "REMOVE_PROJECTS": {
       // TODO: also remove any upstreams or downstreams related (only) to the project.
