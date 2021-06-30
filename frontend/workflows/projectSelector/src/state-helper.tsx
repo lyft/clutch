@@ -4,12 +4,15 @@ import type { ClutchError } from "@clutch-sh/core";
 import type { GroupState, State } from "./hello-world";
 import { Group } from "./hello-world";
 
-export default class StateStore implements State {
-  [Group.PROJECTS]: GroupState;
+export default class StateHelper implements State {
+  // projects
+  0: GroupState;
 
-  [Group.UPSTREAM]: GroupState;
+  // upstream
+  1: GroupState;
 
-  [Group.DOWNSTREAM]: GroupState;
+  // downstream
+  2: GroupState;
 
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
 
@@ -17,6 +20,7 @@ export default class StateStore implements State {
 
   error: ClutchError | undefined;
 
+  // initialize state with empty values
   constructor() {
     this[Group.PROJECTS] = {};
     this[Group.UPSTREAM] = {};
@@ -39,4 +43,6 @@ export default class StateStore implements State {
     }
   }
 
+  // TODO: helper method for creating mapping of upstreams/downstreams => projects (s)
+  // to help determine what upstreams/downstreams are exclusive to a project
 }

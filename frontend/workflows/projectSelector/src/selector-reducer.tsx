@@ -2,29 +2,42 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
 import type { Action, State } from "./hello-world";
-import { deriveSwitchStatus, Group, stateStore } from "./hello-world";
+import { deriveSwitchStatus, Group, stateHelper } from "./hello-world";
 
 const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
     // User actions.
 
     case "ADD_PROJECTS": {
+      const newAddProjectsState = { ...state };
+
       // a given custom project may already exist in the group so don't trigger a state update for those duplicates
       const uniqueCustomProjects = action.payload.projects.filter(
-        (project: string) => !(project in state[action.payload.group])
+        (project: string) => !(project in newAddProjectsState[action.payload.group])
       );
       if (uniqueCustomProjects.length === 0) {
-        return state;
+        return newAddProjectsState;
       }
-      return {
-        ...state,
-        [action.payload.group]: {
-          ...state[action.payload.group],
-          ...Object.fromEntries(
-            uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])
-          ),
-        },
-      };
+
+      uniqueCustomProjects.forEach(v => {
+        newAddProjectsState[Group.PROJECTS][v] = { checked: true, custom: true };
+        // check if we already have project data for this project. if so, add the upstreamds/downstreams
+        if (v in newAddProjectsState.projectData) {
+          _.forIn(newAddProjectsState.projectData[v].dependencies.upstreams, v => {
+            v.ids.forEach(v => {
+              stateHelper.setChecked(newAddProjectsState, Group.UPSTREAM, v);
+            });
+          });
+
+          _.forIn(newAddProjectsState.projectData[v].dependencies.downstreams, v => {
+            v.ids.forEach(v => {
+              stateHelper.setChecked(newAddProjectsState, Group.DOWNSTREAM, v);
+            });
+          });
+        }
+      });
+
+      return newAddProjectsState;
     }
     case "REMOVE_PROJECTS": {
       // TODO: also remove any upstreams or downstreams related (only) to the project.
@@ -88,25 +101,24 @@ const selectorReducer = (state: State, action: Action): State => {
       _.forIn(
         action.payload.result as IClutch.project.v1.IGetProjectsResponse,
         (v: IClutch.project.v1.IProjectResult, k: string) => {
-          // a user owned project
+          // user owned project vs custom project
           if (v.from.users.length > 0) {
-            stateStore.setChecked(state, Group.PROJECTS, k);
+            stateHelper.setChecked(newState, Group.PROJECTS, k);
           } else if (v.from.selected) {
-            // a custom project
-            stateStore.setChecked(state, Group.PROJECTS, k);
+            stateHelper.setChecked(newState, Group.PROJECTS, k);
             newState[Group.PROJECTS][k].custom = true;
           }
 
-          // Add each upstream/downstream for the selected or user project
+          // add each upstream/downstream for the selected or user project
           if (v.from.users.length > 0 || v.from.selected) {
             _.forIn(v.project.dependencies.upstreams, v => {
               v.ids.forEach(v => {
-                stateStore.setChecked(state, Group.UPSTREAM, v);
+                stateHelper.setChecked(newState, Group.UPSTREAM, v);
               });
             });
             _.forIn(v.project.dependencies.downstreams, v => {
               v.ids.forEach(v => {
-                stateStore.setChecked(state, Group.DOWNSTREAM, v);
+                stateHelper.setChecked(newState, Group.DOWNSTREAM, v);
               });
             });
           }
