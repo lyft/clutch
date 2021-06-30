@@ -9,7 +9,6 @@ import _ from "lodash";
 
 import ProjectGroup from "./project-group";
 import { selectorReducer } from "./selector-reducer";
-import StateHelper from "./state-helper";
 
 export enum Group {
   PROJECTS,
@@ -73,8 +72,6 @@ export const useReducerState = () => {
   return React.useContext(StateContext);
 };
 
-export const stateHelper = new StateHelper();
-
 const DispatchContext = React.createContext<(action: Action) => void | undefined>(undefined);
 export const useDispatch = () => {
   return React.useContext(DispatchContext);
@@ -86,6 +83,15 @@ export const deriveSwitchStatus = (state: State, group: Group): boolean => {
     Object.keys(state[group]).length > 0 &&
     Object.keys(state[group]).every(key => state[group][key].checked)
   );
+};
+
+const initialState: State = {
+  [Group.PROJECTS]: {},
+  [Group.UPSTREAM]: {},
+  [Group.DOWNSTREAM]: {},
+  projectData: {},
+  loading: false,
+  error: undefined,
 };
 
 const StyledSelectorContainer = styled.div({
@@ -131,7 +137,7 @@ const ProjectSelector = () => {
 
   const [customProject, setCustomProject] = React.useState("");
 
-  const [state, dispatch] = React.useReducer(selectorReducer, stateHelper);
+  const [state, dispatch] = React.useReducer(selectorReducer, initialState);
 
   React.useEffect(() => {
     console.log("effect");
