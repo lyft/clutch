@@ -56,7 +56,7 @@ export interface State {
   error: ClutchError | undefined;
 }
 
-export interface GroupState {
+interface GroupState {
   [projectName: string]: ProjectState;
 }
 
@@ -197,7 +197,6 @@ const ProjectSelector = () => {
     setCustomProject("");
   };
 
-  console.log("stateStore", stateStore);
   const hasError = state.error !== undefined && state.error !== null;
 
   return (
