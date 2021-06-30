@@ -9,7 +9,7 @@ import _ from "lodash";
 
 import ProjectGroup from "./project-group";
 import { selectorReducer } from "./selector-reducer";
-import StateStore from "./state-store"
+import StateStore from "./state-store";
 
 export enum Group {
   PROJECTS,
@@ -72,6 +72,8 @@ const StateContext = React.createContext<State | undefined>(undefined);
 export const useReducerState = () => {
   return React.useContext(StateContext);
 };
+
+export const stateStore = new StateStore();
 
 const DispatchContext = React.createContext<(action: Action) => void | undefined>(undefined);
 export const useDispatch = () => {
@@ -137,7 +139,6 @@ const ProjectSelector = () => {
   // TODO: If a project is rechecked, the checks were preserved.
 
   const [customProject, setCustomProject] = React.useState("");
-  const stateStore = new StateStore(initialState);
 
   const [state, dispatch] = React.useReducer(selectorReducer, stateStore);
 
@@ -199,6 +200,7 @@ const ProjectSelector = () => {
     setCustomProject("");
   };
 
+  console.log("stateStore", stateStore);
   const hasError = state.error !== undefined && state.error !== null;
 
   return (

@@ -2,7 +2,7 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
 import type { Action, State } from "./hello-world";
-import { deriveSwitchStatus, Group } from "./hello-world";
+import { deriveSwitchStatus, Group, stateStore } from "./hello-world";
 
 const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -90,51 +90,23 @@ const selectorReducer = (state: State, action: Action): State => {
         (v: IClutch.project.v1.IProjectResult, k: string) => {
           // a user owned project
           if (v.from.users.length > 0) {
-            // preserve the current checked state if the project already exists in this group
-            if (k in state[Group.PROJECTS]) {
-              newState[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked };
-            } else {
-              newState[Group.PROJECTS][k] = { checked: true };
-            }
+            stateStore.setChecked(state, Group.PROJECTS, k);
           } else if (v.from.selected) {
             // a custom project
-            // preserve the current checked state if the project already exists in this group
-            if (k in state[Group.PROJECTS]) {
-              newState[Group.PROJECTS][k] = {
-                checked: state[Group.PROJECTS][k].checked,
-                custom: true,
-              };
-            } else {
-              newState[Group.PROJECTS][k] = { checked: true, custom: true };
-            }
+            stateStore.setChecked(state, Group.PROJECTS, k);
+            newState[Group.PROJECTS][k].custom = true;
           }
-
-          // collect upstreams for each project in the results
-          const upstreamsDeps = v.project.dependencies.upstreams;
-
-          // collect downstreams for each project in the results
-          const downstreamsDeps = v.project.dependencies.downstreams;
 
           // Add each upstream/downstream for the selected or user project
           if (v.from.users.length > 0 || v.from.selected) {
-            _.forIn(upstreamsDeps, v => {
+            _.forIn(v.project.dependencies.upstreams, v => {
               v.ids.forEach(v => {
-                // preserve the current checked state if the project already exists in this group
-                if (v in state[Group.UPSTREAM]) {
-                  newState[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
-                } else {
-                  newState[Group.UPSTREAM][v] = { checked: false };
-                }
+                stateStore.setChecked(state, Group.UPSTREAM, v);
               });
             });
-            _.forIn(downstreamsDeps, v => {
+            _.forIn(v.project.dependencies.downstreams, v => {
               v.ids.forEach(v => {
-                // preserve the current checked state if the project already exists in this group
-                if (v in state[Group.DOWNSTREAM]) {
-                  newState[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
-                } else {
-                  newState[Group.DOWNSTREAM][v] = { checked: false };
-                }
+                stateStore.setChecked(state, Group.DOWNSTREAM, v);
               });
             });
           }
