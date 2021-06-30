@@ -60,7 +60,7 @@ interface GroupState {
   [projectName: string]: ProjectState;
 }
 
-interface ProjectState {
+export interface ProjectState {
   checked: boolean;
   // TODO: hidden should be derived?
   hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
