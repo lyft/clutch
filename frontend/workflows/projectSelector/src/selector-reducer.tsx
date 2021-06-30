@@ -8,16 +8,13 @@ const updateGroupstate = (
   state: State,
   group: Group,
   project: string,
-  projectState: ProjectState,
+  projectState: ProjectState
 ): State => {
   const newState = { ...state };
   if (project in newState[group]) {
     // preserve the checked value if the project is already in the group
     newState[group][project].checked = state[group][project].checked;
-    if (group === Group.PROJECTS) {
-      // if it's in Group.Project grp, we set the specified "custom" value from the projectState
-      newState[group][project].custom = projectState.custom;
-    }
+    newState[group][project].custom = projectState.custom;
   } else {
     // we set the projectState to the default state passed in
     newState[group][project] = projectState;
@@ -112,9 +109,12 @@ const selectorReducer = (state: State, action: Action): State => {
         (v: IClutch.project.v1.IProjectResult, k: string) => {
           // user owned project vs custom project
           if (v.from.users.length > 0) {
-            newState = updateGroupstate(newState, Group.PROJECTS, k, {checked: true, custom: false});
+            newState = updateGroupstate(newState, Group.PROJECTS, k, { checked: true });
           } else if (v.from.selected) {
-            newState = updateGroupstate(newState, Group.PROJECTS, k, {checked: true, custom: true});
+            newState = updateGroupstate(newState, Group.PROJECTS, k, {
+              checked: true,
+              custom: true,
+            });
           }
 
           // add each upstream/downstream for the selected or user project
@@ -122,13 +122,17 @@ const selectorReducer = (state: State, action: Action): State => {
             v.project.dependencies.upstreams[
               "type.googleapis.com/clutch.core.project.v1.Project"
             ]?.ids.forEach(upstreamDep => {
-              newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {checked: false});
+              newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
+                checked: false,
+              });
             });
 
             v.project.dependencies.downstreams[
               "type.googleapis.com/clutch.core.project.v1.Project"
             ]?.ids.forEach(downstreamDep => {
-              newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {checked: false});
+              newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
+                checked: false,
+              });
             });
           }
 
