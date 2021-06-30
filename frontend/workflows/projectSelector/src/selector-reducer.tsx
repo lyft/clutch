@@ -4,7 +4,6 @@ import _ from "lodash";
 import type { Action, State } from "./hello-world";
 import { deriveSwitchStatus, Group } from "./hello-world";
 
-// handle custom ; 4th param will be project state object
 const updateGroupstate = (
   state: State,
   group: Group,
