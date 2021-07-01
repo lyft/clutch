@@ -64,7 +64,7 @@ const selectorReducer = (state: State, action: Action): State => {
 
       // if the newly added project is in Group.Projects, check to see if we have
       // project data for it (b/c we don't need to make an API call) and update the state with
-      // it's upstreams/downstreams
+      // its upstreams/downstreams
       if (action.payload.group === Group.PROJECTS) {
         uniqueCustomProjects.forEach(v => {
           if (v in newState.projectData) {
