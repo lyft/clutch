@@ -77,10 +77,13 @@ export interface CheckboxProps
 
 // TODO (sperry): add 16px size variant
 const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled, size, ...props }) => {
-  let sizePx = "24px";
+  let sizePx;
   switch (size) {
     case "small":
       sizePx = "20px";
+      break;
+    default:
+      sizePx = "24px";
   }
 
   return (
