@@ -1,8 +1,27 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
-import type { Action, State } from "./hello-world";
+import type { Action, ProjectState, State } from "./hello-world";
 import { deriveSwitchStatus, Group } from "./hello-world";
+
+const updateGroupstate = (
+  state: State,
+  group: Group,
+  project: string,
+  projectState: ProjectState
+): State => {
+  const newState = { ...state };
+  if (project in newState[group]) {
+    // preserve the checked value if the project is already in the group
+    newState[group][project].checked = state[group][project].checked;
+    newState[group][project].custom = projectState.custom;
+  } else {
+    // we set the projectState to the default state passed in
+    newState[group][project] = projectState;
+  }
+
+  return newState;
+};
 
 const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -83,58 +102,36 @@ const selectorReducer = (state: State, action: Action): State => {
       return { ...state, loading: true };
     }
     case "HYDRATE_END": {
-      const newState = { ...state, loading: false, error: undefined };
+      let newState = { ...state, loading: false, error: undefined };
 
       _.forIn(
         action.payload.result as IClutch.project.v1.IGetProjectsResponse,
         (v: IClutch.project.v1.IProjectResult, k: string) => {
-          // a user owned project
+          // user owned project vs custom project
           if (v.from.users.length > 0) {
-            // preserve the current checked state if the project already exists in this group
-            if (k in state[Group.PROJECTS]) {
-              newState[Group.PROJECTS][k] = { checked: state[Group.PROJECTS][k].checked };
-            } else {
-              newState[Group.PROJECTS][k] = { checked: true };
-            }
+            newState = updateGroupstate(newState, Group.PROJECTS, k, { checked: true });
           } else if (v.from.selected) {
-            // a custom project
-            // preserve the current checked state if the project already exists in this group
-            if (k in state[Group.PROJECTS]) {
-              newState[Group.PROJECTS][k] = {
-                checked: state[Group.PROJECTS][k].checked,
-                custom: true,
-              };
-            } else {
-              newState[Group.PROJECTS][k] = { checked: true, custom: true };
-            }
+            newState = updateGroupstate(newState, Group.PROJECTS, k, {
+              checked: true,
+              custom: true,
+            });
           }
 
-          // collect upstreams for each project in the results
-          const upstreamsDeps = v.project.dependencies.upstreams;
-
-          // collect downstreams for each project in the results
-          const downstreamsDeps = v.project.dependencies.downstreams;
-
-          // Add each upstream/downstream for the selected or user project
+          // add each upstream/downstream for the selected or user project
           if (v.from.users.length > 0 || v.from.selected) {
-            _.forIn(upstreamsDeps, v => {
-              v.ids.forEach(v => {
-                // preserve the current checked state if the project already exists in this group
-                if (v in state[Group.UPSTREAM]) {
-                  newState[Group.UPSTREAM][v] = { checked: state[Group.UPSTREAM][v].checked };
-                } else {
-                  newState[Group.UPSTREAM][v] = { checked: false };
-                }
+            v.project.dependencies.upstreams[
+              "type.googleapis.com/clutch.core.project.v1.Project"
+            ]?.ids.forEach(upstreamDep => {
+              newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
+                checked: false,
               });
             });
-            _.forIn(downstreamsDeps, v => {
-              v.ids.forEach(v => {
-                // preserve the current checked state if the project already exists in this group
-                if (v in state[Group.DOWNSTREAM]) {
-                  newState[Group.DOWNSTREAM][v] = { checked: state[Group.DOWNSTREAM][v].checked };
-                } else {
-                  newState[Group.DOWNSTREAM][v] = { checked: false };
-                }
+
+            v.project.dependencies.downstreams[
+              "type.googleapis.com/clutch.core.project.v1.Project"
+            ]?.ids.forEach(downstreamDep => {
+              newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
+                checked: false,
               });
             });
           }
