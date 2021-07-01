@@ -1,6 +1,6 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
-import HelloWorld from "./hello-world";
+import ProjectSelector from "./project-selector";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
@@ -17,7 +17,7 @@ const register = (): WorkflowConfiguration => {
       landing: {
         path: "/",
         description: "Filter your projects.",
-        component: HelloWorld,
+        component: ProjectSelector,
       },
     },
   };

@@ -61,9 +61,4 @@ module.exports = {
       trending: true,
     },
   },
-  "@clutch-sh/projectSelector": {
-    landing: {
-      trending: true,
-    },
-  },
 };
