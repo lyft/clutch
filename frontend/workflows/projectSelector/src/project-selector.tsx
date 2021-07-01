@@ -160,10 +160,4 @@ const ProjectSelector = () => {
   );
 };
 
-const HelloWorld = () => (
-  <>
-    <ProjectSelector />
-  </>
-);
-
-export default HelloWorld;
+export default ProjectSelector;
