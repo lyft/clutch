@@ -15,35 +15,35 @@ const FormControl = styled(MuiFormControl)({
   width: "75%",
 });
 
-const StyledCheckbox = styled(MuiCheckbox)({
-  color: "#6e7083",
-  borderRadius: "50%",
-  "&:hover": {
-    background: "#f5f6fd",
-  },
-  "&:active": {
-    background: "#d7daf6",
-  },
-  "&.Mui-checked": {
-    color: "#ffffff",
+const StyledCheckbox = styled(MuiCheckbox)(
+  {
+    color: "#6e7083",
+    borderRadius: "50%",
     "&:hover": {
       background: "#f5f6fd",
     },
     "&:active": {
       background: "#d7daf6",
     },
-    "&.Mui-disabled": {
-      color: "#e7e7ea",
-      ".MuiIconButton-label": {
-        color: "rgba(13, 16, 48, 0.38)",
+    "&.Mui-checked": {
+      color: "#ffffff",
+      "&:hover": {
+        background: "#f5f6fd",
+      },
+      "&:active": {
+        background: "#d7daf6",
+      },
+      "&.Mui-disabled": {
+        color: "#e7e7ea",
+        ".MuiIconButton-label": {
+          color: "rgba(13, 16, 48, 0.38)",
+        },
       },
     },
   },
-},
-  props => ({
-  }));
+);
 
-const Icon = styled.div<{disabled: boolean, size: string}>(
+const Icon = styled.div<{ disabled: boolean; size: string }>(
   {
     borderRadius: "2px",
     boxSizing: "border-box",
@@ -55,7 +55,7 @@ const Icon = styled.div<{disabled: boolean, size: string}>(
   })
 );
 
-const SelectedIcon = styled.div<{disabled: boolean, size: string}>(
+const SelectedIcon = styled.div<{ disabled: boolean; size: string }>(
   {
     borderRadius: "2px",
     boxSizing: "border-box",
@@ -70,7 +70,7 @@ const SelectedIcon = styled.div<{disabled: boolean, size: string}>(
     ".MuiSvgIcon-root": {
       height: props.size,
       width: props.size,
-    }
+    },
   })
 );
 
@@ -79,9 +79,8 @@ export interface CheckboxProps
 
 // TODO (sperry): add 16px size variant
 const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled, size, ...props }) => {
-
   let sizePx = "24px";
-  switch(size){
+  switch (size) {
     case "small":
       sizePx = "20px";
   }

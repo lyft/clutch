@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Checkbox, Switch } from "@clutch-sh/core";
 import styled from "@emotion/styled";
+import IconButton from "@material-ui/core/IconButton";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import IconButton from "@material-ui/core/IconButton";
 
 import type { Group } from "./hello-world";
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./hello-world";
@@ -130,7 +130,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
             {title}
             <StyledCount>
               {checkedProjects.length}
-              {numProjects > 0 && "/" + numProjects}
+              {numProjects > 0 && `/${numProjects}`}
             </StyledCount>
           </StyledProjectTitle>
         </StyledHeaderColumn>
@@ -140,17 +140,17 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
             onChange={() =>
               dispatch({
                 type: "TOGGLE_ENTIRE_GROUP",
-                payload: { group: group },
+                payload: { group },
               })
             }
             checked={deriveSwitchStatus(state, group)}
-            disabled={numProjects == 0 || state.loading}
+            disabled={numProjects === 0 || state.loading}
           />
         </StyledHeaderColumn>
       </StyledProjectHeader>
       {!collapsed && (
         <div>
-          {numProjects == 0 && (
+          {numProjects === 0 && (
             <StyledNoProjectsText>No projects in this group yet.</StyledNoProjectsText>
           )}
           {Object.keys(state[group]).map(key => (
@@ -165,10 +165,10 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                     payload: { group, projects: [key] },
                   })
                 }
-                checked={state[group][key].checked ? true : false}
+                checked={!!state[group][key].checked}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledHoverOptions hidden={true}>
+              <StyledHoverOptions hidden>
                 <StyledOnlyButton
                   onClick={() =>
                     !state.loading &&
