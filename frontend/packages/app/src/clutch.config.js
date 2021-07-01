@@ -13,7 +13,7 @@ module.exports = {
       },
     },
     rebootInstance: {
-      // hideNav: true,
+      hideNav: true,
       componentProps: {
         resolverType: "clutch.aws.ec2.v1.Instance",
       },
