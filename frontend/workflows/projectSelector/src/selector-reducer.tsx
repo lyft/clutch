@@ -47,22 +47,47 @@ const selectorReducer = (state: State, action: Action): State => {
     // User actions.
 
     case "ADD_PROJECTS": {
+      let newState = { ...state };
+
       // a given custom project may already exist in the group so don't trigger a state update for those duplicates
       const uniqueCustomProjects = action.payload.projects.filter(
-        (project: string) => !(project in state[action.payload.group])
+        (project: string) => !(project in newState[action.payload.group])
       );
       if (uniqueCustomProjects.length === 0) {
-        return state;
+        return newState;
       }
-      return {
-        ...state,
-        [action.payload.group]: {
-          ...state[action.payload.group],
-          ...Object.fromEntries(
-            uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])
-          ),
-        },
+
+      newState[action.payload.group] = {
+        ...state[action.payload.group],
+        ...Object.fromEntries(uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])),
       };
+
+      // if the newly added project is in Group.Projects, check to see if we have
+      // project data for it (b/c we don't need to make an API call) and update the state with
+      // it's upstreams/downstreams
+      if (action.payload.group === Group.PROJECTS) {
+        uniqueCustomProjects.forEach(v => {
+          if (v in newState.projectData) {
+            newState.projectData[v].dependencies.upstreams[
+              "type.googleapis.com/clutch.core.project.v1.Project"
+            ]?.ids.forEach(upstreamDep => {
+              newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
+                checked: false,
+              });
+            });
+
+            newState.projectData[v].dependencies.downstreams[
+              "type.googleapis.com/clutch.core.project.v1.Project"
+            ]?.ids.forEach(downstreamDep => {
+              newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
+                checked: false,
+              });
+            });
+          }
+        });
+      }
+
+      return newState;
     }
     case "REMOVE_PROJECTS": {
       // TODO: also remove any upstreams or downstreams related (only) to the project.
