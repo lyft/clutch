@@ -161,7 +161,7 @@ const ProjectSelector = () => {
       return true; // Continue.
     });
 
-    if (!state.loading && (Object.keys(state[Group.PROJECTS]).length == 0 || !allPresent)) {
+    if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent)) {
       console.log("calling API!", state.loading);
       dispatch({ type: "HYDRATE_START" });
 
