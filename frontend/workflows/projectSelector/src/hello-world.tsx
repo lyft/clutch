@@ -8,82 +8,9 @@ import LayersIcon from "@material-ui/icons/Layers";
 import _ from "lodash";
 
 import ProjectGroup from "./project-group";
-import { selectorReducer } from "./selector-reducer";
-
-export enum Group {
-  PROJECTS,
-  UPSTREAM,
-  DOWNSTREAM,
-}
-
-type UserActionKind =
-  | "ADD_PROJECTS"
-  | "REMOVE_PROJECTS"
-  | "TOGGLE_PROJECTS"
-  | "TOGGLE_ENTIRE_GROUP"
-  | "ONLY_PROJECTS";
-
-interface UserAction {
-  type: UserActionKind;
-  payload: UserPayload;
-}
-
-interface UserPayload {
-  group: Group;
-  projects?: string[];
-}
-
-type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END" | "HYDRATE_ERROR";
-
-interface BackgroundAction {
-  type: BackgroundActionKind;
-  payload?: BackgroundPayload;
-}
-
-interface BackgroundPayload {
-  result: any;
-}
-
-export type Action = BackgroundAction | UserAction;
-
-export interface State {
-  [Group.PROJECTS]: GroupState;
-  [Group.UPSTREAM]: GroupState;
-  [Group.DOWNSTREAM]: GroupState;
-
-  projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
-  loading: boolean;
-  error: ClutchError | undefined;
-}
-
-interface GroupState {
-  [projectName: string]: ProjectState;
-}
-
-export interface ProjectState {
-  checked: boolean;
-  // TODO: hidden should be derived?
-  hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
-  custom?: boolean;
-}
-
-const StateContext = React.createContext<State | undefined>(undefined);
-export const useReducerState = () => {
-  return React.useContext(StateContext);
-};
-
-const DispatchContext = React.createContext<(action: Action) => void | undefined>(undefined);
-export const useDispatch = () => {
-  return React.useContext(DispatchContext);
-};
-
-// TODO(perf): call with useMemo().
-export const deriveSwitchStatus = (state: State, group: Group): boolean => {
-  return (
-    Object.keys(state[group]).length > 0 &&
-    Object.keys(state[group]).every(key => state[group][key].checked)
-  );
-};
+import { DispatchContext, selectorReducer, StateContext } from "./selector-reducer";
+import type { State } from "./types";
+import { Group } from "./types";
 
 const initialState: State = {
   [Group.PROJECTS]: {},
@@ -140,7 +67,7 @@ const ProjectSelector = () => {
   const [state, dispatch] = React.useReducer(selectorReducer, initialState);
 
   React.useEffect(() => {
-    console.log("effect");
+    console.log("effect"); // eslint-disable-line
     // Determine if any hydration is required.
     // - Are any services missing from state.projectdata?
     // - Are projects empty (first load)?
@@ -162,7 +89,7 @@ const ProjectSelector = () => {
     });
 
     if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent)) {
-      console.log("calling API!", state.loading);
+      console.log("calling API!", state.loading); // eslint-disable-line
       dispatch({ type: "HYDRATE_START" });
 
       // TODO: have userId check be server driven

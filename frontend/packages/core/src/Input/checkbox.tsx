@@ -15,33 +15,31 @@ const FormControl = styled(MuiFormControl)({
   width: "75%",
 });
 
-const StyledCheckbox = styled(MuiCheckbox)(
-  {
-    color: "#6e7083",
-    borderRadius: "50%",
+const StyledCheckbox = styled(MuiCheckbox)({
+  color: "#6e7083",
+  borderRadius: "50%",
+  "&:hover": {
+    background: "#f5f6fd",
+  },
+  "&:active": {
+    background: "#d7daf6",
+  },
+  "&.Mui-checked": {
+    color: "#ffffff",
     "&:hover": {
       background: "#f5f6fd",
     },
     "&:active": {
       background: "#d7daf6",
     },
-    "&.Mui-checked": {
-      color: "#ffffff",
-      "&:hover": {
-        background: "#f5f6fd",
-      },
-      "&:active": {
-        background: "#d7daf6",
-      },
-      "&.Mui-disabled": {
-        color: "#e7e7ea",
-        ".MuiIconButton-label": {
-          color: "rgba(13, 16, 48, 0.38)",
-        },
+    "&.Mui-disabled": {
+      color: "#e7e7ea",
+      ".MuiIconButton-label": {
+        color: "rgba(13, 16, 48, 0.38)",
       },
     },
   },
-);
+});
 
 const Icon = styled.div<{ disabled: boolean; size: string }>(
   {
