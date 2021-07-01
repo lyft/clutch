@@ -16,6 +16,7 @@ const register = (): WorkflowConfiguration => {
     routes: {
       landing: {
         path: "/",
+        displayName: "Project Selector",
         description: "Filter your projects.",
         component: ProjectSelector,
       },
