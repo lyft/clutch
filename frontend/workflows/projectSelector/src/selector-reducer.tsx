@@ -1,8 +1,27 @@
+import * as React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
-import type { Action, ProjectState, State } from "./hello-world";
-import { deriveSwitchStatus, Group } from "./hello-world";
+import type { Action, ProjectState, State } from "./types";
+import { Group } from "./types";
+
+const StateContext = React.createContext<State | undefined>(undefined);
+const useReducerState = () => {
+  return React.useContext(StateContext);
+};
+
+const DispatchContext = React.createContext<(action: Action) => void | undefined>(undefined);
+const useDispatch = () => {
+  return React.useContext(DispatchContext);
+};
+
+// TODO(perf): call with useMemo().
+const deriveSwitchStatus = (state: State, group: Group): boolean => {
+  return (
+    Object.keys(state[group]).length > 0 &&
+    Object.keys(state[group]).every(key => state[group][key].checked)
+  );
+};
 
 const updateGroupstate = (
   state: State,
@@ -157,4 +176,11 @@ const selectorReducer = (state: State, action: Action): State => {
   }
 };
 
-export { selectorReducer };
+export {
+  deriveSwitchStatus,
+  DispatchContext,
+  selectorReducer,
+  StateContext,
+  useDispatch,
+  useReducerState,
+};
