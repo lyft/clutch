@@ -5,6 +5,8 @@ import _ from "lodash";
 import type { Action, ProjectState, State } from "./types";
 import { Group } from "./types";
 
+const TYPEURL = "type.googleapis.com/clutch.core.project.v1.Project";
+
 const StateContext = React.createContext<State | undefined>(undefined);
 const useReducerState = () => {
   return React.useContext(StateContext);
@@ -49,43 +51,48 @@ const selectorReducer = (state: State, action: Action): State => {
     case "ADD_PROJECTS": {
       let newState = { ...state };
 
-      // a given custom project may already exist in the group so don't trigger a state update for those duplicates
+      // a given custom project may already exist in the group so don't trigger a state update for the duplicate(s)
       const uniqueCustomProjects = action.payload.projects.filter(
-        (project: string) => !(project in newState[action.payload.group])
+        (project: string) => !(project in state[action.payload.group])
       );
       if (uniqueCustomProjects.length === 0) {
+        // since there's no new projects to add, we return the original state as it wasn't modified
+        return state;
+      }
+
+      // add the custom project (currently users can only add projects to Group.Projects) to its respective group
+      // and set the project state
+      newState = {
+        ...state,
+        [action.payload.group]: {
+          ...state[action.payload.group],
+          ...Object.fromEntries(
+            uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])
+          ),
+        },
+      };
+
+      if (action.payload.group !== Group.PROJECTS) {
         return newState;
       }
 
-      newState[action.payload.group] = {
-        ...state[action.payload.group],
-        ...Object.fromEntries(uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])),
-      };
-
-      // if the newly added project is in Group.Projects, check to see if we have
-      // project data for it (b/c we don't need to make an API call) and update the state with
+      // check to see if we have project data for project (b/c we don't need to make an API call) and if so, update the state with
       // its upstreams/downstreams
-      if (action.payload.group === Group.PROJECTS) {
-        uniqueCustomProjects.forEach(v => {
-          if (v in newState.projectData) {
-            newState.projectData[v].dependencies.upstreams[
-              "type.googleapis.com/clutch.core.project.v1.Project"
-            ]?.ids.forEach(upstreamDep => {
-              newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
-                checked: false,
-              });
+      uniqueCustomProjects.forEach(v => {
+        if (v in newState.projectData) {
+          newState.projectData[v].dependencies.upstreams[TYPEURL]?.ids.forEach(upstreamDep => {
+            newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
+              checked: false,
             });
+          });
 
-            newState.projectData[v].dependencies.downstreams[
-              "type.googleapis.com/clutch.core.project.v1.Project"
-            ]?.ids.forEach(downstreamDep => {
-              newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
-                checked: false,
-              });
+          newState.projectData[v].dependencies.downstreams[TYPEURL]?.ids.forEach(downstreamDep => {
+            newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
+              checked: false,
             });
-          }
-        });
-      }
+          });
+        }
+      });
 
       return newState;
     }
@@ -163,17 +170,13 @@ const selectorReducer = (state: State, action: Action): State => {
 
           // add each upstream/downstream for the selected or user project
           if (v.from.users.length > 0 || v.from.selected) {
-            v.project.dependencies.upstreams[
-              "type.googleapis.com/clutch.core.project.v1.Project"
-            ]?.ids.forEach(upstreamDep => {
+            v.project.dependencies.upstreams[TYPEURL]?.ids.forEach(upstreamDep => {
               newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
                 checked: false,
               });
             });
 
-            v.project.dependencies.downstreams[
-              "type.googleapis.com/clutch.core.project.v1.Project"
-            ]?.ids.forEach(downstreamDep => {
+            v.project.dependencies.downstreams[TYPEURL]?.ids.forEach(downstreamDep => {
               newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
                 checked: false,
               });
