@@ -5,7 +5,7 @@ import _ from "lodash";
 import type { Action, ProjectState, State } from "./types";
 import { Group } from "./types";
 
-const TYPEURL = "type.googleapis.com/clutch.core.project.v1.Project";
+const PROJECT_TYPE_URL = "type.googleapis.com/clutch.core.project.v1.Project";
 
 const StateContext = React.createContext<State | undefined>(undefined);
 const useReducerState = () => {
@@ -49,8 +49,6 @@ const selectorReducer = (state: State, action: Action): State => {
     // User actions.
 
     case "ADD_PROJECTS": {
-      let newState = { ...state };
-
       // a given custom project may already exist in the group so don't trigger a state update for the duplicate(s)
       const uniqueCustomProjects = action.payload.projects.filter(
         (project: string) => !(project in state[action.payload.group])
@@ -62,7 +60,7 @@ const selectorReducer = (state: State, action: Action): State => {
 
       // add the custom project (currently users can only add projects to Group.Projects) to its respective group
       // and set the project state
-      newState = {
+      let newState = {
         ...state,
         [action.payload.group]: {
           ...state[action.payload.group],
@@ -79,19 +77,21 @@ const selectorReducer = (state: State, action: Action): State => {
       // check to see if we have project data for project (b/c we don't need to make an API call) and if so, update the state with
       // its upstreams/downstreams
       uniqueCustomProjects.forEach(v => {
-        if (v in newState.projectData) {
-          newState.projectData[v].dependencies.upstreams[TYPEURL]?.ids.forEach(upstreamDep => {
-            newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
-              checked: false,
-            });
-          });
-
-          newState.projectData[v].dependencies.downstreams[TYPEURL]?.ids.forEach(downstreamDep => {
-            newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
-              checked: false,
-            });
-          });
+        if (!(v in newState.projectData)) {
+          return;
         }
+
+        const { upstreams, downstreams } = newState.projectData[v].dependencies;
+        upstreams[PROJECT_TYPE_URL]?.ids.forEach(upstreamDep => {
+          newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
+            checked: false,
+          });
+        });
+        downstreams[PROJECT_TYPE_URL]?.ids.forEach(downstreamDep => {
+          newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
+            checked: false,
+          });
+        });
       });
 
       return newState;
@@ -170,13 +170,13 @@ const selectorReducer = (state: State, action: Action): State => {
 
           // add each upstream/downstream for the selected or user project
           if (v.from.users.length > 0 || v.from.selected) {
-            v.project.dependencies.upstreams[TYPEURL]?.ids.forEach(upstreamDep => {
+            const { upstreams, downstreams } = v.project.dependencies;
+            upstreams[PROJECT_TYPE_URL]?.ids.forEach(upstreamDep => {
               newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
                 checked: false,
               });
             });
-
-            v.project.dependencies.downstreams[TYPEURL]?.ids.forEach(downstreamDep => {
+            downstreams[PROJECT_TYPE_URL]?.ids.forEach(downstreamDep => {
               newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
                 checked: false,
               });
