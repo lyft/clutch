@@ -1,5 +1,4 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import _ from "lodash";
 
@@ -8,6 +7,7 @@ import { useWizardContext } from "../Contexts";
 import { Error } from "../Feedback";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
+import { useSearchParams } from "../navigation";
 import type { ClutchError } from "../Network/errors";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";

@@ -3,9 +3,9 @@ import { shallow } from "enzyme";
 
 import ListExperiments from "../list-experiments";
 
-jest.mock("react-router-dom", () => {
+jest.mock("@clutch-sh/core", () => {
   return {
-    ...jest.requireActual("react-router-dom"),
+    ...(jest.requireActual("@clutch-sh/core") as any),
     useNavigate: jest.fn(),
   };
 });

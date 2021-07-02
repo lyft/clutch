@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps, ClutchError } from "@clutch-sh/core";
 import {
@@ -11,6 +10,7 @@ import {
   DialogActions,
   DialogContent,
   Form,
+  useNavigate,
 } from "@clutch-sh/core";
 import { FormFields, PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";

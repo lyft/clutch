@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
-import { BaseWorkflowProps, Button, ButtonGroup, client } from "@clutch-sh/core";
+import { BaseWorkflowProps, Button, ButtonGroup, client, useNavigate } from "@clutch-sh/core";
 
 import PageLayout from "./core/page-layout";
 import type { Column } from "./list-view";
