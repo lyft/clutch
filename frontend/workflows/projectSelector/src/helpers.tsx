@@ -53,15 +53,15 @@ const dependencyToProjects = (state: State, group: Group): DependencyMappings =>
 
   const projects = Object.keys(state[group]);
   projects.forEach(p => {
-    const { upstreams, downstreams } = state.projectData[p]?.dependencies;
-    upstreams[PROJECT_TYPE_URL]?.ids.forEach(u => {
+    const { upstreams, downstreams } = state.projectData[p]?.dependencies || {};
+    upstreams?.[PROJECT_TYPE_URL]?.ids.forEach(u => {
       if (!upstreamMap[u]) {
         upstreamMap[u] = { [p]: true };
       } else {
         upstreamMap[u][p] = true;
       }
     });
-    downstreams[PROJECT_TYPE_URL]?.ids.forEach(d => {
+    downstreams?.[PROJECT_TYPE_URL]?.ids.forEach(d => {
       if (!downstreamMap[d]) {
         downstreamMap[d] = { [p]: true };
       } else {
