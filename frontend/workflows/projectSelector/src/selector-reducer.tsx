@@ -7,6 +7,12 @@ import { Group } from "./types";
 
 const PROJECT_TYPE_URL = "type.googleapis.com/clutch.core.project.v1.Project";
 
+// TODO: dont like this name
+interface DependencyToProject {
+  upstreams?: { [dependency: string]: { [project: string]: boolean } };
+  downstreams?: { [dependency: string]: { [project: string]: boolean } };
+}
+
 const StateContext = React.createContext<State | undefined>(undefined);
 const useReducerState = () => {
   return React.useContext(StateContext);
@@ -42,6 +48,56 @@ const updateGroupstate = (
   }
 
   return newState;
+};
+
+// TODO: make an interface for the return value?
+const exclusiveProjectDependencies = (
+  state: State,
+  group: Group,
+  project: string
+): { upstreams: string[]; downstreams: string[] } => {
+  const dependencyRelationships = dependencyToProject(state, group);
+
+  const upstreams = [];
+  const downstreams = [];
+  _.forIn(dependencyRelationships.upstreams, (v, k) => {
+    if (v[project] && Object.keys(v).length === 1) {
+      upstreams.push(k);
+    }
+  });
+
+  _.forIn(dependencyRelationships.downstreams, (v, k) => {
+    if (v[project] && Object.keys(v).length === 1) {
+      downstreams.push(k);
+    }
+  });
+  return { upstreams, downstreams };
+};
+
+const dependencyToProject = (state: State, group: Group): DependencyToProject => {
+  const upstreams = {};
+  const downstreams = {};
+
+  const projects = Object.keys(state[group]);
+  projects.forEach(p => {
+    state.projectData[p]?.dependencies.upstreams[PROJECT_TYPE_URL]?.ids.forEach(u => {
+      if (!upstreams[u]) {
+        upstreams[u] = { [p]: true };
+      } else {
+        upstreams[u][p] = true;
+      }
+    });
+
+    state.projectData[p]?.dependencies.downstreams[PROJECT_TYPE_URL]?.ids.forEach(d => {
+      if (!downstreams[d]) {
+        downstreams[d] = { [p]: true };
+      } else {
+        downstreams[d][p] = true;
+      }
+    });
+  });
+
+  return { upstreams, downstreams };
 };
 
 const selectorReducer = (state: State, action: Action): State => {
@@ -97,13 +153,34 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "REMOVE_PROJECTS": {
-      // TODO: also remove any upstreams or downstreams related (only) to the project.
-      // if group == Groups.PROJECT, hide exclusive downstream upstreams
-      //
-      return {
+      let newState = { ...state };
+
+      // remove the projects from their respective group
+      newState = {
         ...state,
         [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
       };
+
+      if (action.payload.group !== Group.PROJECTS) {
+        return newState;
+      }
+
+      // for the removed projects in Group.Projects we get their upstreams/dowstreams that are exclusive
+      // (i.e. not shared by other projects that weren't removed)
+      const upstreams = [];
+      const downstreams = [];
+      action.payload.projects.forEach(p => {
+        // get the upstreams/downstreams that are exclusive to the removed project(s)
+        const dependenices = exclusiveProjectDependencies(state, Group.PROJECTS, p);
+        upstreams.push(...dependenices.upstreams);
+        downstreams.push(...dependenices.downstreams);
+      });
+
+      // remove the upstreams/downstreams exclusive to the removed project(s)
+      newState[Group.UPSTREAM] = _.omit(state[Group.UPSTREAM], upstreams);
+      newState[Group.DOWNSTREAM] = _.omit(state[Group.DOWNSTREAM], downstreams);
+
+      return newState;
     }
     case "TOGGLE_PROJECTS": {
       // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
