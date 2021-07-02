@@ -7,8 +7,7 @@ import { Group } from "./types";
 
 const PROJECT_TYPE_URL = "type.googleapis.com/clutch.core.project.v1.Project";
 
-// TODO: dont like this name
-interface DependencyToProject {
+interface DependencyMappings {
   upstreams?: { [dependency: string]: { [project: string]: boolean } };
   downstreams?: { [dependency: string]: { [project: string]: boolean } };
 }
@@ -50,31 +49,7 @@ const updateGroupstate = (
   return newState;
 };
 
-// TODO: make an interface for the return value?
-const exclusiveProjectDependencies = (
-  state: State,
-  group: Group,
-  project: string
-): { upstreams: string[]; downstreams: string[] } => {
-  const dependencyRelationships = dependencyToProject(state, group);
-
-  const upstreams = [];
-  const downstreams = [];
-  _.forIn(dependencyRelationships.upstreams, (v, k) => {
-    if (v[project] && Object.keys(v).length === 1) {
-      upstreams.push(k);
-    }
-  });
-
-  _.forIn(dependencyRelationships.downstreams, (v, k) => {
-    if (v[project] && Object.keys(v).length === 1) {
-      downstreams.push(k);
-    }
-  });
-  return { upstreams, downstreams };
-};
-
-const dependencyToProject = (state: State, group: Group): DependencyToProject => {
+const dependencyToProjects = (state: State, group: Group): DependencyMappings => {
   const upstreams = {};
   const downstreams = {};
 
@@ -97,6 +72,29 @@ const dependencyToProject = (state: State, group: Group): DependencyToProject =>
     });
   });
 
+  return { upstreams, downstreams };
+};
+
+const exclusiveProjectDependencies = (
+  state: State,
+  group: Group,
+  project: string
+): { upstreams: string[]; downstreams: string[] } => {
+  const dependencyMap = dependencyToProjects(state, group);
+
+  const upstreams = [];
+  const downstreams = [];
+  _.forIn(dependencyMap.upstreams, (v, k) => {
+    if (v[project] && Object.keys(v).length === 1) {
+      upstreams.push(k);
+    }
+  });
+
+  _.forIn(dependencyMap.downstreams, (v, k) => {
+    if (v[project] && Object.keys(v).length === 1) {
+      downstreams.push(k);
+    }
+  });
   return { upstreams, downstreams };
 };
 
