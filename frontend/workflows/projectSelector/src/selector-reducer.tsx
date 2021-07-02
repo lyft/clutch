@@ -50,29 +50,29 @@ const updateGroupstate = (
 };
 
 const dependencyToProjects = (state: State, group: Group): DependencyMappings => {
-  const upstreams = {};
-  const downstreams = {};
+  const upstreamMap = {};
+  const downstreamMap = {};
 
   const projects = Object.keys(state[group]);
   projects.forEach(p => {
-    state.projectData[p]?.dependencies.upstreams[PROJECT_TYPE_URL]?.ids.forEach(u => {
-      if (!upstreams[u]) {
-        upstreams[u] = { [p]: true };
+    const { upstreams, downstreams } = state.projectData[p]?.dependencies;
+    upstreams[PROJECT_TYPE_URL]?.ids.forEach(u => {
+      if (!upstreamMap[u]) {
+        upstreamMap[u] = { [p]: true };
       } else {
-        upstreams[u][p] = true;
+        upstreamMap[u][p] = true;
       }
     });
-
-    state.projectData[p]?.dependencies.downstreams[PROJECT_TYPE_URL]?.ids.forEach(d => {
-      if (!downstreams[d]) {
-        downstreams[d] = { [p]: true };
+    downstreams[PROJECT_TYPE_URL]?.ids.forEach(d => {
+      if (!downstreamMap[d]) {
+        downstreamMap[d] = { [p]: true };
       } else {
-        downstreams[d][p] = true;
+        downstreamMap[d][p] = true;
       }
     });
   });
 
-  return { upstreams, downstreams };
+  return { upstreams: upstreamMap, downstreams: downstreamMap };
 };
 
 const exclusiveProjectDependencies = (
@@ -151,10 +151,8 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "REMOVE_PROJECTS": {
-      let newState = { ...state };
-
       // remove the projects from their respective group
-      newState = {
+      const newState = {
         ...state,
         [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
       };
