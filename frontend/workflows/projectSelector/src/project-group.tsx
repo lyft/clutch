@@ -6,7 +6,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import { deriveSwitchStatus, useDispatch, useReducerState } from "./selector-reducer";
+import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
 import type { Group } from "./types";
 
 const StyledCount = styled.span({

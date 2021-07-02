@@ -7,8 +7,9 @@ import { Divider, LinearProgress } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import _ from "lodash";
 
+import { DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
-import { DispatchContext, selectorReducer, StateContext } from "./selector-reducer";
+import selectorReducer from "./selector-reducer";
 import type { State } from "./types";
 import { Group } from "./types";
 
