@@ -298,6 +298,7 @@ type Stats struct {
 	// Types that are assignable to Reporter:
 	//	*Stats_LogReporter_
 	//	*Stats_StatsdReporter_
+	//	*Stats_PrometheusReporter_
 	Reporter isStats_Reporter `protobuf_oneof:"reporter"`
 	// Collect go runtime stats, this is disabled by default.
 	GoRuntimeStats *Stats_GoRuntimeStats `protobuf:"bytes,4,opt,name=go_runtime_stats,json=goRuntimeStats,proto3" json:"go_runtime_stats,omitempty"`
@@ -363,6 +364,13 @@ func (x *Stats) GetStatsdReporter() *Stats_StatsdReporter {
 	return nil
 }
 
+func (x *Stats) GetPrometheusReporter() *Stats_PrometheusReporter {
+	if x, ok := x.GetReporter().(*Stats_PrometheusReporter_); ok {
+		return x.PrometheusReporter
+	}
+	return nil
+}
+
 func (x *Stats) GetGoRuntimeStats() *Stats_GoRuntimeStats {
 	if x != nil {
 		return x.GoRuntimeStats
@@ -379,12 +387,18 @@ type Stats_LogReporter_ struct {
 }
 
 type Stats_StatsdReporter_ struct {
-	StatsdReporter *Stats_StatsdReporter `protobuf:"bytes,3,opt,name=statsd_reporter,json=statsdReporter,proto3,oneof"` //  TODO: Prometheus support.
+	StatsdReporter *Stats_StatsdReporter `protobuf:"bytes,3,opt,name=statsd_reporter,json=statsdReporter,proto3,oneof"`
+}
+
+type Stats_PrometheusReporter_ struct {
+	PrometheusReporter *Stats_PrometheusReporter `protobuf:"bytes,5,opt,name=prometheus_reporter,json=prometheusReporter,proto3,oneof"`
 }
 
 func (*Stats_LogReporter_) isStats_Reporter() {}
 
 func (*Stats_StatsdReporter_) isStats_Reporter() {}
+
+func (*Stats_PrometheusReporter_) isStats_Reporter() {}
 
 type Timeouts struct {
 	state         protoimpl.MessageState
@@ -1045,6 +1059,53 @@ type Stats_StatsdReporter_PointTags_ struct {
 
 func (*Stats_StatsdReporter_PointTags_) isStats_StatsdReporter_TagMode() {}
 
+type Stats_PrometheusReporter struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	HandlerPath string `protobuf:"bytes,1,opt,name=handler_path,json=handlerPath,proto3" json:"handler_path,omitempty"`
+}
+
+func (x *Stats_PrometheusReporter) Reset() {
+	*x = Stats_PrometheusReporter{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Stats_PrometheusReporter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Stats_PrometheusReporter) ProtoMessage() {}
+
+func (x *Stats_PrometheusReporter) ProtoReflect() protoreflect.Message {
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Stats_PrometheusReporter.ProtoReflect.Descriptor instead.
+func (*Stats_PrometheusReporter) Descriptor() ([]byte, []int) {
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{3, 2}
+}
+
+func (x *Stats_PrometheusReporter) GetHandlerPath() string {
+	if x != nil {
+		return x.HandlerPath
+	}
+	return ""
+}
+
 type Stats_GoRuntimeStats struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1057,7 +1118,7 @@ type Stats_GoRuntimeStats struct {
 func (x *Stats_GoRuntimeStats) Reset() {
 	*x = Stats_GoRuntimeStats{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[14]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1070,7 +1131,7 @@ func (x *Stats_GoRuntimeStats) String() string {
 func (*Stats_GoRuntimeStats) ProtoMessage() {}
 
 func (x *Stats_GoRuntimeStats) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[14]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1083,7 +1144,7 @@ func (x *Stats_GoRuntimeStats) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Stats_GoRuntimeStats.ProtoReflect.Descriptor instead.
 func (*Stats_GoRuntimeStats) Descriptor() ([]byte, []int) {
-	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{3, 2}
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{3, 3}
 }
 
 func (x *Stats_GoRuntimeStats) GetCollectionInterval() *durationpb.Duration {
@@ -1104,7 +1165,7 @@ type Stats_StatsdReporter_PointTags struct {
 func (x *Stats_StatsdReporter_PointTags) Reset() {
 	*x = Stats_StatsdReporter_PointTags{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[15]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1117,7 +1178,7 @@ func (x *Stats_StatsdReporter_PointTags) String() string {
 func (*Stats_StatsdReporter_PointTags) ProtoMessage() {}
 
 func (x *Stats_StatsdReporter_PointTags) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[15]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1153,7 +1214,7 @@ type Timeouts_Entry struct {
 func (x *Timeouts_Entry) Reset() {
 	*x = Timeouts_Entry{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[16]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1166,7 +1227,7 @@ func (x *Timeouts_Entry) String() string {
 func (*Timeouts_Entry) ProtoMessage() {}
 
 func (x *Timeouts_Entry) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[16]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1218,7 +1279,7 @@ type Assets_S3Provider struct {
 func (x *Assets_S3Provider) Reset() {
 	*x = Assets_S3Provider{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[17]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1231,7 +1292,7 @@ func (x *Assets_S3Provider) String() string {
 func (*Assets_S3Provider) ProtoMessage() {}
 
 func (x *Assets_S3Provider) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[17]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1314,7 +1375,7 @@ var file_config_gateway_v1_gateway_proto_rawDesc = []byte{
 	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2e, 0x76, 0x31,
 	0x2e, 0x54, 0x43, 0x50, 0x53, 0x6f, 0x63, 0x6b, 0x65, 0x74, 0x48, 0x00, 0x52, 0x03, 0x74, 0x63,
 	0x70, 0x42, 0x0d, 0x0a, 0x06, 0x73, 0x6f, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x03, 0xf8, 0x42, 0x01,
-	0x22, 0xaf, 0x05, 0x0a, 0x05, 0x53, 0x74, 0x61, 0x74, 0x73, 0x12, 0x4f, 0x0a, 0x0e, 0x66, 0x6c,
+	0x22, 0xcf, 0x06, 0x0a, 0x05, 0x53, 0x74, 0x61, 0x74, 0x73, 0x12, 0x4f, 0x0a, 0x0e, 0x66, 0x6c,
 	0x75, 0x73, 0x68, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0d, 0xfa,
@@ -1330,26 +1391,36 @@ var file_config_gateway_v1_gateway_proto_rawDesc = []byte{
 	0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2e, 0x76,
 	0x31, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x73, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x73, 0x64, 0x52, 0x65,
 	0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x48, 0x00, 0x52, 0x0e, 0x73, 0x74, 0x61, 0x74, 0x73, 0x64,
-	0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x12, 0x58, 0x0a, 0x10, 0x67, 0x6f, 0x5f, 0x72,
-	0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x73, 0x18, 0x04, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x6f, 0x6e, 0x66,
-	0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74,
-	0x61, 0x74, 0x73, 0x2e, 0x47, 0x6f, 0x52, 0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x53, 0x74, 0x61,
-	0x74, 0x73, 0x52, 0x0e, 0x67, 0x6f, 0x52, 0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x53, 0x74, 0x61,
-	0x74, 0x73, 0x1a, 0x0d, 0x0a, 0x0b, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65,
-	0x72, 0x1a, 0xc5, 0x01, 0x0a, 0x0e, 0x53, 0x74, 0x61, 0x74, 0x73, 0x64, 0x52, 0x65, 0x70, 0x6f,
-	0x72, 0x74, 0x65, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x59,
-	0x0a, 0x0a, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x5f, 0x74, 0x61, 0x67, 0x73, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x38, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x6f, 0x6e, 0x66,
-	0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74,
-	0x61, 0x74, 0x73, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x73, 0x64, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74,
-	0x65, 0x72, 0x2e, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x54, 0x61, 0x67, 0x73, 0x48, 0x00, 0x52, 0x09,
-	0x70, 0x6f, 0x69, 0x6e, 0x74, 0x54, 0x61, 0x67, 0x73, 0x1a, 0x32, 0x0a, 0x09, 0x50, 0x6f, 0x69,
-	0x6e, 0x74, 0x54, 0x61, 0x67, 0x73, 0x12, 0x25, 0x0a, 0x09, 0x73, 0x65, 0x70, 0x61, 0x72, 0x61,
-	0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02,
-	0x20, 0x01, 0x52, 0x09, 0x73, 0x65, 0x70, 0x61, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x42, 0x0a, 0x0a,
-	0x08, 0x74, 0x61, 0x67, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x1a, 0x6b, 0x0a, 0x0e, 0x47, 0x6f, 0x52,
+	0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x12, 0x65, 0x0a, 0x13, 0x70, 0x72, 0x6f, 0x6d,
+	0x65, 0x74, 0x68, 0x65, 0x75, 0x73, 0x5f, 0x72, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x32, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2e, 0x76, 0x31,
+	0x2e, 0x53, 0x74, 0x61, 0x74, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x6d, 0x65, 0x74, 0x68, 0x65, 0x75,
+	0x73, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x48, 0x00, 0x52, 0x12, 0x70, 0x72, 0x6f,
+	0x6d, 0x65, 0x74, 0x68, 0x65, 0x75, 0x73, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x12,
+	0x58, 0x0a, 0x10, 0x67, 0x6f, 0x5f, 0x72, 0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x5f, 0x73, 0x74,
+	0x61, 0x74, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x63, 0x6c, 0x75, 0x74,
+	0x63, 0x68, 0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x73, 0x2e, 0x47, 0x6f, 0x52, 0x75, 0x6e,
+	0x74, 0x69, 0x6d, 0x65, 0x53, 0x74, 0x61, 0x74, 0x73, 0x52, 0x0e, 0x67, 0x6f, 0x52, 0x75, 0x6e,
+	0x74, 0x69, 0x6d, 0x65, 0x53, 0x74, 0x61, 0x74, 0x73, 0x1a, 0x0d, 0x0a, 0x0b, 0x4c, 0x6f, 0x67,
+	0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x1a, 0xc5, 0x01, 0x0a, 0x0e, 0x53, 0x74, 0x61,
+	0x74, 0x73, 0x64, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x61,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x59, 0x0a, 0x0a, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x5f, 0x74,
+	0x61, 0x67, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x63, 0x6c, 0x75, 0x74,
+	0x63, 0x68, 0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61,
+	0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x73, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x73,
+	0x64, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x2e, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x54,
+	0x61, 0x67, 0x73, 0x48, 0x00, 0x52, 0x09, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x54, 0x61, 0x67, 0x73,
+	0x1a, 0x32, 0x0a, 0x09, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x54, 0x61, 0x67, 0x73, 0x12, 0x25, 0x0a,
+	0x09, 0x73, 0x65, 0x70, 0x61, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x09, 0x73, 0x65, 0x70, 0x61, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x42, 0x0a, 0x0a, 0x08, 0x74, 0x61, 0x67, 0x5f, 0x6d, 0x6f, 0x64, 0x65,
+	0x1a, 0x37, 0x0a, 0x12, 0x50, 0x72, 0x6f, 0x6d, 0x65, 0x74, 0x68, 0x65, 0x75, 0x73, 0x52, 0x65,
+	0x70, 0x6f, 0x72, 0x74, 0x65, 0x72, 0x12, 0x21, 0x0a, 0x0c, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65,
+	0x72, 0x5f, 0x70, 0x61, 0x74, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x68, 0x61,
+	0x6e, 0x64, 0x6c, 0x65, 0x72, 0x50, 0x61, 0x74, 0x68, 0x1a, 0x6b, 0x0a, 0x0e, 0x47, 0x6f, 0x52,
 	0x75, 0x6e, 0x74, 0x69, 0x6d, 0x65, 0x53, 0x74, 0x61, 0x74, 0x73, 0x12, 0x59, 0x0a, 0x13, 0x63,
 	0x6f, 0x6c, 0x6c, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x76,
 	0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
@@ -1489,7 +1560,7 @@ func file_config_gateway_v1_gateway_proto_rawDescGZIP() []byte {
 }
 
 var file_config_gateway_v1_gateway_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_config_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_config_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_config_gateway_v1_gateway_proto_goTypes = []interface{}{
 	(Logger_Level)(0),                      // 0: clutch.config.gateway.v1.Logger.Level
 	(*Config)(nil),                         // 1: clutch.config.gateway.v1.Config
@@ -1506,14 +1577,15 @@ var file_config_gateway_v1_gateway_proto_goTypes = []interface{}{
 	(*Module)(nil),                         // 12: clutch.config.gateway.v1.Module
 	(*Stats_LogReporter)(nil),              // 13: clutch.config.gateway.v1.Stats.LogReporter
 	(*Stats_StatsdReporter)(nil),           // 14: clutch.config.gateway.v1.Stats.StatsdReporter
-	(*Stats_GoRuntimeStats)(nil),           // 15: clutch.config.gateway.v1.Stats.GoRuntimeStats
-	(*Stats_StatsdReporter_PointTags)(nil), // 16: clutch.config.gateway.v1.Stats.StatsdReporter.PointTags
-	(*Timeouts_Entry)(nil),                 // 17: clutch.config.gateway.v1.Timeouts.Entry
-	(*Assets_S3Provider)(nil),              // 18: clutch.config.gateway.v1.Assets.S3Provider
-	(*durationpb.Duration)(nil),            // 19: google.protobuf.Duration
-	(*v1.Config)(nil),                      // 20: clutch.config.middleware.accesslog.v1.Config
-	(*wrapperspb.BoolValue)(nil),           // 21: google.protobuf.BoolValue
-	(*anypb.Any)(nil),                      // 22: google.protobuf.Any
+	(*Stats_PrometheusReporter)(nil),       // 15: clutch.config.gateway.v1.Stats.PrometheusReporter
+	(*Stats_GoRuntimeStats)(nil),           // 16: clutch.config.gateway.v1.Stats.GoRuntimeStats
+	(*Stats_StatsdReporter_PointTags)(nil), // 17: clutch.config.gateway.v1.Stats.StatsdReporter.PointTags
+	(*Timeouts_Entry)(nil),                 // 18: clutch.config.gateway.v1.Timeouts.Entry
+	(*Assets_S3Provider)(nil),              // 19: clutch.config.gateway.v1.Assets.S3Provider
+	(*durationpb.Duration)(nil),            // 20: google.protobuf.Duration
+	(*v1.Config)(nil),                      // 21: clutch.config.middleware.accesslog.v1.Config
+	(*wrapperspb.BoolValue)(nil),           // 22: google.protobuf.BoolValue
+	(*anypb.Any)(nil),                      // 23: google.protobuf.Any
 }
 var file_config_gateway_v1_gateway_proto_depIdxs = []int32{
 	6,  // 0: clutch.config.gateway.v1.Config.gateway:type_name -> clutch.config.gateway.v1.GatewayOptions
@@ -1521,35 +1593,36 @@ var file_config_gateway_v1_gateway_proto_depIdxs = []int32{
 	11, // 2: clutch.config.gateway.v1.Config.resolvers:type_name -> clutch.config.gateway.v1.Resolver
 	12, // 3: clutch.config.gateway.v1.Config.modules:type_name -> clutch.config.gateway.v1.Module
 	2,  // 4: clutch.config.gateway.v1.Listener.tcp:type_name -> clutch.config.gateway.v1.TCPSocket
-	19, // 5: clutch.config.gateway.v1.Stats.flush_interval:type_name -> google.protobuf.Duration
+	20, // 5: clutch.config.gateway.v1.Stats.flush_interval:type_name -> google.protobuf.Duration
 	13, // 6: clutch.config.gateway.v1.Stats.log_reporter:type_name -> clutch.config.gateway.v1.Stats.LogReporter
 	14, // 7: clutch.config.gateway.v1.Stats.statsd_reporter:type_name -> clutch.config.gateway.v1.Stats.StatsdReporter
-	15, // 8: clutch.config.gateway.v1.Stats.go_runtime_stats:type_name -> clutch.config.gateway.v1.Stats.GoRuntimeStats
-	19, // 9: clutch.config.gateway.v1.Timeouts.default:type_name -> google.protobuf.Duration
-	17, // 10: clutch.config.gateway.v1.Timeouts.overrides:type_name -> clutch.config.gateway.v1.Timeouts.Entry
-	3,  // 11: clutch.config.gateway.v1.GatewayOptions.listener:type_name -> clutch.config.gateway.v1.Listener
-	3,  // 12: clutch.config.gateway.v1.GatewayOptions.json_grpc_loopback_listener:type_name -> clutch.config.gateway.v1.Listener
-	8,  // 13: clutch.config.gateway.v1.GatewayOptions.logger:type_name -> clutch.config.gateway.v1.Logger
-	4,  // 14: clutch.config.gateway.v1.GatewayOptions.stats:type_name -> clutch.config.gateway.v1.Stats
-	5,  // 15: clutch.config.gateway.v1.GatewayOptions.timeouts:type_name -> clutch.config.gateway.v1.Timeouts
-	9,  // 16: clutch.config.gateway.v1.GatewayOptions.middleware:type_name -> clutch.config.gateway.v1.Middleware
-	7,  // 17: clutch.config.gateway.v1.GatewayOptions.assets:type_name -> clutch.config.gateway.v1.Assets
-	20, // 18: clutch.config.gateway.v1.GatewayOptions.accesslog:type_name -> clutch.config.middleware.accesslog.v1.Config
-	21, // 19: clutch.config.gateway.v1.GatewayOptions.secure_cookies:type_name -> google.protobuf.BoolValue
-	18, // 20: clutch.config.gateway.v1.Assets.s3:type_name -> clutch.config.gateway.v1.Assets.S3Provider
-	0,  // 21: clutch.config.gateway.v1.Logger.level:type_name -> clutch.config.gateway.v1.Logger.Level
-	22, // 22: clutch.config.gateway.v1.Middleware.typed_config:type_name -> google.protobuf.Any
-	22, // 23: clutch.config.gateway.v1.Service.typed_config:type_name -> google.protobuf.Any
-	22, // 24: clutch.config.gateway.v1.Resolver.typed_config:type_name -> google.protobuf.Any
-	22, // 25: clutch.config.gateway.v1.Module.typed_config:type_name -> google.protobuf.Any
-	16, // 26: clutch.config.gateway.v1.Stats.StatsdReporter.point_tags:type_name -> clutch.config.gateway.v1.Stats.StatsdReporter.PointTags
-	19, // 27: clutch.config.gateway.v1.Stats.GoRuntimeStats.collection_interval:type_name -> google.protobuf.Duration
-	19, // 28: clutch.config.gateway.v1.Timeouts.Entry.timeout:type_name -> google.protobuf.Duration
-	29, // [29:29] is the sub-list for method output_type
-	29, // [29:29] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	15, // 8: clutch.config.gateway.v1.Stats.prometheus_reporter:type_name -> clutch.config.gateway.v1.Stats.PrometheusReporter
+	16, // 9: clutch.config.gateway.v1.Stats.go_runtime_stats:type_name -> clutch.config.gateway.v1.Stats.GoRuntimeStats
+	20, // 10: clutch.config.gateway.v1.Timeouts.default:type_name -> google.protobuf.Duration
+	18, // 11: clutch.config.gateway.v1.Timeouts.overrides:type_name -> clutch.config.gateway.v1.Timeouts.Entry
+	3,  // 12: clutch.config.gateway.v1.GatewayOptions.listener:type_name -> clutch.config.gateway.v1.Listener
+	3,  // 13: clutch.config.gateway.v1.GatewayOptions.json_grpc_loopback_listener:type_name -> clutch.config.gateway.v1.Listener
+	8,  // 14: clutch.config.gateway.v1.GatewayOptions.logger:type_name -> clutch.config.gateway.v1.Logger
+	4,  // 15: clutch.config.gateway.v1.GatewayOptions.stats:type_name -> clutch.config.gateway.v1.Stats
+	5,  // 16: clutch.config.gateway.v1.GatewayOptions.timeouts:type_name -> clutch.config.gateway.v1.Timeouts
+	9,  // 17: clutch.config.gateway.v1.GatewayOptions.middleware:type_name -> clutch.config.gateway.v1.Middleware
+	7,  // 18: clutch.config.gateway.v1.GatewayOptions.assets:type_name -> clutch.config.gateway.v1.Assets
+	21, // 19: clutch.config.gateway.v1.GatewayOptions.accesslog:type_name -> clutch.config.middleware.accesslog.v1.Config
+	22, // 20: clutch.config.gateway.v1.GatewayOptions.secure_cookies:type_name -> google.protobuf.BoolValue
+	19, // 21: clutch.config.gateway.v1.Assets.s3:type_name -> clutch.config.gateway.v1.Assets.S3Provider
+	0,  // 22: clutch.config.gateway.v1.Logger.level:type_name -> clutch.config.gateway.v1.Logger.Level
+	23, // 23: clutch.config.gateway.v1.Middleware.typed_config:type_name -> google.protobuf.Any
+	23, // 24: clutch.config.gateway.v1.Service.typed_config:type_name -> google.protobuf.Any
+	23, // 25: clutch.config.gateway.v1.Resolver.typed_config:type_name -> google.protobuf.Any
+	23, // 26: clutch.config.gateway.v1.Module.typed_config:type_name -> google.protobuf.Any
+	17, // 27: clutch.config.gateway.v1.Stats.StatsdReporter.point_tags:type_name -> clutch.config.gateway.v1.Stats.StatsdReporter.PointTags
+	20, // 28: clutch.config.gateway.v1.Stats.GoRuntimeStats.collection_interval:type_name -> google.protobuf.Duration
+	20, // 29: clutch.config.gateway.v1.Timeouts.Entry.timeout:type_name -> google.protobuf.Duration
+	30, // [30:30] is the sub-list for method output_type
+	30, // [30:30] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_config_gateway_v1_gateway_proto_init() }
@@ -1727,7 +1800,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Stats_GoRuntimeStats); i {
+			switch v := v.(*Stats_PrometheusReporter); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1739,7 +1812,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Stats_StatsdReporter_PointTags); i {
+			switch v := v.(*Stats_GoRuntimeStats); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1751,7 +1824,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Timeouts_Entry); i {
+			switch v := v.(*Stats_StatsdReporter_PointTags); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1763,6 +1836,18 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Timeouts_Entry); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_config_gateway_v1_gateway_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Assets_S3Provider); i {
 			case 0:
 				return &v.state
@@ -1781,6 +1866,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 	file_config_gateway_v1_gateway_proto_msgTypes[3].OneofWrappers = []interface{}{
 		(*Stats_LogReporter_)(nil),
 		(*Stats_StatsdReporter_)(nil),
+		(*Stats_PrometheusReporter_)(nil),
 	}
 	file_config_gateway_v1_gateway_proto_msgTypes[6].OneofWrappers = []interface{}{
 		(*Assets_S3)(nil),
@@ -1797,7 +1883,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_config_gateway_v1_gateway_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   18,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

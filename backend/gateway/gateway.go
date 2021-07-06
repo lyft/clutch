@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/uber-go/tally"
+	tally_prom "github.com/uber-go/tally/prometheus"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
@@ -58,26 +59,44 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
 	// Init stats.
-	var reporter tally.StatsReporter
+	var metricsHandler http.Handler
+	var scopeOpts tally.ScopeOptions
 	switch t := cfg.Gateway.Stats.Reporter.(type) {
 	case nil:
-		reporter = tally.NullStatsReporter
+		scopeOpts = tally.ScopeOptions{
+			Reporter: tally.NullStatsReporter,
+		}
 	case *gatewayv1.Stats_LogReporter_:
-		reporter = stats.NewDebugReporter(logger)
+		scopeOpts = tally.ScopeOptions{
+			Reporter: stats.NewDebugReporter(logger),
+			Prefix:   "clutch",
+		}
 	case *gatewayv1.Stats_StatsdReporter_:
-		reporter, err = stats.NewStatsdReporter(cfg.Gateway.Stats.GetStatsdReporter())
+		reporter, err := stats.NewStatsdReporter(cfg.Gateway.Stats.GetStatsdReporter())
 		if err != nil {
 			logger.Fatal("error creating statsd reporter", zap.Error(err))
 		}
+		scopeOpts = tally.ScopeOptions{
+			Reporter: reporter,
+			Prefix:   "clutch",
+		}
+	case *gatewayv1.Stats_PrometheusReporter_:
+		reporter, err := stats.NewPrometheusReporter(cfg.Gateway.Stats.GetPrometheusReporter())
+		if err != nil {
+			logger.Fatal("error creating prometheus reporter", zap.Error(err))
+		}
+		scopeOpts = tally.ScopeOptions{
+			CachedReporter:  reporter,
+			Prefix:          "clutch",
+			SanitizeOptions: &tally_prom.DefaultSanitizerOpts,
+		}
+		metricsHandler = reporter.HTTPHandler()
 	default:
-		logger.Fatal("unsupported logger", zap.Reflect("type", t))
+		logger.Fatal("unsupported reporter", zap.Reflect("type", t))
 	}
 
 	scope, scopeCloser := tally.NewRootScope(
-		tally.ScopeOptions{
-			Reporter: reporter,
-			Prefix:   "clutch",
-		},
+		scopeOpts,
 		cfg.Gateway.Stats.FlushInterval.AsDuration(),
 	)
 	defer func() {
@@ -194,7 +213,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	// Instantiate and register modules listed in the configuration.
-	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway)
+	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway, metricsHandler)
 	if err != nil {
 		panic(err)
 	}

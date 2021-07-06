@@ -13054,6 +13054,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {google.protobuf.IDuration|null} [flushInterval] Stats flushInterval
                      * @property {clutch.config.gateway.v1.Stats.ILogReporter|null} [logReporter] Stats logReporter
                      * @property {clutch.config.gateway.v1.Stats.IStatsdReporter|null} [statsdReporter] Stats statsdReporter
+                     * @property {clutch.config.gateway.v1.Stats.IPrometheusReporter|null} [prometheusReporter] Stats prometheusReporter
                      * @property {clutch.config.gateway.v1.Stats.IGoRuntimeStats|null} [goRuntimeStats] Stats goRuntimeStats
                      */
 
@@ -13097,6 +13098,14 @@ export const clutch = $root.clutch = (() => {
                     Stats.prototype.statsdReporter = null;
 
                     /**
+                     * Stats prometheusReporter.
+                     * @member {clutch.config.gateway.v1.Stats.IPrometheusReporter|null|undefined} prometheusReporter
+                     * @memberof clutch.config.gateway.v1.Stats
+                     * @instance
+                     */
+                    Stats.prototype.prometheusReporter = null;
+
+                    /**
                      * Stats goRuntimeStats.
                      * @member {clutch.config.gateway.v1.Stats.IGoRuntimeStats|null|undefined} goRuntimeStats
                      * @memberof clutch.config.gateway.v1.Stats
@@ -13109,12 +13118,12 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Stats reporter.
-                     * @member {"logReporter"|"statsdReporter"|undefined} reporter
+                     * @member {"logReporter"|"statsdReporter"|"prometheusReporter"|undefined} reporter
                      * @memberof clutch.config.gateway.v1.Stats
                      * @instance
                      */
                     Object.defineProperty(Stats.prototype, "reporter", {
-                        get: $util.oneOfGetter($oneOfFields = ["logReporter", "statsdReporter"]),
+                        get: $util.oneOfGetter($oneOfFields = ["logReporter", "statsdReporter", "prometheusReporter"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
@@ -13153,6 +13162,16 @@ export const clutch = $root.clutch = (() => {
                                     return "statsdReporter." + error;
                             }
                         }
+                        if (message.prometheusReporter != null && message.hasOwnProperty("prometheusReporter")) {
+                            if (properties.reporter === 1)
+                                return "reporter: multiple values";
+                            properties.reporter = 1;
+                            {
+                                let error = $root.clutch.config.gateway.v1.Stats.PrometheusReporter.verify(message.prometheusReporter);
+                                if (error)
+                                    return "prometheusReporter." + error;
+                            }
+                        }
                         if (message.goRuntimeStats != null && message.hasOwnProperty("goRuntimeStats")) {
                             let error = $root.clutch.config.gateway.v1.Stats.GoRuntimeStats.verify(message.goRuntimeStats);
                             if (error)
@@ -13187,6 +13206,11 @@ export const clutch = $root.clutch = (() => {
                             if (typeof object.statsdReporter !== "object")
                                 throw TypeError(".clutch.config.gateway.v1.Stats.statsdReporter: object expected");
                             message.statsdReporter = $root.clutch.config.gateway.v1.Stats.StatsdReporter.fromObject(object.statsdReporter);
+                        }
+                        if (object.prometheusReporter != null) {
+                            if (typeof object.prometheusReporter !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.Stats.prometheusReporter: object expected");
+                            message.prometheusReporter = $root.clutch.config.gateway.v1.Stats.PrometheusReporter.fromObject(object.prometheusReporter);
                         }
                         if (object.goRuntimeStats != null) {
                             if (typeof object.goRuntimeStats !== "object")
@@ -13227,6 +13251,11 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (message.goRuntimeStats != null && message.hasOwnProperty("goRuntimeStats"))
                             object.goRuntimeStats = $root.clutch.config.gateway.v1.Stats.GoRuntimeStats.toObject(message.goRuntimeStats, options);
+                        if (message.prometheusReporter != null && message.hasOwnProperty("prometheusReporter")) {
+                            object.prometheusReporter = $root.clutch.config.gateway.v1.Stats.PrometheusReporter.toObject(message.prometheusReporter, options);
+                            if (options.oneofs)
+                                object.reporter = "prometheusReporter";
+                        }
                         return object;
                     };
 
@@ -13559,6 +13588,106 @@ export const clutch = $root.clutch = (() => {
                         })();
 
                         return StatsdReporter;
+                    })();
+
+                    Stats.PrometheusReporter = (function() {
+
+                        /**
+                         * Properties of a PrometheusReporter.
+                         * @memberof clutch.config.gateway.v1.Stats
+                         * @interface IPrometheusReporter
+                         * @property {string|null} [handlerPath] PrometheusReporter handlerPath
+                         */
+
+                        /**
+                         * Constructs a new PrometheusReporter.
+                         * @memberof clutch.config.gateway.v1.Stats
+                         * @classdesc Represents a PrometheusReporter.
+                         * @implements IPrometheusReporter
+                         * @constructor
+                         * @param {clutch.config.gateway.v1.Stats.IPrometheusReporter=} [properties] Properties to set
+                         */
+                        function PrometheusReporter(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * PrometheusReporter handlerPath.
+                         * @member {string} handlerPath
+                         * @memberof clutch.config.gateway.v1.Stats.PrometheusReporter
+                         * @instance
+                         */
+                        PrometheusReporter.prototype.handlerPath = "";
+
+                        /**
+                         * Verifies a PrometheusReporter message.
+                         * @function verify
+                         * @memberof clutch.config.gateway.v1.Stats.PrometheusReporter
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        PrometheusReporter.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.handlerPath != null && message.hasOwnProperty("handlerPath"))
+                                if (!$util.isString(message.handlerPath))
+                                    return "handlerPath: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a PrometheusReporter message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.gateway.v1.Stats.PrometheusReporter
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.gateway.v1.Stats.PrometheusReporter} PrometheusReporter
+                         */
+                        PrometheusReporter.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.gateway.v1.Stats.PrometheusReporter)
+                                return object;
+                            let message = new $root.clutch.config.gateway.v1.Stats.PrometheusReporter();
+                            if (object.handlerPath != null)
+                                message.handlerPath = String(object.handlerPath);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a PrometheusReporter message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.gateway.v1.Stats.PrometheusReporter
+                         * @static
+                         * @param {clutch.config.gateway.v1.Stats.PrometheusReporter} message PrometheusReporter
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        PrometheusReporter.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.handlerPath = "";
+                            if (message.handlerPath != null && message.hasOwnProperty("handlerPath"))
+                                object.handlerPath = message.handlerPath;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this PrometheusReporter to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.gateway.v1.Stats.PrometheusReporter
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        PrometheusReporter.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return PrometheusReporter;
                     })();
 
                     Stats.GoRuntimeStats = (function() {

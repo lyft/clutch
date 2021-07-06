@@ -51,11 +51,15 @@ message Stats {
     }
   }
 
+  message PrometheusReporter {
+    string handler_path = 1;
+  }
+
   // The reporter to emit stats. If none specified, then stats will not be reported.
   oneof reporter {
     LogReporter log_reporter = 2;
     StatsdReporter statsd_reporter = 3;
-    //  TODO: Prometheus support.
+    PrometheusReporter prometheus_reporter = 5;
   }
 
   message GoRuntimeStats {
