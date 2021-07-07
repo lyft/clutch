@@ -82,7 +82,6 @@ For more reading on this topic, see [Netflix Winston](https://netflixtechblog.co
 
 Clutch :heart: Envoy. The project was modeled after Envoy and inspired by its success. We are investing significantly in Envoy functionality in the near future.
 
-<RoadmapItem title="Advanced Fault Injection" description="Target and inject faults between other Envoys or third-party networks." />
 <RoadmapItem title="Config Dump Diff" description="Select two Envoys and diff their configuration remotely." />
 <RoadmapItem title="Real-time Stats Viewer" description="Drop a probe on an Envoy for per-second stats visualization." />
 <RoadmapItem title="Tap Interface" description="Tap an Envoy with the filter enabled so that it dumps all requests and response information to your screen." />
