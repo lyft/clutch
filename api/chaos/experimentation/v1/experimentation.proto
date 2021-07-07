@@ -52,9 +52,11 @@ message GetExperimentsRequest {
   }
 
   // Return experiments whose config's type URL matches the provided config type URL.
-  string config_type = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  // Set to empty string to query for all.
+  string config_type = 1;
   // Return experiments whose status is equal to the provided value.
-  Status status = 2 [ (validate.rules).enum = {defined_only : true, not_in : 0} ];
+  // Set to STATUS_UNSPECIFIED to query for all.
+  Status status = 2 [ (validate.rules).enum = {defined_only : true} ];
 }
 
 message GetExperimentsResponse {
