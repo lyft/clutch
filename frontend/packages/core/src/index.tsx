@@ -27,6 +27,7 @@ import { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
 import { AvatarIcon, StatusIcon } from "./icon";
 import { Link } from "./link";
 import Loadable from "./loading";
+import { useLocation, useNavigate, useParams, useSearchParams } from "./navigation";
 import { client } from "./Network";
 import ExpansionPanel from "./panel";
 import Paper from "./paper";
@@ -111,6 +112,10 @@ export {
   TreeTable,
   Typography,
   userId,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
   useWizardContext,
   Warning,
   WizardContext,

@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import {
   ClickAwayListener,
@@ -19,6 +18,7 @@ import type { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
 import _ from "lodash";
 
 import { useAppContext } from "../Contexts";
+import { useNavigate } from "../navigation";
 
 import type { SearchIndex } from "./utils";
 import { searchIndexes } from "./utils";

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import {
@@ -10,6 +9,8 @@ import {
   Form,
   Link,
   TextField,
+  useNavigate,
+  useParams,
 } from "@clutch-sh/core";
 
 import PageLayout from "./core/page-layout";
