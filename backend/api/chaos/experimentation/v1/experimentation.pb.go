@@ -329,8 +329,10 @@ type GetExperimentsRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Return experiments whose config's type URL matches the provided config type URL.
+	// Set to empty string to query for all.
 	ConfigType string `protobuf:"bytes,1,opt,name=config_type,json=configType,proto3" json:"config_type,omitempty"`
 	// Return experiments whose status is equal to the provided value.
+	// Set to STATUS_UNSPECIFIED to query for all.
 	Status GetExperimentsRequest_Status `protobuf:"varint,2,opt,name=status,proto3,enum=clutch.chaos.experimentation.v1.GetExperimentsRequest_Status" json:"status,omitempty"`
 }
 
