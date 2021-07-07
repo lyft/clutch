@@ -46,6 +46,12 @@ export interface NavigateOptions extends ReactRouterNavigateOptions {
 
 /**
  * Convert custom search param object to string.
+ *
+ * ```ts
+ * const searchObject = new URLSearchParams({ query: "value" });
+ * const searchString = convertSearchParam(searchObject);
+ * console.log(searchString); // "?query=value"
+ * ```
  */
 const convertSearchParam = (params: URLSearchParams) => {
   const p = params.toString();
