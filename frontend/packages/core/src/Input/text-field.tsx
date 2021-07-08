@@ -228,6 +228,8 @@ const TextField = ({
     },
   };
 
+  // We maintain a defaultVal to prevent the value from changing from underneath
+  // the component. This is required because autocomplete is uncontrolled.
   const [defaultVal] = React.useState<string>((defaultValue as string) || "");
   const [autoCompleteOptions, setAutoCompleteOptions] = React.useState<AutocompleteResultProps[]>(
     []
