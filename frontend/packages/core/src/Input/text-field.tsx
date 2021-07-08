@@ -145,7 +145,7 @@ const IconButton = styled(MuiIconButton)({
 });
 
 interface AutocompleteResultProps {
-  id: string;
+  id?: string;
   label: string;
 }
 
@@ -228,7 +228,10 @@ const TextField = ({
     },
   };
 
-  const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
+  const [defaultVal] = React.useState<string>((defaultValue as string) || "");
+  const [autoCompleteOptions, setAutoCompleteOptions] = React.useState<AutocompleteResultProps[]>(
+    []
+  );
   const autoCompleteDebounce = React.useRef(
     _.debounce(value => {
       if (autocompleteCallback !== undefined) {
@@ -250,13 +253,17 @@ const TextField = ({
         size="small"
         options={autoCompleteOptions}
         PopperComponent={Popper}
-        getOptionLabel={option => (option?.id ? option.id : option.label)}
+        getOptionLabel={option =>
+          typeof option === "string" ? option : option?.id || option.label
+        }
         onInputChange={(__, v) => autoCompleteDebounce(v)}
-        renderOption={option => <AutocompleteResult id={option.id} label={option.label} />}
+        renderOption={(option: AutocompleteResultProps) => (
+          <AutocompleteResult id={option.id} label={option.label} />
+        )}
         onSelectCapture={e =>
           onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
         }
-        defaultValue={{ id: defaultValue, label: defaultValue }}
+        defaultValue={{ id: defaultVal, label: defaultVal }}
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
