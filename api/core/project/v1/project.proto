@@ -16,4 +16,16 @@ message Project {
   repeated string languages = 4;
   // Allows an organization to populate any information they see fit that does not fit our schema
   map<string, google.protobuf.Value> data = 5;
+  ProjectDependencies dependencies = 6;
+}
+
+// Dependencies could be either upstream or downstream of this project.
+message ProjectDependencies {
+  // The key in this map is the type_url of the dependency
+  map<string, Dependency> upstreams = 1;
+  map<string, Dependency> downstreams = 2;
+}
+
+message Dependency {
+  repeated string ids = 1;
 }

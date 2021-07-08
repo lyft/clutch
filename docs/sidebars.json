@@ -35,10 +35,11 @@
           "type": "category",
           "label": "Frontend",
           "items": [
-            "development/frontend",
+            "development/frontend/overview",
+            "development/frontend/storybook",
             {
               "type": "link",
-              "label": "Storybook",
+              "label": "Clutch's Storybook",
               "href": "https://storybook.clutch.sh"
             }
           ]

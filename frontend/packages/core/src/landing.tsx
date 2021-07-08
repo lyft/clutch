@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +7,7 @@ import { userId } from "./AppLayout/user";
 import { MonsterGraphic } from "./Assets/Graphics";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
+import { useNavigate } from "./navigation";
 
 const StyledLanding = styled.div({
   backgroundColor: "#f9f9fe",

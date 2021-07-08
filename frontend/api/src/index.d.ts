@@ -5007,9 +5007,6 @@ export namespace clutch {
                     /** UpstreamEnforcing upstreamCluster */
                     upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
-                    /** UpstreamEnforcing upstreamPartialSingleCluster */
-                    upstreamPartialSingleCluster?: (clutch.chaos.serverexperimentation.v1.IPartialSingleCluster|null);
-
                     /** UpstreamEnforcing downstreamCluster */
                     downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
                 }
@@ -5026,14 +5023,11 @@ export namespace clutch {
                     /** UpstreamEnforcing upstreamCluster. */
                     public upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
-                    /** UpstreamEnforcing upstreamPartialSingleCluster. */
-                    public upstreamPartialSingleCluster?: (clutch.chaos.serverexperimentation.v1.IPartialSingleCluster|null);
-
                     /** UpstreamEnforcing downstreamCluster. */
                     public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
                     /** UpstreamEnforcing upstreamType. */
-                    public upstreamType?: ("upstreamCluster"|"upstreamPartialSingleCluster");
+                    public upstreamType?: "upstreamCluster";
 
                     /** UpstreamEnforcing downstreamType. */
                     public downstreamType?: "downstreamCluster";
@@ -5170,60 +5164,6 @@ export namespace clutch {
 
                     /**
                      * Converts this SingleCluster to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a PartialSingleCluster. */
-                interface IPartialSingleCluster {
-
-                    /** PartialSingleCluster name */
-                    name?: (string|null);
-
-                    /** PartialSingleCluster clusterPercentage */
-                    clusterPercentage?: (clutch.chaos.serverexperimentation.v1.IClusterPercentage|null);
-                }
-
-                /** Represents a PartialSingleCluster. */
-                class PartialSingleCluster implements IPartialSingleCluster {
-
-                    /**
-                     * Constructs a new PartialSingleCluster.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IPartialSingleCluster);
-
-                    /** PartialSingleCluster name. */
-                    public name: string;
-
-                    /** PartialSingleCluster clusterPercentage. */
-                    public clusterPercentage?: (clutch.chaos.serverexperimentation.v1.IClusterPercentage|null);
-
-                    /**
-                     * Verifies a PartialSingleCluster message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a PartialSingleCluster message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns PartialSingleCluster
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.PartialSingleCluster;
-
-                    /**
-                     * Creates a plain object from a PartialSingleCluster message. Also converts values to other types if specified.
-                     * @param message PartialSingleCluster
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.PartialSingleCluster, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this PartialSingleCluster to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -9711,6 +9651,9 @@ export namespace clutch {
 
                     /** Project data */
                     data?: ({ [k: string]: google.protobuf.IValue }|null);
+
+                    /** Project dependencies */
+                    dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
                 }
 
                 /** Represents a Project. */
@@ -9737,6 +9680,9 @@ export namespace clutch {
                     /** Project data. */
                     public data: { [k: string]: google.protobuf.IValue };
 
+                    /** Project dependencies. */
+                    public dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
+
                     /**
                      * Verifies a Project message.
                      * @param message Plain object to verify
@@ -9761,6 +9707,108 @@ export namespace clutch {
 
                     /**
                      * Converts this Project to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ProjectDependencies. */
+                interface IProjectDependencies {
+
+                    /** ProjectDependencies upstreams */
+                    upstreams?: ({ [k: string]: clutch.core.project.v1.IDependency }|null);
+
+                    /** ProjectDependencies downstreams */
+                    downstreams?: ({ [k: string]: clutch.core.project.v1.IDependency }|null);
+                }
+
+                /** Represents a ProjectDependencies. */
+                class ProjectDependencies implements IProjectDependencies {
+
+                    /**
+                     * Constructs a new ProjectDependencies.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IProjectDependencies);
+
+                    /** ProjectDependencies upstreams. */
+                    public upstreams: { [k: string]: clutch.core.project.v1.IDependency };
+
+                    /** ProjectDependencies downstreams. */
+                    public downstreams: { [k: string]: clutch.core.project.v1.IDependency };
+
+                    /**
+                     * Verifies a ProjectDependencies message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ProjectDependencies message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ProjectDependencies
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.ProjectDependencies;
+
+                    /**
+                     * Creates a plain object from a ProjectDependencies message. Also converts values to other types if specified.
+                     * @param message ProjectDependencies
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.ProjectDependencies, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ProjectDependencies to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Dependency. */
+                interface IDependency {
+
+                    /** Dependency ids */
+                    ids?: (string[]|null);
+                }
+
+                /** Represents a Dependency. */
+                class Dependency implements IDependency {
+
+                    /**
+                     * Constructs a new Dependency.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IDependency);
+
+                    /** Dependency ids. */
+                    public ids: string[];
+
+                    /**
+                     * Verifies a Dependency message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Dependency message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Dependency
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Dependency;
+
+                    /**
+                     * Creates a plain object from a Dependency message. Also converts values to other types if specified.
+                     * @param message Dependency
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.Dependency, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Dependency to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -11357,6 +11405,20 @@ export namespace clutch {
                 public describeService(request: clutch.k8s.v1.IDescribeServiceRequest): Promise<clutch.k8s.v1.DescribeServiceResponse>;
 
                 /**
+                 * Calls ListServices.
+                 * @param request ListServicesRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListServicesResponse
+                 */
+                public listServices(request: clutch.k8s.v1.IListServicesRequest, callback: clutch.k8s.v1.K8sAPI.ListServicesCallback): void;
+
+                /**
+                 * Calls ListServices.
+                 * @param request ListServicesRequest message or plain object
+                 * @returns Promise
+                 */
+                public listServices(request: clutch.k8s.v1.IListServicesRequest): Promise<clutch.k8s.v1.ListServicesResponse>;
+
+                /**
                  * Calls DeleteService.
                  * @param request DeleteServiceRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and DeleteServiceResponse
@@ -11645,6 +11707,13 @@ export namespace clutch {
                  * @param [response] DescribeServiceResponse
                  */
                 type DescribeServiceCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeServiceResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listServices}.
+                 * @param error Error, if any
+                 * @param [response] ListServicesResponse
+                 */
+                type ListServicesCallback = (error: (Error|null), response?: clutch.k8s.v1.ListServicesResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteService}.
@@ -14621,6 +14690,9 @@ export namespace clutch {
 
                 /** Service annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Service selector */
+                selector?: ({ [k: string]: string }|null);
             }
 
             /** Represents a Service. */
@@ -14649,6 +14721,9 @@ export namespace clutch {
 
                 /** Service annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Service selector. */
+                public selector: { [k: string]: string };
 
                 /**
                  * Verifies a Service message.
@@ -14801,6 +14876,120 @@ export namespace clutch {
 
                 /**
                  * Converts this DescribeServiceResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListServicesRequest. */
+            interface IListServicesRequest {
+
+                /** ListServicesRequest clientset */
+                clientset?: (string|null);
+
+                /** ListServicesRequest cluster */
+                cluster?: (string|null);
+
+                /** ListServicesRequest namespace */
+                namespace?: (string|null);
+
+                /** ListServicesRequest options */
+                options?: (clutch.k8s.v1.IListOptions|null);
+            }
+
+            /** Represents a ListServicesRequest. */
+            class ListServicesRequest implements IListServicesRequest {
+
+                /**
+                 * Constructs a new ListServicesRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListServicesRequest);
+
+                /** ListServicesRequest clientset. */
+                public clientset: string;
+
+                /** ListServicesRequest cluster. */
+                public cluster: string;
+
+                /** ListServicesRequest namespace. */
+                public namespace: string;
+
+                /** ListServicesRequest options. */
+                public options?: (clutch.k8s.v1.IListOptions|null);
+
+                /**
+                 * Verifies a ListServicesRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListServicesRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListServicesRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListServicesRequest;
+
+                /**
+                 * Creates a plain object from a ListServicesRequest message. Also converts values to other types if specified.
+                 * @param message ListServicesRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListServicesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListServicesRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListServicesResponse. */
+            interface IListServicesResponse {
+
+                /** ListServicesResponse services */
+                services?: (clutch.k8s.v1.IService[]|null);
+            }
+
+            /** Represents a ListServicesResponse. */
+            class ListServicesResponse implements IListServicesResponse {
+
+                /**
+                 * Constructs a new ListServicesResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListServicesResponse);
+
+                /** ListServicesResponse services. */
+                public services: clutch.k8s.v1.IService[];
+
+                /**
+                 * Verifies a ListServicesResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListServicesResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListServicesResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListServicesResponse;
+
+                /**
+                 * Creates a plain object from a ListServicesResponse message. Also converts values to other types if specified.
+                 * @param message ListServicesResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListServicesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListServicesResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -16884,8 +17073,11 @@ export namespace clutch {
             /** Properties of a GetProjectsRequest. */
             interface IGetProjectsRequest {
 
-                /** GetProjectsRequest names */
-                names?: (string[]|null);
+                /** GetProjectsRequest projects */
+                projects?: (string[]|null);
+
+                /** GetProjectsRequest users */
+                users?: (string[]|null);
             }
 
             /** Represents a GetProjectsRequest. */
@@ -16897,8 +17089,11 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.project.v1.IGetProjectsRequest);
 
-                /** GetProjectsRequest names. */
-                public names: string[];
+                /** GetProjectsRequest projects. */
+                public projects: string[];
+
+                /** GetProjectsRequest users. */
+                public users: string[];
 
                 /**
                  * Verifies a GetProjectsRequest message.
@@ -16929,11 +17124,122 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a ProjectResult. */
+            interface IProjectResult {
+
+                /** ProjectResult from */
+                from?: (clutch.project.v1.ProjectResult.IFrom|null);
+
+                /** ProjectResult project */
+                project?: (clutch.core.project.v1.IProject|null);
+            }
+
+            /** Represents a ProjectResult. */
+            class ProjectResult implements IProjectResult {
+
+                /**
+                 * Constructs a new ProjectResult.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.project.v1.IProjectResult);
+
+                /** ProjectResult from. */
+                public from?: (clutch.project.v1.ProjectResult.IFrom|null);
+
+                /** ProjectResult project. */
+                public project?: (clutch.core.project.v1.IProject|null);
+
+                /**
+                 * Verifies a ProjectResult message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ProjectResult message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ProjectResult
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.project.v1.ProjectResult;
+
+                /**
+                 * Creates a plain object from a ProjectResult message. Also converts values to other types if specified.
+                 * @param message ProjectResult
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.project.v1.ProjectResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ProjectResult to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace ProjectResult {
+
+                /** Properties of a From. */
+                interface IFrom {
+
+                    /** From selected */
+                    selected?: (boolean|null);
+
+                    /** From users */
+                    users?: (string[]|null);
+                }
+
+                /** Represents a From. */
+                class From implements IFrom {
+
+                    /**
+                     * Constructs a new From.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.project.v1.ProjectResult.IFrom);
+
+                    /** From selected. */
+                    public selected: boolean;
+
+                    /** From users. */
+                    public users: string[];
+
+                    /**
+                     * Verifies a From message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a From message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns From
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.project.v1.ProjectResult.From;
+
+                    /**
+                     * Creates a plain object from a From message. Also converts values to other types if specified.
+                     * @param message From
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.project.v1.ProjectResult.From, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this From to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+
             /** Properties of a GetProjectsResponse. */
             interface IGetProjectsResponse {
 
-                /** GetProjectsResponse projects */
-                projects?: (clutch.core.project.v1.IProject[]|null);
+                /** GetProjectsResponse results */
+                results?: ({ [k: string]: clutch.project.v1.IProjectResult }|null);
             }
 
             /** Represents a GetProjectsResponse. */
@@ -16945,8 +17251,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.project.v1.IGetProjectsResponse);
 
-                /** GetProjectsResponse projects. */
-                public projects: clutch.core.project.v1.IProject[];
+                /** GetProjectsResponse results. */
+                public results: { [k: string]: clutch.project.v1.IProjectResult };
 
                 /**
                  * Verifies a GetProjectsResponse message.

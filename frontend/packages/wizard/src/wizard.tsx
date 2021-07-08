@@ -1,6 +1,15 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
-import { Button, ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clutch-sh/core";
+import {
+  Button,
+  ButtonGroup,
+  Step,
+  Stepper,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+  Warning,
+  WizardContext,
+} from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
@@ -58,6 +67,9 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
   const [, setSearchParams] = useSearchParams();
+  const locationState = useLocation().state as { origin?: string };
+  const navigate = useNavigate();
+  const [origin] = React.useState(locationState?.origin);
 
   const updateStepData = (stepName: string, data: object) => {
     setWizardStepData(prevState => {
@@ -89,10 +101,14 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
       displayWarnings: (warnings: string[]) => {
         setGlobalWarnings(warnings);
       },
-      onBack: () => {
+      onBack: (params: { toOrigin: boolean }) => {
         setGlobalWarnings([]);
         setSearchParams({});
-        dispatch(WizardAction.BACK);
+        if (params?.toOrigin && origin) {
+          navigate(origin);
+        } else {
+          dispatch(WizardAction.BACK);
+        }
       },
     };
   };
@@ -106,6 +122,7 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
   const steps = filteredChildren.map((child: WizardChildren) => {
     const isLoading = wizardStepData[child.type.name]?.isLoading || false;
     const hasError = wizardStepData[child.type.name]?.hasError;
+
     return (
       <>
         <DataLayoutContext.Provider value={dataLayoutManager}>
@@ -124,6 +141,9 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
                   dataLayoutManager.reset();
                   setSearchParams({});
                   dispatch(WizardAction.RESET);
+                  if (origin) {
+                    navigate(origin);
+                  }
                 }}
               />
             </ButtonGroup>

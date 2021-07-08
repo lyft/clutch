@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps, ClutchError } from "@clutch-sh/core";
 import {
@@ -11,22 +10,17 @@ import {
   DialogActions,
   DialogContent,
   Form,
+  useNavigate,
 } from "@clutch-sh/core";
-import { PageLayout } from "@clutch-sh/experimentation";
+import { FormFields, PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import type { FormItem } from "./form-fields";
-import FormFields from "./form-fields";
+import type { FormItem } from "../../experimentation/src/core/form-fields";
 
 enum FaultType {
   ABORT = "Abort",
   LATENCY = "Latency",
-}
-
-enum TargetType {
-  REQUESTS = "requests",
-  HOSTS = "hosts",
 }
 
 enum UpstreamClusterType {
@@ -37,8 +31,8 @@ enum UpstreamClusterType {
 type ExperimentData = {
   downstreamCluster: string;
   upstreamCluster: string;
+  environmentValue: string;
   upstreamClusterType: UpstreamClusterType;
-  targetType: TargetType;
   requestsPercentage: number;
   hostsPercentage: number;
   faultType: FaultType;
@@ -48,19 +42,19 @@ type ExperimentData = {
 
 interface ExperimentDetailsProps {
   upstreamClusterTypeSelectionEnabled: boolean;
-  hostsPercentageBasedTargetingEnabled: boolean;
+  environments: Environment[];
   onStart: (ExperimentData) => void;
 }
 
 const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   upstreamClusterTypeSelectionEnabled,
-  hostsPercentageBasedTargetingEnabled,
+  environments,
   onStart,
 }) => {
   const initialExperimentData = {
     upstreamClusterType: UpstreamClusterType.INTERNAL,
     faultType: FaultType.ABORT,
-    targetType: TargetType.REQUESTS,
+    environmentValue: environments.length > 0 ? environments[0].value : "",
   } as ExperimentData;
 
   const experimentDataState = useState<ExperimentData>(initialExperimentData);
@@ -75,32 +69,6 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   const handleOnSubmit = () => {
     onStart(experimentData);
   };
-
-  const faultInjectionClusterRadioGroup = {
-    name: "upstreamClusterType",
-    label: "Upstream Cluster Type",
-    type: "radio-group",
-    visible:
-      upstreamClusterTypeSelectionEnabled && experimentData.targetType === TargetType.REQUESTS,
-    inputProps: {
-      options: [
-        {
-          label: "Internal",
-          value: UpstreamClusterType.INTERNAL,
-        },
-        {
-          label: "External (3rd party)",
-          value: UpstreamClusterType.EXTERNAL,
-        },
-      ],
-      defaultValue: initialExperimentData.upstreamClusterType,
-      disabled: experimentData.targetType !== TargetType.REQUESTS,
-    },
-  };
-  const fakeFaultInjectionClusterRadioGroup = { ...faultInjectionClusterRadioGroup };
-  fakeFaultInjectionClusterRadioGroup.name = "fakeFaultInjectionCluster";
-  fakeFaultInjectionClusterRadioGroup.visible =
-    upstreamClusterTypeSelectionEnabled && experimentData.targetType === TargetType.HOSTS;
 
   const isAbort = experimentData.faultType === FaultType.ABORT;
   const fields = [
@@ -122,45 +90,45 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       validation: yup.string().label("Upstream Cluster").required(),
       inputProps: { defaultValue: undefined },
     },
-    faultInjectionClusterRadioGroup,
-    fakeFaultInjectionClusterRadioGroup,
     {
-      label: "Targeting",
-      type: "title",
-    },
-    {
-      name: "targetType",
-      label: "Target Type",
-      type: "select",
-      visible: hostsPercentageBasedTargetingEnabled,
+      name: "upstreamClusterType",
+      label: "Upstream Cluster Type",
+      type: "radio-group",
+      visible: upstreamClusterTypeSelectionEnabled,
       inputProps: {
         options: [
           {
-            label: "Requests",
-            value: TargetType.REQUESTS,
+            label: "Internal",
+            value: UpstreamClusterType.INTERNAL,
           },
           {
-            label: "Hosts",
-            value: TargetType.HOSTS,
+            label: "External (3rd party)",
+            value: UpstreamClusterType.EXTERNAL,
           },
         ],
-        defaultValue: initialExperimentData.targetType,
+        defaultValue: initialExperimentData.upstreamClusterType,
       },
+    },
+    {
+      name: "environmentValue",
+      label: "Environment",
+      type: "select",
+      inputProps: {
+        options: environments.map(env => {
+          return {
+            label: env.label,
+            value: env.value,
+          };
+        }),
+        defaultValue: initialExperimentData.environmentValue,
+      },
+      visible: environments.length > 0,
     },
     {
       name: "requestsPercentage",
       label: "Percentage of Requests Served by All Hosts",
       type: "number",
       validation: yup.number().label("Percentage").integer().min(1).max(100).required(),
-      visible: experimentData.targetType === TargetType.REQUESTS,
-      inputProps: { defaultValue: "0" },
-    },
-    {
-      name: "hostsPercentage",
-      label: "Percentage of Hosts",
-      type: "number",
-      validation: yup.number().label("Percentage").integer().min(1).max(100).required(),
-      visible: experimentData.targetType === TargetType.HOSTS,
       inputProps: { defaultValue: "0" },
     },
     {
@@ -228,15 +196,56 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   );
 };
 
+type Environment = {
+  // If provided, it's displayed to the user instead of environment's value i.e., 'Staging' or 'Production'.
+  label?: string;
+  // The value that represents the environment i.e., 'staging' or 'production'.
+  value: string;
+};
+
+// The set of templates for upstream cluster.
+type UpstreamClusterTemplates = {
+  // The template that's used to resolve the final name of an internal upstream cluster.
+  // It supports the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to an empty string otherwise.
+  internalClusterTemplate: string;
+  // The template that's used to resolve the final name of an external upstream cluster.
+  // It supports the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to an empty string otherwise.
+  externalClusterTemplate?: string;
+};
+
 interface StartExperimentProps extends BaseWorkflowProps {
+  // Templates that are used to resolve the final name of an upstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
+  // It supports providing separate templates for internal and external upstream clusters. Both default to
+  // '$[CLUSTER]' and support the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to an empty string otherwise.
+  upstreamClusterTemplates?: UpstreamClusterTemplates;
+  // The templates that's used to resolve the final name of a downstream cluster i.e., "$[CLUSTER]-$[ENVIRONMENT]".
+  // It defaults to '$[CLUSTER]' and supports the following variables:
+  //  1. $CLUSTER - the value that a user entered in upstream cluster input field.
+  //  2. $ENVIRONMENT - the value of environment that a user selected. It's available only if
+  //                    'environments' is provided. Resolves to an empty string otherwise.
+  downstreamClusterTemplate?: string;
+  // Whether a user should be able to select if an upstream cluster is an external or internal dependency.
   upstreamClusterTypeSelectionEnabled?: boolean;
-  hostsPercentageBasedTargetingEnabled?: boolean;
+  // The list of environments that a user should be able to choose from. Defaults to empty list. If not present or empty,
+  // a user is not asked for environment.
+  environments?: Environment[];
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
-  upstreamClusterTypeSelectionEnabled = false,
-  hostsPercentageBasedTargetingEnabled = false,
+  upstreamClusterTemplates,
+  downstreamClusterTemplate,
+  upstreamClusterTypeSelectionEnabled,
+  environments,
 }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(undefined);
@@ -251,10 +260,16 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
     setError(err);
   };
 
+  const evaluateClusterTemplate = (
+    clusterTemplate: string,
+    cluster: string,
+    environment: string
+  ) => {
+    return clusterTemplate.replace("$[CLUSTER]", cluster).replace("$[ENVIRONMENT]", environment);
+  };
+
   const createExperiment = (data: ExperimentData) => {
     const isUpstreamEnforcing = data.upstreamClusterType === UpstreamClusterType.INTERNAL;
-    const isTargetingRequests = data.targetType === TargetType.REQUESTS;
-    const isTargetingHosts = data.targetType === TargetType.HOSTS;
 
     const faultTargeting = {} as IClutch.chaos.serverexperimentation.v1.FaultTargeting;
     if (isUpstreamEnforcing) {
@@ -262,19 +277,10 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         downstreamCluster: {
           name: data.downstreamCluster,
         },
+        upstreamCluster: {
+          name: data.upstreamCluster,
+        },
       };
-      if (isTargetingRequests) {
-        faultTargeting.upstreamEnforcing.upstreamCluster = {
-          name: data.upstreamCluster,
-        };
-      } else {
-        faultTargeting.upstreamEnforcing.upstreamPartialSingleCluster = {
-          name: data.upstreamCluster,
-          clusterPercentage: {
-            percentage: isTargetingHosts ? data.hostsPercentage : 100,
-          },
-        };
-      }
     } else {
       faultTargeting.downstreamEnforcing = {
         downstreamCluster: {
@@ -295,7 +301,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           httpStatusCode: data.httpStatus,
         },
         percentage: {
-          percentage: isTargetingRequests ? data.requestsPercentage : 100,
+          percentage: data.requestsPercentage,
         },
       } as IClutch.chaos.serverexperimentation.v1.AbortFault;
     } else {
@@ -304,7 +310,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           fixedDurationMs: data.durationMs,
         },
         percentage: {
-          percentage: isTargetingRequests ? data.requestsPercentage : 100,
+          percentage: data.requestsPercentage,
         },
       } as IClutch.chaos.serverexperimentation.v1.LatencyFault;
     }
@@ -331,8 +337,8 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   return (
     <PageLayout heading={heading} error={error}>
       <ExperimentDetails
-        upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
-        hostsPercentageBasedTargetingEnabled={hostsPercentageBasedTargetingEnabled}
+        upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled ?? false}
+        environments={environments ?? []}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
       />
       <Dialog
@@ -349,6 +355,22 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           <Button
             text="Yes"
             onClick={() => {
+              const environment = experimentData.environmentValue;
+              let upstreamClusterTemplate = upstreamClusterTemplates?.internalClusterTemplate;
+              if (experimentData.upstreamClusterType === UpstreamClusterType.EXTERNAL) {
+                upstreamClusterTemplate = upstreamClusterTemplates?.externalClusterTemplate;
+              }
+              experimentData.upstreamCluster = evaluateClusterTemplate(
+                upstreamClusterTemplate ?? "$[CLUSTER]",
+                experimentData.upstreamCluster,
+                environment
+              );
+              experimentData.downstreamCluster = evaluateClusterTemplate(
+                downstreamClusterTemplate ?? "$[CLUSTER]",
+                experimentData.downstreamCluster,
+                environment
+              );
+
               createExperiment(experimentData);
             }}
           />

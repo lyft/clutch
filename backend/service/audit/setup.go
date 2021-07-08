@@ -6,8 +6,12 @@ package audit
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/binary"
 	"errors"
 	"fmt"
+	"math/big"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -25,7 +29,10 @@ import (
 	"github.com/lyft/clutch/backend/service/auditsink"
 )
 
-const Name = "clutch.service.audit"
+const (
+	Name                 = "clutch.service.audit"
+	auditEventSinkLockId = "audit:eventsink"
+)
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &auditconfigv1.Config{}
@@ -72,7 +79,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	// Start polling loop against database.
-	go c.poll(time.Second * 10)
+	go c.poll()
 
 	return c, nil
 }
@@ -131,11 +138,8 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 }
 
 // This should be called via `go` in order to avoid blocking main exectuion.
-func (c *client) poll(interval time.Duration) {
-	readAndFanout := func() {
-		ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(1*time.Second))
-		defer cancel()
-
+func (c *client) poll() {
+	readAndFanout := func(ctx context.Context) {
 		// TODO(maybe): Backpressure on continued failure.
 		events, err := c.storage.UnsentEvents(ctx)
 		if err != nil {
@@ -156,9 +160,37 @@ func (c *client) poll(interval time.Duration) {
 		}
 	}
 
-	ticker := time.NewTicker(interval)
+	lockID := convertLockToUint32(auditEventSinkLockId)
+
+	// Generate random int with the floor of 10, to jitter this ticker.
+	minTime := int64(10)
+	ran, err := rand.Int(rand.Reader, big.NewInt(5))
+	if err != nil {
+		c.logger.Error("Unable to generate random int", zap.Error(err))
+	}
+	ticker := time.NewTicker(time.Second * time.Duration(ran.Int64()+minTime))
 	for {
 		<-ticker.C
-		readAndFanout()
+		ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(30*time.Second))
+
+		isLocked, err := c.storage.AttemptLock(ctx, lockID)
+		if err != nil {
+			c.logger.Error("Error while attempting to get lock", zap.Error(err))
+		}
+
+		if isLocked {
+			_, err := c.storage.ReleaseLock(ctx, lockID)
+			if err != nil {
+				c.logger.Error("Error trying to release lock", zap.Error(err))
+			}
+			readAndFanout(ctx)
+		}
+
+		cancel()
 	}
+}
+
+func convertLockToUint32(lockID string) uint32 {
+	x := sha256.New().Sum([]byte(lockID))
+	return binary.BigEndian.Uint32(x)
 }

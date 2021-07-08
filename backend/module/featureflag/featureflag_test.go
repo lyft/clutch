@@ -25,7 +25,7 @@ func TestModule(t *testing.T) {
 	assert.True(t, r.JSONRegistered())
 }
 
-func TestAPI(t *testing.T) {
+func TestAPIWithFlags(t *testing.T) {
 	m, err := newModuleImpl(
 		&featureflagv1.Simple{
 			Flags: map[string]bool{
@@ -43,4 +43,18 @@ func TestAPI(t *testing.T) {
 	assert.Equal(t, true, resp.Flags["foo"].GetBooleanValue())
 	assert.Equal(t, false, resp.Flags["bar"].GetBooleanValue())
 	assert.Len(t, resp.Flags, 2)
+}
+
+func TestAPIWithoutFlags(t *testing.T) {
+	m, err := newModuleImpl(
+		&featureflagv1.Simple{
+			Flags: map[string]bool{},
+		},
+	)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, m)
+
+	_, respErr := m.GetFlags(context.Background(), nil)
+	assert.NoError(t, respErr)
 }

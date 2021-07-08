@@ -17,9 +17,7 @@ const FormControl = styled(MuiFormControl)({
 
 const StyledCheckbox = styled(MuiCheckbox)({
   color: "#6e7083",
-  height: "48px",
-  width: "48px",
-  borderRadius: "30px",
+  borderRadius: "50%",
   "&:hover": {
     background: "#f5f6fd",
   },
@@ -43,44 +41,58 @@ const StyledCheckbox = styled(MuiCheckbox)({
   },
 });
 
-const Icon = styled.div(
+const Icon = styled.div<{ disabled: boolean; size: string }>(
   {
     borderRadius: "2px",
     boxSizing: "border-box",
-    height: "24px",
-    width: "24px",
   },
   props => ({
-    border: props["data-disabled"] ? "1px solid #e7e7ea" : "1px solid #6e7083",
+    height: props.size,
+    width: props.size,
+    border: props.disabled ? "1px solid #e7e7ea" : "1px solid #6e7083",
   })
 );
 
-const SelectedIcon = styled.div(
+const SelectedIcon = styled.div<{ disabled: boolean; size: string }>(
   {
     borderRadius: "2px",
     boxSizing: "border-box",
-    height: "24px",
-    width: "24px",
     ".MuiSvgIcon-root": {
       display: "block",
     },
   },
   props => ({
-    background: props["data-disabled"] ? "#e7e7eA" : "#3548d4",
+    height: props.size,
+    width: props.size,
+    background: props.disabled ? "#e7e7eA" : "#3548d4",
+    ".MuiSvgIcon-root": {
+      height: props.size,
+      width: props.size,
+    },
   })
 );
 
 export interface CheckboxProps
-  extends Pick<MuiCheckboxProps, "checked" | "disabled" | "name" | "onChange"> {}
+  extends Pick<MuiCheckboxProps, "checked" | "disabled" | "name" | "onChange" | "size"> {}
 
 // TODO (sperry): add 16px size variant
-const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled, ...props }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled, size, ...props }) => {
+  let sizePx;
+  switch (size) {
+    case "small":
+      sizePx = "20px";
+      break;
+    default:
+      sizePx = "24px";
+  }
+
   return (
     <StyledCheckbox
       checked={checked}
-      icon={<Icon data-disabled={disabled} />}
+      size={size}
+      icon={<Icon disabled={disabled} size={sizePx} />}
       checkedIcon={
-        <SelectedIcon data-disabled={disabled}>
+        <SelectedIcon disabled={disabled} size={sizePx}>
           <CheckIcon />
         </SelectedIcon>
       }

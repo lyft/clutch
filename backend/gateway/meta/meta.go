@@ -314,6 +314,9 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 		return anypb.New(&apiv1.Redacted{RedactedTypeUrl: TypeURL(m)})
 	}
 
+	// Deep copy before field redaction so we do not unintentionally remove fields
+	// from the original object that were passed by reference
+	m = proto.Clone(m)
 	return anypb.New(ClearLogDisabledFields(m))
 }
 

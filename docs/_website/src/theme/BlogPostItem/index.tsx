@@ -4,7 +4,7 @@ import { MDXProvider } from '@mdx-js/react';
 import Seo from '@theme/Seo';
 import Link from '@docusaurus/Link';
 import MDXComponents from '@theme/MDXComponents';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import Share from '@site/src/components/Share';
 import styles from './styles.module.css';
 const MONTHS = [
   'January',
@@ -44,11 +44,12 @@ function BlogPostItem(props) {
           className={clsx('margin-bottom--sm', styles.blogPostTitle)}>
           {isBlogPostPage ? title : <Link to={permalink}>{title}</Link>}
         </TitleHeading>
-        <div className="margin-vert--md">
+        <div className="margin-vert--md" style={{display: "flex", alignItems: "center"}}>
           <time dateTime={date} className={styles.blogPostDate}>
             {month} {day}, {year}{' '}
             {readingTime && <> · {Math.ceil(readingTime)} min read</>}
           </time>
+          {!truncated && <>&nbsp;·&nbsp;<Share title={title} authors={authors} style={{margin: "0 7px"}} /></>}
         </div>
 
 
@@ -82,7 +83,7 @@ function BlogPostItem(props) {
 
       <Seo {...{keywords, image}} />
 
-      <article   className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
+      <article className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
         {renderPostHeader()}
         <section className="markdown">
           <MDXProvider components={MDXComponents}>{children}</MDXProvider>

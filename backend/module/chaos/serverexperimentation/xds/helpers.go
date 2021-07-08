@@ -46,8 +46,6 @@ func GetClusterPair(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (str
 		switch upstreamEnforcing.GetUpstreamType().(type) {
 		case *serverexperimentation.UpstreamEnforcing_UpstreamCluster:
 			upstream = upstreamEnforcing.GetUpstreamCluster().GetName()
-		case *serverexperimentation.UpstreamEnforcing_UpstreamPartialSingleCluster:
-			upstream = upstreamEnforcing.GetUpstreamPartialSingleCluster().GetName()
 		default:
 			return "", "", fmt.Errorf("unknown upstream type of upstream enforcing %v", upstreamEnforcing.GetUpstreamType())
 		}

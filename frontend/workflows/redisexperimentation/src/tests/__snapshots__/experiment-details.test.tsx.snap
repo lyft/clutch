@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Start Experiment workflow renders correctly 1`] = `
+"<Styled(div)>
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={-1} onChange={[Function: onChange]} />
+  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+</Styled(div)>"
+`;
+
+exports[`Start Experiment workflow renders correctly with environments selection enabled 1`] = `
+"<Styled(div)>
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+</Styled(div)>"
+`;
+
+exports[`Start Experiment workflow renders correctly with upstream cluster type selection enabled 1`] = `
+"<Styled(div)>
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={-1} onChange={[Function: onChange]} />
+  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+</Styled(div)>"
+`;

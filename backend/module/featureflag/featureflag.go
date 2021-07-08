@@ -47,7 +47,10 @@ func (m *moduleImpl) Register(r module.Registrar) error {
 }
 
 func (m *moduleImpl) GetFlags(ctx context.Context, req *featureflagv1.GetFlagsRequest) (*featureflagv1.GetFlagsResponse, error) {
-	flags := make(map[string]*featureflagv1.Flag, len(m.simple.Flags))
+	flags := make(map[string]*featureflagv1.Flag)
+	if m.simple == nil {
+		return &featureflagv1.GetFlagsResponse{Flags: flags}, nil
+	}
 	for i, flag := range m.simple.Flags {
 		flags[i] = &featureflagv1.Flag{Type: &featureflagv1.Flag_BooleanValue{BooleanValue: flag}}
 	}

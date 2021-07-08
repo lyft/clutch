@@ -179,7 +179,7 @@ func RegisterResolverAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/GetObjectSchemas")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/GetObjectSchemas", runtime.WithHTTPPathPattern("/v1/resolver/getObjectSchemas"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -202,7 +202,7 @@ func RegisterResolverAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Search")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Search", runtime.WithHTTPPathPattern("/v1/resolver/search"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -225,7 +225,7 @@ func RegisterResolverAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Resolve")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Resolve", runtime.WithHTTPPathPattern("/v1/resolver/resolve"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -248,7 +248,7 @@ func RegisterResolverAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Autocomplete")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Autocomplete", runtime.WithHTTPPathPattern("/v1/resolver/autocomplete"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -310,7 +310,7 @@ func RegisterResolverAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/GetObjectSchemas")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/GetObjectSchemas", runtime.WithHTTPPathPattern("/v1/resolver/getObjectSchemas"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -330,7 +330,7 @@ func RegisterResolverAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Search")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Search", runtime.WithHTTPPathPattern("/v1/resolver/search"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -350,7 +350,7 @@ func RegisterResolverAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Resolve")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Resolve", runtime.WithHTTPPathPattern("/v1/resolver/resolve"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -370,7 +370,7 @@ func RegisterResolverAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Autocomplete")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.resolver.v1.ResolverAPI/Autocomplete", runtime.WithHTTPPathPattern("/v1/resolver/autocomplete"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

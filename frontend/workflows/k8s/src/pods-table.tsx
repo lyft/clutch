@@ -1,8 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import TimeAgo from "react-timeago";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Chip, Table, TableRow, TableRowAction, TableRowActions } from "@clutch-sh/core";
+import {
+  Chip,
+  Table,
+  TableRow,
+  TableRowAction,
+  TableRowActions,
+  useNavigate,
+} from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -93,7 +99,9 @@ const PodTable = () => {
               <TableRowAction
                 icon={<DeleteIcon />}
                 onClick={() =>
-                  navigate(`/k8s/pod/delete?q=${pod.cluster}/${pod.namespace}/${pod.name}`)
+                  navigate(`/k8s/pod/delete?q=${pod.cluster}/${pod.namespace}/${pod.name}`, {
+                    origin: true,
+                  })
                 }
               >
                 Delete

@@ -1,12 +1,12 @@
 import React from "react";
+import { FormFields } from "@clutch-sh/experimentation";
 import { shallow } from "enzyme";
 
-import FormFields from "../form-fields";
 import { ExperimentDetails } from "../start-experiment";
 
-jest.mock("react-router-dom", () => {
+jest.mock("@clutch-sh/core", () => {
   return {
-    ...jest.requireActual("react-router-dom"),
+    ...(jest.requireActual("@clutch-sh/core") as any),
     useNavigate: jest.fn(),
   };
 });
@@ -16,7 +16,7 @@ describe("Start Experiment workflow", () => {
     const component = shallow(
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={false}
-        hostsPercentageBasedTargetingEnabled={false}
+        environments={[]}
         onStart={() => {}}
       />
     );
@@ -25,31 +25,16 @@ describe("Start Experiment workflow", () => {
 
   it("renders correctly with upstream cluster type selection enabled", () => {
     const component = shallow(
-      <ExperimentDetails
-        upstreamClusterTypeSelectionEnabled
-        hostsPercentageBasedTargetingEnabled={false}
-        onStart={() => {}}
-      />
+      <ExperimentDetails upstreamClusterTypeSelectionEnabled environments={[]} onStart={() => {}} />
     );
     expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
   });
 
-  it("renders correctly with host percentage based faults enabled", () => {
+  it("renders correctly with environments", () => {
     const component = shallow(
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={false}
-        hostsPercentageBasedTargetingEnabled={false}
-        onStart={() => {}}
-      />
-    );
-    expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
-  });
-
-  it("renders correctly with host percentage based faults and upstream cluster type selecion enabled", () => {
-    const component = shallow(
-      <ExperimentDetails
-        upstreamClusterTypeSelectionEnabled
-        hostsPercentageBasedTargetingEnabled
+        environments={[{ value: "staging" }]}
         onStart={() => {}}
       />
     );

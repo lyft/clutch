@@ -5,8 +5,11 @@ import {
   ButtonGroup,
   client,
   Confirmation,
+  FeatureOff,
+  FeatureOn,
   MetadataTable,
   Resolver,
+  SimpleFeatureFlag,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -50,7 +53,14 @@ const PodDetails: React.FC<WizardChild> = () => {
         ]}
       />
       <ButtonGroup>
-        <Button text="Back" variant="neutral" onClick={onBack} />
+        <SimpleFeatureFlag feature="k8sDashOrigin">
+          <FeatureOn>
+            <Button text="Back" variant="neutral" onClick={() => onBack({ toOrigin: true })} />
+          </FeatureOn>
+          <FeatureOff>
+            <Button text="Back" variant="neutral" onClick={() => onBack()} />
+          </FeatureOff>
+        </SimpleFeatureFlag>
         <Button text="Delete" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
     </WizardStep>

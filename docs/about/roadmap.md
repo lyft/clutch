@@ -23,12 +23,6 @@ For more reading on this topic, see [Netflix Bolt](https://netflixtechblog.com/i
 
 </RoadmapItem>
 
-<RoadmapItem title="Topology Cache" description="Cache resource lists and add typeahead to forms.">
-
-While adapting any topology to Clutch is possible with an extension, large infrastructure topologies can be slow to search if based on vendor APIs. To make autocomplete possible and allow for a more responsive user experience, Clutch will periodically gather resource IDs and store them in its own online database for faster access.
-
-</RoadmapItem>
-
 <RoadmapItem title="Additional Gateways" description="Access Clutch APIs from other interfaces, e.g. the command-line or a Slackbot.">
 
 Logic and safeguards that are implemented in Clutch should also be usable from other interfaces in addition to the React frontend. For example, informational Clutch APIs should be accessible from a standardized Slackbot.
@@ -82,7 +76,6 @@ For more reading on this topic, see [Netflix Winston](https://netflixtechblog.co
 
 Clutch :heart: Envoy. The project was modeled after Envoy and inspired by its success. We are investing significantly in Envoy functionality in the near future.
 
-<RoadmapItem title="Advanced Fault Injection" description="Target and inject faults between other Envoys or third-party networks." />
 <RoadmapItem title="Config Dump Diff" description="Select two Envoys and diff their configuration remotely." />
 <RoadmapItem title="Real-time Stats Viewer" description="Drop a probe on an Envoy for per-second stats visualization." />
 <RoadmapItem title="Tap Interface" description="Tap an Envoy with the filter enabled so that it dumps all requests and response information to your screen." />

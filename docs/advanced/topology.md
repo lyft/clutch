@@ -1,67 +1,125 @@
 ---
-title: Infrastructure Topology Features
+title: Topology API's
 {{ .EditURL }}
 ---
 
-The Topology feature set enables enables core Clutch capabilities,
-as well as enabling API's that can be used based on your needs.
+The Topology feature set enables core Clutch capabilities such as autocomplete,
+as well as providing API's that can be leveraged for a multitude of purposes.
 
-One of the main goals of the toplogy service was to create a caching mechanism,
-that would aggregate and store all aspects of infratructure with the ability
-for it to be easily extended.
+One of the main goals of the topology service was to create an extensable caching mechanism,
+to store all aspects of infratructure with the ability for it to be easily accessed via API's.
+This allows implementors to write feature that are not bound to service providers API rate limits and latencies among other factors.
+Giving Clutch the control to provide a consistent user experience that you can control as your user base scales.
 
-This allows implmenations to write feature that are not bound to service providers API ratelimits, lantancies and etc.
-Giving us the control to provide a consistent user experience as the userbase scales.
+## Topology Caching
 
-### Topology API's
+At the core of the topology service is its caching functionality which is the foundation that powers its API's.
 
+You can enable the cache like so, there are other [configuration](https://github.com/lyft/clutch/blob/c3097e5ad477952bb4bb90cc1fb5a126d7434565/api/config/service/topology/v1/topology.proto#L14-L28) options that can be tuned if necessary.
 
-### Topology Caching
-
-
-### How to extend the Topology Cache
-
-
-### Autocomplete
-
-
-
-
-I wanted to give a more detailed update on this issue. This feature is now complete and the resolvers for AWS and Kubernetes have the autocomplete functionality for all the supported resource at this time.
-
-However I need to write some documentation on how to utilize it. I'll briefly describe here how you can set this up and a little more detail about the architecture so you could utilize these feature in a verity of different ways.
-
-Autocomplete is powered by the [Topology service](https://github.com/lyft/clutch/tree/main/backend/service/topology), the Topology service has a paginated [Search API](https://github.com/lyft/clutch/blob/main/api/topology/v1/topology_api.proto#L26-L32)  which give us the ability to search the `topology_cache` [table](https://github.com/lyft/clutch/blob/main/backend/cmd/migrate/migrations/000005_create_topology_cache_table.up.sql).
-
-In order to populate this table with resource (aws instance, k8s pods etc) from your infrastructure I have built what is known as the Topology Cache, to enabled the cache you can provide the [cache configuration](https://github.com/lyft/clutch/blob/main/api/config/service/topology/v1/topology.proto#L10-L18) for topology service like so.
-
+```yaml title="clutch-config.yaml"
+services:
+  ...
+  # The topology services does require the postgres datastore to be configured
+  - name: clutch.service.topology
+    typed_config:
+      "@type": types.google.com/clutch.config.service.topology.v1.Config
+      // highlight-next-line
+      cache: {}
 ```
+
+### Leader Election
+
+Currently Clutch elects a leader to handle the caching operations so that,
+only one instances performs write heavy operations.
+
+## How to extend the Topology Cache
+
+Extending the topology cache for private gateways can be done by satisfying the `CacheableTopology` [interface](https://github.com/lyft/clutch/blob/c3097e5ad477952bb4bb90cc1fb5a126d7434565/backend/service/topology/topology.go#L46-L57).
+
+```go
+type CacheableTopology interface {
+  CacheEnabled() bool
+  StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-chan *topologyv1.UpdateCacheRequest, error)
+}
+```
+
+If satisfied, the topology service will start caching resources provided by the services satisfiying the interface and storing it in the `topology_cache` table to utilize for features like the [Search API](https://github.com/lyft/clutch/blob/c3097e5ad477952bb4bb90cc1fb5a126d7434565/api/topology/v1/topology_api.proto#L26-L32) which powers [autocomplete](#autocomplete).
+
+For completeness we can look at the Kubernetes service [caching implementation](https://github.com/lyft/clutch/blob/c3097e5ad477952bb4bb90cc1fb5a126d7434565/backend/service/k8s/cache.go#L28-L61) as an example of how this interface is satisfied.
+
+:::caution Config Load Order
+It's important to load the `clutch.service.topology` last or near the bottom in your Clutch configuration, this is because the topology service will iterate through the service registry to see if any satisfies the `CacheableTopology` interface to enable caching for those services.
+:::
+
+## Autocomplete
+
+Once the topology service and module are configured, autocomplete for all known Clutch resources and workflows will be enabled by default.
+
+```yaml title="clutch-config.yaml"
+modules:
+  // highlight-next-line
+ - name: clutch.module.topology
+services:
+  ...
+  # The topology services does require the postgres datastore to be configured
+  // highlight-start
   - name: clutch.service.topology
     typed_config:
       "@type": types.google.com/clutch.config.service.topology.v1.Config
       cache: {}
+  // highlight-end
 ```
 
-It's important to load / specify the `clutch.service.topology` last in your clutch configuration, this is because the topology service will iterate through the service registry to see if a service satisfies the `CacheableTopology` interface.
 
-https://github.com/lyft/clutch/blob/49f42bbf300faec5279b21d340ac80f8f3e00962/backend/service/topology/topology.go#L45-L56
+### Autocomplete for custom resolver types
 
-If satisfied, the topology cache will start ingesting resources provided by the service and storing it in our `topology_cache` table to utilize for features like the [Search API](https://github.com/lyft/clutch/blob/main/api/topology/v1/topology_api.proto#L26-L32) which powers autocomplete.
+Enabling autocomplete for custom types you have defined in your gateway can be achieved by doing the following.
 
-For completeness we can look at the Kubernetes service [caching implantation](https://github.com/lyft/clutch/blob/main/backend/service/k8s/cache.go#L28-L49) as an example of how this interface is satisfied.
+1.Enable the searchable annotation on the resolver proto, the [example](https://github.com/lyft/clutch/blob/540f0acfb4809acb938e0fc8f52debf2868c9b1c/api/resolver/k8s/v1/k8s.proto#L11-L15) below is for Kubernetes pods.
 
-Now to recap, how do you setup autocomplete? 
-1) Enable the postgres service `clutch.service.db.postgres`
-2) Enable the topology service `clutch.service.topology` like so.
+```protobuf
+message PodID {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "pod ID"
+    // highlight-next-line
+    search : {enabled : true}
+  };
+  ...
+}
 ```
-  - name: clutch.service.topology
-    typed_config:
-      "@type": types.google.com/clutch.config.service.topology.v1.Config
-      cache: {}
+
+2.You will likely have a custom resolver for custom types, for this will have to satisfy the autocomplete function that is present on the resolver interface.
+There are many examples in Clutch you can reference, [here](https://github.com/lyft/clutch/blob/main/backend/resolver/k8s/k8s.go#L247-L273) is the Kubernetes resolver implementation.
+You will notice that the autocomplete function implementation for the resolver are just about identical for AWS and Core Clutch resolvers.
+
+3.Enabling autocomplete on the frontend varies depending on the implementation of the workflow.
+if you are using the wizard, autocomplete will be enabled without any additional effort.
+However if you have a more custom workflow or page, you can do the following to enable autocomplete on any `TextField`.
+
+```typescript
+const autoComplete = async (search: string): Promise<any> => {
+  // Check the length of the search query as the user might empty out the search
+  // which will still trigger the on change handler
+  if (search.length === 0) {
+    return { results: [] };
+  }
+
+  const response = await client.post("/v1/resolver/autocomplete", {
+    // Replace with the type you want to autocomplete on
+    // highlight-next-line
+    want: `type.googleapis.com/clutch.core.project.v1.Project`,
+    search,
+  });
+
+  return { results: response?.data?.results || [] };
+};
+
+
+<TextField
+  name="sometextfield"
+  // Specify the autocompleteCallback prop for the TextField component.
+  // highlight-next-line
+  autocompleteCallback={v => autoComplete(v)}
+/>
 ```
-3) Thats it!
-
-
-Im going to create another issue to track the documentation of all these new features and systems as there was a lot built that could be leveraged in a verity of different ways.
-
-Let me know if you have any questions!
