@@ -88,4 +88,3 @@ message UpdateGSICapacityRequest {
 
 message UpdateGSICapacityResponse {
 }
-
