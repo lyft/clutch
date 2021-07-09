@@ -1,7 +1,8 @@
 import * as React from "react";
 import _ from "lodash";
 
-import type { Action, Group, ProjectState, State } from "./types";
+import type { Action, ProjectState, State } from "./types";
+import { Group } from "./types";
 
 const PROJECT_TYPE_URL = "type.googleapis.com/clutch.core.project.v1.Project";
 
@@ -96,7 +97,53 @@ const exclusiveProjectDependencies = (
   return { upstreams, downstreams };
 };
 
+const deriveHiddenStatus = (state: State, group: Group, key: string): boolean => {
+  const unchecked = [];
+  _.forIn(state[Group.PROJECTS], (v, k) => {
+    if (!v.checked) {
+      // collect the unchecked projects, if any
+      unchecked.push(k);
+    }
+  });
+
+  // no unchecked projects
+  if (unchecked.length === 0) {
+    return false;
+  }
+
+  // get the relationships b/w upstreams/downstreams to project(s)
+  const dependencyMapping = dependencyToProjects(state, Group.PROJECTS);
+
+  const exclusive = [];
+  if (group === Group.UPSTREAM) {
+    // TODO: if all unchecked projects share that dependency, hide it
+    unchecked.forEach(p => {
+      _.forIn(dependencyMapping.upstreams, (v, k) => {
+        if (v[p] && Object.keys(v).length === 1) {
+          exclusive.push(k);
+        }
+      });
+    });
+  } else if (group === Group.DOWNSTREAM) {
+    // TODO: if all unchecked projects share that dependency, hide it
+    unchecked.forEach(p => {
+      _.forIn(dependencyMapping.downstreams, (v, k) => {
+        if (v[p] && Object.keys(v).length === 1) {
+          exclusive.push(k);
+        }
+      });
+    });
+  }
+
+  if (exclusive.includes(key)) {
+    return true;
+  }
+
+  return false;
+};
+
 export {
+  deriveHiddenStatus,
   deriveSwitchStatus,
   DispatchContext,
   exclusiveProjectDependencies,
