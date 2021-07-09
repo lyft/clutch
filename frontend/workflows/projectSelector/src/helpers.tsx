@@ -107,7 +107,7 @@ const exclusiveProjectDependencies = (
 // the checked status of/exclusivity to projects in Group.Projects
 const deriveHiddenStatus = (state: State, group: Group, key: string): boolean => {
   // if true, don't need to go through the flow below as we only hide an upstream/downstream
-  if (group == Group.PROJECTS) {
+  if (group === Group.PROJECTS) {
     return false;
   }
 
@@ -135,7 +135,10 @@ const deriveHiddenStatus = (state: State, group: Group, key: string): boolean =>
         // hide an upstream if it's exclusive to the unchecked project (ie. no other checked project(s) share it)
         if (v[p] && Object.keys(v).length === 1) {
           exclusive.push(k);
-        } else if (unchecked.length > 1 && unchecked.every(p => Object.keys(v).includes(p))) {
+        } else if (
+          unchecked.length > 1 &&
+          unchecked.every(project => Object.keys(v).includes(project))
+        ) {
           // hide an upstream if all unchecked projects share it
           exclusive.push(k);
         }
@@ -147,7 +150,10 @@ const deriveHiddenStatus = (state: State, group: Group, key: string): boolean =>
         // hide a downstream if it's exclusive to the unchecked project (ie. no other checked project(s) share it)
         if (v[p] && Object.keys(v).length === 1) {
           exclusive.push(k);
-        } else if (unchecked.length > 1 && unchecked.every(p => Object.keys(v).includes(p))) {
+        } else if (
+          unchecked.length > 1 &&
+          unchecked.every(project => Object.keys(v).includes(project))
+        ) {
           // hide a downstream if all unchecked projects share it
           exclusive.push(k);
         }
