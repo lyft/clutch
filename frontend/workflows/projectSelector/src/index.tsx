@@ -25,3 +25,5 @@ const register = (): WorkflowConfiguration => {
 };
 
 export default register;
+
+export { ProjectSelector };
