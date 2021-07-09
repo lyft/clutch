@@ -12,6 +12,7 @@ import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
 import type { State } from "./types";
 import { Group } from "./types";
+import { useProjectUpdater } from "./dash";
 
 const initialState: State = {
   [Group.PROJECTS]: {},
@@ -67,6 +68,8 @@ const ProjectSelector = () => {
 
   const [state, dispatch] = React.useReducer(selectorReducer, initialState);
 
+  const { updateProjects } = useProjectUpdater();
+
   React.useEffect(() => {
     console.log("effect"); // eslint-disable-line
     // Determine if any hydration is required.
@@ -113,6 +116,12 @@ const ProjectSelector = () => {
         });
     }
   }, [state[Group.PROJECTS]]);
+
+  React.useEffect(() => {
+    console.log("full state effect");
+    // TODO: filter out unchecked, and include upstreams and downstreams.
+    updateProjects(Object.keys(state[Group.PROJECTS]));
+  }, [state]);
 
   const handleAdd = () => {
     if (customProject === "") {

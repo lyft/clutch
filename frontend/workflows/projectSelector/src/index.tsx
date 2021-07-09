@@ -1,4 +1,5 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import { Dash } from "./dash";
 
 import ProjectSelector from "./project-selector";
 
@@ -18,7 +19,7 @@ const register = (): WorkflowConfiguration => {
         path: "/",
         displayName: "Project Selector",
         description: "Filter your projects.",
-        component: ProjectSelector,
+        component: Dash,
       },
     },
   };
