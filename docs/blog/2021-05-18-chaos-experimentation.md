@@ -6,7 +6,7 @@ authors:
     avatar: https://avatars.githubusercontent.com/u/5263542?v=4
     twitter_username: kathan24
 description: Chaos Experimentation, an open-source framework built on top of Envoy Proxy.
-image: 
+image: https://miro.medium.com/max/1400/1*Xi46XIWByMV7PUePnUIZsg.png
 hide_table_of_contents: false
 ---
 
@@ -15,6 +15,12 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 Services are bound to degrade. It’s a matter of when, not if. In a distributed system where there are many interdependent microservices, it is increasingly difficult to know what will happen when a service is unavailable, latency goes up, or when the success rate drops. Usually, companies find out the hard way when it happens in production and it affects their customers. This is where [Chaos Engineering](https://principlesofchaos.org/) helps us.
 
 <!--truncate-->
+
+---
+
+**Note**: *[This article](https://eng.lyft.com/chaos-experimentation-an-open-source-framework-built-on-top-of-envoy-proxy-df87519ed681) was originally published at [eng.lyft.com](https://eng.lyft.com/).*
+
+---
 
 ***Chaos Engineering is the discipline of experimenting on a system in order to build confidence in the system’s capability to withstand turbulent conditions in production.***
 
