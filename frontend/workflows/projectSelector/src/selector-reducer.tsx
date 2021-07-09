@@ -96,7 +96,6 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "TOGGLE_PROJECTS": {
-      // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
       return {
         ...state,
         [action.payload.group]: {
