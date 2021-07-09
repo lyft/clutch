@@ -119,8 +119,16 @@ const ProjectSelector = () => {
 
   React.useEffect(() => {
     console.log("full state effect");
-    // TODO: filter out unchecked, and include upstreams and downstreams.
-    updateProjects(Object.keys(state[Group.PROJECTS]));
+    // TODO: include upstreams and downstreams.
+
+    const selectedProjects = [];
+    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+      // if the project is custom
+      if (state[Group.PROJECTS][p].checked) {
+        selectedProjects.push(p);
+      }
+    });
+    updateProjects(selectedProjects);
   }, [state]);
 
   const handleAdd = () => {

@@ -1,8 +1,5 @@
 import * as React from "react";
 import ProjectSelector from "./project-selector";
-import type { Group } from "./types";
-
-const useCardManager = () => {};
 
 // update selected projects
 export const useDashManager = () => {};
@@ -15,18 +12,20 @@ interface DashAction {
 }
 
 interface DashState {
+  // TODO: richer state, including upstreams, downstreams, and full project data.
   selectedProjects: string[];
+
+  // TODO: add events to dash state or publish to separate events context? consider pros/cons (possible rendering tax).
 }
 
 const StateContext = React.createContext<DashState | undefined>(undefined);
+
+// TODO: split out into smaller hooks that don't return full state.
 const useReducerState = () => {
   return React.useContext(StateContext);
 };
 
 const DispatchContext = React.createContext<(action: DashAction) => void | undefined>(undefined);
-const useDispatch = () => {
-  return React.useContext(DispatchContext);
-};
 
 type useProjectUpdaterReturn = {
   updateProjects: (projects: string[]) => void;
@@ -49,7 +48,7 @@ const initialState = {
 const dashReducer = (state: DashState, action: DashAction): DashState => {
   switch (action.type) {
     case "UPDATE_PROJECTS": {
-      return {...state, selectedProjects: action.payload };
+      return { ...state, selectedProjects: action.payload };
     }
     default:
       throw new Error("not implemented (should be unreachable)");
@@ -57,11 +56,17 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
 };
 
 const Card = () => {
-  const {selectedProjects} = useReducerState();
+  const { selectedProjects } = useReducerState();
 
-  return <div>Hello world! {JSON.stringify(selectedProjects)}</div>;
+  return (
+    <div style={{ padding: "10px", margin: "10px", border: "1px solid grey", borderRadius: "4px" }}>
+      Hello world card!
+      <br /> Projects: {JSON.stringify(selectedProjects)}
+    </div>
+  );
 };
 
+// TODO: ability to add cards via children.
 export const Dash = () => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
 
