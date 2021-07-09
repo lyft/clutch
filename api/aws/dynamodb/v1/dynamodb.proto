@@ -38,7 +38,7 @@ service DDBAPI {
 message Table {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
-    pattern : "{region}/{table_name}"
+    pattern : "{region}/{name}"
   };
 
   string name = 1;
