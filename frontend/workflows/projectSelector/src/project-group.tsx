@@ -153,7 +153,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
           {numProjects === 0 && (
             <StyledNoProjectsText>No projects in this group yet.</StyledNoProjectsText>
           )}
-          {Object.keys(state[group]).map(key => (
+          {Object.keys(state[group]).sort().map(key => (
             <StyledMenuItem key={key}>
               <Checkbox
                 name={key}
