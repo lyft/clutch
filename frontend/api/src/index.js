@@ -9566,6 +9566,7 @@ export const clutch = $root.clutch = (() => {
                                 return "status: enum value expected";
                             case 0:
                             case 1:
+                            case 2:
                                 break;
                             }
                         return null;
@@ -9593,6 +9594,10 @@ export const clutch = $root.clutch = (() => {
                         case "STATUS_RUNNING":
                         case 1:
                             message.status = 1;
+                            break;
+                        case "STATUS_COMPLETED":
+                        case 2:
+                            message.status = 2;
                             break;
                         }
                         return message;
@@ -9639,11 +9644,13 @@ export const clutch = $root.clutch = (() => {
                      * @enum {number}
                      * @property {number} STATUS_UNSPECIFIED=0 STATUS_UNSPECIFIED value
                      * @property {number} STATUS_RUNNING=1 STATUS_RUNNING value
+                     * @property {number} STATUS_COMPLETED=2 STATUS_COMPLETED value
                      */
                     GetExperimentsRequest.Status = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
                         values[valuesById[0] = "STATUS_UNSPECIFIED"] = 0;
                         values[valuesById[1] = "STATUS_RUNNING"] = 1;
+                        values[valuesById[2] = "STATUS_COMPLETED"] = 2;
                         return values;
                     })();
 

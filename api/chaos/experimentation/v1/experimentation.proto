@@ -49,6 +49,8 @@ message GetExperimentsRequest {
     STATUS_UNSPECIFIED = 0;
     // Return experiments that are currently running.
     STATUS_RUNNING = 1;
+    // Return experiments that have completed.
+    STATUS_COMPLETED = 2;
   }
 
   // Return experiments whose config's type URL matches the provided config type URL.

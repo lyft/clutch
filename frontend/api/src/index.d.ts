@@ -4170,7 +4170,8 @@ export namespace clutch {
                     /** Status enum. */
                     enum Status {
                         STATUS_UNSPECIFIED = 0,
-                        STATUS_RUNNING = 1
+                        STATUS_RUNNING = 1,
+                        STATUS_COMPLETED = 2
                     }
                 }
 
