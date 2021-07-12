@@ -56,7 +56,7 @@ const StyledProgressContainer = styled.div({
   },
 });
 
-const ProjectSelector = () => {
+const ProjectSelector = ({ children }) => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
@@ -156,6 +156,7 @@ const ProjectSelector = () => {
           <Divider />
           <ProjectGroup title="Downstreams" group={Group.DOWNSTREAM} />
         </StyledSelectorContainer>
+        {children}
       </StateContext.Provider>
     </DispatchContext.Provider>
   );
