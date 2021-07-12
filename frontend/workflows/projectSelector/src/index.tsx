@@ -1,6 +1,8 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
 import ProjectSelector from "./project-selector";
+import { useReducerState } from "./helpers";
+import { Group } from "./types";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
@@ -26,4 +28,4 @@ const register = (): WorkflowConfiguration => {
 
 export default register;
 
-export { ProjectSelector };
+export { Group, ProjectSelector, useReducerState };
