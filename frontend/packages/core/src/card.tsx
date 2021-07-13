@@ -1,13 +1,16 @@
 import * as React from "react";
 import styled from "@emotion/styled";
+import type { CardHeaderProps as MuiCardHeaderProps} from "@material-ui/core";
 import {
   Avatar,
   Card as MuiCard,
   CardActionArea,
   CardActionAreaProps,
   CardContent as MuiCardContent,
-  Typography,
+  CardHeader as MuiCardHeader,
 } from "@material-ui/core";
+
+import { StyledTypography } from "./typography";
 
 const StyledCard = styled(MuiCard)({
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
@@ -28,13 +31,37 @@ const StyledCard = styled(MuiCard)({
   },
 });
 
-export type CardProps = {
-  children?: React.ReactNode | React.ReactNode[];
-};
+const StyledCardContent = styled(MuiCardContent)({
+  "&&": {
+    padding: "16px 0",
+  },
+  "> .MuiPaper-root": {
+    border: "0",
+    borderRadius: "0",
+  },
+});
 
-export const Card = ({ children, ...props }: CardProps) => (
+interface CardProps {
+  children?: React.ReactNode | React.ReactNode[];
+}
+
+const Card = ({ children, ...props }: CardProps) => (
   <StyledCard {...props}>{children}</StyledCard>
 );
+
+interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {}
+
+const CardHeader = ({ avatar, title }: CardHeaderProps) => (
+  <MuiCardHeader
+    style={{
+      background: "#EBEDFB",
+      padding: "16px",
+    }}
+    disableTypography
+    avatar={avatar}
+    title={<StyledTypography variant="h3">{title}</StyledTypography>}
+  />
+)
 
 const StyledLandingCard = styled(Card)({
   border: "none",
@@ -55,16 +82,6 @@ const StyledLandingCard = styled(Card)({
     color: "rgba(13, 16, 48, 0.38)",
     backgroundColor: "rgba(13, 16, 48, 0.12)",
   },
-
-  "& .title": {
-    fontSize: "20px",
-    fontWeight: 700,
-  },
-
-  "& .description": {
-    marginTop: "5px",
-    color: "rgba(13, 16, 48, 0.6)",
-  },
 });
 
 export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
@@ -84,14 +101,14 @@ export const LandingCard = ({ group, title, description, onClick, ...props }: La
           <span>{group}</span>
         </div>
         <div>
-          <Typography className="title">{title}</Typography>
-          <Typography className="description">{description}</Typography>
+          <StyledTypography variant="h3">{title}</StyledTypography>
+          <StyledTypography style={{color: "rgba(13, 16, 48, 0.6)"}} variant="body2">{description}</StyledTypography>
         </div>
       </MuiCardContent>
     </CardActionArea>
   </StyledLandingCard>
 );
 
-export const CardContent = MuiCardContent;
 
-export default Card;
+
+export { Card, StyledCardContent as CardContent, CardHeader };

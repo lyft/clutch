@@ -17,7 +17,7 @@ import {
 } from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
-import { Card, CardContent } from "./card";
+import { Card, CardContent, CardHeader } from "./card";
 import { Chip } from "./chip";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
@@ -45,7 +45,7 @@ import {
   TableRowActions,
   TreeTable,
 } from "./Table";
-import Typography from "./typography";
+import { Typography } from "./typography";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
@@ -65,6 +65,7 @@ export {
   ButtonGroup,
   Card,
   CardContent,
+  CardHeader,
   Checkbox,
   CheckboxPanel,
   Chip,
