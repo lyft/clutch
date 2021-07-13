@@ -28,7 +28,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
-	github.com/iancoleman/strcase v0.1.3
+	github.com/iancoleman/strcase v0.2.0
 	github.com/jhump/protoreflect v1.8.2
 	github.com/lib/pq v1.10.2
 	github.com/mitchellh/hashstructure/v2 v2.0.2
