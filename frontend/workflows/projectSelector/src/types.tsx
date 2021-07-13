@@ -12,7 +12,8 @@ type UserActionKind =
   | "REMOVE_PROJECTS"
   | "TOGGLE_PROJECTS"
   | "TOGGLE_ENTIRE_GROUP"
-  | "ONLY_PROJECTS";
+  | "ONLY_PROJECTS"
+  | "HIDE_PROJECTS";
 
 interface UserAction {
   type: UserActionKind;
@@ -51,6 +52,9 @@ interface GroupState {
   [projectName: string]: ProjectState;
 }
 
+// TODO: add new field to designate whether a Group.Project has hidden upstreams/downstreams so that way we can
+// support hiding all upstreams/downstreams if they are shared by other Group.Project who have already opted to
+// hide their dependencies
 export interface ProjectState {
   checked: boolean;
   // TODO: hidden should be derived?

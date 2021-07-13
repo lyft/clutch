@@ -1,7 +1,8 @@
 import * as React from "react";
 import _ from "lodash";
 
-import type { Action, Group, ProjectState, State } from "./types";
+import type { Action, ProjectState, State } from "./types";
+import { Group } from "./types";
 
 const PROJECT_TYPE_URL = "type.googleapis.com/clutch.core.project.v1.Project";
 
@@ -96,6 +97,38 @@ const exclusiveProjectDependencies = (
   return { upstreams, downstreams };
 };
 
+// TODO: if upstreams/downstreams are shared by all other projects that have already hidden their upstreams/downstreams
+// hide those upstreams/downstreams as well
+const updateHiddenState = (state: State, group: Group, project: string): State => {
+  const newState = { ...state };
+
+  const dependencyMapping = dependencyToProjects(state, group);
+
+  _.forIn(dependencyMapping.upstreams, (v, k) => {
+    if (v[project]) {
+      if (Object.keys(v).length === 1) {
+        newState[Group.UPSTREAM][k].hidden = !state[Group.UPSTREAM][k].hidden;
+      } else {
+        // the state could have changed and now that project is shared by others so reset to false
+        newState[Group.UPSTREAM][k].hidden = false;
+      }
+    }
+  });
+
+  _.forIn(dependencyMapping.downstreams, (v, k) => {
+    if (v[project]) {
+      if (Object.keys(v).length === 1) {
+        newState[Group.DOWNSTREAM][k].hidden = !state[Group.DOWNSTREAM][k].hidden;
+      } else {
+        // the state could have changed and now that project is shared by others so reset to false
+        newState[Group.UPSTREAM][k].hidden = false;
+      }
+    }
+  });
+
+  return newState;
+};
+
 export {
   deriveSwitchStatus,
   DispatchContext,
@@ -103,6 +136,7 @@ export {
   PROJECT_TYPE_URL,
   StateContext,
   updateGroupstate,
+  updateHiddenState,
   useDispatch,
   useReducerState,
 };

@@ -6,6 +6,7 @@ import {
   exclusiveProjectDependencies,
   PROJECT_TYPE_URL,
   updateGroupstate,
+  updateHiddenState,
 } from "./helpers";
 import type { Action, State } from "./types";
 import { Group } from "./types";
@@ -14,6 +15,7 @@ const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
     // User actions.
 
+    // TODO: when a project is added, we should check if its upstream(s)/downstream(s) are marked as hidden and unhide them
     case "ADD_PROJECTS": {
       // a given custom project may already exist in the group so don't trigger a state update for the duplicate(s)
       const uniqueCustomProjects = action.payload.projects.filter(
@@ -96,7 +98,6 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "TOGGLE_PROJECTS": {
-      // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
       return {
         ...state,
         [action.payload.group]: {
@@ -124,6 +125,18 @@ const selectorReducer = (state: State, action: Action): State => {
       );
 
       return newState;
+    }
+    case "HIDE_PROJECTS": {
+      // TODO: do we uncheck the Group.Project as well?
+
+      // we only support hiding upstreams/downstreams of Group.Projects
+      if (action.payload.group !== Group.PROJECTS) {
+        return state;
+      }
+
+      // TODO: currently the payload.projects will only have 1 project but in the future we might
+      // support bulk hiding
+      return updateHiddenState(state, action.payload.group, action.payload.projects[0]);
     }
     case "TOGGLE_ENTIRE_GROUP": {
       const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
