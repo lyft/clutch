@@ -118,7 +118,6 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
 
   const numProjects = Object.keys(state[group]).length;
   const checkedProjects = Object.keys(state[group]).filter(k => state[group][k].checked);
-  const hiddenProjects = Object.keys(state[group]).filter(k => state[group][k].hidden === false);
 
   return (
     <>
@@ -151,8 +150,6 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
             disabled={numProjects === 0 || state.loading}
           />
         </StyledHeaderColumn>
-        {/* TODO: just for testing the prototype */}
-        {hiddenProjects.length > 0 && <div>Hidden: {hiddenProjects.length}</div>}
       </StyledProjectHeader>
       {!collapsed && (
         <div>
