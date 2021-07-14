@@ -35,7 +35,7 @@ const register = (): WorkflowConfiguration => {
         component: DeletePod,
         requiredConfigProps: ["resolverType"],
       },
-	  describePod: {
+      describePod: {
         path: "pod/describe",
         displayName: "Describe Pod",
         description: "Describe a K8s pod.",

@@ -107,7 +107,7 @@ const PodTable = () => {
               >
                 Delete
               </TableRowAction>
-			  <TableRowAction
+              <TableRowAction
                 icon={<DetailsIcon />}
                 onClick={() =>
                   navigate(`/k8s/pod/describe?q=${pod.cluster}/${pod.namespace}/${pod.name}`)
