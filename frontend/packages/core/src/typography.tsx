@@ -139,4 +139,4 @@ const Typography = ({ variant, children }: TypographyProps) => {
   return <StyledTypography variant={variant}>{children}</StyledTypography>;
 };
 
-export default Typography;
+export { StyledTypography, Typography };
