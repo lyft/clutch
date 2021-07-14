@@ -12,6 +12,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
 import DeleteIcon from "@material-ui/icons/Delete";
+import DetailsIcon from "@material-ui/icons/ListAlt";
 import _ from "lodash";
 
 const PodsContainer = styled.div({
@@ -105,6 +106,14 @@ const PodTable = () => {
                 }
               >
                 Delete
+              </TableRowAction>
+			  <TableRowAction
+                icon={<DetailsIcon />}
+                onClick={() =>
+                  navigate(`/k8s/pod/describe?q=${pod.cluster}/${pod.namespace}/${pod.name}`)
+                }
+              >
+                Details
               </TableRowAction>
             </TableRowActions>
           </TableRow>

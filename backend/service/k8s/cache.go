@@ -180,7 +180,7 @@ func (s *svc) informerDeleteHandler(obj interface{}) {
 func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCacheRequest_Action) {
 	switch objType := obj.(type) {
 	case *corev1.Pod:
-		pod := podDescription(objType, "")
+		pod := podDescription(objType, "", []corev1.Event{})
 		protoPod, err := anypb.New(pod)
 		if err != nil {
 			s.log.Error("unable to marshal pod", zap.Error(err))

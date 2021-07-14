@@ -30247,6 +30247,141 @@ export const clutch = $root.clutch = (() => {
                 return PodCondition;
             })();
 
+            v1.Event = (function() {
+
+                /**
+                 * Properties of an Event.
+                 * @memberof clutch.k8s.v1
+                 * @interface IEvent
+                 * @property {string|null} [name] Event name
+                 * @property {string|null} [reason] Event reason
+                 * @property {string|null} [description] Event description
+                 */
+
+                /**
+                 * Constructs a new Event.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an Event.
+                 * @implements IEvent
+                 * @constructor
+                 * @param {clutch.k8s.v1.IEvent=} [properties] Properties to set
+                 */
+                function Event(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Event name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.name = "";
+
+                /**
+                 * Event reason.
+                 * @member {string} reason
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.reason = "";
+
+                /**
+                 * Event description.
+                 * @member {string} description
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.description = "";
+
+                /**
+                 * Verifies an Event message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Event.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        if (!$util.isString(message.reason))
+                            return "reason: string expected";
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        if (!$util.isString(message.description))
+                            return "description: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Event} Event
+                 */
+                Event.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Event)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Event();
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.reason != null)
+                        message.reason = String(object.reason);
+                    if (object.description != null)
+                        message.description = String(object.description);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an Event message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {clutch.k8s.v1.Event} message Event
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Event.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.name = "";
+                        object.reason = "";
+                        object.description = "";
+                    }
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        object.reason = message.reason;
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        object.description = message.description;
+                    return object;
+                };
+
+                /**
+                 * Converts this Event to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Event.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Event;
+            })();
+
             v1.Pod = (function() {
 
                 /**
@@ -30268,6 +30403,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {Array.<clutch.k8s.v1.IContainer>|null} [initContainers] Pod initContainers
                  * @property {string|null} [status] Pod status
                  * @property {number|Long|null} [startTimeMillis] Pod startTimeMillis
+                 * @property {Array.<clutch.k8s.v1.IEvent>|null} [events] Pod events
                  */
 
                 /**
@@ -30284,6 +30420,7 @@ export const clutch = $root.clutch = (() => {
                     this.annotations = {};
                     this.podConditions = [];
                     this.initContainers = [];
+                    this.events = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -30411,6 +30548,14 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.startTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
+                 * Pod events.
+                 * @member {Array.<clutch.k8s.v1.IEvent>} events
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.events = $util.emptyArray;
+
+                /**
                  * Verifies a Pod message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Pod
@@ -30505,6 +30650,15 @@ export const clutch = $root.clutch = (() => {
                     if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
                         if (!$util.isInteger(message.startTimeMillis) && !(message.startTimeMillis && $util.isInteger(message.startTimeMillis.low) && $util.isInteger(message.startTimeMillis.high)))
                             return "startTimeMillis: integer|Long expected";
+                    if (message.events != null && message.hasOwnProperty("events")) {
+                        if (!Array.isArray(message.events))
+                            return "events: array expected";
+                        for (let i = 0; i < message.events.length; ++i) {
+                            let error = $root.clutch.k8s.v1.Event.verify(message.events[i]);
+                            if (error)
+                                return "events." + error;
+                        }
+                    }
                     return null;
                 };
 
@@ -30618,6 +30772,16 @@ export const clutch = $root.clutch = (() => {
                             message.startTimeMillis = object.startTimeMillis;
                         else if (typeof object.startTimeMillis === "object")
                             message.startTimeMillis = new $util.LongBits(object.startTimeMillis.low >>> 0, object.startTimeMillis.high >>> 0).toNumber();
+                    if (object.events) {
+                        if (!Array.isArray(object.events))
+                            throw TypeError(".clutch.k8s.v1.Pod.events: array expected");
+                        message.events = [];
+                        for (let i = 0; i < object.events.length; ++i) {
+                            if (typeof object.events[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.Pod.events: object expected");
+                            message.events[i] = $root.clutch.k8s.v1.Event.fromObject(object.events[i]);
+                        }
+                    }
                     return message;
                 };
 
@@ -30638,6 +30802,7 @@ export const clutch = $root.clutch = (() => {
                         object.containers = [];
                         object.podConditions = [];
                         object.initContainers = [];
+                        object.events = [];
                     }
                     if (options.objects || options.defaults) {
                         object.labels = {};
@@ -30708,6 +30873,11 @@ export const clutch = $root.clutch = (() => {
                             object.startTimeMillis = options.longs === String ? String(message.startTimeMillis) : message.startTimeMillis;
                         else
                             object.startTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeMillis) : options.longs === Number ? new $util.LongBits(message.startTimeMillis.low >>> 0, message.startTimeMillis.high >>> 0).toNumber() : message.startTimeMillis;
+                    if (message.events && message.events.length) {
+                        object.events = [];
+                        for (let j = 0; j < message.events.length; ++j)
+                            object.events[j] = $root.clutch.k8s.v1.Event.toObject(message.events[j], options);
+                    }
                     return object;
                 };
 

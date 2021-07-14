@@ -12866,6 +12866,66 @@ export namespace clutch {
                 }
             }
 
+            /** Properties of an Event. */
+            interface IEvent {
+
+                /** Event name */
+                name?: (string|null);
+
+                /** Event reason */
+                reason?: (string|null);
+
+                /** Event description */
+                description?: (string|null);
+            }
+
+            /** Represents an Event. */
+            class Event implements IEvent {
+
+                /**
+                 * Constructs a new Event.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IEvent);
+
+                /** Event name. */
+                public name: string;
+
+                /** Event reason. */
+                public reason: string;
+
+                /** Event description. */
+                public description: string;
+
+                /**
+                 * Verifies an Event message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Event
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Event;
+
+                /**
+                 * Creates a plain object from an Event message. Also converts values to other types if specified.
+                 * @param message Event
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Event to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a Pod. */
             interface IPod {
 
@@ -12913,6 +12973,9 @@ export namespace clutch {
 
                 /** Pod startTimeMillis */
                 startTimeMillis?: (number|Long|null);
+
+                /** Pod events */
+                events?: (clutch.k8s.v1.IEvent[]|null);
             }
 
             /** Represents a Pod. */
@@ -12968,6 +13031,9 @@ export namespace clutch {
 
                 /** Pod startTimeMillis. */
                 public startTimeMillis: (number|Long);
+
+                /** Pod events. */
+                public events: clutch.k8s.v1.IEvent[];
 
                 /**
                  * Verifies a Pod message.
