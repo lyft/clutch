@@ -1,6 +1,9 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { CardHeaderProps as MuiCardHeaderProps } from "@material-ui/core";
+import type {
+  CardContentProps as MuiCardContentProps,
+  CardHeaderProps as MuiCardHeaderProps,
+} from "@material-ui/core";
 import {
   Avatar,
   Card as MuiCard,
@@ -32,16 +35,13 @@ const StyledCard = styled(MuiCard)({
 });
 
 const StyledCardContent = styled(MuiCardContent)({
-  "&&": {
-    padding: "16px 0",
-  },
   "> .MuiPaper-root": {
     border: "0",
     borderRadius: "0",
   },
 });
 
-interface CardProps {
+export interface CardProps {
   children?: React.ReactNode | React.ReactNode[];
 }
 
@@ -59,6 +59,12 @@ const CardHeader = ({ avatar, title }: CardHeaderProps) => (
     avatar={avatar}
     title={<StyledTypography variant="h3">{title}</StyledTypography>}
   />
+);
+
+interface CardContentProps extends MuiCardContentProps {}
+
+const CardContent = ({ children, ...props }: CardContentProps) => (
+  <StyledCardContent {...props}>{children}</StyledCardContent>
 );
 
 const StyledLandingCard = styled(Card)({
@@ -91,7 +97,7 @@ export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
 export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
   <StyledLandingCard {...props}>
     <CardActionArea onClick={onClick}>
-      <MuiCardContent>
+      <CardContent>
         <div className="header">
           <div className="icon">
             <Avatar>{group.charAt(0)}</Avatar>
@@ -104,9 +110,9 @@ export const LandingCard = ({ group, title, description, onClick, ...props }: La
             {description}
           </StyledTypography>
         </div>
-      </MuiCardContent>
+      </CardContent>
     </CardActionArea>
   </StyledLandingCard>
 );
 
-export { Card, StyledCardContent as CardContent, CardHeader };
+export { Card, CardContent, CardHeader };
