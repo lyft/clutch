@@ -1,48 +1,14 @@
-import * as React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
-import type { Action, ProjectState, State } from "./types";
+import {
+  deriveSwitchStatus,
+  exclusiveProjectDependencies,
+  PROJECT_TYPE_URL,
+  updateGroupstate,
+} from "./helpers";
+import type { Action, State } from "./types";
 import { Group } from "./types";
-
-const PROJECT_TYPE_URL = "type.googleapis.com/clutch.core.project.v1.Project";
-
-const StateContext = React.createContext<State | undefined>(undefined);
-const useReducerState = () => {
-  return React.useContext(StateContext);
-};
-
-const DispatchContext = React.createContext<(action: Action) => void | undefined>(undefined);
-const useDispatch = () => {
-  return React.useContext(DispatchContext);
-};
-
-// TODO(perf): call with useMemo().
-const deriveSwitchStatus = (state: State, group: Group): boolean => {
-  return (
-    Object.keys(state[group]).length > 0 &&
-    Object.keys(state[group]).every(key => state[group][key].checked)
-  );
-};
-
-const updateGroupstate = (
-  state: State,
-  group: Group,
-  project: string,
-  projectState: ProjectState
-): State => {
-  const newState = { ...state };
-  if (project in newState[group]) {
-    // preserve the checked value if the project is already in the group
-    newState[group][project].checked = state[group][project].checked;
-    newState[group][project].custom = projectState.custom;
-  } else {
-    // we set the projectState to the default state passed in
-    newState[group][project] = projectState;
-  }
-
-  return newState;
-};
 
 const selectorReducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -97,13 +63,37 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "REMOVE_PROJECTS": {
-      // TODO: also remove any upstreams or downstreams related (only) to the project.
-      // if group == Groups.PROJECT, hide exclusive downstream upstreams
-      //
-      return {
+      // remove the projects from their respective group
+      const newState = {
         ...state,
         [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
       };
+
+      if (action.payload.group !== Group.PROJECTS) {
+        return newState;
+      }
+
+      // for the removed projects in Group.Projects we get their upstreams/dowstreams that are exclusive
+      // (i.e. not shared by other projects that weren't removed)
+      const exclusiveUpstreams = [];
+      const exclusiveDownstreams = [];
+      action.payload.projects.forEach(p => {
+        /* get the upstreams/downstreams that are exclusive to the removed project(s)
+
+        TODO: (sperry) "remove_projects" supports bulk removal & since this func checks if upstreams/downstreams are exclusive
+        to a *single* project, if a dependency is shared by multiple *removed* projects, it wont't be removed. The func should
+        be refactored to take in the list of removed projects to account for this scenario.
+        */
+        const dependencies = exclusiveProjectDependencies(state, Group.PROJECTS, p);
+        exclusiveUpstreams.push(...dependencies.upstreams);
+        exclusiveDownstreams.push(...dependencies.downstreams);
+      });
+
+      // remove the upstreams/downstreams exclusive to the removed project(s)
+      newState[Group.UPSTREAM] = _.omit(state[Group.UPSTREAM], exclusiveUpstreams);
+      newState[Group.DOWNSTREAM] = _.omit(state[Group.DOWNSTREAM], exclusiveDownstreams);
+
+      return newState;
     }
     case "TOGGLE_PROJECTS": {
       // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
@@ -204,11 +194,4 @@ const selectorReducer = (state: State, action: Action): State => {
   }
 };
 
-export {
-  deriveSwitchStatus,
-  DispatchContext,
-  selectorReducer,
-  StateContext,
-  useDispatch,
-  useReducerState,
-};
+export default selectorReducer;

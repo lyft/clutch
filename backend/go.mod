@@ -25,11 +25,11 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-github/v36 v36.0.0
-	github.com/google/uuid v1.2.0
+	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
-	github.com/iancoleman/strcase v0.1.3
-	github.com/jhump/protoreflect v1.8.2
+	github.com/iancoleman/strcase v0.2.0
+	github.com/jhump/protoreflect v1.9.0
 	github.com/lib/pq v1.10.2
 	github.com/m3db/prometheus_client_golang v0.8.1 // indirect
 	github.com/m3db/prometheus_client_model v0.1.0 // indirect
@@ -40,7 +40,7 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
-	github.com/slack-go/slack v0.9.1
+	github.com/slack-go/slack v0.9.2
 	github.com/stretchr/testify v1.7.0
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/uber-go/tally v3.4.1+incompatible

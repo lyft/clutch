@@ -3808,6 +3808,1267 @@ export const clutch = $root.clutch = (() => {
          */
         const aws = {};
 
+        aws.dynamodb = (function() {
+
+            /**
+             * Namespace dynamodb.
+             * @memberof clutch.aws
+             * @namespace
+             */
+            const dynamodb = {};
+
+            dynamodb.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.aws.dynamodb
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.DDBAPI = (function() {
+
+                    /**
+                     * Constructs a new DDBAPI service.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a DDBAPI
+                     * @extends $protobuf.rpc.Service
+                     * @constructor
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     */
+                    function DDBAPI(rpcImpl, requestDelimited, responseDelimited) {
+                        $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                    }
+
+                    (DDBAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = DDBAPI;
+
+                    /**
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#getTable}.
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @typedef GetTableCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.aws.dynamodb.v1.GetTableResponse} [response] GetTableResponse
+                     */
+
+                    /**
+                     * Calls GetTable.
+                     * @function getTable
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @instance
+                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest} request GetTableRequest message or plain object
+                     * @param {clutch.aws.dynamodb.v1.DDBAPI.GetTableCallback} callback Node-style callback called with the error, if any, and GetTableResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(DDBAPI.prototype.getTable = function getTable(request, callback) {
+                        return this.rpcCall(getTable, $root.clutch.aws.dynamodb.v1.GetTableRequest, $root.clutch.aws.dynamodb.v1.GetTableResponse, request, callback);
+                    }, "name", { value: "GetTable" });
+
+                    /**
+                     * Calls GetTable.
+                     * @function getTable
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @instance
+                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest} request GetTableRequest message or plain object
+                     * @returns {Promise<clutch.aws.dynamodb.v1.GetTableResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateTableCapacity}.
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @typedef UpdateTableCapacityCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.aws.dynamodb.v1.UpdateTableCapacityResponse} [response] UpdateTableCapacityResponse
+                     */
+
+                    /**
+                     * Calls UpdateTableCapacity.
+                     * @function updateTableCapacity
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @instance
+                     * @param {clutch.aws.dynamodb.v1.IUpdateTableCapacityRequest} request UpdateTableCapacityRequest message or plain object
+                     * @param {clutch.aws.dynamodb.v1.DDBAPI.UpdateTableCapacityCallback} callback Node-style callback called with the error, if any, and UpdateTableCapacityResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(DDBAPI.prototype.updateTableCapacity = function updateTableCapacity(request, callback) {
+                        return this.rpcCall(updateTableCapacity, $root.clutch.aws.dynamodb.v1.UpdateTableCapacityRequest, $root.clutch.aws.dynamodb.v1.UpdateTableCapacityResponse, request, callback);
+                    }, "name", { value: "UpdateTableCapacity" });
+
+                    /**
+                     * Calls UpdateTableCapacity.
+                     * @function updateTableCapacity
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @instance
+                     * @param {clutch.aws.dynamodb.v1.IUpdateTableCapacityRequest} request UpdateTableCapacityRequest message or plain object
+                     * @returns {Promise<clutch.aws.dynamodb.v1.UpdateTableCapacityResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateGSICapacity}.
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @typedef UpdateGSICapacityCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.aws.dynamodb.v1.UpdateGSICapacityResponse} [response] UpdateGSICapacityResponse
+                     */
+
+                    /**
+                     * Calls UpdateGSICapacity.
+                     * @function updateGSICapacity
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @instance
+                     * @param {clutch.aws.dynamodb.v1.IUpdateGSICapacityRequest} request UpdateGSICapacityRequest message or plain object
+                     * @param {clutch.aws.dynamodb.v1.DDBAPI.UpdateGSICapacityCallback} callback Node-style callback called with the error, if any, and UpdateGSICapacityResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(DDBAPI.prototype.updateGSICapacity = function updateGSICapacity(request, callback) {
+                        return this.rpcCall(updateGSICapacity, $root.clutch.aws.dynamodb.v1.UpdateGSICapacityRequest, $root.clutch.aws.dynamodb.v1.UpdateGSICapacityResponse, request, callback);
+                    }, "name", { value: "UpdateGSICapacity" });
+
+                    /**
+                     * Calls UpdateGSICapacity.
+                     * @function updateGSICapacity
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @instance
+                     * @param {clutch.aws.dynamodb.v1.IUpdateGSICapacityRequest} request UpdateGSICapacityRequest message or plain object
+                     * @returns {Promise<clutch.aws.dynamodb.v1.UpdateGSICapacityResponse>} Promise
+                     * @variation 2
+                     */
+
+                    return DDBAPI;
+                })();
+
+                v1.Table = (function() {
+
+                    /**
+                     * Properties of a Table.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface ITable
+                     * @property {string|null} [name] Table name
+                     * @property {string|null} [region] Table region
+                     * @property {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndex>|null} [globalSecondaryIndexes] Table globalSecondaryIndexes
+                     * @property {clutch.aws.dynamodb.v1.IProvisionedThroughput|null} [capacity] Table capacity
+                     */
+
+                    /**
+                     * Constructs a new Table.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a Table.
+                     * @implements ITable
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.ITable=} [properties] Properties to set
+                     */
+                    function Table(properties) {
+                        this.globalSecondaryIndexes = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Table name.
+                     * @member {string} name
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.name = "";
+
+                    /**
+                     * Table region.
+                     * @member {string} region
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.region = "";
+
+                    /**
+                     * Table globalSecondaryIndexes.
+                     * @member {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndex>} globalSecondaryIndexes
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.globalSecondaryIndexes = $util.emptyArray;
+
+                    /**
+                     * Table capacity.
+                     * @member {clutch.aws.dynamodb.v1.IProvisionedThroughput|null|undefined} capacity
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.capacity = null;
+
+                    /**
+                     * Verifies a Table message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Table.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.globalSecondaryIndexes != null && message.hasOwnProperty("globalSecondaryIndexes")) {
+                            if (!Array.isArray(message.globalSecondaryIndexes))
+                                return "globalSecondaryIndexes: array expected";
+                            for (let i = 0; i < message.globalSecondaryIndexes.length; ++i) {
+                                let error = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.verify(message.globalSecondaryIndexes[i]);
+                                if (error)
+                                    return "globalSecondaryIndexes." + error;
+                            }
+                        }
+                        if (message.capacity != null && message.hasOwnProperty("capacity")) {
+                            let error = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.verify(message.capacity);
+                            if (error)
+                                return "capacity." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Table message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.Table} Table
+                     */
+                    Table.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.Table)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.Table();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.globalSecondaryIndexes) {
+                            if (!Array.isArray(object.globalSecondaryIndexes))
+                                throw TypeError(".clutch.aws.dynamodb.v1.Table.globalSecondaryIndexes: array expected");
+                            message.globalSecondaryIndexes = [];
+                            for (let i = 0; i < object.globalSecondaryIndexes.length; ++i) {
+                                if (typeof object.globalSecondaryIndexes[i] !== "object")
+                                    throw TypeError(".clutch.aws.dynamodb.v1.Table.globalSecondaryIndexes: object expected");
+                                message.globalSecondaryIndexes[i] = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.fromObject(object.globalSecondaryIndexes[i]);
+                            }
+                        }
+                        if (object.capacity != null) {
+                            if (typeof object.capacity !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.Table.capacity: object expected");
+                            message.capacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.capacity);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Table message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.Table} message Table
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Table.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults)
+                            object.globalSecondaryIndexes = [];
+                        if (options.defaults) {
+                            object.name = "";
+                            object.region = "";
+                            object.capacity = null;
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.globalSecondaryIndexes && message.globalSecondaryIndexes.length) {
+                            object.globalSecondaryIndexes = [];
+                            for (let j = 0; j < message.globalSecondaryIndexes.length; ++j)
+                                object.globalSecondaryIndexes[j] = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.toObject(message.globalSecondaryIndexes[j], options);
+                        }
+                        if (message.capacity != null && message.hasOwnProperty("capacity"))
+                            object.capacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.toObject(message.capacity, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Table to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Table.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Table;
+                })();
+
+                v1.GlobalSecondaryIndex = (function() {
+
+                    /**
+                     * Properties of a GlobalSecondaryIndex.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IGlobalSecondaryIndex
+                     * @property {string|null} [name] GlobalSecondaryIndex name
+                     * @property {clutch.aws.dynamodb.v1.IProvisionedThroughput|null} [capacity] GlobalSecondaryIndex capacity
+                     */
+
+                    /**
+                     * Constructs a new GlobalSecondaryIndex.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a GlobalSecondaryIndex.
+                     * @implements IGlobalSecondaryIndex
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IGlobalSecondaryIndex=} [properties] Properties to set
+                     */
+                    function GlobalSecondaryIndex(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GlobalSecondaryIndex name.
+                     * @member {string} name
+                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
+                     * @instance
+                     */
+                    GlobalSecondaryIndex.prototype.name = "";
+
+                    /**
+                     * GlobalSecondaryIndex capacity.
+                     * @member {clutch.aws.dynamodb.v1.IProvisionedThroughput|null|undefined} capacity
+                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
+                     * @instance
+                     */
+                    GlobalSecondaryIndex.prototype.capacity = null;
+
+                    /**
+                     * Verifies a GlobalSecondaryIndex message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GlobalSecondaryIndex.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.capacity != null && message.hasOwnProperty("capacity")) {
+                            let error = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.verify(message.capacity);
+                            if (error)
+                                return "capacity." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GlobalSecondaryIndex message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.GlobalSecondaryIndex} GlobalSecondaryIndex
+                     */
+                    GlobalSecondaryIndex.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.capacity != null) {
+                            if (typeof object.capacity !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.GlobalSecondaryIndex.capacity: object expected");
+                            message.capacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.capacity);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GlobalSecondaryIndex message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.GlobalSecondaryIndex} message GlobalSecondaryIndex
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GlobalSecondaryIndex.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.capacity = null;
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.capacity != null && message.hasOwnProperty("capacity"))
+                            object.capacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.toObject(message.capacity, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GlobalSecondaryIndex to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GlobalSecondaryIndex.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GlobalSecondaryIndex;
+                })();
+
+                v1.ProvisionedThroughput = (function() {
+
+                    /**
+                     * Properties of a ProvisionedThroughput.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IProvisionedThroughput
+                     * @property {number|null} [writeCapacityUnits] ProvisionedThroughput writeCapacityUnits
+                     * @property {number|null} [readCapacityUnits] ProvisionedThroughput readCapacityUnits
+                     */
+
+                    /**
+                     * Constructs a new ProvisionedThroughput.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a ProvisionedThroughput.
+                     * @implements IProvisionedThroughput
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IProvisionedThroughput=} [properties] Properties to set
+                     */
+                    function ProvisionedThroughput(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ProvisionedThroughput writeCapacityUnits.
+                     * @member {number} writeCapacityUnits
+                     * @memberof clutch.aws.dynamodb.v1.ProvisionedThroughput
+                     * @instance
+                     */
+                    ProvisionedThroughput.prototype.writeCapacityUnits = 0;
+
+                    /**
+                     * ProvisionedThroughput readCapacityUnits.
+                     * @member {number} readCapacityUnits
+                     * @memberof clutch.aws.dynamodb.v1.ProvisionedThroughput
+                     * @instance
+                     */
+                    ProvisionedThroughput.prototype.readCapacityUnits = 0;
+
+                    /**
+                     * Verifies a ProvisionedThroughput message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.ProvisionedThroughput
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ProvisionedThroughput.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.writeCapacityUnits != null && message.hasOwnProperty("writeCapacityUnits"))
+                            if (!$util.isInteger(message.writeCapacityUnits))
+                                return "writeCapacityUnits: integer expected";
+                        if (message.readCapacityUnits != null && message.hasOwnProperty("readCapacityUnits"))
+                            if (!$util.isInteger(message.readCapacityUnits))
+                                return "readCapacityUnits: integer expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ProvisionedThroughput message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.ProvisionedThroughput
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.ProvisionedThroughput} ProvisionedThroughput
+                     */
+                    ProvisionedThroughput.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.ProvisionedThroughput)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.ProvisionedThroughput();
+                        if (object.writeCapacityUnits != null)
+                            message.writeCapacityUnits = object.writeCapacityUnits | 0;
+                        if (object.readCapacityUnits != null)
+                            message.readCapacityUnits = object.readCapacityUnits | 0;
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ProvisionedThroughput message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.ProvisionedThroughput
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.ProvisionedThroughput} message ProvisionedThroughput
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ProvisionedThroughput.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.writeCapacityUnits = 0;
+                            object.readCapacityUnits = 0;
+                        }
+                        if (message.writeCapacityUnits != null && message.hasOwnProperty("writeCapacityUnits"))
+                            object.writeCapacityUnits = message.writeCapacityUnits;
+                        if (message.readCapacityUnits != null && message.hasOwnProperty("readCapacityUnits"))
+                            object.readCapacityUnits = message.readCapacityUnits;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ProvisionedThroughput to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.ProvisionedThroughput
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ProvisionedThroughput.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ProvisionedThroughput;
+                })();
+
+                v1.GetTableRequest = (function() {
+
+                    /**
+                     * Properties of a GetTableRequest.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IGetTableRequest
+                     * @property {string|null} [tableName] GetTableRequest tableName
+                     * @property {string|null} [region] GetTableRequest region
+                     */
+
+                    /**
+                     * Constructs a new GetTableRequest.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a GetTableRequest.
+                     * @implements IGetTableRequest
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest=} [properties] Properties to set
+                     */
+                    function GetTableRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetTableRequest tableName.
+                     * @member {string} tableName
+                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @instance
+                     */
+                    GetTableRequest.prototype.tableName = "";
+
+                    /**
+                     * GetTableRequest region.
+                     * @member {string} region
+                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @instance
+                     */
+                    GetTableRequest.prototype.region = "";
+
+                    /**
+                     * Verifies a GetTableRequest message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetTableRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            if (!$util.isString(message.tableName))
+                                return "tableName: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetTableRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.GetTableRequest} GetTableRequest
+                     */
+                    GetTableRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.GetTableRequest)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.GetTableRequest();
+                        if (object.tableName != null)
+                            message.tableName = String(object.tableName);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetTableRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.GetTableRequest} message GetTableRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetTableRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.tableName = "";
+                            object.region = "";
+                        }
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            object.tableName = message.tableName;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetTableRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetTableRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetTableRequest;
+                })();
+
+                v1.GetTableResponse = (function() {
+
+                    /**
+                     * Properties of a GetTableResponse.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IGetTableResponse
+                     * @property {clutch.aws.dynamodb.v1.ITable|null} [table] GetTableResponse table
+                     */
+
+                    /**
+                     * Constructs a new GetTableResponse.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a GetTableResponse.
+                     * @implements IGetTableResponse
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IGetTableResponse=} [properties] Properties to set
+                     */
+                    function GetTableResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetTableResponse table.
+                     * @member {clutch.aws.dynamodb.v1.ITable|null|undefined} table
+                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @instance
+                     */
+                    GetTableResponse.prototype.table = null;
+
+                    /**
+                     * Verifies a GetTableResponse message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetTableResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.table != null && message.hasOwnProperty("table")) {
+                            let error = $root.clutch.aws.dynamodb.v1.Table.verify(message.table);
+                            if (error)
+                                return "table." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetTableResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.GetTableResponse} GetTableResponse
+                     */
+                    GetTableResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.GetTableResponse)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.GetTableResponse();
+                        if (object.table != null) {
+                            if (typeof object.table !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.GetTableResponse.table: object expected");
+                            message.table = $root.clutch.aws.dynamodb.v1.Table.fromObject(object.table);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetTableResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.GetTableResponse} message GetTableResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetTableResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.table = null;
+                        if (message.table != null && message.hasOwnProperty("table"))
+                            object.table = $root.clutch.aws.dynamodb.v1.Table.toObject(message.table, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetTableResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetTableResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetTableResponse;
+                })();
+
+                v1.UpdateTableCapacityRequest = (function() {
+
+                    /**
+                     * Properties of an UpdateTableCapacityRequest.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IUpdateTableCapacityRequest
+                     * @property {string|null} [tableName] UpdateTableCapacityRequest tableName
+                     * @property {string|null} [region] UpdateTableCapacityRequest region
+                     * @property {number|null} [targetTableRcu] UpdateTableCapacityRequest targetTableRcu
+                     * @property {number|null} [targetTableWcu] UpdateTableCapacityRequest targetTableWcu
+                     */
+
+                    /**
+                     * Constructs a new UpdateTableCapacityRequest.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents an UpdateTableCapacityRequest.
+                     * @implements IUpdateTableCapacityRequest
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IUpdateTableCapacityRequest=} [properties] Properties to set
+                     */
+                    function UpdateTableCapacityRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * UpdateTableCapacityRequest tableName.
+                     * @member {string} tableName
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @instance
+                     */
+                    UpdateTableCapacityRequest.prototype.tableName = "";
+
+                    /**
+                     * UpdateTableCapacityRequest region.
+                     * @member {string} region
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @instance
+                     */
+                    UpdateTableCapacityRequest.prototype.region = "";
+
+                    /**
+                     * UpdateTableCapacityRequest targetTableRcu.
+                     * @member {number} targetTableRcu
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @instance
+                     */
+                    UpdateTableCapacityRequest.prototype.targetTableRcu = 0;
+
+                    /**
+                     * UpdateTableCapacityRequest targetTableWcu.
+                     * @member {number} targetTableWcu
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @instance
+                     */
+                    UpdateTableCapacityRequest.prototype.targetTableWcu = 0;
+
+                    /**
+                     * Verifies an UpdateTableCapacityRequest message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateTableCapacityRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            if (!$util.isString(message.tableName))
+                                return "tableName: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.targetTableRcu != null && message.hasOwnProperty("targetTableRcu"))
+                            if (!$util.isInteger(message.targetTableRcu))
+                                return "targetTableRcu: integer expected";
+                        if (message.targetTableWcu != null && message.hasOwnProperty("targetTableWcu"))
+                            if (!$util.isInteger(message.targetTableWcu))
+                                return "targetTableWcu: integer expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateTableCapacityRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.UpdateTableCapacityRequest} UpdateTableCapacityRequest
+                     */
+                    UpdateTableCapacityRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.UpdateTableCapacityRequest)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.UpdateTableCapacityRequest();
+                        if (object.tableName != null)
+                            message.tableName = String(object.tableName);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.targetTableRcu != null)
+                            message.targetTableRcu = object.targetTableRcu | 0;
+                        if (object.targetTableWcu != null)
+                            message.targetTableWcu = object.targetTableWcu | 0;
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateTableCapacityRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.UpdateTableCapacityRequest} message UpdateTableCapacityRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateTableCapacityRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.tableName = "";
+                            object.region = "";
+                            object.targetTableRcu = 0;
+                            object.targetTableWcu = 0;
+                        }
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            object.tableName = message.tableName;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.targetTableRcu != null && message.hasOwnProperty("targetTableRcu"))
+                            object.targetTableRcu = message.targetTableRcu;
+                        if (message.targetTableWcu != null && message.hasOwnProperty("targetTableWcu"))
+                            object.targetTableWcu = message.targetTableWcu;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this UpdateTableCapacityRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateTableCapacityRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateTableCapacityRequest;
+                })();
+
+                v1.UpdateTableCapacityResponse = (function() {
+
+                    /**
+                     * Properties of an UpdateTableCapacityResponse.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IUpdateTableCapacityResponse
+                     */
+
+                    /**
+                     * Constructs a new UpdateTableCapacityResponse.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents an UpdateTableCapacityResponse.
+                     * @implements IUpdateTableCapacityResponse
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IUpdateTableCapacityResponse=} [properties] Properties to set
+                     */
+                    function UpdateTableCapacityResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Verifies an UpdateTableCapacityResponse message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateTableCapacityResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateTableCapacityResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.UpdateTableCapacityResponse} UpdateTableCapacityResponse
+                     */
+                    UpdateTableCapacityResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.UpdateTableCapacityResponse)
+                            return object;
+                        return new $root.clutch.aws.dynamodb.v1.UpdateTableCapacityResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateTableCapacityResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityResponse
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.UpdateTableCapacityResponse} message UpdateTableCapacityResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateTableCapacityResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this UpdateTableCapacityResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateTableCapacityResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateTableCapacityResponse;
+                })();
+
+                v1.UpdateGSICapacityRequest = (function() {
+
+                    /**
+                     * Properties of an UpdateGSICapacityRequest.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IUpdateGSICapacityRequest
+                     * @property {string|null} [tableName] UpdateGSICapacityRequest tableName
+                     * @property {string|null} [region] UpdateGSICapacityRequest region
+                     * @property {string|null} [indexName] UpdateGSICapacityRequest indexName
+                     * @property {number|null} [targetIndexRcu] UpdateGSICapacityRequest targetIndexRcu
+                     * @property {number|null} [targetIndexWcu] UpdateGSICapacityRequest targetIndexWcu
+                     */
+
+                    /**
+                     * Constructs a new UpdateGSICapacityRequest.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents an UpdateGSICapacityRequest.
+                     * @implements IUpdateGSICapacityRequest
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IUpdateGSICapacityRequest=} [properties] Properties to set
+                     */
+                    function UpdateGSICapacityRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * UpdateGSICapacityRequest tableName.
+                     * @member {string} tableName
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @instance
+                     */
+                    UpdateGSICapacityRequest.prototype.tableName = "";
+
+                    /**
+                     * UpdateGSICapacityRequest region.
+                     * @member {string} region
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @instance
+                     */
+                    UpdateGSICapacityRequest.prototype.region = "";
+
+                    /**
+                     * UpdateGSICapacityRequest indexName.
+                     * @member {string} indexName
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @instance
+                     */
+                    UpdateGSICapacityRequest.prototype.indexName = "";
+
+                    /**
+                     * UpdateGSICapacityRequest targetIndexRcu.
+                     * @member {number} targetIndexRcu
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @instance
+                     */
+                    UpdateGSICapacityRequest.prototype.targetIndexRcu = 0;
+
+                    /**
+                     * UpdateGSICapacityRequest targetIndexWcu.
+                     * @member {number} targetIndexWcu
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @instance
+                     */
+                    UpdateGSICapacityRequest.prototype.targetIndexWcu = 0;
+
+                    /**
+                     * Verifies an UpdateGSICapacityRequest message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateGSICapacityRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            if (!$util.isString(message.tableName))
+                                return "tableName: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.indexName != null && message.hasOwnProperty("indexName"))
+                            if (!$util.isString(message.indexName))
+                                return "indexName: string expected";
+                        if (message.targetIndexRcu != null && message.hasOwnProperty("targetIndexRcu"))
+                            if (!$util.isInteger(message.targetIndexRcu))
+                                return "targetIndexRcu: integer expected";
+                        if (message.targetIndexWcu != null && message.hasOwnProperty("targetIndexWcu"))
+                            if (!$util.isInteger(message.targetIndexWcu))
+                                return "targetIndexWcu: integer expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateGSICapacityRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.UpdateGSICapacityRequest} UpdateGSICapacityRequest
+                     */
+                    UpdateGSICapacityRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.UpdateGSICapacityRequest)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.UpdateGSICapacityRequest();
+                        if (object.tableName != null)
+                            message.tableName = String(object.tableName);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.indexName != null)
+                            message.indexName = String(object.indexName);
+                        if (object.targetIndexRcu != null)
+                            message.targetIndexRcu = object.targetIndexRcu | 0;
+                        if (object.targetIndexWcu != null)
+                            message.targetIndexWcu = object.targetIndexWcu | 0;
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateGSICapacityRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.UpdateGSICapacityRequest} message UpdateGSICapacityRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateGSICapacityRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.tableName = "";
+                            object.region = "";
+                            object.indexName = "";
+                            object.targetIndexRcu = 0;
+                            object.targetIndexWcu = 0;
+                        }
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            object.tableName = message.tableName;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.indexName != null && message.hasOwnProperty("indexName"))
+                            object.indexName = message.indexName;
+                        if (message.targetIndexRcu != null && message.hasOwnProperty("targetIndexRcu"))
+                            object.targetIndexRcu = message.targetIndexRcu;
+                        if (message.targetIndexWcu != null && message.hasOwnProperty("targetIndexWcu"))
+                            object.targetIndexWcu = message.targetIndexWcu;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this UpdateGSICapacityRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateGSICapacityRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateGSICapacityRequest;
+                })();
+
+                v1.UpdateGSICapacityResponse = (function() {
+
+                    /**
+                     * Properties of an UpdateGSICapacityResponse.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IUpdateGSICapacityResponse
+                     */
+
+                    /**
+                     * Constructs a new UpdateGSICapacityResponse.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents an UpdateGSICapacityResponse.
+                     * @implements IUpdateGSICapacityResponse
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IUpdateGSICapacityResponse=} [properties] Properties to set
+                     */
+                    function UpdateGSICapacityResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Verifies an UpdateGSICapacityResponse message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateGSICapacityResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateGSICapacityResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.UpdateGSICapacityResponse} UpdateGSICapacityResponse
+                     */
+                    UpdateGSICapacityResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.UpdateGSICapacityResponse)
+                            return object;
+                        return new $root.clutch.aws.dynamodb.v1.UpdateGSICapacityResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateGSICapacityResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityResponse
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.UpdateGSICapacityResponse} message UpdateGSICapacityResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateGSICapacityResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this UpdateGSICapacityResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateGSICapacityResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateGSICapacityResponse;
+                })();
+
+                return v1;
+            })();
+
+            return dynamodb;
+        })();
+
         aws.ec2 = (function() {
 
             /**
