@@ -56,6 +56,10 @@ func TestNewLogger(t *testing.T) {
 		{
 			Level: gatewayv1.Logger_WARN,
 		},
+		{
+			Level:     gatewayv1.Logger_WARN,
+			Namespace: "test",
+		},
 	}
 
 	for idx, tc := range testConfigs {

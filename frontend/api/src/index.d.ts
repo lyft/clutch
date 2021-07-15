@@ -6805,6 +6805,9 @@ export namespace clutch {
 
                     /** Logger pretty */
                     pretty?: (boolean|null);
+
+                    /** Logger namespace */
+                    namespace?: (string|null);
                 }
 
                 /** Represents a Logger. */
@@ -6821,6 +6824,9 @@ export namespace clutch {
 
                     /** Logger pretty. */
                     public pretty?: (boolean|null);
+
+                    /** Logger namespace. */
+                    public namespace: string;
 
                     /** Logger format. */
                     public format?: "pretty";

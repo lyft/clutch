@@ -192,7 +192,16 @@ func newLogger(msg *gatewayv1.Logger) (*zap.Logger, error) {
 	}
 	c.Level = level
 
-	return c.Build(opts...)
+	logger, err := c.Build(opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(msg.Namespace) > 0 {
+		logger = logger.With(zap.Namespace(msg.Namespace))
+	}
+
+	return logger, nil
 }
 
 func newTmpLogger() *zap.Logger {

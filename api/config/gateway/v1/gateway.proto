@@ -144,6 +144,10 @@ message Logger {
   oneof format {
     bool pretty = 2;
   }
+
+  // Namespace will set a zap.Namespace for your logging fields to be nested in.
+  // https://pkg.go.dev/go.uber.org/zap?utm_source=godoc#Namespace
+  string namespace = 3;
 }
 
 message Middleware {

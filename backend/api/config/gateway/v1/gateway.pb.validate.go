@@ -841,6 +841,8 @@ func (m *Logger) Validate() error {
 
 	// no validation rules for Level
 
+	// no validation rules for Namespace
+
 	switch m.Format.(type) {
 
 	case *Logger_Pretty:
