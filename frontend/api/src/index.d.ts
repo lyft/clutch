@@ -6146,6 +6146,9 @@ export namespace clutch {
                     /** Stats statsdReporter */
                     statsdReporter?: (clutch.config.gateway.v1.Stats.IStatsdReporter|null);
 
+                    /** Stats prometheusReporter */
+                    prometheusReporter?: (clutch.config.gateway.v1.Stats.IPrometheusReporter|null);
+
                     /** Stats goRuntimeStats */
                     goRuntimeStats?: (clutch.config.gateway.v1.Stats.IGoRuntimeStats|null);
                 }
@@ -6168,11 +6171,14 @@ export namespace clutch {
                     /** Stats statsdReporter. */
                     public statsdReporter?: (clutch.config.gateway.v1.Stats.IStatsdReporter|null);
 
+                    /** Stats prometheusReporter. */
+                    public prometheusReporter?: (clutch.config.gateway.v1.Stats.IPrometheusReporter|null);
+
                     /** Stats goRuntimeStats. */
                     public goRuntimeStats?: (clutch.config.gateway.v1.Stats.IGoRuntimeStats|null);
 
                     /** Stats reporter. */
-                    public reporter?: ("logReporter"|"statsdReporter");
+                    public reporter?: ("logReporter"|"statsdReporter"|"prometheusReporter");
 
                     /**
                      * Verifies a Stats message.
@@ -6353,6 +6359,54 @@ export namespace clutch {
                              */
                             public toJSON(): { [k: string]: any };
                         }
+                    }
+
+                    /** Properties of a PrometheusReporter. */
+                    interface IPrometheusReporter {
+
+                        /** PrometheusReporter handlerPath */
+                        handlerPath?: (string|null);
+                    }
+
+                    /** Represents a PrometheusReporter. */
+                    class PrometheusReporter implements IPrometheusReporter {
+
+                        /**
+                         * Constructs a new PrometheusReporter.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.gateway.v1.Stats.IPrometheusReporter);
+
+                        /** PrometheusReporter handlerPath. */
+                        public handlerPath: string;
+
+                        /**
+                         * Verifies a PrometheusReporter message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a PrometheusReporter message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns PrometheusReporter
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.gateway.v1.Stats.PrometheusReporter;
+
+                        /**
+                         * Creates a plain object from a PrometheusReporter message. Also converts values to other types if specified.
+                         * @param message PrometheusReporter
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.gateway.v1.Stats.PrometheusReporter, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this PrometheusReporter to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
                     }
 
                     /** Properties of a GoRuntimeStats. */
