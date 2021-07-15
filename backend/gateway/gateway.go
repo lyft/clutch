@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/uber-go/tally"
-	tally_prom "github.com/uber-go/tally/prometheus"
+	tallyprom "github.com/uber-go/tally/prometheus"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
@@ -88,7 +88,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		scopeOpts = tally.ScopeOptions{
 			CachedReporter:  reporter,
 			Prefix:          "clutch",
-			SanitizeOptions: &tally_prom.DefaultSanitizerOpts,
+			SanitizeOptions: &tallyprom.DefaultSanitizerOpts,
 		}
 		metricsHandler = reporter.HTTPHandler()
 	default:
@@ -213,7 +213,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	// Instantiate and register modules listed in the configuration.
-	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway, metricsHandler)
+	rpcMux, err := mux.New(interceptors, assets, metricsHandler, cfg.Gateway)
 	if err != nil {
 		panic(err)
 	}

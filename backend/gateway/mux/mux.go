@@ -229,7 +229,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, gatewayCfg *gatewayv1.GatewayOptions, metricsHandler http.Handler) (*Mux, error) {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, metricsHandler http.Handler, gatewayCfg *gatewayv1.GatewayOptions) (*Mux, error) {
 	secureCookies := true
 	if gatewayCfg.SecureCookies != nil {
 		secureCookies = gatewayCfg.SecureCookies.Value
@@ -275,8 +275,11 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 		httpMux.HandleFunc("/debug/pprof/", pprof.Index)
 	}
 
-	_, ok := gatewayCfg.Stats.Reporter.(*gatewayv1.Stats_PrometheusReporter_)
-	if ok && metricsHandler != nil {
+	if metricsHandler != nil {
+		_, ok := gatewayCfg.Stats.Reporter.(*gatewayv1.Stats_PrometheusReporter_)
+		if !ok {
+			return nil, fmt.Errorf("Expected *gatewayv1.Stats_PrometheusReporter_, got %T", gatewayCfg.Stats.Reporter)
+		}
 		metricsPath := "/metrics"
 		promCfg := gatewayCfg.Stats.GetPrometheusReporter()
 		if promCfg.HandlerPath != "" {
