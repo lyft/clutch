@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import type { UserConfiguration } from ".";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 
@@ -8,11 +10,23 @@ const workflowRoutes = (
 ): ConfiguredRoute[] => {
   const workflowConfig = configuration?.[workflowId] || {};
   const allRoutes = Object.keys(workflowConfig).map(key => {
+    // if workflow does not contain route with user-specified key return an empty object
+    if (workflow.routes[key] === undefined) {
+      /* eslint-disable-next-line no-console */
+      console.warn(
+        `[${workflowId}][${key}] Not registered: Invalid config - route does not exist. Valid routes: ${Object.keys(
+          workflow.routes
+        )}`
+      );
+      return {} as ConfiguredRoute;
+    }
     return {
       ...workflow.routes[key],
       ...workflowConfig[key],
     };
   });
+  // filter out routes that are empty
+  _.remove(allRoutes, r => !!_.isEmpty(r));
 
   const validRoutes = allRoutes.filter(route => {
     const requiredRouteProps = route?.requiredConfigProps || [];
