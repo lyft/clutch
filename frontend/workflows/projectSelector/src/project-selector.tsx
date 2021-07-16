@@ -7,7 +7,7 @@ import { Divider, LinearProgress } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import _ from "lodash";
 
-import { DispatchContext, StateContext } from "./helpers";
+import { deriveStateData, DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
 import type { State } from "./types";
@@ -114,6 +114,10 @@ const ProjectSelector = ({ children }) => {
     }
   }, [state[Group.PROJECTS]]);
 
+  // computes the final state for rendering across other components
+  // (ie. filters out upstream/downstreams that are "hidden")
+  const derivedState = React.useMemo(() => deriveStateData(state), [state]);
+
   const handleAdd = () => {
     if (customProject === "") {
       return;
@@ -129,7 +133,7 @@ const ProjectSelector = ({ children }) => {
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>
+      <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
             {/* TODO: change icon to match design */}

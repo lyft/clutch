@@ -48,12 +48,6 @@ const updateGroupstate = (
   return newState;
 };
 
-const updateHiddenState = (state: State, group: Group, project: string, hidden: boolean): State => {
-  const newState = { ...state };
-  newState[group][project].hidden = hidden;
-  return newState;
-};
-
 const dependencyToProjects = (state: State, group: Group): DependencyMappings => {
   const upstreamMap = {};
   const downstreamMap = {};
@@ -103,67 +97,94 @@ const exclusiveProjectDependencies = (
   return { upstreams, downstreams };
 };
 
-// deriveHiddenStatus evaluates whether to hide an upstream/downstream based on the checked status of/exclusivity to projects in Group.Projects
-const deriveHiddenStatus = (state: State, group: Group, key: string): boolean => {
-  // we only support hidding an upstream/downstream
-  if (group === Group.PROJECTS) {
-    return false;
+// evaluates whether an upstream/downstream should be hidden based on the checked status of/exclusivity to a project(s)
+const hidden = (
+  state: State,
+  group: Group,
+  project: string,
+  projectState: ProjectState,
+  dependency: string,
+  depMapping: DependencyMappings
+): boolean => {
+  const hiddenDep = [];
+  if (group === Group.UPSTREAM) {
+    _.forIn(depMapping.upstreams, (v, k) => {
+      if (v[project]) {
+        // if project is unchecked and dependency is exclusive to that project, hide the dependency
+        if (!projectState.checked && Object.keys(v).length === 1) {
+          hiddenDep.push(k);
+        } else if (Object.keys(v).every(p => !state[Group.PROJECTS][p].checked)) {
+          // although the dependency is exclusive to more than 1 Group.Projects, if all Group.Projects share the dependency
+          // are unchecked, it's safe to hide that dependency as well.
+          hiddenDep.push(k);
+        }
+      }
+    });
+  } else if (group === Group.DOWNSTREAM) {
+    _.forIn(depMapping.downstreams, (v, k) => {
+      if (v[project]) {
+        // if project is unchecked and dependency is exclusive to that project, hide the dependency
+        if (!projectState.checked && Object.keys(v).length === 1) {
+          hiddenDep.push(k);
+        } else if (Object.keys(v).every(p => !state[Group.PROJECTS][p].checked)) {
+          // although the dependency is exclusive to more than 1 Group.Projects, if all Group.Projects share the dependency
+          // are unchecked, it's safe to hide that dependency as well.
+          hiddenDep.push(k);
+        }
+      }
+    });
   }
 
-  // only go through the rest of the flow, if there are unchecked projects
-  const unCheckedProjects = Object.keys(state[Group.PROJECTS]).filter(
-    k => !state[Group.PROJECTS][k].checked
-  );
-  if (unCheckedProjects.length === 0) {
-    updateHiddenState(state, group, key, false);
-    return false;
-  }
-
-  // get the relationships b/w upstreams/downstreams to project(s)
-  const dependencyMapping = dependencyToProjects(state, Group.PROJECTS);
-
-  const exclusive = [];
-  _.forIn(state[Group.PROJECTS], (groupState, project) => {
-    if (group === Group.UPSTREAM) {
-      _.forIn(dependencyMapping.upstreams, (v, k) => {
-        if (v[project]) {
-          // if project is unchecked and dependency is exclusive to that project
-          if (!groupState.checked && Object.keys(v).length === 1) {
-            exclusive.push(k);
-          } else if (Object.keys(v).every(p => !state[Group.PROJECTS][p].checked)) {
-            // although the dependency is exclusive to more than 1 Group.Projects, if all Group.Projects share the dependency
-            // are unchecked, it's safe to hide that dependency as well.
-            exclusive.push(k);
-          }
-        }
-      });
-    } else if (group === Group.DOWNSTREAM) {
-      _.forIn(dependencyMapping.downstreams, (v, k) => {
-        if (v[project]) {
-          // if project is unchecked and dependency is exclusive to that project
-          if (!groupState.checked && Object.keys(v).length === 1) {
-            exclusive.push(k);
-          } else if (Object.keys(v).every(p => !state[Group.PROJECTS][p].checked)) {
-            // although the dependency is exclusive to more than 1 Group.Projects, if all Group.Projects share the dependency
-            // are unchecked, it's safe to hide that dependency as well.
-            exclusive.push(k);
-          }
-        }
-      });
-    }
-  });
-
-  if (exclusive.includes(key)) {
-    updateHiddenState(state, group, key, true);
+  if (hiddenDep.includes(dependency)) {
     return true;
   }
 
-  updateHiddenState(state, group, key, false);
   return false;
 };
 
+/* filter out the state data on the following criteria:
+if a project in Group.Projects is unchecked, remove the exclusive upstream(s)/downstream(s)
+if all unchecked projects share a given upstream/downstream, remove the upstream/downstream
+*/
+const deriveStateData = (state: State): State => {
+  // only go through the flow, if there are unchecked projects
+  if (!Object.keys(state[Group.PROJECTS]).some(k => !state[Group.PROJECTS][k].checked)) {
+    return state;
+  }
+
+  // get the relationships b/w upstreams/downstreams to projects
+  const depMapping = dependencyToProjects(state, Group.PROJECTS);
+
+  const hiddenUpstreams = [];
+  const hiddenDownstreams = [];
+
+  _.forIn(state[Group.PROJECTS], (projectState, project) => {
+    _.forEach(Object.keys(state[Group.UPSTREAM]), upstream => {
+      if (hidden(state, Group.UPSTREAM, project, projectState, upstream, depMapping)) {
+        hiddenUpstreams.push(upstream);
+      }
+    });
+
+    _.forEach(Object.keys(state[Group.DOWNSTREAM]), downstream => {
+      if (hidden(state, Group.DOWNSTREAM, project, projectState, downstream, depMapping)) {
+        hiddenDownstreams.push(downstream);
+      }
+    });
+  });
+
+  const newState = { ...state };
+  if (hiddenUpstreams.length > 0) {
+    newState[Group.UPSTREAM] = _.omit(state[Group.UPSTREAM], hiddenUpstreams);
+  }
+  if (hiddenDownstreams.length > 0) {
+    newState[Group.DOWNSTREAM] = _.omit(state[Group.DOWNSTREAM], hiddenDownstreams);
+  }
+
+  return newState;
+};
+
 export {
-  deriveHiddenStatus,
+  deriveStateData,
   deriveSwitchStatus,
   DispatchContext,
   exclusiveProjectDependencies,
