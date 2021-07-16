@@ -57,3 +57,11 @@ export interface ProjectState {
   hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
   custom?: boolean;
 }
+
+export interface DashState {
+  // Contains the names of selected projects, upstreams, and downstreams merged together.
+  selected: string[];
+
+  // Contains a map of project names to the full project data. 
+  projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
+}

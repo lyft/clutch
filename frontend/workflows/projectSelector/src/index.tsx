@@ -1,7 +1,6 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import { Dash, useDashState } from "./dash";
 
-import { useReducerState } from "./helpers";
-import ProjectSelector from "./project-selector";
 import { Group } from "./types";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
@@ -9,18 +8,18 @@ export interface WorkflowProps extends BaseWorkflowProps {}
 const register = (): WorkflowConfiguration => {
   return {
     developer: {
-      name: "hello@example.com",
-      contactUrl: "mailto:hello@example.com",
+      name: "clutch@lyft.com",
+      contactUrl: "mailto:clutch@lyft.com",
     },
-    path: "projectselector",
-    group: "Project Selector",
-    displayName: "Project Selector",
+    path: "dash",
+    group: "Dash",
+    displayName: "Dash",
     routes: {
       landing: {
         path: "/",
-        displayName: "Project Selector",
-        description: "Filter your projects.",
-        component: ProjectSelector,
+        displayName: "Dash",
+        description: "Display helpful information for multiple services.",
+        component: Dash,
       },
     },
   };
@@ -28,4 +27,4 @@ const register = (): WorkflowConfiguration => {
 
 export default register;
 
-export { Group, ProjectSelector, useReducerState };
+export { Dash, useDashState };
