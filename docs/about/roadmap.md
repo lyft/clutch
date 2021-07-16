@@ -23,12 +23,6 @@ For more reading on this topic, see [Netflix Bolt](https://netflixtechblog.com/i
 
 </RoadmapItem>
 
-<RoadmapItem title="Topology Cache" description="Cache resource lists and add typeahead to forms.">
-
-While adapting any topology to Clutch is possible with an extension, large infrastructure topologies can be slow to search if based on vendor APIs. To make autocomplete possible and allow for a more responsive user experience, Clutch will periodically gather resource IDs and store them in its own online database for faster access.
-
-</RoadmapItem>
-
 <RoadmapItem title="Additional Gateways" description="Access Clutch APIs from other interfaces, e.g. the command-line or a Slackbot.">
 
 Logic and safeguards that are implemented in Clutch should also be usable from other interfaces in addition to the React frontend. For example, informational Clutch APIs should be accessible from a standardized Slackbot.

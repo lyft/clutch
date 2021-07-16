@@ -53,7 +53,8 @@
       "items": [
         "advanced/auth",
         "advanced/chaos-experimentation",
-        "advanced/security-auditing"
+        "advanced/security-auditing",
+        "advanced/topology"
       ]
     },
     "configuration",
