@@ -15937,6 +15937,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface ILogger
                      * @property {clutch.config.gateway.v1.Logger.Level|null} [level] Logger level
                      * @property {boolean|null} [pretty] Logger pretty
+                     * @property {string|null} [namespace] Logger namespace
                      */
 
                     /**
@@ -15969,6 +15970,14 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     Logger.prototype.pretty = null;
+
+                    /**
+                     * Logger namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.config.gateway.v1.Logger
+                     * @instance
+                     */
+                    Logger.prototype.namespace = "";
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -16014,6 +16023,9 @@ export const clutch = $root.clutch = (() => {
                             if (typeof message.pretty !== "boolean")
                                 return "pretty: boolean expected";
                         }
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
                         return null;
                     };
 
@@ -16061,6 +16073,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.pretty != null)
                             message.pretty = Boolean(object.pretty);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
                         return message;
                     };
 
@@ -16077,8 +16091,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.level = options.enums === String ? "UNSPECIFIED" : 0;
+                            object.namespace = "";
+                        }
                         if (message.level != null && message.hasOwnProperty("level"))
                             object.level = options.enums === String ? $root.clutch.config.gateway.v1.Logger.Level[message.level] : message.level;
                         if (message.pretty != null && message.hasOwnProperty("pretty")) {
@@ -16086,6 +16102,8 @@ export const clutch = $root.clutch = (() => {
                             if (options.oneofs)
                                 object.format = "pretty";
                         }
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
                         return object;
                     };
 

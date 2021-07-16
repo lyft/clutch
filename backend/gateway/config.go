@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -171,6 +172,10 @@ func parseYAML(contents []byte, pb proto.Message) error {
 }
 
 func newLogger(msg *gatewayv1.Logger) (*zap.Logger, error) {
+	return newLoggerWithCore(msg, nil)
+}
+
+func newLoggerWithCore(msg *gatewayv1.Logger, zapCore zapcore.Core) (*zap.Logger, error) {
 	var c zap.Config
 	var opts []zap.Option
 	if msg.GetPretty() {
@@ -192,7 +197,21 @@ func newLogger(msg *gatewayv1.Logger) (*zap.Logger, error) {
 	}
 	c.Level = level
 
-	return c.Build(opts...)
+	logger, err := c.Build(opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	// If zapCore is set, create a new logger, this is currently only used in tests.
+	if zapCore != nil {
+		logger = zap.New(zapCore, opts...)
+	}
+
+	if len(msg.Namespace) > 0 {
+		logger = logger.With(zap.Namespace(msg.Namespace))
+	}
+
+	return logger, nil
 }
 
 func newTmpLogger() *zap.Logger {
