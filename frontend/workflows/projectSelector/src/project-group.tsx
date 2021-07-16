@@ -6,7 +6,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import { deriveHiddenStatus, deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
+import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
 import type { Group } from "./types";
 
 const StyledCount = styled.span({
@@ -158,54 +158,51 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
           )}
           {Object.keys(state[group])
             .sort()
-            .map(
-              key =>
-                !deriveHiddenStatus(state, group, key) && (
-                  <StyledMenuItem key={key}>
-                    <Checkbox
-                      name={key}
-                      size="small"
-                      disabled={state.loading}
-                      onChange={() =>
-                        dispatch({
-                          type: "TOGGLE_PROJECTS",
-                          payload: { group, projects: [key] },
-                        })
-                      }
-                      checked={!!state[group][key].checked}
-                    />
-                    <StyledMenuItemName>{key}</StyledMenuItemName>
-                    <StyledHoverOptions hidden>
-                      <StyledOnlyButton
+            .map(key => (
+              <StyledMenuItem key={key}>
+                <Checkbox
+                  name={key}
+                  size="small"
+                  disabled={state.loading}
+                  onChange={() =>
+                    dispatch({
+                      type: "TOGGLE_PROJECTS",
+                      payload: { group, projects: [key] },
+                    })
+                  }
+                  checked={!!state[group][key].checked}
+                />
+                <StyledMenuItemName>{key}</StyledMenuItemName>
+                <StyledHoverOptions hidden>
+                  <StyledOnlyButton
+                    onClick={() =>
+                      !state.loading &&
+                      dispatch({
+                        type: "ONLY_PROJECTS",
+                        payload: { group, projects: [key] },
+                      })
+                    }
+                  >
+                    Only
+                  </StyledOnlyButton>
+                  <StyledClearIcon>
+                    {state[group][key].custom && (
+                      <IconButton
                         onClick={() =>
                           !state.loading &&
                           dispatch({
-                            type: "ONLY_PROJECTS",
+                            type: "REMOVE_PROJECTS",
                             payload: { group, projects: [key] },
                           })
                         }
                       >
-                        Only
-                      </StyledOnlyButton>
-                      <StyledClearIcon>
-                        {state[group][key].custom && (
-                          <IconButton
-                            onClick={() =>
-                              !state.loading &&
-                              dispatch({
-                                type: "REMOVE_PROJECTS",
-                                payload: { group, projects: [key] },
-                              })
-                            }
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        )}
-                      </StyledClearIcon>
-                    </StyledHoverOptions>
-                  </StyledMenuItem>
-                )
-            )}
+                        <ClearIcon />
+                      </IconButton>
+                    )}
+                  </StyledClearIcon>
+                </StyledHoverOptions>
+              </StyledMenuItem>
+            ))}
         </div>
       )}
     </>
