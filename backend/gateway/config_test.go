@@ -11,6 +11,10 @@ import (
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"go.uber.org/zap/zaptest/observer"
 )
 
 func TestExecuteTemplate(t *testing.T) {
@@ -71,6 +75,29 @@ func TestNewLogger(t *testing.T) {
 			assert.NoError(t, err)
 		})
 	}
+}
+
+func TestNewLoggerNamespace(t *testing.T) {
+	core, recorder := observer.New(zapcore.InfoLevel)
+
+	cfg := &gatewayv1.Logger{
+		Level:     gatewayv1.Logger_INFO,
+		Namespace: "cat",
+	}
+
+	l, err := newLoggerWithCore(cfg, core)
+	assert.NotNil(t, l)
+	assert.NoError(t, err)
+
+	l.Info("meow", zap.String("fields", "zapField"))
+
+	assert.Equal(t, 1, recorder.Len())
+	allLogs := recorder.All()
+	assert.Equal(t, "meow", allLogs[0].Message)
+	assert.ElementsMatch(t, []zap.Field{
+		zap.Namespace("cat"),
+		zap.String("fields", "zapField"),
+	}, allLogs[0].Context)
 }
 
 func TestComputeMaximumTimeout(t *testing.T) {
