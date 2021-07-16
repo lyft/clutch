@@ -1,7 +1,6 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
-import { Dash, useDashState } from "./dash";
 
-import { Group } from "./types";
+import { Dash, useDashState } from "./dash-hooks";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 

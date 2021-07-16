@@ -1,35 +1,8 @@
 import * as React from "react";
+
+import { DashDispatchContext, DashStateContext } from "./dash-hooks";
 import ProjectSelector from "./project-selector";
-import type { DashState } from "./types";
-
-type DashActionKind = "UPDATE_SELECTED";
-
-interface DashAction {
-  type: DashActionKind;
-  payload: DashState;
-}
-
-const StateContext = React.createContext<DashState | undefined>(undefined);
-
-export const useDashState = () => {
-  return React.useContext(StateContext);
-};
-
-const DispatchContext = React.createContext<(action: DashAction) => void | undefined>(undefined);
-
-type useDashUpdater = {
-  updateSelected: (state: DashState) => void;
-};
-
-export const useDashUpdater = (): useDashUpdater => {
-  const dispatch = React.useContext(DispatchContext);
-
-  return {
-    updateSelected: projects => {
-      dispatch({ type: "UPDATE_SELECTED", payload: projects });
-    },
-  };
-};
+import type { DashAction, DashState } from "./types";
 
 const initialState = {
   selected: [],
@@ -46,17 +19,17 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
   }
 };
 
-export const Dash = ({children}) => {
+const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
 
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>
+    <DashDispatchContext.Provider value={dispatch}>
+      <DashStateContext.Provider value={state}>
         <ProjectSelector />
-        <div>
-          {children}
-        </div>
-      </StateContext.Provider>
-    </DispatchContext.Provider>
+        <div>{children}</div>
+      </DashStateContext.Provider>
+    </DashDispatchContext.Provider>
   );
 };
+
+export default Dash;

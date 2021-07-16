@@ -7,12 +7,12 @@ import { Divider, LinearProgress } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import _ from "lodash";
 
+import { useDashUpdater } from "./dash-hooks";
 import { DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
 import type { DashState, State } from "./types";
 import { Group } from "./types";
-import { useDashUpdater } from "./dash";
 
 const initialState: State = {
   [Group.PROJECTS]: {},
@@ -119,7 +119,7 @@ const ProjectSelector = () => {
 
   // This hook updates the global dash state based on the currently selected projects for cards to consume (including upstreams and downstreams).
   React.useEffect(() => {
-    const dashState: DashState = {projectData: {}, selected: []};
+    const dashState: DashState = { projectData: {}, selected: [] };
 
     // Determine selected projects.
     const selected = new Set<string>();
@@ -141,9 +141,9 @@ const ProjectSelector = () => {
     dashState.selected = Array.from(selected).sort();
 
     // Collect project data.
-    _.forEach(dashState.selected), p => {
+    _.forEach(dashState.selected, p => {
       dashState.projectData[p] = state.projectData[p];
-    }
+    });
 
     // Update!
     updateSelected(dashState);
