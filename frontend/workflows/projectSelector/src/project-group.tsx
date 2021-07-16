@@ -129,7 +129,6 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
           <StyledProjectTitle>
             {title}
             <StyledCount>
-              {/* TODO: should the numbers below reflect what's hidden? */}
               {checkedProjects.length}
               {numProjects > 0 && `/${numProjects}`}
             </StyledCount>
@@ -144,8 +143,6 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 payload: { group },
               })
             }
-            // TODO: if everything in a upstream/downstream group is hidden but since we are preserving
-            // the checked status, should this reflect that everything is checked or not?
             checked={deriveSwitchStatus(state, group)}
             disabled={numProjects === 0 || state.loading}
           />
