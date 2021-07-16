@@ -7,14 +7,13 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"go.uber.org/zap/zaptest/observer"
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
-
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-	"go.uber.org/zap/zaptest/observer"
 )
 
 func TestExecuteTemplate(t *testing.T) {
