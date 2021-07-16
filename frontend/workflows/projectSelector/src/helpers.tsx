@@ -102,7 +102,6 @@ const hidden = (
   state: State,
   group: Group,
   project: string,
-  projectState: ProjectState,
   dependency: string,
   depMapping: DependencyMappings
 ): boolean => {
@@ -111,7 +110,7 @@ const hidden = (
     _.forIn(depMapping.upstreams, (v, k) => {
       if (v[project]) {
         // if project is unchecked and dependency is exclusive to that project, hide the dependency
-        if (!projectState.checked && Object.keys(v).length === 1) {
+        if (!state[Group.PROJECTS][project].checked && Object.keys(v).length === 1) {
           hiddenDep.push(k);
         } else if (Object.keys(v).every(p => !state[Group.PROJECTS][p].checked)) {
           // although the dependency is exclusive to more than 1 Group.Projects, if all Group.Projects share the dependency
@@ -124,7 +123,7 @@ const hidden = (
     _.forIn(depMapping.downstreams, (v, k) => {
       if (v[project]) {
         // if project is unchecked and dependency is exclusive to that project, hide the dependency
-        if (!projectState.checked && Object.keys(v).length === 1) {
+        if (!state[Group.PROJECTS][project].checked && Object.keys(v).length === 1) {
           hiddenDep.push(k);
         } else if (Object.keys(v).every(p => !state[Group.PROJECTS][p].checked)) {
           // although the dependency is exclusive to more than 1 Group.Projects, if all Group.Projects share the dependency
@@ -154,19 +153,18 @@ const deriveStateData = (state: State): State => {
 
   // get the relationships b/w upstreams/downstreams to projects
   const depMapping = dependencyToProjects(state, Group.PROJECTS);
-
   const hiddenUpstreams = [];
   const hiddenDownstreams = [];
 
-  _.forIn(state[Group.PROJECTS], (projectState, project) => {
+  _.forEach(Object.keys(state[Group.PROJECTS]), project => {
     _.forEach(Object.keys(state[Group.UPSTREAM]), upstream => {
-      if (hidden(state, Group.UPSTREAM, project, projectState, upstream, depMapping)) {
+      if (hidden(state, Group.UPSTREAM, project, upstream, depMapping)) {
         hiddenUpstreams.push(upstream);
       }
     });
 
     _.forEach(Object.keys(state[Group.DOWNSTREAM]), downstream => {
-      if (hidden(state, Group.DOWNSTREAM, project, projectState, downstream, depMapping)) {
+      if (hidden(state, Group.DOWNSTREAM, project, downstream, depMapping)) {
         hiddenDownstreams.push(downstream);
       }
     });
