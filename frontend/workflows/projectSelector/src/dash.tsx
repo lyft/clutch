@@ -1,5 +1,5 @@
-import { Box } from "@material-ui/core";
 import * as React from "react";
+import { Box } from "@material-ui/core";
 
 import { DashDispatchContext, DashStateContext } from "./dash-hooks";
 import ProjectSelector from "./project-selector";
@@ -25,12 +25,12 @@ const Dash = ({ children }) => {
 
   return (
     <Box display="flex" width="100%">
-    <DashDispatchContext.Provider value={dispatch}>
-      <DashStateContext.Provider value={state}>
-        <ProjectSelector />
-        <Box flexGrow={1}>{children}</Box>
-      </DashStateContext.Provider>
-    </DashDispatchContext.Provider>
+      <DashDispatchContext.Provider value={dispatch}>
+        <DashStateContext.Provider value={state}>
+          <ProjectSelector />
+          <Box flexGrow={1}>{children}</Box>
+        </DashStateContext.Provider>
+      </DashDispatchContext.Provider>
     </Box>
   );
 };
