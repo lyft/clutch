@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Box } from "@material-ui/core";
 
 import { DashDispatchContext, DashStateContext } from "./dash-hooks";
 import ProjectSelector from "./project-selector";
@@ -23,12 +24,14 @@ const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
 
   return (
-    <DashDispatchContext.Provider value={dispatch}>
-      <DashStateContext.Provider value={state}>
-        <ProjectSelector />
-        <div>{children}</div>
-      </DashStateContext.Provider>
-    </DashDispatchContext.Provider>
+    <Box display="flex" width="100%">
+      <DashDispatchContext.Provider value={dispatch}>
+        <DashStateContext.Provider value={state}>
+          <ProjectSelector />
+          <Box flexGrow={1}>{children}</Box>
+        </DashStateContext.Provider>
+      </DashDispatchContext.Provider>
+    </Box>
   );
 };
 
