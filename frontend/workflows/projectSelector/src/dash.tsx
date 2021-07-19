@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import * as React from "react";
 
 import { DashDispatchContext, DashStateContext } from "./dash-hooks";
@@ -23,12 +24,14 @@ const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
 
   return (
+    <Box display="flex" width="100%">
     <DashDispatchContext.Provider value={dispatch}>
       <DashStateContext.Provider value={state}>
         <ProjectSelector />
-        <div>{children}</div>
+        <Box flexGrow={1}>{children}</Box>
       </DashStateContext.Provider>
     </DashDispatchContext.Provider>
+    </Box>
   );
 };
 
