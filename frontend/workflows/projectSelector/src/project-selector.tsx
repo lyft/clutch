@@ -127,18 +127,18 @@ const ProjectSelector = () => {
 
     // Determine selected projects.
     const selected = new Set<string>();
-    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-      if (state[Group.PROJECTS][p].checked) {
+    _.forEach(Object.keys(derivedState[Group.PROJECTS]), p => {
+      if (derivedState[Group.PROJECTS][p].checked) {
         selected.add(p);
       }
     });
-    _.forEach(Object.keys(state[Group.DOWNSTREAM]), p => {
-      if (state[Group.DOWNSTREAM][p].checked) {
+    _.forEach(Object.keys(derivedState[Group.DOWNSTREAM]), p => {
+      if (derivedState[Group.DOWNSTREAM][p].checked) {
         selected.add(p);
       }
     });
-    _.forEach(Object.keys(state[Group.UPSTREAM]), p => {
-      if (state[Group.UPSTREAM][p].checked) {
+    _.forEach(Object.keys(derivedState[Group.UPSTREAM]), p => {
+      if (derivedState[Group.UPSTREAM][p].checked) {
         selected.add(p);
       }
     });
