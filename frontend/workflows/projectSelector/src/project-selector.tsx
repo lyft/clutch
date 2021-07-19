@@ -7,10 +7,11 @@ import { Divider, LinearProgress } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import _ from "lodash";
 
+import { useDashUpdater } from "./dash-hooks";
 import { DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
-import type { State } from "./types";
+import type { DashState, State } from "./types";
 import { Group } from "./types";
 
 const initialState: State = {
@@ -56,7 +57,7 @@ const StyledProgressContainer = styled.div({
   },
 });
 
-const ProjectSelector = ({ children }) => {
+const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
@@ -64,6 +65,8 @@ const ProjectSelector = ({ children }) => {
   // TODO: If a project is rechecked, the checks were preserved.
 
   const [customProject, setCustomProject] = React.useState("");
+
+  const { updateSelected } = useDashUpdater();
 
   const [state, dispatch] = React.useReducer(selectorReducer, initialState);
 
@@ -114,6 +117,38 @@ const ProjectSelector = ({ children }) => {
     }
   }, [state[Group.PROJECTS]]);
 
+  // This hook updates the global dash state based on the currently selected projects for cards to consume (including upstreams and downstreams).
+  React.useEffect(() => {
+    const dashState: DashState = { projectData: {}, selected: [] };
+
+    // Determine selected projects.
+    const selected = new Set<string>();
+    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+      if (state[Group.PROJECTS][p].checked) {
+        selected.add(p);
+      }
+    });
+    _.forEach(Object.keys(state[Group.DOWNSTREAM]), p => {
+      if (state[Group.DOWNSTREAM][p].checked) {
+        selected.add(p);
+      }
+    });
+    _.forEach(Object.keys(state[Group.UPSTREAM]), p => {
+      if (state[Group.UPSTREAM][p].checked) {
+        selected.add(p);
+      }
+    });
+    dashState.selected = Array.from(selected).sort();
+
+    // Collect project data.
+    _.forEach(dashState.selected, p => {
+      dashState.projectData[p] = state.projectData[p];
+    });
+
+    // Update!
+    updateSelected(dashState);
+  }, [state]);
+
   const handleAdd = () => {
     if (customProject === "") {
       return;
@@ -156,7 +191,6 @@ const ProjectSelector = ({ children }) => {
           <Divider />
           <ProjectGroup title="Downstreams" group={Group.DOWNSTREAM} />
         </StyledSelectorContainer>
-        {children}
       </StateContext.Provider>
     </DispatchContext.Provider>
   );
