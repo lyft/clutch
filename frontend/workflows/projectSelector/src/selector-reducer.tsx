@@ -126,15 +126,21 @@ const selectorReducer = (state: State, action: Action): State => {
     }
     case "TOGGLE_ENTIRE_GROUP": {
       const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
-      const newState = { ...state };
-      newState[action.payload.group] = Object.fromEntries(
-        Object.keys(state[action.payload.group]).map(key => [
-          key,
-          { ...state[action.payload.group][key], checked: newCheckedValue },
-        ])
-      );
-
-      return newState;
+      return {
+        ...state,
+        [action.payload.group]: {
+          ...state[action.payload.group],
+          ...Object.fromEntries(
+            action.payload.projects.map(key => [
+              key,
+              {
+                ...state[action.payload.group][key],
+                checked: newCheckedValue,
+              },
+            ])
+          ),
+        },
+      };
     }
     // Background actions.
 
