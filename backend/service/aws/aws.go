@@ -27,6 +27,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 
+	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -99,6 +100,10 @@ type Client interface {
 	UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error
 
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
+
+	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)
+	UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) error
+	UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) error
 
 	Regions() []string
 }
