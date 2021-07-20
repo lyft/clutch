@@ -96,7 +96,7 @@ const exclusiveProjectDependencies = (
   });
   return { upstreams, downstreams };
 };
-
+// TODO: (perf/efficiency) compute the projects that should be displayed rather than computing the hidden projects
 // returns the upstreams/downstreams that should be hidden based on the checked status of/exclusivity to project(s)
 const deriveHiddenDependencies = (state: State): { upstreams: string[]; downstreams: string[] } => {
   const upstreams = [];
