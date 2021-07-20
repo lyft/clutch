@@ -92,16 +92,6 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		headers.Add(k, v)
 	}
 
-	var requestBody io.ReadCloser
-	if req.Request != nil {
-		requestJSON, err := protojson.Marshal(req.Request)
-		if err != nil {
-			return nil, err
-		}
-		buff := bytes.NewBuffer(requestJSON)
-		requestBody = ioutil.NopCloser(buff)
-	}
-
 	// Parse the URL by joining both the HOST and PATH specifed by the config
 	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, req.Path))
 	if err != nil {
@@ -116,8 +106,13 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		Header: headers,
 	}
 
-	if requestBody != nil {
-		request.Body = requestBody
+	if req.Request != nil {
+		requestJSON, err := protojson.Marshal(req.Request)
+		if err != nil {
+			return nil, err
+		}
+		buff := bytes.NewBuffer(requestJSON)
+		request.Body = ioutil.NopCloser(buff)
 	}
 
 	response, err := m.client.Do(request)
