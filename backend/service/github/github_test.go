@@ -383,7 +383,6 @@ var getCommitsTests = []struct {
 		mockRepo:        &mockRepositories{},
 		file:            "testfile.go",
 		message:         "committing some changes (#1)",
-		authorLogin:     "foobar",
 		authorAvatarURL: "https://foo.bar/baz.png",
 		authorID:        1234,
 	},
@@ -419,7 +418,6 @@ func TestGetCommit(t *testing.T) {
 			}
 			a.Equal(tt.file, *commit.Files[0].Filename)
 			a.Equal(tt.message, commit.Message)
-			a.Equal(tt.authorLogin, *commit.Author.Login)
 			if commit.Author != nil {
 				a.Equal(tt.authorAvatarURL, *commit.Author.AvatarURL)
 				a.Equal(tt.authorID, *commit.Author.ID)
