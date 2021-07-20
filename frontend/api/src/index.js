@@ -43460,6 +43460,124 @@ export const clutch = $root.clutch = (() => {
                     return KinesisStreamName;
                 })();
 
+                v1.DynamodbTableName = (function() {
+
+                    /**
+                     * Properties of a DynamodbTableName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @interface IDynamodbTableName
+                     * @property {string|null} [name] DynamodbTableName name
+                     * @property {string|null} [region] DynamodbTableName region
+                     */
+
+                    /**
+                     * Constructs a new DynamodbTableName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @classdesc Represents a DynamodbTableName.
+                     * @implements IDynamodbTableName
+                     * @constructor
+                     * @param {clutch.resolver.aws.v1.IDynamodbTableName=} [properties] Properties to set
+                     */
+                    function DynamodbTableName(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * DynamodbTableName name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.aws.v1.DynamodbTableName
+                     * @instance
+                     */
+                    DynamodbTableName.prototype.name = "";
+
+                    /**
+                     * DynamodbTableName region.
+                     * @member {string} region
+                     * @memberof clutch.resolver.aws.v1.DynamodbTableName
+                     * @instance
+                     */
+                    DynamodbTableName.prototype.region = "";
+
+                    /**
+                     * Verifies a DynamodbTableName message.
+                     * @function verify
+                     * @memberof clutch.resolver.aws.v1.DynamodbTableName
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DynamodbTableName.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DynamodbTableName message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.aws.v1.DynamodbTableName
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.aws.v1.DynamodbTableName} DynamodbTableName
+                     */
+                    DynamodbTableName.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.aws.v1.DynamodbTableName)
+                            return object;
+                        let message = new $root.clutch.resolver.aws.v1.DynamodbTableName();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a DynamodbTableName message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.aws.v1.DynamodbTableName
+                     * @static
+                     * @param {clutch.resolver.aws.v1.DynamodbTableName} message DynamodbTableName
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DynamodbTableName.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.region = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this DynamodbTableName to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.aws.v1.DynamodbTableName
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DynamodbTableName.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DynamodbTableName;
+                })();
+
                 return v1;
             })();
 
