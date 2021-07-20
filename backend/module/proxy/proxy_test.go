@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -123,8 +124,14 @@ func TestRequestProxy(t *testing.T) {
 				Service:    "cat",
 				HttpMethod: "POST",
 				Path:       "/nom",
+				Request:    structpbFromBody([]byte(`{"test": "data"}`)),
 			},
 			handler: func(w http.ResponseWriter, r *http.Request) {
+				// assert that the requesting body data was sent
+				bodyData, err := ioutil.ReadAll(r.Body)
+				assert.NoError(t, err)
+				assert.NotEmpty(t, bodyData)
+
 				w.WriteHeader(200)
 				_, _ = w.Write([]byte("{}"))
 			},
