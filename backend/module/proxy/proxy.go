@@ -131,10 +131,8 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	resHeaders := make(map[string]*structpb.ListValue, len(response.Header))
 	for key, headers := range response.Header {
 		headerValues := make([]*structpb.Value, len(headers))
-		for _, h := range headers {
-			if len(h) > 0 {
-				headerValues = append(headerValues, structpb.NewStringValue(h))
-			}
+		for i, h := range headers {
+			headerValues[i] = structpb.NewStringValue(h)
 		}
 
 		resHeaders[key] = &structpb.ListValue{
@@ -144,7 +142,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 
 	proxyResponse := &proxyv1.RequestProxyResponse{
 		HttpStatus: int32(response.StatusCode),
-		// Headers:    resHeaders,
+		Headers:    resHeaders,
 	}
 
 	var bodyData interface{}
