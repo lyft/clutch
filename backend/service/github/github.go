@@ -377,7 +377,7 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 		Files:   commit.Files,
 		Message: commit.GetCommit().GetMessage(),
 		Author:  commit.GetCommit().GetAuthor(),
-		User:    commit.Author,
+		User:    commit.GetAuthor(),
 	}, nil
 }
 
