@@ -374,13 +374,20 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Commit{
-		Files:           commit.Files,
-		Message:         commit.GetCommit().GetMessage(),
-		Author:          commit.GetCommit().GetAuthor(),
-		AuthorAvatarURL: commit.Author.AvatarURL,
-		AuthorID:        commit.Author.GetID(),
-	}, nil
+	retCommit := &Commit{
+		Files:   commit.Files,
+		Message: commit.GetCommit().GetMessage(),
+		Author:  commit.GetCommit().GetAuthor(),
+	}
+
+	if commit.Author != nil {
+		if commit.Author.AvatarURL != nil {
+			retCommit.AuthorAvatarURL = commit.Author.AvatarURL
+		}
+		retCommit.AuthorID = commit.Author.GetID()
+	}
+
+	return retCommit, nil
 }
 
 func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, error) {
