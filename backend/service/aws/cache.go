@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"go.uber.org/zap"
@@ -191,6 +192,51 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 				Resource: &topologyv1.Resource{
 					Id: patternId,
 					Pb: protoStream,
+				},
+				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
+			}
+		}
+	}
+}
+
+func (c *client) processAllDynamodbTables(ctx context.Context, client *regionalClient) {
+	c.log.Info("starting to process dynamodb tables for region", zap.String("region", client.region))
+	// 100 is the maximum amount of records per page allowed for this API
+	input := dynamodb.ListTablesInput{
+		Limit: aws.Int32(100),
+	}
+
+	paginator := dynamodb.NewListTablesPaginator(client.dynamodb, &input)
+	for paginator.HasMorePages() {
+		output, err := paginator.NextPage(ctx)
+		if err != nil {
+			c.log.Error("unable to get next dynamodb tables page", zap.Error(err))
+			break
+		}
+
+		for _, table := range output.TableNames {
+			v1Table, err := c.DescribeTable(ctx, client.region, table)
+			if err != nil {
+				c.log.Error("unable to describe dynamodb table", zap.Error(err))
+				continue
+			}
+
+			protoTable, err := anypb.New(v1Table)
+			if err != nil {
+				c.log.Error("unable to marshal dynamodb table", zap.Error(err))
+				continue
+			}
+
+			patternId, err := meta.HydratedPatternForProto(v1Table)
+			if err != nil {
+				c.log.Error("unable to get proto id from pattern", zap.Error(err))
+				continue
+			}
+
+			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
+				Resource: &topologyv1.Resource{
+					Id: patternId,
+					Pb: protoTable,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
 			}
