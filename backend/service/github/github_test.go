@@ -420,11 +420,9 @@ func TestGetCommit(t *testing.T) {
 			a.Equal(tt.file, *commit.Files[0].Filename)
 			a.Equal(tt.message, commit.Message)
 			a.Equal(tt.authorLogin, *commit.Author.Login)
-			if commit.AuthorAvatarURL != nil {
-				a.Equal(tt.authorAvatarURL, *commit.AuthorAvatarURL)
-			}
-			if commit.AuthorID != 0 {
-				a.Equal(tt.authorID, commit.AuthorID)
+			if commit.User != nil {
+				a.Equal(tt.authorAvatarURL, *commit.User.AvatarURL)
+				a.Equal(tt.authorID, *commit.User.ID)
 			}
 			a.Nil(err)
 		})
