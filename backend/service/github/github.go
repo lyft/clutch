@@ -372,9 +372,7 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Distinction between author and commiter:
-	// The author is the person who originally wrote the code. The committer
-	// is assumed to be the person who committed the code on behalf of the original author.
+
 	// Currently we are using the Author (Github) rather than commit Author (Git)
 	return &Commit{
 		Files:   commit.Files,
