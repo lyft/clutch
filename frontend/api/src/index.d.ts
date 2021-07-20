@@ -1669,17 +1669,17 @@ export namespace clutch {
 
                     /**
                      * Calls DescribeTable.
-                     * @param request GetTableRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and GetTableResponse
+                     * @param request DescribeTableRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and DescribeTableResponse
                      */
-                    public describeTable(request: clutch.aws.dynamodb.v1.IGetTableRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.DescribeTableCallback): void;
+                    public describeTable(request: clutch.aws.dynamodb.v1.IDescribeTableRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.DescribeTableCallback): void;
 
                     /**
                      * Calls DescribeTable.
-                     * @param request GetTableRequest message or plain object
+                     * @param request DescribeTableRequest message or plain object
                      * @returns Promise
                      */
-                    public describeTable(request: clutch.aws.dynamodb.v1.IGetTableRequest): Promise<clutch.aws.dynamodb.v1.GetTableResponse>;
+                    public describeTable(request: clutch.aws.dynamodb.v1.IDescribeTableRequest): Promise<clutch.aws.dynamodb.v1.DescribeTableResponse>;
 
                     /**
                      * Calls UpdateTableCapacity.
@@ -1715,9 +1715,9 @@ export namespace clutch {
                     /**
                      * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#describeTable}.
                      * @param error Error, if any
-                     * @param [response] GetTableResponse
+                     * @param [response] DescribeTableResponse
                      */
-                    type DescribeTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.GetTableResponse) => void;
+                    type DescribeTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.DescribeTableResponse) => void;
 
                     /**
                      * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateTableCapacity}.
@@ -1908,103 +1908,103 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a GetTableRequest. */
-                interface IGetTableRequest {
+                /** Properties of a DescribeTableRequest. */
+                interface IDescribeTableRequest {
 
-                    /** GetTableRequest tableName */
+                    /** DescribeTableRequest tableName */
                     tableName?: (string|null);
 
-                    /** GetTableRequest region */
+                    /** DescribeTableRequest region */
                     region?: (string|null);
                 }
 
-                /** Represents a GetTableRequest. */
-                class GetTableRequest implements IGetTableRequest {
+                /** Represents a DescribeTableRequest. */
+                class DescribeTableRequest implements IDescribeTableRequest {
 
                     /**
-                     * Constructs a new GetTableRequest.
+                     * Constructs a new DescribeTableRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IGetTableRequest);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IDescribeTableRequest);
 
-                    /** GetTableRequest tableName. */
+                    /** DescribeTableRequest tableName. */
                     public tableName: string;
 
-                    /** GetTableRequest region. */
+                    /** DescribeTableRequest region. */
                     public region: string;
 
                     /**
-                     * Verifies a GetTableRequest message.
+                     * Verifies a DescribeTableRequest message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a GetTableRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DescribeTableRequest message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns GetTableRequest
+                     * @returns DescribeTableRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.GetTableRequest;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.DescribeTableRequest;
 
                     /**
-                     * Creates a plain object from a GetTableRequest message. Also converts values to other types if specified.
-                     * @param message GetTableRequest
+                     * Creates a plain object from a DescribeTableRequest message. Also converts values to other types if specified.
+                     * @param message DescribeTableRequest
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.GetTableRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.DescribeTableRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this GetTableRequest to JSON.
+                     * Converts this DescribeTableRequest to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a GetTableResponse. */
-                interface IGetTableResponse {
+                /** Properties of a DescribeTableResponse. */
+                interface IDescribeTableResponse {
 
-                    /** GetTableResponse table */
+                    /** DescribeTableResponse table */
                     table?: (clutch.aws.dynamodb.v1.ITable|null);
                 }
 
-                /** Represents a GetTableResponse. */
-                class GetTableResponse implements IGetTableResponse {
+                /** Represents a DescribeTableResponse. */
+                class DescribeTableResponse implements IDescribeTableResponse {
 
                     /**
-                     * Constructs a new GetTableResponse.
+                     * Constructs a new DescribeTableResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IGetTableResponse);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IDescribeTableResponse);
 
-                    /** GetTableResponse table. */
+                    /** DescribeTableResponse table. */
                     public table?: (clutch.aws.dynamodb.v1.ITable|null);
 
                     /**
-                     * Verifies a GetTableResponse message.
+                     * Verifies a DescribeTableResponse message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a GetTableResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DescribeTableResponse message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns GetTableResponse
+                     * @returns DescribeTableResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.GetTableResponse;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.DescribeTableResponse;
 
                     /**
-                     * Creates a plain object from a GetTableResponse message. Also converts values to other types if specified.
-                     * @param message GetTableResponse
+                     * Creates a plain object from a DescribeTableResponse message. Also converts values to other types if specified.
+                     * @param message DescribeTableResponse
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.GetTableResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.DescribeTableResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this GetTableResponse to JSON.
+                     * Converts this DescribeTableResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

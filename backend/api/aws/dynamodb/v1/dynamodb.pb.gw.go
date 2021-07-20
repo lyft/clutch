@@ -32,7 +32,7 @@ var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
 func request_DDBAPI_DescribeTable_0(ctx context.Context, marshaler runtime.Marshaler, client DDBAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetTableRequest
+	var protoReq DescribeTableRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -49,7 +49,7 @@ func request_DDBAPI_DescribeTable_0(ctx context.Context, marshaler runtime.Marsh
 }
 
 func local_request_DDBAPI_DescribeTable_0(ctx context.Context, marshaler runtime.Marshaler, server DDBAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetTableRequest
+	var protoReq DescribeTableRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

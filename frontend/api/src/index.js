@@ -3850,7 +3850,7 @@ export const clutch = $root.clutch = (() => {
                      * @typedef DescribeTableCallback
                      * @type {function}
                      * @param {Error|null} error Error, if any
-                     * @param {clutch.aws.dynamodb.v1.GetTableResponse} [response] GetTableResponse
+                     * @param {clutch.aws.dynamodb.v1.DescribeTableResponse} [response] DescribeTableResponse
                      */
 
                     /**
@@ -3858,13 +3858,13 @@ export const clutch = $root.clutch = (() => {
                      * @function describeTable
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
                      * @instance
-                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest} request GetTableRequest message or plain object
-                     * @param {clutch.aws.dynamodb.v1.DDBAPI.DescribeTableCallback} callback Node-style callback called with the error, if any, and GetTableResponse
+                     * @param {clutch.aws.dynamodb.v1.IDescribeTableRequest} request DescribeTableRequest message or plain object
+                     * @param {clutch.aws.dynamodb.v1.DDBAPI.DescribeTableCallback} callback Node-style callback called with the error, if any, and DescribeTableResponse
                      * @returns {undefined}
                      * @variation 1
                      */
                     Object.defineProperty(DDBAPI.prototype.describeTable = function describeTable(request, callback) {
-                        return this.rpcCall(describeTable, $root.clutch.aws.dynamodb.v1.GetTableRequest, $root.clutch.aws.dynamodb.v1.GetTableResponse, request, callback);
+                        return this.rpcCall(describeTable, $root.clutch.aws.dynamodb.v1.DescribeTableRequest, $root.clutch.aws.dynamodb.v1.DescribeTableResponse, request, callback);
                     }, "name", { value: "DescribeTable" });
 
                     /**
@@ -3872,8 +3872,8 @@ export const clutch = $root.clutch = (() => {
                      * @function describeTable
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
                      * @instance
-                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest} request GetTableRequest message or plain object
-                     * @returns {Promise<clutch.aws.dynamodb.v1.GetTableResponse>} Promise
+                     * @param {clutch.aws.dynamodb.v1.IDescribeTableRequest} request DescribeTableRequest message or plain object
+                     * @returns {Promise<clutch.aws.dynamodb.v1.DescribeTableResponse>} Promise
                      * @variation 2
                      */
 
@@ -4391,25 +4391,25 @@ export const clutch = $root.clutch = (() => {
                     return ProvisionedThroughput;
                 })();
 
-                v1.GetTableRequest = (function() {
+                v1.DescribeTableRequest = (function() {
 
                     /**
-                     * Properties of a GetTableRequest.
+                     * Properties of a DescribeTableRequest.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @interface IGetTableRequest
-                     * @property {string|null} [tableName] GetTableRequest tableName
-                     * @property {string|null} [region] GetTableRequest region
+                     * @interface IDescribeTableRequest
+                     * @property {string|null} [tableName] DescribeTableRequest tableName
+                     * @property {string|null} [region] DescribeTableRequest region
                      */
 
                     /**
-                     * Constructs a new GetTableRequest.
+                     * Constructs a new DescribeTableRequest.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @classdesc Represents a GetTableRequest.
-                     * @implements IGetTableRequest
+                     * @classdesc Represents a DescribeTableRequest.
+                     * @implements IDescribeTableRequest
                      * @constructor
-                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest=} [properties] Properties to set
+                     * @param {clutch.aws.dynamodb.v1.IDescribeTableRequest=} [properties] Properties to set
                      */
-                    function GetTableRequest(properties) {
+                    function DescribeTableRequest(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -4417,30 +4417,30 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * GetTableRequest tableName.
+                     * DescribeTableRequest tableName.
                      * @member {string} tableName
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @instance
                      */
-                    GetTableRequest.prototype.tableName = "";
+                    DescribeTableRequest.prototype.tableName = "";
 
                     /**
-                     * GetTableRequest region.
+                     * DescribeTableRequest region.
                      * @member {string} region
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @instance
                      */
-                    GetTableRequest.prototype.region = "";
+                    DescribeTableRequest.prototype.region = "";
 
                     /**
-                     * Verifies a GetTableRequest message.
+                     * Verifies a DescribeTableRequest message.
                      * @function verify
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    GetTableRequest.verify = function verify(message) {
+                    DescribeTableRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
@@ -4453,17 +4453,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a GetTableRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DescribeTableRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.aws.dynamodb.v1.GetTableRequest} GetTableRequest
+                     * @returns {clutch.aws.dynamodb.v1.DescribeTableRequest} DescribeTableRequest
                      */
-                    GetTableRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.aws.dynamodb.v1.GetTableRequest)
+                    DescribeTableRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.DescribeTableRequest)
                             return object;
-                        let message = new $root.clutch.aws.dynamodb.v1.GetTableRequest();
+                        let message = new $root.clutch.aws.dynamodb.v1.DescribeTableRequest();
                         if (object.tableName != null)
                             message.tableName = String(object.tableName);
                         if (object.region != null)
@@ -4472,15 +4472,15 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a plain object from a GetTableRequest message. Also converts values to other types if specified.
+                     * Creates a plain object from a DescribeTableRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @static
-                     * @param {clutch.aws.dynamodb.v1.GetTableRequest} message GetTableRequest
+                     * @param {clutch.aws.dynamodb.v1.DescribeTableRequest} message DescribeTableRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    GetTableRequest.toObject = function toObject(message, options) {
+                    DescribeTableRequest.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -4496,37 +4496,37 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this GetTableRequest to JSON.
+                     * Converts this DescribeTableRequest to JSON.
                      * @function toJSON
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    GetTableRequest.prototype.toJSON = function toJSON() {
+                    DescribeTableRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return GetTableRequest;
+                    return DescribeTableRequest;
                 })();
 
-                v1.GetTableResponse = (function() {
+                v1.DescribeTableResponse = (function() {
 
                     /**
-                     * Properties of a GetTableResponse.
+                     * Properties of a DescribeTableResponse.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @interface IGetTableResponse
-                     * @property {clutch.aws.dynamodb.v1.ITable|null} [table] GetTableResponse table
+                     * @interface IDescribeTableResponse
+                     * @property {clutch.aws.dynamodb.v1.ITable|null} [table] DescribeTableResponse table
                      */
 
                     /**
-                     * Constructs a new GetTableResponse.
+                     * Constructs a new DescribeTableResponse.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @classdesc Represents a GetTableResponse.
-                     * @implements IGetTableResponse
+                     * @classdesc Represents a DescribeTableResponse.
+                     * @implements IDescribeTableResponse
                      * @constructor
-                     * @param {clutch.aws.dynamodb.v1.IGetTableResponse=} [properties] Properties to set
+                     * @param {clutch.aws.dynamodb.v1.IDescribeTableResponse=} [properties] Properties to set
                      */
-                    function GetTableResponse(properties) {
+                    function DescribeTableResponse(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -4534,22 +4534,22 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * GetTableResponse table.
+                     * DescribeTableResponse table.
                      * @member {clutch.aws.dynamodb.v1.ITable|null|undefined} table
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @instance
                      */
-                    GetTableResponse.prototype.table = null;
+                    DescribeTableResponse.prototype.table = null;
 
                     /**
-                     * Verifies a GetTableResponse message.
+                     * Verifies a DescribeTableResponse message.
                      * @function verify
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    GetTableResponse.verify = function verify(message) {
+                    DescribeTableResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.table != null && message.hasOwnProperty("table")) {
@@ -4561,35 +4561,35 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a GetTableResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DescribeTableResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.aws.dynamodb.v1.GetTableResponse} GetTableResponse
+                     * @returns {clutch.aws.dynamodb.v1.DescribeTableResponse} DescribeTableResponse
                      */
-                    GetTableResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.aws.dynamodb.v1.GetTableResponse)
+                    DescribeTableResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.DescribeTableResponse)
                             return object;
-                        let message = new $root.clutch.aws.dynamodb.v1.GetTableResponse();
+                        let message = new $root.clutch.aws.dynamodb.v1.DescribeTableResponse();
                         if (object.table != null) {
                             if (typeof object.table !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.GetTableResponse.table: object expected");
+                                throw TypeError(".clutch.aws.dynamodb.v1.DescribeTableResponse.table: object expected");
                             message.table = $root.clutch.aws.dynamodb.v1.Table.fromObject(object.table);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a GetTableResponse message. Also converts values to other types if specified.
+                     * Creates a plain object from a DescribeTableResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @static
-                     * @param {clutch.aws.dynamodb.v1.GetTableResponse} message GetTableResponse
+                     * @param {clutch.aws.dynamodb.v1.DescribeTableResponse} message DescribeTableResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    GetTableResponse.toObject = function toObject(message, options) {
+                    DescribeTableResponse.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -4601,17 +4601,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this GetTableResponse to JSON.
+                     * Converts this DescribeTableResponse to JSON.
                      * @function toJSON
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    GetTableResponse.prototype.toJSON = function toJSON() {
+                    DescribeTableResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return GetTableResponse;
+                    return DescribeTableResponse;
                 })();
 
                 v1.UpdateTableCapacityRequest = (function() {

@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DDBAPIClient interface {
-	DescribeTable(ctx context.Context, in *GetTableRequest, opts ...grpc.CallOption) (*GetTableResponse, error)
+	DescribeTable(ctx context.Context, in *DescribeTableRequest, opts ...grpc.CallOption) (*DescribeTableResponse, error)
 	UpdateTableCapacity(ctx context.Context, in *UpdateTableCapacityRequest, opts ...grpc.CallOption) (*UpdateTableCapacityResponse, error)
 	UpdateGSICapacity(ctx context.Context, in *UpdateGSICapacityRequest, opts ...grpc.CallOption) (*UpdateGSICapacityResponse, error)
 }
@@ -31,8 +31,8 @@ func NewDDBAPIClient(cc grpc.ClientConnInterface) DDBAPIClient {
 	return &dDBAPIClient{cc}
 }
 
-func (c *dDBAPIClient) DescribeTable(ctx context.Context, in *GetTableRequest, opts ...grpc.CallOption) (*GetTableResponse, error) {
-	out := new(GetTableResponse)
+func (c *dDBAPIClient) DescribeTable(ctx context.Context, in *DescribeTableRequest, opts ...grpc.CallOption) (*DescribeTableResponse, error) {
+	out := new(DescribeTableResponse)
 	err := c.cc.Invoke(ctx, "/clutch.aws.dynamodb.v1.DDBAPI/DescribeTable", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (c *dDBAPIClient) UpdateGSICapacity(ctx context.Context, in *UpdateGSICapac
 // All implementations should embed UnimplementedDDBAPIServer
 // for forward compatibility
 type DDBAPIServer interface {
-	DescribeTable(context.Context, *GetTableRequest) (*GetTableResponse, error)
+	DescribeTable(context.Context, *DescribeTableRequest) (*DescribeTableResponse, error)
 	UpdateTableCapacity(context.Context, *UpdateTableCapacityRequest) (*UpdateTableCapacityResponse, error)
 	UpdateGSICapacity(context.Context, *UpdateGSICapacityRequest) (*UpdateGSICapacityResponse, error)
 }
@@ -71,7 +71,7 @@ type DDBAPIServer interface {
 type UnimplementedDDBAPIServer struct {
 }
 
-func (UnimplementedDDBAPIServer) DescribeTable(context.Context, *GetTableRequest) (*GetTableResponse, error) {
+func (UnimplementedDDBAPIServer) DescribeTable(context.Context, *DescribeTableRequest) (*DescribeTableResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeTable not implemented")
 }
 func (UnimplementedDDBAPIServer) UpdateTableCapacity(context.Context, *UpdateTableCapacityRequest) (*UpdateTableCapacityResponse, error) {
@@ -93,7 +93,7 @@ func RegisterDDBAPIServer(s grpc.ServiceRegistrar, srv DDBAPIServer) {
 }
 
 func _DDBAPI_DescribeTable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTableRequest)
+	in := new(DescribeTableRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func _DDBAPI_DescribeTable_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/clutch.aws.dynamodb.v1.DDBAPI/DescribeTable",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DDBAPIServer).DescribeTable(ctx, req.(*GetTableRequest))
+		return srv.(DDBAPIServer).DescribeTable(ctx, req.(*DescribeTableRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
