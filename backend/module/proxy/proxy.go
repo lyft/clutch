@@ -1,10 +1,12 @@
 package proxy
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -14,6 +16,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/structpb"
 
 	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
@@ -89,6 +92,16 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		headers.Add(k, v)
 	}
 
+	var requestBody io.ReadCloser
+	if req.Request != nil {
+		requestJSON, err := protojson.Marshal(req.Request)
+		if err != nil {
+			return nil, err
+		}
+		buff := bytes.NewBuffer(requestJSON)
+		requestBody = ioutil.NopCloser(buff)
+	}
+
 	// Parse the URL by joining both the HOST and PATH specifed by the config
 	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, req.Path))
 	if err != nil {
@@ -103,6 +116,10 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		Header: headers,
 	}
 
+	if requestBody != nil {
+		request.Body = requestBody
+	}
+
 	response, err := m.client.Do(request)
 	if err != nil {
 		m.logger.Error("proxy request error", zap.Error(err))
@@ -115,7 +132,9 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	for key, headers := range response.Header {
 		headerValues := make([]*structpb.Value, len(headers))
 		for _, h := range headers {
-			headerValues = append(headerValues, structpb.NewStringValue(h))
+			if len(h) > 0 {
+				headerValues = append(headerValues, structpb.NewStringValue(h))
+			}
 		}
 
 		resHeaders[key] = &structpb.ListValue{
@@ -125,7 +144,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 
 	proxyResponse := &proxyv1.RequestProxyResponse{
 		HttpStatus: int32(response.StatusCode),
-		Headers:    resHeaders,
+		// Headers:    resHeaders,
 	}
 
 	var bodyData interface{}

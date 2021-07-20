@@ -29,7 +29,7 @@ message RequestProxyRequest {
   // The URI path to call
   string path = 3 [ (validate.rules).string.min_len = 1 ];
   // The request body
-  google.protobuf.Value request = 4;
+  google.protobuf.Value request = 4 [ (clutch.api.v1.log) = false ];
 }
 
 message RequestProxyResponse {
@@ -40,5 +40,5 @@ message RequestProxyResponse {
   // https://datatracker.ietf.org/doc/html/rfc2616#section-4.2
   map<string, google.protobuf.ListValue> headers = 2;
   // The full response body
-  google.protobuf.Value response = 3;
+  google.protobuf.Value response = 3 [ (clutch.api.v1.log) = false ]; 
 }
