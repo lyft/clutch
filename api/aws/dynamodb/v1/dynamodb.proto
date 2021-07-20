@@ -10,7 +10,7 @@ import "validate/validate.proto";
 import "api/v1/annotations.proto";
 
 service DDBAPI {
-  rpc DescribeTable(GetTableRequest) returns (GetTableResponse) {
+  rpc DescribeTable(DescribeTableRequest) returns (DescribeTableResponse) {
     option (google.api.http) = {
       post : "/v1/aws/dynamodb/describeTable"
       body : "*"
@@ -57,12 +57,12 @@ message ProvisionedThroughput {
   int64 read_capacity_units = 2;
 }
 
-message GetTableRequest {
+message DescribeTableRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
-message GetTableResponse {
+message DescribeTableResponse {
   option (clutch.api.v1.reference).fields = "table";
 
   Table table = 1;
