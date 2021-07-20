@@ -1668,18 +1668,18 @@ export namespace clutch {
                     constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
 
                     /**
-                     * Calls GetTable.
+                     * Calls DescribeTable.
                      * @param request GetTableRequest message or plain object
                      * @param callback Node-style callback called with the error, if any, and GetTableResponse
                      */
-                    public getTable(request: clutch.aws.dynamodb.v1.IGetTableRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.GetTableCallback): void;
+                    public describeTable(request: clutch.aws.dynamodb.v1.IGetTableRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.DescribeTableCallback): void;
 
                     /**
-                     * Calls GetTable.
+                     * Calls DescribeTable.
                      * @param request GetTableRequest message or plain object
                      * @returns Promise
                      */
-                    public getTable(request: clutch.aws.dynamodb.v1.IGetTableRequest): Promise<clutch.aws.dynamodb.v1.GetTableResponse>;
+                    public describeTable(request: clutch.aws.dynamodb.v1.IGetTableRequest): Promise<clutch.aws.dynamodb.v1.GetTableResponse>;
 
                     /**
                      * Calls UpdateTableCapacity.
@@ -1713,11 +1713,11 @@ export namespace clutch {
                 namespace DDBAPI {
 
                     /**
-                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#getTable}.
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#describeTable}.
                      * @param error Error, if any
                      * @param [response] GetTableResponse
                      */
-                    type GetTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.GetTableResponse) => void;
+                    type DescribeTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.GetTableResponse) => void;
 
                     /**
                      * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateTableCapacity}.
@@ -1746,8 +1746,8 @@ export namespace clutch {
                     /** Table globalSecondaryIndexes */
                     globalSecondaryIndexes?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndex[]|null);
 
-                    /** Table capacity */
-                    capacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** Table provisionedThroughput */
+                    provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
                 }
 
                 /** Represents a Table. */
@@ -1768,8 +1768,8 @@ export namespace clutch {
                     /** Table globalSecondaryIndexes. */
                     public globalSecondaryIndexes: clutch.aws.dynamodb.v1.IGlobalSecondaryIndex[];
 
-                    /** Table capacity. */
-                    public capacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** Table provisionedThroughput. */
+                    public provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
 
                     /**
                      * Verifies a Table message.
@@ -1806,8 +1806,8 @@ export namespace clutch {
                     /** GlobalSecondaryIndex name */
                     name?: (string|null);
 
-                    /** GlobalSecondaryIndex capacity */
-                    capacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** GlobalSecondaryIndex provisionedThroughput */
+                    provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
                 }
 
                 /** Represents a GlobalSecondaryIndex. */
@@ -1822,8 +1822,8 @@ export namespace clutch {
                     /** GlobalSecondaryIndex name. */
                     public name: string;
 
-                    /** GlobalSecondaryIndex capacity. */
-                    public capacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** GlobalSecondaryIndex provisionedThroughput. */
+                    public provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
 
                     /**
                      * Verifies a GlobalSecondaryIndex message.
@@ -1858,10 +1858,10 @@ export namespace clutch {
                 interface IProvisionedThroughput {
 
                     /** ProvisionedThroughput writeCapacityUnits */
-                    writeCapacityUnits?: (number|null);
+                    writeCapacityUnits?: (number|Long|null);
 
                     /** ProvisionedThroughput readCapacityUnits */
-                    readCapacityUnits?: (number|null);
+                    readCapacityUnits?: (number|Long|null);
                 }
 
                 /** Represents a ProvisionedThroughput. */
@@ -1874,10 +1874,10 @@ export namespace clutch {
                     constructor(properties?: clutch.aws.dynamodb.v1.IProvisionedThroughput);
 
                     /** ProvisionedThroughput writeCapacityUnits. */
-                    public writeCapacityUnits: number;
+                    public writeCapacityUnits: (number|Long);
 
                     /** ProvisionedThroughput readCapacityUnits. */
-                    public readCapacityUnits: number;
+                    public readCapacityUnits: (number|Long);
 
                     /**
                      * Verifies a ProvisionedThroughput message.
@@ -2020,10 +2020,10 @@ export namespace clutch {
                     region?: (string|null);
 
                     /** UpdateTableCapacityRequest targetTableRcu */
-                    targetTableRcu?: (number|null);
+                    targetTableRcu?: (number|Long|null);
 
                     /** UpdateTableCapacityRequest targetTableWcu */
-                    targetTableWcu?: (number|null);
+                    targetTableWcu?: (number|Long|null);
                 }
 
                 /** Represents an UpdateTableCapacityRequest. */
@@ -2042,10 +2042,10 @@ export namespace clutch {
                     public region: string;
 
                     /** UpdateTableCapacityRequest targetTableRcu. */
-                    public targetTableRcu: number;
+                    public targetTableRcu: (number|Long);
 
                     /** UpdateTableCapacityRequest targetTableWcu. */
-                    public targetTableWcu: number;
+                    public targetTableWcu: (number|Long);
 
                     /**
                      * Verifies an UpdateTableCapacityRequest message.
@@ -2131,10 +2131,10 @@ export namespace clutch {
                     indexName?: (string|null);
 
                     /** UpdateGSICapacityRequest targetIndexRcu */
-                    targetIndexRcu?: (number|null);
+                    targetIndexRcu?: (number|Long|null);
 
                     /** UpdateGSICapacityRequest targetIndexWcu */
-                    targetIndexWcu?: (number|null);
+                    targetIndexWcu?: (number|Long|null);
                 }
 
                 /** Represents an UpdateGSICapacityRequest. */
@@ -2156,10 +2156,10 @@ export namespace clutch {
                     public indexName: string;
 
                     /** UpdateGSICapacityRequest targetIndexRcu. */
-                    public targetIndexRcu: number;
+                    public targetIndexRcu: (number|Long);
 
                     /** UpdateGSICapacityRequest targetIndexWcu. */
-                    public targetIndexWcu: number;
+                    public targetIndexWcu: (number|Long);
 
                     /**
                      * Verifies an UpdateGSICapacityRequest message.

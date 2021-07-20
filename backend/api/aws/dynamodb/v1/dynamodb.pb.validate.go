@@ -59,10 +59,10 @@ func (m *Table) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetCapacity()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetProvisionedThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TableValidationError{
-				field:  "Capacity",
+				field:  "ProvisionedThroughput",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -136,10 +136,10 @@ func (m *GlobalSecondaryIndex) Validate() error {
 
 	// no validation rules for Name
 
-	if v, ok := interface{}(m.GetCapacity()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetProvisionedThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GlobalSecondaryIndexValidationError{
-				field:  "Capacity",
+				field:  "ProvisionedThroughput",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

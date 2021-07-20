@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DDBAPIClient interface {
-	GetTable(ctx context.Context, in *GetTableRequest, opts ...grpc.CallOption) (*GetTableResponse, error)
+	DescribeTable(ctx context.Context, in *GetTableRequest, opts ...grpc.CallOption) (*GetTableResponse, error)
 	UpdateTableCapacity(ctx context.Context, in *UpdateTableCapacityRequest, opts ...grpc.CallOption) (*UpdateTableCapacityResponse, error)
 	UpdateGSICapacity(ctx context.Context, in *UpdateGSICapacityRequest, opts ...grpc.CallOption) (*UpdateGSICapacityResponse, error)
 }
@@ -31,9 +31,9 @@ func NewDDBAPIClient(cc grpc.ClientConnInterface) DDBAPIClient {
 	return &dDBAPIClient{cc}
 }
 
-func (c *dDBAPIClient) GetTable(ctx context.Context, in *GetTableRequest, opts ...grpc.CallOption) (*GetTableResponse, error) {
+func (c *dDBAPIClient) DescribeTable(ctx context.Context, in *GetTableRequest, opts ...grpc.CallOption) (*GetTableResponse, error) {
 	out := new(GetTableResponse)
-	err := c.cc.Invoke(ctx, "/clutch.aws.dynamodb.v1.DDBAPI/GetTable", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/clutch.aws.dynamodb.v1.DDBAPI/DescribeTable", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c *dDBAPIClient) UpdateGSICapacity(ctx context.Context, in *UpdateGSICapac
 // All implementations should embed UnimplementedDDBAPIServer
 // for forward compatibility
 type DDBAPIServer interface {
-	GetTable(context.Context, *GetTableRequest) (*GetTableResponse, error)
+	DescribeTable(context.Context, *GetTableRequest) (*GetTableResponse, error)
 	UpdateTableCapacity(context.Context, *UpdateTableCapacityRequest) (*UpdateTableCapacityResponse, error)
 	UpdateGSICapacity(context.Context, *UpdateGSICapacityRequest) (*UpdateGSICapacityResponse, error)
 }
@@ -71,8 +71,8 @@ type DDBAPIServer interface {
 type UnimplementedDDBAPIServer struct {
 }
 
-func (UnimplementedDDBAPIServer) GetTable(context.Context, *GetTableRequest) (*GetTableResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTable not implemented")
+func (UnimplementedDDBAPIServer) DescribeTable(context.Context, *GetTableRequest) (*GetTableResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DescribeTable not implemented")
 }
 func (UnimplementedDDBAPIServer) UpdateTableCapacity(context.Context, *UpdateTableCapacityRequest) (*UpdateTableCapacityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTableCapacity not implemented")
@@ -92,20 +92,20 @@ func RegisterDDBAPIServer(s grpc.ServiceRegistrar, srv DDBAPIServer) {
 	s.RegisterService(&DDBAPI_ServiceDesc, srv)
 }
 
-func _DDBAPI_GetTable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DDBAPI_DescribeTable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetTableRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DDBAPIServer).GetTable(ctx, in)
+		return srv.(DDBAPIServer).DescribeTable(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/clutch.aws.dynamodb.v1.DDBAPI/GetTable",
+		FullMethod: "/clutch.aws.dynamodb.v1.DDBAPI/DescribeTable",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DDBAPIServer).GetTable(ctx, req.(*GetTableRequest))
+		return srv.(DDBAPIServer).DescribeTable(ctx, req.(*GetTableRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -154,8 +154,8 @@ var DDBAPI_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DDBAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetTable",
-			Handler:    _DDBAPI_GetTable_Handler,
+			MethodName: "DescribeTable",
+			Handler:    _DDBAPI_DescribeTable_Handler,
 		},
 		{
 			MethodName: "UpdateTableCapacity",
