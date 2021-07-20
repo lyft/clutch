@@ -362,9 +362,11 @@ func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA str
 }
 
 type Commit struct {
-	Files   []*githubv3.CommitFile
-	Message string
-	Author  *githubv3.CommitAuthor
+	Files           []*githubv3.CommitFile
+	Message         string
+	Author          *githubv3.CommitAuthor
+	AuthorAvatarURL *string
+	AuthorID        int64
 }
 
 func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
@@ -373,9 +375,11 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 		return nil, err
 	}
 	return &Commit{
-		Files:   commit.Files,
-		Message: commit.GetCommit().GetMessage(),
-		Author:  commit.GetCommit().GetAuthor(),
+		Files:           commit.Files,
+		Message:         commit.GetCommit().GetMessage(),
+		Author:          commit.GetCommit().GetAuthor(),
+		AuthorAvatarURL: commit.Author.AvatarURL,
+		AuthorID:        commit.Author.GetID(),
 	}, nil
 }
 
