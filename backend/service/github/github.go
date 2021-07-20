@@ -364,8 +364,7 @@ func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA str
 type Commit struct {
 	Files   []*githubv3.CommitFile
 	Message string
-	Author  *githubv3.CommitAuthor
-	User    *githubv3.User
+	Author  *githubv3.User
 }
 
 func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
@@ -373,13 +372,14 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 	if err != nil {
 		return nil, err
 	}
-	// The author (our User) is the person who originally wrote the code. The committer (our Author)
+	// Distinction between author and commiter:
+	// The author is the person who originally wrote the code. The committer
 	// is assumed to be the person who committed the code on behalf of the original author.
+	// Currently we are using the Author (Github) rather than commit Author (Git)
 	return &Commit{
 		Files:   commit.Files,
 		Message: commit.GetCommit().GetMessage(),
-		Author:  commit.GetCommit().GetAuthor(),
-		User:    commit.GetAuthor(),
+		Author:  commit.GetAuthor(),
 	}, nil
 }
 
