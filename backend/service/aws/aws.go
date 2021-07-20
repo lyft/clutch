@@ -123,6 +123,7 @@ type regionalClient struct {
 	kinesis     kinesisClient
 	ec2         ec2Client
 	autoscaling autoscalingClient
+	dynamodb    dynamodbClient
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
