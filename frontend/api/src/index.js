@@ -3845,35 +3845,35 @@ export const clutch = $root.clutch = (() => {
                     (DDBAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = DDBAPI;
 
                     /**
-                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#getTable}.
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#describeTable}.
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
-                     * @typedef GetTableCallback
+                     * @typedef DescribeTableCallback
                      * @type {function}
                      * @param {Error|null} error Error, if any
-                     * @param {clutch.aws.dynamodb.v1.GetTableResponse} [response] GetTableResponse
+                     * @param {clutch.aws.dynamodb.v1.DescribeTableResponse} [response] DescribeTableResponse
                      */
 
                     /**
-                     * Calls GetTable.
-                     * @function getTable
+                     * Calls DescribeTable.
+                     * @function describeTable
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
                      * @instance
-                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest} request GetTableRequest message or plain object
-                     * @param {clutch.aws.dynamodb.v1.DDBAPI.GetTableCallback} callback Node-style callback called with the error, if any, and GetTableResponse
+                     * @param {clutch.aws.dynamodb.v1.IDescribeTableRequest} request DescribeTableRequest message or plain object
+                     * @param {clutch.aws.dynamodb.v1.DDBAPI.DescribeTableCallback} callback Node-style callback called with the error, if any, and DescribeTableResponse
                      * @returns {undefined}
                      * @variation 1
                      */
-                    Object.defineProperty(DDBAPI.prototype.getTable = function getTable(request, callback) {
-                        return this.rpcCall(getTable, $root.clutch.aws.dynamodb.v1.GetTableRequest, $root.clutch.aws.dynamodb.v1.GetTableResponse, request, callback);
-                    }, "name", { value: "GetTable" });
+                    Object.defineProperty(DDBAPI.prototype.describeTable = function describeTable(request, callback) {
+                        return this.rpcCall(describeTable, $root.clutch.aws.dynamodb.v1.DescribeTableRequest, $root.clutch.aws.dynamodb.v1.DescribeTableResponse, request, callback);
+                    }, "name", { value: "DescribeTable" });
 
                     /**
-                     * Calls GetTable.
-                     * @function getTable
+                     * Calls DescribeTable.
+                     * @function describeTable
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
                      * @instance
-                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest} request GetTableRequest message or plain object
-                     * @returns {Promise<clutch.aws.dynamodb.v1.GetTableResponse>} Promise
+                     * @param {clutch.aws.dynamodb.v1.IDescribeTableRequest} request DescribeTableRequest message or plain object
+                     * @returns {Promise<clutch.aws.dynamodb.v1.DescribeTableResponse>} Promise
                      * @variation 2
                      */
 
@@ -3955,7 +3955,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [name] Table name
                      * @property {string|null} [region] Table region
                      * @property {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndex>|null} [globalSecondaryIndexes] Table globalSecondaryIndexes
-                     * @property {clutch.aws.dynamodb.v1.IProvisionedThroughput|null} [capacity] Table capacity
+                     * @property {clutch.aws.dynamodb.v1.IProvisionedThroughput|null} [provisionedThroughput] Table provisionedThroughput
                      */
 
                     /**
@@ -3999,12 +3999,12 @@ export const clutch = $root.clutch = (() => {
                     Table.prototype.globalSecondaryIndexes = $util.emptyArray;
 
                     /**
-                     * Table capacity.
-                     * @member {clutch.aws.dynamodb.v1.IProvisionedThroughput|null|undefined} capacity
+                     * Table provisionedThroughput.
+                     * @member {clutch.aws.dynamodb.v1.IProvisionedThroughput|null|undefined} provisionedThroughput
                      * @memberof clutch.aws.dynamodb.v1.Table
                      * @instance
                      */
-                    Table.prototype.capacity = null;
+                    Table.prototype.provisionedThroughput = null;
 
                     /**
                      * Verifies a Table message.
@@ -4032,10 +4032,10 @@ export const clutch = $root.clutch = (() => {
                                     return "globalSecondaryIndexes." + error;
                             }
                         }
-                        if (message.capacity != null && message.hasOwnProperty("capacity")) {
-                            let error = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.verify(message.capacity);
+                        if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput")) {
+                            let error = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.verify(message.provisionedThroughput);
                             if (error)
-                                return "capacity." + error;
+                                return "provisionedThroughput." + error;
                         }
                         return null;
                     };
@@ -4066,10 +4066,10 @@ export const clutch = $root.clutch = (() => {
                                 message.globalSecondaryIndexes[i] = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.fromObject(object.globalSecondaryIndexes[i]);
                             }
                         }
-                        if (object.capacity != null) {
-                            if (typeof object.capacity !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.Table.capacity: object expected");
-                            message.capacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.capacity);
+                        if (object.provisionedThroughput != null) {
+                            if (typeof object.provisionedThroughput !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.Table.provisionedThroughput: object expected");
+                            message.provisionedThroughput = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.provisionedThroughput);
                         }
                         return message;
                     };
@@ -4092,7 +4092,7 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.name = "";
                             object.region = "";
-                            object.capacity = null;
+                            object.provisionedThroughput = null;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -4103,8 +4103,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.globalSecondaryIndexes.length; ++j)
                                 object.globalSecondaryIndexes[j] = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.toObject(message.globalSecondaryIndexes[j], options);
                         }
-                        if (message.capacity != null && message.hasOwnProperty("capacity"))
-                            object.capacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.toObject(message.capacity, options);
+                        if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput"))
+                            object.provisionedThroughput = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.toObject(message.provisionedThroughput, options);
                         return object;
                     };
 
@@ -4129,7 +4129,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.aws.dynamodb.v1
                      * @interface IGlobalSecondaryIndex
                      * @property {string|null} [name] GlobalSecondaryIndex name
-                     * @property {clutch.aws.dynamodb.v1.IProvisionedThroughput|null} [capacity] GlobalSecondaryIndex capacity
+                     * @property {clutch.aws.dynamodb.v1.IProvisionedThroughput|null} [provisionedThroughput] GlobalSecondaryIndex provisionedThroughput
                      */
 
                     /**
@@ -4156,12 +4156,12 @@ export const clutch = $root.clutch = (() => {
                     GlobalSecondaryIndex.prototype.name = "";
 
                     /**
-                     * GlobalSecondaryIndex capacity.
-                     * @member {clutch.aws.dynamodb.v1.IProvisionedThroughput|null|undefined} capacity
+                     * GlobalSecondaryIndex provisionedThroughput.
+                     * @member {clutch.aws.dynamodb.v1.IProvisionedThroughput|null|undefined} provisionedThroughput
                      * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
                      * @instance
                      */
-                    GlobalSecondaryIndex.prototype.capacity = null;
+                    GlobalSecondaryIndex.prototype.provisionedThroughput = null;
 
                     /**
                      * Verifies a GlobalSecondaryIndex message.
@@ -4177,10 +4177,10 @@ export const clutch = $root.clutch = (() => {
                         if (message.name != null && message.hasOwnProperty("name"))
                             if (!$util.isString(message.name))
                                 return "name: string expected";
-                        if (message.capacity != null && message.hasOwnProperty("capacity")) {
-                            let error = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.verify(message.capacity);
+                        if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput")) {
+                            let error = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.verify(message.provisionedThroughput);
                             if (error)
-                                return "capacity." + error;
+                                return "provisionedThroughput." + error;
                         }
                         return null;
                     };
@@ -4199,10 +4199,10 @@ export const clutch = $root.clutch = (() => {
                         let message = new $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex();
                         if (object.name != null)
                             message.name = String(object.name);
-                        if (object.capacity != null) {
-                            if (typeof object.capacity !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.GlobalSecondaryIndex.capacity: object expected");
-                            message.capacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.capacity);
+                        if (object.provisionedThroughput != null) {
+                            if (typeof object.provisionedThroughput !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.GlobalSecondaryIndex.provisionedThroughput: object expected");
+                            message.provisionedThroughput = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.provisionedThroughput);
                         }
                         return message;
                     };
@@ -4222,12 +4222,12 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.defaults) {
                             object.name = "";
-                            object.capacity = null;
+                            object.provisionedThroughput = null;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
-                        if (message.capacity != null && message.hasOwnProperty("capacity"))
-                            object.capacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.toObject(message.capacity, options);
+                        if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput"))
+                            object.provisionedThroughput = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.toObject(message.provisionedThroughput, options);
                         return object;
                     };
 
@@ -4251,8 +4251,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a ProvisionedThroughput.
                      * @memberof clutch.aws.dynamodb.v1
                      * @interface IProvisionedThroughput
-                     * @property {number|null} [writeCapacityUnits] ProvisionedThroughput writeCapacityUnits
-                     * @property {number|null} [readCapacityUnits] ProvisionedThroughput readCapacityUnits
+                     * @property {number|Long|null} [writeCapacityUnits] ProvisionedThroughput writeCapacityUnits
+                     * @property {number|Long|null} [readCapacityUnits] ProvisionedThroughput readCapacityUnits
                      */
 
                     /**
@@ -4272,19 +4272,19 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * ProvisionedThroughput writeCapacityUnits.
-                     * @member {number} writeCapacityUnits
+                     * @member {number|Long} writeCapacityUnits
                      * @memberof clutch.aws.dynamodb.v1.ProvisionedThroughput
                      * @instance
                      */
-                    ProvisionedThroughput.prototype.writeCapacityUnits = 0;
+                    ProvisionedThroughput.prototype.writeCapacityUnits = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * ProvisionedThroughput readCapacityUnits.
-                     * @member {number} readCapacityUnits
+                     * @member {number|Long} readCapacityUnits
                      * @memberof clutch.aws.dynamodb.v1.ProvisionedThroughput
                      * @instance
                      */
-                    ProvisionedThroughput.prototype.readCapacityUnits = 0;
+                    ProvisionedThroughput.prototype.readCapacityUnits = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * Verifies a ProvisionedThroughput message.
@@ -4298,11 +4298,11 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.writeCapacityUnits != null && message.hasOwnProperty("writeCapacityUnits"))
-                            if (!$util.isInteger(message.writeCapacityUnits))
-                                return "writeCapacityUnits: integer expected";
+                            if (!$util.isInteger(message.writeCapacityUnits) && !(message.writeCapacityUnits && $util.isInteger(message.writeCapacityUnits.low) && $util.isInteger(message.writeCapacityUnits.high)))
+                                return "writeCapacityUnits: integer|Long expected";
                         if (message.readCapacityUnits != null && message.hasOwnProperty("readCapacityUnits"))
-                            if (!$util.isInteger(message.readCapacityUnits))
-                                return "readCapacityUnits: integer expected";
+                            if (!$util.isInteger(message.readCapacityUnits) && !(message.readCapacityUnits && $util.isInteger(message.readCapacityUnits.low) && $util.isInteger(message.readCapacityUnits.high)))
+                                return "readCapacityUnits: integer|Long expected";
                         return null;
                     };
 
@@ -4319,9 +4319,23 @@ export const clutch = $root.clutch = (() => {
                             return object;
                         let message = new $root.clutch.aws.dynamodb.v1.ProvisionedThroughput();
                         if (object.writeCapacityUnits != null)
-                            message.writeCapacityUnits = object.writeCapacityUnits | 0;
+                            if ($util.Long)
+                                (message.writeCapacityUnits = $util.Long.fromValue(object.writeCapacityUnits)).unsigned = false;
+                            else if (typeof object.writeCapacityUnits === "string")
+                                message.writeCapacityUnits = parseInt(object.writeCapacityUnits, 10);
+                            else if (typeof object.writeCapacityUnits === "number")
+                                message.writeCapacityUnits = object.writeCapacityUnits;
+                            else if (typeof object.writeCapacityUnits === "object")
+                                message.writeCapacityUnits = new $util.LongBits(object.writeCapacityUnits.low >>> 0, object.writeCapacityUnits.high >>> 0).toNumber();
                         if (object.readCapacityUnits != null)
-                            message.readCapacityUnits = object.readCapacityUnits | 0;
+                            if ($util.Long)
+                                (message.readCapacityUnits = $util.Long.fromValue(object.readCapacityUnits)).unsigned = false;
+                            else if (typeof object.readCapacityUnits === "string")
+                                message.readCapacityUnits = parseInt(object.readCapacityUnits, 10);
+                            else if (typeof object.readCapacityUnits === "number")
+                                message.readCapacityUnits = object.readCapacityUnits;
+                            else if (typeof object.readCapacityUnits === "object")
+                                message.readCapacityUnits = new $util.LongBits(object.readCapacityUnits.low >>> 0, object.readCapacityUnits.high >>> 0).toNumber();
                         return message;
                     };
 
@@ -4339,13 +4353,27 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.defaults) {
-                            object.writeCapacityUnits = 0;
-                            object.readCapacityUnits = 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.writeCapacityUnits = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.writeCapacityUnits = options.longs === String ? "0" : 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.readCapacityUnits = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.readCapacityUnits = options.longs === String ? "0" : 0;
                         }
                         if (message.writeCapacityUnits != null && message.hasOwnProperty("writeCapacityUnits"))
-                            object.writeCapacityUnits = message.writeCapacityUnits;
+                            if (typeof message.writeCapacityUnits === "number")
+                                object.writeCapacityUnits = options.longs === String ? String(message.writeCapacityUnits) : message.writeCapacityUnits;
+                            else
+                                object.writeCapacityUnits = options.longs === String ? $util.Long.prototype.toString.call(message.writeCapacityUnits) : options.longs === Number ? new $util.LongBits(message.writeCapacityUnits.low >>> 0, message.writeCapacityUnits.high >>> 0).toNumber() : message.writeCapacityUnits;
                         if (message.readCapacityUnits != null && message.hasOwnProperty("readCapacityUnits"))
-                            object.readCapacityUnits = message.readCapacityUnits;
+                            if (typeof message.readCapacityUnits === "number")
+                                object.readCapacityUnits = options.longs === String ? String(message.readCapacityUnits) : message.readCapacityUnits;
+                            else
+                                object.readCapacityUnits = options.longs === String ? $util.Long.prototype.toString.call(message.readCapacityUnits) : options.longs === Number ? new $util.LongBits(message.readCapacityUnits.low >>> 0, message.readCapacityUnits.high >>> 0).toNumber() : message.readCapacityUnits;
                         return object;
                     };
 
@@ -4363,25 +4391,25 @@ export const clutch = $root.clutch = (() => {
                     return ProvisionedThroughput;
                 })();
 
-                v1.GetTableRequest = (function() {
+                v1.DescribeTableRequest = (function() {
 
                     /**
-                     * Properties of a GetTableRequest.
+                     * Properties of a DescribeTableRequest.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @interface IGetTableRequest
-                     * @property {string|null} [tableName] GetTableRequest tableName
-                     * @property {string|null} [region] GetTableRequest region
+                     * @interface IDescribeTableRequest
+                     * @property {string|null} [tableName] DescribeTableRequest tableName
+                     * @property {string|null} [region] DescribeTableRequest region
                      */
 
                     /**
-                     * Constructs a new GetTableRequest.
+                     * Constructs a new DescribeTableRequest.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @classdesc Represents a GetTableRequest.
-                     * @implements IGetTableRequest
+                     * @classdesc Represents a DescribeTableRequest.
+                     * @implements IDescribeTableRequest
                      * @constructor
-                     * @param {clutch.aws.dynamodb.v1.IGetTableRequest=} [properties] Properties to set
+                     * @param {clutch.aws.dynamodb.v1.IDescribeTableRequest=} [properties] Properties to set
                      */
-                    function GetTableRequest(properties) {
+                    function DescribeTableRequest(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -4389,30 +4417,30 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * GetTableRequest tableName.
+                     * DescribeTableRequest tableName.
                      * @member {string} tableName
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @instance
                      */
-                    GetTableRequest.prototype.tableName = "";
+                    DescribeTableRequest.prototype.tableName = "";
 
                     /**
-                     * GetTableRequest region.
+                     * DescribeTableRequest region.
                      * @member {string} region
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @instance
                      */
-                    GetTableRequest.prototype.region = "";
+                    DescribeTableRequest.prototype.region = "";
 
                     /**
-                     * Verifies a GetTableRequest message.
+                     * Verifies a DescribeTableRequest message.
                      * @function verify
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    GetTableRequest.verify = function verify(message) {
+                    DescribeTableRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
@@ -4425,17 +4453,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a GetTableRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DescribeTableRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.aws.dynamodb.v1.GetTableRequest} GetTableRequest
+                     * @returns {clutch.aws.dynamodb.v1.DescribeTableRequest} DescribeTableRequest
                      */
-                    GetTableRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.aws.dynamodb.v1.GetTableRequest)
+                    DescribeTableRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.DescribeTableRequest)
                             return object;
-                        let message = new $root.clutch.aws.dynamodb.v1.GetTableRequest();
+                        let message = new $root.clutch.aws.dynamodb.v1.DescribeTableRequest();
                         if (object.tableName != null)
                             message.tableName = String(object.tableName);
                         if (object.region != null)
@@ -4444,15 +4472,15 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a plain object from a GetTableRequest message. Also converts values to other types if specified.
+                     * Creates a plain object from a DescribeTableRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @static
-                     * @param {clutch.aws.dynamodb.v1.GetTableRequest} message GetTableRequest
+                     * @param {clutch.aws.dynamodb.v1.DescribeTableRequest} message DescribeTableRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    GetTableRequest.toObject = function toObject(message, options) {
+                    DescribeTableRequest.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -4468,37 +4496,37 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this GetTableRequest to JSON.
+                     * Converts this DescribeTableRequest to JSON.
                      * @function toJSON
-                     * @memberof clutch.aws.dynamodb.v1.GetTableRequest
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    GetTableRequest.prototype.toJSON = function toJSON() {
+                    DescribeTableRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return GetTableRequest;
+                    return DescribeTableRequest;
                 })();
 
-                v1.GetTableResponse = (function() {
+                v1.DescribeTableResponse = (function() {
 
                     /**
-                     * Properties of a GetTableResponse.
+                     * Properties of a DescribeTableResponse.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @interface IGetTableResponse
-                     * @property {clutch.aws.dynamodb.v1.ITable|null} [table] GetTableResponse table
+                     * @interface IDescribeTableResponse
+                     * @property {clutch.aws.dynamodb.v1.ITable|null} [table] DescribeTableResponse table
                      */
 
                     /**
-                     * Constructs a new GetTableResponse.
+                     * Constructs a new DescribeTableResponse.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @classdesc Represents a GetTableResponse.
-                     * @implements IGetTableResponse
+                     * @classdesc Represents a DescribeTableResponse.
+                     * @implements IDescribeTableResponse
                      * @constructor
-                     * @param {clutch.aws.dynamodb.v1.IGetTableResponse=} [properties] Properties to set
+                     * @param {clutch.aws.dynamodb.v1.IDescribeTableResponse=} [properties] Properties to set
                      */
-                    function GetTableResponse(properties) {
+                    function DescribeTableResponse(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -4506,22 +4534,22 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * GetTableResponse table.
+                     * DescribeTableResponse table.
                      * @member {clutch.aws.dynamodb.v1.ITable|null|undefined} table
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @instance
                      */
-                    GetTableResponse.prototype.table = null;
+                    DescribeTableResponse.prototype.table = null;
 
                     /**
-                     * Verifies a GetTableResponse message.
+                     * Verifies a DescribeTableResponse message.
                      * @function verify
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    GetTableResponse.verify = function verify(message) {
+                    DescribeTableResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.table != null && message.hasOwnProperty("table")) {
@@ -4533,35 +4561,35 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a GetTableResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DescribeTableResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.aws.dynamodb.v1.GetTableResponse} GetTableResponse
+                     * @returns {clutch.aws.dynamodb.v1.DescribeTableResponse} DescribeTableResponse
                      */
-                    GetTableResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.aws.dynamodb.v1.GetTableResponse)
+                    DescribeTableResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.DescribeTableResponse)
                             return object;
-                        let message = new $root.clutch.aws.dynamodb.v1.GetTableResponse();
+                        let message = new $root.clutch.aws.dynamodb.v1.DescribeTableResponse();
                         if (object.table != null) {
                             if (typeof object.table !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.GetTableResponse.table: object expected");
+                                throw TypeError(".clutch.aws.dynamodb.v1.DescribeTableResponse.table: object expected");
                             message.table = $root.clutch.aws.dynamodb.v1.Table.fromObject(object.table);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a GetTableResponse message. Also converts values to other types if specified.
+                     * Creates a plain object from a DescribeTableResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @static
-                     * @param {clutch.aws.dynamodb.v1.GetTableResponse} message GetTableResponse
+                     * @param {clutch.aws.dynamodb.v1.DescribeTableResponse} message DescribeTableResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    GetTableResponse.toObject = function toObject(message, options) {
+                    DescribeTableResponse.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -4573,17 +4601,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this GetTableResponse to JSON.
+                     * Converts this DescribeTableResponse to JSON.
                      * @function toJSON
-                     * @memberof clutch.aws.dynamodb.v1.GetTableResponse
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    GetTableResponse.prototype.toJSON = function toJSON() {
+                    DescribeTableResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return GetTableResponse;
+                    return DescribeTableResponse;
                 })();
 
                 v1.UpdateTableCapacityRequest = (function() {
@@ -4594,8 +4622,8 @@ export const clutch = $root.clutch = (() => {
                      * @interface IUpdateTableCapacityRequest
                      * @property {string|null} [tableName] UpdateTableCapacityRequest tableName
                      * @property {string|null} [region] UpdateTableCapacityRequest region
-                     * @property {number|null} [targetTableRcu] UpdateTableCapacityRequest targetTableRcu
-                     * @property {number|null} [targetTableWcu] UpdateTableCapacityRequest targetTableWcu
+                     * @property {number|Long|null} [targetTableRcu] UpdateTableCapacityRequest targetTableRcu
+                     * @property {number|Long|null} [targetTableWcu] UpdateTableCapacityRequest targetTableWcu
                      */
 
                     /**
@@ -4631,19 +4659,19 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * UpdateTableCapacityRequest targetTableRcu.
-                     * @member {number} targetTableRcu
+                     * @member {number|Long} targetTableRcu
                      * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
                      * @instance
                      */
-                    UpdateTableCapacityRequest.prototype.targetTableRcu = 0;
+                    UpdateTableCapacityRequest.prototype.targetTableRcu = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * UpdateTableCapacityRequest targetTableWcu.
-                     * @member {number} targetTableWcu
+                     * @member {number|Long} targetTableWcu
                      * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
                      * @instance
                      */
-                    UpdateTableCapacityRequest.prototype.targetTableWcu = 0;
+                    UpdateTableCapacityRequest.prototype.targetTableWcu = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * Verifies an UpdateTableCapacityRequest message.
@@ -4663,11 +4691,11 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.region))
                                 return "region: string expected";
                         if (message.targetTableRcu != null && message.hasOwnProperty("targetTableRcu"))
-                            if (!$util.isInteger(message.targetTableRcu))
-                                return "targetTableRcu: integer expected";
+                            if (!$util.isInteger(message.targetTableRcu) && !(message.targetTableRcu && $util.isInteger(message.targetTableRcu.low) && $util.isInteger(message.targetTableRcu.high)))
+                                return "targetTableRcu: integer|Long expected";
                         if (message.targetTableWcu != null && message.hasOwnProperty("targetTableWcu"))
-                            if (!$util.isInteger(message.targetTableWcu))
-                                return "targetTableWcu: integer expected";
+                            if (!$util.isInteger(message.targetTableWcu) && !(message.targetTableWcu && $util.isInteger(message.targetTableWcu.low) && $util.isInteger(message.targetTableWcu.high)))
+                                return "targetTableWcu: integer|Long expected";
                         return null;
                     };
 
@@ -4688,9 +4716,23 @@ export const clutch = $root.clutch = (() => {
                         if (object.region != null)
                             message.region = String(object.region);
                         if (object.targetTableRcu != null)
-                            message.targetTableRcu = object.targetTableRcu | 0;
+                            if ($util.Long)
+                                (message.targetTableRcu = $util.Long.fromValue(object.targetTableRcu)).unsigned = false;
+                            else if (typeof object.targetTableRcu === "string")
+                                message.targetTableRcu = parseInt(object.targetTableRcu, 10);
+                            else if (typeof object.targetTableRcu === "number")
+                                message.targetTableRcu = object.targetTableRcu;
+                            else if (typeof object.targetTableRcu === "object")
+                                message.targetTableRcu = new $util.LongBits(object.targetTableRcu.low >>> 0, object.targetTableRcu.high >>> 0).toNumber();
                         if (object.targetTableWcu != null)
-                            message.targetTableWcu = object.targetTableWcu | 0;
+                            if ($util.Long)
+                                (message.targetTableWcu = $util.Long.fromValue(object.targetTableWcu)).unsigned = false;
+                            else if (typeof object.targetTableWcu === "string")
+                                message.targetTableWcu = parseInt(object.targetTableWcu, 10);
+                            else if (typeof object.targetTableWcu === "number")
+                                message.targetTableWcu = object.targetTableWcu;
+                            else if (typeof object.targetTableWcu === "object")
+                                message.targetTableWcu = new $util.LongBits(object.targetTableWcu.low >>> 0, object.targetTableWcu.high >>> 0).toNumber();
                         return message;
                     };
 
@@ -4710,17 +4752,31 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.tableName = "";
                             object.region = "";
-                            object.targetTableRcu = 0;
-                            object.targetTableWcu = 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.targetTableRcu = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetTableRcu = options.longs === String ? "0" : 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.targetTableWcu = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetTableWcu = options.longs === String ? "0" : 0;
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
                         if (message.targetTableRcu != null && message.hasOwnProperty("targetTableRcu"))
-                            object.targetTableRcu = message.targetTableRcu;
+                            if (typeof message.targetTableRcu === "number")
+                                object.targetTableRcu = options.longs === String ? String(message.targetTableRcu) : message.targetTableRcu;
+                            else
+                                object.targetTableRcu = options.longs === String ? $util.Long.prototype.toString.call(message.targetTableRcu) : options.longs === Number ? new $util.LongBits(message.targetTableRcu.low >>> 0, message.targetTableRcu.high >>> 0).toNumber() : message.targetTableRcu;
                         if (message.targetTableWcu != null && message.hasOwnProperty("targetTableWcu"))
-                            object.targetTableWcu = message.targetTableWcu;
+                            if (typeof message.targetTableWcu === "number")
+                                object.targetTableWcu = options.longs === String ? String(message.targetTableWcu) : message.targetTableWcu;
+                            else
+                                object.targetTableWcu = options.longs === String ? $util.Long.prototype.toString.call(message.targetTableWcu) : options.longs === Number ? new $util.LongBits(message.targetTableWcu.low >>> 0, message.targetTableWcu.high >>> 0).toNumber() : message.targetTableWcu;
                         return object;
                     };
 
@@ -4825,8 +4881,8 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [tableName] UpdateGSICapacityRequest tableName
                      * @property {string|null} [region] UpdateGSICapacityRequest region
                      * @property {string|null} [indexName] UpdateGSICapacityRequest indexName
-                     * @property {number|null} [targetIndexRcu] UpdateGSICapacityRequest targetIndexRcu
-                     * @property {number|null} [targetIndexWcu] UpdateGSICapacityRequest targetIndexWcu
+                     * @property {number|Long|null} [targetIndexRcu] UpdateGSICapacityRequest targetIndexRcu
+                     * @property {number|Long|null} [targetIndexWcu] UpdateGSICapacityRequest targetIndexWcu
                      */
 
                     /**
@@ -4870,19 +4926,19 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * UpdateGSICapacityRequest targetIndexRcu.
-                     * @member {number} targetIndexRcu
+                     * @member {number|Long} targetIndexRcu
                      * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
                      * @instance
                      */
-                    UpdateGSICapacityRequest.prototype.targetIndexRcu = 0;
+                    UpdateGSICapacityRequest.prototype.targetIndexRcu = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * UpdateGSICapacityRequest targetIndexWcu.
-                     * @member {number} targetIndexWcu
+                     * @member {number|Long} targetIndexWcu
                      * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
                      * @instance
                      */
-                    UpdateGSICapacityRequest.prototype.targetIndexWcu = 0;
+                    UpdateGSICapacityRequest.prototype.targetIndexWcu = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * Verifies an UpdateGSICapacityRequest message.
@@ -4905,11 +4961,11 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.indexName))
                                 return "indexName: string expected";
                         if (message.targetIndexRcu != null && message.hasOwnProperty("targetIndexRcu"))
-                            if (!$util.isInteger(message.targetIndexRcu))
-                                return "targetIndexRcu: integer expected";
+                            if (!$util.isInteger(message.targetIndexRcu) && !(message.targetIndexRcu && $util.isInteger(message.targetIndexRcu.low) && $util.isInteger(message.targetIndexRcu.high)))
+                                return "targetIndexRcu: integer|Long expected";
                         if (message.targetIndexWcu != null && message.hasOwnProperty("targetIndexWcu"))
-                            if (!$util.isInteger(message.targetIndexWcu))
-                                return "targetIndexWcu: integer expected";
+                            if (!$util.isInteger(message.targetIndexWcu) && !(message.targetIndexWcu && $util.isInteger(message.targetIndexWcu.low) && $util.isInteger(message.targetIndexWcu.high)))
+                                return "targetIndexWcu: integer|Long expected";
                         return null;
                     };
 
@@ -4932,9 +4988,23 @@ export const clutch = $root.clutch = (() => {
                         if (object.indexName != null)
                             message.indexName = String(object.indexName);
                         if (object.targetIndexRcu != null)
-                            message.targetIndexRcu = object.targetIndexRcu | 0;
+                            if ($util.Long)
+                                (message.targetIndexRcu = $util.Long.fromValue(object.targetIndexRcu)).unsigned = false;
+                            else if (typeof object.targetIndexRcu === "string")
+                                message.targetIndexRcu = parseInt(object.targetIndexRcu, 10);
+                            else if (typeof object.targetIndexRcu === "number")
+                                message.targetIndexRcu = object.targetIndexRcu;
+                            else if (typeof object.targetIndexRcu === "object")
+                                message.targetIndexRcu = new $util.LongBits(object.targetIndexRcu.low >>> 0, object.targetIndexRcu.high >>> 0).toNumber();
                         if (object.targetIndexWcu != null)
-                            message.targetIndexWcu = object.targetIndexWcu | 0;
+                            if ($util.Long)
+                                (message.targetIndexWcu = $util.Long.fromValue(object.targetIndexWcu)).unsigned = false;
+                            else if (typeof object.targetIndexWcu === "string")
+                                message.targetIndexWcu = parseInt(object.targetIndexWcu, 10);
+                            else if (typeof object.targetIndexWcu === "number")
+                                message.targetIndexWcu = object.targetIndexWcu;
+                            else if (typeof object.targetIndexWcu === "object")
+                                message.targetIndexWcu = new $util.LongBits(object.targetIndexWcu.low >>> 0, object.targetIndexWcu.high >>> 0).toNumber();
                         return message;
                     };
 
@@ -4955,8 +5025,16 @@ export const clutch = $root.clutch = (() => {
                             object.tableName = "";
                             object.region = "";
                             object.indexName = "";
-                            object.targetIndexRcu = 0;
-                            object.targetIndexWcu = 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.targetIndexRcu = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetIndexRcu = options.longs === String ? "0" : 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.targetIndexWcu = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetIndexWcu = options.longs === String ? "0" : 0;
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
@@ -4965,9 +5043,15 @@ export const clutch = $root.clutch = (() => {
                         if (message.indexName != null && message.hasOwnProperty("indexName"))
                             object.indexName = message.indexName;
                         if (message.targetIndexRcu != null && message.hasOwnProperty("targetIndexRcu"))
-                            object.targetIndexRcu = message.targetIndexRcu;
+                            if (typeof message.targetIndexRcu === "number")
+                                object.targetIndexRcu = options.longs === String ? String(message.targetIndexRcu) : message.targetIndexRcu;
+                            else
+                                object.targetIndexRcu = options.longs === String ? $util.Long.prototype.toString.call(message.targetIndexRcu) : options.longs === Number ? new $util.LongBits(message.targetIndexRcu.low >>> 0, message.targetIndexRcu.high >>> 0).toNumber() : message.targetIndexRcu;
                         if (message.targetIndexWcu != null && message.hasOwnProperty("targetIndexWcu"))
-                            object.targetIndexWcu = message.targetIndexWcu;
+                            if (typeof message.targetIndexWcu === "number")
+                                object.targetIndexWcu = options.longs === String ? String(message.targetIndexWcu) : message.targetIndexWcu;
+                            else
+                                object.targetIndexWcu = options.longs === String ? $util.Long.prototype.toString.call(message.targetIndexWcu) : options.longs === Number ? new $util.LongBits(message.targetIndexWcu.low >>> 0, message.targetIndexWcu.high >>> 0).toNumber() : message.targetIndexWcu;
                         return object;
                     };
 

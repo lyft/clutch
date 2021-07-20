@@ -31,8 +31,8 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
-func request_DDBAPI_GetTable_0(ctx context.Context, marshaler runtime.Marshaler, client DDBAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetTableRequest
+func request_DDBAPI_DescribeTable_0(ctx context.Context, marshaler runtime.Marshaler, client DDBAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DescribeTableRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -43,13 +43,13 @@ func request_DDBAPI_GetTable_0(ctx context.Context, marshaler runtime.Marshaler,
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.GetTable(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.DescribeTable(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_DDBAPI_GetTable_0(ctx context.Context, marshaler runtime.Marshaler, server DDBAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetTableRequest
+func local_request_DDBAPI_DescribeTable_0(ctx context.Context, marshaler runtime.Marshaler, server DDBAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DescribeTableRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -60,7 +60,7 @@ func local_request_DDBAPI_GetTable_0(ctx context.Context, marshaler runtime.Mars
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.GetTable(ctx, &protoReq)
+	msg, err := server.DescribeTable(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -139,18 +139,18 @@ func local_request_DDBAPI_UpdateGSICapacity_0(ctx context.Context, marshaler run
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterDDBAPIHandlerFromEndpoint instead.
 func RegisterDDBAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server DDBAPIServer) error {
 
-	mux.Handle("POST", pattern_DDBAPI_GetTable_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_DDBAPI_DescribeTable_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.dynamodb.v1.DDBAPI/GetTable", runtime.WithHTTPPathPattern("/v1/aws/dynamodb/getTable"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.dynamodb.v1.DDBAPI/DescribeTable", runtime.WithHTTPPathPattern("/v1/aws/dynamodb/describeTable"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DDBAPI_GetTable_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DDBAPI_DescribeTable_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -158,7 +158,7 @@ func RegisterDDBAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 			return
 		}
 
-		forward_DDBAPI_GetTable_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DDBAPI_DescribeTable_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -249,23 +249,23 @@ func RegisterDDBAPIHandler(ctx context.Context, mux *runtime.ServeMux, conn *grp
 // "DDBAPIClient" to call the correct interceptors.
 func RegisterDDBAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, client DDBAPIClient) error {
 
-	mux.Handle("POST", pattern_DDBAPI_GetTable_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_DDBAPI_DescribeTable_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.dynamodb.v1.DDBAPI/GetTable", runtime.WithHTTPPathPattern("/v1/aws/dynamodb/getTable"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.dynamodb.v1.DDBAPI/DescribeTable", runtime.WithHTTPPathPattern("/v1/aws/dynamodb/describeTable"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DDBAPI_GetTable_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DDBAPI_DescribeTable_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_DDBAPI_GetTable_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DDBAPI_DescribeTable_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -313,7 +313,7 @@ func RegisterDDBAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 }
 
 var (
-	pattern_DDBAPI_GetTable_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "aws", "dynamodb", "getTable"}, ""))
+	pattern_DDBAPI_DescribeTable_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "aws", "dynamodb", "describeTable"}, ""))
 
 	pattern_DDBAPI_UpdateTableCapacity_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "aws", "dynamodb", "updateTableCapacity"}, ""))
 
@@ -321,7 +321,7 @@ var (
 )
 
 var (
-	forward_DDBAPI_GetTable_0 = runtime.ForwardResponseMessage
+	forward_DDBAPI_DescribeTable_0 = runtime.ForwardResponseMessage
 
 	forward_DDBAPI_UpdateTableCapacity_0 = runtime.ForwardResponseMessage
 
