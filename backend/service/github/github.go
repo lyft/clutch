@@ -373,6 +373,8 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 	if err != nil {
 		return nil, err
 	}
+	// The author (our User) is the person who originally wrote the code. The committer (our Author)
+	// is assumed to be the person who committed the code on behalf of the original author.
 	return &Commit{
 		Files:   commit.Files,
 		Message: commit.GetCommit().GetMessage(),
