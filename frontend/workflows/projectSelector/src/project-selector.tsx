@@ -8,7 +8,7 @@ import LayersIcon from "@material-ui/icons/Layers";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
-import { DispatchContext, StateContext } from "./helpers";
+import { deriveStateData, DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
 import type { DashState, State } from "./types";
@@ -117,24 +117,28 @@ const ProjectSelector = () => {
     }
   }, [state[Group.PROJECTS]]);
 
+  // computes the final state for rendering across other components
+  // (ie. filters out upstream/downstreams that are "hidden")
+  const derivedState = React.useMemo(() => deriveStateData(state), [state]);
+
   // This hook updates the global dash state based on the currently selected projects for cards to consume (including upstreams and downstreams).
   React.useEffect(() => {
     const dashState: DashState = { projectData: {}, selected: [] };
 
     // Determine selected projects.
     const selected = new Set<string>();
-    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-      if (state[Group.PROJECTS][p].checked) {
+    _.forEach(Object.keys(derivedState[Group.PROJECTS]), p => {
+      if (derivedState[Group.PROJECTS][p].checked) {
         selected.add(p);
       }
     });
-    _.forEach(Object.keys(state[Group.DOWNSTREAM]), p => {
-      if (state[Group.DOWNSTREAM][p].checked) {
+    _.forEach(Object.keys(derivedState[Group.DOWNSTREAM]), p => {
+      if (derivedState[Group.DOWNSTREAM][p].checked) {
         selected.add(p);
       }
     });
-    _.forEach(Object.keys(state[Group.UPSTREAM]), p => {
-      if (state[Group.UPSTREAM][p].checked) {
+    _.forEach(Object.keys(derivedState[Group.UPSTREAM]), p => {
+      if (derivedState[Group.UPSTREAM][p].checked) {
         selected.add(p);
       }
     });
@@ -164,7 +168,7 @@ const ProjectSelector = () => {
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>
+      <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
             {/* TODO: change icon to match design */}
