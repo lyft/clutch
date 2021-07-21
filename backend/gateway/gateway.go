@@ -161,7 +161,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		res, err := factory(resolverCfg.TypedConfig, logger, scope.SubScope(
 			strings.TrimPrefix(resolverCfg.Name, clutchComponentPrefix)))
 		if err != nil {
-			logger.Fatal("resolver instantiation failed", zap.Error(err))
+			logger.Fatal("OOPS resolver instantiation failed", zap.Error(err))
 		}
 		resolver.Registry[resolverCfg.Name] = res
 	}
