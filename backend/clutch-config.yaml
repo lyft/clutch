@@ -28,13 +28,13 @@ gateway:
       secure: false
 modules:
   - name: clutch.module.assets
-  # - name: clutch.module.dynamodb
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
   - name: clutch.module.aws
   - name: clutch.module.envoytriage
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
+  - name: clutch.module.dynamodb
 services:
   - name: clutch.service.aws
     typed_config:
