@@ -364,12 +364,14 @@ func TestCompareCommits(t *testing.T) {
 }
 
 var getCommitsTests = []struct {
-	name        string
-	errorText   string
-	mockRepo    *mockRepositories
-	file        string
-	message     string
-	authorLogin string
+	name            string
+	errorText       string
+	mockRepo        *mockRepositories
+	file            string
+	message         string
+	authorLogin     string
+	authorAvatarURL string
+	authorID        int64
 }{
 	{
 		name:      "v3 error",
@@ -377,11 +379,12 @@ var getCommitsTests = []struct {
 		errorText: "we've had a problem",
 	},
 	{
-		name:        "happy path",
-		mockRepo:    &mockRepositories{},
-		file:        "testfile.go",
-		message:     "committing some changes (#1)",
-		authorLogin: "foobar",
+		name:            "happy path",
+		mockRepo:        &mockRepositories{},
+		file:            "testfile.go",
+		message:         "committing some changes (#1)",
+		authorAvatarURL: "https://foo.bar/baz.png",
+		authorID:        1234,
 	},
 }
 
@@ -415,7 +418,10 @@ func TestGetCommit(t *testing.T) {
 			}
 			a.Equal(tt.file, *commit.Files[0].Filename)
 			a.Equal(tt.message, commit.Message)
-			a.Equal(tt.authorLogin, *commit.Author.Login)
+			if commit.Author != nil {
+				a.Equal(tt.authorAvatarURL, *commit.Author.AvatarURL)
+				a.Equal(tt.authorID, *commit.Author.ID)
+			}
 			a.Nil(err)
 		})
 	}
