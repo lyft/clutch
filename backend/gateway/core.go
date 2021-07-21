@@ -18,7 +18,7 @@ import (
 	xdsmod "github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	"github.com/lyft/clutch/backend/module/chaos/redisexperimentation"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
-	dynamodbmod "github.com/lyft/clutch/backend/module/dynamodbmod"
+	dynamodbmod "github.com/lyft/clutch/backend/module/dynamodb"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/featureflag"
 	"github.com/lyft/clutch/backend/module/healthcheck"
