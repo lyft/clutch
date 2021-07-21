@@ -11,6 +11,7 @@ import { useDashUpdater } from "./dash-hooks";
 import { deriveStateData, DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
+import StyledTooltip from "./tooltip";
 import type { DashState, State } from "./types";
 import { Group } from "./types";
 
@@ -174,6 +175,7 @@ const ProjectSelector = () => {
             {/* TODO: change icon to match design */}
             <LayersIcon />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
+            <StyledTooltip />
           </StyledWorkflowHeader>
           <StyledProgressContainer>
             {state.loading && <LinearProgress color="secondary" />}
