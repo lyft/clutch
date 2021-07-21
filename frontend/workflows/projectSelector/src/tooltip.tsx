@@ -47,22 +47,20 @@ const StyledTooltip = () => {
           <StyledToolTipContainer>
             <StyledTooltipTitle>Projects - </StyledTooltipTitle>
             <StyledTooltipBody>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-              tristique pharetra, eu.
+              are user-owned or searched services, libraries, mobile apps, etc. Unchecking a project hides its respective upstream
+              and downstream dependencies.
             </StyledTooltipBody>
           </StyledToolTipContainer>
           <StyledToolTipContainer>
             <StyledTooltipTitle>Upstreams - </StyledTooltipTitle>
             <StyledTooltipBody>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-              tristique pharetra, eu.
+              are dependencies that are relied on by the respective projects (i.e. a service calls into this upstream for data).
             </StyledTooltipBody>
           </StyledToolTipContainer>
           <StyledToolTipContainer>
             <StyledTooltipTitle>Downstreams - </StyledTooltipTitle>
             <StyledTooltipBody>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-              tristique pharetra, eu.
+              are dependencies that rely on the respective projects (i.e. this downstream calls into a service for data).
             </StyledTooltipBody>
           </StyledToolTipContainer>
         </>
