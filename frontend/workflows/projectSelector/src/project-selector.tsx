@@ -4,7 +4,7 @@ import type { ClutchError } from "@clutch-sh/core";
 import { client, TextField, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
-import LayersIcon from "@material-ui/icons/Layers";
+import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
@@ -172,8 +172,7 @@ const ProjectSelector = () => {
       <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
-            {/* TODO: change icon to match design */}
-            <LayersIcon />
+            <LayersOutlinedIcon />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
             <StyledTooltip />
           </StyledWorkflowHeader>
