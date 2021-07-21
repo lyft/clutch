@@ -15,6 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
@@ -82,6 +83,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 			kinesis:     kinesis.NewFromConfig(regionCfg),
 			ec2:         ec2.NewFromConfig(regionCfg),
 			autoscaling: autoscaling.NewFromConfig(regionCfg),
+			dynamodb:    dynamodb.NewFromConfig(regionCfg),
 		}
 	}
 

@@ -174,6 +174,17 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 
 		return r.kinesisResults(ctx, resolver.OptionAll, query, limit)
 
+	case typeURLDynamodbTable:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*dynamodbv1api.Table)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.dynamodbResults(ctx, patternValues["region"], patternValues["name"], limit)
+		}
+
+		return r.dynamodbResults(ctx, resolver.OptionAll, query, limit)
+
 	default:
 		return nil, status.Errorf(codes.Internal, "resolver search for '%s' not implemented", typeURL)
 	}
