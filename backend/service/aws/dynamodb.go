@@ -71,10 +71,10 @@ func newProtoForGlobalSecondaryIndex(index ddbtypes.GlobalSecondaryIndexDescript
 	}
 }
 
-func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int32, targetTableWcu int32) {
+func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) {
 	// TO DO: implement
 }
 
-func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int32, targetIndexWcu int32) {
+func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) {
 	// TO DO: implement
 }
