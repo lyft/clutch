@@ -1,4 +1,4 @@
-package kinesis
+package dynamodb
 
 import (
 	"errors"

@@ -48,6 +48,7 @@ func (c *client) processRegionTopologyObjects(ctx context.Context) {
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), client, c.processAllEC2Instances)
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllAutoScalingGroups)
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllKinesisStreams)
+		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllDynamodbTables)
 	}
 }
 
