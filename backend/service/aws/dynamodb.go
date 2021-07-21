@@ -71,10 +71,12 @@ func newProtoForGlobalSecondaryIndex(index ddbtypes.GlobalSecondaryIndexDescript
 	}
 }
 
-func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) {
+func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) error {
 	// TO DO: implement
+	return nil
 }
 
-func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) {
+func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) error {
 	// TO DO: implement
+	return nil
 }
