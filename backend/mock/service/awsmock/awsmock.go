@@ -10,6 +10,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
+	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -98,6 +99,27 @@ func (s *svc) RebootInstances(ctx context.Context, region string, ids []string) 
 }
 
 func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error) {
+	panic("implement me")
+}
+
+func (s *svc) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
+	currentThroughput := &dynamodbv1.ProvisionedThroughput{
+		ReadCapacityUnits:  10,
+		WriteCapacityUnits: 20,
+	}
+	ret := &dynamodbv1.Table{
+		Name:                  tableName,
+		Region:                region,
+		ProvisionedThroughput: currentThroughput,
+	}
+	return ret, nil
+}
+
+func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) error {
+	panic("implement me")
+}
+
+func (s *svc) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetRCU int64, targetWCU int64) error {
 	panic("implement me")
 }
 

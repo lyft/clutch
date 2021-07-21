@@ -25,7 +25,7 @@ func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 
 	c, ok := awsClient.(aws.Client)
 	if !ok {
-		return nil, errors.New("service was not the correct type")
+		return nil, errors.New("kinesis: service was not the correct type")
 	}
 
 	mod := &mod{

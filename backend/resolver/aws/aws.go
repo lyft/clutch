@@ -68,7 +68,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 
 	c, ok := awsClient.(aws.Client)
 	if !ok {
-		return nil, errors.New("service was not the correct type")
+		return nil, errors.New("aws resolver: service was not the correct type")
 	}
 
 	var topologyService topology.Service

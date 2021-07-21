@@ -28,7 +28,7 @@ gateway:
       secure: false
 modules:
   - name: clutch.module.assets
-  - name: clutch.module.dynamodb
+  # - name: clutch.module.dynamodb
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
   - name: clutch.module.aws
@@ -51,5 +51,5 @@ services:
     typed_config:
       "@type": types.google.com/clutch.config.service.k8s.v1.Config
 resolvers:
-  - name: clutch.resolver.aws
+  # - name: clutch.resolver.aws
   - name: clutch.resolver.k8s
