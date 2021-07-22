@@ -125,7 +125,13 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "TOGGLE_ENTIRE_GROUP": {
-      const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
+      // the state might not match the filtered state data passed to the components, so in the func below, we should filter out the projects
+      // that _were_ rendered in order to correctly evaluate the toggled checked status for all the projects in the respective group
+      const filteredState = {
+        ...state,
+        [action.payload.group]: _.pick(state[action.payload.group], action.payload.projects),
+      };
+      const newCheckedValue = !deriveSwitchStatus(filteredState, action.payload.group);
       return {
         ...state,
         [action.payload.group]: {
