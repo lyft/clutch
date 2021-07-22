@@ -61,4 +61,12 @@ module.exports = {
       trending: true,
     },
   },
+  "@clutch-sh/dynamodb": {
+    changeCapacity: {
+      trending: true,
+      componentProps: {
+        resolverType: "clutch.aws.dynamodb.v1.Table",
+      },
+    },
+  },
 };
