@@ -53,7 +53,7 @@ syntax = "proto3";
 
 package clutch.amiibo.v1;
 
-option go_package = "{local_go_path_to_gateway}/backend/api/amiibo/v1;amiibov1";
+option go_package = "github.com/{path_to_gateway}/backend/api/amiibo/v1;amiibov1";
 
 import "google/api/annotations.proto";
 
@@ -75,7 +75,7 @@ syntax = "proto3";
 
 package clutch.amiibo.v1;
 
-option go_package = "{local_go_path_to_gateway}/backend/api/amiibo/v1;amiibov1";
+option go_package = "github.com/{path_to_gateway}/backend/api/amiibo/v1;amiibov1";
 
 import "google/api/annotations.proto";
 
@@ -108,7 +108,7 @@ syntax = "proto3";
 
 package clutch.amiibo.v1;
 
-option go_package = "{local_go_path_to_gateway}/backend/api/amiibo/v1;amiibov1";
+option go_package = "github.com/{path_to_gateway}/backend/api/amiibo/v1;amiibov1";
 
 import "google/api/annotations.proto";
 // highlight-next-line
@@ -199,7 +199,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
 
-	amiibov1 "{local_go_path_to_gateway}/backend/api/amiibo/v1"
+	amiibov1 "github.com/{path_to_gateway}/backend/api/amiibo/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 
@@ -291,10 +291,10 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
-	amiibov1 "{local_go_path_to_gateway}/backend/api/amiibo/v1"
+	amiibov1 "github.com/{path_to_gateway}/backend/api/amiibo/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
-	amiiboservice "{local_go_path_to_gateway}/backend/service/amiibo"
+	amiiboservice "github.com/{path_to_gateway}/backend/service/amiibo"
 )
 
 const Name = "gateway.module.amiibo"
@@ -344,8 +344,8 @@ import (
     "github.com/lyft/clutch/backend/cmd/assets"
     "github.com/lyft/clutch/backend/gateway"
     // highlight-start
-    amiibomod "{local_go_path_to_gateway}/module/amiibo"
-    amiiboservice "{local_go_path_to_gateway}/service/amiibo"
+    amiibomod "github.com/{path_to_gateway}/module/amiibo"
+    amiiboservice "github.com/{path_to_gateway}/service/amiibo"
     // highlight-end
 )
 
