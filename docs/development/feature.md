@@ -53,7 +53,7 @@ syntax = "proto3";
 
 package clutch.amiibo.v1;
 
-option go_package = "amiibov1";
+option go_package = "github.com/{path_to_gateway}/backend/api/amiibo/v1;amiibov1";
 
 import "google/api/annotations.proto";
 
@@ -75,7 +75,7 @@ syntax = "proto3";
 
 package clutch.amiibo.v1;
 
-option go_package = "amiibov1";
+option go_package = "github.com/{path_to_gateway}/backend/api/amiibo/v1;amiibov1";
 
 import "google/api/annotations.proto";
 
@@ -108,7 +108,7 @@ syntax = "proto3";
 
 package clutch.amiibo.v1;
 
-option go_package = "amiibov1";
+option go_package = "github.com/{path_to_gateway}/backend/api/amiibo/v1;amiibov1";
 
 import "google/api/annotations.proto";
 // highlight-next-line
@@ -199,11 +199,11 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
 
-	amiibov1 "github.com/lyft/clutch/backend/api/amiibo/v1"
+	amiibov1 "github.com/{path_to_gateway}/backend/api/amiibo/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 
-const Name = "clutch.service.amiibo"
+const Name = "gateway.service.amiibo"
 
 const apiHost = "https://www.amiiboapi.com"
 
@@ -291,16 +291,16 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
-	amiibov1 "github.com/lyft/clutch/backend/api/amiibo/v1"
+	amiibov1 "github.com/{path_to_gateway}/backend/api/amiibo/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
-	amiiboservice "github.com/lyft/clutch/backend/service/amiibo"
+	amiiboservice "github.com/{path_to_gateway}/backend/service/amiibo"
 )
 
-const Name = "clutch.module.amiibo"
+const Name = "gateway.module.amiibo"
 
 func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
-	svc, ok := service.Registry["clutch.service.amiibo"]
+	svc, ok := service.Registry["gateway.service.amiibo"]
 	if !ok {
 		return nil, errors.New("no amiibo service was registered")
 	}
@@ -344,8 +344,8 @@ import (
     "github.com/lyft/clutch/backend/cmd/assets"
     "github.com/lyft/clutch/backend/gateway"
     // highlight-start
-    amiibomod "github.com/lyft/clutch/backend/module/amiibo"
-    amiiboservice "github.com/lyft/clutch/backend/service/amiibo"
+    amiibomod "github.com/{path_to_gateway}/module/amiibo"
+    amiiboservice "github.com/{path_to_gateway}/service/amiibo"
     // highlight-end
 )
 
@@ -368,11 +368,11 @@ Add the components to the config.
 services:
   ...
   // highlight-next-line
-  - name: clutch.service.amiibo
+  - name: gateway.service.amiibo
 modules:
   ...
   // highlight-next-line
-  - name: clutch.module.amiibo
+  - name: gateway.module.amiibo
 ...
 ```
 
