@@ -270,6 +270,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	fmt.Println("DEST WAS", dest)
+	// Fix tilde HOME path.
+	if strings.HasPrefix(dest, "~/") {
+		homeUser, _ := user.Current()
+		dest = filepath.Join(homeUser.HomeDir, dest[2:])
+	}
+
+	fmt.Println("DEST IS", dest)
+
 	// Check if dest exists.
 	if _, err := os.Stat(dest); !os.IsNotExist(err) {
 		log.Fatal("ERROR destination folder exists")
