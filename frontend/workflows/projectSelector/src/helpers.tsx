@@ -16,17 +16,15 @@ const useReducerState = () => {
   return React.useContext(StateContext);
 };
 
-const DispatchContext = React.createContext<(action: Action) => void | undefined>(undefined);
+const DispatchContext = React.createContext<(action: Action) => void | undefined>(() => undefined);
 const useDispatch = () => {
   return React.useContext(DispatchContext);
 };
 
 // TODO(perf): call with useMemo().
-const deriveSwitchStatus = (state: State, group: Group): boolean => {
-  return (
-    Object.keys(state[group]).length > 0 &&
-    Object.keys(state[group]).every(key => state[group][key].checked)
-  );
+const deriveSwitchStatus = (state: State | undefined, group: Group): boolean => {
+  const groupKeys = Object.keys(state?.[group] || []);
+  return groupKeys.length > 0 && groupKeys.every(key => state?.[group][key].checked);
 };
 
 const updateGroupstate = (
@@ -55,14 +53,14 @@ const dependencyToProjects = (state: State, group: Group): DependencyMappings =>
   const projects = Object.keys(state[group]);
   projects.forEach(p => {
     const { upstreams, downstreams } = state.projectData[p]?.dependencies || {};
-    upstreams?.[PROJECT_TYPE_URL]?.ids.forEach(u => {
+    upstreams?.[PROJECT_TYPE_URL]?.ids?.forEach(u => {
       if (!upstreamMap[u]) {
         upstreamMap[u] = { [p]: true };
       } else {
         upstreamMap[u][p] = true;
       }
     });
-    downstreams?.[PROJECT_TYPE_URL]?.ids.forEach(d => {
+    downstreams?.[PROJECT_TYPE_URL]?.ids?.forEach(d => {
       if (!downstreamMap[d]) {
         downstreamMap[d] = { [p]: true };
       } else {
@@ -81,8 +79,8 @@ const exclusiveProjectDependencies = (
 ): { upstreams: string[]; downstreams: string[] } => {
   const dependencyMap = dependencyToProjects(state, group);
 
-  const upstreams = [];
-  const downstreams = [];
+  const upstreams = [] as string[];
+  const downstreams = [] as string[];
   _.forIn(dependencyMap.upstreams, (v, k) => {
     if (v[project] && Object.keys(v).length === 1) {
       upstreams.push(k);
@@ -99,8 +97,8 @@ const exclusiveProjectDependencies = (
 // TODO: (perf/efficiency) compute the projects that should be displayed rather than computing the hidden projects
 // returns the upstreams/downstreams that should be hidden based on the checked status of/exclusivity to project(s)
 const deriveHiddenDependencies = (state: State): { upstreams: string[]; downstreams: string[] } => {
-  const upstreams = [];
-  const downstreams = [];
+  const upstreams = [] as string[];
+  const downstreams = [] as string[];
 
   const uncheckedProjects = Object.keys(state[Group.PROJECTS]).filter(
     p => !state[Group.PROJECTS][p].checked

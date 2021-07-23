@@ -5,7 +5,7 @@ import type { DashAction, DashState } from "./types";
 export const DashStateContext = React.createContext<DashState | undefined>(undefined);
 
 export const DashDispatchContext = React.createContext<(action: DashAction) => void | undefined>(
-  undefined
+  () => undefined
 );
 
 type useDashUpdaterReturn = {

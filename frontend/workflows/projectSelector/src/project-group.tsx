@@ -116,8 +116,9 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
 
   const [collapsed, setCollapsed] = React.useState(false);
 
-  const numProjects = Object.keys(state[group]).length;
-  const checkedProjects = Object.keys(state[group]).filter(k => state[group][k].checked);
+  const groupKeys = Object.keys(state?.[group] || {});
+  const numProjects = groupKeys.length;
+  const checkedProjects = groupKeys.filter(k => state?.[group][k].checked);
 
   return (
     <>
@@ -140,11 +141,11 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
             onChange={() =>
               dispatch({
                 type: "TOGGLE_ENTIRE_GROUP",
-                payload: { group, projects: Object.keys(state[group]) },
+                payload: { group, projects: groupKeys },
               })
             }
             checked={deriveSwitchStatus(state, group)}
-            disabled={numProjects === 0 || state.loading}
+            disabled={numProjects === 0 || state?.loading}
           />
         </StyledHeaderColumn>
       </StyledProjectHeader>
@@ -153,53 +154,51 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
           {numProjects === 0 && (
             <StyledNoProjectsText>No projects in this group yet.</StyledNoProjectsText>
           )}
-          {Object.keys(state[group])
-            .sort()
-            .map(key => (
-              <StyledMenuItem key={key}>
-                <Checkbox
-                  name={key}
-                  size="small"
-                  disabled={state.loading}
-                  onChange={() =>
+          {groupKeys.sort().map(key => (
+            <StyledMenuItem key={key}>
+              <Checkbox
+                name={key}
+                size="small"
+                disabled={state?.loading}
+                onChange={() =>
+                  dispatch({
+                    type: "TOGGLE_PROJECTS",
+                    payload: { group, projects: [key] },
+                  })
+                }
+                checked={!!state?.[group][key].checked}
+              />
+              <StyledMenuItemName>{key}</StyledMenuItemName>
+              <StyledHoverOptions hidden>
+                <StyledOnlyButton
+                  onClick={() =>
+                    !state?.loading &&
                     dispatch({
-                      type: "TOGGLE_PROJECTS",
+                      type: "ONLY_PROJECTS",
                       payload: { group, projects: [key] },
                     })
                   }
-                  checked={!!state[group][key].checked}
-                />
-                <StyledMenuItemName>{key}</StyledMenuItemName>
-                <StyledHoverOptions hidden>
-                  <StyledOnlyButton
-                    onClick={() =>
-                      !state.loading &&
-                      dispatch({
-                        type: "ONLY_PROJECTS",
-                        payload: { group, projects: [key] },
-                      })
-                    }
-                  >
-                    Only
-                  </StyledOnlyButton>
-                  <StyledClearIcon>
-                    {state[group][key].custom && (
-                      <IconButton
-                        onClick={() =>
-                          !state.loading &&
-                          dispatch({
-                            type: "REMOVE_PROJECTS",
-                            payload: { group, projects: [key] },
-                          })
-                        }
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    )}
-                  </StyledClearIcon>
-                </StyledHoverOptions>
-              </StyledMenuItem>
-            ))}
+                >
+                  Only
+                </StyledOnlyButton>
+                <StyledClearIcon>
+                  {state?.[group][key].custom && (
+                    <IconButton
+                      onClick={() =>
+                        !state?.loading &&
+                        dispatch({
+                          type: "REMOVE_PROJECTS",
+                          payload: { group, projects: [key] },
+                        })
+                      }
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  )}
+                </StyledClearIcon>
+              </StyledHoverOptions>
+            </StyledMenuItem>
+          ))}
         </div>
       )}
     </>
