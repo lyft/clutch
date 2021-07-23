@@ -9,7 +9,7 @@ MY_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 YARN:=./build/bin/yarn.sh
 
 .PHONY: all # Generate API, Frontend, and backend assets.
-all: api frontend backend-tidy backend-with-assets
+all: dev-requirement-check api frontend backend-tidy backend-with-assets
 
 .PHONY: api
 api: yarn-ensure
@@ -49,3 +49,7 @@ yarn-ensure:
 .PHONY: frontend-dev # Start the frontend in development mode.
 frontend-dev: yarn-ensure
 	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend start
+
+.PHONY: dev-requirment-checks
+dev-requirement-checks:
+	@tools/dev-requirement-checks.sh
