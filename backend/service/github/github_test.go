@@ -372,6 +372,7 @@ var getCommitsTests = []struct {
 	authorLogin     string
 	authorAvatarURL string
 	authorID        int64
+	parentRef       string
 }{
 	{
 		name:      "v3 error",
@@ -385,6 +386,7 @@ var getCommitsTests = []struct {
 		message:         "committing some changes (#1)",
 		authorAvatarURL: "https://foo.bar/baz.png",
 		authorID:        1234,
+		parentRef:       "test",
 	},
 }
 
@@ -421,6 +423,9 @@ func TestGetCommit(t *testing.T) {
 			if commit.Author != nil {
 				a.Equal(tt.authorAvatarURL, *commit.Author.AvatarURL)
 				a.Equal(tt.authorID, *commit.Author.ID)
+			}
+			if commit.ParentRef != "" {
+				a.Equal(tt.parentRef, commit.ParentRef)
 			}
 			a.Nil(err)
 		})
