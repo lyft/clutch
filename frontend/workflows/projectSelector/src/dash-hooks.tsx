@@ -23,5 +23,5 @@ export const useDashUpdater = (): useDashUpdaterReturn => {
 };
 
 export const useDashState = (): DashState => {
-  return React.useContext(DashStateContext);
+  return React.useContext<DashState>(DashStateContext);
 };
