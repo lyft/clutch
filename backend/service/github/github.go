@@ -361,6 +361,15 @@ func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA str
 	}, nil
 }
 
+func (s *svc) ListCommitsViaComparison(ctx context.Context, ref *RemoteRef, compareSHA string) ([]*githubv3.RepositoryCommit, error) {
+	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
+	if err != nil {
+		return nil, fmt.Errorf("could not get commits from comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
+	}
+
+	return comp.Commits, nil
+}
+
 type Commit struct {
 	Files     []*githubv3.CommitFile
 	Message   string

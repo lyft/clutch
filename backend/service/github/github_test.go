@@ -171,7 +171,11 @@ func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base
 		return nil, nil, errors.New(problem)
 	}
 	returnstr := "behind"
-	return &githubv3.CommitsComparison{Status: &returnstr}, nil, nil
+	shaStr := "astdfsaohecra"
+	return &githubv3.CommitsComparison{Status: &returnstr,
+		Commits: []*githubv3.RepositoryCommit{
+			{SHA: &shaStr},
+		}}, nil, nil
 }
 
 func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha string) (*githubv3.RepositoryCommit, *githubv3.Response, error) {
@@ -358,6 +362,61 @@ func TestCompareCommits(t *testing.T) {
 				return
 			}
 			a.Equal(comp.GetStatus(), tt.status)
+			a.Nil(err)
+		})
+	}
+}
+
+var listCommitsTests = []struct {
+	name         string
+	errorText    string
+	commits      []*githubv3.RepositoryCommit
+	generalError bool
+	mockRepo     *mockRepositories
+}{
+	{
+		name:         "v3 error",
+		generalError: true,
+		errorText:    "could not get commits from comparison",
+		mockRepo:     &mockRepositories{generalError: true},
+	},
+	{
+		name:     "happy path",
+		mockRepo: &mockRepositories{},
+	},
+}
+
+func TestListCommitsViaComparison(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range listCommitsTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			a := assert.New(t)
+			s := &svc{rest: v3client{
+				Repositories: tt.mockRepo,
+			}}
+
+			commits, err := s.ListCommitsViaComparison(
+				context.Background(),
+				&RemoteRef{
+					RepoOwner: "owner",
+					RepoName:  "myRepo",
+					Ref:       "master",
+				},
+				"1234",
+			)
+			if tt.errorText != "" {
+				a.Error(err)
+				a.Contains(err.Error(), tt.errorText)
+				return
+			}
+			if err != nil {
+				a.FailNowf("unexpected error: %s", err.Error())
+				return
+			}
+			a.NotNil(commits)
 			a.Nil(err)
 		})
 	}
