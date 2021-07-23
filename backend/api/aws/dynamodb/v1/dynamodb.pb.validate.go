@@ -205,6 +205,83 @@ var _ interface {
 	ErrorName() string
 } = GlobalSecondaryIndexValidationError{}
 
+// Validate checks the field values on GlobalSecondaryIndexAction with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GlobalSecondaryIndexAction) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetUpdate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GlobalSecondaryIndexActionValidationError{
+				field:  "Update",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// GlobalSecondaryIndexActionValidationError is the validation error returned
+// by GlobalSecondaryIndexAction.Validate if the designated constraints aren't met.
+type GlobalSecondaryIndexActionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GlobalSecondaryIndexActionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GlobalSecondaryIndexActionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GlobalSecondaryIndexActionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GlobalSecondaryIndexActionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GlobalSecondaryIndexActionValidationError) ErrorName() string {
+	return "GlobalSecondaryIndexActionValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GlobalSecondaryIndexActionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGlobalSecondaryIndexAction.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GlobalSecondaryIndexActionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GlobalSecondaryIndexActionValidationError{}
+
 // Validate checks the field values on ProvisionedThroughput with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -456,9 +533,15 @@ func (m *UpdateTableCapacityRequest) Validate() error {
 		}
 	}
 
-	// no validation rules for TargetTableRcu
-
-	// no validation rules for TargetTableWcu
+	if v, ok := interface{}(m.GetTargetCapacity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateTableCapacityRequestValidationError{
+				field:  "TargetCapacity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }
@@ -609,16 +692,15 @@ func (m *UpdateGSICapacityRequest) Validate() error {
 		}
 	}
 
-	if len(m.GetIndexName()) < 1 {
-		return UpdateGSICapacityRequestValidationError{
-			field:  "IndexName",
-			reason: "value length must be at least 1 bytes",
+	if v, ok := interface{}(m.GetUpdate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateGSICapacityRequestValidationError{
+				field:  "Update",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
-
-	// no validation rules for TargetIndexRcu
-
-	// no validation rules for TargetIndexWcu
 
 	return nil
 }
