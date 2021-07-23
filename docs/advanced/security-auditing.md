@@ -37,7 +37,7 @@ syntax = "proto3";
 
 package clutch.amiibo.v1;
 
-option go_package = "amiibov1";
+option go_package = "{local_go_path_to_gateway}/backend/api/amiibo/v1;amiibov1";
 
 import "google/api/annotations.proto";
 
@@ -74,7 +74,7 @@ syntax = "proto3";
 
 package clutch.amiibo.v1;
 
-option go_package = "amiibov1";
+option go_package = "{local_go_path_to_gateway}/backend/api/amiibo/v1;amiibov1";
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
