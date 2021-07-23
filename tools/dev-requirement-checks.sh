@@ -32,6 +32,11 @@ if ! command -v node -v &> /dev/null; then
   did_checks_pass=false
 fi
 
+if ! command -v yarn &> /dev/null; then
+  echo "yarn is not installed, this is a required dependency."
+  did_checks_pass=false
+fi
+
 if [ "$did_checks_pass" = false ] ; then
   printf "\nPlease refer to the development requirments https://clutch.sh/docs/getting-started/local-build/#requirements"
 fi
