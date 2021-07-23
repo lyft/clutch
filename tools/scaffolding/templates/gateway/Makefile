@@ -9,7 +9,7 @@ MY_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 YARN:=./build/bin/yarn.sh
 
 .PHONY: all # Generate API, Frontend, and backend assets.
-all: api frontend backend-tidy backend-with-assets
+all: backend-tidy api frontend backend-with-assets
 
 .PHONY: api
 api: yarn-ensure
