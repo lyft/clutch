@@ -386,7 +386,7 @@ var listCommitsTests = []struct {
 	},
 }
 
-func TestListCommitsViaComparison(t *testing.T) {
+func TestCommitRange(t *testing.T) {
 	t.Parallel()
 
 	for _, tt := range listCommitsTests {
@@ -398,7 +398,7 @@ func TestListCommitsViaComparison(t *testing.T) {
 				Repositories: tt.mockRepo,
 			}}
 
-			commits, err := s.ListCommitsViaComparison(
+			commits, err := s.CommitRange(
 				context.Background(),
 				&RemoteRef{
 					RepoOwner: "owner",
