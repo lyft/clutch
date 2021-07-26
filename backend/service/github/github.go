@@ -364,8 +364,9 @@ func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA str
 /*
  * CommitRange() is used to get multiple commits between 2 SHAs. It is useful because we can do one API call and get a bunch
  * of commits, rather than calling GetCommit() multiple times.
+ * compareSHA is the base (parent) while the ref.ref is the head
  */
-func (s *svc) CommitRange(ctx context.Context, ref *RemoteRef, compareSHA string) ([]*githubv3.RepositoryCommit, error) {
+func (s *svc) CommitRange(ctx context.Context, compareSHA string, ref *RemoteRef) ([]*githubv3.RepositoryCommit, error) {
 	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
 	if err != nil {
 		return nil, fmt.Errorf("could not get commits from comparison for %s and %s in %s/%s. %+v", ref.Ref, compareSHA, ref.RepoOwner, ref.RepoName, err)

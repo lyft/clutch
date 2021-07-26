@@ -367,7 +367,7 @@ func TestCompareCommits(t *testing.T) {
 	}
 }
 
-var listCommitsTests = []struct {
+var commitRangeTests = []struct {
 	name         string
 	errorText    string
 	commits      []*githubv3.RepositoryCommit
@@ -389,7 +389,7 @@ var listCommitsTests = []struct {
 func TestCommitRange(t *testing.T) {
 	t.Parallel()
 
-	for _, tt := range listCommitsTests {
+	for _, tt := range commitRangeTests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
@@ -400,12 +400,11 @@ func TestCommitRange(t *testing.T) {
 
 			commits, err := s.CommitRange(
 				context.Background(),
-				&RemoteRef{
+				"1234", &RemoteRef{
 					RepoOwner: "owner",
 					RepoName:  "myRepo",
 					Ref:       "master",
 				},
-				"1234",
 			)
 			if tt.errorText != "" {
 				a.Error(err)
