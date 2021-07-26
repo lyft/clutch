@@ -5,7 +5,7 @@ import type { LandingCardProps } from "../landing-card";
 import { LandingCard } from "../landing-card";
 
 export default {
-  title: "Core/Card/Landing Card",
+  title: "Core/Cards/Landing Card",
   component: LandingCard,
 } as Meta;
 
