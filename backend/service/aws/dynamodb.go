@@ -5,7 +5,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	dynamodb "github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 )
@@ -39,7 +39,7 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 
 }
 
-func getGlobalSecondaryIndexes(indexes []ddbtypes.GlobalSecondaryIndexDescription) []*dynamodbv1.GlobalSecondaryIndex {
+func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) []*dynamodbv1.GlobalSecondaryIndex {
 	gsis := make([]*dynamodbv1.GlobalSecondaryIndex, len(indexes))
 	for idx, i := range indexes {
 		gsis[idx] = newProtoForGlobalSecondaryIndex(i)
@@ -47,7 +47,7 @@ func getGlobalSecondaryIndexes(indexes []ddbtypes.GlobalSecondaryIndexDescriptio
 	return gsis
 }
 
-func newProtoForTable(table ddbtypes.TableDescription) *dynamodbv1.Table {
+func newProtoForTable(table types.TableDescription) *dynamodbv1.Table {
 	currentCapacity := &dynamodbv1.ProvisionedThroughput{
 		ReadCapacityUnits:  aws.ToInt64(table.ProvisionedThroughput.ReadCapacityUnits),
 		WriteCapacityUnits: aws.ToInt64(table.ProvisionedThroughput.WriteCapacityUnits),
@@ -59,7 +59,7 @@ func newProtoForTable(table ddbtypes.TableDescription) *dynamodbv1.Table {
 	}
 }
 
-func newProtoForGlobalSecondaryIndex(index ddbtypes.GlobalSecondaryIndexDescription) *dynamodbv1.GlobalSecondaryIndex {
+func newProtoForGlobalSecondaryIndex(index types.GlobalSecondaryIndexDescription) *dynamodbv1.GlobalSecondaryIndex {
 	currentCapacity := &dynamodbv1.ProvisionedThroughput{
 		ReadCapacityUnits:  aws.ToInt64(index.ProvisionedThroughput.ReadCapacityUnits),
 		WriteCapacityUnits: aws.ToInt64(index.ProvisionedThroughput.WriteCapacityUnits),
@@ -77,40 +77,18 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 		return err
 	}
 
-	targetCapacity := &dynamodbv.ProvisionedThroughput{
+	targetCapacity := types.ProvisionedThroughput{
 		ReadCapacityUnits:  aws.Int64(targetTableRcu),
 		WriteCapacityUnits: aws.Int64(targetTableWcu),
 	}
 
 	input := &dynamodb.UpdateTableInput{
 		TableName:             aws.String(tableName),
-		ProvisionedThroughput: targetCapacity,
+		ProvisionedThroughput: &targetCapacity,
 	}
 
 	_, err = cl.dynamodb.UpdateTable(ctx, input)
 	return err
-}
-
-func generateInput(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) *dynamodb.UpdateTableInput {
-	input := &dynamodb.UpdateTableInput{
-		TableName: aws.String(tableName),
-	}
-
-	targetCapacity := &dynamodbv1.ProvisionedThroughput{
-		ReadCapacityUnits:  aws.Int64(targetIndexRcu),
-		WriteCapacityUnits: aws.Int64(targetIndexWcu),
-	}
-
-	update := &dynamodb.GlobalSecondaryIndexUpdate{Update: &dynamodb.UpdateGlobalSecondaryIndexAction{
-		IndexName:             aws.String(index),
-		ProvisionedThroughput: targetCapacity,
-	},
-	}
-
-	input.GlobalSecondaryIndexUpdates = append(input.GlobalSecondaryIndexUpdates, update)
-
-	return input
-
 }
 
 func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) error {
@@ -120,24 +98,20 @@ func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName
 		return err
 	}
 
-	input := generateInput(ctx, region, tableName, indexName, targetIndexRcu, targetIndexWcu)
-
-	// targetCapacity := &dynamodbv1.ProvisionedThroughput{
-	// 	ReadCapacityUnits:  aws.Int64(targetIndexRcu),
-	// 	WriteCapacityUnits: aws.Int64(targetIndexWcu),
-	// }
-
-	// input := &dynamodb.UpdateTableInput{
-	// 	TableName: aws.String(tableName),
-	// 	GlobalSecondaryIndexUpdates: map[string]&dynamodb.Throughput,
-	// }
-
-	// input.GlobalSecondaryIndexUpdates = append(input.GlobalSecondaryIndexUpdates, &dynamodb.GlobalSecondaryIndexUpdates{
-	// 	Update: &dynamodb.UpdateGlobalSecondaryIndexAction{
-	// 		IndexName:             indexName,
-	// 		ProvisionedThroughput: targetCapacity,
-	// 	},
-	// })
+	input := &dynamodb.UpdateTableInput{
+		TableName: aws.String(tableName),
+		GlobalSecondaryIndexUpdates: []types.GlobalSecondaryIndexUpdate{
+			types.GlobalSecondaryIndexUpdate{
+				Create: &types.CreateGlobalSecondaryIndexAction{
+					IndexName: aws.String(indexName),
+					ProvisionedThroughput: &types.ProvisionedThroughput{
+						ReadCapacityUnits:  aws.Int64(targetIndexRcu),
+						WriteCapacityUnits: aws.Int64(targetIndexWcu),
+					},
+				},
+			},
+		},
+	}
 
 	_, err = cl.dynamodb.UpdateTable(ctx, input)
 	return err
