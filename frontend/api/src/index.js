@@ -4245,111 +4245,6 @@ export const clutch = $root.clutch = (() => {
                     return GlobalSecondaryIndex;
                 })();
 
-                v1.GlobalSecondaryIndexAction = (function() {
-
-                    /**
-                     * Properties of a GlobalSecondaryIndexAction.
-                     * @memberof clutch.aws.dynamodb.v1
-                     * @interface IGlobalSecondaryIndexAction
-                     * @property {clutch.aws.dynamodb.v1.IGlobalSecondaryIndex|null} [update] GlobalSecondaryIndexAction update
-                     */
-
-                    /**
-                     * Constructs a new GlobalSecondaryIndexAction.
-                     * @memberof clutch.aws.dynamodb.v1
-                     * @classdesc Represents a GlobalSecondaryIndexAction.
-                     * @implements IGlobalSecondaryIndexAction
-                     * @constructor
-                     * @param {clutch.aws.dynamodb.v1.IGlobalSecondaryIndexAction=} [properties] Properties to set
-                     */
-                    function GlobalSecondaryIndexAction(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * GlobalSecondaryIndexAction update.
-                     * @member {clutch.aws.dynamodb.v1.IGlobalSecondaryIndex|null|undefined} update
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction
-                     * @instance
-                     */
-                    GlobalSecondaryIndexAction.prototype.update = null;
-
-                    /**
-                     * Verifies a GlobalSecondaryIndexAction message.
-                     * @function verify
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    GlobalSecondaryIndexAction.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.update != null && message.hasOwnProperty("update")) {
-                            let error = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.verify(message.update);
-                            if (error)
-                                return "update." + error;
-                        }
-                        return null;
-                    };
-
-                    /**
-                     * Creates a GlobalSecondaryIndexAction message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction} GlobalSecondaryIndexAction
-                     */
-                    GlobalSecondaryIndexAction.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction)
-                            return object;
-                        let message = new $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction();
-                        if (object.update != null) {
-                            if (typeof object.update !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction.update: object expected");
-                            message.update = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.fromObject(object.update);
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a GlobalSecondaryIndexAction message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction
-                     * @static
-                     * @param {clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction} message GlobalSecondaryIndexAction
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    GlobalSecondaryIndexAction.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults)
-                            object.update = null;
-                        if (message.update != null && message.hasOwnProperty("update"))
-                            object.update = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.toObject(message.update, options);
-                        return object;
-                    };
-
-                    /**
-                     * Converts this GlobalSecondaryIndexAction to JSON.
-                     * @function toJSON
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    GlobalSecondaryIndexAction.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return GlobalSecondaryIndexAction;
-                })();
-
                 v1.ProvisionedThroughput = (function() {
 
                     /**
@@ -4727,7 +4622,8 @@ export const clutch = $root.clutch = (() => {
                      * @interface IUpdateTableCapacityRequest
                      * @property {string|null} [tableName] UpdateTableCapacityRequest tableName
                      * @property {string|null} [region] UpdateTableCapacityRequest region
-                     * @property {clutch.aws.dynamodb.v1.IProvisionedThroughput|null} [targetCapacity] UpdateTableCapacityRequest targetCapacity
+                     * @property {number|Long|null} [targetTableRcu] UpdateTableCapacityRequest targetTableRcu
+                     * @property {number|Long|null} [targetTableWcu] UpdateTableCapacityRequest targetTableWcu
                      */
 
                     /**
@@ -4762,12 +4658,20 @@ export const clutch = $root.clutch = (() => {
                     UpdateTableCapacityRequest.prototype.region = "";
 
                     /**
-                     * UpdateTableCapacityRequest targetCapacity.
-                     * @member {clutch.aws.dynamodb.v1.IProvisionedThroughput|null|undefined} targetCapacity
+                     * UpdateTableCapacityRequest targetTableRcu.
+                     * @member {number|Long} targetTableRcu
                      * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
                      * @instance
                      */
-                    UpdateTableCapacityRequest.prototype.targetCapacity = null;
+                    UpdateTableCapacityRequest.prototype.targetTableRcu = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * UpdateTableCapacityRequest targetTableWcu.
+                     * @member {number|Long} targetTableWcu
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityRequest
+                     * @instance
+                     */
+                    UpdateTableCapacityRequest.prototype.targetTableWcu = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * Verifies an UpdateTableCapacityRequest message.
@@ -4786,11 +4690,12 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
-                        if (message.targetCapacity != null && message.hasOwnProperty("targetCapacity")) {
-                            let error = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.verify(message.targetCapacity);
-                            if (error)
-                                return "targetCapacity." + error;
-                        }
+                        if (message.targetTableRcu != null && message.hasOwnProperty("targetTableRcu"))
+                            if (!$util.isInteger(message.targetTableRcu) && !(message.targetTableRcu && $util.isInteger(message.targetTableRcu.low) && $util.isInteger(message.targetTableRcu.high)))
+                                return "targetTableRcu: integer|Long expected";
+                        if (message.targetTableWcu != null && message.hasOwnProperty("targetTableWcu"))
+                            if (!$util.isInteger(message.targetTableWcu) && !(message.targetTableWcu && $util.isInteger(message.targetTableWcu.low) && $util.isInteger(message.targetTableWcu.high)))
+                                return "targetTableWcu: integer|Long expected";
                         return null;
                     };
 
@@ -4810,11 +4715,24 @@ export const clutch = $root.clutch = (() => {
                             message.tableName = String(object.tableName);
                         if (object.region != null)
                             message.region = String(object.region);
-                        if (object.targetCapacity != null) {
-                            if (typeof object.targetCapacity !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.UpdateTableCapacityRequest.targetCapacity: object expected");
-                            message.targetCapacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.targetCapacity);
-                        }
+                        if (object.targetTableRcu != null)
+                            if ($util.Long)
+                                (message.targetTableRcu = $util.Long.fromValue(object.targetTableRcu)).unsigned = false;
+                            else if (typeof object.targetTableRcu === "string")
+                                message.targetTableRcu = parseInt(object.targetTableRcu, 10);
+                            else if (typeof object.targetTableRcu === "number")
+                                message.targetTableRcu = object.targetTableRcu;
+                            else if (typeof object.targetTableRcu === "object")
+                                message.targetTableRcu = new $util.LongBits(object.targetTableRcu.low >>> 0, object.targetTableRcu.high >>> 0).toNumber();
+                        if (object.targetTableWcu != null)
+                            if ($util.Long)
+                                (message.targetTableWcu = $util.Long.fromValue(object.targetTableWcu)).unsigned = false;
+                            else if (typeof object.targetTableWcu === "string")
+                                message.targetTableWcu = parseInt(object.targetTableWcu, 10);
+                            else if (typeof object.targetTableWcu === "number")
+                                message.targetTableWcu = object.targetTableWcu;
+                            else if (typeof object.targetTableWcu === "object")
+                                message.targetTableWcu = new $util.LongBits(object.targetTableWcu.low >>> 0, object.targetTableWcu.high >>> 0).toNumber();
                         return message;
                     };
 
@@ -4834,14 +4752,31 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.tableName = "";
                             object.region = "";
-                            object.targetCapacity = null;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.targetTableRcu = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetTableRcu = options.longs === String ? "0" : 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.targetTableWcu = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetTableWcu = options.longs === String ? "0" : 0;
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
-                        if (message.targetCapacity != null && message.hasOwnProperty("targetCapacity"))
-                            object.targetCapacity = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.toObject(message.targetCapacity, options);
+                        if (message.targetTableRcu != null && message.hasOwnProperty("targetTableRcu"))
+                            if (typeof message.targetTableRcu === "number")
+                                object.targetTableRcu = options.longs === String ? String(message.targetTableRcu) : message.targetTableRcu;
+                            else
+                                object.targetTableRcu = options.longs === String ? $util.Long.prototype.toString.call(message.targetTableRcu) : options.longs === Number ? new $util.LongBits(message.targetTableRcu.low >>> 0, message.targetTableRcu.high >>> 0).toNumber() : message.targetTableRcu;
+                        if (message.targetTableWcu != null && message.hasOwnProperty("targetTableWcu"))
+                            if (typeof message.targetTableWcu === "number")
+                                object.targetTableWcu = options.longs === String ? String(message.targetTableWcu) : message.targetTableWcu;
+                            else
+                                object.targetTableWcu = options.longs === String ? $util.Long.prototype.toString.call(message.targetTableWcu) : options.longs === Number ? new $util.LongBits(message.targetTableWcu.low >>> 0, message.targetTableWcu.high >>> 0).toNumber() : message.targetTableWcu;
                         return object;
                     };
 
@@ -4945,7 +4880,9 @@ export const clutch = $root.clutch = (() => {
                      * @interface IUpdateGSICapacityRequest
                      * @property {string|null} [tableName] UpdateGSICapacityRequest tableName
                      * @property {string|null} [region] UpdateGSICapacityRequest region
-                     * @property {clutch.aws.dynamodb.v1.IGlobalSecondaryIndexAction|null} [update] UpdateGSICapacityRequest update
+                     * @property {string|null} [indexName] UpdateGSICapacityRequest indexName
+                     * @property {number|Long|null} [targetIndexRcu] UpdateGSICapacityRequest targetIndexRcu
+                     * @property {number|Long|null} [targetIndexWcu] UpdateGSICapacityRequest targetIndexWcu
                      */
 
                     /**
@@ -4980,12 +4917,28 @@ export const clutch = $root.clutch = (() => {
                     UpdateGSICapacityRequest.prototype.region = "";
 
                     /**
-                     * UpdateGSICapacityRequest update.
-                     * @member {clutch.aws.dynamodb.v1.IGlobalSecondaryIndexAction|null|undefined} update
+                     * UpdateGSICapacityRequest indexName.
+                     * @member {string} indexName
                      * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
                      * @instance
                      */
-                    UpdateGSICapacityRequest.prototype.update = null;
+                    UpdateGSICapacityRequest.prototype.indexName = "";
+
+                    /**
+                     * UpdateGSICapacityRequest targetIndexRcu.
+                     * @member {number|Long} targetIndexRcu
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @instance
+                     */
+                    UpdateGSICapacityRequest.prototype.targetIndexRcu = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * UpdateGSICapacityRequest targetIndexWcu.
+                     * @member {number|Long} targetIndexWcu
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityRequest
+                     * @instance
+                     */
+                    UpdateGSICapacityRequest.prototype.targetIndexWcu = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * Verifies an UpdateGSICapacityRequest message.
@@ -5004,11 +4957,15 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
-                        if (message.update != null && message.hasOwnProperty("update")) {
-                            let error = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction.verify(message.update);
-                            if (error)
-                                return "update." + error;
-                        }
+                        if (message.indexName != null && message.hasOwnProperty("indexName"))
+                            if (!$util.isString(message.indexName))
+                                return "indexName: string expected";
+                        if (message.targetIndexRcu != null && message.hasOwnProperty("targetIndexRcu"))
+                            if (!$util.isInteger(message.targetIndexRcu) && !(message.targetIndexRcu && $util.isInteger(message.targetIndexRcu.low) && $util.isInteger(message.targetIndexRcu.high)))
+                                return "targetIndexRcu: integer|Long expected";
+                        if (message.targetIndexWcu != null && message.hasOwnProperty("targetIndexWcu"))
+                            if (!$util.isInteger(message.targetIndexWcu) && !(message.targetIndexWcu && $util.isInteger(message.targetIndexWcu.low) && $util.isInteger(message.targetIndexWcu.high)))
+                                return "targetIndexWcu: integer|Long expected";
                         return null;
                     };
 
@@ -5028,11 +4985,26 @@ export const clutch = $root.clutch = (() => {
                             message.tableName = String(object.tableName);
                         if (object.region != null)
                             message.region = String(object.region);
-                        if (object.update != null) {
-                            if (typeof object.update !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.UpdateGSICapacityRequest.update: object expected");
-                            message.update = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction.fromObject(object.update);
-                        }
+                        if (object.indexName != null)
+                            message.indexName = String(object.indexName);
+                        if (object.targetIndexRcu != null)
+                            if ($util.Long)
+                                (message.targetIndexRcu = $util.Long.fromValue(object.targetIndexRcu)).unsigned = false;
+                            else if (typeof object.targetIndexRcu === "string")
+                                message.targetIndexRcu = parseInt(object.targetIndexRcu, 10);
+                            else if (typeof object.targetIndexRcu === "number")
+                                message.targetIndexRcu = object.targetIndexRcu;
+                            else if (typeof object.targetIndexRcu === "object")
+                                message.targetIndexRcu = new $util.LongBits(object.targetIndexRcu.low >>> 0, object.targetIndexRcu.high >>> 0).toNumber();
+                        if (object.targetIndexWcu != null)
+                            if ($util.Long)
+                                (message.targetIndexWcu = $util.Long.fromValue(object.targetIndexWcu)).unsigned = false;
+                            else if (typeof object.targetIndexWcu === "string")
+                                message.targetIndexWcu = parseInt(object.targetIndexWcu, 10);
+                            else if (typeof object.targetIndexWcu === "number")
+                                message.targetIndexWcu = object.targetIndexWcu;
+                            else if (typeof object.targetIndexWcu === "object")
+                                message.targetIndexWcu = new $util.LongBits(object.targetIndexWcu.low >>> 0, object.targetIndexWcu.high >>> 0).toNumber();
                         return message;
                     };
 
@@ -5052,14 +5024,34 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.tableName = "";
                             object.region = "";
-                            object.update = null;
+                            object.indexName = "";
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.targetIndexRcu = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetIndexRcu = options.longs === String ? "0" : 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.targetIndexWcu = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetIndexWcu = options.longs === String ? "0" : 0;
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
-                        if (message.update != null && message.hasOwnProperty("update"))
-                            object.update = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction.toObject(message.update, options);
+                        if (message.indexName != null && message.hasOwnProperty("indexName"))
+                            object.indexName = message.indexName;
+                        if (message.targetIndexRcu != null && message.hasOwnProperty("targetIndexRcu"))
+                            if (typeof message.targetIndexRcu === "number")
+                                object.targetIndexRcu = options.longs === String ? String(message.targetIndexRcu) : message.targetIndexRcu;
+                            else
+                                object.targetIndexRcu = options.longs === String ? $util.Long.prototype.toString.call(message.targetIndexRcu) : options.longs === Number ? new $util.LongBits(message.targetIndexRcu.low >>> 0, message.targetIndexRcu.high >>> 0).toNumber() : message.targetIndexRcu;
+                        if (message.targetIndexWcu != null && message.hasOwnProperty("targetIndexWcu"))
+                            if (typeof message.targetIndexWcu === "number")
+                                object.targetIndexWcu = options.longs === String ? String(message.targetIndexWcu) : message.targetIndexWcu;
+                            else
+                                object.targetIndexWcu = options.longs === String ? $util.Long.prototype.toString.call(message.targetIndexWcu) : options.longs === Number ? new $util.LongBits(message.targetIndexWcu.low >>> 0, message.targetIndexWcu.high >>> 0).toNumber() : message.targetIndexWcu;
                         return object;
                     };
 

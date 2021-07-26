@@ -1854,54 +1854,6 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a GlobalSecondaryIndexAction. */
-                interface IGlobalSecondaryIndexAction {
-
-                    /** GlobalSecondaryIndexAction update */
-                    update?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndex|null);
-                }
-
-                /** Represents a GlobalSecondaryIndexAction. */
-                class GlobalSecondaryIndexAction implements IGlobalSecondaryIndexAction {
-
-                    /**
-                     * Constructs a new GlobalSecondaryIndexAction.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IGlobalSecondaryIndexAction);
-
-                    /** GlobalSecondaryIndexAction update. */
-                    public update?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndex|null);
-
-                    /**
-                     * Verifies a GlobalSecondaryIndexAction message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a GlobalSecondaryIndexAction message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns GlobalSecondaryIndexAction
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction;
-
-                    /**
-                     * Creates a plain object from a GlobalSecondaryIndexAction message. Also converts values to other types if specified.
-                     * @param message GlobalSecondaryIndexAction
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.aws.dynamodb.v1.GlobalSecondaryIndexAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this GlobalSecondaryIndexAction to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
                 /** Properties of a ProvisionedThroughput. */
                 interface IProvisionedThroughput {
 
@@ -2067,8 +2019,11 @@ export namespace clutch {
                     /** UpdateTableCapacityRequest region */
                     region?: (string|null);
 
-                    /** UpdateTableCapacityRequest targetCapacity */
-                    targetCapacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** UpdateTableCapacityRequest targetTableRcu */
+                    targetTableRcu?: (number|Long|null);
+
+                    /** UpdateTableCapacityRequest targetTableWcu */
+                    targetTableWcu?: (number|Long|null);
                 }
 
                 /** Represents an UpdateTableCapacityRequest. */
@@ -2086,8 +2041,11 @@ export namespace clutch {
                     /** UpdateTableCapacityRequest region. */
                     public region: string;
 
-                    /** UpdateTableCapacityRequest targetCapacity. */
-                    public targetCapacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** UpdateTableCapacityRequest targetTableRcu. */
+                    public targetTableRcu: (number|Long);
+
+                    /** UpdateTableCapacityRequest targetTableWcu. */
+                    public targetTableWcu: (number|Long);
 
                     /**
                      * Verifies an UpdateTableCapacityRequest message.
@@ -2169,8 +2127,14 @@ export namespace clutch {
                     /** UpdateGSICapacityRequest region */
                     region?: (string|null);
 
-                    /** UpdateGSICapacityRequest update */
-                    update?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndexAction|null);
+                    /** UpdateGSICapacityRequest indexName */
+                    indexName?: (string|null);
+
+                    /** UpdateGSICapacityRequest targetIndexRcu */
+                    targetIndexRcu?: (number|Long|null);
+
+                    /** UpdateGSICapacityRequest targetIndexWcu */
+                    targetIndexWcu?: (number|Long|null);
                 }
 
                 /** Represents an UpdateGSICapacityRequest. */
@@ -2188,8 +2152,14 @@ export namespace clutch {
                     /** UpdateGSICapacityRequest region. */
                     public region: string;
 
-                    /** UpdateGSICapacityRequest update. */
-                    public update?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndexAction|null);
+                    /** UpdateGSICapacityRequest indexName. */
+                    public indexName: string;
+
+                    /** UpdateGSICapacityRequest targetIndexRcu. */
+                    public targetIndexRcu: (number|Long);
+
+                    /** UpdateGSICapacityRequest targetIndexWcu. */
+                    public targetIndexWcu: (number|Long);
 
                     /**
                      * Verifies an UpdateGSICapacityRequest message.
