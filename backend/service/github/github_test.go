@@ -314,19 +314,19 @@ func TestGetUser(t *testing.T) {
 var compareCommitsTests = []struct {
 	name         string
 	errorText    string
-	status       githubv1.CommitCompareStatus
+	status       string
 	generalError bool
 	mockRepo     *mockRepositories
 }{
 	{
 		name:         "v3 error",
 		generalError: true,
-		errorText:    "Could not get compare status",
+		errorText:    "Could not get comparison",
 		mockRepo:     &mockRepositories{generalError: true},
 	},
 	{
 		name:     "happy path",
-		status:   githubv1.CommitCompareStatus_BEHIND,
+		status:   "behind",
 		mockRepo: &mockRepositories{},
 	},
 }
@@ -362,60 +362,7 @@ func TestCompareCommits(t *testing.T) {
 				return
 			}
 			a.Equal(comp.GetStatus(), tt.status)
-			a.Nil(err)
-		})
-	}
-}
-
-var commitRangeTests = []struct {
-	name         string
-	errorText    string
-	commits      []*githubv3.RepositoryCommit
-	generalError bool
-	mockRepo     *mockRepositories
-}{
-	{
-		name:         "v3 error",
-		generalError: true,
-		errorText:    "could not get commits from comparison",
-		mockRepo:     &mockRepositories{generalError: true},
-	},
-	{
-		name:     "happy path",
-		mockRepo: &mockRepositories{},
-	},
-}
-
-func TestCommitRange(t *testing.T) {
-	t.Parallel()
-
-	for _, tt := range commitRangeTests {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			a := assert.New(t)
-			s := &svc{rest: v3client{
-				Repositories: tt.mockRepo,
-			}}
-
-			commits, err := s.CommitRange(
-				context.Background(),
-				"1234", &RemoteRef{
-					RepoOwner: "owner",
-					RepoName:  "myRepo",
-					Ref:       "master",
-				},
-			)
-			if tt.errorText != "" {
-				a.Error(err)
-				a.Contains(err.Error(), tt.errorText)
-				return
-			}
-			if err != nil {
-				a.FailNowf("unexpected error: %s", err.Error())
-				return
-			}
-			a.NotNil(commits)
+			a.NotNil(comp.Commits)
 			a.Nil(err)
 		})
 	}

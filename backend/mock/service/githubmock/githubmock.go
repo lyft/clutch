@@ -8,7 +8,6 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
-	githubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/github"
@@ -40,7 +39,7 @@ func (s svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRe
 	return &sourcecontrolv1.CreateRepositoryResponse{Url: "https://github.com/lyft/clutch"}, nil
 }
 
-func (s svc) CompareCommits(ctx context.Context, ref *github.RemoteRef, compareSHA string) (*githubv1.CommitComparison, error) {
+func (s svc) CompareCommits(ctx context.Context, ref *github.RemoteRef, compareSHA string) (*githubv3.CommitsComparison, error) {
 	panic("implement me")
 }
 
