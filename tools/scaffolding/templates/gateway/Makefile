@@ -3,8 +3,8 @@ SHELL:=/usr/bin/env bash
 
 MAKEFLAGS += --no-print-directory
 
-PRIMARY_MODULE_DIR := $(shell cd backend && go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/backend")
-TOOLS_MODULE_DIR := $(shell cd backend && go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/tools")
+PRIMARY_MODULE_DIR := $(shell cd backend 2>&1 > /dev/null && go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/backend")
+TOOLS_MODULE_DIR := $(shell cd backend 2>&1 > /dev/null && go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/tools")
 MY_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 YARN:=./build/bin/yarn.sh
 
