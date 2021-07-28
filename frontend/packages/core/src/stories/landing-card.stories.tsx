@@ -1,11 +1,11 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import type { LandingCardProps } from "../landing-card";
-import { LandingCard } from "../landing-card";
+import type { LandingCardProps } from "../card";
+import { LandingCard } from "../card";
 
 export default {
-  title: "Core/Cards/Landing Card",
+  title: "Core/Card/Landing Card",
   component: LandingCard,
 } as Meta;
 

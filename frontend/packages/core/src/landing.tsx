@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 
 import { userId } from "./AppLayout/user";
 import { MonsterGraphic } from "./Assets/Graphics";
-import { LandingCard } from "./Cards/landing-card";
+import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
 

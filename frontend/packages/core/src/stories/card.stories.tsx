@@ -5,7 +5,7 @@ import type { CardProps } from "../card";
 import { Card, CardContent } from "../card";
 
 export default {
-  title: "Core/Cards/Basic",
+  title: "Core/Card/Basic",
   component: Card,
 } as Meta;
 
