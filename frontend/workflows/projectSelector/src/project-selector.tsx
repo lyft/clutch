@@ -1,10 +1,11 @@
 import * as React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
-import { client, TextField, userId } from "@clutch-sh/core";
+import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
-import LayersIcon from "@material-ui/icons/Layers";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
@@ -56,6 +57,11 @@ const StyledProgressContainer = styled.div({
     backgroundColor: "#3548D4",
   },
 });
+
+const projectDescription =
+  "server, mobile app, etc. Unchecking a project hides its upstream and downstream dependencies.";
+const upstreamDescription = "receive requests and send responses to the selected project.";
+const downstreamDescription = "send requests and receive responses from the selected project.";
 
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
@@ -171,9 +177,42 @@ const ProjectSelector = () => {
       <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
-            {/* TODO: change icon to match design */}
-            <LayersIcon />
+            <LayersOutlinedIcon />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
+            <Tooltip
+              title={
+                <>
+                  <TooltipContainer>
+                    <Typography variant="subtitle3" color="#FFFFFF">
+                      Projects
+                    </Typography>
+                    <Typography variant="body3" color="#FFFFFF">
+                      {projectDescription}
+                    </Typography>
+                  </TooltipContainer>
+                  <TooltipContainer>
+                    <Typography variant="subtitle3" color="#FFFFFF">
+                      Upstreams
+                    </Typography>
+                    <Typography variant="body3" color="#FFFFFF">
+                      {upstreamDescription}
+                    </Typography>
+                  </TooltipContainer>
+                  <TooltipContainer>
+                    <Typography variant="subtitle3" color="#FFFFFF">
+                      Downstreams
+                    </Typography>
+                    <Typography variant="body3" color="#FFFFFF">
+                      {downstreamDescription}
+                    </Typography>
+                  </TooltipContainer>
+                </>
+              }
+              placement="right-start"
+              maxWidth="391px"
+            >
+              <InfoOutlinedIcon />
+            </Tooltip>
           </StyledWorkflowHeader>
           <StyledProgressContainer>
             {state.loading && <LinearProgress color="secondary" />}
