@@ -12,7 +12,6 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func testEventClientset() k8s.Interface {
@@ -47,7 +46,7 @@ func TestListEvents(t *testing.T) {
 
 	val, ok := k8sapiv1.ObjectKind_value[strings.ToUpper("Pod")]
 	assert.Equal(t, true, ok)
-	kind := k8sv1.ObjectKind(val)
+	kind := k8sapiv1.ObjectKind(val)
 	list, err := s.ListEvents(context.Background(), "foo", "core-testing", "testing-namespace", "Pod1", kind)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(list))

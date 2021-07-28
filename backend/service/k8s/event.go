@@ -5,9 +5,10 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func (s *svc) ListEvents(ctx context.Context, clientset, cluster, namespace, object string, kind k8sapiv1.ObjectKind) ([]*k8sapiv1.Event, error) {
