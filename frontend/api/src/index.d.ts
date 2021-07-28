@@ -12271,6 +12271,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public describeNamespace(request: clutch.k8s.v1.IDescribeNamespaceRequest): Promise<clutch.k8s.v1.DescribeNamespaceResponse>;
+
+                /**
+                 * Calls ListEvents.
+                 * @param request ListEventsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListEventsResponse
+                 */
+                public listEvents(request: clutch.k8s.v1.IListEventsRequest, callback: clutch.k8s.v1.K8sAPI.ListEventsCallback): void;
+
+                /**
+                 * Calls ListEvents.
+                 * @param request ListEventsRequest message or plain object
+                 * @returns Promise
+                 */
+                public listEvents(request: clutch.k8s.v1.IListEventsRequest): Promise<clutch.k8s.v1.ListEventsResponse>;
             }
 
             namespace K8sAPI {
@@ -12463,6 +12477,13 @@ export namespace clutch {
                  * @param [response] DescribeNamespaceResponse
                  */
                 type DescribeNamespaceCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeNamespaceResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listEvents}.
+                 * @param error Error, if any
+                 * @param [response] ListEventsResponse
+                 */
+                type ListEventsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListEventsResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -17242,6 +17263,217 @@ export namespace clutch {
 
                 /**
                  * Converts this DescribeNamespaceResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** ObjectKind enum. */
+            enum ObjectKind {
+                UNSPECIFIED = 0,
+                UNKNOWN = 1,
+                POD = 2
+            }
+
+            /** Properties of an Event. */
+            interface IEvent {
+
+                /** Event name */
+                name?: (string|null);
+
+                /** Event reason */
+                reason?: (string|null);
+
+                /** Event description */
+                description?: (string|null);
+
+                /** Event cluster */
+                cluster?: (string|null);
+
+                /** Event namespace */
+                namespace?: (string|null);
+
+                /** Event involvedObject */
+                involvedObject?: (string|null);
+
+                /** Event kind */
+                kind?: (clutch.k8s.v1.ObjectKind|null);
+            }
+
+            /** Represents an Event. */
+            class Event implements IEvent {
+
+                /**
+                 * Constructs a new Event.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IEvent);
+
+                /** Event name. */
+                public name: string;
+
+                /** Event reason. */
+                public reason: string;
+
+                /** Event description. */
+                public description: string;
+
+                /** Event cluster. */
+                public cluster: string;
+
+                /** Event namespace. */
+                public namespace: string;
+
+                /** Event involvedObject. */
+                public involvedObject: string;
+
+                /** Event kind. */
+                public kind: clutch.k8s.v1.ObjectKind;
+
+                /**
+                 * Verifies an Event message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Event
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Event;
+
+                /**
+                 * Creates a plain object from an Event message. Also converts values to other types if specified.
+                 * @param message Event
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Event to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListEventsRequest. */
+            interface IListEventsRequest {
+
+                /** ListEventsRequest clientset */
+                clientset?: (string|null);
+
+                /** ListEventsRequest cluster */
+                cluster?: (string|null);
+
+                /** ListEventsRequest namespace */
+                namespace?: (string|null);
+
+                /** ListEventsRequest object */
+                object?: (string|null);
+
+                /** ListEventsRequest kind */
+                kind?: (clutch.k8s.v1.ObjectKind|null);
+            }
+
+            /** Represents a ListEventsRequest. */
+            class ListEventsRequest implements IListEventsRequest {
+
+                /**
+                 * Constructs a new ListEventsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListEventsRequest);
+
+                /** ListEventsRequest clientset. */
+                public clientset: string;
+
+                /** ListEventsRequest cluster. */
+                public cluster: string;
+
+                /** ListEventsRequest namespace. */
+                public namespace: string;
+
+                /** ListEventsRequest object. */
+                public object: string;
+
+                /** ListEventsRequest kind. */
+                public kind: clutch.k8s.v1.ObjectKind;
+
+                /**
+                 * Verifies a ListEventsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListEventsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListEventsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListEventsRequest;
+
+                /**
+                 * Creates a plain object from a ListEventsRequest message. Also converts values to other types if specified.
+                 * @param message ListEventsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListEventsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListEventsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListEventsResponse. */
+            interface IListEventsResponse {
+
+                /** ListEventsResponse events */
+                events?: (clutch.k8s.v1.IEvent[]|null);
+            }
+
+            /** Represents a ListEventsResponse. */
+            class ListEventsResponse implements IListEventsResponse {
+
+                /**
+                 * Constructs a new ListEventsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListEventsResponse);
+
+                /** ListEventsResponse events. */
+                public events: clutch.k8s.v1.IEvent[];
+
+                /**
+                 * Verifies a ListEventsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListEventsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListEventsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListEventsResponse;
+
+                /**
+                 * Creates a plain object from a ListEventsResponse message. Also converts values to other types if specified.
+                 * @param message ListEventsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListEventsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListEventsResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

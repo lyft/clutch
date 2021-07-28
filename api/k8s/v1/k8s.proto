@@ -227,6 +227,14 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+
+  rpc ListEvents(ListEventsRequest) returns (ListEventsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listEvents"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message DescribePodRequest {
@@ -1055,6 +1063,53 @@ message DescribeNamespaceResponse {
   Namespace namespace = 1 [ (clutch.api.v1.log) = false ];
 }
 
+// ObjectKind represent a persistent entity in the system
+// For now we only support the kind Pod, we can expand on this
+// list as we add support for different kinds.
+enum ObjectKind {
+  UNSPECIFIED = 0;
+  UNKNOWN = 1;
+  POD = 2;
+}
+
+// this represents a Kubernetes event: https://pkg.go.dev/k8s.io/api/core/v1#Event
+// for a given object
+message Event {
+  string name = 1;
+  string reason = 2;
+  string description = 3;
+
+  // these values represent info of the object
+  // this event is about
+  string cluster = 4;
+  string namespace = 5;
+  // name of the object i.e pod name, deployment name, etc
+  string involvedObject = 6;
+  // kind of the object e.g pod, deployment, service, etc
+  ObjectKind kind = 7;
+}
+
+message ListEventsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  // name of the object i.e pod name, deployment name, etc
+  string object = 4 [ (validate.rules).string = {min_bytes : 1} ];
+  // kind of the object e.g pod, deployment, service, etc
+  // https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+  ObjectKind kind = 5 [ (validate.rules).enum = {defined_only : true} ];
+}
+
+message ListEventsResponse {
+  option (clutch.api.v1.reference).fields = "events";
+
+  repeated Event events = 1 [ (clutch.api.v1.log) = false ];
+}
 // This message type is used to add support for nullable strings and is an
 // alternative to the well-known `StringValue` type. We need it, because the
 // grpc-gateway used by Clutch deserializes a null `StringValue` as an empty
