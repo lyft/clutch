@@ -28,7 +28,6 @@ import (
 	"google.golang.org/grpc/status"
 
 	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
-	scgithubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
 )
@@ -79,7 +78,7 @@ type Client interface {
 	CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
-	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
+	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, error)
 	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
 	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
 	GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error)
@@ -345,20 +344,15 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 	return f, nil
 }
 
-func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error) {
+/*
+ * Rather than calling GetCommit() multiple times, we can use CompareCommits to get a range of commits
+ */
+func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, error) {
 	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
 	if err != nil {
-		return nil, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
+		return nil, fmt.Errorf("Could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
-
-	status, ok := scgithubv1.CommitCompareStatus_value[strings.ToUpper(comp.GetStatus())]
-	if !ok {
-		return nil, fmt.Errorf("unknown status %s", comp.GetStatus())
-	}
-
-	return &scgithubv1.CommitComparison{
-		Status: scgithubv1.CommitCompareStatus(status),
-	}, nil
+	return comp, nil
 }
 
 type Commit struct {
