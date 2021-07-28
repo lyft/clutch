@@ -13,6 +13,7 @@ const StyledTooltip = styled(BaseTooltip)(
     border: "1px solid rgba(13, 16, 48, 0.1)",
     boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
     borderRadius: "6px",
+    margin: "2px",
   },
   props => ({
     maxWidth: props["data-max-width"],
