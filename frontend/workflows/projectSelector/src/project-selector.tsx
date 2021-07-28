@@ -186,7 +186,7 @@ const ProjectSelector = () => {
                     <Typography variant="subtitle3" color="#FFFFFF">
                       Projects
                     </Typography>
-                    <Typography variant="body3" color="#FFFFFF">
+                    <Typography variant="body3" color="#E7E7EA">
                       {projectDescription}
                     </Typography>
                   </TooltipContainer>
@@ -194,7 +194,7 @@ const ProjectSelector = () => {
                     <Typography variant="subtitle3" color="#FFFFFF">
                       Upstreams
                     </Typography>
-                    <Typography variant="body3" color="#FFFFFF">
+                    <Typography variant="body3" color="#E7E7EA">
                       {upstreamDescription}
                     </Typography>
                   </TooltipContainer>
@@ -202,14 +202,14 @@ const ProjectSelector = () => {
                     <Typography variant="subtitle3" color="#FFFFFF">
                       Downstreams
                     </Typography>
-                    <Typography variant="body3" color="#FFFFFF">
+                    <Typography variant="body3" color="#E7E7EA">
                       {downstreamDescription}
                     </Typography>
                   </TooltipContainer>
                 </>
               }
               placement="right-start"
-              maxWidth="391px"
+              maxWidth="400px"
             >
               <InfoOutlinedIcon />
             </Tooltip>
