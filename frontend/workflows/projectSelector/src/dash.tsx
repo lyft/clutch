@@ -28,7 +28,9 @@ const Dash = ({ children }) => {
       <DashDispatchContext.Provider value={dispatch}>
         <DashStateContext.Provider value={state}>
           <ProjectSelector />
-          <Box display="flex" flex={1}>{children}</Box>
+          <Box display="flex" flex={1}>
+            {children}
+          </Box>
         </DashStateContext.Provider>
       </DashDispatchContext.Provider>
     </Box>
