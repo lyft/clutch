@@ -15,7 +15,7 @@ Giving Clutch the control to provide a consistent user experience that you can c
 
 At the core of the topology service is its caching functionality which is the foundation that powers its API's.
 
-You can enable the cache like so, there are other [configuration](https://github.com/lyft/clutch/blob/c3097e5ad477952bb4bb90cc1fb5a126d7434565/api/config/service/topology/v1/topology.proto#L14-L28) options that can be tuned if necessary.
+You can enable the cache by adding the following to your clutch configuration.
 
 ```yaml title="clutch-config.yaml"
 services:
