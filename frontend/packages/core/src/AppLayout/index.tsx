@@ -11,7 +11,6 @@ import Header from "./header";
 
 const AppGrid = styled(MuiGrid)({
   flex: 1,
-  minHeight: 0,
 });
 
 const ContentGrid = styled(MuiGrid)({
