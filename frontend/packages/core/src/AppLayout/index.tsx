@@ -11,12 +11,15 @@ import Header from "./header";
 
 const AppGrid = styled(MuiGrid)({
   flex: 1,
+  minHeight: 0,
 });
 
 const ContentGrid = styled(MuiGrid)({
   flex: 1,
-  overflow: "hidden",
+  maxHeight: "calc(100vh - 64px)",
 });
+
+const MainContent = styled.div({ overflowY: "auto", width: "100%" });
 
 interface AppLayoutProps {
   isLoading?: boolean;
@@ -24,7 +27,7 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false }) => {
   return (
-    <AppGrid container direction="column">
+    <AppGrid container direction="column" data-qa="appgrid">
       <Header />
       <ContentGrid container wrap="nowrap">
         {isLoading ? (
@@ -32,7 +35,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false }) => {
         ) : (
           <>
             <Drawer />
-            <Outlet />
+            <MainContent>
+              <Outlet />
+            </MainContent>
           </>
         )}
       </ContentGrid>

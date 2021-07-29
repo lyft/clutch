@@ -47,7 +47,7 @@ const Header: React.FC = () => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <ClearAppBar />
+      <ClearAppBar data-qa="clear" />
     </>
   );
 };

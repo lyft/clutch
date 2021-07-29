@@ -19,6 +19,7 @@ import { routesByGrouping, sortedGroupings } from "./utils";
 // sidebar
 const DrawerPanel = styled(MuiDrawer)({
   width: "100px",
+  overflowY: "auto",
   ".MuiDrawer-paper": {
     top: "unset",
     width: "inherit",
