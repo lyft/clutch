@@ -62,6 +62,10 @@ modules:
  - name: clutch.module.topology
 services:
   ...
+  - name: clutch.service.k8s
+    typed_config:
+      "@type": types.google.com/clutch.config.service.k8s.v1.Config
+
   # The topology services does require the postgres datastore to be configured
   // highlight-start
   - name: clutch.service.topology
