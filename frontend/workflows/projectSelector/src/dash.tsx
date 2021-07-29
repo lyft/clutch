@@ -24,11 +24,11 @@ const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
 
   return (
-    <Box display="flex" width="100%">
+    <Box display="flex" flex={1}>
       <DashDispatchContext.Provider value={dispatch}>
         <DashStateContext.Provider value={state}>
           <ProjectSelector />
-          <Box flexGrow={1}>{children}</Box>
+          <Box display="flex" flex={1}>{children}</Box>
         </DashStateContext.Provider>
       </DashDispatchContext.Provider>
     </Box>

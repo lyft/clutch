@@ -11,7 +11,7 @@ interface CardProps {
 }
 
 const Card = ({ avatar, title, error, children }: CardProps) => (
-  <Grid item xs={12} sm={7}>
+  <Grid item xs={12} sm={6}>
     <ClutchCard>
       <CardHeader avatar={avatar} title={title} />
       {error ? <Error subject={error} /> : children}
