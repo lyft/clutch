@@ -3,12 +3,12 @@ title: Topology API's
 {{ .EditURL }}
 ---
 
-The Topology feature set enables core Clutch capabilities such as autocomplete,
+The Topology feature set powers core Clutch capabilities such as autocomplete,
 as well as providing API's that can be leveraged for a multitude of purposes.
 
 One of the main goals of the topology service was to create an extensable caching mechanism,
 to store all aspects of infratructure with the ability for it to be easily accessed via API's.
-This allows implementors to write feature that are not bound to service providers API rate limits and latencies among other factors.
+This allows implementors to write features that are not bound by service provider API rate limits and latencies and allows for Clutch to provide a consistent user experience that scales with your users.
 Giving Clutch the control to provide a consistent user experience that you can control as your user base scales.
 
 ## Topology Caching
