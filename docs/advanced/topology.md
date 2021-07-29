@@ -27,6 +27,7 @@ services:
       // highlight-next-line
       cache: {}
 ```
+There are additional [configuration](https://github.com/lyft/clutch/blob/c3097e5ad477952bb4bb90cc1fb5a126d7434565/api/config/service/topology/v1/topology.proto#L14-L28) options that can be tuned if necessary.
 
 ### Leader Election
 
