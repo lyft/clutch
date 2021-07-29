@@ -9,7 +9,6 @@ as well as providing API's that can be leveraged for a multitude of purposes.
 One of the main goals of the topology service was to create an extensable caching mechanism,
 to store all aspects of infrastructure with the ability for it to be easily accessed via APIs.
 This allows implementers to write features that are not bound by service provider API rate limits and latencies and allows for Clutch to provide a consistent user experience that scales with your users.
-Giving Clutch the control to provide a consistent user experience that you can control as your user base scales.
 
 ## Topology Caching
 
