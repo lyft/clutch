@@ -9,6 +9,7 @@ jobs:
     - uses: actions/stale@v4
       with:
         days-before-stale: 7
+        days-before-issue-stale: -1
         days-before-close: 3
         exempt-pr-labels: 'on hold'
         stale-pr-message: >

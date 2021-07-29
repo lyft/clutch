@@ -96,7 +96,6 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "TOGGLE_PROJECTS": {
-      // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
       return {
         ...state,
         [action.payload.group]: {
@@ -126,16 +125,28 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "TOGGLE_ENTIRE_GROUP": {
-      const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
-      const newState = { ...state };
-      newState[action.payload.group] = Object.fromEntries(
-        Object.keys(state[action.payload.group]).map(key => [
-          key,
-          { ...state[action.payload.group][key], checked: newCheckedValue },
-        ])
-      );
-
-      return newState;
+      // the state might not match the filtered state data passed to the components, so in the func below, we should filter out the projects
+      // that _were_ rendered in order to correctly evaluate the toggled checked status for all the projects in the respective group
+      const filteredState = {
+        ...state,
+        [action.payload.group]: _.pick(state[action.payload.group], action.payload.projects),
+      };
+      const newCheckedValue = !deriveSwitchStatus(filteredState, action.payload.group);
+      return {
+        ...state,
+        [action.payload.group]: {
+          ...state[action.payload.group],
+          ...Object.fromEntries(
+            action.payload.projects.map(key => [
+              key,
+              {
+                ...state[action.payload.group][key],
+                checked: newCheckedValue,
+              },
+            ])
+          ),
+        },
+      };
     }
     // Background actions.
 

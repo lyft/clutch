@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	githubv3 "github.com/google/go-github/v36/github"
+	githubv3 "github.com/google/go-github/v37/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"
 
@@ -171,11 +171,17 @@ func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base
 		return nil, nil, errors.New(problem)
 	}
 	returnstr := "behind"
-	return &githubv3.CommitsComparison{Status: &returnstr}, nil, nil
+	shaStr := "astdfsaohecra"
+	return &githubv3.CommitsComparison{Status: &returnstr,
+		Commits: []*githubv3.RepositoryCommit{
+			{SHA: &shaStr},
+		}}, nil, nil
 }
 
 func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha string) (*githubv3.RepositoryCommit, *githubv3.Response, error) {
 	file := "testfile.go"
+	message := "committing some changes (#1)"
+	authorLogin := "foobar"
 	if m.generalError {
 		return &githubv3.RepositoryCommit{}, &githubv3.Response{}, errors.New(problem)
 	}
@@ -183,6 +189,12 @@ func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha strin
 		Files: []*githubv3.CommitFile{
 			{
 				Filename: &file,
+			},
+		},
+		Commit: &githubv3.Commit{
+			Message: &message,
+			Author: &githubv3.CommitAuthor{
+				Login: &authorLogin,
 			},
 		},
 	}, &githubv3.Response{}, nil
@@ -302,19 +314,19 @@ func TestGetUser(t *testing.T) {
 var compareCommitsTests = []struct {
 	name         string
 	errorText    string
-	status       githubv1.CommitCompareStatus
+	status       string
 	generalError bool
 	mockRepo     *mockRepositories
 }{
 	{
 		name:         "v3 error",
 		generalError: true,
-		errorText:    "Could not get compare status",
+		errorText:    "Could not get comparison",
 		mockRepo:     &mockRepositories{generalError: true},
 	},
 	{
 		name:     "happy path",
-		status:   githubv1.CommitCompareStatus_BEHIND,
+		status:   "behind",
 		mockRepo: &mockRepositories{},
 	},
 }
@@ -350,16 +362,22 @@ func TestCompareCommits(t *testing.T) {
 				return
 			}
 			a.Equal(comp.GetStatus(), tt.status)
+			a.NotNil(comp.Commits)
 			a.Nil(err)
 		})
 	}
 }
 
 var getCommitsTests = []struct {
-	name      string
-	errorText string
-	mockRepo  *mockRepositories
-	file      string
+	name            string
+	errorText       string
+	mockRepo        *mockRepositories
+	file            string
+	message         string
+	authorLogin     string
+	authorAvatarURL string
+	authorID        int64
+	parentRef       string
 }{
 	{
 		name:      "v3 error",
@@ -367,9 +385,13 @@ var getCommitsTests = []struct {
 		errorText: "we've had a problem",
 	},
 	{
-		name:     "happy path",
-		mockRepo: &mockRepositories{},
-		file:     "testfile.go",
+		name:            "happy path",
+		mockRepo:        &mockRepositories{},
+		file:            "testfile.go",
+		message:         "committing some changes (#1)",
+		authorAvatarURL: "https://foo.bar/baz.png",
+		authorID:        1234,
+		parentRef:       "test",
 	},
 }
 
@@ -402,6 +424,14 @@ func TestGetCommit(t *testing.T) {
 				return
 			}
 			a.Equal(tt.file, *commit.Files[0].Filename)
+			a.Equal(tt.message, commit.Message)
+			if commit.Author != nil {
+				a.Equal(tt.authorAvatarURL, *commit.Author.AvatarURL)
+				a.Equal(tt.authorID, *commit.Author.ID)
+			}
+			if commit.ParentRef != "" {
+				a.Equal(tt.parentRef, commit.ParentRef)
+			}
 			a.Nil(err)
 		})
 	}

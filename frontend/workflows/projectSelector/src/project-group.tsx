@@ -140,7 +140,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
             onChange={() =>
               dispatch({
                 type: "TOGGLE_ENTIRE_GROUP",
-                payload: { group },
+                payload: { group, projects: Object.keys(state[group]) },
               })
             }
             checked={deriveSwitchStatus(state, group)}

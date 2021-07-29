@@ -1,7 +1,8 @@
 import * as React from "react";
 import _ from "lodash";
 
-import type { Action, Group, ProjectState, State } from "./types";
+import type { Action, ProjectState, State } from "./types";
+import { Group } from "./types";
 
 const PROJECT_TYPE_URL = "type.googleapis.com/clutch.core.project.v1.Project";
 
@@ -95,8 +96,68 @@ const exclusiveProjectDependencies = (
   });
   return { upstreams, downstreams };
 };
+// TODO: (perf/efficiency) compute the projects that should be displayed rather than computing the hidden projects
+// returns the upstreams/downstreams that should be hidden based on the checked status of/exclusivity to project(s)
+const deriveHiddenDependencies = (state: State): { upstreams: string[]; downstreams: string[] } => {
+  const upstreams = [];
+  const downstreams = [];
+
+  const uncheckedProjects = Object.keys(state[Group.PROJECTS]).filter(
+    p => !state[Group.PROJECTS][p].checked
+  );
+  // no unchecked projects, so don't go through rest of the flow
+  if (uncheckedProjects.length === 0) {
+    return { upstreams, downstreams };
+  }
+
+  // get the relationship b/w upstreams/downstreams to Group.Projects
+  const depMapping = dependencyToProjects(state, Group.PROJECTS);
+
+  uncheckedProjects.forEach(project => {
+    _.forIn(depMapping.upstreams, (v, k) => {
+      // if dependency is exclusive to the unchecked project, hide the dependency
+      if (v[project] && Object.keys(v).length === 1) {
+        upstreams.push(k);
+      } else if (Object.keys(v).every(p => !state[Group.PROJECTS][p].checked)) {
+        // if all Group.Projects that share the dependency are unchecked, hide the dependency
+        upstreams.push(k);
+      }
+    });
+
+    _.forIn(depMapping.downstreams, (v, k) => {
+      // if dependency is exclusive to the unchecked project, hide the dependency
+      if (v[project] && Object.keys(v).length === 1) {
+        downstreams.push(k);
+      } else if (Object.keys(v).every(p => !state[Group.PROJECTS][p].checked)) {
+        // if all Group.Projects that share the dependency are unchecked, hide the dependency
+        downstreams.push(k);
+      }
+    });
+  });
+
+  return { upstreams, downstreams };
+};
+
+/* filter out the state data on the following criteria:
+if projects in Group.Projects are unchecked, remove the related upstream(s)/downstream(s)
+*/
+const deriveStateData = (state: State): State => {
+  // get the upstreams/downstreams that should be omitted from the final state data
+  const { upstreams, downstreams } = deriveHiddenDependencies(state);
+
+  const newState = { ...state };
+  if (upstreams.length > 0) {
+    newState[Group.UPSTREAM] = _.omit(state[Group.UPSTREAM], upstreams);
+  }
+  if (downstreams.length > 0) {
+    newState[Group.DOWNSTREAM] = _.omit(state[Group.DOWNSTREAM], downstreams);
+  }
+
+  return newState;
+};
 
 export {
+  deriveStateData,
   deriveSwitchStatus,
   DispatchContext,
   exclusiveProjectDependencies,
