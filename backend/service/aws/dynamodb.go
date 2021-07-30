@@ -90,7 +90,7 @@ func isValidIncrease(current *types.ProvisionedThroughputDescription, target typ
 		return status.Error(codes.FailedPrecondition, "Target read capacity exceeds scale limit.")
 	}
 	if (*target.WriteCapacityUnits / *current.WriteCapacityUnits) > maxDynamodbCapacityScaleFactor {
-		return status.Error(codes.FailedPrecondition, "Target write capacity exceeds scale limit. If you really intend to more than double the capacity, please reach out to #core-datastores oncall to request change.")
+		return status.Error(codes.FailedPrecondition, "Target write capacity exceeds scale limit.")
 	}
 	return nil
 }
@@ -119,6 +119,48 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 	input := &dynamodb.UpdateTableInput{
 		TableName:             aws.String(tableName),
 		ProvisionedThroughput: &targetCapacity,
+	}
+
+	_, err = cl.dynamodb.UpdateTable(ctx, input)
+	return err
+}
+
+func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) error {
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		return err
+	}
+
+	currentTable, err := getTable(ctx, cl, tableName)
+	if err != nil {
+		return err
+	}
+
+	currentGSI, err := 
+
+	targetCapacity := types.ProvisionedThroughput{
+		ReadCapacityUnits:  aws.Int64(targetTableRcu),
+		WriteCapacityUnits: aws.Int64(targetTableWcu),
+	}
+
+	err = isValidIncrease(currentTable.Table.ProvisionedThroughput, targetCapacity)
+	if err != nil {
+		return err
+	}
+
+	input := &dynamodb.UpdateTableInput{
+		TableName: aws.String(tableName),
+		GlobalSecondaryIndexUpdates: []types.GlobalSecondaryIndexUpdate{
+			types.GlobalSecondaryIndexUpdate{
+				Create: &types.CreateGlobalSecondaryIndexAction{
+					IndexName: aws.String(indexName),
+					ProvisionedThroughput: &types.ProvisionedThroughput{
+						ReadCapacityUnits:  aws.Int64(targetIndexRcu),
+						WriteCapacityUnits: aws.Int64(targetIndexWcu),
+					},
+				},
+			},
+		},
 	}
 
 	_, err = cl.dynamodb.UpdateTable(ctx, input)
