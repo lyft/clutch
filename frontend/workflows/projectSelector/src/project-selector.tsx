@@ -57,7 +57,6 @@ const StyledProgressContainer = styled.div({
   },
 });
 
-
 // Determines if every project has projectData (i.e. the effect has finished fetching the data)
 const allPresent = (state: State): boolean => {
   let ret = true;
@@ -69,7 +68,7 @@ const allPresent = (state: State): boolean => {
     return ret; // Will stop iteration early if false encountered.
   });
   return ret;
-}
+};
 
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
@@ -122,7 +121,6 @@ const ProjectSelector = () => {
 
   // This hook updates the global dash state based on the currently selected projects for cards to consume (including upstreams and downstreams).
   React.useEffect(() => {
-
     if (!allPresent(state)) {
       // Need to wait for the data.
       return;
