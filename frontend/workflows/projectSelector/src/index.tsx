@@ -28,4 +28,5 @@ const register = (): WorkflowConfiguration => {
 
 export default register;
 
+export type { DashState } from "./types";
 export { Card, Dash, useDashState };
