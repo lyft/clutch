@@ -118,7 +118,7 @@ type TextVariant =
   | "overline"
   | "input";
 
-const StyledTypography = styled.div<{ color: string; variant: TextVariant }>(props => ({
+const StyledTypography = styled.div<{ color?: string; variant: TextVariant }>(props => ({
   color: props.color,
   fontSize: `${STYLE_MAP[props?.variant || 0].size}px`,
   fontWeight: STYLE_MAP[props?.variant || 0].weight,
