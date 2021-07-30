@@ -36,7 +36,6 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 		ProvisionedThroughput:  currentCapacity,
 	}
 	return ret, nil
-
 }
 
 func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) []*dynamodbv1.GlobalSecondaryIndex {

@@ -32,15 +32,6 @@ var testTableOutput = &dynamodbv1.Table{
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
 }
 
-var testGlobalSecondaryIndex = &types.GlobalSecondaryIndexDescription{
-	IndexName: aws.String("test-gsi"),
-	KeySchema: []types.KeySchemaElement{},
-	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
-		ReadCapacityUnits:  aws.Int64(10),
-		WriteCapacityUnits: aws.Int64(20),
-	},
-}
-
 var testDynamodbTableWithGSI = &types.TableDescription{
 	TableName: aws.String("test-gsi-table"),
 	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
