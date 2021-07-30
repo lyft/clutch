@@ -9,34 +9,71 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/stretchr/testify/assert"
+
+	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 )
 
 var testDynamodbTable = &types.TableDescription{
-	TableName: "test-table",
-	ProvisionedThroughput: &types.ProvisionedThroughput{
+	TableName: aws.String("test-table"),
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
 		ReadCapacityUnits:  aws.Int64(100),
 		WriteCapacityUnits: aws.Int64(200),
 	},
-	GlobalSecondaryIndexes: []types.GlobalSecondaryIndex{},
+	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{},
 }
 
-var testGlobalSecondaryIndex = &types.GlobalSecondaryIndex{
-	IndexName:  "test-gsi",
-	KeySchema:  []types.KeySchema{},
-	Projection: &types.Projection,
-	ProvisionedThroughput: &types.ProvisionedThroughput{
+var testTableOutput = &dynamodbv1.Table{
+	Name:   "test-table",
+	Region: "us-east-1",
+	ProvisionedThroughput: &dynamodbv1.ProvisionedThroughput{
+		ReadCapacityUnits:  100,
+		WriteCapacityUnits: 200,
+	},
+	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
+}
+
+var testGlobalSecondaryIndex = &types.GlobalSecondaryIndexDescription{
+	IndexName: aws.String("test-gsi"),
+	KeySchema: []types.KeySchemaElement{},
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
 		ReadCapacityUnits:  aws.Int64(10),
 		WriteCapacityUnits: aws.Int64(20),
 	},
 }
 
 var testDynamodbTableWithGSI = &types.TableDescription{
-	TableName: "test-gsi-table",
-	ProvisionedThroughput: &types.ProvisionedThroughput{
+	TableName: aws.String("test-gsi-table"),
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
 		ReadCapacityUnits:  aws.Int64(100),
 		WriteCapacityUnits: aws.Int64(200),
 	},
-	GlobalSecondaryIndexes: []types.GlobalSecondaryIndex{testGlobalSecondaryIndex},
+	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{
+		{IndexName: aws.String("test-gsi"),
+			KeySchema: []types.KeySchemaElement{},
+			ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+				ReadCapacityUnits:  aws.Int64(10),
+				WriteCapacityUnits: aws.Int64(20),
+			},
+		},
+	},
+}
+
+var testTableWithGSIOutput = &dynamodbv1.Table{
+	Name:   "test-gsi-table",
+	Region: "us-east-1",
+	ProvisionedThroughput: &dynamodbv1.ProvisionedThroughput{
+		ReadCapacityUnits:  100,
+		WriteCapacityUnits: 200,
+	},
+	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{
+		{
+			Name: "test-gsi",
+			ProvisionedThroughput: &dynamodbv1.ProvisionedThroughput{
+				ReadCapacityUnits:  10,
+				WriteCapacityUnits: 20,
+			},
+		},
+	},
 }
 
 func TestDescribeTableValid(t *testing.T) {
@@ -49,7 +86,7 @@ func TestDescribeTableValid(t *testing.T) {
 
 	result, err := c.DescribeTable(context.Background(), "us-east-1", "test-table")
 	assert.NoError(t, err)
-	assert.Equal(t, testDynamodbTable, result)
+	assert.Equal(t, testTableOutput, result)
 
 	m.tableErr = errors.New("error")
 	_, err1 := c.DescribeTable(context.Background(), "us-east-1", "test-table")
@@ -64,11 +101,12 @@ func TestDescribeTableNotValid(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodb: m}},
 	}
 
+	m.tableErr = errors.New("resource not found")
 	_, err := c.DescribeTable(context.Background(), "us-east-1", "nonexistent-table")
-	assert.EqualError(t, err, "error")
+	assert.EqualError(t, err, "resource not found")
 }
 
-func TestDescribeGsiTableValid(t *testing.T) {
+func TestDescribeTableWithGsiValid(t *testing.T) {
 	m := &mockDynamodb{
 		table: testDynamodbTableWithGSI,
 	}
@@ -78,11 +116,7 @@ func TestDescribeGsiTableValid(t *testing.T) {
 
 	result, err := c.DescribeTable(context.Background(), "us-east-1", "test-gsi-table")
 	assert.NoError(t, err)
-	assert.Equal(t, testDynamodbTableWithGSI, result)
-
-	m.tableErr = errors.New("error")
-	_, err1 := c.DescribeTable(context.Background(), "us-east-1", "test-gsi-table")
-	assert.EqualError(t, err1, "error")
+	assert.Equal(t, testTableWithGSIOutput, result)
 }
 
 type mockDynamodb struct {
