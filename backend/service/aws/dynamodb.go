@@ -29,7 +29,7 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 
 	globalSecondaryIndexes := getGlobalSecondaryIndexes(result.Table.GlobalSecondaryIndexes)
 
-	var ret = &dynamodbv1.Table{
+	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(result.Table.TableName),
 		Region:                 region,
 		GlobalSecondaryIndexes: globalSecondaryIndexes,
