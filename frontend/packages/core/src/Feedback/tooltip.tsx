@@ -7,6 +7,7 @@ const BaseTooltip = ({ className, ...props }: MuiTooltipProps) => (
   <MuiTooltip classes={{ tooltip: className }} {...props} />
 );
 
+// TODO: sync with Design on margins for each possible placement
 const StyledTooltip = styled(BaseTooltip)((props: { maxWidth?: string }) => ({
   maxWidth: props.maxWidth,
   backgroundColor: "#0D1030",
