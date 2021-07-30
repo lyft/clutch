@@ -58,17 +58,10 @@ const StyledProgressContainer = styled.div({
   },
 });
 
-const projectDescription =
-  "server, mobile app, etc. Unchecking a project hides its upstream and downstream dependencies.";
-const upstreamDescription = "receive requests and send responses to the selected project.";
-const downstreamDescription = "send requests and receive responses from the selected project.";
-
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
-  // TODO: If a project is unchecked, the upstream and downstreams related to it disappear from the list.
-  // TODO: If a project is rechecked, the checks were preserved.
 
   const [customProject, setCustomProject] = React.useState("");
 
@@ -85,12 +78,6 @@ const ProjectSelector = () => {
 
     let allPresent = true;
     _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-      /*
-      TODO: b/c of this conditional, if a user adds an upstream/downstream we already have the project data for
-      to the custom project group, allPresent will be true and we wont trigger an api call. One way to account for this
-      is updating the conditional to additionally check if the project is included in state[Group.Downstreams]/state[Group.Upstreams]
-      and if so, mark allPresent as false.
-      */
       if (!(p in state.projectData)) {
         allPresent = false;
         return false; // Stop iteration.
@@ -177,41 +164,42 @@ const ProjectSelector = () => {
       <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
-            <LayersOutlinedIcon />
+            <LayersOutlinedIcon fontSize="small" />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
             <Tooltip
               title={
                 <>
-                  <TooltipContainer>
-                    <Typography variant="subtitle3" color="#FFFFFF">
-                      Projects
-                    </Typography>
-                    <Typography variant="body3" color="#E7E7EA">
-                      {projectDescription}
-                    </Typography>
-                  </TooltipContainer>
-                  <TooltipContainer>
-                    <Typography variant="subtitle3" color="#FFFFFF">
-                      Upstreams
-                    </Typography>
-                    <Typography variant="body3" color="#E7E7EA">
-                      {upstreamDescription}
-                    </Typography>
-                  </TooltipContainer>
-                  <TooltipContainer>
-                    <Typography variant="subtitle3" color="#FFFFFF">
-                      Downstreams
-                    </Typography>
-                    <Typography variant="body3" color="#E7E7EA">
-                      {downstreamDescription}
-                    </Typography>
-                  </TooltipContainer>
+                  {[
+                    {
+                      title: "Projects",
+                      description:
+                        "Service, mobile app, etc. Unchecking a project hides its upstream and downstream dependencies.",
+                    },
+                    {
+                      title: "Upstreams",
+                      description: "Receive requests and send responses to the selected project.",
+                    },
+                    {
+                      title: "Downstreams",
+                      description: "Send requests and receive responses from the selected project.",
+                    },
+                  ].map(item => (
+                    <TooltipContainer>
+                      <Typography variant="subtitle3" color="#FFFFFF">
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body3" color="#E7E7EA">
+                        {item.description}
+                      </Typography>
+                    </TooltipContainer>
+                  ))}
                 </>
               }
-              placement="right-start"
+              interactive
               maxWidth="400px"
+              placement="right-start"
             >
-              <InfoOutlinedIcon />
+              <InfoOutlinedIcon fontSize="small" />
             </Tooltip>
           </StyledWorkflowHeader>
           <StyledProgressContainer>

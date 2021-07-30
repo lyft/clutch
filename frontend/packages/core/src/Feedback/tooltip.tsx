@@ -7,29 +7,25 @@ const BaseTooltip = ({ className, ...props }: MuiTooltipProps) => (
   <MuiTooltip classes={{ tooltip: className }} {...props} />
 );
 
-const StyledTooltip = styled(BaseTooltip)(
-  {
-    backgroundColor: "#0D1030",
-    borderRadius: "6px",
-    "&.MuiTooltip-tooltipPlacementLeft": {
-      margin: "0 2px",
-    },
-    "&.MuiTooltip-tooltipPlacementRight": {
-      margin: "0 2px",
-    },
-    "&.MuiTooltip-tooltipPlacementTop": {
-      margin: "2px 0",
-    },
-    "&.MuiTooltip-tooltipPlacementBottom": {
-      margin: "2px 0",
-    },
+const StyledTooltip = styled(BaseTooltip)((props: { maxWidth: string }) => ({
+  maxWidth: props.maxWidth,
+  backgroundColor: "#0D1030",
+  borderRadius: "6px",
+  "&.MuiTooltip-tooltipPlacementLeft": {
+    margin: "0 2px",
   },
-  props => ({
-    maxWidth: props["data-max-width"],
-  })
-);
+  "&.MuiTooltip-tooltipPlacementRight": {
+    margin: "0 2px",
+  },
+  "&.MuiTooltip-tooltipPlacementTop": {
+    margin: "2px 0",
+  },
+  "&.MuiTooltip-tooltipPlacementBottom": {
+    margin: "2px 0",
+  },
+}));
 
-export interface TooltipProps extends Pick<MuiTooltipProps, "placement"> {
+export interface TooltipProps extends Pick<MuiTooltipProps, "interactive" | "placement"> {
   // tooltip reference element (i.e. icon)
   children: React.ReactElement;
   // material ui default is 300px
@@ -40,7 +36,7 @@ export interface TooltipProps extends Pick<MuiTooltipProps, "placement"> {
 
 const Tooltip = ({ children, maxWidth = "300px", title, ...props }: TooltipProps) => {
   return (
-    <StyledTooltip title={title} data-max-width={maxWidth} {...props}>
+    <StyledTooltip title={title} maxWidth={maxWidth} {...props}>
       {children}
     </StyledTooltip>
   );

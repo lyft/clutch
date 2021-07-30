@@ -118,8 +118,8 @@ type TextVariant =
   | "overline"
   | "input";
 
-const StyledTypography = styled.div<{ variant: TextVariant }>(props => ({
-  color: props["data-color"],
+const StyledTypography = styled.div<{ color: string; variant: TextVariant }>(props => ({
+  color: props.color,
   fontSize: `${STYLE_MAP[props?.variant || 0].size}px`,
   fontWeight: STYLE_MAP[props?.variant || 0].weight,
   lineHeight: `${STYLE_MAP[props?.variant || 0].lineHeight}px`,
@@ -134,7 +134,7 @@ export interface TypographyProps {
 
 const Typography = ({ variant, children, color = "#0D1030" }: TypographyProps) => {
   return (
-    <StyledTypography variant={variant} data-color={color}>
+    <StyledTypography variant={variant} color={color}>
       {children}
     </StyledTypography>
   );
