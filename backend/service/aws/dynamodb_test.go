@@ -110,11 +110,32 @@ func TestDescribeTableWithGsiValid(t *testing.T) {
 	assert.Equal(t, testTableWithGSIOutput, result)
 }
 
+func TestUpdateTableCapacity(t *testing.T) {
+	m := &mockDynamodb{
+		table: testDynamodbTable,
+	}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodb: m}},
+	}
+
+	err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 150, 250)
+	assert.NoError(t, err)
+
+	err1 := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 50, 100)
+	assert.EqualError(t, err1, "rpc error: code = FailedPrecondition desc = Target read capacity is lower than current capacity.")
+
+	err2 := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 1000, 2000)
+	assert.EqualError(t, err2, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds scale limit.")
+}
+
 type mockDynamodb struct {
 	dynamodbClient
 
 	tableErr error
 	table    *types.TableDescription
+
+	updateErr error
+	update    *dynamodb.UpdateTableOutput
 }
 
 func (m *mockDynamodb) DescribeTable(ctx context.Context, params *dynamodb.DescribeTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeTableOutput, error) {
@@ -125,6 +146,15 @@ func (m *mockDynamodb) DescribeTable(ctx context.Context, params *dynamodb.Descr
 	ret := &dynamodb.DescribeTableOutput{
 		Table: m.table,
 	}
+
+	return ret, nil
+}
+
+func (m *mockDynamodb) UpdateTable(ctx context.Context, params *dynamodb.UpdateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateTableOutput, error) {
+	if m.updateErr != nil {
+		return nil, m.updateErr
+	}
+	ret := m.update
 
 	return ret, nil
 }
