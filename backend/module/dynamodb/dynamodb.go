@@ -3,6 +3,9 @@ package dynamodb
 import (
 	"context"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	"github.com/lyft/clutch/backend/service/aws"
 )
@@ -27,13 +30,9 @@ func (a *dynamodbAPI) DescribeTable(ctx context.Context, req *dynamodbv1.Describ
 }
 
 func (a *dynamodbAPI) UpdateTableCapacity(ctx context.Context, req *dynamodbv1.UpdateTableCapacityRequest) (*dynamodbv1.UpdateTableCapacityResponse, error) {
-	// TO DO
-
-	return &dynamodbv1.UpdateTableCapacityResponse{}, nil
+	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
 func (a *dynamodbAPI) UpdateGSICapacity(ctx context.Context, req *dynamodbv1.UpdateGSICapacityRequest) (*dynamodbv1.UpdateGSICapacityResponse, error) {
-	// TO DO
-
-	return &dynamodbv1.UpdateGSICapacityResponse{}, nil
+	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
