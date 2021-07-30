@@ -120,8 +120,6 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 		return err
 	}
 
-	// s, err := c.GetDynamodbConfig()
-
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
 		return err
