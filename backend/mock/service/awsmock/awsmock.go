@@ -115,6 +115,14 @@ func (s *svc) DescribeTable(ctx context.Context, region string, tableName string
 	return ret, nil
 }
 
+func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) error {
+	panic("implement me")
+}
+
+func (s *svc) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetRCU int64, targetWCU int64) error {
+	panic("implement me")
+}
+
 func (s *svc) Regions() []string {
 	return []string{"us-mock-1"}
 }
