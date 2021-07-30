@@ -58,6 +58,19 @@ const StyledProgressContainer = styled.div({
   },
 });
 
+// Determines if every project has projectData (i.e. the effect has finished fetching the data)
+const allPresent = (state: State): boolean => {
+  let ret = true;
+  // We could potentially check all groups but it's really not necessary since an upstream cannot be added manually.
+  _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+    if (!(p in state.projectData)) {
+      ret = false;
+    }
+    return ret; // Will stop iteration early if false encountered.
+  });
+  return ret;
+};
+
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
@@ -76,16 +89,7 @@ const ProjectSelector = () => {
     // - Are projects empty (first load)?
     // - Is loading not already in progress?
 
-    let allPresent = true;
-    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-      if (!(p in state.projectData)) {
-        allPresent = false;
-        return false; // Stop iteration.
-      }
-      return true; // Continue.
-    });
-
-    if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent)) {
+    if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent(state))) {
       console.log("calling API!", state.loading); // eslint-disable-line
       dispatch({ type: "HYDRATE_START" });
 
@@ -116,6 +120,11 @@ const ProjectSelector = () => {
 
   // This hook updates the global dash state based on the currently selected projects for cards to consume (including upstreams and downstreams).
   React.useEffect(() => {
+    if (!allPresent(state)) {
+      // Need to wait for the data.
+      return;
+    }
+
     const dashState: DashState = { projectData: {}, selected: [] };
 
     // Determine selected projects.
