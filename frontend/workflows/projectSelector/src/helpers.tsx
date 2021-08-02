@@ -16,7 +16,7 @@ const useReducerState = () => {
   return React.useContext(StateContext);
 };
 
-const DispatchContext = React.createContext<(action: Action) => void | undefined>(() => undefined);
+const DispatchContext = React.createContext<((action: Action) => void) | undefined>(undefined);
 const useDispatch = () => {
   return React.useContext(DispatchContext);
 };

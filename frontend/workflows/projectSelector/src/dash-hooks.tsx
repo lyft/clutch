@@ -4,8 +4,8 @@ import type { DashAction, DashState } from "./types";
 
 export const DashStateContext = React.createContext<DashState | undefined>(undefined);
 
-export const DashDispatchContext = React.createContext<(action: DashAction) => void | undefined>(
-  () => undefined
+export const DashDispatchContext = React.createContext<((action: DashAction) => void) | undefined>(
+  undefined
 );
 
 type useDashUpdaterReturn = {
@@ -17,7 +17,7 @@ export const useDashUpdater = (): useDashUpdaterReturn => {
 
   return {
     updateSelected: projects => {
-      dispatch({ type: "UPDATE_SELECTED", payload: projects });
+      dispatch && dispatch({ type: "UPDATE_SELECTED", payload: projects });
     },
   };
 };

@@ -116,7 +116,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
 
   const [collapsed, setCollapsed] = React.useState(false);
 
-  const groupKeys = Object.keys(state?.[group] || {});
+  const groupKeys = Object.keys(state?.[group] ?? {});
   const numProjects = groupKeys.length;
   const checkedProjects = groupKeys.filter(k => state?.[group][k].checked);
 
@@ -139,6 +139,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
           {displayToggleHelperText && <StyledAllText>All</StyledAllText>}
           <Switch
             onChange={() =>
+              dispatch &&
               dispatch({
                 type: "TOGGLE_ENTIRE_GROUP",
                 payload: { group, projects: groupKeys },
@@ -161,6 +162,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 size="small"
                 disabled={state?.loading}
                 onChange={() =>
+                  dispatch &&
                   dispatch({
                     type: "TOGGLE_PROJECTS",
                     payload: { group, projects: [key] },
@@ -173,6 +175,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 <StyledOnlyButton
                   onClick={() =>
                     !state?.loading &&
+                    dispatch &&
                     dispatch({
                       type: "ONLY_PROJECTS",
                       payload: { group, projects: [key] },
@@ -186,6 +189,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                     <IconButton
                       onClick={() =>
                         !state?.loading &&
+                        dispatch &&
                         dispatch({
                           type: "REMOVE_PROJECTS",
                           payload: { group, projects: [key] },
