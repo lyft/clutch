@@ -16,7 +16,8 @@ const DialogPaper = styled(Paper)({
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
   boxSizing: "border-box",
   backgroundColor: "#FFFFFF",
-  minWidth: "max-content",
+  width: "max-content",
+  maxWidth: "75vw",
 });
 
 const DialogTitle = styled(MuiDialogTitle)({
@@ -25,7 +26,7 @@ const DialogTitle = styled(MuiDialogTitle)({
   fontSize: "20px",
   padding: "12px 12px 0 32px",
   fontWeight: 500,
-  color: "#0D1030",
+  color: "#0D1030"
 });
 
 const DialogTitleText = styled.div({
@@ -46,6 +47,7 @@ const DialogContent = styled(MuiDialogContent)({
   "> *": {
     margin: "16px 0 0 0",
   },
+  overflowWrap: "break-word",
 });
 
 const DialogActions = styled(MuiDialogActions)({
