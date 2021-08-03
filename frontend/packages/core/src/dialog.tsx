@@ -26,7 +26,7 @@ const DialogTitle = styled(MuiDialogTitle)({
   fontSize: "20px",
   padding: "12px 12px 0 32px",
   fontWeight: 500,
-  color: "#0D1030"
+  color: "#0D1030",
 });
 
 const DialogTitleText = styled.div({
