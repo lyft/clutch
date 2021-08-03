@@ -328,13 +328,13 @@ func (s *svc) DescribeNamespace(_ context.Context, clientset, cluster, name stri
 func (s *svc) ListEvents(_ context.Context, clientset, cluster, namespace, name string, kind k8sv1.ObjectKind) ([]*k8sv1.Event, error) {
 	return []*k8sv1.Event{
 		&k8sv1.Event{
-			Name:           "event1",
-			Reason:         "reason-1",
-			Description:    "description-1",
-			Cluster:        "fake-cluster-name",
-			Namespace:      namespace,
-			InvolvedObject: "pod1",
-			Kind:           kind,
+			Name:               "event1",
+			Reason:             "reason-1",
+			Description:        "description-1",
+			Cluster:            "fake-cluster-name",
+			Namespace:          namespace,
+			InvolvedObjectName: "pod1",
+			Kind:               kind,
 		},
 	}, nil
 }

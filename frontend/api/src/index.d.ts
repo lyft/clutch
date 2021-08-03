@@ -17293,8 +17293,8 @@ export namespace clutch {
                 /** Event namespace */
                 namespace?: (string|null);
 
-                /** Event involvedObject */
-                involvedObject?: (string|null);
+                /** Event involvedObjectName */
+                involvedObjectName?: (string|null);
 
                 /** Event kind */
                 kind?: (clutch.k8s.v1.ObjectKind|null);
@@ -17324,8 +17324,8 @@ export namespace clutch {
                 /** Event namespace. */
                 public namespace: string;
 
-                /** Event involvedObject. */
-                public involvedObject: string;
+                /** Event involvedObjectName. */
+                public involvedObjectName: string;
 
                 /** Event kind. */
                 public kind: clutch.k8s.v1.ObjectKind;
@@ -17371,8 +17371,8 @@ export namespace clutch {
                 /** ListEventsRequest namespace */
                 namespace?: (string|null);
 
-                /** ListEventsRequest object */
-                object?: (string|null);
+                /** ListEventsRequest objectName */
+                objectName?: (string|null);
 
                 /** ListEventsRequest kind */
                 kind?: (clutch.k8s.v1.ObjectKind|null);
@@ -17396,8 +17396,8 @@ export namespace clutch {
                 /** ListEventsRequest namespace. */
                 public namespace: string;
 
-                /** ListEventsRequest object. */
-                public object: string;
+                /** ListEventsRequest objectName. */
+                public objectName: string;
 
                 /** ListEventsRequest kind. */
                 public kind: clutch.k8s.v1.ObjectKind;

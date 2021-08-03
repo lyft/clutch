@@ -41042,7 +41042,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [description] Event description
                  * @property {string|null} [cluster] Event cluster
                  * @property {string|null} [namespace] Event namespace
-                 * @property {string|null} [involvedObject] Event involvedObject
+                 * @property {string|null} [involvedObjectName] Event involvedObjectName
                  * @property {clutch.k8s.v1.ObjectKind|null} [kind] Event kind
                  */
 
@@ -41102,12 +41102,12 @@ export const clutch = $root.clutch = (() => {
                 Event.prototype.namespace = "";
 
                 /**
-                 * Event involvedObject.
-                 * @member {string} involvedObject
+                 * Event involvedObjectName.
+                 * @member {string} involvedObjectName
                  * @memberof clutch.k8s.v1.Event
                  * @instance
                  */
-                Event.prototype.involvedObject = "";
+                Event.prototype.involvedObjectName = "";
 
                 /**
                  * Event kind.
@@ -41143,9 +41143,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.namespace != null && message.hasOwnProperty("namespace"))
                         if (!$util.isString(message.namespace))
                             return "namespace: string expected";
-                    if (message.involvedObject != null && message.hasOwnProperty("involvedObject"))
-                        if (!$util.isString(message.involvedObject))
-                            return "involvedObject: string expected";
+                    if (message.involvedObjectName != null && message.hasOwnProperty("involvedObjectName"))
+                        if (!$util.isString(message.involvedObjectName))
+                            return "involvedObjectName: string expected";
                     if (message.kind != null && message.hasOwnProperty("kind"))
                         switch (message.kind) {
                         default:
@@ -41180,8 +41180,8 @@ export const clutch = $root.clutch = (() => {
                         message.cluster = String(object.cluster);
                     if (object.namespace != null)
                         message.namespace = String(object.namespace);
-                    if (object.involvedObject != null)
-                        message.involvedObject = String(object.involvedObject);
+                    if (object.involvedObjectName != null)
+                        message.involvedObjectName = String(object.involvedObjectName);
                     switch (object.kind) {
                     case "UNSPECIFIED":
                     case 0:
@@ -41218,7 +41218,7 @@ export const clutch = $root.clutch = (() => {
                         object.description = "";
                         object.cluster = "";
                         object.namespace = "";
-                        object.involvedObject = "";
+                        object.involvedObjectName = "";
                         object.kind = options.enums === String ? "UNSPECIFIED" : 0;
                     }
                     if (message.name != null && message.hasOwnProperty("name"))
@@ -41231,8 +41231,8 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = message.cluster;
                     if (message.namespace != null && message.hasOwnProperty("namespace"))
                         object.namespace = message.namespace;
-                    if (message.involvedObject != null && message.hasOwnProperty("involvedObject"))
-                        object.involvedObject = message.involvedObject;
+                    if (message.involvedObjectName != null && message.hasOwnProperty("involvedObjectName"))
+                        object.involvedObjectName = message.involvedObjectName;
                     if (message.kind != null && message.hasOwnProperty("kind"))
                         object.kind = options.enums === String ? $root.clutch.k8s.v1.ObjectKind[message.kind] : message.kind;
                     return object;
@@ -41261,7 +41261,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [clientset] ListEventsRequest clientset
                  * @property {string|null} [cluster] ListEventsRequest cluster
                  * @property {string|null} [namespace] ListEventsRequest namespace
-                 * @property {string|null} [object] ListEventsRequest object
+                 * @property {string|null} [objectName] ListEventsRequest objectName
                  * @property {clutch.k8s.v1.ObjectKind|null} [kind] ListEventsRequest kind
                  */
 
@@ -41305,12 +41305,12 @@ export const clutch = $root.clutch = (() => {
                 ListEventsRequest.prototype.namespace = "";
 
                 /**
-                 * ListEventsRequest object.
-                 * @member {string} object
+                 * ListEventsRequest objectName.
+                 * @member {string} objectName
                  * @memberof clutch.k8s.v1.ListEventsRequest
                  * @instance
                  */
-                ListEventsRequest.prototype.object = "";
+                ListEventsRequest.prototype.objectName = "";
 
                 /**
                  * ListEventsRequest kind.
@@ -41340,9 +41340,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.namespace != null && message.hasOwnProperty("namespace"))
                         if (!$util.isString(message.namespace))
                             return "namespace: string expected";
-                    if (message.object != null && message.hasOwnProperty("object"))
-                        if (!$util.isString(message.object))
-                            return "object: string expected";
+                    if (message.objectName != null && message.hasOwnProperty("objectName"))
+                        if (!$util.isString(message.objectName))
+                            return "objectName: string expected";
                     if (message.kind != null && message.hasOwnProperty("kind"))
                         switch (message.kind) {
                         default:
@@ -41373,8 +41373,8 @@ export const clutch = $root.clutch = (() => {
                         message.cluster = String(object.cluster);
                     if (object.namespace != null)
                         message.namespace = String(object.namespace);
-                    if (object.object != null)
-                        message.object = String(object.object);
+                    if (object.objectName != null)
+                        message.objectName = String(object.objectName);
                     switch (object.kind) {
                     case "UNSPECIFIED":
                     case 0:
@@ -41409,7 +41409,7 @@ export const clutch = $root.clutch = (() => {
                         object.clientset = "";
                         object.cluster = "";
                         object.namespace = "";
-                        object.object = "";
+                        object.objectName = "";
                         object.kind = options.enums === String ? "UNSPECIFIED" : 0;
                     }
                     if (message.clientset != null && message.hasOwnProperty("clientset"))
@@ -41418,8 +41418,8 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = message.cluster;
                     if (message.namespace != null && message.hasOwnProperty("namespace"))
                         object.namespace = message.namespace;
-                    if (message.object != null && message.hasOwnProperty("object"))
-                        object.object = message.object;
+                    if (message.objectName != null && message.hasOwnProperty("objectName"))
+                        object.objectName = message.objectName;
                     if (message.kind != null && message.hasOwnProperty("kind"))
                         object.kind = options.enums === String ? $root.clutch.k8s.v1.ObjectKind[message.kind] : message.kind;
                     return object;

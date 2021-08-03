@@ -1084,7 +1084,7 @@ message Event {
   string cluster = 4;
   string namespace = 5;
   // name of the object i.e pod name, deployment name, etc
-  string involved_object = 6;
+  string involved_object_name = 6;
   // kind of the object e.g pod, deployment, service, etc
   ObjectKind kind = 7;
 }
@@ -1092,14 +1092,15 @@ message Event {
 message ListEventsRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Namespace",
-    pattern : "{cluster}/{namespace}"
+    // requests for all events associated with a given object
+    pattern : "{cluster}/{object_name}"
   };
 
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   // name of the object i.e pod name, deployment name, etc
-  string object = 4 [ (validate.rules).string = {min_bytes : 1} ];
+  string object_name = 4 [ (validate.rules).string = {min_bytes : 1} ];
   // kind of the object e.g pod, deployment, service, etc
   // https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#types-kinds
   ObjectKind kind = 5 [ (validate.rules).enum = {defined_only : true} ];

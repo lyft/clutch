@@ -6076,7 +6076,7 @@ func (m *Event) Validate() error {
 
 	// no validation rules for Namespace
 
-	// no validation rules for InvolvedObject
+	// no validation rules for InvolvedObjectName
 
 	// no validation rules for Kind
 
@@ -6166,9 +6166,9 @@ func (m *ListEventsRequest) Validate() error {
 		}
 	}
 
-	if len(m.GetObject()) < 1 {
+	if len(m.GetObjectName()) < 1 {
 		return ListEventsRequestValidationError{
-			field:  "Object",
+			field:  "ObjectName",
 			reason: "value length must be at least 1 bytes",
 		}
 	}

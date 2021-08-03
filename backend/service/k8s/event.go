@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -20,16 +21,17 @@ func (s *svc) ListEvents(ctx context.Context, clientset, cluster, namespace, obj
 	objKind := strcase.ToCamel(strings.ToLower(kind.String()))
 	// returns the appropriate field selector based on the object involved
 	fieldSelector := cs.CoreV1().Events(cs.Namespace()).GetFieldSelector(&object, &namespace, &objKind, nil)
+	fmt.Printf("fieldSelector %v\n", fieldSelector)
 
 	eventList, err := cs.CoreV1().Events(cs.Namespace()).List(ctx, metav1.ListOptions{FieldSelector: fieldSelector.String()})
 	if err != nil {
 		return nil, err
 	}
 
+	fmt.Printf("eventList %v\n", eventList)
 	var events []*k8sapiv1.Event
-	for _, e := range eventList.Items {
-		event := e
-		events = append(events, ProtoForEvent(cs.Cluster(), &event))
+	for i, _ := range eventList.Items {
+		events = append(events, ProtoForEvent(cs.Cluster(), &eventList.Items[i]))
 	}
 
 	return events, nil
@@ -41,13 +43,13 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 		clusterName = cluster
 	}
 	return &k8sapiv1.Event{
-		Cluster:        clusterName,
-		Namespace:      k8sEvent.Namespace,
-		Name:           k8sEvent.Name,
-		Reason:         k8sEvent.Reason,
-		Description:    k8sEvent.Message,
-		InvolvedObject: k8sEvent.InvolvedObject.Name,
-		Kind:           protoForObjectKind(k8sEvent.InvolvedObject.Kind),
+		Cluster:            clusterName,
+		Namespace:          k8sEvent.Namespace,
+		Name:               k8sEvent.Name,
+		Reason:             k8sEvent.Reason,
+		Description:        k8sEvent.Message,
+		InvolvedObjectName: k8sEvent.InvolvedObject.Name,
+		Kind:               protoForObjectKind(k8sEvent.InvolvedObject.Kind),
 	}
 }
 

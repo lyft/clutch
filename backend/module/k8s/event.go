@@ -7,7 +7,7 @@ import (
 )
 
 func (a *k8sAPI) ListEvents(ctx context.Context, req *k8sapiv1.ListEventsRequest) (*k8sapiv1.ListEventsResponse, error) {
-	events, err := a.k8s.ListEvents(ctx, req.Clientset, req.Cluster, req.Namespace, req.Object, req.Kind)
+	events, err := a.k8s.ListEvents(ctx, req.Clientset, req.Cluster, req.Namespace, req.ObjectName, req.Kind)
 	if err != nil {
 		return nil, err
 	}
