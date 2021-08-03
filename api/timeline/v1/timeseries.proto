@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package lyft.dash.timeline.v1;
+package clutch.timeline.v1;
 
-option go_package = "github.com/lyft/clutch-private/backend/api/dash/timeline/v1;dashtimelinev1";
+option go_package = "github.com/lyft/clutch/backend/api/timeline/v1;timelinev1";
 
 import "google/protobuf/any.proto";
 import "validate/validate.proto";
