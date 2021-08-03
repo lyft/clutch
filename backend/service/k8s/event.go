@@ -30,7 +30,7 @@ func (s *svc) ListEvents(ctx context.Context, clientset, cluster, namespace, obj
 
 	fmt.Printf("eventList %v\n", eventList)
 	var events []*k8sapiv1.Event
-	for i, _ := range eventList.Items {
+	for i := range eventList.Items {
 		events = append(events, ProtoForEvent(cs.Cluster(), &eventList.Items[i]))
 	}
 
