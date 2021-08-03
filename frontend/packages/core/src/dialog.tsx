@@ -16,8 +16,7 @@ const DialogPaper = styled(Paper)({
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
   boxSizing: "border-box",
   backgroundColor: "#FFFFFF",
-  maxWidth: "fit-content",
-  minWidth: "600px",
+  minWidth: "max-content",
 });
 
 const DialogTitle = styled(MuiDialogTitle)({
@@ -40,8 +39,6 @@ const IconButton = styled(MuiIconButton)({
 });
 
 const DialogContent = styled(MuiDialogContent)({
-  display: "flex",
-  flexDirection: "column",
   padding: "16px 32px 32px 32px",
   fontSize: "16px",
   fontWeight: 400,
