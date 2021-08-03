@@ -65306,4 +65306,268 @@ export const google = $root.google = (() => {
     return google;
 })();
 
+export const lyft = $root.lyft = (() => {
+
+    /**
+     * Namespace lyft.
+     * @exports lyft
+     * @namespace
+     */
+    const lyft = {};
+
+    lyft.dash = (function() {
+
+        /**
+         * Namespace dash.
+         * @memberof lyft
+         * @namespace
+         */
+        const dash = {};
+
+        dash.timeline = (function() {
+
+            /**
+             * Namespace timeline.
+             * @memberof lyft.dash
+             * @namespace
+             */
+            const timeline = {};
+
+            timeline.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof lyft.dash.timeline
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.TimeseriesData = (function() {
+
+                    /**
+                     * Properties of a TimeseriesData.
+                     * @memberof lyft.dash.timeline.v1
+                     * @interface ITimeseriesData
+                     * @property {string|null} [projectName] TimeseriesData projectName
+                     * @property {number|Long|null} [startTimeMillis] TimeseriesData startTimeMillis
+                     * @property {number|Long|null} [endTimeMillis] TimeseriesData endTimeMillis
+                     * @property {number|Long|null} [eventId] TimeseriesData eventId
+                     * @property {google.protobuf.IAny|null} [eventInfo] TimeseriesData eventInfo
+                     */
+
+                    /**
+                     * Constructs a new TimeseriesData.
+                     * @memberof lyft.dash.timeline.v1
+                     * @classdesc Represents a TimeseriesData.
+                     * @implements ITimeseriesData
+                     * @constructor
+                     * @param {lyft.dash.timeline.v1.ITimeseriesData=} [properties] Properties to set
+                     */
+                    function TimeseriesData(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * TimeseriesData projectName.
+                     * @member {string} projectName
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @instance
+                     */
+                    TimeseriesData.prototype.projectName = "";
+
+                    /**
+                     * TimeseriesData startTimeMillis.
+                     * @member {number|Long} startTimeMillis
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @instance
+                     */
+                    TimeseriesData.prototype.startTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * TimeseriesData endTimeMillis.
+                     * @member {number|Long} endTimeMillis
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @instance
+                     */
+                    TimeseriesData.prototype.endTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * TimeseriesData eventId.
+                     * @member {number|Long} eventId
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @instance
+                     */
+                    TimeseriesData.prototype.eventId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * TimeseriesData eventInfo.
+                     * @member {google.protobuf.IAny|null|undefined} eventInfo
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @instance
+                     */
+                    TimeseriesData.prototype.eventInfo = null;
+
+                    /**
+                     * Verifies a TimeseriesData message.
+                     * @function verify
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    TimeseriesData.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.projectName != null && message.hasOwnProperty("projectName"))
+                            if (!$util.isString(message.projectName))
+                                return "projectName: string expected";
+                        if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
+                            if (!$util.isInteger(message.startTimeMillis) && !(message.startTimeMillis && $util.isInteger(message.startTimeMillis.low) && $util.isInteger(message.startTimeMillis.high)))
+                                return "startTimeMillis: integer|Long expected";
+                        if (message.endTimeMillis != null && message.hasOwnProperty("endTimeMillis"))
+                            if (!$util.isInteger(message.endTimeMillis) && !(message.endTimeMillis && $util.isInteger(message.endTimeMillis.low) && $util.isInteger(message.endTimeMillis.high)))
+                                return "endTimeMillis: integer|Long expected";
+                        if (message.eventId != null && message.hasOwnProperty("eventId"))
+                            if (!$util.isInteger(message.eventId) && !(message.eventId && $util.isInteger(message.eventId.low) && $util.isInteger(message.eventId.high)))
+                                return "eventId: integer|Long expected";
+                        if (message.eventInfo != null && message.hasOwnProperty("eventInfo")) {
+                            let error = $root.google.protobuf.Any.verify(message.eventInfo);
+                            if (error)
+                                return "eventInfo." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a TimeseriesData message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {lyft.dash.timeline.v1.TimeseriesData} TimeseriesData
+                     */
+                    TimeseriesData.fromObject = function fromObject(object) {
+                        if (object instanceof $root.lyft.dash.timeline.v1.TimeseriesData)
+                            return object;
+                        let message = new $root.lyft.dash.timeline.v1.TimeseriesData();
+                        if (object.projectName != null)
+                            message.projectName = String(object.projectName);
+                        if (object.startTimeMillis != null)
+                            if ($util.Long)
+                                (message.startTimeMillis = $util.Long.fromValue(object.startTimeMillis)).unsigned = false;
+                            else if (typeof object.startTimeMillis === "string")
+                                message.startTimeMillis = parseInt(object.startTimeMillis, 10);
+                            else if (typeof object.startTimeMillis === "number")
+                                message.startTimeMillis = object.startTimeMillis;
+                            else if (typeof object.startTimeMillis === "object")
+                                message.startTimeMillis = new $util.LongBits(object.startTimeMillis.low >>> 0, object.startTimeMillis.high >>> 0).toNumber();
+                        if (object.endTimeMillis != null)
+                            if ($util.Long)
+                                (message.endTimeMillis = $util.Long.fromValue(object.endTimeMillis)).unsigned = false;
+                            else if (typeof object.endTimeMillis === "string")
+                                message.endTimeMillis = parseInt(object.endTimeMillis, 10);
+                            else if (typeof object.endTimeMillis === "number")
+                                message.endTimeMillis = object.endTimeMillis;
+                            else if (typeof object.endTimeMillis === "object")
+                                message.endTimeMillis = new $util.LongBits(object.endTimeMillis.low >>> 0, object.endTimeMillis.high >>> 0).toNumber();
+                        if (object.eventId != null)
+                            if ($util.Long)
+                                (message.eventId = $util.Long.fromValue(object.eventId)).unsigned = false;
+                            else if (typeof object.eventId === "string")
+                                message.eventId = parseInt(object.eventId, 10);
+                            else if (typeof object.eventId === "number")
+                                message.eventId = object.eventId;
+                            else if (typeof object.eventId === "object")
+                                message.eventId = new $util.LongBits(object.eventId.low >>> 0, object.eventId.high >>> 0).toNumber();
+                        if (object.eventInfo != null) {
+                            if (typeof object.eventInfo !== "object")
+                                throw TypeError(".lyft.dash.timeline.v1.TimeseriesData.eventInfo: object expected");
+                            message.eventInfo = $root.google.protobuf.Any.fromObject(object.eventInfo);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a TimeseriesData message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @static
+                     * @param {lyft.dash.timeline.v1.TimeseriesData} message TimeseriesData
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    TimeseriesData.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.projectName = "";
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.startTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.startTimeMillis = options.longs === String ? "0" : 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.endTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.endTimeMillis = options.longs === String ? "0" : 0;
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.eventId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.eventId = options.longs === String ? "0" : 0;
+                            object.eventInfo = null;
+                        }
+                        if (message.projectName != null && message.hasOwnProperty("projectName"))
+                            object.projectName = message.projectName;
+                        if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
+                            if (typeof message.startTimeMillis === "number")
+                                object.startTimeMillis = options.longs === String ? String(message.startTimeMillis) : message.startTimeMillis;
+                            else
+                                object.startTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeMillis) : options.longs === Number ? new $util.LongBits(message.startTimeMillis.low >>> 0, message.startTimeMillis.high >>> 0).toNumber() : message.startTimeMillis;
+                        if (message.endTimeMillis != null && message.hasOwnProperty("endTimeMillis"))
+                            if (typeof message.endTimeMillis === "number")
+                                object.endTimeMillis = options.longs === String ? String(message.endTimeMillis) : message.endTimeMillis;
+                            else
+                                object.endTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.endTimeMillis) : options.longs === Number ? new $util.LongBits(message.endTimeMillis.low >>> 0, message.endTimeMillis.high >>> 0).toNumber() : message.endTimeMillis;
+                        if (message.eventId != null && message.hasOwnProperty("eventId"))
+                            if (typeof message.eventId === "number")
+                                object.eventId = options.longs === String ? String(message.eventId) : message.eventId;
+                            else
+                                object.eventId = options.longs === String ? $util.Long.prototype.toString.call(message.eventId) : options.longs === Number ? new $util.LongBits(message.eventId.low >>> 0, message.eventId.high >>> 0).toNumber() : message.eventId;
+                        if (message.eventInfo != null && message.hasOwnProperty("eventInfo"))
+                            object.eventInfo = $root.google.protobuf.Any.toObject(message.eventInfo, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this TimeseriesData to JSON.
+                     * @function toJSON
+                     * @memberof lyft.dash.timeline.v1.TimeseriesData
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    TimeseriesData.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return TimeseriesData;
+                })();
+
+                return v1;
+            })();
+
+            return timeline;
+        })();
+
+        return dash;
+    })();
+
+    return lyft;
+})();
+
 export { $root as default };

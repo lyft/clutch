@@ -26231,3 +26231,91 @@ export namespace google {
         }
     }
 }
+
+/** Namespace lyft. */
+export namespace lyft {
+
+    /** Namespace dash. */
+    namespace dash {
+
+        /** Namespace timeline. */
+        namespace timeline {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a TimeseriesData. */
+                interface ITimeseriesData {
+
+                    /** TimeseriesData projectName */
+                    projectName?: (string|null);
+
+                    /** TimeseriesData startTimeMillis */
+                    startTimeMillis?: (number|Long|null);
+
+                    /** TimeseriesData endTimeMillis */
+                    endTimeMillis?: (number|Long|null);
+
+                    /** TimeseriesData eventId */
+                    eventId?: (number|Long|null);
+
+                    /** TimeseriesData eventInfo */
+                    eventInfo?: (google.protobuf.IAny|null);
+                }
+
+                /** Represents a TimeseriesData. */
+                class TimeseriesData implements ITimeseriesData {
+
+                    /**
+                     * Constructs a new TimeseriesData.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: lyft.dash.timeline.v1.ITimeseriesData);
+
+                    /** TimeseriesData projectName. */
+                    public projectName: string;
+
+                    /** TimeseriesData startTimeMillis. */
+                    public startTimeMillis: (number|Long);
+
+                    /** TimeseriesData endTimeMillis. */
+                    public endTimeMillis: (number|Long);
+
+                    /** TimeseriesData eventId. */
+                    public eventId: (number|Long);
+
+                    /** TimeseriesData eventInfo. */
+                    public eventInfo?: (google.protobuf.IAny|null);
+
+                    /**
+                     * Verifies a TimeseriesData message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a TimeseriesData message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns TimeseriesData
+                     */
+                    public static fromObject(object: { [k: string]: any }): lyft.dash.timeline.v1.TimeseriesData;
+
+                    /**
+                     * Creates a plain object from a TimeseriesData message. Also converts values to other types if specified.
+                     * @param message TimeseriesData
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: lyft.dash.timeline.v1.TimeseriesData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this TimeseriesData to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+    }
+}
