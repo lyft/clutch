@@ -14,7 +14,6 @@ import (
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 )
 
-<<<<<<< HEAD
 // defaults for the dynamodb settings config
 const (
 	AwsMaxRCU       = int64(40000)
@@ -35,11 +34,6 @@ func getScalingLimits(cfg *awsv1.Config) *awsv1.ScalingLimits {
 	}
 	return cfg.DynamodbConfig.ScalingLimits
 }
-=======
-const maxDynamodbReadCapacityUnits = 35000
-const maxDynamodbWriteCapacityUnits = 50000
-const maxDynamodbCapacityScaleFactor = 2
->>>>>>> 695a4f1671e96a397a5acff83d6e6b5232650a14
 
 func (c *client) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
 	cl, err := c.getRegionalClient(region)
@@ -93,7 +87,6 @@ func newProtoForGlobalSecondaryIndex(index types.GlobalSecondaryIndexDescription
 	}
 }
 
-<<<<<<< HEAD
 func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughputDescription, target types.ProvisionedThroughput) error {
 	// check for targets that are lower than current (can't scale down)
 	if *current.ReadCapacityUnits > *target.ReadCapacityUnits {
@@ -117,31 +110,6 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	}
 	if (float32(*target.WriteCapacityUnits / *current.WriteCapacityUnits)) > client.dynamodbCfg.scalingLimits.maxScaleFactor {
 		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target write capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.scalingLimits.maxScaleFactor))
-=======
-func isValidIncrease(current *types.ProvisionedThroughputDescription, target types.ProvisionedThroughput) error {
-	// check for targets that are lower than current (can't scale down)
-	if *current.ReadCapacityUnits > *target.ReadCapacityUnits {
-		return status.Error(codes.FailedPrecondition, "Target read capacity is lower than current capacity.")
-	}
-	if *current.WriteCapacityUnits > *target.WriteCapacityUnits {
-		return status.Error(codes.FailedPrecondition, "Target write capacity is lower than current capacity.")
-	}
-
-	// check for targets that exceed max limits
-	if *target.ReadCapacityUnits > maxDynamodbReadCapacityUnits {
-		return status.Error(codes.FailedPrecondition, "Target read capacity exceeds maximum allowed limits.")
-	}
-	if *target.WriteCapacityUnits > maxDynamodbWriteCapacityUnits {
-		return status.Error(codes.FailedPrecondition, "Target write capacity exceeds maximum allowed limits.")
-	}
-
-	// check for increases that exceed max increase scale
-	if (*target.ReadCapacityUnits / *current.ReadCapacityUnits) > maxDynamodbCapacityScaleFactor {
-		return status.Error(codes.FailedPrecondition, "Target read capacity exceeds scale limit.")
-	}
-	if (*target.WriteCapacityUnits / *current.WriteCapacityUnits) > maxDynamodbCapacityScaleFactor {
-		return status.Error(codes.FailedPrecondition, "Target write capacity exceeds scale limit.")
->>>>>>> 695a4f1671e96a397a5acff83d6e6b5232650a14
 	}
 	return nil
 }
@@ -154,6 +122,7 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	// s, err := c.GetDynamodbConfig()
 
@@ -164,6 +133,10 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 =======
 >>>>>>> 695a4f1671e96a397a5acff83d6e6b5232650a14
 >>>>>>> Revert "finish merge"
+=======
+	// s, err := c.GetDynamodbConfig()
+
+>>>>>>> Revert "merged"
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
 		return err
@@ -174,11 +147,7 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 		WriteCapacityUnits: aws.Int64(targetTableWcu),
 	}
 
-<<<<<<< HEAD
 	err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, targetCapacity)
-=======
-	err = isValidIncrease(currentTable.Table.ProvisionedThroughput, targetCapacity)
->>>>>>> 695a4f1671e96a397a5acff83d6e6b5232650a14
 	if err != nil {
 		return err
 	}
