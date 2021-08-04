@@ -60,6 +60,8 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		clientRetries = int(ac.ClientConfig.Retries)
 	}
 
+	ds := getScalingLimits(ac)
+
 	awsHTTPClient := &http.Client{}
 
 	for _, region := range ac.Regions {
@@ -78,7 +80,16 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		}
 
 		c.clients[region] = &regionalClient{
-			region:      region,
+			region: region,
+			dynamodbCfg: dynamodbConfig{
+				scalingLimits: scalingLimits{
+					maxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+					maxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+					maxScaleFactor:        ds.MaxScaleFactor,
+					enableOverride:        ds.EnableOverride,
+				},
+			},
+
 			s3:          s3.NewFromConfig(regionCfg),
 			kinesis:     kinesis.NewFromConfig(regionCfg),
 			ec2:         ec2.NewFromConfig(regionCfg),
@@ -104,7 +115,7 @@ type Client interface {
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
 	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)
-	UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) error
+	UpdateTableCapacity(ctx context.Context, region string, tableName string, targetIndexRcu int64, targetIndexWcu int64) error
 
 	Regions() []string
 }
@@ -120,11 +131,24 @@ type client struct {
 type regionalClient struct {
 	region string
 
+	dynamodbCfg dynamodbConfig
+
 	s3          s3Client
 	kinesis     kinesisClient
 	ec2         ec2Client
 	autoscaling autoscalingClient
 	dynamodb    dynamodbClient
+}
+
+type dynamodbConfig struct {
+	scalingLimits scalingLimits
+}
+
+type scalingLimits struct {
+	maxReadCapacityUnits  int64
+	maxWriteCapacityUnits int64
+	maxScaleFactor        float32
+	enableOverride        bool
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
