@@ -185,12 +185,11 @@ type ScalingLimits struct {
 	unknownFields protoimpl.UnknownFields
 
 	// defaults to AWS default quotas if not set
-	// https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html#default-limits-throughput-capacity-modes
 	MaxReadCapacityUnits  int64 `protobuf:"varint,1,opt,name=max_read_capacity_units,json=maxReadCapacityUnits,proto3" json:"max_read_capacity_units,omitempty"`
 	MaxWriteCapacityUnits int64 `protobuf:"varint,2,opt,name=max_write_capacity_units,json=maxWriteCapacityUnits,proto3" json:"max_write_capacity_units,omitempty"`
 	// defaults to a scale factor of 2.0x
 	MaxScaleFactor float32 `protobuf:"fixed32,3,opt,name=max_scale_factor,json=maxScaleFactor,proto3" json:"max_scale_factor,omitempty"`
-	// enables whether the service can override safety limits. Defaults to false.
+	// enables whether the service can override safety limits. Defaults to false
 	EnableOverride bool `protobuf:"varint,4,opt,name=enable_override,json=enableOverride,proto3" json:"enable_override,omitempty"`
 }
 
