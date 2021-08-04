@@ -19,7 +19,7 @@ export default {
 
 const Template = ({ row, ...props }: TableProps & { row: React.ReactElement }) => (
   <div style={{ maxHeight: "300px", display: "flex" }}>
-    <Table headings={["Column 1", "Column 2"]} {...props}>
+    <Table {...props} columns={["Column 1", "Column 2"]}>
       {
         // eslint-disable-next-line react/no-array-index-key
         [...Array(10)].map((_, index: number) => React.cloneElement(row, { key: index }))
@@ -75,7 +75,7 @@ MissingCellValue.args = {
 
 export const DefaultCellValue = Template.bind({});
 DefaultCellValue.args = {
-  row: <IncompleteTableRow defaultCellValue="null" />,
+  row: <IncompleteTableRow cellDefault="null" />,
 };
 
 export const ActionableRows = Template.bind({});
