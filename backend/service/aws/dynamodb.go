@@ -120,23 +120,6 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 		return err
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-	// s, err := c.GetDynamodbConfig()
-
->>>>>>> finish merge
-=======
-	// s, err := c.GetDynamodbConfig()
-
-=======
->>>>>>> 695a4f1671e96a397a5acff83d6e6b5232650a14
->>>>>>> Revert "finish merge"
-=======
-	// s, err := c.GetDynamodbConfig()
-
->>>>>>> Revert "merged"
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
 		return err
