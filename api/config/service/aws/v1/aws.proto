@@ -9,7 +9,7 @@ import "validate/validate.proto";
 message Config {
   repeated string regions = 1 [ (validate.rules).repeated = {min_items : 1} ];
   ClientConfig client_config = 2;
-  ClientSettings dynamodb_config = 3;
+  DynamodbConfig dynamodb_config = 3;
 }
 
 message ClientConfig {
