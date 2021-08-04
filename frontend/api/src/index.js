@@ -29319,6 +29319,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listEvents}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef ListEventsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.ListEventsResponse} [response] ListEventsResponse
+                 */
+
+                /**
+                 * Calls ListEvents.
+                 * @function listEvents
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListEventsRequest} request ListEventsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.ListEventsCallback} callback Node-style callback called with the error, if any, and ListEventsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.listEvents = function listEvents(request, callback) {
+                    return this.rpcCall(listEvents, $root.clutch.k8s.v1.ListEventsRequest, $root.clutch.k8s.v1.ListEventsResponse, request, callback);
+                }, "name", { value: "ListEvents" });
+
+                /**
+                 * Calls ListEvents.
+                 * @function listEvents
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListEventsRequest} request ListEventsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.ListEventsResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -40980,6 +41013,548 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return DescribeNamespaceResponse;
+            })();
+
+            /**
+             * ObjectKind enum.
+             * @name clutch.k8s.v1.ObjectKind
+             * @enum {number}
+             * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+             * @property {number} UNKNOWN=1 UNKNOWN value
+             * @property {number} POD=2 POD value
+             */
+            v1.ObjectKind = (function() {
+                const valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "UNSPECIFIED"] = 0;
+                values[valuesById[1] = "UNKNOWN"] = 1;
+                values[valuesById[2] = "POD"] = 2;
+                return values;
+            })();
+
+            v1.Event = (function() {
+
+                /**
+                 * Properties of an Event.
+                 * @memberof clutch.k8s.v1
+                 * @interface IEvent
+                 * @property {string|null} [name] Event name
+                 * @property {string|null} [reason] Event reason
+                 * @property {string|null} [description] Event description
+                 * @property {string|null} [cluster] Event cluster
+                 * @property {string|null} [namespace] Event namespace
+                 * @property {string|null} [involvedObjectName] Event involvedObjectName
+                 * @property {clutch.k8s.v1.ObjectKind|null} [kind] Event kind
+                 */
+
+                /**
+                 * Constructs a new Event.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an Event.
+                 * @implements IEvent
+                 * @constructor
+                 * @param {clutch.k8s.v1.IEvent=} [properties] Properties to set
+                 */
+                function Event(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Event name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.name = "";
+
+                /**
+                 * Event reason.
+                 * @member {string} reason
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.reason = "";
+
+                /**
+                 * Event description.
+                 * @member {string} description
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.description = "";
+
+                /**
+                 * Event cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.cluster = "";
+
+                /**
+                 * Event namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.namespace = "";
+
+                /**
+                 * Event involvedObjectName.
+                 * @member {string} involvedObjectName
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.involvedObjectName = "";
+
+                /**
+                 * Event kind.
+                 * @member {clutch.k8s.v1.ObjectKind} kind
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.kind = 0;
+
+                /**
+                 * Verifies an Event message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Event.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        if (!$util.isString(message.reason))
+                            return "reason: string expected";
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        if (!$util.isString(message.description))
+                            return "description: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.involvedObjectName != null && message.hasOwnProperty("involvedObjectName"))
+                        if (!$util.isString(message.involvedObjectName))
+                            return "involvedObjectName: string expected";
+                    if (message.kind != null && message.hasOwnProperty("kind"))
+                        switch (message.kind) {
+                        default:
+                            return "kind: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Event} Event
+                 */
+                Event.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Event)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Event();
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.reason != null)
+                        message.reason = String(object.reason);
+                    if (object.description != null)
+                        message.description = String(object.description);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.involvedObjectName != null)
+                        message.involvedObjectName = String(object.involvedObjectName);
+                    switch (object.kind) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.kind = 0;
+                        break;
+                    case "UNKNOWN":
+                    case 1:
+                        message.kind = 1;
+                        break;
+                    case "POD":
+                    case 2:
+                        message.kind = 2;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an Event message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Event
+                 * @static
+                 * @param {clutch.k8s.v1.Event} message Event
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Event.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.name = "";
+                        object.reason = "";
+                        object.description = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.involvedObjectName = "";
+                        object.kind = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        object.reason = message.reason;
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        object.description = message.description;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.involvedObjectName != null && message.hasOwnProperty("involvedObjectName"))
+                        object.involvedObjectName = message.involvedObjectName;
+                    if (message.kind != null && message.hasOwnProperty("kind"))
+                        object.kind = options.enums === String ? $root.clutch.k8s.v1.ObjectKind[message.kind] : message.kind;
+                    return object;
+                };
+
+                /**
+                 * Converts this Event to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Event.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Event;
+            })();
+
+            v1.ListEventsRequest = (function() {
+
+                /**
+                 * Properties of a ListEventsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListEventsRequest
+                 * @property {string|null} [clientset] ListEventsRequest clientset
+                 * @property {string|null} [cluster] ListEventsRequest cluster
+                 * @property {string|null} [namespace] ListEventsRequest namespace
+                 * @property {string|null} [objectName] ListEventsRequest objectName
+                 * @property {clutch.k8s.v1.ObjectKind|null} [kind] ListEventsRequest kind
+                 */
+
+                /**
+                 * Constructs a new ListEventsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListEventsRequest.
+                 * @implements IListEventsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListEventsRequest=} [properties] Properties to set
+                 */
+                function ListEventsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListEventsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @instance
+                 */
+                ListEventsRequest.prototype.clientset = "";
+
+                /**
+                 * ListEventsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @instance
+                 */
+                ListEventsRequest.prototype.cluster = "";
+
+                /**
+                 * ListEventsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @instance
+                 */
+                ListEventsRequest.prototype.namespace = "";
+
+                /**
+                 * ListEventsRequest objectName.
+                 * @member {string} objectName
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @instance
+                 */
+                ListEventsRequest.prototype.objectName = "";
+
+                /**
+                 * ListEventsRequest kind.
+                 * @member {clutch.k8s.v1.ObjectKind} kind
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @instance
+                 */
+                ListEventsRequest.prototype.kind = 0;
+
+                /**
+                 * Verifies a ListEventsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListEventsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.objectName != null && message.hasOwnProperty("objectName"))
+                        if (!$util.isString(message.objectName))
+                            return "objectName: string expected";
+                    if (message.kind != null && message.hasOwnProperty("kind"))
+                        switch (message.kind) {
+                        default:
+                            return "kind: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListEventsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListEventsRequest} ListEventsRequest
+                 */
+                ListEventsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListEventsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListEventsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.objectName != null)
+                        message.objectName = String(object.objectName);
+                    switch (object.kind) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.kind = 0;
+                        break;
+                    case "UNKNOWN":
+                    case 1:
+                        message.kind = 1;
+                        break;
+                    case "POD":
+                    case 2:
+                        message.kind = 2;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListEventsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.ListEventsRequest} message ListEventsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListEventsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.objectName = "";
+                        object.kind = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.objectName != null && message.hasOwnProperty("objectName"))
+                        object.objectName = message.objectName;
+                    if (message.kind != null && message.hasOwnProperty("kind"))
+                        object.kind = options.enums === String ? $root.clutch.k8s.v1.ObjectKind[message.kind] : message.kind;
+                    return object;
+                };
+
+                /**
+                 * Converts this ListEventsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListEventsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListEventsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListEventsRequest;
+            })();
+
+            v1.ListEventsResponse = (function() {
+
+                /**
+                 * Properties of a ListEventsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListEventsResponse
+                 * @property {Array.<clutch.k8s.v1.IEvent>|null} [events] ListEventsResponse events
+                 */
+
+                /**
+                 * Constructs a new ListEventsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListEventsResponse.
+                 * @implements IListEventsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListEventsResponse=} [properties] Properties to set
+                 */
+                function ListEventsResponse(properties) {
+                    this.events = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListEventsResponse events.
+                 * @member {Array.<clutch.k8s.v1.IEvent>} events
+                 * @memberof clutch.k8s.v1.ListEventsResponse
+                 * @instance
+                 */
+                ListEventsResponse.prototype.events = $util.emptyArray;
+
+                /**
+                 * Verifies a ListEventsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListEventsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListEventsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.events != null && message.hasOwnProperty("events")) {
+                        if (!Array.isArray(message.events))
+                            return "events: array expected";
+                        for (let i = 0; i < message.events.length; ++i) {
+                            let error = $root.clutch.k8s.v1.Event.verify(message.events[i]);
+                            if (error)
+                                return "events." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListEventsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListEventsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListEventsResponse} ListEventsResponse
+                 */
+                ListEventsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListEventsResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListEventsResponse();
+                    if (object.events) {
+                        if (!Array.isArray(object.events))
+                            throw TypeError(".clutch.k8s.v1.ListEventsResponse.events: array expected");
+                        message.events = [];
+                        for (let i = 0; i < object.events.length; ++i) {
+                            if (typeof object.events[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListEventsResponse.events: object expected");
+                            message.events[i] = $root.clutch.k8s.v1.Event.fromObject(object.events[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListEventsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListEventsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.ListEventsResponse} message ListEventsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListEventsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.events = [];
+                    if (message.events && message.events.length) {
+                        object.events = [];
+                        for (let j = 0; j < message.events.length; ++j)
+                            object.events[j] = $root.clutch.k8s.v1.Event.toObject(message.events[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListEventsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListEventsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListEventsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListEventsResponse;
             })();
 
             v1.NullableString = (function() {
