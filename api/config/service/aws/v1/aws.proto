@@ -23,12 +23,10 @@ message DynamodbConfig {
 
 message ScalingLimits {
   // defaults to AWS default quotas if not set
-  // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html#default-limits-throughput-capacity-modes
-  int64 max_read_capacity_units = 1 [(validate.rules).int64 = {ignore_empty: true, gte: 1}];
-  int64 max_write_capacity_units = 2 [(validate.rules).int64 = {ignore_empty: true, gte: 1}];
-  // defaults to a scale factor of 2.0x 
+  int64 max_read_capacity_units = 1 [ (validate.rules).int64 = {ignore_empty : true, gte : 1} ];
+  int64 max_write_capacity_units = 2 [ (validate.rules).int64 = {ignore_empty : true, gte : 1} ];
+  // defaults to a scale factor of 2.0x
   float max_scale_factor = 3;
-  // enables whether the service can override safety limits. Defaults to false. 
+  // enables whether the service can override safety limits. Defaults to false
   bool enable_override = 4;
 }
-
