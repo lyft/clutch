@@ -43,7 +43,7 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={amiiboData.error} isLoading={amiiboData.isLoading}>
-      <Table headings={["Name", "Image", "Series", "Type"]}>
+      <Table columns={["Name", "Image", "Series", "Type"]}>
         {amiiboResults.map((amiibo, index: number) => (
           <TableRow key={index}>
             {amiibo.name}
