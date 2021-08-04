@@ -16,8 +16,8 @@ const DialogPaper = styled(Paper)({
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
   boxSizing: "border-box",
   backgroundColor: "#FFFFFF",
-  maxWidth: "fit-content",
-  minWidth: "600px",
+  width: "max-content",
+  maxWidth: "75vw",
 });
 
 const DialogTitle = styled(MuiDialogTitle)({
@@ -40,8 +40,6 @@ const IconButton = styled(MuiIconButton)({
 });
 
 const DialogContent = styled(MuiDialogContent)({
-  display: "flex",
-  flexDirection: "column",
   padding: "16px 32px 32px 32px",
   fontSize: "16px",
   fontWeight: 400,
@@ -49,6 +47,7 @@ const DialogContent = styled(MuiDialogContent)({
   "> *": {
     margin: "16px 0 0 0",
   },
+  overflowWrap: "break-word",
 });
 
 const DialogActions = styled(MuiDialogActions)({
