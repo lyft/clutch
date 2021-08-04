@@ -116,11 +116,11 @@ func (s *svc) DescribeTable(ctx context.Context, region string, tableName string
 }
 
 func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) error {
-	panic("implement me")
+	return nil
 }
 
 func (s *svc) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetRCU int64, targetWCU int64) error {
-	panic("implement me")
+	return nil
 }
 
 func (s *svc) Regions() []string {
