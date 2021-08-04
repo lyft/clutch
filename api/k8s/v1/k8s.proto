@@ -1093,7 +1093,7 @@ message ListEventsRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Namespace",
     // requests for all events associated with a given object
-    pattern : "{cluster}/{object_name}"
+    pattern : "{cluster}/{namespace}/{object_name}"
   };
 
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
