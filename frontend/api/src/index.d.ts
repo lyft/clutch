@@ -8764,6 +8764,9 @@ export namespace clutch {
 
                         /** Config clientConfig */
                         clientConfig?: (clutch.config.service.aws.v1.IClientConfig|null);
+
+                        /** Config dynamodbConfig */
+                        dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
                     }
 
                     /** Represents a Config. */
@@ -8780,6 +8783,9 @@ export namespace clutch {
 
                         /** Config clientConfig. */
                         public clientConfig?: (clutch.config.service.aws.v1.IClientConfig|null);
+
+                        /** Config dynamodbConfig. */
+                        public dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
 
                         /**
                          * Verifies a Config message.
@@ -8853,6 +8859,120 @@ export namespace clutch {
 
                         /**
                          * Converts this ClientConfig to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a DynamodbConfig. */
+                    interface IDynamodbConfig {
+
+                        /** DynamodbConfig scalingLimits */
+                        scalingLimits?: (clutch.config.service.aws.v1.IScalingLimits|null);
+                    }
+
+                    /** Represents a DynamodbConfig. */
+                    class DynamodbConfig implements IDynamodbConfig {
+
+                        /**
+                         * Constructs a new DynamodbConfig.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.aws.v1.IDynamodbConfig);
+
+                        /** DynamodbConfig scalingLimits. */
+                        public scalingLimits?: (clutch.config.service.aws.v1.IScalingLimits|null);
+
+                        /**
+                         * Verifies a DynamodbConfig message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a DynamodbConfig message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns DynamodbConfig
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.aws.v1.DynamodbConfig;
+
+                        /**
+                         * Creates a plain object from a DynamodbConfig message. Also converts values to other types if specified.
+                         * @param message DynamodbConfig
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.aws.v1.DynamodbConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this DynamodbConfig to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a ScalingLimits. */
+                    interface IScalingLimits {
+
+                        /** ScalingLimits maxReadCapacityUnits */
+                        maxReadCapacityUnits?: (number|Long|null);
+
+                        /** ScalingLimits maxWriteCapacityUnits */
+                        maxWriteCapacityUnits?: (number|Long|null);
+
+                        /** ScalingLimits maxScaleFactor */
+                        maxScaleFactor?: (number|null);
+
+                        /** ScalingLimits enableOverride */
+                        enableOverride?: (boolean|null);
+                    }
+
+                    /** Represents a ScalingLimits. */
+                    class ScalingLimits implements IScalingLimits {
+
+                        /**
+                         * Constructs a new ScalingLimits.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.aws.v1.IScalingLimits);
+
+                        /** ScalingLimits maxReadCapacityUnits. */
+                        public maxReadCapacityUnits: (number|Long);
+
+                        /** ScalingLimits maxWriteCapacityUnits. */
+                        public maxWriteCapacityUnits: (number|Long);
+
+                        /** ScalingLimits maxScaleFactor. */
+                        public maxScaleFactor: number;
+
+                        /** ScalingLimits enableOverride. */
+                        public enableOverride: boolean;
+
+                        /**
+                         * Verifies a ScalingLimits message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a ScalingLimits message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns ScalingLimits
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.aws.v1.ScalingLimits;
+
+                        /**
+                         * Creates a plain object from a ScalingLimits message. Also converts values to other types if specified.
+                         * @param message ScalingLimits
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.aws.v1.ScalingLimits, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this ScalingLimits to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };

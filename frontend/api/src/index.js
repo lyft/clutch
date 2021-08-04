@@ -20979,6 +20979,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface IConfig
                          * @property {Array.<string>|null} [regions] Config regions
                          * @property {clutch.config.service.aws.v1.IClientConfig|null} [clientConfig] Config clientConfig
+                         * @property {clutch.config.service.aws.v1.IDynamodbConfig|null} [dynamodbConfig] Config dynamodbConfig
                          */
 
                         /**
@@ -21014,6 +21015,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.clientConfig = null;
 
                         /**
+                         * Config dynamodbConfig.
+                         * @member {clutch.config.service.aws.v1.IDynamodbConfig|null|undefined} dynamodbConfig
+                         * @memberof clutch.config.service.aws.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.dynamodbConfig = null;
+
+                        /**
                          * Verifies a Config message.
                          * @function verify
                          * @memberof clutch.config.service.aws.v1.Config
@@ -21035,6 +21044,11 @@ export const clutch = $root.clutch = (() => {
                                 let error = $root.clutch.config.service.aws.v1.ClientConfig.verify(message.clientConfig);
                                 if (error)
                                     return "clientConfig." + error;
+                            }
+                            if (message.dynamodbConfig != null && message.hasOwnProperty("dynamodbConfig")) {
+                                let error = $root.clutch.config.service.aws.v1.DynamodbConfig.verify(message.dynamodbConfig);
+                                if (error)
+                                    return "dynamodbConfig." + error;
                             }
                             return null;
                         };
@@ -21063,6 +21077,11 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.aws.v1.Config.clientConfig: object expected");
                                 message.clientConfig = $root.clutch.config.service.aws.v1.ClientConfig.fromObject(object.clientConfig);
                             }
+                            if (object.dynamodbConfig != null) {
+                                if (typeof object.dynamodbConfig !== "object")
+                                    throw TypeError(".clutch.config.service.aws.v1.Config.dynamodbConfig: object expected");
+                                message.dynamodbConfig = $root.clutch.config.service.aws.v1.DynamodbConfig.fromObject(object.dynamodbConfig);
+                            }
                             return message;
                         };
 
@@ -21081,8 +21100,10 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.arrays || options.defaults)
                                 object.regions = [];
-                            if (options.defaults)
+                            if (options.defaults) {
                                 object.clientConfig = null;
+                                object.dynamodbConfig = null;
+                            }
                             if (message.regions && message.regions.length) {
                                 object.regions = [];
                                 for (let j = 0; j < message.regions.length; ++j)
@@ -21090,6 +21111,8 @@ export const clutch = $root.clutch = (() => {
                             }
                             if (message.clientConfig != null && message.hasOwnProperty("clientConfig"))
                                 object.clientConfig = $root.clutch.config.service.aws.v1.ClientConfig.toObject(message.clientConfig, options);
+                            if (message.dynamodbConfig != null && message.hasOwnProperty("dynamodbConfig"))
+                                object.dynamodbConfig = $root.clutch.config.service.aws.v1.DynamodbConfig.toObject(message.dynamodbConfig, options);
                             return object;
                         };
 
@@ -21205,6 +21228,291 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         return ClientConfig;
+                    })();
+
+                    v1.DynamodbConfig = (function() {
+
+                        /**
+                         * Properties of a DynamodbConfig.
+                         * @memberof clutch.config.service.aws.v1
+                         * @interface IDynamodbConfig
+                         * @property {clutch.config.service.aws.v1.IScalingLimits|null} [scalingLimits] DynamodbConfig scalingLimits
+                         */
+
+                        /**
+                         * Constructs a new DynamodbConfig.
+                         * @memberof clutch.config.service.aws.v1
+                         * @classdesc Represents a DynamodbConfig.
+                         * @implements IDynamodbConfig
+                         * @constructor
+                         * @param {clutch.config.service.aws.v1.IDynamodbConfig=} [properties] Properties to set
+                         */
+                        function DynamodbConfig(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * DynamodbConfig scalingLimits.
+                         * @member {clutch.config.service.aws.v1.IScalingLimits|null|undefined} scalingLimits
+                         * @memberof clutch.config.service.aws.v1.DynamodbConfig
+                         * @instance
+                         */
+                        DynamodbConfig.prototype.scalingLimits = null;
+
+                        /**
+                         * Verifies a DynamodbConfig message.
+                         * @function verify
+                         * @memberof clutch.config.service.aws.v1.DynamodbConfig
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        DynamodbConfig.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.scalingLimits != null && message.hasOwnProperty("scalingLimits")) {
+                                let error = $root.clutch.config.service.aws.v1.ScalingLimits.verify(message.scalingLimits);
+                                if (error)
+                                    return "scalingLimits." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a DynamodbConfig message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.aws.v1.DynamodbConfig
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.aws.v1.DynamodbConfig} DynamodbConfig
+                         */
+                        DynamodbConfig.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.aws.v1.DynamodbConfig)
+                                return object;
+                            let message = new $root.clutch.config.service.aws.v1.DynamodbConfig();
+                            if (object.scalingLimits != null) {
+                                if (typeof object.scalingLimits !== "object")
+                                    throw TypeError(".clutch.config.service.aws.v1.DynamodbConfig.scalingLimits: object expected");
+                                message.scalingLimits = $root.clutch.config.service.aws.v1.ScalingLimits.fromObject(object.scalingLimits);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a DynamodbConfig message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.aws.v1.DynamodbConfig
+                         * @static
+                         * @param {clutch.config.service.aws.v1.DynamodbConfig} message DynamodbConfig
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        DynamodbConfig.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.scalingLimits = null;
+                            if (message.scalingLimits != null && message.hasOwnProperty("scalingLimits"))
+                                object.scalingLimits = $root.clutch.config.service.aws.v1.ScalingLimits.toObject(message.scalingLimits, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this DynamodbConfig to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.aws.v1.DynamodbConfig
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        DynamodbConfig.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return DynamodbConfig;
+                    })();
+
+                    v1.ScalingLimits = (function() {
+
+                        /**
+                         * Properties of a ScalingLimits.
+                         * @memberof clutch.config.service.aws.v1
+                         * @interface IScalingLimits
+                         * @property {number|Long|null} [maxReadCapacityUnits] ScalingLimits maxReadCapacityUnits
+                         * @property {number|Long|null} [maxWriteCapacityUnits] ScalingLimits maxWriteCapacityUnits
+                         * @property {number|null} [maxScaleFactor] ScalingLimits maxScaleFactor
+                         * @property {boolean|null} [enableOverride] ScalingLimits enableOverride
+                         */
+
+                        /**
+                         * Constructs a new ScalingLimits.
+                         * @memberof clutch.config.service.aws.v1
+                         * @classdesc Represents a ScalingLimits.
+                         * @implements IScalingLimits
+                         * @constructor
+                         * @param {clutch.config.service.aws.v1.IScalingLimits=} [properties] Properties to set
+                         */
+                        function ScalingLimits(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * ScalingLimits maxReadCapacityUnits.
+                         * @member {number|Long} maxReadCapacityUnits
+                         * @memberof clutch.config.service.aws.v1.ScalingLimits
+                         * @instance
+                         */
+                        ScalingLimits.prototype.maxReadCapacityUnits = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * ScalingLimits maxWriteCapacityUnits.
+                         * @member {number|Long} maxWriteCapacityUnits
+                         * @memberof clutch.config.service.aws.v1.ScalingLimits
+                         * @instance
+                         */
+                        ScalingLimits.prototype.maxWriteCapacityUnits = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * ScalingLimits maxScaleFactor.
+                         * @member {number} maxScaleFactor
+                         * @memberof clutch.config.service.aws.v1.ScalingLimits
+                         * @instance
+                         */
+                        ScalingLimits.prototype.maxScaleFactor = 0;
+
+                        /**
+                         * ScalingLimits enableOverride.
+                         * @member {boolean} enableOverride
+                         * @memberof clutch.config.service.aws.v1.ScalingLimits
+                         * @instance
+                         */
+                        ScalingLimits.prototype.enableOverride = false;
+
+                        /**
+                         * Verifies a ScalingLimits message.
+                         * @function verify
+                         * @memberof clutch.config.service.aws.v1.ScalingLimits
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        ScalingLimits.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.maxReadCapacityUnits != null && message.hasOwnProperty("maxReadCapacityUnits"))
+                                if (!$util.isInteger(message.maxReadCapacityUnits) && !(message.maxReadCapacityUnits && $util.isInteger(message.maxReadCapacityUnits.low) && $util.isInteger(message.maxReadCapacityUnits.high)))
+                                    return "maxReadCapacityUnits: integer|Long expected";
+                            if (message.maxWriteCapacityUnits != null && message.hasOwnProperty("maxWriteCapacityUnits"))
+                                if (!$util.isInteger(message.maxWriteCapacityUnits) && !(message.maxWriteCapacityUnits && $util.isInteger(message.maxWriteCapacityUnits.low) && $util.isInteger(message.maxWriteCapacityUnits.high)))
+                                    return "maxWriteCapacityUnits: integer|Long expected";
+                            if (message.maxScaleFactor != null && message.hasOwnProperty("maxScaleFactor"))
+                                if (typeof message.maxScaleFactor !== "number")
+                                    return "maxScaleFactor: number expected";
+                            if (message.enableOverride != null && message.hasOwnProperty("enableOverride"))
+                                if (typeof message.enableOverride !== "boolean")
+                                    return "enableOverride: boolean expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a ScalingLimits message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.aws.v1.ScalingLimits
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.aws.v1.ScalingLimits} ScalingLimits
+                         */
+                        ScalingLimits.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.aws.v1.ScalingLimits)
+                                return object;
+                            let message = new $root.clutch.config.service.aws.v1.ScalingLimits();
+                            if (object.maxReadCapacityUnits != null)
+                                if ($util.Long)
+                                    (message.maxReadCapacityUnits = $util.Long.fromValue(object.maxReadCapacityUnits)).unsigned = false;
+                                else if (typeof object.maxReadCapacityUnits === "string")
+                                    message.maxReadCapacityUnits = parseInt(object.maxReadCapacityUnits, 10);
+                                else if (typeof object.maxReadCapacityUnits === "number")
+                                    message.maxReadCapacityUnits = object.maxReadCapacityUnits;
+                                else if (typeof object.maxReadCapacityUnits === "object")
+                                    message.maxReadCapacityUnits = new $util.LongBits(object.maxReadCapacityUnits.low >>> 0, object.maxReadCapacityUnits.high >>> 0).toNumber();
+                            if (object.maxWriteCapacityUnits != null)
+                                if ($util.Long)
+                                    (message.maxWriteCapacityUnits = $util.Long.fromValue(object.maxWriteCapacityUnits)).unsigned = false;
+                                else if (typeof object.maxWriteCapacityUnits === "string")
+                                    message.maxWriteCapacityUnits = parseInt(object.maxWriteCapacityUnits, 10);
+                                else if (typeof object.maxWriteCapacityUnits === "number")
+                                    message.maxWriteCapacityUnits = object.maxWriteCapacityUnits;
+                                else if (typeof object.maxWriteCapacityUnits === "object")
+                                    message.maxWriteCapacityUnits = new $util.LongBits(object.maxWriteCapacityUnits.low >>> 0, object.maxWriteCapacityUnits.high >>> 0).toNumber();
+                            if (object.maxScaleFactor != null)
+                                message.maxScaleFactor = Number(object.maxScaleFactor);
+                            if (object.enableOverride != null)
+                                message.enableOverride = Boolean(object.enableOverride);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a ScalingLimits message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.aws.v1.ScalingLimits
+                         * @static
+                         * @param {clutch.config.service.aws.v1.ScalingLimits} message ScalingLimits
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        ScalingLimits.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                if ($util.Long) {
+                                    let long = new $util.Long(0, 0, false);
+                                    object.maxReadCapacityUnits = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.maxReadCapacityUnits = options.longs === String ? "0" : 0;
+                                if ($util.Long) {
+                                    let long = new $util.Long(0, 0, false);
+                                    object.maxWriteCapacityUnits = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.maxWriteCapacityUnits = options.longs === String ? "0" : 0;
+                                object.maxScaleFactor = 0;
+                                object.enableOverride = false;
+                            }
+                            if (message.maxReadCapacityUnits != null && message.hasOwnProperty("maxReadCapacityUnits"))
+                                if (typeof message.maxReadCapacityUnits === "number")
+                                    object.maxReadCapacityUnits = options.longs === String ? String(message.maxReadCapacityUnits) : message.maxReadCapacityUnits;
+                                else
+                                    object.maxReadCapacityUnits = options.longs === String ? $util.Long.prototype.toString.call(message.maxReadCapacityUnits) : options.longs === Number ? new $util.LongBits(message.maxReadCapacityUnits.low >>> 0, message.maxReadCapacityUnits.high >>> 0).toNumber() : message.maxReadCapacityUnits;
+                            if (message.maxWriteCapacityUnits != null && message.hasOwnProperty("maxWriteCapacityUnits"))
+                                if (typeof message.maxWriteCapacityUnits === "number")
+                                    object.maxWriteCapacityUnits = options.longs === String ? String(message.maxWriteCapacityUnits) : message.maxWriteCapacityUnits;
+                                else
+                                    object.maxWriteCapacityUnits = options.longs === String ? $util.Long.prototype.toString.call(message.maxWriteCapacityUnits) : options.longs === Number ? new $util.LongBits(message.maxWriteCapacityUnits.low >>> 0, message.maxWriteCapacityUnits.high >>> 0).toNumber() : message.maxWriteCapacityUnits;
+                            if (message.maxScaleFactor != null && message.hasOwnProperty("maxScaleFactor"))
+                                object.maxScaleFactor = options.json && !isFinite(message.maxScaleFactor) ? String(message.maxScaleFactor) : message.maxScaleFactor;
+                            if (message.enableOverride != null && message.hasOwnProperty("enableOverride"))
+                                object.enableOverride = message.enableOverride;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this ScalingLimits to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.aws.v1.ScalingLimits
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        ScalingLimits.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return ScalingLimits;
                     })();
 
                     return v1;
