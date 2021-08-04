@@ -9,7 +9,7 @@ import "validate/validate.proto";
 message Config {
   repeated string regions = 1 [ (validate.rules).repeated = {min_items : 1} ];
   ClientConfig client_config = 2;
-  ClientSettings client_settings = 3;
+  ClientSettings dynamodb_config = 3;
 }
 
 message ClientConfig {
@@ -17,15 +17,15 @@ message ClientConfig {
   int32 retries = 1 [ (validate.rules).int32.gte = 0 ];
 }
 
-message ClientSettings {
-  DynamodbScalingLimits dynamodb_scaling_limits = 1;
+message DynamodbConfig {
+  ScalingLimits scaling_limits = 1;
 }
 
-message DynamodbScalingLimits {
+message ScalingLimits {
   // defaults to AWS default quotas if not set
   // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html#default-limits-throughput-capacity-modes
-  int64 max_read_capacity_units = 1 [ (validate.rules).int64.gte = 1 ];
-  int64 max_write_capacity_units = 2 [ (validate.rules).int64.gte = 1 ];
+  int64 max_read_capacity_units = 1 [(validate.rules).int64 = {ignore_empty: true, gte: 1}];
+  int64 max_write_capacity_units = 2 [(validate.rules).int64 = {ignore_empty: true, gte: 1}];
   // defaults to a scale factor of 2.0x 
   float max_scale_factor = 3;
   // enables whether the service can override safety limits. Defaults to false. 
