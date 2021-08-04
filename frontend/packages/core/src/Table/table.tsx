@@ -22,14 +22,19 @@ const StyledPaper = styled(MuiPaper)({
   border: "1px solid #E7E7EA",
 });
 
-const StyledTable = styled(MuiTable)<{ actions: boolean; columnCount: number; compress: boolean; responsive?: boolean; }>(
+const StyledTable = styled(MuiTable)<{
+  actions: boolean;
+  columnCount: number;
+  compress: boolean;
+  responsive?: boolean;
+}>(
   {
     minWidth: "100%",
     borderCollapse: "collapse",
     alignItems: "center",
   },
   props => ({
-    display: !props.responsive ? "table" : (props.compress ? "zzztable" : "grid"),
+    display: !props.responsive ? "table" : props.compress ? "zzztable" : "grid",
     gridTemplateColumns: `repeat(${props.columnCount}, auto)${props.actions ? " 80px" : ""}`,
   })
 );
@@ -43,7 +48,7 @@ const StyledTableHead = styled(MuiTableHead)({
   backgroundColor: "#D7DAF6",
 });
 
-const StyledTableRow = styled(MuiTableRow)<{ responsive?: boolean; }>(
+const StyledTableRow = styled(MuiTableRow)<{ responsive?: boolean }>(
   {
     ":nth-child(even)": {
       background: "rgba(13, 16, 48, 0.03)",
@@ -53,11 +58,15 @@ const StyledTableRow = styled(MuiTableRow)<{ responsive?: boolean; }>(
     },
   },
   props => ({
-    display: props.responsive ? "contents" : ""
+    display: props.responsive ? "contents" : "",
   })
 );
 
-const StyledTableCell = styled(MuiTableCell)<{ border?: boolean; responsive?: boolean; action?: boolean; }>(
+const StyledTableCell = styled(MuiTableCell)<{
+  border?: boolean;
+  responsive?: boolean;
+  action?: boolean;
+}>(
   {
     alignItems: "center",
     fontSize: "14px",
@@ -108,8 +117,6 @@ const Table: React.FC<TableProps> = ({
   const showHeader = !hideHeader;
   const compress = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
 
-  console.log("compress:", compress)
-  console.log("responsive:", responsive)
   return (
     <TableContainer>
       <StyledTable
@@ -123,21 +130,22 @@ const Table: React.FC<TableProps> = ({
           Filter out empty strings from column headers.
           This may be unintended which is why we override wit hthe hideHeader prop.
         */}
-        {(showHeader &&
-          (columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0)) && (
+        {showHeader && columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0 && (
           <StyledTableHead>
             {columns.map(h => (
               <StyledTableCell responsive={responsive}>
                 <Typography variant="subtitle3">{h}</Typography>
               </StyledTableCell>
             ))}
-            {(actionsColumn && !(responsive && compress)) && <StyledTableCell responsive={responsive} action={true} />}
+            {actionsColumn && !(responsive && compress) && (
+              <StyledTableCell responsive={responsive} action />
+            )}
           </StyledTableHead>
         )}
         <StyledTableBody>
-          {React.Children.map(children, (c: React.ReactElement<TableRowProps>) => (
+          {React.Children.map(children, (c: React.ReactElement<TableRowProps>) =>
             React.cloneElement(c, { responsive })
-          ))}
+          )}
         </StyledTableBody>
       </StyledTable>
     </TableContainer>
