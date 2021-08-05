@@ -34,7 +34,7 @@ const StyledTable = styled(MuiTable)<{
     alignItems: "center",
   },
   props => ({
-    display: !props.responsive ? "table" : props.compress ? "zzztable" : "grid",
+    display: !props.responsive ? "table" : props.compress ? "table" : "grid",
     gridTemplateColumns: `repeat(${props.columnCount}, auto)${props.actions ? " 80px" : ""}`,
   })
 );
@@ -103,7 +103,7 @@ export interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   /** Make table responsive */
   responsive?: boolean;
   /** Table rows to render */
-  children?: React.ReactElement<TableRowProps>[] | React.ReactElement<TableRowProps>;
+  children?: (React.ReactElement<TableRowProps> | null | undefined | {})[] | React.ReactElement<TableRowProps>;
 }
 
 const Table: React.FC<TableProps> = ({
