@@ -120,11 +120,35 @@ func TestDescribeTableWithGsiValid(t *testing.T) {
 	assert.Equal(t, testTableWithGSIOutput, result)
 }
 
-func TestGetScalingLimits(t *testing.T) {
+func TestGetScalingLimitsDefault(t *testing.T) {
 	ds := getScalingLimits(cfg)
 
 	assert.Equal(t, ds.MaxReadCapacityUnits, AwsMaxRCU, "Max RCU default set")
 	assert.Equal(t, ds.MaxScaleFactor, SafeScaleFactor, "scale factor default set")
+	assert.False(t, ds.EnableOverride)
+}
+
+func TestGetScalingLimitsCustom(t *testing.T) {
+	cfg := &awsv1.Config{
+		Regions: regions,
+		ClientConfig: &awsv1.ClientConfig{
+			Retries: 10,
+		},
+		DynamodbConfig: &awsv1.DynamodbConfig{
+			ScalingLimits: &awsv1.ScalingLimits{
+				MaxReadCapacityUnits:  1000,
+				MaxWriteCapacityUnits: 2000,
+				MaxScaleFactor:        4.0,
+				EnableOverride:        false,
+			},
+		},
+	}
+
+	ds := getScalingLimits(cfg)
+
+	assert.Equal(t, ds.MaxReadCapacityUnits, cfg.DynamodbConfig.ScalingLimits.MaxReadCapacityUnits, "RCU set")
+	assert.Equal(t, ds.MaxWriteCapacityUnits, cfg.DynamodbConfig.ScalingLimits.MaxWriteCapacityUnits, "WCU set")
+	assert.Equal(t, ds.MaxScaleFactor, cfg.DynamodbConfig.ScalingLimits.MaxScaleFactor, "scale factor default set")
 	assert.False(t, ds.EnableOverride)
 }
 func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
