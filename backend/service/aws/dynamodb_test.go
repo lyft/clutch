@@ -148,12 +148,12 @@ func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 
 	ds := getScalingLimits(cfg)
 
-	d := dynamodbConfig{
-		scalingLimits: scalingLimits{
-			maxReadCapacityUnits:  ds.MaxReadCapacityUnits,
-			maxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
-			maxScaleFactor:        ds.MaxScaleFactor,
-			enableOverride:        ds.EnableOverride,
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
 		},
 	}
 
@@ -190,12 +190,12 @@ func TestUpdateTableCapacityWithCustomLimits(t *testing.T) {
 	m := &mockDynamodb{
 		table: testDynamodbTable,
 	}
-	d := dynamodbConfig{
-		scalingLimits: scalingLimits{
-			maxReadCapacityUnits:  1000,
-			maxWriteCapacityUnits: 2000,
-			maxScaleFactor:        4.0,
-			enableOverride:        false,
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  1000,
+			MaxWriteCapacityUnits: 2000,
+			MaxScaleFactor:        4.0,
+			EnableOverride:        false,
 		},
 	}
 	c := &client{

@@ -97,19 +97,19 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	}
 
 	// check for targets that exceed max limits
-	if *target.ReadCapacityUnits > client.dynamodbCfg.scalingLimits.maxReadCapacityUnits {
-		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target read capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.scalingLimits.maxReadCapacityUnits))
+	if *target.ReadCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits {
+		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target read capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits))
 	}
-	if *target.WriteCapacityUnits > client.dynamodbCfg.scalingLimits.maxWriteCapacityUnits {
-		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target write capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.scalingLimits.maxWriteCapacityUnits))
+	if *target.WriteCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits {
+		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target write capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits))
 	}
 
 	// check for increases that exceed max increase scale
-	if (float32(*target.ReadCapacityUnits / *current.ReadCapacityUnits)) > client.dynamodbCfg.scalingLimits.maxScaleFactor {
-		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target read capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.scalingLimits.maxScaleFactor))
+	if (float32(*target.ReadCapacityUnits / *current.ReadCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target read capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor))
 	}
-	if (float32(*target.WriteCapacityUnits / *current.WriteCapacityUnits)) > client.dynamodbCfg.scalingLimits.maxScaleFactor {
-		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target write capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.scalingLimits.maxScaleFactor))
+	if (float32(*target.WriteCapacityUnits / *current.WriteCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target write capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor))
 	}
 	return nil
 }

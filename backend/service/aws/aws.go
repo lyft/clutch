@@ -81,12 +81,12 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 
 		c.clients[region] = &regionalClient{
 			region: region,
-			dynamodbCfg: dynamodbConfig{
-				scalingLimits: scalingLimits{
-					maxReadCapacityUnits:  ds.MaxReadCapacityUnits,
-					maxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
-					maxScaleFactor:        ds.MaxScaleFactor,
-					enableOverride:        ds.EnableOverride,
+			dynamodbCfg: &awsv1.DynamodbConfig{
+				ScalingLimits: &awsv1.ScalingLimits{
+					MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+					MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+					MaxScaleFactor:        ds.MaxScaleFactor,
+					EnableOverride:        ds.EnableOverride,
 				},
 			},
 
@@ -131,24 +131,13 @@ type client struct {
 type regionalClient struct {
 	region string
 
-	dynamodbCfg dynamodbConfig
+	dynamodbCfg *awsv1.DynamodbConfig
 
 	s3          s3Client
 	kinesis     kinesisClient
 	ec2         ec2Client
 	autoscaling autoscalingClient
 	dynamodb    dynamodbClient
-}
-
-type dynamodbConfig struct {
-	scalingLimits scalingLimits
-}
-
-type scalingLimits struct {
-	maxReadCapacityUnits  int64
-	maxWriteCapacityUnits int64
-	maxScaleFactor        float32
-	enableOverride        bool
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
