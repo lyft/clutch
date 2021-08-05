@@ -103,7 +103,9 @@ export interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   /** Make table responsive */
   responsive?: boolean;
   /** Table rows to render */
-  children?: (React.ReactElement<TableRowProps> | null | undefined | {})[] | React.ReactElement<TableRowProps>;
+  children?:
+    | (React.ReactElement<TableRowProps> | null | undefined | {})[]
+    | React.ReactElement<TableRowProps>;
 }
 
 const Table: React.FC<TableProps> = ({
