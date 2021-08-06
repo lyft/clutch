@@ -40,9 +40,19 @@ func (m *AppConfig) Validate() error {
 		return nil
 	}
 
-	// no validation rules for AppId
+	if m.GetAppId() < 1 {
+		return AppConfigValidationError{
+			field:  "AppId",
+			reason: "value must be greater than or equal to 1",
+		}
+	}
 
-	// no validation rules for InstallationId
+	if m.GetInstallationId() < 1 {
+		return AppConfigValidationError{
+			field:  "InstallationId",
+			reason: "value must be greater than or equal to 1",
+		}
+	}
 
 	if len(m.GetPem()) < 1 {
 		return AppConfigValidationError{
