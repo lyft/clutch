@@ -297,7 +297,7 @@ func newService(config *githubv1.Config) (Client, error) {
 	case *githubv1.Config_AppConfig:
 		config := config.GetAppConfig()
 		tr := http.DefaultTransport
-		itr, err := ghinstallation.NewKeyFromFile(tr, config.AppId, config.InstallationId, config.Pem)
+		itr, err := ghinstallation.New(tr, config.AppId, config.InstallationId, []byte(config.Pem))
 		if err != nil {
 			return nil, err
 		}
