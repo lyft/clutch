@@ -9,7 +9,14 @@ import "validate/validate.proto";
 message AppConfig {
   int64 app_id = 1 [ (validate.rules).int64.gte = 1 ];
   int64 installation_id = 2 [ (validate.rules).int64.gte = 1 ];
-  string pem = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  oneof pem {
+    option (validate.required) = true;
+
+    // a private encryption key from a pem file
+    string key_pem = 3 [ (validate.rules).string = {min_bytes : 1} ];
+    // a base64 encoded private encryption key from a pem file
+    string base64_pem = 4 [ (validate.rules).string = {min_bytes : 1} ];
+  }
 }
 
 message Config {

@@ -298,9 +298,16 @@ func newService(config *githubv1.Config) (Client, error) {
 	case *githubv1.Config_AppConfig:
 		config := config.GetAppConfig()
 		tr := http.DefaultTransport
-		pem, err := base64.StdEncoding.DecodeString(config.Pem)
-		if err != nil {
-			return nil, err
+		var pem []byte
+		switch config.GetPem().(type) {
+		case *githubv1.AppConfig_Base64Pem:
+			p, err := base64.StdEncoding.DecodeString(config.GetBase64Pem())
+			if err != nil {
+				return nil, err
+			}
+			pem = p
+		case *githubv1.AppConfig_KeyPem:
+			pem = []byte(config.GetKeyPem())
 		}
 		itr, err := ghinstallation.New(tr, config.AppId, config.InstallationId, pem)
 		if err != nil {
