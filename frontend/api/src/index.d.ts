@@ -9446,11 +9446,74 @@ export namespace clutch {
                 /** Namespace v1. */
                 namespace v1 {
 
+                    /** Properties of an AppConfig. */
+                    interface IAppConfig {
+
+                        /** AppConfig appId */
+                        appId?: (number|Long|null);
+
+                        /** AppConfig installationId */
+                        installationId?: (number|Long|null);
+
+                        /** AppConfig pem */
+                        pem?: (string|null);
+                    }
+
+                    /** Represents an AppConfig. */
+                    class AppConfig implements IAppConfig {
+
+                        /**
+                         * Constructs a new AppConfig.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.github.v1.IAppConfig);
+
+                        /** AppConfig appId. */
+                        public appId: (number|Long);
+
+                        /** AppConfig installationId. */
+                        public installationId: (number|Long);
+
+                        /** AppConfig pem. */
+                        public pem: string;
+
+                        /**
+                         * Verifies an AppConfig message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates an AppConfig message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns AppConfig
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.github.v1.AppConfig;
+
+                        /**
+                         * Creates a plain object from an AppConfig message. Also converts values to other types if specified.
+                         * @param message AppConfig
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.github.v1.AppConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this AppConfig to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
                     /** Properties of a Config. */
                     interface IConfig {
 
                         /** Config accessToken */
                         accessToken?: (string|null);
+
+                        /** Config appConfig */
+                        appConfig?: (clutch.config.service.github.v1.IAppConfig|null);
                     }
 
                     /** Represents a Config. */
@@ -9465,8 +9528,11 @@ export namespace clutch {
                         /** Config accessToken. */
                         public accessToken?: (string|null);
 
+                        /** Config appConfig. */
+                        public appConfig?: (clutch.config.service.github.v1.IAppConfig|null);
+
                         /** Config auth. */
-                        public auth?: "accessToken";
+                        public auth?: ("accessToken"|"appConfig");
 
                         /**
                          * Verifies a Config message.
