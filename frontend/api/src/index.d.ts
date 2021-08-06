@@ -9450,10 +9450,10 @@ export namespace clutch {
                     interface IAppConfig {
 
                         /** AppConfig appId */
-                        appId?: (number|Long|null);
+                        appId?: (string|null);
 
                         /** AppConfig installationId */
-                        installationId?: (number|Long|null);
+                        installationId?: (string|null);
 
                         /** AppConfig pem */
                         pem?: (string|null);
@@ -9469,10 +9469,10 @@ export namespace clutch {
                         constructor(properties?: clutch.config.service.github.v1.IAppConfig);
 
                         /** AppConfig appId. */
-                        public appId: (number|Long);
+                        public appId: string;
 
                         /** AppConfig installationId. */
-                        public installationId: (number|Long);
+                        public installationId: string;
 
                         /** AppConfig pem. */
                         public pem: string;

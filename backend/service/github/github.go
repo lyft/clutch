@@ -6,11 +6,13 @@ package github
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -297,7 +299,19 @@ func newService(config *githubv1.Config) (Client, error) {
 	case *githubv1.Config_AppConfig:
 		config := config.GetAppConfig()
 		tr := http.DefaultTransport
-		itr, err := ghinstallation.New(tr, config.AppId, config.InstallationId, []byte(config.Pem))
+		pem, err := base64.StdEncoding.DecodeString(config.Pem)
+		if err != nil {
+			return nil, err
+		}
+		appId, err := strconv.ParseInt(config.AppId, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		installationId, err := strconv.ParseInt(config.InstallationId, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		itr, err := ghinstallation.New(tr, appId, installationId, pem)
 		if err != nil {
 			return nil, err
 		}

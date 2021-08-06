@@ -7,8 +7,8 @@ option go_package = "github.com/lyft/clutch/backend/api/config/service/github/v1
 import "validate/validate.proto";
 
 message AppConfig {
-  int64 app_id = 1 [ (validate.rules).int64.gte = 1 ];
-  int64 installation_id = 2 [ (validate.rules).int64.gte = 1 ];
+  string app_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string installation_id = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string pem = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 

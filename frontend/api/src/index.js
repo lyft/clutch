@@ -22701,8 +22701,8 @@ export const clutch = $root.clutch = (() => {
                          * Properties of an AppConfig.
                          * @memberof clutch.config.service.github.v1
                          * @interface IAppConfig
-                         * @property {number|Long|null} [appId] AppConfig appId
-                         * @property {number|Long|null} [installationId] AppConfig installationId
+                         * @property {string|null} [appId] AppConfig appId
+                         * @property {string|null} [installationId] AppConfig installationId
                          * @property {string|null} [pem] AppConfig pem
                          */
 
@@ -22723,19 +22723,19 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * AppConfig appId.
-                         * @member {number|Long} appId
+                         * @member {string} appId
                          * @memberof clutch.config.service.github.v1.AppConfig
                          * @instance
                          */
-                        AppConfig.prototype.appId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                        AppConfig.prototype.appId = "";
 
                         /**
                          * AppConfig installationId.
-                         * @member {number|Long} installationId
+                         * @member {string} installationId
                          * @memberof clutch.config.service.github.v1.AppConfig
                          * @instance
                          */
-                        AppConfig.prototype.installationId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                        AppConfig.prototype.installationId = "";
 
                         /**
                          * AppConfig pem.
@@ -22757,11 +22757,11 @@ export const clutch = $root.clutch = (() => {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
                             if (message.appId != null && message.hasOwnProperty("appId"))
-                                if (!$util.isInteger(message.appId) && !(message.appId && $util.isInteger(message.appId.low) && $util.isInteger(message.appId.high)))
-                                    return "appId: integer|Long expected";
+                                if (!$util.isString(message.appId))
+                                    return "appId: string expected";
                             if (message.installationId != null && message.hasOwnProperty("installationId"))
-                                if (!$util.isInteger(message.installationId) && !(message.installationId && $util.isInteger(message.installationId.low) && $util.isInteger(message.installationId.high)))
-                                    return "installationId: integer|Long expected";
+                                if (!$util.isString(message.installationId))
+                                    return "installationId: string expected";
                             if (message.pem != null && message.hasOwnProperty("pem"))
                                 if (!$util.isString(message.pem))
                                     return "pem: string expected";
@@ -22781,23 +22781,9 @@ export const clutch = $root.clutch = (() => {
                                 return object;
                             let message = new $root.clutch.config.service.github.v1.AppConfig();
                             if (object.appId != null)
-                                if ($util.Long)
-                                    (message.appId = $util.Long.fromValue(object.appId)).unsigned = false;
-                                else if (typeof object.appId === "string")
-                                    message.appId = parseInt(object.appId, 10);
-                                else if (typeof object.appId === "number")
-                                    message.appId = object.appId;
-                                else if (typeof object.appId === "object")
-                                    message.appId = new $util.LongBits(object.appId.low >>> 0, object.appId.high >>> 0).toNumber();
+                                message.appId = String(object.appId);
                             if (object.installationId != null)
-                                if ($util.Long)
-                                    (message.installationId = $util.Long.fromValue(object.installationId)).unsigned = false;
-                                else if (typeof object.installationId === "string")
-                                    message.installationId = parseInt(object.installationId, 10);
-                                else if (typeof object.installationId === "number")
-                                    message.installationId = object.installationId;
-                                else if (typeof object.installationId === "object")
-                                    message.installationId = new $util.LongBits(object.installationId.low >>> 0, object.installationId.high >>> 0).toNumber();
+                                message.installationId = String(object.installationId);
                             if (object.pem != null)
                                 message.pem = String(object.pem);
                             return message;
@@ -22817,28 +22803,14 @@ export const clutch = $root.clutch = (() => {
                                 options = {};
                             let object = {};
                             if (options.defaults) {
-                                if ($util.Long) {
-                                    let long = new $util.Long(0, 0, false);
-                                    object.appId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                                } else
-                                    object.appId = options.longs === String ? "0" : 0;
-                                if ($util.Long) {
-                                    let long = new $util.Long(0, 0, false);
-                                    object.installationId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                                } else
-                                    object.installationId = options.longs === String ? "0" : 0;
+                                object.appId = "";
+                                object.installationId = "";
                                 object.pem = "";
                             }
                             if (message.appId != null && message.hasOwnProperty("appId"))
-                                if (typeof message.appId === "number")
-                                    object.appId = options.longs === String ? String(message.appId) : message.appId;
-                                else
-                                    object.appId = options.longs === String ? $util.Long.prototype.toString.call(message.appId) : options.longs === Number ? new $util.LongBits(message.appId.low >>> 0, message.appId.high >>> 0).toNumber() : message.appId;
+                                object.appId = message.appId;
                             if (message.installationId != null && message.hasOwnProperty("installationId"))
-                                if (typeof message.installationId === "number")
-                                    object.installationId = options.longs === String ? String(message.installationId) : message.installationId;
-                                else
-                                    object.installationId = options.longs === String ? $util.Long.prototype.toString.call(message.installationId) : options.longs === Number ? new $util.LongBits(message.installationId.low >>> 0, message.installationId.high >>> 0).toNumber() : message.installationId;
+                                object.installationId = message.installationId;
                             if (message.pem != null && message.hasOwnProperty("pem"))
                                 object.pem = message.pem;
                             return object;

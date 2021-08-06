@@ -40,17 +40,17 @@ func (m *AppConfig) Validate() error {
 		return nil
 	}
 
-	if m.GetAppId() < 1 {
+	if len(m.GetAppId()) < 1 {
 		return AppConfigValidationError{
 			field:  "AppId",
-			reason: "value must be greater than or equal to 1",
+			reason: "value length must be at least 1 bytes",
 		}
 	}
 
-	if m.GetInstallationId() < 1 {
+	if len(m.GetInstallationId()) < 1 {
 		return AppConfigValidationError{
 			field:  "InstallationId",
-			reason: "value must be greater than or equal to 1",
+			reason: "value length must be at least 1 bytes",
 		}
 	}
 
