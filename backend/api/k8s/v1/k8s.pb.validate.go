@@ -6059,6 +6059,268 @@ var _ interface {
 	ErrorName() string
 } = DescribeNamespaceResponseValidationError{}
 
+// Validate checks the field values on Event with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Event) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Name
+
+	// no validation rules for Reason
+
+	// no validation rules for Description
+
+	// no validation rules for Cluster
+
+	// no validation rules for Namespace
+
+	// no validation rules for InvolvedObjectName
+
+	// no validation rules for Kind
+
+	return nil
+}
+
+// EventValidationError is the validation error returned by Event.Validate if
+// the designated constraints aren't met.
+type EventValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EventValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EventValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EventValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EventValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EventValidationError) ErrorName() string { return "EventValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EventValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEvent.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EventValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EventValidationError{}
+
+// Validate checks the field values on ListEventsRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *ListEventsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return ListEventsRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return ListEventsRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return ListEventsRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetObjectName()) < 1 {
+		return ListEventsRequestValidationError{
+			field:  "ObjectName",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if _, ok := ObjectKind_name[int32(m.GetKind())]; !ok {
+		return ListEventsRequestValidationError{
+			field:  "Kind",
+			reason: "value must be one of the defined enum values",
+		}
+	}
+
+	return nil
+}
+
+// ListEventsRequestValidationError is the validation error returned by
+// ListEventsRequest.Validate if the designated constraints aren't met.
+type ListEventsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListEventsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListEventsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListEventsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListEventsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListEventsRequestValidationError) ErrorName() string {
+	return "ListEventsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListEventsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListEventsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListEventsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListEventsRequestValidationError{}
+
+// Validate checks the field values on ListEventsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListEventsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetEvents() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListEventsResponseValidationError{
+					field:  fmt.Sprintf("Events[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ListEventsResponseValidationError is the validation error returned by
+// ListEventsResponse.Validate if the designated constraints aren't met.
+type ListEventsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListEventsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListEventsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListEventsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListEventsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListEventsResponseValidationError) ErrorName() string {
+	return "ListEventsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListEventsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListEventsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListEventsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListEventsResponseValidationError{}
+
 // Validate checks the field values on NullableString with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.

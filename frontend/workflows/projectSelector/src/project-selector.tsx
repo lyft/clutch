@@ -94,7 +94,10 @@ const ProjectSelector = () => {
       dispatch({ type: "HYDRATE_START" });
 
       // TODO: have userId check be server driven
-      const requestParams = { users: [userId()], projects: [] };
+      const requestParams = { users: [userId()], projects: [] } as {
+        users: string[];
+        projects: string[];
+      };
       _.forEach(Object.keys(state[Group.PROJECTS]), p => {
         // if the project is custom
         if (state[Group.PROJECTS][p].custom) {

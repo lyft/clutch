@@ -33,6 +33,91 @@ var (
 	_ = anypb.Any{}
 )
 
+// Validate checks the field values on AppConfig with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *AppConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetAppId() < 1 {
+		return AppConfigValidationError{
+			field:  "AppId",
+			reason: "value must be greater than or equal to 1",
+		}
+	}
+
+	if m.GetInstallationId() < 1 {
+		return AppConfigValidationError{
+			field:  "InstallationId",
+			reason: "value must be greater than or equal to 1",
+		}
+	}
+
+	if len(m.GetPem()) < 1 {
+		return AppConfigValidationError{
+			field:  "Pem",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	return nil
+}
+
+// AppConfigValidationError is the validation error returned by
+// AppConfig.Validate if the designated constraints aren't met.
+type AppConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AppConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AppConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AppConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AppConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AppConfigValidationError) ErrorName() string { return "AppConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AppConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAppConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AppConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AppConfigValidationError{}
+
 // Validate checks the field values on Config with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Config) Validate() error {
@@ -48,6 +133,18 @@ func (m *Config) Validate() error {
 			return ConfigValidationError{
 				field:  "AccessToken",
 				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+	case *Config_AppConfig:
+
+		if v, ok := interface{}(m.GetAppConfig()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  "AppConfig",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
 			}
 		}
 
