@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -300,11 +299,11 @@ func newService(config *githubv1.Config) (Client, error) {
 		tr := http.DefaultTransport
 		itr, err := ghinstallation.NewKeyFromFile(tr, config.AppId, config.InstallationId, config.Pem)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		httpClient = &http.Client{Transport: itr}
-		t, err := itr.Token(context.TODO())
+		t, err := itr.Token(context.Background())
 		if err != nil {
 			return nil, err
 		}
