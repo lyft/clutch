@@ -9455,8 +9455,11 @@ export namespace clutch {
                         /** AppConfig installationId */
                         installationId?: (number|Long|null);
 
-                        /** AppConfig pem */
-                        pem?: (string|null);
+                        /** AppConfig keyPem */
+                        keyPem?: (string|null);
+
+                        /** AppConfig base64Pem */
+                        base64Pem?: (string|null);
                     }
 
                     /** Represents an AppConfig. */
@@ -9474,8 +9477,14 @@ export namespace clutch {
                         /** AppConfig installationId. */
                         public installationId: (number|Long);
 
+                        /** AppConfig keyPem. */
+                        public keyPem?: (string|null);
+
+                        /** AppConfig base64Pem. */
+                        public base64Pem?: (string|null);
+
                         /** AppConfig pem. */
-                        public pem: string;
+                        public pem?: ("keyPem"|"base64Pem");
 
                         /**
                          * Verifies an AppConfig message.

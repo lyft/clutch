@@ -54,11 +54,32 @@ func (m *AppConfig) Validate() error {
 		}
 	}
 
-	if len(m.GetPem()) < 1 {
+	switch m.Pem.(type) {
+
+	case *AppConfig_KeyPem:
+
+		if len(m.GetKeyPem()) < 1 {
+			return AppConfigValidationError{
+				field:  "KeyPem",
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+	case *AppConfig_Base64Pem:
+
+		if len(m.GetBase64Pem()) < 1 {
+			return AppConfigValidationError{
+				field:  "Base64Pem",
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+	default:
 		return AppConfigValidationError{
 			field:  "Pem",
-			reason: "value length must be at least 1 bytes",
+			reason: "value is required",
 		}
+
 	}
 
 	return nil

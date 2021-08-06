@@ -22703,7 +22703,8 @@ export const clutch = $root.clutch = (() => {
                          * @interface IAppConfig
                          * @property {number|Long|null} [appId] AppConfig appId
                          * @property {number|Long|null} [installationId] AppConfig installationId
-                         * @property {string|null} [pem] AppConfig pem
+                         * @property {string|null} [keyPem] AppConfig keyPem
+                         * @property {string|null} [base64Pem] AppConfig base64Pem
                          */
 
                         /**
@@ -22738,12 +22739,34 @@ export const clutch = $root.clutch = (() => {
                         AppConfig.prototype.installationId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                         /**
-                         * AppConfig pem.
-                         * @member {string} pem
+                         * AppConfig keyPem.
+                         * @member {string|null|undefined} keyPem
                          * @memberof clutch.config.service.github.v1.AppConfig
                          * @instance
                          */
-                        AppConfig.prototype.pem = "";
+                        AppConfig.prototype.keyPem = null;
+
+                        /**
+                         * AppConfig base64Pem.
+                         * @member {string|null|undefined} base64Pem
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @instance
+                         */
+                        AppConfig.prototype.base64Pem = null;
+
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * AppConfig pem.
+                         * @member {"keyPem"|"base64Pem"|undefined} pem
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @instance
+                         */
+                        Object.defineProperty(AppConfig.prototype, "pem", {
+                            get: $util.oneOfGetter($oneOfFields = ["keyPem", "base64Pem"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
 
                         /**
                          * Verifies an AppConfig message.
@@ -22756,15 +22779,25 @@ export const clutch = $root.clutch = (() => {
                         AppConfig.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
+                            let properties = {};
                             if (message.appId != null && message.hasOwnProperty("appId"))
                                 if (!$util.isInteger(message.appId) && !(message.appId && $util.isInteger(message.appId.low) && $util.isInteger(message.appId.high)))
                                     return "appId: integer|Long expected";
                             if (message.installationId != null && message.hasOwnProperty("installationId"))
                                 if (!$util.isInteger(message.installationId) && !(message.installationId && $util.isInteger(message.installationId.low) && $util.isInteger(message.installationId.high)))
                                     return "installationId: integer|Long expected";
-                            if (message.pem != null && message.hasOwnProperty("pem"))
-                                if (!$util.isString(message.pem))
-                                    return "pem: string expected";
+                            if (message.keyPem != null && message.hasOwnProperty("keyPem")) {
+                                properties.pem = 1;
+                                if (!$util.isString(message.keyPem))
+                                    return "keyPem: string expected";
+                            }
+                            if (message.base64Pem != null && message.hasOwnProperty("base64Pem")) {
+                                if (properties.pem === 1)
+                                    return "pem: multiple values";
+                                properties.pem = 1;
+                                if (!$util.isString(message.base64Pem))
+                                    return "base64Pem: string expected";
+                            }
                             return null;
                         };
 
@@ -22798,8 +22831,10 @@ export const clutch = $root.clutch = (() => {
                                     message.installationId = object.installationId;
                                 else if (typeof object.installationId === "object")
                                     message.installationId = new $util.LongBits(object.installationId.low >>> 0, object.installationId.high >>> 0).toNumber();
-                            if (object.pem != null)
-                                message.pem = String(object.pem);
+                            if (object.keyPem != null)
+                                message.keyPem = String(object.keyPem);
+                            if (object.base64Pem != null)
+                                message.base64Pem = String(object.base64Pem);
                             return message;
                         };
 
@@ -22827,7 +22862,6 @@ export const clutch = $root.clutch = (() => {
                                     object.installationId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                                 } else
                                     object.installationId = options.longs === String ? "0" : 0;
-                                object.pem = "";
                             }
                             if (message.appId != null && message.hasOwnProperty("appId"))
                                 if (typeof message.appId === "number")
@@ -22839,8 +22873,16 @@ export const clutch = $root.clutch = (() => {
                                     object.installationId = options.longs === String ? String(message.installationId) : message.installationId;
                                 else
                                     object.installationId = options.longs === String ? $util.Long.prototype.toString.call(message.installationId) : options.longs === Number ? new $util.LongBits(message.installationId.low >>> 0, message.installationId.high >>> 0).toNumber() : message.installationId;
-                            if (message.pem != null && message.hasOwnProperty("pem"))
-                                object.pem = message.pem;
+                            if (message.keyPem != null && message.hasOwnProperty("keyPem")) {
+                                object.keyPem = message.keyPem;
+                                if (options.oneofs)
+                                    object.pem = "keyPem";
+                            }
+                            if (message.base64Pem != null && message.hasOwnProperty("base64Pem")) {
+                                object.base64Pem = message.base64Pem;
+                                if (options.oneofs)
+                                    object.pem = "base64Pem";
+                            }
                             return object;
                         };
 
