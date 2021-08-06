@@ -22695,6 +22695,169 @@ export const clutch = $root.clutch = (() => {
                      */
                     const v1 = {};
 
+                    v1.AppConfig = (function() {
+
+                        /**
+                         * Properties of an AppConfig.
+                         * @memberof clutch.config.service.github.v1
+                         * @interface IAppConfig
+                         * @property {number|Long|null} [appId] AppConfig appId
+                         * @property {number|Long|null} [installationId] AppConfig installationId
+                         * @property {string|null} [pem] AppConfig pem
+                         */
+
+                        /**
+                         * Constructs a new AppConfig.
+                         * @memberof clutch.config.service.github.v1
+                         * @classdesc Represents an AppConfig.
+                         * @implements IAppConfig
+                         * @constructor
+                         * @param {clutch.config.service.github.v1.IAppConfig=} [properties] Properties to set
+                         */
+                        function AppConfig(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * AppConfig appId.
+                         * @member {number|Long} appId
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @instance
+                         */
+                        AppConfig.prototype.appId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * AppConfig installationId.
+                         * @member {number|Long} installationId
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @instance
+                         */
+                        AppConfig.prototype.installationId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * AppConfig pem.
+                         * @member {string} pem
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @instance
+                         */
+                        AppConfig.prototype.pem = "";
+
+                        /**
+                         * Verifies an AppConfig message.
+                         * @function verify
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        AppConfig.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.appId != null && message.hasOwnProperty("appId"))
+                                if (!$util.isInteger(message.appId) && !(message.appId && $util.isInteger(message.appId.low) && $util.isInteger(message.appId.high)))
+                                    return "appId: integer|Long expected";
+                            if (message.installationId != null && message.hasOwnProperty("installationId"))
+                                if (!$util.isInteger(message.installationId) && !(message.installationId && $util.isInteger(message.installationId.low) && $util.isInteger(message.installationId.high)))
+                                    return "installationId: integer|Long expected";
+                            if (message.pem != null && message.hasOwnProperty("pem"))
+                                if (!$util.isString(message.pem))
+                                    return "pem: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates an AppConfig message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.github.v1.AppConfig} AppConfig
+                         */
+                        AppConfig.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.github.v1.AppConfig)
+                                return object;
+                            let message = new $root.clutch.config.service.github.v1.AppConfig();
+                            if (object.appId != null)
+                                if ($util.Long)
+                                    (message.appId = $util.Long.fromValue(object.appId)).unsigned = false;
+                                else if (typeof object.appId === "string")
+                                    message.appId = parseInt(object.appId, 10);
+                                else if (typeof object.appId === "number")
+                                    message.appId = object.appId;
+                                else if (typeof object.appId === "object")
+                                    message.appId = new $util.LongBits(object.appId.low >>> 0, object.appId.high >>> 0).toNumber();
+                            if (object.installationId != null)
+                                if ($util.Long)
+                                    (message.installationId = $util.Long.fromValue(object.installationId)).unsigned = false;
+                                else if (typeof object.installationId === "string")
+                                    message.installationId = parseInt(object.installationId, 10);
+                                else if (typeof object.installationId === "number")
+                                    message.installationId = object.installationId;
+                                else if (typeof object.installationId === "object")
+                                    message.installationId = new $util.LongBits(object.installationId.low >>> 0, object.installationId.high >>> 0).toNumber();
+                            if (object.pem != null)
+                                message.pem = String(object.pem);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from an AppConfig message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @static
+                         * @param {clutch.config.service.github.v1.AppConfig} message AppConfig
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        AppConfig.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                if ($util.Long) {
+                                    let long = new $util.Long(0, 0, false);
+                                    object.appId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.appId = options.longs === String ? "0" : 0;
+                                if ($util.Long) {
+                                    let long = new $util.Long(0, 0, false);
+                                    object.installationId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.installationId = options.longs === String ? "0" : 0;
+                                object.pem = "";
+                            }
+                            if (message.appId != null && message.hasOwnProperty("appId"))
+                                if (typeof message.appId === "number")
+                                    object.appId = options.longs === String ? String(message.appId) : message.appId;
+                                else
+                                    object.appId = options.longs === String ? $util.Long.prototype.toString.call(message.appId) : options.longs === Number ? new $util.LongBits(message.appId.low >>> 0, message.appId.high >>> 0).toNumber() : message.appId;
+                            if (message.installationId != null && message.hasOwnProperty("installationId"))
+                                if (typeof message.installationId === "number")
+                                    object.installationId = options.longs === String ? String(message.installationId) : message.installationId;
+                                else
+                                    object.installationId = options.longs === String ? $util.Long.prototype.toString.call(message.installationId) : options.longs === Number ? new $util.LongBits(message.installationId.low >>> 0, message.installationId.high >>> 0).toNumber() : message.installationId;
+                            if (message.pem != null && message.hasOwnProperty("pem"))
+                                object.pem = message.pem;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this AppConfig to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.github.v1.AppConfig
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        AppConfig.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return AppConfig;
+                    })();
+
                     v1.Config = (function() {
 
                         /**
@@ -22702,6 +22865,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.github.v1
                          * @interface IConfig
                          * @property {string|null} [accessToken] Config accessToken
+                         * @property {clutch.config.service.github.v1.IAppConfig|null} [appConfig] Config appConfig
                          */
 
                         /**
@@ -22727,17 +22891,25 @@ export const clutch = $root.clutch = (() => {
                          */
                         Config.prototype.accessToken = null;
 
+                        /**
+                         * Config appConfig.
+                         * @member {clutch.config.service.github.v1.IAppConfig|null|undefined} appConfig
+                         * @memberof clutch.config.service.github.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.appConfig = null;
+
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
 
                         /**
                          * Config auth.
-                         * @member {"accessToken"|undefined} auth
+                         * @member {"accessToken"|"appConfig"|undefined} auth
                          * @memberof clutch.config.service.github.v1.Config
                          * @instance
                          */
                         Object.defineProperty(Config.prototype, "auth", {
-                            get: $util.oneOfGetter($oneOfFields = ["accessToken"]),
+                            get: $util.oneOfGetter($oneOfFields = ["accessToken", "appConfig"]),
                             set: $util.oneOfSetter($oneOfFields)
                         });
 
@@ -22758,6 +22930,16 @@ export const clutch = $root.clutch = (() => {
                                 if (!$util.isString(message.accessToken))
                                     return "accessToken: string expected";
                             }
+                            if (message.appConfig != null && message.hasOwnProperty("appConfig")) {
+                                if (properties.auth === 1)
+                                    return "auth: multiple values";
+                                properties.auth = 1;
+                                {
+                                    let error = $root.clutch.config.service.github.v1.AppConfig.verify(message.appConfig);
+                                    if (error)
+                                        return "appConfig." + error;
+                                }
+                            }
                             return null;
                         };
 
@@ -22775,6 +22957,11 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.service.github.v1.Config();
                             if (object.accessToken != null)
                                 message.accessToken = String(object.accessToken);
+                            if (object.appConfig != null) {
+                                if (typeof object.appConfig !== "object")
+                                    throw TypeError(".clutch.config.service.github.v1.Config.appConfig: object expected");
+                                message.appConfig = $root.clutch.config.service.github.v1.AppConfig.fromObject(object.appConfig);
+                            }
                             return message;
                         };
 
@@ -22795,6 +22982,11 @@ export const clutch = $root.clutch = (() => {
                                 object.accessToken = message.accessToken;
                                 if (options.oneofs)
                                     object.auth = "accessToken";
+                            }
+                            if (message.appConfig != null && message.hasOwnProperty("appConfig")) {
+                                object.appConfig = $root.clutch.config.service.github.v1.AppConfig.toObject(message.appConfig, options);
+                                if (options.oneofs)
+                                    object.auth = "appConfig";
                             }
                             return object;
                         };
