@@ -1,5 +1,8 @@
 import * as React from "react";
-import { Box } from "@material-ui/core";
+import styled from "@emotion/styled";
+import { Box, Fab, useMediaQuery } from "@material-ui/core";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import _ from "lodash";
 
 import { DashDispatchContext, DashStateContext } from "./dash-hooks";
@@ -10,6 +13,13 @@ const initialState = {
   selected: [],
   projectData: {},
 };
+
+const StyledFab = styled(Fab)({
+  position: "fixed",
+  left: "85px",
+  bottom: "50vh",
+  transform: "rotate(270deg)",
+});
 
 const dashReducer = (state: DashState, action: DashAction): DashState => {
   switch (action.type) {
@@ -26,15 +36,35 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
 
 const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
+  const compress = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
+  const [showSelector, setShowSelector] = React.useState<boolean>(false);
+  const Icon = showSelector ? KeyboardArrowUpIcon : KeyboardArrowDownIcon;
 
   return (
     <Box display="flex" flex={1}>
       <DashDispatchContext.Provider value={dispatch}>
         <DashStateContext.Provider value={state}>
-          <ProjectSelector />
-          <Box display="flex" flex={1}>
-            {children}
-          </Box>
+          {compress ? (
+            <>
+              <StyledFab onClick={() => setShowSelector(s => !s)} size="small">
+                <Icon />
+              </StyledFab>
+              {showSelector ? (
+                <ProjectSelector />
+              ) : (
+                <Box display="flex" flex={1}>
+                  {children}
+                </Box>
+              )}
+            </>
+          ) : (
+            <>
+              <ProjectSelector />
+              <Box display="flex" flex={1}>
+                {children}
+              </Box>
+            </>
+          )}
         </DashStateContext.Provider>
       </DashDispatchContext.Provider>
     </Box>
