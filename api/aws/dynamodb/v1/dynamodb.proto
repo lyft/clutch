@@ -39,7 +39,7 @@ service DDBAPI {
 enum Status {
   UNSPECIFIED = 0;
   CREATING = 1;
-  UPDATING = 2; 
+  UPDATING = 2;
   DELETING = 3;
   ACTIVE = 4;
   INACCESSIBLE_ENCRYPTION_CREDENTIALS = 5;
@@ -103,6 +103,6 @@ message UpdateGSICapacityRequest {
 
 message UpdateGSICapacityResponse {
   string table_name = 1;
-  string index_name = 2; 
-  Status table_status = 3; 
+  string index_name = 2;
+  Status table_status = 3;
 }
