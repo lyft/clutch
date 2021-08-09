@@ -22,6 +22,10 @@ export const useDashUpdater = (): useDashUpdaterReturn => {
   };
 };
 
-export const useDashState = (): DashState | undefined => {
-  return React.useContext<DashState | undefined>(DashStateContext);
+export const useDashState = (): DashState => {
+  const value = React.useContext<DashState | undefined>(DashStateContext);
+  if (!value) {
+    throw new Error("useDashState was invoked with no value, check that it is a child of the Dash component");
+  }
+  return value;
 };
