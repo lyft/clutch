@@ -37,7 +37,7 @@ service DDBAPI {
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
 enum Status {
-  UNKNOWN = 0;
+  UNSPECIFIED = 0;
   CREATING = 1;
   UPDATING = 2; 
   DELETING = 3;
