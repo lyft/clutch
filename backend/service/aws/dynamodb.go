@@ -6,19 +6,45 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
+	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 )
+
+// defaults for the dynamodb settings config
+const (
+	AwsMaxRCU       = 40000
+	AwsMaxWCU       = 40000
+	SafeScaleFactor = 2.0
+)
+
+// get or set defaults for dynamodb scaling
+func getScalingLimits(cfg *awsv1.Config) *awsv1.ScalingLimits {
+	if cfg.GetDynamodbConfig() == nil && cfg.DynamodbConfig.GetScalingLimits() == nil {
+		ds := &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  AwsMaxRCU,
+			MaxWriteCapacityUnits: AwsMaxWCU,
+			MaxScaleFactor:        SafeScaleFactor,
+			EnableOverride:        false,
+		}
+		return ds
+	}
+	return cfg.DynamodbConfig.ScalingLimits
+}
 
 func (c *client) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
+		c.log.Error("unable to get regional client", zap.Error(err))
 		return nil, err
 	}
 
-	input := &dynamodb.DescribeTableInput{TableName: aws.String(tableName)}
-	result, err := cl.dynamodb.DescribeTable(ctx, input)
+	result, err := getTable(ctx, cl, tableName)
 	if err != nil {
+		c.log.Error("unable to find table", zap.Error(err))
 		return nil, err
 	}
 
@@ -36,6 +62,11 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 		ProvisionedThroughput:  currentCapacity,
 	}
 	return ret, nil
+}
+
+func getTable(ctx context.Context, client *regionalClient, tableName string) (*dynamodb.DescribeTableOutput, error) {
+	input := &dynamodb.DescribeTableInput{TableName: aws.String(tableName)}
+	return client.dynamodb.DescribeTable(ctx, input)
 }
 
 func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) []*dynamodbv1.GlobalSecondaryIndex {
@@ -56,4 +87,64 @@ func newProtoForGlobalSecondaryIndex(index types.GlobalSecondaryIndexDescription
 		Name:                  aws.ToString(index.IndexName),
 		ProvisionedThroughput: currentCapacity,
 	}
+}
+
+func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughputDescription, target types.ProvisionedThroughput) error {
+	// check for targets that are lower than current (can't scale down)
+	if *current.ReadCapacityUnits > *target.ReadCapacityUnits {
+		return status.Errorf(codes.FailedPrecondition, "Target read capacity [%d] is lower than current capacity [%d]", *target.ReadCapacityUnits, *current.ReadCapacityUnits)
+	}
+	if *current.WriteCapacityUnits > *target.WriteCapacityUnits {
+		return status.Errorf(codes.FailedPrecondition, "Target write capacity [%d] is lower than current capacity [%d]", *target.WriteCapacityUnits, *current.WriteCapacityUnits)
+	}
+
+	// check for targets that exceed max limits
+	if *target.ReadCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits {
+		return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits)
+	}
+	if *target.WriteCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits {
+		return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits)
+	}
+
+	// check for increases that exceed max increase scale
+	if (float32(*target.ReadCapacityUnits / *current.ReadCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+		return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
+	}
+	if (float32(*target.WriteCapacityUnits / *current.WriteCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+		return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
+	}
+	return nil
+}
+
+func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) error {
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		c.log.Error("unable to get regional client", zap.Error(err))
+		return err
+	}
+
+	currentTable, err := getTable(ctx, cl, tableName)
+	if err != nil {
+		c.log.Error("unable to find table", zap.Error(err))
+		return err
+	}
+
+	targetCapacity := types.ProvisionedThroughput{
+		ReadCapacityUnits:  aws.Int64(targetTableRcu),
+		WriteCapacityUnits: aws.Int64(targetTableWcu),
+	}
+
+	err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, targetCapacity)
+	if err != nil {
+		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
+		return err
+	}
+
+	input := &dynamodb.UpdateTableInput{
+		TableName:             aws.String(tableName),
+		ProvisionedThroughput: &targetCapacity,
+	}
+
+	_, err = cl.dynamodb.UpdateTable(ctx, input)
+	return err
 }

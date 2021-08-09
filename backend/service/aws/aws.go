@@ -60,6 +60,8 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		clientRetries = int(ac.ClientConfig.Retries)
 	}
 
+	ds := getScalingLimits(ac)
+
 	awsHTTPClient := &http.Client{}
 
 	for _, region := range ac.Regions {
@@ -78,7 +80,16 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		}
 
 		c.clients[region] = &regionalClient{
-			region:      region,
+			region: region,
+			dynamodbCfg: &awsv1.DynamodbConfig{
+				ScalingLimits: &awsv1.ScalingLimits{
+					MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+					MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+					MaxScaleFactor:        ds.MaxScaleFactor,
+					EnableOverride:        ds.EnableOverride,
+				},
+			},
+
 			s3:          s3.NewFromConfig(regionCfg),
 			kinesis:     kinesis.NewFromConfig(regionCfg),
 			ec2:         ec2.NewFromConfig(regionCfg),
@@ -104,6 +115,7 @@ type Client interface {
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
 	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)
+	UpdateTableCapacity(ctx context.Context, region string, tableName string, targetIndexRcu int64, targetIndexWcu int64) error
 
 	Regions() []string
 }
@@ -118,6 +130,8 @@ type client struct {
 
 type regionalClient struct {
 	region string
+
+	dynamodbCfg *awsv1.DynamodbConfig
 
 	s3          s3Client
 	kinesis     kinesisClient
