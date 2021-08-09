@@ -1,4 +1,5 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
+import type { ClutchError } from "@clutch-sh/core";
 import _ from "lodash";
 
 import {
@@ -168,7 +169,27 @@ const selectorReducer = (state: State, action: Action): State => {
       return { ...state, loading: true };
     }
     case "HYDRATE_END": {
-      let newState = { ...state, loading: false, error: undefined } as State;
+      const existingState = { ...state };
+      const missingProjects = _.difference(
+        Object.keys(existingState[Group.PROJECTS]),
+        Object.keys(action?.payload?.result)
+      );
+      if (missingProjects.length > 0) {
+        const resolvedProjects = _.intersection(
+          Object.keys(existingState[Group.PROJECTS]),
+          Object.keys(action?.payload?.result)
+        );
+        existingState[Group.PROJECTS] = _.pick(existingState[Group.PROJECTS], resolvedProjects);
+        const error = {
+          status: {
+            code: 404,
+            text: "Not Found",
+          },
+          message: `Invalid projects: ${missingProjects}`,
+        } as ClutchError;
+        return { ...existingState, loading: false, error };
+      }
+      let newState = { ...existingState, loading: false, error: undefined } as State;
 
       _.forIn(
         action?.payload?.result as { [k: string]: IClutch.project.v1.IProjectResult } | null,
