@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap/zaptest"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -82,6 +83,7 @@ func TestDescribeTableValid(t *testing.T) {
 		table: testDynamodbTable,
 	}
 	c := &client{
+		log:     zaptest.NewLogger(t),
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodb: m}},
 	}
 
@@ -99,6 +101,7 @@ func TestDescribeTableNotValid(t *testing.T) {
 		table: testDynamodbTable,
 	}
 	c := &client{
+		log:     zaptest.NewLogger(t),
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodb: m}},
 	}
 
@@ -112,6 +115,7 @@ func TestDescribeTableWithGsiValid(t *testing.T) {
 		table: testDynamodbTableWithGSI,
 	}
 	c := &client{
+		log:     zaptest.NewLogger(t),
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodb: m}},
 	}
 
@@ -182,6 +186,7 @@ func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 	}
 
 	c := &client{
+		log:     zaptest.NewLogger(t),
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
@@ -223,6 +228,7 @@ func TestUpdateTableCapacityWithCustomLimits(t *testing.T) {
 		},
 	}
 	c := &client{
+		log:     zaptest.NewLogger(t),
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
