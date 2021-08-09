@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -38,11 +39,13 @@ func getScalingLimits(cfg *awsv1.Config) *awsv1.ScalingLimits {
 func (c *client) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
+		c.log.Error("unable to get regional client", zap.Error(err))
 		return nil, err
 	}
 
 	result, err := getTable(ctx, cl, tableName)
 	if err != nil {
+		c.log.Error("unable to find table", zap.Error(err))
 		return nil, err
 	}
 
@@ -117,11 +120,13 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) error {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
+		c.log.Error("unable to get regional client", zap.Error(err))
 		return err
 	}
 
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
+		c.log.Error("unable to find table", zap.Error(err))
 		return err
 	}
 
@@ -132,6 +137,7 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 
 	err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, targetCapacity)
 	if err != nil {
+		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
 		return err
 	}
 
