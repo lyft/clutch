@@ -156,7 +156,6 @@ func TestGetScalingLimitsCustom(t *testing.T) {
 	assert.False(t, ds.EnableOverride)
 }
 func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
-
 	tests := []struct {
 		name     string
 		inputRCU int64
