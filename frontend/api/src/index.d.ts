@@ -1734,6 +1734,18 @@ export namespace clutch {
                     type UpdateGSICapacityCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.UpdateGSICapacityResponse) => void;
                 }
 
+                /** Status enum. */
+                enum Status {
+                    UNKNOWN = 0,
+                    CREATING = 1,
+                    UPDATING = 2,
+                    DELETING = 3,
+                    ACTIVE = 4,
+                    INACCESSIBLE_ENCRYPTION_CREDENTIALS = 5,
+                    ARCHIVING = 6,
+                    ARCHIVED = 7
+                }
+
                 /** Properties of a Table. */
                 interface ITable {
 
@@ -1748,6 +1760,9 @@ export namespace clutch {
 
                     /** Table provisionedThroughput */
                     provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+
+                    /** Table status */
+                    status?: (clutch.aws.dynamodb.v1.Status|null);
                 }
 
                 /** Represents a Table. */
@@ -1770,6 +1785,9 @@ export namespace clutch {
 
                     /** Table provisionedThroughput. */
                     public provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+
+                    /** Table status. */
+                    public status: clutch.aws.dynamodb.v1.Status;
 
                     /**
                      * Verifies a Table message.
@@ -2078,6 +2096,12 @@ export namespace clutch {
 
                 /** Properties of an UpdateTableCapacityResponse. */
                 interface IUpdateTableCapacityResponse {
+
+                    /** UpdateTableCapacityResponse tableName */
+                    tableName?: (string|null);
+
+                    /** UpdateTableCapacityResponse tableStatus */
+                    tableStatus?: (clutch.aws.dynamodb.v1.Status|null);
                 }
 
                 /** Represents an UpdateTableCapacityResponse. */
@@ -2088,6 +2112,12 @@ export namespace clutch {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: clutch.aws.dynamodb.v1.IUpdateTableCapacityResponse);
+
+                    /** UpdateTableCapacityResponse tableName. */
+                    public tableName: string;
+
+                    /** UpdateTableCapacityResponse tableStatus. */
+                    public tableStatus: clutch.aws.dynamodb.v1.Status;
 
                     /**
                      * Verifies an UpdateTableCapacityResponse message.
@@ -2192,6 +2222,15 @@ export namespace clutch {
 
                 /** Properties of an UpdateGSICapacityResponse. */
                 interface IUpdateGSICapacityResponse {
+
+                    /** UpdateGSICapacityResponse tableName */
+                    tableName?: (string|null);
+
+                    /** UpdateGSICapacityResponse indexName */
+                    indexName?: (string|null);
+
+                    /** UpdateGSICapacityResponse tableStatus */
+                    tableStatus?: (clutch.aws.dynamodb.v1.Status|null);
                 }
 
                 /** Represents an UpdateGSICapacityResponse. */
@@ -2202,6 +2241,15 @@ export namespace clutch {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: clutch.aws.dynamodb.v1.IUpdateGSICapacityResponse);
+
+                    /** UpdateGSICapacityResponse tableName. */
+                    public tableName: string;
+
+                    /** UpdateGSICapacityResponse indexName. */
+                    public indexName: string;
+
+                    /** UpdateGSICapacityResponse tableStatus. */
+                    public tableStatus: clutch.aws.dynamodb.v1.Status;
 
                     /**
                      * Verifies an UpdateGSICapacityResponse message.

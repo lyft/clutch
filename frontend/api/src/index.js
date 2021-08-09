@@ -3946,6 +3946,32 @@ export const clutch = $root.clutch = (() => {
                     return DDBAPI;
                 })();
 
+                /**
+                 * Status enum.
+                 * @name clutch.aws.dynamodb.v1.Status
+                 * @enum {number}
+                 * @property {number} UNKNOWN=0 UNKNOWN value
+                 * @property {number} CREATING=1 CREATING value
+                 * @property {number} UPDATING=2 UPDATING value
+                 * @property {number} DELETING=3 DELETING value
+                 * @property {number} ACTIVE=4 ACTIVE value
+                 * @property {number} INACCESSIBLE_ENCRYPTION_CREDENTIALS=5 INACCESSIBLE_ENCRYPTION_CREDENTIALS value
+                 * @property {number} ARCHIVING=6 ARCHIVING value
+                 * @property {number} ARCHIVED=7 ARCHIVED value
+                 */
+                v1.Status = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNKNOWN"] = 0;
+                    values[valuesById[1] = "CREATING"] = 1;
+                    values[valuesById[2] = "UPDATING"] = 2;
+                    values[valuesById[3] = "DELETING"] = 3;
+                    values[valuesById[4] = "ACTIVE"] = 4;
+                    values[valuesById[5] = "INACCESSIBLE_ENCRYPTION_CREDENTIALS"] = 5;
+                    values[valuesById[6] = "ARCHIVING"] = 6;
+                    values[valuesById[7] = "ARCHIVED"] = 7;
+                    return values;
+                })();
+
                 v1.Table = (function() {
 
                     /**
@@ -3956,6 +3982,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [region] Table region
                      * @property {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndex>|null} [globalSecondaryIndexes] Table globalSecondaryIndexes
                      * @property {clutch.aws.dynamodb.v1.IProvisionedThroughput|null} [provisionedThroughput] Table provisionedThroughput
+                     * @property {clutch.aws.dynamodb.v1.Status|null} [status] Table status
                      */
 
                     /**
@@ -4007,6 +4034,14 @@ export const clutch = $root.clutch = (() => {
                     Table.prototype.provisionedThroughput = null;
 
                     /**
+                     * Table status.
+                     * @member {clutch.aws.dynamodb.v1.Status} status
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.status = 0;
+
+                    /**
                      * Verifies a Table message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.Table
@@ -4037,6 +4072,20 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "provisionedThroughput." + error;
                         }
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
+                                break;
+                            }
                         return null;
                     };
 
@@ -4071,6 +4120,40 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.aws.dynamodb.v1.Table.provisionedThroughput: object expected");
                             message.provisionedThroughput = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.provisionedThroughput);
                         }
+                        switch (object.status) {
+                        case "UNKNOWN":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "CREATING":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        case "UPDATING":
+                        case 2:
+                            message.status = 2;
+                            break;
+                        case "DELETING":
+                        case 3:
+                            message.status = 3;
+                            break;
+                        case "ACTIVE":
+                        case 4:
+                            message.status = 4;
+                            break;
+                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
+                        case 5:
+                            message.status = 5;
+                            break;
+                        case "ARCHIVING":
+                        case 6:
+                            message.status = 6;
+                            break;
+                        case "ARCHIVED":
+                        case 7:
+                            message.status = 7;
+                            break;
+                        }
                         return message;
                     };
 
@@ -4093,6 +4176,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.region = "";
                             object.provisionedThroughput = null;
+                            object.status = options.enums === String ? "UNKNOWN" : 0;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -4105,6 +4189,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput"))
                             object.provisionedThroughput = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.toObject(message.provisionedThroughput, options);
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Status[message.status] : message.status;
                         return object;
                     };
 
@@ -4800,6 +4886,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of an UpdateTableCapacityResponse.
                      * @memberof clutch.aws.dynamodb.v1
                      * @interface IUpdateTableCapacityResponse
+                     * @property {string|null} [tableName] UpdateTableCapacityResponse tableName
+                     * @property {clutch.aws.dynamodb.v1.Status|null} [tableStatus] UpdateTableCapacityResponse tableStatus
                      */
 
                     /**
@@ -4818,6 +4906,22 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
+                     * UpdateTableCapacityResponse tableName.
+                     * @member {string} tableName
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityResponse
+                     * @instance
+                     */
+                    UpdateTableCapacityResponse.prototype.tableName = "";
+
+                    /**
+                     * UpdateTableCapacityResponse tableStatus.
+                     * @member {clutch.aws.dynamodb.v1.Status} tableStatus
+                     * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityResponse
+                     * @instance
+                     */
+                    UpdateTableCapacityResponse.prototype.tableStatus = 0;
+
+                    /**
                      * Verifies an UpdateTableCapacityResponse message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.UpdateTableCapacityResponse
@@ -4828,6 +4932,23 @@ export const clutch = $root.clutch = (() => {
                     UpdateTableCapacityResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            if (!$util.isString(message.tableName))
+                                return "tableName: string expected";
+                        if (message.tableStatus != null && message.hasOwnProperty("tableStatus"))
+                            switch (message.tableStatus) {
+                            default:
+                                return "tableStatus: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
+                                break;
+                            }
                         return null;
                     };
 
@@ -4842,7 +4963,44 @@ export const clutch = $root.clutch = (() => {
                     UpdateTableCapacityResponse.fromObject = function fromObject(object) {
                         if (object instanceof $root.clutch.aws.dynamodb.v1.UpdateTableCapacityResponse)
                             return object;
-                        return new $root.clutch.aws.dynamodb.v1.UpdateTableCapacityResponse();
+                        let message = new $root.clutch.aws.dynamodb.v1.UpdateTableCapacityResponse();
+                        if (object.tableName != null)
+                            message.tableName = String(object.tableName);
+                        switch (object.tableStatus) {
+                        case "UNKNOWN":
+                        case 0:
+                            message.tableStatus = 0;
+                            break;
+                        case "CREATING":
+                        case 1:
+                            message.tableStatus = 1;
+                            break;
+                        case "UPDATING":
+                        case 2:
+                            message.tableStatus = 2;
+                            break;
+                        case "DELETING":
+                        case 3:
+                            message.tableStatus = 3;
+                            break;
+                        case "ACTIVE":
+                        case 4:
+                            message.tableStatus = 4;
+                            break;
+                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
+                        case 5:
+                            message.tableStatus = 5;
+                            break;
+                        case "ARCHIVING":
+                        case 6:
+                            message.tableStatus = 6;
+                            break;
+                        case "ARCHIVED":
+                        case 7:
+                            message.tableStatus = 7;
+                            break;
+                        }
+                        return message;
                     };
 
                     /**
@@ -4854,8 +5012,19 @@ export const clutch = $root.clutch = (() => {
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    UpdateTableCapacityResponse.toObject = function toObject() {
-                        return {};
+                    UpdateTableCapacityResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.tableName = "";
+                            object.tableStatus = options.enums === String ? "UNKNOWN" : 0;
+                        }
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            object.tableName = message.tableName;
+                        if (message.tableStatus != null && message.hasOwnProperty("tableStatus"))
+                            object.tableStatus = options.enums === String ? $root.clutch.aws.dynamodb.v1.Status[message.tableStatus] : message.tableStatus;
+                        return object;
                     };
 
                     /**
@@ -5075,6 +5244,9 @@ export const clutch = $root.clutch = (() => {
                      * Properties of an UpdateGSICapacityResponse.
                      * @memberof clutch.aws.dynamodb.v1
                      * @interface IUpdateGSICapacityResponse
+                     * @property {string|null} [tableName] UpdateGSICapacityResponse tableName
+                     * @property {string|null} [indexName] UpdateGSICapacityResponse indexName
+                     * @property {clutch.aws.dynamodb.v1.Status|null} [tableStatus] UpdateGSICapacityResponse tableStatus
                      */
 
                     /**
@@ -5093,6 +5265,30 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
+                     * UpdateGSICapacityResponse tableName.
+                     * @member {string} tableName
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityResponse
+                     * @instance
+                     */
+                    UpdateGSICapacityResponse.prototype.tableName = "";
+
+                    /**
+                     * UpdateGSICapacityResponse indexName.
+                     * @member {string} indexName
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityResponse
+                     * @instance
+                     */
+                    UpdateGSICapacityResponse.prototype.indexName = "";
+
+                    /**
+                     * UpdateGSICapacityResponse tableStatus.
+                     * @member {clutch.aws.dynamodb.v1.Status} tableStatus
+                     * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityResponse
+                     * @instance
+                     */
+                    UpdateGSICapacityResponse.prototype.tableStatus = 0;
+
+                    /**
                      * Verifies an UpdateGSICapacityResponse message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.UpdateGSICapacityResponse
@@ -5103,6 +5299,26 @@ export const clutch = $root.clutch = (() => {
                     UpdateGSICapacityResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            if (!$util.isString(message.tableName))
+                                return "tableName: string expected";
+                        if (message.indexName != null && message.hasOwnProperty("indexName"))
+                            if (!$util.isString(message.indexName))
+                                return "indexName: string expected";
+                        if (message.tableStatus != null && message.hasOwnProperty("tableStatus"))
+                            switch (message.tableStatus) {
+                            default:
+                                return "tableStatus: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
+                                break;
+                            }
                         return null;
                     };
 
@@ -5117,7 +5333,46 @@ export const clutch = $root.clutch = (() => {
                     UpdateGSICapacityResponse.fromObject = function fromObject(object) {
                         if (object instanceof $root.clutch.aws.dynamodb.v1.UpdateGSICapacityResponse)
                             return object;
-                        return new $root.clutch.aws.dynamodb.v1.UpdateGSICapacityResponse();
+                        let message = new $root.clutch.aws.dynamodb.v1.UpdateGSICapacityResponse();
+                        if (object.tableName != null)
+                            message.tableName = String(object.tableName);
+                        if (object.indexName != null)
+                            message.indexName = String(object.indexName);
+                        switch (object.tableStatus) {
+                        case "UNKNOWN":
+                        case 0:
+                            message.tableStatus = 0;
+                            break;
+                        case "CREATING":
+                        case 1:
+                            message.tableStatus = 1;
+                            break;
+                        case "UPDATING":
+                        case 2:
+                            message.tableStatus = 2;
+                            break;
+                        case "DELETING":
+                        case 3:
+                            message.tableStatus = 3;
+                            break;
+                        case "ACTIVE":
+                        case 4:
+                            message.tableStatus = 4;
+                            break;
+                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
+                        case 5:
+                            message.tableStatus = 5;
+                            break;
+                        case "ARCHIVING":
+                        case 6:
+                            message.tableStatus = 6;
+                            break;
+                        case "ARCHIVED":
+                        case 7:
+                            message.tableStatus = 7;
+                            break;
+                        }
+                        return message;
                     };
 
                     /**
@@ -5129,8 +5384,22 @@ export const clutch = $root.clutch = (() => {
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    UpdateGSICapacityResponse.toObject = function toObject() {
-                        return {};
+                    UpdateGSICapacityResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.tableName = "";
+                            object.indexName = "";
+                            object.tableStatus = options.enums === String ? "UNKNOWN" : 0;
+                        }
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            object.tableName = message.tableName;
+                        if (message.indexName != null && message.hasOwnProperty("indexName"))
+                            object.indexName = message.indexName;
+                        if (message.tableStatus != null && message.hasOwnProperty("tableStatus"))
+                            object.tableStatus = options.enums === String ? $root.clutch.aws.dynamodb.v1.Status[message.tableStatus] : message.tableStatus;
+                        return object;
                     };
 
                     /**
