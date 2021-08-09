@@ -22,7 +22,9 @@ message DynamodbConfig {
 }
 
 message ScalingLimits {
-  // defaults to AWS default quotas if not set
+  // defaults to AWS quotas if not set
+  // AWS max read: 40000
+  // AWS max write: 40000
   int64 max_read_capacity_units = 1 [ (validate.rules).int64 = {ignore_empty : true, gte : 1} ];
   int64 max_write_capacity_units = 2 [ (validate.rules).int64 = {ignore_empty : true, gte : 1} ];
   // defaults to a scale factor of 2.0x
