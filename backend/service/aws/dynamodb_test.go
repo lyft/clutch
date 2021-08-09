@@ -127,8 +127,8 @@ func TestDescribeTableWithGsiValid(t *testing.T) {
 func TestGetScalingLimitsDefault(t *testing.T) {
 	ds := getScalingLimits(cfg)
 
-	assert.Equal(t, ds.MaxReadCapacityUnits, AwsMaxRCU, "Max RCU default set")
-	assert.Equal(t, ds.MaxScaleFactor, SafeScaleFactor, "scale factor default set")
+	assert.Equal(t, ds.MaxReadCapacityUnits, int64(AwsMaxRCU), "Max RCU default set")
+	assert.Equal(t, ds.MaxScaleFactor, float32(SafeScaleFactor), "scale factor default set")
 	assert.False(t, ds.EnableOverride)
 }
 
@@ -156,6 +156,7 @@ func TestGetScalingLimitsCustom(t *testing.T) {
 	assert.False(t, ds.EnableOverride)
 }
 func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
+
 	tests := []struct {
 		name     string
 		inputRCU int64
@@ -190,10 +191,13 @@ func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
+	err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 201)
+	assert.NoError(t, err)
+
 	for _, tt := range tests {
 		tt := tt // capture range variable
 		t.Run(tt.name, func(t *testing.T) {
-			got := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-gsi-table", tt.inputRCU, tt.inputWCU)
+			got := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
 			if got.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, got)
 			}
@@ -232,10 +236,13 @@ func TestUpdateTableCapacityWithCustomLimits(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
+	err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 201)
+	assert.NoError(t, err)
+
 	for _, tt := range tests {
 		tt := tt // capture range variable
 		t.Run(tt.name, func(t *testing.T) {
-			got := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-gsi-table", tt.inputRCU, tt.inputWCU)
+			got := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
 			if got.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, got)
 			}
