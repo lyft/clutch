@@ -93,7 +93,7 @@ func newProtoForGlobalSecondaryIndex(index types.GlobalSecondaryIndexDescription
 func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughputDescription, target types.ProvisionedThroughput) error {
 	// check for targets that are lower than current (can't scale down)
 	if *current.ReadCapacityUnits > *target.ReadCapacityUnits {
-		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target read capacity [%d] is lower than current capacity [%d]", *target.ReadCapacityUnits, *current.ReadCapacityUnits))
+		return status.Errorf(codes.FailedPrecondition, "Target read capacity [%d] is lower than current capacity [%d]", *target.ReadCapacityUnits, *current.ReadCapacityUnits)
 	}
 	if *current.WriteCapacityUnits > *target.WriteCapacityUnits {
 		return status.Errorf(codes.FailedPrecondition, fmt.Sprintf("Target write capacity [%d] is lower than current capacity [%d]", *target.WriteCapacityUnits, *current.WriteCapacityUnits))
