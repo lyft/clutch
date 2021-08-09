@@ -48,7 +48,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/uber-go/tally v3.4.2+incompatible
-	go.uber.org/zap v1.18.1
+	go.uber.org/zap v1.19.0
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
 	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985
 	golang.org/x/oauth2 v0.0.0-20210628180205-a41e5a781914
