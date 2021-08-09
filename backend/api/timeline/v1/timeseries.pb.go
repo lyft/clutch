@@ -23,7 +23,8 @@ const (
 )
 
 // A timeseries datapoint message is useful for organizing events
-// to be displayed in a timeline
+// to be displayed in a timeline view.  Users can transform data
+// into a timeseries format and be able to organize them.
 type TimeseriesData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
