@@ -3950,7 +3950,7 @@ export const clutch = $root.clutch = (() => {
                  * Status enum.
                  * @name clutch.aws.dynamodb.v1.Status
                  * @enum {number}
-                 * @property {number} UNKNOWN=0 UNKNOWN value
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} CREATING=1 CREATING value
                  * @property {number} UPDATING=2 UPDATING value
                  * @property {number} DELETING=3 DELETING value
@@ -3961,7 +3961,7 @@ export const clutch = $root.clutch = (() => {
                  */
                 v1.Status = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "UNKNOWN"] = 0;
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
                     values[valuesById[1] = "CREATING"] = 1;
                     values[valuesById[2] = "UPDATING"] = 2;
                     values[valuesById[3] = "DELETING"] = 3;
@@ -4121,7 +4121,7 @@ export const clutch = $root.clutch = (() => {
                             message.provisionedThroughput = $root.clutch.aws.dynamodb.v1.ProvisionedThroughput.fromObject(object.provisionedThroughput);
                         }
                         switch (object.status) {
-                        case "UNKNOWN":
+                        case "UNSPECIFIED":
                         case 0:
                             message.status = 0;
                             break;
@@ -4176,7 +4176,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.region = "";
                             object.provisionedThroughput = null;
-                            object.status = options.enums === String ? "UNKNOWN" : 0;
+                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -4967,7 +4967,7 @@ export const clutch = $root.clutch = (() => {
                         if (object.tableName != null)
                             message.tableName = String(object.tableName);
                         switch (object.tableStatus) {
-                        case "UNKNOWN":
+                        case "UNSPECIFIED":
                         case 0:
                             message.tableStatus = 0;
                             break;
@@ -5018,7 +5018,7 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.defaults) {
                             object.tableName = "";
-                            object.tableStatus = options.enums === String ? "UNKNOWN" : 0;
+                            object.tableStatus = options.enums === String ? "UNSPECIFIED" : 0;
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
@@ -5339,7 +5339,7 @@ export const clutch = $root.clutch = (() => {
                         if (object.indexName != null)
                             message.indexName = String(object.indexName);
                         switch (object.tableStatus) {
-                        case "UNKNOWN":
+                        case "UNSPECIFIED":
                         case 0:
                             message.tableStatus = 0;
                             break;
@@ -5391,7 +5391,7 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.tableName = "";
                             object.indexName = "";
-                            object.tableStatus = options.enums === String ? "UNKNOWN" : 0;
+                            object.tableStatus = options.enums === String ? "UNSPECIFIED" : 0;
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;

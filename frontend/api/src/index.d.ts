@@ -1736,7 +1736,7 @@ export namespace clutch {
 
                 /** Status enum. */
                 enum Status {
-                    UNKNOWN = 0,
+                    UNSPECIFIED = 0,
                     CREATING = 1,
                     UPDATING = 2,
                     DELETING = 3,
