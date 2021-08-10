@@ -31,7 +31,11 @@ func TestModule(t *testing.T) {
 
 var testUpdateTableCapacityResponse = &dynamodbv1.UpdateTableCapacityResponse{
 	TableName:   "",
+<<<<<<< HEAD
 	TableStatus: 3,
+=======
+	TableStatus: 2,
+>>>>>>> test UpdateTableCapacity on module
 }
 
 func TestDDBAPIDescribeTable(t *testing.T) {
