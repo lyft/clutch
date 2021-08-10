@@ -9,13 +9,17 @@ import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
-import { deriveStateData, DispatchContext, StateContext } from "./helpers";
+import {
+  deriveStateData,
+  DispatchContext,
+  hydrateFromLocalState,
+  StateContext,
+  writeToLocalState,
+} from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
 import type { DashState, State } from "./types";
 import { Group } from "./types";
-
-const STORAGE_KEY = "dashState";
 
 const initialState: State = {
   [Group.PROJECTS]: {},
@@ -86,12 +90,7 @@ const ProjectSelector = () => {
 
   const { updateSelected } = useDashUpdater();
 
-  const localState = window.localStorage.getItem(STORAGE_KEY);
-  const finalizedState = localState ? JSON.parse(localState) : {};
-  const [state, dispatch] = React.useReducer(
-    selectorReducer,
-    _.merge(initialState, finalizedState)
-  );
+  const [state, dispatch] = React.useReducer(selectorReducer, hydrateFromLocalState(initialState));
 
   React.useEffect(() => {
     console.log("effect"); // eslint-disable-line
@@ -166,15 +165,8 @@ const ProjectSelector = () => {
     });
 
     // Update!
+    writeToLocalState(state);
     updateSelected(dashState);
-    window.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        [Group.PROJECTS]: state[Group.PROJECTS],
-        [Group.UPSTREAM]: state[Group.UPSTREAM],
-        [Group.DOWNSTREAM]: state[Group.DOWNSTREAM],
-      })
-    );
   }, [state]);
 
   const handleAdd = () => {

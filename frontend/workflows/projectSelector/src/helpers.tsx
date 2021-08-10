@@ -1,9 +1,10 @@
 import * as React from "react";
 import _ from "lodash";
 
-import type { Action, ProjectState, State } from "./types";
+import type { Action, GroupState, LocalState, ProjectState, State } from "./types";
 import { Group } from "./types";
 
+const LOCAL_STORAGE_STATE_KEY = "dashState";
 const PROJECT_TYPE_URL = "type.googleapis.com/clutch.core.project.v1.Project";
 
 interface DependencyMappings {
@@ -154,14 +155,65 @@ const deriveStateData = (state: State): State => {
   return newState;
 };
 
+const writeToLocalState = (state: State) => {
+  const localState = {
+    [Group.PROJECTS]: state[Group.PROJECTS],
+    [Group.UPSTREAM]: state[Group.UPSTREAM],
+    [Group.DOWNSTREAM]: state[Group.DOWNSTREAM],
+  } as LocalState;
+  window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, JSON.stringify(localState));
+};
+
+const isProjectState = (state: ProjectState | object): state is ProjectState => {
+  return (state as ProjectState).checked !== undefined;
+};
+
+const isGroupState = (state: GroupState | object): state is GroupState => {
+  const projectStates = Object.values(state as GroupState);
+  return projectStates.filter(s => isProjectState(s)).length === projectStates.length;
+};
+
+const isLocalState = (state: LocalState | Object): state is LocalState => {
+  const localState = state as LocalState;
+  const projects = localState[Group.PROJECTS];
+  const upstream = localState[Group.UPSTREAM];
+  const downstream = localState[Group.DOWNSTREAM];
+
+  const hasProjects = projects !== undefined && isGroupState(projects);
+  const hasUpstream = upstream !== undefined && isGroupState(upstream);
+  const hasDownstream = downstream !== undefined && isGroupState(downstream);
+  return hasProjects && hasUpstream && hasDownstream;
+};
+
+const hydrateFromLocalState = (state: State): State => {
+  const rawLocalState = window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY);
+  if (!rawLocalState) {
+    return state;
+  }
+
+  try {
+    const localState = JSON.parse(rawLocalState);
+    if (isLocalState(localState)) {
+      return _.merge(state, localState);
+    }
+    window.localStorage.removeItem(LOCAL_STORAGE_STATE_KEY);
+
+    return state;
+  } catch {
+    return state;
+  }
+};
+
 export {
   deriveStateData,
   deriveSwitchStatus,
   DispatchContext,
   exclusiveProjectDependencies,
+  hydrateFromLocalState,
   PROJECT_TYPE_URL,
   StateContext,
   updateGroupstate,
   useDispatch,
   useReducerState,
+  writeToLocalState,
 };

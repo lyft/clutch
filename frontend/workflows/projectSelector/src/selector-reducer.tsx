@@ -7,7 +7,7 @@ import {
   PROJECT_TYPE_URL,
   updateGroupstate,
 } from "./helpers";
-import type { Action, State } from "./types";
+import type { Action, ProjectState, State } from "./types";
 import { Group } from "./types";
 
 const selectorReducer = (state: State, action: Action): State => {
@@ -32,7 +32,7 @@ const selectorReducer = (state: State, action: Action): State => {
         [action.payload.group]: {
           ...state[action.payload.group],
           ...Object.fromEntries(
-            uniqueCustomProjects.map(v => [v, { checked: true, custom: true }])
+            uniqueCustomProjects.map(v => [v, { checked: true, custom: true } as ProjectState])
           ),
         },
       };

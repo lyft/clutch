@@ -37,17 +37,19 @@ interface BackgroundPayload {
 
 export type Action = BackgroundAction | UserAction;
 
-export interface State {
+export interface LocalState {
   [Group.PROJECTS]: GroupState;
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
+}
 
+export interface State extends LocalState {
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
   loading: boolean;
   error: ClutchError | undefined;
 }
 
-interface GroupState {
+export interface GroupState {
   [projectName: string]: ProjectState;
 }
 
