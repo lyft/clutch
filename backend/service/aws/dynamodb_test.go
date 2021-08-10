@@ -42,7 +42,7 @@ var testTableOutput = &dynamodbv1.Table{
 		WriteCapacityUnits: 200,
 	},
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
-	Status:                 dynamodbv1.Status(4),
+	Status:                 dynamodbv1.Status(5),
 }
 
 var testDynamodbTableWithGSI = &types.TableDescription{
@@ -79,7 +79,7 @@ var testTableWithGSIOutput = &dynamodbv1.Table{
 			},
 		},
 	},
-	Status: dynamodbv1.Status(4),
+	Status: dynamodbv1.Status(5),
 }
 
 func TestDescribeTableValid(t *testing.T) {
