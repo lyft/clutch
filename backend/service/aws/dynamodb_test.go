@@ -31,6 +31,7 @@ var testDynamodbTable = &types.TableDescription{
 		WriteCapacityUnits: aws.Int64(200),
 	},
 	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{},
+	TableStatus:            "ACTIVE",
 }
 
 var testTableOutput = &dynamodbv1.Table{
@@ -41,6 +42,7 @@ var testTableOutput = &dynamodbv1.Table{
 		WriteCapacityUnits: 200,
 	},
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
+	Status:                 dynamodbv1.Status(4),
 }
 
 var testDynamodbTableWithGSI = &types.TableDescription{
@@ -58,6 +60,7 @@ var testDynamodbTableWithGSI = &types.TableDescription{
 			},
 		},
 	},
+	TableStatus: "ACTIVE",
 }
 
 var testTableWithGSIOutput = &dynamodbv1.Table{
@@ -76,6 +79,7 @@ var testTableWithGSIOutput = &dynamodbv1.Table{
 			},
 		},
 	},
+	Status: dynamodbv1.Status(4),
 }
 
 func TestDescribeTableValid(t *testing.T) {
@@ -155,6 +159,7 @@ func TestGetScalingLimitsCustom(t *testing.T) {
 	assert.Equal(t, ds.MaxScaleFactor, cfg.DynamodbConfig.ScalingLimits.MaxScaleFactor, "scale factor default set")
 	assert.False(t, ds.EnableOverride)
 }
+
 func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -190,16 +195,14 @@ func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
-	err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 201)
-	assert.NoError(t, err)
-
 	for _, tt := range tests {
 		tt := tt // capture range variable
 		t.Run(tt.name, func(t *testing.T) {
-			got := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
-			if got.Error() != tt.want {
-				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, got)
+			status, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
+			if err.Error() != tt.want {
+				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
+			assert.Nil(t, status)
 		})
 	}
 }
@@ -235,16 +238,14 @@ func TestUpdateTableCapacityWithCustomLimits(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
-	err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 201)
-	assert.NoError(t, err)
-
 	for _, tt := range tests {
 		tt := tt // capture range variable
 		t.Run(tt.name, func(t *testing.T) {
-			got := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
-			if got.Error() != tt.want {
-				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, got)
+			status, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
+			if err.Error() != tt.want {
+				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
+			assert.Nil(t, status)
 		})
 	}
 }
