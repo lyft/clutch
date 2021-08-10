@@ -83,7 +83,7 @@ func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) 
 func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Status {
 	value, ok := dynamodbv1.Status_value[string(s)]
 	if !ok {
-		return dynamodbv1.Status_UNSPECIFIED
+		return dynamodbv1.Status_UNKNOWN
 	}
 	return dynamodbv1.Status(value)
 }

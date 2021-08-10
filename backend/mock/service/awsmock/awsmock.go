@@ -111,13 +111,13 @@ func (s *svc) DescribeTable(ctx context.Context, region string, tableName string
 		Name:                  tableName,
 		Region:                region,
 		ProvisionedThroughput: currentThroughput,
-		Status:                dynamodbv1.Status(4),
+		Status:                dynamodbv1.Status(5),
 	}
 	return ret, nil
 }
 
 func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) (*dynamodbv1.Status, error) {
-	stat := dynamodbv1.Status(2)
+	stat := dynamodbv1.Status(3)
 	return &stat, nil
 }
 
