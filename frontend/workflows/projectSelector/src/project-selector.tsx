@@ -15,6 +15,8 @@ import selectorReducer from "./selector-reducer";
 import type { DashState, State } from "./types";
 import { Group } from "./types";
 
+const STORAGE_KEY = "dashState";
+
 const initialState: State = {
   [Group.PROJECTS]: {},
   [Group.UPSTREAM]: {},
@@ -62,7 +64,12 @@ const StyledProgressContainer = styled.div({
 const allPresent = (state: State): boolean => {
   let ret = true;
   // We could potentially check all groups but it's really not necessary since an upstream cannot be added manually.
-  _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+  const allProjects = [
+    ...Object.keys(state[Group.PROJECTS]),
+    ...Object.keys(state[Group.UPSTREAM]),
+    ...Object.keys(state[Group.DOWNSTREAM]),
+  ];
+  allProjects.forEach(p => {
     if (!(p in state.projectData)) {
       ret = false;
     }
@@ -80,7 +87,12 @@ const ProjectSelector = () => {
 
   const { updateSelected } = useDashUpdater();
 
-  const [state, dispatch] = React.useReducer(selectorReducer, initialState);
+  const localState = window.localStorage.getItem(STORAGE_KEY);
+  const finalizedState = localState ? JSON.parse(localState) : {};
+  const [state, dispatch] = React.useReducer(
+    selectorReducer,
+    _.merge(initialState, finalizedState)
+  );
 
   React.useEffect(() => {
     console.log("effect"); // eslint-disable-line
@@ -156,6 +168,14 @@ const ProjectSelector = () => {
 
     // Update!
     updateSelected(dashState);
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        [Group.PROJECTS]: state[Group.PROJECTS],
+        [Group.UPSTREAM]: state[Group.UPSTREAM],
+        [Group.DOWNSTREAM]: state[Group.DOWNSTREAM],
+      })
+    );
   }, [state]);
 
   const handleAdd = () => {
@@ -196,7 +216,7 @@ const ProjectSelector = () => {
                       description: "Send requests and receive responses from the selected project.",
                     },
                   ].map(item => (
-                    <TooltipContainer>
+                    <TooltipContainer key={item.title}>
                       <Typography variant="subtitle3" color="#FFFFFF">
                         {item.title}
                       </Typography>
