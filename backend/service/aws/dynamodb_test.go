@@ -160,6 +160,33 @@ func TestGetScalingLimitsCustom(t *testing.T) {
 	assert.False(t, ds.EnableOverride)
 }
 
+func TestUpdateTableSuccess(t *testing.T) {
+	m := &mockDynamodb{
+		table: testDynamodbTable,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	got, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 202)
+	assert.NotNil(t, got)
+	assert.Nil(t, err)
+
+}
+
 func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -277,7 +304,6 @@ func (m *mockDynamodb) UpdateTable(ctx context.Context, params *dynamodb.UpdateT
 		return nil, m.updateErr
 	}
 
-	// ret := m.update
 	ret := &dynamodb.UpdateTableOutput{
 		TableDescription: &types.TableDescription{
 			TableStatus: m.updateStatus,
