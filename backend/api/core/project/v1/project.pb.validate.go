@@ -71,6 +71,16 @@ func (m *Project) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetPagerduty()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ProjectValidationError{
+				field:  "Pagerduty",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -292,3 +302,67 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DependencyValidationError{}
+
+// Validate checks the field values on Pagerduty with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Pagerduty) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// PagerdutyValidationError is the validation error returned by
+// Pagerduty.Validate if the designated constraints aren't met.
+type PagerdutyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PagerdutyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PagerdutyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PagerdutyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PagerdutyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PagerdutyValidationError) ErrorName() string { return "PagerdutyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PagerdutyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPagerduty.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PagerdutyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PagerdutyValidationError{}
