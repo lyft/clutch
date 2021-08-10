@@ -29,10 +29,24 @@ func TestModule(t *testing.T) {
 	assert.True(t, r.JSONRegistered())
 }
 
+var testUpdateTableCapacityResponse = &dynamodbv1.UpdateTableCapacityResponse{
+	TableName:   "",
+	TableStatus: 2,
+}
+
 func TestDDBAPIDescribeTable(t *testing.T) {
 	c := awsmock.New()
 	api := newDDBAPI(c)
 	resp, err := api.DescribeTable(context.Background(), &dynamodbv1.DescribeTableRequest{})
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
+}
+
+func TestDDBAPIUpdateTableCapacity(t *testing.T) {
+	c := awsmock.New()
+	api := newDDBAPI(c)
+	resp, err := api.UpdateTableCapacity(context.Background(), &dynamodbv1.UpdateTableCapacityRequest{})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, testUpdateTableCapacityResponse, resp)
 }
