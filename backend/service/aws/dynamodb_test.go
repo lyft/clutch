@@ -184,7 +184,6 @@ func TestUpdateTableSuccess(t *testing.T) {
 	got, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 202)
 	assert.NotNil(t, got)
 	assert.Nil(t, err)
-
 }
 
 func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
