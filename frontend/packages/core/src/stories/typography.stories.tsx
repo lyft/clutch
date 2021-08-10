@@ -14,12 +14,14 @@ export default {
     },
     color: {
       control: { type: "color" },
-    }
+    },
   },
 } as Meta;
 
 const Template: Story<TypographyProps> = ({ variant, children, ...props }) => (
-  <Typography variant={variant} {...props}>{children}</Typography>
+  <Typography variant={variant} {...props}>
+    {children}
+  </Typography>
 );
 
 export const Primary = Template.bind({});
