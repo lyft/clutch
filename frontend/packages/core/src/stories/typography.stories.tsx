@@ -12,11 +12,14 @@ export default {
       options: VARIANTS,
       control: { type: "select" },
     },
+    color: {
+      control: { type: "color" },
+    }
   },
 } as Meta;
 
-const Template: Story<TypographyProps> = ({ variant, children }) => (
-  <Typography variant={variant}>{children}</Typography>
+const Template: Story<TypographyProps> = ({ variant, children, ...props }) => (
+  <Typography variant={variant} {...props}>{children}</Typography>
 );
 
 export const Primary = Template.bind({});
