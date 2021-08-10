@@ -132,12 +132,10 @@ export interface TypographyProps {
   color?: string;
 }
 
-const Typography = ({ variant, children, color = "#0D1030" }: TypographyProps) => {
-  return (
-    <StyledTypography variant={variant} color={color}>
-      {children}
-    </StyledTypography>
-  );
-};
+const Typography = ({ variant, children, color = "#0D1030" }: TypographyProps) => (
+  <StyledTypography variant={variant} color={color}>
+    {children}
+  </StyledTypography>
+);
 
 export { StyledTypography, Typography };
