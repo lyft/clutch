@@ -256,8 +256,8 @@ type mockDynamodb struct {
 	tableErr error
 	table    *types.TableDescription
 
-	updateErr error
-	update    *dynamodb.UpdateTableOutput
+	updateErr    error
+	updateStatus types.TableStatus
 }
 
 func (m *mockDynamodb) DescribeTable(ctx context.Context, params *dynamodb.DescribeTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeTableOutput, error) {
@@ -276,7 +276,13 @@ func (m *mockDynamodb) UpdateTable(ctx context.Context, params *dynamodb.UpdateT
 	if m.updateErr != nil {
 		return nil, m.updateErr
 	}
-	ret := m.update
+
+	// ret := m.update
+	ret := &dynamodb.UpdateTableOutput{
+		TableDescription: &types.TableDescription{
+			TableStatus: m.updateStatus,
+		},
+	}
 
 	return ret, nil
 }
