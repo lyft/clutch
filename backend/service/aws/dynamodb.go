@@ -55,11 +55,14 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 
 	globalSecondaryIndexes := getGlobalSecondaryIndexes(result.Table.GlobalSecondaryIndexes)
 
+	status := newProtoForTableStatus(result.Table.TableStatus)
+
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(result.Table.TableName),
 		Region:                 region,
 		GlobalSecondaryIndexes: globalSecondaryIndexes,
 		ProvisionedThroughput:  currentCapacity,
+		Status:                 status,
 	}
 	return ret, nil
 }
@@ -75,6 +78,15 @@ func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) 
 		gsis[idx] = newProtoForGlobalSecondaryIndex(i)
 	}
 	return gsis
+}
+
+func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Status {
+	// str := string(s)
+	value, ok := dynamodbv1.Status_value[string(s)]
+	if !ok {
+		return dynamodbv1.Status_UNSPECIFIED
+	}
+	return dynamodbv1.Status(value)
 }
 
 func newProtoForGlobalSecondaryIndex(index types.GlobalSecondaryIndexDescription) *dynamodbv1.GlobalSecondaryIndex {
@@ -116,17 +128,17 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
-func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) error {
+func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (*dynamodbv1.Status, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
 		c.log.Error("unable to get regional client", zap.Error(err))
-		return err
+		return nil, err
 	}
 
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
 		c.log.Error("unable to find table", zap.Error(err))
-		return err
+		return nil, err
 	}
 
 	targetCapacity := types.ProvisionedThroughput{
@@ -137,7 +149,7 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 	err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, targetCapacity)
 	if err != nil {
 		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
-		return err
+		return nil, err
 	}
 
 	input := &dynamodb.UpdateTableInput{
@@ -145,6 +157,14 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 		ProvisionedThroughput: &targetCapacity,
 	}
 
-	_, err = cl.dynamodb.UpdateTable(ctx, input)
-	return err
+	result, err := cl.dynamodb.UpdateTable(ctx, input)
+
+	if err != nil {
+		c.log.Error("update table failed", zap.Error(err))
+		return nil, err
+	}
+
+	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+
+	return &tableStatus, nil
 }
