@@ -55,22 +55,14 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 
 	globalSecondaryIndexes := getGlobalSecondaryIndexes(result.Table.GlobalSecondaryIndexes)
 
-<<<<<<< HEAD
 	tableStatus := newProtoForTableStatus(result.Table.TableStatus)
-=======
-	status := newProtoForTableStatus(result.Table.TableStatus)
->>>>>>> feat: update table response returns status
 
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(result.Table.TableName),
 		Region:                 region,
 		GlobalSecondaryIndexes: globalSecondaryIndexes,
 		ProvisionedThroughput:  currentCapacity,
-<<<<<<< HEAD
 		Status:                 tableStatus,
-=======
-		Status:                 status,
->>>>>>> feat: update table response returns status
 	}
 	return ret, nil
 }
@@ -89,16 +81,9 @@ func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) 
 }
 
 func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Status {
-<<<<<<< HEAD
 	value, ok := dynamodbv1.Status_value[string(s)]
 	if !ok {
 		return dynamodbv1.Status_UNKNOWN
-=======
-	// str := string(s)
-	value, ok := dynamodbv1.Status_value[string(s)]
-	if !ok {
-		return dynamodbv1.Status_UNSPECIFIED
->>>>>>> feat: update table response returns status
 	}
 	return dynamodbv1.Status(value)
 }
@@ -142,29 +127,17 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
-<<<<<<< HEAD
 func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
 		c.log.Error("unable to get regional client", zap.Error(err))
 		return 0, err
-=======
-func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (*dynamodbv1.Status, error) {
-	cl, err := c.getRegionalClient(region)
-	if err != nil {
-		c.log.Error("unable to get regional client", zap.Error(err))
-		return nil, err
->>>>>>> feat: update table response returns status
 	}
 
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
 		c.log.Error("unable to find table", zap.Error(err))
-<<<<<<< HEAD
 		return 0, err
-=======
-		return nil, err
->>>>>>> feat: update table response returns status
 	}
 
 	targetCapacity := types.ProvisionedThroughput{
@@ -175,11 +148,7 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 	err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, targetCapacity)
 	if err != nil {
 		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
-<<<<<<< HEAD
 		return 0, err
-=======
-		return nil, err
->>>>>>> feat: update table response returns status
 	}
 
 	input := &dynamodb.UpdateTableInput{
@@ -191,18 +160,10 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 
 	if err != nil {
 		c.log.Error("update table failed", zap.Error(err))
-<<<<<<< HEAD
 		return 0, err
-=======
-		return nil, err
->>>>>>> feat: update table response returns status
 	}
 
 	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
 
-<<<<<<< HEAD
 	return tableStatus, nil
-=======
-	return &tableStatus, nil
->>>>>>> feat: update table response returns status
 }
