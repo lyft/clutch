@@ -3951,24 +3951,26 @@ export const clutch = $root.clutch = (() => {
                  * @name clutch.aws.dynamodb.v1.Status
                  * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                 * @property {number} CREATING=1 CREATING value
-                 * @property {number} UPDATING=2 UPDATING value
-                 * @property {number} DELETING=3 DELETING value
-                 * @property {number} ACTIVE=4 ACTIVE value
-                 * @property {number} INACCESSIBLE_ENCRYPTION_CREDENTIALS=5 INACCESSIBLE_ENCRYPTION_CREDENTIALS value
-                 * @property {number} ARCHIVING=6 ARCHIVING value
-                 * @property {number} ARCHIVED=7 ARCHIVED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} CREATING=2 CREATING value
+                 * @property {number} UPDATING=3 UPDATING value
+                 * @property {number} DELETING=4 DELETING value
+                 * @property {number} ACTIVE=5 ACTIVE value
+                 * @property {number} INACCESSIBLE_ENCRYPTION_CREDENTIALS=6 INACCESSIBLE_ENCRYPTION_CREDENTIALS value
+                 * @property {number} ARCHIVING=7 ARCHIVING value
+                 * @property {number} ARCHIVED=8 ARCHIVED value
                  */
                 v1.Status = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
                     values[valuesById[0] = "UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "CREATING"] = 1;
-                    values[valuesById[2] = "UPDATING"] = 2;
-                    values[valuesById[3] = "DELETING"] = 3;
-                    values[valuesById[4] = "ACTIVE"] = 4;
-                    values[valuesById[5] = "INACCESSIBLE_ENCRYPTION_CREDENTIALS"] = 5;
-                    values[valuesById[6] = "ARCHIVING"] = 6;
-                    values[valuesById[7] = "ARCHIVED"] = 7;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "CREATING"] = 2;
+                    values[valuesById[3] = "UPDATING"] = 3;
+                    values[valuesById[4] = "DELETING"] = 4;
+                    values[valuesById[5] = "ACTIVE"] = 5;
+                    values[valuesById[6] = "INACCESSIBLE_ENCRYPTION_CREDENTIALS"] = 6;
+                    values[valuesById[7] = "ARCHIVING"] = 7;
+                    values[valuesById[8] = "ARCHIVED"] = 8;
                     return values;
                 })();
 
@@ -4084,6 +4086,7 @@ export const clutch = $root.clutch = (() => {
                             case 5:
                             case 6:
                             case 7:
+                            case 8:
                                 break;
                             }
                         return null;
@@ -4125,33 +4128,37 @@ export const clutch = $root.clutch = (() => {
                         case 0:
                             message.status = 0;
                             break;
-                        case "CREATING":
+                        case "UNKNOWN":
                         case 1:
                             message.status = 1;
                             break;
-                        case "UPDATING":
+                        case "CREATING":
                         case 2:
                             message.status = 2;
                             break;
-                        case "DELETING":
+                        case "UPDATING":
                         case 3:
                             message.status = 3;
                             break;
-                        case "ACTIVE":
+                        case "DELETING":
                         case 4:
                             message.status = 4;
                             break;
-                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
+                        case "ACTIVE":
                         case 5:
                             message.status = 5;
                             break;
-                        case "ARCHIVING":
+                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
                         case 6:
                             message.status = 6;
                             break;
-                        case "ARCHIVED":
+                        case "ARCHIVING":
                         case 7:
                             message.status = 7;
+                            break;
+                        case "ARCHIVED":
+                        case 8:
+                            message.status = 8;
                             break;
                         }
                         return message;
@@ -4947,6 +4954,7 @@ export const clutch = $root.clutch = (() => {
                             case 5:
                             case 6:
                             case 7:
+                            case 8:
                                 break;
                             }
                         return null;
@@ -4971,33 +4979,37 @@ export const clutch = $root.clutch = (() => {
                         case 0:
                             message.tableStatus = 0;
                             break;
-                        case "CREATING":
+                        case "UNKNOWN":
                         case 1:
                             message.tableStatus = 1;
                             break;
-                        case "UPDATING":
+                        case "CREATING":
                         case 2:
                             message.tableStatus = 2;
                             break;
-                        case "DELETING":
+                        case "UPDATING":
                         case 3:
                             message.tableStatus = 3;
                             break;
-                        case "ACTIVE":
+                        case "DELETING":
                         case 4:
                             message.tableStatus = 4;
                             break;
-                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
+                        case "ACTIVE":
                         case 5:
                             message.tableStatus = 5;
                             break;
-                        case "ARCHIVING":
+                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
                         case 6:
                             message.tableStatus = 6;
                             break;
-                        case "ARCHIVED":
+                        case "ARCHIVING":
                         case 7:
                             message.tableStatus = 7;
+                            break;
+                        case "ARCHIVED":
+                        case 8:
+                            message.tableStatus = 8;
                             break;
                         }
                         return message;
@@ -5317,6 +5329,7 @@ export const clutch = $root.clutch = (() => {
                             case 5:
                             case 6:
                             case 7:
+                            case 8:
                                 break;
                             }
                         return null;
@@ -5343,33 +5356,37 @@ export const clutch = $root.clutch = (() => {
                         case 0:
                             message.tableStatus = 0;
                             break;
-                        case "CREATING":
+                        case "UNKNOWN":
                         case 1:
                             message.tableStatus = 1;
                             break;
-                        case "UPDATING":
+                        case "CREATING":
                         case 2:
                             message.tableStatus = 2;
                             break;
-                        case "DELETING":
+                        case "UPDATING":
                         case 3:
                             message.tableStatus = 3;
                             break;
-                        case "ACTIVE":
+                        case "DELETING":
                         case 4:
                             message.tableStatus = 4;
                             break;
-                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
+                        case "ACTIVE":
                         case 5:
                             message.tableStatus = 5;
                             break;
-                        case "ARCHIVING":
+                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
                         case 6:
                             message.tableStatus = 6;
                             break;
-                        case "ARCHIVED":
+                        case "ARCHIVING":
                         case 7:
                             message.tableStatus = 7;
+                            break;
+                        case "ARCHIVED":
+                        case 8:
+                            message.tableStatus = 8;
                             break;
                         }
                         return message;

@@ -1737,13 +1737,14 @@ export namespace clutch {
                 /** Status enum. */
                 enum Status {
                     UNSPECIFIED = 0,
-                    CREATING = 1,
-                    UPDATING = 2,
-                    DELETING = 3,
-                    ACTIVE = 4,
-                    INACCESSIBLE_ENCRYPTION_CREDENTIALS = 5,
-                    ARCHIVING = 6,
-                    ARCHIVED = 7
+                    UNKNOWN = 1,
+                    CREATING = 2,
+                    UPDATING = 3,
+                    DELETING = 4,
+                    ACTIVE = 5,
+                    INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6,
+                    ARCHIVING = 7,
+                    ARCHIVED = 8
                 }
 
                 /** Properties of a Table. */
