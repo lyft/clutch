@@ -10494,8 +10494,8 @@ export namespace clutch {
                     /** Project dependencies */
                     dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
 
-                    /** Project pagerduty */
-                    pagerduty?: (clutch.core.project.v1.IPagerduty|null);
+                    /** Project alerts */
+                    alerts?: (clutch.core.project.v1.IAlerts|null);
                 }
 
                 /** Represents a Project. */
@@ -10525,8 +10525,8 @@ export namespace clutch {
                     /** Project dependencies. */
                     public dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
 
-                    /** Project pagerduty. */
-                    public pagerduty?: (clutch.core.project.v1.IPagerduty|null);
+                    /** Project alerts. */
+                    public alerts?: (clutch.core.project.v1.IAlerts|null);
 
                     /**
                      * Verifies a Project message.
@@ -10659,49 +10659,97 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a Pagerduty. */
-                interface IPagerduty {
+                /** Properties of an Alerts. */
+                interface IAlerts {
 
-                    /** Pagerduty serviceIds */
-                    serviceIds?: (string[]|null);
+                    /** Alerts pagerduty */
+                    pagerduty?: (clutch.core.project.v1.IPagerDuty|null);
                 }
 
-                /** Represents a Pagerduty. */
-                class Pagerduty implements IPagerduty {
+                /** Represents an Alerts. */
+                class Alerts implements IAlerts {
 
                     /**
-                     * Constructs a new Pagerduty.
+                     * Constructs a new Alerts.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.core.project.v1.IPagerduty);
+                    constructor(properties?: clutch.core.project.v1.IAlerts);
 
-                    /** Pagerduty serviceIds. */
-                    public serviceIds: string[];
+                    /** Alerts pagerduty. */
+                    public pagerduty?: (clutch.core.project.v1.IPagerDuty|null);
 
                     /**
-                     * Verifies a Pagerduty message.
+                     * Verifies an Alerts message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a Pagerduty message from a plain object. Also converts values to their respective internal types.
+                     * Creates an Alerts message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns Pagerduty
+                     * @returns Alerts
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Pagerduty;
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Alerts;
 
                     /**
-                     * Creates a plain object from a Pagerduty message. Also converts values to other types if specified.
-                     * @param message Pagerduty
+                     * Creates a plain object from an Alerts message. Also converts values to other types if specified.
+                     * @param message Alerts
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.core.project.v1.Pagerduty, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.core.project.v1.Alerts, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this Pagerduty to JSON.
+                     * Converts this Alerts to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a PagerDuty. */
+                interface IPagerDuty {
+
+                    /** PagerDuty serviceIds */
+                    serviceIds?: (string[]|null);
+                }
+
+                /** Represents a PagerDuty. */
+                class PagerDuty implements IPagerDuty {
+
+                    /**
+                     * Constructs a new PagerDuty.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IPagerDuty);
+
+                    /** PagerDuty serviceIds. */
+                    public serviceIds: string[];
+
+                    /**
+                     * Verifies a PagerDuty message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a PagerDuty message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns PagerDuty
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.PagerDuty;
+
+                    /**
+                     * Creates a plain object from a PagerDuty message. Also converts values to other types if specified.
+                     * @param message PagerDuty
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.PagerDuty, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this PagerDuty to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

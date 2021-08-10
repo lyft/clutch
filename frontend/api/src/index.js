@@ -25213,7 +25213,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Array.<string>|null} [languages] Project languages
                      * @property {Object.<string,google.protobuf.IValue>|null} [data] Project data
                      * @property {clutch.core.project.v1.IProjectDependencies|null} [dependencies] Project dependencies
-                     * @property {clutch.core.project.v1.IPagerduty|null} [pagerduty] Project pagerduty
+                     * @property {clutch.core.project.v1.IAlerts|null} [alerts] Project alerts
                      */
 
                     /**
@@ -25283,12 +25283,12 @@ export const clutch = $root.clutch = (() => {
                     Project.prototype.dependencies = null;
 
                     /**
-                     * Project pagerduty.
-                     * @member {clutch.core.project.v1.IPagerduty|null|undefined} pagerduty
+                     * Project alerts.
+                     * @member {clutch.core.project.v1.IAlerts|null|undefined} alerts
                      * @memberof clutch.core.project.v1.Project
                      * @instance
                      */
-                    Project.prototype.pagerduty = null;
+                    Project.prototype.alerts = null;
 
                     /**
                      * Verifies a Project message.
@@ -25336,10 +25336,10 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "dependencies." + error;
                         }
-                        if (message.pagerduty != null && message.hasOwnProperty("pagerduty")) {
-                            let error = $root.clutch.core.project.v1.Pagerduty.verify(message.pagerduty);
+                        if (message.alerts != null && message.hasOwnProperty("alerts")) {
+                            let error = $root.clutch.core.project.v1.Alerts.verify(message.alerts);
                             if (error)
-                                return "pagerduty." + error;
+                                return "alerts." + error;
                         }
                         return null;
                     };
@@ -25389,10 +25389,10 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.core.project.v1.Project.dependencies: object expected");
                             message.dependencies = $root.clutch.core.project.v1.ProjectDependencies.fromObject(object.dependencies);
                         }
-                        if (object.pagerduty != null) {
-                            if (typeof object.pagerduty !== "object")
-                                throw TypeError(".clutch.core.project.v1.Project.pagerduty: object expected");
-                            message.pagerduty = $root.clutch.core.project.v1.Pagerduty.fromObject(object.pagerduty);
+                        if (object.alerts != null) {
+                            if (typeof object.alerts !== "object")
+                                throw TypeError(".clutch.core.project.v1.Project.alerts: object expected");
+                            message.alerts = $root.clutch.core.project.v1.Alerts.fromObject(object.alerts);
                         }
                         return message;
                     };
@@ -25420,7 +25420,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.tier = "";
                             object.dependencies = null;
-                            object.pagerduty = null;
+                            object.alerts = null;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -25444,8 +25444,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (message.dependencies != null && message.hasOwnProperty("dependencies"))
                             object.dependencies = $root.clutch.core.project.v1.ProjectDependencies.toObject(message.dependencies, options);
-                        if (message.pagerduty != null && message.hasOwnProperty("pagerduty"))
-                            object.pagerduty = $root.clutch.core.project.v1.Pagerduty.toObject(message.pagerduty, options);
+                        if (message.alerts != null && message.hasOwnProperty("alerts"))
+                            object.alerts = $root.clutch.core.project.v1.Alerts.toObject(message.alerts, options);
                         return object;
                     };
 
@@ -25733,24 +25733,129 @@ export const clutch = $root.clutch = (() => {
                     return Dependency;
                 })();
 
-                v1.Pagerduty = (function() {
+                v1.Alerts = (function() {
 
                     /**
-                     * Properties of a Pagerduty.
+                     * Properties of an Alerts.
                      * @memberof clutch.core.project.v1
-                     * @interface IPagerduty
-                     * @property {Array.<string>|null} [serviceIds] Pagerduty serviceIds
+                     * @interface IAlerts
+                     * @property {clutch.core.project.v1.IPagerDuty|null} [pagerduty] Alerts pagerduty
                      */
 
                     /**
-                     * Constructs a new Pagerduty.
+                     * Constructs a new Alerts.
                      * @memberof clutch.core.project.v1
-                     * @classdesc Represents a Pagerduty.
-                     * @implements IPagerduty
+                     * @classdesc Represents an Alerts.
+                     * @implements IAlerts
                      * @constructor
-                     * @param {clutch.core.project.v1.IPagerduty=} [properties] Properties to set
+                     * @param {clutch.core.project.v1.IAlerts=} [properties] Properties to set
                      */
-                    function Pagerduty(properties) {
+                    function Alerts(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Alerts pagerduty.
+                     * @member {clutch.core.project.v1.IPagerDuty|null|undefined} pagerduty
+                     * @memberof clutch.core.project.v1.Alerts
+                     * @instance
+                     */
+                    Alerts.prototype.pagerduty = null;
+
+                    /**
+                     * Verifies an Alerts message.
+                     * @function verify
+                     * @memberof clutch.core.project.v1.Alerts
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Alerts.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.pagerduty != null && message.hasOwnProperty("pagerduty")) {
+                            let error = $root.clutch.core.project.v1.PagerDuty.verify(message.pagerduty);
+                            if (error)
+                                return "pagerduty." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an Alerts message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.core.project.v1.Alerts
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.core.project.v1.Alerts} Alerts
+                     */
+                    Alerts.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.project.v1.Alerts)
+                            return object;
+                        let message = new $root.clutch.core.project.v1.Alerts();
+                        if (object.pagerduty != null) {
+                            if (typeof object.pagerduty !== "object")
+                                throw TypeError(".clutch.core.project.v1.Alerts.pagerduty: object expected");
+                            message.pagerduty = $root.clutch.core.project.v1.PagerDuty.fromObject(object.pagerduty);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an Alerts message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.core.project.v1.Alerts
+                     * @static
+                     * @param {clutch.core.project.v1.Alerts} message Alerts
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Alerts.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.pagerduty = null;
+                        if (message.pagerduty != null && message.hasOwnProperty("pagerduty"))
+                            object.pagerduty = $root.clutch.core.project.v1.PagerDuty.toObject(message.pagerduty, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Alerts to JSON.
+                     * @function toJSON
+                     * @memberof clutch.core.project.v1.Alerts
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Alerts.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Alerts;
+                })();
+
+                v1.PagerDuty = (function() {
+
+                    /**
+                     * Properties of a PagerDuty.
+                     * @memberof clutch.core.project.v1
+                     * @interface IPagerDuty
+                     * @property {Array.<string>|null} [serviceIds] PagerDuty serviceIds
+                     */
+
+                    /**
+                     * Constructs a new PagerDuty.
+                     * @memberof clutch.core.project.v1
+                     * @classdesc Represents a PagerDuty.
+                     * @implements IPagerDuty
+                     * @constructor
+                     * @param {clutch.core.project.v1.IPagerDuty=} [properties] Properties to set
+                     */
+                    function PagerDuty(properties) {
                         this.serviceIds = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -25759,22 +25864,22 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Pagerduty serviceIds.
+                     * PagerDuty serviceIds.
                      * @member {Array.<string>} serviceIds
-                     * @memberof clutch.core.project.v1.Pagerduty
+                     * @memberof clutch.core.project.v1.PagerDuty
                      * @instance
                      */
-                    Pagerduty.prototype.serviceIds = $util.emptyArray;
+                    PagerDuty.prototype.serviceIds = $util.emptyArray;
 
                     /**
-                     * Verifies a Pagerduty message.
+                     * Verifies a PagerDuty message.
                      * @function verify
-                     * @memberof clutch.core.project.v1.Pagerduty
+                     * @memberof clutch.core.project.v1.PagerDuty
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    Pagerduty.verify = function verify(message) {
+                    PagerDuty.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.serviceIds != null && message.hasOwnProperty("serviceIds")) {
@@ -25788,20 +25893,20 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a Pagerduty message from a plain object. Also converts values to their respective internal types.
+                     * Creates a PagerDuty message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.core.project.v1.Pagerduty
+                     * @memberof clutch.core.project.v1.PagerDuty
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.core.project.v1.Pagerduty} Pagerduty
+                     * @returns {clutch.core.project.v1.PagerDuty} PagerDuty
                      */
-                    Pagerduty.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.core.project.v1.Pagerduty)
+                    PagerDuty.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.project.v1.PagerDuty)
                             return object;
-                        let message = new $root.clutch.core.project.v1.Pagerduty();
+                        let message = new $root.clutch.core.project.v1.PagerDuty();
                         if (object.serviceIds) {
                             if (!Array.isArray(object.serviceIds))
-                                throw TypeError(".clutch.core.project.v1.Pagerduty.serviceIds: array expected");
+                                throw TypeError(".clutch.core.project.v1.PagerDuty.serviceIds: array expected");
                             message.serviceIds = [];
                             for (let i = 0; i < object.serviceIds.length; ++i)
                                 message.serviceIds[i] = String(object.serviceIds[i]);
@@ -25810,15 +25915,15 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a plain object from a Pagerduty message. Also converts values to other types if specified.
+                     * Creates a plain object from a PagerDuty message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.core.project.v1.Pagerduty
+                     * @memberof clutch.core.project.v1.PagerDuty
                      * @static
-                     * @param {clutch.core.project.v1.Pagerduty} message Pagerduty
+                     * @param {clutch.core.project.v1.PagerDuty} message PagerDuty
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    Pagerduty.toObject = function toObject(message, options) {
+                    PagerDuty.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -25833,17 +25938,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this Pagerduty to JSON.
+                     * Converts this PagerDuty to JSON.
                      * @function toJSON
-                     * @memberof clutch.core.project.v1.Pagerduty
+                     * @memberof clutch.core.project.v1.PagerDuty
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    Pagerduty.prototype.toJSON = function toJSON() {
+                    PagerDuty.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return Pagerduty;
+                    return PagerDuty;
                 })();
 
                 return v1;

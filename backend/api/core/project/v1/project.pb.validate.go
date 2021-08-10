@@ -71,10 +71,10 @@ func (m *Project) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetPagerduty()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetAlerts()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ProjectValidationError{
-				field:  "Pagerduty",
+				field:  "Alerts",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -303,19 +303,29 @@ var _ interface {
 	ErrorName() string
 } = DependencyValidationError{}
 
-// Validate checks the field values on Pagerduty with the rules defined in the
+// Validate checks the field values on Alerts with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
-func (m *Pagerduty) Validate() error {
+func (m *Alerts) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if v, ok := interface{}(m.GetPagerduty()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return AlertsValidationError{
+				field:  "Pagerduty",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	return nil
 }
 
-// PagerdutyValidationError is the validation error returned by
-// Pagerduty.Validate if the designated constraints aren't met.
-type PagerdutyValidationError struct {
+// AlertsValidationError is the validation error returned by Alerts.Validate if
+// the designated constraints aren't met.
+type AlertsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -323,22 +333,22 @@ type PagerdutyValidationError struct {
 }
 
 // Field function returns field value.
-func (e PagerdutyValidationError) Field() string { return e.field }
+func (e AlertsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PagerdutyValidationError) Reason() string { return e.reason }
+func (e AlertsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PagerdutyValidationError) Cause() error { return e.cause }
+func (e AlertsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PagerdutyValidationError) Key() bool { return e.key }
+func (e AlertsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PagerdutyValidationError) ErrorName() string { return "PagerdutyValidationError" }
+func (e AlertsValidationError) ErrorName() string { return "AlertsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e PagerdutyValidationError) Error() string {
+func (e AlertsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -350,14 +360,14 @@ func (e PagerdutyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPagerduty.%s: %s%s",
+		"invalid %sAlerts.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PagerdutyValidationError{}
+var _ error = AlertsValidationError{}
 
 var _ interface {
 	Field() string
@@ -365,4 +375,68 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PagerdutyValidationError{}
+} = AlertsValidationError{}
+
+// Validate checks the field values on PagerDuty with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *PagerDuty) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// PagerDutyValidationError is the validation error returned by
+// PagerDuty.Validate if the designated constraints aren't met.
+type PagerDutyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PagerDutyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PagerDutyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PagerDutyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PagerDutyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PagerDutyValidationError) ErrorName() string { return "PagerDutyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PagerDutyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPagerDuty.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PagerDutyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PagerDutyValidationError{}
