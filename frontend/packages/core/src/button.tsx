@@ -117,7 +117,7 @@ const StyledIconButton = styled(MuiIconButton)({
   },
 });
 
-export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type"> {
+export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   children: React.ReactElement;
 }
 
