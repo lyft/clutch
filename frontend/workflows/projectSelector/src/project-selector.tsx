@@ -63,7 +63,6 @@ const StyledProgressContainer = styled.div({
 // Determines if every project has projectData (i.e. the effect has finished fetching the data)
 const allPresent = (state: State): boolean => {
   let ret = true;
-  // We could potentially check all groups but it's really not necessary since an upstream cannot be added manually.
   const allProjects = [
     ...Object.keys(state[Group.PROJECTS]),
     ...Object.keys(state[Group.UPSTREAM]),
