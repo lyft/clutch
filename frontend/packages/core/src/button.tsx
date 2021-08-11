@@ -129,7 +129,7 @@ export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "
   children: React.ReactElement;
 }
 
-const IconButton = ({ variant, children, ...props }: IconButtonProps) => {
+const IconButton = ({ variant = "primary", children, ...props }: IconButtonProps) => {
   const color = variant === "destructive" ? "danger" : variant;
 
   return (
