@@ -1,9 +1,18 @@
 import * as React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
-import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
+import {
+  client,
+  IconButton,
+  TextField,
+  Tooltip,
+  TooltipContainer,
+  Typography,
+  userId,
+} from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
@@ -24,17 +33,25 @@ const initialState: State = {
   error: undefined,
 };
 
-const StyledSelectorContainer = styled.div({
-  backgroundColor: "#F9FAFE",
-  borderRight: "1px solid rgba(13, 16, 48, 0.1)",
-  boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
-  width: "245px",
-});
+const StyledSelectorContainer = styled.div<{ full: boolean }>(
+  {
+    backgroundColor: "#F9FAFE",
+    borderRight: "1px solid rgba(13, 16, 48, 0.1)",
+    boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
+  },
+  props => ({
+    width: props.full ? "100%" : "245px",
+  })
+);
 
 const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
   display: "flex",
   alignItems: "center",
+});
+
+const StyledSpacer = styled.div({
+  flex: "1",
 });
 
 const StyledWorkflowTitle = styled.span({
@@ -71,15 +88,17 @@ const allPresent = (state: State): boolean => {
   return ret;
 };
 
-const ProjectSelector = () => {
+interface ProjectSelectorProps {
+  fullScreen?: boolean;
+  onClose?: () => void;
+}
+
+const ProjectSelector = ({ fullScreen = false, onClose }: ProjectSelectorProps) => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
-
   const [customProject, setCustomProject] = React.useState("");
-
   const { updateSelected } = useDashUpdater();
-
   const [state, dispatch] = React.useReducer(selectorReducer, initialState);
 
   React.useEffect(() => {
@@ -174,7 +193,7 @@ const ProjectSelector = () => {
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={derivedState}>
-        <StyledSelectorContainer>
+        <StyledSelectorContainer full={fullScreen}>
           <StyledWorkflowHeader>
             <LayersOutlinedIcon fontSize="small" />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
@@ -213,6 +232,14 @@ const ProjectSelector = () => {
             >
               <InfoOutlinedIcon fontSize="small" />
             </Tooltip>
+            {onClose && (
+              <>
+                <StyledSpacer />
+                <IconButton variant="neutral" onClick={onClose}>
+                  <CloseIcon />
+                </IconButton>
+              </>
+            )}
           </StyledWorkflowHeader>
           <StyledProgressContainer>
             {state.loading && <LinearProgress color="secondary" />}
