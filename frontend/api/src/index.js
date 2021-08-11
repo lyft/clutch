@@ -48407,45 +48407,43 @@ export const clutch = $root.clutch = (() => {
         return resolver;
     })();
 
-    clutch.timeline = (function() {
+    clutch.timeseries = (function() {
 
         /**
-         * Namespace timeline.
+         * Namespace timeseries.
          * @memberof clutch
          * @namespace
          */
-        const timeline = {};
+        const timeseries = {};
 
-        timeline.v1 = (function() {
+        timeseries.v1 = (function() {
 
             /**
              * Namespace v1.
-             * @memberof clutch.timeline
+             * @memberof clutch.timeseries
              * @namespace
              */
             const v1 = {};
 
-            v1.TimeseriesData = (function() {
+            v1.TimeRange = (function() {
 
                 /**
-                 * Properties of a TimeseriesData.
-                 * @memberof clutch.timeline.v1
-                 * @interface ITimeseriesData
-                 * @property {string|null} [projectName] TimeseriesData projectName
-                 * @property {number|Long|null} [startTimeMillis] TimeseriesData startTimeMillis
-                 * @property {number|Long|null} [endTimeMillis] TimeseriesData endTimeMillis
-                 * @property {google.protobuf.IAny|null} [eventInfo] TimeseriesData eventInfo
+                 * Properties of a TimeRange.
+                 * @memberof clutch.timeseries.v1
+                 * @interface ITimeRange
+                 * @property {number|Long|null} [startTimeMillis] TimeRange startTimeMillis
+                 * @property {number|Long|null} [endTimeMillis] TimeRange endTimeMillis
                  */
 
                 /**
-                 * Constructs a new TimeseriesData.
-                 * @memberof clutch.timeline.v1
-                 * @classdesc Represents a TimeseriesData.
-                 * @implements ITimeseriesData
+                 * Constructs a new TimeRange.
+                 * @memberof clutch.timeseries.v1
+                 * @classdesc Represents a TimeRange.
+                 * @implements ITimeRange
                  * @constructor
-                 * @param {clutch.timeline.v1.ITimeseriesData=} [properties] Properties to set
+                 * @param {clutch.timeseries.v1.ITimeRange=} [properties] Properties to set
                  */
-                function TimeseriesData(properties) {
+                function TimeRange(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -48453,79 +48451,53 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * TimeseriesData projectName.
-                 * @member {string} projectName
-                 * @memberof clutch.timeline.v1.TimeseriesData
-                 * @instance
-                 */
-                TimeseriesData.prototype.projectName = "";
-
-                /**
-                 * TimeseriesData startTimeMillis.
+                 * TimeRange startTimeMillis.
                  * @member {number|Long} startTimeMillis
-                 * @memberof clutch.timeline.v1.TimeseriesData
+                 * @memberof clutch.timeseries.v1.TimeRange
                  * @instance
                  */
-                TimeseriesData.prototype.startTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                TimeRange.prototype.startTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * TimeseriesData endTimeMillis.
+                 * TimeRange endTimeMillis.
                  * @member {number|Long} endTimeMillis
-                 * @memberof clutch.timeline.v1.TimeseriesData
+                 * @memberof clutch.timeseries.v1.TimeRange
                  * @instance
                  */
-                TimeseriesData.prototype.endTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                TimeRange.prototype.endTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * TimeseriesData eventInfo.
-                 * @member {google.protobuf.IAny|null|undefined} eventInfo
-                 * @memberof clutch.timeline.v1.TimeseriesData
-                 * @instance
-                 */
-                TimeseriesData.prototype.eventInfo = null;
-
-                /**
-                 * Verifies a TimeseriesData message.
+                 * Verifies a TimeRange message.
                  * @function verify
-                 * @memberof clutch.timeline.v1.TimeseriesData
+                 * @memberof clutch.timeseries.v1.TimeRange
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                TimeseriesData.verify = function verify(message) {
+                TimeRange.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.projectName != null && message.hasOwnProperty("projectName"))
-                        if (!$util.isString(message.projectName))
-                            return "projectName: string expected";
                     if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
                         if (!$util.isInteger(message.startTimeMillis) && !(message.startTimeMillis && $util.isInteger(message.startTimeMillis.low) && $util.isInteger(message.startTimeMillis.high)))
                             return "startTimeMillis: integer|Long expected";
                     if (message.endTimeMillis != null && message.hasOwnProperty("endTimeMillis"))
                         if (!$util.isInteger(message.endTimeMillis) && !(message.endTimeMillis && $util.isInteger(message.endTimeMillis.low) && $util.isInteger(message.endTimeMillis.high)))
                             return "endTimeMillis: integer|Long expected";
-                    if (message.eventInfo != null && message.hasOwnProperty("eventInfo")) {
-                        let error = $root.google.protobuf.Any.verify(message.eventInfo);
-                        if (error)
-                            return "eventInfo." + error;
-                    }
                     return null;
                 };
 
                 /**
-                 * Creates a TimeseriesData message from a plain object. Also converts values to their respective internal types.
+                 * Creates a TimeRange message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.timeline.v1.TimeseriesData
+                 * @memberof clutch.timeseries.v1.TimeRange
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.timeline.v1.TimeseriesData} TimeseriesData
+                 * @returns {clutch.timeseries.v1.TimeRange} TimeRange
                  */
-                TimeseriesData.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.timeline.v1.TimeseriesData)
+                TimeRange.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.timeseries.v1.TimeRange)
                         return object;
-                    let message = new $root.clutch.timeline.v1.TimeseriesData();
-                    if (object.projectName != null)
-                        message.projectName = String(object.projectName);
+                    let message = new $root.clutch.timeseries.v1.TimeRange();
                     if (object.startTimeMillis != null)
                         if ($util.Long)
                             (message.startTimeMillis = $util.Long.fromValue(object.startTimeMillis)).unsigned = false;
@@ -48544,29 +48516,23 @@ export const clutch = $root.clutch = (() => {
                             message.endTimeMillis = object.endTimeMillis;
                         else if (typeof object.endTimeMillis === "object")
                             message.endTimeMillis = new $util.LongBits(object.endTimeMillis.low >>> 0, object.endTimeMillis.high >>> 0).toNumber();
-                    if (object.eventInfo != null) {
-                        if (typeof object.eventInfo !== "object")
-                            throw TypeError(".clutch.timeline.v1.TimeseriesData.eventInfo: object expected");
-                        message.eventInfo = $root.google.protobuf.Any.fromObject(object.eventInfo);
-                    }
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a TimeseriesData message. Also converts values to other types if specified.
+                 * Creates a plain object from a TimeRange message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.timeline.v1.TimeseriesData
+                 * @memberof clutch.timeseries.v1.TimeRange
                  * @static
-                 * @param {clutch.timeline.v1.TimeseriesData} message TimeseriesData
+                 * @param {clutch.timeseries.v1.TimeRange} message TimeRange
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                TimeseriesData.toObject = function toObject(message, options) {
+                TimeRange.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.projectName = "";
                         if ($util.Long) {
                             let long = new $util.Long(0, 0, false);
                             object.startTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -48577,10 +48543,7 @@ export const clutch = $root.clutch = (() => {
                             object.endTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.endTimeMillis = options.longs === String ? "0" : 0;
-                        object.eventInfo = null;
                     }
-                    if (message.projectName != null && message.hasOwnProperty("projectName"))
-                        object.projectName = message.projectName;
                     if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
                         if (typeof message.startTimeMillis === "number")
                             object.startTimeMillis = options.longs === String ? String(message.startTimeMillis) : message.startTimeMillis;
@@ -48591,29 +48554,225 @@ export const clutch = $root.clutch = (() => {
                             object.endTimeMillis = options.longs === String ? String(message.endTimeMillis) : message.endTimeMillis;
                         else
                             object.endTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.endTimeMillis) : options.longs === Number ? new $util.LongBits(message.endTimeMillis.low >>> 0, message.endTimeMillis.high >>> 0).toNumber() : message.endTimeMillis;
-                    if (message.eventInfo != null && message.hasOwnProperty("eventInfo"))
-                        object.eventInfo = $root.google.protobuf.Any.toObject(message.eventInfo, options);
                     return object;
                 };
 
                 /**
-                 * Converts this TimeseriesData to JSON.
+                 * Converts this TimeRange to JSON.
                  * @function toJSON
-                 * @memberof clutch.timeline.v1.TimeseriesData
+                 * @memberof clutch.timeseries.v1.TimeRange
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                TimeseriesData.prototype.toJSON = function toJSON() {
+                TimeRange.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return TimeseriesData;
+                return TimeRange;
+            })();
+
+            v1.Point = (function() {
+
+                /**
+                 * Properties of a Point.
+                 * @memberof clutch.timeseries.v1
+                 * @interface IPoint
+                 * @property {clutch.timeseries.v1.ITimeRange|null} [range] Point range
+                 * @property {number|Long|null} [singularEventTimestampMillis] Point singularEventTimestampMillis
+                 * @property {google.protobuf.IAny|null} [eventInfo] Point eventInfo
+                 * @property {string|null} [eventDescription] Point eventDescription
+                 */
+
+                /**
+                 * Constructs a new Point.
+                 * @memberof clutch.timeseries.v1
+                 * @classdesc Represents a Point.
+                 * @implements IPoint
+                 * @constructor
+                 * @param {clutch.timeseries.v1.IPoint=} [properties] Properties to set
+                 */
+                function Point(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Point range.
+                 * @member {clutch.timeseries.v1.ITimeRange|null|undefined} range
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 */
+                Point.prototype.range = null;
+
+                /**
+                 * Point singularEventTimestampMillis.
+                 * @member {number|Long|null|undefined} singularEventTimestampMillis
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 */
+                Point.prototype.singularEventTimestampMillis = null;
+
+                /**
+                 * Point eventInfo.
+                 * @member {google.protobuf.IAny|null|undefined} eventInfo
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 */
+                Point.prototype.eventInfo = null;
+
+                /**
+                 * Point eventDescription.
+                 * @member {string} eventDescription
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 */
+                Point.prototype.eventDescription = "";
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * Point event.
+                 * @member {"range"|"singularEventTimestampMillis"|undefined} event
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 */
+                Object.defineProperty(Point.prototype, "event", {
+                    get: $util.oneOfGetter($oneOfFields = ["range", "singularEventTimestampMillis"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Verifies a Point message.
+                 * @function verify
+                 * @memberof clutch.timeseries.v1.Point
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Point.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    let properties = {};
+                    if (message.range != null && message.hasOwnProperty("range")) {
+                        properties.event = 1;
+                        {
+                            let error = $root.clutch.timeseries.v1.TimeRange.verify(message.range);
+                            if (error)
+                                return "range." + error;
+                        }
+                    }
+                    if (message.singularEventTimestampMillis != null && message.hasOwnProperty("singularEventTimestampMillis")) {
+                        if (properties.event === 1)
+                            return "event: multiple values";
+                        properties.event = 1;
+                        if (!$util.isInteger(message.singularEventTimestampMillis) && !(message.singularEventTimestampMillis && $util.isInteger(message.singularEventTimestampMillis.low) && $util.isInteger(message.singularEventTimestampMillis.high)))
+                            return "singularEventTimestampMillis: integer|Long expected";
+                    }
+                    if (message.eventInfo != null && message.hasOwnProperty("eventInfo")) {
+                        let error = $root.google.protobuf.Any.verify(message.eventInfo);
+                        if (error)
+                            return "eventInfo." + error;
+                    }
+                    if (message.eventDescription != null && message.hasOwnProperty("eventDescription"))
+                        if (!$util.isString(message.eventDescription))
+                            return "eventDescription: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Point message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.timeseries.v1.Point
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.timeseries.v1.Point} Point
+                 */
+                Point.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.timeseries.v1.Point)
+                        return object;
+                    let message = new $root.clutch.timeseries.v1.Point();
+                    if (object.range != null) {
+                        if (typeof object.range !== "object")
+                            throw TypeError(".clutch.timeseries.v1.Point.range: object expected");
+                        message.range = $root.clutch.timeseries.v1.TimeRange.fromObject(object.range);
+                    }
+                    if (object.singularEventTimestampMillis != null)
+                        if ($util.Long)
+                            (message.singularEventTimestampMillis = $util.Long.fromValue(object.singularEventTimestampMillis)).unsigned = false;
+                        else if (typeof object.singularEventTimestampMillis === "string")
+                            message.singularEventTimestampMillis = parseInt(object.singularEventTimestampMillis, 10);
+                        else if (typeof object.singularEventTimestampMillis === "number")
+                            message.singularEventTimestampMillis = object.singularEventTimestampMillis;
+                        else if (typeof object.singularEventTimestampMillis === "object")
+                            message.singularEventTimestampMillis = new $util.LongBits(object.singularEventTimestampMillis.low >>> 0, object.singularEventTimestampMillis.high >>> 0).toNumber();
+                    if (object.eventInfo != null) {
+                        if (typeof object.eventInfo !== "object")
+                            throw TypeError(".clutch.timeseries.v1.Point.eventInfo: object expected");
+                        message.eventInfo = $root.google.protobuf.Any.fromObject(object.eventInfo);
+                    }
+                    if (object.eventDescription != null)
+                        message.eventDescription = String(object.eventDescription);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Point message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.timeseries.v1.Point
+                 * @static
+                 * @param {clutch.timeseries.v1.Point} message Point
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Point.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.eventInfo = null;
+                        object.eventDescription = "";
+                    }
+                    if (message.range != null && message.hasOwnProperty("range")) {
+                        object.range = $root.clutch.timeseries.v1.TimeRange.toObject(message.range, options);
+                        if (options.oneofs)
+                            object.event = "range";
+                    }
+                    if (message.singularEventTimestampMillis != null && message.hasOwnProperty("singularEventTimestampMillis")) {
+                        if (typeof message.singularEventTimestampMillis === "number")
+                            object.singularEventTimestampMillis = options.longs === String ? String(message.singularEventTimestampMillis) : message.singularEventTimestampMillis;
+                        else
+                            object.singularEventTimestampMillis = options.longs === String ? $util.Long.prototype.toString.call(message.singularEventTimestampMillis) : options.longs === Number ? new $util.LongBits(message.singularEventTimestampMillis.low >>> 0, message.singularEventTimestampMillis.high >>> 0).toNumber() : message.singularEventTimestampMillis;
+                        if (options.oneofs)
+                            object.event = "singularEventTimestampMillis";
+                    }
+                    if (message.eventInfo != null && message.hasOwnProperty("eventInfo"))
+                        object.eventInfo = $root.google.protobuf.Any.toObject(message.eventInfo, options);
+                    if (message.eventDescription != null && message.hasOwnProperty("eventDescription"))
+                        object.eventDescription = message.eventDescription;
+                    return object;
+                };
+
+                /**
+                 * Converts this Point to JSON.
+                 * @function toJSON
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Point.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Point;
             })();
 
             return v1;
         })();
 
-        return timeline;
+        return timeseries;
     })();
 
     clutch.topology = (function() {

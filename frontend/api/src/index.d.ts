@@ -20350,73 +20350,130 @@ export namespace clutch {
         }
     }
 
-    /** Namespace timeline. */
-    namespace timeline {
+    /** Namespace timeseries. */
+    namespace timeseries {
 
         /** Namespace v1. */
         namespace v1 {
 
-            /** Properties of a TimeseriesData. */
-            interface ITimeseriesData {
+            /** Properties of a TimeRange. */
+            interface ITimeRange {
 
-                /** TimeseriesData projectName */
-                projectName?: (string|null);
-
-                /** TimeseriesData startTimeMillis */
+                /** TimeRange startTimeMillis */
                 startTimeMillis?: (number|Long|null);
 
-                /** TimeseriesData endTimeMillis */
+                /** TimeRange endTimeMillis */
                 endTimeMillis?: (number|Long|null);
-
-                /** TimeseriesData eventInfo */
-                eventInfo?: (google.protobuf.IAny|null);
             }
 
-            /** Represents a TimeseriesData. */
-            class TimeseriesData implements ITimeseriesData {
+            /** Represents a TimeRange. */
+            class TimeRange implements ITimeRange {
 
                 /**
-                 * Constructs a new TimeseriesData.
+                 * Constructs a new TimeRange.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.timeline.v1.ITimeseriesData);
+                constructor(properties?: clutch.timeseries.v1.ITimeRange);
 
-                /** TimeseriesData projectName. */
-                public projectName: string;
-
-                /** TimeseriesData startTimeMillis. */
+                /** TimeRange startTimeMillis. */
                 public startTimeMillis: (number|Long);
 
-                /** TimeseriesData endTimeMillis. */
+                /** TimeRange endTimeMillis. */
                 public endTimeMillis: (number|Long);
 
-                /** TimeseriesData eventInfo. */
-                public eventInfo?: (google.protobuf.IAny|null);
-
                 /**
-                 * Verifies a TimeseriesData message.
+                 * Verifies a TimeRange message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a TimeseriesData message from a plain object. Also converts values to their respective internal types.
+                 * Creates a TimeRange message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns TimeseriesData
+                 * @returns TimeRange
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.timeline.v1.TimeseriesData;
+                public static fromObject(object: { [k: string]: any }): clutch.timeseries.v1.TimeRange;
 
                 /**
-                 * Creates a plain object from a TimeseriesData message. Also converts values to other types if specified.
-                 * @param message TimeseriesData
+                 * Creates a plain object from a TimeRange message. Also converts values to other types if specified.
+                 * @param message TimeRange
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.timeline.v1.TimeseriesData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.timeseries.v1.TimeRange, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this TimeseriesData to JSON.
+                 * Converts this TimeRange to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Point. */
+            interface IPoint {
+
+                /** Point range */
+                range?: (clutch.timeseries.v1.ITimeRange|null);
+
+                /** Point singularEventTimestampMillis */
+                singularEventTimestampMillis?: (number|Long|null);
+
+                /** Point eventInfo */
+                eventInfo?: (google.protobuf.IAny|null);
+
+                /** Point eventDescription */
+                eventDescription?: (string|null);
+            }
+
+            /** Represents a Point. */
+            class Point implements IPoint {
+
+                /**
+                 * Constructs a new Point.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.timeseries.v1.IPoint);
+
+                /** Point range. */
+                public range?: (clutch.timeseries.v1.ITimeRange|null);
+
+                /** Point singularEventTimestampMillis. */
+                public singularEventTimestampMillis?: (number|Long|null);
+
+                /** Point eventInfo. */
+                public eventInfo?: (google.protobuf.IAny|null);
+
+                /** Point eventDescription. */
+                public eventDescription: string;
+
+                /** Point event. */
+                public event?: ("range"|"singularEventTimestampMillis");
+
+                /**
+                 * Verifies a Point message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Point message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Point
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.timeseries.v1.Point;
+
+                /**
+                 * Creates a plain object from a Point message. Also converts values to other types if specified.
+                 * @param message Point
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.timeseries.v1.Point, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Point to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
