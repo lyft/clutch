@@ -18,7 +18,7 @@ message TimeRange {
 message Point {
   oneof event {
     TimeRange range = 2;
-    int64 singular_event_timestamp_millis = 3;
+    int64 singular_event_timestamp_millis = 3 [ (validate.rules).int64.gt = 0 ];
   }
   google.protobuf.Any event_info = 5;
   string event_description = 6;
