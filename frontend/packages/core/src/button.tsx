@@ -12,7 +12,7 @@ import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 const COLORS = {
   neutral: {
     background: {
-      primary: "#FFFFFF",
+      primary: "transparent",
       hover: "#E7E7EA",
       active: "#CFD3D7",
       disabled: "#FFFFFF",
@@ -76,12 +76,14 @@ const OutlinedButton = styled(StyledButton)({
   },
 });
 
+type ButtonVariant = "neutral" | "primary" | "danger" | "destructive";
+
 export interface ButtonProps
   extends Pick<MuiButtonProps, "disabled" | "endIcon" | "onClick" | "startIcon" | "type"> {
   // Case-sensitive button text.
   text: string;
   // Provides feedback to the user in regards to the action of the button.
-  variant?: "neutral" | "primary" | "danger" | "destructive";
+  variant?: ButtonVariant;
 }
 
 /**
@@ -98,32 +100,42 @@ const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) 
   );
 };
 
-const StyledIconButton = styled(MuiIconButton)({
-  height: "48px",
-  width: "48px",
-  padding: "12px",
-  color: COLORS.primary.font,
-  backgroundColor: COLORS.primary.background.primary,
-  "&:hover": {
-    backgroundColor: COLORS.primary.background.hover,
+const StyledIconButton = styled(MuiIconButton)(
+  {
+    height: "48px",
+    width: "48px",
+    padding: "12px",
   },
-  "&:active": {
-    backgroundColor: COLORS.primary.background.active,
-  },
-  "&:disabled": {
-    color: "rgba(13, 16, 48, 0.38)",
-    backgroundColor: COLORS.primary.background.disabled,
-    opacity: "0.38",
-  },
-});
+  props => ({
+    color: props["data-color"].font,
+    backgroundColor: props["data-color"].background.primary,
+    "&:hover": {
+      backgroundColor: props["data-color"].background.hover,
+    },
+    "&:active": {
+      backgroundColor: props["data-color"].background.active,
+    },
+    "&:disabled": {
+      color: "rgba(13, 16, 48, 0.38)",
+      backgroundColor: props["data-color"].background.disabled,
+      opacity: "0.38",
+    },
+  })
+);
 
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type"> {
+  // Provides feedback to the user in regards to the action of the button.
+  variant?: ButtonVariant;
   children: React.ReactElement;
 }
 
-const IconButton = ({ children, ...props }: IconButtonProps) => (
-  <StyledIconButton {...props}>{children}</StyledIconButton>
-);
+const IconButton = ({ variant, children, ...props }: IconButtonProps) => {
+  const color = variant === "destructive" ? "danger" : variant;
+
+  return (
+    <StyledIconButton {...props} data-color={COLORS[color]}>{children}</StyledIconButton>
+  );
+};
 
 const ButtonGroupContainer = styled(Grid)(
   {
