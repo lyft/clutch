@@ -133,7 +133,9 @@ const IconButton = ({ variant, children, ...props }: IconButtonProps) => {
   const color = variant === "destructive" ? "danger" : variant;
 
   return (
-    <StyledIconButton {...props} data-color={COLORS[color]}>{children}</StyledIconButton>
+    <StyledIconButton {...props} data-color={COLORS[color]}>
+      {children}
+    </StyledIconButton>
   );
 };
 
