@@ -50,7 +50,7 @@ const StyledTableHead = styled(MuiTableHead)({
 
 const StyledTableRow = styled(MuiTableRow)<{ responsive?: boolean }>(
   {
-    ":nth-child(even)": {
+    ":nth-of-type(even)": {
       background: "rgba(13, 16, 48, 0.03)",
     },
     ":hover": {
