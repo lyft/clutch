@@ -65,7 +65,7 @@ export interface DashState {
   // Contains a map of project names to the full project data.
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
 
-  // contains delta in state change of newly selected/removed project(s) based on the previous selected state
+  // contains delta in state change of newly (un)selected project(s)
   delta?: DashStateDelta;
 }
 

@@ -18,7 +18,7 @@ const initialState = {
 const dashReducer = (state: DashState, action: DashAction): DashState => {
   switch (action.type) {
     case "UPDATE_SELECTED": {
-      // comparisons of what was selected and removed
+      // comparisons of what was (un)selected
       const selected = _.difference(action.payload.selected, state.selected);
       const unselected = _.difference(state.selected, action.payload.selected);
 
