@@ -9,13 +9,28 @@ import type { DashAction, DashState } from "./types";
 const initialState = {
   selected: [],
   projectData: {},
+  delta: {
+    newSelected: [],
+    newUnselected: [],
+  },
 };
 
 const dashReducer = (state: DashState, action: DashAction): DashState => {
   switch (action.type) {
     case "UPDATE_SELECTED": {
+      // comparisons of what was selected and removed
+      const selected = _.difference(action.payload.selected, state.selected);
+      const unselected = _.difference(state.selected, action.payload.selected);
+
       if (!_.isEqual(state.selected, action.payload.selected)) {
-        return action.payload;
+        return {
+          selected: action.payload.selected,
+          projectData: action.payload.projectData,
+          delta: {
+            newSelected: selected,
+            newUnselected: unselected,
+          },
+        };
       }
       return state;
     }

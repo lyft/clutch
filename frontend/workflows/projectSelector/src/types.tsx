@@ -64,6 +64,14 @@ export interface DashState {
 
   // Contains a map of project names to the full project data.
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
+
+  // contains delta in state change of newly selected/removed project(s) based on the previous selected state
+  delta?: DashStateDelta;
+}
+
+interface DashStateDelta {
+  newSelected: string[];
+  newUnselected: string[];
 }
 
 export type DashActionKind = "UPDATE_SELECTED";
