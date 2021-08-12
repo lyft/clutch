@@ -31,6 +31,7 @@ var testDynamodbTable = &types.TableDescription{
 		WriteCapacityUnits: aws.Int64(200),
 	},
 	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{},
+	TableStatus:            "ACTIVE",
 }
 
 var testTableOutput = &dynamodbv1.Table{
@@ -41,6 +42,7 @@ var testTableOutput = &dynamodbv1.Table{
 		WriteCapacityUnits: 200,
 	},
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
+	Status:                 dynamodbv1.Status(5),
 }
 
 var testDynamodbTableWithGSI = &types.TableDescription{
@@ -58,6 +60,7 @@ var testDynamodbTableWithGSI = &types.TableDescription{
 			},
 		},
 	},
+	TableStatus: "ACTIVE",
 }
 
 var testTableWithGSIOutput = &dynamodbv1.Table{
@@ -76,6 +79,7 @@ var testTableWithGSIOutput = &dynamodbv1.Table{
 			},
 		},
 	},
+	Status: dynamodbv1.Status(5),
 }
 
 func TestDescribeTableValid(t *testing.T) {
@@ -155,6 +159,33 @@ func TestGetScalingLimitsCustom(t *testing.T) {
 	assert.Equal(t, ds.MaxScaleFactor, cfg.DynamodbConfig.ScalingLimits.MaxScaleFactor, "scale factor default set")
 	assert.False(t, ds.EnableOverride)
 }
+
+func TestUpdateTableSuccess(t *testing.T) {
+	m := &mockDynamodb{
+		table: testDynamodbTable,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	got, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 202)
+	assert.NotNil(t, got)
+	assert.Nil(t, err)
+}
+
 func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -190,16 +221,14 @@ func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
-	err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 201)
-	assert.NoError(t, err)
-
 	for _, tt := range tests {
 		tt := tt // capture range variable
 		t.Run(tt.name, func(t *testing.T) {
-			got := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
-			if got.Error() != tt.want {
-				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, got)
+			status, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
+			if err.Error() != tt.want {
+				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
+			assert.Equal(t, dynamodbv1.Status(0), status)
 		})
 	}
 }
@@ -235,16 +264,14 @@ func TestUpdateTableCapacityWithCustomLimits(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
-	err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 201)
-	assert.NoError(t, err)
-
 	for _, tt := range tests {
 		tt := tt // capture range variable
 		t.Run(tt.name, func(t *testing.T) {
-			got := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
-			if got.Error() != tt.want {
-				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, got)
+			status, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
+			if err.Error() != tt.want {
+				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
+			assert.Equal(t, dynamodbv1.Status(0), status)
 		})
 	}
 }
@@ -255,8 +282,8 @@ type mockDynamodb struct {
 	tableErr error
 	table    *types.TableDescription
 
-	updateErr error
-	update    *dynamodb.UpdateTableOutput
+	updateErr    error
+	updateStatus types.TableStatus
 }
 
 func (m *mockDynamodb) DescribeTable(ctx context.Context, params *dynamodb.DescribeTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeTableOutput, error) {
@@ -275,7 +302,12 @@ func (m *mockDynamodb) UpdateTable(ctx context.Context, params *dynamodb.UpdateT
 	if m.updateErr != nil {
 		return nil, m.updateErr
 	}
-	ret := m.update
+
+	ret := &dynamodb.UpdateTableOutput{
+		TableDescription: &types.TableDescription{
+			TableStatus: m.updateStatus,
+		},
+	}
 
 	return ret, nil
 }

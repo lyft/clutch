@@ -69,6 +69,8 @@ func (m *Table) Validate() error {
 		}
 	}
 
+	// no validation rules for Status
+
 	return nil
 }
 
@@ -527,6 +529,10 @@ func (m *UpdateTableCapacityResponse) Validate() error {
 		return nil
 	}
 
+	// no validation rules for TableName
+
+	// no validation rules for TableStatus
+
 	return nil
 }
 
@@ -686,6 +692,12 @@ func (m *UpdateGSICapacityResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
+
+	// no validation rules for TableName
+
+	// no validation rules for IndexName
+
+	// no validation rules for TableStatus
 
 	return nil
 }
