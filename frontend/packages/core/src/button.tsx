@@ -134,7 +134,7 @@ const StyledIconButton = styled(MuiIconButton)<{ palette: ButtonColor }>(
   })
 );
 
-export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type"> {
+export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   /* Provides feedback to the user in regards to the action of the button. */
   variant?: ButtonVariant;
   children: React.ReactElement;
