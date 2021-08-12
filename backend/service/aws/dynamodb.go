@@ -192,7 +192,7 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) (dynamodbv1.Status, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
-		c.log.Error("update table failed", zap.Error(err))
+		c.log.Error("unable to get regional client", zap.Error(err))
 		return 0, err
 	}
 
@@ -215,6 +215,7 @@ func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName
 
 	err = isValidIncrease(cl, index.ProvisionedThroughput, targetCapacity)
 	if err != nil {
+		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
 		return 0, err
 	}
 
