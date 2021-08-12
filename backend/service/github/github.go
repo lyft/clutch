@@ -96,9 +96,7 @@ func (s *svc) CreateIssueComment(ctx context.Context, ref *RemoteRef, number int
 		Body: strPtr(body),
 	}
 	_, response, err := s.rest.Issues.CreateComment(ctx, ref.RepoOwner, ref.RepoName, number, com)
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 	return err
 }
 
@@ -119,9 +117,7 @@ func (s *svc) GetOrganization(ctx context.Context, organization string) (*github
 	if err != nil {
 		return nil, err
 	}
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 	return org, nil
 }
 
@@ -132,9 +128,7 @@ func (s *svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.O
 	if err != nil {
 		return nil, err
 	}
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 	return organizations, nil
 }
 
@@ -150,9 +144,7 @@ func (s *svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3
 		}
 		return nil, err
 	}
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 	return membership, nil
 }
 
@@ -163,9 +155,7 @@ func (s *svc) GetUser(ctx context.Context, username string) (*githubv3.User, err
 	if err != nil {
 		return nil, err
 	}
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 	return user, nil
 }
 
@@ -181,9 +171,7 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 	if err != nil {
 		return nil, err
 	}
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 
 	var org string
 	if org = req.Owner; currentUser.GetLogin() == req.Owner {
@@ -201,9 +189,7 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 	if err != nil {
 		return nil, err
 	}
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 	resp := &sourcecontrolv1.CreateRepositoryResponse{
 		Url: *newRepo.HTMLURL,
 	}
@@ -230,9 +216,7 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 	if err != nil {
 		return nil, err
 	}
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 	return &PullRequestInfo{
 		Number: pr.GetNumber(),
 		// There are many possible URLs to return, but the HTML one is most human friendly
@@ -411,9 +395,7 @@ func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA str
 	if err != nil {
 		return nil, fmt.Errorf("Could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 
 	return comp, nil
 }
@@ -425,15 +407,19 @@ type Commit struct {
 	ParentRef string
 }
 
+func (s *svc) emitRateLimit(response *githubv3.Response) {
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
+	}
+}
+
 func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 	commit, response, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
 	if err != nil {
 		return nil, err
 	}
 
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
+	s.emitRateLimit(response)
 
 	// Currently we are using the Author (Github) rather than commit Author (Git)
 	retCommit := &Commit{
