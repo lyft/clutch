@@ -25213,7 +25213,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Array.<string>|null} [languages] Project languages
                      * @property {Object.<string,google.protobuf.IValue>|null} [data] Project data
                      * @property {clutch.core.project.v1.IProjectDependencies|null} [dependencies] Project dependencies
-                     * @property {clutch.core.project.v1.IAlerts|null} [alerts] Project alerts
+                     * @property {clutch.core.project.v1.IOnCall|null} [oncall] Project oncall
                      */
 
                     /**
@@ -25283,12 +25283,12 @@ export const clutch = $root.clutch = (() => {
                     Project.prototype.dependencies = null;
 
                     /**
-                     * Project alerts.
-                     * @member {clutch.core.project.v1.IAlerts|null|undefined} alerts
+                     * Project oncall.
+                     * @member {clutch.core.project.v1.IOnCall|null|undefined} oncall
                      * @memberof clutch.core.project.v1.Project
                      * @instance
                      */
-                    Project.prototype.alerts = null;
+                    Project.prototype.oncall = null;
 
                     /**
                      * Verifies a Project message.
@@ -25336,10 +25336,10 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "dependencies." + error;
                         }
-                        if (message.alerts != null && message.hasOwnProperty("alerts")) {
-                            let error = $root.clutch.core.project.v1.Alerts.verify(message.alerts);
+                        if (message.oncall != null && message.hasOwnProperty("oncall")) {
+                            let error = $root.clutch.core.project.v1.OnCall.verify(message.oncall);
                             if (error)
-                                return "alerts." + error;
+                                return "oncall." + error;
                         }
                         return null;
                     };
@@ -25389,10 +25389,10 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.core.project.v1.Project.dependencies: object expected");
                             message.dependencies = $root.clutch.core.project.v1.ProjectDependencies.fromObject(object.dependencies);
                         }
-                        if (object.alerts != null) {
-                            if (typeof object.alerts !== "object")
-                                throw TypeError(".clutch.core.project.v1.Project.alerts: object expected");
-                            message.alerts = $root.clutch.core.project.v1.Alerts.fromObject(object.alerts);
+                        if (object.oncall != null) {
+                            if (typeof object.oncall !== "object")
+                                throw TypeError(".clutch.core.project.v1.Project.oncall: object expected");
+                            message.oncall = $root.clutch.core.project.v1.OnCall.fromObject(object.oncall);
                         }
                         return message;
                     };
@@ -25420,7 +25420,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.tier = "";
                             object.dependencies = null;
-                            object.alerts = null;
+                            object.oncall = null;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -25444,8 +25444,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (message.dependencies != null && message.hasOwnProperty("dependencies"))
                             object.dependencies = $root.clutch.core.project.v1.ProjectDependencies.toObject(message.dependencies, options);
-                        if (message.alerts != null && message.hasOwnProperty("alerts"))
-                            object.alerts = $root.clutch.core.project.v1.Alerts.toObject(message.alerts, options);
+                        if (message.oncall != null && message.hasOwnProperty("oncall"))
+                            object.oncall = $root.clutch.core.project.v1.OnCall.toObject(message.oncall, options);
                         return object;
                     };
 
@@ -25733,24 +25733,24 @@ export const clutch = $root.clutch = (() => {
                     return Dependency;
                 })();
 
-                v1.Alerts = (function() {
+                v1.OnCall = (function() {
 
                     /**
-                     * Properties of an Alerts.
+                     * Properties of an OnCall.
                      * @memberof clutch.core.project.v1
-                     * @interface IAlerts
-                     * @property {clutch.core.project.v1.IPagerDuty|null} [pagerduty] Alerts pagerduty
+                     * @interface IOnCall
+                     * @property {clutch.core.project.v1.IPagerDuty|null} [pagerduty] OnCall pagerduty
                      */
 
                     /**
-                     * Constructs a new Alerts.
+                     * Constructs a new OnCall.
                      * @memberof clutch.core.project.v1
-                     * @classdesc Represents an Alerts.
-                     * @implements IAlerts
+                     * @classdesc Represents an OnCall.
+                     * @implements IOnCall
                      * @constructor
-                     * @param {clutch.core.project.v1.IAlerts=} [properties] Properties to set
+                     * @param {clutch.core.project.v1.IOnCall=} [properties] Properties to set
                      */
-                    function Alerts(properties) {
+                    function OnCall(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -25758,22 +25758,22 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Alerts pagerduty.
+                     * OnCall pagerduty.
                      * @member {clutch.core.project.v1.IPagerDuty|null|undefined} pagerduty
-                     * @memberof clutch.core.project.v1.Alerts
+                     * @memberof clutch.core.project.v1.OnCall
                      * @instance
                      */
-                    Alerts.prototype.pagerduty = null;
+                    OnCall.prototype.pagerduty = null;
 
                     /**
-                     * Verifies an Alerts message.
+                     * Verifies an OnCall message.
                      * @function verify
-                     * @memberof clutch.core.project.v1.Alerts
+                     * @memberof clutch.core.project.v1.OnCall
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    Alerts.verify = function verify(message) {
+                    OnCall.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.pagerduty != null && message.hasOwnProperty("pagerduty")) {
@@ -25785,35 +25785,35 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates an Alerts message from a plain object. Also converts values to their respective internal types.
+                     * Creates an OnCall message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.core.project.v1.Alerts
+                     * @memberof clutch.core.project.v1.OnCall
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.core.project.v1.Alerts} Alerts
+                     * @returns {clutch.core.project.v1.OnCall} OnCall
                      */
-                    Alerts.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.core.project.v1.Alerts)
+                    OnCall.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.project.v1.OnCall)
                             return object;
-                        let message = new $root.clutch.core.project.v1.Alerts();
+                        let message = new $root.clutch.core.project.v1.OnCall();
                         if (object.pagerduty != null) {
                             if (typeof object.pagerduty !== "object")
-                                throw TypeError(".clutch.core.project.v1.Alerts.pagerduty: object expected");
+                                throw TypeError(".clutch.core.project.v1.OnCall.pagerduty: object expected");
                             message.pagerduty = $root.clutch.core.project.v1.PagerDuty.fromObject(object.pagerduty);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from an Alerts message. Also converts values to other types if specified.
+                     * Creates a plain object from an OnCall message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.core.project.v1.Alerts
+                     * @memberof clutch.core.project.v1.OnCall
                      * @static
-                     * @param {clutch.core.project.v1.Alerts} message Alerts
+                     * @param {clutch.core.project.v1.OnCall} message OnCall
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    Alerts.toObject = function toObject(message, options) {
+                    OnCall.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -25825,17 +25825,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this Alerts to JSON.
+                     * Converts this OnCall to JSON.
                      * @function toJSON
-                     * @memberof clutch.core.project.v1.Alerts
+                     * @memberof clutch.core.project.v1.OnCall
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    Alerts.prototype.toJSON = function toJSON() {
+                    OnCall.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return Alerts;
+                    return OnCall;
                 })();
 
                 v1.PagerDuty = (function() {

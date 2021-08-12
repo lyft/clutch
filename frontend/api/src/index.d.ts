@@ -10494,8 +10494,8 @@ export namespace clutch {
                     /** Project dependencies */
                     dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
 
-                    /** Project alerts */
-                    alerts?: (clutch.core.project.v1.IAlerts|null);
+                    /** Project oncall */
+                    oncall?: (clutch.core.project.v1.IOnCall|null);
                 }
 
                 /** Represents a Project. */
@@ -10525,8 +10525,8 @@ export namespace clutch {
                     /** Project dependencies. */
                     public dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
 
-                    /** Project alerts. */
-                    public alerts?: (clutch.core.project.v1.IAlerts|null);
+                    /** Project oncall. */
+                    public oncall?: (clutch.core.project.v1.IOnCall|null);
 
                     /**
                      * Verifies a Project message.
@@ -10659,49 +10659,49 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of an Alerts. */
-                interface IAlerts {
+                /** Properties of an OnCall. */
+                interface IOnCall {
 
-                    /** Alerts pagerduty */
+                    /** OnCall pagerduty */
                     pagerduty?: (clutch.core.project.v1.IPagerDuty|null);
                 }
 
-                /** Represents an Alerts. */
-                class Alerts implements IAlerts {
+                /** Represents an OnCall. */
+                class OnCall implements IOnCall {
 
                     /**
-                     * Constructs a new Alerts.
+                     * Constructs a new OnCall.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.core.project.v1.IAlerts);
+                    constructor(properties?: clutch.core.project.v1.IOnCall);
 
-                    /** Alerts pagerduty. */
+                    /** OnCall pagerduty. */
                     public pagerduty?: (clutch.core.project.v1.IPagerDuty|null);
 
                     /**
-                     * Verifies an Alerts message.
+                     * Verifies an OnCall message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an Alerts message from a plain object. Also converts values to their respective internal types.
+                     * Creates an OnCall message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns Alerts
+                     * @returns OnCall
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Alerts;
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.OnCall;
 
                     /**
-                     * Creates a plain object from an Alerts message. Also converts values to other types if specified.
-                     * @param message Alerts
+                     * Creates a plain object from an OnCall message. Also converts values to other types if specified.
+                     * @param message OnCall
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.core.project.v1.Alerts, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.core.project.v1.OnCall, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this Alerts to JSON.
+                     * Converts this OnCall to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

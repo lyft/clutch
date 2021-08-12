@@ -71,10 +71,10 @@ func (m *Project) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetAlerts()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetOncall()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ProjectValidationError{
-				field:  "Alerts",
+				field:  "Oncall",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -303,16 +303,16 @@ var _ interface {
 	ErrorName() string
 } = DependencyValidationError{}
 
-// Validate checks the field values on Alerts with the rules defined in the
+// Validate checks the field values on OnCall with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
-func (m *Alerts) Validate() error {
+func (m *OnCall) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if v, ok := interface{}(m.GetPagerduty()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return AlertsValidationError{
+			return OnCallValidationError{
 				field:  "Pagerduty",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -323,9 +323,9 @@ func (m *Alerts) Validate() error {
 	return nil
 }
 
-// AlertsValidationError is the validation error returned by Alerts.Validate if
+// OnCallValidationError is the validation error returned by OnCall.Validate if
 // the designated constraints aren't met.
-type AlertsValidationError struct {
+type OnCallValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -333,22 +333,22 @@ type AlertsValidationError struct {
 }
 
 // Field function returns field value.
-func (e AlertsValidationError) Field() string { return e.field }
+func (e OnCallValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AlertsValidationError) Reason() string { return e.reason }
+func (e OnCallValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AlertsValidationError) Cause() error { return e.cause }
+func (e OnCallValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AlertsValidationError) Key() bool { return e.key }
+func (e OnCallValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AlertsValidationError) ErrorName() string { return "AlertsValidationError" }
+func (e OnCallValidationError) ErrorName() string { return "OnCallValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AlertsValidationError) Error() string {
+func (e OnCallValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -360,14 +360,14 @@ func (e AlertsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAlerts.%s: %s%s",
+		"invalid %sOnCall.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AlertsValidationError{}
+var _ error = OnCallValidationError{}
 
 var _ interface {
 	Field() string
@@ -375,7 +375,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AlertsValidationError{}
+} = OnCallValidationError{}
 
 // Validate checks the field values on PagerDuty with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.

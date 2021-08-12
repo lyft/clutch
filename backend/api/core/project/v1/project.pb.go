@@ -36,7 +36,7 @@ type Project struct {
 	// Allows an organization to populate any information they see fit that does not fit our schema
 	Data         map[string]*structpb.Value `protobuf:"bytes,5,rep,name=data,proto3" json:"data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	Dependencies *ProjectDependencies       `protobuf:"bytes,6,opt,name=dependencies,proto3" json:"dependencies,omitempty"`
-	Alerts       *Alerts                    `protobuf:"bytes,7,opt,name=alerts,proto3" json:"alerts,omitempty"`
+	Oncall       *OnCall                    `protobuf:"bytes,7,opt,name=oncall,proto3" json:"oncall,omitempty"`
 }
 
 func (x *Project) Reset() {
@@ -113,9 +113,9 @@ func (x *Project) GetDependencies() *ProjectDependencies {
 	return nil
 }
 
-func (x *Project) GetAlerts() *Alerts {
+func (x *Project) GetOncall() *OnCall {
 	if x != nil {
-		return x.Alerts
+		return x.Oncall
 	}
 	return nil
 }
@@ -224,8 +224,9 @@ func (x *Dependency) GetIds() []string {
 	return nil
 }
 
-// Alerting information that could come from several sources for a project
-type Alerts struct {
+// Oncall information that could come from several sources for a project
+// From active alerts from source like pagerduty, to who is currently on call.
+type OnCall struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -233,8 +234,8 @@ type Alerts struct {
 	Pagerduty *PagerDuty `protobuf:"bytes,1,opt,name=pagerduty,proto3" json:"pagerduty,omitempty"`
 }
 
-func (x *Alerts) Reset() {
-	*x = Alerts{}
+func (x *OnCall) Reset() {
+	*x = OnCall{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_core_project_v1_project_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -242,13 +243,13 @@ func (x *Alerts) Reset() {
 	}
 }
 
-func (x *Alerts) String() string {
+func (x *OnCall) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Alerts) ProtoMessage() {}
+func (*OnCall) ProtoMessage() {}
 
-func (x *Alerts) ProtoReflect() protoreflect.Message {
+func (x *OnCall) ProtoReflect() protoreflect.Message {
 	mi := &file_core_project_v1_project_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -260,12 +261,12 @@ func (x *Alerts) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Alerts.ProtoReflect.Descriptor instead.
-func (*Alerts) Descriptor() ([]byte, []int) {
+// Deprecated: Use OnCall.ProtoReflect.Descriptor instead.
+func (*OnCall) Descriptor() ([]byte, []int) {
 	return file_core_project_v1_project_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Alerts) GetPagerduty() *PagerDuty {
+func (x *OnCall) GetPagerduty() *PagerDuty {
 	if x != nil {
 		return x.Pagerduty
 	}
@@ -346,10 +347,10 @@ var file_core_project_v1_project_proto_rawDesc = []byte{
 	0x72, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x6a, 0x65, 0x63, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72,
 	0x6f, 0x6a, 0x65, 0x63, 0x74, 0x44, 0x65, 0x70, 0x65, 0x6e, 0x64, 0x65, 0x6e, 0x63, 0x69, 0x65,
 	0x73, 0x52, 0x0c, 0x64, 0x65, 0x70, 0x65, 0x6e, 0x64, 0x65, 0x6e, 0x63, 0x69, 0x65, 0x73, 0x12,
-	0x36, 0x0a, 0x06, 0x61, 0x6c, 0x65, 0x72, 0x74, 0x73, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x36, 0x0a, 0x06, 0x6f, 0x6e, 0x63, 0x61, 0x6c, 0x6c, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32,
 	0x1e, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x70, 0x72,
-	0x6f, 0x6a, 0x65, 0x63, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x6c, 0x65, 0x72, 0x74, 0x73, 0x52,
-	0x06, 0x61, 0x6c, 0x65, 0x72, 0x74, 0x73, 0x1a, 0x4f, 0x0a, 0x09, 0x44, 0x61, 0x74, 0x61, 0x45,
+	0x6f, 0x6a, 0x65, 0x63, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x6e, 0x43, 0x61, 0x6c, 0x6c, 0x52,
+	0x06, 0x6f, 0x6e, 0x63, 0x61, 0x6c, 0x6c, 0x1a, 0x4f, 0x0a, 0x09, 0x44, 0x61, 0x74, 0x61, 0x45,
 	0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x2c, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18,
 	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
@@ -382,7 +383,7 @@ var file_core_project_v1_project_proto_rawDesc = []byte{
 	0x64, 0x65, 0x6e, 0x63, 0x79, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01,
 	0x22, 0x1e, 0x0a, 0x0a, 0x44, 0x65, 0x70, 0x65, 0x6e, 0x64, 0x65, 0x6e, 0x63, 0x79, 0x12, 0x10,
 	0x0a, 0x03, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x03, 0x69, 0x64, 0x73,
-	0x22, 0x49, 0x0a, 0x06, 0x41, 0x6c, 0x65, 0x72, 0x74, 0x73, 0x12, 0x3f, 0x0a, 0x09, 0x70, 0x61,
+	0x22, 0x49, 0x0a, 0x06, 0x4f, 0x6e, 0x43, 0x61, 0x6c, 0x6c, 0x12, 0x3f, 0x0a, 0x09, 0x70, 0x61,
 	0x67, 0x65, 0x72, 0x64, 0x75, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e,
 	0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x6a,
 	0x65, 0x63, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x72, 0x44, 0x75, 0x74, 0x79,
@@ -414,7 +415,7 @@ var file_core_project_v1_project_proto_goTypes = []interface{}{
 	(*Project)(nil),             // 0: clutch.core.project.v1.Project
 	(*ProjectDependencies)(nil), // 1: clutch.core.project.v1.ProjectDependencies
 	(*Dependency)(nil),          // 2: clutch.core.project.v1.Dependency
-	(*Alerts)(nil),              // 3: clutch.core.project.v1.Alerts
+	(*OnCall)(nil),              // 3: clutch.core.project.v1.OnCall
 	(*PagerDuty)(nil),           // 4: clutch.core.project.v1.PagerDuty
 	nil,                         // 5: clutch.core.project.v1.Project.DataEntry
 	nil,                         // 6: clutch.core.project.v1.ProjectDependencies.UpstreamsEntry
@@ -424,10 +425,10 @@ var file_core_project_v1_project_proto_goTypes = []interface{}{
 var file_core_project_v1_project_proto_depIdxs = []int32{
 	5, // 0: clutch.core.project.v1.Project.data:type_name -> clutch.core.project.v1.Project.DataEntry
 	1, // 1: clutch.core.project.v1.Project.dependencies:type_name -> clutch.core.project.v1.ProjectDependencies
-	3, // 2: clutch.core.project.v1.Project.alerts:type_name -> clutch.core.project.v1.Alerts
+	3, // 2: clutch.core.project.v1.Project.oncall:type_name -> clutch.core.project.v1.OnCall
 	6, // 3: clutch.core.project.v1.ProjectDependencies.upstreams:type_name -> clutch.core.project.v1.ProjectDependencies.UpstreamsEntry
 	7, // 4: clutch.core.project.v1.ProjectDependencies.downstreams:type_name -> clutch.core.project.v1.ProjectDependencies.DownstreamsEntry
-	4, // 5: clutch.core.project.v1.Alerts.pagerduty:type_name -> clutch.core.project.v1.PagerDuty
+	4, // 5: clutch.core.project.v1.OnCall.pagerduty:type_name -> clutch.core.project.v1.PagerDuty
 	8, // 6: clutch.core.project.v1.Project.DataEntry.value:type_name -> google.protobuf.Value
 	2, // 7: clutch.core.project.v1.ProjectDependencies.UpstreamsEntry.value:type_name -> clutch.core.project.v1.Dependency
 	2, // 8: clutch.core.project.v1.ProjectDependencies.DownstreamsEntry.value:type_name -> clutch.core.project.v1.Dependency
@@ -481,7 +482,7 @@ func file_core_project_v1_project_proto_init() {
 			}
 		}
 		file_core_project_v1_project_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Alerts); i {
+			switch v := v.(*OnCall); i {
 			case 0:
 				return &v.state
 			case 1:
