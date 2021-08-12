@@ -9,15 +9,19 @@ import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@materia
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
-interface ButtonColor {
+interface ButtonPalette {
+  /** A palette of background colors used for the various button states. */
   background: {
     primary: string;
     hover: string;
     active: string;
     disabled: string;
   };
-  font: string;
-  fontDisabled: string;
+  /** A palette of font colors used for the various button states. */
+  font: {
+    primary: string;
+    disabled?: string;
+  };
 }
 
 const COLORS = {
@@ -28,8 +32,10 @@ const COLORS = {
       active: "#CFD3D7",
       disabled: "#FFFFFF",
     },
-    font: "#0D1030",
-    fontDisabled: "#0D1030",
+    font: {
+      primary: "#0D1030",
+      disabled: "#0D1030",
+    },
   },
   primary: {
     background: {
@@ -38,8 +44,10 @@ const COLORS = {
       active: "#2938A5",
       disabled: "#E7E7EA",
     },
-    font: "#FFFFFF",
-    fontDisabled: "rgba(13, 16, 48, 0.38)",
+    font: {
+      primary: "#FFFFFF",
+      disabled: "rgba(13, 16, 48, 0.38)",
+    },
   },
   danger: {
     background: {
@@ -48,12 +56,32 @@ const COLORS = {
       active: "#AB2A10",
       disabled: "#F1B3A6",
     },
-    font: "#FFFFFF",
-    fontDisabled: "#FFFFFF",
+    font: {
+      primary: "#FFFFFF",
+      disabled: "#FFFFFF",
+    },
   },
-} as { [key: string]: ButtonColor };
+} as { [key: string]: ButtonPalette };
 
-const StyledButton = styled(MuiButton)<{ palette: ButtonColor }>(
+const colorCss = (palette: ButtonPalette) => {
+  return {
+    color: palette.font.primary,
+    backgroundColor: palette.background.primary,
+    "&:hover": {
+      backgroundColor: palette.background.hover,
+    },
+    "&:active": {
+      backgroundColor: palette.background.active,
+    },
+    "&:disabled": {
+      color: palette.font?.disabled ? palette.font?.disabled : palette.font?.primary,
+      backgroundColor: palette.background.disabled,
+      opacity: "0.38",
+    },
+  };
+};
+
+const StyledButton = styled(MuiButton)<{ palette: ButtonPalette }>(
   {
     borderRadius: "4px",
     fontWeight: 500,
@@ -63,21 +91,7 @@ const StyledButton = styled(MuiButton)<{ palette: ButtonColor }>(
     height: "48px",
     padding: "14px 32px",
   },
-  props => ({
-    color: props.palette.font,
-    backgroundColor: props.palette.background.primary,
-    "&:hover": {
-      backgroundColor: props.palette.background.hover,
-    },
-    "&:active": {
-      backgroundColor: props.palette.background.active,
-    },
-    "&:disabled": {
-      color: props.palette.fontDisabled,
-      backgroundColor: props.palette.background.disabled,
-      opacity: "0.38",
-    },
-  })
+  props => colorCss(props.palette)
 );
 
 const StyledBorderButton = styled(StyledButton)({
@@ -87,68 +101,56 @@ const StyledBorderButton = styled(StyledButton)({
   },
 });
 
+/** Provides feedback to the user in regards to the action of the button. */
 type ButtonVariant = "neutral" | "primary" | "danger" | "destructive";
+
+/** A color palette from a @type ButtonPalette */
+const variantPalette = (variant: ButtonVariant): ButtonPalette => {
+  const v = variant === "destructive" ? "danger" : variant;
+  return COLORS?.[v] || COLORS.primary;
+};
 
 export interface ButtonProps
   extends Pick<MuiButtonProps, "disabled" | "endIcon" | "onClick" | "startIcon" | "type"> {
-  /* Case-sensitive button text. */
+  /** Case-sensitive button text. */
   text: string;
-  /* Provides feedback to the user in regards to the action of the button. */
+  /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
 }
 
-/**
- * A button with default themes based on use case.
- */
-const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) => {
-  const color = variant === "destructive" ? "danger" : variant;
-
+/** A button with default themes based on use case. */
+const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
+  const palette = variantPalette(variant);
   const ButtonVariant = variant === "neutral" ? StyledBorderButton : StyledButton;
+
   return (
-    <ButtonVariant variant="contained" disableElevation palette={COLORS[color]} {...props}>
+    <ButtonVariant variant="contained" disableElevation palette={palette} {...props}>
       {text}
     </ButtonVariant>
   );
 };
 
-const StyledIconButton = styled(MuiIconButton)<{ palette: ButtonColor }>(
+const StyledIconButton = styled(MuiIconButton)<{ palette: ButtonPalette }>(
   {
     height: "48px",
     width: "48px",
     padding: "12px",
   },
-  props => ({
-    color: props.palette.font,
-    backgroundColor: props.palette.background.primary,
-    "&:hover": {
-      backgroundColor: props.palette.background.hover,
-    },
-    "&:active": {
-      backgroundColor: props.palette.background.active,
-    },
-    "&:disabled": {
-      color: "rgba(13, 16, 48, 0.38)",
-      backgroundColor: props.palette.background.disabled,
-      opacity: "0.38",
-    },
-  })
+  props => colorCss(props.palette)
 );
 
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
-  /* Provides feedback to the user in regards to the action of the button. */
+  /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
   children: React.ReactElement;
 }
 
-const IconButton = ({ variant = "primary", children, ...props }: IconButtonProps) => {
-  const color = variant === "destructive" ? "danger" : variant;
-
-  return (
-    <StyledIconButton {...props} palette={COLORS[color]}>
-      {children}
-    </StyledIconButton>
-  );
-};
+/** An button to wrap icons with default themes based on use case. */
+const IconButton = ({ variant = "primary", children, ...props }: IconButtonProps) => (
+  <StyledIconButton {...props} palette={variantPalette(variant)}>
+    {children}
+  </StyledIconButton>
+);
 
 const ButtonGroupContainer = styled(Grid)(
   {
@@ -171,18 +173,22 @@ const ButtonGroupContainer = styled(Grid)(
 );
 
 export interface ButtonGroupProps {
+  /** Buttons within the group. */
   children: React.ReactElement<ButtonProps> | React.ReactElement<ButtonProps>[];
+  /** Justification of buttons. */
   justify?: GridJustification;
+  /** Position of button group border. Defautls to top. */
   border?: "top" | "bottom";
 }
 
+/** A set of buttons to group together. */
 const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonGroupProps) => (
   <ButtonGroupContainer container justify={justify} data-border={border}>
     {children}
   </ButtonGroupContainer>
 );
 
-const ClipboardIconButton = styled(MuiIconButton)({
+const StyledClipboardIconButton = styled(MuiIconButton)({
   color: "#000000",
   ":hover": {
     backgroundColor: "transparent",
@@ -190,13 +196,16 @@ const ClipboardIconButton = styled(MuiIconButton)({
 });
 
 export interface ClipboardButtonProps {
+  /** Case-sensitive text to be copied. */
   text: string;
 }
 
-// ClipboardButton is a button that copies text to the clipboard and briefly displays a checkmark
-// after being clicked to let the user know that clicking actually did something and sent the
-// provided value to the clipboard.
-const ClipboardButton: React.FC<ClipboardButtonProps> = ({ text }) => {
+/**
+ * A button to copy text to a users clipboard.
+ *
+ * When clicked a checkmark is briefly displayed.
+ */
+const ClipboardButton = ({ text }: ClipboardButtonProps) => {
   const [clicked, setClicked] = React.useState(false);
   React.useEffect(() => {
     if (clicked) {
@@ -210,14 +219,14 @@ const ClipboardButton: React.FC<ClipboardButtonProps> = ({ text }) => {
   }, [clicked]);
 
   return (
-    <ClipboardIconButton
+    <StyledClipboardIconButton
       onClick={() => {
         setClicked(true);
         navigator.clipboard.writeText(text);
       }}
     >
       {clicked ? <CheckCircleOutlinedIcon /> : <FileCopyOutlinedIcon />}
-    </ClipboardIconButton>
+    </StyledClipboardIconButton>
   );
 };
 
