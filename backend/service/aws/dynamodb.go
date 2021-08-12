@@ -55,14 +55,14 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 
 	globalSecondaryIndexes := getGlobalSecondaryIndexes(result.Table.GlobalSecondaryIndexes)
 
-	status := newProtoForTableStatus(result.Table.TableStatus)
+	tableStatus := newProtoForTableStatus(result.Table.TableStatus)
 
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(result.Table.TableName),
 		Region:                 region,
 		GlobalSecondaryIndexes: globalSecondaryIndexes,
 		ProvisionedThroughput:  currentCapacity,
-		Status:                 status,
+		Status:                 tableStatus,
 	}
 	return ret, nil
 }
@@ -127,17 +127,17 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
-func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (*dynamodbv1.Status, error) {
+func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
 		c.log.Error("unable to get regional client", zap.Error(err))
-		return nil, err
+		return 0, err
 	}
 
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
 		c.log.Error("unable to find table", zap.Error(err))
-		return nil, err
+		return 0, err
 	}
 
 	targetCapacity := types.ProvisionedThroughput{
@@ -148,7 +148,7 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 	err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, targetCapacity)
 	if err != nil {
 		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
-		return nil, err
+		return 0, err
 	}
 
 	input := &dynamodb.UpdateTableInput{
@@ -160,10 +160,10 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 
 	if err != nil {
 		c.log.Error("update table failed", zap.Error(err))
-		return nil, err
+		return 0, err
 	}
 
 	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
 
-	return &tableStatus, nil
+	return tableStatus, nil
 }
