@@ -27,6 +27,7 @@ const (
 type Status int32
 
 const (
+	// Unspecified status indicates the table status could not be found.
 	Status_UNSPECIFIED                         Status = 0
 	Status_UNKNOWN                             Status = 1
 	Status_CREATING                            Status = 2
