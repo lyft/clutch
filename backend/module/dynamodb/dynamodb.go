@@ -35,7 +35,7 @@ func (a *dynamodbAPI) UpdateTableCapacity(ctx context.Context, req *dynamodbv1.U
 		return nil, err
 	}
 
-	return &dynamodbv1.UpdateTableCapacityResponse{TableName: req.TableName, TableStatus: *result}, nil
+	return &dynamodbv1.UpdateTableCapacityResponse{TableName: req.TableName, TableStatus: result}, nil
 }
 
 func (a *dynamodbAPI) UpdateGSICapacity(ctx context.Context, req *dynamodbv1.UpdateGSICapacityRequest) (*dynamodbv1.UpdateGSICapacityResponse, error) {
