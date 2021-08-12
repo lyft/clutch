@@ -10542,6 +10542,9 @@ export namespace clutch {
 
                     /** Project dependencies */
                     dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
+
+                    /** Project oncall */
+                    oncall?: (clutch.core.project.v1.IOnCall|null);
                 }
 
                 /** Represents a Project. */
@@ -10570,6 +10573,9 @@ export namespace clutch {
 
                     /** Project dependencies. */
                     public dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
+
+                    /** Project oncall. */
+                    public oncall?: (clutch.core.project.v1.IOnCall|null);
 
                     /**
                      * Verifies a Project message.
@@ -10697,6 +10703,102 @@ export namespace clutch {
 
                     /**
                      * Converts this Dependency to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an OnCall. */
+                interface IOnCall {
+
+                    /** OnCall pagerduty */
+                    pagerduty?: (clutch.core.project.v1.IPagerDuty|null);
+                }
+
+                /** Represents an OnCall. */
+                class OnCall implements IOnCall {
+
+                    /**
+                     * Constructs a new OnCall.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IOnCall);
+
+                    /** OnCall pagerduty. */
+                    public pagerduty?: (clutch.core.project.v1.IPagerDuty|null);
+
+                    /**
+                     * Verifies an OnCall message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an OnCall message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns OnCall
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.OnCall;
+
+                    /**
+                     * Creates a plain object from an OnCall message. Also converts values to other types if specified.
+                     * @param message OnCall
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.OnCall, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this OnCall to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a PagerDuty. */
+                interface IPagerDuty {
+
+                    /** PagerDuty serviceIds */
+                    serviceIds?: (string[]|null);
+                }
+
+                /** Represents a PagerDuty. */
+                class PagerDuty implements IPagerDuty {
+
+                    /**
+                     * Constructs a new PagerDuty.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IPagerDuty);
+
+                    /** PagerDuty serviceIds. */
+                    public serviceIds: string[];
+
+                    /**
+                     * Verifies a PagerDuty message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a PagerDuty message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns PagerDuty
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.PagerDuty;
+
+                    /**
+                     * Creates a plain object from a PagerDuty message. Also converts values to other types if specified.
+                     * @param message PagerDuty
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.PagerDuty, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this PagerDuty to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
