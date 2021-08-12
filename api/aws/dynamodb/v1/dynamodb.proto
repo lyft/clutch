@@ -37,6 +37,7 @@ service DDBAPI {
 
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
 enum Status {
+  // Unspecified status indicates the table status could not be found.
   UNSPECIFIED = 0;
   CREATING = 1;
   UPDATING = 2;
