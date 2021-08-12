@@ -173,9 +173,11 @@ func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base
 	returnstr := "behind"
 	shaStr := "astdfsaohecra"
 	return &githubv3.CommitsComparison{Status: &returnstr,
-		Commits: []*githubv3.RepositoryCommit{
-			{SHA: &shaStr},
-		}}, nil, nil
+			Commits: []*githubv3.RepositoryCommit{
+				{SHA: &shaStr},
+			}}, &githubv3.Response{
+			Rate: githubv3.Rate{Limit: 1, Remaining: 1},
+		}, nil
 }
 
 func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha string) (*githubv3.RepositoryCommit, *githubv3.Response, error) {
@@ -343,7 +345,7 @@ func TestCompareCommits(t *testing.T) {
 				Repositories: tt.mockRepo,
 			}}
 
-			comp, err := s.CompareCommits(
+			comp, response, err := s.CompareCommits(
 				context.Background(),
 				&RemoteRef{
 					RepoOwner: "owner",
@@ -363,6 +365,7 @@ func TestCompareCommits(t *testing.T) {
 			}
 			a.Equal(comp.GetStatus(), tt.status)
 			a.NotNil(comp.Commits)
+			a.NotNil(response)
 			a.Nil(err)
 		})
 	}
