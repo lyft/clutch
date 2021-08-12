@@ -8,19 +8,19 @@ import "google/protobuf/any.proto";
 import "validate/validate.proto";
 
 message TimeRange {
-  int64 start_time_millis = 1 [ (validate.rules).int64.gt = 0 ];
-  int64 end_time_millis = 2 [ (validate.rules).int64.gt = 0 ];
+  int64 start_millis = 1 [ (validate.rules).int64.gt = 0 ];
+  int64 end_millis = 2 [ (validate.rules).int64.gt = 0 ];
 }
 
 // A timeseries Point message is useful for organizing events
 // to be displayed in a timeline view.  Users can transform data
 // into a timeseries format and be able to organize them.
 message Point {
-  oneof event {
+  oneof timestamp {
     option (validate.required) = true;
     TimeRange range = 2;
-    int64 singular_event_timestamp_millis = 3;
+    int64 millis = 3;
   }
-  google.protobuf.Any event_info = 5;
-  string event_description = 6;
+  google.protobuf.Any pb = 5;
+  string description = 6;
 }
