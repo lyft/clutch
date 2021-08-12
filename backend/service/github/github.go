@@ -45,7 +45,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
-	return newService(config)
+	return newService(config, scope)
 }
 
 // Remote ref points to a git reference using a combination of the repository and the reference itself.
@@ -81,7 +81,7 @@ type Client interface {
 	CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
-	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, *githubv3.Response, error)
+	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, error)
 	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
 	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
 	GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error)
@@ -95,7 +95,10 @@ func (s *svc) CreateIssueComment(ctx context.Context, ref *RemoteRef, number int
 	com := &githubv3.IssueComment{
 		Body: strPtr(body),
 	}
-	_, _, err := s.rest.Issues.CreateComment(ctx, ref.RepoOwner, ref.RepoName, number, com)
+	_, response, err := s.rest.Issues.CreateComment(ctx, ref.RepoOwner, ref.RepoName, number, com)
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
+	}
 	return err
 }
 
@@ -108,12 +111,16 @@ type svc struct {
 	graphQL v4client
 	rest    v3client
 	rawAuth *gittransport.BasicAuth
+	scope   tally.Scope
 }
 
 func (s *svc) GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error) {
-	org, _, err := s.rest.Organizations.Get(ctx, organization)
+	org, response, err := s.rest.Organizations.Get(ctx, organization)
 	if err != nil {
 		return nil, err
+	}
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
 	}
 	return org, nil
 }
@@ -121,9 +128,12 @@ func (s *svc) GetOrganization(ctx context.Context, organization string) (*github
 // ListOrganizations returns all organizations for a specified user.
 // To list organizations for the currently authenticated user set user to "".
 func (s *svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error) {
-	organizations, _, err := s.rest.Organizations.List(ctx, user, &githubv3.ListOptions{})
+	organizations, response, err := s.rest.Organizations.List(ctx, user, &githubv3.ListOptions{})
 	if err != nil {
 		return nil, err
+	}
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
 	}
 	return organizations, nil
 }
@@ -140,15 +150,21 @@ func (s *svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3
 		}
 		return nil, err
 	}
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
+	}
 	return membership, nil
 }
 
 // GetUser returns information about the specified user.
 // To list organizations for the currently authenticated user set user to "".
 func (s *svc) GetUser(ctx context.Context, username string) (*githubv3.User, error) {
-	user, _, err := s.rest.Users.Get(ctx, username)
+	user, response, err := s.rest.Users.Get(ctx, username)
 	if err != nil {
 		return nil, err
+	}
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
 	}
 	return user, nil
 }
@@ -161,9 +177,12 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 	}
 
 	opts := req.GetGithubOptions()
-	currentUser, _, err := s.rest.Users.Get(ctx, "")
+	currentUser, response, err := s.rest.Users.Get(ctx, "")
 	if err != nil {
 		return nil, err
+	}
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
 	}
 
 	var org string
@@ -178,11 +197,13 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 		Private:     boolPtr(opts.Parameters.Visibility.String() == sourcecontrolv1.Visibility_PRIVATE.String()),
 		AutoInit:    boolPtr(opts.AutoInit),
 	}
-	newRepo, _, err := s.rest.Repositories.Create(ctx, org, repo)
+	newRepo, response, err := s.rest.Repositories.Create(ctx, org, repo)
 	if err != nil {
 		return nil, err
 	}
-
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
+	}
 	resp := &sourcecontrolv1.CreateRepositoryResponse{
 		Url: *newRepo.HTMLURL,
 	}
@@ -205,9 +226,12 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 		Body:                strPtr(body),
 		MaintainerCanModify: boolPtr(true),
 	}
-	pr, _, err := s.rest.PullRequests.Create(ctx, ref.RepoOwner, ref.RepoName, req)
+	pr, response, err := s.rest.PullRequests.Create(ctx, ref.RepoOwner, ref.RepoName, req)
 	if err != nil {
 		return nil, err
+	}
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
 	}
 	return &PullRequestInfo{
 		Number: pr.GetNumber(),
@@ -283,7 +307,7 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 	return nil
 }
 
-func newService(config *githubv1.Config) (Client, error) {
+func newService(config *githubv1.Config, scope tally.Scope) (Client, error) {
 	auth := config.GetAuth()
 	var token string
 	var httpClient *http.Client
@@ -336,6 +360,7 @@ func newService(config *githubv1.Config) (Client, error) {
 			Username: "token",
 			Password: token,
 		},
+		scope: scope,
 	}, nil
 }
 
@@ -381,12 +406,16 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 /*
  * Rather than calling GetCommit() multiple times, we can use CompareCommits to get a range of commits
  */
-func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, *githubv3.Response, error) {
+func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, error) {
 	comp, response, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
 	if err != nil {
-		return nil, nil, fmt.Errorf("Could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
+		return nil, fmt.Errorf("Could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
-	return comp, response, nil
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
+	}
+
+	return comp, nil
 }
 
 type Commit struct {
@@ -397,9 +426,13 @@ type Commit struct {
 }
 
 func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
-	commit, _, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
+	commit, response, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
 	if err != nil {
 		return nil, err
+	}
+
+	if response != nil {
+		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
 	}
 
 	// Currently we are using the Author (Github) rather than commit Author (Git)
