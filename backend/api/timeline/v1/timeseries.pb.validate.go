@@ -145,12 +145,12 @@ func (m *Point) Validate() error {
 		}
 
 	case *Point_SingularEventTimestampMillis:
+		// no validation rules for SingularEventTimestampMillis
 
-		if m.GetSingularEventTimestampMillis() <= 0 {
-			return PointValidationError{
-				field:  "SingularEventTimestampMillis",
-				reason: "value must be greater than 0",
-			}
+	default:
+		return PointValidationError{
+			field:  "Event",
+			reason: "value is required",
 		}
 
 	}

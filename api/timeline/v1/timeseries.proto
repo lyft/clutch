@@ -17,8 +17,9 @@ message TimeRange {
 // into a timeseries format and be able to organize them.
 message Point {
   oneof event {
+    option (validate.required) = true;
     TimeRange range = 2;
-    int64 singular_event_timestamp_millis = 3 [ (validate.rules).int64.gt = 0 ];
+    int64 singular_event_timestamp_millis = 3;
   }
   google.protobuf.Any event_info = 5;
   string event_description = 6;
