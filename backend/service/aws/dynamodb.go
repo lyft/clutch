@@ -72,12 +72,23 @@ func getTable(ctx context.Context, client *regionalClient, tableName string) (*d
 	return client.dynamodb.DescribeTable(ctx, input)
 }
 
+// takes raw list of GSIs from table description and creates new GlobalSecondaryIndex structs
 func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) []*dynamodbv1.GlobalSecondaryIndex {
 	gsis := make([]*dynamodbv1.GlobalSecondaryIndex, len(indexes))
 	for idx, i := range indexes {
 		gsis[idx] = newProtoForGlobalSecondaryIndex(i)
 	}
 	return gsis
+}
+
+// retrieve one GSI from list
+func getGlobalSecondaryIndex(indexes []types.GlobalSecondaryIndexDescription, targetIndexName string) (*types.GlobalSecondaryIndexDescription, error) {
+	for _, i := range indexes {
+		if *i.IndexName == targetIndexName {
+			return &i, nil
+		}
+	}
+	return nil, status.Error(codes.NotFound, "Global secondary index not found.")
 }
 
 func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Status {
@@ -187,11 +198,13 @@ func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName
 
 	result, err := getTable(ctx, cl, tableName)
 	if err != nil {
+		c.log.Error("unable to find table", zap.Error(err))
 		return 0, err
 	}
 
 	index, err := getGlobalSecondaryIndex(result.Table.GlobalSecondaryIndexes, indexName)
 	if err != nil {
+		c.log.Error("specified GSI not found", zap.Error(err))
 		return 0, err
 	}
 
