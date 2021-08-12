@@ -9,6 +9,17 @@ import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@materia
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
+interface ButtonColor {
+  background: {
+    primary: string;
+    hover: string;
+    active: string;
+    disabled: string;
+  };
+  font: string;
+  fontDisabled: string;
+}
+
 const COLORS = {
   neutral: {
     background: {
@@ -40,9 +51,9 @@ const COLORS = {
     font: "#FFFFFF",
     fontDisabled: "#FFFFFF",
   },
-};
+}  as { [key: string]: ButtonColor };
 
-const StyledButton = styled(MuiButton)(
+const StyledButton = styled(MuiButton)<{ palette: ButtonColor }>(
   {
     borderRadius: "4px",
     fontWeight: 500,
@@ -53,23 +64,23 @@ const StyledButton = styled(MuiButton)(
     padding: "14px 32px",
   },
   props => ({
-    color: props["data-color"].font,
-    backgroundColor: props["data-color"].background.primary,
+    color: props.palette.font,
+    backgroundColor: props.palette.background.primary,
     "&:hover": {
-      backgroundColor: props["data-color"].background.hover,
+      backgroundColor: props.palette.background.hover,
     },
     "&:active": {
-      backgroundColor: props["data-color"].background.active,
+      backgroundColor: props.palette.background.active,
     },
     "&:disabled": {
-      color: props["data-color"].fontDisabled,
-      backgroundColor: props["data-color"].background.disabled,
+      color: props.palette.fontDisabled,
+      backgroundColor: props.palette.background.disabled,
       opacity: "0.38",
     },
   })
 );
 
-const OutlinedButton = styled(StyledButton)({
+const StyledBorderButton = styled(StyledButton)({
   border: "1px solid #0D1030",
   "&.Mui-disabled": {
     borderColor: "rgba(13, 16, 48, 0.1)",
@@ -80,9 +91,9 @@ type ButtonVariant = "neutral" | "primary" | "danger" | "destructive";
 
 export interface ButtonProps
   extends Pick<MuiButtonProps, "disabled" | "endIcon" | "onClick" | "startIcon" | "type"> {
-  // Case-sensitive button text.
+  /* Case-sensitive button text. */
   text: string;
-  // Provides feedback to the user in regards to the action of the button.
+  /* Provides feedback to the user in regards to the action of the button. */
   variant?: ButtonVariant;
 }
 
@@ -92,39 +103,39 @@ export interface ButtonProps
 const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) => {
   const color = variant === "destructive" ? "danger" : variant;
 
-  const ButtonVariant = variant === "neutral" ? OutlinedButton : StyledButton;
+  const ButtonVariant = variant === "neutral" ? StyledBorderButton : StyledButton;
   return (
-    <ButtonVariant variant="contained" disableElevation data-color={COLORS[color]} {...props}>
+    <ButtonVariant variant="contained" disableElevation palette={COLORS[color]} {...props}>
       {text}
     </ButtonVariant>
   );
 };
 
-const StyledIconButton = styled(MuiIconButton)(
+const StyledIconButton = styled(MuiIconButton)<{ palette: ButtonColor }>(
   {
     height: "48px",
     width: "48px",
     padding: "12px",
   },
   props => ({
-    color: props["data-color"].font,
-    backgroundColor: props["data-color"].background.primary,
+    color: props.palette.font,
+    backgroundColor: props.palette.background.primary,
     "&:hover": {
-      backgroundColor: props["data-color"].background.hover,
+      backgroundColor: props.palette.background.hover,
     },
     "&:active": {
-      backgroundColor: props["data-color"].background.active,
+      backgroundColor: props.palette.background.active,
     },
     "&:disabled": {
       color: "rgba(13, 16, 48, 0.38)",
-      backgroundColor: props["data-color"].background.disabled,
+      backgroundColor: props.palette.background.disabled,
       opacity: "0.38",
     },
   })
 );
 
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type"> {
-  // Provides feedback to the user in regards to the action of the button.
+  /* Provides feedback to the user in regards to the action of the button. */
   variant?: ButtonVariant;
   children: React.ReactElement;
 }
@@ -133,7 +144,7 @@ const IconButton = ({ variant = "primary", children, ...props }: IconButtonProps
   const color = variant === "destructive" ? "danger" : variant;
 
   return (
-    <StyledIconButton {...props} data-color={COLORS[color]}>
+    <StyledIconButton {...props} palette={COLORS[color]}>
       {children}
     </StyledIconButton>
   );
