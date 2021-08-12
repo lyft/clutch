@@ -20359,11 +20359,11 @@ export namespace clutch {
             /** Properties of a TimeRange. */
             interface ITimeRange {
 
-                /** TimeRange startTimeMillis */
-                startTimeMillis?: (number|Long|null);
+                /** TimeRange startMillis */
+                startMillis?: (number|Long|null);
 
-                /** TimeRange endTimeMillis */
-                endTimeMillis?: (number|Long|null);
+                /** TimeRange endMillis */
+                endMillis?: (number|Long|null);
             }
 
             /** Represents a TimeRange. */
@@ -20375,11 +20375,11 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.timeseries.v1.ITimeRange);
 
-                /** TimeRange startTimeMillis. */
-                public startTimeMillis: (number|Long);
+                /** TimeRange startMillis. */
+                public startMillis: (number|Long);
 
-                /** TimeRange endTimeMillis. */
-                public endTimeMillis: (number|Long);
+                /** TimeRange endMillis. */
+                public endMillis: (number|Long);
 
                 /**
                  * Verifies a TimeRange message.
@@ -20416,14 +20416,14 @@ export namespace clutch {
                 /** Point range */
                 range?: (clutch.timeseries.v1.ITimeRange|null);
 
-                /** Point singularEventTimestampMillis */
-                singularEventTimestampMillis?: (number|Long|null);
+                /** Point millis */
+                millis?: (number|Long|null);
 
-                /** Point eventInfo */
-                eventInfo?: (google.protobuf.IAny|null);
+                /** Point pb */
+                pb?: (google.protobuf.IAny|null);
 
-                /** Point eventDescription */
-                eventDescription?: (string|null);
+                /** Point description */
+                description?: (string|null);
             }
 
             /** Represents a Point. */
@@ -20438,17 +20438,17 @@ export namespace clutch {
                 /** Point range. */
                 public range?: (clutch.timeseries.v1.ITimeRange|null);
 
-                /** Point singularEventTimestampMillis. */
-                public singularEventTimestampMillis?: (number|Long|null);
+                /** Point millis. */
+                public millis?: (number|Long|null);
 
-                /** Point eventInfo. */
-                public eventInfo?: (google.protobuf.IAny|null);
+                /** Point pb. */
+                public pb?: (google.protobuf.IAny|null);
 
-                /** Point eventDescription. */
-                public eventDescription: string;
+                /** Point description. */
+                public description: string;
 
-                /** Point event. */
-                public event?: ("range"|"singularEventTimestampMillis");
+                /** Point timestamp. */
+                public timestamp?: ("range"|"millis");
 
                 /**
                  * Verifies a Point message.

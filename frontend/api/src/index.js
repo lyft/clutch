@@ -48431,8 +48431,8 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a TimeRange.
                  * @memberof clutch.timeseries.v1
                  * @interface ITimeRange
-                 * @property {number|Long|null} [startTimeMillis] TimeRange startTimeMillis
-                 * @property {number|Long|null} [endTimeMillis] TimeRange endTimeMillis
+                 * @property {number|Long|null} [startMillis] TimeRange startMillis
+                 * @property {number|Long|null} [endMillis] TimeRange endMillis
                  */
 
                 /**
@@ -48451,20 +48451,20 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * TimeRange startTimeMillis.
-                 * @member {number|Long} startTimeMillis
+                 * TimeRange startMillis.
+                 * @member {number|Long} startMillis
                  * @memberof clutch.timeseries.v1.TimeRange
                  * @instance
                  */
-                TimeRange.prototype.startTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                TimeRange.prototype.startMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * TimeRange endTimeMillis.
-                 * @member {number|Long} endTimeMillis
+                 * TimeRange endMillis.
+                 * @member {number|Long} endMillis
                  * @memberof clutch.timeseries.v1.TimeRange
                  * @instance
                  */
-                TimeRange.prototype.endTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                TimeRange.prototype.endMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
                  * Verifies a TimeRange message.
@@ -48477,12 +48477,12 @@ export const clutch = $root.clutch = (() => {
                 TimeRange.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
-                        if (!$util.isInteger(message.startTimeMillis) && !(message.startTimeMillis && $util.isInteger(message.startTimeMillis.low) && $util.isInteger(message.startTimeMillis.high)))
-                            return "startTimeMillis: integer|Long expected";
-                    if (message.endTimeMillis != null && message.hasOwnProperty("endTimeMillis"))
-                        if (!$util.isInteger(message.endTimeMillis) && !(message.endTimeMillis && $util.isInteger(message.endTimeMillis.low) && $util.isInteger(message.endTimeMillis.high)))
-                            return "endTimeMillis: integer|Long expected";
+                    if (message.startMillis != null && message.hasOwnProperty("startMillis"))
+                        if (!$util.isInteger(message.startMillis) && !(message.startMillis && $util.isInteger(message.startMillis.low) && $util.isInteger(message.startMillis.high)))
+                            return "startMillis: integer|Long expected";
+                    if (message.endMillis != null && message.hasOwnProperty("endMillis"))
+                        if (!$util.isInteger(message.endMillis) && !(message.endMillis && $util.isInteger(message.endMillis.low) && $util.isInteger(message.endMillis.high)))
+                            return "endMillis: integer|Long expected";
                     return null;
                 };
 
@@ -48498,24 +48498,24 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.timeseries.v1.TimeRange)
                         return object;
                     let message = new $root.clutch.timeseries.v1.TimeRange();
-                    if (object.startTimeMillis != null)
+                    if (object.startMillis != null)
                         if ($util.Long)
-                            (message.startTimeMillis = $util.Long.fromValue(object.startTimeMillis)).unsigned = false;
-                        else if (typeof object.startTimeMillis === "string")
-                            message.startTimeMillis = parseInt(object.startTimeMillis, 10);
-                        else if (typeof object.startTimeMillis === "number")
-                            message.startTimeMillis = object.startTimeMillis;
-                        else if (typeof object.startTimeMillis === "object")
-                            message.startTimeMillis = new $util.LongBits(object.startTimeMillis.low >>> 0, object.startTimeMillis.high >>> 0).toNumber();
-                    if (object.endTimeMillis != null)
+                            (message.startMillis = $util.Long.fromValue(object.startMillis)).unsigned = false;
+                        else if (typeof object.startMillis === "string")
+                            message.startMillis = parseInt(object.startMillis, 10);
+                        else if (typeof object.startMillis === "number")
+                            message.startMillis = object.startMillis;
+                        else if (typeof object.startMillis === "object")
+                            message.startMillis = new $util.LongBits(object.startMillis.low >>> 0, object.startMillis.high >>> 0).toNumber();
+                    if (object.endMillis != null)
                         if ($util.Long)
-                            (message.endTimeMillis = $util.Long.fromValue(object.endTimeMillis)).unsigned = false;
-                        else if (typeof object.endTimeMillis === "string")
-                            message.endTimeMillis = parseInt(object.endTimeMillis, 10);
-                        else if (typeof object.endTimeMillis === "number")
-                            message.endTimeMillis = object.endTimeMillis;
-                        else if (typeof object.endTimeMillis === "object")
-                            message.endTimeMillis = new $util.LongBits(object.endTimeMillis.low >>> 0, object.endTimeMillis.high >>> 0).toNumber();
+                            (message.endMillis = $util.Long.fromValue(object.endMillis)).unsigned = false;
+                        else if (typeof object.endMillis === "string")
+                            message.endMillis = parseInt(object.endMillis, 10);
+                        else if (typeof object.endMillis === "number")
+                            message.endMillis = object.endMillis;
+                        else if (typeof object.endMillis === "object")
+                            message.endMillis = new $util.LongBits(object.endMillis.low >>> 0, object.endMillis.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -48535,25 +48535,25 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         if ($util.Long) {
                             let long = new $util.Long(0, 0, false);
-                            object.startTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            object.startMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
-                            object.startTimeMillis = options.longs === String ? "0" : 0;
+                            object.startMillis = options.longs === String ? "0" : 0;
                         if ($util.Long) {
                             let long = new $util.Long(0, 0, false);
-                            object.endTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            object.endMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
-                            object.endTimeMillis = options.longs === String ? "0" : 0;
+                            object.endMillis = options.longs === String ? "0" : 0;
                     }
-                    if (message.startTimeMillis != null && message.hasOwnProperty("startTimeMillis"))
-                        if (typeof message.startTimeMillis === "number")
-                            object.startTimeMillis = options.longs === String ? String(message.startTimeMillis) : message.startTimeMillis;
+                    if (message.startMillis != null && message.hasOwnProperty("startMillis"))
+                        if (typeof message.startMillis === "number")
+                            object.startMillis = options.longs === String ? String(message.startMillis) : message.startMillis;
                         else
-                            object.startTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeMillis) : options.longs === Number ? new $util.LongBits(message.startTimeMillis.low >>> 0, message.startTimeMillis.high >>> 0).toNumber() : message.startTimeMillis;
-                    if (message.endTimeMillis != null && message.hasOwnProperty("endTimeMillis"))
-                        if (typeof message.endTimeMillis === "number")
-                            object.endTimeMillis = options.longs === String ? String(message.endTimeMillis) : message.endTimeMillis;
+                            object.startMillis = options.longs === String ? $util.Long.prototype.toString.call(message.startMillis) : options.longs === Number ? new $util.LongBits(message.startMillis.low >>> 0, message.startMillis.high >>> 0).toNumber() : message.startMillis;
+                    if (message.endMillis != null && message.hasOwnProperty("endMillis"))
+                        if (typeof message.endMillis === "number")
+                            object.endMillis = options.longs === String ? String(message.endMillis) : message.endMillis;
                         else
-                            object.endTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.endTimeMillis) : options.longs === Number ? new $util.LongBits(message.endTimeMillis.low >>> 0, message.endTimeMillis.high >>> 0).toNumber() : message.endTimeMillis;
+                            object.endMillis = options.longs === String ? $util.Long.prototype.toString.call(message.endMillis) : options.longs === Number ? new $util.LongBits(message.endMillis.low >>> 0, message.endMillis.high >>> 0).toNumber() : message.endMillis;
                     return object;
                 };
 
@@ -48578,9 +48578,9 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.timeseries.v1
                  * @interface IPoint
                  * @property {clutch.timeseries.v1.ITimeRange|null} [range] Point range
-                 * @property {number|Long|null} [singularEventTimestampMillis] Point singularEventTimestampMillis
-                 * @property {google.protobuf.IAny|null} [eventInfo] Point eventInfo
-                 * @property {string|null} [eventDescription] Point eventDescription
+                 * @property {number|Long|null} [millis] Point millis
+                 * @property {google.protobuf.IAny|null} [pb] Point pb
+                 * @property {string|null} [description] Point description
                  */
 
                 /**
@@ -48607,40 +48607,40 @@ export const clutch = $root.clutch = (() => {
                 Point.prototype.range = null;
 
                 /**
-                 * Point singularEventTimestampMillis.
-                 * @member {number|Long|null|undefined} singularEventTimestampMillis
+                 * Point millis.
+                 * @member {number|Long|null|undefined} millis
                  * @memberof clutch.timeseries.v1.Point
                  * @instance
                  */
-                Point.prototype.singularEventTimestampMillis = null;
+                Point.prototype.millis = null;
 
                 /**
-                 * Point eventInfo.
-                 * @member {google.protobuf.IAny|null|undefined} eventInfo
+                 * Point pb.
+                 * @member {google.protobuf.IAny|null|undefined} pb
                  * @memberof clutch.timeseries.v1.Point
                  * @instance
                  */
-                Point.prototype.eventInfo = null;
+                Point.prototype.pb = null;
 
                 /**
-                 * Point eventDescription.
-                 * @member {string} eventDescription
+                 * Point description.
+                 * @member {string} description
                  * @memberof clutch.timeseries.v1.Point
                  * @instance
                  */
-                Point.prototype.eventDescription = "";
+                Point.prototype.description = "";
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
 
                 /**
-                 * Point event.
-                 * @member {"range"|"singularEventTimestampMillis"|undefined} event
+                 * Point timestamp.
+                 * @member {"range"|"millis"|undefined} timestamp
                  * @memberof clutch.timeseries.v1.Point
                  * @instance
                  */
-                Object.defineProperty(Point.prototype, "event", {
-                    get: $util.oneOfGetter($oneOfFields = ["range", "singularEventTimestampMillis"]),
+                Object.defineProperty(Point.prototype, "timestamp", {
+                    get: $util.oneOfGetter($oneOfFields = ["range", "millis"]),
                     set: $util.oneOfSetter($oneOfFields)
                 });
 
@@ -48657,28 +48657,28 @@ export const clutch = $root.clutch = (() => {
                         return "object expected";
                     let properties = {};
                     if (message.range != null && message.hasOwnProperty("range")) {
-                        properties.event = 1;
+                        properties.timestamp = 1;
                         {
                             let error = $root.clutch.timeseries.v1.TimeRange.verify(message.range);
                             if (error)
                                 return "range." + error;
                         }
                     }
-                    if (message.singularEventTimestampMillis != null && message.hasOwnProperty("singularEventTimestampMillis")) {
-                        if (properties.event === 1)
-                            return "event: multiple values";
-                        properties.event = 1;
-                        if (!$util.isInteger(message.singularEventTimestampMillis) && !(message.singularEventTimestampMillis && $util.isInteger(message.singularEventTimestampMillis.low) && $util.isInteger(message.singularEventTimestampMillis.high)))
-                            return "singularEventTimestampMillis: integer|Long expected";
+                    if (message.millis != null && message.hasOwnProperty("millis")) {
+                        if (properties.timestamp === 1)
+                            return "timestamp: multiple values";
+                        properties.timestamp = 1;
+                        if (!$util.isInteger(message.millis) && !(message.millis && $util.isInteger(message.millis.low) && $util.isInteger(message.millis.high)))
+                            return "millis: integer|Long expected";
                     }
-                    if (message.eventInfo != null && message.hasOwnProperty("eventInfo")) {
-                        let error = $root.google.protobuf.Any.verify(message.eventInfo);
+                    if (message.pb != null && message.hasOwnProperty("pb")) {
+                        let error = $root.google.protobuf.Any.verify(message.pb);
                         if (error)
-                            return "eventInfo." + error;
+                            return "pb." + error;
                     }
-                    if (message.eventDescription != null && message.hasOwnProperty("eventDescription"))
-                        if (!$util.isString(message.eventDescription))
-                            return "eventDescription: string expected";
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        if (!$util.isString(message.description))
+                            return "description: string expected";
                     return null;
                 };
 
@@ -48699,22 +48699,22 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.timeseries.v1.Point.range: object expected");
                         message.range = $root.clutch.timeseries.v1.TimeRange.fromObject(object.range);
                     }
-                    if (object.singularEventTimestampMillis != null)
+                    if (object.millis != null)
                         if ($util.Long)
-                            (message.singularEventTimestampMillis = $util.Long.fromValue(object.singularEventTimestampMillis)).unsigned = false;
-                        else if (typeof object.singularEventTimestampMillis === "string")
-                            message.singularEventTimestampMillis = parseInt(object.singularEventTimestampMillis, 10);
-                        else if (typeof object.singularEventTimestampMillis === "number")
-                            message.singularEventTimestampMillis = object.singularEventTimestampMillis;
-                        else if (typeof object.singularEventTimestampMillis === "object")
-                            message.singularEventTimestampMillis = new $util.LongBits(object.singularEventTimestampMillis.low >>> 0, object.singularEventTimestampMillis.high >>> 0).toNumber();
-                    if (object.eventInfo != null) {
-                        if (typeof object.eventInfo !== "object")
-                            throw TypeError(".clutch.timeseries.v1.Point.eventInfo: object expected");
-                        message.eventInfo = $root.google.protobuf.Any.fromObject(object.eventInfo);
+                            (message.millis = $util.Long.fromValue(object.millis)).unsigned = false;
+                        else if (typeof object.millis === "string")
+                            message.millis = parseInt(object.millis, 10);
+                        else if (typeof object.millis === "number")
+                            message.millis = object.millis;
+                        else if (typeof object.millis === "object")
+                            message.millis = new $util.LongBits(object.millis.low >>> 0, object.millis.high >>> 0).toNumber();
+                    if (object.pb != null) {
+                        if (typeof object.pb !== "object")
+                            throw TypeError(".clutch.timeseries.v1.Point.pb: object expected");
+                        message.pb = $root.google.protobuf.Any.fromObject(object.pb);
                     }
-                    if (object.eventDescription != null)
-                        message.eventDescription = String(object.eventDescription);
+                    if (object.description != null)
+                        message.description = String(object.description);
                     return message;
                 };
 
@@ -48732,26 +48732,26 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.eventInfo = null;
-                        object.eventDescription = "";
+                        object.pb = null;
+                        object.description = "";
                     }
                     if (message.range != null && message.hasOwnProperty("range")) {
                         object.range = $root.clutch.timeseries.v1.TimeRange.toObject(message.range, options);
                         if (options.oneofs)
-                            object.event = "range";
+                            object.timestamp = "range";
                     }
-                    if (message.singularEventTimestampMillis != null && message.hasOwnProperty("singularEventTimestampMillis")) {
-                        if (typeof message.singularEventTimestampMillis === "number")
-                            object.singularEventTimestampMillis = options.longs === String ? String(message.singularEventTimestampMillis) : message.singularEventTimestampMillis;
+                    if (message.millis != null && message.hasOwnProperty("millis")) {
+                        if (typeof message.millis === "number")
+                            object.millis = options.longs === String ? String(message.millis) : message.millis;
                         else
-                            object.singularEventTimestampMillis = options.longs === String ? $util.Long.prototype.toString.call(message.singularEventTimestampMillis) : options.longs === Number ? new $util.LongBits(message.singularEventTimestampMillis.low >>> 0, message.singularEventTimestampMillis.high >>> 0).toNumber() : message.singularEventTimestampMillis;
+                            object.millis = options.longs === String ? $util.Long.prototype.toString.call(message.millis) : options.longs === Number ? new $util.LongBits(message.millis.low >>> 0, message.millis.high >>> 0).toNumber() : message.millis;
                         if (options.oneofs)
-                            object.event = "singularEventTimestampMillis";
+                            object.timestamp = "millis";
                     }
-                    if (message.eventInfo != null && message.hasOwnProperty("eventInfo"))
-                        object.eventInfo = $root.google.protobuf.Any.toObject(message.eventInfo, options);
-                    if (message.eventDescription != null && message.hasOwnProperty("eventDescription"))
-                        object.eventDescription = message.eventDescription;
+                    if (message.pb != null && message.hasOwnProperty("pb"))
+                        object.pb = $root.google.protobuf.Any.toObject(message.pb, options);
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        object.description = message.description;
                     return object;
                 };
 

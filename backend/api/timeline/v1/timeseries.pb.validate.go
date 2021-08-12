@@ -40,16 +40,16 @@ func (m *TimeRange) Validate() error {
 		return nil
 	}
 
-	if m.GetStartTimeMillis() <= 0 {
+	if m.GetStartMillis() <= 0 {
 		return TimeRangeValidationError{
-			field:  "StartTimeMillis",
+			field:  "StartMillis",
 			reason: "value must be greater than 0",
 		}
 	}
 
-	if m.GetEndTimeMillis() <= 0 {
+	if m.GetEndMillis() <= 0 {
 		return TimeRangeValidationError{
-			field:  "EndTimeMillis",
+			field:  "EndMillis",
 			reason: "value must be greater than 0",
 		}
 	}
@@ -118,19 +118,19 @@ func (m *Point) Validate() error {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetEventInfo()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetPb()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return PointValidationError{
-				field:  "EventInfo",
+				field:  "Pb",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
 
-	// no validation rules for EventDescription
+	// no validation rules for Description
 
-	switch m.Event.(type) {
+	switch m.Timestamp.(type) {
 
 	case *Point_Range:
 
@@ -144,12 +144,12 @@ func (m *Point) Validate() error {
 			}
 		}
 
-	case *Point_SingularEventTimestampMillis:
-		// no validation rules for SingularEventTimestampMillis
+	case *Point_Millis:
+		// no validation rules for Millis
 
 	default:
 		return PointValidationError{
-			field:  "Event",
+			field:  "Timestamp",
 			reason: "value is required",
 		}
 
