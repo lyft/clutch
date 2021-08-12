@@ -127,6 +127,18 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
+func increaseCapacity(ctx context.Context, cl *regionalClient, input types.UpdateTableInput) (*dynamodbv1.Status, error) {
+	result, err := cl.dynamodb.UpdateTable(ctx, input)
+
+	if err != nil {
+		return nil, err
+	}
+
+	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+
+	return &tableStatus, nil
+}
+
 func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
@@ -156,14 +168,68 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 		ProvisionedThroughput: &targetCapacity,
 	}
 
-	result, err := cl.dynamodb.UpdateTable(ctx, input)
+	tableStatus, err := increaseCapacity(ctx, cl, input)
 
+	// result, err := cl.dynamodb.UpdateTable(ctx, input)
+
+	// if err != nil {
+	// 	c.log.Error("update table failed", zap.Error(err))
+	// 	return nil, err
+	// }
+
+	// tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+
+	return tableStatus, nil
+}
+
+func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) (*dynamodbv1.Status, error) {
+	cl, err := c.getRegionalClient(region)
 	if err != nil {
 		c.log.Error("update table failed", zap.Error(err))
 		return 0, err
 	}
 
-	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+	result, err := getTable(ctx, cl, tableName)
+	if err != nil {
+		return nil, err
+	}
+
+	index, err := getGlobalSecondaryIndex(result.Table.GlobalSecondaryIndexes, indexName)
+	if err != nil {
+		return nil, err
+	}
+
+	targetCapacity := types.ProvisionedThroughput{
+		ReadCapacityUnits:  aws.Int64(targetIndexRcu),
+		WriteCapacityUnits: aws.Int64(targetIndexWcu),
+	}
+
+	err = isValidIncrease(cl, index.ProvisionedThroughput, targetCapacity)
+	if err != nil {
+		return nil, err
+	}
+
+	input := &dynamodb.UpdateTableInput{
+		TableName: aws.String(tableName),
+		GlobalSecondaryIndexUpdates: []types.GlobalSecondaryIndexUpdate{
+			types.GlobalSecondaryIndexUpdate{
+				Update: &types.UpdateGlobalSecondaryIndexAction{
+					IndexName: aws.String(indexName),
+					ProvisionedThroughput: &types.ProvisionedThroughput{
+						ReadCapacityUnits:  aws.Int64(targetIndexRcu),
+						WriteCapacityUnits: aws.Int64(targetIndexWcu),
+					},
+				},
+			},
+		},
+	}
+
+	tableStatus, err := increaseCapacity(ctx, cl, input)
+
+	if err != nil {
+		c.log.Error("update table failed", zap.Error(err))
+		return nil, err
+	}
 
 	return tableStatus, nil
 }
