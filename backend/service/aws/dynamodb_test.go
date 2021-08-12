@@ -59,6 +59,13 @@ var testDynamodbTableWithGSI = &types.TableDescription{
 				WriteCapacityUnits: aws.Int64(20),
 			},
 		},
+		{IndexName: aws.String("test-gsi-two"),
+			KeySchema: []types.KeySchemaElement{},
+			ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+				ReadCapacityUnits:  aws.Int64(100),
+				WriteCapacityUnits: aws.Int64(200),
+			},
+		},
 	},
 	TableStatus: "ACTIVE",
 }
@@ -76,6 +83,13 @@ var testTableWithGSIOutput = &dynamodbv1.Table{
 			ProvisionedThroughput: &dynamodbv1.ProvisionedThroughput{
 				ReadCapacityUnits:  10,
 				WriteCapacityUnits: 20,
+			},
+		},
+		{
+			Name: "test-gsi-two",
+			ProvisionedThroughput: &dynamodbv1.ProvisionedThroughput{
+				ReadCapacityUnits:  100,
+				WriteCapacityUnits: 200,
 			},
 		},
 	},
@@ -268,6 +282,93 @@ func TestUpdateTableCapacityWithCustomLimits(t *testing.T) {
 		tt := tt // capture range variable
 		t.Run(tt.name, func(t *testing.T) {
 			status, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
+			if err.Error() != tt.want {
+				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
+			}
+			assert.Equal(t, dynamodbv1.Status(0), status)
+		})
+	}
+}
+
+func TestGetGlobalSecondaryIndex(t *testing.T) {
+	testIndexes := testDynamodbTableWithGSI.GlobalSecondaryIndexes
+	validIndex := "test-gsi"
+	index, err := getGlobalSecondaryIndex(testIndexes, validIndex)
+	assert.NoError(t, err)
+	assert.NotNil(t, index)
+	assert.Equal(t, validIndex, *index.IndexName)
+
+	invalidIndex := "fake-gsi"
+	ret, err := getGlobalSecondaryIndex(testIndexes, invalidIndex)
+	assert.Error(t, err)
+	assert.Nil(t, ret)
+}
+
+func TestUpdateGSICapacitySuccess(t *testing.T) {
+	m := &mockDynamodb{
+		table: testDynamodbTableWithGSI,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	got, err := c.UpdateGSICapacity(context.Background(), "us-east-1", "test-table", "test-gsi-two", 101, 202)
+	assert.NotNil(t, got)
+	assert.Nil(t, err)
+}
+
+func TestUpdateGSICapacityErrors(t *testing.T) {
+	tests := []struct {
+		name     string
+		inputRCU int64
+		inputWCU int64
+		want     string
+	}{
+		{"rcu above max", 100000, 250, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds maximum allowed limits [40000]"},
+		{"wcu above max", 100, 100000, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds maximum allowed limits [40000]"},
+		{"rcu lower than current", 1, 1500, "rpc error: code = FailedPrecondition desc = Target read capacity [1] is lower than current capacity [100]"},
+		{"wcu lower than current", 1500, 1, "rpc error: code = FailedPrecondition desc = Target write capacity [1] is lower than current capacity [200]"},
+		{"rcu change scale too high", 400, 200, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds the scale limit of [2.0]x current capacity"},
+		{"wcu change scale too high", 100, 600, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds the scale limit of [2.0]x current capacity"},
+	}
+
+	m := &mockDynamodb{
+		table: testDynamodbTableWithGSI,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	for _, tt := range tests {
+		tt := tt // capture range variable
+		t.Run(tt.name, func(t *testing.T) {
+			status, err := c.UpdateGSICapacity(context.Background(), "us-east-1", "test-table", "test-gsi-two", tt.inputRCU, tt.inputWCU)
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}

@@ -72,12 +72,23 @@ func getTable(ctx context.Context, client *regionalClient, tableName string) (*d
 	return client.dynamodb.DescribeTable(ctx, input)
 }
 
+// takes raw list of GSIs from table description and creates new GlobalSecondaryIndex structs
 func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) []*dynamodbv1.GlobalSecondaryIndex {
 	gsis := make([]*dynamodbv1.GlobalSecondaryIndex, len(indexes))
 	for idx, i := range indexes {
 		gsis[idx] = newProtoForGlobalSecondaryIndex(i)
 	}
 	return gsis
+}
+
+// retrieve one GSI from list
+func getGlobalSecondaryIndex(indexes []types.GlobalSecondaryIndexDescription, targetIndexName string) (*types.GlobalSecondaryIndexDescription, error) {
+	for _, i := range indexes {
+		if *i.IndexName == targetIndexName {
+			return &i, nil
+		}
+	}
+	return nil, status.Error(codes.NotFound, "Global secondary index not found.")
 }
 
 func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Status {
@@ -127,6 +138,18 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
+func increaseCapacity(ctx context.Context, cl *regionalClient, input *dynamodb.UpdateTableInput) (dynamodbv1.Status, error) {
+	result, err := cl.dynamodb.UpdateTable(ctx, input)
+
+	if err != nil {
+		return 0, err
+	}
+
+	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+
+	return tableStatus, nil
+}
+
 func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
@@ -156,14 +179,67 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 		ProvisionedThroughput: &targetCapacity,
 	}
 
-	result, err := cl.dynamodb.UpdateTable(ctx, input)
+	tableStatus, err := increaseCapacity(ctx, cl, input)
 
 	if err != nil {
 		c.log.Error("update table failed", zap.Error(err))
 		return 0, err
 	}
 
-	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+	return tableStatus, nil
+}
+
+func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) (dynamodbv1.Status, error) {
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		c.log.Error("unable to get regional client", zap.Error(err))
+		return 0, err
+	}
+
+	result, err := getTable(ctx, cl, tableName)
+	if err != nil {
+		c.log.Error("unable to find table", zap.Error(err))
+		return 0, err
+	}
+
+	index, err := getGlobalSecondaryIndex(result.Table.GlobalSecondaryIndexes, indexName)
+	if err != nil {
+		c.log.Error("specified GSI not found", zap.Error(err))
+		return 0, err
+	}
+
+	targetCapacity := types.ProvisionedThroughput{
+		ReadCapacityUnits:  aws.Int64(targetIndexRcu),
+		WriteCapacityUnits: aws.Int64(targetIndexWcu),
+	}
+
+	err = isValidIncrease(cl, index.ProvisionedThroughput, targetCapacity)
+	if err != nil {
+		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
+		return 0, err
+	}
+
+	input := &dynamodb.UpdateTableInput{
+		TableName: aws.String(tableName),
+		GlobalSecondaryIndexUpdates: []types.GlobalSecondaryIndexUpdate{
+			types.GlobalSecondaryIndexUpdate{
+				Update: &types.UpdateGlobalSecondaryIndexAction{
+					IndexName: aws.String(indexName),
+					ProvisionedThroughput: &types.ProvisionedThroughput{
+						ReadCapacityUnits:  aws.Int64(targetIndexRcu),
+						WriteCapacityUnits: aws.Int64(targetIndexWcu),
+					},
+				},
+			},
+		},
+	}
+
+	tableStatus, err := increaseCapacity(ctx, cl, input)
+
+	if err != nil {
+		c.log.Error("update table failed", zap.Error(err))
+		return 0, err
+	}
 
 	return tableStatus, nil
 }

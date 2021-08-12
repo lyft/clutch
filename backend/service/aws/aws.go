@@ -116,6 +116,7 @@ type Client interface {
 
 	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)
 	UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error)
+	UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) (dynamodbv1.Status, error)
 
 	Regions() []string
 }
