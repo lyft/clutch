@@ -228,7 +228,7 @@ func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
-			assert.Nil(t, status)
+			assert.Equal(t, dynamodbv1.Status(0), status)
 		})
 	}
 }
@@ -271,7 +271,7 @@ func TestUpdateTableCapacityWithCustomLimits(t *testing.T) {
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
-			assert.Nil(t, status)
+			assert.Equal(t, dynamodbv1.Status(0), status)
 		})
 	}
 }
