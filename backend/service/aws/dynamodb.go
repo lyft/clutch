@@ -127,16 +127,16 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
-func increaseCapacity(ctx context.Context, cl *regionalClient, input types.UpdateTableInput) (*dynamodbv1.Status, error) {
+func increaseCapacity(ctx context.Context, cl *regionalClient, input *dynamodb.UpdateTableInput) (dynamodbv1.Status, error) {
 	result, err := cl.dynamodb.UpdateTable(ctx, input)
 
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
 
-	return &tableStatus, nil
+	return tableStatus, nil
 }
 
 func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error) {
@@ -170,19 +170,15 @@ func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableNa
 
 	tableStatus, err := increaseCapacity(ctx, cl, input)
 
-	// result, err := cl.dynamodb.UpdateTable(ctx, input)
-
-	// if err != nil {
-	// 	c.log.Error("update table failed", zap.Error(err))
-	// 	return nil, err
-	// }
-
-	// tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+	if err != nil {
+		c.log.Error("update table failed", zap.Error(err))
+		return 0, err
+	}
 
 	return tableStatus, nil
 }
 
-func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) (*dynamodbv1.Status, error) {
+func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetIndexRcu int64, targetIndexWcu int64) (dynamodbv1.Status, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
 		c.log.Error("update table failed", zap.Error(err))
@@ -191,12 +187,12 @@ func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName
 
 	result, err := getTable(ctx, cl, tableName)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	index, err := getGlobalSecondaryIndex(result.Table.GlobalSecondaryIndexes, indexName)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	targetCapacity := types.ProvisionedThroughput{
@@ -206,7 +202,7 @@ func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName
 
 	err = isValidIncrease(cl, index.ProvisionedThroughput, targetCapacity)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	input := &dynamodb.UpdateTableInput{
@@ -228,7 +224,7 @@ func (c *client) UpdateGSICapacity(ctx context.Context, region string, tableName
 
 	if err != nil {
 		c.log.Error("update table failed", zap.Error(err))
-		return nil, err
+		return 0, err
 	}
 
 	return tableStatus, nil
