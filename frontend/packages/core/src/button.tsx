@@ -51,7 +51,7 @@ const COLORS = {
     font: "#FFFFFF",
     fontDisabled: "#FFFFFF",
   },
-}  as { [key: string]: ButtonColor };
+} as { [key: string]: ButtonColor };
 
 const StyledButton = styled(MuiButton)<{ palette: ButtonColor }>(
   {
