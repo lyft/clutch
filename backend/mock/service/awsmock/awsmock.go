@@ -116,15 +116,9 @@ func (s *svc) DescribeTable(ctx context.Context, region string, tableName string
 	return ret, nil
 }
 
-<<<<<<< HEAD
 func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) (dynamodbv1.Status, error) {
 	stat := dynamodbv1.Status(3)
 	return stat, nil
-=======
-func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) (*dynamodbv1.Status, error) {
-	stat := dynamodbv1.Status(3)
-	return &stat, nil
->>>>>>> fix: update enum values
 }
 
 func (s *svc) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetRCU int64, targetWCU int64) error {
