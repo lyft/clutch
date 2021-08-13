@@ -27,6 +27,32 @@ service DDBAPI {
   }
 }
 
+<<<<<<< HEAD
+=======
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
+enum TableStatus {
+  // Unspecified status indicates the table status could not be found.
+  UNSPECIFIED = 0;
+  UNKNOWN = 1;
+  CREATING = 2;
+  UPDATING = 3;
+  DELETING = 4;
+  ACTIVE = 5;
+  INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6;
+  ARCHIVING = 7;
+  ARCHIVED = 8;
+}
+
+enum IndexStatus {
+  UNSPECIFIED = 0;
+  UNKNOWN = 1;
+  CREATING = 2; 
+  UPDATING = 3;
+  DELETING = 4;
+  ACTIVE = 5;
+}
+
+>>>>>>> api: add proto message for IndexStatus
 message Table {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
