@@ -51,7 +51,7 @@ func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 
 	if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
 		if v, err := strconv.Atoi(hdr); err == nil {
-			st.scope.Gauge("foo").Update(float64(v))
+			st.scope.Gauge("github_rate_limit_remaining").Update(float64(v))
 		}
 	}
 	return resp, err
@@ -125,7 +125,6 @@ type svc struct {
 	graphQL v4client
 	rest    v3client
 	rawAuth *gittransport.BasicAuth
-	scope   tally.Scope
 }
 
 func (s *svc) GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error) {
@@ -342,7 +341,7 @@ func newService(config *githubv1.Config, scope tally.Scope) (Client, error) {
 		}
 		token = t
 	}
-	httpClient.Transport = &StatsRoundTripper{Wrapped: httpClient.Transport}
+	httpClient.Transport = &StatsRoundTripper{Wrapped: httpClient.Transport, scope: scope}
 	restClient := githubv3.NewClient(httpClient)
 
 	return &svc{
@@ -358,7 +357,6 @@ func newService(config *githubv1.Config, scope tally.Scope) (Client, error) {
 			Username: "token",
 			Password: token,
 		},
-		scope: scope,
 	}, nil
 }
 
