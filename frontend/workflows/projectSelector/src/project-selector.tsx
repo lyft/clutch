@@ -1,10 +1,11 @@
 import * as React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
-import { client, TextField, userId } from "@clutch-sh/core";
+import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
-import LayersIcon from "@material-ui/icons/Layers";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
@@ -57,12 +58,27 @@ const StyledProgressContainer = styled.div({
   },
 });
 
+// Determines if every project has projectData (i.e. the effect has finished fetching the data)
+const allPresent = (state: State): boolean => {
+  let ret = true;
+  const allProjects = new Set([
+    ...Object.keys(state[Group.PROJECTS]),
+    ...Object.keys(state[Group.UPSTREAM]),
+    ...Object.keys(state[Group.DOWNSTREAM]),
+  ]);
+  allProjects.forEach(p => {
+    if (!(p in state.projectData)) {
+      ret = false;
+    }
+    return ret; // Will stop iteration early if false encountered.
+  });
+  return ret;
+};
+
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
-  // TODO: If a project is unchecked, the upstream and downstreams related to it disappear from the list.
-  // TODO: If a project is rechecked, the checks were preserved.
 
   const [customProject, setCustomProject] = React.useState("");
 
@@ -77,27 +93,15 @@ const ProjectSelector = () => {
     // - Are projects empty (first load)?
     // - Is loading not already in progress?
 
-    let allPresent = true;
-    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-      /*
-      TODO: b/c of this conditional, if a user adds an upstream/downstream we already have the project data for
-      to the custom project group, allPresent will be true and we wont trigger an api call. One way to account for this
-      is updating the conditional to additionally check if the project is included in state[Group.Downstreams]/state[Group.Upstreams]
-      and if so, mark allPresent as false.
-      */
-      if (!(p in state.projectData)) {
-        allPresent = false;
-        return false; // Stop iteration.
-      }
-      return true; // Continue.
-    });
-
-    if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent)) {
+    if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent(state))) {
       console.log("calling API!", state.loading); // eslint-disable-line
       dispatch({ type: "HYDRATE_START" });
 
       // TODO: have userId check be server driven
-      const requestParams = { users: [userId()], projects: [] };
+      const requestParams = { users: [userId()], projects: [] } as {
+        users: string[];
+        projects: string[];
+      };
       _.forEach(Object.keys(state[Group.PROJECTS]), p => {
         // if the project is custom
         if (state[Group.PROJECTS][p].custom) {
@@ -123,6 +127,11 @@ const ProjectSelector = () => {
 
   // This hook updates the global dash state based on the currently selected projects for cards to consume (including upstreams and downstreams).
   React.useEffect(() => {
+    if (!allPresent(state)) {
+      // Need to wait for the data.
+      return;
+    }
+
     const dashState: DashState = { projectData: {}, selected: [] };
 
     // Determine selected projects.
@@ -171,9 +180,43 @@ const ProjectSelector = () => {
       <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
-            {/* TODO: change icon to match design */}
-            <LayersIcon />
+            <LayersOutlinedIcon fontSize="small" />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
+            <Tooltip
+              title={
+                <>
+                  {[
+                    {
+                      title: "Projects",
+                      description:
+                        "Service, mobile app, etc. Unchecking a project hides its upstream and downstream dependencies.",
+                    },
+                    {
+                      title: "Upstreams",
+                      description: "Receive requests and send responses to the selected project.",
+                    },
+                    {
+                      title: "Downstreams",
+                      description: "Send requests and receive responses from the selected project.",
+                    },
+                  ].map(item => (
+                    <TooltipContainer>
+                      <Typography variant="subtitle3" color="#FFFFFF">
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body3" color="#E7E7EA">
+                        {item.description}
+                      </Typography>
+                    </TooltipContainer>
+                  ))}
+                </>
+              }
+              interactive
+              maxWidth="400px"
+              placement="right-start"
+            >
+              <InfoOutlinedIcon fontSize="small" />
+            </Tooltip>
           </StyledWorkflowHeader>
           <StyledProgressContainer>
             {state.loading && <LinearProgress color="secondary" />}

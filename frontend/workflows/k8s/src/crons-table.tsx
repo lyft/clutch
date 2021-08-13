@@ -19,14 +19,14 @@ const CronTable = () => {
       <Table
         stickyHeader
         actionsColumn
-        headings={["Name", "Cluster", "Schedule", "Suspend", "Active Jobs", "Concurrency Policy"]}
+        columns={["Name", "Cluster", "Schedule", "Suspend", "Active Jobs", "Concurrency Policy"]}
       >
         {_.sortBy(crons, [
           o => {
             return o.name;
           },
         ]).map(cron => (
-          <TableRow key={cron.name} defaultCellValue="nil">
+          <TableRow key={cron.name} cellDefault="nil">
             {cron.name}
             {cron.cluster}
             {cron.schedule}

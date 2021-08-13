@@ -22,7 +22,7 @@ const DeploymentTable = () => {
       <Table
         stickyHeader
         actionsColumn
-        headings={[
+        columns={[
           "Name",
           "Cluster",
           "Replicas Ready",
@@ -36,7 +36,7 @@ const DeploymentTable = () => {
             return o.name;
           },
         ]).map(deployment => (
-          <TableRow key={deployment.name} defaultCellValue="nil">
+          <TableRow key={deployment.name} cellDefault="nil">
             {deployment.name}
             {deployment.cluster}
             {deployment.deploymentStatus?.readyReplicas}

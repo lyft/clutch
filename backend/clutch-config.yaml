@@ -28,6 +28,7 @@ gateway:
       secure: false
 modules:
   - name: clutch.module.assets
+  - name: clutch.module.dynamodb
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
   - name: clutch.module.aws

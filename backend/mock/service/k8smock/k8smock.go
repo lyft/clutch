@@ -325,6 +325,20 @@ func (s *svc) DescribeNamespace(_ context.Context, clientset, cluster, name stri
 	}, nil
 }
 
+func (s *svc) ListEvents(_ context.Context, clientset, cluster, namespace, name string, kind k8sv1.ObjectKind) ([]*k8sv1.Event, error) {
+	return []*k8sv1.Event{
+		&k8sv1.Event{
+			Name:               "event1",
+			Reason:             "reason-1",
+			Description:        "description-1",
+			Cluster:            "fake-cluster-name",
+			Namespace:          namespace,
+			InvolvedObjectName: "pod1",
+			Kind:               kind,
+		},
+	}, nil
+}
+
 func (*svc) Clientsets(ctx context.Context) ([]string, error) {
 	return []string{"fake-user@fake-cluster"}, nil
 }

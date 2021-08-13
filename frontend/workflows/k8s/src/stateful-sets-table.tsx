@@ -20,14 +20,14 @@ const StatefulSetTable = () => {
       <Table
         stickyHeader
         actionsColumn
-        headings={["Name", "Cluster", "Replicas Desired", "Replicas Ready", "Replicas Up-To-Date"]}
+        columns={["Name", "Cluster", "Replicas Desired", "Replicas Ready", "Replicas Up-To-Date"]}
       >
         {_.sortBy(statefulSets, [
           o => {
             return o.name;
           },
         ]).map(statefulSet => (
-          <TableRow key={statefulSet.name} defaultCellValue="nil">
+          <TableRow key={statefulSet.name} cellDefault="nil">
             {statefulSet.name}
             {statefulSet.cluster}
             {statefulSet.status?.replicas}

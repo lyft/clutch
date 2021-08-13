@@ -118,25 +118,24 @@ type TextVariant =
   | "overline"
   | "input";
 
-const StyledTypography = styled.div<{ variant: TextVariant }>(
-  {
-    color: "#0D1030",
-  },
-  props => ({
-    fontSize: `${STYLE_MAP[props?.variant || 0].size}px`,
-    fontWeight: STYLE_MAP[props?.variant || 0].weight,
-    lineHeight: `${STYLE_MAP[props?.variant || 0].lineHeight}px`,
-    ...STYLE_MAP[props?.variant || 0].props,
-  })
-);
+const StyledTypography = styled.div<{ color?: string; variant: TextVariant }>(props => ({
+  color: props.color,
+  fontSize: `${STYLE_MAP[props?.variant || 0].size}px`,
+  fontWeight: STYLE_MAP[props?.variant || 0].weight,
+  lineHeight: `${STYLE_MAP[props?.variant || 0].lineHeight}px`,
+  ...STYLE_MAP[props?.variant || 0].props,
+}));
 
 export interface TypographyProps {
   variant: TextVariant;
   children: React.ReactNode;
+  color?: string;
 }
 
-const Typography = ({ variant, children }: TypographyProps) => {
-  return <StyledTypography variant={variant}>{children}</StyledTypography>;
-};
+const Typography = ({ variant, children, color = "#0D1030" }: TypographyProps) => (
+  <StyledTypography variant={variant} color={color}>
+    {children}
+  </StyledTypography>
+);
 
 export { StyledTypography, Typography };

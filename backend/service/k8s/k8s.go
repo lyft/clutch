@@ -98,6 +98,9 @@ type Service interface {
 
 	// Namespace management functions.
 	DescribeNamespace(ctx context.Context, clientset, cluster, name string) (*k8sapiv1.Namespace, error)
+
+	// Event management functions.
+	ListEvents(ctx context.Context, clientset, cluster, namespace, object string, kind k8sapiv1.ObjectKind) ([]*k8sapiv1.Event, error)
 }
 
 type svc struct {

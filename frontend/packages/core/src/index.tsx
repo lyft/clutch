@@ -22,7 +22,16 @@ import { Chip } from "./chip";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
-import { Alert, Error, Hint, Note, NotePanel, Warning } from "./Feedback";
+import {
+  Alert,
+  Error,
+  Hint,
+  Note,
+  NotePanel,
+  Tooltip,
+  TooltipContainer,
+  Warning,
+} from "./Feedback";
 import { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
 import { AvatarIcon, StatusIcon } from "./icon";
 import { Link } from "./link";
@@ -110,6 +119,8 @@ export {
   TableRowActions,
   Tabs,
   TextField,
+  Tooltip,
+  TooltipContainer,
   TreeTable,
   Typography,
   userId,

@@ -17,6 +17,7 @@ message Project {
   // Allows an organization to populate any information they see fit that does not fit our schema
   map<string, google.protobuf.Value> data = 5;
   ProjectDependencies dependencies = 6;
+  OnCall oncall = 7;
 }
 
 // Dependencies could be either upstream or downstream of this project.
@@ -28,4 +29,17 @@ message ProjectDependencies {
 
 message Dependency {
   repeated string ids = 1;
+}
+
+// Oncall information that could come from several sources for a project
+// From active alerts from source like pagerduty, to who is currently on call.
+message OnCall {
+  PagerDuty pagerduty = 1;
+}
+
+// PagerDuty specific information for a project
+message PagerDuty {
+  // A project may have more than one PagerDuty service id
+  // https://developer.pagerduty.com/api-reference/docs/CONCEPTS.md#services
+  repeated string service_ids = 1;
 }

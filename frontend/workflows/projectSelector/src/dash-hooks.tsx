@@ -4,7 +4,7 @@ import type { DashAction, DashState } from "./types";
 
 export const DashStateContext = React.createContext<DashState | undefined>(undefined);
 
-export const DashDispatchContext = React.createContext<(action: DashAction) => void | undefined>(
+export const DashDispatchContext = React.createContext<((action: DashAction) => void) | undefined>(
   undefined
 );
 
@@ -17,11 +17,17 @@ export const useDashUpdater = (): useDashUpdaterReturn => {
 
   return {
     updateSelected: projects => {
-      dispatch({ type: "UPDATE_SELECTED", payload: projects });
+      dispatch && dispatch({ type: "UPDATE_SELECTED", payload: projects });
     },
   };
 };
 
 export const useDashState = (): DashState => {
-  return React.useContext<DashState>(DashStateContext);
+  const value = React.useContext<DashState | undefined>(DashStateContext);
+  if (!value) {
+    throw new Error(
+      "useDashState was invoked outside of a valid context, check that it is a child of the Dash component"
+    );
+  }
+  return value;
 };

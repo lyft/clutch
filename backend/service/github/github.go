@@ -6,13 +6,16 @@ package github
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net/http"
 	"strings"
 	"time"
 
+	"github.com/bradleyfalzon/ghinstallation"
 	"github.com/go-git/go-billy/v5/memfs"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
@@ -42,7 +45,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
-	return newService(config), nil
+	return newService(config)
 }
 
 // Remote ref points to a git reference using a combination of the repository and the reference itself.
@@ -280,29 +283,60 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 	return nil
 }
 
-func newService(config *githubv1.Config) Client {
-	token := config.GetAccessToken()
+func newService(config *githubv1.Config) (Client, error) {
+	auth := config.GetAuth()
+	var token string
+	var httpClient *http.Client
 
-	tokenSource := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
-	)
-	httpClient := oauth2.NewClient(context.Background(), tokenSource)
+	switch auth.(type) {
+	case *githubv1.Config_AccessToken:
+		token = config.GetAccessToken()
+		tokenSource := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: token},
+		)
+		httpClient = oauth2.NewClient(context.Background(), tokenSource)
+	case *githubv1.Config_AppConfig:
+		config := config.GetAppConfig()
+		tr := http.DefaultTransport
+		var pem []byte
+		switch config.GetPem().(type) {
+		case *githubv1.AppConfig_Base64Pem:
+			p, err := base64.StdEncoding.DecodeString(config.GetBase64Pem())
+			if err != nil {
+				return nil, err
+			}
+			pem = p
+		case *githubv1.AppConfig_KeyPem:
+			pem = []byte(config.GetKeyPem())
+		}
+		itr, err := ghinstallation.New(tr, config.AppId, config.InstallationId, pem)
+		if err != nil {
+			return nil, err
+		}
 
-	rest := githubv3.NewClient(httpClient)
+		httpClient = &http.Client{Transport: itr}
+		t, err := itr.Token(context.Background())
+		if err != nil {
+			return nil, err
+		}
+		token = t
+	}
+	restClient := githubv3.NewClient(httpClient)
+
 	return &svc{
 		graphQL: githubv4.NewClient(httpClient),
 		rest: v3client{
-			Repositories:  rest.Repositories,
-			PullRequests:  rest.PullRequests,
-			Issues:        rest.Issues,
-			Users:         rest.Users,
-			Organizations: rest.Organizations,
+			Repositories:  restClient.Repositories,
+			PullRequests:  restClient.PullRequests,
+			Issues:        restClient.Issues,
+			Users:         restClient.Users,
+			Organizations: restClient.Organizations,
 		},
 		rawAuth: &gittransport.BasicAuth{
 			Username: "token",
 			Password: token,
 		},
-	}
+	}, nil
 }
 
 func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, error) {

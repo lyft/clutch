@@ -9,9 +9,26 @@ import "validate/validate.proto";
 message Config {
   repeated string regions = 1 [ (validate.rules).repeated = {min_items : 1} ];
   ClientConfig client_config = 2;
+  DynamodbConfig dynamodb_config = 3;
 }
 
 message ClientConfig {
   // If not set explicity, retries default to 0
   int32 retries = 1 [ (validate.rules).int32.gte = 0 ];
+}
+
+message DynamodbConfig {
+  ScalingLimits scaling_limits = 1;
+}
+
+message ScalingLimits {
+  // defaults to AWS quotas if not set
+  // AWS max read: 40000
+  // AWS max write: 40000
+  int64 max_read_capacity_units = 1 [ (validate.rules).int64 = {ignore_empty : true, gte : 1} ];
+  int64 max_write_capacity_units = 2 [ (validate.rules).int64 = {ignore_empty : true, gte : 1} ];
+  // defaults to a scale factor of 2.0x
+  float max_scale_factor = 3;
+  // enables whether the service can override safety limits. Defaults to false
+  bool enable_override = 4;
 }

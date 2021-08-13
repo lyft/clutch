@@ -17,11 +17,11 @@ const ChevronRight = styled(ChevronRightIcon)(props => ({
 }));
 
 export interface AccordionRowProps {
-  headings: React.ReactElement[];
+  columns: React.ReactElement[];
   children: React.ReactElement<TableRowProps> | React.ReactElement<TableRowProps>[];
 }
 
-export const AccordionRow = ({ headings, children }: AccordionRowProps) => {
+export const AccordionRow = ({ columns, children }: AccordionRowProps) => {
   const [open, setOpen] = React.useState(false);
   const hasChildren = React.Children.count(children) !== 0;
 
@@ -33,14 +33,14 @@ export const AccordionRow = ({ headings, children }: AccordionRowProps) => {
   return (
     <>
       <TableRow>
-        {headings.map((heading: any, index: number) => {
+        {columns.map((heading: any, index: number) => {
           const icon = (
             <IconButton onClick={onClick}>
               {open ? <KeyboardArrowDownIcon /> : <ChevronRight data-disabled={!hasChildren} />}
             </IconButton>
           );
           return (
-            <TableCell key={heading} data-border style={index === 0 ? { display: "flex" } : {}}>
+            <TableCell key={heading} border style={index === 0 ? { display: "flex" } : {}}>
               {index === 0 && icon}
               <div style={{ alignSelf: "center" }}>{heading}</div>
             </TableCell>
