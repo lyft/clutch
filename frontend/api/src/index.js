@@ -3913,34 +3913,6 @@ export const clutch = $root.clutch = (() => {
                     return DDBAPI;
                 })();
 
-                /**
-                 * Status enum.
-                 * @name clutch.aws.dynamodb.v1.Status
-                 * @enum {number}
-                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                 * @property {number} UNKNOWN=1 UNKNOWN value
-                 * @property {number} CREATING=2 CREATING value
-                 * @property {number} UPDATING=3 UPDATING value
-                 * @property {number} DELETING=4 DELETING value
-                 * @property {number} ACTIVE=5 ACTIVE value
-                 * @property {number} INACCESSIBLE_ENCRYPTION_CREDENTIALS=6 INACCESSIBLE_ENCRYPTION_CREDENTIALS value
-                 * @property {number} ARCHIVING=7 ARCHIVING value
-                 * @property {number} ARCHIVED=8 ARCHIVED value
-                 */
-                v1.Status = (function() {
-                    const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "UNKNOWN"] = 1;
-                    values[valuesById[2] = "CREATING"] = 2;
-                    values[valuesById[3] = "UPDATING"] = 3;
-                    values[valuesById[4] = "DELETING"] = 4;
-                    values[valuesById[5] = "ACTIVE"] = 5;
-                    values[valuesById[6] = "INACCESSIBLE_ENCRYPTION_CREDENTIALS"] = 6;
-                    values[valuesById[7] = "ARCHIVING"] = 7;
-                    values[valuesById[8] = "ARCHIVED"] = 8;
-                    return values;
-                })();
-
                 v1.Table = (function() {
 
                     /**
@@ -3951,7 +3923,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [region] Table region
                      * @property {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndex>|null} [globalSecondaryIndexes] Table globalSecondaryIndexes
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [provisionedThroughput] Table provisionedThroughput
-                     * @property {clutch.aws.dynamodb.v1.Status|null} [status] Table status
+                     * @property {clutch.aws.dynamodb.v1.Table.TableStatus|null} [status] Table status
                      */
 
                     /**
@@ -4004,7 +3976,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Table status.
-                     * @member {clutch.aws.dynamodb.v1.Status} status
+                     * @member {clutch.aws.dynamodb.v1.Table.TableStatus} status
                      * @memberof clutch.aws.dynamodb.v1.Table
                      * @instance
                      */
@@ -4164,7 +4136,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput"))
                             object.provisionedThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.provisionedThroughput, options);
                         if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Status[message.status] : message.status;
+                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.TableStatus[message.status] : message.status;
                         return object;
                     };
 
@@ -4179,6 +4151,34 @@ export const clutch = $root.clutch = (() => {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
+                    /**
+                     * TableStatus enum.
+                     * @name clutch.aws.dynamodb.v1.Table.TableStatus
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} UNKNOWN=1 UNKNOWN value
+                     * @property {number} CREATING=2 CREATING value
+                     * @property {number} UPDATING=3 UPDATING value
+                     * @property {number} DELETING=4 DELETING value
+                     * @property {number} ACTIVE=5 ACTIVE value
+                     * @property {number} INACCESSIBLE_ENCRYPTION_CREDENTIALS=6 INACCESSIBLE_ENCRYPTION_CREDENTIALS value
+                     * @property {number} ARCHIVING=7 ARCHIVING value
+                     * @property {number} ARCHIVED=8 ARCHIVED value
+                     */
+                    Table.TableStatus = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "UNKNOWN"] = 1;
+                        values[valuesById[2] = "CREATING"] = 2;
+                        values[valuesById[3] = "UPDATING"] = 3;
+                        values[valuesById[4] = "DELETING"] = 4;
+                        values[valuesById[5] = "ACTIVE"] = 5;
+                        values[valuesById[6] = "INACCESSIBLE_ENCRYPTION_CREDENTIALS"] = 6;
+                        values[valuesById[7] = "ARCHIVING"] = 7;
+                        values[valuesById[8] = "ARCHIVED"] = 8;
+                        return values;
+                    })();
+
                     return Table;
                 })();
 
@@ -4190,7 +4190,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IGlobalSecondaryIndex
                      * @property {string|null} [name] GlobalSecondaryIndex name
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [provisionedThroughput] GlobalSecondaryIndex provisionedThroughput
-                     * @property {clutch.aws.dynamodb.v1.Status|null} [status] GlobalSecondaryIndex status
+                     * @property {clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus|null} [status] GlobalSecondaryIndex status
                      */
 
                     /**
@@ -4226,7 +4226,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * GlobalSecondaryIndex status.
-                     * @member {clutch.aws.dynamodb.v1.Status} status
+                     * @member {clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus} status
                      * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
                      * @instance
                      */
@@ -4261,9 +4261,6 @@ export const clutch = $root.clutch = (() => {
                             case 3:
                             case 4:
                             case 5:
-                            case 6:
-                            case 7:
-                            case 8:
                                 break;
                             }
                         return null;
@@ -4313,18 +4310,6 @@ export const clutch = $root.clutch = (() => {
                         case 5:
                             message.status = 5;
                             break;
-                        case "INACCESSIBLE_ENCRYPTION_CREDENTIALS":
-                        case 6:
-                            message.status = 6;
-                            break;
-                        case "ARCHIVING":
-                        case 7:
-                            message.status = 7;
-                            break;
-                        case "ARCHIVED":
-                        case 8:
-                            message.status = 8;
-                            break;
                         }
                         return message;
                     };
@@ -4352,7 +4337,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput"))
                             object.provisionedThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.provisionedThroughput, options);
                         if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Status[message.status] : message.status;
+                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus[message.status] : message.status;
                         return object;
                     };
 
@@ -4366,6 +4351,28 @@ export const clutch = $root.clutch = (() => {
                     GlobalSecondaryIndex.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    /**
+                     * IndexStatus enum.
+                     * @name clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} UNKNOWN=1 UNKNOWN value
+                     * @property {number} CREATING=2 CREATING value
+                     * @property {number} UPDATING=3 UPDATING value
+                     * @property {number} DELETING=4 DELETING value
+                     * @property {number} ACTIVE=5 ACTIVE value
+                     */
+                    GlobalSecondaryIndex.IndexStatus = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "UNKNOWN"] = 1;
+                        values[valuesById[2] = "CREATING"] = 2;
+                        values[valuesById[3] = "UPDATING"] = 3;
+                        values[valuesById[4] = "DELETING"] = 4;
+                        values[valuesById[5] = "ACTIVE"] = 5;
+                        return values;
+                    })();
 
                     return GlobalSecondaryIndex;
                 })();

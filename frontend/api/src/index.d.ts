@@ -1713,19 +1713,6 @@ export namespace clutch {
                     type UpdateCapacityCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.UpdateCapacityResponse) => void;
                 }
 
-                /** Status enum. */
-                enum Status {
-                    UNSPECIFIED = 0,
-                    UNKNOWN = 1,
-                    CREATING = 2,
-                    UPDATING = 3,
-                    DELETING = 4,
-                    ACTIVE = 5,
-                    INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6,
-                    ARCHIVING = 7,
-                    ARCHIVED = 8
-                }
-
                 /** Properties of a Table. */
                 interface ITable {
 
@@ -1742,7 +1729,7 @@ export namespace clutch {
                     provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** Table status */
-                    status?: (clutch.aws.dynamodb.v1.Status|null);
+                    status?: (clutch.aws.dynamodb.v1.Table.TableStatus|null);
                 }
 
                 /** Represents a Table. */
@@ -1767,7 +1754,7 @@ export namespace clutch {
                     public provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** Table status. */
-                    public status: clutch.aws.dynamodb.v1.Status;
+                    public status: clutch.aws.dynamodb.v1.Table.TableStatus;
 
                     /**
                      * Verifies a Table message.
@@ -1798,6 +1785,22 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
+                namespace Table {
+
+                    /** TableStatus enum. */
+                    enum TableStatus {
+                        UNSPECIFIED = 0,
+                        UNKNOWN = 1,
+                        CREATING = 2,
+                        UPDATING = 3,
+                        DELETING = 4,
+                        ACTIVE = 5,
+                        INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6,
+                        ARCHIVING = 7,
+                        ARCHIVED = 8
+                    }
+                }
+
                 /** Properties of a GlobalSecondaryIndex. */
                 interface IGlobalSecondaryIndex {
 
@@ -1808,7 +1811,7 @@ export namespace clutch {
                     provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** GlobalSecondaryIndex status */
-                    status?: (clutch.aws.dynamodb.v1.Status|null);
+                    status?: (clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus|null);
                 }
 
                 /** Represents a GlobalSecondaryIndex. */
@@ -1827,7 +1830,7 @@ export namespace clutch {
                     public provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** GlobalSecondaryIndex status. */
-                    public status: clutch.aws.dynamodb.v1.Status;
+                    public status: clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus;
 
                     /**
                      * Verifies a GlobalSecondaryIndex message.
@@ -1856,6 +1859,19 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace GlobalSecondaryIndex {
+
+                    /** IndexStatus enum. */
+                    enum IndexStatus {
+                        UNSPECIFIED = 0,
+                        UNKNOWN = 1,
+                        CREATING = 2,
+                        UPDATING = 3,
+                        DELETING = 4,
+                        ACTIVE = 5
+                    }
                 }
 
                 /** Properties of a GlobalSecondaryIndexUpdate. */
