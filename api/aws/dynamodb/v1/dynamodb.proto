@@ -34,7 +34,7 @@ message Table {
   };
 
   // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
-  enum TableStatus {
+  enum Status {
     // Unspecified status indicates the table status could not be found.
     UNSPECIFIED = 0;
     UNKNOWN = 1;
@@ -56,7 +56,7 @@ message Table {
 
 // Represents the current GSI state
 message GlobalSecondaryIndex {
-  enum IndexStatus {
+  enum Status {
     // Unspecified indicates GSI status could not be found.
     UNSPECIFIED = 0;
     UNKNOWN = 1;
