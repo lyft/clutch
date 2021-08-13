@@ -43,27 +43,14 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 	}
 
 	result, err := getTable(ctx, cl, tableName)
+
 	if err != nil {
 		c.log.Error("unable to find table", zap.Error(err))
 		return nil, err
 	}
 
-	currentCapacity := &dynamodbv1.ProvisionedThroughput{
-		WriteCapacityUnits: aws.ToInt64(result.Table.ProvisionedThroughput.WriteCapacityUnits),
-		ReadCapacityUnits:  aws.ToInt64(result.Table.ProvisionedThroughput.ReadCapacityUnits),
-	}
+	ret := newProtoForTable(result.Table, region)
 
-	globalSecondaryIndexes := getGlobalSecondaryIndexes(result.Table.GlobalSecondaryIndexes)
-
-	tableStatus := newProtoForTableStatus(result.Table.TableStatus)
-
-	ret := &dynamodbv1.Table{
-		Name:                   aws.ToString(result.Table.TableName),
-		Region:                 region,
-		GlobalSecondaryIndexes: globalSecondaryIndexes,
-		ProvisionedThroughput:  currentCapacity,
-		Status:                 tableStatus,
-	}
 	return ret, nil
 }
 
@@ -72,6 +59,7 @@ func getTable(ctx context.Context, client *regionalClient, tableName string) (*d
 	return client.dynamodb.DescribeTable(ctx, input)
 }
 
+// generator for the list of GSI protos
 func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) []*dynamodbv1.GlobalSecondaryIndex {
 	gsis := make([]*dynamodbv1.GlobalSecondaryIndex, len(indexes))
 	for idx, i := range indexes {
@@ -80,23 +68,65 @@ func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) 
 	return gsis
 }
 
-func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Status {
-	value, ok := dynamodbv1.Status_value[string(s)]
-	if !ok {
-		return dynamodbv1.Status_UNKNOWN
+// retrieve one GSI from table description
+func getGlobalSecondaryIndex(indexes []types.GlobalSecondaryIndexDescription, targetIndexName string) (*types.GlobalSecondaryIndexDescription, error) {
+	for _, i := range indexes {
+		if *i.IndexName == targetIndexName {
+			return &i, nil
+		}
 	}
-	return dynamodbv1.Status(value)
+	return nil, status.Error(codes.NotFound, "Global secondary index not found.")
+}
+
+func newProtoForTable(t *types.TableDescription, region string) *dynamodbv1.Table {
+	currentCapacity := &dynamodbv1.Throughput{
+		WriteCapacityUnits: aws.ToInt64(t.ProvisionedThroughput.WriteCapacityUnits),
+		ReadCapacityUnits:  aws.ToInt64(t.ProvisionedThroughput.ReadCapacityUnits),
+	}
+
+	globalSecondaryIndexes := getGlobalSecondaryIndexes(t.GlobalSecondaryIndexes)
+
+	tableStatus := newProtoForTableStatus(t.TableStatus)
+
+	ret := &dynamodbv1.Table{
+		Name:                   aws.ToString(t.TableName),
+		Region:                 region,
+		GlobalSecondaryIndexes: globalSecondaryIndexes,
+		ProvisionedThroughput:  currentCapacity,
+		Status:                 tableStatus,
+	}
+
+	return ret
+}
+
+func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Table_Status {
+	value, ok := dynamodbv1.Table_Status_value[string(s)]
+	if !ok {
+		return dynamodbv1.Table_UNKNOWN
+	}
+	return dynamodbv1.Table_Status(value)
+}
+
+func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex_Status {
+	value, ok := dynamodbv1.GlobalSecondaryIndex_Status_value[string(s)]
+	if !ok {
+		return dynamodbv1.GlobalSecondaryIndex_UNKNOWN
+	}
+	return dynamodbv1.GlobalSecondaryIndex_Status(value)
 }
 
 func newProtoForGlobalSecondaryIndex(index types.GlobalSecondaryIndexDescription) *dynamodbv1.GlobalSecondaryIndex {
-	currentCapacity := &dynamodbv1.ProvisionedThroughput{
+	currentCapacity := &dynamodbv1.Throughput{
 		ReadCapacityUnits:  aws.ToInt64(index.ProvisionedThroughput.ReadCapacityUnits),
 		WriteCapacityUnits: aws.ToInt64(index.ProvisionedThroughput.WriteCapacityUnits),
 	}
 
+	indexStatus := newProtoForIndexStatus(index.IndexStatus)
+
 	return &dynamodbv1.GlobalSecondaryIndex{
 		Name:                  aws.ToString(index.IndexName),
 		ProvisionedThroughput: currentCapacity,
+		Status:                indexStatus,
 	}
 }
 
@@ -127,43 +157,151 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
-func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error) {
+func (c *client) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.GlobalSecondaryIndexUpdate) (*dynamodbv1.Table, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
 		c.log.Error("unable to get regional client", zap.Error(err))
-		return 0, err
+		return nil, err
 	}
 
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
 		c.log.Error("unable to find table", zap.Error(err))
-		return 0, err
+		return nil, err
 	}
 
-	targetCapacity := types.ProvisionedThroughput{
-		ReadCapacityUnits:  aws.Int64(targetTableRcu),
-		WriteCapacityUnits: aws.Int64(targetTableWcu),
-	}
-
-	err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, targetCapacity)
-	if err != nil {
-		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
-		return 0, err
-	}
-
+	// initialize the input we'll pass to AWS
 	input := &dynamodb.UpdateTableInput{
-		TableName:             aws.String(tableName),
-		ProvisionedThroughput: &targetCapacity,
+		TableName: aws.String(tableName),
+	}
+
+	// add target table capacity to input if valid
+	if targetTableCapacity != nil { // received new vals for table
+		t := types.ProvisionedThroughput{
+			ReadCapacityUnits:  aws.Int64(targetTableCapacity.ReadCapacityUnits),
+			WriteCapacityUnits: aws.Int64(targetTableCapacity.WriteCapacityUnits),
+		}
+
+		err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, t)
+		if err != nil {
+			return nil, err
+		}
+
+		input.ProvisionedThroughput = &t
+	}
+
+	// add target index capacities to input if valid
+	if len(indexUpdates) > 0 { // received at least one index update
+		updates, err := generateIndexUpdates(cl, currentTable, indexUpdates)
+		if err != nil {
+			return nil, err
+		}
+		input.GlobalSecondaryIndexUpdates = append(input.GlobalSecondaryIndexUpdates, updates...)
 	}
 
 	result, err := cl.dynamodb.UpdateTable(ctx, input)
-
 	if err != nil {
-		c.log.Error("update table failed", zap.Error(err))
-		return 0, err
+		return nil, err
 	}
 
-	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+	ret := newProtoForTable(result.TableDescription, region)
 
-	return tableStatus, nil
+	return ret, nil
 }
+
+// given a list of ddbv1.updates, generate the AWS types for updates
+// TO DO: this function currently terminates upon encountering one invalid index update,
+// preserving the AWS SDK design of "all-or-nothing" UpdateTable functionality.
+// confirm if that is still the desired behavior. Alternatively, we can selectively make updates.
+func generateIndexUpdates(cl *regionalClient, t *dynamodb.DescribeTableOutput, indexUpdates []*dynamodbv1.GlobalSecondaryIndexUpdate) ([]types.GlobalSecondaryIndexUpdate, error) {
+	currentIndexes := t.Table.GlobalSecondaryIndexes
+
+	var updates []types.GlobalSecondaryIndexUpdate
+
+	for _, i := range indexUpdates {
+		currentIndex, err := getGlobalSecondaryIndex(currentIndexes, i.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		targetIndexCapacity := types.ProvisionedThroughput{
+			ReadCapacityUnits:  aws.Int64(i.TargetIndexThroughput.ReadCapacityUnits),
+			WriteCapacityUnits: aws.Int64(i.TargetIndexThroughput.WriteCapacityUnits),
+		}
+
+		err = isValidIncrease(cl, currentIndex.ProvisionedThroughput, targetIndexCapacity)
+		if err != nil {
+			return nil, err
+		}
+
+		newIndexUpdate := types.GlobalSecondaryIndexUpdate{
+			Update: &types.UpdateGlobalSecondaryIndexAction{
+				IndexName: aws.String(i.Name),
+				ProvisionedThroughput: &types.ProvisionedThroughput{
+					ReadCapacityUnits:  aws.Int64(i.TargetIndexThroughput.ReadCapacityUnits),
+					WriteCapacityUnits: aws.Int64(i.TargetIndexThroughput.WriteCapacityUnits),
+				},
+			},
+		}
+
+		updates = append(updates, newIndexUpdate)
+	}
+
+	return updates, nil
+}
+
+// input := &dynamodb.UpdateTableInput{
+// 	TableName: aws.String(tableName),
+// 	GlobalSecondaryIndexUpdates: []types.GlobalSecondaryIndexUpdate{
+// 		types.GlobalSecondaryIndexUpdate{
+// 			Update: &types.UpdateGlobalSecondaryIndexAction{
+// 				IndexName: aws.String(indexName),
+// 				ProvisionedThroughput: &types.ProvisionedThroughput{
+// 					ReadCapacityUnits:  aws.Int64(targetIndexRcu),
+// 					WriteCapacityUnits: aws.Int64(targetIndexWcu),
+// 				},
+// 			},
+// 		},
+// 	},
+// }
+
+// func (c *client) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error) {
+// 	cl, err := c.getRegionalClient(region)
+// 	if err != nil {
+// 		c.log.Error("unable to get regional client", zap.Error(err))
+// 		return 0, err
+// 	}
+
+// 	currentTable, err := getTable(ctx, cl, tableName)
+// 	if err != nil {
+// 		c.log.Error("unable to find table", zap.Error(err))
+// 		return 0, err
+// 	}
+
+// 	targetCapacity := types.ProvisionedThroughput{
+// 		ReadCapacityUnits:  aws.Int64(targetTableRcu),
+// 		WriteCapacityUnits: aws.Int64(targetTableWcu),
+// 	}
+
+// 	err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, targetCapacity)
+// 	if err != nil {
+// 		c.log.Error("invalid requested amount for capacity increase", zap.Error(err))
+// 		return 0, err
+// 	}
+
+// 	input := &dynamodb.UpdateTableInput{
+// 		TableName:             aws.String(tableName),
+// 		ProvisionedThroughput: &targetCapacity,
+// 	}
+
+// 	result, err := cl.dynamodb.UpdateTable(ctx, input)
+
+// 	if err != nil {
+// 		c.log.Error("update table failed", zap.Error(err))
+// 		return 0, err
+// 	}
+
+// 	tableStatus := newProtoForTableStatus(result.TableDescription.TableStatus)
+
+// 	return tableStatus, nil
+// }
