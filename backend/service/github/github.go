@@ -51,7 +51,7 @@ func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 
 	if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
 		if v, err := strconv.Atoi(hdr); err == nil {
-			st.scope.Gauge("github_rate_limit_remaining").Update(float64(v))
+			st.scope.Gauge("rate_limit_remaining").Update(float64(v))
 		}
 	}
 	return resp, err
