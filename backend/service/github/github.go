@@ -12,6 +12,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -40,12 +41,28 @@ const CurrentUser = ""
 
 type FileMap map[string]io.ReadCloser
 
+type StatsRoundTripper struct {
+	Wrapped http.RoundTripper
+	scope   tally.Scope
+}
+
+func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	resp, err := st.Wrapped.RoundTrip(req)
+
+	if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
+		if v, err := strconv.Atoi(hdr); err == nil {
+			st.scope.Gauge("rate_limit_remaining").Update(float64(v))
+		}
+	}
+	return resp, err
+}
+
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &githubv1.Config{}
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
-	return newService(config)
+	return newService(config, scope)
 }
 
 // Remote ref points to a git reference using a combination of the repository and the reference itself.
@@ -140,6 +157,7 @@ func (s *svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3
 		}
 		return nil, err
 	}
+
 	return membership, nil
 }
 
@@ -150,6 +168,7 @@ func (s *svc) GetUser(ctx context.Context, username string) (*githubv3.User, err
 	if err != nil {
 		return nil, err
 	}
+
 	return user, nil
 }
 
@@ -209,6 +228,7 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 	if err != nil {
 		return nil, err
 	}
+
 	return &PullRequestInfo{
 		Number: pr.GetNumber(),
 		// There are many possible URLs to return, but the HTML one is most human friendly
@@ -283,7 +303,7 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 	return nil
 }
 
-func newService(config *githubv1.Config) (Client, error) {
+func newService(config *githubv1.Config, scope tally.Scope) (Client, error) {
 	auth := config.GetAuth()
 	var token string
 	var httpClient *http.Client
@@ -321,6 +341,7 @@ func newService(config *githubv1.Config) (Client, error) {
 		}
 		token = t
 	}
+	httpClient.Transport = &StatsRoundTripper{Wrapped: httpClient.Transport, scope: scope}
 	restClient := githubv3.NewClient(httpClient)
 
 	return &svc{
@@ -386,6 +407,7 @@ func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA str
 	if err != nil {
 		return nil, fmt.Errorf("Could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
+
 	return comp, nil
 }
 
