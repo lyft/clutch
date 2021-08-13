@@ -27,38 +27,47 @@ service DDBAPI {
   }
 }
 
-// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
-enum Status {
-  // Unspecified status indicates the table status could not be found.
-  UNSPECIFIED = 0;
-  UNKNOWN = 1;
-  CREATING = 2;
-  UPDATING = 3;
-  DELETING = 4;
-  ACTIVE = 5;
-  INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6;
-  ARCHIVING = 7;
-  ARCHIVED = 8;
-}
-
 message Table {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
     pattern : "{region}/{name}"
   };
 
+  // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
+  enum TableStatus {
+    // Unspecified status indicates the table status could not be found.
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    CREATING = 2;
+    UPDATING = 3;
+    DELETING = 4;
+    ACTIVE = 5;
+    INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6;
+    ARCHIVING = 7;
+    ARCHIVED = 8;
+  }
+
   string name = 1;
   string region = 2;
   repeated GlobalSecondaryIndex global_secondary_indexes = 3;
   Throughput provisioned_throughput = 4;
-  Status status = 5;
+  TableStatus status = 5;
 }
 
 // Represents the current GSI state
 message GlobalSecondaryIndex {
+  enum IndexStatus {
+    // Unspecified indicates GSI status could not be found.
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    CREATING = 2;
+    UPDATING = 3;
+    DELETING = 4;
+    ACTIVE = 5;
+  }
   string name = 1;
   Throughput provisioned_throughput = 2;
-  Status status = 3;
+  IndexStatus status = 3;
 }
 
 // Represents an Update action on a GSI, which changes the provisioned capacity.
