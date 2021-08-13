@@ -1682,32 +1682,18 @@ export namespace clutch {
                     public describeTable(request: clutch.aws.dynamodb.v1.IDescribeTableRequest): Promise<clutch.aws.dynamodb.v1.DescribeTableResponse>;
 
                     /**
-                     * Calls UpdateTableCapacity.
-                     * @param request UpdateTableCapacityRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and UpdateTableCapacityResponse
+                     * Calls UpdateCapacity.
+                     * @param request UpdateCapacityRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and UpdateCapacityResponse
                      */
-                    public updateTableCapacity(request: clutch.aws.dynamodb.v1.IUpdateTableCapacityRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.UpdateTableCapacityCallback): void;
+                    public updateCapacity(request: clutch.aws.dynamodb.v1.IUpdateCapacityRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.UpdateCapacityCallback): void;
 
                     /**
-                     * Calls UpdateTableCapacity.
-                     * @param request UpdateTableCapacityRequest message or plain object
+                     * Calls UpdateCapacity.
+                     * @param request UpdateCapacityRequest message or plain object
                      * @returns Promise
                      */
-                    public updateTableCapacity(request: clutch.aws.dynamodb.v1.IUpdateTableCapacityRequest): Promise<clutch.aws.dynamodb.v1.UpdateTableCapacityResponse>;
-
-                    /**
-                     * Calls UpdateGSICapacity.
-                     * @param request UpdateGSICapacityRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and UpdateGSICapacityResponse
-                     */
-                    public updateGSICapacity(request: clutch.aws.dynamodb.v1.IUpdateGSICapacityRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.UpdateGSICapacityCallback): void;
-
-                    /**
-                     * Calls UpdateGSICapacity.
-                     * @param request UpdateGSICapacityRequest message or plain object
-                     * @returns Promise
-                     */
-                    public updateGSICapacity(request: clutch.aws.dynamodb.v1.IUpdateGSICapacityRequest): Promise<clutch.aws.dynamodb.v1.UpdateGSICapacityResponse>;
+                    public updateCapacity(request: clutch.aws.dynamodb.v1.IUpdateCapacityRequest): Promise<clutch.aws.dynamodb.v1.UpdateCapacityResponse>;
                 }
 
                 namespace DDBAPI {
@@ -1720,18 +1706,11 @@ export namespace clutch {
                     type DescribeTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.DescribeTableResponse) => void;
 
                     /**
-                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateTableCapacity}.
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateCapacity}.
                      * @param error Error, if any
-                     * @param [response] UpdateTableCapacityResponse
+                     * @param [response] UpdateCapacityResponse
                      */
-                    type UpdateTableCapacityCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.UpdateTableCapacityResponse) => void;
-
-                    /**
-                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateGSICapacity}.
-                     * @param error Error, if any
-                     * @param [response] UpdateGSICapacityResponse
-                     */
-                    type UpdateGSICapacityCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.UpdateGSICapacityResponse) => void;
+                    type UpdateCapacityCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.UpdateCapacityResponse) => void;
                 }
 
                 /** Status enum. */
@@ -1760,7 +1739,7 @@ export namespace clutch {
                     globalSecondaryIndexes?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndex[]|null);
 
                     /** Table provisionedThroughput */
-                    provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** Table status */
                     status?: (clutch.aws.dynamodb.v1.Status|null);
@@ -1785,7 +1764,7 @@ export namespace clutch {
                     public globalSecondaryIndexes: clutch.aws.dynamodb.v1.IGlobalSecondaryIndex[];
 
                     /** Table provisionedThroughput. */
-                    public provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    public provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** Table status. */
                     public status: clutch.aws.dynamodb.v1.Status;
@@ -1826,7 +1805,10 @@ export namespace clutch {
                     name?: (string|null);
 
                     /** GlobalSecondaryIndex provisionedThroughput */
-                    provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
+
+                    /** GlobalSecondaryIndex status */
+                    status?: (clutch.aws.dynamodb.v1.Status|null);
                 }
 
                 /** Represents a GlobalSecondaryIndex. */
@@ -1842,7 +1824,10 @@ export namespace clutch {
                     public name: string;
 
                     /** GlobalSecondaryIndex provisionedThroughput. */
-                    public provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    public provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
+
+                    /** GlobalSecondaryIndex status. */
+                    public status: clutch.aws.dynamodb.v1.Status;
 
                     /**
                      * Verifies a GlobalSecondaryIndex message.
@@ -1873,55 +1858,109 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a ProvisionedThroughput. */
-                interface IProvisionedThroughput {
+                /** Properties of a GlobalSecondaryIndexUpdate. */
+                interface IGlobalSecondaryIndexUpdate {
 
-                    /** ProvisionedThroughput writeCapacityUnits */
-                    writeCapacityUnits?: (number|Long|null);
+                    /** GlobalSecondaryIndexUpdate name */
+                    name?: (string|null);
 
-                    /** ProvisionedThroughput readCapacityUnits */
-                    readCapacityUnits?: (number|Long|null);
+                    /** GlobalSecondaryIndexUpdate targetIndexThroughput */
+                    targetIndexThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
                 }
 
-                /** Represents a ProvisionedThroughput. */
-                class ProvisionedThroughput implements IProvisionedThroughput {
+                /** Represents a GlobalSecondaryIndexUpdate. */
+                class GlobalSecondaryIndexUpdate implements IGlobalSecondaryIndexUpdate {
 
                     /**
-                     * Constructs a new ProvisionedThroughput.
+                     * Constructs a new GlobalSecondaryIndexUpdate.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IProvisionedThroughput);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IGlobalSecondaryIndexUpdate);
 
-                    /** ProvisionedThroughput writeCapacityUnits. */
-                    public writeCapacityUnits: (number|Long);
+                    /** GlobalSecondaryIndexUpdate name. */
+                    public name: string;
 
-                    /** ProvisionedThroughput readCapacityUnits. */
-                    public readCapacityUnits: (number|Long);
+                    /** GlobalSecondaryIndexUpdate targetIndexThroughput. */
+                    public targetIndexThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /**
-                     * Verifies a ProvisionedThroughput message.
+                     * Verifies a GlobalSecondaryIndexUpdate message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a ProvisionedThroughput message from a plain object. Also converts values to their respective internal types.
+                     * Creates a GlobalSecondaryIndexUpdate message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns ProvisionedThroughput
+                     * @returns GlobalSecondaryIndexUpdate
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.ProvisionedThroughput;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate;
 
                     /**
-                     * Creates a plain object from a ProvisionedThroughput message. Also converts values to other types if specified.
-                     * @param message ProvisionedThroughput
+                     * Creates a plain object from a GlobalSecondaryIndexUpdate message. Also converts values to other types if specified.
+                     * @param message GlobalSecondaryIndexUpdate
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.ProvisionedThroughput, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this ProvisionedThroughput to JSON.
+                     * Converts this GlobalSecondaryIndexUpdate to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Throughput. */
+                interface IThroughput {
+
+                    /** Throughput writeCapacityUnits */
+                    writeCapacityUnits?: (number|Long|null);
+
+                    /** Throughput readCapacityUnits */
+                    readCapacityUnits?: (number|Long|null);
+                }
+
+                /** Represents a Throughput. */
+                class Throughput implements IThroughput {
+
+                    /**
+                     * Constructs a new Throughput.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.dynamodb.v1.IThroughput);
+
+                    /** Throughput writeCapacityUnits. */
+                    public writeCapacityUnits: (number|Long);
+
+                    /** Throughput readCapacityUnits. */
+                    public readCapacityUnits: (number|Long);
+
+                    /**
+                     * Verifies a Throughput message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Throughput message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Throughput
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.Throughput;
+
+                    /**
+                     * Creates a plain object from a Throughput message. Also converts values to other types if specified.
+                     * @param message Throughput
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.dynamodb.v1.Throughput, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Throughput to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -2029,253 +2068,115 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of an UpdateTableCapacityRequest. */
-                interface IUpdateTableCapacityRequest {
+                /** Properties of an UpdateCapacityRequest. */
+                interface IUpdateCapacityRequest {
 
-                    /** UpdateTableCapacityRequest tableName */
+                    /** UpdateCapacityRequest tableName */
                     tableName?: (string|null);
 
-                    /** UpdateTableCapacityRequest region */
+                    /** UpdateCapacityRequest region */
                     region?: (string|null);
 
-                    /** UpdateTableCapacityRequest targetTableRcu */
-                    targetTableRcu?: (number|Long|null);
+                    /** UpdateCapacityRequest targetTableThroughput */
+                    targetTableThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
-                    /** UpdateTableCapacityRequest targetTableWcu */
-                    targetTableWcu?: (number|Long|null);
+                    /** UpdateCapacityRequest gsiUpdates */
+                    gsiUpdates?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndexUpdate[]|null);
                 }
 
-                /** Represents an UpdateTableCapacityRequest. */
-                class UpdateTableCapacityRequest implements IUpdateTableCapacityRequest {
+                /** Represents an UpdateCapacityRequest. */
+                class UpdateCapacityRequest implements IUpdateCapacityRequest {
 
                     /**
-                     * Constructs a new UpdateTableCapacityRequest.
+                     * Constructs a new UpdateCapacityRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IUpdateTableCapacityRequest);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IUpdateCapacityRequest);
 
-                    /** UpdateTableCapacityRequest tableName. */
+                    /** UpdateCapacityRequest tableName. */
                     public tableName: string;
 
-                    /** UpdateTableCapacityRequest region. */
+                    /** UpdateCapacityRequest region. */
                     public region: string;
 
-                    /** UpdateTableCapacityRequest targetTableRcu. */
-                    public targetTableRcu: (number|Long);
+                    /** UpdateCapacityRequest targetTableThroughput. */
+                    public targetTableThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
-                    /** UpdateTableCapacityRequest targetTableWcu. */
-                    public targetTableWcu: (number|Long);
+                    /** UpdateCapacityRequest gsiUpdates. */
+                    public gsiUpdates: clutch.aws.dynamodb.v1.IGlobalSecondaryIndexUpdate[];
 
                     /**
-                     * Verifies an UpdateTableCapacityRequest message.
+                     * Verifies an UpdateCapacityRequest message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an UpdateTableCapacityRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates an UpdateCapacityRequest message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns UpdateTableCapacityRequest
+                     * @returns UpdateCapacityRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.UpdateTableCapacityRequest;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.UpdateCapacityRequest;
 
                     /**
-                     * Creates a plain object from an UpdateTableCapacityRequest message. Also converts values to other types if specified.
-                     * @param message UpdateTableCapacityRequest
+                     * Creates a plain object from an UpdateCapacityRequest message. Also converts values to other types if specified.
+                     * @param message UpdateCapacityRequest
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.UpdateTableCapacityRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.UpdateCapacityRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this UpdateTableCapacityRequest to JSON.
+                     * Converts this UpdateCapacityRequest to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of an UpdateTableCapacityResponse. */
-                interface IUpdateTableCapacityResponse {
+                /** Properties of an UpdateCapacityResponse. */
+                interface IUpdateCapacityResponse {
 
-                    /** UpdateTableCapacityResponse tableName */
-                    tableName?: (string|null);
-
-                    /** UpdateTableCapacityResponse tableStatus */
-                    tableStatus?: (clutch.aws.dynamodb.v1.Status|null);
+                    /** UpdateCapacityResponse table */
+                    table?: (clutch.aws.dynamodb.v1.ITable|null);
                 }
 
-                /** Represents an UpdateTableCapacityResponse. */
-                class UpdateTableCapacityResponse implements IUpdateTableCapacityResponse {
+                /** Represents an UpdateCapacityResponse. */
+                class UpdateCapacityResponse implements IUpdateCapacityResponse {
 
                     /**
-                     * Constructs a new UpdateTableCapacityResponse.
+                     * Constructs a new UpdateCapacityResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IUpdateTableCapacityResponse);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IUpdateCapacityResponse);
 
-                    /** UpdateTableCapacityResponse tableName. */
-                    public tableName: string;
-
-                    /** UpdateTableCapacityResponse tableStatus. */
-                    public tableStatus: clutch.aws.dynamodb.v1.Status;
+                    /** UpdateCapacityResponse table. */
+                    public table?: (clutch.aws.dynamodb.v1.ITable|null);
 
                     /**
-                     * Verifies an UpdateTableCapacityResponse message.
+                     * Verifies an UpdateCapacityResponse message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an UpdateTableCapacityResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates an UpdateCapacityResponse message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns UpdateTableCapacityResponse
+                     * @returns UpdateCapacityResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.UpdateTableCapacityResponse;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.UpdateCapacityResponse;
 
                     /**
-                     * Creates a plain object from an UpdateTableCapacityResponse message. Also converts values to other types if specified.
-                     * @param message UpdateTableCapacityResponse
+                     * Creates a plain object from an UpdateCapacityResponse message. Also converts values to other types if specified.
+                     * @param message UpdateCapacityResponse
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.UpdateTableCapacityResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.UpdateCapacityResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this UpdateTableCapacityResponse to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of an UpdateGSICapacityRequest. */
-                interface IUpdateGSICapacityRequest {
-
-                    /** UpdateGSICapacityRequest tableName */
-                    tableName?: (string|null);
-
-                    /** UpdateGSICapacityRequest region */
-                    region?: (string|null);
-
-                    /** UpdateGSICapacityRequest indexName */
-                    indexName?: (string|null);
-
-                    /** UpdateGSICapacityRequest targetIndexRcu */
-                    targetIndexRcu?: (number|Long|null);
-
-                    /** UpdateGSICapacityRequest targetIndexWcu */
-                    targetIndexWcu?: (number|Long|null);
-                }
-
-                /** Represents an UpdateGSICapacityRequest. */
-                class UpdateGSICapacityRequest implements IUpdateGSICapacityRequest {
-
-                    /**
-                     * Constructs a new UpdateGSICapacityRequest.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IUpdateGSICapacityRequest);
-
-                    /** UpdateGSICapacityRequest tableName. */
-                    public tableName: string;
-
-                    /** UpdateGSICapacityRequest region. */
-                    public region: string;
-
-                    /** UpdateGSICapacityRequest indexName. */
-                    public indexName: string;
-
-                    /** UpdateGSICapacityRequest targetIndexRcu. */
-                    public targetIndexRcu: (number|Long);
-
-                    /** UpdateGSICapacityRequest targetIndexWcu. */
-                    public targetIndexWcu: (number|Long);
-
-                    /**
-                     * Verifies an UpdateGSICapacityRequest message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an UpdateGSICapacityRequest message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns UpdateGSICapacityRequest
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.UpdateGSICapacityRequest;
-
-                    /**
-                     * Creates a plain object from an UpdateGSICapacityRequest message. Also converts values to other types if specified.
-                     * @param message UpdateGSICapacityRequest
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.aws.dynamodb.v1.UpdateGSICapacityRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this UpdateGSICapacityRequest to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of an UpdateGSICapacityResponse. */
-                interface IUpdateGSICapacityResponse {
-
-                    /** UpdateGSICapacityResponse tableName */
-                    tableName?: (string|null);
-
-                    /** UpdateGSICapacityResponse indexName */
-                    indexName?: (string|null);
-
-                    /** UpdateGSICapacityResponse tableStatus */
-                    tableStatus?: (clutch.aws.dynamodb.v1.Status|null);
-                }
-
-                /** Represents an UpdateGSICapacityResponse. */
-                class UpdateGSICapacityResponse implements IUpdateGSICapacityResponse {
-
-                    /**
-                     * Constructs a new UpdateGSICapacityResponse.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IUpdateGSICapacityResponse);
-
-                    /** UpdateGSICapacityResponse tableName. */
-                    public tableName: string;
-
-                    /** UpdateGSICapacityResponse indexName. */
-                    public indexName: string;
-
-                    /** UpdateGSICapacityResponse tableStatus. */
-                    public tableStatus: clutch.aws.dynamodb.v1.Status;
-
-                    /**
-                     * Verifies an UpdateGSICapacityResponse message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an UpdateGSICapacityResponse message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns UpdateGSICapacityResponse
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.UpdateGSICapacityResponse;
-
-                    /**
-                     * Creates a plain object from an UpdateGSICapacityResponse message. Also converts values to other types if specified.
-                     * @param message UpdateGSICapacityResponse
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.aws.dynamodb.v1.UpdateGSICapacityResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this UpdateGSICapacityResponse to JSON.
+                     * Converts this UpdateCapacityResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
