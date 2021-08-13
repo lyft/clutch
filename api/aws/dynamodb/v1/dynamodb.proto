@@ -51,7 +51,7 @@ message Table {
   string region = 2;
   repeated GlobalSecondaryIndex global_secondary_indexes = 3;
   Throughput provisioned_throughput = 4;
-  TableStatus status = 5;
+  Status status = 5;
 }
 
 // Represents the current GSI state
@@ -67,7 +67,7 @@ message GlobalSecondaryIndex {
   }
   string name = 1;
   Throughput provisioned_throughput = 2;
-  IndexStatus status = 3;
+  Status status = 3;
 }
 
 // Represents an Update action on a GSI, which changes the provisioned capacity.
