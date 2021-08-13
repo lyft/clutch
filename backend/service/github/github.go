@@ -12,6 +12,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -39,6 +40,22 @@ const Name = "clutch.service.github"
 const CurrentUser = ""
 
 type FileMap map[string]io.ReadCloser
+
+type StatsRoundTripper struct {
+	Wrapped http.RoundTripper
+	scope   tally.Scope
+}
+
+func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	resp, err := st.Wrapped.RoundTrip(req)
+
+	if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
+		if v, err := strconv.Atoi(hdr); err == nil {
+			st.scope.Gauge("foo").Update(float64(v))
+		}
+	}
+	return resp, err
+}
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &githubv1.Config{}
@@ -95,8 +112,7 @@ func (s *svc) CreateIssueComment(ctx context.Context, ref *RemoteRef, number int
 	com := &githubv3.IssueComment{
 		Body: strPtr(body),
 	}
-	_, response, err := s.rest.Issues.CreateComment(ctx, ref.RepoOwner, ref.RepoName, number, com)
-	s.emitRateLimit(response)
+	_, _, err := s.rest.Issues.CreateComment(ctx, ref.RepoOwner, ref.RepoName, number, com)
 	return err
 }
 
@@ -113,22 +129,20 @@ type svc struct {
 }
 
 func (s *svc) GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error) {
-	org, response, err := s.rest.Organizations.Get(ctx, organization)
+	org, _, err := s.rest.Organizations.Get(ctx, organization)
 	if err != nil {
 		return nil, err
 	}
-	s.emitRateLimit(response)
 	return org, nil
 }
 
 // ListOrganizations returns all organizations for a specified user.
 // To list organizations for the currently authenticated user set user to "".
 func (s *svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error) {
-	organizations, response, err := s.rest.Organizations.List(ctx, user, &githubv3.ListOptions{})
+	organizations, _, err := s.rest.Organizations.List(ctx, user, &githubv3.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
-	s.emitRateLimit(response)
 	return organizations, nil
 }
 
@@ -144,18 +158,18 @@ func (s *svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3
 		}
 		return nil, err
 	}
-	s.emitRateLimit(response)
+
 	return membership, nil
 }
 
 // GetUser returns information about the specified user.
 // To list organizations for the currently authenticated user set user to "".
 func (s *svc) GetUser(ctx context.Context, username string) (*githubv3.User, error) {
-	user, response, err := s.rest.Users.Get(ctx, username)
+	user, _, err := s.rest.Users.Get(ctx, username)
 	if err != nil {
 		return nil, err
 	}
-	s.emitRateLimit(response)
+
 	return user, nil
 }
 
@@ -167,11 +181,10 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 	}
 
 	opts := req.GetGithubOptions()
-	currentUser, response, err := s.rest.Users.Get(ctx, "")
+	currentUser, _, err := s.rest.Users.Get(ctx, "")
 	if err != nil {
 		return nil, err
 	}
-	s.emitRateLimit(response)
 
 	var org string
 	if org = req.Owner; currentUser.GetLogin() == req.Owner {
@@ -185,11 +198,11 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 		Private:     boolPtr(opts.Parameters.Visibility.String() == sourcecontrolv1.Visibility_PRIVATE.String()),
 		AutoInit:    boolPtr(opts.AutoInit),
 	}
-	newRepo, response, err := s.rest.Repositories.Create(ctx, org, repo)
+	newRepo, _, err := s.rest.Repositories.Create(ctx, org, repo)
 	if err != nil {
 		return nil, err
 	}
-	s.emitRateLimit(response)
+
 	resp := &sourcecontrolv1.CreateRepositoryResponse{
 		Url: *newRepo.HTMLURL,
 	}
@@ -212,11 +225,11 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 		Body:                strPtr(body),
 		MaintainerCanModify: boolPtr(true),
 	}
-	pr, response, err := s.rest.PullRequests.Create(ctx, ref.RepoOwner, ref.RepoName, req)
+	pr, _, err := s.rest.PullRequests.Create(ctx, ref.RepoOwner, ref.RepoName, req)
 	if err != nil {
 		return nil, err
 	}
-	s.emitRateLimit(response)
+
 	return &PullRequestInfo{
 		Number: pr.GetNumber(),
 		// There are many possible URLs to return, but the HTML one is most human friendly
@@ -329,6 +342,7 @@ func newService(config *githubv1.Config, scope tally.Scope) (Client, error) {
 		}
 		token = t
 	}
+	httpClient.Transport = &StatsRoundTripper{Wrapped: httpClient.Transport}
 	restClient := githubv3.NewClient(httpClient)
 
 	return &svc{
@@ -391,11 +405,10 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
  * Rather than calling GetCommit() multiple times, we can use CompareCommits to get a range of commits
  */
 func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, error) {
-	comp, response, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
+	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
 	if err != nil {
 		return nil, fmt.Errorf("Could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
-	s.emitRateLimit(response)
 
 	return comp, nil
 }
@@ -407,19 +420,11 @@ type Commit struct {
 	ParentRef string
 }
 
-func (s *svc) emitRateLimit(response *githubv3.Response) {
-	if response != nil {
-		s.scope.SubScope("github_client").Gauge("rate_limit_remaining").Update(float64(response.Rate.Remaining))
-	}
-}
-
 func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
-	commit, response, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
+	commit, _, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
 	if err != nil {
 		return nil, err
 	}
-
-	s.emitRateLimit(response)
 
 	// Currently we are using the Author (Github) rather than commit Author (Git)
 	retCommit := &Commit{
