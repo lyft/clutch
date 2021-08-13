@@ -3,9 +3,6 @@ package dynamodb
 import (
 	"context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	"github.com/lyft/clutch/backend/service/aws"
 )
@@ -29,15 +26,15 @@ func (a *dynamodbAPI) DescribeTable(ctx context.Context, req *dynamodbv1.Describ
 	return &dynamodbv1.DescribeTableResponse{Table: table}, nil
 }
 
-func (a *dynamodbAPI) UpdateTableCapacity(ctx context.Context, req *dynamodbv1.UpdateTableCapacityRequest) (*dynamodbv1.UpdateTableCapacityResponse, error) {
-	result, err := a.client.UpdateTableCapacity(ctx, req.Region, req.TableName, req.TargetTableRcu, req.TargetTableWcu)
+func (a *dynamodbAPI) UpdateCapacity(ctx context.Context, req *dynamodbv1.UpdateCapacityRequest) (*dynamodbv1.UpdateCapacityResponse, error) {
+	result, err := a.client.UpdateCapacity(ctx, req.Region, req.TableName, req.TargetTableThroughput, req.GsiUpdates)
 	if err != nil {
 		return nil, err
 	}
 
-	return &dynamodbv1.UpdateTableCapacityResponse{TableName: req.TableName, TableStatus: result}, nil
+	return &dynamodbv1.UpdateCapacityResponse{Table: result}, nil
 }
 
-func (a *dynamodbAPI) UpdateGSICapacity(ctx context.Context, req *dynamodbv1.UpdateGSICapacityRequest) (*dynamodbv1.UpdateGSICapacityResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "not implemented")
-}
+// func (a *dynamodbAPI) UpdateGSICapacity(ctx context.Context, req *dynamodbv1.UpdateGSICapacityRequest) (*dynamodbv1.UpdateGSICapacityResponse, error) {
+// 	return nil, status.Error(codes.Unimplemented, "not implemented")
+// }
