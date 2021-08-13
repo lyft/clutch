@@ -1729,7 +1729,7 @@ export namespace clutch {
                     provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** Table status */
-                    status?: (clutch.aws.dynamodb.v1.Table.TableStatus|null);
+                    status?: (clutch.aws.dynamodb.v1.Table.Status|null);
                 }
 
                 /** Represents a Table. */
@@ -1754,7 +1754,7 @@ export namespace clutch {
                     public provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** Table status. */
-                    public status: clutch.aws.dynamodb.v1.Table.TableStatus;
+                    public status: clutch.aws.dynamodb.v1.Table.Status;
 
                     /**
                      * Verifies a Table message.
@@ -1787,8 +1787,8 @@ export namespace clutch {
 
                 namespace Table {
 
-                    /** TableStatus enum. */
-                    enum TableStatus {
+                    /** Status enum. */
+                    enum Status {
                         UNSPECIFIED = 0,
                         UNKNOWN = 1,
                         CREATING = 2,
@@ -1811,7 +1811,7 @@ export namespace clutch {
                     provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** GlobalSecondaryIndex status */
-                    status?: (clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus|null);
+                    status?: (clutch.aws.dynamodb.v1.GlobalSecondaryIndex.Status|null);
                 }
 
                 /** Represents a GlobalSecondaryIndex. */
@@ -1830,7 +1830,7 @@ export namespace clutch {
                     public provisionedThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
                     /** GlobalSecondaryIndex status. */
-                    public status: clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus;
+                    public status: clutch.aws.dynamodb.v1.GlobalSecondaryIndex.Status;
 
                     /**
                      * Verifies a GlobalSecondaryIndex message.
@@ -1863,8 +1863,8 @@ export namespace clutch {
 
                 namespace GlobalSecondaryIndex {
 
-                    /** IndexStatus enum. */
-                    enum IndexStatus {
+                    /** Status enum. */
+                    enum Status {
                         UNSPECIFIED = 0,
                         UNKNOWN = 1,
                         CREATING = 2,

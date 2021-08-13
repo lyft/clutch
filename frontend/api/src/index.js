@@ -3923,7 +3923,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [region] Table region
                      * @property {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndex>|null} [globalSecondaryIndexes] Table globalSecondaryIndexes
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [provisionedThroughput] Table provisionedThroughput
-                     * @property {clutch.aws.dynamodb.v1.Table.TableStatus|null} [status] Table status
+                     * @property {clutch.aws.dynamodb.v1.Table.Status|null} [status] Table status
                      */
 
                     /**
@@ -3976,7 +3976,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Table status.
-                     * @member {clutch.aws.dynamodb.v1.Table.TableStatus} status
+                     * @member {clutch.aws.dynamodb.v1.Table.Status} status
                      * @memberof clutch.aws.dynamodb.v1.Table
                      * @instance
                      */
@@ -4136,7 +4136,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput"))
                             object.provisionedThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.provisionedThroughput, options);
                         if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.TableStatus[message.status] : message.status;
+                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.Status[message.status] : message.status;
                         return object;
                     };
 
@@ -4152,8 +4152,8 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * TableStatus enum.
-                     * @name clutch.aws.dynamodb.v1.Table.TableStatus
+                     * Status enum.
+                     * @name clutch.aws.dynamodb.v1.Table.Status
                      * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} UNKNOWN=1 UNKNOWN value
@@ -4165,7 +4165,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {number} ARCHIVING=7 ARCHIVING value
                      * @property {number} ARCHIVED=8 ARCHIVED value
                      */
-                    Table.TableStatus = (function() {
+                    Table.Status = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
                         values[valuesById[0] = "UNSPECIFIED"] = 0;
                         values[valuesById[1] = "UNKNOWN"] = 1;
@@ -4190,7 +4190,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IGlobalSecondaryIndex
                      * @property {string|null} [name] GlobalSecondaryIndex name
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [provisionedThroughput] GlobalSecondaryIndex provisionedThroughput
-                     * @property {clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus|null} [status] GlobalSecondaryIndex status
+                     * @property {clutch.aws.dynamodb.v1.GlobalSecondaryIndex.Status|null} [status] GlobalSecondaryIndex status
                      */
 
                     /**
@@ -4226,7 +4226,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * GlobalSecondaryIndex status.
-                     * @member {clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus} status
+                     * @member {clutch.aws.dynamodb.v1.GlobalSecondaryIndex.Status} status
                      * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndex
                      * @instance
                      */
@@ -4337,7 +4337,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.provisionedThroughput != null && message.hasOwnProperty("provisionedThroughput"))
                             object.provisionedThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.provisionedThroughput, options);
                         if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus[message.status] : message.status;
+                            object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndex.Status[message.status] : message.status;
                         return object;
                     };
 
@@ -4353,8 +4353,8 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * IndexStatus enum.
-                     * @name clutch.aws.dynamodb.v1.GlobalSecondaryIndex.IndexStatus
+                     * Status enum.
+                     * @name clutch.aws.dynamodb.v1.GlobalSecondaryIndex.Status
                      * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} UNKNOWN=1 UNKNOWN value
@@ -4363,7 +4363,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {number} DELETING=4 DELETING value
                      * @property {number} ACTIVE=5 ACTIVE value
                      */
-                    GlobalSecondaryIndex.IndexStatus = (function() {
+                    GlobalSecondaryIndex.Status = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
                         values[valuesById[0] = "UNSPECIFIED"] = 0;
                         values[valuesById[1] = "UNKNOWN"] = 1;
