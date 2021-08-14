@@ -34,7 +34,3 @@ func (a *dynamodbAPI) UpdateCapacity(ctx context.Context, req *dynamodbv1.Update
 
 	return &dynamodbv1.UpdateCapacityResponse{Table: result}, nil
 }
-
-// func (a *dynamodbAPI) UpdateGSICapacity(ctx context.Context, req *dynamodbv1.UpdateGSICapacityRequest) (*dynamodbv1.UpdateGSICapacityResponse, error) {
-// 	return nil, status.Error(codes.Unimplemented, "not implemented")
-// }
