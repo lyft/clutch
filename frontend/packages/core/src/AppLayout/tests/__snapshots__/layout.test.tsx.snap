@@ -5,7 +5,9 @@ exports[`AppLayout component renders correctly 1`] = `
   <Header />
   <Styled(WithStyles(ForwardRef(Grid))) container={true} wrap=\\"nowrap\\">
     <Drawer />
-    <Outlet />
+    <Styled(div)>
+      <Outlet />
+    </Styled(div)>
   </Styled(WithStyles(ForwardRef(Grid)))>
   <FeedbackButton />
 </Styled(WithStyles(ForwardRef(Grid)))>"
