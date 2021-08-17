@@ -18,9 +18,9 @@ message TimeRange {
 message Point {
   oneof timestamp {
     option (validate.required) = true;
-    TimeRange range = 2;
-    int64 millis = 3;
+    TimeRange range = 1;
+    int64 millis = 2;
   }
-  google.protobuf.Any pb = 5;
-  string description = 6;
+  google.protobuf.Any pb = 3;
+  string description = 4;
 }
