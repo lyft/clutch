@@ -10,6 +10,11 @@ import type { ProjectState, State } from "../types";
 import { Group } from "../types";
 
 describe("isGroupState", () => {
+  it("returns false for undefined state", () => {
+    const groupState = undefined;
+    expect(isGroupState(groupState)).toBe(false);
+  });
+
   it("matches group state types", () => {
     const groupState = { key: { checked: false } as ProjectState };
     expect(isGroupState(groupState)).toBe(true);

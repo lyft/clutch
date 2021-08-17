@@ -168,7 +168,10 @@ const isProjectState = (state: ProjectState | object): state is ProjectState => 
   return (state as ProjectState).checked !== undefined;
 };
 
-const isGroupState = (state: GroupState | object): state is GroupState => {
+const isGroupState = (state: GroupState | object | undefined): state is GroupState => {
+  if (state === undefined) {
+    return false;
+  }
   const projectStates = Object.values(state as GroupState);
   return projectStates.filter(s => isProjectState(s)).length === projectStates.length;
 };
@@ -179,27 +182,32 @@ const isLocalState = (state: LocalState | Object): state is LocalState => {
   const upstream = localState[Group.UPSTREAM];
   const downstream = localState[Group.DOWNSTREAM];
 
-  const hasProjects = projects !== undefined && isGroupState(projects);
-  const hasUpstream = upstream !== undefined && isGroupState(upstream);
-  const hasDownstream = downstream !== undefined && isGroupState(downstream);
+  const hasProjects = isGroupState(projects);
+  const hasUpstream = isGroupState(upstream);
+  const hasDownstream = isGroupState(downstream);
   return hasProjects && hasUpstream && hasDownstream;
 };
 
 const hydrateFromLocalState = (state: State): State => {
+  // Grab local state from storage
   const rawLocalState = window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY);
+  // If local state does not exist return unmodified state
   if (!rawLocalState) {
     return state;
   }
 
   try {
     const localState = JSON.parse(rawLocalState);
+    // If local state is in the proper format merge it with existing state.
     if (isLocalState(localState)) {
+      // Merge will overwrite existing values in state with any found in local state.
       return _.merge(state, localState);
     }
+    // If local state is not in the correct format purge it and return unmodified state.
     window.localStorage.removeItem(LOCAL_STORAGE_STATE_KEY);
-
     return state;
   } catch {
+    // If any errors occur return existing state.
     return state;
   }
 };
