@@ -7,7 +7,7 @@ import Loadable from "../loading";
 
 import Drawer from "./drawer";
 import FeedbackButton from "./feedback";
-import Header from "./header";
+import Header, { APP_BAR_HEIGHT } from "./header";
 
 const AppGrid = styled(MuiGrid)({
   flex: 1,
@@ -15,7 +15,7 @@ const AppGrid = styled(MuiGrid)({
 
 const ContentGrid = styled(MuiGrid)({
   flex: 1,
-  maxHeight: "calc(100vh - 64px)",
+  maxHeight: `calc(100vh - ${APP_BAR_HEIGHT})`,
 });
 
 const MainContent = styled.div({ overflowY: "auto", width: "100%" });
