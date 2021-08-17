@@ -6,7 +6,6 @@ import { Grid, LinearProgress } from "@material-ui/core";
 
 const StyledProgressContainer = styled.div({
   height: "4px",
-  background: "rgb(235, 237, 251)",
   ".MuiLinearProgress-root": {
     backgroundColor: "rgb(194, 200, 242)",
   },
