@@ -6,6 +6,7 @@ import { Grid, LinearProgress } from "@material-ui/core";
 
 const StyledProgressContainer = styled.div({
   height: "4px",
+  background: "rgb(235, 237, 251)",
   ".MuiLinearProgress-root": {
     backgroundColor: "rgb(194, 200, 242)",
   },
@@ -25,12 +26,11 @@ interface CardProps {
 const Card = ({ avatar, children, error, isLoading, title }: CardProps) => (
   <Grid item xs={12} sm={6}>
     <ClutchCard>
-      <CardHeader avatar={avatar} title={title} />
-      {isLoading && (
+      <CardHeader avatar={avatar} title={title}>
         <StyledProgressContainer>
-          <LinearProgress color="secondary" />
+          {isLoading && <LinearProgress color="secondary" />}
         </StyledProgressContainer>
-      )}
+      </CardHeader>
       {error ? <Error subject={error} /> : children}
     </ClutchCard>
   </Grid>

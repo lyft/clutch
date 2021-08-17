@@ -47,18 +47,23 @@ export interface CardProps {
 
 const Card = ({ children, ...props }: CardProps) => <StyledCard {...props}>{children}</StyledCard>;
 
-interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {}
+interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {
+  children?: React.ReactNode;
+}
 
-const CardHeader = ({ avatar, title }: CardHeaderProps) => (
-  <MuiCardHeader
-    style={{
-      background: "#EBEDFB",
-      padding: "16px",
-    }}
-    disableTypography
-    avatar={avatar}
-    title={<StyledTypography variant="h3">{title}</StyledTypography>}
-  />
+const CardHeader = ({ avatar, children, title }: CardHeaderProps) => (
+  <>
+    <MuiCardHeader
+      style={{
+        background: "#EBEDFB",
+        padding: "16px",
+      }}
+      disableTypography
+      avatar={avatar}
+      title={<StyledTypography variant="h3">{title}</StyledTypography>}
+    />
+    {children}
+  </>
 );
 
 interface CardContentProps extends MuiCardContentProps {}
