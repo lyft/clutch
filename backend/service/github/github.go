@@ -22,7 +22,7 @@ import (
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/golang/protobuf/ptypes/any"
-	githubv3 "github.com/google/go-github/v37/github"
+	githubv3 "github.com/google/go-github/v38/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
