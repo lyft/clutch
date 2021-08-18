@@ -1,64 +1,64 @@
 import {
-  hydrateFromLocalState,
   isGroupState,
-  isLocalState,
+  isProjectsState,
   isProjectState,
+  loadStoredState,
   LOCAL_STORAGE_STATE_KEY,
-  writeToLocalState,
-} from "../helpers";
+  storeState,
+} from "../storage";
 import type { ProjectState, State } from "../types";
 import { Group } from "../types";
 
 describe("isGroupState", () => {
   it("returns false for undefined state", () => {
-    const groupState = undefined;
-    expect(isGroupState(groupState)).toBe(false);
+    const state = undefined;
+    expect(isGroupState(state)).toBe(false);
   });
 
   it("matches group state types", () => {
-    const groupState = { key: { checked: false } as ProjectState };
-    expect(isGroupState(groupState)).toBe(true);
+    const state = { key: { checked: false } as ProjectState };
+    expect(isGroupState(state)).toBe(true);
   });
 
   it("rejects other types", () => {
-    const groupState = { key: {} as ProjectState };
-    expect(isGroupState(groupState)).toBe(false);
+    const state = { key: {} as ProjectState };
+    expect(isGroupState(state)).toBe(false);
   });
 });
 
-describe("isLocalState", () => {
-  it("matches local state types", () => {
-    const localState = {
+describe("isProjectsState", () => {
+  it("matches projects state types", () => {
+    const state = {
       [Group.PROJECTS]: { key: { checked: false } as ProjectState },
       [Group.UPSTREAM]: { key: { checked: false } as ProjectState },
       [Group.DOWNSTREAM]: { key: { checked: false } as ProjectState },
     };
-    expect(isLocalState(localState)).toBe(true);
+    expect(isProjectsState(state)).toBe(true);
   });
 
   it("rejects other types", () => {
-    const localState = {
+    const state = {
       [Group.PROJECTS]: { key: { checked: false } as ProjectState },
       [Group.UPSTREAM]: { key: {} as ProjectState },
     };
-    expect(isLocalState(localState)).toBe(false);
+    expect(isProjectsState(state)).toBe(false);
   });
 });
 
 describe("isProjectState", () => {
   it("matches project state types", () => {
-    const projectState = { checked: false };
-    expect(isProjectState(projectState)).toBe(true);
+    const state = { checked: false };
+    expect(isProjectState(state)).toBe(true);
   });
 
   it("rejects other types", () => {
-    const projectState = {};
-    expect(isProjectState(projectState)).toBe(false);
+    const state = {};
+    expect(isProjectState(state)).toBe(false);
   });
 });
 
-describe("hydrateFromLocalState", () => {
-  const localState = JSON.stringify({
+describe("loadStoredState", () => {
+  const storedState = JSON.stringify({
     [Group.PROJECTS]: { a: { checked: false }, b: { checked: true } },
     [Group.UPSTREAM]: { b: { checked: true } },
     [Group.DOWNSTREAM]: { c: { checked: false } },
@@ -78,31 +78,31 @@ describe("hydrateFromLocalState", () => {
   });
 
   it("returns existing state if local storage empty", () => {
-    const finalState = hydrateFromLocalState(state);
+    const finalState = loadStoredState(state);
     expect(finalState).toEqual(state);
   });
 
   it("removes local storage if invalid state", () => {
     window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, "{}");
-    hydrateFromLocalState(state);
+    loadStoredState(state);
     expect(window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY)).toBeNull();
   });
 
   it("returns existing state if invalid state", () => {
     window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, "{}");
-    const finalState = hydrateFromLocalState(state);
+    const finalState = loadStoredState(state);
     expect(finalState).toEqual(state);
   });
 
   it("returns existing state on any error", () => {
     window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, "foobar");
-    const finalState = hydrateFromLocalState(state);
+    const finalState = loadStoredState(state);
     expect(finalState).toEqual(state);
   });
 
   it("merges existing state with valid local state", () => {
-    window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, localState);
-    const finalState = hydrateFromLocalState(state);
+    window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, storedState);
+    const finalState = loadStoredState(state);
     expect(finalState).toEqual({
       [Group.PROJECTS]: { a: { checked: false }, b: { checked: true } },
       [Group.UPSTREAM]: { b: { checked: true } },
@@ -114,14 +114,14 @@ describe("hydrateFromLocalState", () => {
   });
 });
 
-describe("writeToLocalState", () => {
-  const localState = {
+describe("storeState", () => {
+  const projectsState = {
     [Group.PROJECTS]: { a: { checked: false } },
     [Group.UPSTREAM]: { b: { checked: true } },
     [Group.DOWNSTREAM]: { c: { checked: false } },
   };
   const state = {
-    ...localState,
+    ...projectsState,
     projectData: {},
     loading: false,
     error: undefined,
@@ -131,8 +131,10 @@ describe("writeToLocalState", () => {
     window.localStorage.clear();
   });
 
-  it("writes stringified local state to local storage", () => {
-    writeToLocalState(state);
-    expect(window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY)).toBe(JSON.stringify(localState));
+  it("writes stringified projects state to local storage", () => {
+    storeState(state);
+    expect(window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY)).toBe(
+      JSON.stringify(projectsState)
+    );
   });
 });
