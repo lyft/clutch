@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package clutch.timeseries.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/timeseries/v1;timeseriesv1";
+
+import "google/protobuf/any.proto";
+import "validate/validate.proto";
+
+message TimeRange {
+  int64 start_millis = 1 [ (validate.rules).int64.gt = 0 ];
+  int64 end_millis = 2 [ (validate.rules).int64.gt = 0 ];
+}
+
+// A timeseries Point message is useful for organizing events
+// to be displayed in a timeline view.  Users can transform data
+// into a timeseries format and be able to organize them.
+message Point {
+  oneof timestamp {
+    option (validate.required) = true;
+    TimeRange range = 1;
+    int64 millis = 2;
+  }
+  google.protobuf.Any pb = 3;
+  string description = 4;
+}

@@ -197,7 +197,7 @@ func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha strin
 				Login: &authorLogin,
 			},
 		},
-	}, &githubv3.Response{}, nil
+	}, nil, nil
 }
 
 type mockUsers struct {

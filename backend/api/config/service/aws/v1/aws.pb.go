@@ -184,7 +184,9 @@ type ScalingLimits struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// defaults to AWS default quotas if not set
+	// defaults to AWS quotas if not set
+	// AWS max read: 40000
+	// AWS max write: 40000
 	MaxReadCapacityUnits  int64 `protobuf:"varint,1,opt,name=max_read_capacity_units,json=maxReadCapacityUnits,proto3" json:"max_read_capacity_units,omitempty"`
 	MaxWriteCapacityUnits int64 `protobuf:"varint,2,opt,name=max_write_capacity_units,json=maxWriteCapacityUnits,proto3" json:"max_write_capacity_units,omitempty"`
 	// defaults to a scale factor of 2.0x

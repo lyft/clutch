@@ -15,7 +15,7 @@
     "prismjs": "^1.21.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "remark-toc": "^7.0.0"
+    "remark-toc": "^8.0.0"
   },
   "browserslist": {
     "production": [
