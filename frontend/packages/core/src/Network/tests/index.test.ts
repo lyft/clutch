@@ -25,6 +25,7 @@ describe("error interceptor", () => {
   });
 
   describe("on auth error", () => {
+    let window;
     const axiosError = {
       response: {
         status: 401,
@@ -37,6 +38,7 @@ describe("error interceptor", () => {
     } as AxiosError;
 
     beforeAll(() => {
+      window = global.window;
       global.window = Object.create(window);
       Object.defineProperty(window, "location", {
         value: {
@@ -47,7 +49,11 @@ describe("error interceptor", () => {
         writable: true,
       });
 
-      errorInterceptor(axiosError);
+      errorInterceptor(axiosError).catch(_ => _);
+    });
+
+    afterAll(() => {
+      global.window = window;
     });
 
     it("redirects to provided url", () => {
@@ -84,8 +90,19 @@ describe("error interceptor", () => {
   });
 
   describe("on unknown error", () => {
+    let window;
     let err: Promise<ClutchError>;
     beforeAll(() => {
+      window = global.window;
+      global.window = Object.create(window);
+      Object.defineProperty(window, "location", {
+        value: {
+          href: "/example?foo=bar",
+          pathname: "/example",
+          search: "?foo=bar",
+        },
+        writable: true,
+      });
       err = errorInterceptor({
         isAxiosError: false,
         message: "Unauthorized to perform action",
@@ -102,6 +119,10 @@ describe("error interceptor", () => {
           return {};
         },
       });
+    });
+
+    afterAll(() => {
+      global.window = window;
     });
 
     it("returns a ClutchError", () => {
