@@ -76,7 +76,8 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
     schemas.filter(schema => schema?.metadata?.search?.autocompleteEnabled === true).length >= 1 &&
     enableAutocomplete;
 
-  const error = validation.errors?.query;
+  const error = validation.formState.errors?.query;
+  const validationProps = validation.register("query", { required: true });
   return (
     <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
       <TextField
@@ -87,11 +88,12 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
         onChange={handleChanges}
         onKeyDown={handleChanges}
         onFocus={handleChanges}
-        inputRef={validation.register({ required: true })}
         error={!!error}
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
         autocompleteCallback={isAutoCompleteEnabled ? v => autoComplete(inputType, v) : undefined}
+        inputRef={validationProps.ref}
+        {...validationProps}
       />
     </Form>
   );
@@ -100,7 +102,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
 // TODO: update and use
 interface SchemaResolverProps extends Pick<AccordionProps, "expanded" | "onClick"> {
   schema: clutch.resolver.v1.Schema;
-  submitHandler: any;
+  submitHandler: (data: { "@type": string; [key: string]: string }) => void;
 }
 
 const SchemaDetails = styled(AccordionDetails)({

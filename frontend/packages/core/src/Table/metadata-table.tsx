@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
@@ -134,12 +135,13 @@ const ImmutableRow: React.FC<ImmutableRowProps> = ({ data }) => {
 interface MutableRowProps extends ImmutableRowProps {
   onUpdate: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   onReturn: () => void;
-  validation: any;
+  validation: UseFormReturn<FieldValues>;
 }
 
 const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
-  const error = validation.errors?.[data.name];
+  const error = validation?.formState?.errors?.[data.name];
 
+  const validationProps = validation.register(data.name);
   return (
     <TableRow key={data.id}>
       <KeyCell data={data} />
@@ -151,15 +153,15 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
           <ChevronRightIcon />
           <TextField
             id={data.id}
-            name={data.name}
             defaultValue={data.value}
             type={data?.input?.type}
             onChange={onUpdate}
             onReturn={onReturn}
             onFocus={onUpdate}
-            inputRef={validation.register}
             helperText={error?.message || ""}
             error={!!error || false}
+            inputRef={validationProps.ref}
+            {...validationProps}
           />
         </Grid>
       </TableCell>
@@ -208,7 +210,9 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
 
   return (
     <TableContainer data-max-height={maxHeight}>
-      {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && <DevTool control={control} />}
+      {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && (
+        <DevTool control={control} placement="top-right" />
+      )}
       <Table>
         <TableBody>
           {rows.map((row: IdentifiableRowData) => {

@@ -68,10 +68,10 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
         }
         if (["text", "number"].indexOf(field.type) >= 0) {
           const customProps: TextFieldProps = field.inputProps as TextFieldProps;
+          const fieldValidation = register(field.name);
           return (
             <TextField
               key={field.label}
-              name={field.name}
               label={field.label}
               defaultValue={customProps.defaultValue}
               type={field.type}
@@ -80,9 +80,10 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
                 copiedData[field.name] = e.target.value;
                 setData(copiedData);
               }}
-              inputRef={register}
+              inputRef={fieldValidation.ref}
               error={!!errors[field.name]}
               helperText={errors[field.name] ? errors[field.name].message : ""}
+              {...fieldValidation}
             />
           );
         }
