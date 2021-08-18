@@ -104,19 +104,21 @@ func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, 
 
 func (s *svc) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
 	currentThroughput := &dynamodbv1.ProvisionedThroughput{
-		ReadCapacityUnits:  10,
-		WriteCapacityUnits: 20,
+		ReadCapacityUnits:  100,
+		WriteCapacityUnits: 200,
 	}
 	ret := &dynamodbv1.Table{
 		Name:                  tableName,
 		Region:                region,
 		ProvisionedThroughput: currentThroughput,
+		Status:                dynamodbv1.Status(5),
 	}
 	return ret, nil
 }
 
-func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) error {
-	return nil
+func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) (dynamodbv1.Status, error) {
+	stat := dynamodbv1.Status(3)
+	return stat, nil
 }
 
 func (s *svc) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetRCU int64, targetWCU int64) error {

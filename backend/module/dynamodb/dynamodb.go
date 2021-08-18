@@ -30,12 +30,12 @@ func (a *dynamodbAPI) DescribeTable(ctx context.Context, req *dynamodbv1.Describ
 }
 
 func (a *dynamodbAPI) UpdateTableCapacity(ctx context.Context, req *dynamodbv1.UpdateTableCapacityRequest) (*dynamodbv1.UpdateTableCapacityResponse, error) {
-	err := a.client.UpdateTableCapacity(ctx, req.Region, req.TableName, req.TargetTableRcu, req.TargetTableWcu)
+	result, err := a.client.UpdateTableCapacity(ctx, req.Region, req.TableName, req.TargetTableRcu, req.TargetTableWcu)
 	if err != nil {
 		return nil, err
 	}
 
-	return &dynamodbv1.UpdateTableCapacityResponse{}, nil
+	return &dynamodbv1.UpdateTableCapacityResponse{TableName: req.TableName, TableStatus: result}, nil
 }
 
 func (a *dynamodbAPI) UpdateGSICapacity(ctx context.Context, req *dynamodbv1.UpdateGSICapacityRequest) (*dynamodbv1.UpdateGSICapacityResponse, error) {
