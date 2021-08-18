@@ -9,15 +9,10 @@ import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
-import {
-  deriveStateData,
-  DispatchContext,
-  hydrateFromLocalState,
-  StateContext,
-  writeToLocalState,
-} from "./helpers";
+import { deriveStateData, DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
+import { loadStoredState, storeState } from "./storage";
 import type { DashState, State } from "./types";
 import { Group } from "./types";
 
@@ -90,7 +85,7 @@ const ProjectSelector = () => {
 
   const { updateSelected } = useDashUpdater();
 
-  const [state, dispatch] = React.useReducer(selectorReducer, hydrateFromLocalState(initialState));
+  const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
   React.useEffect(() => {
     console.log("effect"); // eslint-disable-line
@@ -165,7 +160,7 @@ const ProjectSelector = () => {
     });
 
     // Update!
-    writeToLocalState(state);
+    storeState(state);
     updateSelected(dashState);
   }, [state]);
 
