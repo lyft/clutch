@@ -95,7 +95,7 @@ message DescribeTableResponse {
 message UpdateCapacityRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
-  Throughput target_table_throughput = 3;
+  Throughput table_throughput = 3;
   repeated GlobalSecondaryIndexUpdate gsi_updates = 4;
 }
 
