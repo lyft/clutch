@@ -18,88 +18,143 @@ service DDBAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
-  rpc UpdateCapacity(UpdateCapacityRequest) returns (UpdateCapacityResponse) {
+  rpc UpdateCapacity(IncreaseCapacityRequest) returns (IncreaseCapacityResponse) {
     option (google.api.http) = {
-      post : "/v1/aws/dynamodb/updateCapacity"
+      post : "/v1/aws/dynamodb/increaseCapacity"
       body : "*"
     };
     option (clutch.api.v1.action).type = UPDATE;
   }
 }
 
+// A Dynamodb table 
 message Table {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
     pattern : "{region}/{name}"
   };
 
+  // Enum representing the status of a table. 
   // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
   enum Status {
     // Unspecified status indicates the table status could not be found.
     UNSPECIFIED = 0;
+
+    // AWS returned a status that isn't recognized.
     UNKNOWN = 1;
+
+    // Table is in the process of being provisioned.
     CREATING = 2;
+
+    // Table is undergoing an update. 
     UPDATING = 3;
+
+    // Table is in the process of being deleted.
     DELETING = 4;
+
+    // Table is active and available for actions. 
     ACTIVE = 5;
+
+    // The KMS key used to encrypt the table is inaccessible, 
+    // table operations may fail without the key.
     INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6;
+
+    // Table is in the process of being moved to archives. 
     ARCHIVING = 7;
+
+    // Table is archived.
     ARCHIVED = 8;
   }
 
+  // Name of the Dynamodb table.
   string name = 1;
+
+  // AWS regional location for the table.
   string region = 2;
+
+  // The global secondary indexes present on a table.
+  // A table may have anywhere from 0-20 GSIs per AWS default quota.
   repeated GlobalSecondaryIndex global_secondary_indexes = 3;
+
+  // The currently provisioned throughput of a table.
+  // Minimum throughout on a provisioned table is 1 RCU/1 WCU. 
+  // Tables with ON-DEMAND capacity will return a provisioned throughput of 0 RCU/0 WCU.
   Throughput provisioned_throughput = 4;
+
+  // Table status.
   Status status = 5;
 }
 
-// Represents the current GSI state
+// Enum that represents the current GSI state
 message GlobalSecondaryIndex {
   enum Status {
     // Unspecified indicates GSI status could not be found.
     UNSPECIFIED = 0;
+
+    // AWS returned a status that isn't recognized.
     UNKNOWN = 1;
+
+    // GSI is in process of being created.
     CREATING = 2;
+
+    // GSI is in process of being updated.
     UPDATING = 3;
+
+    // GSI is in process of being deleted.
     DELETING = 4;
+
+    // GSI is active and available for actions.
     ACTIVE = 5;
   }
+
+  // Name of the global secondary index.
   string name = 1;
+
+  // Capacity settings on the GSI.
   Throughput provisioned_throughput = 2;
+
+  // Current GSI status.
   Status status = 3;
 }
 
 // Represents an Update action on a GSI, which changes the provisioned capacity.
-message GlobalSecondaryIndexUpdate {
+message IndexUpdateAction {
   string name = 1;
-  Throughput target_index_throughput = 2;
+  Throughput index_throughput = 2;
 }
 
+// Represents a throughput object that describes a current or pending provisioned capacity.
 message Throughput {
   int64 write_capacity_units = 1;
   int64 read_capacity_units = 2;
 }
 
+// A request for table information. 
 message DescribeTableRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
+// The result of requesting a table.
 message DescribeTableResponse {
   option (clutch.api.v1.reference).fields = "table";
 
   Table table = 1;
 }
 
-message UpdateCapacityRequest {
+// A request to increase a table's capacity.
+// Any combination of table capacity and GSI capacities can be increased in a single request.
+// If no throughputs or GSI updates are specified, the table is unchanged.
+message IncreaseCapacityRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
   Throughput table_throughput = 3;
   repeated GlobalSecondaryIndexUpdate gsi_updates = 4;
 }
 
-message UpdateCapacityResponse {
+// The result of requesting a capacity increase. 
+// Successful calls return an updated table description.
+message IncreaseCapacityResponse {
   option (clutch.api.v1.reference).fields = "table";
 
   Table table = 1;
