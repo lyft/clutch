@@ -149,7 +149,7 @@ message IncreaseCapacityRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
   Throughput table_throughput = 3;
-  repeated GlobalSecondaryIndexUpdate gsi_updates = 4;
+  repeated IndexUpdateAction gsi_updates = 4;
 }
 
 // The result of requesting a capacity increase. 
