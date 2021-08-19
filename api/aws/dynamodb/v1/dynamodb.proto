@@ -18,7 +18,7 @@ service DDBAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
-  rpc UpdateCapacity(IncreaseCapacityRequest) returns (IncreaseCapacityResponse) {
+  rpc IncreaseCapacity(IncreaseCapacityRequest) returns (IncreaseCapacityResponse) {
     option (google.api.http) = {
       post : "/v1/aws/dynamodb/increaseCapacity"
       body : "*"
@@ -27,14 +27,14 @@ service DDBAPI {
   }
 }
 
-// A Dynamodb table 
+// A Dynamodb table
 message Table {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
     pattern : "{region}/{name}"
   };
 
-  // Enum representing the status of a table. 
+  // Enum representing the status of a table.
   // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
   enum Status {
     // Unspecified status indicates the table status could not be found.
@@ -46,20 +46,20 @@ message Table {
     // Table is in the process of being provisioned.
     CREATING = 2;
 
-    // Table is undergoing an update. 
+    // Table is undergoing an update.
     UPDATING = 3;
 
     // Table is in the process of being deleted.
     DELETING = 4;
 
-    // Table is active and available for actions. 
+    // Table is active and available for actions.
     ACTIVE = 5;
 
-    // The KMS key used to encrypt the table is inaccessible, 
-    // table operations may fail without the key.
+    // The KMS key used to encrypt the table is inaccessible.
+    // Table operations may fail without the key.
     INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6;
 
-    // Table is in the process of being moved to archives. 
+    // Table is in the process of being moved to archives.
     ARCHIVING = 7;
 
     // Table is archived.
@@ -77,7 +77,7 @@ message Table {
   repeated GlobalSecondaryIndex global_secondary_indexes = 3;
 
   // The currently provisioned throughput of a table.
-  // Minimum throughout on a provisioned table is 1 RCU/1 WCU. 
+  // Minimum throughout on a provisioned table is 1 RCU/1 WCU.
   // Tables with ON-DEMAND capacity will return a provisioned throughput of 0 RCU/0 WCU.
   Throughput provisioned_throughput = 4;
 
@@ -129,7 +129,7 @@ message Throughput {
   int64 read_capacity_units = 2;
 }
 
-// A request for table information. 
+// A request for table information.
 message DescribeTableRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
@@ -152,7 +152,7 @@ message IncreaseCapacityRequest {
   repeated IndexUpdateAction gsi_updates = 4;
 }
 
-// The result of requesting a capacity increase. 
+// The result of requesting a capacity increase.
 // Successful calls return an updated table description.
 message IncreaseCapacityResponse {
   option (clutch.api.v1.reference).fields = "table";
