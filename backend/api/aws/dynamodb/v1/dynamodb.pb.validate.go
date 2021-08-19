@@ -209,20 +209,20 @@ var _ interface {
 	ErrorName() string
 } = GlobalSecondaryIndexValidationError{}
 
-// Validate checks the field values on GlobalSecondaryIndexUpdate with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *GlobalSecondaryIndexUpdate) Validate() error {
+// Validate checks the field values on IndexUpdateAction with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *IndexUpdateAction) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	// no validation rules for Name
 
-	if v, ok := interface{}(m.GetTargetIndexThroughput()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetIndexThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GlobalSecondaryIndexUpdateValidationError{
-				field:  "TargetIndexThroughput",
+			return IndexUpdateActionValidationError{
+				field:  "IndexThroughput",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -232,9 +232,9 @@ func (m *GlobalSecondaryIndexUpdate) Validate() error {
 	return nil
 }
 
-// GlobalSecondaryIndexUpdateValidationError is the validation error returned
-// by GlobalSecondaryIndexUpdate.Validate if the designated constraints aren't met.
-type GlobalSecondaryIndexUpdateValidationError struct {
+// IndexUpdateActionValidationError is the validation error returned by
+// IndexUpdateAction.Validate if the designated constraints aren't met.
+type IndexUpdateActionValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -242,24 +242,24 @@ type GlobalSecondaryIndexUpdateValidationError struct {
 }
 
 // Field function returns field value.
-func (e GlobalSecondaryIndexUpdateValidationError) Field() string { return e.field }
+func (e IndexUpdateActionValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GlobalSecondaryIndexUpdateValidationError) Reason() string { return e.reason }
+func (e IndexUpdateActionValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GlobalSecondaryIndexUpdateValidationError) Cause() error { return e.cause }
+func (e IndexUpdateActionValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GlobalSecondaryIndexUpdateValidationError) Key() bool { return e.key }
+func (e IndexUpdateActionValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GlobalSecondaryIndexUpdateValidationError) ErrorName() string {
-	return "GlobalSecondaryIndexUpdateValidationError"
+func (e IndexUpdateActionValidationError) ErrorName() string {
+	return "IndexUpdateActionValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GlobalSecondaryIndexUpdateValidationError) Error() string {
+func (e IndexUpdateActionValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -271,14 +271,14 @@ func (e GlobalSecondaryIndexUpdateValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGlobalSecondaryIndexUpdate.%s: %s%s",
+		"invalid %sIndexUpdateAction.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GlobalSecondaryIndexUpdateValidationError{}
+var _ error = IndexUpdateActionValidationError{}
 
 var _ interface {
 	Field() string
@@ -286,7 +286,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GlobalSecondaryIndexUpdateValidationError{}
+} = IndexUpdateActionValidationError{}
 
 // Validate checks the field values on Throughput with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -514,32 +514,32 @@ var _ interface {
 	ErrorName() string
 } = DescribeTableResponseValidationError{}
 
-// Validate checks the field values on UpdateCapacityRequest with the rules
+// Validate checks the field values on IncreaseCapacityRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *UpdateCapacityRequest) Validate() error {
+func (m *IncreaseCapacityRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if len(m.GetTableName()) < 1 {
-		return UpdateCapacityRequestValidationError{
+		return IncreaseCapacityRequestValidationError{
 			field:  "TableName",
 			reason: "value length must be at least 1 bytes",
 		}
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return UpdateCapacityRequestValidationError{
+		return IncreaseCapacityRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
 	}
 
-	if v, ok := interface{}(m.GetTargetTableThroughput()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetTableThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return UpdateCapacityRequestValidationError{
-				field:  "TargetTableThroughput",
+			return IncreaseCapacityRequestValidationError{
+				field:  "TableThroughput",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -551,7 +551,7 @@ func (m *UpdateCapacityRequest) Validate() error {
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return UpdateCapacityRequestValidationError{
+				return IncreaseCapacityRequestValidationError{
 					field:  fmt.Sprintf("GsiUpdates[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -564,9 +564,9 @@ func (m *UpdateCapacityRequest) Validate() error {
 	return nil
 }
 
-// UpdateCapacityRequestValidationError is the validation error returned by
-// UpdateCapacityRequest.Validate if the designated constraints aren't met.
-type UpdateCapacityRequestValidationError struct {
+// IncreaseCapacityRequestValidationError is the validation error returned by
+// IncreaseCapacityRequest.Validate if the designated constraints aren't met.
+type IncreaseCapacityRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -574,24 +574,24 @@ type UpdateCapacityRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e UpdateCapacityRequestValidationError) Field() string { return e.field }
+func (e IncreaseCapacityRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UpdateCapacityRequestValidationError) Reason() string { return e.reason }
+func (e IncreaseCapacityRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UpdateCapacityRequestValidationError) Cause() error { return e.cause }
+func (e IncreaseCapacityRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UpdateCapacityRequestValidationError) Key() bool { return e.key }
+func (e IncreaseCapacityRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UpdateCapacityRequestValidationError) ErrorName() string {
-	return "UpdateCapacityRequestValidationError"
+func (e IncreaseCapacityRequestValidationError) ErrorName() string {
+	return "IncreaseCapacityRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e UpdateCapacityRequestValidationError) Error() string {
+func (e IncreaseCapacityRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -603,14 +603,14 @@ func (e UpdateCapacityRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUpdateCapacityRequest.%s: %s%s",
+		"invalid %sIncreaseCapacityRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UpdateCapacityRequestValidationError{}
+var _ error = IncreaseCapacityRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -618,19 +618,19 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UpdateCapacityRequestValidationError{}
+} = IncreaseCapacityRequestValidationError{}
 
-// Validate checks the field values on UpdateCapacityResponse with the rules
+// Validate checks the field values on IncreaseCapacityResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *UpdateCapacityResponse) Validate() error {
+func (m *IncreaseCapacityResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if v, ok := interface{}(m.GetTable()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return UpdateCapacityResponseValidationError{
+			return IncreaseCapacityResponseValidationError{
 				field:  "Table",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -641,9 +641,9 @@ func (m *UpdateCapacityResponse) Validate() error {
 	return nil
 }
 
-// UpdateCapacityResponseValidationError is the validation error returned by
-// UpdateCapacityResponse.Validate if the designated constraints aren't met.
-type UpdateCapacityResponseValidationError struct {
+// IncreaseCapacityResponseValidationError is the validation error returned by
+// IncreaseCapacityResponse.Validate if the designated constraints aren't met.
+type IncreaseCapacityResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -651,24 +651,24 @@ type UpdateCapacityResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e UpdateCapacityResponseValidationError) Field() string { return e.field }
+func (e IncreaseCapacityResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UpdateCapacityResponseValidationError) Reason() string { return e.reason }
+func (e IncreaseCapacityResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UpdateCapacityResponseValidationError) Cause() error { return e.cause }
+func (e IncreaseCapacityResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UpdateCapacityResponseValidationError) Key() bool { return e.key }
+func (e IncreaseCapacityResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UpdateCapacityResponseValidationError) ErrorName() string {
-	return "UpdateCapacityResponseValidationError"
+func (e IncreaseCapacityResponseValidationError) ErrorName() string {
+	return "IncreaseCapacityResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e UpdateCapacityResponseValidationError) Error() string {
+func (e IncreaseCapacityResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -680,14 +680,14 @@ func (e UpdateCapacityResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUpdateCapacityResponse.%s: %s%s",
+		"invalid %sIncreaseCapacityResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UpdateCapacityResponseValidationError{}
+var _ error = IncreaseCapacityResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -695,4 +695,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UpdateCapacityResponseValidationError{}
+} = IncreaseCapacityResponseValidationError{}

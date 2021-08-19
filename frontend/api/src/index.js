@@ -3878,35 +3878,35 @@ export const clutch = $root.clutch = (() => {
                      */
 
                     /**
-                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateCapacity}.
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#increaseCapacity}.
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
-                     * @typedef UpdateCapacityCallback
+                     * @typedef IncreaseCapacityCallback
                      * @type {function}
                      * @param {Error|null} error Error, if any
-                     * @param {clutch.aws.dynamodb.v1.UpdateCapacityResponse} [response] UpdateCapacityResponse
+                     * @param {clutch.aws.dynamodb.v1.IncreaseCapacityResponse} [response] IncreaseCapacityResponse
                      */
 
                     /**
-                     * Calls UpdateCapacity.
-                     * @function updateCapacity
+                     * Calls IncreaseCapacity.
+                     * @function increaseCapacity
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
                      * @instance
-                     * @param {clutch.aws.dynamodb.v1.IUpdateCapacityRequest} request UpdateCapacityRequest message or plain object
-                     * @param {clutch.aws.dynamodb.v1.DDBAPI.UpdateCapacityCallback} callback Node-style callback called with the error, if any, and UpdateCapacityResponse
+                     * @param {clutch.aws.dynamodb.v1.IIncreaseCapacityRequest} request IncreaseCapacityRequest message or plain object
+                     * @param {clutch.aws.dynamodb.v1.DDBAPI.IncreaseCapacityCallback} callback Node-style callback called with the error, if any, and IncreaseCapacityResponse
                      * @returns {undefined}
                      * @variation 1
                      */
-                    Object.defineProperty(DDBAPI.prototype.updateCapacity = function updateCapacity(request, callback) {
-                        return this.rpcCall(updateCapacity, $root.clutch.aws.dynamodb.v1.UpdateCapacityRequest, $root.clutch.aws.dynamodb.v1.UpdateCapacityResponse, request, callback);
-                    }, "name", { value: "UpdateCapacity" });
+                    Object.defineProperty(DDBAPI.prototype.increaseCapacity = function increaseCapacity(request, callback) {
+                        return this.rpcCall(increaseCapacity, $root.clutch.aws.dynamodb.v1.IncreaseCapacityRequest, $root.clutch.aws.dynamodb.v1.IncreaseCapacityResponse, request, callback);
+                    }, "name", { value: "IncreaseCapacity" });
 
                     /**
-                     * Calls UpdateCapacity.
-                     * @function updateCapacity
+                     * Calls IncreaseCapacity.
+                     * @function increaseCapacity
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
                      * @instance
-                     * @param {clutch.aws.dynamodb.v1.IUpdateCapacityRequest} request UpdateCapacityRequest message or plain object
-                     * @returns {Promise<clutch.aws.dynamodb.v1.UpdateCapacityResponse>} Promise
+                     * @param {clutch.aws.dynamodb.v1.IIncreaseCapacityRequest} request IncreaseCapacityRequest message or plain object
+                     * @returns {Promise<clutch.aws.dynamodb.v1.IncreaseCapacityResponse>} Promise
                      * @variation 2
                      */
 
@@ -4377,25 +4377,25 @@ export const clutch = $root.clutch = (() => {
                     return GlobalSecondaryIndex;
                 })();
 
-                v1.GlobalSecondaryIndexUpdate = (function() {
+                v1.IndexUpdateAction = (function() {
 
                     /**
-                     * Properties of a GlobalSecondaryIndexUpdate.
+                     * Properties of an IndexUpdateAction.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @interface IGlobalSecondaryIndexUpdate
-                     * @property {string|null} [name] GlobalSecondaryIndexUpdate name
-                     * @property {clutch.aws.dynamodb.v1.IThroughput|null} [targetIndexThroughput] GlobalSecondaryIndexUpdate targetIndexThroughput
+                     * @interface IIndexUpdateAction
+                     * @property {string|null} [name] IndexUpdateAction name
+                     * @property {clutch.aws.dynamodb.v1.IThroughput|null} [indexThroughput] IndexUpdateAction indexThroughput
                      */
 
                     /**
-                     * Constructs a new GlobalSecondaryIndexUpdate.
+                     * Constructs a new IndexUpdateAction.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @classdesc Represents a GlobalSecondaryIndexUpdate.
-                     * @implements IGlobalSecondaryIndexUpdate
+                     * @classdesc Represents an IndexUpdateAction.
+                     * @implements IIndexUpdateAction
                      * @constructor
-                     * @param {clutch.aws.dynamodb.v1.IGlobalSecondaryIndexUpdate=} [properties] Properties to set
+                     * @param {clutch.aws.dynamodb.v1.IIndexUpdateAction=} [properties] Properties to set
                      */
-                    function GlobalSecondaryIndexUpdate(properties) {
+                    function IndexUpdateAction(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -4403,101 +4403,101 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * GlobalSecondaryIndexUpdate name.
+                     * IndexUpdateAction name.
                      * @member {string} name
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate
+                     * @memberof clutch.aws.dynamodb.v1.IndexUpdateAction
                      * @instance
                      */
-                    GlobalSecondaryIndexUpdate.prototype.name = "";
+                    IndexUpdateAction.prototype.name = "";
 
                     /**
-                     * GlobalSecondaryIndexUpdate targetIndexThroughput.
-                     * @member {clutch.aws.dynamodb.v1.IThroughput|null|undefined} targetIndexThroughput
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate
+                     * IndexUpdateAction indexThroughput.
+                     * @member {clutch.aws.dynamodb.v1.IThroughput|null|undefined} indexThroughput
+                     * @memberof clutch.aws.dynamodb.v1.IndexUpdateAction
                      * @instance
                      */
-                    GlobalSecondaryIndexUpdate.prototype.targetIndexThroughput = null;
+                    IndexUpdateAction.prototype.indexThroughput = null;
 
                     /**
-                     * Verifies a GlobalSecondaryIndexUpdate message.
+                     * Verifies an IndexUpdateAction message.
                      * @function verify
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate
+                     * @memberof clutch.aws.dynamodb.v1.IndexUpdateAction
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    GlobalSecondaryIndexUpdate.verify = function verify(message) {
+                    IndexUpdateAction.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.name != null && message.hasOwnProperty("name"))
                             if (!$util.isString(message.name))
                                 return "name: string expected";
-                        if (message.targetIndexThroughput != null && message.hasOwnProperty("targetIndexThroughput")) {
-                            let error = $root.clutch.aws.dynamodb.v1.Throughput.verify(message.targetIndexThroughput);
+                        if (message.indexThroughput != null && message.hasOwnProperty("indexThroughput")) {
+                            let error = $root.clutch.aws.dynamodb.v1.Throughput.verify(message.indexThroughput);
                             if (error)
-                                return "targetIndexThroughput." + error;
+                                return "indexThroughput." + error;
                         }
                         return null;
                     };
 
                     /**
-                     * Creates a GlobalSecondaryIndexUpdate message from a plain object. Also converts values to their respective internal types.
+                     * Creates an IndexUpdateAction message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate
+                     * @memberof clutch.aws.dynamodb.v1.IndexUpdateAction
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate} GlobalSecondaryIndexUpdate
+                     * @returns {clutch.aws.dynamodb.v1.IndexUpdateAction} IndexUpdateAction
                      */
-                    GlobalSecondaryIndexUpdate.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate)
+                    IndexUpdateAction.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.IndexUpdateAction)
                             return object;
-                        let message = new $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate();
+                        let message = new $root.clutch.aws.dynamodb.v1.IndexUpdateAction();
                         if (object.name != null)
                             message.name = String(object.name);
-                        if (object.targetIndexThroughput != null) {
-                            if (typeof object.targetIndexThroughput !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate.targetIndexThroughput: object expected");
-                            message.targetIndexThroughput = $root.clutch.aws.dynamodb.v1.Throughput.fromObject(object.targetIndexThroughput);
+                        if (object.indexThroughput != null) {
+                            if (typeof object.indexThroughput !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.IndexUpdateAction.indexThroughput: object expected");
+                            message.indexThroughput = $root.clutch.aws.dynamodb.v1.Throughput.fromObject(object.indexThroughput);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a GlobalSecondaryIndexUpdate message. Also converts values to other types if specified.
+                     * Creates a plain object from an IndexUpdateAction message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate
+                     * @memberof clutch.aws.dynamodb.v1.IndexUpdateAction
                      * @static
-                     * @param {clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate} message GlobalSecondaryIndexUpdate
+                     * @param {clutch.aws.dynamodb.v1.IndexUpdateAction} message IndexUpdateAction
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    GlobalSecondaryIndexUpdate.toObject = function toObject(message, options) {
+                    IndexUpdateAction.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
                         if (options.defaults) {
                             object.name = "";
-                            object.targetIndexThroughput = null;
+                            object.indexThroughput = null;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
-                        if (message.targetIndexThroughput != null && message.hasOwnProperty("targetIndexThroughput"))
-                            object.targetIndexThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.targetIndexThroughput, options);
+                        if (message.indexThroughput != null && message.hasOwnProperty("indexThroughput"))
+                            object.indexThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.indexThroughput, options);
                         return object;
                     };
 
                     /**
-                     * Converts this GlobalSecondaryIndexUpdate to JSON.
+                     * Converts this IndexUpdateAction to JSON.
                      * @function toJSON
-                     * @memberof clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate
+                     * @memberof clutch.aws.dynamodb.v1.IndexUpdateAction
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    GlobalSecondaryIndexUpdate.prototype.toJSON = function toJSON() {
+                    IndexUpdateAction.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return GlobalSecondaryIndexUpdate;
+                    return IndexUpdateAction;
                 })();
 
                 v1.Throughput = (function() {
@@ -4869,27 +4869,27 @@ export const clutch = $root.clutch = (() => {
                     return DescribeTableResponse;
                 })();
 
-                v1.UpdateCapacityRequest = (function() {
+                v1.IncreaseCapacityRequest = (function() {
 
                     /**
-                     * Properties of an UpdateCapacityRequest.
+                     * Properties of an IncreaseCapacityRequest.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @interface IUpdateCapacityRequest
-                     * @property {string|null} [tableName] UpdateCapacityRequest tableName
-                     * @property {string|null} [region] UpdateCapacityRequest region
-                     * @property {clutch.aws.dynamodb.v1.IThroughput|null} [targetTableThroughput] UpdateCapacityRequest targetTableThroughput
-                     * @property {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndexUpdate>|null} [gsiUpdates] UpdateCapacityRequest gsiUpdates
+                     * @interface IIncreaseCapacityRequest
+                     * @property {string|null} [tableName] IncreaseCapacityRequest tableName
+                     * @property {string|null} [region] IncreaseCapacityRequest region
+                     * @property {clutch.aws.dynamodb.v1.IThroughput|null} [tableThroughput] IncreaseCapacityRequest tableThroughput
+                     * @property {Array.<clutch.aws.dynamodb.v1.IIndexUpdateAction>|null} [gsiUpdates] IncreaseCapacityRequest gsiUpdates
                      */
 
                     /**
-                     * Constructs a new UpdateCapacityRequest.
+                     * Constructs a new IncreaseCapacityRequest.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @classdesc Represents an UpdateCapacityRequest.
-                     * @implements IUpdateCapacityRequest
+                     * @classdesc Represents an IncreaseCapacityRequest.
+                     * @implements IIncreaseCapacityRequest
                      * @constructor
-                     * @param {clutch.aws.dynamodb.v1.IUpdateCapacityRequest=} [properties] Properties to set
+                     * @param {clutch.aws.dynamodb.v1.IIncreaseCapacityRequest=} [properties] Properties to set
                      */
-                    function UpdateCapacityRequest(properties) {
+                    function IncreaseCapacityRequest(properties) {
                         this.gsiUpdates = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -4898,46 +4898,46 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * UpdateCapacityRequest tableName.
+                     * IncreaseCapacityRequest tableName.
                      * @member {string} tableName
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
                      * @instance
                      */
-                    UpdateCapacityRequest.prototype.tableName = "";
+                    IncreaseCapacityRequest.prototype.tableName = "";
 
                     /**
-                     * UpdateCapacityRequest region.
+                     * IncreaseCapacityRequest region.
                      * @member {string} region
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
                      * @instance
                      */
-                    UpdateCapacityRequest.prototype.region = "";
+                    IncreaseCapacityRequest.prototype.region = "";
 
                     /**
-                     * UpdateCapacityRequest targetTableThroughput.
-                     * @member {clutch.aws.dynamodb.v1.IThroughput|null|undefined} targetTableThroughput
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * IncreaseCapacityRequest tableThroughput.
+                     * @member {clutch.aws.dynamodb.v1.IThroughput|null|undefined} tableThroughput
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
                      * @instance
                      */
-                    UpdateCapacityRequest.prototype.targetTableThroughput = null;
+                    IncreaseCapacityRequest.prototype.tableThroughput = null;
 
                     /**
-                     * UpdateCapacityRequest gsiUpdates.
-                     * @member {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndexUpdate>} gsiUpdates
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * IncreaseCapacityRequest gsiUpdates.
+                     * @member {Array.<clutch.aws.dynamodb.v1.IIndexUpdateAction>} gsiUpdates
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
                      * @instance
                      */
-                    UpdateCapacityRequest.prototype.gsiUpdates = $util.emptyArray;
+                    IncreaseCapacityRequest.prototype.gsiUpdates = $util.emptyArray;
 
                     /**
-                     * Verifies an UpdateCapacityRequest message.
+                     * Verifies an IncreaseCapacityRequest message.
                      * @function verify
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    UpdateCapacityRequest.verify = function verify(message) {
+                    IncreaseCapacityRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
@@ -4946,16 +4946,16 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
-                        if (message.targetTableThroughput != null && message.hasOwnProperty("targetTableThroughput")) {
-                            let error = $root.clutch.aws.dynamodb.v1.Throughput.verify(message.targetTableThroughput);
+                        if (message.tableThroughput != null && message.hasOwnProperty("tableThroughput")) {
+                            let error = $root.clutch.aws.dynamodb.v1.Throughput.verify(message.tableThroughput);
                             if (error)
-                                return "targetTableThroughput." + error;
+                                return "tableThroughput." + error;
                         }
                         if (message.gsiUpdates != null && message.hasOwnProperty("gsiUpdates")) {
                             if (!Array.isArray(message.gsiUpdates))
                                 return "gsiUpdates: array expected";
                             for (let i = 0; i < message.gsiUpdates.length; ++i) {
-                                let error = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate.verify(message.gsiUpdates[i]);
+                                let error = $root.clutch.aws.dynamodb.v1.IndexUpdateAction.verify(message.gsiUpdates[i]);
                                 if (error)
                                     return "gsiUpdates." + error;
                             }
@@ -4964,49 +4964,49 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates an UpdateCapacityRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates an IncreaseCapacityRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.aws.dynamodb.v1.UpdateCapacityRequest} UpdateCapacityRequest
+                     * @returns {clutch.aws.dynamodb.v1.IncreaseCapacityRequest} IncreaseCapacityRequest
                      */
-                    UpdateCapacityRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.aws.dynamodb.v1.UpdateCapacityRequest)
+                    IncreaseCapacityRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.IncreaseCapacityRequest)
                             return object;
-                        let message = new $root.clutch.aws.dynamodb.v1.UpdateCapacityRequest();
+                        let message = new $root.clutch.aws.dynamodb.v1.IncreaseCapacityRequest();
                         if (object.tableName != null)
                             message.tableName = String(object.tableName);
                         if (object.region != null)
                             message.region = String(object.region);
-                        if (object.targetTableThroughput != null) {
-                            if (typeof object.targetTableThroughput !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.UpdateCapacityRequest.targetTableThroughput: object expected");
-                            message.targetTableThroughput = $root.clutch.aws.dynamodb.v1.Throughput.fromObject(object.targetTableThroughput);
+                        if (object.tableThroughput != null) {
+                            if (typeof object.tableThroughput !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.IncreaseCapacityRequest.tableThroughput: object expected");
+                            message.tableThroughput = $root.clutch.aws.dynamodb.v1.Throughput.fromObject(object.tableThroughput);
                         }
                         if (object.gsiUpdates) {
                             if (!Array.isArray(object.gsiUpdates))
-                                throw TypeError(".clutch.aws.dynamodb.v1.UpdateCapacityRequest.gsiUpdates: array expected");
+                                throw TypeError(".clutch.aws.dynamodb.v1.IncreaseCapacityRequest.gsiUpdates: array expected");
                             message.gsiUpdates = [];
                             for (let i = 0; i < object.gsiUpdates.length; ++i) {
                                 if (typeof object.gsiUpdates[i] !== "object")
-                                    throw TypeError(".clutch.aws.dynamodb.v1.UpdateCapacityRequest.gsiUpdates: object expected");
-                                message.gsiUpdates[i] = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate.fromObject(object.gsiUpdates[i]);
+                                    throw TypeError(".clutch.aws.dynamodb.v1.IncreaseCapacityRequest.gsiUpdates: object expected");
+                                message.gsiUpdates[i] = $root.clutch.aws.dynamodb.v1.IndexUpdateAction.fromObject(object.gsiUpdates[i]);
                             }
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from an UpdateCapacityRequest message. Also converts values to other types if specified.
+                     * Creates a plain object from an IncreaseCapacityRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
                      * @static
-                     * @param {clutch.aws.dynamodb.v1.UpdateCapacityRequest} message UpdateCapacityRequest
+                     * @param {clutch.aws.dynamodb.v1.IncreaseCapacityRequest} message IncreaseCapacityRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    UpdateCapacityRequest.toObject = function toObject(message, options) {
+                    IncreaseCapacityRequest.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -5015,54 +5015,54 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.tableName = "";
                             object.region = "";
-                            object.targetTableThroughput = null;
+                            object.tableThroughput = null;
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
-                        if (message.targetTableThroughput != null && message.hasOwnProperty("targetTableThroughput"))
-                            object.targetTableThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.targetTableThroughput, options);
+                        if (message.tableThroughput != null && message.hasOwnProperty("tableThroughput"))
+                            object.tableThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.tableThroughput, options);
                         if (message.gsiUpdates && message.gsiUpdates.length) {
                             object.gsiUpdates = [];
                             for (let j = 0; j < message.gsiUpdates.length; ++j)
-                                object.gsiUpdates[j] = $root.clutch.aws.dynamodb.v1.GlobalSecondaryIndexUpdate.toObject(message.gsiUpdates[j], options);
+                                object.gsiUpdates[j] = $root.clutch.aws.dynamodb.v1.IndexUpdateAction.toObject(message.gsiUpdates[j], options);
                         }
                         return object;
                     };
 
                     /**
-                     * Converts this UpdateCapacityRequest to JSON.
+                     * Converts this IncreaseCapacityRequest to JSON.
                      * @function toJSON
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    UpdateCapacityRequest.prototype.toJSON = function toJSON() {
+                    IncreaseCapacityRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return UpdateCapacityRequest;
+                    return IncreaseCapacityRequest;
                 })();
 
-                v1.UpdateCapacityResponse = (function() {
+                v1.IncreaseCapacityResponse = (function() {
 
                     /**
-                     * Properties of an UpdateCapacityResponse.
+                     * Properties of an IncreaseCapacityResponse.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @interface IUpdateCapacityResponse
-                     * @property {clutch.aws.dynamodb.v1.ITable|null} [table] UpdateCapacityResponse table
+                     * @interface IIncreaseCapacityResponse
+                     * @property {clutch.aws.dynamodb.v1.ITable|null} [table] IncreaseCapacityResponse table
                      */
 
                     /**
-                     * Constructs a new UpdateCapacityResponse.
+                     * Constructs a new IncreaseCapacityResponse.
                      * @memberof clutch.aws.dynamodb.v1
-                     * @classdesc Represents an UpdateCapacityResponse.
-                     * @implements IUpdateCapacityResponse
+                     * @classdesc Represents an IncreaseCapacityResponse.
+                     * @implements IIncreaseCapacityResponse
                      * @constructor
-                     * @param {clutch.aws.dynamodb.v1.IUpdateCapacityResponse=} [properties] Properties to set
+                     * @param {clutch.aws.dynamodb.v1.IIncreaseCapacityResponse=} [properties] Properties to set
                      */
-                    function UpdateCapacityResponse(properties) {
+                    function IncreaseCapacityResponse(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -5070,22 +5070,22 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * UpdateCapacityResponse table.
+                     * IncreaseCapacityResponse table.
                      * @member {clutch.aws.dynamodb.v1.ITable|null|undefined} table
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityResponse
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityResponse
                      * @instance
                      */
-                    UpdateCapacityResponse.prototype.table = null;
+                    IncreaseCapacityResponse.prototype.table = null;
 
                     /**
-                     * Verifies an UpdateCapacityResponse message.
+                     * Verifies an IncreaseCapacityResponse message.
                      * @function verify
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityResponse
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    UpdateCapacityResponse.verify = function verify(message) {
+                    IncreaseCapacityResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.table != null && message.hasOwnProperty("table")) {
@@ -5097,35 +5097,35 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates an UpdateCapacityResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates an IncreaseCapacityResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityResponse
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.aws.dynamodb.v1.UpdateCapacityResponse} UpdateCapacityResponse
+                     * @returns {clutch.aws.dynamodb.v1.IncreaseCapacityResponse} IncreaseCapacityResponse
                      */
-                    UpdateCapacityResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.aws.dynamodb.v1.UpdateCapacityResponse)
+                    IncreaseCapacityResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.IncreaseCapacityResponse)
                             return object;
-                        let message = new $root.clutch.aws.dynamodb.v1.UpdateCapacityResponse();
+                        let message = new $root.clutch.aws.dynamodb.v1.IncreaseCapacityResponse();
                         if (object.table != null) {
                             if (typeof object.table !== "object")
-                                throw TypeError(".clutch.aws.dynamodb.v1.UpdateCapacityResponse.table: object expected");
+                                throw TypeError(".clutch.aws.dynamodb.v1.IncreaseCapacityResponse.table: object expected");
                             message.table = $root.clutch.aws.dynamodb.v1.Table.fromObject(object.table);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from an UpdateCapacityResponse message. Also converts values to other types if specified.
+                     * Creates a plain object from an IncreaseCapacityResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityResponse
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityResponse
                      * @static
-                     * @param {clutch.aws.dynamodb.v1.UpdateCapacityResponse} message UpdateCapacityResponse
+                     * @param {clutch.aws.dynamodb.v1.IncreaseCapacityResponse} message IncreaseCapacityResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    UpdateCapacityResponse.toObject = function toObject(message, options) {
+                    IncreaseCapacityResponse.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -5137,17 +5137,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this UpdateCapacityResponse to JSON.
+                     * Converts this IncreaseCapacityResponse to JSON.
                      * @function toJSON
-                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityResponse
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    UpdateCapacityResponse.prototype.toJSON = function toJSON() {
+                    IncreaseCapacityResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return UpdateCapacityResponse;
+                    return IncreaseCapacityResponse;
                 })();
 
                 return v1;
