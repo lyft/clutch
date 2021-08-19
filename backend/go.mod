@@ -14,11 +14,11 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.11.1
 	github.com/aws/smithy-go v1.7.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
-	github.com/bufbuild/buf v0.37.0
+	github.com/bufbuild/buf v0.52.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/envoyproxy/go-control-plane v0.9.9-0.20210304204206-e2b50f82e48e
+	github.com/envoyproxy/go-control-plane v0.9.9-0.20210512163311-63b5d3c536b0
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
 	github.com/fullstorydev/grpcurl v1.8.2
 	github.com/go-git/go-billy/v5 v5.3.1
@@ -33,7 +33,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
 	github.com/iancoleman/strcase v0.2.0
-	github.com/jhump/protoreflect v1.9.0
+	github.com/jhump/protoreflect v1.9.1-0.20210817181203-db1a327a393e
 	github.com/lib/pq v1.10.2
 	github.com/m3db/prometheus_client_golang v0.8.1 // indirect
 	github.com/m3db/prometheus_client_model v0.1.0 // indirect
@@ -50,11 +50,11 @@ require (
 	github.com/uber-go/tally v3.4.2+incompatible
 	go.uber.org/zap v1.19.0
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
-	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985
+	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
 	golang.org/x/oauth2 v0.0.0-20210628180205-a41e5a781914
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/genproto v0.0.0-20210701133433-6b8dcf568a95
-	google.golang.org/grpc v1.38.0
+	google.golang.org/grpc v1.40.0-dev.0.20210708170655-30dfb4b933a5
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/square/go-jose.v2 v2.6.0
