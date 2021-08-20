@@ -1,10 +1,5 @@
-import {
-  isGroupState,
-  isProjectsState,
-  isProjectState,
-} from "../types";
 import type { ProjectState } from "../types";
-import { Group } from "../types";
+import { Group, isGroupState, isProjectsState, isProjectState } from "../types";
 
 describe("isGroupState", () => {
   it("returns false for undefined state", () => {
@@ -41,7 +36,6 @@ describe("isProjectsState", () => {
     };
     expect(isProjectsState(state)).toBe(true);
   });
-
 
   it("rejects projects state types with incorrect types", () => {
     const state = {

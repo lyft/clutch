@@ -46,8 +46,4 @@ const storeState = (state: State) => {
   window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, JSON.stringify(localState));
 };
 
-export {
-  loadStoredState,
-  LOCAL_STORAGE_STATE_KEY,
-  storeState,
-};
+export { loadStoredState, LOCAL_STORAGE_STATE_KEY, storeState };

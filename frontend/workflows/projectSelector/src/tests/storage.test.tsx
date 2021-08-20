@@ -1,8 +1,4 @@
-import {
-  loadStoredState,
-  LOCAL_STORAGE_STATE_KEY,
-  storeState,
-} from "../storage";
+import { loadStoredState, LOCAL_STORAGE_STATE_KEY, storeState } from "../storage";
 import type { State } from "../types";
 import { Group } from "../types";
 

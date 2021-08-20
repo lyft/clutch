@@ -43,10 +43,47 @@ export interface ProjectsState {
   [Group.DOWNSTREAM]: GroupState;
 }
 
+export interface GroupState {
+  [projectName: string]: ProjectState;
+}
+
+// n.b. if you are updating ProjectState be sure to update the custom type guard below it.
+export interface ProjectState {
+  checked: boolean;
+  // TODO: hidden should be derived?
+  hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
+  custom?: boolean;
+}
+
+/**
+ * Determines if an object is of type @type {ProjectState}.
+ */
+const isProjectState = (state: ProjectState | object): state is ProjectState => {
+  const pState = state as ProjectState;
+  const checkedProp = pState?.checked;
+  const hasRequiredProps = checkedProp !== undefined && typeof checkedProp === "boolean";
+
+  const validOptionalProps =
+    (pState?.hidden !== undefined ? typeof pState.hidden === "boolean" : true) &&
+    (pState?.custom !== undefined ? typeof pState.custom === "boolean" : true);
+  return hasRequiredProps && validOptionalProps;
+};
+
+/**
+ * Determines if an object is of type @type {GroupState}.
+ */
+const isGroupState = (state: GroupState | object | undefined): state is GroupState => {
+  if (state === undefined) {
+    return false;
+  }
+  const projectStates = Object.values(state as GroupState);
+  return projectStates.filter(s => isProjectState(s)).length === projectStates.length;
+};
+
 /**
  * Determines if an object is of type @type {ProjectsState}.
  */
- const isProjectsState = (state: ProjectsState | Object): state is ProjectsState => {
+const isProjectsState = (state: ProjectsState | Object): state is ProjectsState => {
   const projectsState = state as ProjectsState;
   const projects = projectsState[Group.PROJECTS];
   const upstream = projectsState[Group.UPSTREAM];
@@ -64,45 +101,6 @@ export interface State extends ProjectsState {
   error: ClutchError | undefined;
 }
 
-export interface GroupState {
-  [projectName: string]: ProjectState;
-}
-
-/**
- * Determines if an object is of type @type {GroupState}.
- */
- const isGroupState = (state: GroupState | object | undefined): state is GroupState => {
-  if (state === undefined) {
-    return false;
-  }
-  const projectStates = Object.values(state as GroupState);
-  return projectStates.filter(s => isProjectState(s)).length === projectStates.length;
-};
-
-
-// n.b. if you are updating ProjectState be sure to update the custom type guard below it.
-export interface ProjectState {
-  checked: boolean;
-  // TODO: hidden should be derived?
-  hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
-  custom?: boolean;
-}
-
-/**
- * Determines if an object is of type @type {ProjectState}.
- */
- const isProjectState = (state: ProjectState | object): state is ProjectState => {
-  const pState = (state as ProjectState);
-  const checkedProp = pState?.checked;
-  const hasRequiredProps = checkedProp !== undefined && typeof checkedProp === "boolean";
-  
-  const validOptionalProps = (
-    (pState?.hidden !== undefined ? typeof pState.hidden === "boolean" : true) &&
-    (pState?.custom !== undefined ? typeof pState.custom === "boolean" : true)
-  );
-  return hasRequiredProps && validOptionalProps;
-};
-
 export interface DashState {
   // Contains the names of selected projects, upstreams, and downstreams merged together.
   selected: string[];
@@ -118,4 +116,4 @@ export interface DashAction {
   payload: DashState;
 }
 
-export {isGroupState, isProjectState, isProjectsState };
+export { isGroupState, isProjectState, isProjectsState };
