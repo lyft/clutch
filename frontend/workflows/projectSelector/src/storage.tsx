@@ -9,8 +9,15 @@ const LOCAL_STORAGE_STATE_KEY = "dashState";
  * Determines if an object is of type @type {ProjectState}.
  */
 const isProjectState = (state: ProjectState | object): state is ProjectState => {
-  const checkedProp = (state as ProjectState).checked;
-  return checkedProp !== undefined && typeof checkedProp === "boolean";
+  const pState = (state as ProjectState);
+  const checkedProp = pState?.checked;
+  const hasRequiredProps = checkedProp !== undefined && typeof checkedProp === "boolean";
+  
+  const validOptionalProps = (
+    (pState?.hidden !== undefined ? typeof pState.hidden === "boolean" : true) &&
+    (pState?.custom !== undefined ? typeof pState.custom === "boolean" : true)
+  );
+  return hasRequiredProps && validOptionalProps;
 };
 
 /**

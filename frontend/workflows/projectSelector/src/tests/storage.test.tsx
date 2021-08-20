@@ -27,13 +27,41 @@ describe("isGroupState", () => {
 });
 
 describe("isProjectsState", () => {
-  it("matches projects state types", () => {
+  it("matches projects state types with only required fields", () => {
     const state = {
       [Group.PROJECTS]: { key: { checked: false } as ProjectState },
       [Group.UPSTREAM]: { key: { checked: false } as ProjectState },
       [Group.DOWNSTREAM]: { key: { checked: false } as ProjectState },
     };
     expect(isProjectsState(state)).toBe(true);
+  });
+
+  it("matches projects state types with optional fields", () => {
+    const state = {
+      [Group.PROJECTS]: { key: { checked: false, hidden: true, custom: false } as ProjectState },
+      [Group.UPSTREAM]: { key: { checked: false } as ProjectState },
+      [Group.DOWNSTREAM]: { key: { checked: false } as ProjectState },
+    };
+    expect(isProjectsState(state)).toBe(true);
+  });
+
+
+  it("rejects projects state types with incorrect types", () => {
+    const state = {
+      [Group.PROJECTS]: { key: { checked: "false" } },
+      [Group.UPSTREAM]: { key: { checked: false, hidden: "true" } },
+      [Group.DOWNSTREAM]: { key: { checked: false, custom: "false" } },
+    };
+    expect(isProjectsState(state)).toBe(false);
+  });
+
+  it("rejects projects state types without required fields", () => {
+    const state = {
+      [Group.PROJECTS]: { key: { hidden: true } as ProjectState },
+      [Group.UPSTREAM]: { key: { hidden: true } as ProjectState },
+      [Group.DOWNSTREAM]: { key: { custom: false } as ProjectState },
+    };
+    expect(isProjectsState(state)).toBe(false);
   });
 
   it("rejects other types", () => {
