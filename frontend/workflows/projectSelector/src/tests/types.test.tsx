@@ -30,7 +30,7 @@ describe("isGlobalState", () => {
 
   it("matches projects state types with optional fields", () => {
     const state = {
-      [Group.PROJECTS]: { key: { checked: false, hidden: true, custom: false } as ProjectState },
+      [Group.PROJECTS]: { key: { checked: false, custom: false } as ProjectState },
       [Group.UPSTREAM]: { key: { checked: false } as ProjectState },
       [Group.DOWNSTREAM]: { key: { checked: false } as ProjectState },
     };
@@ -40,7 +40,7 @@ describe("isGlobalState", () => {
   it("rejects projects state types with incorrect types", () => {
     const state = {
       [Group.PROJECTS]: { key: { checked: "false" } },
-      [Group.UPSTREAM]: { key: { checked: false, hidden: "true" } },
+      [Group.UPSTREAM]: { key: { checked: false } },
       [Group.DOWNSTREAM]: { key: { checked: false, custom: "false" } },
     };
     expect(isGlobalState(state)).toBe(false);
@@ -48,8 +48,8 @@ describe("isGlobalState", () => {
 
   it("rejects projects state types without required fields", () => {
     const state = {
-      [Group.PROJECTS]: { key: { hidden: true } as ProjectState },
-      [Group.UPSTREAM]: { key: { hidden: true } as ProjectState },
+      [Group.PROJECTS]: { key: { custom: true } as ProjectState },
+      [Group.UPSTREAM]: { key: { custom: true } as ProjectState },
       [Group.DOWNSTREAM]: { key: { custom: false } as ProjectState },
     };
     expect(isGlobalState(state)).toBe(false);

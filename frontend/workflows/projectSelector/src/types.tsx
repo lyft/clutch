@@ -50,8 +50,6 @@ export interface GroupState {
 // n.b. if you are updating ProjectState be sure to update the custom type guard below it.
 export interface ProjectState {
   checked: boolean;
-  // TODO: hidden should be derived?
-  hidden?: boolean; // upstreams and downstreams are hidden when their parent is unchecked unless other parents also use them.
   custom?: boolean;
 }
 
@@ -64,8 +62,7 @@ const isProjectState = (state: ProjectState | object): state is ProjectState => 
   const hasRequiredProps = checkedProp !== undefined && typeof checkedProp === "boolean";
 
   const validOptionalProps =
-    (pState?.hidden !== undefined ? typeof pState.hidden === "boolean" : true) &&
-    (pState?.custom !== undefined ? typeof pState.custom === "boolean" : true);
+    pState?.custom !== undefined ? typeof pState.custom === "boolean" : true;
   return hasRequiredProps && validOptionalProps;
 };
 
