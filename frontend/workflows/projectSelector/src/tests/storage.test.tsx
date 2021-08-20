@@ -60,13 +60,13 @@ describe("loadStoredState", () => {
 });
 
 describe("storeState", () => {
-  const projectsState = {
+  const globalState = {
     [Group.PROJECTS]: { a: { checked: false } },
     [Group.UPSTREAM]: { b: { checked: true } },
     [Group.DOWNSTREAM]: { c: { checked: false } },
   };
   const state = {
-    ...projectsState,
+    ...globalState,
     projectData: {},
     loading: false,
     error: undefined,
@@ -78,8 +78,6 @@ describe("storeState", () => {
 
   it("writes stringified projects state to local storage", () => {
     storeState(state);
-    expect(window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY)).toBe(
-      JSON.stringify(projectsState)
-    );
+    expect(window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY)).toBe(JSON.stringify(globalState));
   });
 });

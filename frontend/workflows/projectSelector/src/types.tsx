@@ -37,7 +37,7 @@ interface BackgroundPayload {
 
 export type Action = BackgroundAction | UserAction;
 
-export interface ProjectsState {
+export interface GlobalState {
   [Group.PROJECTS]: GroupState;
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
@@ -81,13 +81,13 @@ const isGroupState = (state: GroupState | object | undefined): state is GroupSta
 };
 
 /**
- * Determines if an object is of type @type {ProjectsState}.
+ * Determines if an object is of type @type {GlobalState}.
  */
-const isProjectsState = (state: ProjectsState | Object): state is ProjectsState => {
-  const projectsState = state as ProjectsState;
-  const projects = projectsState[Group.PROJECTS];
-  const upstream = projectsState[Group.UPSTREAM];
-  const downstream = projectsState[Group.DOWNSTREAM];
+const isGlobalState = (state: GlobalState | Object): state is GlobalState => {
+  const globalState = state as GlobalState;
+  const projects = globalState[Group.PROJECTS];
+  const upstream = globalState[Group.UPSTREAM];
+  const downstream = globalState[Group.DOWNSTREAM];
 
   const hasProjects = isGroupState(projects);
   const hasUpstream = isGroupState(upstream);
@@ -95,7 +95,7 @@ const isProjectsState = (state: ProjectsState | Object): state is ProjectsState 
   return hasProjects && hasUpstream && hasDownstream;
 };
 
-export interface State extends ProjectsState {
+export interface State extends GlobalState {
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
   loading: boolean;
   error: ClutchError | undefined;
@@ -116,4 +116,4 @@ export interface DashAction {
   payload: DashState;
 }
 
-export { isGroupState, isProjectState, isProjectsState };
+export { isGroupState, isProjectState, isGlobalState };
