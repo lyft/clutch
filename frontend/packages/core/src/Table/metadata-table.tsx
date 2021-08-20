@@ -141,7 +141,6 @@ interface MutableRowProps extends ImmutableRowProps {
 const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
   const error = validation?.formState?.errors?.[data.name];
 
-  const validationProps = validation.register(data.name);
   return (
     <TableRow key={data.id}>
       <KeyCell data={data} />
@@ -160,8 +159,7 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
             onFocus={onUpdate}
             helperText={error?.message || ""}
             error={!!error || false}
-            inputRef={validationProps.ref}
-            {...validationProps}
+            validation={validation.register(data.name)}
           />
         </Grid>
       </TableCell>

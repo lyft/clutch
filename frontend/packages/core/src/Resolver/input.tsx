@@ -77,7 +77,6 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
     enableAutocomplete;
 
   const error = validation.formState.errors?.query;
-  const validationProps = validation.register("query", { required: true });
   return (
     <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
       <TextField
@@ -92,8 +91,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
         autocompleteCallback={isAutoCompleteEnabled ? v => autoComplete(inputType, v) : undefined}
-        inputRef={validationProps.ref}
-        {...validationProps}
+        validation={validation.register("query", { required: true })}
       />
     </Form>
   );

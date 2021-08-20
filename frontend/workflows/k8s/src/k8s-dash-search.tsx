@@ -68,9 +68,6 @@ const K8sDashSearch = ({ onSubmit }) => {
       });
   };
 
-  const namespaceValidation = register("namespace");
-  const clientsetValidation = register("clientset");
-
   return (
     <Container>
       <Paper>
@@ -82,8 +79,7 @@ const K8sDashSearch = ({ onSubmit }) => {
               name="namespace"
               error={!!errors?.namespace}
               helperText={errors?.namespace?.message}
-              inputRef={namespaceValidation.ref}
-              {...namespaceValidation}
+              validation={register("namespace")}
             />
             <TextField
               defaultValue={inputData.displayValue()?.clientset}
@@ -91,8 +87,7 @@ const K8sDashSearch = ({ onSubmit }) => {
               name="clientset"
               error={!!errors?.clientset}
               helperText={errors?.clientset?.message}
-              inputRef={clientsetValidation.ref}
-              {...clientsetValidation}
+              validation={register("clientset")}
             />
             <IconButton type="submit">
               <SearchIcon />

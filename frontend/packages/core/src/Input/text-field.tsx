@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { UseFormRegisterReturn } from "react-hook-form";
 import styled from "@emotion/styled";
 import type {
   InputProps as MuiInputProps,
@@ -180,6 +181,7 @@ export interface TextFieldProps
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
   autocompleteCallback?: (v: string) => Promise<{ results: { id?: string; label: string }[] }>;
+  validation?: UseFormRegisterReturn;
 }
 
 const TextField = ({
@@ -191,6 +193,7 @@ const TextField = ({
   endAdornment,
   autocompleteCallback,
   defaultValue,
+  validation,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -227,6 +230,13 @@ const TextField = ({
       endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
     },
   };
+
+  const validationProps = validation
+    ? {
+        inputRef: validation.ref,
+        ...validation,
+      }
+    : {};
 
   // We maintain a defaultVal to prevent the value from changing from underneath
   // the component. This is required because autocomplete is uncontrolled.
@@ -275,6 +285,7 @@ const TextField = ({
               ref: inputProps.InputProps.ref,
             }}
             {...props}
+            {...validationProps}
           />
         )}
       />
@@ -285,8 +296,9 @@ const TextField = ({
     <StyledTextField
       {...textFieldProps}
       defaultValue={defaultValue}
-      onChange={onChange}
       {...props}
+      {...validationProps}
+      onChange={onChange}
     />
   );
 };

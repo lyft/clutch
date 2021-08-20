@@ -44,10 +44,6 @@ const StringField = (
     onChange(convertChangeEvent(event));
   };
 
-  const validationProps = validation.register(field.name, {
-    required: field.metadata.required || false,
-  });
-
   return (
     <TextField
       key={field.metadata.displayName || field.name}
@@ -60,8 +56,9 @@ const StringField = (
       onFocus={handleChanges}
       helperText={errorMsg}
       error={!!errorMsg}
-      inputRef={validationProps.ref}
-      {...validationProps}
+      validation={validation.register(field.name, {
+        required: field.metadata.required || false,
+      })}
     />
   );
 };
