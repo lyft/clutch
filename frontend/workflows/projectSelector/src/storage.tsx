@@ -1,50 +1,9 @@
 import _ from "lodash";
 
-import type { GroupState, ProjectsState, ProjectState, State } from "./types";
-import { Group } from "./types";
+import type { ProjectsState, State } from "./types";
+import { Group, isProjectsState } from "./types";
 
 const LOCAL_STORAGE_STATE_KEY = "dashState";
-
-/**
- * Determines if an object is of type @type {ProjectState}.
- */
-const isProjectState = (state: ProjectState | object): state is ProjectState => {
-  const pState = (state as ProjectState);
-  const checkedProp = pState?.checked;
-  const hasRequiredProps = checkedProp !== undefined && typeof checkedProp === "boolean";
-  
-  const validOptionalProps = (
-    (pState?.hidden !== undefined ? typeof pState.hidden === "boolean" : true) &&
-    (pState?.custom !== undefined ? typeof pState.custom === "boolean" : true)
-  );
-  return hasRequiredProps && validOptionalProps;
-};
-
-/**
- * Determines if an object is of type @type {GroupState}.
- */
-const isGroupState = (state: GroupState | object | undefined): state is GroupState => {
-  if (state === undefined) {
-    return false;
-  }
-  const projectStates = Object.values(state as GroupState);
-  return projectStates.filter(s => isProjectState(s)).length === projectStates.length;
-};
-
-/**
- * Determines if an object is of type @type {ProjectsState}.
- */
-const isProjectsState = (state: ProjectsState | Object): state is ProjectsState => {
-  const projectsState = state as ProjectsState;
-  const projects = projectsState[Group.PROJECTS];
-  const upstream = projectsState[Group.UPSTREAM];
-  const downstream = projectsState[Group.DOWNSTREAM];
-
-  const hasProjects = isGroupState(projects);
-  const hasUpstream = isGroupState(upstream);
-  const hasDownstream = isGroupState(downstream);
-  return hasProjects && hasUpstream && hasDownstream;
-};
 
 /**
  * Attempts to load state stored in local storage and merge it into the specified state.
@@ -88,9 +47,6 @@ const storeState = (state: State) => {
 };
 
 export {
-  isGroupState,
-  isProjectState,
-  isProjectsState,
   loadStoredState,
   LOCAL_STORAGE_STATE_KEY,
   storeState,
