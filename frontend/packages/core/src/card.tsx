@@ -10,7 +10,7 @@ import {
   CardActionArea,
   CardActionAreaProps,
   CardContent as MuiCardContent,
-  CardHeader as MuiCardHeader,
+  Divider as MuiDivider,
 } from "@material-ui/core";
 
 import { StyledTypography } from "./typography";
@@ -51,23 +51,79 @@ const StyledCardHeaderContainer = styled.div({
   background: "#EBEDFB",
 });
 
-interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {
-  children?: React.ReactNode;
+const StyledCardHeader = styled.div({
+  padding: "16px",
+  display: "flex",
+  alignItems: "center",
+});
+
+// TODO: add flex to this like the material component?
+const StyledCardHeaderAvater = styled.div({
+  marginRight: "16px",
+});
+
+const StyledCardHeaderSection = styled.div({
+  paddingRight: "28px",
+  paddingLeft: "28px",
+});
+
+// TODO: confirm the width
+const Divider = styled(MuiDivider)({
+  color: "rgba(13, 16, 48, 0.38)",
+  height: "40px",
+});
+
+export interface CardHeaderSections {
+  title: string;
+  subheader?: string;
+  titleColor?: string;
+  subheaderColor?: string;
 }
 
-const CardHeader = ({ avatar, children, title }: CardHeaderProps) => (
-  <StyledCardHeaderContainer>
-    <MuiCardHeader
-      style={{
-        padding: "16px",
-      }}
-      disableTypography
-      avatar={avatar}
-      title={<StyledTypography variant="h3">{title}</StyledTypography>}
-    />
-    {children}
-  </StyledCardHeaderContainer>
-);
+interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {
+  children?: React.ReactNode;
+  sections?: CardHeaderSections[];
+}
+
+// TODO: some flex/grid improvemnts
+const CardHeader = ({ avatar, children, title, sections }: CardHeaderProps) => {
+  return (
+    <StyledCardHeaderContainer>
+      <StyledCardHeader>
+        <StyledCardHeaderAvater>{avatar}</StyledCardHeaderAvater>
+        {/* todo wrap the title and sections together like material ui does? and add flex? */}
+        <StyledTypography variant="h4" style={{ marginRight: "28px" }}>
+          {title}
+        </StyledTypography>
+        {sections?.length > 0 &&
+          sections.map(section => (
+            <>
+              <Divider orientation="vertical" flexItem />
+              <StyledCardHeaderSection>
+                <StyledTypography
+                  variant="subtitle2"
+                  color={section.titleColor ? section.titleColor : "#0D1030"}
+                >
+                  {section.title}
+                </StyledTypography>
+                {section.subheader && (
+                  <StyledTypography
+                    variant="body3"
+                    color={
+                      section.subheaderColor ? section.subheaderColor : "rgba(13, 16, 48, 0.6)"
+                    }
+                  >
+                    {section.subheader}
+                  </StyledTypography>
+                )}
+              </StyledCardHeaderSection>
+            </>
+          ))}
+      </StyledCardHeader>
+      {children}
+    </StyledCardHeaderContainer>
+  );
+};
 
 interface CardContentProps extends MuiCardContentProps {}
 

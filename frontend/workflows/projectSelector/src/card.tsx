@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { ClutchError } from "@clutch-sh/core";
+import type { CardHeaderSections, ClutchError } from "@clutch-sh/core";
 import { Card as ClutchCard, CardHeader, Error } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Grid, LinearProgress } from "@material-ui/core";
@@ -19,13 +19,14 @@ interface CardProps {
   children: React.ReactNode;
   error?: ClutchError;
   isLoading?: boolean;
+  sections?: CardHeaderSections[];
   title?: React.ReactNode & string;
 }
 
-const Card = ({ avatar, children, error, isLoading, title }: CardProps) => (
+const Card = ({ avatar, children, error, isLoading, sections, title }: CardProps) => (
   <Grid item xs={12} sm={6}>
     <ClutchCard>
-      <CardHeader avatar={avatar} title={title}>
+      <CardHeader avatar={avatar} sections={sections} title={title}>
         <StyledProgressContainer>
           {isLoading && <LinearProgress color="secondary" />}
         </StyledProgressContainer>
