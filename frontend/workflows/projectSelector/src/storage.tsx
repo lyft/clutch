@@ -1,7 +1,7 @@
 import _ from "lodash";
 
-import type { GlobalState, State } from "./types";
-import { Group, isGlobalState } from "./types";
+import type { GlobalProjectState, State } from "./types";
+import { Group, isGlobalProjectState } from "./types";
 
 const LOCAL_STORAGE_STATE_KEY = "dashState";
 
@@ -24,7 +24,7 @@ const loadStoredState = (state: State): State => {
   try {
     const storedStateObject = JSON.parse(storedState);
     // If stored state is in the proper format merge it with existing state
-    if (isGlobalState(storedStateObject)) {
+    if (isGlobalProjectState(storedStateObject)) {
       // Merge will overwrite existing values in state with any found in the stored state
       return _.merge(state, storedStateObject);
     }
@@ -42,7 +42,7 @@ const storeState = (state: State) => {
     [Group.PROJECTS]: state[Group.PROJECTS],
     [Group.UPSTREAM]: state[Group.UPSTREAM],
     [Group.DOWNSTREAM]: state[Group.DOWNSTREAM],
-  } as GlobalState;
+  } as GlobalProjectState;
   window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, JSON.stringify(localState));
 };
 

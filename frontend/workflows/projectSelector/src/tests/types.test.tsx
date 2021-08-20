@@ -1,5 +1,5 @@
 import type { ProjectState } from "../types";
-import { Group, isGlobalState, isGroupState, isProjectState } from "../types";
+import { Group, isGlobalProjectState, isGroupState, isProjectState } from "../types";
 
 describe("isGroupState", () => {
   it("returns false for undefined state", () => {
@@ -18,14 +18,14 @@ describe("isGroupState", () => {
   });
 });
 
-describe("isGlobalState", () => {
+describe("isGlobalProjectState", () => {
   it("matches projects state types with only required fields", () => {
     const state = {
       [Group.PROJECTS]: { key: { checked: false } as ProjectState },
       [Group.UPSTREAM]: { key: { checked: false } as ProjectState },
       [Group.DOWNSTREAM]: { key: { checked: false } as ProjectState },
     };
-    expect(isGlobalState(state)).toBe(true);
+    expect(isGlobalProjectState(state)).toBe(true);
   });
 
   it("matches projects state types with optional fields", () => {
@@ -34,7 +34,7 @@ describe("isGlobalState", () => {
       [Group.UPSTREAM]: { key: { checked: false } as ProjectState },
       [Group.DOWNSTREAM]: { key: { checked: false } as ProjectState },
     };
-    expect(isGlobalState(state)).toBe(true);
+    expect(isGlobalProjectState(state)).toBe(true);
   });
 
   it("rejects projects state types with incorrect types", () => {
@@ -43,7 +43,7 @@ describe("isGlobalState", () => {
       [Group.UPSTREAM]: { key: { checked: false } },
       [Group.DOWNSTREAM]: { key: { checked: false, custom: "false" } },
     };
-    expect(isGlobalState(state)).toBe(false);
+    expect(isGlobalProjectState(state)).toBe(false);
   });
 
   it("rejects projects state types without required fields", () => {
@@ -52,7 +52,7 @@ describe("isGlobalState", () => {
       [Group.UPSTREAM]: { key: { custom: true } as ProjectState },
       [Group.DOWNSTREAM]: { key: { custom: false } as ProjectState },
     };
-    expect(isGlobalState(state)).toBe(false);
+    expect(isGlobalProjectState(state)).toBe(false);
   });
 
   it("rejects other types", () => {
@@ -60,7 +60,7 @@ describe("isGlobalState", () => {
       [Group.PROJECTS]: { key: { checked: false } as ProjectState },
       [Group.UPSTREAM]: { key: {} as ProjectState },
     };
-    expect(isGlobalState(state)).toBe(false);
+    expect(isGlobalProjectState(state)).toBe(false);
   });
 });
 
