@@ -35,6 +35,20 @@ service DDBAPI {
   }
 }
 
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
+enum Status {
+  // Unspecified status indicates the table status could not be found.
+  UNSPECIFIED = 0;
+  UNKNOWN = 1;
+  CREATING = 2;
+  UPDATING = 3;
+  DELETING = 4;
+  ACTIVE = 5;
+  INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6;
+  ARCHIVING = 7;
+  ARCHIVED = 8;
+}
+
 message Table {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
@@ -45,6 +59,7 @@ message Table {
   string region = 2;
   repeated GlobalSecondaryIndex global_secondary_indexes = 3;
   ProvisionedThroughput provisioned_throughput = 4;
+  Status status = 5;
 }
 
 message GlobalSecondaryIndex {
@@ -76,6 +91,8 @@ message UpdateTableCapacityRequest {
 }
 
 message UpdateTableCapacityResponse {
+  string table_name = 1;
+  Status table_status = 2;
 }
 
 message UpdateGSICapacityRequest {
@@ -87,4 +104,7 @@ message UpdateGSICapacityRequest {
 }
 
 message UpdateGSICapacityResponse {
+  string table_name = 1;
+  string index_name = 2;
+  Status table_status = 3;
 }

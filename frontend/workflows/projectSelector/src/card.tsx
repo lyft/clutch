@@ -1,19 +1,35 @@
 import * as React from "react";
 import type { ClutchError } from "@clutch-sh/core";
 import { Card as ClutchCard, CardHeader, Error } from "@clutch-sh/core";
-import { Grid } from "@material-ui/core";
+import styled from "@emotion/styled";
+import { Grid, LinearProgress } from "@material-ui/core";
+
+const StyledProgressContainer = styled.div({
+  height: "4px",
+  ".MuiLinearProgress-root": {
+    backgroundColor: "rgb(194, 200, 242)",
+  },
+  ".MuiLinearProgress-bar": {
+    backgroundColor: "#3548D4",
+  },
+});
 
 interface CardProps {
   avatar?: React.ReactNode;
-  title?: React.ReactNode & string;
-  error?: ClutchError;
   children: React.ReactNode;
+  error?: ClutchError;
+  isLoading?: boolean;
+  title?: React.ReactNode & string;
 }
 
-const Card = ({ avatar, title, error, children }: CardProps) => (
+const Card = ({ avatar, children, error, isLoading, title }: CardProps) => (
   <Grid item xs={12} sm={6}>
     <ClutchCard>
-      <CardHeader avatar={avatar} title={title} />
+      <CardHeader avatar={avatar} title={title}>
+        <StyledProgressContainer>
+          {isLoading && <LinearProgress color="secondary" />}
+        </StyledProgressContainer>
+      </CardHeader>
       {error ? <Error subject={error} /> : children}
     </ClutchCard>
   </Grid>

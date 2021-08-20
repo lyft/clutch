@@ -68,7 +68,7 @@ const PodTable = () => {
       <Table
         stickyHeader
         actionsColumn
-        headings={[
+        columns={[
           "Name",
           "Cluster",
           "Containers Ready",
@@ -85,7 +85,7 @@ const PodTable = () => {
             return o.name;
           },
         ]).map(pod => (
-          <TableRow key={pod.name} defaultCellValue="nil">
+          <TableRow key={pod.name} cellDefault="nil">
             {pod.name}
             {pod.cluster}
             {getReadyCountString(pod.containers)}

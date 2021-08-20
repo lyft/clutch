@@ -45,6 +45,7 @@ type K8SAPIClient interface {
 	DeleteJob(ctx context.Context, in *DeleteJobRequest, opts ...grpc.CallOption) (*DeleteJobResponse, error)
 	CreateJob(ctx context.Context, in *CreateJobRequest, opts ...grpc.CallOption) (*CreateJobResponse, error)
 	DescribeNamespace(ctx context.Context, in *DescribeNamespaceRequest, opts ...grpc.CallOption) (*DescribeNamespaceResponse, error)
+	ListEvents(ctx context.Context, in *ListEventsRequest, opts ...grpc.CallOption) (*ListEventsResponse, error)
 }
 
 type k8SAPIClient struct {
@@ -298,6 +299,15 @@ func (c *k8SAPIClient) DescribeNamespace(ctx context.Context, in *DescribeNamesp
 	return out, nil
 }
 
+func (c *k8SAPIClient) ListEvents(ctx context.Context, in *ListEventsRequest, opts ...grpc.CallOption) (*ListEventsResponse, error) {
+	out := new(ListEventsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/ListEvents", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // K8SAPIServer is the server API for K8SAPI service.
 // All implementations should embed UnimplementedK8SAPIServer
 // for forward compatibility
@@ -329,6 +339,7 @@ type K8SAPIServer interface {
 	DeleteJob(context.Context, *DeleteJobRequest) (*DeleteJobResponse, error)
 	CreateJob(context.Context, *CreateJobRequest) (*CreateJobResponse, error)
 	DescribeNamespace(context.Context, *DescribeNamespaceRequest) (*DescribeNamespaceResponse, error)
+	ListEvents(context.Context, *ListEventsRequest) (*ListEventsResponse, error)
 }
 
 // UnimplementedK8SAPIServer should be embedded to have forward compatible implementations.
@@ -415,6 +426,9 @@ func (UnimplementedK8SAPIServer) CreateJob(context.Context, *CreateJobRequest) (
 }
 func (UnimplementedK8SAPIServer) DescribeNamespace(context.Context, *DescribeNamespaceRequest) (*DescribeNamespaceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeNamespace not implemented")
+}
+func (UnimplementedK8SAPIServer) ListEvents(context.Context, *ListEventsRequest) (*ListEventsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListEvents not implemented")
 }
 
 // UnsafeK8SAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -914,6 +928,24 @@ func _K8SAPI_DescribeNamespace_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_ListEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListEventsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).ListEvents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/ListEvents",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).ListEvents(ctx, req.(*ListEventsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // K8SAPI_ServiceDesc is the grpc.ServiceDesc for K8SAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1028,6 +1060,10 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DescribeNamespace",
 			Handler:    _K8SAPI_DescribeNamespace_Handler,
+		},
+		{
+			MethodName: "ListEvents",
+			Handler:    _K8SAPI_ListEvents_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

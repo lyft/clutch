@@ -57,6 +57,16 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetDynamodbConfig()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ConfigValidationError{
+				field:  "DynamodbConfig",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -185,3 +195,169 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ClientConfigValidationError{}
+
+// Validate checks the field values on DynamodbConfig with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *DynamodbConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetScalingLimits()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DynamodbConfigValidationError{
+				field:  "ScalingLimits",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// DynamodbConfigValidationError is the validation error returned by
+// DynamodbConfig.Validate if the designated constraints aren't met.
+type DynamodbConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DynamodbConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DynamodbConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DynamodbConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DynamodbConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DynamodbConfigValidationError) ErrorName() string { return "DynamodbConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DynamodbConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDynamodbConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DynamodbConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DynamodbConfigValidationError{}
+
+// Validate checks the field values on ScalingLimits with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *ScalingLimits) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetMaxReadCapacityUnits() != 0 {
+
+		if m.GetMaxReadCapacityUnits() < 1 {
+			return ScalingLimitsValidationError{
+				field:  "MaxReadCapacityUnits",
+				reason: "value must be greater than or equal to 1",
+			}
+		}
+
+	}
+
+	if m.GetMaxWriteCapacityUnits() != 0 {
+
+		if m.GetMaxWriteCapacityUnits() < 1 {
+			return ScalingLimitsValidationError{
+				field:  "MaxWriteCapacityUnits",
+				reason: "value must be greater than or equal to 1",
+			}
+		}
+
+	}
+
+	// no validation rules for MaxScaleFactor
+
+	// no validation rules for EnableOverride
+
+	return nil
+}
+
+// ScalingLimitsValidationError is the validation error returned by
+// ScalingLimits.Validate if the designated constraints aren't met.
+type ScalingLimitsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ScalingLimitsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ScalingLimitsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ScalingLimitsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ScalingLimitsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ScalingLimitsValidationError) ErrorName() string { return "ScalingLimitsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ScalingLimitsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sScalingLimits.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ScalingLimitsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ScalingLimitsValidationError{}

@@ -15,7 +15,7 @@ const Listeners: React.FC<ListenersProps> = ({ listeners }) => {
   }, [listeners]);
 
   return (
-    <Table headings={["Name", "Local Address"]}>
+    <Table columns={["Name", "Local Address"]}>
       {_.sortBy(statuses, ["name"]).map(listener => (
         <TableRow key={listener.name}>
           {listener.name}

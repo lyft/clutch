@@ -10,6 +10,8 @@ const StyledLink = styled(MuiLink)(
     maxWidth: "fit-content",
     fontSize: "14px",
     color: "#3548D4",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   props => ({
     textTransform: props["data-text-transform"],
