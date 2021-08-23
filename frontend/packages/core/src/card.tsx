@@ -20,7 +20,6 @@ const StyledCard = styled(MuiCard)({
   border: "1px solid rgba(13, 16, 48, 0.1)",
 
   ".MuiCardContent-root": {
-    padding: "32px",
     color: "#0D1030",
     fontSize: "16px",
   },
@@ -34,12 +33,15 @@ const StyledCard = styled(MuiCard)({
   },
 });
 
-const StyledCardContent = styled(MuiCardContent)({
+const StyledCardContent = styled(MuiCardContent)((props: { disablePadding?: boolean }) => ({
   "> .MuiPaper-root": {
     border: "0",
     borderRadius: "0",
   },
-});
+  "&.MuiCardContent-root": {
+    padding: props.disablePadding ? "0px" : "32px",
+  },
+}));
 
 export interface CardProps {
   children?: React.ReactNode | React.ReactNode[];
@@ -69,10 +71,14 @@ const CardHeader = ({ avatar, children, title }: CardHeaderProps) => (
   </StyledCardHeaderContainer>
 );
 
-interface CardContentProps extends MuiCardContentProps {}
+interface CardContentProps extends MuiCardContentProps {
+  disablePadding?: boolean;
+}
 
-const CardContent = ({ children, ...props }: CardContentProps) => (
-  <StyledCardContent {...props}>{children}</StyledCardContent>
+const CardContent = ({ children, disablePadding = false, ...props }: CardContentProps) => (
+  <StyledCardContent disablePadding={disablePadding} {...props}>
+    {children}
+  </StyledCardContent>
 );
 
 const StyledLandingCard = styled(Card)({
