@@ -4879,6 +4879,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [region] IncreaseCapacityRequest region
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [tableThroughput] IncreaseCapacityRequest tableThroughput
                      * @property {Array.<clutch.aws.dynamodb.v1.IIndexUpdateAction>|null} [gsiUpdates] IncreaseCapacityRequest gsiUpdates
+                     * @property {boolean|null} [ignoreMaximums] IncreaseCapacityRequest ignoreMaximums
                      */
 
                     /**
@@ -4930,6 +4931,14 @@ export const clutch = $root.clutch = (() => {
                     IncreaseCapacityRequest.prototype.gsiUpdates = $util.emptyArray;
 
                     /**
+                     * IncreaseCapacityRequest ignoreMaximums.
+                     * @member {boolean} ignoreMaximums
+                     * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
+                     * @instance
+                     */
+                    IncreaseCapacityRequest.prototype.ignoreMaximums = false;
+
+                    /**
                      * Verifies an IncreaseCapacityRequest message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.IncreaseCapacityRequest
@@ -4960,6 +4969,9 @@ export const clutch = $root.clutch = (() => {
                                     return "gsiUpdates." + error;
                             }
                         }
+                        if (message.ignoreMaximums != null && message.hasOwnProperty("ignoreMaximums"))
+                            if (typeof message.ignoreMaximums !== "boolean")
+                                return "ignoreMaximums: boolean expected";
                         return null;
                     };
 
@@ -4994,6 +5006,8 @@ export const clutch = $root.clutch = (() => {
                                 message.gsiUpdates[i] = $root.clutch.aws.dynamodb.v1.IndexUpdateAction.fromObject(object.gsiUpdates[i]);
                             }
                         }
+                        if (object.ignoreMaximums != null)
+                            message.ignoreMaximums = Boolean(object.ignoreMaximums);
                         return message;
                     };
 
@@ -5016,6 +5030,7 @@ export const clutch = $root.clutch = (() => {
                             object.tableName = "";
                             object.region = "";
                             object.tableThroughput = null;
+                            object.ignoreMaximums = false;
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
@@ -5028,6 +5043,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.gsiUpdates.length; ++j)
                                 object.gsiUpdates[j] = $root.clutch.aws.dynamodb.v1.IndexUpdateAction.toObject(message.gsiUpdates[j], options);
                         }
+                        if (message.ignoreMaximums != null && message.hasOwnProperty("ignoreMaximums"))
+                            object.ignoreMaximums = message.ignoreMaximums;
                         return object;
                     };
 

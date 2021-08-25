@@ -561,6 +561,8 @@ func (m *IncreaseCapacityRequest) Validate() error {
 
 	}
 
+	// no validation rules for IgnoreMaximums
+
 	return nil
 }
 

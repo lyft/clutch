@@ -2098,6 +2098,9 @@ export namespace clutch {
 
                     /** IncreaseCapacityRequest gsiUpdates */
                     gsiUpdates?: (clutch.aws.dynamodb.v1.IIndexUpdateAction[]|null);
+
+                    /** IncreaseCapacityRequest ignoreMaximums */
+                    ignoreMaximums?: (boolean|null);
                 }
 
                 /** Represents an IncreaseCapacityRequest. */
@@ -2120,6 +2123,9 @@ export namespace clutch {
 
                     /** IncreaseCapacityRequest gsiUpdates. */
                     public gsiUpdates: clutch.aws.dynamodb.v1.IIndexUpdateAction[];
+
+                    /** IncreaseCapacityRequest ignoreMaximums. */
+                    public ignoreMaximums: boolean;
 
                     /**
                      * Verifies an IncreaseCapacityRequest message.
