@@ -10,7 +10,8 @@ import {
   CardActionArea,
   CardActionAreaProps,
   CardContent as MuiCardContent,
-  Divider as MuiDivider,
+  Divider,
+  Grid,
 } from "@material-ui/core";
 
 import { StyledTypography } from "./typography";
@@ -55,29 +56,26 @@ const StyledCardHeader = styled.div({
   padding: "16px",
   display: "flex",
   alignItems: "center",
+  height: "68px",
 });
 
-// TODO: add flex to this like the material component?
 const StyledCardHeaderAvater = styled.div({
   marginRight: "16px",
 });
 
-const StyledCardHeaderSection = styled.div({
-  paddingRight: "28px",
-  paddingLeft: "28px",
+// TODO: confirm the width
+const StyledDivider = styled(Divider)({
+  color: "rgba(13, 16, 48, 0.38)",
+  height: "36px",
 });
 
-// TODO: confirm the width
-const Divider = styled(MuiDivider)({
-  color: "rgba(13, 16, 48, 0.38)",
-  height: "40px",
+const StyledGridItem = styled(Grid)({
+  textAlign: "center",
 });
 
 export interface CardHeaderSections {
-  title: string;
-  subheader?: string;
-  titleColor?: string;
-  subheaderColor?: string;
+  title: React.ReactNode;
+  subheader?: React.ReactNode;
 }
 
 interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {
@@ -85,39 +83,25 @@ interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {
   sections?: CardHeaderSections[];
 }
 
-// TODO: some flex/grid improvemnts
+// TODO: fix wonky shifing of divider and text when container gets smaller
+// TODO: do we want to move the sections into the Dash card and keep this core card with just avatar and title
 const CardHeader = ({ avatar, children, title, sections }: CardHeaderProps) => {
   return (
     <StyledCardHeaderContainer>
       <StyledCardHeader>
         <StyledCardHeaderAvater>{avatar}</StyledCardHeaderAvater>
-        {/* todo wrap the title and sections together like material ui does? and add flex? */}
         <StyledTypography variant="h4" style={{ marginRight: "28px" }}>
           {title}
         </StyledTypography>
         {sections?.length > 0 &&
           sections.map(section => (
-            <>
-              <Divider orientation="vertical" flexItem />
-              <StyledCardHeaderSection>
-                <StyledTypography
-                  variant="subtitle2"
-                  color={section.titleColor ? section.titleColor : "#0D1030"}
-                >
-                  {section.title}
-                </StyledTypography>
-                {section.subheader && (
-                  <StyledTypography
-                    variant="body3"
-                    color={
-                      section.subheaderColor ? section.subheaderColor : "rgba(13, 16, 48, 0.6)"
-                    }
-                  >
-                    {section.subheader}
-                  </StyledTypography>
-                )}
-              </StyledCardHeaderSection>
-            </>
+            <Grid container>
+              <StyledDivider orientation="vertical" />
+              <StyledGridItem item xs>
+                {section.title}
+                {section.subheader}
+              </StyledGridItem>
+            </Grid>
           ))}
       </StyledCardHeader>
       {children}
