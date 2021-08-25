@@ -150,6 +150,7 @@ message IncreaseCapacityRequest {
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
   Throughput table_throughput = 3;
   repeated IndexUpdateAction gsi_updates = 4;
+  bool ignore_maximums = 5;
 }
 
 // The result of requesting a capacity increase.
