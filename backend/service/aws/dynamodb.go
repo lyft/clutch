@@ -130,7 +130,7 @@ func newProtoForGlobalSecondaryIndex(index types.GlobalSecondaryIndexDescription
 	}
 }
 
-func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughputDescription, target types.ProvisionedThroughput) error {
+func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughputDescription, target types.ProvisionedThroughput, ignore_maximums bool) error {
 	// check for targets that are lower than current (can't scale down)
 	if *current.ReadCapacityUnits > *target.ReadCapacityUnits {
 		return status.Errorf(codes.FailedPrecondition, "Target read capacity [%d] is lower than current capacity [%d]", *target.ReadCapacityUnits, *current.ReadCapacityUnits)
@@ -139,25 +139,27 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 		return status.Errorf(codes.FailedPrecondition, "Target write capacity [%d] is lower than current capacity [%d]", *target.WriteCapacityUnits, *current.WriteCapacityUnits)
 	}
 
-	// check for targets that exceed max limits
-	if *target.ReadCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits {
-		return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits)
-	}
-	if *target.WriteCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits {
-		return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits)
-	}
+	if !ignore_maximums {
+		// check for targets that exceed max limits
+		if *target.ReadCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits {
+			return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits)
+		}
+		if *target.WriteCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits {
+			return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits)
+		}
 
-	// check for increases that exceed max increase scale
-	if (float32(*target.ReadCapacityUnits / *current.ReadCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
-		return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
-	}
-	if (float32(*target.WriteCapacityUnits / *current.WriteCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
-		return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
+		// check for increases that exceed max increase scale
+		if (float32(*target.ReadCapacityUnits / *current.ReadCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+			return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
+		}
+		if (float32(*target.WriteCapacityUnits / *current.WriteCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+			return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
+		}
 	}
 	return nil
 }
 
-func (c *client) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.GlobalSecondaryIndexUpdate) (*dynamodbv1.Table, error) {
+func (c *client) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignore_maximums bool) (*dynamodbv1.Table, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
 		c.log.Error("unable to get regional client", zap.Error(err))
@@ -182,7 +184,7 @@ func (c *client) UpdateCapacity(ctx context.Context, region string, tableName st
 			WriteCapacityUnits: aws.Int64(targetTableCapacity.WriteCapacityUnits),
 		}
 
-		err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, t)
+		err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, t, ignore_maximums)
 		if err != nil {
 			return nil, err
 		}
@@ -192,7 +194,7 @@ func (c *client) UpdateCapacity(ctx context.Context, region string, tableName st
 
 	// add target index capacities to input if valid
 	if len(indexUpdates) > 0 { // received at least one index update
-		updates, err := generateIndexUpdates(cl, currentTable, indexUpdates)
+		updates, err := generateIndexUpdates(cl, currentTable, indexUpdates, ignore_maximums)
 		if err != nil {
 			return nil, err
 		}
@@ -213,7 +215,7 @@ func (c *client) UpdateCapacity(ctx context.Context, region string, tableName st
 // TO DO: this function currently terminates upon encountering one invalid index update,
 // preserving the AWS SDK design of "all-or-nothing" UpdateTable functionality.
 // confirm if that is still the desired behavior. Alternatively, we can selectively make updates.
-func generateIndexUpdates(cl *regionalClient, t *dynamodb.DescribeTableOutput, indexUpdates []*dynamodbv1.GlobalSecondaryIndexUpdate) ([]types.GlobalSecondaryIndexUpdate, error) {
+func generateIndexUpdates(cl *regionalClient, t *dynamodb.DescribeTableOutput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignore_maximums bool) ([]types.GlobalSecondaryIndexUpdate, error) {
 	currentIndexes := t.Table.GlobalSecondaryIndexes
 
 	var updates []types.GlobalSecondaryIndexUpdate
@@ -225,11 +227,11 @@ func generateIndexUpdates(cl *regionalClient, t *dynamodb.DescribeTableOutput, i
 		}
 
 		targetIndexCapacity := types.ProvisionedThroughput{
-			ReadCapacityUnits:  aws.Int64(i.TargetIndexThroughput.ReadCapacityUnits),
-			WriteCapacityUnits: aws.Int64(i.TargetIndexThroughput.WriteCapacityUnits),
+			ReadCapacityUnits:  aws.Int64(i.IndexThroughput.ReadCapacityUnits),
+			WriteCapacityUnits: aws.Int64(i.IndexThroughput.WriteCapacityUnits),
 		}
 
-		err = isValidIncrease(cl, currentIndex.ProvisionedThroughput, targetIndexCapacity)
+		err = isValidIncrease(cl, currentIndex.ProvisionedThroughput, targetIndexCapacity, ignore_maximums)
 		if err != nil {
 			return nil, err
 		}
@@ -238,8 +240,8 @@ func generateIndexUpdates(cl *regionalClient, t *dynamodb.DescribeTableOutput, i
 			Update: &types.UpdateGlobalSecondaryIndexAction{
 				IndexName: aws.String(i.Name),
 				ProvisionedThroughput: &types.ProvisionedThroughput{
-					ReadCapacityUnits:  aws.Int64(i.TargetIndexThroughput.ReadCapacityUnits),
-					WriteCapacityUnits: aws.Int64(i.TargetIndexThroughput.WriteCapacityUnits),
+					ReadCapacityUnits:  aws.Int64(i.IndexThroughput.ReadCapacityUnits),
+					WriteCapacityUnits: aws.Int64(i.IndexThroughput.WriteCapacityUnits),
 				},
 			},
 		}

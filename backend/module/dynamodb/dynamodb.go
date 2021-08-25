@@ -26,11 +26,11 @@ func (a *dynamodbAPI) DescribeTable(ctx context.Context, req *dynamodbv1.Describ
 	return &dynamodbv1.DescribeTableResponse{Table: table}, nil
 }
 
-func (a *dynamodbAPI) UpdateCapacity(ctx context.Context, req *dynamodbv1.UpdateCapacityRequest) (*dynamodbv1.UpdateCapacityResponse, error) {
-	result, err := a.client.UpdateCapacity(ctx, req.Region, req.TableName, req.TargetTableThroughput, req.GsiUpdates)
+func (a *dynamodbAPI) IncreaseCapacity(ctx context.Context, req *dynamodbv1.IncreaseCapacityRequest) (*dynamodbv1.IncreaseCapacityResponse, error) {
+	result, err := a.client.IncreaseCapacity(ctx, req.Region, req.TableName, req.TableThroughput, req.GsiUpdates, req.IgnoreMaximums)
 	if err != nil {
 		return nil, err
 	}
 
-	return &dynamodbv1.UpdateCapacityResponse{Table: result}, nil
+	return &dynamodbv1.IncreaseCapacityResponse{Table: result}, nil
 }

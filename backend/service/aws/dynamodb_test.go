@@ -181,7 +181,7 @@ func TestGetScalingLimitsCustom(t *testing.T) {
 	assert.False(t, ds.EnableOverride)
 }
 
-func TestUpdateTableCapacityErrors(t *testing.T) {
+func TestIncreaseTableCapacityErrors(t *testing.T) {
 	tests := []struct {
 		name      string
 		targetRCU int64
@@ -224,9 +224,9 @@ func TestUpdateTableCapacityErrors(t *testing.T) {
 				WriteCapacityUnits: tt.targetWCU,
 			}
 
-			gsiUpdates := make([]*dynamodbv1.GlobalSecondaryIndexUpdate, 0)
+			gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
 
-			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates)
+			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
@@ -283,14 +283,14 @@ func TestUpdateGSICapacityErrors(t *testing.T) {
 				WriteCapacityUnits: tt.targetWCU,
 			}
 
-			gsiUpdates := make([]*dynamodbv1.GlobalSecondaryIndexUpdate, 0)
-			update := dynamodbv1.GlobalSecondaryIndexUpdate{
-				Name:                  "test-gsi",
-				TargetIndexThroughput: targetIndexCapacity,
+			gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+			update := dynamodbv1.IndexUpdateAction{
+				Name:            "test-gsi",
+				IndexThroughput: targetIndexCapacity,
 			}
 			gsiUpdates = append(gsiUpdates, &update)
 
-			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates)
+			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
@@ -299,7 +299,7 @@ func TestUpdateGSICapacityErrors(t *testing.T) {
 	}
 }
 
-func TestUpdateTableSuccess(t *testing.T) {
+func TestIncreaseCapacitySuccess(t *testing.T) {
 	m := &mockDynamodb{
 		table:  testDynamodbTableWithGSI,
 		update: testUpdateResponse,
@@ -331,14 +331,60 @@ func TestUpdateTableSuccess(t *testing.T) {
 		WriteCapacityUnits: 21,
 	}
 
-	gsiUpdates := make([]*dynamodbv1.GlobalSecondaryIndexUpdate, 0)
-	update := dynamodbv1.GlobalSecondaryIndexUpdate{
-		Name:                  "test-gsi",
-		TargetIndexThroughput: targetIndexCapacity,
+	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+	update := dynamodbv1.IndexUpdateAction{
+		Name:            "test-gsi",
+		IndexThroughput: targetIndexCapacity,
 	}
 	gsiUpdates = append(gsiUpdates, &update)
 
-	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates)
+	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, false)
+	assert.NotNil(t, got)
+	assert.Nil(t, err)
+	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
+	assert.Equal(t, got.GlobalSecondaryIndexes[0].Status, dynamodbv1.GlobalSecondaryIndex_Status(3))
+}
+
+func TestIgnoreMaximums(t *testing.T) {
+	m := &mockDynamodb{
+		table:  testDynamodbTableWithGSI,
+		update: testUpdateResponse,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	targetTableCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  100000,
+		WriteCapacityUnits: 100000,
+	}
+
+	targetIndexCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  100000,
+		WriteCapacityUnits: 100000,
+	}
+
+	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+	update := dynamodbv1.IndexUpdateAction{
+		Name:            "test-gsi",
+		IndexThroughput: targetIndexCapacity,
+	}
+	gsiUpdates = append(gsiUpdates, &update)
+
+	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, true)
 	assert.NotNil(t, got)
 	assert.Nil(t, err)
 	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
