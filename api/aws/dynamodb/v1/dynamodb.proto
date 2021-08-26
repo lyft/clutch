@@ -77,7 +77,7 @@ message Table {
   repeated GlobalSecondaryIndex global_secondary_indexes = 3;
 
   // The currently provisioned throughput of a table.
-  // Minimum throughout on a provisioned table is 1 RCU/1 WCU.
+  // Minimum throughput on a provisioned table is 1 RCU/1 WCU.
   // Tables with ON-DEMAND capacity will return a provisioned throughput of 0 RCU/0 WCU.
   Throughput provisioned_throughput = 4;
 
