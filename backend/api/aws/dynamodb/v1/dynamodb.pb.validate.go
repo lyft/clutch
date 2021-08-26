@@ -71,6 +71,8 @@ func (m *Table) Validate() error {
 
 	// no validation rules for Status
 
+	// no validation rules for BillingMode
+
 	return nil
 }
 

@@ -1730,6 +1730,9 @@ export namespace clutch {
 
                     /** Table status */
                     status?: (clutch.aws.dynamodb.v1.Table.Status|null);
+
+                    /** Table billingMode */
+                    billingMode?: (clutch.aws.dynamodb.v1.Table.BillingMode|null);
                 }
 
                 /** Represents a Table. */
@@ -1755,6 +1758,9 @@ export namespace clutch {
 
                     /** Table status. */
                     public status: clutch.aws.dynamodb.v1.Table.Status;
+
+                    /** Table billingMode. */
+                    public billingMode: clutch.aws.dynamodb.v1.Table.BillingMode;
 
                     /**
                      * Verifies a Table message.
@@ -1798,6 +1804,14 @@ export namespace clutch {
                         INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6,
                         ARCHIVING = 7,
                         ARCHIVED = 8
+                    }
+
+                    /** BillingMode enum. */
+                    enum BillingMode {
+                        BILLING_UNSPECIFIED = 0,
+                        BILLING_UNKNOWN = 1,
+                        PROVISIONED = 2,
+                        PAY_PER_REQUEST = 3
                     }
                 }
 

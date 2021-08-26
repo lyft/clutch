@@ -3924,6 +3924,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Array.<clutch.aws.dynamodb.v1.IGlobalSecondaryIndex>|null} [globalSecondaryIndexes] Table globalSecondaryIndexes
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [provisionedThroughput] Table provisionedThroughput
                      * @property {clutch.aws.dynamodb.v1.Table.Status|null} [status] Table status
+                     * @property {clutch.aws.dynamodb.v1.Table.BillingMode|null} [billingMode] Table billingMode
                      */
 
                     /**
@@ -3983,6 +3984,14 @@ export const clutch = $root.clutch = (() => {
                     Table.prototype.status = 0;
 
                     /**
+                     * Table billingMode.
+                     * @member {clutch.aws.dynamodb.v1.Table.BillingMode} billingMode
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.billingMode = 0;
+
+                    /**
                      * Verifies a Table message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.Table
@@ -4026,6 +4035,16 @@ export const clutch = $root.clutch = (() => {
                             case 6:
                             case 7:
                             case 8:
+                                break;
+                            }
+                        if (message.billingMode != null && message.hasOwnProperty("billingMode"))
+                            switch (message.billingMode) {
+                            default:
+                                return "billingMode: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
                                 break;
                             }
                         return null;
@@ -4100,6 +4119,24 @@ export const clutch = $root.clutch = (() => {
                             message.status = 8;
                             break;
                         }
+                        switch (object.billingMode) {
+                        case "BILLING_UNSPECIFIED":
+                        case 0:
+                            message.billingMode = 0;
+                            break;
+                        case "BILLING_UNKNOWN":
+                        case 1:
+                            message.billingMode = 1;
+                            break;
+                        case "PROVISIONED":
+                        case 2:
+                            message.billingMode = 2;
+                            break;
+                        case "PAY_PER_REQUEST":
+                        case 3:
+                            message.billingMode = 3;
+                            break;
+                        }
                         return message;
                     };
 
@@ -4123,6 +4160,7 @@ export const clutch = $root.clutch = (() => {
                             object.region = "";
                             object.provisionedThroughput = null;
                             object.status = options.enums === String ? "UNSPECIFIED" : 0;
+                            object.billingMode = options.enums === String ? "BILLING_UNSPECIFIED" : 0;
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -4137,6 +4175,8 @@ export const clutch = $root.clutch = (() => {
                             object.provisionedThroughput = $root.clutch.aws.dynamodb.v1.Throughput.toObject(message.provisionedThroughput, options);
                         if (message.status != null && message.hasOwnProperty("status"))
                             object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.Status[message.status] : message.status;
+                        if (message.billingMode != null && message.hasOwnProperty("billingMode"))
+                            object.billingMode = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.BillingMode[message.billingMode] : message.billingMode;
                         return object;
                     };
 
@@ -4176,6 +4216,24 @@ export const clutch = $root.clutch = (() => {
                         values[valuesById[6] = "INACCESSIBLE_ENCRYPTION_CREDENTIALS"] = 6;
                         values[valuesById[7] = "ARCHIVING"] = 7;
                         values[valuesById[8] = "ARCHIVED"] = 8;
+                        return values;
+                    })();
+
+                    /**
+                     * BillingMode enum.
+                     * @name clutch.aws.dynamodb.v1.Table.BillingMode
+                     * @enum {number}
+                     * @property {number} BILLING_UNSPECIFIED=0 BILLING_UNSPECIFIED value
+                     * @property {number} BILLING_UNKNOWN=1 BILLING_UNKNOWN value
+                     * @property {number} PROVISIONED=2 PROVISIONED value
+                     * @property {number} PAY_PER_REQUEST=3 PAY_PER_REQUEST value
+                     */
+                    Table.BillingMode = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "BILLING_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "BILLING_UNKNOWN"] = 1;
+                        values[valuesById[2] = "PROVISIONED"] = 2;
+                        values[valuesById[3] = "PAY_PER_REQUEST"] = 3;
                         return values;
                     })();
 
