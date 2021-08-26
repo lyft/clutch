@@ -180,7 +180,7 @@ type Table struct {
 	// A table may have anywhere from 0-20 GSIs per AWS default quota.
 	GlobalSecondaryIndexes []*GlobalSecondaryIndex `protobuf:"bytes,3,rep,name=global_secondary_indexes,json=globalSecondaryIndexes,proto3" json:"global_secondary_indexes,omitempty"`
 	// The currently provisioned throughput of a table.
-	// Minimum throughout on a provisioned table is 1 RCU/1 WCU.
+	// Minimum throughput on a provisioned table is 1 RCU/1 WCU.
 	// Tables with ON-DEMAND capacity will return a provisioned throughput of 0 RCU/0 WCU.
 	ProvisionedThroughput *Throughput `protobuf:"bytes,4,opt,name=provisioned_throughput,json=provisionedThroughput,proto3" json:"provisioned_throughput,omitempty"`
 	// Table status.
