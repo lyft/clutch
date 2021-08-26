@@ -32,6 +32,9 @@ var testDynamodbTable = &types.TableDescription{
 	},
 	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{},
 	TableStatus:            "ACTIVE",
+	BillingModeSummary: &types.BillingModeSummary{
+		BillingMode: "PROVISIONED",
+	},
 }
 
 var testTableOutput = &dynamodbv1.Table{
@@ -43,6 +46,7 @@ var testTableOutput = &dynamodbv1.Table{
 	},
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
 	Status:                 dynamodbv1.Table_Status(5),
+	BillingMode:            dynamodbv1.Table_BillingMode(2),
 }
 
 var testDynamodbTableWithGSI = &types.TableDescription{
@@ -62,6 +66,9 @@ var testDynamodbTableWithGSI = &types.TableDescription{
 		},
 	},
 	TableStatus: "ACTIVE",
+	BillingModeSummary: &types.BillingModeSummary{
+		BillingMode: "PROVISIONED",
+	},
 }
 
 var testTableWithGSIOutput = &dynamodbv1.Table{
@@ -81,7 +88,30 @@ var testTableWithGSIOutput = &dynamodbv1.Table{
 			Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
 		},
 	},
-	Status: dynamodbv1.Table_Status(5),
+	Status:      dynamodbv1.Table_Status(5),
+	BillingMode: dynamodbv1.Table_BillingMode(2),
+}
+
+var testOnDemandTable = &types.TableDescription{
+	TableName: aws.String("test-ondemand-table"),
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+		ReadCapacityUnits:  aws.Int64(0),
+		WriteCapacityUnits: aws.Int64(0),
+	},
+	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{
+		{IndexName: aws.String("test-gsi"),
+			KeySchema: []types.KeySchemaElement{},
+			ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+				ReadCapacityUnits:  aws.Int64(0),
+				WriteCapacityUnits: aws.Int64(0),
+			},
+			IndexStatus: "ACTIVE",
+		},
+	},
+	TableStatus: "ACTIVE",
+	BillingModeSummary: &types.BillingModeSummary{
+		BillingMode: "PAY_PER_REQUEST",
+	},
 }
 
 var testUpdateResponse = &types.TableDescription{
@@ -101,6 +131,9 @@ var testUpdateResponse = &types.TableDescription{
 		},
 	},
 	TableStatus: "UPDATING",
+	BillingModeSummary: &types.BillingModeSummary{
+		BillingMode: "PROVISIONED",
+	},
 }
 
 func TestDescribeTableValid(t *testing.T) {
@@ -389,6 +422,39 @@ func TestIgnoreMaximums(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
 	assert.Equal(t, got.GlobalSecondaryIndexes[0].Status, dynamodbv1.GlobalSecondaryIndex_Status(3))
+}
+
+func TestOnDemandCheck(t *testing.T) {
+	m := &mockDynamodb{
+		table: testOnDemandTable,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	targetTableCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  10,
+		WriteCapacityUnits: 10,
+	}
+
+	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+
+	result, err := c.IncreaseCapacity(context.Background(), "us-east-1", "test-ondemand-table", targetTableCapacity, gsiUpdates, false)
+	assert.Nil(t, result)
+	assert.Equal(t, "rpc error: code = FailedPrecondition desc = Table billing mode is not set to PROVISIONED, cannot scale capacities.", err.Error())
 }
 
 type mockDynamodb struct {

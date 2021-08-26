@@ -88,12 +88,15 @@ func newProtoForTable(t *types.TableDescription, region string) *dynamodbv1.Tabl
 
 	tableStatus := newProtoForTableStatus(t.TableStatus)
 
+	billingMode := newProtoForBillingMode(t.BillingModeSummary.BillingMode)
+
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(t.TableName),
 		Region:                 region,
 		GlobalSecondaryIndexes: globalSecondaryIndexes,
 		ProvisionedThroughput:  currentCapacity,
 		Status:                 tableStatus,
+		BillingMode:            billingMode,
 	}
 
 	return ret
@@ -113,6 +116,14 @@ func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex
 		return dynamodbv1.GlobalSecondaryIndex_UNKNOWN
 	}
 	return dynamodbv1.GlobalSecondaryIndex_Status(value)
+}
+
+func newProtoForBillingMode(s types.BillingMode) dynamodbv1.Table_BillingMode {
+	value, ok := dynamodbv1.Table_BillingMode_value[string(s)]
+	if !ok {
+		return dynamodbv1.Table_BILLING_UNKNOWN
+	}
+	return dynamodbv1.Table_BillingMode(value)
 }
 
 func newProtoForGlobalSecondaryIndex(index types.GlobalSecondaryIndexDescription) *dynamodbv1.GlobalSecondaryIndex {
@@ -160,6 +171,10 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
+func isProvisioned(t *dynamodb.DescribeTableOutput) bool {
+	return t.Table.BillingModeSummary.BillingMode == "PROVISIONED"
+}
+
 func (c *client) IncreaseCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignore_maximums bool) (*dynamodbv1.Table, error) {
 	cl, err := c.getRegionalClient(region)
 	if err != nil {
@@ -171,6 +186,10 @@ func (c *client) IncreaseCapacity(ctx context.Context, region string, tableName 
 	if err != nil {
 		c.log.Error("unable to find table", zap.Error(err))
 		return nil, err
+	}
+
+	if !(isProvisioned(currentTable)) {
+		return nil, status.Error(codes.FailedPrecondition, "Table billing mode is not set to PROVISIONED, cannot scale capacities.")
 	}
 
 	// initialize the input we'll pass to AWS
