@@ -115,6 +115,7 @@ type Client interface {
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
 	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)
+	IncreaseCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error)
 
 	Regions() []string
 }

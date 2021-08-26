@@ -358,7 +358,7 @@ func TestIgnoreMaximums(t *testing.T) {
 			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
 			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
 			MaxScaleFactor:        ds.MaxScaleFactor,
-			EnableOverride:        ds.EnableOverride,
+			EnableOverride:        true,
 		},
 	}
 

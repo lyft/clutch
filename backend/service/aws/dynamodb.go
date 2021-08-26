@@ -139,7 +139,8 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 		return status.Errorf(codes.FailedPrecondition, "Target write capacity [%d] is lower than current capacity [%d]", *target.WriteCapacityUnits, *current.WriteCapacityUnits)
 	}
 
-	if !ignore_maximums {
+	// override not enabled in config or override not set to true in args
+	if !client.dynamodbCfg.ScalingLimits.EnableOverride || !ignore_maximums {
 		// check for targets that exceed max limits
 		if *target.ReadCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits {
 			return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits)
