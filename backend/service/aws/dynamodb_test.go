@@ -226,7 +226,7 @@ func TestIncreaseTableCapacityErrors(t *testing.T) {
 
 			gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
 
-			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
+			result, err := c.IncreaseCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
@@ -290,7 +290,7 @@ func TestUpdateGSICapacityErrors(t *testing.T) {
 			}
 			gsiUpdates = append(gsiUpdates, &update)
 
-			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
+			result, err := c.IncreaseCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
@@ -338,7 +338,7 @@ func TestIncreaseCapacitySuccess(t *testing.T) {
 	}
 	gsiUpdates = append(gsiUpdates, &update)
 
-	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, false)
+	got, err := c.IncreaseCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, false)
 	assert.NotNil(t, got)
 	assert.Nil(t, err)
 	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
@@ -384,7 +384,7 @@ func TestIgnoreMaximums(t *testing.T) {
 	}
 	gsiUpdates = append(gsiUpdates, &update)
 
-	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, true)
+	got, err := c.IncreaseCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, true)
 	assert.NotNil(t, got)
 	assert.Nil(t, err)
 	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
