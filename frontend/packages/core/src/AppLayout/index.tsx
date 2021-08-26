@@ -7,7 +7,7 @@ import Loadable from "../loading";
 
 import Drawer from "./drawer";
 import FeedbackButton from "./feedback";
-import Header from "./header";
+import Header, { APP_BAR_HEIGHT } from "./header";
 
 const AppGrid = styled(MuiGrid)({
   flex: 1,
@@ -15,8 +15,10 @@ const AppGrid = styled(MuiGrid)({
 
 const ContentGrid = styled(MuiGrid)({
   flex: 1,
-  overflow: "hidden",
+  maxHeight: `calc(100vh - ${APP_BAR_HEIGHT})`,
 });
+
+const MainContent = styled.div({ overflowY: "auto", width: "100%" });
 
 interface AppLayoutProps {
   isLoading?: boolean;
@@ -32,7 +34,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false }) => {
         ) : (
           <>
             <Drawer />
-            <Outlet />
+            <MainContent>
+              <Outlet />
+            </MainContent>
           </>
         )}
       </ContentGrid>

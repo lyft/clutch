@@ -25,12 +25,11 @@ interface CardProps {
 const Card = ({ avatar, children, error, isLoading, title }: CardProps) => (
   <Grid item xs={12} sm={6}>
     <ClutchCard>
-      <CardHeader avatar={avatar} title={title} />
-      {isLoading && (
+      <CardHeader avatar={avatar} title={title}>
         <StyledProgressContainer>
-          <LinearProgress color="secondary" />
+          {isLoading && <LinearProgress color="secondary" />}
         </StyledProgressContainer>
-      )}
+      </CardHeader>
       {error ? <Error subject={error} /> : children}
     </ClutchCard>
   </Grid>

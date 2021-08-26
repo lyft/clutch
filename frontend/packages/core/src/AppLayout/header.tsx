@@ -8,7 +8,7 @@ import Notifications from "./notifications";
 import SearchField from "./search";
 import { UserInformation } from "./user";
 
-const APP_BAR_HEIGHT = "64px";
+export const APP_BAR_HEIGHT = "64px";
 
 const AppBar = styled(MuiAppBar)({
   minWidth: "fit-content",
