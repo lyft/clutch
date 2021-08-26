@@ -66,6 +66,21 @@ message Table {
     ARCHIVED = 8;
   }
 
+  // enum of a table's billing mode
+  enum BillingMode {
+    // Billing mode for table could not be found.
+    BILLING_UNSPECIFIED = 0;
+
+    // Unknown mode type returned from server.
+    BILLING_UNKNOWN = 1;
+
+    // Table and index capacities are provisioned.
+    PROVISIONED = 2;
+
+    // Table and index capacity are on-demand.
+    PAY_PER_REQUEST = 3;
+  }
+
   // Name of the Dynamodb table.
   string name = 1;
 
@@ -83,6 +98,9 @@ message Table {
 
   // Table status.
   Status status = 5;
+
+  // Table billing mode.
+  BillingMode billing_mode = 6;
 }
 
 // Enum that represents the current GSI state
