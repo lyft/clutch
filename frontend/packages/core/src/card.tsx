@@ -1,9 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type {
-  CardContentProps as MuiCardContentProps,
-  CardHeaderProps as MuiCardHeaderProps,
-} from "@material-ui/core";
+import type { CardContentProps as MuiCardContentProps } from "@material-ui/core";
 import {
   Avatar,
   Card as MuiCard,
@@ -52,21 +49,20 @@ const StyledCardHeaderContainer = styled.div({
   background: "#EBEDFB",
 });
 
-const StyledCardHeader = styled.div({
+const StyledCardHeader = styled(Grid)({
   padding: "16px",
-  display: "flex",
-  alignItems: "center",
-  height: "68px",
+  minHeight: "72px",
 });
 
 const StyledCardHeaderAvater = styled.div({
   marginRight: "16px",
+  fontSize: "24px",
 });
 
-// TODO: confirm the width
 const StyledDivider = styled(Divider)({
   color: "rgba(13, 16, 48, 0.38)",
   height: "36px",
+  alignSelf: "center",
 });
 
 const StyledGridItem = styled(Grid)({
@@ -78,30 +74,32 @@ export interface CardHeaderSections {
   subheader?: React.ReactNode;
 }
 
-interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {
+interface CardHeaderProps {
+  avatar: React.ReactNode;
   children?: React.ReactNode;
   sections?: CardHeaderSections[];
+  title: React.ReactNode;
 }
 
-// TODO: fix wonky shifing of divider and text when container gets smaller
 // TODO: do we want to move the sections into the Dash card and keep this core card with just avatar and title
 const CardHeader = ({ avatar, children, title, sections }: CardHeaderProps) => {
   return (
     <StyledCardHeaderContainer>
-      <StyledCardHeader>
+      <StyledCardHeader container wrap="nowrap" alignItems="center">
+        {/* TODO: use avatar component */}
         <StyledCardHeaderAvater>{avatar}</StyledCardHeaderAvater>
-        <StyledTypography variant="h4" style={{ marginRight: "28px" }}>
-          {title}
-        </StyledTypography>
+        <Grid item xs>
+          <StyledTypography variant="h4">{title}</StyledTypography>
+        </Grid>
         {sections?.length > 0 &&
           sections.map(section => (
-            <Grid container>
+            <>
               <StyledDivider orientation="vertical" />
               <StyledGridItem item xs>
                 {section.title}
                 {section.subheader}
               </StyledGridItem>
-            </Grid>
+            </>
           ))}
       </StyledCardHeader>
       {children}
