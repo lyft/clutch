@@ -52,6 +52,8 @@ const StyledCardHeaderContainer = styled.div({
 const StyledCardHeader = styled(Grid)({
   padding: "16px",
   minHeight: "72px",
+  margin: "0px",
+  width: "100%",
 });
 
 const StyledCardHeaderAvater = styled.div({
@@ -85,8 +87,8 @@ interface CardHeaderProps {
 const CardHeader = ({ avatar, children, title, sections }: CardHeaderProps) => {
   return (
     <StyledCardHeaderContainer>
-      <StyledCardHeader container wrap="nowrap" alignItems="center">
-        {/* TODO: use avatar component */}
+      <StyledCardHeader container wrap="nowrap" alignItems="center" spacing={2}>
+        {/* TODO: use avatar component per design doc */}
         <StyledCardHeaderAvater>{avatar}</StyledCardHeaderAvater>
         <Grid item xs>
           <StyledTypography variant="h4">{title}</StyledTypography>
