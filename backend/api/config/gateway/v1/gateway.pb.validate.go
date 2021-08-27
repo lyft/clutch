@@ -389,6 +389,18 @@ func (m *Stats) Validate() error {
 			}
 		}
 
+	case *Stats_PrometheusReporter_:
+
+		if v, ok := interface{}(m.GetPrometheusReporter()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StatsValidationError{
+					field:  "PrometheusReporter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	}
 
 	return nil
@@ -828,6 +840,8 @@ func (m *Logger) Validate() error {
 	}
 
 	// no validation rules for Level
+
+	// no validation rules for Namespace
 
 	switch m.Format.(type) {
 
@@ -1368,6 +1382,75 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Stats_StatsdReporterValidationError{}
+
+// Validate checks the field values on Stats_PrometheusReporter with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *Stats_PrometheusReporter) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for HandlerPath
+
+	return nil
+}
+
+// Stats_PrometheusReporterValidationError is the validation error returned by
+// Stats_PrometheusReporter.Validate if the designated constraints aren't met.
+type Stats_PrometheusReporterValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Stats_PrometheusReporterValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Stats_PrometheusReporterValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Stats_PrometheusReporterValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Stats_PrometheusReporterValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Stats_PrometheusReporterValidationError) ErrorName() string {
+	return "Stats_PrometheusReporterValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Stats_PrometheusReporterValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStats_PrometheusReporter.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Stats_PrometheusReporterValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Stats_PrometheusReporterValidationError{}
 
 // Validate checks the field values on Stats_GoRuntimeStats with the rules
 // defined in the proto definition for this message. If any rules are

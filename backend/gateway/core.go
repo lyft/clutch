@@ -18,6 +18,7 @@ import (
 	xdsmod "github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	"github.com/lyft/clutch/backend/module/chaos/redisexperimentation"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
+	dynamodbmod "github.com/lyft/clutch/backend/module/dynamodb"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/featureflag"
 	"github.com/lyft/clutch/backend/module/healthcheck"
@@ -62,6 +63,7 @@ var Modules = module.Factory{
 	authnmod.Name:              authnmod.New,
 	authzmod.Name:              authzmod.New,
 	awsmod.Name:                awsmod.New,
+	dynamodbmod.Name:           dynamodbmod.New,
 	envoytriage.Name:           envoytriage.New,
 	experimentationapi.Name:    experimentationapi.New,
 	featureflag.Name:           featureflag.New,

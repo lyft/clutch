@@ -15,6 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
@@ -27,6 +28,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 
+	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -58,6 +60,8 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		clientRetries = int(ac.ClientConfig.Retries)
 	}
 
+	ds := getScalingLimits(ac)
+
 	awsHTTPClient := &http.Client{}
 
 	for _, region := range ac.Regions {
@@ -76,11 +80,21 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		}
 
 		c.clients[region] = &regionalClient{
-			region:      region,
+			region: region,
+			dynamodbCfg: &awsv1.DynamodbConfig{
+				ScalingLimits: &awsv1.ScalingLimits{
+					MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+					MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+					MaxScaleFactor:        ds.MaxScaleFactor,
+					EnableOverride:        ds.EnableOverride,
+				},
+			},
+
 			s3:          s3.NewFromConfig(regionCfg),
 			kinesis:     kinesis.NewFromConfig(regionCfg),
 			ec2:         ec2.NewFromConfig(regionCfg),
 			autoscaling: autoscaling.NewFromConfig(regionCfg),
+			dynamodb:    dynamodb.NewFromConfig(regionCfg),
 		}
 	}
 
@@ -100,6 +114,9 @@ type Client interface {
 
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
+	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)
+	UpdateTableCapacity(ctx context.Context, region string, tableName string, targetTableRcu int64, targetTableWcu int64) (dynamodbv1.Status, error)
+
 	Regions() []string
 }
 
@@ -114,10 +131,13 @@ type client struct {
 type regionalClient struct {
 	region string
 
+	dynamodbCfg *awsv1.DynamodbConfig
+
 	s3          s3Client
 	kinesis     kinesisClient
 	ec2         ec2Client
 	autoscaling autoscalingClient
+	dynamodb    dynamodbClient
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.

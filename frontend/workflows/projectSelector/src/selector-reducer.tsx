@@ -16,9 +16,10 @@ const selectorReducer = (state: State, action: Action): State => {
 
     case "ADD_PROJECTS": {
       // a given custom project may already exist in the group so don't trigger a state update for the duplicate(s)
-      const uniqueCustomProjects = action.payload.projects.filter(
-        (project: string) => !(project in state[action.payload.group])
-      );
+      const uniqueCustomProjects =
+        action?.payload?.projects?.filter(
+          (project: string) => !(project in state[action.payload.group])
+        ) || [];
       if (uniqueCustomProjects.length === 0) {
         // since there's no new projects to add, we return the original state as it wasn't modified
         return state;
@@ -47,13 +48,17 @@ const selectorReducer = (state: State, action: Action): State => {
           return;
         }
 
-        const { upstreams, downstreams } = newState.projectData[v].dependencies;
-        upstreams[PROJECT_TYPE_URL]?.ids.forEach(upstreamDep => {
+        const dependencies = newState.projectData[v]?.dependencies || {
+          upstreams: {},
+          downstreams: {},
+        };
+        const { upstreams, downstreams } = dependencies;
+        upstreams?.[PROJECT_TYPE_URL]?.ids?.forEach(upstreamDep => {
           newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
             checked: false,
           });
         });
-        downstreams[PROJECT_TYPE_URL]?.ids.forEach(downstreamDep => {
+        downstreams?.[PROJECT_TYPE_URL]?.ids?.forEach(downstreamDep => {
           newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
             checked: false,
           });
@@ -66,7 +71,10 @@ const selectorReducer = (state: State, action: Action): State => {
       // remove the projects from their respective group
       const newState = {
         ...state,
-        [action.payload.group]: _.omit(state[action.payload.group], action.payload.projects),
+        [action.payload.group]: _.omit(
+          state[action.payload.group],
+          action?.payload?.projects || []
+        ),
       };
 
       if (action.payload.group !== Group.PROJECTS) {
@@ -75,9 +83,9 @@ const selectorReducer = (state: State, action: Action): State => {
 
       // for the removed projects in Group.Projects we get their upstreams/dowstreams that are exclusive
       // (i.e. not shared by other projects that weren't removed)
-      const exclusiveUpstreams = [];
-      const exclusiveDownstreams = [];
-      action.payload.projects.forEach(p => {
+      const exclusiveUpstreams = [] as string[];
+      const exclusiveDownstreams = [] as string[];
+      action?.payload?.projects?.forEach(p => {
         /* get the upstreams/downstreams that are exclusive to the removed project(s)
 
         TODO: (sperry) "remove_projects" supports bulk removal & since this func checks if upstreams/downstreams are exclusive
@@ -96,19 +104,18 @@ const selectorReducer = (state: State, action: Action): State => {
       return newState;
     }
     case "TOGGLE_PROJECTS": {
-      // TODO: hide exclusive upstreams and downstreams if group is PROJECTS
       return {
         ...state,
         [action.payload.group]: {
           ...state[action.payload.group],
           ...Object.fromEntries(
-            action.payload.projects.map(key => [
+            action?.payload?.projects?.map(key => [
               key,
               {
                 ...state[action.payload.group][key],
                 checked: !state[action.payload.group][key].checked,
               },
-            ])
+            ]) || []
           ),
         },
       };
@@ -119,23 +126,41 @@ const selectorReducer = (state: State, action: Action): State => {
       newState[action.payload.group] = Object.fromEntries(
         Object.keys(state[action.payload.group]).map(key => [
           key,
-          { ...state[action.payload.group][key], checked: action.payload.projects.includes(key) },
+          {
+            ...state[action.payload.group][key],
+            checked: action?.payload?.projects?.includes(key) || false,
+          },
         ])
       );
 
       return newState;
     }
     case "TOGGLE_ENTIRE_GROUP": {
-      const newCheckedValue = !deriveSwitchStatus(state, action.payload.group);
-      const newState = { ...state };
-      newState[action.payload.group] = Object.fromEntries(
-        Object.keys(state[action.payload.group]).map(key => [
-          key,
-          { ...state[action.payload.group][key], checked: newCheckedValue },
-        ])
-      );
-
-      return newState;
+      // the state might not match the filtered state data passed to the components, so in the func below, we should filter out the projects
+      // that _were_ rendered in order to correctly evaluate the toggled checked status for all the projects in the respective group
+      const filteredState = {
+        ...state,
+        [action.payload.group]: _.pick(
+          state[action.payload.group],
+          action?.payload?.projects || []
+        ),
+      };
+      const newCheckedValue = !deriveSwitchStatus(filteredState, action.payload.group);
+      return {
+        ...state,
+        [action.payload.group]: {
+          ...state[action.payload.group],
+          ...Object.fromEntries(
+            action?.payload?.projects?.map(key => [
+              key,
+              {
+                ...state[action.payload.group][key],
+                checked: newCheckedValue,
+              },
+            ]) || []
+          ),
+        },
+      };
     }
     // Background actions.
 
@@ -143,15 +168,15 @@ const selectorReducer = (state: State, action: Action): State => {
       return { ...state, loading: true };
     }
     case "HYDRATE_END": {
-      let newState = { ...state, loading: false, error: undefined };
+      let newState = { ...state, loading: false, error: undefined } as State;
 
       _.forIn(
-        action.payload.result as IClutch.project.v1.IGetProjectsResponse,
+        action?.payload?.result as { [k: string]: IClutch.project.v1.IProjectResult } | null,
         (v: IClutch.project.v1.IProjectResult, k: string) => {
           // user owned project vs custom project
-          if (v.from.users.length > 0) {
+          if (v?.from?.users && v.from.users.length > 0) {
             newState = updateGroupstate(newState, Group.PROJECTS, k, { checked: true });
-          } else if (v.from.selected) {
+          } else if (v?.from?.selected) {
             newState = updateGroupstate(newState, Group.PROJECTS, k, {
               checked: true,
               custom: true,
@@ -159,14 +184,15 @@ const selectorReducer = (state: State, action: Action): State => {
           }
 
           // add each upstream/downstream for the selected or user project
-          if (v.from.users.length > 0 || v.from.selected) {
-            const { upstreams, downstreams } = v.project.dependencies;
-            upstreams[PROJECT_TYPE_URL]?.ids.forEach(upstreamDep => {
+          if ((v?.from?.users && v.from.users.length > 0) || v?.from?.selected) {
+            const dependencies = v?.project?.dependencies || { upstreams: {}, downstreams: {} };
+            const { upstreams, downstreams } = dependencies;
+            upstreams?.[PROJECT_TYPE_URL]?.ids?.forEach(upstreamDep => {
               newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
                 checked: false,
               });
             });
-            downstreams[PROJECT_TYPE_URL]?.ids.forEach(downstreamDep => {
+            downstreams?.[PROJECT_TYPE_URL]?.ids?.forEach(downstreamDep => {
               newState = updateGroupstate(newState, Group.DOWNSTREAM, downstreamDep, {
                 checked: false,
               });
@@ -174,7 +200,9 @@ const selectorReducer = (state: State, action: Action): State => {
           }
 
           // stores the raw project data for each project in the API result
-          newState.projectData[k] = v.project;
+          if (v?.project) {
+            newState.projectData[k] = v.project;
+          }
         }
       );
       return newState;
@@ -188,7 +216,7 @@ const selectorReducer = (state: State, action: Action): State => {
        TODO: when we add error handling for projects not found, we'll need to make sure we remove the not-found-project from project group
        (it's added automatically in the "ADD_PROJECTS" state)
       */
-      return { ...state, loading: false, error: action.payload.result };
+      return { ...state, loading: false, error: action?.payload?.result };
     default:
       throw new Error(`unknown resolver action`);
   }

@@ -1668,18 +1668,18 @@ export namespace clutch {
                     constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
 
                     /**
-                     * Calls GetTable.
-                     * @param request GetTableRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and GetTableResponse
+                     * Calls DescribeTable.
+                     * @param request DescribeTableRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and DescribeTableResponse
                      */
-                    public getTable(request: clutch.aws.dynamodb.v1.IGetTableRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.GetTableCallback): void;
+                    public describeTable(request: clutch.aws.dynamodb.v1.IDescribeTableRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.DescribeTableCallback): void;
 
                     /**
-                     * Calls GetTable.
-                     * @param request GetTableRequest message or plain object
+                     * Calls DescribeTable.
+                     * @param request DescribeTableRequest message or plain object
                      * @returns Promise
                      */
-                    public getTable(request: clutch.aws.dynamodb.v1.IGetTableRequest): Promise<clutch.aws.dynamodb.v1.GetTableResponse>;
+                    public describeTable(request: clutch.aws.dynamodb.v1.IDescribeTableRequest): Promise<clutch.aws.dynamodb.v1.DescribeTableResponse>;
 
                     /**
                      * Calls UpdateTableCapacity.
@@ -1713,11 +1713,11 @@ export namespace clutch {
                 namespace DDBAPI {
 
                     /**
-                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#getTable}.
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#describeTable}.
                      * @param error Error, if any
-                     * @param [response] GetTableResponse
+                     * @param [response] DescribeTableResponse
                      */
-                    type GetTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.GetTableResponse) => void;
+                    type DescribeTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.DescribeTableResponse) => void;
 
                     /**
                      * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateTableCapacity}.
@@ -1734,6 +1734,19 @@ export namespace clutch {
                     type UpdateGSICapacityCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.UpdateGSICapacityResponse) => void;
                 }
 
+                /** Status enum. */
+                enum Status {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    CREATING = 2,
+                    UPDATING = 3,
+                    DELETING = 4,
+                    ACTIVE = 5,
+                    INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6,
+                    ARCHIVING = 7,
+                    ARCHIVED = 8
+                }
+
                 /** Properties of a Table. */
                 interface ITable {
 
@@ -1746,8 +1759,11 @@ export namespace clutch {
                     /** Table globalSecondaryIndexes */
                     globalSecondaryIndexes?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndex[]|null);
 
-                    /** Table capacity */
-                    capacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** Table provisionedThroughput */
+                    provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+
+                    /** Table status */
+                    status?: (clutch.aws.dynamodb.v1.Status|null);
                 }
 
                 /** Represents a Table. */
@@ -1768,8 +1784,11 @@ export namespace clutch {
                     /** Table globalSecondaryIndexes. */
                     public globalSecondaryIndexes: clutch.aws.dynamodb.v1.IGlobalSecondaryIndex[];
 
-                    /** Table capacity. */
-                    public capacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** Table provisionedThroughput. */
+                    public provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+
+                    /** Table status. */
+                    public status: clutch.aws.dynamodb.v1.Status;
 
                     /**
                      * Verifies a Table message.
@@ -1806,8 +1825,8 @@ export namespace clutch {
                     /** GlobalSecondaryIndex name */
                     name?: (string|null);
 
-                    /** GlobalSecondaryIndex capacity */
-                    capacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** GlobalSecondaryIndex provisionedThroughput */
+                    provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
                 }
 
                 /** Represents a GlobalSecondaryIndex. */
@@ -1822,8 +1841,8 @@ export namespace clutch {
                     /** GlobalSecondaryIndex name. */
                     public name: string;
 
-                    /** GlobalSecondaryIndex capacity. */
-                    public capacity?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
+                    /** GlobalSecondaryIndex provisionedThroughput. */
+                    public provisionedThroughput?: (clutch.aws.dynamodb.v1.IProvisionedThroughput|null);
 
                     /**
                      * Verifies a GlobalSecondaryIndex message.
@@ -1858,10 +1877,10 @@ export namespace clutch {
                 interface IProvisionedThroughput {
 
                     /** ProvisionedThroughput writeCapacityUnits */
-                    writeCapacityUnits?: (number|null);
+                    writeCapacityUnits?: (number|Long|null);
 
                     /** ProvisionedThroughput readCapacityUnits */
-                    readCapacityUnits?: (number|null);
+                    readCapacityUnits?: (number|Long|null);
                 }
 
                 /** Represents a ProvisionedThroughput. */
@@ -1874,10 +1893,10 @@ export namespace clutch {
                     constructor(properties?: clutch.aws.dynamodb.v1.IProvisionedThroughput);
 
                     /** ProvisionedThroughput writeCapacityUnits. */
-                    public writeCapacityUnits: number;
+                    public writeCapacityUnits: (number|Long);
 
                     /** ProvisionedThroughput readCapacityUnits. */
-                    public readCapacityUnits: number;
+                    public readCapacityUnits: (number|Long);
 
                     /**
                      * Verifies a ProvisionedThroughput message.
@@ -1908,103 +1927,103 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a GetTableRequest. */
-                interface IGetTableRequest {
+                /** Properties of a DescribeTableRequest. */
+                interface IDescribeTableRequest {
 
-                    /** GetTableRequest tableName */
+                    /** DescribeTableRequest tableName */
                     tableName?: (string|null);
 
-                    /** GetTableRequest region */
+                    /** DescribeTableRequest region */
                     region?: (string|null);
                 }
 
-                /** Represents a GetTableRequest. */
-                class GetTableRequest implements IGetTableRequest {
+                /** Represents a DescribeTableRequest. */
+                class DescribeTableRequest implements IDescribeTableRequest {
 
                     /**
-                     * Constructs a new GetTableRequest.
+                     * Constructs a new DescribeTableRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IGetTableRequest);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IDescribeTableRequest);
 
-                    /** GetTableRequest tableName. */
+                    /** DescribeTableRequest tableName. */
                     public tableName: string;
 
-                    /** GetTableRequest region. */
+                    /** DescribeTableRequest region. */
                     public region: string;
 
                     /**
-                     * Verifies a GetTableRequest message.
+                     * Verifies a DescribeTableRequest message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a GetTableRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DescribeTableRequest message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns GetTableRequest
+                     * @returns DescribeTableRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.GetTableRequest;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.DescribeTableRequest;
 
                     /**
-                     * Creates a plain object from a GetTableRequest message. Also converts values to other types if specified.
-                     * @param message GetTableRequest
+                     * Creates a plain object from a DescribeTableRequest message. Also converts values to other types if specified.
+                     * @param message DescribeTableRequest
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.GetTableRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.DescribeTableRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this GetTableRequest to JSON.
+                     * Converts this DescribeTableRequest to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a GetTableResponse. */
-                interface IGetTableResponse {
+                /** Properties of a DescribeTableResponse. */
+                interface IDescribeTableResponse {
 
-                    /** GetTableResponse table */
+                    /** DescribeTableResponse table */
                     table?: (clutch.aws.dynamodb.v1.ITable|null);
                 }
 
-                /** Represents a GetTableResponse. */
-                class GetTableResponse implements IGetTableResponse {
+                /** Represents a DescribeTableResponse. */
+                class DescribeTableResponse implements IDescribeTableResponse {
 
                     /**
-                     * Constructs a new GetTableResponse.
+                     * Constructs a new DescribeTableResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IGetTableResponse);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IDescribeTableResponse);
 
-                    /** GetTableResponse table. */
+                    /** DescribeTableResponse table. */
                     public table?: (clutch.aws.dynamodb.v1.ITable|null);
 
                     /**
-                     * Verifies a GetTableResponse message.
+                     * Verifies a DescribeTableResponse message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a GetTableResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DescribeTableResponse message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns GetTableResponse
+                     * @returns DescribeTableResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.GetTableResponse;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.DescribeTableResponse;
 
                     /**
-                     * Creates a plain object from a GetTableResponse message. Also converts values to other types if specified.
-                     * @param message GetTableResponse
+                     * Creates a plain object from a DescribeTableResponse message. Also converts values to other types if specified.
+                     * @param message DescribeTableResponse
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.GetTableResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.DescribeTableResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this GetTableResponse to JSON.
+                     * Converts this DescribeTableResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -2020,10 +2039,10 @@ export namespace clutch {
                     region?: (string|null);
 
                     /** UpdateTableCapacityRequest targetTableRcu */
-                    targetTableRcu?: (number|null);
+                    targetTableRcu?: (number|Long|null);
 
                     /** UpdateTableCapacityRequest targetTableWcu */
-                    targetTableWcu?: (number|null);
+                    targetTableWcu?: (number|Long|null);
                 }
 
                 /** Represents an UpdateTableCapacityRequest. */
@@ -2042,10 +2061,10 @@ export namespace clutch {
                     public region: string;
 
                     /** UpdateTableCapacityRequest targetTableRcu. */
-                    public targetTableRcu: number;
+                    public targetTableRcu: (number|Long);
 
                     /** UpdateTableCapacityRequest targetTableWcu. */
-                    public targetTableWcu: number;
+                    public targetTableWcu: (number|Long);
 
                     /**
                      * Verifies an UpdateTableCapacityRequest message.
@@ -2078,6 +2097,12 @@ export namespace clutch {
 
                 /** Properties of an UpdateTableCapacityResponse. */
                 interface IUpdateTableCapacityResponse {
+
+                    /** UpdateTableCapacityResponse tableName */
+                    tableName?: (string|null);
+
+                    /** UpdateTableCapacityResponse tableStatus */
+                    tableStatus?: (clutch.aws.dynamodb.v1.Status|null);
                 }
 
                 /** Represents an UpdateTableCapacityResponse. */
@@ -2088,6 +2113,12 @@ export namespace clutch {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: clutch.aws.dynamodb.v1.IUpdateTableCapacityResponse);
+
+                    /** UpdateTableCapacityResponse tableName. */
+                    public tableName: string;
+
+                    /** UpdateTableCapacityResponse tableStatus. */
+                    public tableStatus: clutch.aws.dynamodb.v1.Status;
 
                     /**
                      * Verifies an UpdateTableCapacityResponse message.
@@ -2131,10 +2162,10 @@ export namespace clutch {
                     indexName?: (string|null);
 
                     /** UpdateGSICapacityRequest targetIndexRcu */
-                    targetIndexRcu?: (number|null);
+                    targetIndexRcu?: (number|Long|null);
 
                     /** UpdateGSICapacityRequest targetIndexWcu */
-                    targetIndexWcu?: (number|null);
+                    targetIndexWcu?: (number|Long|null);
                 }
 
                 /** Represents an UpdateGSICapacityRequest. */
@@ -2156,10 +2187,10 @@ export namespace clutch {
                     public indexName: string;
 
                     /** UpdateGSICapacityRequest targetIndexRcu. */
-                    public targetIndexRcu: number;
+                    public targetIndexRcu: (number|Long);
 
                     /** UpdateGSICapacityRequest targetIndexWcu. */
-                    public targetIndexWcu: number;
+                    public targetIndexWcu: (number|Long);
 
                     /**
                      * Verifies an UpdateGSICapacityRequest message.
@@ -2192,6 +2223,15 @@ export namespace clutch {
 
                 /** Properties of an UpdateGSICapacityResponse. */
                 interface IUpdateGSICapacityResponse {
+
+                    /** UpdateGSICapacityResponse tableName */
+                    tableName?: (string|null);
+
+                    /** UpdateGSICapacityResponse indexName */
+                    indexName?: (string|null);
+
+                    /** UpdateGSICapacityResponse tableStatus */
+                    tableStatus?: (clutch.aws.dynamodb.v1.Status|null);
                 }
 
                 /** Represents an UpdateGSICapacityResponse. */
@@ -2202,6 +2242,15 @@ export namespace clutch {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: clutch.aws.dynamodb.v1.IUpdateGSICapacityResponse);
+
+                    /** UpdateGSICapacityResponse tableName. */
+                    public tableName: string;
+
+                    /** UpdateGSICapacityResponse indexName. */
+                    public indexName: string;
+
+                    /** UpdateGSICapacityResponse tableStatus. */
+                    public tableStatus: clutch.aws.dynamodb.v1.Status;
 
                     /**
                      * Verifies an UpdateGSICapacityResponse message.
@@ -6146,6 +6195,9 @@ export namespace clutch {
                     /** Stats statsdReporter */
                     statsdReporter?: (clutch.config.gateway.v1.Stats.IStatsdReporter|null);
 
+                    /** Stats prometheusReporter */
+                    prometheusReporter?: (clutch.config.gateway.v1.Stats.IPrometheusReporter|null);
+
                     /** Stats goRuntimeStats */
                     goRuntimeStats?: (clutch.config.gateway.v1.Stats.IGoRuntimeStats|null);
                 }
@@ -6168,11 +6220,14 @@ export namespace clutch {
                     /** Stats statsdReporter. */
                     public statsdReporter?: (clutch.config.gateway.v1.Stats.IStatsdReporter|null);
 
+                    /** Stats prometheusReporter. */
+                    public prometheusReporter?: (clutch.config.gateway.v1.Stats.IPrometheusReporter|null);
+
                     /** Stats goRuntimeStats. */
                     public goRuntimeStats?: (clutch.config.gateway.v1.Stats.IGoRuntimeStats|null);
 
                     /** Stats reporter. */
-                    public reporter?: ("logReporter"|"statsdReporter");
+                    public reporter?: ("logReporter"|"statsdReporter"|"prometheusReporter");
 
                     /**
                      * Verifies a Stats message.
@@ -6353,6 +6408,54 @@ export namespace clutch {
                              */
                             public toJSON(): { [k: string]: any };
                         }
+                    }
+
+                    /** Properties of a PrometheusReporter. */
+                    interface IPrometheusReporter {
+
+                        /** PrometheusReporter handlerPath */
+                        handlerPath?: (string|null);
+                    }
+
+                    /** Represents a PrometheusReporter. */
+                    class PrometheusReporter implements IPrometheusReporter {
+
+                        /**
+                         * Constructs a new PrometheusReporter.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.gateway.v1.Stats.IPrometheusReporter);
+
+                        /** PrometheusReporter handlerPath. */
+                        public handlerPath: string;
+
+                        /**
+                         * Verifies a PrometheusReporter message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a PrometheusReporter message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns PrometheusReporter
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.gateway.v1.Stats.PrometheusReporter;
+
+                        /**
+                         * Creates a plain object from a PrometheusReporter message. Also converts values to other types if specified.
+                         * @param message PrometheusReporter
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.gateway.v1.Stats.PrometheusReporter, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this PrometheusReporter to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
                     }
 
                     /** Properties of a GoRuntimeStats. */
@@ -6751,6 +6854,9 @@ export namespace clutch {
 
                     /** Logger pretty */
                     pretty?: (boolean|null);
+
+                    /** Logger namespace */
+                    namespace?: (string|null);
                 }
 
                 /** Represents a Logger. */
@@ -6767,6 +6873,9 @@ export namespace clutch {
 
                     /** Logger pretty. */
                     public pretty?: (boolean|null);
+
+                    /** Logger namespace. */
+                    public namespace: string;
 
                     /** Logger format. */
                     public format?: "pretty";
@@ -8704,6 +8813,9 @@ export namespace clutch {
 
                         /** Config clientConfig */
                         clientConfig?: (clutch.config.service.aws.v1.IClientConfig|null);
+
+                        /** Config dynamodbConfig */
+                        dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
                     }
 
                     /** Represents a Config. */
@@ -8720,6 +8832,9 @@ export namespace clutch {
 
                         /** Config clientConfig. */
                         public clientConfig?: (clutch.config.service.aws.v1.IClientConfig|null);
+
+                        /** Config dynamodbConfig. */
+                        public dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
 
                         /**
                          * Verifies a Config message.
@@ -8793,6 +8908,120 @@ export namespace clutch {
 
                         /**
                          * Converts this ClientConfig to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a DynamodbConfig. */
+                    interface IDynamodbConfig {
+
+                        /** DynamodbConfig scalingLimits */
+                        scalingLimits?: (clutch.config.service.aws.v1.IScalingLimits|null);
+                    }
+
+                    /** Represents a DynamodbConfig. */
+                    class DynamodbConfig implements IDynamodbConfig {
+
+                        /**
+                         * Constructs a new DynamodbConfig.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.aws.v1.IDynamodbConfig);
+
+                        /** DynamodbConfig scalingLimits. */
+                        public scalingLimits?: (clutch.config.service.aws.v1.IScalingLimits|null);
+
+                        /**
+                         * Verifies a DynamodbConfig message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a DynamodbConfig message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns DynamodbConfig
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.aws.v1.DynamodbConfig;
+
+                        /**
+                         * Creates a plain object from a DynamodbConfig message. Also converts values to other types if specified.
+                         * @param message DynamodbConfig
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.aws.v1.DynamodbConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this DynamodbConfig to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a ScalingLimits. */
+                    interface IScalingLimits {
+
+                        /** ScalingLimits maxReadCapacityUnits */
+                        maxReadCapacityUnits?: (number|Long|null);
+
+                        /** ScalingLimits maxWriteCapacityUnits */
+                        maxWriteCapacityUnits?: (number|Long|null);
+
+                        /** ScalingLimits maxScaleFactor */
+                        maxScaleFactor?: (number|null);
+
+                        /** ScalingLimits enableOverride */
+                        enableOverride?: (boolean|null);
+                    }
+
+                    /** Represents a ScalingLimits. */
+                    class ScalingLimits implements IScalingLimits {
+
+                        /**
+                         * Constructs a new ScalingLimits.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.aws.v1.IScalingLimits);
+
+                        /** ScalingLimits maxReadCapacityUnits. */
+                        public maxReadCapacityUnits: (number|Long);
+
+                        /** ScalingLimits maxWriteCapacityUnits. */
+                        public maxWriteCapacityUnits: (number|Long);
+
+                        /** ScalingLimits maxScaleFactor. */
+                        public maxScaleFactor: number;
+
+                        /** ScalingLimits enableOverride. */
+                        public enableOverride: boolean;
+
+                        /**
+                         * Verifies a ScalingLimits message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a ScalingLimits message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns ScalingLimits
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.aws.v1.ScalingLimits;
+
+                        /**
+                         * Creates a plain object from a ScalingLimits message. Also converts values to other types if specified.
+                         * @param message ScalingLimits
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.aws.v1.ScalingLimits, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this ScalingLimits to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
@@ -9266,11 +9495,83 @@ export namespace clutch {
                 /** Namespace v1. */
                 namespace v1 {
 
+                    /** Properties of an AppConfig. */
+                    interface IAppConfig {
+
+                        /** AppConfig appId */
+                        appId?: (number|Long|null);
+
+                        /** AppConfig installationId */
+                        installationId?: (number|Long|null);
+
+                        /** AppConfig keyPem */
+                        keyPem?: (string|null);
+
+                        /** AppConfig base64Pem */
+                        base64Pem?: (string|null);
+                    }
+
+                    /** Represents an AppConfig. */
+                    class AppConfig implements IAppConfig {
+
+                        /**
+                         * Constructs a new AppConfig.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.github.v1.IAppConfig);
+
+                        /** AppConfig appId. */
+                        public appId: (number|Long);
+
+                        /** AppConfig installationId. */
+                        public installationId: (number|Long);
+
+                        /** AppConfig keyPem. */
+                        public keyPem?: (string|null);
+
+                        /** AppConfig base64Pem. */
+                        public base64Pem?: (string|null);
+
+                        /** AppConfig pem. */
+                        public pem?: ("keyPem"|"base64Pem");
+
+                        /**
+                         * Verifies an AppConfig message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates an AppConfig message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns AppConfig
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.github.v1.AppConfig;
+
+                        /**
+                         * Creates a plain object from an AppConfig message. Also converts values to other types if specified.
+                         * @param message AppConfig
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.github.v1.AppConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this AppConfig to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
                     /** Properties of a Config. */
                     interface IConfig {
 
                         /** Config accessToken */
                         accessToken?: (string|null);
+
+                        /** Config appConfig */
+                        appConfig?: (clutch.config.service.github.v1.IAppConfig|null);
                     }
 
                     /** Represents a Config. */
@@ -9285,8 +9586,11 @@ export namespace clutch {
                         /** Config accessToken. */
                         public accessToken?: (string|null);
 
+                        /** Config appConfig. */
+                        public appConfig?: (clutch.config.service.github.v1.IAppConfig|null);
+
                         /** Config auth. */
-                        public auth?: "accessToken";
+                        public auth?: ("accessToken"|"appConfig");
 
                         /**
                          * Verifies a Config message.
@@ -10238,6 +10542,9 @@ export namespace clutch {
 
                     /** Project dependencies */
                     dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
+
+                    /** Project oncall */
+                    oncall?: (clutch.core.project.v1.IOnCall|null);
                 }
 
                 /** Represents a Project. */
@@ -10266,6 +10573,9 @@ export namespace clutch {
 
                     /** Project dependencies. */
                     public dependencies?: (clutch.core.project.v1.IProjectDependencies|null);
+
+                    /** Project oncall. */
+                    public oncall?: (clutch.core.project.v1.IOnCall|null);
 
                     /**
                      * Verifies a Project message.
@@ -10393,6 +10703,102 @@ export namespace clutch {
 
                     /**
                      * Converts this Dependency to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an OnCall. */
+                interface IOnCall {
+
+                    /** OnCall pagerduty */
+                    pagerduty?: (clutch.core.project.v1.IPagerDuty|null);
+                }
+
+                /** Represents an OnCall. */
+                class OnCall implements IOnCall {
+
+                    /**
+                     * Constructs a new OnCall.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IOnCall);
+
+                    /** OnCall pagerduty. */
+                    public pagerduty?: (clutch.core.project.v1.IPagerDuty|null);
+
+                    /**
+                     * Verifies an OnCall message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an OnCall message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns OnCall
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.OnCall;
+
+                    /**
+                     * Creates a plain object from an OnCall message. Also converts values to other types if specified.
+                     * @param message OnCall
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.OnCall, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this OnCall to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a PagerDuty. */
+                interface IPagerDuty {
+
+                    /** PagerDuty serviceIds */
+                    serviceIds?: (string[]|null);
+                }
+
+                /** Represents a PagerDuty. */
+                class PagerDuty implements IPagerDuty {
+
+                    /**
+                     * Constructs a new PagerDuty.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.IPagerDuty);
+
+                    /** PagerDuty serviceIds. */
+                    public serviceIds: string[];
+
+                    /**
+                     * Verifies a PagerDuty message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a PagerDuty message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns PagerDuty
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.PagerDuty;
+
+                    /**
+                     * Creates a plain object from a PagerDuty message. Also converts values to other types if specified.
+                     * @param message PagerDuty
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.PagerDuty, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this PagerDuty to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -12211,6 +12617,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public describeNamespace(request: clutch.k8s.v1.IDescribeNamespaceRequest): Promise<clutch.k8s.v1.DescribeNamespaceResponse>;
+
+                /**
+                 * Calls ListEvents.
+                 * @param request ListEventsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListEventsResponse
+                 */
+                public listEvents(request: clutch.k8s.v1.IListEventsRequest, callback: clutch.k8s.v1.K8sAPI.ListEventsCallback): void;
+
+                /**
+                 * Calls ListEvents.
+                 * @param request ListEventsRequest message or plain object
+                 * @returns Promise
+                 */
+                public listEvents(request: clutch.k8s.v1.IListEventsRequest): Promise<clutch.k8s.v1.ListEventsResponse>;
             }
 
             namespace K8sAPI {
@@ -12403,6 +12823,13 @@ export namespace clutch {
                  * @param [response] DescribeNamespaceResponse
                  */
                 type DescribeNamespaceCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeNamespaceResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listEvents}.
+                 * @param error Error, if any
+                 * @param [response] ListEventsResponse
+                 */
+                type ListEventsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListEventsResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -17187,6 +17614,217 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** ObjectKind enum. */
+            enum ObjectKind {
+                UNSPECIFIED = 0,
+                UNKNOWN = 1,
+                POD = 2
+            }
+
+            /** Properties of an Event. */
+            interface IEvent {
+
+                /** Event name */
+                name?: (string|null);
+
+                /** Event reason */
+                reason?: (string|null);
+
+                /** Event description */
+                description?: (string|null);
+
+                /** Event cluster */
+                cluster?: (string|null);
+
+                /** Event namespace */
+                namespace?: (string|null);
+
+                /** Event involvedObjectName */
+                involvedObjectName?: (string|null);
+
+                /** Event kind */
+                kind?: (clutch.k8s.v1.ObjectKind|null);
+            }
+
+            /** Represents an Event. */
+            class Event implements IEvent {
+
+                /**
+                 * Constructs a new Event.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IEvent);
+
+                /** Event name. */
+                public name: string;
+
+                /** Event reason. */
+                public reason: string;
+
+                /** Event description. */
+                public description: string;
+
+                /** Event cluster. */
+                public cluster: string;
+
+                /** Event namespace. */
+                public namespace: string;
+
+                /** Event involvedObjectName. */
+                public involvedObjectName: string;
+
+                /** Event kind. */
+                public kind: clutch.k8s.v1.ObjectKind;
+
+                /**
+                 * Verifies an Event message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Event
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Event;
+
+                /**
+                 * Creates a plain object from an Event message. Also converts values to other types if specified.
+                 * @param message Event
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Event to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListEventsRequest. */
+            interface IListEventsRequest {
+
+                /** ListEventsRequest clientset */
+                clientset?: (string|null);
+
+                /** ListEventsRequest cluster */
+                cluster?: (string|null);
+
+                /** ListEventsRequest namespace */
+                namespace?: (string|null);
+
+                /** ListEventsRequest objectName */
+                objectName?: (string|null);
+
+                /** ListEventsRequest kind */
+                kind?: (clutch.k8s.v1.ObjectKind|null);
+            }
+
+            /** Represents a ListEventsRequest. */
+            class ListEventsRequest implements IListEventsRequest {
+
+                /**
+                 * Constructs a new ListEventsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListEventsRequest);
+
+                /** ListEventsRequest clientset. */
+                public clientset: string;
+
+                /** ListEventsRequest cluster. */
+                public cluster: string;
+
+                /** ListEventsRequest namespace. */
+                public namespace: string;
+
+                /** ListEventsRequest objectName. */
+                public objectName: string;
+
+                /** ListEventsRequest kind. */
+                public kind: clutch.k8s.v1.ObjectKind;
+
+                /**
+                 * Verifies a ListEventsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListEventsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListEventsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListEventsRequest;
+
+                /**
+                 * Creates a plain object from a ListEventsRequest message. Also converts values to other types if specified.
+                 * @param message ListEventsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListEventsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListEventsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListEventsResponse. */
+            interface IListEventsResponse {
+
+                /** ListEventsResponse events */
+                events?: (clutch.k8s.v1.IEvent[]|null);
+            }
+
+            /** Represents a ListEventsResponse. */
+            class ListEventsResponse implements IListEventsResponse {
+
+                /**
+                 * Constructs a new ListEventsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListEventsResponse);
+
+                /** ListEventsResponse events. */
+                public events: clutch.k8s.v1.IEvent[];
+
+                /**
+                 * Verifies a ListEventsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListEventsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListEventsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListEventsResponse;
+
+                /**
+                 * Creates a plain object from a ListEventsResponse message. Also converts values to other types if specified.
+                 * @param message ListEventsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListEventsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListEventsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a NullableString. */
             interface INullableString {
 
@@ -19868,6 +20506,137 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+            }
+        }
+    }
+
+    /** Namespace timeseries. */
+    namespace timeseries {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Properties of a TimeRange. */
+            interface ITimeRange {
+
+                /** TimeRange startMillis */
+                startMillis?: (number|Long|null);
+
+                /** TimeRange endMillis */
+                endMillis?: (number|Long|null);
+            }
+
+            /** Represents a TimeRange. */
+            class TimeRange implements ITimeRange {
+
+                /**
+                 * Constructs a new TimeRange.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.timeseries.v1.ITimeRange);
+
+                /** TimeRange startMillis. */
+                public startMillis: (number|Long);
+
+                /** TimeRange endMillis. */
+                public endMillis: (number|Long);
+
+                /**
+                 * Verifies a TimeRange message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a TimeRange message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns TimeRange
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.timeseries.v1.TimeRange;
+
+                /**
+                 * Creates a plain object from a TimeRange message. Also converts values to other types if specified.
+                 * @param message TimeRange
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.timeseries.v1.TimeRange, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this TimeRange to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Point. */
+            interface IPoint {
+
+                /** Point range */
+                range?: (clutch.timeseries.v1.ITimeRange|null);
+
+                /** Point millis */
+                millis?: (number|Long|null);
+
+                /** Point pb */
+                pb?: (google.protobuf.IAny|null);
+
+                /** Point description */
+                description?: (string|null);
+            }
+
+            /** Represents a Point. */
+            class Point implements IPoint {
+
+                /**
+                 * Constructs a new Point.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.timeseries.v1.IPoint);
+
+                /** Point range. */
+                public range?: (clutch.timeseries.v1.ITimeRange|null);
+
+                /** Point millis. */
+                public millis?: (number|Long|null);
+
+                /** Point pb. */
+                public pb?: (google.protobuf.IAny|null);
+
+                /** Point description. */
+                public description: string;
+
+                /** Point timestamp. */
+                public timestamp?: ("range"|"millis");
+
+                /**
+                 * Verifies a Point message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Point message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Point
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.timeseries.v1.Point;
+
+                /**
+                 * Creates a plain object from a Point message. Also converts values to other types if specified.
+                 * @param message Point
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.timeseries.v1.Point, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Point to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
         }
     }

@@ -59,15 +59,17 @@ func (m *Table) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetCapacity()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetProvisionedThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TableValidationError{
-				field:  "Capacity",
+				field:  "ProvisionedThroughput",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
+
+	// no validation rules for Status
 
 	return nil
 }
@@ -136,10 +138,10 @@ func (m *GlobalSecondaryIndex) Validate() error {
 
 	// no validation rules for Name
 
-	if v, ok := interface{}(m.GetCapacity()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetProvisionedThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GlobalSecondaryIndexValidationError{
-				field:  "Capacity",
+				field:  "ProvisionedThroughput",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -276,23 +278,23 @@ var _ interface {
 	ErrorName() string
 } = ProvisionedThroughputValidationError{}
 
-// Validate checks the field values on GetTableRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *GetTableRequest) Validate() error {
+// Validate checks the field values on DescribeTableRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeTableRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if len(m.GetTableName()) < 1 {
-		return GetTableRequestValidationError{
+		return DescribeTableRequestValidationError{
 			field:  "TableName",
 			reason: "value length must be at least 1 bytes",
 		}
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return GetTableRequestValidationError{
+		return DescribeTableRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
@@ -301,9 +303,9 @@ func (m *GetTableRequest) Validate() error {
 	return nil
 }
 
-// GetTableRequestValidationError is the validation error returned by
-// GetTableRequest.Validate if the designated constraints aren't met.
-type GetTableRequestValidationError struct {
+// DescribeTableRequestValidationError is the validation error returned by
+// DescribeTableRequest.Validate if the designated constraints aren't met.
+type DescribeTableRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -311,22 +313,24 @@ type GetTableRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetTableRequestValidationError) Field() string { return e.field }
+func (e DescribeTableRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetTableRequestValidationError) Reason() string { return e.reason }
+func (e DescribeTableRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetTableRequestValidationError) Cause() error { return e.cause }
+func (e DescribeTableRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetTableRequestValidationError) Key() bool { return e.key }
+func (e DescribeTableRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetTableRequestValidationError) ErrorName() string { return "GetTableRequestValidationError" }
+func (e DescribeTableRequestValidationError) ErrorName() string {
+	return "DescribeTableRequestValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e GetTableRequestValidationError) Error() string {
+func (e DescribeTableRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -338,14 +342,14 @@ func (e GetTableRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetTableRequest.%s: %s%s",
+		"invalid %sDescribeTableRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetTableRequestValidationError{}
+var _ error = DescribeTableRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -353,19 +357,19 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetTableRequestValidationError{}
+} = DescribeTableRequestValidationError{}
 
-// Validate checks the field values on GetTableResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *GetTableResponse) Validate() error {
+// Validate checks the field values on DescribeTableResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeTableResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if v, ok := interface{}(m.GetTable()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetTableResponseValidationError{
+			return DescribeTableResponseValidationError{
 				field:  "Table",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -376,9 +380,9 @@ func (m *GetTableResponse) Validate() error {
 	return nil
 }
 
-// GetTableResponseValidationError is the validation error returned by
-// GetTableResponse.Validate if the designated constraints aren't met.
-type GetTableResponseValidationError struct {
+// DescribeTableResponseValidationError is the validation error returned by
+// DescribeTableResponse.Validate if the designated constraints aren't met.
+type DescribeTableResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -386,22 +390,24 @@ type GetTableResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetTableResponseValidationError) Field() string { return e.field }
+func (e DescribeTableResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetTableResponseValidationError) Reason() string { return e.reason }
+func (e DescribeTableResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetTableResponseValidationError) Cause() error { return e.cause }
+func (e DescribeTableResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetTableResponseValidationError) Key() bool { return e.key }
+func (e DescribeTableResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetTableResponseValidationError) ErrorName() string { return "GetTableResponseValidationError" }
+func (e DescribeTableResponseValidationError) ErrorName() string {
+	return "DescribeTableResponseValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e GetTableResponseValidationError) Error() string {
+func (e DescribeTableResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -413,14 +419,14 @@ func (e GetTableResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetTableResponse.%s: %s%s",
+		"invalid %sDescribeTableResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetTableResponseValidationError{}
+var _ error = DescribeTableResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -428,7 +434,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetTableResponseValidationError{}
+} = DescribeTableResponseValidationError{}
 
 // Validate checks the field values on UpdateTableCapacityRequest with the
 // rules defined in the proto definition for this message. If any rules are
@@ -522,6 +528,10 @@ func (m *UpdateTableCapacityResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
+
+	// no validation rules for TableName
+
+	// no validation rules for TableStatus
 
 	return nil
 }
@@ -682,6 +692,12 @@ func (m *UpdateGSICapacityResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
+
+	// no validation rules for TableName
+
+	// no validation rules for IndexName
+
+	// no validation rules for TableStatus
 
 	return nil
 }

@@ -10,9 +10,9 @@ import "validate/validate.proto";
 import "api/v1/annotations.proto";
 
 service DDBAPI {
-  rpc GetTable(GetTableRequest) returns (GetTableResponse) {
+  rpc DescribeTable(DescribeTableRequest) returns (DescribeTableResponse) {
     option (google.api.http) = {
-      post : "/v1/aws/dynamodb/getTable"
+      post : "/v1/aws/dynamodb/describeTable"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
@@ -35,6 +35,20 @@ service DDBAPI {
   }
 }
 
+// https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TableDescription.html
+enum Status {
+  // Unspecified status indicates the table status could not be found.
+  UNSPECIFIED = 0;
+  UNKNOWN = 1;
+  CREATING = 2;
+  UPDATING = 3;
+  DELETING = 4;
+  ACTIVE = 5;
+  INACCESSIBLE_ENCRYPTION_CREDENTIALS = 6;
+  ARCHIVING = 7;
+  ARCHIVED = 8;
+}
+
 message Table {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
@@ -44,25 +58,26 @@ message Table {
   string name = 1;
   string region = 2;
   repeated GlobalSecondaryIndex global_secondary_indexes = 3;
-  ProvisionedThroughput capacity = 4;
+  ProvisionedThroughput provisioned_throughput = 4;
+  Status status = 5;
 }
 
 message GlobalSecondaryIndex {
   string name = 1;
-  ProvisionedThroughput capacity = 2;
+  ProvisionedThroughput provisioned_throughput = 2;
 }
 
 message ProvisionedThroughput {
-  int32 write_capacity_units = 1;
-  int32 read_capacity_units = 2;
+  int64 write_capacity_units = 1;
+  int64 read_capacity_units = 2;
 }
 
-message GetTableRequest {
+message DescribeTableRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
-message GetTableResponse {
+message DescribeTableResponse {
   option (clutch.api.v1.reference).fields = "table";
 
   Table table = 1;
@@ -71,20 +86,25 @@ message GetTableResponse {
 message UpdateTableCapacityRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
-  int32 target_table_rcu = 3;
-  int32 target_table_wcu = 4;
+  int64 target_table_rcu = 3;
+  int64 target_table_wcu = 4;
 }
 
 message UpdateTableCapacityResponse {
+  string table_name = 1;
+  Status table_status = 2;
 }
 
 message UpdateGSICapacityRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string index_name = 3 [ (validate.rules).string = {min_bytes : 1} ];
-  int32 target_index_rcu = 4;
-  int32 target_index_wcu = 5;
+  int64 target_index_rcu = 4;
+  int64 target_index_wcu = 5;
 }
 
 message UpdateGSICapacityResponse {
+  string table_name = 1;
+  string index_name = 2;
+  Status table_status = 3;
 }

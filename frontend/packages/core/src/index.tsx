@@ -17,12 +17,21 @@ import {
 } from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
-import { Card, CardContent } from "./card";
+import { Card, CardContent, CardHeader } from "./card";
 import { Chip } from "./chip";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
-import { Alert, Error, Hint, Note, NotePanel, Warning } from "./Feedback";
+import {
+  Alert,
+  Error,
+  Hint,
+  Note,
+  NotePanel,
+  Tooltip,
+  TooltipContainer,
+  Warning,
+} from "./Feedback";
 import { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
 import { AvatarIcon, StatusIcon } from "./icon";
 import { Link } from "./link";
@@ -45,7 +54,7 @@ import {
   TableRowActions,
   TreeTable,
 } from "./Table";
-import Typography from "./typography";
+import { Typography } from "./typography";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
@@ -65,6 +74,7 @@ export {
   ButtonGroup,
   Card,
   CardContent,
+  CardHeader,
   Checkbox,
   CheckboxPanel,
   Chip,
@@ -109,6 +119,8 @@ export {
   TableRowActions,
   Tabs,
   TextField,
+  Tooltip,
+  TooltipContainer,
   TreeTable,
   Typography,
   userId,

@@ -80,11 +80,11 @@ const Clusters: React.FC<ClustersProps> = ({ clusters }) => {
 
   return (
     <div style={{ height: "400px", display: "flex" }}>
-      <Table stickyHeader headings={["Hosts", "Status"]}>
+      <Table stickyHeader columns={["Hosts", "Status"]}>
         {_.sortBy(statuses, ["name"]).map(cluster => (
           <AccordionRow
             key={cluster.name}
-            headings={[
+            columns={[
               cluster.name,
               cluster.hosts.length === 0 ? (
                 <Bar fill="transparent" width="100px" />
