@@ -53,13 +53,13 @@ const Dash = ({ children }) => {
                 title="Deploys"
                 sections={[
                   {
-                    title: <Typography variant="subtitle2">5 mins</Typography>,
-                    subheader: <Typography variant="body3">Last Deploy</Typography>,
+                    title: <Typography variant="subtitle2">5m ago</Typography>,
+                    subheader: <Typography variant="body3">Last deploy</Typography>,
                   },
                   {
                     title: (
                       <Typography variant="subtitle2" color="#3548D4">
-                        23
+                        0
                       </Typography>
                     ),
                     subheader: <Typography variant="body3">In progress</Typography>,
@@ -70,7 +70,7 @@ const Dash = ({ children }) => {
                         0
                       </Typography>
                     ),
-                    subheader: <Typography variant="body3">Failed Deploys</Typography>,
+                    subheader: <Typography variant="body3">Failed</Typography>,
                   },
                 ]}
               >
@@ -97,13 +97,13 @@ const Dash = ({ children }) => {
                 title="Deploys"
                 sections={[
                   {
-                    title: <Typography variant="subtitle2">5 mins</Typography>,
-                    subheader: <Typography variant="body3">Last Deploy</Typography>,
+                    title: <Typography variant="subtitle2">5m ago</Typography>,
+                    subheader: <Typography variant="body3">Last deploy</Typography>,
                   },
                   {
                     title: (
                       <Typography variant="subtitle2" color="#3548D4">
-                        23
+                        3
                       </Typography>
                     ),
                     subheader: <Typography variant="body3">In progress</Typography>,
@@ -114,7 +114,7 @@ const Dash = ({ children }) => {
                         0
                       </Typography>
                     ),
-                    subheader: <Typography variant="body3">Failed Deploys</Typography>,
+                    subheader: <Typography variant="body3">Failed</Typography>,
                   },
                   {
                     title: <Typography variant="subtitle2">0</Typography>,
@@ -125,7 +125,7 @@ const Dash = ({ children }) => {
                 <Table columns={["", "", "", "", "", ""]}>
                   <TableRow>
                     <div>clutch</div>
-                    <div>A longer commit message than other rows</div>
+                    <div>Commit</div>
                     <div>🥚</div>
                     <div>RUNNING</div>
                     <div>0 days ago</div>
@@ -133,7 +133,7 @@ const Dash = ({ children }) => {
                   </TableRow>
                   <TableRow>
                     <div>clutch</div>
-                    <div>A longer commit message than other rows</div>
+                    <div>Commit</div>
                     <div>🥚</div>
                     <div>RUNNING</div>
                     <div>0 days ago</div>
