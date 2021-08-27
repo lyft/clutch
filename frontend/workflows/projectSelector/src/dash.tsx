@@ -1,7 +1,10 @@
 import * as React from "react";
-import { Box } from "@material-ui/core";
+import { Table, TableRow, Typography } from "@clutch-sh/core";
+import styled from "@emotion/styled";
+import { Box, Grid as MuiGrid } from "@material-ui/core";
 import _ from "lodash";
 
+import Card from "./card";
 import { DashDispatchContext, DashStateContext } from "./dash-hooks";
 import ProjectSelector from "./project-selector";
 import type { DashAction, DashState } from "./types";
@@ -10,6 +13,10 @@ const initialState = {
   selected: [],
   projectData: {},
 };
+
+const BigGrid = styled(MuiGrid)({
+  margin: "7px",
+});
 
 const dashReducer = (state: DashState, action: DashAction): DashState => {
   switch (action.type) {
@@ -33,7 +40,116 @@ const Dash = ({ children }) => {
         <DashStateContext.Provider value={state}>
           <ProjectSelector />
           <Box display="flex" flex={1}>
-            {children}
+            <BigGrid
+              spacing={3}
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="flex-start"
+              alignContent="flex-start"
+            >
+              <Card
+                avatar="🚀"
+                title="Deploys"
+                sections={[
+                  {
+                    title: <Typography variant="subtitle2">5 mins</Typography>,
+                    subheader: <Typography variant="body3">Last Deploy</Typography>,
+                  },
+                  {
+                    title: (
+                      <Typography variant="subtitle2" color="#3548D4">
+                        23
+                      </Typography>
+                    ),
+                    subheader: <Typography variant="body3">In progress</Typography>,
+                  },
+                  {
+                    title: (
+                      <Typography variant="subtitle2" color="#DB3615">
+                        0
+                      </Typography>
+                    ),
+                    subheader: <Typography variant="body3">Failed Deploys</Typography>,
+                  },
+                ]}
+              >
+                <Table columns={["", "", ""]}>
+                  <TableRow>
+                    <div>clutch</div>
+                    <div>No commits</div>
+                    <div>🥚</div>
+                  </TableRow>
+                  <TableRow>
+                    <div>clutch</div>
+                    <div>No commits</div>
+                    <div>🥚</div>
+                  </TableRow>
+                  <TableRow>
+                    <div>clutch</div>
+                    <div>No commits</div>
+                    <div>🥚</div>
+                  </TableRow>
+                </Table>
+              </Card>
+              <Card
+                avatar="🚀"
+                title="Deploys"
+                sections={[
+                  {
+                    title: <Typography variant="subtitle2">5 mins</Typography>,
+                    subheader: <Typography variant="body3">Last Deploy</Typography>,
+                  },
+                  {
+                    title: (
+                      <Typography variant="subtitle2" color="#3548D4">
+                        23
+                      </Typography>
+                    ),
+                    subheader: <Typography variant="body3">In progress</Typography>,
+                  },
+                  {
+                    title: (
+                      <Typography variant="subtitle2" color="#DB3615">
+                        0
+                      </Typography>
+                    ),
+                    subheader: <Typography variant="body3">Failed Deploys</Typography>,
+                  },
+                  {
+                    title: <Typography variant="subtitle2">0</Typography>,
+                    subheader: <Typography variant="body3">Rollbacks</Typography>,
+                  },
+                ]}
+              >
+                <Table columns={["", "", "", "", "", ""]}>
+                  <TableRow>
+                    <div>clutch</div>
+                    <div>A longer commit message than other rows</div>
+                    <div>🥚</div>
+                    <div>RUNNING</div>
+                    <div>0 days ago</div>
+                    <div>Initiated by ANON</div>
+                  </TableRow>
+                  <TableRow>
+                    <div>clutch</div>
+                    <div>A longer commit message than other rows</div>
+                    <div>🥚</div>
+                    <div>RUNNING</div>
+                    <div>0 days ago</div>
+                    <div>Initiated by ANON</div>
+                  </TableRow>
+                  <TableRow>
+                    <div>clutch</div>
+                    <div>A longer commit message than other rows</div>
+                    <div>🥚</div>
+                    <div>RUNNING</div>
+                    <div>0 days ago</div>
+                    <div>Initiated by ANON</div>
+                  </TableRow>
+                </Table>
+              </Card>
+            </BigGrid>
           </Box>
         </DashStateContext.Provider>
       </DashDispatchContext.Provider>
