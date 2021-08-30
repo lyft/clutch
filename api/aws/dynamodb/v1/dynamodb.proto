@@ -18,9 +18,9 @@ service DDBAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
-  rpc IncreaseCapacity(IncreaseCapacityRequest) returns (IncreaseCapacityResponse) {
+  rpc UpdateCapacity(UpdateCapacityRequest) returns (UpdateCapacityResponse) {
     option (google.api.http) = {
-      post : "/v1/aws/dynamodb/increaseCapacity"
+      post : "/v1/aws/dynamodb/updateCapacity"
       body : "*"
     };
     option (clutch.api.v1.action).type = UPDATE;
@@ -160,10 +160,10 @@ message DescribeTableResponse {
   Table table = 1;
 }
 
-// A request to increase a table's capacity.
-// Any combination of table capacity and GSI capacities can be increased in a single request.
+// A request to update a table's capacity.
+// Any combination of table capacity and GSI capacities can be updated in a single request.
 // If no throughputs or GSI updates are specified, the table is unchanged.
-message IncreaseCapacityRequest {
+message UpdateCapacityRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
   Throughput table_throughput = 3;
@@ -171,9 +171,9 @@ message IncreaseCapacityRequest {
   bool ignore_maximums = 5;
 }
 
-// The result of requesting a capacity increase.
+// The result of requesting a capacity update.
 // Successful calls return an updated table description.
-message IncreaseCapacityResponse {
+message UpdateCapacityResponse {
   option (clutch.api.v1.reference).fields = "table";
 
   Table table = 1;
