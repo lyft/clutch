@@ -128,7 +128,7 @@ func (s *svc) DescribeTable(ctx context.Context, region string, tableName string
 	return ret, nil
 }
 
-func (s *svc) IncreaseCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error) {
+func (s *svc) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error) {
 	currentThroughput := &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
