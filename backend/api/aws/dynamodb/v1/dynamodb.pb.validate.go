@@ -516,23 +516,23 @@ var _ interface {
 	ErrorName() string
 } = DescribeTableResponseValidationError{}
 
-// Validate checks the field values on IncreaseCapacityRequest with the rules
+// Validate checks the field values on UpdateCapacityRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *IncreaseCapacityRequest) Validate() error {
+func (m *UpdateCapacityRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if len(m.GetTableName()) < 1 {
-		return IncreaseCapacityRequestValidationError{
+		return UpdateCapacityRequestValidationError{
 			field:  "TableName",
 			reason: "value length must be at least 1 bytes",
 		}
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return IncreaseCapacityRequestValidationError{
+		return UpdateCapacityRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
@@ -540,7 +540,7 @@ func (m *IncreaseCapacityRequest) Validate() error {
 
 	if v, ok := interface{}(m.GetTableThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return IncreaseCapacityRequestValidationError{
+			return UpdateCapacityRequestValidationError{
 				field:  "TableThroughput",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -553,7 +553,7 @@ func (m *IncreaseCapacityRequest) Validate() error {
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return IncreaseCapacityRequestValidationError{
+				return UpdateCapacityRequestValidationError{
 					field:  fmt.Sprintf("GsiUpdates[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -568,9 +568,9 @@ func (m *IncreaseCapacityRequest) Validate() error {
 	return nil
 }
 
-// IncreaseCapacityRequestValidationError is the validation error returned by
-// IncreaseCapacityRequest.Validate if the designated constraints aren't met.
-type IncreaseCapacityRequestValidationError struct {
+// UpdateCapacityRequestValidationError is the validation error returned by
+// UpdateCapacityRequest.Validate if the designated constraints aren't met.
+type UpdateCapacityRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -578,24 +578,24 @@ type IncreaseCapacityRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e IncreaseCapacityRequestValidationError) Field() string { return e.field }
+func (e UpdateCapacityRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e IncreaseCapacityRequestValidationError) Reason() string { return e.reason }
+func (e UpdateCapacityRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e IncreaseCapacityRequestValidationError) Cause() error { return e.cause }
+func (e UpdateCapacityRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e IncreaseCapacityRequestValidationError) Key() bool { return e.key }
+func (e UpdateCapacityRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e IncreaseCapacityRequestValidationError) ErrorName() string {
-	return "IncreaseCapacityRequestValidationError"
+func (e UpdateCapacityRequestValidationError) ErrorName() string {
+	return "UpdateCapacityRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e IncreaseCapacityRequestValidationError) Error() string {
+func (e UpdateCapacityRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -607,14 +607,14 @@ func (e IncreaseCapacityRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sIncreaseCapacityRequest.%s: %s%s",
+		"invalid %sUpdateCapacityRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = IncreaseCapacityRequestValidationError{}
+var _ error = UpdateCapacityRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -622,19 +622,19 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = IncreaseCapacityRequestValidationError{}
+} = UpdateCapacityRequestValidationError{}
 
-// Validate checks the field values on IncreaseCapacityResponse with the rules
+// Validate checks the field values on UpdateCapacityResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *IncreaseCapacityResponse) Validate() error {
+func (m *UpdateCapacityResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if v, ok := interface{}(m.GetTable()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return IncreaseCapacityResponseValidationError{
+			return UpdateCapacityResponseValidationError{
 				field:  "Table",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -645,9 +645,9 @@ func (m *IncreaseCapacityResponse) Validate() error {
 	return nil
 }
 
-// IncreaseCapacityResponseValidationError is the validation error returned by
-// IncreaseCapacityResponse.Validate if the designated constraints aren't met.
-type IncreaseCapacityResponseValidationError struct {
+// UpdateCapacityResponseValidationError is the validation error returned by
+// UpdateCapacityResponse.Validate if the designated constraints aren't met.
+type UpdateCapacityResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -655,24 +655,24 @@ type IncreaseCapacityResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e IncreaseCapacityResponseValidationError) Field() string { return e.field }
+func (e UpdateCapacityResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e IncreaseCapacityResponseValidationError) Reason() string { return e.reason }
+func (e UpdateCapacityResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e IncreaseCapacityResponseValidationError) Cause() error { return e.cause }
+func (e UpdateCapacityResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e IncreaseCapacityResponseValidationError) Key() bool { return e.key }
+func (e UpdateCapacityResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e IncreaseCapacityResponseValidationError) ErrorName() string {
-	return "IncreaseCapacityResponseValidationError"
+func (e UpdateCapacityResponseValidationError) ErrorName() string {
+	return "UpdateCapacityResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e IncreaseCapacityResponseValidationError) Error() string {
+func (e UpdateCapacityResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -684,14 +684,14 @@ func (e IncreaseCapacityResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sIncreaseCapacityResponse.%s: %s%s",
+		"invalid %sUpdateCapacityResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = IncreaseCapacityResponseValidationError{}
+var _ error = UpdateCapacityResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -699,4 +699,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = IncreaseCapacityResponseValidationError{}
+} = UpdateCapacityResponseValidationError{}

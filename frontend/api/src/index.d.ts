@@ -1682,18 +1682,18 @@ export namespace clutch {
                     public describeTable(request: clutch.aws.dynamodb.v1.IDescribeTableRequest): Promise<clutch.aws.dynamodb.v1.DescribeTableResponse>;
 
                     /**
-                     * Calls IncreaseCapacity.
-                     * @param request IncreaseCapacityRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and IncreaseCapacityResponse
+                     * Calls UpdateCapacity.
+                     * @param request UpdateCapacityRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and UpdateCapacityResponse
                      */
-                    public increaseCapacity(request: clutch.aws.dynamodb.v1.IIncreaseCapacityRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.IncreaseCapacityCallback): void;
+                    public updateCapacity(request: clutch.aws.dynamodb.v1.IUpdateCapacityRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.UpdateCapacityCallback): void;
 
                     /**
-                     * Calls IncreaseCapacity.
-                     * @param request IncreaseCapacityRequest message or plain object
+                     * Calls UpdateCapacity.
+                     * @param request UpdateCapacityRequest message or plain object
                      * @returns Promise
                      */
-                    public increaseCapacity(request: clutch.aws.dynamodb.v1.IIncreaseCapacityRequest): Promise<clutch.aws.dynamodb.v1.IncreaseCapacityResponse>;
+                    public updateCapacity(request: clutch.aws.dynamodb.v1.IUpdateCapacityRequest): Promise<clutch.aws.dynamodb.v1.UpdateCapacityResponse>;
                 }
 
                 namespace DDBAPI {
@@ -1706,11 +1706,11 @@ export namespace clutch {
                     type DescribeTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.DescribeTableResponse) => void;
 
                     /**
-                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#increaseCapacity}.
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateCapacity}.
                      * @param error Error, if any
-                     * @param [response] IncreaseCapacityResponse
+                     * @param [response] UpdateCapacityResponse
                      */
-                    type IncreaseCapacityCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.IncreaseCapacityResponse) => void;
+                    type UpdateCapacityCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.UpdateCapacityResponse) => void;
                 }
 
                 /** Properties of a Table. */
@@ -2098,121 +2098,121 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of an IncreaseCapacityRequest. */
-                interface IIncreaseCapacityRequest {
+                /** Properties of an UpdateCapacityRequest. */
+                interface IUpdateCapacityRequest {
 
-                    /** IncreaseCapacityRequest tableName */
+                    /** UpdateCapacityRequest tableName */
                     tableName?: (string|null);
 
-                    /** IncreaseCapacityRequest region */
+                    /** UpdateCapacityRequest region */
                     region?: (string|null);
 
-                    /** IncreaseCapacityRequest tableThroughput */
+                    /** UpdateCapacityRequest tableThroughput */
                     tableThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
-                    /** IncreaseCapacityRequest gsiUpdates */
+                    /** UpdateCapacityRequest gsiUpdates */
                     gsiUpdates?: (clutch.aws.dynamodb.v1.IIndexUpdateAction[]|null);
 
-                    /** IncreaseCapacityRequest ignoreMaximums */
+                    /** UpdateCapacityRequest ignoreMaximums */
                     ignoreMaximums?: (boolean|null);
                 }
 
-                /** Represents an IncreaseCapacityRequest. */
-                class IncreaseCapacityRequest implements IIncreaseCapacityRequest {
+                /** Represents an UpdateCapacityRequest. */
+                class UpdateCapacityRequest implements IUpdateCapacityRequest {
 
                     /**
-                     * Constructs a new IncreaseCapacityRequest.
+                     * Constructs a new UpdateCapacityRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IIncreaseCapacityRequest);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IUpdateCapacityRequest);
 
-                    /** IncreaseCapacityRequest tableName. */
+                    /** UpdateCapacityRequest tableName. */
                     public tableName: string;
 
-                    /** IncreaseCapacityRequest region. */
+                    /** UpdateCapacityRequest region. */
                     public region: string;
 
-                    /** IncreaseCapacityRequest tableThroughput. */
+                    /** UpdateCapacityRequest tableThroughput. */
                     public tableThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
-                    /** IncreaseCapacityRequest gsiUpdates. */
+                    /** UpdateCapacityRequest gsiUpdates. */
                     public gsiUpdates: clutch.aws.dynamodb.v1.IIndexUpdateAction[];
 
-                    /** IncreaseCapacityRequest ignoreMaximums. */
+                    /** UpdateCapacityRequest ignoreMaximums. */
                     public ignoreMaximums: boolean;
 
                     /**
-                     * Verifies an IncreaseCapacityRequest message.
+                     * Verifies an UpdateCapacityRequest message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an IncreaseCapacityRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates an UpdateCapacityRequest message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns IncreaseCapacityRequest
+                     * @returns UpdateCapacityRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.IncreaseCapacityRequest;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.UpdateCapacityRequest;
 
                     /**
-                     * Creates a plain object from an IncreaseCapacityRequest message. Also converts values to other types if specified.
-                     * @param message IncreaseCapacityRequest
+                     * Creates a plain object from an UpdateCapacityRequest message. Also converts values to other types if specified.
+                     * @param message UpdateCapacityRequest
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.IncreaseCapacityRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.UpdateCapacityRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this IncreaseCapacityRequest to JSON.
+                     * Converts this UpdateCapacityRequest to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of an IncreaseCapacityResponse. */
-                interface IIncreaseCapacityResponse {
+                /** Properties of an UpdateCapacityResponse. */
+                interface IUpdateCapacityResponse {
 
-                    /** IncreaseCapacityResponse table */
+                    /** UpdateCapacityResponse table */
                     table?: (clutch.aws.dynamodb.v1.ITable|null);
                 }
 
-                /** Represents an IncreaseCapacityResponse. */
-                class IncreaseCapacityResponse implements IIncreaseCapacityResponse {
+                /** Represents an UpdateCapacityResponse. */
+                class UpdateCapacityResponse implements IUpdateCapacityResponse {
 
                     /**
-                     * Constructs a new IncreaseCapacityResponse.
+                     * Constructs a new UpdateCapacityResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.aws.dynamodb.v1.IIncreaseCapacityResponse);
+                    constructor(properties?: clutch.aws.dynamodb.v1.IUpdateCapacityResponse);
 
-                    /** IncreaseCapacityResponse table. */
+                    /** UpdateCapacityResponse table. */
                     public table?: (clutch.aws.dynamodb.v1.ITable|null);
 
                     /**
-                     * Verifies an IncreaseCapacityResponse message.
+                     * Verifies an UpdateCapacityResponse message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an IncreaseCapacityResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates an UpdateCapacityResponse message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns IncreaseCapacityResponse
+                     * @returns UpdateCapacityResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.IncreaseCapacityResponse;
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.UpdateCapacityResponse;
 
                     /**
-                     * Creates a plain object from an IncreaseCapacityResponse message. Also converts values to other types if specified.
-                     * @param message IncreaseCapacityResponse
+                     * Creates a plain object from an UpdateCapacityResponse message. Also converts values to other types if specified.
+                     * @param message UpdateCapacityResponse
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.aws.dynamodb.v1.IncreaseCapacityResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.aws.dynamodb.v1.UpdateCapacityResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this IncreaseCapacityResponse to JSON.
+                     * Converts this UpdateCapacityResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

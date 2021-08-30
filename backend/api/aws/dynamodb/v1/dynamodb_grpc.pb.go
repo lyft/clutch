@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DDBAPIClient interface {
 	DescribeTable(ctx context.Context, in *DescribeTableRequest, opts ...grpc.CallOption) (*DescribeTableResponse, error)
-	IncreaseCapacity(ctx context.Context, in *IncreaseCapacityRequest, opts ...grpc.CallOption) (*IncreaseCapacityResponse, error)
+	UpdateCapacity(ctx context.Context, in *UpdateCapacityRequest, opts ...grpc.CallOption) (*UpdateCapacityResponse, error)
 }
 
 type dDBAPIClient struct {
@@ -39,9 +39,9 @@ func (c *dDBAPIClient) DescribeTable(ctx context.Context, in *DescribeTableReque
 	return out, nil
 }
 
-func (c *dDBAPIClient) IncreaseCapacity(ctx context.Context, in *IncreaseCapacityRequest, opts ...grpc.CallOption) (*IncreaseCapacityResponse, error) {
-	out := new(IncreaseCapacityResponse)
-	err := c.cc.Invoke(ctx, "/clutch.aws.dynamodb.v1.DDBAPI/IncreaseCapacity", in, out, opts...)
+func (c *dDBAPIClient) UpdateCapacity(ctx context.Context, in *UpdateCapacityRequest, opts ...grpc.CallOption) (*UpdateCapacityResponse, error) {
+	out := new(UpdateCapacityResponse)
+	err := c.cc.Invoke(ctx, "/clutch.aws.dynamodb.v1.DDBAPI/UpdateCapacity", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (c *dDBAPIClient) IncreaseCapacity(ctx context.Context, in *IncreaseCapacit
 // for forward compatibility
 type DDBAPIServer interface {
 	DescribeTable(context.Context, *DescribeTableRequest) (*DescribeTableResponse, error)
-	IncreaseCapacity(context.Context, *IncreaseCapacityRequest) (*IncreaseCapacityResponse, error)
+	UpdateCapacity(context.Context, *UpdateCapacityRequest) (*UpdateCapacityResponse, error)
 }
 
 // UnimplementedDDBAPIServer should be embedded to have forward compatible implementations.
@@ -63,8 +63,8 @@ type UnimplementedDDBAPIServer struct {
 func (UnimplementedDDBAPIServer) DescribeTable(context.Context, *DescribeTableRequest) (*DescribeTableResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeTable not implemented")
 }
-func (UnimplementedDDBAPIServer) IncreaseCapacity(context.Context, *IncreaseCapacityRequest) (*IncreaseCapacityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IncreaseCapacity not implemented")
+func (UnimplementedDDBAPIServer) UpdateCapacity(context.Context, *UpdateCapacityRequest) (*UpdateCapacityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCapacity not implemented")
 }
 
 // UnsafeDDBAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -96,20 +96,20 @@ func _DDBAPI_DescribeTable_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DDBAPI_IncreaseCapacity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IncreaseCapacityRequest)
+func _DDBAPI_UpdateCapacity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCapacityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DDBAPIServer).IncreaseCapacity(ctx, in)
+		return srv.(DDBAPIServer).UpdateCapacity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/clutch.aws.dynamodb.v1.DDBAPI/IncreaseCapacity",
+		FullMethod: "/clutch.aws.dynamodb.v1.DDBAPI/UpdateCapacity",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DDBAPIServer).IncreaseCapacity(ctx, req.(*IncreaseCapacityRequest))
+		return srv.(DDBAPIServer).UpdateCapacity(ctx, req.(*UpdateCapacityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -126,8 +126,8 @@ var DDBAPI_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DDBAPI_DescribeTable_Handler,
 		},
 		{
-			MethodName: "IncreaseCapacity",
-			Handler:    _DDBAPI_IncreaseCapacity_Handler,
+			MethodName: "UpdateCapacity",
+			Handler:    _DDBAPI_UpdateCapacity_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
