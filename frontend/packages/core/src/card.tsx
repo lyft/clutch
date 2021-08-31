@@ -1,17 +1,14 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type {
-  CardContentProps as MuiCardContentProps,
-  CardHeaderProps as MuiCardHeaderProps,
-} from "@material-ui/core";
+import type { CardHeaderProps as MuiCardHeaderProps } from "@material-ui/core";
 import {
   Avatar,
   Card as MuiCard,
   CardActionArea,
   CardActionAreaProps,
-  CardContent as MuiCardContent,
   CardHeader as MuiCardHeader,
 } from "@material-ui/core";
+import { spacing } from "@material-ui/system";
 
 import { StyledTypography } from "./typography";
 
@@ -32,16 +29,6 @@ const StyledCard = styled(MuiCard)({
     backgroundColor: "#D7DAF6",
   },
 });
-
-const StyledCardContent = styled(MuiCardContent)((props: { disablePadding?: boolean }) => ({
-  "> .MuiPaper-root": {
-    border: "0",
-    borderRadius: "0",
-  },
-  "&.MuiCardContent-root": {
-    padding: props.disablePadding ? "0px" : "32px",
-  },
-}));
 
 export interface CardProps {
   children?: React.ReactNode | React.ReactNode[];
@@ -71,14 +58,31 @@ const CardHeader = ({ avatar, children, title }: CardHeaderProps) => (
   </StyledCardHeaderContainer>
 );
 
-interface CardContentProps extends MuiCardContentProps {
-  disablePadding?: boolean;
+// Material UI Spacing system supports many props https://material-ui.com/system/spacing/#api
+// We can add more to this list as use cases arise
+interface SpacingProps {
+  padding?: number;
+  // shorthand for padding
+  p?: number;
 }
 
-const CardContent = ({ children, disablePadding = false, ...props }: CardContentProps) => (
-  <StyledCardContent disablePadding={disablePadding} {...props}>
-    {children}
-  </StyledCardContent>
+const BaseCardContent = styled.div<SpacingProps>`
+  ${spacing}
+`;
+
+const StyledCardContent = styled(BaseCardContent)({
+  "> .MuiPaper-root": {
+    border: "0",
+    borderRadius: "0",
+  },
+});
+
+interface CardContentProps extends SpacingProps {
+  children?: React.ReactNode | React.ReactNode[];
+}
+
+const CardContent = ({ children, ...props }: CardContentProps) => (
+  <StyledCardContent {...props}>{children}</StyledCardContent>
 );
 
 const StyledLandingCard = styled(Card)({
@@ -111,7 +115,7 @@ export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
 export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
   <StyledLandingCard {...props}>
     <CardActionArea onClick={onClick}>
-      <CardContent>
+      <CardContent padding={4}>
         <div className="header">
           <div className="icon">
             <Avatar>{group.charAt(0)}</Avatar>

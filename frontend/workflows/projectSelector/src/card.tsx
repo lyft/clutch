@@ -30,7 +30,7 @@ const Card = ({ avatar, children, error, isLoading, title }: CardProps) => (
           {isLoading && <LinearProgress color="secondary" />}
         </StyledProgressContainer>
       </CardHeader>
-      <CardContent disablePadding>{error ? <Error subject={error} /> : children}</CardContent>
+      <CardContent padding={0}>{error ? <Error subject={error} /> : children}</CardContent>
     </ClutchCard>
   </Grid>
 );
