@@ -30,7 +30,7 @@ func (r *res) dynamodbResults(ctx context.Context, region string, name string, l
 			defer handler.Done()
 			table, err := r.client.DescribeTable(ctx, region, name)
 			select {
-			case handler.Channel() <- resolver.NewFanoutResult(table, err):
+			case handler.Channel() <- resolver.NewSingleFanoutResult(table, err):
 				return
 			case <-handler.Cancelled():
 				return
