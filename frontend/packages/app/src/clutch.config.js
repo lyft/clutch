@@ -1,4 +1,17 @@
 module.exports = {
+  "@clutch-sh/dynamodb": {
+    updateCapacity: {
+      trending: true,
+      componentProps: {
+        resolverType: "clutch.aws.dynamodb.v1.Table",
+        notes: [
+          {
+            severity: "info",
+            text: "The table may take several minutes to provision new capacity.",
+          },
+        ],
+      },
+    },
   "@clutch-sh/ec2": {
     terminateInstance: {
       trending: true,
