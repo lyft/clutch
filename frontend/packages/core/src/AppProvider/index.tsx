@@ -8,7 +8,7 @@ import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
 import NotFound from "../not-found";
 
-import registeredWorkflows from "./registrar";
+import { registeredWorkflows } from "./registrar";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
