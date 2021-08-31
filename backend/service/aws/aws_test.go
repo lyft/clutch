@@ -25,12 +25,20 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	regions := []string{"us-east-1", "us-west25"}
+	regions := []string{"us-east-1", "us-west-2"}
 
 	cfg, _ := anypb.New(&awsv1.Config{
 		Regions: regions,
 		ClientConfig: &awsv1.ClientConfig{
 			Retries: 10,
+		},
+		DynamodbConfig: &awsv1.DynamodbConfig{
+			ScalingLimits: &awsv1.ScalingLimits{
+				MaxReadCapacityUnits:  1000,
+				MaxWriteCapacityUnits: 2000,
+				MaxScaleFactor:        4.0,
+				EnableOverride:        false,
+			},
 		},
 	})
 	log := zaptest.NewLogger(t)
