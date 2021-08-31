@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	dynamodbv1api "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1api "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
@@ -32,6 +33,7 @@ const Name = "clutch.resolver.aws"
 var typeURLInstance = meta.TypeURL((*ec2v1api.Instance)(nil))
 var typeURLAutoscalingGroup = meta.TypeURL((*ec2v1api.AutoscalingGroup)(nil))
 var typeURLKinesisStream = meta.TypeURL((*kinesisv1api.Stream)(nil))
+var typeURLDynamodbTable = meta.TypeURL((*dynamodbv1api.Table)(nil))
 
 var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	typeURLInstance: {
@@ -42,6 +44,9 @@ var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	},
 	typeURLKinesisStream: {
 		(*awsv1resolver.KinesisStreamName)(nil),
+	},
+	typeURLDynamodbTable: {
+		(*awsv1resolver.DynamodbTableName)(nil),
 	},
 }
 
@@ -123,6 +128,9 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 	case typeURLKinesisStream:
 		return r.resolveKinesisStreamForInput(ctx, input)
 
+	case typeURLDynamodbTable:
+		return r.resolveDynamodbTableForInput(ctx, input)
+
 	default:
 		return nil, status.Errorf(codes.Internal, "resolver for '%s' not implemented", wantTypeURL)
 	}
@@ -165,6 +173,17 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		}
 
 		return r.kinesisResults(ctx, resolver.OptionAll, query, limit)
+
+	case typeURLDynamodbTable:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*dynamodbv1api.Table)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.dynamodbResults(ctx, patternValues["region"], patternValues["name"], limit)
+		}
+
+		return r.dynamodbResults(ctx, resolver.OptionAll, query, limit)
 
 	default:
 		return nil, status.Errorf(codes.Internal, "resolver search for '%s' not implemented", typeURL)
