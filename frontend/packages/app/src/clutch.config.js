@@ -10,7 +10,6 @@ module.exports = {
             text: "The table may take several minutes to provision new capacity.",
           },
         ],
-        enableDecreaseCapacity: false,
       },
     },
   "@clutch-sh/ec2": {
