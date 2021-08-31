@@ -1,5 +1,6 @@
 module.exports = {
   roots: ["./src"],
+  clearMocks: true,
   collectCoverageFrom: ["src/*.*sx"],
   coverageDirectory: "/tmp",
   coverageReporters: ["text", "cobertura"],
