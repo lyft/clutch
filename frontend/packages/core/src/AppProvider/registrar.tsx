@@ -82,4 +82,4 @@ const registeredWorkflows = async (
   return validWorkflows;
 };
 
-export default registeredWorkflows;
+export { registeredWorkflows, workflowRoutes };
