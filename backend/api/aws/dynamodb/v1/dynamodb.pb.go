@@ -159,6 +159,7 @@ func (Table_BillingMode) EnumDescriptor() ([]byte, []int) {
 	return file_aws_dynamodb_v1_dynamodb_proto_rawDescGZIP(), []int{0, 1}
 }
 
+// Enum that represents the current GSI state
 type GlobalSecondaryIndex_Status int32
 
 const (
@@ -320,7 +321,7 @@ func (x *Table) GetBillingMode() Table_BillingMode {
 	return Table_BILLING_UNSPECIFIED
 }
 
-// Enum that represents the current GSI state
+// A global secondary index.
 type GlobalSecondaryIndex struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

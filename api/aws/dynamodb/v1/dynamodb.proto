@@ -103,8 +103,9 @@ message Table {
   BillingMode billing_mode = 6;
 }
 
-// Enum that represents the current GSI state
+// A global secondary index.
 message GlobalSecondaryIndex {
+  // Enum that represents the current GSI state
   enum Status {
     // Unspecified indicates GSI status could not be found.
     UNSPECIFIED = 0;
