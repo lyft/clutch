@@ -1,6 +1,6 @@
 #!/bin/bash
 
-YARN_VERSION="1.22.5"
+YARN_VERSION="1.22.11"
 ROOT_DEST_DIR="$PWD/frontend"
 DEST_DIR="$ROOT_DEST_DIR/.yarn/releases"
 DEST_FILE="${DEST_DIR}/yarn-${YARN_VERSION}.js"
