@@ -20578,42 +20578,6 @@ export namespace clutch {
         /** Namespace v1. */
         namespace v1 {
 
-            /** Represents a SourcegraphAPI */
-            class SourcegraphAPI extends $protobuf.rpc.Service {
-
-                /**
-                 * Constructs a new SourcegraphAPI service.
-                 * @param rpcImpl RPC implementation
-                 * @param [requestDelimited=false] Whether requests are length-delimited
-                 * @param [responseDelimited=false] Whether responses are length-delimited
-                 */
-                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
-
-                /**
-                 * Calls CompareCommits.
-                 * @param request CompareCommitsRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and CompareCommitsResponse
-                 */
-                public compareCommits(request: clutch.sourcegraph.v1.ICompareCommitsRequest, callback: clutch.sourcegraph.v1.SourcegraphAPI.CompareCommitsCallback): void;
-
-                /**
-                 * Calls CompareCommits.
-                 * @param request CompareCommitsRequest message or plain object
-                 * @returns Promise
-                 */
-                public compareCommits(request: clutch.sourcegraph.v1.ICompareCommitsRequest): Promise<clutch.sourcegraph.v1.CompareCommitsResponse>;
-            }
-
-            namespace SourcegraphAPI {
-
-                /**
-                 * Callback as used by {@link clutch.sourcegraph.v1.SourcegraphAPI#compareCommits}.
-                 * @param error Error, if any
-                 * @param [response] CompareCommitsResponse
-                 */
-                type CompareCommitsCallback = (error: (Error|null), response?: clutch.sourcegraph.v1.CompareCommitsResponse) => void;
-            }
-
             /** Properties of a CompareCommitsRequest. */
             interface ICompareCommitsRequest {
 

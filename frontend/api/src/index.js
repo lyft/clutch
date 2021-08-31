@@ -49135,60 +49135,6 @@ export const clutch = $root.clutch = (() => {
              */
             const v1 = {};
 
-            v1.SourcegraphAPI = (function() {
-
-                /**
-                 * Constructs a new SourcegraphAPI service.
-                 * @memberof clutch.sourcegraph.v1
-                 * @classdesc Represents a SourcegraphAPI
-                 * @extends $protobuf.rpc.Service
-                 * @constructor
-                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
-                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
-                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
-                 */
-                function SourcegraphAPI(rpcImpl, requestDelimited, responseDelimited) {
-                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
-                }
-
-                (SourcegraphAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = SourcegraphAPI;
-
-                /**
-                 * Callback as used by {@link clutch.sourcegraph.v1.SourcegraphAPI#compareCommits}.
-                 * @memberof clutch.sourcegraph.v1.SourcegraphAPI
-                 * @typedef CompareCommitsCallback
-                 * @type {function}
-                 * @param {Error|null} error Error, if any
-                 * @param {clutch.sourcegraph.v1.CompareCommitsResponse} [response] CompareCommitsResponse
-                 */
-
-                /**
-                 * Calls CompareCommits.
-                 * @function compareCommits
-                 * @memberof clutch.sourcegraph.v1.SourcegraphAPI
-                 * @instance
-                 * @param {clutch.sourcegraph.v1.ICompareCommitsRequest} request CompareCommitsRequest message or plain object
-                 * @param {clutch.sourcegraph.v1.SourcegraphAPI.CompareCommitsCallback} callback Node-style callback called with the error, if any, and CompareCommitsResponse
-                 * @returns {undefined}
-                 * @variation 1
-                 */
-                Object.defineProperty(SourcegraphAPI.prototype.compareCommits = function compareCommits(request, callback) {
-                    return this.rpcCall(compareCommits, $root.clutch.sourcegraph.v1.CompareCommitsRequest, $root.clutch.sourcegraph.v1.CompareCommitsResponse, request, callback);
-                }, "name", { value: "CompareCommits" });
-
-                /**
-                 * Calls CompareCommits.
-                 * @function compareCommits
-                 * @memberof clutch.sourcegraph.v1.SourcegraphAPI
-                 * @instance
-                 * @param {clutch.sourcegraph.v1.ICompareCommitsRequest} request CompareCommitsRequest message or plain object
-                 * @returns {Promise<clutch.sourcegraph.v1.CompareCommitsResponse>} Promise
-                 * @variation 2
-                 */
-
-                return SourcegraphAPI;
-            })();
-
             v1.CompareCommitsRequest = (function() {
 
                 /**
