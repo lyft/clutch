@@ -18846,6 +18846,60 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+
+                /** Properties of a DynamodbTableName. */
+                interface IDynamodbTableName {
+
+                    /** DynamodbTableName name */
+                    name?: (string|null);
+
+                    /** DynamodbTableName region */
+                    region?: (string|null);
+                }
+
+                /** Represents a DynamodbTableName. */
+                class DynamodbTableName implements IDynamodbTableName {
+
+                    /**
+                     * Constructs a new DynamodbTableName.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.aws.v1.IDynamodbTableName);
+
+                    /** DynamodbTableName name. */
+                    public name: string;
+
+                    /** DynamodbTableName region. */
+                    public region: string;
+
+                    /**
+                     * Verifies a DynamodbTableName message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DynamodbTableName message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DynamodbTableName
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.aws.v1.DynamodbTableName;
+
+                    /**
+                     * Creates a plain object from a DynamodbTableName message. Also converts values to other types if specified.
+                     * @param message DynamodbTableName
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.aws.v1.DynamodbTableName, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DynamodbTableName to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
         }
 
