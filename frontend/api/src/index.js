@@ -23431,6 +23431,148 @@ export const clutch = $root.clutch = (() => {
                 return k8s;
             })();
 
+            service.sourcegraph = (function() {
+
+                /**
+                 * Namespace sourcegraph.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const sourcegraph = {};
+
+                sourcegraph.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.sourcegraph
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.sourcegraph.v1
+                         * @interface IConfig
+                         * @property {string|null} [host] Config host
+                         * @property {string|null} [token] Config token
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.sourcegraph.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.sourcegraph.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config host.
+                         * @member {string} host
+                         * @memberof clutch.config.service.sourcegraph.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.host = "";
+
+                        /**
+                         * Config token.
+                         * @member {string} token
+                         * @memberof clutch.config.service.sourcegraph.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.token = "";
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.sourcegraph.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                if (!$util.isString(message.host))
+                                    return "host: string expected";
+                            if (message.token != null && message.hasOwnProperty("token"))
+                                if (!$util.isString(message.token))
+                                    return "token: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.sourcegraph.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.sourcegraph.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.sourcegraph.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.sourcegraph.v1.Config();
+                            if (object.host != null)
+                                message.host = String(object.host);
+                            if (object.token != null)
+                                message.token = String(object.token);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.sourcegraph.v1.Config
+                         * @static
+                         * @param {clutch.config.service.sourcegraph.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.host = "";
+                                object.token = "";
+                            }
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                object.host = message.host;
+                            if (message.token != null && message.hasOwnProperty("token"))
+                                object.token = message.token;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.sourcegraph.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return sourcegraph;
+            })();
+
             service.topology = (function() {
 
                 /**
@@ -48765,6 +48907,435 @@ export const clutch = $root.clutch = (() => {
         })();
 
         return resolver;
+    })();
+
+    clutch.sourcegraph = (function() {
+
+        /**
+         * Namespace sourcegraph.
+         * @memberof clutch
+         * @namespace
+         */
+        const sourcegraph = {};
+
+        sourcegraph.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.sourcegraph
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.CompareCommitsRequest = (function() {
+
+                /**
+                 * Properties of a CompareCommitsRequest.
+                 * @memberof clutch.sourcegraph.v1
+                 * @interface ICompareCommitsRequest
+                 * @property {string|null} [repository] CompareCommitsRequest repository
+                 * @property {string|null} [base] CompareCommitsRequest base
+                 * @property {string|null} [head] CompareCommitsRequest head
+                 */
+
+                /**
+                 * Constructs a new CompareCommitsRequest.
+                 * @memberof clutch.sourcegraph.v1
+                 * @classdesc Represents a CompareCommitsRequest.
+                 * @implements ICompareCommitsRequest
+                 * @constructor
+                 * @param {clutch.sourcegraph.v1.ICompareCommitsRequest=} [properties] Properties to set
+                 */
+                function CompareCommitsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CompareCommitsRequest repository.
+                 * @member {string} repository
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
+                 * @instance
+                 */
+                CompareCommitsRequest.prototype.repository = "";
+
+                /**
+                 * CompareCommitsRequest base.
+                 * @member {string} base
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
+                 * @instance
+                 */
+                CompareCommitsRequest.prototype.base = "";
+
+                /**
+                 * CompareCommitsRequest head.
+                 * @member {string} head
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
+                 * @instance
+                 */
+                CompareCommitsRequest.prototype.head = "";
+
+                /**
+                 * Verifies a CompareCommitsRequest message.
+                 * @function verify
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CompareCommitsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.repository != null && message.hasOwnProperty("repository"))
+                        if (!$util.isString(message.repository))
+                            return "repository: string expected";
+                    if (message.base != null && message.hasOwnProperty("base"))
+                        if (!$util.isString(message.base))
+                            return "base: string expected";
+                    if (message.head != null && message.hasOwnProperty("head"))
+                        if (!$util.isString(message.head))
+                            return "head: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a CompareCommitsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcegraph.v1.CompareCommitsRequest} CompareCommitsRequest
+                 */
+                CompareCommitsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcegraph.v1.CompareCommitsRequest)
+                        return object;
+                    let message = new $root.clutch.sourcegraph.v1.CompareCommitsRequest();
+                    if (object.repository != null)
+                        message.repository = String(object.repository);
+                    if (object.base != null)
+                        message.base = String(object.base);
+                    if (object.head != null)
+                        message.head = String(object.head);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CompareCommitsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
+                 * @static
+                 * @param {clutch.sourcegraph.v1.CompareCommitsRequest} message CompareCommitsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CompareCommitsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.repository = "";
+                        object.base = "";
+                        object.head = "";
+                    }
+                    if (message.repository != null && message.hasOwnProperty("repository"))
+                        object.repository = message.repository;
+                    if (message.base != null && message.hasOwnProperty("base"))
+                        object.base = message.base;
+                    if (message.head != null && message.hasOwnProperty("head"))
+                        object.head = message.head;
+                    return object;
+                };
+
+                /**
+                 * Converts this CompareCommitsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CompareCommitsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CompareCommitsRequest;
+            })();
+
+            v1.CompareCommitsResponse = (function() {
+
+                /**
+                 * Properties of a CompareCommitsResponse.
+                 * @memberof clutch.sourcegraph.v1
+                 * @interface ICompareCommitsResponse
+                 * @property {Array.<clutch.sourcegraph.v1.ICommit>|null} [commits] CompareCommitsResponse commits
+                 */
+
+                /**
+                 * Constructs a new CompareCommitsResponse.
+                 * @memberof clutch.sourcegraph.v1
+                 * @classdesc Represents a CompareCommitsResponse.
+                 * @implements ICompareCommitsResponse
+                 * @constructor
+                 * @param {clutch.sourcegraph.v1.ICompareCommitsResponse=} [properties] Properties to set
+                 */
+                function CompareCommitsResponse(properties) {
+                    this.commits = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CompareCommitsResponse commits.
+                 * @member {Array.<clutch.sourcegraph.v1.ICommit>} commits
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsResponse
+                 * @instance
+                 */
+                CompareCommitsResponse.prototype.commits = $util.emptyArray;
+
+                /**
+                 * Verifies a CompareCommitsResponse message.
+                 * @function verify
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CompareCommitsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.commits != null && message.hasOwnProperty("commits")) {
+                        if (!Array.isArray(message.commits))
+                            return "commits: array expected";
+                        for (let i = 0; i < message.commits.length; ++i) {
+                            let error = $root.clutch.sourcegraph.v1.Commit.verify(message.commits[i]);
+                            if (error)
+                                return "commits." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a CompareCommitsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcegraph.v1.CompareCommitsResponse} CompareCommitsResponse
+                 */
+                CompareCommitsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcegraph.v1.CompareCommitsResponse)
+                        return object;
+                    let message = new $root.clutch.sourcegraph.v1.CompareCommitsResponse();
+                    if (object.commits) {
+                        if (!Array.isArray(object.commits))
+                            throw TypeError(".clutch.sourcegraph.v1.CompareCommitsResponse.commits: array expected");
+                        message.commits = [];
+                        for (let i = 0; i < object.commits.length; ++i) {
+                            if (typeof object.commits[i] !== "object")
+                                throw TypeError(".clutch.sourcegraph.v1.CompareCommitsResponse.commits: object expected");
+                            message.commits[i] = $root.clutch.sourcegraph.v1.Commit.fromObject(object.commits[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CompareCommitsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsResponse
+                 * @static
+                 * @param {clutch.sourcegraph.v1.CompareCommitsResponse} message CompareCommitsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CompareCommitsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.commits = [];
+                    if (message.commits && message.commits.length) {
+                        object.commits = [];
+                        for (let j = 0; j < message.commits.length; ++j)
+                            object.commits[j] = $root.clutch.sourcegraph.v1.Commit.toObject(message.commits[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this CompareCommitsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CompareCommitsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CompareCommitsResponse;
+            })();
+
+            v1.Commit = (function() {
+
+                /**
+                 * Properties of a Commit.
+                 * @memberof clutch.sourcegraph.v1
+                 * @interface ICommit
+                 * @property {string|null} [oid] Commit oid
+                 * @property {string|null} [email] Commit email
+                 * @property {string|null} [message] Commit message
+                 * @property {string|null} [displayName] Commit displayName
+                 */
+
+                /**
+                 * Constructs a new Commit.
+                 * @memberof clutch.sourcegraph.v1
+                 * @classdesc Represents a Commit.
+                 * @implements ICommit
+                 * @constructor
+                 * @param {clutch.sourcegraph.v1.ICommit=} [properties] Properties to set
+                 */
+                function Commit(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Commit oid.
+                 * @member {string} oid
+                 * @memberof clutch.sourcegraph.v1.Commit
+                 * @instance
+                 */
+                Commit.prototype.oid = "";
+
+                /**
+                 * Commit email.
+                 * @member {string} email
+                 * @memberof clutch.sourcegraph.v1.Commit
+                 * @instance
+                 */
+                Commit.prototype.email = "";
+
+                /**
+                 * Commit message.
+                 * @member {string} message
+                 * @memberof clutch.sourcegraph.v1.Commit
+                 * @instance
+                 */
+                Commit.prototype.message = "";
+
+                /**
+                 * Commit displayName.
+                 * @member {string} displayName
+                 * @memberof clutch.sourcegraph.v1.Commit
+                 * @instance
+                 */
+                Commit.prototype.displayName = "";
+
+                /**
+                 * Verifies a Commit message.
+                 * @function verify
+                 * @memberof clutch.sourcegraph.v1.Commit
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Commit.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.oid != null && message.hasOwnProperty("oid"))
+                        if (!$util.isString(message.oid))
+                            return "oid: string expected";
+                    if (message.email != null && message.hasOwnProperty("email"))
+                        if (!$util.isString(message.email))
+                            return "email: string expected";
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        if (!$util.isString(message.message))
+                            return "message: string expected";
+                    if (message.displayName != null && message.hasOwnProperty("displayName"))
+                        if (!$util.isString(message.displayName))
+                            return "displayName: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Commit message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcegraph.v1.Commit
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcegraph.v1.Commit} Commit
+                 */
+                Commit.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcegraph.v1.Commit)
+                        return object;
+                    let message = new $root.clutch.sourcegraph.v1.Commit();
+                    if (object.oid != null)
+                        message.oid = String(object.oid);
+                    if (object.email != null)
+                        message.email = String(object.email);
+                    if (object.message != null)
+                        message.message = String(object.message);
+                    if (object.displayName != null)
+                        message.displayName = String(object.displayName);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Commit message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcegraph.v1.Commit
+                 * @static
+                 * @param {clutch.sourcegraph.v1.Commit} message Commit
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Commit.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.oid = "";
+                        object.email = "";
+                        object.message = "";
+                        object.displayName = "";
+                    }
+                    if (message.oid != null && message.hasOwnProperty("oid"))
+                        object.oid = message.oid;
+                    if (message.email != null && message.hasOwnProperty("email"))
+                        object.email = message.email;
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        object.message = message.message;
+                    if (message.displayName != null && message.hasOwnProperty("displayName"))
+                        object.displayName = message.displayName;
+                    return object;
+                };
+
+                /**
+                 * Converts this Commit to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcegraph.v1.Commit
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Commit.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Commit;
+            })();
+
+            return v1;
+        })();
+
+        return sourcegraph;
     })();
 
     clutch.timeseries = (function() {

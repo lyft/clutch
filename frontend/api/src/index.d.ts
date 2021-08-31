@@ -9682,6 +9682,68 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace sourcegraph. */
+            namespace sourcegraph {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config host */
+                        host?: (string|null);
+
+                        /** Config token */
+                        token?: (string|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.sourcegraph.v1.IConfig);
+
+                        /** Config host. */
+                        public host: string;
+
+                        /** Config token. */
+                        public token: string;
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.sourcegraph.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.sourcegraph.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace topology. */
             namespace topology {
 
@@ -20443,6 +20505,188 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+            }
+        }
+    }
+
+    /** Namespace sourcegraph. */
+    namespace sourcegraph {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Properties of a CompareCommitsRequest. */
+            interface ICompareCommitsRequest {
+
+                /** CompareCommitsRequest repository */
+                repository?: (string|null);
+
+                /** CompareCommitsRequest base */
+                base?: (string|null);
+
+                /** CompareCommitsRequest head */
+                head?: (string|null);
+            }
+
+            /** Represents a CompareCommitsRequest. */
+            class CompareCommitsRequest implements ICompareCommitsRequest {
+
+                /**
+                 * Constructs a new CompareCommitsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.sourcegraph.v1.ICompareCommitsRequest);
+
+                /** CompareCommitsRequest repository. */
+                public repository: string;
+
+                /** CompareCommitsRequest base. */
+                public base: string;
+
+                /** CompareCommitsRequest head. */
+                public head: string;
+
+                /**
+                 * Verifies a CompareCommitsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CompareCommitsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CompareCommitsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.sourcegraph.v1.CompareCommitsRequest;
+
+                /**
+                 * Creates a plain object from a CompareCommitsRequest message. Also converts values to other types if specified.
+                 * @param message CompareCommitsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.sourcegraph.v1.CompareCommitsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CompareCommitsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CompareCommitsResponse. */
+            interface ICompareCommitsResponse {
+
+                /** CompareCommitsResponse commits */
+                commits?: (clutch.sourcegraph.v1.ICommit[]|null);
+            }
+
+            /** Represents a CompareCommitsResponse. */
+            class CompareCommitsResponse implements ICompareCommitsResponse {
+
+                /**
+                 * Constructs a new CompareCommitsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.sourcegraph.v1.ICompareCommitsResponse);
+
+                /** CompareCommitsResponse commits. */
+                public commits: clutch.sourcegraph.v1.ICommit[];
+
+                /**
+                 * Verifies a CompareCommitsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CompareCommitsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CompareCommitsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.sourcegraph.v1.CompareCommitsResponse;
+
+                /**
+                 * Creates a plain object from a CompareCommitsResponse message. Also converts values to other types if specified.
+                 * @param message CompareCommitsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.sourcegraph.v1.CompareCommitsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CompareCommitsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Commit. */
+            interface ICommit {
+
+                /** Commit oid */
+                oid?: (string|null);
+
+                /** Commit email */
+                email?: (string|null);
+
+                /** Commit message */
+                message?: (string|null);
+
+                /** Commit displayName */
+                displayName?: (string|null);
+            }
+
+            /** Represents a Commit. */
+            class Commit implements ICommit {
+
+                /**
+                 * Constructs a new Commit.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.sourcegraph.v1.ICommit);
+
+                /** Commit oid. */
+                public oid: string;
+
+                /** Commit email. */
+                public email: string;
+
+                /** Commit message. */
+                public message: string;
+
+                /** Commit displayName. */
+                public displayName: string;
+
+                /**
+                 * Verifies a Commit message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Commit message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Commit
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.sourcegraph.v1.Commit;
+
+                /**
+                 * Creates a plain object from a Commit message. Also converts values to other types if specified.
+                 * @param message Commit
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.sourcegraph.v1.Commit, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Commit to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
         }
     }
