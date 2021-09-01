@@ -1,29 +1,21 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type {
-  CardContentProps as MuiCardContentProps,
-  CardHeaderProps as MuiCardHeaderProps,
-} from "@material-ui/core";
+import type { CardHeaderProps as MuiCardHeaderProps } from "@material-ui/core";
 import {
   Avatar,
   Card as MuiCard,
   CardActionArea,
   CardActionAreaProps,
-  CardContent as MuiCardContent,
   CardHeader as MuiCardHeader,
 } from "@material-ui/core";
+import type { SpacingProps as MuiSpacingProps } from "@material-ui/system";
+import { spacing } from "@material-ui/system";
 
-import { StyledTypography } from "./typography";
+import { Typography } from "./typography";
 
 const StyledCard = styled(MuiCard)({
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
   border: "1px solid rgba(13, 16, 48, 0.1)",
-
-  ".MuiCardContent-root": {
-    padding: "32px",
-    color: "#0D1030",
-    fontSize: "16px",
-  },
 
   ".MuiCardActionArea-root:hover": {
     backgroundColor: "#F5F6FD",
@@ -31,13 +23,6 @@ const StyledCard = styled(MuiCard)({
 
   ".MuiCardActionArea-root:active": {
     backgroundColor: "#D7DAF6",
-  },
-});
-
-const StyledCardContent = styled(MuiCardContent)({
-  "> .MuiPaper-root": {
-    border: "0",
-    borderRadius: "0",
   },
 });
 
@@ -63,13 +48,30 @@ const CardHeader = ({ avatar, children, title }: CardHeaderProps) => (
       }}
       disableTypography
       avatar={avatar}
-      title={<StyledTypography variant="h3">{title}</StyledTypography>}
+      title={<Typography variant="h3">{title}</Typography>}
     />
     {children}
   </StyledCardHeaderContainer>
 );
 
-interface CardContentProps extends MuiCardContentProps {}
+// Material UI Spacing system supports many props https://material-ui.com/system/spacing/#api
+// We can add more to this list as use cases arise
+interface SpacingProps extends Pick<MuiSpacingProps, "padding" | "p"> {}
+
+const BaseCardContent = styled.div<SpacingProps>`
+  ${spacing}
+`;
+
+const StyledCardContent = styled(BaseCardContent)({
+  "> .MuiPaper-root": {
+    border: "0",
+    borderRadius: "0",
+  },
+});
+
+interface CardContentProps extends SpacingProps {
+  children?: React.ReactNode | React.ReactNode[];
+}
 
 const CardContent = ({ children, ...props }: CardContentProps) => (
   <StyledCardContent {...props}>{children}</StyledCardContent>
@@ -105,7 +107,7 @@ export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
 export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
   <StyledLandingCard {...props}>
     <CardActionArea onClick={onClick}>
-      <CardContent>
+      <CardContent padding={4}>
         <div className="header">
           <div className="icon">
             <Avatar>{group.charAt(0)}</Avatar>
@@ -113,10 +115,10 @@ export const LandingCard = ({ group, title, description, onClick, ...props }: La
           <span>{group}</span>
         </div>
         <div>
-          <StyledTypography variant="h3">{title}</StyledTypography>
-          <StyledTypography style={{ color: "rgba(13, 16, 48, 0.6)" }} variant="body2">
+          <Typography variant="h3">{title}</Typography>
+          <Typography color="rgba(13, 16, 48, 0.6)" variant="body2">
             {description}
-          </StyledTypography>
+          </Typography>
         </div>
       </CardContent>
     </CardActionArea>
