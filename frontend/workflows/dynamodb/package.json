@@ -1,0 +1,32 @@
+{
+  "name": "@clutch-sh/dynamodb",
+  "version": "0.1.0",
+  "private": true,
+  "description": " Manage Dynamodb resources",
+  "license": "Apache-2.0",
+  "author": "datastore-team@lyft.com",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
+    "compile:watch": "yarn compile:dev --watch",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "yarn run lint --fix",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:watch": "yarn run test --watch"
+  },
+  "dependencies": {
+    "@clutch-sh/wizard": "^1.0.0-beta",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@clutch-sh/tools": "^1.0.0-beta"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "yarn": "^1.22.5"
+  }
+}
