@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package clutch.config.service.sourcegraph.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/service/sourcegraph/v1;sourcegraphv1";
+
+import "validate/validate.proto";
+
+message Config {
+  string host = 1 [ (validate.rules).string.min_len = 1 ];
+  string token = 2 [ (validate.rules).string.min_len = 1 ];
+}

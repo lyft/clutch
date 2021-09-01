@@ -12,6 +12,7 @@ import { useDashUpdater } from "./dash-hooks";
 import { deriveStateData, DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
+import { loadStoredState, storeState } from "./storage";
 import type { DashState, State } from "./types";
 import { Group } from "./types";
 
@@ -84,7 +85,7 @@ const ProjectSelector = () => {
 
   const { updateSelected } = useDashUpdater();
 
-  const [state, dispatch] = React.useReducer(selectorReducer, initialState);
+  const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
   React.useEffect(() => {
     console.log("effect"); // eslint-disable-line
@@ -159,6 +160,7 @@ const ProjectSelector = () => {
     });
 
     // Update!
+    storeState(state);
     updateSelected(dashState);
   }, [state]);
 
@@ -200,7 +202,7 @@ const ProjectSelector = () => {
                       description: "Send requests and receive responses from the selected project.",
                     },
                   ].map(item => (
-                    <TooltipContainer>
+                    <TooltipContainer key={item.title}>
                       <Typography variant="subtitle3" color="#FFFFFF">
                         {item.title}
                       </Typography>

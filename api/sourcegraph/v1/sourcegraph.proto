@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package clutch.sourcegraph.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/sourcegraph/v1;sourcegraphv1";
+
+import "validate/validate.proto";
+
+message CompareCommitsRequest {
+  string repository = 1 [ (validate.rules).string.min_len = 1 ];
+  string base = 2 [ (validate.rules).string.min_len = 1 ];
+  string head = 3 [ (validate.rules).string.min_len = 1 ];
+}
+
+message CompareCommitsResponse {
+  repeated Commit commits = 1;
+}
+
+message Commit {
+  string oid = 1;
+  string email = 2;
+  string message = 3;
+  string display_name = 4;
+}

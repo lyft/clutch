@@ -103,26 +103,55 @@ func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, 
 }
 
 func (s *svc) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
-	currentThroughput := &dynamodbv1.ProvisionedThroughput{
+	currentThroughput := &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
 	}
+	gsis := []*dynamodbv1.GlobalSecondaryIndex{
+		{
+			Name: "test-gsi",
+			ProvisionedThroughput: &dynamodbv1.Throughput{
+				ReadCapacityUnits:  10,
+				WriteCapacityUnits: 20,
+			},
+			Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
+		},
+	}
+
 	ret := &dynamodbv1.Table{
-		Name:                  tableName,
-		Region:                region,
-		ProvisionedThroughput: currentThroughput,
-		Status:                dynamodbv1.Status(5),
+		Name:                   tableName,
+		Region:                 region,
+		ProvisionedThroughput:  currentThroughput,
+		Status:                 dynamodbv1.Table_Status(5),
+		GlobalSecondaryIndexes: gsis,
 	}
 	return ret, nil
 }
 
-func (s *svc) UpdateTableCapacity(ctx context.Context, region string, tableName string, targetRCU int64, targetWCU int64) (dynamodbv1.Status, error) {
-	stat := dynamodbv1.Status(3)
-	return stat, nil
-}
+func (s *svc) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error) {
+	currentThroughput := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  100,
+		WriteCapacityUnits: 200,
+	}
+	gsis := []*dynamodbv1.GlobalSecondaryIndex{
+		{
+			Name: "test-gsi",
+			ProvisionedThroughput: &dynamodbv1.Throughput{
+				ReadCapacityUnits:  10,
+				WriteCapacityUnits: 20,
+			},
+			Status: dynamodbv1.GlobalSecondaryIndex_Status(3),
+		},
+	}
 
-func (s *svc) UpdateGSICapacity(ctx context.Context, region string, tableName string, indexName string, targetRCU int64, targetWCU int64) error {
-	return nil
+	ret := &dynamodbv1.Table{
+		Name:                   tableName,
+		Region:                 region,
+		ProvisionedThroughput:  currentThroughput,
+		Status:                 dynamodbv1.Table_Status(3),
+		GlobalSecondaryIndexes: gsis,
+	}
+	return ret, nil
 }
 
 func (s *svc) Regions() []string {

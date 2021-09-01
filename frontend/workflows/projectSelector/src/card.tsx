@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { CardHeaderSections, ClutchError } from "@clutch-sh/core";
-import { Card as ClutchCard, CardHeader, Error } from "@clutch-sh/core";
+import { Card as ClutchCard, CardContent, CardHeader, Error } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Grid, LinearProgress } from "@material-ui/core";
 
@@ -31,7 +31,7 @@ const Card = ({ avatar, children, error, isLoading, sections, title }: CardProps
           {isLoading && <LinearProgress color="secondary" />}
         </StyledProgressContainer>
       </CardHeader>
-      {error ? <Error subject={error} /> : children}
+      <CardContent padding={0}>{error ? <Error subject={error} /> : children}</CardContent>
     </ClutchCard>
   </Grid>
 );

@@ -19,8 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DDBAPIClient interface {
 	DescribeTable(ctx context.Context, in *DescribeTableRequest, opts ...grpc.CallOption) (*DescribeTableResponse, error)
-	UpdateTableCapacity(ctx context.Context, in *UpdateTableCapacityRequest, opts ...grpc.CallOption) (*UpdateTableCapacityResponse, error)
-	UpdateGSICapacity(ctx context.Context, in *UpdateGSICapacityRequest, opts ...grpc.CallOption) (*UpdateGSICapacityResponse, error)
+	UpdateCapacity(ctx context.Context, in *UpdateCapacityRequest, opts ...grpc.CallOption) (*UpdateCapacityResponse, error)
 }
 
 type dDBAPIClient struct {
@@ -40,18 +39,9 @@ func (c *dDBAPIClient) DescribeTable(ctx context.Context, in *DescribeTableReque
 	return out, nil
 }
 
-func (c *dDBAPIClient) UpdateTableCapacity(ctx context.Context, in *UpdateTableCapacityRequest, opts ...grpc.CallOption) (*UpdateTableCapacityResponse, error) {
-	out := new(UpdateTableCapacityResponse)
-	err := c.cc.Invoke(ctx, "/clutch.aws.dynamodb.v1.DDBAPI/UpdateTableCapacity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *dDBAPIClient) UpdateGSICapacity(ctx context.Context, in *UpdateGSICapacityRequest, opts ...grpc.CallOption) (*UpdateGSICapacityResponse, error) {
-	out := new(UpdateGSICapacityResponse)
-	err := c.cc.Invoke(ctx, "/clutch.aws.dynamodb.v1.DDBAPI/UpdateGSICapacity", in, out, opts...)
+func (c *dDBAPIClient) UpdateCapacity(ctx context.Context, in *UpdateCapacityRequest, opts ...grpc.CallOption) (*UpdateCapacityResponse, error) {
+	out := new(UpdateCapacityResponse)
+	err := c.cc.Invoke(ctx, "/clutch.aws.dynamodb.v1.DDBAPI/UpdateCapacity", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +53,7 @@ func (c *dDBAPIClient) UpdateGSICapacity(ctx context.Context, in *UpdateGSICapac
 // for forward compatibility
 type DDBAPIServer interface {
 	DescribeTable(context.Context, *DescribeTableRequest) (*DescribeTableResponse, error)
-	UpdateTableCapacity(context.Context, *UpdateTableCapacityRequest) (*UpdateTableCapacityResponse, error)
-	UpdateGSICapacity(context.Context, *UpdateGSICapacityRequest) (*UpdateGSICapacityResponse, error)
+	UpdateCapacity(context.Context, *UpdateCapacityRequest) (*UpdateCapacityResponse, error)
 }
 
 // UnimplementedDDBAPIServer should be embedded to have forward compatible implementations.
@@ -74,11 +63,8 @@ type UnimplementedDDBAPIServer struct {
 func (UnimplementedDDBAPIServer) DescribeTable(context.Context, *DescribeTableRequest) (*DescribeTableResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeTable not implemented")
 }
-func (UnimplementedDDBAPIServer) UpdateTableCapacity(context.Context, *UpdateTableCapacityRequest) (*UpdateTableCapacityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTableCapacity not implemented")
-}
-func (UnimplementedDDBAPIServer) UpdateGSICapacity(context.Context, *UpdateGSICapacityRequest) (*UpdateGSICapacityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateGSICapacity not implemented")
+func (UnimplementedDDBAPIServer) UpdateCapacity(context.Context, *UpdateCapacityRequest) (*UpdateCapacityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCapacity not implemented")
 }
 
 // UnsafeDDBAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -110,38 +96,20 @@ func _DDBAPI_DescribeTable_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DDBAPI_UpdateTableCapacity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTableCapacityRequest)
+func _DDBAPI_UpdateCapacity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCapacityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DDBAPIServer).UpdateTableCapacity(ctx, in)
+		return srv.(DDBAPIServer).UpdateCapacity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/clutch.aws.dynamodb.v1.DDBAPI/UpdateTableCapacity",
+		FullMethod: "/clutch.aws.dynamodb.v1.DDBAPI/UpdateCapacity",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DDBAPIServer).UpdateTableCapacity(ctx, req.(*UpdateTableCapacityRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _DDBAPI_UpdateGSICapacity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateGSICapacityRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DDBAPIServer).UpdateGSICapacity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.aws.dynamodb.v1.DDBAPI/UpdateGSICapacity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DDBAPIServer).UpdateGSICapacity(ctx, req.(*UpdateGSICapacityRequest))
+		return srv.(DDBAPIServer).UpdateCapacity(ctx, req.(*UpdateCapacityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -158,12 +126,8 @@ var DDBAPI_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DDBAPI_DescribeTable_Handler,
 		},
 		{
-			MethodName: "UpdateTableCapacity",
-			Handler:    _DDBAPI_UpdateTableCapacity_Handler,
-		},
-		{
-			MethodName: "UpdateGSICapacity",
-			Handler:    _DDBAPI_UpdateGSICapacity_Handler,
+			MethodName: "UpdateCapacity",
+			Handler:    _DDBAPI_UpdateCapacity_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
