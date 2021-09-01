@@ -56,9 +56,9 @@ const TableDetails: React.FC<WizardChild> = () => {
     console.log(capacityUpdates.displayValue())
   };
 
-  const handleGsiCapacityChange = (key: string, value: string, name: string) => {
+  const handleGsiCapacityChange = (key: string, value: string) => {
     console.log(key)
-    console.log(name)
+    console.log(key[0])
     // const gsiList = capacityUpdates.displayValue().gsi_updates? {...capacityUpdates.displayValue().gsi_updates} : {};
     // if (event.target.name in gsiList) {
     //   gsiList[event.target.name] = {...gsiList[event.target.name], [event.target.name]: event.target.value}
@@ -103,7 +103,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     key: "read",
                     validation: number()
                     .integer()
-                    .min(ref("read") as Reference<number>),
+                    .min(table.provisionedThroughput.readCapacityUnits),
                   },
                 },
                 {
@@ -114,12 +114,12 @@ const TableDetails: React.FC<WizardChild> = () => {
                     key: "write",
                     validation: number()
                       .integer()
-                      .moreThan(0),
+                      .min(table.provisionedThroughput.writeCapacityUnits),
                   },
                 }]}>
               </MetadataTable>
           </TableRow>
-          {table.globalSecondaryIndexes.map((gsi, index: number) => (
+          {table.globalSecondaryIndexes.map(gsi => (
           <TableRow key={gsi.name}>
             {gsi.name}
             {"Index"}
@@ -132,10 +132,10 @@ const TableDetails: React.FC<WizardChild> = () => {
                   value: gsi.provisionedThroughput.readCapacityUnits,
                   input: {
                     type: "number",
-                    key: [gsi.name, "read"],
+                    key: "r" + gsi.name,
                     validation: number()
                     .integer()
-                    .min(ref("read") as Reference<number>),
+                    .min(gsi.provisionedThroughput.readCapacityUnits),
                   },
                 },
                 {
@@ -143,10 +143,10 @@ const TableDetails: React.FC<WizardChild> = () => {
                   value: gsi.provisionedThroughput.writeCapacityUnits,
                   input: {
                     type: "number",
-                    key: [gsi.name, "write"],
+                    key: "w" + gsi.name,
                     validation: number()
                       .integer()
-                      .min(ref("write") as Reference<number>),
+                      .min(gsi.provisionedThroughput.writeCapacityUnits),
                   },
                 }]}>
               </MetadataTable>
