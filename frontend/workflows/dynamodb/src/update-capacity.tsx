@@ -50,21 +50,22 @@ const TableDetails: React.FC<WizardChild> = () => {
 
   const handleTableCapacityChange = (key: string, value: string) => {
     const newTableCapacity = {...capacityUpdates.displayValue().table_throughput};
+    console.log(key)
     newTableCapacity[key] = value;
     capacityUpdates.updateData("table_throughput", newTableCapacity)
     console.log(capacityUpdates.displayValue())
   };
 
-  const handleGsiCapacityChange = (event) => {
-    console.log(event.target.name + ": " + event.target.value  + " | " + event.target.name)
-    const gsiList = capacityUpdates.displayValue().gsi_updates? {...capacityUpdates.displayValue().gsi_updates} : {};
-    if (event.target.name in gsiList) {
-      gsiList[event.target.name] = {...gsiList[event.target.name], [event.target.name]: event.target.value}
-    } else {
-      gsiList[event.target.name] = {[event.target.name]: event.target.value}
-    }
-    capacityUpdates.updateData("gsi_updates", gsiList)
-    console.log(capacityUpdates.displayValue())
+  const handleGsiCapacityChange = (key: string, value: string, name: string) => {
+    console.log(key)
+    console.log(name)
+    // const gsiList = capacityUpdates.displayValue().gsi_updates? {...capacityUpdates.displayValue().gsi_updates} : {};
+    // if (event.target.name in gsiList) {
+    //   gsiList[event.target.name] = {...gsiList[event.target.name], [event.target.name]: event.target.value}
+    // } else {
+    //   gsiList[event.target.name] = {[event.target.name]: event.target.value}
+    // }
+    // capacityUpdates.updateData("gsi_updates", gsiList)
   };
 
   // FOR LATER WORK
@@ -95,18 +96,18 @@ const TableDetails: React.FC<WizardChild> = () => {
               onUpdate={handleTableCapacityChange}
               data={[
                 {
-                  name: "Read",
+                  name: "read",
                   value: table.provisionedThroughput.readCapacityUnits,
                   input: {
                     type: "number",
                     key: "read",
                     validation: number()
                     .integer()
-                    .min(ref("Read") as Reference<number>),
+                    .min(ref("read") as Reference<number>),
                   },
                 },
                 {
-                  name: "Write",
+                  name: "write",
                   value: table.provisionedThroughput.writeCapacityUnits,
                   input: {
                     type: "number",
@@ -131,7 +132,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                   value: gsi.provisionedThroughput.readCapacityUnits,
                   input: {
                     type: "number",
-                    key: "read",
+                    key: [gsi.name, "read"],
                     validation: number()
                     .integer()
                     .min(ref("read") as Reference<number>),
@@ -142,7 +143,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                   value: gsi.provisionedThroughput.writeCapacityUnits,
                   input: {
                     type: "number",
-                    key: "write",
+                    key: [gsi.name, "write"],
                     validation: number()
                       .integer()
                       .min(ref("write") as Reference<number>),
@@ -211,13 +212,6 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({resolverType}) => {
         }
         if (capacityUpdates.gsi_updates) {
           const gsi_list = []
-          for (const [key, value] of Object.entries(capacityUpdates.gsi_updates)) {
-            gsi_list.push({
-              name: key,
-              index_throughput: {
-              }
-            })
-          }
           changeArgs = {...changeArgs, gsi_updates: gsi_list}
         }
         return client
