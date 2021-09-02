@@ -104,8 +104,9 @@ const TableDetails: React.FC<WizardChild> = () => {
                     type: "number",
                     key: "read",
                     validation: number()
-                      .integer("must be a number")
-                      .moreThan(table.provisionedThroughput.readCapacityUnits-1),
+                      .integer()
+                      .transform(value => (isNaN(value) ? 0 : value))
+                      .moreThan((table.provisionedThroughput.readCapacityUnits-1)),
                   },
                 },
                 {
@@ -116,6 +117,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     key: "write",
                     validation: number()
                       .integer()
+                      .transform(value => (isNaN(value) ? 0 : value))
                       .min(table.provisionedThroughput.writeCapacityUnits),
                   },
                 },
@@ -138,6 +140,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                       key: `read_capacity_units,${gsi.name}`,
                       validation: number()
                         .integer()
+                        .transform(value => (isNaN(value) ? 0 : value))
                         .min(gsi.provisionedThroughput.readCapacityUnits),
                     },
                   },
@@ -149,6 +152,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                       key: `write_capacity_units,${gsi.name}`,
                       validation: number()
                         .integer()
+                        .transform(value => (isNaN(value) ? 0 : value))
                         .min(gsi.provisionedThroughput.writeCapacityUnits),
                     },
                   },
@@ -209,7 +213,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
         const tableArgs = {
           table_name: resourceData.name,
           region: resourceData.region,
-          // ignore_maximums: capacityUpdates?.ignore_maximums? capacityUpdates.ignore_maximums : false,
+          ignore_maximums: capacityUpdates.hasOwnProperty("ignore_maximums")? capacityUpdates.ignore_maximums : false,
         };
 
         let changeArgs: {};
