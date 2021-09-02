@@ -18,7 +18,7 @@ const register = (): WorkflowConfiguration => {
     },
     path: "dynamodb",
     group: "AWS",
-    displayName: "Dynamodb",
+    displayName: "DynamoDB",
     routes: {
       updateCapacity: {
         path: "/capacity",
