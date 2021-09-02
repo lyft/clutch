@@ -105,8 +105,8 @@ const TableDetails: React.FC<WizardChild> = () => {
                     key: "read",
                     validation: number()
                       .integer()
-                      .transform(value => (isNaN(value) ? 0 : value))
-                      .moreThan(Number(table.provisionedThroughput.readCapacityUnits)-1),
+                      .transform(value => (Number.isNaN(value) ? 0 : value))
+                      .min(Number(table.provisionedThroughput.readCapacityUnits)),
                   },
                 },
                 {
@@ -117,8 +117,8 @@ const TableDetails: React.FC<WizardChild> = () => {
                     key: "write",
                     validation: number()
                       .integer()
-                      .transform(value => (isNaN(value) ? 0 : value))
-                      .moreThan(Number(table.provisionedThroughput.writeCapacityUnits)-1),
+                      .transform(value => (Number.isNaN(value) ? 0 : value))
+                      .min(Number(table.provisionedThroughput.writeCapacityUnits)),
                   },
                 },
               ]}
@@ -140,8 +140,8 @@ const TableDetails: React.FC<WizardChild> = () => {
                       key: `read_capacity_units,${gsi.name}`,
                       validation: number()
                         .integer()
-                        .transform(value => (isNaN(value) ? 0 : value))
-                        .moreThan(Number(gsi.provisionedThroughput.readCapacityUnits)-1),
+                        .transform(value => (Number.isNaN(value) ? 0 : value))
+                        .min(Number(gsi.provisionedThroughput.readCapacityUnits)),
                     },
                   },
                   {
@@ -152,8 +152,8 @@ const TableDetails: React.FC<WizardChild> = () => {
                       key: `write_capacity_units,${gsi.name}`,
                       validation: number()
                         .integer()
-                        .transform(value => (isNaN(value) ? 0 : value))
-                        .moreThan(Number(gsi.provisionedThroughput.writeCapacityUnits)-1),
+                        .transform(value => (Number.isNaN(value) ? 0 : value))
+                        .min(Number(gsi.provisionedThroughput.writeCapacityUnits)),
                     },
                   },
                 ]}
