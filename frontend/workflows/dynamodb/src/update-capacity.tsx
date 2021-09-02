@@ -106,7 +106,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     validation: number()
                       .integer()
                       .transform(value => (isNaN(value) ? 0 : value))
-                      .moreThan((table.provisionedThroughput.readCapacityUnits-1)),
+                      .moreThan(Number(table.provisionedThroughput.readCapacityUnits)-1),
                   },
                 },
                 {
@@ -118,7 +118,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     validation: number()
                       .integer()
                       .transform(value => (isNaN(value) ? 0 : value))
-                      .min(table.provisionedThroughput.writeCapacityUnits),
+                      .moreThan(Number(table.provisionedThroughput.writeCapacityUnits)-1),
                   },
                 },
               ]}
@@ -141,7 +141,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                       validation: number()
                         .integer()
                         .transform(value => (isNaN(value) ? 0 : value))
-                        .min(gsi.provisionedThroughput.readCapacityUnits),
+                        .moreThan(Number(gsi.provisionedThroughput.readCapacityUnits)-1),
                     },
                   },
                   {
@@ -153,7 +153,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                       validation: number()
                         .integer()
                         .transform(value => (isNaN(value) ? 0 : value))
-                        .min(gsi.provisionedThroughput.writeCapacityUnits),
+                        .moreThan(Number(gsi.provisionedThroughput.writeCapacityUnits)-1),
                     },
                   },
                 ]}
