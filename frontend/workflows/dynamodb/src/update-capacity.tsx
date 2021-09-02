@@ -58,9 +58,7 @@ const TableDetails: React.FC<WizardChild> = () => {
     const capacityType = keys[0];
     const gsiName = keys[1];
 
-    const gsiList = capacityUpdates.displayValue().gsi_updates
-      ? [...capacityUpdates.displayValue().gsi_updates]
-      : [];
+    const gsiList = [...(capacityUpdates.displayValue()?.gsi_updates || [])];
     const idx = gsiList.findIndex(
       (gsi: { name: string; indexThroughput: {} }) => gsi.name === gsiName
     );
