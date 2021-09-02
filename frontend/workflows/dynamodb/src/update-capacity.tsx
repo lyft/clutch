@@ -16,8 +16,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import styled from "@emotion/styled";
 import _ from "lodash";
-import { number, ref } from "yup";
-import type Reference from "yup/lib/Reference";
+import { number } from "yup";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
@@ -53,7 +52,7 @@ const TableDetails: React.FC<WizardChild> = () => {
   const handleGsiCapacityChange = (key: string, value: string) => {
     // big hack to retrieve the capacity type (read or write?) and
     // the GSI name from a single event attribute [key]
-    // where key is formatted like "read,gsi-name" 
+    // where key is formatted like "read,gsi-name"
     // feature request to address this: https://github.com/lyft/clutch/issues/1739
     const keys = key.split(",");
     const capacityType = keys[0];
@@ -213,7 +212,8 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
         const tableArgs = {
           table_name: resourceData.name,
           region: resourceData.region,
-          ignore_maximums: capacityUpdates.hasOwnProperty("ignore_maximums")? capacityUpdates.ignore_maximums : false,
+          ignore_maximums:
+            "ignore_maximums" in capacityUpdates ? capacityUpdates.ignore_maximums : false,
         };
 
         let changeArgs: {};
