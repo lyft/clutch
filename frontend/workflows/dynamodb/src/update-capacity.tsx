@@ -3,7 +3,6 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   Button,
   ButtonGroup,
-  Checkbox,
   CheckboxPanel,
   client,
   MetadataTable,
@@ -16,7 +15,6 @@ import styled from "@emotion/styled";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-// import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
 import _ from "lodash";
 import { number } from "yup";
 
