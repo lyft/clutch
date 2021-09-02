@@ -41,8 +41,9 @@ const StyledCardHeaderContainer = styled.div({
 const StyledCardHeader = styled(Grid)({
   padding: "16px",
   minHeight: "72px",
-  margin: "0px",
-  width: "100%",
+  ".MuiGrid-item": {
+    padding: "0px 8px 0px 8px",
+  },
 });
 
 // TODO: use material ui avatar component and implement figma design
@@ -77,7 +78,7 @@ interface CardHeaderProps {
 const CardHeader = ({ avatar, children, title, summary = [] }: CardHeaderProps) => {
   return (
     <StyledCardHeaderContainer>
-      <StyledCardHeader container wrap="nowrap" alignItems="center" spacing={2}>
+      <StyledCardHeader container wrap="nowrap" alignItems="center">
         <StyledCardHeaderAvatar>
           <Typography variant="h2">{avatar}</Typography>
         </StyledCardHeaderAvatar>
