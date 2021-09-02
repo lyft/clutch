@@ -29,9 +29,31 @@ func TestModule(t *testing.T) {
 	assert.True(t, r.JSONRegistered())
 }
 
-var testUpdateTableCapacityResponse = &dynamodbv1.UpdateTableCapacityResponse{
-	TableName:   "",
-	TableStatus: 3,
+var testUpdateCapacityResponse = &dynamodbv1.UpdateCapacityResponse{
+	Table: testTable,
+}
+
+var pt = &dynamodbv1.Throughput{
+	ReadCapacityUnits:  100,
+	WriteCapacityUnits: 200,
+}
+var g = []*dynamodbv1.GlobalSecondaryIndex{
+	{
+		Name: "test-gsi",
+		ProvisionedThroughput: &dynamodbv1.Throughput{
+			ReadCapacityUnits:  10,
+			WriteCapacityUnits: 20,
+		},
+		Status: dynamodbv1.GlobalSecondaryIndex_Status(3),
+	},
+}
+
+var testTable = &dynamodbv1.Table{
+	Name:                   "",
+	Region:                 "",
+	ProvisionedThroughput:  pt,
+	GlobalSecondaryIndexes: g,
+	Status:                 dynamodbv1.Table_Status(3),
 }
 
 func TestDDBAPIDescribeTable(t *testing.T) {
@@ -42,11 +64,11 @@ func TestDDBAPIDescribeTable(t *testing.T) {
 	assert.NotNil(t, resp)
 }
 
-func TestDDBAPIUpdateTableCapacity(t *testing.T) {
+func TestDDBAPIUpdateCapacity(t *testing.T) {
 	c := awsmock.New()
 	api := newDDBAPI(c)
-	resp, err := api.UpdateTableCapacity(context.Background(), &dynamodbv1.UpdateTableCapacityRequest{})
+	resp, err := api.UpdateCapacity(context.Background(), &dynamodbv1.UpdateCapacityRequest{})
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
-	assert.Equal(t, testUpdateTableCapacityResponse, resp)
+	assert.Equal(t, testUpdateCapacityResponse, resp)
 }

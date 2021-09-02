@@ -32,17 +32,21 @@ var testDynamodbTable = &types.TableDescription{
 	},
 	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{},
 	TableStatus:            "ACTIVE",
+	BillingModeSummary: &types.BillingModeSummary{
+		BillingMode: "PROVISIONED",
+	},
 }
 
 var testTableOutput = &dynamodbv1.Table{
 	Name:   "test-table",
 	Region: "us-east-1",
-	ProvisionedThroughput: &dynamodbv1.ProvisionedThroughput{
+	ProvisionedThroughput: &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
 	},
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
-	Status:                 dynamodbv1.Status(5),
+	Status:                 dynamodbv1.Table_Status(5),
+	BillingMode:            dynamodbv1.Table_BillingMode(2),
 }
 
 var testDynamodbTableWithGSI = &types.TableDescription{
@@ -58,28 +62,78 @@ var testDynamodbTableWithGSI = &types.TableDescription{
 				ReadCapacityUnits:  aws.Int64(10),
 				WriteCapacityUnits: aws.Int64(20),
 			},
+			IndexStatus: "ACTIVE",
 		},
 	},
 	TableStatus: "ACTIVE",
+	BillingModeSummary: &types.BillingModeSummary{
+		BillingMode: "PROVISIONED",
+	},
 }
 
 var testTableWithGSIOutput = &dynamodbv1.Table{
 	Name:   "test-gsi-table",
 	Region: "us-east-1",
-	ProvisionedThroughput: &dynamodbv1.ProvisionedThroughput{
+	ProvisionedThroughput: &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
 	},
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{
 		{
 			Name: "test-gsi",
-			ProvisionedThroughput: &dynamodbv1.ProvisionedThroughput{
+			ProvisionedThroughput: &dynamodbv1.Throughput{
 				ReadCapacityUnits:  10,
 				WriteCapacityUnits: 20,
 			},
+			Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
 		},
 	},
-	Status: dynamodbv1.Status(5),
+	Status:      dynamodbv1.Table_Status(5),
+	BillingMode: dynamodbv1.Table_BillingMode(2),
+}
+
+var testOnDemandTable = &types.TableDescription{
+	TableName: aws.String("test-ondemand-table"),
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+		ReadCapacityUnits:  aws.Int64(0),
+		WriteCapacityUnits: aws.Int64(0),
+	},
+	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{
+		{IndexName: aws.String("test-gsi"),
+			KeySchema: []types.KeySchemaElement{},
+			ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+				ReadCapacityUnits:  aws.Int64(0),
+				WriteCapacityUnits: aws.Int64(0),
+			},
+			IndexStatus: "ACTIVE",
+		},
+	},
+	TableStatus: "ACTIVE",
+	BillingModeSummary: &types.BillingModeSummary{
+		BillingMode: "PAY_PER_REQUEST",
+	},
+}
+
+var testUpdateResponse = &types.TableDescription{
+	TableName: aws.String("test-gsi-table"),
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+		ReadCapacityUnits:  aws.Int64(100),
+		WriteCapacityUnits: aws.Int64(200),
+	},
+	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{
+		{IndexName: aws.String("test-gsi"),
+			KeySchema: []types.KeySchemaElement{},
+			ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+				ReadCapacityUnits:  aws.Int64(10),
+				WriteCapacityUnits: aws.Int64(20),
+			},
+			IndexStatus: "UPDATING",
+		},
+	},
+	TableStatus: "UPDATING",
+	BillingModeSummary: &types.BillingModeSummary{
+		BillingMode: "PROVISIONED",
+	},
 }
 
 func TestDescribeTableValid(t *testing.T) {
@@ -160,7 +214,21 @@ func TestGetScalingLimitsCustom(t *testing.T) {
 	assert.False(t, ds.EnableOverride)
 }
 
-func TestUpdateTableSuccess(t *testing.T) {
+func TestIncreaseTableCapacityErrors(t *testing.T) {
+	tests := []struct {
+		name      string
+		targetRCU int64
+		targetWCU int64
+		want      string
+	}{
+		{"target table rcu above max", 100000, 250, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds maximum allowed limits [40000]"},
+		{"target table wcu above max", 100, 100000, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds maximum allowed limits [40000]"},
+		{"target table rcu lower than current", 1, 1500, "rpc error: code = FailedPrecondition desc = Target read capacity [1] is lower than current capacity [100]"},
+		{"target table wcu lower than current", 1500, 1, "rpc error: code = FailedPrecondition desc = Target write capacity [1] is lower than current capacity [200]"},
+		{"table rcu change scale too high", 400, 200, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds the scale limit of [2.0]x current capacity"},
+		{"table wcu change scale too high", 100, 600, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds the scale limit of [2.0]x current capacity"},
+	}
+
 	m := &mockDynamodb{
 		table: testDynamodbTable,
 	}
@@ -181,28 +249,184 @@ func TestUpdateTableSuccess(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
-	got, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", 101, 202)
+	for _, tt := range tests {
+		tt := tt // capture range variable
+		t.Run(tt.name, func(t *testing.T) {
+			targetTableCapacity := &dynamodbv1.Throughput{
+				ReadCapacityUnits:  tt.targetRCU,
+				WriteCapacityUnits: tt.targetWCU,
+			}
+
+			gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+
+			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
+			if err.Error() != tt.want {
+				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
+			}
+			assert.Nil(t, result)
+		})
+	}
+}
+
+func TestUpdateGSICapacityErrors(t *testing.T) {
+	tests := []struct {
+		name      string
+		targetRCU int64
+		targetWCU int64
+		want      string
+	}{
+		{"target gsi rcu above max", 100000, 25, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds maximum allowed limits [40000]"},
+		{"target gsi wcu above max", 25, 100000, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds maximum allowed limits [40000]"},
+		{"target gsi rcu lower than current", 1, 25, "rpc error: code = FailedPrecondition desc = Target read capacity [1] is lower than current capacity [10]"},
+		{"target gsi wcu lower than current", 25, 1, "rpc error: code = FailedPrecondition desc = Target write capacity [1] is lower than current capacity [20]"},
+		{"gsi rcu change scale too high", 400, 25, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds the scale limit of [2.0]x current capacity"},
+		{"gsi wcu change scale too high", 25, 600, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds the scale limit of [2.0]x current capacity"},
+	}
+
+	m := &mockDynamodb{
+		table: testDynamodbTableWithGSI,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	targetTableCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  101,
+		WriteCapacityUnits: 202,
+	}
+
+	for _, tt := range tests {
+		tt := tt // capture range variable
+		t.Run(tt.name, func(t *testing.T) {
+			targetIndexCapacity := &dynamodbv1.Throughput{
+				ReadCapacityUnits:  tt.targetRCU,
+				WriteCapacityUnits: tt.targetWCU,
+			}
+
+			gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+			update := dynamodbv1.IndexUpdateAction{
+				Name:            "test-gsi",
+				IndexThroughput: targetIndexCapacity,
+			}
+			gsiUpdates = append(gsiUpdates, &update)
+
+			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
+			if err.Error() != tt.want {
+				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
+			}
+			assert.Nil(t, result)
+		})
+	}
+}
+
+func TestUpdateCapacitySuccess(t *testing.T) {
+	m := &mockDynamodb{
+		table:  testDynamodbTableWithGSI,
+		update: testUpdateResponse,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	targetTableCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  101,
+		WriteCapacityUnits: 202,
+	}
+
+	targetIndexCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  11,
+		WriteCapacityUnits: 21,
+	}
+
+	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+	update := dynamodbv1.IndexUpdateAction{
+		Name:            "test-gsi",
+		IndexThroughput: targetIndexCapacity,
+	}
+	gsiUpdates = append(gsiUpdates, &update)
+
+	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, false)
 	assert.NotNil(t, got)
 	assert.Nil(t, err)
+	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
+	assert.Equal(t, got.GlobalSecondaryIndexes[0].Status, dynamodbv1.GlobalSecondaryIndex_Status(3))
 }
 
-func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
-	tests := []struct {
-		name     string
-		inputRCU int64
-		inputWCU int64
-		want     string
-	}{
-		{"rcu above max", 100000, 250, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds maximum allowed limits [40000]"},
-		{"wcu above max", 100, 100000, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds maximum allowed limits [40000]"},
-		{"rcu lower than current", 1, 1500, "rpc error: code = FailedPrecondition desc = Target read capacity [1] is lower than current capacity [100]"},
-		{"wcu lower than current", 1500, 1, "rpc error: code = FailedPrecondition desc = Target write capacity [1] is lower than current capacity [200]"},
-		{"rcu change scale too high", 400, 200, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds the scale limit of [2.0]x current capacity"},
-		{"wcu change scale too high", 100, 600, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds the scale limit of [2.0]x current capacity"},
+func TestIgnoreMaximums(t *testing.T) {
+	m := &mockDynamodb{
+		table:  testDynamodbTableWithGSI,
+		update: testUpdateResponse,
 	}
 
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        true,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	targetTableCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  100000,
+		WriteCapacityUnits: 100000,
+	}
+
+	targetIndexCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  100000,
+		WriteCapacityUnits: 100000,
+	}
+
+	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+	update := dynamodbv1.IndexUpdateAction{
+		Name:            "test-gsi",
+		IndexThroughput: targetIndexCapacity,
+	}
+	gsiUpdates = append(gsiUpdates, &update)
+
+	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, true)
+	assert.NotNil(t, got)
+	assert.Nil(t, err)
+	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
+	assert.Equal(t, got.GlobalSecondaryIndexes[0].Status, dynamodbv1.GlobalSecondaryIndex_Status(3))
+}
+
+func TestOnDemandCheck(t *testing.T) {
 	m := &mockDynamodb{
-		table: testDynamodbTable,
+		table: testOnDemandTable,
 	}
 
 	ds := getScalingLimits(cfg)
@@ -221,59 +445,16 @@ func TestUpdateTableCapacityWithDefaultLimits(t *testing.T) {
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
 	}
 
-	for _, tt := range tests {
-		tt := tt // capture range variable
-		t.Run(tt.name, func(t *testing.T) {
-			status, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
-			if err.Error() != tt.want {
-				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
-			}
-			assert.Equal(t, dynamodbv1.Status(0), status)
-		})
-	}
-}
-
-func TestUpdateTableCapacityWithCustomLimits(t *testing.T) {
-	tests := []struct {
-		name     string
-		inputRCU int64
-		inputWCU int64
-		want     string
-	}{
-		{"rcu above max", 2000, 250, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds maximum allowed limits [1000]"},
-		{"wcu above max", 100, 3000, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds maximum allowed limits [2000]"},
-		{"rcu lower than current", 1, 1500, "rpc error: code = FailedPrecondition desc = Target read capacity [1] is lower than current capacity [100]"},
-		{"wcu lower than current", 1500, 1, "rpc error: code = FailedPrecondition desc = Target write capacity [1] is lower than current capacity [200]"},
-		{"rcu change scale too high", 900, 200, "rpc error: code = FailedPrecondition desc = Target read capacity exceeds the scale limit of [4.0]x current capacity"},
-		{"wcu change scale too high", 100, 1900, "rpc error: code = FailedPrecondition desc = Target write capacity exceeds the scale limit of [4.0]x current capacity"},
+	targetTableCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  10,
+		WriteCapacityUnits: 10,
 	}
 
-	m := &mockDynamodb{
-		table: testDynamodbTable,
-	}
-	d := &awsv1.DynamodbConfig{
-		ScalingLimits: &awsv1.ScalingLimits{
-			MaxReadCapacityUnits:  1000,
-			MaxWriteCapacityUnits: 2000,
-			MaxScaleFactor:        4.0,
-			EnableOverride:        false,
-		},
-	}
-	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
-	}
+	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
 
-	for _, tt := range tests {
-		tt := tt // capture range variable
-		t.Run(tt.name, func(t *testing.T) {
-			status, err := c.UpdateTableCapacity(context.Background(), "us-east-1", "test-table", tt.inputRCU, tt.inputWCU)
-			if err.Error() != tt.want {
-				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
-			}
-			assert.Equal(t, dynamodbv1.Status(0), status)
-		})
-	}
+	result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-ondemand-table", targetTableCapacity, gsiUpdates, false)
+	assert.Nil(t, result)
+	assert.Equal(t, "rpc error: code = FailedPrecondition desc = Table billing mode is not set to PROVISIONED, cannot scale capacities.", err.Error())
 }
 
 type mockDynamodb struct {
@@ -282,8 +463,8 @@ type mockDynamodb struct {
 	tableErr error
 	table    *types.TableDescription
 
-	updateErr    error
-	updateStatus types.TableStatus
+	updateErr error
+	update    *types.TableDescription
 }
 
 func (m *mockDynamodb) DescribeTable(ctx context.Context, params *dynamodb.DescribeTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeTableOutput, error) {
@@ -304,9 +485,7 @@ func (m *mockDynamodb) UpdateTable(ctx context.Context, params *dynamodb.UpdateT
 	}
 
 	ret := &dynamodb.UpdateTableOutput{
-		TableDescription: &types.TableDescription{
-			TableStatus: m.updateStatus,
-		},
+		TableDescription: m.update,
 	}
 
 	return ret, nil

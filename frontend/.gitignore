@@ -33,4 +33,5 @@ storybook-static
 .env.test.local
 .env.production.local
 
+# clutch generated files
 **/workflows.jsx
