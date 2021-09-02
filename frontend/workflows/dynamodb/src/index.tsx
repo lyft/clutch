@@ -14,7 +14,7 @@ const register = (): WorkflowConfiguration => {
   return {
     developer: {
       name: "Lyft",
-      contactUrl: "mailto:hello@clutch.sh",
+      contactUrl: "mailto:clutch@lyft.com",
     },
     path: "dynamodb",
     group: "AWS",
