@@ -16,7 +16,7 @@ const StyledGroup = styled.div({
   display: "block",
   "& > *": {
     display: "inline-block",
-  }
+  },
 });
 
 const StyledGroupTitle = styled.span({
@@ -33,7 +33,7 @@ const StyledCount = styled.span({
   padding: "1px 4px",
   marginRight: "4px",
   marginBottom: "10px",
-  marginTop: "2px"
+  marginTop: "2px",
 });
 
 const StyledMenuItem = styled.div({
@@ -139,7 +139,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
         <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
           {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
         </StyledHeaderColumn>
-        <StyledHeaderColumn style={{flexGrow: 1}}>
+        <StyledHeaderColumn style={{ flexGrow: 1 }}>
           <StyledGroup>
             <StyledGroupTitle>{title}</StyledGroupTitle>
             <StyledCount>
