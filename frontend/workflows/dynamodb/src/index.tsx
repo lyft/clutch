@@ -4,8 +4,8 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import UpdateCapacity from "./update-capacity";
 
 interface ResolverConfigProps {
-    resolverType: string;
-  }  
+  resolverType: string;
+}
 
 export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
