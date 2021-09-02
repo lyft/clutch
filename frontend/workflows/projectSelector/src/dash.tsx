@@ -58,13 +58,6 @@ const Dash = ({ children }) => {
                   },
                   {
                     title: (
-                      <Typography variant="subtitle2" color="#3548D4">
-                        0
-                      </Typography>
-                    ),
-                  },
-                  {
-                    title: (
                       <Typography variant="subtitle2" color="#DB3615">
                         0
                       </Typography>
