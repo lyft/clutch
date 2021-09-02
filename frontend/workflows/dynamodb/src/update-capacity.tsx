@@ -4,7 +4,6 @@ import {
   Button,
   ButtonGroup,
   client,
-  HorizontalRule,
   MetadataTable,
   Resolver,
   Table,
