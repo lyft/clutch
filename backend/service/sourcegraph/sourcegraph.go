@@ -23,16 +23,31 @@ type Service interface {
 	CompareCommits(context.Context, *sourcegraphv1.CompareCommitsRequest) (*sourcegraphv1.CompareCommitsResponse, error)
 }
 
-type QraphQLQuery struct {
-	Query string `json:"query"`
-}
-
 type client struct {
 	config *sourcegraphv1cfg.Config
 	log    *zap.Logger
 	scope  tally.Scope
 
 	gqlClient *graphql.Client
+}
+
+var compareCommitsQuery struct {
+	Repository struct {
+		Comparison struct {
+			Commits struct {
+				Nodes []struct {
+					Message graphql.String
+					Oid     graphql.String
+					Author  struct {
+						Person struct {
+							Email       graphql.String
+							DisplayName graphql.String
+						}
+					}
+				}
+			}
+		} `graphql:"comparison(base: $base, head: $head)"`
+	} `graphql:"repository(name: $name)"`
 }
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, error) {
@@ -67,25 +82,6 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, err
 }
 
 func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareCommitsRequest) (*sourcegraphv1.CompareCommitsResponse, error) {
-	var compareCommitsQuery struct {
-		Repository struct {
-			Comparison struct {
-				Commits struct {
-					Nodes []struct {
-						Message graphql.String
-						Oid     graphql.String
-						Author  struct {
-							Person struct {
-								Email       graphql.String
-								DisplayName graphql.String
-							}
-						}
-					}
-				}
-			} `graphql:"comparison(base: $base, head: $head)"`
-		} `graphql:"repository(name: $name)"`
-	}
-
 	variables := map[string]interface{}{
 		"name": graphql.String(req.Repository),
 		"base": graphql.String(req.Base),
@@ -96,12 +92,6 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 	if err != nil {
 		c.log.Error("unsuccessful response from sourcegraph", zap.Error(err))
 		return nil, errors.New("unsuccessful response from sourcegraph")
-	}
-
-	if len(compareCommitsQuery.Repository.Comparison.Commits.Nodes) == 0 {
-		return &sourcegraphv1.CompareCommitsResponse{
-			Commits: []*sourcegraphv1.Commit{},
-		}, nil
 	}
 
 	commits := make([]*sourcegraphv1.Commit, len(compareCommitsQuery.Repository.Comparison.Commits.Nodes))
