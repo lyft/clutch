@@ -160,7 +160,7 @@ const TableDetails: React.FC<WizardChild> = () => {
         </Table>
       </Container>
 
-      {/* TO DO: conditionally render the override checkbox depending on workflow config prop */}
+      {/* TODO: conditionally render the override checkbox depending on workflow config prop */}
       <CheckboxPanel
         header="To override the safety limits for scaling, check the box below."
         onChange={state => capacityUpdates.updateData("ignore_maximums", state)}
