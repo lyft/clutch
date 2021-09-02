@@ -4,7 +4,7 @@
   "private": true,
   "description": "Manage Dynamodb resources",
   "license": "Apache-2.0",
-  "author": "datastore-team@lyft.com",
+  "author": "clutch@lyft.com",
   "main": "dist/index.js",
   "files": [
     "dist" 
