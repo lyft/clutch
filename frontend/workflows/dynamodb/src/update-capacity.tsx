@@ -16,8 +16,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
 import _ from "lodash";
-import { number, ref } from "yup";
-import type Reference from "yup/lib/Reference";
+import { number } from "yup";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
@@ -48,10 +47,8 @@ const TableDetails: React.FC<WizardChild> = () => {
 
   const handleTableCapacityChange = (key: string, value: string) => {
     const newTableCapacity = {...capacityUpdates.displayValue().table_throughput};
-    console.log(key)
     newTableCapacity[key] = value;
     capacityUpdates.updateData("table_throughput", newTableCapacity)
-    console.log(capacityUpdates.displayValue())
   };
 
   const handleGsiCapacityChange = (key: string, value: string) => {
@@ -63,12 +60,11 @@ const TableDetails: React.FC<WizardChild> = () => {
 
     const gsiList = capacityUpdates.displayValue().gsi_updates? [...capacityUpdates.displayValue().gsi_updates] : [];
     const idx = gsiList.findIndex((gsi: {name: string, index_throughput: {}}) => gsi.name === gsi_name)
-    if ( idx > -1) { // gsi has been edited before
+    if ( idx > -1) { // gsi already in the edits list
       const gsi = gsiList[idx]
       gsi["index_throughput"] = {...gsi["index_throughput"], [capacity_type] : value}
       capacityUpdates.updateData("gsi_updates", gsiList)
     } else { // copy over current capacities 
-      console.log("UPDATING A KNOWN GSI")
       const gsi = table.globalSecondaryIndexes.find(gsi => gsi.name === gsi_name)
       const newGsi = { 
         "name": gsi_name, 
@@ -78,13 +74,9 @@ const TableDetails: React.FC<WizardChild> = () => {
         }
       }
       newGsi.index_throughput = {...newGsi.index_throughput, [capacity_type]: value}
-      console.log(newGsi)
       gsiList.push(newGsi)
-      console.log("GSI LLIST")
-      console.log(gsiList)
       capacityUpdates.updateData("gsi_updates", gsiList)
     }
-    console.log(capacityUpdates.displayValue().gsi_updates)
   };
 
   // FOR LATER WORK
@@ -92,9 +84,6 @@ const TableDetails: React.FC<WizardChild> = () => {
   //   setOverrideToggle(e.target.checked);
   //   resourceData.updateData(e.target.name, e.target.checked);
   // };
-
-  
-
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
@@ -185,7 +174,6 @@ const TableDetails: React.FC<WizardChild> = () => {
 
 const Confirm: React.FC<WizardChild> = () => {
   const updateCapacityOutput = useDataLayout("updateCapacityOutput");
-  console.log(updateCapacityOutput.displayValue())
   let scalingResults = updateCapacityOutput.displayValue()?.data?.table
   let statusList = [];
   if (!_.isEmpty(scalingResults)) {
@@ -222,7 +210,6 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({resolverType}) => {
 
         let changeArgs: {}
         if (capacityUpdates.table_throughput) {
-          console.log("TABLE CHANGING!")
           changeArgs = {...changeArgs, table_throughput: {
             read_capacity_units: capacityUpdates.table_throughput["read"]? capacityUpdates.table_throughput["read"] : resourceData.provisionedThroughput.readCapacityUnits,
             write_capacity_units: capacityUpdates.table_throughput["write"]? capacityUpdates.table_throughput["write"] : resourceData.provisionedThroughput.writeCapacityUnits,
