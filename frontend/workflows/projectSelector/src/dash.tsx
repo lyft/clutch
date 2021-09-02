@@ -54,7 +54,7 @@ const Dash = ({ children }) => {
                 sections={[
                   {
                     title: <Typography variant="subtitle2">5m ago</Typography>,
-                    subheader: <Typography variant="body3">Last deploy</Typography>,
+                    subheader: "Last deploy",
                   },
                   {
                     title: (
@@ -62,7 +62,6 @@ const Dash = ({ children }) => {
                         0
                       </Typography>
                     ),
-                    subheader: <Typography variant="body3">In progress</Typography>,
                   },
                   {
                     title: (
@@ -70,7 +69,7 @@ const Dash = ({ children }) => {
                         0
                       </Typography>
                     ),
-                    subheader: <Typography variant="body3">Failed</Typography>,
+                    subheader: "Failed",
                   },
                 ]}
               >
@@ -98,7 +97,7 @@ const Dash = ({ children }) => {
                 sections={[
                   {
                     title: <Typography variant="subtitle2">5m ago</Typography>,
-                    subheader: <Typography variant="body3">Last deploy</Typography>,
+                    subheader: "Last deploy",
                   },
                   {
                     title: (
@@ -106,7 +105,7 @@ const Dash = ({ children }) => {
                         3
                       </Typography>
                     ),
-                    subheader: <Typography variant="body3">In progress</Typography>,
+                    subheader: "In progress",
                   },
                   {
                     title: (
@@ -114,11 +113,11 @@ const Dash = ({ children }) => {
                         0
                       </Typography>
                     ),
-                    subheader: <Typography variant="body3">Failed</Typography>,
+                    subheader: "Failed",
                   },
                   {
                     title: <Typography variant="subtitle2">0</Typography>,
-                    subheader: <Typography variant="body3">Rollbacks</Typography>,
+                    subheader: "Rollbacks",
                   },
                 ]}
               >
