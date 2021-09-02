@@ -132,7 +132,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     value: gsi.provisionedThroughput.readCapacityUnits,
                     input: {
                       type: "number",
-                      key: ["read_capacity_units", gsi.name],
+                      key: `read_capacity_units,${gsi.name}`,
                       validation: number()
                         .integer()
                         .min(gsi.provisionedThroughput.readCapacityUnits),
@@ -143,7 +143,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     value: gsi.provisionedThroughput.writeCapacityUnits,
                     input: {
                       type: "number",
-                      key: ["write_capacity_units", gsi.name],
+                      key: `write_capacity_units,${gsi.name}`,
                       validation: number()
                         .integer()
                         .min(gsi.provisionedThroughput.writeCapacityUnits),
