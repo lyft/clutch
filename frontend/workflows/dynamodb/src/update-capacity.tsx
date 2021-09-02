@@ -16,7 +16,8 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import styled from "@emotion/styled";
 import _ from "lodash";
-import { number } from "yup";
+import { number, ref } from "yup";
+import type Reference from "yup/lib/Reference";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
@@ -51,7 +52,8 @@ const TableDetails: React.FC<WizardChild> = () => {
 
   const handleGsiCapacityChange = (key: string, value: string) => {
     // big hack to retrieve the capacity type (read or write?) and
-    // the GSI name from a single event attribute
+    // the GSI name from a single event attribute [key]
+    // where key is formatted like "read,gsi-name" 
     const keys = key.split(",");
     const capacityType = keys[0];
     const gsiName = keys[1];
@@ -102,7 +104,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     key: "read",
                     validation: number()
                       .integer("must be a number")
-                      .min(table.provisionedThroughput.readCapacityUnits),
+                      .min(ref(table.provisionedThroughput.readCapacityUnits) as Reference<number>),
                   },
                 },
                 {
