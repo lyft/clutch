@@ -185,8 +185,8 @@ const Confirm: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={updateCapacityOutput.error} isLoading={updateCapacityOutput.isLoading}>
       <Table columns={["Name", "Status"]}>
-        {statusList.map((s, index: number) => (
-          <TableRow key={s.name + index}>
+        {statusList.map(s => (
+          <TableRow key={s.name}>
             {s.name}
             {s.status}
           </TableRow>
