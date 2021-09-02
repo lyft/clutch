@@ -54,6 +54,7 @@ const TableDetails: React.FC<WizardChild> = () => {
     // big hack to retrieve the capacity type (read or write?) and
     // the GSI name from a single event attribute [key]
     // where key is formatted like "read,gsi-name" 
+    // feature request to address this: https://github.com/lyft/clutch/issues/1739
     const keys = key.split(",");
     const capacityType = keys[0];
     const gsiName = keys[1];
@@ -104,7 +105,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     key: "read",
                     validation: number()
                       .integer("must be a number")
-                      .min(ref(table.provisionedThroughput.readCapacityUnits) as Reference<number>),
+                      .moreThan(table.provisionedThroughput.readCapacityUnits-1),
                   },
                 },
                 {
