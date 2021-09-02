@@ -92,10 +92,10 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 		"head": graphql.String(req.Head),
 	}
 
-	err := c.gqlClient.Query(context.Background(), &compareCommitsQuery, variables)
+	err := c.gqlClient.Query(ctx, &compareCommitsQuery, variables)
 	if err != nil {
-		c.log.Error("None successful response from sourcegraph", zap.Error(err))
-		return nil, errors.New("None successful response from sourcegraph")
+		c.log.Error("unsuccessful response from sourcegraph", zap.Error(err))
+		return nil, errors.New("unsuccessful response from sourcegraph")
 	}
 
 	if len(compareCommitsQuery.Repository.Comparison.Commits.Nodes) == 0 {
