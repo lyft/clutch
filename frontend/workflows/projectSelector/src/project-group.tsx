@@ -14,13 +14,11 @@ const StyledGroup = styled.div({
   marginLeft: "4px",
   marginTop: "9px",
   display: "block",
-  "& > *": {
-    display: "inline-block",
-  },
 });
 
 const StyledGroupTitle = styled.span({
   marginRight: "4px",
+  display: "inline-block",
 });
 
 const StyledCount = styled.span({
@@ -34,6 +32,7 @@ const StyledCount = styled.span({
   marginRight: "4px",
   marginBottom: "10px",
   marginTop: "2px",
+  display: "inline-block",
 });
 
 const StyledMenuItem = styled.div({
@@ -58,12 +57,12 @@ const StyledProjectHeader = styled.div({
   padding: "0 12px",
 });
 
-const StyledHeaderColumn = styled.div({
+const StyledHeaderColumn = styled.div((props: { grow?: boolean }) => ({
   display: "flex",
   minHeight: "38px",
-
   alignItems: "center",
-});
+  flexGrow: props.grow ? 1 : 0,
+}));
 
 const StyledNoProjectsText = styled.div({
   color: "rgba(13, 16, 48, 0.38)",
@@ -139,13 +138,12 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
         <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
           {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
         </StyledHeaderColumn>
-        <StyledHeaderColumn style={{ flexGrow: 1 }}>
+        <StyledHeaderColumn grow>
           <StyledGroup>
             <StyledGroupTitle>{title}</StyledGroupTitle>
             <StyledCount>
-              {/* {checkedProjects.length}
-              {numProjects > 0 && ` / ${numProjects}`} */}
-              2/388
+              {checkedProjects.length}
+              {numProjects > 0 && ` / ${numProjects}`}
             </StyledCount>
           </StyledGroup>
         </StyledHeaderColumn>
