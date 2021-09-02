@@ -3,6 +3,8 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   Button,
   ButtonGroup,
+  Checkbox,
+  CheckboxPanel,
   client,
   MetadataTable,
   Resolver,
@@ -14,7 +16,7 @@ import styled from "@emotion/styled";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
+// import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
 import _ from "lodash";
 import { number } from "yup";
 
@@ -42,8 +44,6 @@ const TableDetails: React.FC<WizardChild> = () => {
   const resourceData = useDataLayout("resourceData");
   const capacityUpdates = useDataLayout("capacityUpdates");
   const table = resourceData.displayValue() as IClutch.aws.dynamodb.v1.Table;
-
-  // const [overrideToggle, setOverrideToggle] = useState(false) ** for later work
 
   const handleTableCapacityChange = (key: string, value: string) => {
     const newTableCapacity = {...capacityUpdates.displayValue().table_throughput};
@@ -78,12 +78,6 @@ const TableDetails: React.FC<WizardChild> = () => {
       capacityUpdates.updateData("gsi_updates", gsiList)
     }
   };
-
-  // FOR LATER WORK
-  // const handleOverrideToggleChange = e => {
-  //   setOverrideToggle(e.target.checked);
-  //   resourceData.updateData(e.target.name, e.target.checked);
-  // };
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
@@ -164,9 +158,18 @@ const TableDetails: React.FC<WizardChild> = () => {
         </Table>
       </Container>
 
+
+      <CheckboxPanel
+        header="To override the safety limits for scaling, check the box below."
+        onChange={state => capacityUpdates.updateData("ignore_maximums", state)}
+        options={{
+          'Override maximum limits': false,
+        }}
+      />
+
       <ButtonGroup>
-        <Button text="Back" onClick={() => onBack()} />
-        <Button text="Update" variant="destructive" onClick={onSubmit} />
+        <Button text="Back" variant="neutral" onClick={() => onBack()} />
+        <Button text="Update" onClick={onSubmit} />
       </ButtonGroup>
     </WizardStep>
   );
@@ -205,14 +208,14 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({resolverType}) => {
         let tableArgs = {
           table_name: resourceData.name,
           region: resourceData.region,
-          // ignore_maximums: capacityUpdates?.ignore_maximums? true : false,
+          ignore_maximums: capacityUpdates?.ignore_maximums? true : false,
         }
 
         let changeArgs: {}
         if (capacityUpdates.table_throughput) {
           changeArgs = {...changeArgs, table_throughput: {
-            read_capacity_units: capacityUpdates.table_throughput["read"]? capacityUpdates.table_throughput["read"] : resourceData.provisionedThroughput.readCapacityUnits,
-            write_capacity_units: capacityUpdates.table_throughput["write"]? capacityUpdates.table_throughput["write"] : resourceData.provisionedThroughput.writeCapacityUnits,
+            read_capacity_units: capacityUpdates.table_throughput["read"] ||= resourceData.provisionedThroughput.readCapacityUnits,
+            write_capacity_units: capacityUpdates.table_throughput["write"] ||= resourceData.provisionedThroughput.writeCapacityUnits,
           }}
         }
         if (Array.isArray(capacityUpdates.gsi_updates)) {
