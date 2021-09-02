@@ -70,11 +70,11 @@ export interface CardHeaderSummaryProps {
 interface CardHeaderProps {
   avatar: React.ReactNode;
   children?: React.ReactNode;
-  sections?: CardHeaderSummaryProps[];
+  summary?: CardHeaderSummaryProps[];
   title: React.ReactNode;
 }
 
-const CardHeader = ({ avatar, children, title, sections = [] }: CardHeaderProps) => {
+const CardHeader = ({ avatar, children, title, summary = [] }: CardHeaderProps) => {
   return (
     <StyledCardHeaderContainer>
       <StyledCardHeader container wrap="nowrap" alignItems="center" spacing={2}>
@@ -84,7 +84,7 @@ const CardHeader = ({ avatar, children, title, sections = [] }: CardHeaderProps)
         <Grid item xs>
           <Typography variant="h4">{title}</Typography>
         </Grid>
-        {sections.map(section => (
+        {summary.map(section => (
           <>
             <StyledDivider orientation="vertical" />
             <StyledGridItem item xs>

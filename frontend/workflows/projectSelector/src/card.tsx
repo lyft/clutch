@@ -19,14 +19,14 @@ interface CardProps {
   children: React.ReactNode;
   error?: ClutchError;
   isLoading?: boolean;
-  sections?: CardHeaderSummaryProps[];
+  summary?: CardHeaderSummaryProps[];
   title?: React.ReactNode & string;
 }
 
-const Card = ({ avatar, children, error, isLoading, sections, title }: CardProps) => (
+const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps) => (
   <Grid item xs={12} sm={6}>
     <ClutchCard>
-      <CardHeader avatar={avatar} sections={sections} title={title}>
+      <CardHeader avatar={avatar} summary={summary} title={title}>
         <StyledProgressContainer>
           {isLoading && <LinearProgress color="secondary" />}
         </StyledProgressContainer>

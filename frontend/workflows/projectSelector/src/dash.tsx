@@ -51,7 +51,7 @@ const Dash = ({ children }) => {
               <Card
                 avatar="🚀"
                 title="Deploys"
-                sections={[
+                summary={[
                   {
                     title: <Typography variant="subtitle2">5m ago</Typography>,
                     subheader: "Last deploy",
@@ -94,7 +94,7 @@ const Dash = ({ children }) => {
               <Card
                 avatar="🚀"
                 title="Deploys"
-                sections={[
+                summary={[
                   {
                     title: <Typography variant="subtitle2">5m ago</Typography>,
                     subheader: "Last deploy",
