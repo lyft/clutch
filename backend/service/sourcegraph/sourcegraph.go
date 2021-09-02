@@ -1,17 +1,13 @@
 package sourcegraph
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"io/ioutil"
-	"net/http"
 	"net/url"
 
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/shurcooL/graphql"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
@@ -36,8 +32,7 @@ type client struct {
 	log    *zap.Logger
 	scope  tally.Scope
 
-	sgURL  *url.URL
-	client *http.Client
+	gqlClient *graphql.Client
 }
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, error) {
@@ -55,100 +50,67 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, err
 
 	// setup http client with auth token
 	ctx := context.Background()
-	sgClient := oauth2.NewClient(ctx, oauth2.StaticTokenSource(&oauth2.Token{
+	oauthClient := oauth2.NewClient(ctx, oauth2.StaticTokenSource(&oauth2.Token{
 		AccessToken: sgConfig.Token,
 		TokenType:   "token",
 	}))
+
+	gqlClient := graphql.NewClient(sgURL.String(), oauthClient)
 
 	return &client{
 		config: sgConfig,
 		log:    log,
 		scope:  scope,
 
-		sgURL:  sgURL,
-		client: sgClient,
+		gqlClient: gqlClient,
 	}, nil
 }
 
 func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareCommitsRequest) (*sourcegraphv1.CompareCommitsResponse, error) {
-	compareCommitQuery := fmt.Sprintf(`
-	query {
-		repository(name: "%s") {
-			comparison(
-				base: "%s"
-				head: "%s"
-			) {
-				commits {
-					nodes {
-						message
-						oid
-						author {
-							person {
-								email
-								displayName
+	var compareCommitsQuery struct {
+		Repository struct {
+			Comparison struct {
+				Commits struct {
+					Nodes []struct {
+						Message graphql.String
+						Oid     graphql.String
+						Author  struct {
+							Person struct {
+								Email       graphql.String
+								DisplayName graphql.String
 							}
 						}
 					}
 				}
-			}
-		}
-	}
-	`, req.Repository, req.Base, req.Head)
-
-	gqlQuery := &QraphQLQuery{
-		Query: compareCommitQuery,
+			} `graphql:"comparison(base: $base, head: $head)"`
+		} `graphql:"repository(name: $name)"`
 	}
 
-	data, err := json.Marshal(gqlQuery)
+	variables := map[string]interface{}{
+		"name": graphql.String(req.Repository),
+		"base": graphql.String(req.Base),
+		"head": graphql.String(req.Head),
+	}
+
+	err := c.gqlClient.Query(context.Background(), &compareCommitsQuery, variables)
 	if err != nil {
-		c.log.Error("unable to marshal gql query", zap.Error(err))
-		return nil, err
-	}
-
-	sgRequest := &http.Request{
-		Method: http.MethodPost,
-		URL:    c.sgURL,
-		Body:   ioutil.NopCloser(bytes.NewBuffer(data)),
-	}
-
-	res, err := c.client.Do(sgRequest)
-	if err != nil {
-		c.log.Error("error querying sourcegraph", zap.Error(err))
-		return nil, err
-	}
-
-	if res.StatusCode != http.StatusOK {
-		bodyData, err := io.ReadAll(res.Body)
-		if err == nil {
-			c.log.Error("None successful response from sourcegraph",
-				zap.Int("statusCode", res.StatusCode), zap.String("error", string(bodyData)))
-		}
-
-		c.log.Error("None successful response from sourcegraph and unable to parse the body",
-			zap.Int("statusCode", res.StatusCode))
+		c.log.Error("None successful response from sourcegraph", zap.Error(err))
 		return nil, errors.New("None successful response from sourcegraph")
 	}
 
-	var bodyData compareCommitsResponse
-	err = json.NewDecoder(res.Body).Decode(&bodyData)
-	if err != nil {
-		c.log.Error("Unable to decode sourcegraph response", zap.Error(err))
-		return nil, err
-	}
-
-	if len(bodyData.Data.Repository.Comparision.Commits.Nodes) == 0 {
+	if len(compareCommitsQuery.Repository.Comparison.Commits.Nodes) == 0 {
 		return &sourcegraphv1.CompareCommitsResponse{
 			Commits: []*sourcegraphv1.Commit{},
 		}, nil
 	}
 
-	commits := make([]*sourcegraphv1.Commit, len(bodyData.Data.Repository.Comparision.Commits.Nodes))
-	for i, v := range bodyData.Data.Repository.Comparision.Commits.Nodes {
+	commits := make([]*sourcegraphv1.Commit, len(compareCommitsQuery.Repository.Comparison.Commits.Nodes))
+	for i, v := range compareCommitsQuery.Repository.Comparison.Commits.Nodes {
 		commits[i] = &sourcegraphv1.Commit{
-			Oid:         v.Oid,
-			Message:     v.Message,
-			Email:       v.Author.Person.Email,
-			DisplayName: v.Author.Person.DisplayName,
+			Oid:         string(v.Oid),
+			Message:     string(v.Message),
+			Email:       string(v.Author.Person.Email),
+			DisplayName: string(v.Author.Person.DisplayName),
 		}
 	}
 

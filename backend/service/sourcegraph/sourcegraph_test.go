@@ -7,12 +7,14 @@ import (
 	"net/url"
 	"testing"
 
-	sourcegraphv1cfg "github.com/lyft/clutch/backend/api/config/service/sourcegraph/v1"
-	sourcegraphv1 "github.com/lyft/clutch/backend/api/sourcegraph/v1"
+	"github.com/shurcooL/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	sourcegraphv1cfg "github.com/lyft/clutch/backend/api/config/service/sourcegraph/v1"
+	sourcegraphv1 "github.com/lyft/clutch/backend/api/sourcegraph/v1"
 )
 
 func TestNew(t *testing.T) {
@@ -41,8 +43,12 @@ func TestCompareCommits(t *testing.T) {
 		res     *sourcegraphv1.CompareCommitsResponse
 	}{
 		{
-			id:  "single response",
-			req: &sourcegraphv1.CompareCommitsRequest{},
+			id: "single response",
+			req: &sourcegraphv1.CompareCommitsRequest{
+				Repository: "github.com/lyft/clutch",
+				Base:       "8a9857493108d0be9ebc251f30f72665c79424f6",
+				Head:       "8a9857493108d0be9ebc251f30f72665c79424f6",
+			},
 			handler: func(w http.ResponseWriter, r *http.Request) {
 				_, _ = w.Write([]byte(compareCommitsSingleResponse))
 			},
@@ -58,8 +64,12 @@ func TestCompareCommits(t *testing.T) {
 			},
 		},
 		{
-			id:  "multi result response",
-			req: &sourcegraphv1.CompareCommitsRequest{},
+			id: "multi result response",
+			req: &sourcegraphv1.CompareCommitsRequest{
+				Repository: "github.com/lyft/clutch",
+				Base:       "8a9857493108d0be9ebc251f30f72665c79424f6~2",
+				Head:       "8a9857493108d0be9ebc251f30f72665c79424f6",
+			},
 			handler: func(w http.ResponseWriter, r *http.Request) {
 				_, _ = w.Write([]byte(compareCommitsMultiResultResponse))
 			},
@@ -81,8 +91,12 @@ func TestCompareCommits(t *testing.T) {
 			},
 		},
 		{
-			id:  "no results response",
-			req: &sourcegraphv1.CompareCommitsRequest{},
+			id: "no results response",
+			req: &sourcegraphv1.CompareCommitsRequest{
+				Repository: "github.com/lyft/clutch",
+				Base:       "8a9857493108d0be9ebc251f30f72665c79424f6~2",
+				Head:       "8a9857493108d0be9ebc251f30f72665c79424f6",
+			},
 			handler: func(w http.ResponseWriter, r *http.Request) {
 				_, _ = w.Write([]byte(compareCommitsNoResultsResponse))
 			},
@@ -101,12 +115,13 @@ func TestCompareCommits(t *testing.T) {
 			sgURL, err := url.Parse(srv.URL)
 			assert.NoError(t, err)
 
+			gqlClient := graphql.NewClient(sgURL.String(), srv.Client())
+
 			c := &client{
 				log:   log,
 				scope: scope,
 
-				client: srv.Client(),
-				sgURL:  sgURL,
+				gqlClient: gqlClient,
 			}
 
 			res, err := c.CompareCommits(context.Background(), tt.req)
@@ -116,6 +131,6 @@ func TestCompareCommits(t *testing.T) {
 	}
 }
 
-var compareCommitsSingleResponse string = `{"data":{"repository":{"comparison":{"commits":{"nodes":[{"message":"housekeeping: Update dependency cypress to v8.2.0 (#1672)\n","oid":"8a9857493108d0be9ebc251f30f72665c79424f6","author":{"person":{"name":"renovate[bot]","email":"29139614+renovate[bot]@users.noreply.github.com","displayName":"renovate[bot]","avatarURL":null}}}]}}}}}`
-var compareCommitsMultiResultResponse string = `{"data":{"repository":{"comparison":{"commits":{"nodes":[{"message":"housekeeping: Update dependency cypress to v8.2.0 (#1672)\n","oid":"8a9857493108d0be9ebc251f30f72665c79424f6","author":{"person":{"name":"renovate[bot]","email":"29139614+renovate[bot]@users.noreply.github.com","displayName":"renovate[bot]","avatarURL":null}}},{"message":"housekeeping: Update dependency remark-toc to v8 (#1680)\n","oid":"5802372fe18c37e9ab62341b18d7f286078430b4","author":{"person":{"name":"renovate[bot]","email":"29139614+renovate[bot]@users.noreply.github.com","displayName":"renovate[bot]","avatarURL":null}}}]}}}}}`
+var compareCommitsSingleResponse string = `{"data":{"repository":{"comparison":{"commits":{"nodes":[{"message":"housekeeping: Update dependency cypress to v8.2.0 (#1672)\n","oid":"8a9857493108d0be9ebc251f30f72665c79424f6","author":{"person":{"email":"29139614+renovate[bot]@users.noreply.github.com","displayName":"renovate[bot]"}}}]}}}}}`
+var compareCommitsMultiResultResponse string = `{"data":{"repository":{"comparison":{"commits":{"nodes":[{"message":"housekeeping: Update dependency cypress to v8.2.0 (#1672)\n","oid":"8a9857493108d0be9ebc251f30f72665c79424f6","author":{"person":{"email":"29139614+renovate[bot]@users.noreply.github.com","displayName":"renovate[bot]"}}},{"message":"housekeeping: Update dependency remark-toc to v8 (#1680)\n","oid":"5802372fe18c37e9ab62341b18d7f286078430b4","author":{"person":{"email":"29139614+renovate[bot]@users.noreply.github.com","displayName":"renovate[bot]"}}}]}}}}}`
 var compareCommitsNoResultsResponse string = `{"data":{"repository":{"comparison":{"commits":{"nodes":[]}}}}}`
