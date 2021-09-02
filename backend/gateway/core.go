@@ -46,6 +46,7 @@ import (
 	"github.com/lyft/clutch/backend/service/envoyadmin"
 	"github.com/lyft/clutch/backend/service/github"
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
+	sourcegraphservice "github.com/lyft/clutch/backend/service/sourcegraph"
 	topologyservice "github.com/lyft/clutch/backend/service/topology"
 )
 
@@ -94,6 +95,7 @@ var Services = service.Factory{
 	loggingsink.Name:         loggingsink.New,
 	pgservice.Name:           pgservice.New,
 	slack.Name:               slack.New,
+	sourcegraphservice.Name:  sourcegraphservice.New,
 	terminator.Name:          terminator.New,
 	topologyservice.Name:     topologyservice.New,
 }
