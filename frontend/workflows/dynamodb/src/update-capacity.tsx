@@ -4,12 +4,11 @@ import {
   Button,
   ButtonGroup,
   client,
-  Confirmation,
+  HorizontalRule,
   MetadataTable,
   Resolver,
   Table,
   TableRow,
-  TextField,
   useWizardContext,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
@@ -57,15 +56,28 @@ const TableDetails: React.FC<WizardChild> = () => {
   };
 
   const handleGsiCapacityChange = (key: string, value: string) => {
-    console.log(key)
-    console.log(key[0])
+    // big hack to retrieve the capacity type (read or write?) and 
+    // the GSI name from a single event attribute
+    const keys = key.split(',')
+    const capacity_type = keys[0]
+    const gsi_name = keys[1]
+
+    const gsiList = capacityUpdates.displayValue().gsi_updates? [...capacityUpdates.displayValue().gsi_updates] : [];
+    if (capacityUpdates.find((gsi: {name: string}) => gsi.name === gsi_name))
+
     // const gsiList = capacityUpdates.displayValue().gsi_updates? {...capacityUpdates.displayValue().gsi_updates} : {};
-    // if (event.target.name in gsiList) {
-    //   gsiList[event.target.name] = {...gsiList[event.target.name], [event.target.name]: event.target.value}
-    // } else {
-    //   gsiList[event.target.name] = {[event.target.name]: event.target.value}
+    // if (gsi_name in gsiList) { // gsi has been edited before
+    //   gsiList[gsi_name] = {...gsiList[gsi_name], [capacity_type]: value}
+    // } else { 
+    //   const currentCapacity = table.globalSecondaryIndexes.find(gsi => gsi.name === gsi_name)
+    //   gsiList[gsi_name] = { // copy over current capacities 
+    //     "read": currentCapacity.provisionedThroughput.readCapacityUnits,
+    //     "write": currentCapacity.provisionedThroughput.writeCapacityUnits,
+    //   }
+    //   gsiList[gsi_name] = {...gsiList[gsi_name], [capacity_type]: value}
     // }
     // capacityUpdates.updateData("gsi_updates", gsiList)
+    // console.log(capacityUpdates.displayValue().gsi_updates)
   };
 
   // FOR LATER WORK
@@ -102,7 +114,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     type: "number",
                     key: "read",
                     validation: number()
-                    .integer()
+                    .integer("must be a number")
                     .min(table.provisionedThroughput.readCapacityUnits),
                   },
                 },
@@ -132,7 +144,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                   value: gsi.provisionedThroughput.readCapacityUnits,
                   input: {
                     type: "number",
-                    key: "r" + gsi.name,
+                    key: ["read", gsi.name],
                     validation: number()
                     .integer()
                     .min(gsi.provisionedThroughput.readCapacityUnits),
@@ -143,7 +155,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                   value: gsi.provisionedThroughput.writeCapacityUnits,
                   input: {
                     type: "number",
-                    key: "w" + gsi.name,
+                    key: ["write", gsi.name],
                     validation: number()
                       .integer()
                       .min(gsi.provisionedThroughput.writeCapacityUnits),
@@ -154,9 +166,7 @@ const TableDetails: React.FC<WizardChild> = () => {
       ))}
         
         </Table>
-
       </Container>
-
 
       <ButtonGroup>
         <Button text="Back" onClick={() => onBack()} />
