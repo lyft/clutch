@@ -9,21 +9,31 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
 import type { Group } from "./types";
 
+const StyledGroup = styled.div({
+  fontWeight: 500,
+  marginLeft: "4px",
+  marginTop: "9px",
+  display: "block",
+  "& > *": {
+    display: "inline-block",
+  }
+});
+
+const StyledGroupTitle = styled.span({
+  marginRight: "4px",
+});
+
 const StyledCount = styled.span({
   color: "rgba(13, 16, 48, 0.6)",
   backgroundColor: "rgba(13, 16, 48, 0.03)",
   fontVariantNumeric: "tabular-nums",
-  letterSpacing: "2px",
   borderRadius: "4px",
   fontWeight: "bold",
   fontSize: "12px",
-  padding: "1px 2px 1px 4px",
-  margin: "0 4px",
-});
-
-const StyledProjectTitle = styled.span({
-  fontWeight: 500,
-  marginLeft: "4px",
+  padding: "1px 4px",
+  marginRight: "4px",
+  marginBottom: "10px",
+  marginTop: "2px"
 });
 
 const StyledMenuItem = styled.div({
@@ -41,14 +51,17 @@ const StyledMenuItem = styled.div({
 
 const StyledProjectHeader = styled.div({
   display: "flex",
-  alignItems: "center",
+  maxWidth: "100%",
+  alignItems: "flex-start",
   justifyContent: "space-between",
-  height: "48px",
+  minHeight: "40px",
   padding: "0 12px",
 });
 
 const StyledHeaderColumn = styled.div({
   display: "flex",
+  minHeight: "38px",
+
   alignItems: "center",
 });
 
@@ -123,17 +136,18 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   return (
     <>
       <StyledProjectHeader>
-        <StyledHeaderColumn>
-          <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
-            {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
-          </StyledHeaderColumn>
-          <StyledProjectTitle>
-            {title}
+        <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
+          {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
+        </StyledHeaderColumn>
+        <StyledHeaderColumn style={{flexGrow: 1}}>
+          <StyledGroup>
+            <StyledGroupTitle>{title}</StyledGroupTitle>
             <StyledCount>
-              {checkedProjects.length}
-              {numProjects > 0 && `/${numProjects}`}
+              {/* {checkedProjects.length}
+              {numProjects > 0 && ` / ${numProjects}`} */}
+              2/388
             </StyledCount>
-          </StyledProjectTitle>
+          </StyledGroup>
         </StyledHeaderColumn>
         <StyledHeaderColumn>
           {displayToggleHelperText && <StyledAllText>All</StyledAllText>}

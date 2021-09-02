@@ -29,6 +29,9 @@ const StyledSelectorContainer = styled.div({
   borderRight: "1px solid rgba(13, 16, 48, 0.1)",
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
   width: "245px",
+  overflowY: "auto",
+  overflowX: "hidden",
+  maxHeight: "100%",
 });
 
 const StyledWorkflowHeader = styled.div({
