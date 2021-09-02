@@ -34,6 +34,7 @@ import {
 } from "./Feedback";
 import { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
 import { AvatarIcon, StatusIcon } from "./icon";
+import HorizontalRule from "./horizontal-rule";
 import { Link } from "./link";
 import Loadable from "./loading";
 import { useLocation, useNavigate, useParams, useSearchParams } from "./navigation";
@@ -93,6 +94,7 @@ export {
   FormRow,
   Grid,
   Hint,
+  HorizontalRule,
   IconButton,
   Link,
   Loadable,

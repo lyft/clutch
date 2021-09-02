@@ -63,21 +63,29 @@ const TableDetails: React.FC<WizardChild> = () => {
     const gsi_name = keys[1]
 
     const gsiList = capacityUpdates.displayValue().gsi_updates? [...capacityUpdates.displayValue().gsi_updates] : [];
-    if (capacityUpdates.find((gsi: {name: string}) => gsi.name === gsi_name))
-
-    // const gsiList = capacityUpdates.displayValue().gsi_updates? {...capacityUpdates.displayValue().gsi_updates} : {};
-    // if (gsi_name in gsiList) { // gsi has been edited before
-    //   gsiList[gsi_name] = {...gsiList[gsi_name], [capacity_type]: value}
-    // } else { 
-    //   const currentCapacity = table.globalSecondaryIndexes.find(gsi => gsi.name === gsi_name)
-    //   gsiList[gsi_name] = { // copy over current capacities 
-    //     "read": currentCapacity.provisionedThroughput.readCapacityUnits,
-    //     "write": currentCapacity.provisionedThroughput.writeCapacityUnits,
-    //   }
-    //   gsiList[gsi_name] = {...gsiList[gsi_name], [capacity_type]: value}
-    // }
-    // capacityUpdates.updateData("gsi_updates", gsiList)
-    // console.log(capacityUpdates.displayValue().gsi_updates)
+    const idx = gsiList.findIndex((gsi: {name: string, index_throughput: {}}) => gsi.name === gsi_name)
+    if ( idx > -1) { // gsi has been edited before
+      const gsi = gsiList[idx]
+      gsi["index_throughput"] = {...gsi["index_throughput"], [capacity_type] : value}
+      capacityUpdates.updateData("gsi_updates", gsiList)
+    } else { // copy over current capacities 
+      console.log("UPDATING A KNOWN GSI")
+      const gsi = table.globalSecondaryIndexes.find(gsi => gsi.name === gsi_name)
+      const newGsi = { 
+        "name": gsi_name, 
+        "index_throughput": { 
+          "read_capacity_units": gsi.provisionedThroughput.readCapacityUnits,
+          "write_capacity_units": gsi.provisionedThroughput.writeCapacityUnits,
+        }
+      }
+      newGsi.index_throughput = {...newGsi.index_throughput, [capacity_type]: value}
+      console.log(newGsi)
+      gsiList.push(newGsi)
+      console.log("GSI LLIST")
+      console.log(gsiList)
+      capacityUpdates.updateData("gsi_updates", gsiList)
+    }
+    console.log(capacityUpdates.displayValue().gsi_updates)
   };
 
   // FOR LATER WORK
@@ -144,7 +152,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                   value: gsi.provisionedThroughput.readCapacityUnits,
                   input: {
                     type: "number",
-                    key: ["read", gsi.name],
+                    key: ["read_capacity_units", gsi.name],
                     validation: number()
                     .integer()
                     .min(gsi.provisionedThroughput.readCapacityUnits),
@@ -155,7 +163,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                   value: gsi.provisionedThroughput.writeCapacityUnits,
                   input: {
                     type: "number",
-                    key: ["write", gsi.name],
+                    key: ["write_capacity_units", gsi.name],
                     validation: number()
                       .integer()
                       .min(gsi.provisionedThroughput.writeCapacityUnits),
@@ -215,14 +223,14 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({resolverType}) => {
 
         let changeArgs: {}
         if (capacityUpdates.table_throughput) {
+          console.log("TABLE CHANGING!")
           changeArgs = {...changeArgs, table_throughput: {
             read_capacity_units: capacityUpdates.table_throughput["read"]? capacityUpdates.table_throughput["read"] : resourceData.provisionedThroughput.readCapacityUnits,
             write_capacity_units: capacityUpdates.table_throughput["write"]? capacityUpdates.table_throughput["write"] : resourceData.provisionedThroughput.writeCapacityUnits,
           }}
         }
-        if (capacityUpdates.gsi_updates) {
-          const gsi_list = []
-          changeArgs = {...changeArgs, gsi_updates: gsi_list}
+        if (Array.isArray(capacityUpdates.gsi_updates)) {
+          changeArgs = {...changeArgs, gsi_updates: [...capacityUpdates.gsi_updates]}
         }
         return client
           .post("/v1/aws/dynamodb/updateCapacity", {...tableArgs, ...changeArgs})
