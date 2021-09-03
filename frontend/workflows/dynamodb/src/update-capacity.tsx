@@ -217,9 +217,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
           changeArgs = {
             ...changeArgs,
             table_throughput: {
-              read_capacity_units: capacityUpdates.table_throughput.read
-                ? capacityUpdates.table_throughput.read
-                : resourceData.provisionedThroughput.readCapacityUnits,
+              read_capacity_units: capacityUpdates.table_throughput?.read ?? resourceData.provisionedThroughput.readCapacityUnits,
               write_capacity_units: capacityUpdates.table_throughput.write
                 ? capacityUpdates.table_throughput.write
                 : resourceData.provisionedThroughput.writeCapacityUnits,
