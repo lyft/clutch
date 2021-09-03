@@ -30,7 +30,9 @@ const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
     resolvedResourceData.assign(results[0]);
     capacityUpdates.updateData(
       "gsi_map",
-      _.mapValues(_.keyBy(results[0].globalSecondaryIndexes, "name"), v => v.provisionedThroughput)
+      _.mapValues(_.keyBy(results[0].globalSecondaryIndexes, "name"), v =>
+        v.provisionedThroughput.toJSON()
+      )
     );
     onSubmit();
   };
@@ -44,12 +46,12 @@ const TableDetails: React.FC<WizardChild> = () => {
   const capacityUpdates = useDataLayout("capacityUpdates");
   const table = resourceData.displayValue() as IClutch.aws.dynamodb.v1.Table;
 
-  const handleTableCapacityChange = (key: string, value: string) => {
+  const handleTableCapacityChange = (key: string, value: number) => {
     const newTableThroughput = { ...capacityUpdates.displayValue().table_throughput, [key]: value };
     capacityUpdates.updateData("table_throughput", newTableThroughput);
   };
 
-  const handleGsiCapacityChange = (key: string, value: string) => {
+  const handleGsiCapacityChange = (key: string, value: number) => {
     // big hack to retrieve the capacity type (read or write?) and
     // the GSI name from a single event attribute [key]
     // where key is formatted like "read,gsi-name"
@@ -59,7 +61,7 @@ const TableDetails: React.FC<WizardChild> = () => {
     const updatesList = { ...(capacityUpdates.displayValue()?.gsi_updates || {}) };
     if (!_.has(updatesList, gsiName)) {
       // copy over current throughput on first update
-      updatesList[gsiName] = { ...capacityUpdates.displayValue().gsi_map[gsiName] };
+      updatesList[gsiName] = capacityUpdates.displayValue().gsi_map[gsiName];
       capacityUpdates.updateData("gsi_updates", updatesList);
     }
     updatesList[gsiName] = { ...updatesList[gsiName], [capacityType]: value };
@@ -199,21 +201,25 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
 
         let changeArgs: {};
         if (_.has(capacityUpdates, "table_throughput")) {
-          changeArgs = {
-            tableThroughput: {
-              readCapacityUnits:
-                capacityUpdates.table_throughput?.read ??
-                resourceData.provisionedThroughput.readCapacityUnits,
-              writeCapacityUnits:
-                capacityUpdates.table_throughput.write ??
-                resourceData.provisionedThroughput.writeCapacityUnits,
-            },
+          const targetTableThroughput = {
+            readCapacityUnits:
+              capacityUpdates.table_throughput?.read ??
+              resourceData.provisionedThroughput.readCapacityUnits,
+            writeCapacityUnits:
+              capacityUpdates.table_throughput.write ??
+              resourceData.provisionedThroughput.writeCapacityUnits,
           };
+          if (!_.isEqual(targetTableThroughput, resourceData.provisionedThroughput.toJSON())) {
+            changeArgs = { tableThroughput: targetTableThroughput };
+          }
         }
         if (_.has(capacityUpdates, "gsi_updates")) {
           const updatesFormatted = [];
           _.each(capacityUpdates.gsi_updates, (throughput, name) => {
-            updatesFormatted.push({ name, index_throughput: throughput });
+            if (!_.isEqual(capacityUpdates.gsi_map[name], throughput)) {
+              // handle edge case where input matches current capacity
+              updatesFormatted.push({ name, index_throughput: throughput });
+            }
           });
           changeArgs = { ...changeArgs, gsi_updates: updatesFormatted };
         }
