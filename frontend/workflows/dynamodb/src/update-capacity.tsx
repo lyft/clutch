@@ -23,10 +23,13 @@ import type { ResolverChild, WorkflowProps } from "./index";
 const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
   const resolvedResourceData = useDataLayout("resourceData");
+  const capacityUpdates = useDataLayout("capacityUpdates");
 
   const onResolve = ({ results }) => {
     // Decide how to process results.
     resolvedResourceData.assign(results[0]);
+    const gsi_map = _.mapValues(_.keyBy(resolvedResourceData.displayValue().globalSecondaryIndexes, 'name'), v => ({"read": v.provisionedThroughput.readCapacityUnits, "write": v.provisionedThroughput.readCapacityUnits}));
+    capacityUpdates.updateData("gsi_map", gsi_map)
     onSubmit();
   };
 
@@ -40,8 +43,8 @@ const TableDetails: React.FC<WizardChild> = () => {
   const table = resourceData.displayValue() as IClutch.aws.dynamodb.v1.Table;
 
   const handleTableCapacityChange = (key: string, value: string) => {
-    const newTableThroughput = { ...capacityUpdates.displayValue().table_throughput, key: value };
-    capacityUpdates.updateData("table_throughput", newTableCapacity);
+    const newTableThroughput = { ...capacityUpdates.displayValue().table_throughput, [key]: value };
+    capacityUpdates.updateData("table_throughput", newTableThroughput);
   };
 
   const handleGsiCapacityChange = (key: string, value: string) => {
