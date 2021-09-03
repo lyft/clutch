@@ -145,15 +145,14 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
         </Table>
       </Box>
 
-      {/* TODO: conditionally render the override checkbox depending on workflow config prop */}
       {enableOverride && (
         <CheckboxPanel
-          header="To override the safety limits for scaling, check the box below."
+          header="Warning: checking the option below disables the limits set on your scaling action."
           onChange={state =>
-            capacityUpdates.updateData("ignore_maximums", state["Override maximum limits"])
+            capacityUpdates.updateData("ignore_maximums", state["Override limits"])
           }
           options={{
-            "Override maximum limits": false,
+            "Override limits": false,
           }}
         />
       )}
