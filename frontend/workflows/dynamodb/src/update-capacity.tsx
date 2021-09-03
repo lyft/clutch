@@ -40,8 +40,7 @@ const TableDetails: React.FC<WizardChild> = () => {
   const table = resourceData.displayValue() as IClutch.aws.dynamodb.v1.Table;
 
   const handleTableCapacityChange = (key: string, value: string) => {
-    const newTableCapacity = { ...capacityUpdates.displayValue().table_throughput };
-    newTableCapacity[key] = value;
+    const newTableThroughput = { ...capacityUpdates.displayValue().table_throughput, key: value };
     capacityUpdates.updateData("table_throughput", newTableCapacity);
   };
 
@@ -50,9 +49,7 @@ const TableDetails: React.FC<WizardChild> = () => {
     // the GSI name from a single event attribute [key]
     // where key is formatted like "read,gsi-name"
     // feature request to address this: https://github.com/lyft/clutch/issues/1739
-    const keys = key.split(",");
-    const capacityType = keys[0];
-    const gsiName = keys[1];
+    const [capacityType, gsiName] = key.split(",");
 
     const gsiList = [...(capacityUpdates.displayValue()?.gsi_updates || [])];
     const idx = gsiList.findIndex(
@@ -71,9 +68,9 @@ const TableDetails: React.FC<WizardChild> = () => {
         index_throughput: {
           read_capacity_units: curr.provisionedThroughput.readCapacityUnits,
           write_capacity_units: curr.provisionedThroughput.writeCapacityUnits,
+          [capacityType]: value,
         },
       };
-      newGsi.index_throughput = { ...newGsi.index_throughput, [capacityType]: value };
       gsiList.push(newGsi);
       capacityUpdates.updateData("gsi_updates", gsiList);
     }
@@ -213,11 +210,8 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
         let changeArgs: {};
         if (capacityUpdates.table_throughput) {
           changeArgs = {
-            ...changeArgs,
             table_throughput: {
-              read_capacity_units: capacityUpdates.table_throughput.read
-                ? capacityUpdates.table_throughput.read
-                : resourceData.provisionedThroughput.readCapacityUnits,
+              read_capacity_units: capacityUpdates.table_throughput?.read ?? resourceData.provisionedThroughput.readCapacityUnits,
               write_capacity_units: capacityUpdates.table_throughput.write
                 ? capacityUpdates.table_throughput.write
                 : resourceData.provisionedThroughput.writeCapacityUnits,
