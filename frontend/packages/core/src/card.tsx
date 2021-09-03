@@ -42,7 +42,7 @@ const StyledCardHeader = styled(Grid)({
   padding: "16px",
   minHeight: "72px",
   ".MuiGrid-item": {
-    padding: "0px 8px 0px 8px",
+    padding: "0px 8px",
   },
 });
 
