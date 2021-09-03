@@ -46,6 +46,7 @@ const StyledCardHeader = styled(Grid)({
   },
 });
 
+// TODO:: confirm the width and height of the icon container
 // TODO: use material ui avatar component and implement figma design
 const StyledCardHeaderAvatar = styled.div({
   width: "32px",
@@ -53,6 +54,8 @@ const StyledCardHeaderAvatar = styled.div({
   marginRight: "16px",
 });
 
+// TODO: make the divider a core component
+// TODO: confirm the height of the divider
 const StyledDivider = styled(Divider)({
   color: "rgba(13, 16, 48, 0.38)",
   height: "36px",
@@ -80,6 +83,7 @@ const CardHeader = ({ avatar, children, title, summary = [] }: CardHeaderProps) 
     <StyledCardHeaderContainer>
       <StyledCardHeader container wrap="nowrap" alignItems="center">
         <StyledCardHeaderAvatar>
+          {/* TODO: confirm the fontSize of icon */}
           <Typography variant="h2">{avatar}</Typography>
         </StyledCardHeaderAvatar>
         <Grid item xs>
@@ -90,6 +94,7 @@ const CardHeader = ({ avatar, children, title, summary = [] }: CardHeaderProps) 
             <StyledDivider orientation="vertical" />
             <StyledGridItem item xs>
               {section.title}
+              {/* TODO: confirm the fontSize of the subheader */}
               {section.subheader && (
                 <Typography variant="body3" color="rgba(13, 16, 48, 0.6)">
                   {section.subheader}
