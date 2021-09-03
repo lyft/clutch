@@ -14,15 +14,11 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import styled from "@emotion/styled";
 import _ from "lodash";
 import { number } from "yup";
+import { Box } from "@material-ui/core";
 
 import type { ResolverChild, WorkflowProps } from "./index";
-
-const Container = styled.div({
-  display: "flex",
-});
 
 const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
@@ -85,7 +81,7 @@ const TableDetails: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
-      <Container>
+      <Box>
         <Table columns={["Name", "Type", "Status", "Provisioned Capacities"]}>
           <TableRow key={table.name}>
             {table.name}
@@ -158,7 +154,7 @@ const TableDetails: React.FC<WizardChild> = () => {
             </TableRow>
           ))}
         </Table>
-      </Container>
+      </Box>
 
       {/* TODO: conditionally render the override checkbox depending on workflow config prop */}
       <CheckboxPanel
