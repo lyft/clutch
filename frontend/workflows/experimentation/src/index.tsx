@@ -1,11 +1,11 @@
-import type { WorkflowConfiguration } from "@clutch-sh/core";
+import type { DefaultWorkflowConfig } from "@clutch-sh/core";
 
 import FormFields from "./core/form-fields";
 import PageLayout from "./core/page-layout";
 import ListExperiments from "./list-experiments";
 import ViewExperimentRun from "./view-experiment-run";
 
-const register = (): WorkflowConfiguration => {
+const register = (): DefaultWorkflowConfig => {
   return {
     developer: {
       name: "Lyft",

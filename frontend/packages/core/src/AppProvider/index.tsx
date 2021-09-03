@@ -4,57 +4,29 @@ import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext } from "../Contexts/app-context";
-import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
+import { FEATURE_FLAG_POLL_RATE } from "../flags";
 import Landing from "../landing";
 import NotFound from "../not-found";
 
+import ErrorBoundary from "./error";
+import featureFlagFilter from "./filters";
 import { registeredWorkflows } from "./registrar";
 import { Theme } from "./themes";
-import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
-import ErrorBoundary from "./workflow";
-
-export interface UserConfiguration {
-  [packageName: string]: {
-    [key: string]: ConfiguredRoute;
-  };
-}
-
-/**
- * Filter workflow routes using available feature flags.
- * @param workflows a list of valid Workflow objects.
- */
-const featureFlagFilter = (workflows: Workflow[]): Promise<Workflow[]> => {
-  return featureFlags().then(flags =>
-    workflows.filter(workflow => {
-      /* eslint-disable-next-line no-param-reassign */
-      workflow.routes = workflow.routes.filter(route => {
-        const show =
-          route.featureFlag === undefined ||
-          (flags?.[route.featureFlag] !== undefined &&
-            flags[route.featureFlag].booleanValue === true);
-        return show;
-      });
-      return workflow.routes.length !== 0;
-    })
-  );
-};
+import type { GatewayConfig, Workflow, Workflows } from "./types";
 
 interface ClutchAppProps {
-  availableWorkflows: {
-    [key: string]: () => WorkflowConfiguration;
-  };
-  configuration: UserConfiguration;
+  /** All workflows available to the gateway. */
+  workflows: Workflows;
+  /** Gateway configuration used to register specific workflows and their configurations. */
+  gatewayConfig: GatewayConfig;
 }
 
-const ClutchApp: React.FC<ClutchAppProps> = ({
-  availableWorkflows,
-  configuration: userConfiguration,
-}) => {
+const ClutchApp: React.FC<ClutchAppProps> = ({ workflows: availableWorkflows, gatewayConfig }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const loadWorkflows = () => {
-    registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
+    registeredWorkflows(availableWorkflows, gatewayConfig, [featureFlagFilter]).then(w => {
       setWorkflows(w);
       setIsLoading(false);
     });

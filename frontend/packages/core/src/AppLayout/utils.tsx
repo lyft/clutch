@@ -1,4 +1,4 @@
-import type { Workflow } from "../AppProvider/workflow";
+import type { Workflow } from "../AppProvider/types";
 
 interface GroupedRoutes {
   [category: string]: {

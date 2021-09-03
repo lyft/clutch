@@ -1,10 +1,10 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, DefaultWorkflowConfig } from "@clutch-sh/core";
 
 import { StartExperiment } from "./start-experiment";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
-const register = (): WorkflowConfiguration => {
+const register = (): DefaultWorkflowConfig => {
   return {
     developer: {
       name: "Lyft",

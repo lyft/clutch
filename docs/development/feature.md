@@ -561,13 +561,13 @@ Here we define the data layout structure and pass it to the wizard along with th
 The final step is registering this new Amiibo workflow with the Clutch app. First update the component name by replacing the scaffolded default (`HelloWorld`) in our workflow's registration function.
 
 ```tsx title="frontend/workflows/amiibo/src/index.tsx"
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, DefaultWorkflowConfig } from "@clutch-sh/core";
 // highlight-next-line
 import Amiibo from "./hello-world";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
-const register = (): WorkflowConfiguration => {
+const register = (): DefaultWorkflowConfig => {
   return {
     developer: {
       name: "Name McName",

@@ -1,85 +1,125 @@
 import _ from "lodash";
 
-import type { UserConfiguration } from ".";
-import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
+import type {
+  DefaultWorkflowConfig,
+  GatewayConfig,
+  GatewayRoute,
+  RouteConfigs,
+  Workflow,
+  WorkflowFilters,
+  Workflows,
+} from "./types";
 
+/** Warn end users a workflow or route is not being registered with a reason. */
+const warnUnregistered = (
+  workflowId: string,
+  reason: string,
+  message: string,
+  routeName?: string
+) => {
+  /* eslint-disable-next-line no-console */
+  console.warn(`[${workflowId}]${routeName ? `[${routeName}]` : ""} ${reason}: ${message}`);
+};
+
+/**
+ * Determine if a route is valid by checking:
+ *   * does the gateway route config have the required route props?
+ */
+const isValidRoute = (route: GatewayRoute): boolean => {
+  const requiredRouteProps = route?.requiredConfigProps || [];
+  const missingProps = requiredRouteProps.filter((prop: string) => {
+    return route?.componentProps?.[prop] === undefined;
+  });
+
+  return missingProps.length === 0;
+};
+
+/**
+ * Determine all valid routes registered on the gateway.
+ *
+ * @param workflowId
+ * @param workflow
+ * @param configuration
+ */
 const workflowRoutes = (
   workflowId: string,
-  workflow: WorkflowConfiguration,
-  configuration: UserConfiguration
-): ConfiguredRoute[] => {
-  const workflowConfig = configuration?.[workflowId] || {};
-  const allRoutes = Object.keys(workflowConfig).map(key => {
-    // if workflow does not contain route with user-specified key return an empty object
-    if (workflow.routes[key] === undefined) {
-      /* eslint-disable-next-line no-console */
-      console.warn(
-        `[${workflowId}][${key}] Not registered: Invalid config - route does not exist. Valid routes: ${Object.keys(
-          workflow.routes
-        )}`
+  workflow: DefaultWorkflowConfig,
+  routes: RouteConfigs = {}
+): GatewayRoute[] => {
+  const validRoutes = Object.keys(routes).map(routeName => {
+    // if workflow does not contain route with gateway config key ignore gateway route
+    if (workflow.routes?.[routeName] === undefined) {
+      warnUnregistered(
+        workflowId,
+        "Invalid gateway config",
+        `route with specified name does not exist`,
+        routeName
       );
-      return {} as ConfiguredRoute;
+      return null;
     }
-    return {
-      ...workflow.routes[key],
-      ...workflowConfig[key],
-    };
+    const routeConfig = { ...workflow.routes[routeName], ...routes[routeName] };
+    if (!isValidRoute(routeConfig)) {
+      warnUnregistered(
+        workflowId,
+        "Invalid gateway config",
+        `route is missing required props`,
+        routeName
+      );
+      return null;
+    }
+    return routeConfig;
   });
   // filter out routes that are empty
-  _.remove(allRoutes, r => !!_.isEmpty(r));
-
-  const validRoutes = allRoutes.filter(route => {
-    const requiredRouteProps = route?.requiredConfigProps || [];
-    const missingProps = requiredRouteProps.filter((prop: string) => {
-      return route.componentProps?.[prop] === undefined;
-    });
-
-    const isValidRoute = missingProps.length === 0;
-    if (!isValidRoute) {
-      /* eslint-disable-next-line no-console */
-      console.warn(
-        `[${workflowId}][${route.path}] Not registered: Invalid config - missing required component props ${missingProps}`
-      );
-    }
-    return isValidRoute;
-  });
+  _.remove(validRoutes, r => _.isEmpty(r));
 
   return validRoutes;
 };
 
 /**
- * Determine all user registered workflows on the application and apply filters, if any.
- * @param workflows a map of workflow keys to functions that return their configuration.
- * @param configuration the user configuration, usually read in from the clutch.config.js file.
- * @param filters a list of filters to apply to the user registered workflows.
- * @returns
+ * Determine the workflows registered on the gateway and apply filters, if any.
+ *
+ * @param workflows A map of unique workflow keys (package names) to functions that return their configuration.
+ * @param gatwayConfig Configuration specific to the Clutch gateway running.
+ * @param filters A list of filters to apply to the gateway's registered workflows.
  */
 const registeredWorkflows = async (
-  workflows: { [key: string]: () => WorkflowConfiguration },
-  configuration: UserConfiguration,
-  filters: { (workflows: Workflow[]): Promise<Workflow[]> }[] = []
+  workflows: Workflows = {},
+  gatewayConfig: GatewayConfig = {},
+  filters: WorkflowFilters = []
 ): Promise<Workflow[]> => {
-  let validWorkflows = Object.keys(workflows || [])
+  let wkflws = Object.keys(workflows)
     .map((workflowId: string) => {
-      const workflow = workflows[workflowId]();
+      let routes = [];
+      const defaultWorkflowConfig = workflows[workflowId]();
+      const gatewayWorkflowConfig = gatewayConfig[workflowId];
+      const gatewayWorkflowOverrides = gatewayWorkflowConfig?.overrides || {};
+      // remove gateway workflow overrides before gathering routes as they are at the same level
+      delete gatewayWorkflowConfig?.overrides;
       try {
-        return { ...workflow, routes: workflowRoutes(workflowId, workflow, configuration) };
-      } catch {
-        // n.b. if the routes aren't configured properly we drop the workflow
-        /* eslint-disable-next-line no-console */
-        console.warn(
-          `Skipping registration of ${workflowId || "unknown"} workflow due to invalid config`
+        routes = workflowRoutes(
+          workflowId,
+          defaultWorkflowConfig,
+          gatewayWorkflowConfig as RouteConfigs
         );
+      } catch {
+        // if the routes aren't configured properly we drop the workflow
+        warnUnregistered(workflowId, "Not registered", "invalid config");
         return null;
       }
+
+      // if workflow has no routes drop the workflow
+      if (_.isEmpty(routes)) {
+        warnUnregistered(workflowId, "Not registered", "zero routes found");
+        return null;
+      }
+
+      return { ...defaultWorkflowConfig, ...gatewayWorkflowOverrides, routes };
     })
     .filter(workflow => workflow !== null);
-  filters.forEach(f => {
-    f(validWorkflows).then(w => {
-      validWorkflows = w;
-    });
+  await filters.forEach(async f => {
+    wkflws = await f(wkflws);
   });
-  return validWorkflows;
+  return wkflws;
 };
 
-export { registeredWorkflows, workflowRoutes };
+export { isValidRoute, registeredWorkflows, warnUnregistered, workflowRoutes };

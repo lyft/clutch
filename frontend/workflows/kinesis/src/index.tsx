@@ -1,4 +1,4 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, DefaultWorkflowConfig } from "@clutch-sh/core";
 import type { WizardChild } from "@clutch-sh/wizard";
 
 import UpdateShardCount from "./update-shard-count";
@@ -10,7 +10,7 @@ interface ConfigurationProps {
 export interface WorkflowProps extends BaseWorkflowProps, ConfigurationProps {}
 export interface ResolverChild extends WizardChild, ConfigurationProps {}
 
-const register = (): WorkflowConfiguration => {
+const register = (): DefaultWorkflowConfig => {
   return {
     developer: {
       name: "Lyft",

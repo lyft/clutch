@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { Workflow } from "../AppProvider/workflow";
+import type { Workflow } from "../AppProvider/types";
 
 interface ContextProps {
   workflows: Workflow[];

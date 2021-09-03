@@ -1,4 +1,4 @@
-import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, DefaultWorkflowConfig, NoteConfig } from "@clutch-sh/core";
 import type { WizardChild } from "@clutch-sh/wizard";
 
 import DeletePod from "./delete-pod";
@@ -17,7 +17,7 @@ export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, C
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
 export interface ConfirmChild extends WizardChild, ConfirmConfigProps {}
 
-const register = (): WorkflowConfiguration => {
+const register = (): DefaultWorkflowConfig => {
   return {
     developer: {
       name: "Lyft",

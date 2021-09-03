@@ -6,54 +6,7 @@ import { Alert } from "@material-ui/lab";
 import { Dialog, DialogContent } from "../dialog";
 import Code from "../text";
 
-export interface BaseWorkflowProps {
-  heading: string;
-}
-
-interface Developer {
-  contactUrl: string;
-  name: string;
-}
-
-interface BaseWorkflowConfiguration {
-  developer: Developer;
-  displayName: string;
-  group: string;
-  path: string;
-  routes: unknown;
-}
-
-export interface Workflow extends BaseWorkflowConfiguration {
-  routes: ConfiguredRoute[];
-}
-
-export interface WorkflowConfiguration extends BaseWorkflowConfiguration {
-  routes: {
-    [key: string]: Route;
-  };
-}
-
-interface Route {
-  component: React.FC<any>;
-  description: string;
-  displayName?: string;
-  path: string;
-  /** Properties required by the Component that are set only via the config. */
-  requiredConfigProps?: string[];
-  /** Is the workflow discoverable via search and drawer navigation. This defaults to false. */
-  hideNav?: boolean;
-  /**
-   * The feature flag used to determine if the route should be registered.
-   *
-   * If this is not set the route will always be registered.
-   */
-  featureFlag?: string;
-}
-
-export interface ConfiguredRoute extends Route {
-  componentProps?: object;
-  trending?: boolean;
-}
+import type { Workflow } from "./types";
 
 interface ErrorBoundaryProps {
   workflow: Workflow;

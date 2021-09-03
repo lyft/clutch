@@ -48,7 +48,7 @@ ensures that even if users do not reload the application there is a max TTL of u
 afformentioned polling interval.
 
 ```tsx title="frontend/workflows/amiibo/src/index.tsx"
-const register = (): WorkflowConfiguration => {
+const register = (): DefaultWorkflowConfig => {
   return {
     developer: {
       name: "Name McName",

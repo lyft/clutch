@@ -1,4 +1,4 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, DefaultWorkflowConfig } from "@clutch-sh/core";
 
 import Card from "./card";
 import Dash from "./dash";
@@ -6,7 +6,7 @@ import { useDashState } from "./dash-hooks";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
-const register = (): WorkflowConfiguration => {
+const register = (): DefaultWorkflowConfig => {
   return {
     developer: {
       name: "clutch@lyft.com",

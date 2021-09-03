@@ -1,6 +1,7 @@
 import React from "react";
 
-import { workflowRoutes } from "../registrar";
+import { registeredWorkflows, workflowRoutes } from "../registrar";
+import type { DefaultWorkflowConfig, GatewayConfig, GatewayRoute, RouteConfigs } from "../types";
 
 const WORKFLOW_ID = "@clutch-sh/ec2";
 const WORKFLOW_CONFIG = {
@@ -34,86 +35,198 @@ const WORKFLOW_CONFIG = {
       component: () => <></>,
     },
   },
-};
-const USER_CONFIGURATION = {
-  "@clutch-sh/ec2": {
-    terminateInstance: {
-      component: () => <></>,
-      path: "instance/terminate",
-      description: "Terminate an EC2 instance.",
-      trending: true,
-      componentProps: {
-        resolverType: "clutch.aws.ec2.v1.Instance",
-        notes: [
-          {
-            severity: "info",
-            text: "Note: the instance may take several minutes to shut down.",
-          },
-        ],
-      },
+} as DefaultWorkflowConfig;
+const ROUTES = {
+  terminateInstance: {
+    component: () => <></>,
+    path: "instance/term",
+    description: "Custom description.",
+    trending: true,
+    componentProps: {
+      resolverType: "clutch.aws.ec2.v1.Instance",
+      notes: [
+        {
+          severity: "info",
+          text: "Note: the instance may take several minutes to shut down.",
+        },
+      ],
     },
   },
-};
+} as RouteConfigs;
+
+const GATEWAY_CONFIG = {
+  [WORKFLOW_ID]: ROUTES,
+} as GatewayConfig;
 
 describe("workflowRoutes", () => {
   let warn;
-  beforeAll(() => {
-    warn = jest.spyOn(console, "warn").mockImplementation();
+  let gatewayRoutes;
+  beforeEach(() => {
+    gatewayRoutes = JSON.parse(JSON.stringify(ROUTES));
+    warn = jest.spyOn(console, "warn").mockImplementation(() => {});
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    warn.mockReset();
   });
 
   afterAll(() => {
     warn.mockRestore();
   });
 
-  it("handles empty user configuration", () => {
+  it("handles empty gateway route configuration", () => {
     const routes = workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, {});
     expect(routes).toEqual([]);
   });
 
-  it("handles non-existant workflow IDs", () => {
-    const routes = workflowRoutes("test-workflow-id", WORKFLOW_CONFIG, USER_CONFIGURATION);
-    expect(routes).toEqual([]);
-  });
-
-  it("warns when user-specified workflow route is missing", () => {
-    const gatewayCfg = { ...USER_CONFIGURATION };
+  it("warns on invalid gateway routes", () => {
     // eslint-disable-next-line
-    gatewayCfg["@clutch-sh/ec2"]["fakeRoute"] = {};
-    workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayCfg);
+    gatewayRoutes["fakeRoute"] = {} as GatewayRoute;
+    workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayRoutes);
     expect(warn).toHaveBeenCalledWith(
-      "[@clutch-sh/ec2][fakeRoute] Not registered: Invalid config - route does not exist. Valid routes: terminateInstance,rebootInstance,resizeAutoscalingGroup"
+      "[@clutch-sh/ec2][fakeRoute] Invalid gateway config: route with specified name does not exist"
     );
   });
 
-  it("filters out empty routes", () => {
-    const gatewayCfg = { ...USER_CONFIGURATION };
+  it("removes invalid gateway routes", () => {
     // eslint-disable-next-line
-    gatewayCfg["@clutch-sh/ec2"]["fakeRoute"] = {};
-    const routes = workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayCfg);
+    gatewayRoutes["fakeRoute"] = {} as GatewayRoute;
+    const routes = workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayRoutes);
     expect(routes).toHaveLength(1);
   });
 
-  it("warns on missing required route props", () => {
-    const gatewayCfg = { ...USER_CONFIGURATION };
-    delete gatewayCfg["@clutch-sh/ec2"].terminateInstance.componentProps;
-    workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayCfg);
+  it("warns on invalid gateway route configurations", () => {
+    delete gatewayRoutes.terminateInstance.componentProps;
+    workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayRoutes);
     expect(warn).toHaveBeenCalledWith(
-      "[@clutch-sh/ec2][instance/terminate] Not registered: Invalid config - missing required component props resolverType"
+      "[@clutch-sh/ec2][terminateInstance] Invalid gateway config: route is missing required props"
     );
   });
-  it("filters out routes missing required props", () => {
-    const gatewayCfg = { ...USER_CONFIGURATION };
-    delete gatewayCfg["@clutch-sh/ec2"].terminateInstance.componentProps;
-    const routes = workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayCfg);
+
+  it("removes routes with invalid gateway configurations", () => {
+    delete gatewayRoutes.terminateInstance.componentProps;
+    const routes = workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayRoutes);
     expect(routes).toHaveLength(0);
   });
 
-  it("returns valid routes", () => {
-    const routes = workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, USER_CONFIGURATION);
+  it("removes empty routes", () => {
+    // @ts-ignore
+    const routes = workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, { terminateInstance: {} });
     expect(routes).toEqual([]);
+  });
+
+  it("returns valid routes", () => {
+    const routes = workflowRoutes(WORKFLOW_ID, WORKFLOW_CONFIG, gatewayRoutes);
+    expect(routes).toHaveLength(1);
+  });
+});
+
+describe("registeredWorkflows", () => {
+  let warn;
+  let gatewayConfig;
+  const availableWorkflows = { [WORKFLOW_ID]: () => WORKFLOW_CONFIG };
+  beforeEach(() => {
+    gatewayConfig = JSON.parse(JSON.stringify(GATEWAY_CONFIG));
+    warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warn.mockClear();
+  });
+
+  afterAll(() => {
+    warn.mockRestore();
+  });
+
+  it("handles empty workflows", () => {
+    return registeredWorkflows().then(workflows => {
+      expect(workflows).toHaveLength(0);
+    });
+  });
+
+  it("handles empty gateway configuration", () => {
+    return registeredWorkflows(undefined).then(workflows => {
+      expect(workflows).toHaveLength(0);
+    });
+  });
+
+  it("allows workflow overrides from gateway", () => {
+    gatewayConfig[WORKFLOW_ID].overrides = { displayName: "Amazon Web Services" };
+    return registeredWorkflows(availableWorkflows, gatewayConfig).then(workflows => {
+      expect(workflows[0].displayName).toBe("Amazon Web Services");
+    });
+  });
+
+  it("removes workflow overrides from gateway config", () => {
+    gatewayConfig[WORKFLOW_ID].overrides = { displayName: "Amazon Web Services" };
+    return registeredWorkflows(availableWorkflows, gatewayConfig).then(() => {
+      expect(warn).not.toHaveBeenCalled();
+    });
+  });
+
+  it("warns on any error parsing gateway route configs", () => {
+    return registeredWorkflows(availableWorkflows, { [WORKFLOW_ID]: null }).then(() => {
+      expect(warn).toHaveBeenCalledWith("[@clutch-sh/ec2] Not registered: invalid config");
+    });
+  });
+
+  it("removes gateway route configs on any error", () => {
+    return registeredWorkflows(availableWorkflows, { [WORKFLOW_ID]: null }).then(workflows => {
+      expect(workflows).toHaveLength(0);
+    });
+  });
+
+  it("warns if gateway workflow has zero valid routes", () => {
+    delete gatewayConfig[WORKFLOW_ID].terminateInstance;
+    return registeredWorkflows(availableWorkflows, gatewayConfig).then(() => {
+      expect(warn).toHaveBeenCalledWith("[@clutch-sh/ec2] Not registered: zero routes found");
+    });
+  });
+
+  it("removes gateway workflows with zero valid routes", () => {
+    delete gatewayConfig[WORKFLOW_ID].terminateInstance;
+    return registeredWorkflows(availableWorkflows, gatewayConfig).then(workflows => {
+      expect(workflows).toHaveLength(0);
+    });
+  });
+
+  it("returns gateway configured workflow routes", () => {
+    return registeredWorkflows(availableWorkflows, gatewayConfig).then(workflows => {
+      expect(workflows[0].routes[0].path).toBe("instance/term");
+    });
+  });
+
+  it("applies filters to each workflow", () => {
+    const filter = jest.fn().mockImplementation(() => new Promise(resolve => resolve([])));
+    filter.mockReturnValue(new Promise(resolve => resolve([])));
+    return registeredWorkflows(availableWorkflows, gatewayConfig, [filter]).then(workflows => {
+      expect(filter).toHaveBeenLastCalledWith([
+        {
+          developer: { contactUrl: "mailto:hello@example.com", name: "Lyft" },
+          displayName: "EC2",
+          group: "AWS",
+          path: "ec2",
+          routes: [
+            expect.objectContaining({
+              componentProps: {
+                notes: [
+                  {
+                    severity: "info",
+                    text: "Note: the instance may take several minutes to shut down.",
+                  },
+                ],
+                resolverType: "clutch.aws.ec2.v1.Instance",
+              },
+              description: "Custom description.",
+              displayName: "Terminate Instance",
+              path: "instance/term",
+              requiredConfigProps: ["resolverType"],
+              trending: true,
+            }),
+          ],
+        },
+      ]);
+      expect(workflows).toHaveLength(0);
+    });
   });
 });

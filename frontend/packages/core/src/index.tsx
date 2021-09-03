@@ -56,7 +56,7 @@ import {
 } from "./Table";
 import { Typography } from "./typography";
 
-export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
+export type { BaseWorkflowProps, DefaultWorkflowConfig } from "./AppProvider/types";
 export type { ButtonProps } from "./button";
 export type { NoteConfig } from "./Feedback";
 export type { ClutchError } from "./Network/errors";
