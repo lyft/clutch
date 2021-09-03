@@ -9,6 +9,7 @@ import {
   Resolver,
   Table,
   TableRow,
+  Typography,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -146,8 +147,11 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
       </Box>
 
       {enableOverride && (
+      <Box>
+        <Typography variant="body2">
+          Warning: to override the DynamoDB scaling limits, check the box below. This will bypass the maximum limits placed on all throughput updates. Only override limits if safe to do so.
+        </Typography>
         <CheckboxPanel
-          header="Warning: checking the option below disables the limits set on your scaling action."
           onChange={state =>
             capacityUpdates.updateData("ignore_maximums", state["Override limits"])
           }
@@ -155,6 +159,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
             "Override limits": false,
           }}
         />
+      </Box>
       )}
 
       <ButtonGroup>
