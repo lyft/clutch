@@ -23,7 +23,7 @@ import (
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/golang/protobuf/ptypes/any"
-	githubv3 "github.com/google/go-github/v37/github"
+	githubv3 "github.com/google/go-github/v38/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -403,7 +403,7 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
  * Rather than calling GetCommit() multiple times, we can use CompareCommits to get a range of commits
  */
 func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, error) {
-	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
+	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref, &githubv3.ListOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("Could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
@@ -419,7 +419,7 @@ type Commit struct {
 }
 
 func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
-	commit, _, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
+	commit, _, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref, &githubv3.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
