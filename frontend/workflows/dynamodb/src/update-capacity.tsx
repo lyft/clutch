@@ -28,10 +28,11 @@ const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const onResolve = ({ results }) => {
     // Decide how to process results.
     resolvedResourceData.assign(results[0]);
-    const gsi_map = _.mapValues(_.keyBy(resolvedResourceData.displayValue().globalSecondaryIndexes, 'name'), v => ({"read": v.provisionedThroughput.readCapacityUnits, "write": v.provisionedThroughput.readCapacityUnits}));
-    capacityUpdates.updateData("gsi_map", gsi_map)
+    capacityUpdates.updateData("gsi_map", _.mapValues(_.keyBy(results[0].globalSecondaryIndexes, 'name'), v => v.provisionedThroughput))
     onSubmit();
   };
+
+
 
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
@@ -54,29 +55,16 @@ const TableDetails: React.FC<WizardChild> = () => {
     // feature request to address this: https://github.com/lyft/clutch/issues/1739
     const [capacityType, gsiName] = key.split(",");
 
-    const gsiList = [...(capacityUpdates.displayValue()?.gsi_updates || [])];
-    const idx = gsiList.findIndex(
-      (gsi: { name: string; indexThroughput: {} }) => gsi.name === gsiName
-    );
-    if (idx > -1) {
-      // gsi already in the edits list
-      const gsi = gsiList[idx];
-      gsi.index_throughput = { ...gsi.index_throughput, [capacityType]: value };
-      capacityUpdates.updateData("gsi_updates", gsiList);
-    } else {
-      // copy over current capacities
-      const curr = table.globalSecondaryIndexes.find(gsi => gsi.name === gsiName);
-      const newGsi = {
-        name: gsiName,
-        index_throughput: {
-          read_capacity_units: curr.provisionedThroughput.readCapacityUnits,
-          write_capacity_units: curr.provisionedThroughput.writeCapacityUnits,
-          [capacityType]: value,
-        },
-      };
-      gsiList.push(newGsi);
-      capacityUpdates.updateData("gsi_updates", gsiList);
+    const updatesList = {...(capacityUpdates.displayValue()?.gsi_updates || {})};
+    if (!_.has(updatesList, gsiName)) { // copy over current throughput on first update
+      console.log("first touch")
+      updatesList[gsiName] = {...capacityUpdates.displayValue().gsi_map[gsiName]};
+      capacityUpdates.updateData("gsi_updates", updatesList);
     }
+      console.log("updating: " + gsiName)
+      updatesList[gsiName] = {...updatesList[gsiName], [capacityType]: value}
+      capacityUpdates.updateData("gsi_updates", updatesList);
+      console.log(updatesList)
   };
 
   return (
@@ -130,7 +118,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     value: gsi.provisionedThroughput.readCapacityUnits,
                     input: {
                       type: "number",
-                      key: `read_capacity_units,${gsi.name}`,
+                      key: `readCapacityUnits,${gsi.name}`,
                       validation: number()
                         .integer()
                         .transform(value => (Number.isNaN(value) ? 0 : value))
@@ -142,7 +130,7 @@ const TableDetails: React.FC<WizardChild> = () => {
                     value: gsi.provisionedThroughput.writeCapacityUnits,
                     input: {
                       type: "number",
-                      key: `write_capacity_units,${gsi.name}`,
+                      key: `writeCapacityUnits,${gsi.name}`,
                       validation: number()
                         .integer()
                         .transform(value => (Number.isNaN(value) ? 0 : value))
