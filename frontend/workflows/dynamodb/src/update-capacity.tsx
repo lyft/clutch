@@ -57,14 +57,11 @@ const TableDetails: React.FC<WizardChild> = () => {
 
     const updatesList = {...(capacityUpdates.displayValue()?.gsi_updates || {})};
     if (!_.has(updatesList, gsiName)) { // copy over current throughput on first update
-      console.log("first touch")
       updatesList[gsiName] = {...capacityUpdates.displayValue().gsi_map[gsiName]};
       capacityUpdates.updateData("gsi_updates", updatesList);
     }
-      console.log("updating: " + gsiName)
       updatesList[gsiName] = {...updatesList[gsiName], [capacityType]: value}
       capacityUpdates.updateData("gsi_updates", updatesList);
-      console.log(updatesList)
   };
 
   return (
@@ -192,25 +189,27 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
       deps: ["resourceData", "capacityUpdates"],
       hydrator: (resourceData, capacityUpdates) => {
         const tableArgs = {
-          table_name: resourceData.name,
+          tableName: resourceData.name,
           region: resourceData.region,
-          ignore_maximums:
+          ignoreMaximums:
             "ignore_maximums" in capacityUpdates ? capacityUpdates.ignore_maximums : false,
         };
 
         let changeArgs: {};
-        if (capacityUpdates.table_throughput) {
+        if (_.has(capacityUpdates, "table_throughput")) {
           changeArgs = {
-            table_throughput: {
-              read_capacity_units: capacityUpdates.table_throughput?.read ?? resourceData.provisionedThroughput.readCapacityUnits,
-              write_capacity_units: capacityUpdates.table_throughput.write
-                ? capacityUpdates.table_throughput.write
-                : resourceData.provisionedThroughput.writeCapacityUnits,
-            },
-          };
+            tableThroughput: {
+              readCapacityUnits: capacityUpdates.table_throughput?.read ?? resourceData.provisionedThroughput.readCapacityUnits,
+              writeCapacityUnits: capacityUpdates.table_throughput.write ?? resourceData.provisionedThroughput.writeCapacityUnits,
+            }
+          }
         }
-        if (Array.isArray(capacityUpdates.gsi_updates)) {
-          changeArgs = { ...changeArgs, gsi_updates: [...capacityUpdates.gsi_updates] };
+        if (_.has(capacityUpdates, "gsi_updates")) {
+          let updatesFormatted = []
+          _.each(capacityUpdates.gsi_updates, (throughput, name) => {
+            updatesFormatted.push({'name': name, 'index_throughput': throughput})
+          })
+          changeArgs = { ...changeArgs, gsi_updates: updatesFormatted};
         }
         return client
           .post("/v1/aws/dynamodb/updateCapacity", { ...tableArgs, ...changeArgs })
