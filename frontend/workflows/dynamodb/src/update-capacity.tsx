@@ -54,9 +54,7 @@ const TableDetails: React.FC<WizardChild> = () => {
     // the GSI name from a single event attribute [key]
     // where key is formatted like "read,gsi-name"
     // feature request to address this: https://github.com/lyft/clutch/issues/1739
-    const keys = key.split(",");
-    const capacityType = keys[0];
-    const gsiName = keys[1];
+    const [capacityType, gsiName] = key.split(",");
 
     const gsiList = [...(capacityUpdates.displayValue()?.gsi_updates || [])];
     const idx = gsiList.findIndex(
