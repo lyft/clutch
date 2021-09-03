@@ -75,9 +75,9 @@ const TableDetails: React.FC<WizardChild> = () => {
         index_throughput: {
           read_capacity_units: curr.provisionedThroughput.readCapacityUnits,
           write_capacity_units: curr.provisionedThroughput.writeCapacityUnits,
+          [capacityType]: value,
         },
       };
-      newGsi.index_throughput = { ...newGsi.index_throughput, [capacityType]: value };
       gsiList.push(newGsi);
       capacityUpdates.updateData("gsi_updates", gsiList);
     }
