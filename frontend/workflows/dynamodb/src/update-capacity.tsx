@@ -44,8 +44,7 @@ const TableDetails: React.FC<WizardChild> = () => {
   const table = resourceData.displayValue() as IClutch.aws.dynamodb.v1.Table;
 
   const handleTableCapacityChange = (key: string, value: string) => {
-    const newTableCapacity = { ...capacityUpdates.displayValue().table_throughput };
-    newTableCapacity[key] = value;
+    const newTableThroughput = { ...capacityUpdates.displayValue().table_throughput, key: value };
     capacityUpdates.updateData("table_throughput", newTableCapacity);
   };
 
