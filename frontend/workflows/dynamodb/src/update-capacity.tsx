@@ -14,9 +14,9 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import { Box } from "@material-ui/core";
 import _ from "lodash";
 import { number } from "yup";
-import { Box } from "@material-ui/core";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
@@ -28,11 +28,12 @@ const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const onResolve = ({ results }) => {
     // Decide how to process results.
     resolvedResourceData.assign(results[0]);
-    capacityUpdates.updateData("gsi_map", _.mapValues(_.keyBy(results[0].globalSecondaryIndexes, 'name'), v => v.provisionedThroughput))
+    capacityUpdates.updateData(
+      "gsi_map",
+      _.mapValues(_.keyBy(results[0].globalSecondaryIndexes, "name"), v => v.provisionedThroughput)
+    );
     onSubmit();
   };
-
-
 
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
@@ -55,13 +56,14 @@ const TableDetails: React.FC<WizardChild> = () => {
     // feature request to address this: https://github.com/lyft/clutch/issues/1739
     const [capacityType, gsiName] = key.split(",");
 
-    const updatesList = {...(capacityUpdates.displayValue()?.gsi_updates || {})};
-    if (!_.has(updatesList, gsiName)) { // copy over current throughput on first update
-      updatesList[gsiName] = {...capacityUpdates.displayValue().gsi_map[gsiName]};
+    const updatesList = { ...(capacityUpdates.displayValue()?.gsi_updates || {}) };
+    if (!_.has(updatesList, gsiName)) {
+      // copy over current throughput on first update
+      updatesList[gsiName] = { ...capacityUpdates.displayValue().gsi_map[gsiName] };
       capacityUpdates.updateData("gsi_updates", updatesList);
     }
-      updatesList[gsiName] = {...updatesList[gsiName], [capacityType]: value}
-      capacityUpdates.updateData("gsi_updates", updatesList);
+    updatesList[gsiName] = { ...updatesList[gsiName], [capacityType]: value };
+    capacityUpdates.updateData("gsi_updates", updatesList);
   };
 
   return (
@@ -199,17 +201,21 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
         if (_.has(capacityUpdates, "table_throughput")) {
           changeArgs = {
             tableThroughput: {
-              readCapacityUnits: capacityUpdates.table_throughput?.read ?? resourceData.provisionedThroughput.readCapacityUnits,
-              writeCapacityUnits: capacityUpdates.table_throughput.write ?? resourceData.provisionedThroughput.writeCapacityUnits,
-            }
-          }
+              readCapacityUnits:
+                capacityUpdates.table_throughput?.read ??
+                resourceData.provisionedThroughput.readCapacityUnits,
+              writeCapacityUnits:
+                capacityUpdates.table_throughput.write ??
+                resourceData.provisionedThroughput.writeCapacityUnits,
+            },
+          };
         }
         if (_.has(capacityUpdates, "gsi_updates")) {
-          let updatesFormatted = []
+          const updatesFormatted = [];
           _.each(capacityUpdates.gsi_updates, (throughput, name) => {
-            updatesFormatted.push({'name': name, 'index_throughput': throughput})
-          })
-          changeArgs = { ...changeArgs, gsi_updates: updatesFormatted};
+            updatesFormatted.push({ name, index_throughput: throughput });
+          });
+          changeArgs = { ...changeArgs, gsi_updates: updatesFormatted };
         }
         return client
           .post("/v1/aws/dynamodb/updateCapacity", { ...tableArgs, ...changeArgs })
