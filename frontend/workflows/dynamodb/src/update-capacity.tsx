@@ -148,7 +148,9 @@ const TableDetails: React.FC<WizardChild> = () => {
       {/* TODO: conditionally render the override checkbox depending on workflow config prop */}
       <CheckboxPanel
         header="To override the safety limits for scaling, check the box below."
-        onChange={state => capacityUpdates.updateData("ignore_maximums", state)}
+        onChange={state =>
+          capacityUpdates.updateData("ignore_maximums", state["Override maximum limits"])
+        }
         options={{
           "Override maximum limits": false,
         }}
@@ -217,7 +219,6 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
           const updatesFormatted = [];
           _.each(capacityUpdates.gsi_updates, (throughput, name) => {
             if (!_.isEqual(capacityUpdates.gsi_map[name], throughput)) {
-              // handle edge case where input matches current capacity
               updatesFormatted.push({ name, index_throughput: throughput });
             }
           });
