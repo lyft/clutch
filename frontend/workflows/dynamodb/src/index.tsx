@@ -7,8 +7,13 @@ interface ResolverConfigProps {
   resolverType: string;
 }
 
-export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps {}
+interface TableDetailsProps {
+  enableOverride?: boolean;
+}
+
+export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, TableDetailsProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
+export interface TableDetailsChild extends WizardChild, TableDetailsProps {}
 
 const register = (): WorkflowConfiguration => {
   return {
@@ -25,7 +30,7 @@ const register = (): WorkflowConfiguration => {
         component: UpdateCapacity,
         displayName: "Update Capacity",
         description: "Update the table or GSI provisioned capacity.",
-        requiredConfigProps: ["resolverType", "notes"],
+        requiredConfigProps: ["resolverType"],
       },
     },
   };

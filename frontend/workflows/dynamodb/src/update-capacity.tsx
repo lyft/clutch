@@ -18,7 +18,7 @@ import { Box } from "@material-ui/core";
 import _ from "lodash";
 import { number } from "yup";
 
-import type { ResolverChild, WorkflowProps } from "./index";
+import type { ResolverChild, TableDetailsChild, WorkflowProps } from ".";
 
 const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
@@ -40,7 +40,7 @@ const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
 
-const TableDetails: React.FC<WizardChild> = () => {
+const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
   const { onSubmit, onBack } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
   const capacityUpdates = useDataLayout("capacityUpdates");
@@ -146,15 +146,17 @@ const TableDetails: React.FC<WizardChild> = () => {
       </Box>
 
       {/* TODO: conditionally render the override checkbox depending on workflow config prop */}
-      <CheckboxPanel
-        header="To override the safety limits for scaling, check the box below."
-        onChange={state =>
-          capacityUpdates.updateData("ignore_maximums", state["Override maximum limits"])
-        }
-        options={{
-          "Override maximum limits": false,
-        }}
-      />
+      {enableOverride && (
+        <CheckboxPanel
+          header="To override the safety limits for scaling, check the box below."
+          onChange={state =>
+            capacityUpdates.updateData("ignore_maximums", state["Override maximum limits"])
+          }
+          options={{
+            "Override maximum limits": false,
+          }}
+        />
+      )}
 
       <ButtonGroup>
         <Button text="Back" variant="neutral" onClick={() => onBack()} />
@@ -187,7 +189,7 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
+const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType, enableOverride }) => {
   const dataLayout = {
     resourceData: {},
     capacityUpdates: {},
@@ -236,7 +238,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType }) => {
   return (
     <Wizard dataLayout={dataLayout}>
       <TableIdentifier name="Lookup" resolverType={resolverType} />
-      <TableDetails name="Modify" />
+      <TableDetails name="Modify" enableOverride={enableOverride} />
       <Confirm name="Results" />
     </Wizard>
   );
