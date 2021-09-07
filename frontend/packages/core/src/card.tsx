@@ -1,17 +1,19 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { CardHeaderProps as MuiCardHeaderProps } from "@material-ui/core";
 import {
   Avatar,
   Card as MuiCard,
   CardActionArea,
   CardActionAreaProps,
-  CardHeader as MuiCardHeader,
+  Divider,
+  Grid,
 } from "@material-ui/core";
 import type { SpacingProps as MuiSpacingProps } from "@material-ui/system";
 import { spacing } from "@material-ui/system";
 
-import { Typography } from "./typography";
+import { Typography, TypographyProps } from "./typography";
+
+// TODO: seperate out the different card parts into various files
 
 const StyledCard = styled(MuiCard)({
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
@@ -36,23 +38,76 @@ const StyledCardHeaderContainer = styled.div({
   background: "#EBEDFB",
 });
 
-interface CardHeaderProps extends Pick<MuiCardHeaderProps, "avatar" | "title"> {
-  children?: React.ReactNode;
+const StyledCardHeader = styled(Grid)({
+  padding: "16px",
+  minHeight: "72px",
+  ".MuiGrid-item": {
+    padding: "0px 8px",
+  },
+});
+
+// TODO:: confirm the width and height of the icon container
+// TODO: use material ui avatar component and implement figma design
+const StyledCardHeaderAvatar = styled.div({
+  width: "32px",
+  height: "32px",
+  marginRight: "16px",
+});
+
+// TODO: make the divider a core component
+// TODO: confirm the height of the divider
+const StyledDivider = styled(Divider)({
+  color: "rgba(13, 16, 48, 0.38)",
+  height: "36px",
+  alignSelf: "center",
+});
+
+const StyledGridItem = styled(Grid)({
+  textAlign: "center",
+});
+
+export interface CardHeaderSummaryProps {
+  title: React.ReactElement<TypographyProps> | React.ReactElement<TypographyProps>[];
+  subheader?: string;
 }
 
-const CardHeader = ({ avatar, children, title }: CardHeaderProps) => (
-  <StyledCardHeaderContainer>
-    <MuiCardHeader
-      style={{
-        padding: "16px",
-      }}
-      disableTypography
-      avatar={avatar}
-      title={<Typography variant="h3">{title}</Typography>}
-    />
-    {children}
-  </StyledCardHeaderContainer>
-);
+interface CardHeaderProps {
+  avatar: React.ReactNode;
+  children?: React.ReactNode;
+  summary?: CardHeaderSummaryProps[];
+  title: React.ReactNode;
+}
+
+const CardHeader = ({ avatar, children, title, summary = [] }: CardHeaderProps) => {
+  return (
+    <StyledCardHeaderContainer>
+      <StyledCardHeader container wrap="nowrap" alignItems="center">
+        <StyledCardHeaderAvatar>
+          {/* TODO: confirm the fontSize of icon */}
+          <Typography variant="h2">{avatar}</Typography>
+        </StyledCardHeaderAvatar>
+        <Grid item xs>
+          <Typography variant="h4">{title}</Typography>
+        </Grid>
+        {summary.map(section => (
+          <>
+            <StyledDivider orientation="vertical" />
+            <StyledGridItem item xs>
+              {section.title}
+              {/* TODO: confirm the fontSize of the subheader */}
+              {section.subheader && (
+                <Typography variant="body3" color="rgba(13, 16, 48, 0.6)">
+                  {section.subheader}
+                </Typography>
+              )}
+            </StyledGridItem>
+          </>
+        ))}
+      </StyledCardHeader>
+      {children}
+    </StyledCardHeaderContainer>
+  );
+};
 
 // Material UI Spacing system supports many props https://material-ui.com/system/spacing/#api
 // We can add more to this list as use cases arise

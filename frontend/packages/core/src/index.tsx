@@ -60,6 +60,7 @@ export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/wor
 export type { ButtonProps } from "./button";
 export type { NoteConfig } from "./Feedback";
 export type { ClutchError } from "./Network/errors";
+export type { CardHeaderSummaryProps } from "./card";
 
 export {
   Accordion,
