@@ -11,7 +11,7 @@ import {
 import type { SpacingProps as MuiSpacingProps } from "@material-ui/system";
 import { spacing } from "@material-ui/system";
 
-import { Typography } from "./typography";
+import { Typography, TypographyProps } from "./typography";
 
 // TODO: seperate out the different card parts into various files
 
@@ -67,7 +67,7 @@ const StyledGridItem = styled(Grid)({
 });
 
 export interface CardHeaderSummaryProps {
-  title: React.ReactNode;
+  title: React.ReactElement<TypographyProps> | React.ReactElement<TypographyProps>[];
   subheader?: string;
 }
 
