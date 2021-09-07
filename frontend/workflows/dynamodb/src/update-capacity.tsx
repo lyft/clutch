@@ -1,15 +1,16 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
+  Alert,
   Button,
   ButtonGroup,
   CheckboxPanel,
   client,
+  Confirmation,
   MetadataTable,
   Resolver,
   Table,
   TableRow,
-  Typography,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -147,19 +148,21 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
       </Box>
 
       {enableOverride && (
-      <Box>
-        <Typography variant="body2">
-          Warning: to override the DynamoDB scaling limits, check the box below. This will bypass the maximum limits placed on all throughput updates. Only override limits if safe to do so.
-        </Typography>
-        <CheckboxPanel
-          onChange={state =>
-            capacityUpdates.updateData("ignore_maximums", state["Override limits"])
-          }
-          options={{
-            "Override limits": false,
-          }}
-        />
-      </Box>
+        <Box>
+          <Alert severity="warning">
+            Warning: to override the DynamoDB scaling limits, check the box below. This will bypass
+            the maximum limits placed on all throughput updates. Only override limits if safe to do
+            so.
+          </Alert>
+          <CheckboxPanel
+            onChange={state =>
+              capacityUpdates.updateData("ignore_maximums", state["Override limits"])
+            }
+            options={{
+              "Override limits": false,
+            }}
+          />
+        </Box>
       )}
 
       <ButtonGroup>
@@ -181,6 +184,7 @@ const Confirm: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={updateCapacityOutput.error} isLoading={updateCapacityOutput.isLoading}>
+      <Confirmation action="Update" />
       <Table columns={["Name", "Status"]}>
         {statusList.map(s => (
           <TableRow key={s.name}>
