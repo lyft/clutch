@@ -1,8 +1,9 @@
 import * as React from "react";
 import type { CardHeaderSummaryProps, ClutchError } from "@clutch-sh/core";
-import { Card as ClutchCard, CardContent, CardHeader, Error } from "@clutch-sh/core";
+import { Card as ClutchCard, CardContent, CardHeader, Error, IconButton } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Grid, LinearProgress } from "@material-ui/core";
+import MinimizeIcon from "@material-ui/icons/Minimize";
 
 const StyledProgressContainer = styled.div({
   height: "4px",
@@ -23,17 +24,36 @@ interface CardProps {
   title?: React.ReactNode & string;
 }
 
-const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps) => (
-  <Grid item xs={12} sm={12} md={12} lg={6}>
-    <ClutchCard>
-      <CardHeader avatar={avatar} summary={summary} title={title}>
-        <StyledProgressContainer>
-          {isLoading && <LinearProgress color="secondary" />}
-        </StyledProgressContainer>
-      </CardHeader>
-      <CardContent padding={0}>{error ? <Error subject={error} /> : children}</CardContent>
-    </ClutchCard>
-  </Grid>
-);
+const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps) => {
+  const [expanded, setExpanded] = React.useState(true);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  return (
+    <Grid item xs={12} sm={12} md={12} lg={6}>
+      <ClutchCard>
+        <CardHeader
+          actions={
+            <IconButton onClick={handleExpandClick} variant="neutral">
+              <MinimizeIcon />
+            </IconButton>
+          }
+          avatar={avatar}
+          summary={summary}
+          title={title}
+        >
+          <StyledProgressContainer>
+            {isLoading && <LinearProgress color="secondary" />}
+          </StyledProgressContainer>
+        </CardHeader>
+        {expanded && (
+          <CardContent padding={0}>{error ? <Error subject={error} /> : children}</CardContent>
+        )}
+      </ClutchCard>
+    </Grid>
+  );
+};
 
 export default Card;
