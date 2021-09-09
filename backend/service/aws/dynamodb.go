@@ -184,7 +184,7 @@ func (c *client) UpdateCapacity(ctx context.Context, region string, tableName st
 
 	currentTable, err := getTable(ctx, cl, tableName)
 	if err != nil {
-		c.log.Error("unable to find table", zap.Error(err))
+		c.log.Error("unable to find table", zap.String("table", tableName), zap.Error(err))
 		return nil, err
 	}
 
@@ -206,6 +206,7 @@ func (c *client) UpdateCapacity(ctx context.Context, region string, tableName st
 
 		err = isValidIncrease(cl, currentTable.Table.ProvisionedThroughput, t, ignore_maximums)
 		if err != nil {
+			c.log.Error("is not a valid increase", zap.Error(err))
 			return nil, err
 		}
 
@@ -216,6 +217,7 @@ func (c *client) UpdateCapacity(ctx context.Context, region string, tableName st
 	if len(indexUpdates) > 0 { // received at least one index update
 		updates, err := generateIndexUpdates(cl, currentTable, indexUpdates, ignore_maximums)
 		if err != nil {
+			c.log.Error("unable to generate index updates", zap.Error(err))
 			return nil, err
 		}
 		input.GlobalSecondaryIndexUpdates = append(input.GlobalSecondaryIndexUpdates, updates...)
@@ -223,12 +225,11 @@ func (c *client) UpdateCapacity(ctx context.Context, region string, tableName st
 
 	result, err := cl.dynamodb.UpdateTable(ctx, input)
 	if err != nil {
+		c.log.Error("unable to update table", zap.String("table", tableName), zap.Error(err))
 		return nil, err
 	}
 
-	ret := newProtoForTable(result.TableDescription, region)
-
-	return ret, nil
+	return newProtoForTable(result.TableDescription, region), nil
 }
 
 // given a list of ddbv1.updates, generate the AWS types for updates
