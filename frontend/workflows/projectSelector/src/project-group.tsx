@@ -44,7 +44,7 @@ const StyledMenuItem = styled.div({
     backgroundColor: "rgba(13, 16, 48, 0.03)",
   },
   "&:hover > div": {
-    display: "inline-flex", // Unhide hidden button spans.
+    display: "inline-flex", // Unhide hidden only button and x if necessary.
   },
 });
 
