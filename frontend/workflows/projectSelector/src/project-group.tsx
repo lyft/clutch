@@ -43,7 +43,7 @@ const StyledMenuItem = styled.div({
   "&:hover": {
     backgroundColor: "rgba(13, 16, 48, 0.03)",
   },
-  "&:hover > span": {
+  "&:hover > div": {
     display: "inline-flex", // Unhide hidden button spans.
   },
 });
@@ -77,7 +77,13 @@ const StyledAllText = styled.div({
 
 const StyledMenuItemName = styled.span({
   flexGrow: 1,
-  marginLeft: "8px",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
+  marginLeft: "4px",
+  marginRight: "0px",
+  display: "block",
+  maxWidth: "160px",
 });
 
 const StyledClearIcon = styled.span({
@@ -112,7 +118,7 @@ const StyledOnlyButton = styled.button({
   },
 });
 
-const StyledHoverOptions = styled.span({
+const StyledHoverOptions = styled.div({
   alignItems: "center",
 });
 
