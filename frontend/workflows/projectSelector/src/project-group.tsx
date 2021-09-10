@@ -9,21 +9,30 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
 import type { Group } from "./types";
 
+const StyledGroup = styled.div({
+  fontWeight: 500,
+  marginLeft: "4px",
+  marginTop: "9px",
+  display: "block",
+});
+
+const StyledGroupTitle = styled.span({
+  marginRight: "4px",
+  display: "inline-block",
+});
+
 const StyledCount = styled.span({
   color: "rgba(13, 16, 48, 0.6)",
   backgroundColor: "rgba(13, 16, 48, 0.03)",
   fontVariantNumeric: "tabular-nums",
-  letterSpacing: "2px",
   borderRadius: "4px",
   fontWeight: "bold",
   fontSize: "12px",
-  padding: "1px 2px 1px 4px",
-  margin: "0 4px",
-});
-
-const StyledProjectTitle = styled.span({
-  fontWeight: 500,
-  marginLeft: "4px",
+  padding: "1px 4px",
+  marginRight: "4px",
+  marginBottom: "10px",
+  marginTop: "2px",
+  display: "inline-block",
 });
 
 const StyledMenuItem = styled.div({
@@ -34,23 +43,26 @@ const StyledMenuItem = styled.div({
   "&:hover": {
     backgroundColor: "rgba(13, 16, 48, 0.03)",
   },
-  "&:hover > span": {
-    display: "inline-flex", // Unhide hidden button spans.
+  "&:hover > div": {
+    display: "inline-flex", // Unhide hidden only button and x if necessary.
   },
 });
 
 const StyledProjectHeader = styled.div({
   display: "flex",
-  alignItems: "center",
+  maxWidth: "100%",
+  alignItems: "flex-start",
   justifyContent: "space-between",
-  height: "48px",
+  minHeight: "40px",
   padding: "0 12px",
 });
 
-const StyledHeaderColumn = styled.div({
+const StyledHeaderColumn = styled.div((props: { grow?: boolean }) => ({
   display: "flex",
+  minHeight: "38px",
   alignItems: "center",
-});
+  flexGrow: props.grow ? 1 : 0,
+}));
 
 const StyledNoProjectsText = styled.div({
   color: "rgba(13, 16, 48, 0.38)",
@@ -65,7 +77,13 @@ const StyledAllText = styled.div({
 
 const StyledMenuItemName = styled.span({
   flexGrow: 1,
-  marginLeft: "8px",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
+  marginLeft: "4px",
+  marginRight: "0px",
+  display: "block",
+  maxWidth: "160px",
 });
 
 const StyledClearIcon = styled.span({
@@ -100,7 +118,7 @@ const StyledOnlyButton = styled.button({
   },
 });
 
-const StyledHoverOptions = styled.span({
+const StyledHoverOptions = styled.div({
   alignItems: "center",
 });
 
@@ -123,17 +141,17 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   return (
     <>
       <StyledProjectHeader>
-        <StyledHeaderColumn>
-          <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
-            {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
-          </StyledHeaderColumn>
-          <StyledProjectTitle>
-            {title}
+        <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
+          {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
+        </StyledHeaderColumn>
+        <StyledHeaderColumn grow>
+          <StyledGroup>
+            <StyledGroupTitle>{title}</StyledGroupTitle>
             <StyledCount>
               {checkedProjects.length}
-              {numProjects > 0 && `/${numProjects}`}
+              {numProjects > 0 && ` / ${numProjects}`}
             </StyledCount>
-          </StyledProjectTitle>
+          </StyledGroup>
         </StyledHeaderColumn>
         <StyledHeaderColumn>
           {displayToggleHelperText && <StyledAllText>All</StyledAllText>}
