@@ -15,6 +15,13 @@ const StyledProgressContainer = styled.div({
   },
 });
 
+const StyledIconButton = styled(IconButton)({
+  alignItems: "flex-end",
+  ".MuiIconButton-label": {
+    display: "inline",
+  },
+});
+
 interface CardProps {
   avatar?: React.ReactNode;
   children: React.ReactNode;
@@ -36,9 +43,9 @@ const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps)
       <ClutchCard>
         <CardHeader
           actions={
-            <IconButton onClick={handleExpandClick} variant="neutral">
+            <StyledIconButton onClick={handleExpandClick} variant="neutral">
               <MinimizeIcon />
-            </IconButton>
+            </StyledIconButton>
           }
           avatar={avatar}
           summary={summary}
