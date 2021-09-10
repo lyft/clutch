@@ -280,9 +280,19 @@ func (c *ecdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeUR
 	return c.onStreamOpen(ctx)
 }
 
+func (c *ecdsCallbacks) OnDeltaStreamOpen(ctx context.Context, streamID int64, typeURL string) error {
+	c.logger.Debugw("ECDS onDeltaStreamOpen", "streamID", streamID, "typeURL", typeURL)
+	return c.onDeltaStreamOpen(ctx, streamID, typeURL)
+}
+
 func (c *ecdsCallbacks) OnStreamClosed(streamID int64) {
 	c.logger.Debugw("ECDS onStreamClosed", "streamID", streamID)
 	c.onStreamClosed(streamID)
+}
+
+func (c *ecdsCallbacks) OnDeltaStreamClosed(streamID int64) {
+	c.logger.Debugw("ECDS onDeltaStreamClosed", "streamID", streamID)
+	c.onDeltaStreamClosed(streamID)
 }
 
 func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.DiscoveryRequest) error {
@@ -294,10 +304,26 @@ func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.Disc
 	return nil
 }
 
+func (c *ecdsCallbacks) OnStreamDeltaRequest(streamID int64, req *gcpDiscoveryV3.DeltaDiscoveryRequest) error {
+	c.safeECDSResources.setResourcesForCluster(req.Node.Cluster, req.ResourceNamesSubscribe)
+
+	c.logger.Debugw("ECDS OnStreamDeltaRequest", "streamID", streamID, "cluster", req.Node.Cluster, "resources", req.ResourceNamesSubscribe)
+	c.onStreamDeltaRequest(streamID, req.Node.Cluster, req.ErrorDetail)
+
+	return nil
+}
+
 func (c *ecdsCallbacks) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
 	c.logger.Debugw("ECDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", request.VersionInfo)
 	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
 }
+
+func (c *ecdsCallbacks) OnStreamDeltaResponse(streamID int64, request *gcpDiscoveryV3.DeltaDiscoveryRequest, response *gcpDiscoveryV3.DeltaDiscoveryResponse) {
+	c.logger.Debugw("ECDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster)
+	c.onStreamDeltaResponse()
+
+}
+
 
 func (c *ecdsCallbacks) OnFetchRequest(context.Context, *gcpDiscoveryV3.DiscoveryRequest) error {
 	c.logger.Debugw("ECDS OnFetchRequest")
