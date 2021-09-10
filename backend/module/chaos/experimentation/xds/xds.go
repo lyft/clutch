@@ -321,9 +321,7 @@ func (c *ecdsCallbacks) OnStreamResponse(streamID int64, request *gcpDiscoveryV3
 func (c *ecdsCallbacks) OnStreamDeltaResponse(streamID int64, request *gcpDiscoveryV3.DeltaDiscoveryRequest, response *gcpDiscoveryV3.DeltaDiscoveryResponse) {
 	c.logger.Debugw("ECDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster)
 	c.onStreamDeltaResponse()
-
 }
-
 
 func (c *ecdsCallbacks) OnFetchRequest(context.Context, *gcpDiscoveryV3.DiscoveryRequest) error {
 	c.logger.Debugw("ECDS OnFetchRequest")
