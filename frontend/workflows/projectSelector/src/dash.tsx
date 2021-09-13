@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Box } from "@material-ui/core";
 import styled from "@emotion/styled";
-
+import { Box } from "@material-ui/core";
 import _ from "lodash";
 
 import { DashDispatchContext, DashStateContext } from "./dash-hooks";
@@ -18,7 +17,7 @@ const CardContainer = styled.div({
   flex: 1,
   maxHeight: "100%",
   overflowY: "scroll",
-})
+});
 
 const dashReducer = (state: DashState, action: DashAction): DashState => {
   switch (action.type) {
@@ -41,9 +40,7 @@ const Dash = ({ children }) => {
       <DashDispatchContext.Provider value={dispatch}>
         <DashStateContext.Provider value={state}>
           <ProjectSelector />
-          <CardContainer>
-            {children}
-          </CardContainer>
+          <CardContainer>{children}</CardContainer>
         </DashStateContext.Provider>
       </DashDispatchContext.Provider>
     </Box>
