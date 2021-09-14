@@ -81,7 +81,7 @@ const Dash = ({ children }) => {
                   },
                 ]}
               >
-                <Table columns={["", "", "", ""]}>
+                <Table columns={["", "", "", ""]} responsive>
                   <TableRow>
                     <div>clutch</div>
                     <div>No commits</div>
@@ -128,7 +128,7 @@ const Dash = ({ children }) => {
                   },
                 ]}
               >
-                <Table columns={["", "", "", ""]}>
+                <Table columns={["", "", "", ""]} responsive>
                   <TableRow>
                     <div>clutch</div>
                     <div>No alerts</div>
@@ -150,7 +150,7 @@ const Dash = ({ children }) => {
                 </Table>
               </Card>
               <Card avatar="🌏" title="Incidents">
-                <Table columns={["", ""]}>
+                <Table columns={["", ""]} responsive>
                   <TableRow>
                     <div>AWS</div>
                     <div>Healthy</div>
