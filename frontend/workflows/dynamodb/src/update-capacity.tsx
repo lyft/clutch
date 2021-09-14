@@ -70,6 +70,10 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
     capacityUpdates.updateData("gsi_updates", updatesList);
   };
 
+  if (!_.has(table,"globalSecondaryIndexes")) {
+    table.globalSecondaryIndexes = []
+  }
+
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <Box>
@@ -197,7 +201,7 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType, enableOverride }) => {
+const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType, enableOverride, heading }) => {
   const dataLayout = {
     resourceData: {},
     capacityUpdates: {},
@@ -244,8 +248,8 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType, enableOverride 
   };
 
   return (
-    <Wizard dataLayout={dataLayout}>
-      <TableIdentifier name="Lookup" resolverType={resolverType} />
+    <Wizard dataLayout={dataLayout} heading={heading}>
+      <TableIdentifier name="Lookup" resolverType={resolverType}/>
       <TableDetails name="Modify" enableOverride={enableOverride} />
       <Confirm name="Results" />
     </Wizard>
