@@ -70,8 +70,8 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
     capacityUpdates.updateData("gsi_updates", updatesList);
   };
 
-  if (!_.has(table, "globalSecondaryIndexes")) {
-    table.globalSecondaryIndexes = [];
+  if (!_.has(table,"globalSecondaryIndexes")) {
+    table.globalSecondaryIndexes = []
   }
 
   return (
@@ -249,7 +249,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType, enableOverride,
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <TableIdentifier name="Lookup" resolverType={resolverType} />
+      <TableIdentifier name="Lookup" resolverType={resolverType}/>
       <TableDetails name="Modify" enableOverride={enableOverride} />
       <Confirm name="Results" />
     </Wizard>
