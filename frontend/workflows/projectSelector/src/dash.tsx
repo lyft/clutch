@@ -55,40 +55,18 @@ const Dash = ({ children }) => {
               alignItems="flex-start"
               alignContent="flex-start"
             >
-              <Card avatar="🚀" title="Deploys">
-                <Table columns={["", "", ""]}>
-                  <TableRow>
-                    <div>clutch</div>
-                    <div>No commits</div>
-                    <div>🥚</div>
-                    <div>0 days ago</div>
-                  </TableRow>
-                  <TableRow>
-                    <div>clutch</div>
-                    <div>No commits</div>
-                    <div>🥚</div>
-                    <div>0 days ago</div>
-                  </TableRow>
-                  <TableRow>
-                    <div>clutch</div>
-                    <div>No commits</div>
-                    <div>🥚</div>
-                    <div>0 days ago</div>
-                  </TableRow>
-                </Table>
-              </Card>
               <Card
                 avatar="🚀"
                 title="Deploys"
                 summary={[
                   {
-                    title: <Typography variant="subtitle2">5 mins</Typography>,
+                    title: <Typography variant="subtitle2">-</Typography>,
                     subheader: "Last Deploy",
                   },
                   {
                     title: (
                       <Typography variant="subtitle2" color="#3548D4">
-                        23
+                        0
                       </Typography>
                     ),
                     subheader: "In progress",
@@ -96,90 +74,90 @@ const Dash = ({ children }) => {
                   {
                     title: (
                       <Typography variant="subtitle2" color="#DB3615">
-                        3
+                        0
                       </Typography>
                     ),
                     subheader: "Failed Deploys",
                   },
                 ]}
               >
-                <Table columns={["", "", "", "", "", ""]}>
+                <Table columns={["", "", "", ""]} responsive>
                   <TableRow>
                     <div>clutch</div>
-                    <div>A longer commit message than other rows</div>
-                    <div>🥚</div>
-                    <div>RUNNING</div>
-                    <div>0 days ago</div>
-                    <div>Initiated by ANON</div>
+                    <div>No commits</div>
+                    <div>0m</div>
+                    <div>✅ 🥚</div>
                   </TableRow>
                   <TableRow>
                     <div>clutch</div>
-                    <div>A longer commit message than other rows</div>
-                    <div>🥚</div>
-                    <div>RUNNING</div>
-                    <div>0 days ago</div>
-                    <div>Initiated by ANON</div>
+                    <div>No commits</div>
+                    <div>0m</div>
+                    <div>✅ 🥚</div>
                   </TableRow>
                   <TableRow>
                     <div>clutch</div>
-                    <div>A longer commit message than other rows</div>
-                    <div>🥚</div>
-                    <div>RUNNING</div>
-                    <div>0 days ago</div>
-                    <div>Initiated by ANON</div>
+                    <div>No commits</div>
+                    <div>0m</div>
+                    <div>✅ 🥚</div>
                   </TableRow>
                 </Table>
               </Card>
               <Card
-                avatar="🚀"
-                title="Deploys"
+                avatar="🚨"
+                title="Alerts"
                 summary={[
                   {
-                    title: <Typography variant="subtitle2">5 mins</Typography>,
-                    subheader: "Last Deploy",
+                    title: <Typography variant="subtitle2">-</Typography>,
+                    subheader: "Last alert",
                   },
                   {
                     title: (
                       <Typography variant="subtitle2" color="#3548D4">
-                        23
+                        0
                       </Typography>
                     ),
-                    subheader: "In progress",
+                    subheader: "Open",
                   },
                   {
                     title: (
                       <Typography variant="subtitle2" color="#DB3615">
-                        3
+                        0
                       </Typography>
                     ),
-                    subheader: "Failed Deploys",
+                    subheader: "Acknowledged",
                   },
                 ]}
               >
-                <Table columns={["", "", "", "", "", ""]}>
+                <Table columns={["", "", "", ""]} responsive>
                   <TableRow>
                     <div>clutch</div>
-                    <div>A longer commit message than other rows</div>
-                    <div>🥚</div>
-                    <div>RUNNING</div>
-                    <div>0 days ago</div>
-                    <div>Initiated by ANON</div>
+                    <div>No alerts</div>
+                    <></>
+                    <></>
                   </TableRow>
                   <TableRow>
                     <div>clutch</div>
-                    <div>A longer commit message than other rows</div>
-                    <div>🥚</div>
-                    <div>RUNNING</div>
-                    <div>0 days ago</div>
-                    <div>Initiated by ANON</div>
+                    <div>No alerts</div>
+                    <></>
+                    <></>
                   </TableRow>
                   <TableRow>
                     <div>clutch</div>
-                    <div>A longer commit message than other rows</div>
-                    <div>🥚</div>
-                    <div>RUNNING</div>
-                    <div>0 days ago</div>
-                    <div>Initiated by ANON</div>
+                    <div>No alerts</div>
+                    <></>
+                    <></>
+                  </TableRow>
+                </Table>
+              </Card>
+              <Card avatar="🌏" title="Incidents">
+                <Table columns={["", ""]} responsive>
+                  <TableRow>
+                    <div>AWS</div>
+                    <div>Healthy</div>
+                  </TableRow>
+                  <TableRow>
+                    <div>Github</div>
+                    <div>Healthy</div>
                   </TableRow>
                 </Table>
               </Card>
