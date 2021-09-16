@@ -24,7 +24,7 @@ interface CardProps {
 }
 
 const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps) => (
-  <Grid item xs={12} sm={6}>
+  <Grid item xs={12} sm={12} md={12} lg={6}>
     <ClutchCard>
       <CardHeader avatar={avatar} summary={summary} title={title}>
         <StyledProgressContainer>
