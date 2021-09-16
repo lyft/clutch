@@ -72,38 +72,42 @@ export interface CardHeaderSummaryProps {
 }
 
 interface CardHeaderProps {
+  actions?: React.ReactNode;
   avatar: React.ReactNode;
   children?: React.ReactNode;
   summary?: CardHeaderSummaryProps[];
   title: React.ReactNode;
 }
 
-const CardHeader = ({ avatar, children, title, summary = [] }: CardHeaderProps) => {
+const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHeaderProps) => {
   return (
     <StyledCardHeaderContainer>
-      <StyledCardHeader container wrap="nowrap" alignItems="center">
-        <StyledCardHeaderAvatar>
-          {/* TODO: confirm the fontSize of icon */}
-          <Typography variant="h2">{avatar}</Typography>
-        </StyledCardHeaderAvatar>
-        <Grid item xs>
-          <Typography variant="h4">{title}</Typography>
-        </Grid>
-        {summary.map(section => (
-          <>
-            <StyledDivider orientation="vertical" />
-            <StyledGridItem item xs>
-              {section.title}
-              {/* TODO: confirm the fontSize of the subheader */}
-              {section.subheader && (
-                <Typography variant="body3" color="rgba(13, 16, 48, 0.6)">
-                  {section.subheader}
-                </Typography>
-              )}
-            </StyledGridItem>
-          </>
-        ))}
-      </StyledCardHeader>
+      <Grid container wrap="nowrap">
+        <StyledCardHeader container wrap="nowrap" alignItems="center">
+          <StyledCardHeaderAvatar>
+            {/* TODO: confirm the fontSize of icon */}
+            <Typography variant="h2">{avatar}</Typography>
+          </StyledCardHeaderAvatar>
+          <Grid item xs>
+            <Typography variant="h4">{title}</Typography>
+          </Grid>
+          {summary.map(section => (
+            <>
+              <StyledDivider orientation="vertical" />
+              <StyledGridItem item xs>
+                {section.title}
+                {/* TODO: confirm the fontSize of the subheader */}
+                {section.subheader && (
+                  <Typography variant="body3" color="rgba(13, 16, 48, 0.6)">
+                    {section.subheader}
+                  </Typography>
+                )}
+              </StyledGridItem>
+            </>
+          ))}
+        </StyledCardHeader>
+        {actions}
+      </Grid>
       {children}
     </StyledCardHeaderContainer>
   );
