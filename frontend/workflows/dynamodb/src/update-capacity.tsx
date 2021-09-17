@@ -36,7 +36,8 @@ const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
         _.mapValues(_.keyBy(results[0].globalSecondaryIndexes, "name"), v =>
           v.provisionedThroughput.toJSON()
         )
-    )};
+      );
+    }
     onSubmit();
   };
 
