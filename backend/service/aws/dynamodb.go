@@ -45,11 +45,16 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 	result, err := getTable(ctx, cl, tableName)
 
 	if err != nil {
-		c.log.Error("unable to find table", zap.Error(err))
+		c.log.Warn("unable to find table on region: "+region, zap.Error(err))
 		return nil, err
 	}
 
-	ret := newProtoForTable(result.Table, region)
+	table, ok := result.Table
+	if !ok {
+		return nil, status.Error(codes.NotFound, "Table description not found")
+	}
+
+	ret := newProtoForTable(table, region)
 
 	return ret, nil
 }
