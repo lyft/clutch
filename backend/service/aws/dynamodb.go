@@ -45,7 +45,7 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 	result, err := getTable(ctx, cl, tableName)
 
 	if err != nil {
-		c.log.Error("unable to find table", zap.Error(err))
+		c.log.Warn("unable to find table", zap.Error(err))
 		return nil, err
 	}
 
