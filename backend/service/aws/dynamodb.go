@@ -49,7 +49,6 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 		return nil, err
 	}
 
-	c.log.Info("generating new proto")
 	ret := newProtoForTable(result.Table, region)
 
 	return ret, nil
