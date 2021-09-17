@@ -45,16 +45,12 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 	result, err := getTable(ctx, cl, tableName)
 
 	if err != nil {
-		c.log.Warn("unable to find table on region: "+region, zap.Error(err))
+		c.log.Warn("unable to find table in region: "+region, zap.Error(err))
 		return nil, err
 	}
 
-	table, ok := result.Table
-	if !ok {
-		return nil, status.Error(codes.NotFound, "Table description not found")
-	}
-
-	ret := newProtoForTable(table, region)
+	c.log.Info("generating new proto")
+	ret := newProtoForTable(result.Table, region)
 
 	return ret, nil
 }
@@ -93,7 +89,7 @@ func newProtoForTable(t *types.TableDescription, region string) *dynamodbv1.Tabl
 
 	tableStatus := newProtoForTableStatus(t.TableStatus)
 
-	billingMode := newProtoForBillingMode(t.BillingModeSummary.BillingMode)
+	billingMode := newProtoForBillingMode(t.BillingModeSummary)
 
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(t.TableName),
@@ -123,8 +119,8 @@ func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex
 	return dynamodbv1.GlobalSecondaryIndex_Status(value)
 }
 
-func newProtoForBillingMode(s types.BillingMode) dynamodbv1.Table_BillingMode {
-	value, ok := dynamodbv1.Table_BillingMode_value[string(s)]
+func newProtoForBillingMode(s *types.BillingModeSummary) dynamodbv1.Table_BillingMode {
+	value, ok := dynamodbv1.Table_BillingMode_value[string(s.BillingMode)]
 	if !ok {
 		return dynamodbv1.Table_BILLING_UNKNOWN
 	}
