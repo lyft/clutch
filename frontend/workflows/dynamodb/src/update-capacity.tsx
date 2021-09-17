@@ -28,14 +28,15 @@ const TableIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const capacityUpdates = useDataLayout("capacityUpdates");
 
   const onResolve = ({ results }) => {
-    // Decide how to process results.
+    // Decide how to process results
     resolvedResourceData.assign(results[0]);
-    capacityUpdates.updateData(
-      "gsi_map",
-      _.mapValues(_.keyBy(results[0].globalSecondaryIndexes, "name"), v =>
-        v.provisionedThroughput.toJSON()
-      )
-    );
+    if (_.has(results[0], "globalSecondaryIndexes")) {
+      capacityUpdates.updateData(
+        "gsi_map",
+        _.mapValues(_.keyBy(results[0].globalSecondaryIndexes, "name"), v =>
+          v.provisionedThroughput.toJSON()
+        )
+    )};
     onSubmit();
   };
 
