@@ -68,6 +68,8 @@ func (m *OIDC) Validate() error {
 		}
 	}
 
+	// no validation rules for GroupsFromUserinfo
+
 	return nil
 }
 

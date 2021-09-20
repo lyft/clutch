@@ -41,6 +41,7 @@ type OIDCProvider struct {
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
 
 	enableServiceTokenCreation bool
+	groupsFromUserInfo         bool
 }
 
 // Clutch's state token claims used during the exchange.
@@ -51,7 +52,8 @@ type stateClaims struct {
 
 // Intermediate claims object for the ID token. Based on what scopes were requested.
 type idClaims struct {
-	Email string `json:"email"`
+	Email  string   `json:"email"`
+	Groups []string `json:"groups"`
 }
 
 func WithClaimsFromOIDCTokenFunc(p *OIDCProvider, fn ClaimsFromOIDCTokenFunc) *OIDCProvider {
@@ -129,6 +131,23 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 	claims, err := p.claimsFromOIDCToken(ctx, idToken)
 	if err != nil {
 		return nil, err
+	}
+
+	// If groups are required from userinfo, fetch and add them.
+	// See https://support.okta.com/help/s/article/Okta-Groups-or-Attribute-Missing-from-Id-Token?language=en_US for more information
+	// on why this is required.
+	if p.groupsFromUserInfo {
+		userInfo, err := p.provider.UserInfo(ctx, p.oauth2.TokenSource(ctx, token))
+		if err != nil {
+			panic(err)
+		}
+
+		idc := &idClaims{}
+		err = userInfo.Claims(idc)
+		if err != nil {
+			return nil, err
+		}
+		claims.Groups = idc.Groups
 	}
 
 	if p.tokenStorage != nil {
@@ -389,6 +408,10 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 		scopes = defaultScopes
 	}
 
+	if c.GroupsFromUserinfo {
+		scopes = append(scopes, "groups")
+	}
+
 	oc := &oauth2.Config{
 		ClientID:     c.ClientId,
 		ClientSecret: c.ClientSecret,
@@ -416,6 +439,7 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 		claimsFromOIDCToken:        DefaultClaimsFromOIDCToken,
 		tokenStorage:               tokenStorage,
 		enableServiceTokenCreation: tokenStorage != nil && config.EnableServiceTokenCreation,
+		groupsFromUserInfo:         c.GroupsFromUserinfo,
 	}
 
 	return p, nil
