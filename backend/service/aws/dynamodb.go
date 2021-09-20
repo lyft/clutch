@@ -88,7 +88,7 @@ func newProtoForTable(t *types.TableDescription, region string) *dynamodbv1.Tabl
 
 	tableStatus := newProtoForTableStatus(t.TableStatus)
 
-	billingMode := newProtoForBillingMode(t.BillingModeSummary)
+	billingMode := newProtoForBillingMode(t)
 
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(t.TableName),
@@ -118,11 +118,33 @@ func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex
 	return dynamodbv1.GlobalSecondaryIndex_Status(value)
 }
 
-func newProtoForBillingMode(s *types.BillingModeSummary) dynamodbv1.Table_BillingMode {
-	value, ok := dynamodbv1.Table_BillingMode_value[string(s.BillingMode)]
+// manually check the billing mode by inferring it from throughput
+// to cover cases where AWS does not return the mode in the table description
+// if a table is PROVISIONED, it will have at least 1 RCU/WCU provisioned
+// if a table is PAY_PER_REQUEST (on demand), it will have 0 RCU/WCU provisioned
+func checkBillingMode(t *types.ProvisionedThroughputDescription) types.BillingMode {
+	if (*t.ReadCapacityUnits > 0) || (*t.WriteCapacityUnits > 0) {
+		return "PROVISIONED"
+	}
+	if (*t.ReadCapacityUnits == 0) || (*t.WriteCapacityUnits == 0) {
+		return "PAY_PER_REQUEST"
+	}
+	return "UNKNOWN" // unable to infer what billing mode it is
+}
+
+func newProtoForBillingMode(t *types.TableDescription) dynamodbv1.Table_BillingMode {
+	var billingMode types.BillingMode
+	if t.BillingModeSummary == nil {
+		billingMode = checkBillingMode(t.ProvisionedThroughput)
+	} else {
+		billingMode = t.BillingModeSummary.BillingMode
+	}
+
+	value, ok := dynamodbv1.Table_BillingMode_value[string(billingMode)]
 	if !ok {
 		return dynamodbv1.Table_BILLING_UNKNOWN
 	}
+
 	return dynamodbv1.Table_BillingMode(value)
 }
 
@@ -171,7 +193,14 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
+// Note: in some cases, table descriptions may not contain the billing mode summary
+// even though they're provisioned, so we need to check for throughput settings
+// as well to determine if a table capacity is provisioned
 func isProvisioned(t *dynamodb.DescribeTableOutput) bool {
+	if t.Table.BillingModeSummary == nil {
+		billingMode := checkBillingMode(t.Table.ProvisionedThroughput)
+		return billingMode == "PROVISIONED"
+	}
 	return t.Table.BillingModeSummary.BillingMode == "PROVISIONED"
 }
 
