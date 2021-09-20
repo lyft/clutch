@@ -122,7 +122,7 @@ func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex
 // to cover cases where AWS does not return the mode in the table description
 // if a table is PROVISIONED, it will have at least 1 RCU/WCU provisioned
 // if a table is PAY_PER_REQUEST (on demand), it will have 0 RCU/WCU provisioned
-func checkBillingMode(t *types.ProvisionedThroughputDescription) types.BillingMode {
+func getBillingMode(t *types.ProvisionedThroughputDescription) types.BillingMode {
 	if (*t.ReadCapacityUnits > 0) || (*t.WriteCapacityUnits > 0) {
 		return types.BillingModeProvisioned
 	}
@@ -136,7 +136,7 @@ func checkBillingMode(t *types.ProvisionedThroughputDescription) types.BillingMo
 func newProtoForBillingMode(t *types.TableDescription) dynamodbv1.Table_BillingMode {
 	var billingMode types.BillingMode
 	if t.BillingModeSummary == nil {
-		billingMode = checkBillingMode(t.ProvisionedThroughput)
+		billingMode = getBillingMode(t.ProvisionedThroughput)
 	} else {
 		billingMode = t.BillingModeSummary.BillingMode
 	}
@@ -199,7 +199,7 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 // as well to determine if a table capacity is provisioned
 func isProvisioned(t *dynamodb.DescribeTableOutput) bool {
 	if t.Table.BillingModeSummary == nil {
-		billingMode := checkBillingMode(t.Table.ProvisionedThroughput)
+		billingMode := getBillingMode(t.Table.ProvisionedThroughput)
 		return billingMode == types.BillingModeProvisioned
 	}
 	return t.Table.BillingModeSummary.BillingMode == types.BillingModeProvisioned
