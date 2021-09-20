@@ -124,12 +124,13 @@ func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex
 // if a table is PAY_PER_REQUEST (on demand), it will have 0 RCU/WCU provisioned
 func checkBillingMode(t *types.ProvisionedThroughputDescription) types.BillingMode {
 	if (*t.ReadCapacityUnits > 0) || (*t.WriteCapacityUnits > 0) {
-		return "PROVISIONED"
+		return types.BillingModeProvisioned
 	}
 	if (*t.ReadCapacityUnits == 0) || (*t.WriteCapacityUnits == 0) {
-		return "PAY_PER_REQUEST"
+		return types.BillingModePayPerRequest
 	}
-	return "UNKNOWN" // unable to infer what billing mode it is
+
+	return "UNSPECIFIED" // unable to infer what billing mode it is
 }
 
 func newProtoForBillingMode(t *types.TableDescription) dynamodbv1.Table_BillingMode {
@@ -199,9 +200,9 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 func isProvisioned(t *dynamodb.DescribeTableOutput) bool {
 	if t.Table.BillingModeSummary == nil {
 		billingMode := checkBillingMode(t.Table.ProvisionedThroughput)
-		return billingMode == "PROVISIONED"
+		return billingMode == types.BillingModeProvisioned
 	}
-	return t.Table.BillingModeSummary.BillingMode == "PROVISIONED"
+	return t.Table.BillingModeSummary.BillingMode == types.BillingModeProvisioned
 }
 
 func (c *client) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignore_maximums bool) (*dynamodbv1.Table, error) {
