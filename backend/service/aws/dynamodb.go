@@ -21,6 +21,10 @@ const (
 	SafeScaleFactor = 2.0
 )
 
+// constant to cover edge case where billing mode is not in table description
+// and we cannot infer the billing mode from the provisioned throughput numbers
+const TableBillingUnspecified = "UNSPECIFIED"
+
 // get or set defaults for dynamodb scaling
 func getScalingLimits(cfg *awsv1.Config) *awsv1.ScalingLimits {
 	if cfg.GetDynamodbConfig() == nil && cfg.DynamodbConfig.GetScalingLimits() == nil {
@@ -118,7 +122,7 @@ func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex
 	return dynamodbv1.GlobalSecondaryIndex_Status(value)
 }
 
-// manually check the billing mode by inferring it from throughput
+// manually retrieve the billing mode by inferring it from throughput
 // to cover cases where AWS does not return the mode in the table description
 // if a table is PROVISIONED, it will have at least 1 RCU/WCU provisioned
 // if a table is PAY_PER_REQUEST (on demand), it will have 0 RCU/WCU provisioned
@@ -130,7 +134,7 @@ func getBillingMode(t *types.ProvisionedThroughputDescription) types.BillingMode
 		return types.BillingModePayPerRequest
 	}
 
-	return "UNSPECIFIED" // unable to infer what billing mode it is
+	return TableBillingUnspecified // unable to infer what billing mode it is
 }
 
 func newProtoForBillingMode(t *types.TableDescription) dynamodbv1.Table_BillingMode {
