@@ -39,26 +39,33 @@ const StyledCardHeaderContainer = styled.div({
 });
 
 const StyledCardHeader = styled(Grid)({
-  padding: "16px",
-  minHeight: "72px",
+  padding: "6px 0px",
+  minHeight: "48px",
   ".MuiGrid-item": {
     padding: "0px 8px",
   },
 });
 
-// TODO:: confirm the width and height of the icon container
+const StyledHeaderAvatarContainer = styled.div({
+  padding: "12px",
+  height: "48px",
+  width: "48px",
+  alignSelf: "center",
+});
+
 // TODO: use material ui avatar component and implement figma design
-const StyledCardHeaderAvatar = styled.div({
-  width: "32px",
-  height: "32px",
+const StyledHeaderAvatar = styled.div({
+  width: "24px",
+  height: "24px",
   marginRight: "16px",
+  fontSize: "18px",
+  alignSelf: "center",
 });
 
 // TODO: make the divider a core component
-// TODO: confirm the height of the divider
 const StyledDivider = styled(Divider)({
-  color: "rgba(13, 16, 48, 0.38)",
-  height: "36px",
+  color: "#A3A4B0",
+  height: "24px",
   alignSelf: "center",
 });
 
@@ -83,11 +90,10 @@ const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHead
   return (
     <StyledCardHeaderContainer>
       <Grid container wrap="nowrap">
+        <StyledHeaderAvatarContainer>
+          <StyledHeaderAvatar>{avatar}</StyledHeaderAvatar>
+        </StyledHeaderAvatarContainer>
         <StyledCardHeader container wrap="nowrap" alignItems="center">
-          <StyledCardHeaderAvatar>
-            {/* TODO: confirm the fontSize of icon */}
-            <Typography variant="h2">{avatar}</Typography>
-          </StyledCardHeaderAvatar>
           <Grid item xs>
             <Typography variant="h4">{title}</Typography>
           </Grid>
@@ -96,9 +102,8 @@ const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHead
               <StyledDivider orientation="vertical" />
               <StyledGridItem item xs>
                 {section.title}
-                {/* TODO: confirm the fontSize of the subheader */}
                 {section.subheader && (
-                  <Typography variant="body3" color="rgba(13, 16, 48, 0.6)">
+                  <Typography variant="body4" color="rgba(13, 16, 48, 0.6)">
                     {section.subheader}
                   </Typography>
                 )}

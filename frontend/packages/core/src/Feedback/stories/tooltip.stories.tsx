@@ -26,12 +26,12 @@ At purus nunc, lacus fermentum quam pulvinar vel, maecenas.`;
 const MultilineText = () => (
   <>
     <TooltipContainer>
-      <Typography variant="body3" color="#FFFFFF">
+      <Typography variant="body4" color="#FFFFFF">
         {text}
       </Typography>
     </TooltipContainer>
     <TooltipContainer>
-      <Typography variant="body3" color="#FFFFFF">
+      <Typography variant="body4" color="#FFFFFF">
         {text}
       </Typography>
     </TooltipContainer>
