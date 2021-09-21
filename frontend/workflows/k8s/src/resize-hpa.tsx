@@ -77,7 +77,8 @@ const HPADetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "sizing.minReplicas",
-              validation: number().integer().moreThan(0),
+              validation:
+                hpa.sizing.minReplicas > 0 ? number().integer().moreThan(0) : number().integer().min(0),
             },
           },
           {
