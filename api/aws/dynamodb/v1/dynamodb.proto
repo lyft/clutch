@@ -165,6 +165,10 @@ message DescribeTableResponse {
 // Any combination of table capacity and GSI capacities can be updated in a single request.
 // If no throughputs or GSI updates are specified, the table is unchanged.
 message UpdateCapacityRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.dynamodb.v1.Table",
+    pattern : "{region}/{table_name}"
+  };
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
   Throughput table_throughput = 3;

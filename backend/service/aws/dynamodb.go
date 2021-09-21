@@ -21,6 +21,10 @@ const (
 	SafeScaleFactor = 2.0
 )
 
+// constant to cover edge case where billing mode is not in table description
+// and we cannot infer the billing mode from the provisioned throughput numbers
+const TableBillingUnspecified = "UNSPECIFIED"
+
 // get or set defaults for dynamodb scaling
 func getScalingLimits(cfg *awsv1.Config) *awsv1.ScalingLimits {
 	if cfg.GetDynamodbConfig() == nil && cfg.DynamodbConfig.GetScalingLimits() == nil {
@@ -45,7 +49,7 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 	result, err := getTable(ctx, cl, tableName)
 
 	if err != nil {
-		c.log.Error("unable to find table", zap.Error(err))
+		c.log.Warn("unable to find table in region: "+region, zap.Error(err))
 		return nil, err
 	}
 
@@ -88,7 +92,7 @@ func newProtoForTable(t *types.TableDescription, region string) *dynamodbv1.Tabl
 
 	tableStatus := newProtoForTableStatus(t.TableStatus)
 
-	billingMode := newProtoForBillingMode(t.BillingModeSummary.BillingMode)
+	billingMode := newProtoForBillingMode(t)
 
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(t.TableName),
@@ -118,11 +122,34 @@ func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex
 	return dynamodbv1.GlobalSecondaryIndex_Status(value)
 }
 
-func newProtoForBillingMode(s types.BillingMode) dynamodbv1.Table_BillingMode {
-	value, ok := dynamodbv1.Table_BillingMode_value[string(s)]
+// manually retrieve the billing mode by inferring it from throughput
+// to cover cases where AWS does not return the mode in the table description
+// if a table is PROVISIONED, it will have at least 1 RCU/WCU provisioned
+// if a table is PAY_PER_REQUEST (on demand), it will have 0 RCU/WCU provisioned
+func getBillingMode(t *types.ProvisionedThroughputDescription) types.BillingMode {
+	if (*t.ReadCapacityUnits > 0) || (*t.WriteCapacityUnits > 0) {
+		return types.BillingModeProvisioned
+	}
+	if (*t.ReadCapacityUnits == 0) || (*t.WriteCapacityUnits == 0) {
+		return types.BillingModePayPerRequest
+	}
+
+	return TableBillingUnspecified // unable to infer what billing mode it is
+}
+
+func newProtoForBillingMode(t *types.TableDescription) dynamodbv1.Table_BillingMode {
+	var billingMode types.BillingMode
+	if t.BillingModeSummary == nil {
+		billingMode = getBillingMode(t.ProvisionedThroughput)
+	} else {
+		billingMode = t.BillingModeSummary.BillingMode
+	}
+
+	value, ok := dynamodbv1.Table_BillingMode_value[string(billingMode)]
 	if !ok {
 		return dynamodbv1.Table_BILLING_UNKNOWN
 	}
+
 	return dynamodbv1.Table_BillingMode(value)
 }
 
@@ -171,8 +198,15 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	return nil
 }
 
+// Note: in some cases, table descriptions may not contain the billing mode summary
+// even though they're provisioned, so we need to check for throughput settings
+// as well to determine if a table capacity is provisioned
 func isProvisioned(t *dynamodb.DescribeTableOutput) bool {
-	return t.Table.BillingModeSummary.BillingMode == "PROVISIONED"
+	if t.Table.BillingModeSummary == nil {
+		billingMode := getBillingMode(t.Table.ProvisionedThroughput)
+		return billingMode == types.BillingModeProvisioned
+	}
+	return t.Table.BillingModeSummary.BillingMode == types.BillingModeProvisioned
 }
 
 func (c *client) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignore_maximums bool) (*dynamodbv1.Table, error) {

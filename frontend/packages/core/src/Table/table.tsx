@@ -13,6 +13,7 @@ import {
   TableRowProps as MuiTableRowProps,
   useMediaQuery,
 } from "@material-ui/core";
+import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import { Popper, PopperItem } from "../popper";
@@ -96,6 +97,8 @@ const TableContainer = ({ children }: TableContainerProps) => (
 export interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   /** The names of the columns. This must be set (even to empty string) to render the table. */
   columns: string[];
+  /** The breakpoint at which to compress the table rows. By default the small breakpoint is used. */
+  compressBreakpoint?: Breakpoint;
   /** Hide the header. By default this is false. */
   hideHeader?: boolean;
   /** Add an actions column. By default this is false. */
@@ -110,6 +113,7 @@ export interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
 
 const Table: React.FC<TableProps> = ({
   columns,
+  compressBreakpoint = "sm",
   hideHeader = false,
   actionsColumn = false,
   responsive = false,
@@ -117,7 +121,7 @@ const Table: React.FC<TableProps> = ({
   ...props
 }) => {
   const showHeader = !hideHeader;
-  const compress = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
+  const compress = useMediaQuery((theme: any) => theme.breakpoints.down(compressBreakpoint));
 
   return (
     <TableContainer>

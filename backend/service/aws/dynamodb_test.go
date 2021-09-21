@@ -114,6 +114,25 @@ var testOnDemandTable = &types.TableDescription{
 	},
 }
 
+var testOnDemandInferredTable = &types.TableDescription{
+	TableName: aws.String("test-ondemand-table"),
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+		ReadCapacityUnits:  aws.Int64(0),
+		WriteCapacityUnits: aws.Int64(0),
+	},
+	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{
+		{IndexName: aws.String("test-gsi"),
+			KeySchema: []types.KeySchemaElement{},
+			ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+				ReadCapacityUnits:  aws.Int64(0),
+				WriteCapacityUnits: aws.Int64(0),
+			},
+			IndexStatus: "ACTIVE",
+		},
+	},
+	TableStatus: "ACTIVE",
+}
+
 var testUpdateResponse = &types.TableDescription{
 	TableName: aws.String("test-gsi-table"),
 	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
@@ -134,6 +153,26 @@ var testUpdateResponse = &types.TableDescription{
 	BillingModeSummary: &types.BillingModeSummary{
 		BillingMode: "PROVISIONED",
 	},
+}
+
+var testTableNoBillingMode = &types.TableDescription{
+	TableName: aws.String("test-table-no-billing"),
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+		ReadCapacityUnits:  aws.Int64(100),
+		WriteCapacityUnits: aws.Int64(200),
+	},
+	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{},
+	TableStatus:            "ACTIVE",
+}
+
+var testTableNoBillingModeResponse = &types.TableDescription{
+	TableName: aws.String("test-table-no-billing"),
+	ProvisionedThroughput: &types.ProvisionedThroughputDescription{
+		ReadCapacityUnits:  aws.Int64(100),
+		WriteCapacityUnits: aws.Int64(200),
+	},
+	GlobalSecondaryIndexes: []types.GlobalSecondaryIndexDescription{},
+	TableStatus:            "UPDATING",
 }
 
 func TestDescribeTableValid(t *testing.T) {
@@ -455,6 +494,74 @@ func TestOnDemandCheck(t *testing.T) {
 	result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-ondemand-table", targetTableCapacity, gsiUpdates, false)
 	assert.Nil(t, result)
 	assert.Equal(t, "rpc error: code = FailedPrecondition desc = Table billing mode is not set to PROVISIONED, cannot scale capacities.", err.Error())
+}
+
+func TestOnDemandCheckInferred(t *testing.T) {
+	m := &mockDynamodb{
+		table: testOnDemandInferredTable,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	targetTableCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  10,
+		WriteCapacityUnits: 10,
+	}
+
+	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+
+	result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-ondemand-table", targetTableCapacity, gsiUpdates, false)
+	assert.Nil(t, result)
+	assert.Equal(t, "rpc error: code = FailedPrecondition desc = Table billing mode is not set to PROVISIONED, cannot scale capacities.", err.Error())
+}
+
+func TestNoBillingMode(t *testing.T) {
+	m := &mockDynamodb{
+		table:  testTableNoBillingMode,
+		update: testTableNoBillingModeResponse,
+	}
+
+	ds := getScalingLimits(cfg)
+
+	d := &awsv1.DynamodbConfig{
+		ScalingLimits: &awsv1.ScalingLimits{
+			MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+			MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+			MaxScaleFactor:        ds.MaxScaleFactor,
+			EnableOverride:        ds.EnableOverride,
+		},
+	}
+
+	c := &client{
+		log:     zaptest.NewLogger(t),
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+	}
+
+	targetTableCapacity := &dynamodbv1.Throughput{
+		ReadCapacityUnits:  101,
+		WriteCapacityUnits: 202,
+	}
+
+	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
+
+	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table-no-billing", targetTableCapacity, gsiUpdates, false)
+	assert.NotNil(t, got)
+	assert.Nil(t, err)
+	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
 }
 
 type mockDynamodb struct {
