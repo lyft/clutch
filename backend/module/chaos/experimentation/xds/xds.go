@@ -123,23 +123,17 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 }
 
 type serverStats struct {
-	totalStreams              tally.Gauge
-	totalDeltaStreams         tally.Gauge
-	totalResourcesServed      tally.Counter
-	totalDeltaResourcesServed tally.Counter
-	totalErrorsReceived       tally.Counter
-	totalDeltaErrorsReceived  tally.Counter
+	totalStreams         tally.Gauge
+	totalResourcesServed tally.Counter
+	totalErrorsReceived  tally.Counter
 }
 
 func (s *Server) newScopedStats(subScope string) serverStats {
 	scope := s.scope.SubScope(subScope)
 	return serverStats{
-		totalStreams:              scope.Gauge("totalStreams"),
-		totalDeltaStreams:         scope.Gauge("totalDeltaStreams"),
-		totalDeltaResourcesServed: scope.Counter("totalDeltaResourcesServed"),
-		totalResourcesServed:      scope.Counter("totalResourcesServed"),
-		totalDeltaErrorsReceived:  scope.Counter("totalDeltaErrorsReceived"),
-		totalErrorsReceived:       scope.Counter("totalErrorsReceived"),
+		totalStreams:         scope.Gauge("totalStreams"),
+		totalResourcesServed: scope.Counter("totalResourcesServed"),
+		totalErrorsReceived:  scope.Counter("totalErrorsReceived"),
 	}
 }
 
@@ -147,43 +141,30 @@ func (s *Server) Register(r module.Registrar) error {
 	ctx := context.Background()
 	s.poller.Start(ctx)
 	// RTDS V3 Server
-	rtdsServer := gcpServerV3.NewServer(s.ctx, s.poller.cache, &rtdsCallbacks{callbacksBase{serverStats: s.newScopedStats("rtds"),
-		logger: s.logger}})
+	rtdsServer := gcpServerV3.NewServer(s.ctx, s.poller.cache, &rtdsCallbacks{callbacksBase{s.newScopedStats("rtds"),
+		s.logger, 0}})
 	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), rtdsServer)
 
-	ecdsServer := NewECDSServer(s.ctx, s.poller.cache, &ecdsCallbacks{callbacksBase{
-		serverStats: s.newScopedStats("ecds"), logger: s.logger}, s.ecdsConfig.ecdsResourceMap})
+	ecdsServer := NewECDSServer(s.ctx, s.poller.cache, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.ecdsResourceMap})
 	gcpExtencionServiceV3.RegisterExtensionConfigDiscoveryServiceServer(r.GRPCServer(), ecdsServer)
 	return nil
 }
 
 type callbacksBase struct {
-	serverStats     serverStats
-	logger          *zap.SugaredLogger
-	numStreams      int32
-	numDeltaStreams int32
+	serverStats serverStats
+	logger      *zap.SugaredLogger
+	numStreams  int32
 }
 
-func (c *callbacksBase) onStreamOpen(context.Context) error {
+func (c *callbacksBase) onStreamOpen(_ context.Context) error {
 	numStreams := atomic.AddInt32(&c.numStreams, 1)
 	c.serverStats.totalStreams.Update(float64(numStreams))
-	return nil
-}
-
-func (c *callbacksBase) onDeltaStreamOpen(ctx context.Context, streamID int64, typeURL string) error {
-	n := atomic.AddInt32(&c.numDeltaStreams, 1)
-	c.serverStats.totalDeltaStreams.Update(float64(n))
 	return nil
 }
 
 func (c *callbacksBase) onStreamClosed(streamID int64) {
 	numStreams := atomic.AddInt32(&c.numStreams, -1)
 	c.serverStats.totalStreams.Update(float64(numStreams))
-}
-
-func (c *callbacksBase) onDeltaStreamClosed(streamID int64) {
-	n := atomic.AddInt32(&c.numDeltaStreams, -1)
-	c.serverStats.totalDeltaStreams.Update(float64(n))
 }
 
 func (c *callbacksBase) onStreamRequest(streamID int64, cluster string, errorDetail *rpc_status.Status) {
@@ -193,19 +174,8 @@ func (c *callbacksBase) onStreamRequest(streamID int64, cluster string, errorDet
 	}
 }
 
-func (c *callbacksBase) onStreamDeltaRequest(streamID int64, cluster string, errorDetail *rpc_status.Status) {
-	if errorDetail != nil {
-		c.serverStats.totalDeltaErrorsReceived.Inc(1)
-		c.logger.Errorw("xDS Error Delta Request", "streamID", streamID, "cluster", cluster, "error", errorDetail.GetDetails())
-	}
-}
-
 func (c *callbacksBase) onStreamResponse(_ int64, _ string, _ string) {
 	c.serverStats.totalResourcesServed.Inc(1)
-}
-
-func (c *callbacksBase) onStreamDeltaResponse() {
-	c.serverStats.totalDeltaResourcesServed.Inc(1)
 }
 
 // RTDS Callbacks
@@ -218,41 +188,21 @@ func (c *rtdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeUR
 	return c.onStreamOpen(ctx)
 }
 
-func (c *rtdsCallbacks) OnDeltaStreamOpen(ctx context.Context, streamID int64, typeURL string) error {
-	c.logger.Debugw("RTDS OnDeltaStreamOpen", "streamID", streamID, "typeURL", typeURL)
-	return c.onDeltaStreamOpen(ctx, streamID, typeURL)
-}
-
 func (c *rtdsCallbacks) OnStreamClosed(streamID int64) {
 	c.logger.Debugw("RTDS onStreamClosed", "streamID", streamID)
 	c.onStreamClosed(streamID)
 }
 
-func (c *rtdsCallbacks) OnDeltaStreamClosed(streamID int64) {
-	c.logger.Debugw("RTDS OnDeltaStreamClosed", "streamID", streamID)
-	c.onDeltaStreamClosed(streamID)
-}
-
 func (c *rtdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.DiscoveryRequest) error {
 	c.logger.Debugw("RTDS OnStreamRequest", "streamID", streamID, "cluster", req.Node.Cluster)
 	c.onStreamRequest(streamID, req.Node.Cluster, req.ErrorDetail)
-	return nil
-}
 
-func (c *rtdsCallbacks) OnStreamDeltaRequest(streamID int64, req *gcpDiscoveryV3.DeltaDiscoveryRequest) error {
-	c.logger.Debugw("RTDS OnStreamDeltaRequest", "streamID", streamID, "cluster", req.Node.Cluster)
-	c.onStreamDeltaRequest(streamID, req.Node.Cluster, req.ErrorDetail)
 	return nil
 }
 
 func (c *rtdsCallbacks) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
 	c.logger.Debugw("RTDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", request.VersionInfo)
 	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
-}
-
-func (c *rtdsCallbacks) OnStreamDeltaResponse(streamID int64, request *gcpDiscoveryV3.DeltaDiscoveryRequest, response *gcpDiscoveryV3.DeltaDiscoveryResponse) {
-	c.logger.Debugw("RTDS OnStreamDeltaResponse", "streamID", streamID, "cluster", request.Node.Cluster)
-	c.onStreamDeltaResponse()
 }
 
 func (c *rtdsCallbacks) OnFetchRequest(context.Context, *gcpDiscoveryV3.DiscoveryRequest) error {
@@ -280,19 +230,9 @@ func (c *ecdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeUR
 	return c.onStreamOpen(ctx)
 }
 
-func (c *ecdsCallbacks) OnDeltaStreamOpen(ctx context.Context, streamID int64, typeURL string) error {
-	c.logger.Debugw("ECDS onDeltaStreamOpen", "streamID", streamID, "typeURL", typeURL)
-	return c.onDeltaStreamOpen(ctx, streamID, typeURL)
-}
-
 func (c *ecdsCallbacks) OnStreamClosed(streamID int64) {
 	c.logger.Debugw("ECDS onStreamClosed", "streamID", streamID)
 	c.onStreamClosed(streamID)
-}
-
-func (c *ecdsCallbacks) OnDeltaStreamClosed(streamID int64) {
-	c.logger.Debugw("ECDS onDeltaStreamClosed", "streamID", streamID)
-	c.onDeltaStreamClosed(streamID)
 }
 
 func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.DiscoveryRequest) error {
@@ -304,23 +244,9 @@ func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.Disc
 	return nil
 }
 
-func (c *ecdsCallbacks) OnStreamDeltaRequest(streamID int64, req *gcpDiscoveryV3.DeltaDiscoveryRequest) error {
-	c.safeECDSResources.setResourcesForCluster(req.Node.Cluster, req.ResourceNamesSubscribe)
-
-	c.logger.Debugw("ECDS OnStreamDeltaRequest", "streamID", streamID, "cluster", req.Node.Cluster, "resources", req.ResourceNamesSubscribe)
-	c.onStreamDeltaRequest(streamID, req.Node.Cluster, req.ErrorDetail)
-
-	return nil
-}
-
 func (c *ecdsCallbacks) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
 	c.logger.Debugw("ECDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", request.VersionInfo)
 	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
-}
-
-func (c *ecdsCallbacks) OnStreamDeltaResponse(streamID int64, request *gcpDiscoveryV3.DeltaDiscoveryRequest, response *gcpDiscoveryV3.DeltaDiscoveryResponse) {
-	c.logger.Debugw("ECDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster)
-	c.onStreamDeltaResponse()
 }
 
 func (c *ecdsCallbacks) OnFetchRequest(context.Context, *gcpDiscoveryV3.DiscoveryRequest) error {
