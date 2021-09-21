@@ -156,6 +156,7 @@ type callbacksBase struct {
 	numStreams  int32
 }
 
+
 func (c *callbacksBase) onStreamOpen(_ context.Context) error {
 	numStreams := atomic.AddInt32(&c.numStreams, 1)
 	c.serverStats.totalStreams.Update(float64(numStreams))
@@ -176,6 +177,23 @@ func (c *callbacksBase) onStreamRequest(streamID int64, cluster string, errorDet
 
 func (c *callbacksBase) onStreamResponse(_ int64, _ string, _ string) {
 	c.serverStats.totalResourcesServed.Inc(1)
+}
+
+// Unimplemented Delta Callbacks
+func (c *callbacksBase) OnDeltaStreamOpen(ctx context.Context, i int64, s string) error {
+	panic("delta callbacks not implemented, use 'GRPC' api_type")
+}
+
+func (c *callbacksBase) OnStreamDeltaRequest(i int64, request *gcpDiscoveryV3.DeltaDiscoveryRequest) error {
+	panic("delta callbacks not implemented, use 'GRPC' api_type")
+}
+
+func (c *callbacksBase) OnStreamDeltaResponse(i int64, request *gcpDiscoveryV3.DeltaDiscoveryRequest, response *gcpDiscoveryV3.DeltaDiscoveryResponse) {
+	panic("delta callbacks not implemented, use 'GRPC' api_type")
+}
+
+func (c *callbacksBase) OnDeltaStreamClosed(streamID int64) {
+	panic("delta callbacks not implemented, use 'GRPC' api_type")
 }
 
 // RTDS Callbacks
