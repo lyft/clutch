@@ -22,7 +22,9 @@ func NewRunDetails(run *ExperimentRun, config *ExperimentConfig, transformer *Tr
 		return nil, err
 	}
 
-	properties := append(runProperties, configProperties...)
+	var properties []*experimentation.Property
+	properties = append(properties, runProperties...)
+	properties = append(properties, configProperties...)
 	properties = append(properties, transformerProperties...)
 
 	if err != nil {

@@ -22,7 +22,9 @@ func NewRunListView(run *ExperimentRun, config *ExperimentConfig, transformer *T
 		return nil, err
 	}
 
-	properties := append(runProperties, configProperties...)
+	var properties []*experimentation.Property
+	properties = append(properties, runProperties...)
+	properties = append(properties, configProperties...)
 	properties = append(properties, transformerProperties...)
 	propertiesMapItems := make(map[string]*experimentation.Property)
 	for _, p := range properties {

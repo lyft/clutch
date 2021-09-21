@@ -6,9 +6,9 @@ BUILD_ROOT="${REPO_ROOT}/build"
 BUILD_BIN="${BUILD_ROOT}/bin"
 
 NAME=golangci-lint
-RELEASE=v1.37.1
-OSX_RELEASE_MD5=1d0f4389bfa56a0eda0e938ddef45ac3
-LINUX_RELEASE_MD5=cbc07eda24cbd20a41ff3af27861617b
+RELEASE=v1.42.1
+OSX_RELEASE_256=9c0042e91218dc1dd4eb7b54e29c7331eff081b3ac3f88b0d5df89b976fcd45c
+LINUX_RELEASE_256=214b093c15863430c4b66dd39df677dab6e38fc873ded147e331740d50eea51f
 
 ARCH=amd64
 
@@ -28,8 +28,8 @@ ensure_binary() {
     mkdir -p "${BUILD_BIN}"
 
     case "${OSTYPE}" in
-      "darwin"*) os_type="darwin"; md5="${OSX_RELEASE_MD5}" ;;
-      "linux"*) os_type="linux"; md5="${LINUX_RELEASE_MD5}" ;;
+      "darwin"*) os_type="darwin"; sum="${OSX_RELEASE_256}" ;;
+      "linux"*) os_type="linux"; sum="${LINUX_RELEASE_256}" ;;
       *) echo "error: Unsupported OS '${OSTYPE}' for shellcheck install, please install manually" && exit 1 ;;
     esac
 
@@ -37,7 +37,7 @@ ensure_binary() {
 
     URL="https://github.com/golangci/golangci-lint/releases/download/${RELEASE}/golangci-lint-${RELEASE:1}-${os_type}-${ARCH}.tar.gz"
     curl -sSL -o "${release_archive}" "${URL}"
-    echo ${md5} ${release_archive} | md5sum --check --quiet -
+    echo ${sum} ${release_archive} | sha256sum --check --quiet -
 
     release_tmp_dir="/tmp/${NAME}-${RELEASE}"
     mkdir -p "${release_tmp_dir}"
