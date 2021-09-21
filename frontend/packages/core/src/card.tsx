@@ -46,7 +46,7 @@ const StyledCardHeader = styled(Grid)({
   },
 });
 
-const StyledHeaderAvatarContainer = styled.div({
+const StyledCardHeaderAvatarContainer = styled.div({
   padding: "12px",
   height: "48px",
   width: "48px",
@@ -54,7 +54,7 @@ const StyledHeaderAvatarContainer = styled.div({
 });
 
 // TODO: use material ui avatar component and implement figma design
-const StyledHeaderAvatar = styled.div({
+const StyledCardHeaderAvatar = styled.div({
   width: "24px",
   height: "24px",
   marginRight: "16px",
@@ -90,9 +90,9 @@ const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHead
   return (
     <StyledCardHeaderContainer>
       <Grid container wrap="nowrap">
-        <StyledHeaderAvatarContainer>
-          <StyledHeaderAvatar>{avatar}</StyledHeaderAvatar>
-        </StyledHeaderAvatarContainer>
+        <StyledCardHeaderAvatarContainer>
+          <StyledCardHeaderAvatar>{avatar}</StyledCardHeaderAvatar>
+        </StyledCardHeaderAvatarContainer>
         <StyledCardHeader container wrap="nowrap" alignItems="center">
           <Grid item xs>
             <Typography variant="h4">{title}</Typography>
