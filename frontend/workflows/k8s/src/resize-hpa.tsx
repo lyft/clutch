@@ -89,9 +89,12 @@ const HPADetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "sizing.maxReplicas",
-              validation: number()
-                .integer()
-                .min(ref("Min Size") as Reference<number>),
+              validation:
+                hpa.sizing.minReplicas > 0
+                  ? number()
+                      .integer()
+                      .min(ref("Min Size") as Reference<number>)
+                  : number().integer().moreThan(0),
             },
           },
           { name: "Cluster", value: hpa.cluster },
