@@ -156,7 +156,6 @@ type callbacksBase struct {
 	numStreams  int32
 }
 
-
 func (c *callbacksBase) onStreamOpen(_ context.Context) error {
 	numStreams := atomic.AddInt32(&c.numStreams, 1)
 	c.serverStats.totalStreams.Update(float64(numStreams))
