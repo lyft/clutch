@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package clutch.play.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/play/v1/;playv1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service PlayAPI{
+    rpc GetPlay (GetPlayRequest) returns (GetPlayResponse) {
+        option (google.api.http) = {
+            post: "/v1/play/getPlay"
+            body: "*"
+        };
+    }
+}
+
+message GetPlayRequest {
+    string name = 1 [ (validate.rules).string = {min_bytes: 1} ];
+}
+
+message GetPlayResponse {
+    repeated Play play = 1;
+}
+
+message Play {
+    string character = 1;
+    string name = 2;
+    string series = 3;
+    string image_url = 4;
+
+    enum Type {
+        UNSPECIFIED = 0;
+        CARD = 1;
+        FIGURE = 2;
+        YARN = 3;
+    }
+    Type type = 5;
+}

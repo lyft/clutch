@@ -18249,6 +18249,229 @@ export namespace clutch {
         }
     }
 
+    /** Namespace play. */
+    namespace play {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a PlayAPI */
+            class PlayAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new PlayAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetPlay.
+                 * @param request GetPlayRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetPlayResponse
+                 */
+                public getPlay(request: clutch.play.v1.IGetPlayRequest, callback: clutch.play.v1.PlayAPI.GetPlayCallback): void;
+
+                /**
+                 * Calls GetPlay.
+                 * @param request GetPlayRequest message or plain object
+                 * @returns Promise
+                 */
+                public getPlay(request: clutch.play.v1.IGetPlayRequest): Promise<clutch.play.v1.GetPlayResponse>;
+            }
+
+            namespace PlayAPI {
+
+                /**
+                 * Callback as used by {@link clutch.play.v1.PlayAPI#getPlay}.
+                 * @param error Error, if any
+                 * @param [response] GetPlayResponse
+                 */
+                type GetPlayCallback = (error: (Error|null), response?: clutch.play.v1.GetPlayResponse) => void;
+            }
+
+            /** Properties of a GetPlayRequest. */
+            interface IGetPlayRequest {
+
+                /** GetPlayRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a GetPlayRequest. */
+            class GetPlayRequest implements IGetPlayRequest {
+
+                /**
+                 * Constructs a new GetPlayRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.play.v1.IGetPlayRequest);
+
+                /** GetPlayRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a GetPlayRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetPlayRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetPlayRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.play.v1.GetPlayRequest;
+
+                /**
+                 * Creates a plain object from a GetPlayRequest message. Also converts values to other types if specified.
+                 * @param message GetPlayRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.play.v1.GetPlayRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetPlayRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetPlayResponse. */
+            interface IGetPlayResponse {
+
+                /** GetPlayResponse play */
+                play?: (clutch.play.v1.IPlay[]|null);
+            }
+
+            /** Represents a GetPlayResponse. */
+            class GetPlayResponse implements IGetPlayResponse {
+
+                /**
+                 * Constructs a new GetPlayResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.play.v1.IGetPlayResponse);
+
+                /** GetPlayResponse play. */
+                public play: clutch.play.v1.IPlay[];
+
+                /**
+                 * Verifies a GetPlayResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetPlayResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetPlayResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.play.v1.GetPlayResponse;
+
+                /**
+                 * Creates a plain object from a GetPlayResponse message. Also converts values to other types if specified.
+                 * @param message GetPlayResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.play.v1.GetPlayResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetPlayResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Play. */
+            interface IPlay {
+
+                /** Play character */
+                character?: (string|null);
+
+                /** Play name */
+                name?: (string|null);
+
+                /** Play series */
+                series?: (string|null);
+
+                /** Play imageUrl */
+                imageUrl?: (string|null);
+
+                /** Play type */
+                type?: (clutch.play.v1.Play.Type|null);
+            }
+
+            /** Represents a Play. */
+            class Play implements IPlay {
+
+                /**
+                 * Constructs a new Play.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.play.v1.IPlay);
+
+                /** Play character. */
+                public character: string;
+
+                /** Play name. */
+                public name: string;
+
+                /** Play series. */
+                public series: string;
+
+                /** Play imageUrl. */
+                public imageUrl: string;
+
+                /** Play type. */
+                public type: clutch.play.v1.Play.Type;
+
+                /**
+                 * Verifies a Play message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Play message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Play
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.play.v1.Play;
+
+                /**
+                 * Creates a plain object from a Play message. Also converts values to other types if specified.
+                 * @param message Play
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.play.v1.Play, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Play to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace Play {
+
+                /** Type enum. */
+                enum Type {
+                    UNSPECIFIED = 0,
+                    CARD = 1,
+                    FIGURE = 2,
+                    YARN = 3
+                }
+            }
+        }
+    }
+
     /** Namespace project. */
     namespace project {
 

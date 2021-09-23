@@ -43659,6 +43659,512 @@ export const clutch = $root.clutch = (() => {
         return k8s;
     })();
 
+    clutch.play = (function() {
+
+        /**
+         * Namespace play.
+         * @memberof clutch
+         * @namespace
+         */
+        const play = {};
+
+        play.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.play
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.PlayAPI = (function() {
+
+                /**
+                 * Constructs a new PlayAPI service.
+                 * @memberof clutch.play.v1
+                 * @classdesc Represents a PlayAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function PlayAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (PlayAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = PlayAPI;
+
+                /**
+                 * Callback as used by {@link clutch.play.v1.PlayAPI#getPlay}.
+                 * @memberof clutch.play.v1.PlayAPI
+                 * @typedef GetPlayCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.play.v1.GetPlayResponse} [response] GetPlayResponse
+                 */
+
+                /**
+                 * Calls GetPlay.
+                 * @function getPlay
+                 * @memberof clutch.play.v1.PlayAPI
+                 * @instance
+                 * @param {clutch.play.v1.IGetPlayRequest} request GetPlayRequest message or plain object
+                 * @param {clutch.play.v1.PlayAPI.GetPlayCallback} callback Node-style callback called with the error, if any, and GetPlayResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(PlayAPI.prototype.getPlay = function getPlay(request, callback) {
+                    return this.rpcCall(getPlay, $root.clutch.play.v1.GetPlayRequest, $root.clutch.play.v1.GetPlayResponse, request, callback);
+                }, "name", { value: "GetPlay" });
+
+                /**
+                 * Calls GetPlay.
+                 * @function getPlay
+                 * @memberof clutch.play.v1.PlayAPI
+                 * @instance
+                 * @param {clutch.play.v1.IGetPlayRequest} request GetPlayRequest message or plain object
+                 * @returns {Promise<clutch.play.v1.GetPlayResponse>} Promise
+                 * @variation 2
+                 */
+
+                return PlayAPI;
+            })();
+
+            v1.GetPlayRequest = (function() {
+
+                /**
+                 * Properties of a GetPlayRequest.
+                 * @memberof clutch.play.v1
+                 * @interface IGetPlayRequest
+                 * @property {string|null} [name] GetPlayRequest name
+                 */
+
+                /**
+                 * Constructs a new GetPlayRequest.
+                 * @memberof clutch.play.v1
+                 * @classdesc Represents a GetPlayRequest.
+                 * @implements IGetPlayRequest
+                 * @constructor
+                 * @param {clutch.play.v1.IGetPlayRequest=} [properties] Properties to set
+                 */
+                function GetPlayRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetPlayRequest name.
+                 * @member {string} name
+                 * @memberof clutch.play.v1.GetPlayRequest
+                 * @instance
+                 */
+                GetPlayRequest.prototype.name = "";
+
+                /**
+                 * Verifies a GetPlayRequest message.
+                 * @function verify
+                 * @memberof clutch.play.v1.GetPlayRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetPlayRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetPlayRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.play.v1.GetPlayRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.play.v1.GetPlayRequest} GetPlayRequest
+                 */
+                GetPlayRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.play.v1.GetPlayRequest)
+                        return object;
+                    let message = new $root.clutch.play.v1.GetPlayRequest();
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetPlayRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.play.v1.GetPlayRequest
+                 * @static
+                 * @param {clutch.play.v1.GetPlayRequest} message GetPlayRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetPlayRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.name = "";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this GetPlayRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.play.v1.GetPlayRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetPlayRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetPlayRequest;
+            })();
+
+            v1.GetPlayResponse = (function() {
+
+                /**
+                 * Properties of a GetPlayResponse.
+                 * @memberof clutch.play.v1
+                 * @interface IGetPlayResponse
+                 * @property {Array.<clutch.play.v1.IPlay>|null} [play] GetPlayResponse play
+                 */
+
+                /**
+                 * Constructs a new GetPlayResponse.
+                 * @memberof clutch.play.v1
+                 * @classdesc Represents a GetPlayResponse.
+                 * @implements IGetPlayResponse
+                 * @constructor
+                 * @param {clutch.play.v1.IGetPlayResponse=} [properties] Properties to set
+                 */
+                function GetPlayResponse(properties) {
+                    this.play = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetPlayResponse play.
+                 * @member {Array.<clutch.play.v1.IPlay>} play
+                 * @memberof clutch.play.v1.GetPlayResponse
+                 * @instance
+                 */
+                GetPlayResponse.prototype.play = $util.emptyArray;
+
+                /**
+                 * Verifies a GetPlayResponse message.
+                 * @function verify
+                 * @memberof clutch.play.v1.GetPlayResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetPlayResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.play != null && message.hasOwnProperty("play")) {
+                        if (!Array.isArray(message.play))
+                            return "play: array expected";
+                        for (let i = 0; i < message.play.length; ++i) {
+                            let error = $root.clutch.play.v1.Play.verify(message.play[i]);
+                            if (error)
+                                return "play." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetPlayResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.play.v1.GetPlayResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.play.v1.GetPlayResponse} GetPlayResponse
+                 */
+                GetPlayResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.play.v1.GetPlayResponse)
+                        return object;
+                    let message = new $root.clutch.play.v1.GetPlayResponse();
+                    if (object.play) {
+                        if (!Array.isArray(object.play))
+                            throw TypeError(".clutch.play.v1.GetPlayResponse.play: array expected");
+                        message.play = [];
+                        for (let i = 0; i < object.play.length; ++i) {
+                            if (typeof object.play[i] !== "object")
+                                throw TypeError(".clutch.play.v1.GetPlayResponse.play: object expected");
+                            message.play[i] = $root.clutch.play.v1.Play.fromObject(object.play[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetPlayResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.play.v1.GetPlayResponse
+                 * @static
+                 * @param {clutch.play.v1.GetPlayResponse} message GetPlayResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetPlayResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.play = [];
+                    if (message.play && message.play.length) {
+                        object.play = [];
+                        for (let j = 0; j < message.play.length; ++j)
+                            object.play[j] = $root.clutch.play.v1.Play.toObject(message.play[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetPlayResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.play.v1.GetPlayResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetPlayResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetPlayResponse;
+            })();
+
+            v1.Play = (function() {
+
+                /**
+                 * Properties of a Play.
+                 * @memberof clutch.play.v1
+                 * @interface IPlay
+                 * @property {string|null} [character] Play character
+                 * @property {string|null} [name] Play name
+                 * @property {string|null} [series] Play series
+                 * @property {string|null} [imageUrl] Play imageUrl
+                 * @property {clutch.play.v1.Play.Type|null} [type] Play type
+                 */
+
+                /**
+                 * Constructs a new Play.
+                 * @memberof clutch.play.v1
+                 * @classdesc Represents a Play.
+                 * @implements IPlay
+                 * @constructor
+                 * @param {clutch.play.v1.IPlay=} [properties] Properties to set
+                 */
+                function Play(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Play character.
+                 * @member {string} character
+                 * @memberof clutch.play.v1.Play
+                 * @instance
+                 */
+                Play.prototype.character = "";
+
+                /**
+                 * Play name.
+                 * @member {string} name
+                 * @memberof clutch.play.v1.Play
+                 * @instance
+                 */
+                Play.prototype.name = "";
+
+                /**
+                 * Play series.
+                 * @member {string} series
+                 * @memberof clutch.play.v1.Play
+                 * @instance
+                 */
+                Play.prototype.series = "";
+
+                /**
+                 * Play imageUrl.
+                 * @member {string} imageUrl
+                 * @memberof clutch.play.v1.Play
+                 * @instance
+                 */
+                Play.prototype.imageUrl = "";
+
+                /**
+                 * Play type.
+                 * @member {clutch.play.v1.Play.Type} type
+                 * @memberof clutch.play.v1.Play
+                 * @instance
+                 */
+                Play.prototype.type = 0;
+
+                /**
+                 * Verifies a Play message.
+                 * @function verify
+                 * @memberof clutch.play.v1.Play
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Play.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.character != null && message.hasOwnProperty("character"))
+                        if (!$util.isString(message.character))
+                            return "character: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.series != null && message.hasOwnProperty("series"))
+                        if (!$util.isString(message.series))
+                            return "series: string expected";
+                    if (message.imageUrl != null && message.hasOwnProperty("imageUrl"))
+                        if (!$util.isString(message.imageUrl))
+                            return "imageUrl: string expected";
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        switch (message.type) {
+                        default:
+                            return "type: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates a Play message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.play.v1.Play
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.play.v1.Play} Play
+                 */
+                Play.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.play.v1.Play)
+                        return object;
+                    let message = new $root.clutch.play.v1.Play();
+                    if (object.character != null)
+                        message.character = String(object.character);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.series != null)
+                        message.series = String(object.series);
+                    if (object.imageUrl != null)
+                        message.imageUrl = String(object.imageUrl);
+                    switch (object.type) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.type = 0;
+                        break;
+                    case "CARD":
+                    case 1:
+                        message.type = 1;
+                        break;
+                    case "FIGURE":
+                    case 2:
+                        message.type = 2;
+                        break;
+                    case "YARN":
+                    case 3:
+                        message.type = 3;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Play message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.play.v1.Play
+                 * @static
+                 * @param {clutch.play.v1.Play} message Play
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Play.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.character = "";
+                        object.name = "";
+                        object.series = "";
+                        object.imageUrl = "";
+                        object.type = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.character != null && message.hasOwnProperty("character"))
+                        object.character = message.character;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.series != null && message.hasOwnProperty("series"))
+                        object.series = message.series;
+                    if (message.imageUrl != null && message.hasOwnProperty("imageUrl"))
+                        object.imageUrl = message.imageUrl;
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        object.type = options.enums === String ? $root.clutch.play.v1.Play.Type[message.type] : message.type;
+                    return object;
+                };
+
+                /**
+                 * Converts this Play to JSON.
+                 * @function toJSON
+                 * @memberof clutch.play.v1.Play
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Play.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Type enum.
+                 * @name clutch.play.v1.Play.Type
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} CARD=1 CARD value
+                 * @property {number} FIGURE=2 FIGURE value
+                 * @property {number} YARN=3 YARN value
+                 */
+                Play.Type = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "CARD"] = 1;
+                    values[valuesById[2] = "FIGURE"] = 2;
+                    values[valuesById[3] = "YARN"] = 3;
+                    return values;
+                })();
+
+                return Play;
+            })();
+
+            return v1;
+        })();
+
+        return play;
+    })();
+
     clutch.project = (function() {
 
         /**
