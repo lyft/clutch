@@ -1,7 +1,7 @@
 *                                                    @lyft/clutch-maintainer
-/api/chaos/                                          @lyft/resilience
-/api/config/module/chaos/                            @lyft/resilience
-/backend/**/chaos/                                   @lyft/resilience
-/backend/cmd/migrate/migrations/*_experimentation_*  @lyft/resilience
-/frontend/api/src/                                   @lyft/resilience
-/frontend/workflows/*experimentation/                @lyft/resilience
+/api/chaos/                                          @lyft/lyne-clients
+/api/config/module/chaos/                            @lyft/lyne-clients
+/backend/**/chaos/                                   @lyft/lyne-clients
+/backend/cmd/migrate/migrations/*_experimentation_*  @lyft/lyne-clients
+/frontend/api/src/                                   @lyft/lyne-clients
+/frontend/workflows/*experimentation/                @lyft/lyne-clients
