@@ -28,6 +28,7 @@ type Flags struct {
 	ConfigPath string
 	Template   bool
 	Validate   bool
+	DevMode    bool
 }
 
 // Link register the struct vars globally for parsing by the flag library.
@@ -35,6 +36,7 @@ func (f *Flags) Link() {
 	flag.StringVar(&f.ConfigPath, "c", "clutch-config.yaml", "path to YAML configuration")
 	flag.BoolVar(&f.Template, "template", false, "executes go templates on the configuration file")
 	flag.BoolVar(&f.Validate, "validate", false, "validates the configuration file and exits")
+	flag.BoolVar(&f.DevMode, "dev", false, "run clutch in development mode")
 }
 
 // Parse command line arguments.

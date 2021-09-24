@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/uber-go/tally"
 	tallyprom "github.com/uber-go/tally/prometheus"
 	"go.uber.org/zap"
@@ -39,7 +41,27 @@ type ComponentFactory struct {
 	Modules    module.Factory
 }
 
+func loadEnv(f *Flags) {
+
+	// Order is important as godotenv will NOT overwrite existing environment variables.
+	envFiles := []string{".env.local", ".env.development", ".env"}
+	for _, filename := range envFiles {
+		// Use a temporary logger to parse the environment files
+		tmpLogger := newTmpLogger().With(zap.String("file", filename))
+
+		if filename == ".env.development" && !f.DevMode {
+			continue
+		}
+		p, err := filepath.Abs(filename)
+		if err != nil {
+			tmpLogger.Fatal("parsing .env file failed", zap.Error(err))
+		}
+		godotenv.Load(p)
+	}
+}
+
 func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
+	loadEnv(f)
 	cfg := MustReadOrValidateConfig(f)
 	RunWithConfig(f, cfg, cf, assets)
 }
