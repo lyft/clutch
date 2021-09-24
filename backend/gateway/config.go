@@ -50,9 +50,7 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 	tmpLogger := newTmpLogger().With(zap.String("file", f.ConfigPath))
 
 	var cfg gatewayv1.Config
-	if err := parseFile(f.ConfigPath, &cfg, f.Template); err != nil {
-		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
-	}
+	consolidateConfigs(f.ConfigPath, &cfg, f)
 	if err := cfg.Validate(); err != nil {
 		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
 	}
@@ -63,6 +61,24 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 	}
 
 	return &cfg
+}
+
+func consolidateConfigs(cfgPath string, cfg *gatewayv1.Config, f *Flags) {
+	// Use a temporary logger to parse the configuration and output.
+	tmpLogger := newTmpLogger().With(zap.String("file", cfgPath))
+
+	var curCfg gatewayv1.Config
+	if err := parseFile(cfgPath, &curCfg, f.Template); err != nil {
+		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
+	}
+
+	if curCfg.Extends == "" || cfgPath == curCfg.Extends {
+		proto.Merge(cfg, &curCfg)
+		return
+	}
+
+	consolidateConfigs(curCfg.Extends, cfg, f)
+	proto.Merge(cfg, &curCfg)
 }
 
 func executeTemplate(contents []byte) ([]byte, error) {
