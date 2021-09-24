@@ -42,7 +42,6 @@ type ComponentFactory struct {
 }
 
 func loadEnv(f *Flags) {
-
 	// Order is important as godotenv will NOT overwrite existing environment variables.
 	envFiles := []string{".env.local", ".env.development", ".env"}
 	for _, filename := range envFiles {
@@ -56,7 +55,10 @@ func loadEnv(f *Flags) {
 		if err != nil {
 			tmpLogger.Fatal("parsing .env file failed", zap.Error(err))
 		}
-		godotenv.Load(p)
+		err = godotenv.Load(p)
+		if err != nil {
+			tmpLogger.Fatal("parsing .env file failed", zap.Error(err))
+		}
 	}
 }
 
