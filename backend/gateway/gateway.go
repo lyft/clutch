@@ -55,10 +55,8 @@ func loadEnv(f *Flags) {
 		if err != nil {
 			tmpLogger.Fatal("parsing .env file failed", zap.Error(err))
 		}
-		err = godotenv.Load(p)
-		if err != nil {
-			tmpLogger.Fatal("parsing .env file failed", zap.Error(err))
-		}
+		// nolint
+		godotenv.Load(p)
 	}
 }
 
