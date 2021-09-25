@@ -106,6 +106,12 @@ export interface DashState {
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
 }
 
+export interface TimelineState {
+  // Contains a mapping of card names to their event time points
+  // See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
+  timeData: { [eventsKey: string]: IClutch.timeseries.v1.ITimePoint[] };
+}
+
 export type DashActionKind = "UPDATE_SELECTED";
 
 export interface DashAction {

@@ -3,7 +3,12 @@ import styled from "@emotion/styled";
 import { Box } from "@material-ui/core";
 import _ from "lodash";
 
-import { DashDispatchContext, DashStateContext } from "./dash-hooks";
+import {
+  DashDispatchContext,
+  DashStateContext,
+  TimelineStateContext,
+  TimelineUpdateContext,
+} from "./dash-hooks";
 import ProjectSelector from "./project-selector";
 import type { DashAction, DashState } from "./types";
 
@@ -34,13 +39,18 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
 
 const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
-
+  // TODO: should we use reducer instead of state here?
+  const [timeData, setTimeData] = React.useState<any>({});
   return (
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">
       <DashDispatchContext.Provider value={dispatch}>
         <DashStateContext.Provider value={state}>
-          <ProjectSelector />
-          <CardContainer>{children}</CardContainer>
+          <TimelineUpdateContext.Provider value={setTimeData}>
+            <TimelineStateContext.Provider value={timeData}>
+              <ProjectSelector />
+              <CardContainer>{children}</CardContainer>
+            </TimelineStateContext.Provider>
+          </TimelineUpdateContext.Provider>
         </DashStateContext.Provider>
       </DashDispatchContext.Provider>
     </Box>
