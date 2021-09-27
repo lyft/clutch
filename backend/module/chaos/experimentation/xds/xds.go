@@ -178,6 +178,23 @@ func (c *callbacksBase) onStreamResponse(_ int64, _ string, _ string) {
 	c.serverStats.totalResourcesServed.Inc(1)
 }
 
+// Unimplemented Delta Callbacks
+func (c *callbacksBase) OnDeltaStreamOpen(ctx context.Context, i int64, s string) error {
+	panic("delta callbacks not implemented, use 'GRPC' api_type")
+}
+
+func (c *callbacksBase) OnStreamDeltaRequest(i int64, request *gcpDiscoveryV3.DeltaDiscoveryRequest) error {
+	panic("delta callbacks not implemented, use 'GRPC' api_type")
+}
+
+func (c *callbacksBase) OnStreamDeltaResponse(i int64, request *gcpDiscoveryV3.DeltaDiscoveryRequest, response *gcpDiscoveryV3.DeltaDiscoveryResponse) {
+	panic("delta callbacks not implemented, use 'GRPC' api_type")
+}
+
+func (c *callbacksBase) OnDeltaStreamClosed(streamID int64) {
+	panic("delta callbacks not implemented, use 'GRPC' api_type")
+}
+
 // RTDS Callbacks
 type rtdsCallbacks struct {
 	callbacksBase
