@@ -39,7 +39,7 @@ const StyledCardHeaderContainer = styled.div({
 });
 
 const StyledCardHeader = styled(Grid)({
-  padding: "6px 0px",
+  padding: "6px 8px",
   minHeight: "48px",
   ".MuiGrid-item": {
     padding: "0px 8px",
@@ -89,11 +89,11 @@ interface CardHeaderProps {
 const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHeaderProps) => {
   return (
     <StyledCardHeaderContainer>
-      <Grid container wrap="nowrap" alignItems="center">
+      <StyledCardHeader container wrap="nowrap" alignItems="center">
         <StyledCardHeaderAvatarContainer>
           <StyledCardHeaderAvatar>{avatar}</StyledCardHeaderAvatar>
         </StyledCardHeaderAvatarContainer>
-        <StyledCardHeader container wrap="nowrap" alignItems="center">
+        <Grid container wrap="nowrap" alignItems="center">
           <Grid item xs>
             <Typography variant="h4">{title}</Typography>
           </Grid>
@@ -110,9 +110,9 @@ const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHead
               </StyledGridItem>
             </>
           ))}
-        </StyledCardHeader>
+        </Grid>
         {actions}
-      </Grid>
+      </StyledCardHeader>
       {children}
     </StyledCardHeaderContainer>
   );
