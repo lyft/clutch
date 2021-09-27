@@ -3,7 +3,8 @@ import type { CardHeaderSummaryProps, ClutchError } from "@clutch-sh/core";
 import { Card as ClutchCard, CardContent, CardHeader, Error, IconButton } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Grid, LinearProgress } from "@material-ui/core";
-import MinimizeIcon from "@material-ui/icons/Minimize";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 const StyledProgressContainer = styled.div({
   height: "4px",
@@ -16,10 +17,9 @@ const StyledProgressContainer = styled.div({
 });
 
 const StyledIconButton = styled(IconButton)({
-  alignItems: "flex-end",
-  ".MuiIconButton-label": {
-    display: "inline",
-  },
+  width: "32px",
+  height: "32px",
+  padding: "8px",
 });
 
 interface CardProps {
@@ -44,7 +44,7 @@ const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps)
         <CardHeader
           actions={
             <StyledIconButton onClick={handleExpandClick} variant="neutral">
-              <MinimizeIcon />
+              {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </StyledIconButton>
           }
           avatar={avatar}
