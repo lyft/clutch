@@ -39,26 +39,33 @@ const StyledCardHeaderContainer = styled.div({
 });
 
 const StyledCardHeader = styled(Grid)({
-  padding: "16px",
-  minHeight: "72px",
+  padding: "6px 8px",
+  minHeight: "48px",
   ".MuiGrid-item": {
     padding: "0px 8px",
   },
 });
 
-// TODO:: confirm the width and height of the icon container
+const StyledCardHeaderAvatarContainer = styled.div({
+  padding: "8px",
+  height: "32px",
+  width: "32px",
+  alignSelf: "center",
+  display: "flex",
+});
+
 // TODO: use material ui avatar component and implement figma design
 const StyledCardHeaderAvatar = styled.div({
-  width: "32px",
-  height: "32px",
-  marginRight: "16px",
+  width: "24px",
+  height: "24px",
+  fontSize: "18px",
+  alignSelf: "center",
 });
 
 // TODO: make the divider a core component
-// TODO: confirm the height of the divider
 const StyledDivider = styled(Divider)({
-  color: "rgba(13, 16, 48, 0.38)",
-  height: "36px",
+  color: "#A3A4B0",
+  height: "24px",
   alignSelf: "center",
 });
 
@@ -82,12 +89,11 @@ interface CardHeaderProps {
 const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHeaderProps) => {
   return (
     <StyledCardHeaderContainer>
-      <Grid container wrap="nowrap">
-        <StyledCardHeader container wrap="nowrap" alignItems="center">
-          <StyledCardHeaderAvatar>
-            {/* TODO: confirm the fontSize of icon */}
-            <Typography variant="h2">{avatar}</Typography>
-          </StyledCardHeaderAvatar>
+      <StyledCardHeader container wrap="nowrap" alignItems="center">
+        <StyledCardHeaderAvatarContainer>
+          <StyledCardHeaderAvatar>{avatar}</StyledCardHeaderAvatar>
+        </StyledCardHeaderAvatarContainer>
+        <Grid container wrap="nowrap" alignItems="center">
           <Grid item xs>
             <Typography variant="h4">{title}</Typography>
           </Grid>
@@ -96,18 +102,17 @@ const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHead
               <StyledDivider orientation="vertical" />
               <StyledGridItem item xs>
                 {section.title}
-                {/* TODO: confirm the fontSize of the subheader */}
                 {section.subheader && (
-                  <Typography variant="body3" color="rgba(13, 16, 48, 0.6)">
+                  <Typography variant="body4" color="rgba(13, 16, 48, 0.6)">
                     {section.subheader}
                   </Typography>
                 )}
               </StyledGridItem>
             </>
           ))}
-        </StyledCardHeader>
+        </Grid>
         {actions}
-      </Grid>
+      </StyledCardHeader>
       {children}
     </StyledCardHeaderContainer>
   );

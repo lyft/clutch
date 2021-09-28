@@ -209,7 +209,7 @@ const ProjectSelector = () => {
                       <Typography variant="subtitle3" color="#FFFFFF">
                         {item.title}
                       </Typography>
-                      <Typography variant="body3" color="#E7E7EA">
+                      <Typography variant="body4" color="#E7E7EA">
                         {item.description}
                       </Typography>
                     </TooltipContainer>
