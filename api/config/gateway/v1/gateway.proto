@@ -17,7 +17,7 @@ message Config {
   repeated Resolver resolvers = 3;
   repeated Module modules = 4;
 
-  string extends = 5;
+  repeated string extends = 5;
 }
 
 message TCPSocket {

@@ -102,8 +102,6 @@ func (m *Config) Validate() error {
 
 	}
 
-	// no validation rules for Extends
-
 	return nil
 }
 

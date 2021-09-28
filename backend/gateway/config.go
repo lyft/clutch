@@ -72,12 +72,17 @@ func consolidateConfigs(cfgPath string, cfg *gatewayv1.Config, f *Flags) {
 		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
 	}
 
-	if curCfg.Extends == "" || cfgPath == curCfg.Extends {
+	if len(curCfg.Extends) == 0 {
 		proto.Merge(cfg, &curCfg)
 		return
 	}
 
-	consolidateConfigs(curCfg.Extends, cfg, f)
+	for _, c := range curCfg.Extends {
+		if c == cfgPath {
+			continue
+		}
+		consolidateConfigs(c, cfg, f)
+	}
 	proto.Merge(cfg, &curCfg)
 }
 
