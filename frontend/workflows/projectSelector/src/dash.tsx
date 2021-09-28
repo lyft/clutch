@@ -56,7 +56,6 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
 
 const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
-  // TODO: should we use reducer instead of state here?
   const [timelineState, timelineDispatch] = React.useReducer(timelineReducer, initialTimelineState);
   return (
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">

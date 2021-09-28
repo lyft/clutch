@@ -5,9 +5,9 @@ import type { DashAction, DashState, TimelineAction, TimelineState } from "./typ
 
 export const DashStateContext = React.createContext<DashState | undefined>(undefined);
 export const TimelineStateContext = React.createContext<TimelineState | undefined>(undefined);
-export const TimelineUpdateContext = React.createContext<((action: TimelineAction) => void) | undefined>(
-  undefined
-);
+export const TimelineUpdateContext = React.createContext<
+  ((action: TimelineAction) => void) | undefined
+>(undefined);
 export const DashDispatchContext = React.createContext<((action: DashAction) => void) | undefined>(
   undefined
 );
