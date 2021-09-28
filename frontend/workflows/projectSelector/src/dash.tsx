@@ -46,8 +46,9 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
     case "UPDATE": {
       // TODO: should disable lint for this? (no param assign)
       // for now, clobber any existing data
-      state.timeData[action.payload.key] = action.payload.points;
-      return state;
+      const newState = state;
+      newState.timeData[action.payload.key] = action.payload.points;
+      return newState;
     }
     default:
       throw new Error("not implemented (should be unreachable)");
