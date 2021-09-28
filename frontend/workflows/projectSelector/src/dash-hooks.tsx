@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 
 import type { DashAction, DashState, TimelineState } from "./types";
 
@@ -16,6 +17,10 @@ type useDashUpdaterReturn = {
   updateSelected: (state: DashState) => void;
 };
 
+type useTimelineUpdaterReturn = {
+  updateTimeline: (key: string, points: IClutch.timeseries.v1.IPoint[]) => void;
+};
+
 export const useDashUpdater = (): useDashUpdaterReturn => {
   const dispatch = React.useContext(DashDispatchContext);
 
@@ -26,14 +31,15 @@ export const useDashUpdater = (): useDashUpdaterReturn => {
   };
 };
 
-export const useTimelineUpdate = (): React.Dispatch<any> => {
-  const setTimeData = React.useContext(TimelineUpdateContext);
-  if (!setTimeData) {
-    throw new Error(
-      "useTimelineUpdate was invoked outside of a valid context, check that it is a child of the Timeline component"
-    );
-  }
-  return setTimeData;
+export const useTimelineUpdater = (): useTimelineUpdaterReturn => {
+  const dispatch = React.useContext(TimelineUpdateContext);
+
+  return {
+    // TODO: how do we pass the key and points here instead of the state?
+    updateTimeline: (key, points) => {
+      dispatch && dispatch({ type: "UPDATE", payload: { key, points } });
+    },
+  };
 };
 
 export const useDashState = (): DashState => {

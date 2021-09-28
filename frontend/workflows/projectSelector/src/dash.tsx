@@ -10,11 +10,15 @@ import {
   TimelineUpdateContext,
 } from "./dash-hooks";
 import ProjectSelector from "./project-selector";
-import type { DashAction, DashState } from "./types";
+import type { DashAction, DashState, TimelineAction, TimelineState } from "./types";
 
 const initialState = {
   selected: [],
   projectData: {},
+};
+
+const initialTimelineState = {
+  timeData: {},
 };
 
 const CardContainer = styled.div({
@@ -37,16 +41,29 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
   }
 };
 
+const timelineReducer = (state: TimelineState, action: TimelineAction): TimelineState => {
+  switch (action.type) {
+    case "UPDATE": {
+      // TODO: should disable lint for this? (no param assign)
+      // for now, clobber any existing data
+      state.timeData[action.payload.key] = action.payload.points;
+      return state;
+    }
+    default:
+      throw new Error("not implemented (should be unreachable)");
+  }
+};
+
 const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
   // TODO: should we use reducer instead of state here?
-  const [timeData, setTimeData] = React.useState<any>({});
+  const [timelineState, timelineDispatch] = React.useReducer(timelineReducer, initialTimelineState);
   return (
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">
       <DashDispatchContext.Provider value={dispatch}>
         <DashStateContext.Provider value={state}>
-          <TimelineUpdateContext.Provider value={setTimeData}>
-            <TimelineStateContext.Provider value={timeData}>
+          <TimelineUpdateContext.Provider value={timelineDispatch}>
+            <TimelineStateContext.Provider value={timelineState}>
               <ProjectSelector />
               <CardContainer>{children}</CardContainer>
             </TimelineStateContext.Provider>

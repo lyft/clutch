@@ -2,7 +2,7 @@ import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
 import Card from "./card";
 import Dash from "./dash";
-import { useDashState, useTimelineState, useTimelineUpdate } from "./dash-hooks";
+import { useDashState, useTimelineState, useTimelineUpdater } from "./dash-hooks";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
@@ -29,4 +29,4 @@ const register = (): WorkflowConfiguration => {
 export default register;
 
 export type { DashState, TimelineState } from "./types";
-export { Card, Dash, useDashState, useTimelineState, useTimelineUpdate };
+export { Card, Dash, useDashState, useTimelineState, useTimelineUpdater };
