@@ -1,12 +1,11 @@
 import * as React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 
-import type { DashAction, DashState, TimelineState } from "./types";
+import type { DashAction, DashState, TimelineAction, TimelineState } from "./types";
 
 export const DashStateContext = React.createContext<DashState | undefined>(undefined);
 export const TimelineStateContext = React.createContext<TimelineState | undefined>(undefined);
-// TODO: What type goes here? React.Dispatch<any> or? ???
-export const TimelineUpdateContext = React.createContext<React.Dispatch<any> | undefined>(
+export const TimelineUpdateContext = React.createContext<((action: TimelineAction) => void) | undefined>(
   undefined
 );
 export const DashDispatchContext = React.createContext<((action: DashAction) => void) | undefined>(
