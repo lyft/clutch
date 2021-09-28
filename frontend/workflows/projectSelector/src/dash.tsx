@@ -44,7 +44,6 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
 const timelineReducer = (state: TimelineState, action: TimelineAction): TimelineState => {
   switch (action.type) {
     case "UPDATE": {
-      // TODO: should disable lint for this? (no param assign)
       // for now, clobber any existing data
       const newState = state;
       newState.timeData[action.payload.key] = action.payload.points;
