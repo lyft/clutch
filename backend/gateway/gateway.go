@@ -43,18 +43,19 @@ type ComponentFactory struct {
 
 func loadEnv(f *Flags) {
 	// Order is important as godotenv will NOT overwrite existing environment variables.
-	envFiles := []string{".env.local", ".env.development", ".env"}
+	envFiles := []string{".env.local"}
+	envFiles = append(envFiles, f.EnvFile...)
+
 	for _, filename := range envFiles {
 		// Use a temporary logger to parse the environment files
 		tmpLogger := newTmpLogger().With(zap.String("file", filename))
 
-		if filename == ".env.development" && !f.DevMode {
-			continue
-		}
 		p, err := filepath.Abs(filename)
 		if err != nil {
 			tmpLogger.Fatal("parsing .env file failed", zap.Error(err))
 		}
+		// Ignore lint below as it is ok to to ignore dotenv loads as not all env files are guaranteed
+		// to be present.
 		// nolint
 		godotenv.Load(p)
 	}
