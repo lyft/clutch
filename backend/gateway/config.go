@@ -50,7 +50,8 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 	tmpLogger := newTmpLogger().With(zap.String("file", f.ConfigPath))
 
 	var cfg gatewayv1.Config
-	consolidateConfigs(f.ConfigPath, &cfg, f)
+	var seenCfgs []string
+	consolidateConfigs(f.ConfigPath, &cfg, f, &seenCfgs)
 	if err := cfg.Validate(); err != nil {
 		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
 	}
@@ -63,15 +64,31 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 	return &cfg
 }
 
-func consolidateConfigs(cfgPath string, cfg *gatewayv1.Config, f *Flags) {
+func contains(s *[]string, str string) bool {
+	for _, v := range *s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
+}
+
+func consolidateConfigs(cfgPath string, cfg *gatewayv1.Config, f *Flags, seen *[]string) {
 	// Use a temporary logger to parse the configuration and output.
 	tmpLogger := newTmpLogger().With(zap.String("file", cfgPath))
+
+	if contains(seen, cfgPath) {
+		tmpLogger.Error("ignoring duplicate extended config")
+		return
+	}
 
 	var curCfg gatewayv1.Config
 	if err := parseFile(cfgPath, &curCfg, f.Template); err != nil {
 		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
 	}
 
+	*seen = append(*seen, cfgPath)
 	if len(curCfg.Extends) == 0 {
 		proto.Merge(cfg, &curCfg)
 		return
@@ -81,7 +98,7 @@ func consolidateConfigs(cfgPath string, cfg *gatewayv1.Config, f *Flags) {
 		if c == cfgPath {
 			continue
 		}
-		consolidateConfigs(c, cfg, f)
+		consolidateConfigs(c, cfg, f, seen)
 	}
 	proto.Merge(cfg, &curCfg)
 }
