@@ -34,7 +34,6 @@ export const useTimelineUpdater = (): useTimelineUpdaterReturn => {
   const dispatch = React.useContext(TimelineUpdateContext);
 
   return {
-    // TODO: how do we pass the key and points here instead of the state?
     updateTimeline: (key, points) => {
       dispatch && dispatch({ type: "UPDATE", payload: { key, points } });
     },
