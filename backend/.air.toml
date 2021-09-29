@@ -9,7 +9,7 @@ tmp_dir = ".air"
 # Just plain old shell command. You could use `make` as well.
 cmd = "go build -o .air/clutch ."
 # Binary file yields from `cmd`.
-bin = ".air/clutch"
+bin = ".air/clutch -env .env.local"
 # Watch these filename extensions.
 include_ext = ["go"]
 # Ignore these filename extensions or directories.

@@ -24,10 +24,22 @@ import (
 	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
 
+type envFiles []string
+
+func (f *envFiles) String() string {
+	return strings.Join(*f, ",")
+}
+
+func (f *envFiles) Set(value string) error {
+	*f = append(*f, value)
+	return nil
+}
+
 type Flags struct {
 	ConfigPath string
 	Template   bool
 	Validate   bool
+	EnvFiles   envFiles
 }
 
 // Link register the struct vars globally for parsing by the flag library.
@@ -35,6 +47,7 @@ func (f *Flags) Link() {
 	flag.StringVar(&f.ConfigPath, "c", "clutch-config.yaml", "path to YAML configuration")
 	flag.BoolVar(&f.Template, "template", false, "executes go templates on the configuration file")
 	flag.BoolVar(&f.Validate, "validate", false, "validates the configuration file and exits")
+	flag.Var(&f.EnvFiles, "env", "path to additional .env files to load")
 }
 
 // Parse command line arguments.
