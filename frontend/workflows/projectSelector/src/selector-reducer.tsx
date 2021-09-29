@@ -215,7 +215,6 @@ const selectorReducer = (state: State, action: Action): State => {
        * actions, such as use the toggle/checkbox/ etc. the error message will be still be on the page
        */
       const err = action?.payload?.result as ClutchError;
-      // if (grpcCodeToHttpCode(err?.code) !== 404) {
       if (err.status.code !== 404) {
         return { ...state, loading: false, error: action?.payload?.result };
       }
