@@ -43,8 +43,7 @@ type ComponentFactory struct {
 
 func loadEnv(f *Flags) {
 	// Order is important as godotenv will NOT overwrite existing environment variables.
-	envFiles := []string{".env.local"}
-	envFiles = append(envFiles, f.EnvFile...)
+	envFiles := f.EnvFiles
 
 	for _, filename := range envFiles {
 		// Use a temporary logger to parse the environment files

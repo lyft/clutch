@@ -39,7 +39,7 @@ type Flags struct {
 	ConfigPath string
 	Template   bool
 	Validate   bool
-	EnvFile    envFiles
+	EnvFiles   envFiles
 }
 
 // Link register the struct vars globally for parsing by the flag library.
@@ -47,7 +47,7 @@ func (f *Flags) Link() {
 	flag.StringVar(&f.ConfigPath, "c", "clutch-config.yaml", "path to YAML configuration")
 	flag.BoolVar(&f.Template, "template", false, "executes go templates on the configuration file")
 	flag.BoolVar(&f.Validate, "validate", false, "validates the configuration file and exits")
-	flag.Var(&f.EnvFile, "env", "path to additional .env files to load")
+	flag.Var(&f.EnvFiles, "env", "path to additional .env files to load")
 }
 
 // Parse command line arguments.
