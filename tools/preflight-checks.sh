@@ -5,7 +5,7 @@ set -euo pipefail
 did_checks_pass=true
 
 # Minimum versions
-MIN_GO_VERSION="1.17.0"
+MIN_GO_VERSION="1.17"
 MIN_NODE_VERSION="14.0.0"
 MIN_YARN_VERSION="1.22.11"
 
@@ -23,7 +23,7 @@ is_version_ok() {
 }
 
 os() {
-  # If were on OSX lets check for brew and coreutils as they are requriments
+  # If were on OSX lets check for brew and coreutils as they are requirements
   # https://clutch.sh/docs/getting-started/local-build/#requirements
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # check brew is installed
@@ -42,7 +42,6 @@ os() {
 }
 
 backend() {
-  echo "Checking backend"
   if ! command -v go -v &> /dev/null; then
     echo "golang is not installed, this is a required dependency."
     did_checks_pass=false
@@ -56,7 +55,6 @@ backend() {
 }
 
 frontend() {
-  echo "Checking frontend"
   if ! command -v node -v &> /dev/null; then
     echo "nodejs is not installed, this is a required dependency."
     did_checks_pass=false
@@ -83,7 +81,7 @@ frontend() {
 }
 
 main() {
-  # always check OS level requirments
+  # always check OS level requirements
   os
 
   if [ $# -ge 1 ] && [ -n "$1" ]; then
@@ -91,14 +89,14 @@ main() {
       backend
     elif [ "$1" == "frontend" ]; then
       frontend
-    else
-      backend
-      frontend
     fi
+  else
+    backend
+    frontend
   fi
 
   if [ "$did_checks_pass" = false ] ; then
-    printf "\nPlease refer to the development requirments https://clutch.sh/docs/getting-started/local-build/#requirements"
+    printf "\nPlease refer to the development requirements https://clutch.sh/docs/getting-started/local-build/#requirements"
     return 1
   fi
 }
