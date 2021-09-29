@@ -56,7 +56,10 @@ func loadEnv(f *Flags) {
 		// Ignore lint below as it is ok to to ignore dotenv loads as not all env files are guaranteed
 		// to be present.
 		// nolint
-		godotenv.Load(p)
+		err = godotenv.Load(p)
+		if err == nil {
+			tmpLogger.Info("successfully loaded environment variables")
+		}
 	}
 }
 
