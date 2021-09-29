@@ -51,7 +51,7 @@ backend-dev: preflight-checks-backend
 	tools/air.sh
 
 .PHONY: backend-dev-mock # Start the backend in development mode with mock responses.
-backend-dev-mock: preflight-checks-backend
+backend-dev-mock:
 	cd backend && go run mock/gateway.go
 
 .PHONY: backend-lint # Lint the backend code.
@@ -68,12 +68,12 @@ backend-test: preflight-checks-backend
 	cd backend && go test -race -covermode=atomic ./...
 
 .PHONY: backend-verify # Verify go modules' requirements files are clean.
-backend-verify: preflight-checks-backend
+backend-verify:
 	cd backend && go mod tidy
 	tools/ensure-no-diff.sh backend
 
 .PHONY: backend-config-validation
-backend-config-validation: preflight-checks-backend
+backend-config-validation:
 	cd backend && go run main.go -validate -c clutch-config.yaml
 
 .PHONY: yarn-install # Install frontend dependencies.

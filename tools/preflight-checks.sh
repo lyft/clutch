@@ -49,7 +49,7 @@ backend() {
   else
     current_version=$(go version | { read -r _ _ v _; echo "${v#go}"; })
     if ! is_version_ok $MIN_GO_VERSION "$current_version"; then
-      echo "golang version must be >= $MIN_GO_VERSION"
+      echo "golang version must be >= $MIN_GO_VERSION, current version $current_version"
       did_checks_pass=false
     fi
   fi
@@ -65,7 +65,7 @@ frontend() {
     # remove the leading v from the version output
     nov=${current_version:1}
     if ! is_version_ok $MIN_NODE_VERSION "$nov"; then
-      echo "node version must be >= $MIN_NODE_VERSION"
+      echo "node version must be >= $MIN_NODE_VERSION, current version $nov"
       did_checks_pass=false
     fi
   fi
@@ -75,8 +75,8 @@ frontend() {
     did_checks_pass=false
   else
     current_version=$(yarn --version)
-    if ! is_version_ok $MIN_YARN_VERSION "$current_version:1"; then
-      echo "yarn version must be >= $MIN_YARN_VERSION"
+    if ! is_version_ok $MIN_YARN_VERSION "$current_version"; then
+      echo "yarn version must be >= $MIN_YARN_VERSION, current version $current_version"
       did_checks_pass=false
     fi
   fi
