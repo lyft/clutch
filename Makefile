@@ -16,7 +16,7 @@ PROJECT_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 	@grep -E '^\.PHONY: [a-zA-Z_-]+ .*?# .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = "(: |#)"}; {printf "%-30s %s\n", $$2, $$3}'
 
 .PHONY: all # Generate API, Frontend, and backend assets.
-all: preflight-checks-all api frontend backend-with-assets
+all: preflight-checks api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
 api: yarn-ensure
@@ -189,6 +189,6 @@ preflight-checks-frontend:
 preflight-checks-backend:
 	@tools/preflight-checks.sh backend
 
-.PHONY: preflight-checks-all
-preflight-checks-all:
+.PHONY: preflight-checks
+preflight-checks:
 	@tools/preflight-checks.sh
