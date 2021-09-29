@@ -61,7 +61,7 @@ func TestLoadEnv(t *testing.T) {
 					log.Fatal(err)
 				}
 				defer os.Remove(envFile.Name())
-				ioutil.WriteFile(envFile.Name(), []byte(f.value), 0644)
+				_ = ioutil.WriteFile(envFile.Name(), []byte(f.value), 0644)
 				fileNames = append(fileNames, envFile.Name())
 			}
 
@@ -73,5 +73,4 @@ func TestLoadEnv(t *testing.T) {
 			os.Setenv(tc.envVar, tmpVar)
 		})
 	}
-
 }
