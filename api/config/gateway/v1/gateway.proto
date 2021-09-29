@@ -17,6 +17,7 @@ message Config {
   repeated Resolver resolvers = 3;
   repeated Module modules = 4;
 
+  // External clutch config files to extend and compose into a consolidated config
   repeated string extends = 5;
 }
 

@@ -95,7 +95,8 @@ type Config struct {
 	Services  []*Service      `protobuf:"bytes,2,rep,name=services,proto3" json:"services,omitempty"`
 	Resolvers []*Resolver     `protobuf:"bytes,3,rep,name=resolvers,proto3" json:"resolvers,omitempty"`
 	Modules   []*Module       `protobuf:"bytes,4,rep,name=modules,proto3" json:"modules,omitempty"`
-	Extends   []string        `protobuf:"bytes,5,rep,name=extends,proto3" json:"extends,omitempty"`
+	// External clutch config files to extend and compose into a consolidated config
+	Extends []string `protobuf:"bytes,5,rep,name=extends,proto3" json:"extends,omitempty"`
 }
 
 func (x *Config) Reset() {
