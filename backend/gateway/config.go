@@ -79,7 +79,7 @@ func consolidateConfigs(cfgPath string, cfg *gatewayv1.Config, f *Flags, seen *[
 	tmpLogger := newTmpLogger().With(zap.String("file", cfgPath))
 
 	if contains(seen, cfgPath) {
-		tmpLogger.Error("ignoring duplicate extended config")
+		tmpLogger.Warn("ignoring duplicate extended config")
 		return
 	}
 
