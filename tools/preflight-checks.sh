@@ -35,7 +35,7 @@ os() {
         did_checks_pass=false
       fi
     else
-        echo "brew is not installed, unable to verify coreutils dependency."
+        echo "brew is not installed (visit https://brew.sh/ to install), unable to verify coreutils dependency."
         did_checks_pass=false
     fi
   fi
@@ -43,7 +43,7 @@ os() {
 
 backend() {
   if ! command -v go -v &> /dev/null; then
-    echo "golang is not installed, this is a required dependency."
+    echo "golang is not installed or cannot be found in the current PATH, this is a required dependency."
     did_checks_pass=false
   else
     current_version=$(go version | { read -r _ _ v _; echo "${v#go}"; })
@@ -56,7 +56,7 @@ backend() {
 
 frontend() {
   if ! command -v node -v &> /dev/null; then
-    echo "nodejs is not installed, this is a required dependency."
+    echo "nodejs is not installed or cannot be found in the current PATH, this is a required dependency."
     did_checks_pass=false
   else
     current_version=$(node --version)
@@ -69,7 +69,7 @@ frontend() {
   fi
 
   if ! command -v yarn &> /dev/null; then
-    echo "yarn is not installed, this is a required dependency."
+    echo "yarn is not installed or cannot be found in the current PATH, this is a required dependency."
     did_checks_pass=false
   else
     current_version=$(yarn --version)
