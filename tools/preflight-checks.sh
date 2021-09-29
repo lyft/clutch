@@ -23,7 +23,7 @@ is_version_ok() {
 }
 
 os() {
-  # If were on OSX lets check for brew and coreutils as they are requirements
+  # If we're on OSX lets check for brew and coreutils as they are requirements
   # https://clutch.sh/docs/getting-started/local-build/#requirements
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # check brew is installed
