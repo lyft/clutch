@@ -16,7 +16,7 @@ PROJECT_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 	@grep -E '^\.PHONY: [a-zA-Z_-]+ .*?# .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = "(: |#)"}; {printf "%-30s %s\n", $$2, $$3}'
 
 .PHONY: all # Generate API, Frontend, and backend assets.
-all: preflight-checks api frontend backend-with-assets
+all: preflight-checks-all api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
 api: yarn-ensure
@@ -39,41 +39,41 @@ api-verify:
 	tools/ensure-no-diff.sh backend/api backend/internal/test/pb frontend/api/src
 
 .PHONY: backend # Build the standalone backend.
-backend:
+backend: preflight-checks-backend
 	cd backend && go build -o ../build/clutch -ldflags="-X main.version=$(VERSION)"
 
 .PHONY: backend-with-assets # Build the backend with frontend assets.
-backend-with-assets:
+backend-with-assets: preflight-checks-backend
 	cd backend && go run cmd/assets/generate.go ../frontend/packages/app/build && go build -tags withAssets -o ../build/clutch -ldflags="-X main.version=$(VERSION)"
 
 .PHONY: backend-dev # Start the backend in development mode.
-backend-dev:
+backend-dev: preflight-checks-backend
 	tools/air.sh
 
 .PHONY: backend-dev-mock # Start the backend in development mode with mock responses.
-backend-dev-mock:
+backend-dev-mock: preflight-checks-backend
 	cd backend && go run mock/gateway.go
 
 .PHONY: backend-lint # Lint the backend code.
-backend-lint:
+backend-lint: preflight-checks-backend
 	tools/golangci-lint.sh run
 
 .PHONY: backend-lint-fix # Lint and fix the backend code.
-backend-lint-fix:
+backend-lint-fix: preflight-checks-backend
 	tools/golangci-lint.sh run --fix
 	cd backend && go mod tidy
 
 .PHONY: backend-test # Run unit tests for the backend code.
-backend-test:
+backend-test: preflight-checks-backend
 	cd backend && go test -race -covermode=atomic ./...
 
 .PHONY: backend-verify # Verify go modules' requirements files are clean.
-backend-verify:
+backend-verify: preflight-checks-backend
 	cd backend && go mod tidy
 	tools/ensure-no-diff.sh backend
 
 .PHONY: backend-config-validation
-backend-config-validation:
+backend-config-validation: preflight-checks-backend
 	cd backend && go run main.go -validate -c clutch-config.yaml
 
 .PHONY: yarn-install # Install frontend dependencies.
@@ -181,6 +181,14 @@ dev-k8s-up:
 dev-k8s-down:
 	@tools/kind.sh delete cluster --name clutch-local
 
-.PHONY: preflight-checks
-preflight-checks:
+.PHONY: preflight-checks-frontend
+preflight-checks-frontend:
+	@tools/preflight-checks.sh frontend
+
+.PHONY: preflight-checks-backend
+preflight-checks-backend:
+	@tools/preflight-checks.sh backend
+
+.PHONY: preflight-checks-all
+preflight-checks-all:
 	@tools/preflight-checks.sh
