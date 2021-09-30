@@ -5,7 +5,7 @@ authors:
     url: https://github.com/lyft-tla
     avatar: https://avatars.githubusercontent.com/u/72420441?v=4
 description: Using Clutch's security audit logs to track usage and engagement
-image: https://raw.githubusercontent.com/lyft/clutch/e53cf7c9ae5b600fd5dbd7d8fb9c55ae451349f4/docs/_website/static/img/docs/Metrics_Charts.png
+image: https://raw.githubusercontent.com/lyft/clutch/5eb15c33b5593d38f75d921c4a9c711f16c5b552/docs/_website/static/img/docs/metrics-charts.png
 hide_table_of_contents: false
 ---
 
@@ -59,7 +59,7 @@ WHERE
 
 Using a 'Business Intelligence' tool, we can take this data and create nice charts to examine usage over time. We like to look at unique users per month and week and actions performed over the last 14 days and 90 days. From these charts, we can easily see which workflows are the most frequently used and how often Clutch is being used.
 
-<Image alt="Clutch Basic Tracking Dashboard" src="https://raw.githubusercontent.com/lyft/clutch/e53cf7c9ae5b600fd5dbd7d8fb9c55ae451349f4/docs/_website/static/img/docs/Metrics_Charts.png" />
+<Image alt="Clutch Basic Tracking Dashboard" src="https://raw.githubusercontent.com/lyft/clutch/5eb15c33b5593d38f75d921c4a9c711f16c5b552/docs/_website/static/img/docs/metrics-charts.png" />
 
 If you don’t have a charting tool, you’ll need a query for each of these charts.
 
