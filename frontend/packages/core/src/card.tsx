@@ -8,9 +8,12 @@ import {
   Divider,
   Grid,
 } from "@material-ui/core";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import type { SpacingProps as MuiSpacingProps } from "@material-ui/system";
 import { spacing } from "@material-ui/system";
 
+import { IconButton } from "./button";
 import { Typography, TypographyProps } from "./typography";
 
 // TODO: seperate out the different card parts into various files
@@ -126,20 +129,68 @@ const BaseCardContent = styled.div<SpacingProps>`
   ${spacing}
 `;
 
-const StyledCardContent = styled(BaseCardContent)({
+const StyledCardContentContainer = styled.div({
   "> .MuiPaper-root": {
     border: "0",
     borderRadius: "0",
   },
+  overflow: "hidden",
+});
+
+const StyledExpandButton = styled(IconButton)({
+  width: "32px",
+  height: "32px",
+  color: "#3548D4",
 });
 
 interface CardContentProps extends SpacingProps {
   children?: React.ReactNode | React.ReactNode[];
+  showExpand?: boolean;
 }
 
-const CardContent = ({ children, ...props }: CardContentProps) => (
-  <StyledCardContent {...props}>{children}</StyledCardContent>
-);
+// TODO: make card action component with spacing
+// TODO: make max height a prop
+// TODO: set maxheight to inherit
+// TODO: how to make the bottom card action area more flexible
+const CardContent = ({ children, showExpand = false, ...props }: CardContentProps) => {
+  const ref = React.useRef(null);
+  const [shouldShowExpand, setShouldShowExpand] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(true);
+
+  const maxHeight = 400;
+  const MAX_POSSIBLE_HEIGHT = 1000;
+
+  React.useEffect(() => {
+    if (ref.current.scrollHeight > maxHeight) {
+      setShouldShowExpand(true);
+      setExpanded(false);
+    }
+  }, [maxHeight]);
+
+  return (
+    <BaseCardContent {...props} ref={ref}>
+      <StyledCardContentContainer style={{ maxHeight: expanded ? MAX_POSSIBLE_HEIGHT : maxHeight }}>
+        {children}
+      </StyledCardContentContainer>
+      {showExpand && shouldShowExpand && (
+        <CardActionArea style={{ padding: "8px" }} onClick={() => setExpanded(!expanded)}>
+          <Grid container alignItems="center" spacing={1}>
+            <Grid item>
+              <Typography variant="body4" color="#3548D4">
+                See More
+              </Typography>
+            </Grid>
+            <Grid item>
+              <StyledExpandButton variant="neutral">
+                {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </StyledExpandButton>
+            </Grid>
+          </Grid>
+        </CardActionArea>
+      )}
+    </BaseCardContent>
+  );
+};
 
 const StyledLandingCard = styled(Card)({
   border: "none",
