@@ -1,4 +1,5 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
+import type { ClutchError } from "@clutch-sh/core";
 import _ from "lodash";
 
 import {
@@ -207,16 +208,38 @@ const selectorReducer = (state: State, action: Action): State => {
       );
       return newState;
     }
-    case "HYDRATE_ERROR":
-      /*
-       TODO: do we want to handle the error state differently? For example, when we render the error on the UI,
-       it won't disapper unless there's a successful API call or if the user refreshes the page. If a user performs other
-       actions, such as use the toggle/checkbox/ etc. the error message will be still be on the page
-
-       TODO: when we add error handling for projects not found, we'll need to make sure we remove the not-found-project from project group
-       (it's added automatically in the "ADD_PROJECTS" state)
-      */
-      return { ...state, loading: false, error: action?.payload?.result };
+    case "HYDRATE_ERROR": {
+      /**
+       * TODO: do we want to handle the error state differently? For example, when we render the error on the UI,
+       * it won't disapper unless there's a successful API call or if the user refreshes the page. If a user performs other
+       * actions, such as use the toggle/checkbox/ etc. the error message will be still be on the page
+       */
+      const err = action?.payload?.result as ClutchError;
+      if (err.status.code !== 404) {
+        return { ...state, loading: false, error: action?.payload?.result };
+      }
+      const errorMsg = err.message;
+      const validState = { ...state };
+      let projects = validState[Group.PROJECTS];
+      if (errorMsg) {
+        // this message is guaranteed to follow this format from the server
+        const ERROR_FMT = /unable to find project: (.+)/;
+        const invalidProject = errorMsg.match(ERROR_FMT)?.[1];
+        if (!invalidProject) {
+          return { ...state, loading: false, error: action?.payload?.result };
+        }
+        const validProjects = _.difference(Object.keys(validState[Group.PROJECTS]), [
+          unescape(invalidProject),
+        ]);
+        projects = _.pick(validState[Group.PROJECTS], validProjects);
+      }
+      return {
+        ...validState,
+        [Group.PROJECTS]: projects,
+        loading: false,
+        error: action?.payload?.result,
+      };
+    }
     default:
       throw new Error(`unknown resolver action`);
   }

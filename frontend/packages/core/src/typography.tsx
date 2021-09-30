@@ -62,9 +62,14 @@ const STYLE_MAP = {
     lineHeight: "22",
   },
   body3: {
+    size: "14",
+    weight: REGULAR,
+    lineHeight: "18",
+  },
+  body4: {
     size: "12",
     weight: REGULAR,
-    lineHeight: "20",
+    lineHeight: "16",
   },
   caption1: {
     size: "16",
@@ -113,6 +118,7 @@ type TextVariant =
   | "body1"
   | "body2"
   | "body3"
+  | "body4"
   | "caption1"
   | "caption2"
   | "overline"
