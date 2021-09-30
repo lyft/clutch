@@ -52,7 +52,7 @@ Below is a sample of data that is stored in the `DETAILS` column.
 
 ## Querying for events
 
-With this SQL statement, we are able to get a list of all users and the actions they performed in Clutch over the last 90 days. If you are not familiar with traversing JSON with Postgres, take a quick peek at [JSON Functions and Operators](https://www.postgresql.org/docs/9.4/functions-json.html). 
+With the SQL statement below, we are able to get a list of all users and the actions they performed in Clutch over the last 90 days. If you are not familiar with traversing JSON with Postgres, take a quick peek at [JSON Functions and Operators](https://www.postgresql.org/docs/9.4/functions-json.html). 
 
 ```sql
 SELECT 
@@ -65,7 +65,7 @@ WHERE
   occurred_at >= NOW() - INTERVAL '90d'
 ```
 
-Using a 'Business Intelligence' tool, we can take this data and create nice charts to examine usage over time. We like to look at unique users per month and week and actions performed over the last 14 days and 90 days. From these charts, we can easily see which workflows are the most frequently used and how often Clutch is being used.
+Using a 'Business Intelligence' tool, we can take this data and create nice charts to examine usage over time. We like to look at unique users per month and week as well as actions performed over the last 14 days and 90 days. From these charts, we can easily see which workflows are the most frequently used and how often Clutch is being used.
 
 <Image alt="Clutch Basic Tracking Dashboard" src="https://raw.githubusercontent.com/lyft/clutch/5eb15c33b5593d38f75d921c4a9c711f16c5b552/docs/_website/static/img/docs/metrics-charts.png" />
 
