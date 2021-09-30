@@ -15,7 +15,7 @@ Like most companies, Lyft is data driven. We have hypotheses and use data to sup
 
 Here’s a recap of Clutch’s security auditing architecture ([Security Auditing](https://clutch.sh/docs/advanced/security-auditing)):
 
-<Image alt="Clutch Component Architecture" src="https://raw.githubusercontent.com/lyft/clutch/main/docs/_website/static/img/docs/audit-architecture-diagram.png" width="50%" variant="centered" />
+<Image alt="Clutch Component Architecture" src="https://raw.githubusercontent.com/lyft/clutch/main/docs/_website/static/img/docs/audit-architecture-diagram.png" width="75%" variant="centered" />
 
 In Lyft’s configuration, we are storing our audit data to a PostgreSQL database in a table called `public.AUDIT_EVENTS`. Within `AUDIT_EVENTS`, there are two columns that are the most relevant to us, `OCCURRED_AT` and `DETAILS`. 
 
