@@ -8,8 +8,6 @@ import {
   Divider,
   Grid,
 } from "@material-ui/core";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import type { SpacingProps as MuiSpacingProps } from "@material-ui/system";
 import { spacing } from "@material-ui/system";
 
@@ -21,14 +19,6 @@ import { Typography, TypographyProps } from "./typography";
 const StyledCard = styled(MuiCard)({
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
   border: "1px solid rgba(13, 16, 48, 0.1)",
-
-  ".MuiCardActionArea-root:hover": {
-    backgroundColor: "#F5F6FD",
-  },
-
-  ".MuiCardActionArea-root:active": {
-    backgroundColor: "#D7DAF6",
-  },
 });
 
 export interface CardProps {
@@ -137,56 +127,78 @@ const StyledCardContentContainer = styled.div({
   overflow: "hidden",
 });
 
+const BaseCardActionArea = styled(CardActionArea)<SpacingProps>`
+  ${spacing}
+`;
+
+const StyledCardActionArea = styled(BaseCardActionArea)({
+  ":hover": {
+    backgroundColor: "#F5F6FD",
+  },
+
+  ":active": {
+    backgroundColor: "#D7DAF6",
+  },
+});
+
 const StyledExpandButton = styled(IconButton)({
   width: "32px",
   height: "32px",
   color: "#3548D4",
 });
 
-interface CardContentProps extends SpacingProps {
-  children?: React.ReactNode | React.ReactNode[];
-  showExpand?: boolean;
+interface CardContentCollapsibleProps {
+  title: string;
+  dualStateIcon?: { true: React.ReactElement; false: React.ReactElement };
 }
 
-// TODO: make card action component with spacing
-// TODO: make max height a prop
-// TODO: set maxheight to inherit
-// TODO: how to make the bottom card action area more flexible
-const CardContent = ({ children, showExpand = false, ...props }: CardContentProps) => {
+interface CardContentProps extends SpacingProps {
+  children?: React.ReactNode | React.ReactNode[];
+  collapsible?: boolean;
+  collapseAction?: CardContentCollapsibleProps;
+  maxHeight?: number;
+}
+
+const CardContent = ({
+  children,
+  collapsible = false,
+  collapseAction,
+  maxHeight,
+  ...props
+}: CardContentProps) => {
   const ref = React.useRef(null);
-  const [shouldShowExpand, setShouldShowExpand] = React.useState(false);
+  const [showExpand, setShowExpand] = React.useState(false);
   const [expanded, setExpanded] = React.useState(true);
 
-  const maxHeight = 400;
-  const MAX_POSSIBLE_HEIGHT = 1000;
+  const defaultMaxHeight = maxHeight || "none";
 
   React.useEffect(() => {
-    if (ref.current.scrollHeight > maxHeight) {
-      setShouldShowExpand(true);
+    if (ref.current.scrollHeight > defaultMaxHeight) {
+      setShowExpand(true);
       setExpanded(false);
     }
-  }, [maxHeight]);
+  }, [defaultMaxHeight]);
 
   return (
     <BaseCardContent {...props} ref={ref}>
-      <StyledCardContentContainer style={{ maxHeight: expanded ? MAX_POSSIBLE_HEIGHT : maxHeight }}>
+      <StyledCardContentContainer style={{ maxHeight: expanded ? "none" : defaultMaxHeight }}>
         {children}
       </StyledCardContentContainer>
-      {showExpand && shouldShowExpand && (
-        <CardActionArea style={{ padding: "8px" }} onClick={() => setExpanded(!expanded)}>
+      {collapsible && showExpand && (
+        <StyledCardActionArea padding={1} onClick={() => setExpanded(!expanded)}>
           <Grid container alignItems="center" spacing={1}>
             <Grid item>
               <Typography variant="body4" color="#3548D4">
-                See More
+                {collapseAction.title}
               </Typography>
             </Grid>
             <Grid item>
               <StyledExpandButton variant="neutral">
-                {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                {expanded ? collapseAction.dualStateIcon.true : collapseAction.dualStateIcon.false}
               </StyledExpandButton>
             </Grid>
           </Grid>
-        </CardActionArea>
+        </StyledCardActionArea>
       )}
     </BaseCardContent>
   );
@@ -221,7 +233,7 @@ export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
 
 export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
   <StyledLandingCard {...props}>
-    <CardActionArea onClick={onClick}>
+    <StyledCardActionArea onClick={onClick}>
       <CardContent padding={4}>
         <div className="header">
           <div className="icon">
@@ -236,7 +248,7 @@ export const LandingCard = ({ group, title, description, onClick, ...props }: La
           </Typography>
         </div>
       </CardContent>
-    </CardActionArea>
+    </StyledCardActionArea>
   </StyledLandingCard>
 );
 

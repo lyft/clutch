@@ -56,7 +56,6 @@ const Dash = ({ children }) => {
               alignContent="flex-start"
             >
               <Card
-                // isLoading={true}
                 avatar="🚀"
                 title="Deploys"
                 summary={[

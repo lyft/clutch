@@ -56,7 +56,18 @@ const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps)
           </StyledProgressContainer>
         </CardHeader>
         {expanded && (
-          <CardContent padding={0} showExpand>
+          <CardContent
+            padding={0}
+            collapsible
+            collapseAction={{
+              title: "See More",
+              dualStateIcon: {
+                true: <KeyboardArrowUpIcon />,
+                false: <KeyboardArrowDownIcon />,
+              },
+            }}
+            maxHeight={400}
+          >
             {error ? <Error subject={error} /> : children}
           </CardContent>
         )}
