@@ -24,6 +24,9 @@ brew install coreutils
 
 [Homebrew package manager](http://brew.sh/) is recommended for macOS users to manage these dependencies.
 
+After cloning clutch you can run `./tools/preflight-checks.sh`,
+which will check if your local environment has all required dependencies for development.
+
 :::info
 If running Clutch in a Docker container is preferred, see the [Docker](/docs/getting-started/docker) docs.
 :::
