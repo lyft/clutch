@@ -112,18 +112,26 @@ export interface DashAction {
   payload: DashState;
 }
 
+/**
+ * Contains a mapping of card names to their event time points
+ * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
+ */
 export interface TimeData {
   [eventsKey: string]: IClutch.timeseries.v1.IPoint[];
 }
 
+/**
+ * Used by the reducer to update the time data in our context.
+ * @property key the name of the card or entity that is updating
+ * @property points the timeseries points that will be the value
+ *
+ */
 export interface TimeDataUpdate {
   key: string;
   points: IClutch.timeseries.v1.IPoint[];
 }
 
 export interface TimelineState {
-  // Contains a mapping of card names to their event time points
-  // See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
   timeData: TimeData;
 }
 

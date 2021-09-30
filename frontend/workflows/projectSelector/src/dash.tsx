@@ -4,8 +4,8 @@ import { Box } from "@material-ui/core";
 import _ from "lodash";
 
 import {
-  DashDispatchContext,
-  DashStateContext,
+  ProjectSelectorDispatchContext,
+  ProjectSelectorStateContext,
   TimelineDispatchContext,
   TimelineStateContext,
 } from "./dash-hooks";
@@ -43,6 +43,7 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
 
 const timelineReducer = (state: TimelineState, action: TimelineAction): TimelineState => {
   switch (action.type) {
+    // TODO: Add more actions like slicing by time
     case "UPDATE": {
       // for now, clobber any existing data
       const newState = { ...state };
@@ -59,16 +60,17 @@ const Dash = ({ children }) => {
   const [timelineState, timelineDispatch] = React.useReducer(timelineReducer, initialTimelineState);
   return (
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">
-      <DashDispatchContext.Provider value={dispatch}>
-        <DashStateContext.Provider value={state}>
+      {/* TODO: Maybe in the future invert proj selector and timeline contexts */}
+      <ProjectSelectorDispatchContext.Provider value={dispatch}>
+        <ProjectSelectorStateContext.Provider value={state}>
           <TimelineDispatchContext.Provider value={timelineDispatch}>
             <TimelineStateContext.Provider value={timelineState}>
               <ProjectSelector />
               <CardContainer>{children}</CardContainer>
             </TimelineStateContext.Provider>
           </TimelineDispatchContext.Provider>
-        </DashStateContext.Provider>
-      </DashDispatchContext.Provider>
+        </ProjectSelectorStateContext.Provider>
+      </ProjectSelectorDispatchContext.Provider>
     </Box>
   );
 };
