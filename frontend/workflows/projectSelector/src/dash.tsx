@@ -6,8 +6,8 @@ import _ from "lodash";
 import {
   DashDispatchContext,
   DashStateContext,
-  TimelineStateContext,
   TimelineDispatchContext,
+  TimelineStateContext,
 } from "./dash-hooks";
 import ProjectSelector from "./project-selector";
 import type { DashAction, DashState, TimelineAction, TimelineState } from "./types";
