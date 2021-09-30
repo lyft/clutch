@@ -1,5 +1,5 @@
 ---
-title: Engagement Tracking throuhg Audit Logs
+title: Engagement Tracking through Audit Logs
 authors:
   - name: Tuong La
     url: https://github.com/lyft-tla
