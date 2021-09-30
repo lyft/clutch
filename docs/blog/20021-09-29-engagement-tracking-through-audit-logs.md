@@ -113,9 +113,9 @@ message RequestProxyRequest {
 
 At Lyft, for some actions we log entire response objects and are able to generate reports detailing information like how often our Slack integration is being utilized or which specific resources are being actioned against most often, all through the audit logs.
 
-If you are interested in turning on Security Audit logging with Clutch, take a look at our guide.
+If you are interested in turning on Security Audit logging with Clutch, take a look at our [guide](https://clutch.sh/docs/advanced/security-auditing).
 
-Have a question? Join us in our Slack!
+Have a question? Join us in our [Slack](https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA)!
 
 ## Want to get involved?
 
