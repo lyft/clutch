@@ -122,8 +122,8 @@ export interface TimeData {
 
 /**
  * Used by the reducer to update the time data in our context.
- * @property key the name of the card or entity that is updating
- * @property points the timeseries points that will be the value
+ * @property key    The name of the card or entity that is updating
+ * @property points The timeseries points that will be the value
  *
  */
 export interface TimeDataUpdate {
