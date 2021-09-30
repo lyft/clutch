@@ -1,23 +1,23 @@
 import * as React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 
-import type { DashAction, DashState, TimelineAction, TimelineState } from "./types";
+import type { DashAction, DashState, TimeDataUpdate, TimelineAction, TimelineState } from "./types";
 
+// Contexts for project selector / DASH
 export const DashStateContext = React.createContext<DashState | undefined>(undefined);
-export const TimelineStateContext = React.createContext<TimelineState | undefined>(undefined);
-export const TimelineUpdateContext = React.createContext<
-  ((action: TimelineAction) => void) | undefined
->(undefined);
 export const DashDispatchContext = React.createContext<((action: DashAction) => void) | undefined>(
   undefined
 );
 
+// Contexts for timeline
+export const TimelineStateContext = React.createContext<TimelineState | undefined>(undefined);
+export const TimelineDispatchContext = React.createContext<
+  ((action: TimelineAction) => void) | undefined
+>(undefined);
+
+// project selector / DASH hooks
 type useDashUpdaterReturn = {
   updateSelected: (state: DashState) => void;
-};
-
-type useTimelineUpdaterReturn = {
-  updateTimeline: (key: string, points: IClutch.timeseries.v1.IPoint[]) => void;
 };
 
 export const useDashUpdater = (): useDashUpdaterReturn => {
@@ -26,16 +26,6 @@ export const useDashUpdater = (): useDashUpdaterReturn => {
   return {
     updateSelected: projects => {
       dispatch && dispatch({ type: "UPDATE_SELECTED", payload: projects });
-    },
-  };
-};
-
-export const useTimelineUpdater = (): useTimelineUpdaterReturn => {
-  const dispatch = React.useContext(TimelineUpdateContext);
-
-  return {
-    updateTimeline: (key, points) => {
-      dispatch && dispatch({ type: "UPDATE", payload: { key, points } });
     },
   };
 };
@@ -50,6 +40,23 @@ export const useDashState = (): DashState => {
   return value;
 };
 
+// timeline hooks
+type useTimelineUpdaterReturn = {
+  updateTimeline: (update: TimeDataUpdate) => void;
+};
+
+// hook for writing
+export const useTimelineUpdater = (): useTimelineUpdaterReturn => {
+  const dispatch = React.useContext(TimelineDispatchContext);
+
+  return {
+    updateTimeline: (update: TimeDataUpdate) => {
+      dispatch && dispatch({ type: "UPDATE", payload: update });
+    },
+  };
+};
+
+// hook for reading
 export const useTimelineState = (): TimelineState => {
   const value = React.useContext<TimelineState | undefined>(TimelineStateContext);
   if (!value) {

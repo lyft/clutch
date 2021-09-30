@@ -7,7 +7,7 @@ import {
   DashDispatchContext,
   DashStateContext,
   TimelineStateContext,
-  TimelineUpdateContext,
+  TimelineDispatchContext,
 } from "./dash-hooks";
 import ProjectSelector from "./project-selector";
 import type { DashAction, DashState, TimelineAction, TimelineState } from "./types";
@@ -45,7 +45,7 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
   switch (action.type) {
     case "UPDATE": {
       // for now, clobber any existing data
-      const newState = state;
+      const newState = { ...state };
       newState.timeData[action.payload.key] = action.payload.points;
       return newState;
     }
@@ -61,12 +61,12 @@ const Dash = ({ children }) => {
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">
       <DashDispatchContext.Provider value={dispatch}>
         <DashStateContext.Provider value={state}>
-          <TimelineUpdateContext.Provider value={timelineDispatch}>
+          <TimelineDispatchContext.Provider value={timelineDispatch}>
             <TimelineStateContext.Provider value={timelineState}>
               <ProjectSelector />
               <CardContainer>{children}</CardContainer>
             </TimelineStateContext.Provider>
-          </TimelineUpdateContext.Provider>
+          </TimelineDispatchContext.Provider>
         </DashStateContext.Provider>
       </DashDispatchContext.Provider>
     </Box>
