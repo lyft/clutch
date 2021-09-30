@@ -42,3 +42,4 @@ jobs:
           tags: ${{ steps.tags.outputs.tags }}
           push: false
           cache-from: type=registry,ref=lyft/clutch:latest
+          cache-to: type=inline
