@@ -13,9 +13,13 @@ import Image from '@site/src/components/Image';
 
 Like most companies, Lyft is data driven. We have hypotheses and use data to support or invalidate them. If you are reading this blog, you probably have a Clutch gateway instance running and have a custom workflow built. If you ever wondered how often those workflows are being used, we will show you how you can easily use Clutch’s built-in [Security Auditing](https://clutch.sh/docs/advanced/security-auditing) as a way to track and report on usage. The audit middleware saves data on each incoming request to a database and any additional sinks of your choosing. With this data, we can track usage of Clutch itself and its integrations.
 
+<!--truncate-->
+
 Here’s a recap of Clutch’s security auditing architecture ([Security Auditing](https://clutch.sh/docs/advanced/security-auditing)):
 
 <Image alt="Clutch Component Architecture" src="https://raw.githubusercontent.com/lyft/clutch/main/docs/_website/static/img/docs/audit-architecture-diagram.png" width="75%" variant="centered" />
+
+## Where are events stored
 
 In Lyft’s configuration, we are storing our audit data to a PostgreSQL database in a table called `public.AUDIT_EVENTS`. Within `AUDIT_EVENTS`, there are two columns that are the most relevant to us, `OCCURRED_AT` and `DETAILS`. 
 
@@ -23,6 +27,8 @@ In Lyft’s configuration, we are storing our audit data to a PostgreSQL databas
 |--------------|-------------------------------------|
 |`OCCURRED_AT` | datetime of the audit event|
 |`DETAILS`| event information in JSON|
+
+## Event Structure
 
 Below is a sample of data that is stored in the `DETAILS` column.
 
@@ -44,6 +50,8 @@ Below is a sample of data that is stored in the `DETAILS` column.
 }
 ```
 
+## Querying the logs
+
 With this SQL statement, we are able to get a list of all users and the actions they performed in Clutch over the last 90 days. If you are not familiar with traversing JSON with Postgres, take a quick peek at [JSON Functions and Operators](https://www.postgresql.org/docs/9.4/functions-json.html). 
 
 ```sql
@@ -56,6 +64,7 @@ FROM
 WHERE 
   occurred_at >= NOW() - INTERVAL '90d'
 ```
+
 
 Using a 'Business Intelligence' tool, we can take this data and create nice charts to examine usage over time. We like to look at unique users per month and week and actions performed over the last 14 days and 90 days. From these charts, we can easily see which workflows are the most frequently used and how often Clutch is being used.
 
@@ -90,6 +99,8 @@ WHERE
 GROUP BY method_name
 
 ```
+
+## Conclusion
 
 That’s it! Now, for some nuance. Our audit log only contains events sent to the middleware, so things like button clicks do not get logged. However, without installing tools like Google Analytics, mining the audit log is an easy way to see what your users are taking actions on.
 
