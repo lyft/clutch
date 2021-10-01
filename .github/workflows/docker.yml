@@ -3,13 +3,20 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+    paths:
+      - Dockerfile
+      - .github/workflows/docker.yml
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-buildx-action@v1
-      - uses: docker/login-action@v1
+      - if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
@@ -21,9 +28,17 @@ jobs:
           TAGS="${DOCKER_IMAGE}:${VERSION}"
           TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::7}"
           echo ::set-output name=tags::${TAGS}
-      - name: build
+      - name: build and push
+        if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v2.7.0
         with:
           tags: ${{ steps.tags.outputs.tags }}
           push: true
+          cache-from: type=registry,ref=lyft/clutch:latest
+      - name: build
+        if: github.ref != 'refs/heads/main'
+        uses: docker/build-push-action@v2.7.0
+        with:
+          tags: ${{ steps.tags.outputs.tags }}
+          push: false
           cache-from: type=registry,ref=lyft/clutch:latest
