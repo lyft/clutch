@@ -155,7 +155,7 @@ interface CardContentCollapsibleProps {
    */
   dualStateTitle: { true: string; false: string };
   /** The icon to show in the collapse action area when the card content is collapsed/not collapsed.
-   * By default, this is a ArrowUp icon for ture and a ArrowDown icon for false.
+   * By default, this is an ArrowUp icon for true and an ArrowDown icon for false.
    */
   dualStateIcon: { true: React.ReactElement; false: React.ReactElement };
 }
@@ -164,7 +164,7 @@ interface CardContentProps extends SpacingProps {
   children?: React.ReactNode | React.ReactNode[];
   /** Make the card content collapse at a set max height. The default is false. */
   collapsible?: boolean;
-  /** The props for the collapse action if collapisble is enabled */
+  /** The props for the collapse action if collapsible is enabled */
   collapseAction?: CardContentCollapsibleProps;
   /** The max height of the card content. The default is none. */
   maxHeight?: number;
