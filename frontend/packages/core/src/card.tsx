@@ -8,6 +8,8 @@ import {
   Divider,
   Grid,
 } from "@material-ui/core";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import type { SpacingProps as MuiSpacingProps } from "@material-ui/system";
 import { spacing } from "@material-ui/system";
 
@@ -148,21 +150,33 @@ const StyledExpandButton = styled(IconButton)({
 });
 
 interface CardContentCollapsibleProps {
-  title: string;
-  dualStateIcon?: { true: React.ReactElement; false: React.ReactElement };
+  /** The text to show in the collapse action area when the card content is collapsed/not collapsed.
+   * By default, this is "See Less" for true and "See More" for false.
+   */
+  dualStateTitle: { true: string; false: string };
+  /** The icon to show in the collapse action area when the card content is collapsed/not collapsed.
+   * By default, this is a ArrowUp icon for ture and a ArrowDown icon for false.
+   */
+  dualStateIcon: { true: React.ReactElement; false: React.ReactElement };
 }
 
 interface CardContentProps extends SpacingProps {
   children?: React.ReactNode | React.ReactNode[];
+  /** Make the card content collapse at a set max height. The default is false. */
   collapsible?: boolean;
+  /** The props for the collapse action if collapisble is enabled */
   collapseAction?: CardContentCollapsibleProps;
+  /** The max height of the card content. The default is none. */
   maxHeight?: number;
 }
 
 const CardContent = ({
   children,
   collapsible = false,
-  collapseAction,
+  collapseAction = {
+    dualStateTitle: { true: "See Less", false: "See More" },
+    dualStateIcon: { true: <KeyboardArrowUpIcon />, false: <KeyboardArrowDownIcon /> },
+  },
   maxHeight,
   ...props
 }: CardContentProps) => {
@@ -186,10 +200,12 @@ const CardContent = ({
       </StyledCardContentContainer>
       {collapsible && showExpand && (
         <StyledCardActionArea padding={1} onClick={() => setExpanded(!expanded)}>
-          <Grid container alignItems="center" spacing={1}>
+          <Grid container alignItems="center" spacing={1} justify="center">
             <Grid item>
               <Typography variant="body4" color="#3548D4">
-                {collapseAction.title}
+                {expanded
+                  ? collapseAction.dualStateTitle.true
+                  : collapseAction.dualStateTitle.false}
               </Typography>
             </Grid>
             <Grid item>
