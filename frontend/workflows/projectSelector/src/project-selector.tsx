@@ -71,7 +71,7 @@ const allPresent = (state: State): boolean => {
     ...Object.keys(state[Group.DOWNSTREAM]),
   ]);
   allProjects.forEach(p => {
-    if (!(p in state.projectData)) {
+    if (!(p in state.projectData) || _.isEmpty(state.projectData?.[p])) {
       ret = false;
     }
     return ret; // Will stop iteration early if false encountered.
@@ -91,14 +91,12 @@ const ProjectSelector = () => {
   const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
   React.useEffect(() => {
-    console.log("effect"); // eslint-disable-line
     // Determine if any hydration is required.
     // - Are any services missing from state.projectdata?
     // - Are projects empty (first load)?
     // - Is loading not already in progress?
 
     if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent(state))) {
-      console.log("calling API!", state.loading); // eslint-disable-line
       dispatch({ type: "HYDRATE_START" });
 
       // TODO: have userId check be server driven
