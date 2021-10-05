@@ -78,6 +78,8 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	if err != nil {
 		newTmpLogger().Fatal("could not instantiate logger", zap.Error(err))
 	}
+	// See https://github.com/uber-go/zap/issues/880 for more information.
+	// nolint
 	defer logger.Sync()
 
 	logger.Info("using configuration", zap.String("file", f.ConfigPath))
