@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/uber-go/tally"
 	tallyprom "github.com/uber-go/tally/prometheus"
 	"go.uber.org/zap"
@@ -39,7 +41,30 @@ type ComponentFactory struct {
 	Modules    module.Factory
 }
 
+func loadEnv(f *Flags) {
+	// Order is important as godotenv will NOT overwrite existing environment variables.
+	envFiles := f.EnvFiles
+
+	for _, filename := range envFiles {
+		// Use a temporary logger to parse the environment files
+		tmpLogger := newTmpLogger().With(zap.String("file", filename))
+
+		p, err := filepath.Abs(filename)
+		if err != nil {
+			tmpLogger.Fatal("parsing .env file failed", zap.Error(err))
+		}
+		// Ignore lint below as it is ok to to ignore dotenv loads as not all env files are guaranteed
+		// to be present.
+		// nolint
+		err = godotenv.Load(p)
+		if err == nil {
+			tmpLogger.Info("successfully loaded environment variables")
+		}
+	}
+}
+
 func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
+	loadEnv(f)
 	cfg := MustReadOrValidateConfig(f)
 	RunWithConfig(f, cfg, cf, assets)
 }

@@ -10,7 +10,7 @@ image: https://user-images.githubusercontent.com/2250844/106201558-7956e700-616d
 hide_table_of_contents: false
 ---
 
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import Image from '@site/src/components/Image';
 
 Ever wonder how Clutch handles serving frontend assets without a CDN in a distributed multi-version deployment?
 This article will touch on how Lyft deploys Clutch and some of the early problems we faced when rolling it out.
@@ -22,7 +22,7 @@ This article will touch on how Lyft deploys Clutch and some of the early problem
 During our deploys of Clutch at Lyft we noticed very early on that when a new version is deployed,
 a subset of users would fail to load the webpage (only seeing a blank page) as some of the frontend assets could not be resolved.
 
-<img style={ {border: "1px solid black"} } alt="Unable to Load" src="https://user-images.githubusercontent.com/2250844/106508379-2dfc4b80-6481-11eb-9c75-6b9f66407047.png" />
+<Image style={ {border: "1px solid black"} } alt="Unable to Load" src="https://user-images.githubusercontent.com/2250844/106508379-2dfc4b80-6481-11eb-9c75-6b9f66407047.png" />
 
 ```text
 Uncaught SyntaxError: Unexpected token '<'
@@ -43,7 +43,7 @@ Clutch uses webpack as the build system for the frontend,
 when building a new release [webpack templates the output filename](https://webpack.js.org/guides/caching/#output-filenames) to include a content hash eg: `main.[contenthash].chunk.js`.
 This uniqueness of this content hash allows Clutch to cache bust what the browser has locally allowing the new version to be requested.
 
-<img alt="Problem Diagram" src="https://user-images.githubusercontent.com/2250844/106201546-765bf680-616d-11eb-83d3-c70cf93ba252.png" />
+<Image alt="Problem Diagram" src="https://user-images.githubusercontent.com/2250844/106201546-765bf680-616d-11eb-83d3-c70cf93ba252.png" />
 
 The client makes a request to Clutch and a canary host responds with an `index.html` page with a script tag asking for `main.a3762de8.chunk.js`.
 Illustrated by the green and red arrows, there is only one host which has the correct asset the client is asking for, the canary.
@@ -111,7 +111,7 @@ In this example we have two Clutch versions deployed: `v1` and `v2`.
 Regardless of which version of the frontend a user might request, all versions of the frontend assets live in S3,
 so if a Clutch host does not have what the user is requesting, it can check S3.
 
-<img alt="Logical Architecture" src="https://user-images.githubusercontent.com/2250844/106201558-7956e700-616d-11eb-887d-28410b67d558.png" />
+<Image alt="Logical Architecture" src="https://user-images.githubusercontent.com/2250844/106201558-7956e700-616d-11eb-887d-28410b67d558.png" />
 
 
 ## Deploying
@@ -124,7 +124,7 @@ Below is a simplified version of our deployment process.
 Early on in the deployment pipeline assets are uploaded to S3,
 utilizing the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html) to `aws s3 sync` the new assets to the target bucket.
 
-<img alt="Deploying" src="https://user-images.githubusercontent.com/2250844/106201560-7956e700-616d-11eb-9f9d-a4b1345bcf41.png" />
+<Image alt="Deploying" src="https://user-images.githubusercontent.com/2250844/106201560-7956e700-616d-11eb-9f9d-a4b1345bcf41.png" />
 
 ## Conclusion
 

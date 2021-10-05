@@ -107,10 +107,35 @@ export interface DashState {
 }
 
 export type DashActionKind = "UPDATE_SELECTED";
-
 export interface DashAction {
   type: DashActionKind;
   payload: DashState;
+}
+
+/**
+ * Contains a mapping of card names to their event time points
+ * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
+ */
+export interface TimeData {
+  [eventsKey: string]: IClutch.timeseries.v1.IPoint[];
+}
+
+/** Used by the reducer to update the time data in our context. */
+export interface TimeDataUpdate {
+  /** The name of the card or entity that is updating */
+  key: string;
+  /** The timeseries points that will be the value */
+  points: IClutch.timeseries.v1.IPoint[];
+}
+
+export interface TimelineState {
+  timeData: TimeData;
+}
+
+export type TimelineActionKindUpdate = "UPDATE";
+export interface TimelineAction {
+  type: TimelineActionKindUpdate;
+  payload: TimeDataUpdate;
 }
 
 export { isGroupState, isProjectState, isGlobalProjectState };

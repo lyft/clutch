@@ -10,6 +10,8 @@ image: https://user-images.githubusercontent.com/1004789/113597092-0eec7800-95f0
 hide_table_of_contents: false
 ---
 
+import Image from '@site/src/components/Image';
+
 Design is one of those things that is tricky but imperative to get right. While this may seem obvious, creating and implementing a great design is much harder than you might think.
 
 <!--truncate-->
@@ -25,7 +27,7 @@ A transparent design is one that results in a  user experience so intuitive and 
 
 The initial public release of Clutch was actually the third iteration of the frontend; we had previously built an internal proof of concept. This meant we weren’t starting entirely from scratch. However, both previous versions were using a deprecated component library. [Material UI](https://material-ui.com/) was chosen as the component library for Clutch because it offered a wide selection of pre-existing components along with design standards based on Google’s Material Design. This was especially important as the team was relatively small with no dedicated designers. Over the course of about six months our team built out something comparable to what the internal tool looked like but with the default material designs. Most workflows were primarily using the Material UI components directly, with a few additional custom components. We decided that was sufficient for our MVP and shipped what we had.
 
-<img alt="Clutch V1 Landing Page" src="https://user-images.githubusercontent.com/1004789/113597561-bec1e580-95f0-11eb-8893-788fc4545a32.png" />
+<Image alt="Clutch V1 Landing Page" src="https://user-images.githubusercontent.com/1004789/113597561-bec1e580-95f0-11eb-8893-788fc4545a32.png" />
 
 ## Release Early and Often
 
@@ -35,7 +37,7 @@ After launching, the team onboarded a dedicated designer who, over the next few 
 
 Simultaneously we worked to tackle the component isolation problem. Up until this point any changes to the existing components were tested within the Clutch app. New components would be added as needed and tested within the application. This was problematic since other factors, including sibling and parent components, could impact how the individual components rendered or functioned. Solving this problem now was especially important as we knew that implementing the new component designs would be much easier with a solution for this in place. We leveraged [Storybook](https://storybook.js.org/), which is designed specifically for this use case, to create the bones of what would become [our current component library](https://storybook.clutch.sh/). For those who are unfamiliar with Storybook, it’s an open source tool that provides a component library and documentation site. It offers end users an easy interface to interact with components and modify their props by utilizing what they call stories. A story is a snippet of code that renders an individual component in a particular state. For example in the screenshot below you can see an accordion group story with one accordion expanded by default. Development and code reviews were now much easier, as each new or redesigned component was accompanied with a story demonstrating every variant of the component.
 
-<img alt="Clutch Storybook Accordion" src="https://user-images.githubusercontent.com/1004789/113596886-c634bf00-95ef-11eb-9743-bd20fae758a6.png" />
+<Image alt="Clutch Storybook Accordion" src="https://user-images.githubusercontent.com/1004789/113596886-c634bf00-95ef-11eb-9743-bd20fae758a6.png" />
 
 ## Decisions, Decisions...
 
@@ -63,13 +65,13 @@ There were numerous pros and cons to each of these solutions but emotion ended u
 
 Now that the tough decisions were out of the way, we were able to start implementation of the new designs. It took three engineers from our team just over two months to finish redesigning the Clutch frontend. Thus far the response has been overwhelmingly positive. The expanded component library has made development of new workflows faster and our maintenance has been reduced drastically.
 
-<img alt="Clutch V2 Landing Page" src="https://user-images.githubusercontent.com/1004789/113597092-0eec7800-95f0-11eb-8f94-b953dd790c23.png" />
+<Image alt="Clutch V2 Landing Page" src="https://user-images.githubusercontent.com/1004789/113597092-0eec7800-95f0-11eb-8f94-b953dd790c23.png" />
 
 ## Iteration is Key
 
 Design is ever-changing. While we feel that we have a great foundation, we are still finding ways to improve different pieces of the design throughout Clutch, both in the frontend and backend. (Stay posted for an upcoming blog on how we revamped error handling!) We continue to invest resources in ensuring that new features and workflows deliver the intuitive and exceptional experience users have come to expect.
 
-<img alt="Clutch Design Process" src="https://user-images.githubusercontent.com/1004789/113596372-119a9d80-95ef-11eb-96cc-e829c905592f.png" />
+<Image alt="Clutch Design Process" src="https://user-images.githubusercontent.com/1004789/113596372-119a9d80-95ef-11eb-96cc-e829c905592f.png" />
 
 ## Interested in Getting Involved?
 

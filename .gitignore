@@ -6,4 +6,5 @@
 build/
 
 backend/.air/
+backend/.env.local
 backend/cmd/assets/generated_assets.go

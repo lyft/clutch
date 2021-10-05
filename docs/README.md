@@ -25,7 +25,7 @@ Go file linked above.
 
 ### Microsite
 
-The microsite lives in [_website](./_website) and is built on [Docusaurus](https://v2.docusaurus.io/docs/introduction).
+The microsite lives in [_website](./_website) and is built on [Docusaurus](https://docusaurus.io/docs).
 
 ### Development
 
