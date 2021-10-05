@@ -341,4 +341,15 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		WriteTimeout: timeout,
 	}
 	logger.Fatal("error bringing up listener", zap.Error(srv.ListenAndServe()))
+
+	ctxShutDown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err = srv.Shutdown(ctxShutDown); err != nil {
+		logger.Fatal("server shutdown failed", zap.Error(err))
+	}
+
+	if err == http.ErrServerClosed {
+		err = nil
+	}
 }
