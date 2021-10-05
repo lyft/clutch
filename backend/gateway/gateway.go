@@ -352,6 +352,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 
 	go func() {
 		if err = srv.ListenAndServe(); err != http.ErrServerClosed {
+			// Only log an error if it's not due to shutdown or close
 			logger.Fatal("error bringing up listener", zap.Error(err))
 		}
 	}()
