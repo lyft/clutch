@@ -79,7 +79,7 @@ const allPresent = (state: State): boolean => {
   return ret;
 };
 
-const updateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
+const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
   // Determine if any hydration is required.
   // - Are any services missing from state.projectdata?
   // - Are projects empty (first load)?
@@ -121,12 +121,12 @@ const ProjectSelector = () => {
   const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
   React.useEffect(() => {
-    const interval = setInterval(() => updateProjects(state, dispatch), 30000);
+    const interval = setInterval(() => hydrateProjects(state, dispatch), 30000);
     return () => clearInterval(interval);
   }, []);
 
   React.useEffect(() => {
-    updateProjects(state, dispatch)
+    hydrateProjects(state, dispatch);
   }, [state[Group.PROJECTS]]);
 
   // computes the final state for rendering across other components
