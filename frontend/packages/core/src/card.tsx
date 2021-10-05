@@ -209,7 +209,7 @@ const CardContent = ({
       </StyledCardContentContainer>
       {collapsible && showExpand && (
         <StyledCardActionArea padding={0} onClick={() => setExpanded(!expanded)}>
-          <Grid container alignItems="center" spacing={1} justify="center">
+          <Grid container alignItems="center" justify="center">
             <Grid item>
               <Typography variant="body4" color="#3548D4">
                 {expanded ? collapseAction?.open.title : collapseAction?.closed.title}
