@@ -120,6 +120,7 @@ export interface TimeData {
   [eventsKey: string]: IClutch.timeseries.v1.IPoint[];
 }
 
+/** Used by the reducer to update the time data in our context. */
 export interface TimeDataUpdate {
   /** The name of the card or entity that is updating */
   key: string;
