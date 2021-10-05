@@ -13,7 +13,7 @@ import { deriveStateData, DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
 import { loadStoredState, storeState } from "./storage";
-import type { DashState, State } from "./types";
+import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
 
 const initialState: State = {
@@ -79,48 +79,54 @@ const allPresent = (state: State): boolean => {
   return ret;
 };
 
+const updateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
+  // Determine if any hydration is required.
+  // - Are any services missing from state.projectdata?
+  // - Are projects empty (first load)?
+  // - Is loading not already in progress?
+  if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent(state))) {
+    dispatch({ type: "HYDRATE_START" });
+
+    // TODO: have userId check be server driven
+    const requestParams = { users: [userId()], projects: [] } as {
+      users: string[];
+      projects: string[];
+    };
+    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+      // if the project is custom
+      if (state[Group.PROJECTS][p].custom) {
+        requestParams.projects.push(p);
+      }
+    });
+
+    client
+      .post("/v1/project/getProjects", requestParams as IClutch.project.v1.GetProjectsRequest)
+      .then(resp => {
+        const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
+        dispatch({ type: "HYDRATE_END", payload: { result: results || {} } });
+      })
+      .catch((err: ClutchError) => {
+        dispatch({ type: "HYDRATE_ERROR", payload: { result: err } });
+      });
+  }
+};
+
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
 
   const [customProject, setCustomProject] = React.useState("");
-
   const { updateSelected } = useDashUpdater();
-
   const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
   React.useEffect(() => {
-    // Determine if any hydration is required.
-    // - Are any services missing from state.projectdata?
-    // - Are projects empty (first load)?
-    // - Is loading not already in progress?
+    const interval = setInterval(() => updateProjects(state, dispatch), 30000);
+    return () => clearInterval(interval);
+  }, []);
 
-    if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent(state))) {
-      dispatch({ type: "HYDRATE_START" });
-
-      // TODO: have userId check be server driven
-      const requestParams = { users: [userId()], projects: [] } as {
-        users: string[];
-        projects: string[];
-      };
-      _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-        // if the project is custom
-        if (state[Group.PROJECTS][p].custom) {
-          requestParams.projects.push(p);
-        }
-      });
-
-      client
-        .post("/v1/project/getProjects", requestParams as IClutch.project.v1.GetProjectsRequest)
-        .then(resp => {
-          const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
-          dispatch({ type: "HYDRATE_END", payload: { result: results || {} } });
-        })
-        .catch((err: ClutchError) => {
-          dispatch({ type: "HYDRATE_ERROR", payload: { result: err } });
-        });
-    }
+  React.useEffect(() => {
+    updateProjects(state, dispatch)
   }, [state[Group.PROJECTS]]);
 
   // computes the final state for rendering across other components
