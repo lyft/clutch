@@ -359,6 +359,8 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 
 	<-sc
 
+	signal.Stop(sc)
+
 	// Shutdown timeout should be max request timeout (with 1s buffer).
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
