@@ -121,16 +121,14 @@ const BaseCardContent = styled.div<SpacingProps>`
   ${spacing}
 `;
 
-const StyledCardContentContainer = styled.div(
-  (props: { expanded: boolean; maxHeight: number | "none" }) => ({
-    "> .MuiPaper-root": {
-      border: "0",
-      borderRadius: "0",
-    },
-    overflow: "hidden",
-    maxHeight: props.expanded ? "none" : props.maxHeight,
-  })
-);
+const StyledCardContentContainer = styled.div((props: { maxHeight: number | "none" }) => ({
+  "> .MuiPaper-root": {
+    border: "0",
+    borderRadius: "0",
+  },
+  overflow: "hidden",
+  maxHeight: props.maxHeight,
+}));
 
 const BaseCardActionArea = styled(CardActionArea)<SpacingProps>`
   ${spacing}
@@ -204,7 +202,7 @@ const CardContent = ({
 
   return (
     <BaseCardContent {...props} ref={ref}>
-      <StyledCardContentContainer expanded={expanded} maxHeight={maxHeight}>
+      <StyledCardContentContainer maxHeight={expanded ? "none" : maxHeight}>
         {children}
       </StyledCardContentContainer>
       {collapsible && showExpand && (
