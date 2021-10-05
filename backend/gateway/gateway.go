@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -75,11 +78,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	if err != nil {
 		newTmpLogger().Fatal("could not instantiate logger", zap.Error(err))
 	}
-	defer func() {
-		if err := logger.Sync(); err != nil {
-			panic(err)
-		}
-	}()
+	defer logger.Sync()
 
 	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
@@ -340,16 +339,30 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		ReadTimeout:  timeout,
 		WriteTimeout: timeout,
 	}
-	logger.Fatal("error bringing up listener", zap.Error(srv.ListenAndServe()))
 
-	ctxShutDown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	sc := make(chan os.Signal, 1)
+	signal.Notify(
+		sc,
+		os.Interrupt,
+		syscall.SIGTERM,
+		syscall.SIGQUIT,
+	)
+
+	go func() {
+		if err = srv.ListenAndServe(); err != http.ErrServerClosed {
+			logger.Fatal("error bringing up listener", zap.Error(err))
+		}
+	}()
+
+	<-sc
+
+	// Shutdown timeout should be max request timeout (with 1s buffer).
+	ctxShutDown, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	if err = srv.Shutdown(ctxShutDown); err != nil {
 		logger.Fatal("server shutdown failed", zap.Error(err))
 	}
 
-	if err == http.ErrServerClosed {
-		err = nil
-	}
+	logger.Debug("server shutdown gracefully")
 }
