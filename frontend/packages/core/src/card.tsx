@@ -121,13 +121,16 @@ const BaseCardContent = styled.div<SpacingProps>`
   ${spacing}
 `;
 
-const StyledCardContentContainer = styled.div({
-  "> .MuiPaper-root": {
-    border: "0",
-    borderRadius: "0",
-  },
-  overflow: "hidden",
-});
+const StyledCardContentContainer = styled.div(
+  (props: { expanded: boolean; maxHeight: number | "none" }) => ({
+    "> .MuiPaper-root": {
+      border: "0",
+      borderRadius: "0",
+    },
+    overflow: "hidden",
+    maxHeight: props.expanded ? "none" : props.maxHeight,
+  })
+);
 
 const BaseCardActionArea = styled(CardActionArea)<SpacingProps>`
   ${spacing}
@@ -147,70 +150,74 @@ const StyledExpandButton = styled(IconButton)({
   width: "32px",
   height: "32px",
   color: "#3548D4",
+  ":hover": {
+    backgroundColor: "transparent",
+  },
 });
 
-interface CardContentCollapsibleProps {
+interface CollapsibleState {
   /** The text to show in the collapse action area when the card content is collapsed/not collapsed.
    * By default, this is "See Less" for true and "See More" for false.
    */
-  dualStateTitle: { true: string; false: string };
+  title: string;
   /** The icon to show in the collapse action area when the card content is collapsed/not collapsed.
    * By default, this is an ArrowUp icon for true and an ArrowDown icon for false.
    */
-  dualStateIcon: { true: React.ReactElement; false: React.ReactElement };
+  icon: React.ReactElement;
+}
+
+interface CardContentCollapsibleProps {
+  open?: CollapsibleState;
+  closed?: CollapsibleState;
 }
 
 interface CardContentProps extends SpacingProps {
   children?: React.ReactNode | React.ReactNode[];
   /** Make the card content collapse at a set max height. The default is false. */
   collapsible?: boolean;
-  /** The props for the collapse action if collapsible is enabled */
+  /** The props for the collapse action */
   collapseAction?: CardContentCollapsibleProps;
   /** The max height of the card content. The default is none. */
-  maxHeight?: number;
+  maxHeight?: number | "none";
 }
 
 const CardContent = ({
   children,
   collapsible = false,
   collapseAction = {
-    dualStateTitle: { true: "See Less", false: "See More" },
-    dualStateIcon: { true: <KeyboardArrowUpIcon />, false: <KeyboardArrowDownIcon /> },
+    open: { title: "See Less", icon: <KeyboardArrowUpIcon /> },
+    closed: { title: "See More", icon: <KeyboardArrowDownIcon /> },
   },
-  maxHeight,
+  maxHeight = "none",
   ...props
 }: CardContentProps) => {
   const ref = React.useRef(null);
-  const [showExpand, setShowExpand] = React.useState(false);
-  const [expanded, setExpanded] = React.useState(true);
-
-  const defaultMaxHeight = maxHeight || "none";
+  const [showExpand, setShowExpand] = React.useState<boolean>(false);
+  const [expanded, setExpanded] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    if (ref.current.scrollHeight > defaultMaxHeight) {
+    if (ref.current.scrollHeight > maxHeight) {
       setShowExpand(true);
       setExpanded(false);
     }
-  }, [defaultMaxHeight]);
+  }, [maxHeight]);
 
   return (
     <BaseCardContent {...props} ref={ref}>
-      <StyledCardContentContainer style={{ maxHeight: expanded ? "none" : defaultMaxHeight }}>
+      <StyledCardContentContainer expanded={expanded} maxHeight={maxHeight}>
         {children}
       </StyledCardContentContainer>
       {collapsible && showExpand && (
-        <StyledCardActionArea padding={1} onClick={() => setExpanded(!expanded)}>
+        <StyledCardActionArea padding={0} onClick={() => setExpanded(!expanded)}>
           <Grid container alignItems="center" spacing={1} justify="center">
             <Grid item>
               <Typography variant="body4" color="#3548D4">
-                {expanded
-                  ? collapseAction.dualStateTitle.true
-                  : collapseAction.dualStateTitle.false}
+                {expanded ? collapseAction?.open.title : collapseAction?.closed.title}
               </Typography>
             </Grid>
             <Grid item>
               <StyledExpandButton variant="neutral">
-                {expanded ? collapseAction.dualStateIcon.true : collapseAction.dualStateIcon.false}
+                {expanded ? collapseAction?.open.icon : collapseAction?.closed.icon}
               </StyledExpandButton>
             </Grid>
           </Grid>
