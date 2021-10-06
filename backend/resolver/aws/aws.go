@@ -7,6 +7,7 @@ package aws
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
@@ -62,6 +63,9 @@ func makeRegionOptions(regions []string) []*resolverv1.Option {
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
 	awsClient, ok := service.Registry["clutch.service.aws"]
+
+	logger.Info(fmt.Sprint("+%v",awsClient.(aws.Client)))
+
 	if !ok {
 		return nil, errors.New("could not find service")
 	}
