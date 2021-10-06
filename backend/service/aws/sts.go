@@ -14,10 +14,5 @@ func (c *client) GetCallerIdentity(ctx context.Context, region string) (*sts.Get
 
 	in := &sts.GetCallerIdentityInput{}
 
-	out, err := rc.sts.GetCallerIdentity(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-
-	return out, nil
+	return rc.sts.GetCallerIdentity(ctx, in)
 }

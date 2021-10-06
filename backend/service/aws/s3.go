@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func (c *client) S3GetBucketPolicy(ctx context.Context, region string, bucket string, accountID string) (*string, error) {
+func (c *client) S3GetBucketPolicy(ctx context.Context, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error) {
 	rc, err := c.getRegionalClient(region)
 	if err != nil {
 		return nil, err
@@ -19,13 +19,7 @@ func (c *client) S3GetBucketPolicy(ctx context.Context, region string, bucket st
 		Bucket:              aws.String(bucket),
 	}
 
-	bucketPolicy, err := rc.s3.GetBucketPolicy(ctx, in)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return bucketPolicy.Policy, nil
+	return rc.s3.GetBucketPolicy(ctx, in)
 }
 
 func (c *client) S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error) {

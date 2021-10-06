@@ -114,7 +114,7 @@ type Client interface {
 	DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error)
 	UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error
 
-	S3GetBucketPolicy(ctx context.Context, region string, bucket string, accountID string) (*string, error)
+	S3GetBucketPolicy(ctx context.Context, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error)
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
 	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)

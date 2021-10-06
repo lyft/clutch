@@ -3,6 +3,8 @@ package awsmock
 import (
 	"context"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/smithy-go/middleware"
 	"io"
 	"math/rand"
 
@@ -104,8 +106,11 @@ func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, 
 	panic("implement me")
 }
 
-func (s *svc) S3GetBucketPolicy(ctx context.Context, region string, bucket string, accountID string) (*string, error) {
-	return aws.String("{}"), nil
+func (s *svc) S3GetBucketPolicy(ctx context.Context, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error) {
+	return &s3.GetBucketPolicyOutput{
+		Policy: aws.String("{}"),
+		ResultMetadata: middleware.Metadata{},
+	}, nil
 }
 
 func (s *svc) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {

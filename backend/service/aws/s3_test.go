@@ -3,6 +3,7 @@ package aws
 import (
 	"context"
 	"fmt"
+	"github.com/aws/smithy-go/middleware"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -49,6 +50,7 @@ func TestS3GetBucketPolicy(t *testing.T) {
 	s3Client := &mockS3{
 		getObjectPolicyOutput: &s3.GetBucketPolicyOutput{
 			Policy: aws.String("{}"),
+			ResultMetadata: middleware.Metadata{},
 		},
 	}
 	c := &client{
@@ -57,7 +59,10 @@ func TestS3GetBucketPolicy(t *testing.T) {
 
 	output, err := c.S3GetBucketPolicy(context.Background(), "us-east-1", "clutch", "000000000000")
 	assert.NoError(t, err)
-	assert.Equal(t, output, aws.String("{}"))
+	assert.Equal(t, output, &s3.GetBucketPolicyOutput{
+		Policy: aws.String("{}"),
+		ResultMetadata: middleware.Metadata{},
+	})
 }
 
 func TestS3GetBucketPolicyErrorHandling(t *testing.T) {
