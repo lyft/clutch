@@ -193,6 +193,14 @@ const CardContent = ({
   const [showExpand, setShowExpand] = React.useState<boolean>(false);
   const [expanded, setExpanded] = React.useState<boolean>(true);
 
+  /**
+   * Since the children rendered in the CardContent might be fetched through an API call
+   * the hook adds the children prop as dependency so that hook can be re-run when there
+   * are changes to the children value.
+   * Additionally, because the children prop value can change on non-user actions (i.e. an API call is made on
+   * an interval to refresh the CardContent data), if the card had already been expanded, we don't reset the value.
+   * )
+   */
   React.useEffect(() => {
     if (showExpand && expanded) {
       return;
