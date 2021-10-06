@@ -3,13 +3,16 @@ package awsmock
 import (
 	"context"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/smithy-go/middleware"
 	"io"
 	"math/rand"
 
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/smithy-go/middleware"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
+	"github.com/aws/smithy-go/middleware"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -18,7 +21,7 @@ import (
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	"github.com/lyft/clutch/backend/service"
-	clutch_aws_client "github.com/lyft/clutch/backend/service/aws"
+	clutchawsclient "github.com/lyft/clutch/backend/service/aws"
 )
 
 type svc struct{}
@@ -108,7 +111,7 @@ func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, 
 
 func (s *svc) S3GetBucketPolicy(ctx context.Context, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error) {
 	return &s3.GetBucketPolicyOutput{
-		Policy: aws.String("{}"),
+		Policy:         aws.String("{}"),
 		ResultMetadata: middleware.Metadata{},
 	}, nil
 }
@@ -177,7 +180,7 @@ func (s *svc) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCal
 	}, nil
 }
 
-func New() clutch_aws_client.Client {
+func New() clutchawsclient.Client {
 	return &svc{}
 }
 

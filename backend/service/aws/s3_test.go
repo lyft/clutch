@@ -3,13 +3,15 @@ package aws
 import (
 	"context"
 	"fmt"
-	"github.com/aws/smithy-go/middleware"
 	"io/ioutil"
 	"strings"
 	"testing"
 
+	"github.com/aws/smithy-go/middleware"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/smithy-go/middleware"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -49,7 +51,7 @@ func TestS3StreamGetErrorHandling(t *testing.T) {
 func TestS3GetBucketPolicy(t *testing.T) {
 	s3Client := &mockS3{
 		getObjectPolicyOutput: &s3.GetBucketPolicyOutput{
-			Policy: aws.String("{}"),
+			Policy:         aws.String("{}"),
 			ResultMetadata: middleware.Metadata{},
 		},
 	}
@@ -60,7 +62,7 @@ func TestS3GetBucketPolicy(t *testing.T) {
 	output, err := c.S3GetBucketPolicy(context.Background(), "us-east-1", "clutch", "000000000000")
 	assert.NoError(t, err)
 	assert.Equal(t, output, &s3.GetBucketPolicyOutput{
-		Policy: aws.String("{}"),
+		Policy:         aws.String("{}"),
 		ResultMetadata: middleware.Metadata{},
 	})
 }
