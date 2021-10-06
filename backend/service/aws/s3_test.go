@@ -3,6 +3,7 @@ package aws
 import (
 	"context"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -44,11 +45,49 @@ func TestS3StreamGetErrorHandling(t *testing.T) {
 	assert.Error(t, err2)
 }
 
+
+func TestS3GetBucketPolicy(t *testing.T) {
+	s3Client := &mockS3{
+		getObjectPolicyOutput: &s3.GetBucketPolicyOutput{
+			Policy: aws.String("{}"),
+		},
+	}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", s3: s3Client}},
+	}
+
+	output, err := c.S3GetBucketPolicy(context.Background(), "us-east-1", "clutch", "000000000000")
+	assert.NoError(t, err)
+	assert.Equal(t, output, aws.String("{}"))
+}
+
+func TestS3GetBucketPolicyErrorHandling(t *testing.T) {
+	s3Client := &mockS3{
+		getObjectPolicyErr: fmt.Errorf("error"),
+	}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", s3: s3Client}},
+	}
+
+	output1, err1 := c.S3GetBucketPolicy(context.Background(), "us-east-1", "clutch", "000000000000")
+	assert.Nil(t, output1)
+	assert.Error(t, err1)
+
+	// Test unknown region
+	output2, err2 := c.S3GetBucketPolicy(context.Background(), "choice-region-1", "clutch", "000000000000")
+	assert.Nil(t, output2)
+	assert.Error(t, err2)
+}
+
+
 type mockS3 struct {
 	s3Client
 
 	getObjectErr    error
 	getObjectOutput *s3.GetObjectOutput
+
+	getObjectPolicyErr    error
+	getObjectPolicyOutput *s3.GetBucketPolicyOutput
 }
 
 func (m *mockS3) GetObject(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
@@ -57,4 +96,12 @@ func (m *mockS3) GetObject(ctx context.Context, params *s3.GetObjectInput, optFn
 	}
 
 	return m.getObjectOutput, nil
+}
+
+func (m *mockS3) GetBucketPolicy(ctx context.Context, params *s3.GetBucketPolicyInput, optFns ...func(*s3.Options)) (*s3.GetBucketPolicyOutput, error) {
+	if m.getObjectPolicyErr != nil {
+		return nil, m.getObjectPolicyErr
+	}
+
+	return m.getObjectPolicyOutput, nil
 }
