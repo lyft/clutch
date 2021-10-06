@@ -194,11 +194,14 @@ const CardContent = ({
   const [expanded, setExpanded] = React.useState<boolean>(true);
 
   React.useEffect(() => {
+    if (showExpand && expanded) {
+      return;
+    }
     if (ref.current.scrollHeight > maxHeight) {
       setShowExpand(true);
       setExpanded(false);
     }
-  }, [maxHeight]);
+  }, [maxHeight, children]);
 
   return (
     <BaseCardContent {...props} ref={ref}>
