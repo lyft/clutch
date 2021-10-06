@@ -88,14 +88,16 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 		"head": graphql.String(req.Head),
 	}
 
-	err := c.gqlClient.Query(ctx, &compareCommitsQuery, variables)
+	query := &compareCommitsQuery
+	err := c.gqlClient.Query(ctx, query, variables)
 	if err != nil {
 		c.log.Error("unsuccessful response from sourcegraph", zap.Error(err))
 		return nil, errors.New("unsuccessful response from sourcegraph")
 	}
 
-	commits := make([]*sourcegraphv1.Commit, len(compareCommitsQuery.Repository.Comparison.Commits.Nodes))
-	for i, v := range compareCommitsQuery.Repository.Comparison.Commits.Nodes {
+	nodes := query.Repository.Comparison.Commits.Nodes
+	commits := make([]*sourcegraphv1.Commit, len(nodes))
+	for i, v := range nodes {
 		commits[i] = &sourcegraphv1.Commit{
 			Oid:         string(v.Oid),
 			Message:     string(v.Message),
