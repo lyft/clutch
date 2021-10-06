@@ -8,9 +8,12 @@ import {
   Divider,
   Grid,
 } from "@material-ui/core";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import type { SpacingProps as MuiSpacingProps } from "@material-ui/system";
 import { spacing } from "@material-ui/system";
 
+import { IconButton } from "./button";
 import { Typography, TypographyProps } from "./typography";
 
 // TODO: seperate out the different card parts into various files
@@ -18,14 +21,6 @@ import { Typography, TypographyProps } from "./typography";
 const StyledCard = styled(MuiCard)({
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
   border: "1px solid rgba(13, 16, 48, 0.1)",
-
-  ".MuiCardActionArea-root:hover": {
-    backgroundColor: "#F5F6FD",
-  },
-
-  ".MuiCardActionArea-root:active": {
-    backgroundColor: "#D7DAF6",
-  },
 });
 
 export interface CardProps {
@@ -126,20 +121,109 @@ const BaseCardContent = styled.div<SpacingProps>`
   ${spacing}
 `;
 
-const StyledCardContent = styled(BaseCardContent)({
+const StyledCardContentContainer = styled.div((props: { maxHeight: number | "none" }) => ({
   "> .MuiPaper-root": {
     border: "0",
     borderRadius: "0",
   },
+  overflow: "hidden",
+  maxHeight: props.maxHeight,
+}));
+
+const BaseCardActionArea = styled(CardActionArea)<SpacingProps>`
+  ${spacing}
+`;
+
+const StyledCardActionArea = styled(BaseCardActionArea)({
+  ":hover": {
+    backgroundColor: "#F5F6FD",
+  },
+
+  ":active": {
+    backgroundColor: "#D7DAF6",
+  },
 });
+
+const StyledExpandButton = styled(IconButton)({
+  width: "32px",
+  height: "32px",
+  color: "#3548D4",
+  ":hover": {
+    backgroundColor: "transparent",
+  },
+});
+
+interface CollapsibleState {
+  /** The text to show in the collapse action area when the card content is collapsed/not collapsed.
+   * By default, this is "See Less" for true and "See More" for false.
+   */
+  title: string;
+  /** The icon to show in the collapse action area when the card content is collapsed/not collapsed.
+   * By default, this is an ArrowUp icon for true and an ArrowDown icon for false.
+   */
+  icon: React.ReactElement;
+}
+
+interface CardContentCollapsibleProps {
+  open?: CollapsibleState;
+  closed?: CollapsibleState;
+}
 
 interface CardContentProps extends SpacingProps {
   children?: React.ReactNode | React.ReactNode[];
+  /** Make the card content collapse at a set max height. The default is false. */
+  collapsible?: boolean;
+  /** The props for the collapse action */
+  collapseAction?: CardContentCollapsibleProps;
+  /** The max height of the card content. The default is none. */
+  maxHeight?: number | "none";
 }
 
-const CardContent = ({ children, ...props }: CardContentProps) => (
-  <StyledCardContent {...props}>{children}</StyledCardContent>
-);
+const CardContent = ({
+  children,
+  collapsible = false,
+  collapseAction = {
+    open: { title: "See Less", icon: <KeyboardArrowUpIcon /> },
+    closed: { title: "See More", icon: <KeyboardArrowDownIcon /> },
+  },
+  maxHeight = "none",
+  ...props
+}: CardContentProps) => {
+  const ref = React.useRef(null);
+  const [showExpand, setShowExpand] = React.useState<boolean>(false);
+  const [expanded, setExpanded] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    if (ref.current.scrollHeight > maxHeight) {
+      setShowExpand(true);
+      setExpanded(false);
+    }
+  }, [maxHeight]);
+
+  return (
+    <BaseCardContent {...props} ref={ref}>
+      <StyledCardContentContainer maxHeight={expanded ? "none" : maxHeight}>
+        {children}
+      </StyledCardContentContainer>
+      {collapsible && showExpand && (
+        <StyledCardActionArea padding={0} onClick={() => setExpanded(!expanded)}>
+          <Grid container alignItems="center" justify="center">
+            <Grid item>
+              <Typography variant="body4" color="#3548D4">
+                {expanded ? collapseAction?.open.title : collapseAction?.closed.title}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <StyledExpandButton variant="neutral">
+                {expanded ? collapseAction?.open.icon : collapseAction?.closed.icon}
+              </StyledExpandButton>
+            </Grid>
+          </Grid>
+        </StyledCardActionArea>
+      )}
+    </BaseCardContent>
+  );
+};
 
 const StyledLandingCard = styled(Card)({
   border: "none",
@@ -170,7 +254,7 @@ export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
 
 export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
   <StyledLandingCard {...props}>
-    <CardActionArea onClick={onClick}>
+    <StyledCardActionArea onClick={onClick}>
       <CardContent padding={4}>
         <div className="header">
           <div className="icon">
@@ -185,7 +269,7 @@ export const LandingCard = ({ group, title, description, onClick, ...props }: La
           </Typography>
         </div>
       </CardContent>
-    </CardActionArea>
+    </StyledCardActionArea>
   </StyledLandingCard>
 );
 
