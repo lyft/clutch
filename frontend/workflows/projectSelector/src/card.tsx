@@ -56,9 +56,7 @@ const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps)
           </StyledProgressContainer>
         </CardHeader>
         {expanded && (
-          <CardContent padding={0} collapsible maxHeight={500}>
-            {error ? <Error subject={error} /> : children}
-          </CardContent>
+          <CardContent padding={0}>{error ? <Error subject={error} /> : children}</CardContent>
         )}
       </ClutchCard>
     </Grid>
