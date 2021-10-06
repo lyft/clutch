@@ -101,7 +101,13 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())
 	sigc := make(chan os.Signal, 1)
-	signal.Notify(sigc, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	signal.Notify(
+		sigc,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGQUIT,
+		syscall.SIGTERM,
+	)
 	go func() {
 		<-sigc
 		c.log.Info("Caught shutdown signal, shutting down topology caching and releasing advisory lock")
