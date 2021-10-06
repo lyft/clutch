@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -75,11 +78,9 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	if err != nil {
 		newTmpLogger().Fatal("could not instantiate logger", zap.Error(err))
 	}
-	defer func() {
-		if err := logger.Sync(); err != nil {
-			panic(err)
-		}
-	}()
+	// See https://github.com/uber-go/zap/issues/880 for more information.
+	// nolint
+	defer logger.Sync()
 
 	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
@@ -340,5 +341,33 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		ReadTimeout:  timeout,
 		WriteTimeout: timeout,
 	}
-	logger.Fatal("error bringing up listener", zap.Error(srv.ListenAndServe()))
+
+	sc := make(chan os.Signal, 1)
+	signal.Notify(
+		sc,
+		os.Interrupt,
+		syscall.SIGTERM,
+		syscall.SIGQUIT,
+	)
+
+	go func() {
+		if err = srv.ListenAndServe(); err != http.ErrServerClosed {
+			// Only log an error if it's not due to shutdown or close
+			logger.Fatal("error bringing up listener", zap.Error(err))
+		}
+	}()
+
+	<-sc
+
+	signal.Stop(sc)
+
+	// Shutdown timeout should be max request timeout (with 1s buffer).
+	ctxShutDown, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	if err = srv.Shutdown(ctxShutDown); err != nil {
+		logger.Fatal("server shutdown failed", zap.Error(err))
+	}
+
+	logger.Debug("server shutdown gracefully")
 }
