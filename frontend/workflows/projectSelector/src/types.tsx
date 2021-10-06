@@ -114,14 +114,14 @@ export interface DashAction {
 
 export interface TimeData {
   /** eventsKey corresponds to entity owning the data - i.e. cards */
-  [eventsKey: string]: projectToPointsMap;
+  [eventsKey: string]: ProjectToPointsMap;
 }
 
 /**
  * Contains a mapping of project names to their event time points
  * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
  */
-export interface projectToPointsMap {
+export interface ProjectToPointsMap {
   [projectName: string]: IClutch.timeseries.v1.IPoint[];
 }
 
@@ -130,7 +130,7 @@ export interface TimeDataUpdate {
   /** The name of the card or entity that is updating */
   key: string;
   /** The projects and their timeseries */
-  points: projectToPointsMap;
+  points: ProjectToPointsMap;
 }
 
 export interface TimelineState {
