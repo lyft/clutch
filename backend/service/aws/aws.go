@@ -6,7 +6,6 @@ package aws
 
 import (
 	"context"
-	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"io"
 	"net/http"
 	"strings"
@@ -21,6 +20,7 @@ import (
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/iancoleman/strcase"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -96,7 +96,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 			ec2:         ec2.NewFromConfig(regionCfg),
 			autoscaling: autoscaling.NewFromConfig(regionCfg),
 			dynamodb:    dynamodb.NewFromConfig(regionCfg),
-			sts: sts.NewFromConfig(regionCfg),
+			sts:         sts.NewFromConfig(regionCfg),
 		}
 	}
 
@@ -114,9 +114,8 @@ type Client interface {
 	DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error)
 	UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error
 
-	S3GetBucketPolicy(ctx context.Context, region string, bucket string, accountID string)(*string, error)
+	S3GetBucketPolicy(ctx context.Context, region string, bucket string, accountID string) (*string, error)
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
-
 
 	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)
 	UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error)
@@ -144,7 +143,7 @@ type regionalClient struct {
 	ec2         ec2Client
 	autoscaling autoscalingClient
 	dynamodb    dynamodbClient
-	sts 		stsClient
+	sts         stsClient
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
@@ -349,5 +348,3 @@ func newProtoForInstance(i ec2types.Instance) *ec2v1.Instance {
 
 	return ret
 }
-
-

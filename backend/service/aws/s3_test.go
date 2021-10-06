@@ -3,11 +3,11 @@ package aws
 import (
 	"context"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"io/ioutil"
 	"strings"
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/stretchr/testify/assert"
 )
@@ -45,7 +45,6 @@ func TestS3StreamGetErrorHandling(t *testing.T) {
 	assert.Error(t, err2)
 }
 
-
 func TestS3GetBucketPolicy(t *testing.T) {
 	s3Client := &mockS3{
 		getObjectPolicyOutput: &s3.GetBucketPolicyOutput{
@@ -78,7 +77,6 @@ func TestS3GetBucketPolicyErrorHandling(t *testing.T) {
 	assert.Nil(t, output2)
 	assert.Error(t, err2)
 }
-
 
 type mockS3 struct {
 	s3Client

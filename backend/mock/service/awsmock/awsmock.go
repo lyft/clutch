@@ -6,6 +6,8 @@ import (
 	"io"
 	"math/rand"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -14,7 +16,7 @@ import (
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/aws"
+	clutch_aws_client "github.com/lyft/clutch/backend/service/aws"
 )
 
 type svc struct{}
@@ -102,6 +104,10 @@ func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, 
 	panic("implement me")
 }
 
+func (s *svc) S3GetBucketPolicy(ctx context.Context, region string, bucket string, accountID string) (*string, error) {
+	return aws.String("{}"), nil
+}
+
 func (s *svc) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
 	currentThroughput := &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
@@ -158,7 +164,15 @@ func (s *svc) Regions() []string {
 	return []string{"us-mock-1"}
 }
 
-func New() aws.Client {
+func (s *svc) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCallerIdentityOutput, error) {
+	return &sts.GetCallerIdentityOutput{
+		Account: aws.String("000000000000"),
+		Arn:     aws.String("arn:aws:sts::000000000000:fake-role"),
+		UserId:  aws.String("some_special_id"),
+	}, nil
+}
+
+func New() clutch_aws_client.Client {
 	return &svc{}
 }
 

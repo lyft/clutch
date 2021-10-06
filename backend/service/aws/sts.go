@@ -1,8 +1,9 @@
 package aws
 
 import (
-"context"
-"github.com/aws/aws-sdk-go-v2/service/sts"
+	"context"
+
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
 func (c *client) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCallerIdentityOutput, error) {
@@ -12,7 +13,6 @@ func (c *client) GetCallerIdentity(ctx context.Context, region string) (*sts.Get
 	}
 
 	in := &sts.GetCallerIdentityInput{}
-
 
 	out, err := rc.sts.GetCallerIdentity(ctx, in)
 	if err != nil {

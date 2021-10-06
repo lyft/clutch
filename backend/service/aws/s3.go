@@ -2,18 +2,17 @@ package aws
 
 import (
 	"context"
+	"io"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"io"
 )
-
 
 func (c *client) S3GetBucketPolicy(ctx context.Context, region string, bucket string, accountID string) (*string, error) {
 	rc, err := c.getRegionalClient(region)
 	if err != nil {
 		return nil, err
 	}
-
 
 	in := &s3.GetBucketPolicyInput{
 		ExpectedBucketOwner: aws.String(accountID),
@@ -22,15 +21,12 @@ func (c *client) S3GetBucketPolicy(ctx context.Context, region string, bucket st
 
 	bucketPolicy, err := rc.s3.GetBucketPolicy(ctx, in)
 
-
 	if err != nil {
 		return nil, err
 	}
 
 	return bucketPolicy.Policy, nil
 }
-
-
 
 func (c *client) S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error) {
 	rc, err := c.getRegionalClient(region)
@@ -50,4 +46,3 @@ func (c *client) S3StreamingGet(ctx context.Context, region string, bucket strin
 
 	return out.Body, nil
 }
-
