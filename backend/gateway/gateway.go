@@ -345,9 +345,10 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	sc := make(chan os.Signal, 1)
 	signal.Notify(
 		sc,
-		os.Interrupt,
-		syscall.SIGTERM,
+		syscall.SIGHUP,
+		syscall.SIGINT,
 		syscall.SIGQUIT,
+		syscall.SIGTERM,
 	)
 
 	go func() {
