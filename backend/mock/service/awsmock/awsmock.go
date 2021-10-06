@@ -7,14 +7,13 @@ import (
 	"math/rand"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally"
-	"go.uber.org/zap"
-
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/aws"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 )
 
 type svc struct{}
