@@ -25,6 +25,7 @@ require (
 	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/gobwas/glob v0.2.3
+	github.com/gogo/protobuf v1.3.2
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-github/v29 v29.0.3 // indirect
