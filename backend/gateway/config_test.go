@@ -2,6 +2,8 @@ package gateway
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 	"testing"
 	"time"
@@ -15,6 +17,125 @@ import (
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
+
+func tmpFile(filename, content string) *os.File {
+	f, err := ioutil.TempFile(".", filename)
+	if err != nil {
+		log.Panic(err)
+	}
+	_ = ioutil.WriteFile(f.Name(), []byte(content), 0644)
+	return f
+}
+
+func TestConsolidateConfigs(t *testing.T) {
+	baseConfig := `
+gateway:
+  logger:
+    pretty: true
+    level: DEBUG
+`
+	bc := tmpFile("base-config-*.yaml", baseConfig)
+	defer os.Remove(bc.Name())
+
+	config := fmt.Sprintf(`
+extends:
+  - %s
+gateway:
+  listener:
+    tcp:
+      address: 0.0.0.0
+      port: 8080
+      secure: false
+`, bc.Name())
+
+	cc := tmpFile("clutch-config-*.yaml", config)
+	defer os.Remove(cc.Name())
+
+	var cfg gatewayv1.Config
+	var seenCfgs []string
+	consolidateConfigs(cc.Name(), &cfg, &Flags{Template: false}, &seenCfgs)
+
+	assert.Equal(t, true, cfg.GetGateway().GetLogger().GetPretty())
+	assert.Equal(t, gatewayv1.Logger_DEBUG, cfg.GetGateway().GetLogger().GetLevel())
+
+	assert.Equal(t, "0.0.0.0", cfg.GetGateway().GetListener().GetTcp().GetAddress())
+	assert.Equal(t, uint32(8080), cfg.GetGateway().GetListener().GetTcp().GetPort())
+	assert.Equal(t, false, cfg.GetGateway().GetListener().GetTcp().GetSecure())
+}
+
+func TestConsolidateConfigsOverrides(t *testing.T) {
+	baseConfig := `
+gateway:
+  logger:
+    pretty: true
+    level: DEBUG
+`
+	bc := tmpFile("base-config-*.yaml", baseConfig)
+	defer os.Remove(bc.Name())
+
+	logConfig := fmt.Sprintf(`
+extends:
+  - %s
+gateway:
+  logger:
+    pretty: false
+`, bc.Name())
+	lc := tmpFile("log-config-*.yaml", logConfig)
+	defer os.Remove(lc.Name())
+
+	config := fmt.Sprintf(`
+extends:
+  - %s
+gateway:
+  logger:
+    level: WARN
+`, lc.Name())
+
+	cc := tmpFile("clutch-config-*.yaml", config)
+	defer os.Remove(cc.Name())
+
+	var cfg gatewayv1.Config
+	var seenCfgs []string
+	consolidateConfigs(cc.Name(), &cfg, &Flags{Template: false}, &seenCfgs)
+
+	assert.Equal(t, false, cfg.GetGateway().GetLogger().GetPretty())
+	assert.Equal(t, gatewayv1.Logger_WARN, cfg.GetGateway().GetLogger().GetLevel())
+}
+
+func TestConsolidateConfigsIgnoresDuplicateConfigs(t *testing.T) {
+	cc := tmpFile("clutch-config-*.yaml", "")
+	defer os.Remove(cc.Name())
+	bc := tmpFile("base-config-*.yaml", "")
+	defer os.Remove(bc.Name())
+
+	baseConfig := fmt.Sprintf(`
+extends:
+  - %s
+  - %s
+gateway:
+  logger:
+    pretty: true
+    level: DEBUG
+`, cc.Name(), bc.Name())
+	_ = ioutil.WriteFile(bc.Name(), []byte(baseConfig), 0644)
+
+	config := fmt.Sprintf(`
+extends:
+  - %s
+gateway:
+  logger:
+    pretty: true
+    level: WARN
+`, bc.Name())
+	_ = ioutil.WriteFile(cc.Name(), []byte(config), 0644)
+
+	var cfg gatewayv1.Config
+	var seenCfgs []string
+	consolidateConfigs(cc.Name(), &cfg, &Flags{Template: false}, &seenCfgs)
+
+	assert.Equal(t, true, cfg.GetGateway().GetLogger().GetPretty())
+	assert.Equal(t, gatewayv1.Logger_WARN, cfg.GetGateway().GetLogger().GetLevel())
+}
 
 func TestExecuteTemplate(t *testing.T) {
 	config := `

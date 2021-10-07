@@ -5957,6 +5957,9 @@ export namespace clutch {
 
                     /** Config modules */
                     modules?: (clutch.config.gateway.v1.IModule[]|null);
+
+                    /** Config extends */
+                    "extends"?: (string[]|null);
                 }
 
                 /** Represents a Config. */
@@ -5979,6 +5982,9 @@ export namespace clutch {
 
                     /** Config modules. */
                     public modules: clutch.config.gateway.v1.IModule[];
+
+                    /** Config extends. */
+                    public extends: string[];
 
                     /**
                      * Verifies a Config message.

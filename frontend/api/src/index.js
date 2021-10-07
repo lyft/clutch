@@ -14007,6 +14007,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Array.<clutch.config.gateway.v1.IService>|null} [services] Config services
                      * @property {Array.<clutch.config.gateway.v1.IResolver>|null} [resolvers] Config resolvers
                      * @property {Array.<clutch.config.gateway.v1.IModule>|null} [modules] Config modules
+                     * @property {Array.<string>|null} ["extends"] Config extends
                      */
 
                     /**
@@ -14021,6 +14022,7 @@ export const clutch = $root.clutch = (() => {
                         this.services = [];
                         this.resolvers = [];
                         this.modules = [];
+                        this["extends"] = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -14058,6 +14060,14 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     Config.prototype.modules = $util.emptyArray;
+
+                    /**
+                     * Config extends.
+                     * @member {Array.<string>} extends
+                     * @memberof clutch.config.gateway.v1.Config
+                     * @instance
+                     */
+                    Config.prototype["extends"] = $util.emptyArray;
 
                     /**
                      * Verifies a Config message.
@@ -14101,6 +14111,13 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "modules." + error;
                             }
+                        }
+                        if (message["extends"] != null && message.hasOwnProperty("extends")) {
+                            if (!Array.isArray(message["extends"]))
+                                return "extends: array expected";
+                            for (let i = 0; i < message["extends"].length; ++i)
+                                if (!$util.isString(message["extends"][i]))
+                                    return "extends: string[] expected";
                         }
                         return null;
                     };
@@ -14152,6 +14169,13 @@ export const clutch = $root.clutch = (() => {
                                 message.modules[i] = $root.clutch.config.gateway.v1.Module.fromObject(object.modules[i]);
                             }
                         }
+                        if (object["extends"]) {
+                            if (!Array.isArray(object["extends"]))
+                                throw TypeError(".clutch.config.gateway.v1.Config.extends: array expected");
+                            message["extends"] = [];
+                            for (let i = 0; i < object["extends"].length; ++i)
+                                message["extends"][i] = String(object["extends"][i]);
+                        }
                         return message;
                     };
 
@@ -14172,6 +14196,7 @@ export const clutch = $root.clutch = (() => {
                             object.services = [];
                             object.resolvers = [];
                             object.modules = [];
+                            object["extends"] = [];
                         }
                         if (options.defaults)
                             object.gateway = null;
@@ -14191,6 +14216,11 @@ export const clutch = $root.clutch = (() => {
                             object.modules = [];
                             for (let j = 0; j < message.modules.length; ++j)
                                 object.modules[j] = $root.clutch.config.gateway.v1.Module.toObject(message.modules[j], options);
+                        }
+                        if (message["extends"] && message["extends"].length) {
+                            object["extends"] = [];
+                            for (let j = 0; j < message["extends"].length; ++j)
+                                object["extends"][j] = message["extends"][j];
                         }
                         return object;
                     };
