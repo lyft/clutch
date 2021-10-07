@@ -28,5 +28,5 @@ const register = (): WorkflowConfiguration => {
 
 export default register;
 
-export type { DashState, TimelineState } from "./types";
+export type { DashState, TimelineState, TimeData, TimeDataUpdate, ProjectToPointsMap } from "./types";
 export { Card, Dash, useDashState, useTimelineState, useTimelineUpdater };
