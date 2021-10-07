@@ -216,8 +216,8 @@ const CardContent = ({
   }, [maxHeight, children]);
 
   return (
-    <BaseCardContent {...props} ref={ref}>
-      <StyledCardContentContainer maxHeight={expanded ? "none" : maxHeight}>
+    <BaseCardContent {...props}>
+      <StyledCardContentContainer maxHeight={expanded ? "none" : maxHeight} ref={ref}>
         {children}
       </StyledCardContentContainer>
       {collapsible && showExpand && (
