@@ -20,7 +20,7 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"gopkg.in/yaml.v3"
 
-	"github.com/gogo/protobuf/jsonpb"
+	"github.com/golang/protobuf/jsonpb"
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
@@ -83,7 +83,8 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 		if err != nil {
 			tmpLogger.Fatal("failed to cast configuration file to json", zap.Error(err))
 		}
-		tmpLogger.Info(json)
+		fmt.Println(json)
+		os.Exit(0)
 	}
 
 	return &cfg
