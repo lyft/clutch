@@ -112,7 +112,7 @@ func consolidateConfigs(cfgBaseDir, cfgFile string, cfg *gatewayv1.Config, f *Fl
 		if c == cfgPath {
 			continue
 		}
-		consolidateConfigs(cfgBaseDir, c, cfg, f, seen)
+		consolidateConfigs(filepath.Dir(cfgPath), c, cfg, f, seen)
 	}
 	proto.Merge(cfg, &curCfg)
 }
