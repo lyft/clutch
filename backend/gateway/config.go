@@ -64,7 +64,7 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 
 	var cfg gatewayv1.Config
 	var seenCfgs []string
-	consolidateConfigs(f.ConfigPath, &cfg, f, &seenCfgs)
+	consolidateConfigs(filepath.Dir(f.ConfigPath), filepath.Base(f.ConfigPath), &cfg, f, &seenCfgs)
 	if err := cfg.Validate(); err != nil {
 		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
 	}
@@ -87,8 +87,9 @@ func contains(s *[]string, str string) bool {
 	return false
 }
 
-func consolidateConfigs(cfgPath string, cfg *gatewayv1.Config, f *Flags, seen *[]string) {
+func consolidateConfigs(cfgBaseDir, cfgFile string, cfg *gatewayv1.Config, f *Flags, seen *[]string) {
 	// Use a temporary logger to parse the configuration and output.
+	cfgPath := filepath.Join(cfgBaseDir, cfgFile)
 	tmpLogger := newTmpLogger().With(zap.String("file", cfgPath))
 
 	if contains(seen, cfgPath) {
@@ -111,7 +112,7 @@ func consolidateConfigs(cfgPath string, cfg *gatewayv1.Config, f *Flags, seen *[
 		if c == cfgPath {
 			continue
 		}
-		consolidateConfigs(c, cfg, f, seen)
+		consolidateConfigs(cfgBaseDir, c, cfg, f, seen)
 	}
 	proto.Merge(cfg, &curCfg)
 }
