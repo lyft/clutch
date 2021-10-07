@@ -194,18 +194,22 @@ const CardContent = ({
   const [expanded, setExpanded] = React.useState<boolean>(true);
 
   /**
-   * Since the children rendered in the CardContent might be fetched through an API call
-   * the hook adds the children prop as dependency so that hook can be re-run when there
-   * are changes to the children value.
-   * Additionally, because the children prop value can change on non-user actions (i.e. an API call is made on
-   * an interval to refresh the CardContent data), if the card had already been expanded, we don't reset the value.
-   * )
+   * Since the children rendered in the CardContent might be fetched through an API call, the hook adds the children prop as a dependency
+   * so that the hook can be re-run when there are changes to the children prop value. Additionally, because the children prop value can
+   * change dynamically (i.e. an API call is made to fetch more or less data for CardContent or an API call is made on an interval
+   * to refresh the data for CardContent), the hook checks these evaluations in the following order:
+   * 1. Is scollHeight less than maxHeight? If true, don't show the expand container and don't set a max height to the CardContent children
+   * 2. Is showExpand and expand already true? If so, don't change their values.
+   * 3. is scrollHeight greater than maxHeight? If true, show the expand container and set a max height to the CardContent children
    */
   React.useEffect(() => {
-    if (showExpand && expanded) {
-      return;
-    }
-    if (ref.current.scrollHeight > maxHeight) {
+    if (ref.current.scrollHeight < maxHeight) {
+      setShowExpand(false);
+      setExpanded(true);
+    } else if (showExpand && expanded) {
+      setShowExpand(showExpand);
+      setExpanded(expanded);
+    } else if (ref.current.scrollHeight > maxHeight) {
       setShowExpand(true);
       setExpanded(false);
     }
