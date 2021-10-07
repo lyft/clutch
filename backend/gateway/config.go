@@ -20,6 +20,7 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"gopkg.in/yaml.v3"
 
+	"github.com/gogo/protobuf/jsonpb"
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
@@ -39,6 +40,7 @@ type Flags struct {
 	ConfigPath string
 	Template   bool
 	Validate   bool
+	Debug      bool
 	EnvFiles   envFiles
 }
 
@@ -47,6 +49,7 @@ func (f *Flags) Link() {
 	flag.StringVar(&f.ConfigPath, "c", "clutch-config.yaml", "path to YAML configuration")
 	flag.BoolVar(&f.Template, "template", false, "executes go templates on the configuration file")
 	flag.BoolVar(&f.Validate, "validate", false, "validates the configuration file and exits")
+	flag.BoolVar(&f.Debug, "debug", false, "print the final composed configuration file to stdout")
 	flag.Var(&f.EnvFiles, "env", "path to additional .env files to load")
 }
 
@@ -72,6 +75,15 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 	if f.Validate {
 		tmpLogger.Info("configuration validation was successful")
 		os.Exit(0)
+	}
+
+	if f.Debug {
+		m := jsonpb.Marshaler{}
+		json, err := m.MarshalToString(&cfg)
+		if err != nil {
+			tmpLogger.Fatal("failed to cast configuration file to json", zap.Error(err))
+		}
+		tmpLogger.Info(json)
 	}
 
 	return &cfg
