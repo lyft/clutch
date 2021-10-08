@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -53,7 +54,7 @@ gateway:
 
 	var cfg gatewayv1.Config
 	var seenCfgs []string
-	consolidateConfigs(cc.Name(), &cfg, &Flags{Template: false}, &seenCfgs)
+	consolidateConfigs(filepath.Dir(cc.Name()), filepath.Base(cc.Name()), &cfg, &Flags{Template: false}, &seenCfgs)
 
 	assert.Equal(t, true, cfg.GetGateway().GetLogger().GetPretty())
 	assert.Equal(t, gatewayv1.Logger_DEBUG, cfg.GetGateway().GetLogger().GetLevel())
@@ -96,7 +97,7 @@ gateway:
 
 	var cfg gatewayv1.Config
 	var seenCfgs []string
-	consolidateConfigs(cc.Name(), &cfg, &Flags{Template: false}, &seenCfgs)
+	consolidateConfigs(filepath.Dir(cc.Name()), filepath.Base(cc.Name()), &cfg, &Flags{Template: false}, &seenCfgs)
 
 	assert.Equal(t, false, cfg.GetGateway().GetLogger().GetPretty())
 	assert.Equal(t, gatewayv1.Logger_WARN, cfg.GetGateway().GetLogger().GetLevel())
@@ -131,7 +132,7 @@ gateway:
 
 	var cfg gatewayv1.Config
 	var seenCfgs []string
-	consolidateConfigs(cc.Name(), &cfg, &Flags{Template: false}, &seenCfgs)
+	consolidateConfigs(filepath.Dir(cc.Name()), filepath.Base(cc.Name()), &cfg, &Flags{Template: false}, &seenCfgs)
 
 	assert.Equal(t, true, cfg.GetGateway().GetLogger().GetPretty())
 	assert.Equal(t, gatewayv1.Logger_WARN, cfg.GetGateway().GetLogger().GetLevel())
