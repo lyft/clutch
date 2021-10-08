@@ -18,7 +18,7 @@ main() {
   cd "${REPO_ROOT}/backend"
   ensure_binary
 
-  "${RELEASE_BINARY}" "$@"
+  "${RELEASE_BINARY}" "$@" -v
 }
 
 ensure_binary() {
