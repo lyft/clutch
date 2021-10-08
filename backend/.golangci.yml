@@ -3,21 +3,21 @@ linters:
   disable-all: true
   enable:
   - deadcode
-  - gci
   - errcheck
+  - exportloopref
+  - gci
   - gocritic
   - goimports
   - gosec
   - gosimple
   - govet
   - ineffassign
-  - scopelint
   - staticcheck
   - structcheck
   - typecheck
   - unused
-  - whitespace
   - varcheck
+  - whitespace
 linters-settings:
   gocritic:
     disabled-checks:
