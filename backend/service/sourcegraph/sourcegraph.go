@@ -91,7 +91,12 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 	query := &compareCommitsQuery
 	err := c.gqlClient.Query(ctx, query, variables)
 	if err != nil {
-		c.log.Error("unsuccessful response from sourcegraph", zap.Error(err))
+		c.log.Error("unsuccessful response from sourcegraph",
+			zap.String("repo", req.Repository),
+			zap.String("base", req.Base),
+			zap.String("head", req.Head),
+			zap.Error(err))
+
 		return nil, errors.New("unsuccessful response from sourcegraph")
 	}
 
