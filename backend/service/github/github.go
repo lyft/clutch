@@ -103,6 +103,7 @@ type Client interface {
 	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
 	GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error)
 	ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error)
+	ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string) ([]*PullRequestInfo, error)
 	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
 	GetUser(ctx context.Context, username string) (*githubv3.User, error)
 }
@@ -117,8 +118,9 @@ func (s *svc) CreateIssueComment(ctx context.Context, ref *RemoteRef, number int
 }
 
 type PullRequestInfo struct {
-	Number  int
-	HTMLURL string
+	Number     int
+	HTMLURL    string
+	BranchName string
 }
 
 type svc struct {
@@ -216,6 +218,10 @@ func boolPtr(b bool) *bool {
 	return &b
 }
 
+func int64Ptr(i64 int64) *int64 {
+	return &i64
+}
+
 func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error) {
 	req := &githubv3.NewPullRequest{
 		Title:               strPtr(title),
@@ -234,6 +240,25 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 		// There are many possible URLs to return, but the HTML one is most human friendly
 		HTMLURL: pr.GetHTMLURL(),
 	}, nil
+}
+
+func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string) ([]*PullRequestInfo, error) {
+	// PullRequestListOptions left as nil since default opts are sufficient (State: "open", Sort: "created")
+	respPRs, _, err := s.rest.PullRequests.ListPullRequestsWithCommit(ctx, ref.RepoOwner, ref.RepoName, sha, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	prInfos := make([]*PullRequestInfo, len(respPRs))
+	for _, pr := range respPRs {
+		prInfos = append(prInfos, &PullRequestInfo{
+			Number: pr.GetNumber(),
+			HTMLURL: pr.GetHTMLURL(),
+			BranchName: pr.GetHead().GetRef(),
+		})
+	}
+
+	return prInfos, nil
 }
 
 type CreateBranchRequest struct {
