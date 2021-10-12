@@ -117,9 +117,17 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 
 	response, err := m.client.Do(request)
 	if err != nil {
+		m.scope.Tagged(map[string]string{
+			"service": service.Name,
+		}).Counter("request.error").Inc(1)
 		m.logger.Error("proxy request error", zap.Error(err))
 		return nil, err
 	}
+
+	m.scope.Tagged(map[string]string{
+		"service":     service.Name,
+		"status_code": fmt.Sprintf("%d", response.StatusCode),
+	}).Counter("request").Inc(1)
 
 	// Extract headers from response
 	// TODO: It might make sense to provide a list of allowed headers, as there can be a lot.
