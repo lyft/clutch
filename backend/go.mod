@@ -19,7 +19,6 @@ require (
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/dschaller/graphql v0.0.0-20211012063638-bb02d136322e // indirect
 	github.com/envoyproxy/go-control-plane v0.9.9
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
 	github.com/fullstorydev/grpcurl v1.8.2
