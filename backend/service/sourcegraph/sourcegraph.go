@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/dschaller/graphql"
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/shurcooL/graphql"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
