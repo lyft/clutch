@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/shurcooL/graphql"
+	"github.com/dschaller/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
