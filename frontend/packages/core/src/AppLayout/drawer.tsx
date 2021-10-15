@@ -103,6 +103,34 @@ const Group = ({ heading, open = false, updateOpenGroup, closeGroup, children }:
   if (React.Children.count(children) === 0) {
     return null;
   }
+  
+  // If there is only 1 child, we can go straight to that item instead of popping
+  // open a drawer and displaying the only choice.
+  // TODO: Make sure this is the optimal way to do this - yes it works, but it
+  // might be the wrong way.
+  if (React.Children.count(children) === 1) {
+    return (
+      <GroupList data-qa="workflowGroup">
+        <GroupListItem
+          button
+          selected={open}
+          ref={anchorRef}
+          aria-controls={open ? "workflow-options" : undefined}
+          aria-haspopup="true"
+          onClick={() => {
+            window.location.href = window.location.origin + "/" + children[0]?.props?.to;
+          }}
+        >
+          <Avatar>{heading.charAt(0)}</Avatar>
+          <GroupHeading align="center">{heading}</GroupHeading>
+          <Popper open={open} onClickAway={closeGroup} anchorRef={anchorRef} id="workflow-options">
+            {children}
+          </Popper>
+        </GroupListItem>
+      </GroupList>
+    );
+  }
+
   // TODO (dschaller): revisit how we handle long groups once we have designs.
   // n.b. this is a stop-gap solution to prevent long groups from looking unreadable.
   return (
