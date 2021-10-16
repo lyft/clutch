@@ -1,6 +1,14 @@
 import * as React from "react";
 
-import type { DashAction, DashState, TimeDataUpdate, TimelineAction, TimelineState } from "./types";
+import type {
+  DashAction,
+  DashState,
+  TimeDataUpdate,
+  TimelineAction,
+  TimelineState,
+  TimeSelectorAction,
+  TimeSelectorState,
+} from "./types";
 
 // Contexts for project selector
 export const ProjectSelectorStateContext = React.createContext<DashState | undefined>(undefined);
@@ -12,6 +20,14 @@ export const ProjectSelectorDispatchContext = React.createContext<
 export const TimelineStateContext = React.createContext<TimelineState | undefined>(undefined);
 export const TimelineDispatchContext = React.createContext<
   ((action: TimelineAction) => void) | undefined
+>(undefined);
+
+// Contexts for time selector
+export const TimeSelectorStateContext = React.createContext<TimeSelectorState | undefined>(
+  undefined
+);
+export const TimeSelectorDispatchContext = React.createContext<
+  ((action: TimeSelectorAction) => void) | undefined
 >(undefined);
 
 // project selector hooks
@@ -61,6 +77,33 @@ export const useTimelineState = (): TimelineState => {
   if (!value) {
     throw new Error(
       "useTimelineState was invoked outside of a valid context, check that it is a child of the Timeline component"
+    );
+  }
+  return value;
+};
+
+// timestamp selection hooks
+type useTimeSelectorReturn = {
+  updateTimeSelection: (state: TimeSelectorState) => void;
+};
+
+// hook for writing
+export const useTimeSelectorUpdater = (): useTimeSelectorReturn => {
+  const dispatch = React.useContext(TimeSelectorDispatchContext);
+
+  return {
+    updateTimeSelection: (state: TimeSelectorState) => {
+      dispatch && dispatch({ type: "UPDATE", payload: state });
+    },
+  };
+};
+
+// hook for reading
+export const useTimeSelectorState = (): TimeSelectorState => {
+  const value = React.useContext<TimeSelectorState | undefined>(TimeSelectorStateContext);
+  if (!value) {
+    throw new Error(
+      "useTimeSelectorState was invoked outside of a valid context, check that it is a child of the TimeSelector component"
     );
   }
   return value;

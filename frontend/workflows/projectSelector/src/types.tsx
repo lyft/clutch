@@ -142,5 +142,18 @@ export interface TimelineAction {
   type: TimelineActionKindUpdate;
   payload: TimeDataUpdate;
 }
+export interface TimeSelectorState {
+  /** The start of the time window the user has chosen */
+  startTimeMillis: number;
+  /** The end of time window the user has chosen */
+  endTimeMillis: number;
+}
+
+export type TimeSelectorActionUpdate = "UPDATE";
+
+export interface TimeSelectorAction {
+  type: TimeSelectorActionUpdate;
+  payload: TimeSelectorState;
+}
 
 export { isGroupState, isProjectState, isGlobalProjectState };
