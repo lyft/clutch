@@ -12274,6 +12274,9 @@ export namespace clutch {
 
                 /** OriginQuestion options */
                 options?: (clutch.feedback.v1.IRatingOptions|null);
+
+                /** OriginQuestion show */
+                show?: (boolean|null);
             }
 
             /** Represents an OriginQuestion. */
@@ -12293,6 +12296,9 @@ export namespace clutch {
 
                 /** OriginQuestion options. */
                 public options?: (clutch.feedback.v1.IRatingOptions|null);
+
+                /** OriginQuestion show. */
+                public show: boolean;
 
                 /**
                  * Verifies an OriginQuestion message.
@@ -12328,9 +12334,6 @@ export namespace clutch {
 
                 /** GetFeedbackQuestionsResponse originQuestion */
                 originQuestion?: ({ [k: string]: clutch.feedback.v1.IOriginQuestion }|null);
-
-                /** GetFeedbackQuestionsResponse show */
-                show?: (boolean|null);
             }
 
             /** Represents a GetFeedbackQuestionsResponse. */
@@ -12344,9 +12347,6 @@ export namespace clutch {
 
                 /** GetFeedbackQuestionsResponse originQuestion. */
                 public originQuestion: { [k: string]: clutch.feedback.v1.IOriginQuestion };
-
-                /** GetFeedbackQuestionsResponse show. */
-                public show: boolean;
 
                 /**
                  * Verifies a GetFeedbackQuestionsResponse message.

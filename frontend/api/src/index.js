@@ -29573,6 +29573,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [question] OriginQuestion question
                  * @property {string|null} [freeformQuestion] OriginQuestion freeformQuestion
                  * @property {clutch.feedback.v1.IRatingOptions|null} [options] OriginQuestion options
+                 * @property {boolean|null} [show] OriginQuestion show
                  */
 
                 /**
@@ -29615,6 +29616,14 @@ export const clutch = $root.clutch = (() => {
                 OriginQuestion.prototype.options = null;
 
                 /**
+                 * OriginQuestion show.
+                 * @member {boolean} show
+                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * @instance
+                 */
+                OriginQuestion.prototype.show = false;
+
+                /**
                  * Verifies an OriginQuestion message.
                  * @function verify
                  * @memberof clutch.feedback.v1.OriginQuestion
@@ -29636,6 +29645,9 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "options." + error;
                     }
+                    if (message.show != null && message.hasOwnProperty("show"))
+                        if (typeof message.show !== "boolean")
+                            return "show: boolean expected";
                     return null;
                 };
 
@@ -29660,6 +29672,8 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.feedback.v1.OriginQuestion.options: object expected");
                         message.options = $root.clutch.feedback.v1.RatingOptions.fromObject(object.options);
                     }
+                    if (object.show != null)
+                        message.show = Boolean(object.show);
                     return message;
                 };
 
@@ -29680,6 +29694,7 @@ export const clutch = $root.clutch = (() => {
                         object.question = "";
                         object.freeformQuestion = "";
                         object.options = null;
+                        object.show = false;
                     }
                     if (message.question != null && message.hasOwnProperty("question"))
                         object.question = message.question;
@@ -29687,6 +29702,8 @@ export const clutch = $root.clutch = (() => {
                         object.freeformQuestion = message.freeformQuestion;
                     if (message.options != null && message.hasOwnProperty("options"))
                         object.options = $root.clutch.feedback.v1.RatingOptions.toObject(message.options, options);
+                    if (message.show != null && message.hasOwnProperty("show"))
+                        object.show = message.show;
                     return object;
                 };
 
@@ -29711,7 +29728,6 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.feedback.v1
                  * @interface IGetFeedbackQuestionsResponse
                  * @property {Object.<string,clutch.feedback.v1.IOriginQuestion>|null} [originQuestion] GetFeedbackQuestionsResponse originQuestion
-                 * @property {boolean|null} [show] GetFeedbackQuestionsResponse show
                  */
 
                 /**
@@ -29739,14 +29755,6 @@ export const clutch = $root.clutch = (() => {
                 GetFeedbackQuestionsResponse.prototype.originQuestion = $util.emptyObject;
 
                 /**
-                 * GetFeedbackQuestionsResponse show.
-                 * @member {boolean} show
-                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
-                 * @instance
-                 */
-                GetFeedbackQuestionsResponse.prototype.show = false;
-
-                /**
                  * Verifies a GetFeedbackQuestionsResponse message.
                  * @function verify
                  * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
@@ -29767,9 +29775,6 @@ export const clutch = $root.clutch = (() => {
                                 return "originQuestion." + error;
                         }
                     }
-                    if (message.show != null && message.hasOwnProperty("show"))
-                        if (typeof message.show !== "boolean")
-                            return "show: boolean expected";
                     return null;
                 };
 
@@ -29795,8 +29800,6 @@ export const clutch = $root.clutch = (() => {
                             message.originQuestion[keys[i]] = $root.clutch.feedback.v1.OriginQuestion.fromObject(object.originQuestion[keys[i]]);
                         }
                     }
-                    if (object.show != null)
-                        message.show = Boolean(object.show);
                     return message;
                 };
 
@@ -29815,16 +29818,12 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.objects || options.defaults)
                         object.originQuestion = {};
-                    if (options.defaults)
-                        object.show = false;
                     let keys2;
                     if (message.originQuestion && (keys2 = Object.keys(message.originQuestion)).length) {
                         object.originQuestion = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.originQuestion[keys2[j]] = $root.clutch.feedback.v1.OriginQuestion.toObject(message.originQuestion[keys2[j]], options);
                     }
-                    if (message.show != null && message.hasOwnProperty("show"))
-                        object.show = message.show;
                     return object;
                 };
 

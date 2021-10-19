@@ -25,8 +25,8 @@ enum Origin {
 }
 
 message GetFeedbackQuestionsRequest {
-  // the origin of the feedback entry which gets mapped to origin-specific questions
-  // multiple origins can be passed in the request to return their specific questions
+  // the origin of the feedback entry which gets mapped to a origin-specific question
+  // multiple origins can be passed in the request to return their specific question
   repeated Origin origins = 1;
   // future: have rules on whether a user should see the feedback questions
   string user = 2;
@@ -47,10 +47,11 @@ message OriginQuestion {
   string freeform_question = 2;
   // feedback options to present to the user (i.e. "bad", "ok", "great")
   RatingOptions options = 3;
+  // future: have rules on whether a user should see the feedback question
+  bool show = 4;
 }
 
 message GetFeedbackQuestionsResponse {
   // key will be the feedback origin name
   map<string, OriginQuestion> origin_question = 1;
-  bool show = 2;
 }

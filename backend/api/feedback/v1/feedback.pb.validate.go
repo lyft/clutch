@@ -196,6 +196,8 @@ func (m *OriginQuestion) Validate() error {
 		}
 	}
 
+	// no validation rules for Show
+
 	return nil
 }
 
@@ -277,8 +279,6 @@ func (m *GetFeedbackQuestionsResponse) Validate() error {
 		}
 
 	}
-
-	// no validation rules for Show
 
 	return nil
 }
