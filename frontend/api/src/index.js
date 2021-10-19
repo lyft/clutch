@@ -29190,6 +29190,528 @@ export const clutch = $root.clutch = (() => {
         return featureflag;
     })();
 
+    clutch.feedback = (function() {
+
+        /**
+         * Namespace feedback.
+         * @memberof clutch
+         * @namespace
+         */
+        const feedback = {};
+
+        feedback.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.feedback
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.FeedbackAPI = (function() {
+
+                /**
+                 * Constructs a new FeedbackAPI service.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a FeedbackAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function FeedbackAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (FeedbackAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = FeedbackAPI;
+
+                /**
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#getFeedbackQuestions}.
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @typedef GetFeedbackQuestionsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.feedback.v1.GetFeedbackQuestionsResponse} [response] GetFeedbackQuestionsResponse
+                 */
+
+                /**
+                 * Calls GetFeedbackQuestions.
+                 * @function getFeedbackQuestions
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @instance
+                 * @param {clutch.feedback.v1.IGetFeedbackQuestionsRequest} request GetFeedbackQuestionsRequest message or plain object
+                 * @param {clutch.feedback.v1.FeedbackAPI.GetFeedbackQuestionsCallback} callback Node-style callback called with the error, if any, and GetFeedbackQuestionsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(FeedbackAPI.prototype.getFeedbackQuestions = function getFeedbackQuestions(request, callback) {
+                    return this.rpcCall(getFeedbackQuestions, $root.clutch.feedback.v1.GetFeedbackQuestionsRequest, $root.clutch.feedback.v1.GetFeedbackQuestionsResponse, request, callback);
+                }, "name", { value: "GetFeedbackQuestions" });
+
+                /**
+                 * Calls GetFeedbackQuestions.
+                 * @function getFeedbackQuestions
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @instance
+                 * @param {clutch.feedback.v1.IGetFeedbackQuestionsRequest} request GetFeedbackQuestionsRequest message or plain object
+                 * @returns {Promise<clutch.feedback.v1.GetFeedbackQuestionsResponse>} Promise
+                 * @variation 2
+                 */
+
+                return FeedbackAPI;
+            })();
+
+            /**
+             * Origin enum.
+             * @name clutch.feedback.v1.Origin
+             * @enum {number}
+             * @property {number} ORIGIN_UNSPECIFIED=0 ORIGIN_UNSPECIFIED value
+             * @property {number} HEADER=1 HEADER value
+             * @property {number} WIZARD=2 WIZARD value
+             */
+            v1.Origin = (function() {
+                const valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "ORIGIN_UNSPECIFIED"] = 0;
+                values[valuesById[1] = "HEADER"] = 1;
+                values[valuesById[2] = "WIZARD"] = 2;
+                return values;
+            })();
+
+            v1.RatingOptions = (function() {
+
+                /**
+                 * Properties of a RatingOptions.
+                 * @memberof clutch.feedback.v1
+                 * @interface IRatingOptions
+                 * @property {string|null} [one] RatingOptions one
+                 * @property {string|null} [two] RatingOptions two
+                 * @property {string|null} [three] RatingOptions three
+                 */
+
+                /**
+                 * Constructs a new RatingOptions.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a RatingOptions.
+                 * @implements IRatingOptions
+                 * @constructor
+                 * @param {clutch.feedback.v1.IRatingOptions=} [properties] Properties to set
+                 */
+                function RatingOptions(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * RatingOptions one.
+                 * @member {string} one
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @instance
+                 */
+                RatingOptions.prototype.one = "";
+
+                /**
+                 * RatingOptions two.
+                 * @member {string} two
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @instance
+                 */
+                RatingOptions.prototype.two = "";
+
+                /**
+                 * RatingOptions three.
+                 * @member {string} three
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @instance
+                 */
+                RatingOptions.prototype.three = "";
+
+                /**
+                 * Verifies a RatingOptions message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                RatingOptions.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.one != null && message.hasOwnProperty("one"))
+                        if (!$util.isString(message.one))
+                            return "one: string expected";
+                    if (message.two != null && message.hasOwnProperty("two"))
+                        if (!$util.isString(message.two))
+                            return "two: string expected";
+                    if (message.three != null && message.hasOwnProperty("three"))
+                        if (!$util.isString(message.three))
+                            return "three: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.RatingOptions} RatingOptions
+                 */
+                RatingOptions.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.RatingOptions)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.RatingOptions();
+                    if (object.one != null)
+                        message.one = String(object.one);
+                    if (object.two != null)
+                        message.two = String(object.two);
+                    if (object.three != null)
+                        message.three = String(object.three);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @static
+                 * @param {clutch.feedback.v1.RatingOptions} message RatingOptions
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                RatingOptions.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.one = "";
+                        object.two = "";
+                        object.three = "";
+                    }
+                    if (message.one != null && message.hasOwnProperty("one"))
+                        object.one = message.one;
+                    if (message.two != null && message.hasOwnProperty("two"))
+                        object.two = message.two;
+                    if (message.three != null && message.hasOwnProperty("three"))
+                        object.three = message.three;
+                    return object;
+                };
+
+                /**
+                 * Converts this RatingOptions to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                RatingOptions.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return RatingOptions;
+            })();
+
+            v1.GetFeedbackQuestionsRequest = (function() {
+
+                /**
+                 * Properties of a GetFeedbackQuestionsRequest.
+                 * @memberof clutch.feedback.v1
+                 * @interface IGetFeedbackQuestionsRequest
+                 * @property {clutch.feedback.v1.Origin|null} [origin] GetFeedbackQuestionsRequest origin
+                 * @property {string|null} [user] GetFeedbackQuestionsRequest user
+                 */
+
+                /**
+                 * Constructs a new GetFeedbackQuestionsRequest.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a GetFeedbackQuestionsRequest.
+                 * @implements IGetFeedbackQuestionsRequest
+                 * @constructor
+                 * @param {clutch.feedback.v1.IGetFeedbackQuestionsRequest=} [properties] Properties to set
+                 */
+                function GetFeedbackQuestionsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetFeedbackQuestionsRequest origin.
+                 * @member {clutch.feedback.v1.Origin} origin
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsRequest
+                 * @instance
+                 */
+                GetFeedbackQuestionsRequest.prototype.origin = 0;
+
+                /**
+                 * GetFeedbackQuestionsRequest user.
+                 * @member {string} user
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsRequest
+                 * @instance
+                 */
+                GetFeedbackQuestionsRequest.prototype.user = "";
+
+                /**
+                 * Verifies a GetFeedbackQuestionsRequest message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetFeedbackQuestionsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.origin != null && message.hasOwnProperty("origin"))
+                        switch (message.origin) {
+                        default:
+                            return "origin: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
+                    if (message.user != null && message.hasOwnProperty("user"))
+                        if (!$util.isString(message.user))
+                            return "user: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetFeedbackQuestionsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.GetFeedbackQuestionsRequest} GetFeedbackQuestionsRequest
+                 */
+                GetFeedbackQuestionsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.GetFeedbackQuestionsRequest)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.GetFeedbackQuestionsRequest();
+                    switch (object.origin) {
+                    case "ORIGIN_UNSPECIFIED":
+                    case 0:
+                        message.origin = 0;
+                        break;
+                    case "HEADER":
+                    case 1:
+                        message.origin = 1;
+                        break;
+                    case "WIZARD":
+                    case 2:
+                        message.origin = 2;
+                        break;
+                    }
+                    if (object.user != null)
+                        message.user = String(object.user);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetFeedbackQuestionsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsRequest
+                 * @static
+                 * @param {clutch.feedback.v1.GetFeedbackQuestionsRequest} message GetFeedbackQuestionsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetFeedbackQuestionsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.origin = options.enums === String ? "ORIGIN_UNSPECIFIED" : 0;
+                        object.user = "";
+                    }
+                    if (message.origin != null && message.hasOwnProperty("origin"))
+                        object.origin = options.enums === String ? $root.clutch.feedback.v1.Origin[message.origin] : message.origin;
+                    if (message.user != null && message.hasOwnProperty("user"))
+                        object.user = message.user;
+                    return object;
+                };
+
+                /**
+                 * Converts this GetFeedbackQuestionsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetFeedbackQuestionsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetFeedbackQuestionsRequest;
+            })();
+
+            v1.GetFeedbackQuestionsResponse = (function() {
+
+                /**
+                 * Properties of a GetFeedbackQuestionsResponse.
+                 * @memberof clutch.feedback.v1
+                 * @interface IGetFeedbackQuestionsResponse
+                 * @property {string|null} [question] GetFeedbackQuestionsResponse question
+                 * @property {string|null} [freeformQuestion] GetFeedbackQuestionsResponse freeformQuestion
+                 * @property {clutch.feedback.v1.IRatingOptions|null} [options] GetFeedbackQuestionsResponse options
+                 * @property {boolean|null} [show] GetFeedbackQuestionsResponse show
+                 */
+
+                /**
+                 * Constructs a new GetFeedbackQuestionsResponse.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a GetFeedbackQuestionsResponse.
+                 * @implements IGetFeedbackQuestionsResponse
+                 * @constructor
+                 * @param {clutch.feedback.v1.IGetFeedbackQuestionsResponse=} [properties] Properties to set
+                 */
+                function GetFeedbackQuestionsResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetFeedbackQuestionsResponse question.
+                 * @member {string} question
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
+                 * @instance
+                 */
+                GetFeedbackQuestionsResponse.prototype.question = "";
+
+                /**
+                 * GetFeedbackQuestionsResponse freeformQuestion.
+                 * @member {string} freeformQuestion
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
+                 * @instance
+                 */
+                GetFeedbackQuestionsResponse.prototype.freeformQuestion = "";
+
+                /**
+                 * GetFeedbackQuestionsResponse options.
+                 * @member {clutch.feedback.v1.IRatingOptions|null|undefined} options
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
+                 * @instance
+                 */
+                GetFeedbackQuestionsResponse.prototype.options = null;
+
+                /**
+                 * GetFeedbackQuestionsResponse show.
+                 * @member {boolean} show
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
+                 * @instance
+                 */
+                GetFeedbackQuestionsResponse.prototype.show = false;
+
+                /**
+                 * Verifies a GetFeedbackQuestionsResponse message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetFeedbackQuestionsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.question != null && message.hasOwnProperty("question"))
+                        if (!$util.isString(message.question))
+                            return "question: string expected";
+                    if (message.freeformQuestion != null && message.hasOwnProperty("freeformQuestion"))
+                        if (!$util.isString(message.freeformQuestion))
+                            return "freeformQuestion: string expected";
+                    if (message.options != null && message.hasOwnProperty("options")) {
+                        let error = $root.clutch.feedback.v1.RatingOptions.verify(message.options);
+                        if (error)
+                            return "options." + error;
+                    }
+                    if (message.show != null && message.hasOwnProperty("show"))
+                        if (typeof message.show !== "boolean")
+                            return "show: boolean expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetFeedbackQuestionsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.GetFeedbackQuestionsResponse} GetFeedbackQuestionsResponse
+                 */
+                GetFeedbackQuestionsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.GetFeedbackQuestionsResponse)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.GetFeedbackQuestionsResponse();
+                    if (object.question != null)
+                        message.question = String(object.question);
+                    if (object.freeformQuestion != null)
+                        message.freeformQuestion = String(object.freeformQuestion);
+                    if (object.options != null) {
+                        if (typeof object.options !== "object")
+                            throw TypeError(".clutch.feedback.v1.GetFeedbackQuestionsResponse.options: object expected");
+                        message.options = $root.clutch.feedback.v1.RatingOptions.fromObject(object.options);
+                    }
+                    if (object.show != null)
+                        message.show = Boolean(object.show);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetFeedbackQuestionsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
+                 * @static
+                 * @param {clutch.feedback.v1.GetFeedbackQuestionsResponse} message GetFeedbackQuestionsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetFeedbackQuestionsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.question = "";
+                        object.freeformQuestion = "";
+                        object.options = null;
+                        object.show = false;
+                    }
+                    if (message.question != null && message.hasOwnProperty("question"))
+                        object.question = message.question;
+                    if (message.freeformQuestion != null && message.hasOwnProperty("freeformQuestion"))
+                        object.freeformQuestion = message.freeformQuestion;
+                    if (message.options != null && message.hasOwnProperty("options"))
+                        object.options = $root.clutch.feedback.v1.RatingOptions.toObject(message.options, options);
+                    if (message.show != null && message.hasOwnProperty("show"))
+                        object.show = message.show;
+                    return object;
+                };
+
+                /**
+                 * Converts this GetFeedbackQuestionsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.GetFeedbackQuestionsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetFeedbackQuestionsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetFeedbackQuestionsResponse;
+            })();
+
+            return v1;
+        })();
+
+        return feedback;
+    })();
+
     clutch.healthcheck = (function() {
 
         /**
