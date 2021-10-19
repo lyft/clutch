@@ -107,12 +107,15 @@ func ensureUnique(cfg *gatewayv1.Config) error {
 		if _, seen := mods[m.GetName()]; seen {
 			return fmt.Errorf("duplicate module found: %s", m.GetName())
 		}
+		mods[m.GetName()] = true
 	}
+
 	rlvs := make(map[string]bool)
 	for _, r := range cfg.GetResolvers() {
 		if _, seen := rlvs[r.GetName()]; seen {
 			return fmt.Errorf("duplicate resolver found: %s", r.GetName())
 		}
+		rlvs[r.GetName()] = true
 	}
 	return nil
 }

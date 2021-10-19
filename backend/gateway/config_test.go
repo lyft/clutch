@@ -19,6 +19,58 @@ import (
 	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
 
+func TestEnsureUnique(t *testing.T) {
+	tests := []struct {
+		c   *gatewayv1.Config
+		err error
+	}{
+		{
+			c: &gatewayv1.Config{
+				Services: []*gatewayv1.Service{
+					{Name: "foo"},
+					{Name: "foo"},
+				},
+			},
+			err: fmt.Errorf("duplicate service found: foo"),
+		},
+		{
+			c: &gatewayv1.Config{
+				Modules: []*gatewayv1.Module{
+					{Name: "foo"},
+					{Name: "foo"},
+				},
+			},
+			err: fmt.Errorf("duplicate module found: foo"),
+		},
+		{
+			c: &gatewayv1.Config{
+				Resolvers: []*gatewayv1.Resolver{
+					{Name: "foo"},
+					{Name: "foo"},
+				},
+			},
+			err: fmt.Errorf("duplicate resolver found: foo"),
+		},
+		{
+			c: &gatewayv1.Config{
+				Services:  []*gatewayv1.Service{{Name: "foo"}},
+				Modules:   []*gatewayv1.Module{{Name: "foo"}},
+				Resolvers: []*gatewayv1.Resolver{{Name: "foo"}},
+			},
+			err: nil,
+		},
+	}
+
+	for idx, tt := range tests {
+		tc := tt // Pin!
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
+			err := ensureUnique(tc.c)
+			assert.Equal(t, tc.err, err)
+		})
+	}
+}
+
 func tmpFile(filename, content string) *os.File {
 	f, err := ioutil.TempFile(".", filename)
 	if err != nil {
