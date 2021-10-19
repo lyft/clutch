@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package clutch.feedback.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/feedback/v1;feedbackv1";
+
+import "google/api/annotations.proto";
+import "api/v1/annotations.proto";
+import "validate/validate.proto";
+
+service FeedbackAPI {
+  rpc GetFeedbackQuestions(GetFeedbackQuestionsRequest) returns (GetFeedbackQuestionsResponse) {
+    option (google.api.http) = {
+      post : "/v1/feedback/getFeedbackQuestions"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+enum Origin {
+  // currently these are the supported placements for feedback
+  ORIGIN_UNSPECIFIED = 0;
+  HEADER = 1;
+  WIZARD = 2;
+}
+
+message RatingOptions {
+  // the text (i.e. "bad", "ok", "great") for each value in the rating system
+  // currently a three-point rating system (and UI designs) are supported
+  string one = 1;
+  string two = 2;
+  string three = 3;
+}
+
+message GetFeedbackQuestionsRequest {
+  // the origin of the feedback entry which maps to a origin-specific question
+  Origin origin = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
+  // future: have rules on whether a user should be prompted for feedback
+  string user = 2;
+}
+
+message GetFeedbackQuestionsResponse {
+  // the question for the rating options
+  string question = 1;
+  // the prompt for the freeform feedback
+  string freeform_question = 2;
+  // feedback options to present to the user (i.e. "bad", "ok", "great")
+  RatingOptions options = 3;
+  // future: have rules on whether a user should see the feedback questions
+  bool show = 4;
+}
