@@ -143,9 +143,9 @@ type GetFeedbackQuestionsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// the origin of the feedback entry which maps to a origin-specific question
+	// the origin of the feedback entry which gets mapped to origin-specific questions
 	Origin Origin `protobuf:"varint,1,opt,name=origin,proto3,enum=clutch.feedback.v1.Origin" json:"origin,omitempty"`
-	// future: have rules on whether a user should be prompted for feedback
+	// future: have rules on whether a user should see the feedback questions
 	User string `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
 }
 

@@ -34,9 +34,9 @@ message RatingOptions {
 }
 
 message GetFeedbackQuestionsRequest {
-  // the origin of the feedback entry which maps to a origin-specific question
+  // the origin of the feedback entry which gets mapped to origin-specific questions
   Origin origin = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
-  // future: have rules on whether a user should be prompted for feedback
+  // future: have rules on whether a user should see the feedback questions
   string user = 2;
 }
 
