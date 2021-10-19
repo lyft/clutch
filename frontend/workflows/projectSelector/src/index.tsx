@@ -6,8 +6,8 @@ import {
   useDashState,
   useTimelineState,
   useTimelineUpdater,
-  useTimeSelectorState,
-  useTimeSelectorUpdater,
+  useTimeRangeState,
+  useTimeRangeUpdater,
 } from "./dash-hooks";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
@@ -40,7 +40,7 @@ export type {
   TimeData,
   TimeDataUpdate,
   ProjectToPointsMap,
-  TimeSelectorState,
+  TimeRangeState,
 } from "./types";
 export {
   Card,
@@ -48,6 +48,6 @@ export {
   useDashState,
   useTimelineState,
   useTimelineUpdater,
-  useTimeSelectorState,
-  useTimeSelectorUpdater,
+  useTimeRangeState,
+  useTimeRangeUpdater,
 };

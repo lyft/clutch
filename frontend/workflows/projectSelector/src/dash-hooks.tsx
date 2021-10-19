@@ -6,8 +6,8 @@ import type {
   TimeDataUpdate,
   TimelineAction,
   TimelineState,
-  TimeSelectorAction,
-  TimeSelectorState,
+  TimeRangeAction,
+  TimeRangeState,
 } from "./types";
 
 // Contexts for project selector
@@ -23,11 +23,9 @@ export const TimelineDispatchContext = React.createContext<
 >(undefined);
 
 // Contexts for time selector
-export const TimeSelectorStateContext = React.createContext<TimeSelectorState | undefined>(
-  undefined
-);
-export const TimeSelectorDispatchContext = React.createContext<
-  ((action: TimeSelectorAction) => void) | undefined
+export const TimeRangeStateContext = React.createContext<TimeRangeState | undefined>(undefined);
+export const TimeRangeDispatchContext = React.createContext<
+  ((action: TimeRangeAction) => void) | undefined
 >(undefined);
 
 // project selector hooks
@@ -83,27 +81,27 @@ export const useTimelineState = (): TimelineState => {
 };
 
 // timestamp selection hooks
-type useTimeSelectorReturn = {
-  updateTimeSelection: (state: TimeSelectorState) => void;
+type useTimeRangeReturn = {
+  updateTimeRange: (state: TimeRangeState) => void;
 };
 
 // hook for writing
-export const useTimeSelectorUpdater = (): useTimeSelectorReturn => {
-  const dispatch = React.useContext(TimeSelectorDispatchContext);
+export const useTimeRangeUpdater = (): useTimeRangeReturn => {
+  const dispatch = React.useContext(TimeRangeDispatchContext);
 
   return {
-    updateTimeSelection: (state: TimeSelectorState) => {
+    updateTimeRange: (state: TimeRangeState) => {
       dispatch && dispatch({ type: "UPDATE", payload: state });
     },
   };
 };
 
 // hook for reading
-export const useTimeSelectorState = (): TimeSelectorState => {
-  const value = React.useContext<TimeSelectorState | undefined>(TimeSelectorStateContext);
+export const useTimeRangeState = (): TimeRangeState => {
+  const value = React.useContext<TimeRangeState | undefined>(TimeRangeStateContext);
   if (!value) {
     throw new Error(
-      "useTimeSelectorState was invoked outside of a valid context, check that it is a child of the TimeSelector component"
+      "useTimeRangeState was invoked outside of a valid context, check that it is a child of the TimeRange component"
     );
   }
   return value;

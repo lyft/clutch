@@ -154,6 +154,10 @@ const deriveStateData = (state: State): State => {
   return newState;
 };
 
+const hoursToMs = (hours: number): number => {
+  return hours * 60 * 60 * 1000;
+};
+
 export {
   deriveStateData,
   deriveSwitchStatus,
@@ -164,4 +168,5 @@ export {
   updateGroupstate,
   useDispatch,
   useReducerState,
+  hoursToMs,
 };
