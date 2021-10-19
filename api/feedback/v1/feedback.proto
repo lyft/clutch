@@ -8,9 +8,9 @@ import "google/api/annotations.proto";
 import "api/v1/annotations.proto";
 
 service FeedbackAPI {
-  rpc GetFeedbackQuestions(GetFeedbackQuestionsRequest) returns (GetFeedbackQuestionsResponse) {
+  rpc GetQuestions(GetQuestionsRequest) returns (GetQuestionsResponse) {
     option (google.api.http) = {
-      post : "/v1/feedback/getFeedbackQuestions"
+      post : "/v1/feedback/getQuestions"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
@@ -24,7 +24,7 @@ enum Origin {
   WIZARD = 2;
 }
 
-message GetFeedbackQuestionsRequest {
+message GetQuestionsRequest {
   // the origin of the feedback entry which gets mapped to a origin-specific question
   // multiple origins can be passed in the request to return their specific question
   repeated Origin origins = 1;
@@ -46,12 +46,12 @@ message OriginQuestion {
   // the prompt for the freeform feedback
   string freeform_question = 2;
   // feedback options to present to the user (i.e. "bad", "ok", "great")
-  RatingOptions options = 3;
+  RatingOptions rating_options = 3;
   // future: have rules on whether a user should see the feedback question
   bool show = 4;
 }
 
-message GetFeedbackQuestionsResponse {
+message GetQuestionsResponse {
   // key will be the feedback origin name
   map<string, OriginQuestion> origin_question = 1;
 }

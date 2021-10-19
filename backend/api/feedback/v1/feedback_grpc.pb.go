@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FeedbackAPIClient interface {
-	GetFeedbackQuestions(ctx context.Context, in *GetFeedbackQuestionsRequest, opts ...grpc.CallOption) (*GetFeedbackQuestionsResponse, error)
+	GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*GetQuestionsResponse, error)
 }
 
 type feedbackAPIClient struct {
@@ -29,9 +29,9 @@ func NewFeedbackAPIClient(cc grpc.ClientConnInterface) FeedbackAPIClient {
 	return &feedbackAPIClient{cc}
 }
 
-func (c *feedbackAPIClient) GetFeedbackQuestions(ctx context.Context, in *GetFeedbackQuestionsRequest, opts ...grpc.CallOption) (*GetFeedbackQuestionsResponse, error) {
-	out := new(GetFeedbackQuestionsResponse)
-	err := c.cc.Invoke(ctx, "/clutch.feedback.v1.FeedbackAPI/GetFeedbackQuestions", in, out, opts...)
+func (c *feedbackAPIClient) GetQuestions(ctx context.Context, in *GetQuestionsRequest, opts ...grpc.CallOption) (*GetQuestionsResponse, error) {
+	out := new(GetQuestionsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.feedback.v1.FeedbackAPI/GetQuestions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,15 +42,15 @@ func (c *feedbackAPIClient) GetFeedbackQuestions(ctx context.Context, in *GetFee
 // All implementations should embed UnimplementedFeedbackAPIServer
 // for forward compatibility
 type FeedbackAPIServer interface {
-	GetFeedbackQuestions(context.Context, *GetFeedbackQuestionsRequest) (*GetFeedbackQuestionsResponse, error)
+	GetQuestions(context.Context, *GetQuestionsRequest) (*GetQuestionsResponse, error)
 }
 
 // UnimplementedFeedbackAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedFeedbackAPIServer struct {
 }
 
-func (UnimplementedFeedbackAPIServer) GetFeedbackQuestions(context.Context, *GetFeedbackQuestionsRequest) (*GetFeedbackQuestionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetFeedbackQuestions not implemented")
+func (UnimplementedFeedbackAPIServer) GetQuestions(context.Context, *GetQuestionsRequest) (*GetQuestionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQuestions not implemented")
 }
 
 // UnsafeFeedbackAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -64,20 +64,20 @@ func RegisterFeedbackAPIServer(s grpc.ServiceRegistrar, srv FeedbackAPIServer) {
 	s.RegisterService(&FeedbackAPI_ServiceDesc, srv)
 }
 
-func _FeedbackAPI_GetFeedbackQuestions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetFeedbackQuestionsRequest)
+func _FeedbackAPI_GetQuestions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetQuestionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FeedbackAPIServer).GetFeedbackQuestions(ctx, in)
+		return srv.(FeedbackAPIServer).GetQuestions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/clutch.feedback.v1.FeedbackAPI/GetFeedbackQuestions",
+		FullMethod: "/clutch.feedback.v1.FeedbackAPI/GetQuestions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FeedbackAPIServer).GetFeedbackQuestions(ctx, req.(*GetFeedbackQuestionsRequest))
+		return srv.(FeedbackAPIServer).GetQuestions(ctx, req.(*GetQuestionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -90,8 +90,8 @@ var FeedbackAPI_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*FeedbackAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetFeedbackQuestions",
-			Handler:    _FeedbackAPI_GetFeedbackQuestions_Handler,
+			MethodName: "GetQuestions",
+			Handler:    _FeedbackAPI_GetQuestions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

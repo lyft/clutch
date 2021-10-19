@@ -33,10 +33,10 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on GetFeedbackQuestionsRequest with the
-// rules defined in the proto definition for this message. If any rules are
+// Validate checks the field values on GetQuestionsRequest with the rules
+// defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *GetFeedbackQuestionsRequest) Validate() error {
+func (m *GetQuestionsRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -46,10 +46,9 @@ func (m *GetFeedbackQuestionsRequest) Validate() error {
 	return nil
 }
 
-// GetFeedbackQuestionsRequestValidationError is the validation error returned
-// by GetFeedbackQuestionsRequest.Validate if the designated constraints
-// aren't met.
-type GetFeedbackQuestionsRequestValidationError struct {
+// GetQuestionsRequestValidationError is the validation error returned by
+// GetQuestionsRequest.Validate if the designated constraints aren't met.
+type GetQuestionsRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -57,24 +56,24 @@ type GetFeedbackQuestionsRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetFeedbackQuestionsRequestValidationError) Field() string { return e.field }
+func (e GetQuestionsRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetFeedbackQuestionsRequestValidationError) Reason() string { return e.reason }
+func (e GetQuestionsRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetFeedbackQuestionsRequestValidationError) Cause() error { return e.cause }
+func (e GetQuestionsRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetFeedbackQuestionsRequestValidationError) Key() bool { return e.key }
+func (e GetQuestionsRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetFeedbackQuestionsRequestValidationError) ErrorName() string {
-	return "GetFeedbackQuestionsRequestValidationError"
+func (e GetQuestionsRequestValidationError) ErrorName() string {
+	return "GetQuestionsRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetFeedbackQuestionsRequestValidationError) Error() string {
+func (e GetQuestionsRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -86,14 +85,14 @@ func (e GetFeedbackQuestionsRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetFeedbackQuestionsRequest.%s: %s%s",
+		"invalid %sGetQuestionsRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetFeedbackQuestionsRequestValidationError{}
+var _ error = GetQuestionsRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -101,7 +100,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetFeedbackQuestionsRequestValidationError{}
+} = GetQuestionsRequestValidationError{}
 
 // Validate checks the field values on RatingOptions with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
@@ -186,10 +185,10 @@ func (m *OriginQuestion) Validate() error {
 
 	// no validation rules for FreeformQuestion
 
-	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetRatingOptions()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return OriginQuestionValidationError{
-				field:  "Options",
+				field:  "RatingOptions",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -255,10 +254,10 @@ var _ interface {
 	ErrorName() string
 } = OriginQuestionValidationError{}
 
-// Validate checks the field values on GetFeedbackQuestionsResponse with the
-// rules defined in the proto definition for this message. If any rules are
+// Validate checks the field values on GetQuestionsResponse with the rules
+// defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *GetFeedbackQuestionsResponse) Validate() error {
+func (m *GetQuestionsResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -270,7 +269,7 @@ func (m *GetFeedbackQuestionsResponse) Validate() error {
 
 		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetFeedbackQuestionsResponseValidationError{
+				return GetQuestionsResponseValidationError{
 					field:  fmt.Sprintf("OriginQuestion[%v]", key),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -283,10 +282,9 @@ func (m *GetFeedbackQuestionsResponse) Validate() error {
 	return nil
 }
 
-// GetFeedbackQuestionsResponseValidationError is the validation error returned
-// by GetFeedbackQuestionsResponse.Validate if the designated constraints
-// aren't met.
-type GetFeedbackQuestionsResponseValidationError struct {
+// GetQuestionsResponseValidationError is the validation error returned by
+// GetQuestionsResponse.Validate if the designated constraints aren't met.
+type GetQuestionsResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -294,24 +292,24 @@ type GetFeedbackQuestionsResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetFeedbackQuestionsResponseValidationError) Field() string { return e.field }
+func (e GetQuestionsResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetFeedbackQuestionsResponseValidationError) Reason() string { return e.reason }
+func (e GetQuestionsResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetFeedbackQuestionsResponseValidationError) Cause() error { return e.cause }
+func (e GetQuestionsResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetFeedbackQuestionsResponseValidationError) Key() bool { return e.key }
+func (e GetQuestionsResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetFeedbackQuestionsResponseValidationError) ErrorName() string {
-	return "GetFeedbackQuestionsResponseValidationError"
+func (e GetQuestionsResponseValidationError) ErrorName() string {
+	return "GetQuestionsResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetFeedbackQuestionsResponseValidationError) Error() string {
+func (e GetQuestionsResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -323,14 +321,14 @@ func (e GetFeedbackQuestionsResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetFeedbackQuestionsResponse.%s: %s%s",
+		"invalid %sGetQuestionsResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetFeedbackQuestionsResponseValidationError{}
+var _ error = GetQuestionsResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -338,4 +336,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetFeedbackQuestionsResponseValidationError{}
+} = GetQuestionsResponseValidationError{}
