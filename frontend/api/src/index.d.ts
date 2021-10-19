@@ -12149,6 +12149,60 @@ export namespace clutch {
                 WIZARD = 2
             }
 
+            /** Properties of a GetFeedbackQuestionsRequest. */
+            interface IGetFeedbackQuestionsRequest {
+
+                /** GetFeedbackQuestionsRequest origins */
+                origins?: (clutch.feedback.v1.Origin[]|null);
+
+                /** GetFeedbackQuestionsRequest user */
+                user?: (string|null);
+            }
+
+            /** Represents a GetFeedbackQuestionsRequest. */
+            class GetFeedbackQuestionsRequest implements IGetFeedbackQuestionsRequest {
+
+                /**
+                 * Constructs a new GetFeedbackQuestionsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IGetFeedbackQuestionsRequest);
+
+                /** GetFeedbackQuestionsRequest origins. */
+                public origins: clutch.feedback.v1.Origin[];
+
+                /** GetFeedbackQuestionsRequest user. */
+                public user: string;
+
+                /**
+                 * Verifies a GetFeedbackQuestionsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetFeedbackQuestionsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetFeedbackQuestionsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetFeedbackQuestionsRequest;
+
+                /**
+                 * Creates a plain object from a GetFeedbackQuestionsRequest message. Also converts values to other types if specified.
+                 * @param message GetFeedbackQuestionsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.GetFeedbackQuestionsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetFeedbackQuestionsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a RatingOptions. */
             interface IRatingOptions {
 
@@ -12209,55 +12263,61 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a GetFeedbackQuestionsRequest. */
-            interface IGetFeedbackQuestionsRequest {
+            /** Properties of an OriginQuestion. */
+            interface IOriginQuestion {
 
-                /** GetFeedbackQuestionsRequest origin */
-                origin?: (clutch.feedback.v1.Origin|null);
+                /** OriginQuestion question */
+                question?: (string|null);
 
-                /** GetFeedbackQuestionsRequest user */
-                user?: (string|null);
+                /** OriginQuestion freeformQuestion */
+                freeformQuestion?: (string|null);
+
+                /** OriginQuestion options */
+                options?: (clutch.feedback.v1.IRatingOptions|null);
             }
 
-            /** Represents a GetFeedbackQuestionsRequest. */
-            class GetFeedbackQuestionsRequest implements IGetFeedbackQuestionsRequest {
+            /** Represents an OriginQuestion. */
+            class OriginQuestion implements IOriginQuestion {
 
                 /**
-                 * Constructs a new GetFeedbackQuestionsRequest.
+                 * Constructs a new OriginQuestion.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.feedback.v1.IGetFeedbackQuestionsRequest);
+                constructor(properties?: clutch.feedback.v1.IOriginQuestion);
 
-                /** GetFeedbackQuestionsRequest origin. */
-                public origin: clutch.feedback.v1.Origin;
+                /** OriginQuestion question. */
+                public question: string;
 
-                /** GetFeedbackQuestionsRequest user. */
-                public user: string;
+                /** OriginQuestion freeformQuestion. */
+                public freeformQuestion: string;
+
+                /** OriginQuestion options. */
+                public options?: (clutch.feedback.v1.IRatingOptions|null);
 
                 /**
-                 * Verifies a GetFeedbackQuestionsRequest message.
+                 * Verifies an OriginQuestion message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a GetFeedbackQuestionsRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates an OriginQuestion message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns GetFeedbackQuestionsRequest
+                 * @returns OriginQuestion
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetFeedbackQuestionsRequest;
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.OriginQuestion;
 
                 /**
-                 * Creates a plain object from a GetFeedbackQuestionsRequest message. Also converts values to other types if specified.
-                 * @param message GetFeedbackQuestionsRequest
+                 * Creates a plain object from an OriginQuestion message. Also converts values to other types if specified.
+                 * @param message OriginQuestion
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.feedback.v1.GetFeedbackQuestionsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.feedback.v1.OriginQuestion, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this GetFeedbackQuestionsRequest to JSON.
+                 * Converts this OriginQuestion to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -12266,14 +12326,8 @@ export namespace clutch {
             /** Properties of a GetFeedbackQuestionsResponse. */
             interface IGetFeedbackQuestionsResponse {
 
-                /** GetFeedbackQuestionsResponse question */
-                question?: (string|null);
-
-                /** GetFeedbackQuestionsResponse freeformQuestion */
-                freeformQuestion?: (string|null);
-
-                /** GetFeedbackQuestionsResponse options */
-                options?: (clutch.feedback.v1.IRatingOptions|null);
+                /** GetFeedbackQuestionsResponse originQuestion */
+                originQuestion?: ({ [k: string]: clutch.feedback.v1.IOriginQuestion }|null);
 
                 /** GetFeedbackQuestionsResponse show */
                 show?: (boolean|null);
@@ -12288,14 +12342,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.feedback.v1.IGetFeedbackQuestionsResponse);
 
-                /** GetFeedbackQuestionsResponse question. */
-                public question: string;
-
-                /** GetFeedbackQuestionsResponse freeformQuestion. */
-                public freeformQuestion: string;
-
-                /** GetFeedbackQuestionsResponse options. */
-                public options?: (clutch.feedback.v1.IRatingOptions|null);
+                /** GetFeedbackQuestionsResponse originQuestion. */
+                public originQuestion: { [k: string]: clutch.feedback.v1.IOriginQuestion };
 
                 /** GetFeedbackQuestionsResponse show. */
                 public show: boolean;

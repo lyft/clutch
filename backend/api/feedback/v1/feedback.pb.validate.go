@@ -33,6 +33,76 @@ var (
 	_ = anypb.Any{}
 )
 
+// Validate checks the field values on GetFeedbackQuestionsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetFeedbackQuestionsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for User
+
+	return nil
+}
+
+// GetFeedbackQuestionsRequestValidationError is the validation error returned
+// by GetFeedbackQuestionsRequest.Validate if the designated constraints
+// aren't met.
+type GetFeedbackQuestionsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetFeedbackQuestionsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetFeedbackQuestionsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetFeedbackQuestionsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetFeedbackQuestionsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetFeedbackQuestionsRequestValidationError) ErrorName() string {
+	return "GetFeedbackQuestionsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetFeedbackQuestionsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetFeedbackQuestionsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetFeedbackQuestionsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetFeedbackQuestionsRequestValidationError{}
+
 // Validate checks the field values on RatingOptions with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
@@ -104,37 +174,34 @@ var _ interface {
 	ErrorName() string
 } = RatingOptionsValidationError{}
 
-// Validate checks the field values on GetFeedbackQuestionsRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *GetFeedbackQuestionsRequest) Validate() error {
+// Validate checks the field values on OriginQuestion with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *OriginQuestion) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if _, ok := _GetFeedbackQuestionsRequest_Origin_NotInLookup[m.GetOrigin()]; ok {
-		return GetFeedbackQuestionsRequestValidationError{
-			field:  "Origin",
-			reason: "value must not be in list [0]",
+	// no validation rules for Question
+
+	// no validation rules for FreeformQuestion
+
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OriginQuestionValidationError{
+				field:  "Options",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
-
-	if _, ok := Origin_name[int32(m.GetOrigin())]; !ok {
-		return GetFeedbackQuestionsRequestValidationError{
-			field:  "Origin",
-			reason: "value must be one of the defined enum values",
-		}
-	}
-
-	// no validation rules for User
 
 	return nil
 }
 
-// GetFeedbackQuestionsRequestValidationError is the validation error returned
-// by GetFeedbackQuestionsRequest.Validate if the designated constraints
-// aren't met.
-type GetFeedbackQuestionsRequestValidationError struct {
+// OriginQuestionValidationError is the validation error returned by
+// OriginQuestion.Validate if the designated constraints aren't met.
+type OriginQuestionValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -142,24 +209,22 @@ type GetFeedbackQuestionsRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetFeedbackQuestionsRequestValidationError) Field() string { return e.field }
+func (e OriginQuestionValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetFeedbackQuestionsRequestValidationError) Reason() string { return e.reason }
+func (e OriginQuestionValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetFeedbackQuestionsRequestValidationError) Cause() error { return e.cause }
+func (e OriginQuestionValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetFeedbackQuestionsRequestValidationError) Key() bool { return e.key }
+func (e OriginQuestionValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetFeedbackQuestionsRequestValidationError) ErrorName() string {
-	return "GetFeedbackQuestionsRequestValidationError"
-}
+func (e OriginQuestionValidationError) ErrorName() string { return "OriginQuestionValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetFeedbackQuestionsRequestValidationError) Error() string {
+func (e OriginQuestionValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -171,14 +236,14 @@ func (e GetFeedbackQuestionsRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetFeedbackQuestionsRequest.%s: %s%s",
+		"invalid %sOriginQuestion.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetFeedbackQuestionsRequestValidationError{}
+var _ error = OriginQuestionValidationError{}
 
 var _ interface {
 	Field() string
@@ -186,11 +251,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetFeedbackQuestionsRequestValidationError{}
-
-var _GetFeedbackQuestionsRequest_Origin_NotInLookup = map[Origin]struct{}{
-	0: {},
-}
+} = OriginQuestionValidationError{}
 
 // Validate checks the field values on GetFeedbackQuestionsResponse with the
 // rules defined in the proto definition for this message. If any rules are
@@ -200,18 +261,21 @@ func (m *GetFeedbackQuestionsResponse) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Question
+	for key, val := range m.GetOriginQuestion() {
+		_ = val
 
-	// no validation rules for FreeformQuestion
+		// no validation rules for OriginQuestion[key]
 
-	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return GetFeedbackQuestionsResponseValidationError{
-				field:  "Options",
-				reason: "embedded message failed validation",
-				cause:  err,
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetFeedbackQuestionsResponseValidationError{
+					field:  fmt.Sprintf("OriginQuestion[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
 			}
 		}
+
 	}
 
 	// no validation rules for Show

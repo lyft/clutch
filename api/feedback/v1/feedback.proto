@@ -6,7 +6,6 @@ option go_package = "github.com/lyft/clutch/backend/api/feedback/v1;feedbackv1";
 
 import "google/api/annotations.proto";
 import "api/v1/annotations.proto";
-import "validate/validate.proto";
 
 service FeedbackAPI {
   rpc GetFeedbackQuestions(GetFeedbackQuestionsRequest) returns (GetFeedbackQuestionsResponse) {
@@ -25,6 +24,14 @@ enum Origin {
   WIZARD = 2;
 }
 
+message GetFeedbackQuestionsRequest {
+  // the origin of the feedback entry which gets mapped to origin-specific questions
+  // multiple origins can be passed in the request to return their specific questions
+  repeated Origin origins = 1;
+  // future: have rules on whether a user should see the feedback questions
+  string user = 2;
+}
+
 message RatingOptions {
   // the text (i.e. "bad", "ok", "great") for each value in the rating system
   // currently a three-point rating system (and UI designs) are supported
@@ -33,20 +40,17 @@ message RatingOptions {
   string three = 3;
 }
 
-message GetFeedbackQuestionsRequest {
-  // the origin of the feedback entry which gets mapped to origin-specific questions
-  Origin origin = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
-  // future: have rules on whether a user should see the feedback questions
-  string user = 2;
-}
-
-message GetFeedbackQuestionsResponse {
+message OriginQuestion {
   // the question for the rating options
   string question = 1;
   // the prompt for the freeform feedback
   string freeform_question = 2;
   // feedback options to present to the user (i.e. "bad", "ok", "great")
   RatingOptions options = 3;
-  // future: have rules on whether a user should see the feedback questions
-  bool show = 4;
+}
+
+message GetFeedbackQuestionsResponse {
+  // key will be the feedback origin name
+  map<string, OriginQuestion> origin_question = 1;
+  bool show = 2;
 }
