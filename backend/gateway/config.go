@@ -94,32 +94,25 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 
 // Ensure gateway config has unique modules and service entries
 func ensureUnique(cfg *gatewayv1.Config) error {
-	svcs := make([]string, len(cfg.GetServices()))
+	svcs := make(map[string]bool)
 	for _, s := range cfg.GetServices() {
-		for _, svc := range svcs {
-			if svc == s.GetName() {
-				return fmt.Errorf("duplicate service found: %s", svc)
-			}
+		if _, seen := svcs[s.GetName()]; seen {
+			return fmt.Errorf("duplicate service found: %s", s.GetName())
 		}
-		svcs = append(svcs, s.GetName())
+		svcs[s.GetName()] = true
 	}
-	mods := make([]string, len(cfg.GetModules()))
+
+	mods := make(map[string]bool)
 	for _, m := range cfg.GetModules() {
-		for _, mod := range mods {
-			if mod == m.GetName() {
-				return fmt.Errorf("duplicate module found: %s", mod)
-			}
+		if _, seen := mods[m.GetName()]; seen {
+			return fmt.Errorf("duplicate module found: %s", m.GetName())
 		}
-		mods = append(mods, m.GetName())
 	}
-	rlvs := make([]string, len(cfg.GetResolvers()))
+	rlvs := make(map[string]bool)
 	for _, r := range cfg.GetResolvers() {
-		for _, rlv := range rlvs {
-			if rlv == r.GetName() {
-				return fmt.Errorf("duplicate resolver found: %s", rlv)
-			}
+		if _, seen := rlvs[r.GetName()]; seen {
+			return fmt.Errorf("duplicate resolver found: %s", r.GetName())
 		}
-		rlvs = append(rlvs, r.GetName())
 	}
 	return nil
 }
