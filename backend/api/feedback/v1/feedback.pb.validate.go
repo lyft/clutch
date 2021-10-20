@@ -41,7 +41,38 @@ func (m *GetQuestionsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for User
+	if len(m.GetOrigins()) < 1 {
+		return GetQuestionsRequestValidationError{
+			field:  "Origins",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetOrigins() {
+		_, _ = idx, item
+
+		if _, ok := _GetQuestionsRequest_Origins_NotInLookup[item]; ok {
+			return GetQuestionsRequestValidationError{
+				field:  fmt.Sprintf("Origins[%v]", idx),
+				reason: "value must not be in list [0]",
+			}
+		}
+
+		if _, ok := Origin_name[int32(item)]; !ok {
+			return GetQuestionsRequestValidationError{
+				field:  fmt.Sprintf("Origins[%v]", idx),
+				reason: "value must be one of the defined enum values",
+			}
+		}
+
+	}
+
+	if len(m.GetUser()) < 1 {
+		return GetQuestionsRequestValidationError{
+			field:  "User",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	return nil
 }
@@ -101,6 +132,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetQuestionsRequestValidationError{}
+
+var _GetQuestionsRequest_Origins_NotInLookup = map[Origin]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on RatingOptions with the rules defined in
 // the proto definition for this message. If any rules are violated, an error

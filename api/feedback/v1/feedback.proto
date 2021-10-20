@@ -6,6 +6,7 @@ option go_package = "github.com/lyft/clutch/backend/api/feedback/v1;feedbackv1";
 
 import "google/api/annotations.proto";
 import "api/v1/annotations.proto";
+import "validate/validate.proto";
 
 service FeedbackAPI {
   rpc GetQuestions(GetQuestionsRequest) returns (GetQuestionsResponse) {
@@ -27,9 +28,12 @@ enum Origin {
 message GetQuestionsRequest {
   // the origin of the feedback entry which gets mapped to a origin-specific question
   // multiple origins can be passed in the request to return their specific question
-  repeated Origin origins = 1;
+  repeated Origin origins = 1 [ (validate.rules).repeated = {
+    min_items : 1,
+    items : {enum : {defined_only : true, not_in : 0}}
+  } ];
   // future: have rules on whether a user should see the feedback questions
-  string user = 2;
+  string user = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message RatingOptions {
@@ -52,6 +56,6 @@ message OriginQuestion {
 }
 
 message GetQuestionsResponse {
-  // key will be the feedback origin name
+  // the key will be the feedback origin name
   map<string, OriginQuestion> origin_question = 1;
 }
