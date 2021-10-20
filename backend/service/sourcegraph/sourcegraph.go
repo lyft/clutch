@@ -82,13 +82,6 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, err
 }
 
 func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareCommitsRequest) (resp *sourcegraphv1.CompareCommitsResponse, err error) {
-	variables := map[string]interface{}{
-		"name": graphql.String(req.Repository),
-		"base": graphql.String(req.Base),
-		"head": graphql.String(req.Head),
-	}
-
-	query := &compareCommitsQuery
 	// TODO: Remove this when a fix has been landed to the upstream to fix the panic from index out of bounds
 	defer func() {
 		if r := recover(); r != nil {
@@ -97,6 +90,14 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 			err = errors.New("unsuccessful response from sourcegraph")
 		}
 	}()
+
+	variables := map[string]interface{}{
+		"name": graphql.String(req.Repository),
+		"base": graphql.String(req.Base),
+		"head": graphql.String(req.Head),
+	}
+
+	query := &compareCommitsQuery
 	e := c.gqlClient.Query(ctx, query, variables)
 	if e != nil {
 		c.log.Error("unsuccessful response from sourcegraph",
