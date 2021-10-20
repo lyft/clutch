@@ -12100,6 +12100,285 @@ export namespace clutch {
         }
     }
 
+    /** Namespace feedback. */
+    namespace feedback {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a FeedbackAPI */
+            class FeedbackAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new FeedbackAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetQuestions.
+                 * @param request GetQuestionsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetQuestionsResponse
+                 */
+                public getQuestions(request: clutch.feedback.v1.IGetQuestionsRequest, callback: clutch.feedback.v1.FeedbackAPI.GetQuestionsCallback): void;
+
+                /**
+                 * Calls GetQuestions.
+                 * @param request GetQuestionsRequest message or plain object
+                 * @returns Promise
+                 */
+                public getQuestions(request: clutch.feedback.v1.IGetQuestionsRequest): Promise<clutch.feedback.v1.GetQuestionsResponse>;
+            }
+
+            namespace FeedbackAPI {
+
+                /**
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#getQuestions}.
+                 * @param error Error, if any
+                 * @param [response] GetQuestionsResponse
+                 */
+                type GetQuestionsCallback = (error: (Error|null), response?: clutch.feedback.v1.GetQuestionsResponse) => void;
+            }
+
+            /** Origin enum. */
+            enum Origin {
+                ORIGIN_UNSPECIFIED = 0,
+                HEADER = 1,
+                WIZARD = 2
+            }
+
+            /** Properties of a GetQuestionsRequest. */
+            interface IGetQuestionsRequest {
+
+                /** GetQuestionsRequest origins */
+                origins?: (clutch.feedback.v1.Origin[]|null);
+
+                /** GetQuestionsRequest user */
+                user?: (string|null);
+            }
+
+            /** Represents a GetQuestionsRequest. */
+            class GetQuestionsRequest implements IGetQuestionsRequest {
+
+                /**
+                 * Constructs a new GetQuestionsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IGetQuestionsRequest);
+
+                /** GetQuestionsRequest origins. */
+                public origins: clutch.feedback.v1.Origin[];
+
+                /** GetQuestionsRequest user. */
+                public user: string;
+
+                /**
+                 * Verifies a GetQuestionsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetQuestionsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetQuestionsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetQuestionsRequest;
+
+                /**
+                 * Creates a plain object from a GetQuestionsRequest message. Also converts values to other types if specified.
+                 * @param message GetQuestionsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.GetQuestionsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetQuestionsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a RatingOptions. */
+            interface IRatingOptions {
+
+                /** RatingOptions one */
+                one?: (string|null);
+
+                /** RatingOptions two */
+                two?: (string|null);
+
+                /** RatingOptions three */
+                three?: (string|null);
+            }
+
+            /** Represents a RatingOptions. */
+            class RatingOptions implements IRatingOptions {
+
+                /**
+                 * Constructs a new RatingOptions.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IRatingOptions);
+
+                /** RatingOptions one. */
+                public one: string;
+
+                /** RatingOptions two. */
+                public two: string;
+
+                /** RatingOptions three. */
+                public three: string;
+
+                /**
+                 * Verifies a RatingOptions message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RatingOptions
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingOptions;
+
+                /**
+                 * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
+                 * @param message RatingOptions
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.RatingOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RatingOptions to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an OriginQuestion. */
+            interface IOriginQuestion {
+
+                /** OriginQuestion question */
+                question?: (string|null);
+
+                /** OriginQuestion freeformQuestion */
+                freeformQuestion?: (string|null);
+
+                /** OriginQuestion ratingOptions */
+                ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
+
+                /** OriginQuestion show */
+                show?: (boolean|null);
+            }
+
+            /** Represents an OriginQuestion. */
+            class OriginQuestion implements IOriginQuestion {
+
+                /**
+                 * Constructs a new OriginQuestion.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IOriginQuestion);
+
+                /** OriginQuestion question. */
+                public question: string;
+
+                /** OriginQuestion freeformQuestion. */
+                public freeformQuestion: string;
+
+                /** OriginQuestion ratingOptions. */
+                public ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
+
+                /** OriginQuestion show. */
+                public show: boolean;
+
+                /**
+                 * Verifies an OriginQuestion message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an OriginQuestion message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns OriginQuestion
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.OriginQuestion;
+
+                /**
+                 * Creates a plain object from an OriginQuestion message. Also converts values to other types if specified.
+                 * @param message OriginQuestion
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.OriginQuestion, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this OriginQuestion to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetQuestionsResponse. */
+            interface IGetQuestionsResponse {
+
+                /** GetQuestionsResponse originQuestion */
+                originQuestion?: ({ [k: string]: clutch.feedback.v1.IOriginQuestion }|null);
+            }
+
+            /** Represents a GetQuestionsResponse. */
+            class GetQuestionsResponse implements IGetQuestionsResponse {
+
+                /**
+                 * Constructs a new GetQuestionsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IGetQuestionsResponse);
+
+                /** GetQuestionsResponse originQuestion. */
+                public originQuestion: { [k: string]: clutch.feedback.v1.IOriginQuestion };
+
+                /**
+                 * Verifies a GetQuestionsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetQuestionsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetQuestionsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetQuestionsResponse;
+
+                /**
+                 * Creates a plain object from a GetQuestionsResponse message. Also converts values to other types if specified.
+                 * @param message GetQuestionsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.GetQuestionsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetQuestionsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
     /** Namespace healthcheck. */
     namespace healthcheck {
 
