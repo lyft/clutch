@@ -86,6 +86,8 @@ gateway:
   logger:
     pretty: true
     level: DEBUG
+modules:
+  - name: clutch.module.healthcheck
 `
 	bc := tmpFile("base-config-*.yaml", baseConfig)
 	defer os.Remove(bc.Name())
@@ -99,6 +101,8 @@ gateway:
       address: 0.0.0.0
       port: 8080
       secure: false
+modules:
+  - name: clutch.module.healthcheck
 `, bc.Name())
 
 	cc := tmpFile("clutch-config-*.yaml", config)
@@ -108,12 +112,14 @@ gateway:
 	var seenCfgs []string
 	consolidateConfigs(filepath.Dir(cc.Name()), filepath.Base(cc.Name()), &cfg, &Flags{Template: false}, &seenCfgs)
 
-	assert.Equal(t, true, cfg.GetGateway().GetLogger().GetPretty())
+	assert.True(t, cfg.GetGateway().GetLogger().GetPretty())
 	assert.Equal(t, gatewayv1.Logger_DEBUG, cfg.GetGateway().GetLogger().GetLevel())
 
 	assert.Equal(t, "0.0.0.0", cfg.GetGateway().GetListener().GetTcp().GetAddress())
 	assert.Equal(t, uint32(8080), cfg.GetGateway().GetListener().GetTcp().GetPort())
-	assert.Equal(t, false, cfg.GetGateway().GetListener().GetTcp().GetSecure())
+	assert.False(t, cfg.GetGateway().GetListener().GetTcp().GetSecure())
+
+	assert.NoError(t, ensureUnique(&cfg))
 }
 
 func TestConsolidateConfigsOverrides(t *testing.T) {
