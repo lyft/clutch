@@ -19,6 +19,9 @@ message Service {
   repeated AllowRequest allowed_requests = 3 [ (validate.rules).repeated = {min_items : 1} ];
   // Additional headers can be set such as auth
   map<string, string> headers = 4;
+  // The host header value to send in the Request's Host field. Context: https://github.com/golang/go/issues/29865. If the Host
+  // value is set in the header map, it gets ignored and so it needs to be set in the request's Host field instead.
+  string host_header = 5;
 }
 
 message AllowRequest {

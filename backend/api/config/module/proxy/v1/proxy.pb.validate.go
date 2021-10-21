@@ -157,6 +157,8 @@ func (m *Service) Validate() error {
 
 	// no validation rules for Headers
 
+	// no validation rules for HostHeader
+
 	return nil
 }
 

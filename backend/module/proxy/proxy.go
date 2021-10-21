@@ -40,7 +40,7 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 		for _, ar := range service.AllowedRequests {
 			_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, ar.Path))
 			if err != nil {
-				return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", service.Name)
+				return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
 			}
 		}
 	}
@@ -71,7 +71,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	isAllowed, err := isAllowedRequest(m.services, req.Service, req.Path, req.HttpMethod)
 	if err != nil {
 		m.logger.Error("Unable to parse the configured URL", zap.Error(err))
-		return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", req.Service)
+		return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", req.Service)
 	}
 
 	if !isAllowed {
@@ -96,7 +96,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, req.Path))
 	if err != nil {
 		m.logger.Error("Unable to parse the configured URL", zap.Error(err))
-		return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", service.Name)
+		return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
 	}
 
 	// Constructing the request object
@@ -104,6 +104,10 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		Method: req.HttpMethod,
 		URL:    parsedUrl,
 		Header: headers,
+	}
+
+	if service.HostHeader != "" {
+		request.Host = service.HostHeader
 	}
 
 	if req.Request != nil {

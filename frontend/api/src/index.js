@@ -18312,6 +18312,7 @@ export const clutch = $root.clutch = (() => {
                          * @property {string|null} [host] Service host
                          * @property {Array.<clutch.config.module.proxy.v1.IAllowRequest>|null} [allowedRequests] Service allowedRequests
                          * @property {Object.<string,string>|null} [headers] Service headers
+                         * @property {string|null} [hostHeader] Service hostHeader
                          */
 
                         /**
@@ -18364,6 +18365,14 @@ export const clutch = $root.clutch = (() => {
                         Service.prototype.headers = $util.emptyObject;
 
                         /**
+                         * Service hostHeader.
+                         * @member {string} hostHeader
+                         * @memberof clutch.config.module.proxy.v1.Service
+                         * @instance
+                         */
+                        Service.prototype.hostHeader = "";
+
+                        /**
                          * Verifies a Service message.
                          * @function verify
                          * @memberof clutch.config.module.proxy.v1.Service
@@ -18397,6 +18406,9 @@ export const clutch = $root.clutch = (() => {
                                     if (!$util.isString(message.headers[key[i]]))
                                         return "headers: string{k:string} expected";
                             }
+                            if (message.hostHeader != null && message.hasOwnProperty("hostHeader"))
+                                if (!$util.isString(message.hostHeader))
+                                    return "hostHeader: string expected";
                             return null;
                         };
 
@@ -18433,6 +18445,8 @@ export const clutch = $root.clutch = (() => {
                                 for (let keys = Object.keys(object.headers), i = 0; i < keys.length; ++i)
                                     message.headers[keys[i]] = String(object.headers[keys[i]]);
                             }
+                            if (object.hostHeader != null)
+                                message.hostHeader = String(object.hostHeader);
                             return message;
                         };
 
@@ -18456,6 +18470,7 @@ export const clutch = $root.clutch = (() => {
                             if (options.defaults) {
                                 object.name = "";
                                 object.host = "";
+                                object.hostHeader = "";
                             }
                             if (message.name != null && message.hasOwnProperty("name"))
                                 object.name = message.name;
@@ -18472,6 +18487,8 @@ export const clutch = $root.clutch = (() => {
                                 for (let j = 0; j < keys2.length; ++j)
                                     object.headers[keys2[j]] = message.headers[keys2[j]];
                             }
+                            if (message.hostHeader != null && message.hasOwnProperty("hostHeader"))
+                                object.hostHeader = message.hostHeader;
                             return object;
                         };
 

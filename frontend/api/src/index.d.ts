@@ -7705,6 +7705,9 @@ export namespace clutch {
 
                         /** Service headers */
                         headers?: ({ [k: string]: string }|null);
+
+                        /** Service hostHeader */
+                        hostHeader?: (string|null);
                     }
 
                     /** Represents a Service. */
@@ -7727,6 +7730,9 @@ export namespace clutch {
 
                         /** Service headers. */
                         public headers: { [k: string]: string };
+
+                        /** Service hostHeader. */
+                        public hostHeader: string;
 
                         /**
                          * Verifies a Service message.
