@@ -37,6 +37,7 @@ func generateServicesConfig(host string) []*proxyv1cfg.Service {
 				{Path: "/meow", Method: "GET"},
 				{Path: "/nom", Method: "POST"},
 			},
+			HostHeader: "woof",
 		},
 	}
 }
@@ -138,6 +139,38 @@ func TestRequestProxy(t *testing.T) {
 			shouldError:    false,
 			assertStatus:   200,
 			assertBodyData: structpbFromBody([]byte("{}")),
+		},
+		{
+			id: "Request with HostHeader provided in config",
+			request: &proxyv1.RequestProxyRequest{
+				Service:    "meow",
+				HttpMethod: "GET",
+				Path:       "/meow",
+			},
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				// assert that the host is the value provided in the config
+				assert.Equal(t, "woof", r.Host)
+				w.WriteHeader(200)
+			},
+			shouldError:  false,
+			assertStatus: 200,
+		},
+		{
+			id: "Request with no HostHeader provided in config",
+			request: &proxyv1.RequestProxyRequest{
+				Service:    "cat",
+				HttpMethod: "GET",
+				Path:       "/meow",
+			},
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				// no hostheader was provided in the config, so assert
+				// it's whatever gets sets by default (here it's localhost)
+				assert.Contains(t, r.Host, "127.0.0.1")
+
+				w.WriteHeader(200)
+			},
+			shouldError:  false,
+			assertStatus: 200,
 		},
 	}
 
