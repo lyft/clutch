@@ -81,8 +81,9 @@ type Service struct {
 	AllowedRequests []*AllowRequest `protobuf:"bytes,3,rep,name=allowed_requests,json=allowedRequests,proto3" json:"allowed_requests,omitempty"`
 	// Additional headers can be set such as auth
 	Headers map[string]string `protobuf:"bytes,4,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// The host header value to send in the Request's Host field. Context: https://github.com/golang/go/issues/29865. If the Host
-	// value is set in the header map, it gets ignored and so it needs to be set in the request's Host field instead.
+	// The host header value to send in the Request's Host field. Context: https://github.com/golang/go/issues/29865. If
+	// the Host value is set in the header map, it gets ignored and so it needs to be set in the request's Host field
+	// instead.
 	HostHeader string `protobuf:"bytes,5,opt,name=host_header,json=hostHeader,proto3" json:"host_header,omitempty"`
 }
 
