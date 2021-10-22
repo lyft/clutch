@@ -7649,11 +7649,11 @@ export namespace clutch {
                         /** Config origins */
                         origins?: (clutch.config.module.feedback.v1.IOriginQuestion[]|null);
 
-                        /** Config freeformQuestion */
-                        freeformQuestion?: (string|null);
+                        /** Config defaultFreeformQuestion */
+                        defaultFreeformQuestion?: (string|null);
 
-                        /** Config ratingOptions */
-                        ratingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
+                        /** Config defaultRatingOptions */
+                        defaultRatingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
                     }
 
                     /** Represents a Config. */
@@ -7668,11 +7668,11 @@ export namespace clutch {
                         /** Config origins. */
                         public origins: clutch.config.module.feedback.v1.IOriginQuestion[];
 
-                        /** Config freeformQuestion. */
-                        public freeformQuestion: string;
+                        /** Config defaultFreeformQuestion. */
+                        public defaultFreeformQuestion: string;
 
-                        /** Config ratingOptions. */
-                        public ratingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
+                        /** Config defaultRatingOptions. */
+                        public defaultRatingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
 
                         /**
                          * Verifies a Config message.
@@ -7766,11 +7766,11 @@ export namespace clutch {
                         /** Question question */
                         question?: (string|null);
 
-                        /** Question freeformQuestion */
-                        freeformQuestion?: (string|null);
+                        /** Question customFreeformQuestion */
+                        customFreeformQuestion?: (string|null);
 
-                        /** Question ratingOptions */
-                        ratingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
+                        /** Question customRatingOptions */
+                        customRatingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
                     }
 
                     /** Represents a Question. */
@@ -7785,11 +7785,11 @@ export namespace clutch {
                         /** Question question. */
                         public question: string;
 
-                        /** Question freeformQuestion. */
-                        public freeformQuestion: string;
+                        /** Question customFreeformQuestion. */
+                        public customFreeformQuestion: string;
 
-                        /** Question ratingOptions. */
-                        public ratingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
+                        /** Question customRatingOptions. */
+                        public customRatingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
 
                         /**
                          * Verifies a Question message.

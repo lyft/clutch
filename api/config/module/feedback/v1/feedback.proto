@@ -9,9 +9,9 @@ import "validate/validate.proto";
 message Config {
   repeated OriginQuestion origins = 1 [ (validate.rules).repeated = {min_items : 1} ];
   // Use if freeform feedback prompt is the same for all feedback origins
-  string freeform_question = 2;
+  string default_freeform_question = 2;
   // Use if rating options are the same for all feedback origins
-  RatingOptions rating_options = 3;
+  RatingOptions default_rating_options = 3;
 }
 
 message OriginQuestion {
@@ -27,9 +27,9 @@ message OriginQuestion {
 message Question {
   string question = 1 [ (validate.rules).string = {min_bytes : 1} ];
   // Use if this question has a custom prompt for freeform feedback
-  string freeform_question = 2;
+  string custom_freeform_question = 2;
   // Use if this question has custom rating options
-  RatingOptions rating_options = 3;
+  RatingOptions custom_rating_options = 3;
 }
 
 message RatingOptions {

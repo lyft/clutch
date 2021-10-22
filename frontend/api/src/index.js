@@ -18191,8 +18191,8 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.module.feedback.v1
                          * @interface IConfig
                          * @property {Array.<clutch.config.module.feedback.v1.IOriginQuestion>|null} [origins] Config origins
-                         * @property {string|null} [freeformQuestion] Config freeformQuestion
-                         * @property {clutch.config.module.feedback.v1.IRatingOptions|null} [ratingOptions] Config ratingOptions
+                         * @property {string|null} [defaultFreeformQuestion] Config defaultFreeformQuestion
+                         * @property {clutch.config.module.feedback.v1.IRatingOptions|null} [defaultRatingOptions] Config defaultRatingOptions
                          */
 
                         /**
@@ -18220,20 +18220,20 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.origins = $util.emptyArray;
 
                         /**
-                         * Config freeformQuestion.
-                         * @member {string} freeformQuestion
+                         * Config defaultFreeformQuestion.
+                         * @member {string} defaultFreeformQuestion
                          * @memberof clutch.config.module.feedback.v1.Config
                          * @instance
                          */
-                        Config.prototype.freeformQuestion = "";
+                        Config.prototype.defaultFreeformQuestion = "";
 
                         /**
-                         * Config ratingOptions.
-                         * @member {clutch.config.module.feedback.v1.IRatingOptions|null|undefined} ratingOptions
+                         * Config defaultRatingOptions.
+                         * @member {clutch.config.module.feedback.v1.IRatingOptions|null|undefined} defaultRatingOptions
                          * @memberof clutch.config.module.feedback.v1.Config
                          * @instance
                          */
-                        Config.prototype.ratingOptions = null;
+                        Config.prototype.defaultRatingOptions = null;
 
                         /**
                          * Verifies a Config message.
@@ -18255,13 +18255,13 @@ export const clutch = $root.clutch = (() => {
                                         return "origins." + error;
                                 }
                             }
-                            if (message.freeformQuestion != null && message.hasOwnProperty("freeformQuestion"))
-                                if (!$util.isString(message.freeformQuestion))
-                                    return "freeformQuestion: string expected";
-                            if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions")) {
-                                let error = $root.clutch.config.module.feedback.v1.RatingOptions.verify(message.ratingOptions);
+                            if (message.defaultFreeformQuestion != null && message.hasOwnProperty("defaultFreeformQuestion"))
+                                if (!$util.isString(message.defaultFreeformQuestion))
+                                    return "defaultFreeformQuestion: string expected";
+                            if (message.defaultRatingOptions != null && message.hasOwnProperty("defaultRatingOptions")) {
+                                let error = $root.clutch.config.module.feedback.v1.RatingOptions.verify(message.defaultRatingOptions);
                                 if (error)
-                                    return "ratingOptions." + error;
+                                    return "defaultRatingOptions." + error;
                             }
                             return null;
                         };
@@ -18288,12 +18288,12 @@ export const clutch = $root.clutch = (() => {
                                     message.origins[i] = $root.clutch.config.module.feedback.v1.OriginQuestion.fromObject(object.origins[i]);
                                 }
                             }
-                            if (object.freeformQuestion != null)
-                                message.freeformQuestion = String(object.freeformQuestion);
-                            if (object.ratingOptions != null) {
-                                if (typeof object.ratingOptions !== "object")
-                                    throw TypeError(".clutch.config.module.feedback.v1.Config.ratingOptions: object expected");
-                                message.ratingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.fromObject(object.ratingOptions);
+                            if (object.defaultFreeformQuestion != null)
+                                message.defaultFreeformQuestion = String(object.defaultFreeformQuestion);
+                            if (object.defaultRatingOptions != null) {
+                                if (typeof object.defaultRatingOptions !== "object")
+                                    throw TypeError(".clutch.config.module.feedback.v1.Config.defaultRatingOptions: object expected");
+                                message.defaultRatingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.fromObject(object.defaultRatingOptions);
                             }
                             return message;
                         };
@@ -18314,18 +18314,18 @@ export const clutch = $root.clutch = (() => {
                             if (options.arrays || options.defaults)
                                 object.origins = [];
                             if (options.defaults) {
-                                object.freeformQuestion = "";
-                                object.ratingOptions = null;
+                                object.defaultFreeformQuestion = "";
+                                object.defaultRatingOptions = null;
                             }
                             if (message.origins && message.origins.length) {
                                 object.origins = [];
                                 for (let j = 0; j < message.origins.length; ++j)
                                     object.origins[j] = $root.clutch.config.module.feedback.v1.OriginQuestion.toObject(message.origins[j], options);
                             }
-                            if (message.freeformQuestion != null && message.hasOwnProperty("freeformQuestion"))
-                                object.freeformQuestion = message.freeformQuestion;
-                            if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions"))
-                                object.ratingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.toObject(message.ratingOptions, options);
+                            if (message.defaultFreeformQuestion != null && message.hasOwnProperty("defaultFreeformQuestion"))
+                                object.defaultFreeformQuestion = message.defaultFreeformQuestion;
+                            if (message.defaultRatingOptions != null && message.hasOwnProperty("defaultRatingOptions"))
+                                object.defaultRatingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.toObject(message.defaultRatingOptions, options);
                             return object;
                         };
 
@@ -18503,8 +18503,8 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.module.feedback.v1
                          * @interface IQuestion
                          * @property {string|null} [question] Question question
-                         * @property {string|null} [freeformQuestion] Question freeformQuestion
-                         * @property {clutch.config.module.feedback.v1.IRatingOptions|null} [ratingOptions] Question ratingOptions
+                         * @property {string|null} [customFreeformQuestion] Question customFreeformQuestion
+                         * @property {clutch.config.module.feedback.v1.IRatingOptions|null} [customRatingOptions] Question customRatingOptions
                          */
 
                         /**
@@ -18531,20 +18531,20 @@ export const clutch = $root.clutch = (() => {
                         Question.prototype.question = "";
 
                         /**
-                         * Question freeformQuestion.
-                         * @member {string} freeformQuestion
+                         * Question customFreeformQuestion.
+                         * @member {string} customFreeformQuestion
                          * @memberof clutch.config.module.feedback.v1.Question
                          * @instance
                          */
-                        Question.prototype.freeformQuestion = "";
+                        Question.prototype.customFreeformQuestion = "";
 
                         /**
-                         * Question ratingOptions.
-                         * @member {clutch.config.module.feedback.v1.IRatingOptions|null|undefined} ratingOptions
+                         * Question customRatingOptions.
+                         * @member {clutch.config.module.feedback.v1.IRatingOptions|null|undefined} customRatingOptions
                          * @memberof clutch.config.module.feedback.v1.Question
                          * @instance
                          */
-                        Question.prototype.ratingOptions = null;
+                        Question.prototype.customRatingOptions = null;
 
                         /**
                          * Verifies a Question message.
@@ -18560,13 +18560,13 @@ export const clutch = $root.clutch = (() => {
                             if (message.question != null && message.hasOwnProperty("question"))
                                 if (!$util.isString(message.question))
                                     return "question: string expected";
-                            if (message.freeformQuestion != null && message.hasOwnProperty("freeformQuestion"))
-                                if (!$util.isString(message.freeformQuestion))
-                                    return "freeformQuestion: string expected";
-                            if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions")) {
-                                let error = $root.clutch.config.module.feedback.v1.RatingOptions.verify(message.ratingOptions);
+                            if (message.customFreeformQuestion != null && message.hasOwnProperty("customFreeformQuestion"))
+                                if (!$util.isString(message.customFreeformQuestion))
+                                    return "customFreeformQuestion: string expected";
+                            if (message.customRatingOptions != null && message.hasOwnProperty("customRatingOptions")) {
+                                let error = $root.clutch.config.module.feedback.v1.RatingOptions.verify(message.customRatingOptions);
                                 if (error)
-                                    return "ratingOptions." + error;
+                                    return "customRatingOptions." + error;
                             }
                             return null;
                         };
@@ -18585,12 +18585,12 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.module.feedback.v1.Question();
                             if (object.question != null)
                                 message.question = String(object.question);
-                            if (object.freeformQuestion != null)
-                                message.freeformQuestion = String(object.freeformQuestion);
-                            if (object.ratingOptions != null) {
-                                if (typeof object.ratingOptions !== "object")
-                                    throw TypeError(".clutch.config.module.feedback.v1.Question.ratingOptions: object expected");
-                                message.ratingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.fromObject(object.ratingOptions);
+                            if (object.customFreeformQuestion != null)
+                                message.customFreeformQuestion = String(object.customFreeformQuestion);
+                            if (object.customRatingOptions != null) {
+                                if (typeof object.customRatingOptions !== "object")
+                                    throw TypeError(".clutch.config.module.feedback.v1.Question.customRatingOptions: object expected");
+                                message.customRatingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.fromObject(object.customRatingOptions);
                             }
                             return message;
                         };
@@ -18610,15 +18610,15 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.defaults) {
                                 object.question = "";
-                                object.freeformQuestion = "";
-                                object.ratingOptions = null;
+                                object.customFreeformQuestion = "";
+                                object.customRatingOptions = null;
                             }
                             if (message.question != null && message.hasOwnProperty("question"))
                                 object.question = message.question;
-                            if (message.freeformQuestion != null && message.hasOwnProperty("freeformQuestion"))
-                                object.freeformQuestion = message.freeformQuestion;
-                            if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions"))
-                                object.ratingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.toObject(message.ratingOptions, options);
+                            if (message.customFreeformQuestion != null && message.hasOwnProperty("customFreeformQuestion"))
+                                object.customFreeformQuestion = message.customFreeformQuestion;
+                            if (message.customRatingOptions != null && message.hasOwnProperty("customRatingOptions"))
+                                object.customRatingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.toObject(message.customRatingOptions, options);
                             return object;
                         };
 

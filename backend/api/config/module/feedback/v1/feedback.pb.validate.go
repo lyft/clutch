@@ -62,12 +62,12 @@ func (m *Config) Validate() error {
 
 	}
 
-	// no validation rules for FreeformQuestion
+	// no validation rules for DefaultFreeformQuestion
 
-	if v, ok := interface{}(m.GetRatingOptions()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetDefaultRatingOptions()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ConfigValidationError{
-				field:  "RatingOptions",
+				field:  "DefaultRatingOptions",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -244,12 +244,12 @@ func (m *Question) Validate() error {
 		}
 	}
 
-	// no validation rules for FreeformQuestion
+	// no validation rules for CustomFreeformQuestion
 
-	if v, ok := interface{}(m.GetRatingOptions()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetCustomRatingOptions()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return QuestionValidationError{
-				field:  "RatingOptions",
+				field:  "CustomRatingOptions",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
