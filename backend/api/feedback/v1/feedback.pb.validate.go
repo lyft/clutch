@@ -67,12 +67,7 @@ func (m *GetQuestionsRequest) Validate() error {
 
 	}
 
-	if len(m.GetUser()) < 1 {
-		return GetQuestionsRequestValidationError{
-			field:  "User",
-			reason: "value length must be at least 1 bytes",
-		}
-	}
+	// no validation rules for User
 
 	return nil
 }

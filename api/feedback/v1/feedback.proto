@@ -33,7 +33,7 @@ message GetQuestionsRequest {
     items : {enum : {defined_only : true, not_in : 0}}
   } ];
   // future: have rules on whether a user should see the feedback questions
-  string user = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string user = 2;
 }
 
 message RatingOptions {
