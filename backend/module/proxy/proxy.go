@@ -26,7 +26,7 @@ import (
 
 const (
 	Name    = "clutch.module.proxy"
-	HostKey = "host"
+	HostKey = "Host"
 )
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
