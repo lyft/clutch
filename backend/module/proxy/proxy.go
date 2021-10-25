@@ -25,8 +25,8 @@ import (
 )
 
 const (
-	Name    = "clutch.module.proxy"
-	HostKey = "Host"
+	Name          = "clutch.module.proxy"
+	HostHeaderKey = "Host"
 )
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
@@ -191,12 +191,17 @@ func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method stri
 	return false, nil
 }
 
-// For headers that get ignored in the header map, the helper adds the header values to the designated fields on
-// the Request struct. Context: https://github.com/golang/go/issues/29865, https://github.com/golang/go/blob/8c94aa40e6f5e61e8a570e9d20b7d0d4ad8c382d/src/net/http/request.go#L88
+/*
+For headers that get ignored in the header map, this helper adds their values back to the designated
+fields on the Request struct.
+Context:
+	https://github.com/golang/go/issues/29865
+	https://github.com/golang/go/blob/8c94aa40e6f5e61e8a570e9d20b7d0d4ad8c382d/src/net/http/request.go#L88
+*/
 // TODO: add the other headers that get excluded from the request
 func addExcludedHeaders(request *http.Request) *http.Request {
 	// Get() is case insensitive
-	if hostHeader := request.Header.Get(HostKey); hostHeader != "" {
+	if hostHeader := request.Header.Get(HostHeaderKey); hostHeader != "" {
 		request.Host = hostHeader
 	}
 	return request
