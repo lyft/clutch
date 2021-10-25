@@ -81,37 +81,35 @@ interface CardHeaderProps {
   title: React.ReactNode;
 }
 
-const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHeaderProps) => {
-  return (
-    <StyledCardHeaderContainer>
-      <StyledCardHeader container wrap="nowrap" alignItems="center">
-        <StyledCardHeaderAvatarContainer>
-          <StyledCardHeaderAvatar>{avatar}</StyledCardHeaderAvatar>
-        </StyledCardHeaderAvatarContainer>
-        <Grid container wrap="nowrap" alignItems="center">
-          <Grid item xs>
-            <Typography variant="h4">{title}</Typography>
-          </Grid>
-          {summary.map(section => (
-            <>
-              <StyledDivider orientation="vertical" />
-              <StyledGridItem item xs>
-                {section.title}
-                {section.subheader && (
-                  <Typography variant="body4" color="rgba(13, 16, 48, 0.6)">
-                    {section.subheader}
-                  </Typography>
-                )}
-              </StyledGridItem>
-            </>
-          ))}
+const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHeaderProps) => (
+  <StyledCardHeaderContainer>
+    <StyledCardHeader container wrap="nowrap" alignItems="center">
+      <StyledCardHeaderAvatarContainer>
+        <StyledCardHeaderAvatar>{avatar}</StyledCardHeaderAvatar>
+      </StyledCardHeaderAvatarContainer>
+      <Grid container wrap="nowrap" alignItems="center">
+        <Grid item xs>
+          <Typography variant="h4">{title}</Typography>
         </Grid>
-        {actions}
-      </StyledCardHeader>
-      {children}
-    </StyledCardHeaderContainer>
-  );
-};
+        {summary.map((section: CardHeaderSummaryProps, idx: number) => (
+          <React.Fragment key={idx}>
+            <StyledDivider orientation="vertical" />
+            <StyledGridItem item xs>
+              {section.title}
+              {section.subheader && (
+                <Typography variant="body4" color="rgba(13, 16, 48, 0.6)">
+                  {section.subheader}
+                </Typography>
+              )}
+            </StyledGridItem>
+          </React.Fragment>
+        ))}
+      </Grid>
+      {actions}
+    </StyledCardHeader>
+    {children}
+  </StyledCardHeaderContainer>
+);
 
 // Material UI Spacing system supports many props https://material-ui.com/system/spacing/#api
 // We can add more to this list as use cases arise
