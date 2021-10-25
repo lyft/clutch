@@ -37,7 +37,6 @@ func generateServicesConfig(host string) []*proxyv1cfg.Service {
 				{Path: "/meow", Method: "GET"},
 				{Path: "/nom", Method: "POST"},
 			},
-			HostHeader: "woof",
 		},
 	}
 }
@@ -140,38 +139,6 @@ func TestRequestProxy(t *testing.T) {
 			assertStatus:   200,
 			assertBodyData: structpbFromBody([]byte("{}")),
 		},
-		{
-			id: "Request with HostHeader provided in config",
-			request: &proxyv1.RequestProxyRequest{
-				Service:    "meow",
-				HttpMethod: "GET",
-				Path:       "/meow",
-			},
-			handler: func(w http.ResponseWriter, r *http.Request) {
-				// assert that the host is the value provided in the config
-				assert.Equal(t, "woof", r.Host)
-				w.WriteHeader(200)
-			},
-			shouldError:  false,
-			assertStatus: 200,
-		},
-		{
-			id: "Request with no HostHeader provided in config",
-			request: &proxyv1.RequestProxyRequest{
-				Service:    "cat",
-				HttpMethod: "GET",
-				Path:       "/meow",
-			},
-			handler: func(w http.ResponseWriter, r *http.Request) {
-				// no hostheader was provided in the config, so assert
-				// it's whatever gets sets by default (here it's localhost)
-				assert.Contains(t, r.Host, "127.0.0.1")
-
-				w.WriteHeader(200)
-			},
-			shouldError:  false,
-			assertStatus: 200,
-		},
 	}
 
 	for _, test := range tests {
@@ -263,5 +230,29 @@ func TestIsAllowedRequest(t *testing.T) {
 			assert.NoError(t, err)
 			assert.Equal(t, test.expect, isAllowed)
 		}
+	}
+}
+
+func TestAddExcludedHeaders(t *testing.T) {
+	tests := []struct {
+		id       string
+		key      string
+		value    string
+		expected string
+	}{
+		{id: "host key is uppercased", key: "Host", value: "value1", expected: "value1"},
+		{id: "host key is lowercased", key: "host", value: "value2", expected: "value2"},
+		{id: "host key is not provided", key: "foo", value: "bar", expected: ""},
+	}
+
+	for _, test := range tests {
+		headers := http.Header{}
+		headers.Add(test.key, test.value)
+		req := &http.Request{
+			Header: headers,
+		}
+
+		updatedReq := addExcludedHeaders(req)
+		assert.Equal(t, test.expected, updatedReq.Host)
 	}
 }
