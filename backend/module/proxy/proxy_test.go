@@ -252,7 +252,7 @@ func TestAddExcludedHeaders(t *testing.T) {
 			Header: headers,
 		}
 
-		updatedReq := addExcludedHeaders(req)
-		assert.Equal(t, test.expected, updatedReq.Host)
+		addExcludedHeaders(req)
+		assert.Equal(t, test.expected, req.Host)
 	}
 }

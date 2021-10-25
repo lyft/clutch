@@ -107,7 +107,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		Header: headers,
 	}
 
-	request = addExcludedHeaders(request)
+	addExcludedHeaders(request)
 
 	if req.Request != nil {
 		requestJSON, err := protojson.Marshal(req.Request)
@@ -199,10 +199,9 @@ Context:
 	https://github.com/golang/go/blob/8c94aa40e6f5e61e8a570e9d20b7d0d4ad8c382d/src/net/http/request.go#L88
 */
 // TODO: add the other headers that get excluded from the request
-func addExcludedHeaders(request *http.Request) *http.Request {
+func addExcludedHeaders(request *http.Request) {
 	// Get() is case insensitive
 	if hostHeader := request.Header.Get(HostHeaderKey); hostHeader != "" {
 		request.Host = hostHeader
 	}
-	return request
 }
