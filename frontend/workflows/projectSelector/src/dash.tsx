@@ -63,7 +63,7 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
     case "UPDATE": {
       // for now, clobber any existing data
       const newState = { ...state };
-      newState.timeData[action.payload.key] = action.payload.points;
+      newState.timeData[action.payload.key] = action.payload.cardData;
       return newState;
     }
     default:
@@ -74,6 +74,7 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
 const timeRangeReducer = (state: TimeRangeState, action: TimeRangeAction): TimeRangeState => {
   switch (action.type) {
     case "UPDATE": {
+      // TODO: when adding more complexity to the time range state - i.e. filters of event types - add logic here to handle if both start and end times are equal
       if (
         !_.isEqual(state.startTimeMs, action.payload.startTimeMs) ||
         !_.isEqual(state.endTimeMs, action.payload.endTimeMs)

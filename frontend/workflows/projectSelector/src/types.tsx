@@ -113,24 +113,26 @@ export interface DashAction {
 }
 
 export interface TimeData {
-  /** eventsKey corresponds to entity owning the data - i.e. cards */
-  [eventsKey: string]: ProjectToPointsMap;
+  /** eventsKey corresponds to entity owning the data - i.e. card name */
+  [eventsKey: string]: CardData;
 }
 
-/**
- * Contains a mapping of project names to their event time points
- * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
- */
-export interface ProjectToPointsMap {
-  [projectName: string]: IClutch.timeseries.v1.IPoint[];
+export interface CardData {
+  /** 
+   * Mapping of project names to their event time points 
+   * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
+   */
+  points: { [projectName: string]: IClutch.timeseries.v1.IPoint[] };
+  /** The emoji that will be used for this card on the event timeline */
+  emoji: string;
 }
 
 /** Used by the reducer to update the time data in our context. */
 export interface TimeDataUpdate {
   /** The name of the card or entity that is updating */
   key: string;
-  /** The projects and their timeseries */
-  points: ProjectToPointsMap;
+  /** The projects with their timeseries data and emoji */
+  cardData: CardData;
 }
 
 export interface TimelineState {
