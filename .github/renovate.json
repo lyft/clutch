@@ -48,7 +48,6 @@
   "postUpdateOptions": [
     "gomodTidy"
   ],
-  "yarnrc": "",
   "ignoreDeps": [
     "@date-io/core",
     "babel-jest",
