@@ -33,16 +33,16 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on GetQuestionsRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *GetQuestionsRequest) Validate() error {
+// Validate checks the field values on GetSurveysRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *GetSurveysRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if len(m.GetOrigins()) < 1 {
-		return GetQuestionsRequestValidationError{
+		return GetSurveysRequestValidationError{
 			field:  "Origins",
 			reason: "value must contain at least 1 item(s)",
 		}
@@ -51,15 +51,15 @@ func (m *GetQuestionsRequest) Validate() error {
 	for idx, item := range m.GetOrigins() {
 		_, _ = idx, item
 
-		if _, ok := _GetQuestionsRequest_Origins_NotInLookup[item]; ok {
-			return GetQuestionsRequestValidationError{
+		if _, ok := _GetSurveysRequest_Origins_NotInLookup[item]; ok {
+			return GetSurveysRequestValidationError{
 				field:  fmt.Sprintf("Origins[%v]", idx),
 				reason: "value must not be in list [0]",
 			}
 		}
 
 		if _, ok := Origin_name[int32(item)]; !ok {
-			return GetQuestionsRequestValidationError{
+			return GetSurveysRequestValidationError{
 				field:  fmt.Sprintf("Origins[%v]", idx),
 				reason: "value must be one of the defined enum values",
 			}
@@ -72,9 +72,9 @@ func (m *GetQuestionsRequest) Validate() error {
 	return nil
 }
 
-// GetQuestionsRequestValidationError is the validation error returned by
-// GetQuestionsRequest.Validate if the designated constraints aren't met.
-type GetQuestionsRequestValidationError struct {
+// GetSurveysRequestValidationError is the validation error returned by
+// GetSurveysRequest.Validate if the designated constraints aren't met.
+type GetSurveysRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -82,24 +82,24 @@ type GetQuestionsRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetQuestionsRequestValidationError) Field() string { return e.field }
+func (e GetSurveysRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetQuestionsRequestValidationError) Reason() string { return e.reason }
+func (e GetSurveysRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetQuestionsRequestValidationError) Cause() error { return e.cause }
+func (e GetSurveysRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetQuestionsRequestValidationError) Key() bool { return e.key }
+func (e GetSurveysRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetQuestionsRequestValidationError) ErrorName() string {
-	return "GetQuestionsRequestValidationError"
+func (e GetSurveysRequestValidationError) ErrorName() string {
+	return "GetSurveysRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetQuestionsRequestValidationError) Error() string {
+func (e GetSurveysRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -111,14 +111,14 @@ func (e GetQuestionsRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetQuestionsRequest.%s: %s%s",
+		"invalid %sGetSurveysRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetQuestionsRequestValidationError{}
+var _ error = GetSurveysRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -126,9 +126,9 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetQuestionsRequestValidationError{}
+} = GetSurveysRequestValidationError{}
 
-var _GetQuestionsRequest_Origins_NotInLookup = map[Origin]struct{}{
+var _GetSurveysRequest_Origins_NotInLookup = map[Origin]struct{}{
 	0: {},
 }
 
@@ -203,21 +203,20 @@ var _ interface {
 	ErrorName() string
 } = RatingOptionsValidationError{}
 
-// Validate checks the field values on OriginQuestion with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *OriginQuestion) Validate() error {
+// Validate checks the field values on Survey with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Survey) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	// no validation rules for Question
+	// no validation rules for Prompt
 
-	// no validation rules for FreeformQuestion
+	// no validation rules for FreeformPrompt
 
 	if v, ok := interface{}(m.GetRatingOptions()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return OriginQuestionValidationError{
+			return SurveyValidationError{
 				field:  "RatingOptions",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -230,9 +229,9 @@ func (m *OriginQuestion) Validate() error {
 	return nil
 }
 
-// OriginQuestionValidationError is the validation error returned by
-// OriginQuestion.Validate if the designated constraints aren't met.
-type OriginQuestionValidationError struct {
+// SurveyValidationError is the validation error returned by Survey.Validate if
+// the designated constraints aren't met.
+type SurveyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -240,22 +239,22 @@ type OriginQuestionValidationError struct {
 }
 
 // Field function returns field value.
-func (e OriginQuestionValidationError) Field() string { return e.field }
+func (e SurveyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e OriginQuestionValidationError) Reason() string { return e.reason }
+func (e SurveyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e OriginQuestionValidationError) Cause() error { return e.cause }
+func (e SurveyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e OriginQuestionValidationError) Key() bool { return e.key }
+func (e SurveyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e OriginQuestionValidationError) ErrorName() string { return "OriginQuestionValidationError" }
+func (e SurveyValidationError) ErrorName() string { return "SurveyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e OriginQuestionValidationError) Error() string {
+func (e SurveyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -267,14 +266,14 @@ func (e OriginQuestionValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sOriginQuestion.%s: %s%s",
+		"invalid %sSurvey.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = OriginQuestionValidationError{}
+var _ error = SurveyValidationError{}
 
 var _ interface {
 	Field() string
@@ -282,25 +281,25 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = OriginQuestionValidationError{}
+} = SurveyValidationError{}
 
-// Validate checks the field values on GetQuestionsResponse with the rules
+// Validate checks the field values on GetSurveysResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *GetQuestionsResponse) Validate() error {
+func (m *GetSurveysResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	for key, val := range m.GetOriginQuestion() {
+	for key, val := range m.GetOriginSurvey() {
 		_ = val
 
-		// no validation rules for OriginQuestion[key]
+		// no validation rules for OriginSurvey[key]
 
 		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetQuestionsResponseValidationError{
-					field:  fmt.Sprintf("OriginQuestion[%v]", key),
+				return GetSurveysResponseValidationError{
+					field:  fmt.Sprintf("OriginSurvey[%v]", key),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -312,9 +311,9 @@ func (m *GetQuestionsResponse) Validate() error {
 	return nil
 }
 
-// GetQuestionsResponseValidationError is the validation error returned by
-// GetQuestionsResponse.Validate if the designated constraints aren't met.
-type GetQuestionsResponseValidationError struct {
+// GetSurveysResponseValidationError is the validation error returned by
+// GetSurveysResponse.Validate if the designated constraints aren't met.
+type GetSurveysResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -322,24 +321,24 @@ type GetQuestionsResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetQuestionsResponseValidationError) Field() string { return e.field }
+func (e GetSurveysResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetQuestionsResponseValidationError) Reason() string { return e.reason }
+func (e GetSurveysResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetQuestionsResponseValidationError) Cause() error { return e.cause }
+func (e GetSurveysResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetQuestionsResponseValidationError) Key() bool { return e.key }
+func (e GetSurveysResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetQuestionsResponseValidationError) ErrorName() string {
-	return "GetQuestionsResponseValidationError"
+func (e GetSurveysResponseValidationError) ErrorName() string {
+	return "GetSurveysResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetQuestionsResponseValidationError) Error() string {
+func (e GetSurveysResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -351,14 +350,14 @@ func (e GetQuestionsResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetQuestionsResponse.%s: %s%s",
+		"invalid %sGetSurveysResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetQuestionsResponseValidationError{}
+var _ error = GetSurveysResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -366,4 +365,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetQuestionsResponseValidationError{}
+} = GetSurveysResponseValidationError{}

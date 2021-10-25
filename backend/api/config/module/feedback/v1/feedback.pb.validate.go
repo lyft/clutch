@@ -33,286 +33,6 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Config) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if len(m.GetOrigins()) < 1 {
-		return ConfigValidationError{
-			field:  "Origins",
-			reason: "value must contain at least 1 item(s)",
-		}
-	}
-
-	for idx, item := range m.GetOrigins() {
-		_, _ = idx, item
-
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ConfigValidationError{
-					field:  fmt.Sprintf("Origins[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	// no validation rules for DefaultFreeformQuestion
-
-	if v, ok := interface{}(m.GetDefaultRatingOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ConfigValidationError{
-				field:  "DefaultRatingOptions",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// ConfigValidationError is the validation error returned by Config.Validate if
-// the designated constraints aren't met.
-type ConfigValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ConfigValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ConfigValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ConfigValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ConfigValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ConfigValidationError) ErrorName() string { return "ConfigValidationError" }
-
-// Error satisfies the builtin error interface
-func (e ConfigValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sConfig.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ConfigValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ConfigValidationError{}
-
-// Validate checks the field values on OriginQuestion with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *OriginQuestion) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	switch m.Type.(type) {
-
-	case *OriginQuestion_Header:
-
-		if v, ok := interface{}(m.GetHeader()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return OriginQuestionValidationError{
-					field:  "Header",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *OriginQuestion_Wizard:
-
-		if v, ok := interface{}(m.GetWizard()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return OriginQuestionValidationError{
-					field:  "Wizard",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	default:
-		return OriginQuestionValidationError{
-			field:  "Type",
-			reason: "value is required",
-		}
-
-	}
-
-	return nil
-}
-
-// OriginQuestionValidationError is the validation error returned by
-// OriginQuestion.Validate if the designated constraints aren't met.
-type OriginQuestionValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e OriginQuestionValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e OriginQuestionValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e OriginQuestionValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e OriginQuestionValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e OriginQuestionValidationError) ErrorName() string { return "OriginQuestionValidationError" }
-
-// Error satisfies the builtin error interface
-func (e OriginQuestionValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sOriginQuestion.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = OriginQuestionValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = OriginQuestionValidationError{}
-
-// Validate checks the field values on Question with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Question) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if len(m.GetQuestion()) < 1 {
-		return QuestionValidationError{
-			field:  "Question",
-			reason: "value length must be at least 1 bytes",
-		}
-	}
-
-	// no validation rules for CustomFreeformQuestion
-
-	if v, ok := interface{}(m.GetCustomRatingOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return QuestionValidationError{
-				field:  "CustomRatingOptions",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// QuestionValidationError is the validation error returned by
-// Question.Validate if the designated constraints aren't met.
-type QuestionValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e QuestionValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e QuestionValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e QuestionValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e QuestionValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e QuestionValidationError) ErrorName() string { return "QuestionValidationError" }
-
-// Error satisfies the builtin error interface
-func (e QuestionValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sQuestion.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = QuestionValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = QuestionValidationError{}
-
 // Validate checks the field values on RatingOptions with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
@@ -398,3 +118,292 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = RatingOptionsValidationError{}
+
+// Validate checks the field values on Survey with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Survey) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetPrompt()) < 1 {
+		return SurveyValidationError{
+			field:  "Prompt",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	// no validation rules for FreeformPrompt
+
+	if m.GetRatingOptions() == nil {
+		return SurveyValidationError{
+			field:  "RatingOptions",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetRatingOptions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SurveyValidationError{
+				field:  "RatingOptions",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// SurveyValidationError is the validation error returned by Survey.Validate if
+// the designated constraints aren't met.
+type SurveyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SurveyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SurveyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SurveyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SurveyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SurveyValidationError) ErrorName() string { return "SurveyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SurveyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSurvey.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SurveyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SurveyValidationError{}
+
+// Validate checks the field values on SurveyOrigin with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *SurveyOrigin) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Type.(type) {
+
+	case *SurveyOrigin_Header:
+
+		if m.GetHeader() == nil {
+			return SurveyOriginValidationError{
+				field:  "Header",
+				reason: "value is required",
+			}
+		}
+
+		if v, ok := interface{}(m.GetHeader()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SurveyOriginValidationError{
+					field:  "Header",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *SurveyOrigin_Wizard:
+
+		if m.GetWizard() == nil {
+			return SurveyOriginValidationError{
+				field:  "Wizard",
+				reason: "value is required",
+			}
+		}
+
+		if v, ok := interface{}(m.GetWizard()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SurveyOriginValidationError{
+					field:  "Wizard",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return SurveyOriginValidationError{
+			field:  "Type",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// SurveyOriginValidationError is the validation error returned by
+// SurveyOrigin.Validate if the designated constraints aren't met.
+type SurveyOriginValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SurveyOriginValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SurveyOriginValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SurveyOriginValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SurveyOriginValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SurveyOriginValidationError) ErrorName() string { return "SurveyOriginValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SurveyOriginValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSurveyOrigin.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SurveyOriginValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SurveyOriginValidationError{}
+
+// Validate checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Config) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetOrigins()) < 1 {
+		return ConfigValidationError{
+			field:  "Origins",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetOrigins() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  fmt.Sprintf("Origins[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ConfigValidationError is the validation error returned by Config.Validate if
+// the designated constraints aren't met.
+type ConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ConfigValidationError) ErrorName() string { return "ConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ConfigValidationError{}
