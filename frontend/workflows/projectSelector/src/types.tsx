@@ -118,8 +118,8 @@ export interface TimeData {
 }
 
 export interface CardData {
-  /** 
-   * Mapping of project names to their event time points 
+  /**
+   * Mapping of project names to their event time points
    * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
    */
   points: { [projectName: string]: IClutch.timeseries.v1.IPoint[] };
