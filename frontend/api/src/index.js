@@ -18166,6 +18166,576 @@ export const clutch = $root.clutch = (() => {
                 return featureflag;
             })();
 
+            module.feedback = (function() {
+
+                /**
+                 * Namespace feedback.
+                 * @memberof clutch.config.module
+                 * @namespace
+                 */
+                const feedback = {};
+
+                feedback.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.module.feedback
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.RatingOptions = (function() {
+
+                        /**
+                         * Properties of a RatingOptions.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @interface IRatingOptions
+                         * @property {string|null} [one] RatingOptions one
+                         * @property {string|null} [two] RatingOptions two
+                         * @property {string|null} [three] RatingOptions three
+                         */
+
+                        /**
+                         * Constructs a new RatingOptions.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @classdesc Represents a RatingOptions.
+                         * @implements IRatingOptions
+                         * @constructor
+                         * @param {clutch.config.module.feedback.v1.IRatingOptions=} [properties] Properties to set
+                         */
+                        function RatingOptions(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * RatingOptions one.
+                         * @member {string} one
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @instance
+                         */
+                        RatingOptions.prototype.one = "";
+
+                        /**
+                         * RatingOptions two.
+                         * @member {string} two
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @instance
+                         */
+                        RatingOptions.prototype.two = "";
+
+                        /**
+                         * RatingOptions three.
+                         * @member {string} three
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @instance
+                         */
+                        RatingOptions.prototype.three = "";
+
+                        /**
+                         * Verifies a RatingOptions message.
+                         * @function verify
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        RatingOptions.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.one != null && message.hasOwnProperty("one"))
+                                if (!$util.isString(message.one))
+                                    return "one: string expected";
+                            if (message.two != null && message.hasOwnProperty("two"))
+                                if (!$util.isString(message.two))
+                                    return "two: string expected";
+                            if (message.three != null && message.hasOwnProperty("three"))
+                                if (!$util.isString(message.three))
+                                    return "three: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.feedback.v1.RatingOptions} RatingOptions
+                         */
+                        RatingOptions.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.feedback.v1.RatingOptions)
+                                return object;
+                            let message = new $root.clutch.config.module.feedback.v1.RatingOptions();
+                            if (object.one != null)
+                                message.one = String(object.one);
+                            if (object.two != null)
+                                message.two = String(object.two);
+                            if (object.three != null)
+                                message.three = String(object.three);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @static
+                         * @param {clutch.config.module.feedback.v1.RatingOptions} message RatingOptions
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        RatingOptions.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.one = "";
+                                object.two = "";
+                                object.three = "";
+                            }
+                            if (message.one != null && message.hasOwnProperty("one"))
+                                object.one = message.one;
+                            if (message.two != null && message.hasOwnProperty("two"))
+                                object.two = message.two;
+                            if (message.three != null && message.hasOwnProperty("three"))
+                                object.three = message.three;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this RatingOptions to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        RatingOptions.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return RatingOptions;
+                    })();
+
+                    v1.Survey = (function() {
+
+                        /**
+                         * Properties of a Survey.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @interface ISurvey
+                         * @property {string|null} [prompt] Survey prompt
+                         * @property {string|null} [freeformPrompt] Survey freeformPrompt
+                         * @property {clutch.config.module.feedback.v1.IRatingOptions|null} [ratingOptions] Survey ratingOptions
+                         */
+
+                        /**
+                         * Constructs a new Survey.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @classdesc Represents a Survey.
+                         * @implements ISurvey
+                         * @constructor
+                         * @param {clutch.config.module.feedback.v1.ISurvey=} [properties] Properties to set
+                         */
+                        function Survey(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Survey prompt.
+                         * @member {string} prompt
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @instance
+                         */
+                        Survey.prototype.prompt = "";
+
+                        /**
+                         * Survey freeformPrompt.
+                         * @member {string} freeformPrompt
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @instance
+                         */
+                        Survey.prototype.freeformPrompt = "";
+
+                        /**
+                         * Survey ratingOptions.
+                         * @member {clutch.config.module.feedback.v1.IRatingOptions|null|undefined} ratingOptions
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @instance
+                         */
+                        Survey.prototype.ratingOptions = null;
+
+                        /**
+                         * Verifies a Survey message.
+                         * @function verify
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Survey.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.prompt != null && message.hasOwnProperty("prompt"))
+                                if (!$util.isString(message.prompt))
+                                    return "prompt: string expected";
+                            if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
+                                if (!$util.isString(message.freeformPrompt))
+                                    return "freeformPrompt: string expected";
+                            if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions")) {
+                                let error = $root.clutch.config.module.feedback.v1.RatingOptions.verify(message.ratingOptions);
+                                if (error)
+                                    return "ratingOptions." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Survey message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.feedback.v1.Survey} Survey
+                         */
+                        Survey.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.feedback.v1.Survey)
+                                return object;
+                            let message = new $root.clutch.config.module.feedback.v1.Survey();
+                            if (object.prompt != null)
+                                message.prompt = String(object.prompt);
+                            if (object.freeformPrompt != null)
+                                message.freeformPrompt = String(object.freeformPrompt);
+                            if (object.ratingOptions != null) {
+                                if (typeof object.ratingOptions !== "object")
+                                    throw TypeError(".clutch.config.module.feedback.v1.Survey.ratingOptions: object expected");
+                                message.ratingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.fromObject(object.ratingOptions);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Survey message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @static
+                         * @param {clutch.config.module.feedback.v1.Survey} message Survey
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Survey.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.prompt = "";
+                                object.freeformPrompt = "";
+                                object.ratingOptions = null;
+                            }
+                            if (message.prompt != null && message.hasOwnProperty("prompt"))
+                                object.prompt = message.prompt;
+                            if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
+                                object.freeformPrompt = message.freeformPrompt;
+                            if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions"))
+                                object.ratingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.toObject(message.ratingOptions, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Survey to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Survey.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Survey;
+                    })();
+
+                    v1.SurveyOrigin = (function() {
+
+                        /**
+                         * Properties of a SurveyOrigin.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @interface ISurveyOrigin
+                         * @property {clutch.config.module.feedback.v1.ISurvey|null} [header] SurveyOrigin header
+                         * @property {clutch.config.module.feedback.v1.ISurvey|null} [wizard] SurveyOrigin wizard
+                         */
+
+                        /**
+                         * Constructs a new SurveyOrigin.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @classdesc Represents a SurveyOrigin.
+                         * @implements ISurveyOrigin
+                         * @constructor
+                         * @param {clutch.config.module.feedback.v1.ISurveyOrigin=} [properties] Properties to set
+                         */
+                        function SurveyOrigin(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * SurveyOrigin header.
+                         * @member {clutch.config.module.feedback.v1.ISurvey|null|undefined} header
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @instance
+                         */
+                        SurveyOrigin.prototype.header = null;
+
+                        /**
+                         * SurveyOrigin wizard.
+                         * @member {clutch.config.module.feedback.v1.ISurvey|null|undefined} wizard
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @instance
+                         */
+                        SurveyOrigin.prototype.wizard = null;
+
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * SurveyOrigin type.
+                         * @member {"header"|"wizard"|undefined} type
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @instance
+                         */
+                        Object.defineProperty(SurveyOrigin.prototype, "type", {
+                            get: $util.oneOfGetter($oneOfFields = ["header", "wizard"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
+
+                        /**
+                         * Verifies a SurveyOrigin message.
+                         * @function verify
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        SurveyOrigin.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            let properties = {};
+                            if (message.header != null && message.hasOwnProperty("header")) {
+                                properties.type = 1;
+                                {
+                                    let error = $root.clutch.config.module.feedback.v1.Survey.verify(message.header);
+                                    if (error)
+                                        return "header." + error;
+                                }
+                            }
+                            if (message.wizard != null && message.hasOwnProperty("wizard")) {
+                                if (properties.type === 1)
+                                    return "type: multiple values";
+                                properties.type = 1;
+                                {
+                                    let error = $root.clutch.config.module.feedback.v1.Survey.verify(message.wizard);
+                                    if (error)
+                                        return "wizard." + error;
+                                }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a SurveyOrigin message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.feedback.v1.SurveyOrigin} SurveyOrigin
+                         */
+                        SurveyOrigin.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.feedback.v1.SurveyOrigin)
+                                return object;
+                            let message = new $root.clutch.config.module.feedback.v1.SurveyOrigin();
+                            if (object.header != null) {
+                                if (typeof object.header !== "object")
+                                    throw TypeError(".clutch.config.module.feedback.v1.SurveyOrigin.header: object expected");
+                                message.header = $root.clutch.config.module.feedback.v1.Survey.fromObject(object.header);
+                            }
+                            if (object.wizard != null) {
+                                if (typeof object.wizard !== "object")
+                                    throw TypeError(".clutch.config.module.feedback.v1.SurveyOrigin.wizard: object expected");
+                                message.wizard = $root.clutch.config.module.feedback.v1.Survey.fromObject(object.wizard);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a SurveyOrigin message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @static
+                         * @param {clutch.config.module.feedback.v1.SurveyOrigin} message SurveyOrigin
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        SurveyOrigin.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (message.header != null && message.hasOwnProperty("header")) {
+                                object.header = $root.clutch.config.module.feedback.v1.Survey.toObject(message.header, options);
+                                if (options.oneofs)
+                                    object.type = "header";
+                            }
+                            if (message.wizard != null && message.hasOwnProperty("wizard")) {
+                                object.wizard = $root.clutch.config.module.feedback.v1.Survey.toObject(message.wizard, options);
+                                if (options.oneofs)
+                                    object.type = "wizard";
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this SurveyOrigin to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        SurveyOrigin.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return SurveyOrigin;
+                    })();
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @interface IConfig
+                         * @property {Array.<clutch.config.module.feedback.v1.ISurveyOrigin>|null} [origins] Config origins
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.module.feedback.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            this.origins = [];
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config origins.
+                         * @member {Array.<clutch.config.module.feedback.v1.ISurveyOrigin>} origins
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.origins = $util.emptyArray;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.origins != null && message.hasOwnProperty("origins")) {
+                                if (!Array.isArray(message.origins))
+                                    return "origins: array expected";
+                                for (let i = 0; i < message.origins.length; ++i) {
+                                    let error = $root.clutch.config.module.feedback.v1.SurveyOrigin.verify(message.origins[i]);
+                                    if (error)
+                                        return "origins." + error;
+                                }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.feedback.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.feedback.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.module.feedback.v1.Config();
+                            if (object.origins) {
+                                if (!Array.isArray(object.origins))
+                                    throw TypeError(".clutch.config.module.feedback.v1.Config.origins: array expected");
+                                message.origins = [];
+                                for (let i = 0; i < object.origins.length; ++i) {
+                                    if (typeof object.origins[i] !== "object")
+                                        throw TypeError(".clutch.config.module.feedback.v1.Config.origins: object expected");
+                                    message.origins[i] = $root.clutch.config.module.feedback.v1.SurveyOrigin.fromObject(object.origins[i]);
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @static
+                         * @param {clutch.config.module.feedback.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.arrays || options.defaults)
+                                object.origins = [];
+                            if (message.origins && message.origins.length) {
+                                object.origins = [];
+                                for (let j = 0; j < message.origins.length; ++j)
+                                    object.origins[j] = $root.clutch.config.module.feedback.v1.SurveyOrigin.toObject(message.origins[j], options);
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return feedback;
+            })();
+
             module.proxy = (function() {
 
                 /**
@@ -29227,35 +29797,35 @@ export const clutch = $root.clutch = (() => {
                 (FeedbackAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = FeedbackAPI;
 
                 /**
-                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#getQuestions}.
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#getSurveys}.
                  * @memberof clutch.feedback.v1.FeedbackAPI
-                 * @typedef GetQuestionsCallback
+                 * @typedef GetSurveysCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
-                 * @param {clutch.feedback.v1.GetQuestionsResponse} [response] GetQuestionsResponse
+                 * @param {clutch.feedback.v1.GetSurveysResponse} [response] GetSurveysResponse
                  */
 
                 /**
-                 * Calls GetQuestions.
-                 * @function getQuestions
+                 * Calls GetSurveys.
+                 * @function getSurveys
                  * @memberof clutch.feedback.v1.FeedbackAPI
                  * @instance
-                 * @param {clutch.feedback.v1.IGetQuestionsRequest} request GetQuestionsRequest message or plain object
-                 * @param {clutch.feedback.v1.FeedbackAPI.GetQuestionsCallback} callback Node-style callback called with the error, if any, and GetQuestionsResponse
+                 * @param {clutch.feedback.v1.IGetSurveysRequest} request GetSurveysRequest message or plain object
+                 * @param {clutch.feedback.v1.FeedbackAPI.GetSurveysCallback} callback Node-style callback called with the error, if any, and GetSurveysResponse
                  * @returns {undefined}
                  * @variation 1
                  */
-                Object.defineProperty(FeedbackAPI.prototype.getQuestions = function getQuestions(request, callback) {
-                    return this.rpcCall(getQuestions, $root.clutch.feedback.v1.GetQuestionsRequest, $root.clutch.feedback.v1.GetQuestionsResponse, request, callback);
-                }, "name", { value: "GetQuestions" });
+                Object.defineProperty(FeedbackAPI.prototype.getSurveys = function getSurveys(request, callback) {
+                    return this.rpcCall(getSurveys, $root.clutch.feedback.v1.GetSurveysRequest, $root.clutch.feedback.v1.GetSurveysResponse, request, callback);
+                }, "name", { value: "GetSurveys" });
 
                 /**
-                 * Calls GetQuestions.
-                 * @function getQuestions
+                 * Calls GetSurveys.
+                 * @function getSurveys
                  * @memberof clutch.feedback.v1.FeedbackAPI
                  * @instance
-                 * @param {clutch.feedback.v1.IGetQuestionsRequest} request GetQuestionsRequest message or plain object
-                 * @returns {Promise<clutch.feedback.v1.GetQuestionsResponse>} Promise
+                 * @param {clutch.feedback.v1.IGetSurveysRequest} request GetSurveysRequest message or plain object
+                 * @returns {Promise<clutch.feedback.v1.GetSurveysResponse>} Promise
                  * @variation 2
                  */
 
@@ -29278,25 +29848,25 @@ export const clutch = $root.clutch = (() => {
                 return values;
             })();
 
-            v1.GetQuestionsRequest = (function() {
+            v1.GetSurveysRequest = (function() {
 
                 /**
-                 * Properties of a GetQuestionsRequest.
+                 * Properties of a GetSurveysRequest.
                  * @memberof clutch.feedback.v1
-                 * @interface IGetQuestionsRequest
-                 * @property {Array.<clutch.feedback.v1.Origin>|null} [origins] GetQuestionsRequest origins
-                 * @property {string|null} [user] GetQuestionsRequest user
+                 * @interface IGetSurveysRequest
+                 * @property {Array.<clutch.feedback.v1.Origin>|null} [origins] GetSurveysRequest origins
+                 * @property {string|null} [user] GetSurveysRequest user
                  */
 
                 /**
-                 * Constructs a new GetQuestionsRequest.
+                 * Constructs a new GetSurveysRequest.
                  * @memberof clutch.feedback.v1
-                 * @classdesc Represents a GetQuestionsRequest.
-                 * @implements IGetQuestionsRequest
+                 * @classdesc Represents a GetSurveysRequest.
+                 * @implements IGetSurveysRequest
                  * @constructor
-                 * @param {clutch.feedback.v1.IGetQuestionsRequest=} [properties] Properties to set
+                 * @param {clutch.feedback.v1.IGetSurveysRequest=} [properties] Properties to set
                  */
-                function GetQuestionsRequest(properties) {
+                function GetSurveysRequest(properties) {
                     this.origins = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -29305,30 +29875,30 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetQuestionsRequest origins.
+                 * GetSurveysRequest origins.
                  * @member {Array.<clutch.feedback.v1.Origin>} origins
-                 * @memberof clutch.feedback.v1.GetQuestionsRequest
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
                  * @instance
                  */
-                GetQuestionsRequest.prototype.origins = $util.emptyArray;
+                GetSurveysRequest.prototype.origins = $util.emptyArray;
 
                 /**
-                 * GetQuestionsRequest user.
+                 * GetSurveysRequest user.
                  * @member {string} user
-                 * @memberof clutch.feedback.v1.GetQuestionsRequest
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
                  * @instance
                  */
-                GetQuestionsRequest.prototype.user = "";
+                GetSurveysRequest.prototype.user = "";
 
                 /**
-                 * Verifies a GetQuestionsRequest message.
+                 * Verifies a GetSurveysRequest message.
                  * @function verify
-                 * @memberof clutch.feedback.v1.GetQuestionsRequest
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                GetQuestionsRequest.verify = function verify(message) {
+                GetSurveysRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.origins != null && message.hasOwnProperty("origins")) {
@@ -29351,20 +29921,20 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a GetQuestionsRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a GetSurveysRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.feedback.v1.GetQuestionsRequest
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.feedback.v1.GetQuestionsRequest} GetQuestionsRequest
+                 * @returns {clutch.feedback.v1.GetSurveysRequest} GetSurveysRequest
                  */
-                GetQuestionsRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.feedback.v1.GetQuestionsRequest)
+                GetSurveysRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.GetSurveysRequest)
                         return object;
-                    let message = new $root.clutch.feedback.v1.GetQuestionsRequest();
+                    let message = new $root.clutch.feedback.v1.GetSurveysRequest();
                     if (object.origins) {
                         if (!Array.isArray(object.origins))
-                            throw TypeError(".clutch.feedback.v1.GetQuestionsRequest.origins: array expected");
+                            throw TypeError(".clutch.feedback.v1.GetSurveysRequest.origins: array expected");
                         message.origins = [];
                         for (let i = 0; i < object.origins.length; ++i)
                             switch (object.origins[i]) {
@@ -29389,15 +29959,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a GetQuestionsRequest message. Also converts values to other types if specified.
+                 * Creates a plain object from a GetSurveysRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.feedback.v1.GetQuestionsRequest
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
                  * @static
-                 * @param {clutch.feedback.v1.GetQuestionsRequest} message GetQuestionsRequest
+                 * @param {clutch.feedback.v1.GetSurveysRequest} message GetSurveysRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                GetQuestionsRequest.toObject = function toObject(message, options) {
+                GetSurveysRequest.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -29416,17 +29986,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this GetQuestionsRequest to JSON.
+                 * Converts this GetSurveysRequest to JSON.
                  * @function toJSON
-                 * @memberof clutch.feedback.v1.GetQuestionsRequest
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                GetQuestionsRequest.prototype.toJSON = function toJSON() {
+                GetSurveysRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return GetQuestionsRequest;
+                return GetSurveysRequest;
             })();
 
             v1.RatingOptions = (function() {
@@ -29564,27 +30134,27 @@ export const clutch = $root.clutch = (() => {
                 return RatingOptions;
             })();
 
-            v1.OriginQuestion = (function() {
+            v1.Survey = (function() {
 
                 /**
-                 * Properties of an OriginQuestion.
+                 * Properties of a Survey.
                  * @memberof clutch.feedback.v1
-                 * @interface IOriginQuestion
-                 * @property {string|null} [question] OriginQuestion question
-                 * @property {string|null} [freeformQuestion] OriginQuestion freeformQuestion
-                 * @property {clutch.feedback.v1.IRatingOptions|null} [ratingOptions] OriginQuestion ratingOptions
-                 * @property {boolean|null} [show] OriginQuestion show
+                 * @interface ISurvey
+                 * @property {string|null} [prompt] Survey prompt
+                 * @property {string|null} [freeformPrompt] Survey freeformPrompt
+                 * @property {clutch.feedback.v1.IRatingOptions|null} [ratingOptions] Survey ratingOptions
+                 * @property {boolean|null} [show] Survey show
                  */
 
                 /**
-                 * Constructs a new OriginQuestion.
+                 * Constructs a new Survey.
                  * @memberof clutch.feedback.v1
-                 * @classdesc Represents an OriginQuestion.
-                 * @implements IOriginQuestion
+                 * @classdesc Represents a Survey.
+                 * @implements ISurvey
                  * @constructor
-                 * @param {clutch.feedback.v1.IOriginQuestion=} [properties] Properties to set
+                 * @param {clutch.feedback.v1.ISurvey=} [properties] Properties to set
                  */
-                function OriginQuestion(properties) {
+                function Survey(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -29592,54 +30162,54 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * OriginQuestion question.
-                 * @member {string} question
-                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * Survey prompt.
+                 * @member {string} prompt
+                 * @memberof clutch.feedback.v1.Survey
                  * @instance
                  */
-                OriginQuestion.prototype.question = "";
+                Survey.prototype.prompt = "";
 
                 /**
-                 * OriginQuestion freeformQuestion.
-                 * @member {string} freeformQuestion
-                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * Survey freeformPrompt.
+                 * @member {string} freeformPrompt
+                 * @memberof clutch.feedback.v1.Survey
                  * @instance
                  */
-                OriginQuestion.prototype.freeformQuestion = "";
+                Survey.prototype.freeformPrompt = "";
 
                 /**
-                 * OriginQuestion ratingOptions.
+                 * Survey ratingOptions.
                  * @member {clutch.feedback.v1.IRatingOptions|null|undefined} ratingOptions
-                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * @memberof clutch.feedback.v1.Survey
                  * @instance
                  */
-                OriginQuestion.prototype.ratingOptions = null;
+                Survey.prototype.ratingOptions = null;
 
                 /**
-                 * OriginQuestion show.
+                 * Survey show.
                  * @member {boolean} show
-                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * @memberof clutch.feedback.v1.Survey
                  * @instance
                  */
-                OriginQuestion.prototype.show = false;
+                Survey.prototype.show = false;
 
                 /**
-                 * Verifies an OriginQuestion message.
+                 * Verifies a Survey message.
                  * @function verify
-                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * @memberof clutch.feedback.v1.Survey
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                OriginQuestion.verify = function verify(message) {
+                Survey.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.question != null && message.hasOwnProperty("question"))
-                        if (!$util.isString(message.question))
-                            return "question: string expected";
-                    if (message.freeformQuestion != null && message.hasOwnProperty("freeformQuestion"))
-                        if (!$util.isString(message.freeformQuestion))
-                            return "freeformQuestion: string expected";
+                    if (message.prompt != null && message.hasOwnProperty("prompt"))
+                        if (!$util.isString(message.prompt))
+                            return "prompt: string expected";
+                    if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
+                        if (!$util.isString(message.freeformPrompt))
+                            return "freeformPrompt: string expected";
                     if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions")) {
                         let error = $root.clutch.feedback.v1.RatingOptions.verify(message.ratingOptions);
                         if (error)
@@ -29652,24 +30222,24 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates an OriginQuestion message from a plain object. Also converts values to their respective internal types.
+                 * Creates a Survey message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * @memberof clutch.feedback.v1.Survey
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.feedback.v1.OriginQuestion} OriginQuestion
+                 * @returns {clutch.feedback.v1.Survey} Survey
                  */
-                OriginQuestion.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.feedback.v1.OriginQuestion)
+                Survey.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.Survey)
                         return object;
-                    let message = new $root.clutch.feedback.v1.OriginQuestion();
-                    if (object.question != null)
-                        message.question = String(object.question);
-                    if (object.freeformQuestion != null)
-                        message.freeformQuestion = String(object.freeformQuestion);
+                    let message = new $root.clutch.feedback.v1.Survey();
+                    if (object.prompt != null)
+                        message.prompt = String(object.prompt);
+                    if (object.freeformPrompt != null)
+                        message.freeformPrompt = String(object.freeformPrompt);
                     if (object.ratingOptions != null) {
                         if (typeof object.ratingOptions !== "object")
-                            throw TypeError(".clutch.feedback.v1.OriginQuestion.ratingOptions: object expected");
+                            throw TypeError(".clutch.feedback.v1.Survey.ratingOptions: object expected");
                         message.ratingOptions = $root.clutch.feedback.v1.RatingOptions.fromObject(object.ratingOptions);
                     }
                     if (object.show != null)
@@ -29678,28 +30248,28 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from an OriginQuestion message. Also converts values to other types if specified.
+                 * Creates a plain object from a Survey message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * @memberof clutch.feedback.v1.Survey
                  * @static
-                 * @param {clutch.feedback.v1.OriginQuestion} message OriginQuestion
+                 * @param {clutch.feedback.v1.Survey} message Survey
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                OriginQuestion.toObject = function toObject(message, options) {
+                Survey.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.question = "";
-                        object.freeformQuestion = "";
+                        object.prompt = "";
+                        object.freeformPrompt = "";
                         object.ratingOptions = null;
                         object.show = false;
                     }
-                    if (message.question != null && message.hasOwnProperty("question"))
-                        object.question = message.question;
-                    if (message.freeformQuestion != null && message.hasOwnProperty("freeformQuestion"))
-                        object.freeformQuestion = message.freeformQuestion;
+                    if (message.prompt != null && message.hasOwnProperty("prompt"))
+                        object.prompt = message.prompt;
+                    if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
+                        object.freeformPrompt = message.freeformPrompt;
                     if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions"))
                         object.ratingOptions = $root.clutch.feedback.v1.RatingOptions.toObject(message.ratingOptions, options);
                     if (message.show != null && message.hasOwnProperty("show"))
@@ -29708,38 +30278,38 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this OriginQuestion to JSON.
+                 * Converts this Survey to JSON.
                  * @function toJSON
-                 * @memberof clutch.feedback.v1.OriginQuestion
+                 * @memberof clutch.feedback.v1.Survey
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                OriginQuestion.prototype.toJSON = function toJSON() {
+                Survey.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return OriginQuestion;
+                return Survey;
             })();
 
-            v1.GetQuestionsResponse = (function() {
+            v1.GetSurveysResponse = (function() {
 
                 /**
-                 * Properties of a GetQuestionsResponse.
+                 * Properties of a GetSurveysResponse.
                  * @memberof clutch.feedback.v1
-                 * @interface IGetQuestionsResponse
-                 * @property {Object.<string,clutch.feedback.v1.IOriginQuestion>|null} [originQuestion] GetQuestionsResponse originQuestion
+                 * @interface IGetSurveysResponse
+                 * @property {Object.<string,clutch.feedback.v1.ISurvey>|null} [originSurvey] GetSurveysResponse originSurvey
                  */
 
                 /**
-                 * Constructs a new GetQuestionsResponse.
+                 * Constructs a new GetSurveysResponse.
                  * @memberof clutch.feedback.v1
-                 * @classdesc Represents a GetQuestionsResponse.
-                 * @implements IGetQuestionsResponse
+                 * @classdesc Represents a GetSurveysResponse.
+                 * @implements IGetSurveysResponse
                  * @constructor
-                 * @param {clutch.feedback.v1.IGetQuestionsResponse=} [properties] Properties to set
+                 * @param {clutch.feedback.v1.IGetSurveysResponse=} [properties] Properties to set
                  */
-                function GetQuestionsResponse(properties) {
-                    this.originQuestion = {};
+                function GetSurveysResponse(properties) {
+                    this.originSurvey = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -29747,98 +30317,98 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetQuestionsResponse originQuestion.
-                 * @member {Object.<string,clutch.feedback.v1.IOriginQuestion>} originQuestion
-                 * @memberof clutch.feedback.v1.GetQuestionsResponse
+                 * GetSurveysResponse originSurvey.
+                 * @member {Object.<string,clutch.feedback.v1.ISurvey>} originSurvey
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
                  * @instance
                  */
-                GetQuestionsResponse.prototype.originQuestion = $util.emptyObject;
+                GetSurveysResponse.prototype.originSurvey = $util.emptyObject;
 
                 /**
-                 * Verifies a GetQuestionsResponse message.
+                 * Verifies a GetSurveysResponse message.
                  * @function verify
-                 * @memberof clutch.feedback.v1.GetQuestionsResponse
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                GetQuestionsResponse.verify = function verify(message) {
+                GetSurveysResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.originQuestion != null && message.hasOwnProperty("originQuestion")) {
-                        if (!$util.isObject(message.originQuestion))
-                            return "originQuestion: object expected";
-                        let key = Object.keys(message.originQuestion);
+                    if (message.originSurvey != null && message.hasOwnProperty("originSurvey")) {
+                        if (!$util.isObject(message.originSurvey))
+                            return "originSurvey: object expected";
+                        let key = Object.keys(message.originSurvey);
                         for (let i = 0; i < key.length; ++i) {
-                            let error = $root.clutch.feedback.v1.OriginQuestion.verify(message.originQuestion[key[i]]);
+                            let error = $root.clutch.feedback.v1.Survey.verify(message.originSurvey[key[i]]);
                             if (error)
-                                return "originQuestion." + error;
+                                return "originSurvey." + error;
                         }
                     }
                     return null;
                 };
 
                 /**
-                 * Creates a GetQuestionsResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a GetSurveysResponse message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.feedback.v1.GetQuestionsResponse
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.feedback.v1.GetQuestionsResponse} GetQuestionsResponse
+                 * @returns {clutch.feedback.v1.GetSurveysResponse} GetSurveysResponse
                  */
-                GetQuestionsResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.feedback.v1.GetQuestionsResponse)
+                GetSurveysResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.GetSurveysResponse)
                         return object;
-                    let message = new $root.clutch.feedback.v1.GetQuestionsResponse();
-                    if (object.originQuestion) {
-                        if (typeof object.originQuestion !== "object")
-                            throw TypeError(".clutch.feedback.v1.GetQuestionsResponse.originQuestion: object expected");
-                        message.originQuestion = {};
-                        for (let keys = Object.keys(object.originQuestion), i = 0; i < keys.length; ++i) {
-                            if (typeof object.originQuestion[keys[i]] !== "object")
-                                throw TypeError(".clutch.feedback.v1.GetQuestionsResponse.originQuestion: object expected");
-                            message.originQuestion[keys[i]] = $root.clutch.feedback.v1.OriginQuestion.fromObject(object.originQuestion[keys[i]]);
+                    let message = new $root.clutch.feedback.v1.GetSurveysResponse();
+                    if (object.originSurvey) {
+                        if (typeof object.originSurvey !== "object")
+                            throw TypeError(".clutch.feedback.v1.GetSurveysResponse.originSurvey: object expected");
+                        message.originSurvey = {};
+                        for (let keys = Object.keys(object.originSurvey), i = 0; i < keys.length; ++i) {
+                            if (typeof object.originSurvey[keys[i]] !== "object")
+                                throw TypeError(".clutch.feedback.v1.GetSurveysResponse.originSurvey: object expected");
+                            message.originSurvey[keys[i]] = $root.clutch.feedback.v1.Survey.fromObject(object.originSurvey[keys[i]]);
                         }
                     }
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a GetQuestionsResponse message. Also converts values to other types if specified.
+                 * Creates a plain object from a GetSurveysResponse message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.feedback.v1.GetQuestionsResponse
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
                  * @static
-                 * @param {clutch.feedback.v1.GetQuestionsResponse} message GetQuestionsResponse
+                 * @param {clutch.feedback.v1.GetSurveysResponse} message GetSurveysResponse
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                GetQuestionsResponse.toObject = function toObject(message, options) {
+                GetSurveysResponse.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
                     if (options.objects || options.defaults)
-                        object.originQuestion = {};
+                        object.originSurvey = {};
                     let keys2;
-                    if (message.originQuestion && (keys2 = Object.keys(message.originQuestion)).length) {
-                        object.originQuestion = {};
+                    if (message.originSurvey && (keys2 = Object.keys(message.originSurvey)).length) {
+                        object.originSurvey = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.originQuestion[keys2[j]] = $root.clutch.feedback.v1.OriginQuestion.toObject(message.originQuestion[keys2[j]], options);
+                            object.originSurvey[keys2[j]] = $root.clutch.feedback.v1.Survey.toObject(message.originSurvey[keys2[j]], options);
                     }
                     return object;
                 };
 
                 /**
-                 * Converts this GetQuestionsResponse to JSON.
+                 * Converts this GetSurveysResponse to JSON.
                  * @function toJSON
-                 * @memberof clutch.feedback.v1.GetQuestionsResponse
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                GetQuestionsResponse.prototype.toJSON = function toJSON() {
+                GetSurveysResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return GetQuestionsResponse;
+                return GetSurveysResponse;
             })();
 
             return v1;

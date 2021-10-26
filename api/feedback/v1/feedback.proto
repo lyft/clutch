@@ -9,9 +9,9 @@ import "api/v1/annotations.proto";
 import "validate/validate.proto";
 
 service FeedbackAPI {
-  rpc GetQuestions(GetQuestionsRequest) returns (GetQuestionsResponse) {
+  rpc GetSurveys(GetSurveysRequest) returns (GetSurveysResponse) {
     option (google.api.http) = {
-      post : "/v1/feedback/getQuestions"
+      post : "/v1/feedback/getSurveys"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
@@ -25,15 +25,14 @@ enum Origin {
   WIZARD = 2;
 }
 
-message GetQuestionsRequest {
-  // the origin of the feedback entry which gets mapped to a origin-specific question
-  // multiple origins can be passed in the request to return their specific question
+message GetSurveysRequest {
+  // the origin of the feedback entry. multiple origins can be passed in the request to return their specific survey
   repeated Origin origins = 1 [ (validate.rules).repeated = {
     min_items : 1,
     items : {enum : {defined_only : true, not_in : 0}}
   } ];
-  // future: have rules on whether a user should see the feedback questions
-  string user = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  // future: have rules on whether a user should see the feedback survey
+  string user = 2;
 }
 
 message RatingOptions {
@@ -44,18 +43,18 @@ message RatingOptions {
   string three = 3;
 }
 
-message OriginQuestion {
-  // the question for the rating options
-  string question = 1;
+message Survey {
+  // the prompt for the rating options
+  string prompt = 1;
   // the prompt for the freeform feedback
-  string freeform_question = 2;
+  string freeform_prompt = 2;
   // feedback options to present to the user (i.e. "bad", "ok", "great")
   RatingOptions rating_options = 3;
-  // future: have rules on whether a user should see the feedback question
+  // future: have rules on whether a user should see the feedback survey
   bool show = 4;
 }
 
-message GetQuestionsResponse {
+message GetSurveysResponse {
   // the key will be the feedback origin name
-  map<string, OriginQuestion> origin_question = 1;
+  map<string, Survey> origin_survey = 1;
 }
