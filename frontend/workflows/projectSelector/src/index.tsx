@@ -39,7 +39,7 @@ export type {
   TimelineState,
   TimeData,
   TimeDataUpdate,
-  ProjectToPointsMap,
+  EventData,
   TimeRangeState,
 } from "./types";
 export {
