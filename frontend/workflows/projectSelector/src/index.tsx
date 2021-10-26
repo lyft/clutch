@@ -39,7 +39,7 @@ export type {
   TimelineState,
   TimeData,
   TimeDataUpdate,
-  CardData,
+  EventData,
   TimeRangeState,
 } from "./types";
 export {

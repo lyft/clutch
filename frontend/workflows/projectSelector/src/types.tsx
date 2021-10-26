@@ -114,10 +114,10 @@ export interface DashAction {
 
 export interface TimeData {
   /** eventsKey corresponds to entity owning the data - i.e. card name */
-  [eventsKey: string]: CardData;
+  [eventsKey: string]: EventData;
 }
 
-export interface CardData {
+export interface EventData {
   /**
    * Mapping of project names to their event time points
    * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
@@ -132,7 +132,7 @@ export interface TimeDataUpdate {
   /** The name of the card or entity that is updating */
   key: string;
   /** The projects with their timeseries data and emoji */
-  cardData: CardData;
+  eventData: EventData;
 }
 
 export interface TimelineState {

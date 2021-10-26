@@ -63,7 +63,7 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
     case "UPDATE": {
       // for now, clobber any existing data
       const newState = { ...state };
-      newState.timeData[action.payload.key] = action.payload.cardData;
+      newState.timeData[action.payload.key] = action.payload.eventData;
       return newState;
     }
     default:
