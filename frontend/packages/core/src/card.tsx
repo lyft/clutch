@@ -92,6 +92,7 @@ const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHead
           <Typography variant="h4">{title}</Typography>
         </Grid>
         {summary.map((section: CardHeaderSummaryProps, idx: number) => (
+          // eslint-disable-next-line react/no-array-index-key
           <React.Fragment key={idx}>
             <StyledDivider orientation="vertical" />
             <StyledGridItem item xs>
