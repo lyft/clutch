@@ -366,3 +366,437 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetSurveysResponseValidationError{}
+
+// Validate checks the field values on FeedbackMetadata with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *FeedbackMetadata) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetOrigin()) < 1 {
+		return FeedbackMetadataValidationError{
+			field:  "Origin",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if m.GetSurvey() == nil {
+		return FeedbackMetadataValidationError{
+			field:  "Survey",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSurvey()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return FeedbackMetadataValidationError{
+				field:  "Survey",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for UserSubmitted
+
+	return nil
+}
+
+// FeedbackMetadataValidationError is the validation error returned by
+// FeedbackMetadata.Validate if the designated constraints aren't met.
+type FeedbackMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FeedbackMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FeedbackMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FeedbackMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FeedbackMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FeedbackMetadataValidationError) ErrorName() string { return "FeedbackMetadataValidationError" }
+
+// Error satisfies the builtin error interface
+func (e FeedbackMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFeedbackMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FeedbackMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FeedbackMetadataValidationError{}
+
+// Validate checks the field values on Feedback with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Feedback) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetUserId()) < 1 {
+		return FeedbackValidationError{
+			field:  "UserId",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetUrlPath()) < 1 {
+		return FeedbackValidationError{
+			field:  "UrlPath",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetRating()) < 1 {
+		return FeedbackValidationError{
+			field:  "Rating",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	// no validation rules for FreeformResponse
+
+	// no validation rules for FeedbackType
+
+	if m.GetMetadata() == nil {
+		return FeedbackValidationError{
+			field:  "Metadata",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return FeedbackValidationError{
+				field:  "Metadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// FeedbackValidationError is the validation error returned by
+// Feedback.Validate if the designated constraints aren't met.
+type FeedbackValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FeedbackValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FeedbackValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FeedbackValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FeedbackValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FeedbackValidationError) ErrorName() string { return "FeedbackValidationError" }
+
+// Error satisfies the builtin error interface
+func (e FeedbackValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFeedback.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FeedbackValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FeedbackValidationError{}
+
+// Validate checks the field values on CreateFeedbackRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateFeedbackRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetFeedback() == nil {
+		return CreateFeedbackRequestValidationError{
+			field:  "Feedback",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateFeedbackRequestValidationError{
+				field:  "Feedback",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// CreateFeedbackRequestValidationError is the validation error returned by
+// CreateFeedbackRequest.Validate if the designated constraints aren't met.
+type CreateFeedbackRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateFeedbackRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateFeedbackRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateFeedbackRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateFeedbackRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateFeedbackRequestValidationError) ErrorName() string {
+	return "CreateFeedbackRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateFeedbackRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateFeedbackRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateFeedbackRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateFeedbackRequestValidationError{}
+
+// Validate checks the field values on CreateFeedbackResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateFeedbackResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	return nil
+}
+
+// CreateFeedbackResponseValidationError is the validation error returned by
+// CreateFeedbackResponse.Validate if the designated constraints aren't met.
+type CreateFeedbackResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateFeedbackResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateFeedbackResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateFeedbackResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateFeedbackResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateFeedbackResponseValidationError) ErrorName() string {
+	return "CreateFeedbackResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateFeedbackResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateFeedbackResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateFeedbackResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateFeedbackResponseValidationError{}
+
+// Validate checks the field values on Submission with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Submission) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetSubmittedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SubmissionValidationError{
+				field:  "SubmittedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetFeedabck()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SubmissionValidationError{
+				field:  "Feedabck",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// SubmissionValidationError is the validation error returned by
+// Submission.Validate if the designated constraints aren't met.
+type SubmissionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SubmissionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SubmissionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SubmissionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SubmissionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SubmissionValidationError) ErrorName() string { return "SubmissionValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SubmissionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSubmission.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SubmissionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SubmissionValidationError{}

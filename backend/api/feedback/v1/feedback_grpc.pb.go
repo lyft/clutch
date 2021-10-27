@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FeedbackAPIClient interface {
 	GetSurveys(ctx context.Context, in *GetSurveysRequest, opts ...grpc.CallOption) (*GetSurveysResponse, error)
+	CreateFeedback(ctx context.Context, in *CreateFeedbackRequest, opts ...grpc.CallOption) (*CreateFeedbackResponse, error)
 }
 
 type feedbackAPIClient struct {
@@ -38,11 +39,21 @@ func (c *feedbackAPIClient) GetSurveys(ctx context.Context, in *GetSurveysReques
 	return out, nil
 }
 
+func (c *feedbackAPIClient) CreateFeedback(ctx context.Context, in *CreateFeedbackRequest, opts ...grpc.CallOption) (*CreateFeedbackResponse, error) {
+	out := new(CreateFeedbackResponse)
+	err := c.cc.Invoke(ctx, "/clutch.feedback.v1.FeedbackAPI/CreateFeedback", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FeedbackAPIServer is the server API for FeedbackAPI service.
 // All implementations should embed UnimplementedFeedbackAPIServer
 // for forward compatibility
 type FeedbackAPIServer interface {
 	GetSurveys(context.Context, *GetSurveysRequest) (*GetSurveysResponse, error)
+	CreateFeedback(context.Context, *CreateFeedbackRequest) (*CreateFeedbackResponse, error)
 }
 
 // UnimplementedFeedbackAPIServer should be embedded to have forward compatible implementations.
@@ -51,6 +62,9 @@ type UnimplementedFeedbackAPIServer struct {
 
 func (UnimplementedFeedbackAPIServer) GetSurveys(context.Context, *GetSurveysRequest) (*GetSurveysResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSurveys not implemented")
+}
+func (UnimplementedFeedbackAPIServer) CreateFeedback(context.Context, *CreateFeedbackRequest) (*CreateFeedbackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFeedback not implemented")
 }
 
 // UnsafeFeedbackAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -82,6 +96,24 @@ func _FeedbackAPI_GetSurveys_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FeedbackAPI_CreateFeedback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateFeedbackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FeedbackAPIServer).CreateFeedback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.feedback.v1.FeedbackAPI/CreateFeedback",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FeedbackAPIServer).CreateFeedback(ctx, req.(*CreateFeedbackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FeedbackAPI_ServiceDesc is the grpc.ServiceDesc for FeedbackAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -92,6 +124,10 @@ var FeedbackAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSurveys",
 			Handler:    _FeedbackAPI_GetSurveys_Handler,
+		},
+		{
+			MethodName: "CreateFeedback",
+			Handler:    _FeedbackAPI_CreateFeedback_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
