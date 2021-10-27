@@ -572,6 +572,8 @@ func (m *CreateFeedbackRequest) Validate() error {
 		return nil
 	}
 
+	// no validation rules for Id
+
 	if m.GetFeedback() == nil {
 		return CreateFeedbackRequestValidationError{
 			field:  "Feedback",

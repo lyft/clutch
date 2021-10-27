@@ -91,7 +91,10 @@ message Feedback {
 }
 
 message CreateFeedbackRequest {
-  Feedback feedback = 1 [ (validate.rules).message = {required : true} ];
+  // (optional) id of the feedback to update (essentially replace with the latest)
+  // TODO: remove if we decide to record feedback only when a user clicks the submit button
+  int64 id = 1;
+  Feedback feedback = 2 [ (validate.rules).message = {required : true} ];
 }
 
 message CreateFeedbackResponse {

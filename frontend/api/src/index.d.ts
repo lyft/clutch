@@ -12772,6 +12772,9 @@ export namespace clutch {
             /** Properties of a CreateFeedbackRequest. */
             interface ICreateFeedbackRequest {
 
+                /** CreateFeedbackRequest id */
+                id?: (number|Long|null);
+
                 /** CreateFeedbackRequest feedback */
                 feedback?: (clutch.feedback.v1.IFeedback|null);
             }
@@ -12784,6 +12787,9 @@ export namespace clutch {
                  * @param [properties] Properties to set
                  */
                 constructor(properties?: clutch.feedback.v1.ICreateFeedbackRequest);
+
+                /** CreateFeedbackRequest id. */
+                public id: (number|Long);
 
                 /** CreateFeedbackRequest feedback. */
                 public feedback?: (clutch.feedback.v1.IFeedback|null);

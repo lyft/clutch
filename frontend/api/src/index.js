@@ -30781,6 +30781,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a CreateFeedbackRequest.
                  * @memberof clutch.feedback.v1
                  * @interface ICreateFeedbackRequest
+                 * @property {number|Long|null} [id] CreateFeedbackRequest id
                  * @property {clutch.feedback.v1.IFeedback|null} [feedback] CreateFeedbackRequest feedback
                  */
 
@@ -30798,6 +30799,14 @@ export const clutch = $root.clutch = (() => {
                             if (properties[keys[i]] != null)
                                 this[keys[i]] = properties[keys[i]];
                 }
+
+                /**
+                 * CreateFeedbackRequest id.
+                 * @member {number|Long} id
+                 * @memberof clutch.feedback.v1.CreateFeedbackRequest
+                 * @instance
+                 */
+                CreateFeedbackRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
                  * CreateFeedbackRequest feedback.
@@ -30818,6 +30827,9 @@ export const clutch = $root.clutch = (() => {
                 CreateFeedbackRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                            return "id: integer|Long expected";
                     if (message.feedback != null && message.hasOwnProperty("feedback")) {
                         let error = $root.clutch.feedback.v1.Feedback.verify(message.feedback);
                         if (error)
@@ -30838,6 +30850,15 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.feedback.v1.CreateFeedbackRequest)
                         return object;
                     let message = new $root.clutch.feedback.v1.CreateFeedbackRequest();
+                    if (object.id != null)
+                        if ($util.Long)
+                            (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                        else if (typeof object.id === "string")
+                            message.id = parseInt(object.id, 10);
+                        else if (typeof object.id === "number")
+                            message.id = object.id;
+                        else if (typeof object.id === "object")
+                            message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
                     if (object.feedback != null) {
                         if (typeof object.feedback !== "object")
                             throw TypeError(".clutch.feedback.v1.CreateFeedbackRequest.feedback: object expected");
@@ -30859,8 +30880,19 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.defaults)
+                    if (options.defaults) {
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.id = options.longs === String ? "0" : 0;
                         object.feedback = null;
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (typeof message.id === "number")
+                            object.id = options.longs === String ? String(message.id) : message.id;
+                        else
+                            object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
                     if (message.feedback != null && message.hasOwnProperty("feedback"))
                         object.feedback = $root.clutch.feedback.v1.Feedback.toObject(message.feedback, options);
                     return object;
