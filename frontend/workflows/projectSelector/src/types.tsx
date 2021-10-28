@@ -123,8 +123,8 @@ export interface EventData {
    * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
    */
   points: { [name: string]: IClutch.timeseries.v1.IPoint[] };
-  /** The emoji that will be used for this event series on the event timeline */
-  emoji: string;
+  /** The icon that will be used for this event series on the event timeline */
+  icon: React.ReactElement<any> | string;
 }
 
 /** Used by the reducer to update the time data in our context. */
