@@ -8992,6 +8992,12 @@ export namespace clutch {
 
                         /** Config dynamodbConfig */
                         dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
+
+                        /** Config currentAccountAlias */
+                        currentAccountAlias?: (string|null);
+
+                        /** Config additionalAccounts */
+                        additionalAccounts?: (clutch.config.service.aws.v1.IAWSAccount[]|null);
                     }
 
                     /** Represents a Config. */
@@ -9011,6 +9017,12 @@ export namespace clutch {
 
                         /** Config dynamodbConfig. */
                         public dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
+
+                        /** Config currentAccountAlias. */
+                        public currentAccountAlias: string;
+
+                        /** Config additionalAccounts. */
+                        public additionalAccounts: clutch.config.service.aws.v1.IAWSAccount[];
 
                         /**
                          * Verifies a Config message.
@@ -9198,6 +9210,72 @@ export namespace clutch {
 
                         /**
                          * Converts this ScalingLimits to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a AWSAccount. */
+                    interface IAWSAccount {
+
+                        /** AWSAccount alias */
+                        alias?: (string|null);
+
+                        /** AWSAccount accountNumber */
+                        accountNumber?: (string|null);
+
+                        /** AWSAccount iamRole */
+                        iamRole?: (string|null);
+
+                        /** AWSAccount regions */
+                        regions?: (string[]|null);
+                    }
+
+                    /** Represents a AWSAccount. */
+                    class AWSAccount implements IAWSAccount {
+
+                        /**
+                         * Constructs a new AWSAccount.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.aws.v1.IAWSAccount);
+
+                        /** AWSAccount alias. */
+                        public alias: string;
+
+                        /** AWSAccount accountNumber. */
+                        public accountNumber: string;
+
+                        /** AWSAccount iamRole. */
+                        public iamRole: string;
+
+                        /** AWSAccount regions. */
+                        public regions: string[];
+
+                        /**
+                         * Verifies a AWSAccount message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a AWSAccount message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns AWSAccount
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.aws.v1.AWSAccount;
+
+                        /**
+                         * Creates a plain object from a AWSAccount message. Also converts values to other types if specified.
+                         * @param message AWSAccount
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.aws.v1.AWSAccount, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this AWSAccount to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };

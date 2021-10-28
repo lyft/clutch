@@ -47,15 +47,12 @@ func (c *client) DescribeTable(ctx context.Context, region string, tableName str
 	}
 
 	result, err := getTable(ctx, cl, tableName)
-
 	if err != nil {
-		c.log.Warn("unable to find table in region: "+region, zap.Error(err))
+		c.log.Error("unable to find table in region", zap.String("region", region), zap.Error(err))
 		return nil, err
 	}
 
-	ret := newProtoForTable(result.Table, region)
-
-	return ret, nil
+	return newProtoForTable(result.Table, region), nil
 }
 
 func getTable(ctx context.Context, client *regionalClient, tableName string) (*dynamodb.DescribeTableOutput, error) {

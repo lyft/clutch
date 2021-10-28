@@ -69,7 +69,14 @@ func TestDescribeStreamWithGoodData(t *testing.T) {
 		stream: testAwsStream,
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", kinesis: m},
+				},
+			},
+		},
 	}
 
 	result, err := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
@@ -86,7 +93,14 @@ func TestDescribeStreamWithBadData(t *testing.T) {
 		stream: testAwsStreamWithBadData,
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", kinesis: m},
+				},
+			},
+		},
 	}
 
 	_, err := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
@@ -99,7 +113,14 @@ func TestUpdateShardCount(t *testing.T) {
 		stream: testAwsStream,
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", kinesis: m},
+				},
+			},
+		},
 	}
 
 	err := c.UpdateKinesisShardCount(context.Background(), "us-east-1", "test-stream", 50)

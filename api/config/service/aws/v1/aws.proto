@@ -10,6 +10,10 @@ message Config {
   repeated string regions = 1 [ (validate.rules).repeated = {min_items : 1} ];
   ClientConfig client_config = 2;
   DynamodbConfig dynamodb_config = 3;
+
+  // Defaults to "default"
+  string current_account_alias = 4;
+  repeated AWSAccount additional_accounts = 5;
 }
 
 message ClientConfig {
@@ -31,4 +35,11 @@ message ScalingLimits {
   float max_scale_factor = 3;
   // enables whether the service can override safety limits. Defaults to false
   bool enable_override = 4;
+}
+
+message AWSAccount {
+  string alias = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string account_number = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string iam_role = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  repeated string regions = 4 [ (validate.rules).repeated = {min_items : 1} ];
 }

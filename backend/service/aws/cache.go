@@ -43,7 +43,10 @@ func (c *client) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<
 // If a single resource and region takes longer to process it will not block other resources.
 // Additionally this give us the flexibility to tune the frequency based on resource.
 func (c *client) processRegionTopologyObjects(ctx context.Context) {
-	for name, client := range c.clients {
+	// TODO (mcutalo) this will be removed once the final bits of the multi account work have been merged
+	clients := c.accounts[c.currentAccountAlias].clients
+
+	for name, client := range clients {
 		c.log.Info("processing topology objects for region", zap.String("region", name))
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), client, c.processAllEC2Instances)
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllAutoScalingGroups)

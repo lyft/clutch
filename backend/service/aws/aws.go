@@ -38,6 +38,18 @@ import (
 	"github.com/lyft/clutch/backend/service"
 )
 
+// Only need to set the default account once
+// i dont think i really wanna be smart about it, will let the user config it
+// this causes lots of problmes for tests as we need to mock this response
+// if c.currentAccountAlias == "" {
+// 	tmpCfg := iam.NewFromConfig(regionCfg)
+// 	accountAlias, err := tmpCfg.ListAccountAliases(context.Background(), &iam.ListAccountAliasesInput{})
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	c.currentAccountAlias = accountAlias.AccountAliases[0]
+// }
+
 const (
 	Name = "clutch.service.aws"
 )
@@ -49,12 +61,18 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		return nil, err
 	}
 
+	accountAlias := "default"
+	if ac.CurrentAccountAlias == "" {
+		accountAlias = ac.CurrentAccountAlias
+	}
+
 	c := &client{
-		clients:            make(map[string]*accountClients, len(ac.Regions)),
-		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
-		topologyLock:       semaphore.NewWeighted(1),
-		log:                logger,
-		scope:              scope,
+		accounts:            make(map[string]*accountClients, len(ac.Regions)),
+		topologyObjectChan:  make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
+		topologyLock:        semaphore.NewWeighted(1),
+		currentAccountAlias: accountAlias,
+		log:                 logger,
+		scope:               scope,
 	}
 
 	clientRetries := 0
@@ -80,38 +98,37 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 			return nil, err
 		}
 
-		// Should sts to get current account info?
-		// default client
-		c.clients["default"] = &accountClients{
-			clients: map[string]*regionalClient{
-				region: &regionalClient{
-					region: region,
-					dynamodbCfg: &awsv1.DynamodbConfig{
-						ScalingLimits: &awsv1.ScalingLimits{
-							MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
-							MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
-							MaxScaleFactor:        ds.MaxScaleFactor,
-							EnableOverride:        ds.EnableOverride,
-						},
-					},
+		if _, ok := c.accounts[c.currentAccountAlias]; !ok {
+			c.accounts[c.currentAccountAlias] = &accountClients{
+				clients: map[string]*regionalClient{},
+			}
+		}
 
-					s3:          s3.NewFromConfig(regionCfg),
-					kinesis:     kinesis.NewFromConfig(regionCfg),
-					ec2:         ec2.NewFromConfig(regionCfg),
-					autoscaling: autoscaling.NewFromConfig(regionCfg),
-					dynamodb:    dynamodb.NewFromConfig(regionCfg),
-					sts:         sts.NewFromConfig(regionCfg),
-					iam:         iam.NewFromConfig(regionCfg),
+		c.accounts[c.currentAccountAlias].clients[region] = &regionalClient{
+			region: region,
+			dynamodbCfg: &awsv1.DynamodbConfig{
+				ScalingLimits: &awsv1.ScalingLimits{
+					MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+					MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+					MaxScaleFactor:        ds.MaxScaleFactor,
+					EnableOverride:        ds.EnableOverride,
 				},
 			},
+
+			s3:          s3.NewFromConfig(regionCfg),
+			kinesis:     kinesis.NewFromConfig(regionCfg),
+			ec2:         ec2.NewFromConfig(regionCfg),
+			autoscaling: autoscaling.NewFromConfig(regionCfg),
+			dynamodb:    dynamodb.NewFromConfig(regionCfg),
+			sts:         sts.NewFromConfig(regionCfg),
+			iam:         iam.NewFromConfig(regionCfg),
 		}
 	}
 
-	// Construct default account, query STS to get account info
-	// Construct add the rest of the clients now that current account / client are complete
-
 	return c, nil
 }
+
+// func configureAdditonalAccountClient(account awsv1.AWSAccount) {}
 
 type Client interface {
 	DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error)
@@ -136,11 +153,12 @@ type Client interface {
 }
 
 type client struct {
-	clients            map[string]*accountClients
-	topologyObjectChan chan *topologyv1.UpdateCacheRequest
-	topologyLock       *semaphore.Weighted
-	log                *zap.Logger
-	scope              tally.Scope
+	accounts            map[string]*accountClients
+	topologyObjectChan  chan *topologyv1.UpdateCacheRequest
+	topologyLock        *semaphore.Weighted
+	currentAccountAlias string
+	log                 *zap.Logger
+	scope               tally.Scope
 }
 
 type regionalClient struct {
@@ -173,7 +191,10 @@ func (c *client) InterceptError(e error) error {
 }
 
 func (c *client) getRegionalClient(region string) (*regionalClient, error) {
-	rc, ok := c.clients["default"].clients[region]
+	// TODO (mcutalo): this currently defaults to the current account alias
+	// this will be removed once the multi account bits land
+	// the func signature will also have to be updated to pass in desired account info
+	rc, ok := c.accounts[c.currentAccountAlias].clients[region]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "no client found for region '%s'", region)
 	}
@@ -282,11 +303,16 @@ func newProtoForAutoscalingGroup(group astypes.AutoScalingGroup) *ec2v1.Autoscal
 	return pb
 }
 
+// what is this suppose to do now, like get all regions for all accounts, or just per account.
 func (c *client) Regions() []string {
-	regions := make([]string, 0, len(c.clients))
-	for region := range c.clients {
-		regions = append(regions, region)
+	regions := make([]string, 0)
+
+	for _, account := range c.accounts {
+		for region := range account.clients {
+			regions = append(regions, region)
+		}
 	}
+
 	return regions
 }
 

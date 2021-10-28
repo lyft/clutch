@@ -15,6 +15,12 @@ import (
 func TestStartTopologyCache(t *testing.T) {
 	log := zaptest.NewLogger(t)
 	c := client{
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{},
+			},
+		},
 		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
 		topologyLock:       semaphore.NewWeighted(1),
 		log:                log,

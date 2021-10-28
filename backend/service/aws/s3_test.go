@@ -20,7 +20,14 @@ func TestS3StreamGet(t *testing.T) {
 		},
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", s3: s3Client}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", s3: s3Client},
+				},
+			},
+		},
 	}
 
 	output, err := c.S3StreamingGet(context.Background(), "us-east-1", "clutch", "key")
@@ -33,7 +40,14 @@ func TestS3StreamGetErrorHandling(t *testing.T) {
 		getObjectErr: fmt.Errorf("error"),
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", s3: s3Client}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", s3: s3Client},
+				},
+			},
+		},
 	}
 
 	output1, err1 := c.S3StreamingGet(context.Background(), "us-east-1", "clutch", "key")
@@ -54,7 +68,14 @@ func TestS3GetBucketPolicy(t *testing.T) {
 		},
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", s3: s3Client}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", s3: s3Client},
+				},
+			},
+		},
 	}
 
 	output, err := c.S3GetBucketPolicy(context.Background(), "us-east-1", "clutch", "000000000000")
@@ -70,7 +91,14 @@ func TestS3GetBucketPolicyErrorHandling(t *testing.T) {
 		getObjectPolicyErr: fmt.Errorf("error"),
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", s3: s3Client}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", s3: s3Client},
+				},
+			},
+		},
 	}
 
 	output1, err1 := c.S3GetBucketPolicy(context.Background(), "us-east-1", "clutch", "000000000000")
