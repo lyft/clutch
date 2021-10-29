@@ -12365,18 +12365,18 @@ export namespace clutch {
                 public getSurveys(request: clutch.feedback.v1.IGetSurveysRequest): Promise<clutch.feedback.v1.GetSurveysResponse>;
 
                 /**
-                 * Calls CreateFeedback.
-                 * @param request CreateFeedbackRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and CreateFeedbackResponse
+                 * Calls SubmitFeedback.
+                 * @param request SubmitFeedbackRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and SubmitFeedbackResponse
                  */
-                public createFeedback(request: clutch.feedback.v1.ICreateFeedbackRequest, callback: clutch.feedback.v1.FeedbackAPI.CreateFeedbackCallback): void;
+                public submitFeedback(request: clutch.feedback.v1.ISubmitFeedbackRequest, callback: clutch.feedback.v1.FeedbackAPI.SubmitFeedbackCallback): void;
 
                 /**
-                 * Calls CreateFeedback.
-                 * @param request CreateFeedbackRequest message or plain object
+                 * Calls SubmitFeedback.
+                 * @param request SubmitFeedbackRequest message or plain object
                  * @returns Promise
                  */
-                public createFeedback(request: clutch.feedback.v1.ICreateFeedbackRequest): Promise<clutch.feedback.v1.CreateFeedbackResponse>;
+                public submitFeedback(request: clutch.feedback.v1.ISubmitFeedbackRequest): Promise<clutch.feedback.v1.SubmitFeedbackResponse>;
             }
 
             namespace FeedbackAPI {
@@ -12389,11 +12389,11 @@ export namespace clutch {
                 type GetSurveysCallback = (error: (Error|null), response?: clutch.feedback.v1.GetSurveysResponse) => void;
 
                 /**
-                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#createFeedback}.
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#submitFeedback}.
                  * @param error Error, if any
-                 * @param [response] CreateFeedbackResponse
+                 * @param [response] SubmitFeedbackResponse
                  */
-                type CreateFeedbackCallback = (error: (Error|null), response?: clutch.feedback.v1.CreateFeedbackResponse) => void;
+                type SubmitFeedbackCallback = (error: (Error|null), response?: clutch.feedback.v1.SubmitFeedbackResponse) => void;
             }
 
             /** Origin enum. */
@@ -12769,103 +12769,103 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a CreateFeedbackRequest. */
-            interface ICreateFeedbackRequest {
+            /** Properties of a SubmitFeedbackRequest. */
+            interface ISubmitFeedbackRequest {
 
-                /** CreateFeedbackRequest id */
+                /** SubmitFeedbackRequest id */
                 id?: (number|Long|null);
 
-                /** CreateFeedbackRequest feedback */
+                /** SubmitFeedbackRequest feedback */
                 feedback?: (clutch.feedback.v1.IFeedback|null);
             }
 
-            /** Represents a CreateFeedbackRequest. */
-            class CreateFeedbackRequest implements ICreateFeedbackRequest {
+            /** Represents a SubmitFeedbackRequest. */
+            class SubmitFeedbackRequest implements ISubmitFeedbackRequest {
 
                 /**
-                 * Constructs a new CreateFeedbackRequest.
+                 * Constructs a new SubmitFeedbackRequest.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.feedback.v1.ICreateFeedbackRequest);
+                constructor(properties?: clutch.feedback.v1.ISubmitFeedbackRequest);
 
-                /** CreateFeedbackRequest id. */
+                /** SubmitFeedbackRequest id. */
                 public id: (number|Long);
 
-                /** CreateFeedbackRequest feedback. */
+                /** SubmitFeedbackRequest feedback. */
                 public feedback?: (clutch.feedback.v1.IFeedback|null);
 
                 /**
-                 * Verifies a CreateFeedbackRequest message.
+                 * Verifies a SubmitFeedbackRequest message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a CreateFeedbackRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SubmitFeedbackRequest message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns CreateFeedbackRequest
+                 * @returns SubmitFeedbackRequest
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.CreateFeedbackRequest;
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.SubmitFeedbackRequest;
 
                 /**
-                 * Creates a plain object from a CreateFeedbackRequest message. Also converts values to other types if specified.
-                 * @param message CreateFeedbackRequest
+                 * Creates a plain object from a SubmitFeedbackRequest message. Also converts values to other types if specified.
+                 * @param message SubmitFeedbackRequest
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.feedback.v1.CreateFeedbackRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.feedback.v1.SubmitFeedbackRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this CreateFeedbackRequest to JSON.
+                 * Converts this SubmitFeedbackRequest to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a CreateFeedbackResponse. */
-            interface ICreateFeedbackResponse {
+            /** Properties of a SubmitFeedbackResponse. */
+            interface ISubmitFeedbackResponse {
 
-                /** CreateFeedbackResponse id */
+                /** SubmitFeedbackResponse id */
                 id?: (number|Long|null);
             }
 
-            /** Represents a CreateFeedbackResponse. */
-            class CreateFeedbackResponse implements ICreateFeedbackResponse {
+            /** Represents a SubmitFeedbackResponse. */
+            class SubmitFeedbackResponse implements ISubmitFeedbackResponse {
 
                 /**
-                 * Constructs a new CreateFeedbackResponse.
+                 * Constructs a new SubmitFeedbackResponse.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.feedback.v1.ICreateFeedbackResponse);
+                constructor(properties?: clutch.feedback.v1.ISubmitFeedbackResponse);
 
-                /** CreateFeedbackResponse id. */
+                /** SubmitFeedbackResponse id. */
                 public id: (number|Long);
 
                 /**
-                 * Verifies a CreateFeedbackResponse message.
+                 * Verifies a SubmitFeedbackResponse message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a CreateFeedbackResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SubmitFeedbackResponse message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns CreateFeedbackResponse
+                 * @returns SubmitFeedbackResponse
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.CreateFeedbackResponse;
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.SubmitFeedbackResponse;
 
                 /**
-                 * Creates a plain object from a CreateFeedbackResponse message. Also converts values to other types if specified.
-                 * @param message CreateFeedbackResponse
+                 * Creates a plain object from a SubmitFeedbackResponse message. Also converts values to other types if specified.
+                 * @param message SubmitFeedbackResponse
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.feedback.v1.CreateFeedbackResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.feedback.v1.SubmitFeedbackResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this CreateFeedbackResponse to JSON.
+                 * Converts this SubmitFeedbackResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -12877,8 +12877,8 @@ export namespace clutch {
                 /** Submission submittedAt */
                 submittedAt?: (google.protobuf.ITimestamp|null);
 
-                /** Submission feedabck */
-                feedabck?: (clutch.feedback.v1.IFeedback|null);
+                /** Submission feedback */
+                feedback?: (clutch.feedback.v1.IFeedback|null);
             }
 
             /** Represents a Submission. */
@@ -12893,8 +12893,8 @@ export namespace clutch {
                 /** Submission submittedAt. */
                 public submittedAt?: (google.protobuf.ITimestamp|null);
 
-                /** Submission feedabck. */
-                public feedabck?: (clutch.feedback.v1.IFeedback|null);
+                /** Submission feedback. */
+                public feedback?: (clutch.feedback.v1.IFeedback|null);
 
                 /**
                  * Verifies a Submission message.

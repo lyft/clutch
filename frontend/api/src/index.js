@@ -29830,35 +29830,35 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
-                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#createFeedback}.
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#submitFeedback}.
                  * @memberof clutch.feedback.v1.FeedbackAPI
-                 * @typedef CreateFeedbackCallback
+                 * @typedef SubmitFeedbackCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
-                 * @param {clutch.feedback.v1.CreateFeedbackResponse} [response] CreateFeedbackResponse
+                 * @param {clutch.feedback.v1.SubmitFeedbackResponse} [response] SubmitFeedbackResponse
                  */
 
                 /**
-                 * Calls CreateFeedback.
-                 * @function createFeedback
+                 * Calls SubmitFeedback.
+                 * @function submitFeedback
                  * @memberof clutch.feedback.v1.FeedbackAPI
                  * @instance
-                 * @param {clutch.feedback.v1.ICreateFeedbackRequest} request CreateFeedbackRequest message or plain object
-                 * @param {clutch.feedback.v1.FeedbackAPI.CreateFeedbackCallback} callback Node-style callback called with the error, if any, and CreateFeedbackResponse
+                 * @param {clutch.feedback.v1.ISubmitFeedbackRequest} request SubmitFeedbackRequest message or plain object
+                 * @param {clutch.feedback.v1.FeedbackAPI.SubmitFeedbackCallback} callback Node-style callback called with the error, if any, and SubmitFeedbackResponse
                  * @returns {undefined}
                  * @variation 1
                  */
-                Object.defineProperty(FeedbackAPI.prototype.createFeedback = function createFeedback(request, callback) {
-                    return this.rpcCall(createFeedback, $root.clutch.feedback.v1.CreateFeedbackRequest, $root.clutch.feedback.v1.CreateFeedbackResponse, request, callback);
-                }, "name", { value: "CreateFeedback" });
+                Object.defineProperty(FeedbackAPI.prototype.submitFeedback = function submitFeedback(request, callback) {
+                    return this.rpcCall(submitFeedback, $root.clutch.feedback.v1.SubmitFeedbackRequest, $root.clutch.feedback.v1.SubmitFeedbackResponse, request, callback);
+                }, "name", { value: "SubmitFeedback" });
 
                 /**
-                 * Calls CreateFeedback.
-                 * @function createFeedback
+                 * Calls SubmitFeedback.
+                 * @function submitFeedback
                  * @memberof clutch.feedback.v1.FeedbackAPI
                  * @instance
-                 * @param {clutch.feedback.v1.ICreateFeedbackRequest} request CreateFeedbackRequest message or plain object
-                 * @returns {Promise<clutch.feedback.v1.CreateFeedbackResponse>} Promise
+                 * @param {clutch.feedback.v1.ISubmitFeedbackRequest} request SubmitFeedbackRequest message or plain object
+                 * @returns {Promise<clutch.feedback.v1.SubmitFeedbackResponse>} Promise
                  * @variation 2
                  */
 
@@ -30775,25 +30775,25 @@ export const clutch = $root.clutch = (() => {
                 return Feedback;
             })();
 
-            v1.CreateFeedbackRequest = (function() {
+            v1.SubmitFeedbackRequest = (function() {
 
                 /**
-                 * Properties of a CreateFeedbackRequest.
+                 * Properties of a SubmitFeedbackRequest.
                  * @memberof clutch.feedback.v1
-                 * @interface ICreateFeedbackRequest
-                 * @property {number|Long|null} [id] CreateFeedbackRequest id
-                 * @property {clutch.feedback.v1.IFeedback|null} [feedback] CreateFeedbackRequest feedback
+                 * @interface ISubmitFeedbackRequest
+                 * @property {number|Long|null} [id] SubmitFeedbackRequest id
+                 * @property {clutch.feedback.v1.IFeedback|null} [feedback] SubmitFeedbackRequest feedback
                  */
 
                 /**
-                 * Constructs a new CreateFeedbackRequest.
+                 * Constructs a new SubmitFeedbackRequest.
                  * @memberof clutch.feedback.v1
-                 * @classdesc Represents a CreateFeedbackRequest.
-                 * @implements ICreateFeedbackRequest
+                 * @classdesc Represents a SubmitFeedbackRequest.
+                 * @implements ISubmitFeedbackRequest
                  * @constructor
-                 * @param {clutch.feedback.v1.ICreateFeedbackRequest=} [properties] Properties to set
+                 * @param {clutch.feedback.v1.ISubmitFeedbackRequest=} [properties] Properties to set
                  */
-                function CreateFeedbackRequest(properties) {
+                function SubmitFeedbackRequest(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -30801,30 +30801,30 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CreateFeedbackRequest id.
+                 * SubmitFeedbackRequest id.
                  * @member {number|Long} id
-                 * @memberof clutch.feedback.v1.CreateFeedbackRequest
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
                  * @instance
                  */
-                CreateFeedbackRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                SubmitFeedbackRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * CreateFeedbackRequest feedback.
+                 * SubmitFeedbackRequest feedback.
                  * @member {clutch.feedback.v1.IFeedback|null|undefined} feedback
-                 * @memberof clutch.feedback.v1.CreateFeedbackRequest
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
                  * @instance
                  */
-                CreateFeedbackRequest.prototype.feedback = null;
+                SubmitFeedbackRequest.prototype.feedback = null;
 
                 /**
-                 * Verifies a CreateFeedbackRequest message.
+                 * Verifies a SubmitFeedbackRequest message.
                  * @function verify
-                 * @memberof clutch.feedback.v1.CreateFeedbackRequest
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                CreateFeedbackRequest.verify = function verify(message) {
+                SubmitFeedbackRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -30839,17 +30839,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a CreateFeedbackRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SubmitFeedbackRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.feedback.v1.CreateFeedbackRequest
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.feedback.v1.CreateFeedbackRequest} CreateFeedbackRequest
+                 * @returns {clutch.feedback.v1.SubmitFeedbackRequest} SubmitFeedbackRequest
                  */
-                CreateFeedbackRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.feedback.v1.CreateFeedbackRequest)
+                SubmitFeedbackRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.SubmitFeedbackRequest)
                         return object;
-                    let message = new $root.clutch.feedback.v1.CreateFeedbackRequest();
+                    let message = new $root.clutch.feedback.v1.SubmitFeedbackRequest();
                     if (object.id != null)
                         if ($util.Long)
                             (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -30861,22 +30861,22 @@ export const clutch = $root.clutch = (() => {
                             message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
                     if (object.feedback != null) {
                         if (typeof object.feedback !== "object")
-                            throw TypeError(".clutch.feedback.v1.CreateFeedbackRequest.feedback: object expected");
+                            throw TypeError(".clutch.feedback.v1.SubmitFeedbackRequest.feedback: object expected");
                         message.feedback = $root.clutch.feedback.v1.Feedback.fromObject(object.feedback);
                     }
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a CreateFeedbackRequest message. Also converts values to other types if specified.
+                 * Creates a plain object from a SubmitFeedbackRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.feedback.v1.CreateFeedbackRequest
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
                  * @static
-                 * @param {clutch.feedback.v1.CreateFeedbackRequest} message CreateFeedbackRequest
+                 * @param {clutch.feedback.v1.SubmitFeedbackRequest} message SubmitFeedbackRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                CreateFeedbackRequest.toObject = function toObject(message, options) {
+                SubmitFeedbackRequest.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -30899,37 +30899,37 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this CreateFeedbackRequest to JSON.
+                 * Converts this SubmitFeedbackRequest to JSON.
                  * @function toJSON
-                 * @memberof clutch.feedback.v1.CreateFeedbackRequest
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                CreateFeedbackRequest.prototype.toJSON = function toJSON() {
+                SubmitFeedbackRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return CreateFeedbackRequest;
+                return SubmitFeedbackRequest;
             })();
 
-            v1.CreateFeedbackResponse = (function() {
+            v1.SubmitFeedbackResponse = (function() {
 
                 /**
-                 * Properties of a CreateFeedbackResponse.
+                 * Properties of a SubmitFeedbackResponse.
                  * @memberof clutch.feedback.v1
-                 * @interface ICreateFeedbackResponse
-                 * @property {number|Long|null} [id] CreateFeedbackResponse id
+                 * @interface ISubmitFeedbackResponse
+                 * @property {number|Long|null} [id] SubmitFeedbackResponse id
                  */
 
                 /**
-                 * Constructs a new CreateFeedbackResponse.
+                 * Constructs a new SubmitFeedbackResponse.
                  * @memberof clutch.feedback.v1
-                 * @classdesc Represents a CreateFeedbackResponse.
-                 * @implements ICreateFeedbackResponse
+                 * @classdesc Represents a SubmitFeedbackResponse.
+                 * @implements ISubmitFeedbackResponse
                  * @constructor
-                 * @param {clutch.feedback.v1.ICreateFeedbackResponse=} [properties] Properties to set
+                 * @param {clutch.feedback.v1.ISubmitFeedbackResponse=} [properties] Properties to set
                  */
-                function CreateFeedbackResponse(properties) {
+                function SubmitFeedbackResponse(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -30937,22 +30937,22 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CreateFeedbackResponse id.
+                 * SubmitFeedbackResponse id.
                  * @member {number|Long} id
-                 * @memberof clutch.feedback.v1.CreateFeedbackResponse
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
                  * @instance
                  */
-                CreateFeedbackResponse.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                SubmitFeedbackResponse.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * Verifies a CreateFeedbackResponse message.
+                 * Verifies a SubmitFeedbackResponse message.
                  * @function verify
-                 * @memberof clutch.feedback.v1.CreateFeedbackResponse
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                CreateFeedbackResponse.verify = function verify(message) {
+                SubmitFeedbackResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -30962,17 +30962,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a CreateFeedbackResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SubmitFeedbackResponse message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.feedback.v1.CreateFeedbackResponse
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.feedback.v1.CreateFeedbackResponse} CreateFeedbackResponse
+                 * @returns {clutch.feedback.v1.SubmitFeedbackResponse} SubmitFeedbackResponse
                  */
-                CreateFeedbackResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.feedback.v1.CreateFeedbackResponse)
+                SubmitFeedbackResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.SubmitFeedbackResponse)
                         return object;
-                    let message = new $root.clutch.feedback.v1.CreateFeedbackResponse();
+                    let message = new $root.clutch.feedback.v1.SubmitFeedbackResponse();
                     if (object.id != null)
                         if ($util.Long)
                             (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -30986,15 +30986,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a CreateFeedbackResponse message. Also converts values to other types if specified.
+                 * Creates a plain object from a SubmitFeedbackResponse message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.feedback.v1.CreateFeedbackResponse
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
                  * @static
-                 * @param {clutch.feedback.v1.CreateFeedbackResponse} message CreateFeedbackResponse
+                 * @param {clutch.feedback.v1.SubmitFeedbackResponse} message SubmitFeedbackResponse
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                CreateFeedbackResponse.toObject = function toObject(message, options) {
+                SubmitFeedbackResponse.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -31013,17 +31013,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this CreateFeedbackResponse to JSON.
+                 * Converts this SubmitFeedbackResponse to JSON.
                  * @function toJSON
-                 * @memberof clutch.feedback.v1.CreateFeedbackResponse
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                CreateFeedbackResponse.prototype.toJSON = function toJSON() {
+                SubmitFeedbackResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return CreateFeedbackResponse;
+                return SubmitFeedbackResponse;
             })();
 
             v1.Submission = (function() {
@@ -31033,7 +31033,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.feedback.v1
                  * @interface ISubmission
                  * @property {google.protobuf.ITimestamp|null} [submittedAt] Submission submittedAt
-                 * @property {clutch.feedback.v1.IFeedback|null} [feedabck] Submission feedabck
+                 * @property {clutch.feedback.v1.IFeedback|null} [feedback] Submission feedback
                  */
 
                 /**
@@ -31060,12 +31060,12 @@ export const clutch = $root.clutch = (() => {
                 Submission.prototype.submittedAt = null;
 
                 /**
-                 * Submission feedabck.
-                 * @member {clutch.feedback.v1.IFeedback|null|undefined} feedabck
+                 * Submission feedback.
+                 * @member {clutch.feedback.v1.IFeedback|null|undefined} feedback
                  * @memberof clutch.feedback.v1.Submission
                  * @instance
                  */
-                Submission.prototype.feedabck = null;
+                Submission.prototype.feedback = null;
 
                 /**
                  * Verifies a Submission message.
@@ -31083,10 +31083,10 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "submittedAt." + error;
                     }
-                    if (message.feedabck != null && message.hasOwnProperty("feedabck")) {
-                        let error = $root.clutch.feedback.v1.Feedback.verify(message.feedabck);
+                    if (message.feedback != null && message.hasOwnProperty("feedback")) {
+                        let error = $root.clutch.feedback.v1.Feedback.verify(message.feedback);
                         if (error)
-                            return "feedabck." + error;
+                            return "feedback." + error;
                     }
                     return null;
                 };
@@ -31108,10 +31108,10 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.feedback.v1.Submission.submittedAt: object expected");
                         message.submittedAt = $root.google.protobuf.Timestamp.fromObject(object.submittedAt);
                     }
-                    if (object.feedabck != null) {
-                        if (typeof object.feedabck !== "object")
-                            throw TypeError(".clutch.feedback.v1.Submission.feedabck: object expected");
-                        message.feedabck = $root.clutch.feedback.v1.Feedback.fromObject(object.feedabck);
+                    if (object.feedback != null) {
+                        if (typeof object.feedback !== "object")
+                            throw TypeError(".clutch.feedback.v1.Submission.feedback: object expected");
+                        message.feedback = $root.clutch.feedback.v1.Feedback.fromObject(object.feedback);
                     }
                     return message;
                 };
@@ -31131,12 +31131,12 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.defaults) {
                         object.submittedAt = null;
-                        object.feedabck = null;
+                        object.feedback = null;
                     }
                     if (message.submittedAt != null && message.hasOwnProperty("submittedAt"))
                         object.submittedAt = $root.google.protobuf.Timestamp.toObject(message.submittedAt, options);
-                    if (message.feedabck != null && message.hasOwnProperty("feedabck"))
-                        object.feedabck = $root.clutch.feedback.v1.Feedback.toObject(message.feedabck, options);
+                    if (message.feedback != null && message.hasOwnProperty("feedback"))
+                        object.feedback = $root.clutch.feedback.v1.Feedback.toObject(message.feedback, options);
                     return object;
                 };
 

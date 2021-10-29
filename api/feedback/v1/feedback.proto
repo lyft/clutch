@@ -17,9 +17,9 @@ service FeedbackAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
-  rpc CreateFeedback(CreateFeedbackRequest) returns (CreateFeedbackResponse) {
+  rpc SubmitFeedback(SubmitFeedbackRequest) returns (SubmitFeedbackResponse) {
     option (google.api.http) = {
-      post : "/v1/feedback/createFeedback"
+      post : "/v1/feedback/submitFeedback"
       body : "*"
     };
     option (clutch.api.v1.action).type = CREATE;
@@ -90,20 +90,22 @@ message Feedback {
   FeedbackMetadata metadata = 6 [ (validate.rules).message = {required : true} ];
 }
 
-message CreateFeedbackRequest {
+message SubmitFeedbackRequest {
   // (optional) id of the feedback to update (essentially replace with the latest)
   // TODO: remove if we decide to record feedback only when a user clicks the submit button
   int64 id = 1;
   Feedback feedback = 2 [ (validate.rules).message = {required : true} ];
 }
 
-message CreateFeedbackResponse {
+message SubmitFeedbackResponse {
   // id of the feedback submission
   // TODO: remove if we decide to record feedback only when a user clicks the submit button
   int64 id = 1;
 }
 
+// proto used by the Feedback service
 message Submission {
+  // timestamp will be populated by the server
   google.protobuf.Timestamp submitted_at = 1;
-  Feedback feedabck = 2;
+  Feedback feedback = 2;
 }

@@ -564,10 +564,10 @@ var _ interface {
 	ErrorName() string
 } = FeedbackValidationError{}
 
-// Validate checks the field values on CreateFeedbackRequest with the rules
+// Validate checks the field values on SubmitFeedbackRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *CreateFeedbackRequest) Validate() error {
+func (m *SubmitFeedbackRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -575,7 +575,7 @@ func (m *CreateFeedbackRequest) Validate() error {
 	// no validation rules for Id
 
 	if m.GetFeedback() == nil {
-		return CreateFeedbackRequestValidationError{
+		return SubmitFeedbackRequestValidationError{
 			field:  "Feedback",
 			reason: "value is required",
 		}
@@ -583,7 +583,7 @@ func (m *CreateFeedbackRequest) Validate() error {
 
 	if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return CreateFeedbackRequestValidationError{
+			return SubmitFeedbackRequestValidationError{
 				field:  "Feedback",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -594,9 +594,9 @@ func (m *CreateFeedbackRequest) Validate() error {
 	return nil
 }
 
-// CreateFeedbackRequestValidationError is the validation error returned by
-// CreateFeedbackRequest.Validate if the designated constraints aren't met.
-type CreateFeedbackRequestValidationError struct {
+// SubmitFeedbackRequestValidationError is the validation error returned by
+// SubmitFeedbackRequest.Validate if the designated constraints aren't met.
+type SubmitFeedbackRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -604,24 +604,24 @@ type CreateFeedbackRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e CreateFeedbackRequestValidationError) Field() string { return e.field }
+func (e SubmitFeedbackRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CreateFeedbackRequestValidationError) Reason() string { return e.reason }
+func (e SubmitFeedbackRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CreateFeedbackRequestValidationError) Cause() error { return e.cause }
+func (e SubmitFeedbackRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CreateFeedbackRequestValidationError) Key() bool { return e.key }
+func (e SubmitFeedbackRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CreateFeedbackRequestValidationError) ErrorName() string {
-	return "CreateFeedbackRequestValidationError"
+func (e SubmitFeedbackRequestValidationError) ErrorName() string {
+	return "SubmitFeedbackRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e CreateFeedbackRequestValidationError) Error() string {
+func (e SubmitFeedbackRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -633,14 +633,14 @@ func (e CreateFeedbackRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCreateFeedbackRequest.%s: %s%s",
+		"invalid %sSubmitFeedbackRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CreateFeedbackRequestValidationError{}
+var _ error = SubmitFeedbackRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -648,12 +648,12 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CreateFeedbackRequestValidationError{}
+} = SubmitFeedbackRequestValidationError{}
 
-// Validate checks the field values on CreateFeedbackResponse with the rules
+// Validate checks the field values on SubmitFeedbackResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *CreateFeedbackResponse) Validate() error {
+func (m *SubmitFeedbackResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -663,9 +663,9 @@ func (m *CreateFeedbackResponse) Validate() error {
 	return nil
 }
 
-// CreateFeedbackResponseValidationError is the validation error returned by
-// CreateFeedbackResponse.Validate if the designated constraints aren't met.
-type CreateFeedbackResponseValidationError struct {
+// SubmitFeedbackResponseValidationError is the validation error returned by
+// SubmitFeedbackResponse.Validate if the designated constraints aren't met.
+type SubmitFeedbackResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -673,24 +673,24 @@ type CreateFeedbackResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e CreateFeedbackResponseValidationError) Field() string { return e.field }
+func (e SubmitFeedbackResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CreateFeedbackResponseValidationError) Reason() string { return e.reason }
+func (e SubmitFeedbackResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CreateFeedbackResponseValidationError) Cause() error { return e.cause }
+func (e SubmitFeedbackResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CreateFeedbackResponseValidationError) Key() bool { return e.key }
+func (e SubmitFeedbackResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CreateFeedbackResponseValidationError) ErrorName() string {
-	return "CreateFeedbackResponseValidationError"
+func (e SubmitFeedbackResponseValidationError) ErrorName() string {
+	return "SubmitFeedbackResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e CreateFeedbackResponseValidationError) Error() string {
+func (e SubmitFeedbackResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -702,14 +702,14 @@ func (e CreateFeedbackResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCreateFeedbackResponse.%s: %s%s",
+		"invalid %sSubmitFeedbackResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CreateFeedbackResponseValidationError{}
+var _ error = SubmitFeedbackResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -717,7 +717,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CreateFeedbackResponseValidationError{}
+} = SubmitFeedbackResponseValidationError{}
 
 // Validate checks the field values on Submission with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -736,10 +736,10 @@ func (m *Submission) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetFeedabck()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SubmissionValidationError{
-				field:  "Feedabck",
+				field:  "Feedback",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

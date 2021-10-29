@@ -65,8 +65,8 @@ func local_request_FeedbackAPI_GetSurveys_0(ctx context.Context, marshaler runti
 
 }
 
-func request_FeedbackAPI_CreateFeedback_0(ctx context.Context, marshaler runtime.Marshaler, client FeedbackAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateFeedbackRequest
+func request_FeedbackAPI_SubmitFeedback_0(ctx context.Context, marshaler runtime.Marshaler, client FeedbackAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq SubmitFeedbackRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -77,13 +77,13 @@ func request_FeedbackAPI_CreateFeedback_0(ctx context.Context, marshaler runtime
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.CreateFeedback(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.SubmitFeedback(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_FeedbackAPI_CreateFeedback_0(ctx context.Context, marshaler runtime.Marshaler, server FeedbackAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateFeedbackRequest
+func local_request_FeedbackAPI_SubmitFeedback_0(ctx context.Context, marshaler runtime.Marshaler, server FeedbackAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq SubmitFeedbackRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -94,7 +94,7 @@ func local_request_FeedbackAPI_CreateFeedback_0(ctx context.Context, marshaler r
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.CreateFeedback(ctx, &protoReq)
+	msg, err := server.SubmitFeedback(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -128,18 +128,18 @@ func RegisterFeedbackAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("POST", pattern_FeedbackAPI_CreateFeedback_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_FeedbackAPI_SubmitFeedback_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.feedback.v1.FeedbackAPI/CreateFeedback", runtime.WithHTTPPathPattern("/v1/feedback/createFeedback"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.feedback.v1.FeedbackAPI/SubmitFeedback", runtime.WithHTTPPathPattern("/v1/feedback/submitFeedback"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_FeedbackAPI_CreateFeedback_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_FeedbackAPI_SubmitFeedback_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -147,7 +147,7 @@ func RegisterFeedbackAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_FeedbackAPI_CreateFeedback_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_FeedbackAPI_SubmitFeedback_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -212,23 +212,23 @@ func RegisterFeedbackAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("POST", pattern_FeedbackAPI_CreateFeedback_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_FeedbackAPI_SubmitFeedback_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.feedback.v1.FeedbackAPI/CreateFeedback", runtime.WithHTTPPathPattern("/v1/feedback/createFeedback"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.feedback.v1.FeedbackAPI/SubmitFeedback", runtime.WithHTTPPathPattern("/v1/feedback/submitFeedback"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_FeedbackAPI_CreateFeedback_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_FeedbackAPI_SubmitFeedback_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_FeedbackAPI_CreateFeedback_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_FeedbackAPI_SubmitFeedback_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -238,11 +238,11 @@ func RegisterFeedbackAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 var (
 	pattern_FeedbackAPI_GetSurveys_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "feedback", "getSurveys"}, ""))
 
-	pattern_FeedbackAPI_CreateFeedback_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "feedback", "createFeedback"}, ""))
+	pattern_FeedbackAPI_SubmitFeedback_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "feedback", "submitFeedback"}, ""))
 )
 
 var (
 	forward_FeedbackAPI_GetSurveys_0 = runtime.ForwardResponseMessage
 
-	forward_FeedbackAPI_CreateFeedback_0 = runtime.ForwardResponseMessage
+	forward_FeedbackAPI_SubmitFeedback_0 = runtime.ForwardResponseMessage
 )
