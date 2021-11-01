@@ -18,6 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
@@ -49,7 +50,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 	}
 
 	c := &client{
-		clients:            make(map[string]*regionalClient, len(ac.Regions)),
+		clients:            make(map[string]*accountClients, len(ac.Regions)),
 		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
 		topologyLock:       semaphore.NewWeighted(1),
 		log:                logger,
@@ -62,7 +63,6 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 	}
 
 	ds := getScalingLimits(ac)
-
 	awsHTTPClient := &http.Client{}
 
 	for _, region := range ac.Regions {
@@ -80,25 +80,35 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 			return nil, err
 		}
 
-		c.clients[region] = &regionalClient{
-			region: region,
-			dynamodbCfg: &awsv1.DynamodbConfig{
-				ScalingLimits: &awsv1.ScalingLimits{
-					MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
-					MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
-					MaxScaleFactor:        ds.MaxScaleFactor,
-					EnableOverride:        ds.EnableOverride,
+		// Should sts to get current account info?
+		// default client
+		c.clients["default"] = &accountClients{
+			clients: map[string]*regionalClient{
+				region: &regionalClient{
+					region: region,
+					dynamodbCfg: &awsv1.DynamodbConfig{
+						ScalingLimits: &awsv1.ScalingLimits{
+							MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+							MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+							MaxScaleFactor:        ds.MaxScaleFactor,
+							EnableOverride:        ds.EnableOverride,
+						},
+					},
+
+					s3:          s3.NewFromConfig(regionCfg),
+					kinesis:     kinesis.NewFromConfig(regionCfg),
+					ec2:         ec2.NewFromConfig(regionCfg),
+					autoscaling: autoscaling.NewFromConfig(regionCfg),
+					dynamodb:    dynamodb.NewFromConfig(regionCfg),
+					sts:         sts.NewFromConfig(regionCfg),
+					iam:         iam.NewFromConfig(regionCfg),
 				},
 			},
-
-			s3:          s3.NewFromConfig(regionCfg),
-			kinesis:     kinesis.NewFromConfig(regionCfg),
-			ec2:         ec2.NewFromConfig(regionCfg),
-			autoscaling: autoscaling.NewFromConfig(regionCfg),
-			dynamodb:    dynamodb.NewFromConfig(regionCfg),
-			sts:         sts.NewFromConfig(regionCfg),
 		}
 	}
+
+	// Construct default account, query STS to get account info
+	// Construct add the rest of the clients now that current account / client are complete
 
 	return c, nil
 }
@@ -126,7 +136,7 @@ type Client interface {
 }
 
 type client struct {
-	clients            map[string]*regionalClient
+	clients            map[string]*accountClients
 	topologyObjectChan chan *topologyv1.UpdateCacheRequest
 	topologyLock       *semaphore.Weighted
 	log                *zap.Logger
@@ -144,6 +154,17 @@ type regionalClient struct {
 	autoscaling autoscalingClient
 	dynamodb    dynamodbClient
 	sts         stsClient
+	iam         iamClient
+}
+
+// Encapulates information for an aws account
+type accountClients struct {
+	name          string
+	accountNumber int
+	aimRole       string
+	regions       []string
+
+	clients map[string]*regionalClient
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
@@ -152,7 +173,7 @@ func (c *client) InterceptError(e error) error {
 }
 
 func (c *client) getRegionalClient(region string) (*regionalClient, error) {
-	rc, ok := c.clients[region]
+	rc, ok := c.clients["default"].clients[region]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "no client found for region '%s'", region)
 	}

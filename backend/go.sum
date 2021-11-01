@@ -150,8 +150,13 @@ github.com/aws/aws-sdk-go-v2/service/dynamodb v1.6.0 h1:HDp8hUQlGU5fgNoNDp0BOthk
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.6.0/go.mod h1:t8pYXJHxfOe/088CcNeuqQbucpq9SwO1yjheCieDDnI=
 github.com/aws/aws-sdk-go-v2/service/ec2 v1.20.0 h1:qvcoul6cfXEjiQMY1N43zaDui3FWsEpXLVxHlmWc3pk=
 github.com/aws/aws-sdk-go-v2/service/ec2 v1.20.0/go.mod h1:P+gshV4VLT7jUbWALAhV9lXDyZ40R7E/Rvr2ryBqn2s=
+<<<<<<< HEAD
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.2.2/go.mod h1:EASdTcM1lGhUe1/p4gkojHwlGJkeoRjjr1sRCzup3Is=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.3.0/go.mod h1:v8ygadNyATSm6elwJ/4gzJwcFhri9RqS8skgHKiwXPU=
+=======
+github.com/aws/aws-sdk-go-v2/service/iam v1.11.0 h1:RLDJKse1N4HkYQ+PLse7UzAHC7AnTEkG/hXEBE5Arm8=
+github.com/aws/aws-sdk-go-v2/service/iam v1.11.0/go.mod h1:HILqe6vfjMKnuUO64jXXFAcLBQ5sT2P7xNQiXy6q7BM=
+>>>>>>> e4930bd9 (wip)
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.4.0 h1:EtQ6hVAgNsWTiO+u9e+ziaEYyOAlEkAwLskpL40U6pQ=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.4.0/go.mod h1:vEkJTjJ8vnv0uWy2tAp7DSydWFpudMGWPQ2SFucoN1k=
 github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.2.0 h1:uxy31f/H1bkUV2aircA9hTQT8s093u1eOeErsOXIY90=
