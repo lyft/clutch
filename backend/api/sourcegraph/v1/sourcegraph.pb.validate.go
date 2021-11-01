@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,39 +32,86 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on CompareCommitsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *CompareCommitsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompareCommitsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompareCommitsRequestMultiError, or nil if none found.
+func (m *CompareCommitsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompareCommitsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if utf8.RuneCountInString(m.GetRepository()) < 1 {
-		return CompareCommitsRequestValidationError{
+		err := CompareCommitsRequestValidationError{
 			field:  "Repository",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetBase()) < 1 {
-		return CompareCommitsRequestValidationError{
+		err := CompareCommitsRequestValidationError{
 			field:  "Base",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetHead()) < 1 {
-		return CompareCommitsRequestValidationError{
+		err := CompareCommitsRequestValidationError{
 			field:  "Head",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return CompareCommitsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// CompareCommitsRequestMultiError is an error wrapping multiple validation
+// errors returned by CompareCommitsRequest.ValidateAll() if the designated
+// constraints aren't met.
+type CompareCommitsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompareCommitsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompareCommitsRequestMultiError) AllErrors() []error { return m }
 
 // CompareCommitsRequestValidationError is the validation error returned by
 // CompareCommitsRequest.Validate if the designated constraints aren't met.
@@ -123,16 +171,49 @@ var _ interface {
 
 // Validate checks the field values on CompareCommitsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *CompareCommitsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompareCommitsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompareCommitsResponseMultiError, or nil if none found.
+func (m *CompareCommitsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompareCommitsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetCommits() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CompareCommitsResponseValidationError{
+						field:  fmt.Sprintf("Commits[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CompareCommitsResponseValidationError{
+						field:  fmt.Sprintf("Commits[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return CompareCommitsResponseValidationError{
 					field:  fmt.Sprintf("Commits[%v]", idx),
@@ -144,8 +225,28 @@ func (m *CompareCommitsResponse) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return CompareCommitsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// CompareCommitsResponseMultiError is an error wrapping multiple validation
+// errors returned by CompareCommitsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type CompareCommitsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompareCommitsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompareCommitsResponseMultiError) AllErrors() []error { return m }
 
 // CompareCommitsResponseValidationError is the validation error returned by
 // CompareCommitsResponse.Validate if the designated constraints aren't met.
@@ -204,11 +305,25 @@ var _ interface {
 } = CompareCommitsResponseValidationError{}
 
 // Validate checks the field values on Commit with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Commit) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Commit with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in CommitMultiError, or nil if none found.
+func (m *Commit) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Commit) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Oid
 
@@ -218,8 +333,27 @@ func (m *Commit) Validate() error {
 
 	// no validation rules for DisplayName
 
+	if len(errors) > 0 {
+		return CommitMultiError(errors)
+	}
 	return nil
 }
+
+// CommitMultiError is an error wrapping multiple validation errors returned by
+// Commit.ValidateAll() if the designated constraints aren't met.
+type CommitMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CommitMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CommitMultiError) AllErrors() []error { return m }
 
 // CommitValidationError is the validation error returned by Commit.Validate if
 // the designated constraints aren't met.

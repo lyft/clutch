@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,76 +32,157 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Config) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ConfigMultiError, or nil if none found.
+func (m *Config) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Config) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	for key, val := range m.GetPerConfigTypeConfiguration() {
-		_ = val
+	var errors []error
 
-		// no validation rules for PerConfigTypeConfiguration[key]
+	{
+		sorted_keys := make([]string, len(m.GetPerConfigTypeConfiguration()))
+		i := 0
+		for key := range m.GetPerConfigTypeConfiguration() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetPerConfigTypeConfiguration()[key]
+			_ = val
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ConfigValidationError{
-					field:  fmt.Sprintf("PerConfigTypeConfiguration[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
+			// no validation rules for PerConfigTypeConfiguration[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, ConfigValidationError{
+							field:  fmt.Sprintf("PerConfigTypeConfiguration[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, ConfigValidationError{
+							field:  fmt.Sprintf("PerConfigTypeConfiguration[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return ConfigValidationError{
+						field:  fmt.Sprintf("PerConfigTypeConfiguration[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
-		}
 
+		}
 	}
 
 	if d := m.GetOuterLoopInterval(); d != nil {
 		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
-			return ConfigValidationError{
+			err = ConfigValidationError{
 				field:  "OuterLoopInterval",
 				reason: "value is not a valid duration",
 				cause:  err,
 			}
-		}
-
-		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
-
-		if dur <= gt {
-			return ConfigValidationError{
-				field:  "OuterLoopInterval",
-				reason: "value must be greater than 0s",
+			if !all {
+				return err
 			}
-		}
+			errors = append(errors, err)
+		} else {
 
+			gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+			if dur <= gt {
+				err := ConfigValidationError{
+					field:  "OuterLoopInterval",
+					reason: "value must be greater than 0s",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+		}
 	}
 
 	if d := m.GetPerExperimentCheckInterval(); d != nil {
 		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
-			return ConfigValidationError{
+			err = ConfigValidationError{
 				field:  "PerExperimentCheckInterval",
 				reason: "value is not a valid duration",
 				cause:  err,
 			}
-		}
-
-		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
-
-		if dur <= gt {
-			return ConfigValidationError{
-				field:  "PerExperimentCheckInterval",
-				reason: "value must be greater than 0s",
+			if !all {
+				return err
 			}
-		}
+			errors = append(errors, err)
+		} else {
 
+			gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+			if dur <= gt {
+				err := ConfigValidationError{
+					field:  "PerExperimentCheckInterval",
+					reason: "value must be greater than 0s",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+		}
 	}
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.ValidateAll() if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.
@@ -158,35 +240,78 @@ var _ interface {
 
 // Validate checks the field values on MaxTimeTerminationCriterion with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *MaxTimeTerminationCriterion) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on MaxTimeTerminationCriterion with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// MaxTimeTerminationCriterionMultiError, or nil if none found.
+func (m *MaxTimeTerminationCriterion) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *MaxTimeTerminationCriterion) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if d := m.GetMaxDuration(); d != nil {
 		dur, err := d.AsDuration(), d.CheckValid()
 		if err != nil {
-			return MaxTimeTerminationCriterionValidationError{
+			err = MaxTimeTerminationCriterionValidationError{
 				field:  "MaxDuration",
 				reason: "value is not a valid duration",
 				cause:  err,
 			}
-		}
-
-		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
-
-		if dur <= gt {
-			return MaxTimeTerminationCriterionValidationError{
-				field:  "MaxDuration",
-				reason: "value must be greater than 0s",
+			if !all {
+				return err
 			}
-		}
+			errors = append(errors, err)
+		} else {
 
+			gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+			if dur <= gt {
+				err := MaxTimeTerminationCriterionValidationError{
+					field:  "MaxDuration",
+					reason: "value must be greater than 0s",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+		}
 	}
 
+	if len(errors) > 0 {
+		return MaxTimeTerminationCriterionMultiError(errors)
+	}
 	return nil
 }
+
+// MaxTimeTerminationCriterionMultiError is an error wrapping multiple
+// validation errors returned by MaxTimeTerminationCriterion.ValidateAll() if
+// the designated constraints aren't met.
+type MaxTimeTerminationCriterionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m MaxTimeTerminationCriterionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m MaxTimeTerminationCriterionMultiError) AllErrors() []error { return m }
 
 // MaxTimeTerminationCriterionValidationError is the validation error returned
 // by MaxTimeTerminationCriterion.Validate if the designated constraints
@@ -247,23 +372,60 @@ var _ interface {
 
 // Validate checks the field values on Config_PerConfigTypeConfig with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *Config_PerConfigTypeConfig) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Config_PerConfigTypeConfig with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Config_PerConfigTypeConfigMultiError, or nil if none found.
+func (m *Config_PerConfigTypeConfig) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Config_PerConfigTypeConfig) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetTerminationCriteria()) < 1 {
-		return Config_PerConfigTypeConfigValidationError{
+		err := Config_PerConfigTypeConfigValidationError{
 			field:  "TerminationCriteria",
 			reason: "value must contain at least 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetTerminationCriteria() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Config_PerConfigTypeConfigValidationError{
+						field:  fmt.Sprintf("TerminationCriteria[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Config_PerConfigTypeConfigValidationError{
+						field:  fmt.Sprintf("TerminationCriteria[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return Config_PerConfigTypeConfigValidationError{
 					field:  fmt.Sprintf("TerminationCriteria[%v]", idx),
@@ -275,8 +437,28 @@ func (m *Config_PerConfigTypeConfig) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return Config_PerConfigTypeConfigMultiError(errors)
+	}
 	return nil
 }
+
+// Config_PerConfigTypeConfigMultiError is an error wrapping multiple
+// validation errors returned by Config_PerConfigTypeConfig.ValidateAll() if
+// the designated constraints aren't met.
+type Config_PerConfigTypeConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Config_PerConfigTypeConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Config_PerConfigTypeConfigMultiError) AllErrors() []error { return m }
 
 // Config_PerConfigTypeConfigValidationError is the validation error returned
 // by Config_PerConfigTypeConfig.Validate if the designated constraints aren't met.

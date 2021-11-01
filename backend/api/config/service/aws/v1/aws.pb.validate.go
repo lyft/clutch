@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,23 +32,61 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Config) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ConfigMultiError, or nil if none found.
+func (m *Config) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Config) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetRegions()) < 1 {
-		return ConfigValidationError{
+		err := ConfigValidationError{
 			field:  "Regions",
 			reason: "value must contain at least 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetClientConfig()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetClientConfig()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ConfigValidationError{
+					field:  "ClientConfig",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ConfigValidationError{
+					field:  "ClientConfig",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetClientConfig()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ConfigValidationError{
 				field:  "ClientConfig",
@@ -57,7 +96,26 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetDynamodbConfig()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDynamodbConfig()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ConfigValidationError{
+					field:  "DynamodbConfig",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ConfigValidationError{
+					field:  "DynamodbConfig",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDynamodbConfig()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ConfigValidationError{
 				field:  "DynamodbConfig",
@@ -67,8 +125,27 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.ValidateAll() if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.
@@ -125,22 +202,59 @@ var _ interface {
 } = ConfigValidationError{}
 
 // Validate checks the field values on ClientConfig with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *ClientConfig) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ClientConfig with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ClientConfigMultiError, or
+// nil if none found.
+func (m *ClientConfig) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ClientConfig) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetRetries() < 0 {
-		return ClientConfigValidationError{
+		err := ClientConfigValidationError{
 			field:  "Retries",
 			reason: "value must be greater than or equal to 0",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return ClientConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ClientConfigMultiError is an error wrapping multiple validation errors
+// returned by ClientConfig.ValidateAll() if the designated constraints aren't met.
+type ClientConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ClientConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ClientConfigMultiError) AllErrors() []error { return m }
 
 // ClientConfigValidationError is the validation error returned by
 // ClientConfig.Validate if the designated constraints aren't met.
@@ -197,14 +311,47 @@ var _ interface {
 } = ClientConfigValidationError{}
 
 // Validate checks the field values on DynamodbConfig with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *DynamodbConfig) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DynamodbConfig with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DynamodbConfigMultiError,
+// or nil if none found.
+func (m *DynamodbConfig) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DynamodbConfig) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetScalingLimits()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetScalingLimits()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DynamodbConfigValidationError{
+					field:  "ScalingLimits",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DynamodbConfigValidationError{
+					field:  "ScalingLimits",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetScalingLimits()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return DynamodbConfigValidationError{
 				field:  "ScalingLimits",
@@ -214,8 +361,28 @@ func (m *DynamodbConfig) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return DynamodbConfigMultiError(errors)
+	}
 	return nil
 }
+
+// DynamodbConfigMultiError is an error wrapping multiple validation errors
+// returned by DynamodbConfig.ValidateAll() if the designated constraints
+// aren't met.
+type DynamodbConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DynamodbConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DynamodbConfigMultiError) AllErrors() []error { return m }
 
 // DynamodbConfigValidationError is the validation error returned by
 // DynamodbConfig.Validate if the designated constraints aren't met.
@@ -272,20 +439,38 @@ var _ interface {
 } = DynamodbConfigValidationError{}
 
 // Validate checks the field values on ScalingLimits with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *ScalingLimits) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ScalingLimits with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ScalingLimitsMultiError, or
+// nil if none found.
+func (m *ScalingLimits) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ScalingLimits) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetMaxReadCapacityUnits() != 0 {
 
 		if m.GetMaxReadCapacityUnits() < 1 {
-			return ScalingLimitsValidationError{
+			err := ScalingLimitsValidationError{
 				field:  "MaxReadCapacityUnits",
 				reason: "value must be greater than or equal to 1",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 	}
@@ -293,10 +478,14 @@ func (m *ScalingLimits) Validate() error {
 	if m.GetMaxWriteCapacityUnits() != 0 {
 
 		if m.GetMaxWriteCapacityUnits() < 1 {
-			return ScalingLimitsValidationError{
+			err := ScalingLimitsValidationError{
 				field:  "MaxWriteCapacityUnits",
 				reason: "value must be greater than or equal to 1",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 	}
@@ -305,8 +494,28 @@ func (m *ScalingLimits) Validate() error {
 
 	// no validation rules for EnableOverride
 
+	if len(errors) > 0 {
+		return ScalingLimitsMultiError(errors)
+	}
 	return nil
 }
+
+// ScalingLimitsMultiError is an error wrapping multiple validation errors
+// returned by ScalingLimits.ValidateAll() if the designated constraints
+// aren't met.
+type ScalingLimitsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ScalingLimitsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ScalingLimitsMultiError) AllErrors() []error { return m }
 
 // ScalingLimitsValidationError is the validation error returned by
 // ScalingLimits.Validate if the designated constraints aren't met.
