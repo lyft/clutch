@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,39 +32,86 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on RatingOptions with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *RatingOptions) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RatingOptions with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RatingOptionsMultiError, or
+// nil if none found.
+func (m *RatingOptions) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RatingOptions) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetOne()) < 1 {
-		return RatingOptionsValidationError{
+		err := RatingOptionsValidationError{
 			field:  "One",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetTwo()) < 1 {
-		return RatingOptionsValidationError{
+		err := RatingOptionsValidationError{
 			field:  "Two",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetThree()) < 1 {
-		return RatingOptionsValidationError{
+		err := RatingOptionsValidationError{
 			field:  "Three",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return RatingOptionsMultiError(errors)
+	}
 	return nil
 }
+
+// RatingOptionsMultiError is an error wrapping multiple validation errors
+// returned by RatingOptions.ValidateAll() if the designated constraints
+// aren't met.
+type RatingOptionsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RatingOptionsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RatingOptionsMultiError) AllErrors() []error { return m }
 
 // RatingOptionsValidationError is the validation error returned by
 // RatingOptions.Validate if the designated constraints aren't met.
@@ -120,29 +168,70 @@ var _ interface {
 } = RatingOptionsValidationError{}
 
 // Validate checks the field values on Survey with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Survey) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Survey with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in SurveyMultiError, or nil if none found.
+func (m *Survey) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Survey) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetPrompt()) < 1 {
-		return SurveyValidationError{
+		err := SurveyValidationError{
 			field:  "Prompt",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	// no validation rules for FreeformPrompt
 
 	if m.GetRatingOptions() == nil {
-		return SurveyValidationError{
+		err := SurveyValidationError{
 			field:  "RatingOptions",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRatingOptions()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRatingOptions()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SurveyValidationError{
+					field:  "RatingOptions",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SurveyValidationError{
+					field:  "RatingOptions",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRatingOptions()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SurveyValidationError{
 				field:  "RatingOptions",
@@ -152,8 +241,27 @@ func (m *Survey) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SurveyMultiError(errors)
+	}
 	return nil
 }
+
+// SurveyMultiError is an error wrapping multiple validation errors returned by
+// Survey.ValidateAll() if the designated constraints aren't met.
+type SurveyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SurveyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SurveyMultiError) AllErrors() []error { return m }
 
 // SurveyValidationError is the validation error returned by Survey.Validate if
 // the designated constraints aren't met.
@@ -210,25 +318,62 @@ var _ interface {
 } = SurveyValidationError{}
 
 // Validate checks the field values on SurveyOrigin with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *SurveyOrigin) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SurveyOrigin with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SurveyOriginMultiError, or
+// nil if none found.
+func (m *SurveyOrigin) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SurveyOrigin) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	switch m.Type.(type) {
 
 	case *SurveyOrigin_Header:
 
 		if m.GetHeader() == nil {
-			return SurveyOriginValidationError{
+			err := SurveyOriginValidationError{
 				field:  "Header",
 				reason: "value is required",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
-		if v, ok := interface{}(m.GetHeader()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetHeader()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SurveyOriginValidationError{
+						field:  "Header",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SurveyOriginValidationError{
+						field:  "Header",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetHeader()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return SurveyOriginValidationError{
 					field:  "Header",
@@ -241,13 +386,36 @@ func (m *SurveyOrigin) Validate() error {
 	case *SurveyOrigin_Wizard:
 
 		if m.GetWizard() == nil {
-			return SurveyOriginValidationError{
+			err := SurveyOriginValidationError{
 				field:  "Wizard",
 				reason: "value is required",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
-		if v, ok := interface{}(m.GetWizard()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetWizard()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SurveyOriginValidationError{
+						field:  "Wizard",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SurveyOriginValidationError{
+						field:  "Wizard",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetWizard()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return SurveyOriginValidationError{
 					field:  "Wizard",
@@ -258,15 +426,38 @@ func (m *SurveyOrigin) Validate() error {
 		}
 
 	default:
-		return SurveyOriginValidationError{
+		err := SurveyOriginValidationError{
 			field:  "Type",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 
 	}
 
+	if len(errors) > 0 {
+		return SurveyOriginMultiError(errors)
+	}
 	return nil
 }
+
+// SurveyOriginMultiError is an error wrapping multiple validation errors
+// returned by SurveyOrigin.ValidateAll() if the designated constraints aren't met.
+type SurveyOriginMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SurveyOriginMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SurveyOriginMultiError) AllErrors() []error { return m }
 
 // SurveyOriginValidationError is the validation error returned by
 // SurveyOrigin.Validate if the designated constraints aren't met.
@@ -323,23 +514,60 @@ var _ interface {
 } = SurveyOriginValidationError{}
 
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Config) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ConfigMultiError, or nil if none found.
+func (m *Config) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Config) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetOrigins()) < 1 {
-		return ConfigValidationError{
+		err := ConfigValidationError{
 			field:  "Origins",
 			reason: "value must contain at least 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetOrigins() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  fmt.Sprintf("Origins[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  fmt.Sprintf("Origins[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ConfigValidationError{
 					field:  fmt.Sprintf("Origins[%v]", idx),
@@ -351,8 +579,27 @@ func (m *Config) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.ValidateAll() if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.

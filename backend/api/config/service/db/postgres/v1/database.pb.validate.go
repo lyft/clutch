@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,36 +32,64 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Connection with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Connection) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Connection with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ConnectionMultiError, or
+// nil if none found.
+func (m *Connection) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Connection) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if err := m._validateHostname(m.GetHost()); err != nil {
 		if ip := net.ParseIP(m.GetHost()); ip == nil {
-			return ConnectionValidationError{
+			err := ConnectionValidationError{
 				field:  "Host",
 				reason: "value must be a valid hostname, or ip address",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 	}
 
 	if m.GetPort() > 65535 {
-		return ConnectionValidationError{
+		err := ConnectionValidationError{
 			field:  "Port",
 			reason: "value must be less than or equal to 65535",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetUser()) < 1 {
-		return ConnectionValidationError{
+		err := ConnectionValidationError{
 			field:  "User",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	// no validation rules for Dbname
@@ -72,14 +101,21 @@ func (m *Connection) Validate() error {
 	case *Connection_Password:
 
 		if utf8.RuneCountInString(m.GetPassword()) < 1 {
-			return ConnectionValidationError{
+			err := ConnectionValidationError{
 				field:  "Password",
 				reason: "value length must be at least 1 runes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 	}
 
+	if len(errors) > 0 {
+		return ConnectionMultiError(errors)
+	}
 	return nil
 }
 
@@ -112,6 +148,22 @@ func (m *Connection) _validateHostname(host string) error {
 
 	return nil
 }
+
+// ConnectionMultiError is an error wrapping multiple validation errors
+// returned by Connection.ValidateAll() if the designated constraints aren't met.
+type ConnectionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConnectionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConnectionMultiError) AllErrors() []error { return m }
 
 // ConnectionValidationError is the validation error returned by
 // Connection.Validate if the designated constraints aren't met.
@@ -168,13 +220,46 @@ var _ interface {
 } = ConnectionValidationError{}
 
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Config) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ConfigMultiError, or nil if none found.
+func (m *Config) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Config) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetConnection()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetConnection()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ConfigValidationError{
+					field:  "Connection",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ConfigValidationError{
+					field:  "Connection",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetConnection()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ConfigValidationError{
 				field:  "Connection",
@@ -186,8 +271,27 @@ func (m *Config) Validate() error {
 
 	// no validation rules for MaxIdleConnections
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.ValidateAll() if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.

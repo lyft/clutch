@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,19 +32,53 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Action with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Action) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Action with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ActionMultiError, or nil if none found.
+func (m *Action) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Action) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Type
 
+	if len(errors) > 0 {
+		return ActionMultiError(errors)
+	}
 	return nil
 }
+
+// ActionMultiError is an error wrapping multiple validation errors returned by
+// Action.ValidateAll() if the designated constraints aren't met.
+type ActionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ActionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ActionMultiError) AllErrors() []error { return m }
 
 // ActionValidationError is the validation error returned by Action.Validate if
 // the designated constraints aren't met.
@@ -100,18 +135,51 @@ var _ interface {
 } = ActionValidationError{}
 
 // Validate checks the field values on Pattern with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Pattern) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Pattern with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in PatternMultiError, or nil if none found.
+func (m *Pattern) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Pattern) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for TypeUrl
 
 	// no validation rules for Pattern
 
+	if len(errors) > 0 {
+		return PatternMultiError(errors)
+	}
 	return nil
 }
+
+// PatternMultiError is an error wrapping multiple validation errors returned
+// by Pattern.ValidateAll() if the designated constraints aren't met.
+type PatternMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PatternMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PatternMultiError) AllErrors() []error { return m }
 
 // PatternValidationError is the validation error returned by Pattern.Validate
 // if the designated constraints aren't met.
@@ -168,16 +236,50 @@ var _ interface {
 } = PatternValidationError{}
 
 // Validate checks the field values on Identifier with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Identifier) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Identifier with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in IdentifierMultiError, or
+// nil if none found.
+func (m *Identifier) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Identifier) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetPatterns() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, IdentifierValidationError{
+						field:  fmt.Sprintf("Patterns[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, IdentifierValidationError{
+						field:  fmt.Sprintf("Patterns[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return IdentifierValidationError{
 					field:  fmt.Sprintf("Patterns[%v]", idx),
@@ -189,8 +291,27 @@ func (m *Identifier) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return IdentifierMultiError(errors)
+	}
 	return nil
 }
+
+// IdentifierMultiError is an error wrapping multiple validation errors
+// returned by Identifier.ValidateAll() if the designated constraints aren't met.
+type IdentifierMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IdentifierMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IdentifierMultiError) AllErrors() []error { return m }
 
 // IdentifierValidationError is the validation error returned by
 // Identifier.Validate if the designated constraints aren't met.
@@ -247,14 +368,48 @@ var _ interface {
 } = IdentifierValidationError{}
 
 // Validate checks the field values on Reference with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Reference) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Reference with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ReferenceMultiError, or nil
+// if none found.
+func (m *Reference) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Reference) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return ReferenceMultiError(errors)
+	}
 	return nil
 }
+
+// ReferenceMultiError is an error wrapping multiple validation errors returned
+// by Reference.ValidateAll() if the designated constraints aren't met.
+type ReferenceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ReferenceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ReferenceMultiError) AllErrors() []error { return m }
 
 // ReferenceValidationError is the validation error returned by
 // Reference.Validate if the designated constraints aren't met.
@@ -311,16 +466,50 @@ var _ interface {
 } = ReferenceValidationError{}
 
 // Validate checks the field values on Redacted with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Redacted) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Redacted with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RedactedMultiError, or nil
+// if none found.
+func (m *Redacted) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Redacted) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for RedactedTypeUrl
 
+	if len(errors) > 0 {
+		return RedactedMultiError(errors)
+	}
 	return nil
 }
+
+// RedactedMultiError is an error wrapping multiple validation errors returned
+// by Redacted.ValidateAll() if the designated constraints aren't met.
+type RedactedMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RedactedMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RedactedMultiError) AllErrors() []error { return m }
 
 // RedactedValidationError is the validation error returned by
 // Redacted.Validate if the designated constraints aren't met.
