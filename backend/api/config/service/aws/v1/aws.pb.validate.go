@@ -125,17 +125,31 @@ func (m *Config) validate(all bool) error {
 		}
 	}
 
-<<<<<<< HEAD
-	if len(errors) > 0 {
-		return ConfigMultiError(errors)
-	}
-=======
 	// no validation rules for CurrentAccountAlias
 
 	for idx, item := range m.GetAdditionalAccounts() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  fmt.Sprintf("AdditionalAccounts[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  fmt.Sprintf("AdditionalAccounts[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ConfigValidationError{
 					field:  fmt.Sprintf("AdditionalAccounts[%v]", idx),
@@ -147,7 +161,9 @@ func (m *Config) validate(all bool) error {
 
 	}
 
->>>>>>> 5e4a496a (retro fit with new config)
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
 
@@ -592,42 +608,92 @@ var _ interface {
 } = ScalingLimitsValidationError{}
 
 // Validate checks the field values on AWSAccount with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *AWSAccount) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AWSAccount with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in AWSAccountMultiError, or
+// nil if none found.
+func (m *AWSAccount) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AWSAccount) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetAlias()) < 1 {
-		return AWSAccountValidationError{
+		err := AWSAccountValidationError{
 			field:  "Alias",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetAccountNumber()) < 1 {
-		return AWSAccountValidationError{
+		err := AWSAccountValidationError{
 			field:  "AccountNumber",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetIamRole()) < 1 {
-		return AWSAccountValidationError{
+		err := AWSAccountValidationError{
 			field:  "IamRole",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRegions()) < 1 {
-		return AWSAccountValidationError{
+		err := AWSAccountValidationError{
 			field:  "Regions",
 			reason: "value must contain at least 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return AWSAccountMultiError(errors)
+	}
 	return nil
 }
+
+// AWSAccountMultiError is an error wrapping multiple validation errors
+// returned by AWSAccount.ValidateAll() if the designated constraints aren't met.
+type AWSAccountMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AWSAccountMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AWSAccountMultiError) AllErrors() []error { return m }
 
 // AWSAccountValidationError is the validation error returned by
 // AWSAccount.Validate if the designated constraints aren't met.
