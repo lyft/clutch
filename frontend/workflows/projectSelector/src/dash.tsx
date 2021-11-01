@@ -8,17 +8,33 @@ import {
   ProjectSelectorStateContext,
   TimelineDispatchContext,
   TimelineStateContext,
+  TimeRangeDispatchContext,
+  TimeRangeStateContext,
 } from "./dash-hooks";
+import { hoursToMs } from "./helpers";
 import ProjectSelector from "./project-selector";
-import type { DashAction, DashState, TimelineAction, TimelineState } from "./types";
+import type {
+  DashAction,
+  DashState,
+  TimelineAction,
+  TimelineState,
+  TimeRangeAction,
+  TimeRangeState,
+} from "./types";
 
-const initialState = {
+const initialState: DashState = {
   selected: [],
   projectData: {},
 };
 
-const initialTimelineState = {
+const initialTimelineState: TimelineState = {
   timeData: {},
+};
+
+const initialTimeRangeState: TimeRangeState = {
+  // Default look back is 2 hours for time selector
+  startTimeMs: Date.now() - hoursToMs(2),
+  endTimeMs: Date.now(),
 };
 
 const CardContainer = styled.div({
@@ -47,8 +63,25 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
     case "UPDATE": {
       // for now, clobber any existing data
       const newState = { ...state };
-      newState.timeData[action.payload.key] = action.payload.points;
+      newState.timeData[action.payload.key] = action.payload.eventData;
       return newState;
+    }
+    default:
+      throw new Error("not implemented (should be unreachable)");
+  }
+};
+
+const timeRangeReducer = (state: TimeRangeState, action: TimeRangeAction): TimeRangeState => {
+  switch (action.type) {
+    case "UPDATE": {
+      // TODO: when adding more complexity to the time range state - i.e. filters of event types - add logic here to handle if both start and end times are equal
+      if (
+        !_.isEqual(state.startTimeMs, action.payload.startTimeMs) ||
+        !_.isEqual(state.endTimeMs, action.payload.endTimeMs)
+      ) {
+        return action.payload;
+      }
+      return state;
     }
     default:
       throw new Error("not implemented (should be unreachable)");
@@ -58,17 +91,25 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
 const Dash = ({ children }) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
   const [timelineState, timelineDispatch] = React.useReducer(timelineReducer, initialTimelineState);
+  const [timeRangeState, timeRangeDispatch] = React.useReducer(
+    timeRangeReducer,
+    initialTimeRangeState
+  );
   return (
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">
       {/* TODO: Maybe in the future invert proj selector and timeline contexts */}
       <ProjectSelectorDispatchContext.Provider value={dispatch}>
         <ProjectSelectorStateContext.Provider value={state}>
-          <TimelineDispatchContext.Provider value={timelineDispatch}>
-            <TimelineStateContext.Provider value={timelineState}>
-              <ProjectSelector />
-              <CardContainer>{children}</CardContainer>
-            </TimelineStateContext.Provider>
-          </TimelineDispatchContext.Provider>
+          <TimeRangeDispatchContext.Provider value={timeRangeDispatch}>
+            <TimeRangeStateContext.Provider value={timeRangeState}>
+              <TimelineDispatchContext.Provider value={timelineDispatch}>
+                <TimelineStateContext.Provider value={timelineState}>
+                  <ProjectSelector />
+                  <CardContainer>{children}</CardContainer>
+                </TimelineStateContext.Provider>
+              </TimelineDispatchContext.Provider>
+            </TimeRangeStateContext.Provider>
+          </TimeRangeDispatchContext.Provider>
         </ProjectSelectorStateContext.Provider>
       </ProjectSelectorDispatchContext.Provider>
     </Box>

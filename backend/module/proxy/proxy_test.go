@@ -232,3 +232,27 @@ func TestIsAllowedRequest(t *testing.T) {
 		}
 	}
 }
+
+func TestAddExcludedHeaders(t *testing.T) {
+	tests := []struct {
+		id       string
+		key      string
+		value    string
+		expected string
+	}{
+		{id: "host key is uppercased", key: "Host", value: "value1", expected: "value1"},
+		{id: "host key is lowercased", key: "host", value: "value2", expected: "value2"},
+		{id: "host key is not provided", key: "foo", value: "bar", expected: ""},
+	}
+
+	for _, test := range tests {
+		headers := http.Header{}
+		headers.Add(test.key, test.value)
+		req := &http.Request{
+			Header: headers,
+		}
+
+		addExcludedHeaders(req)
+		assert.Equal(t, test.expected, req.Host)
+	}
+}

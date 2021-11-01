@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/dschaller/graphql"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/shurcooL/graphql"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
@@ -81,7 +81,16 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, err
 	}, nil
 }
 
-func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareCommitsRequest) (*sourcegraphv1.CompareCommitsResponse, error) {
+func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareCommitsRequest) (resp *sourcegraphv1.CompareCommitsResponse, err error) {
+	// TODO: Remove this when a fix has been landed to the upstream to fix the panic from index out of bounds
+	defer func() {
+		if r := recover(); r != nil {
+			c.log.Warn("Recovered from panic in gql client query")
+			resp = nil
+			err = errors.New("unsuccessful response from sourcegraph")
+		}
+	}()
+
 	variables := map[string]interface{}{
 		"name": graphql.String(req.Repository),
 		"base": graphql.String(req.Base),
@@ -89,13 +98,13 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 	}
 
 	query := &compareCommitsQuery
-	err := c.gqlClient.Query(ctx, query, variables)
-	if err != nil {
+	e := c.gqlClient.Query(ctx, query, variables)
+	if e != nil {
 		c.log.Error("unsuccessful response from sourcegraph",
 			zap.String("repo", req.Repository),
 			zap.String("base", req.Base),
 			zap.String("head", req.Head),
-			zap.Error(err))
+			zap.Error(e))
 
 		return nil, errors.New("unsuccessful response from sourcegraph")
 	}

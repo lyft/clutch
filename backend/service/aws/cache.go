@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"go.uber.org/zap"
@@ -47,6 +48,7 @@ func (c *client) processRegionTopologyObjects(ctx context.Context) {
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), client, c.processAllEC2Instances)
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllAutoScalingGroups)
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllKinesisStreams)
+		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllDynamoDatabases)
 	}
 }
 
@@ -191,6 +193,51 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 				Resource: &topologyv1.Resource{
 					Id: patternId,
 					Pb: protoStream,
+				},
+				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
+			}
+		}
+	}
+}
+
+func (c *client) processAllDynamoDatabases(ctx context.Context, client *regionalClient) {
+	c.log.Info("starting to process dynamodb for region", zap.String("region", client.region))
+
+	input := dynamodb.ListTablesInput{
+		Limit: aws.Int32(100),
+	}
+
+	paginator := dynamodb.NewListTablesPaginator(client.dynamodb, &input)
+	for paginator.HasMorePages() {
+		output, err := paginator.NextPage(ctx)
+		if err != nil {
+			c.log.Error("unable to get next dynamodb page", zap.Error(err))
+			break
+		}
+
+		for _, t := range output.TableNames {
+			protoTable, err := c.DescribeTable(ctx, client.region, t)
+			if err != nil {
+				c.log.Error("unable to describe dynamodb table", zap.Error(err))
+				continue
+			}
+
+			tableAny, err := anypb.New(protoTable)
+			if err != nil {
+				c.log.Error("unable to marshal dynamodb proto", zap.Error(err))
+				continue
+			}
+
+			patternId, err := meta.HydratedPatternForProto(protoTable)
+			if err != nil {
+				c.log.Error("unable to get proto id from pattern", zap.Error(err))
+				continue
+			}
+
+			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
+				Resource: &topologyv1.Resource{
+					Id: patternId,
+					Pb: tableAny,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
 			}
