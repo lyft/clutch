@@ -117,7 +117,7 @@ main() {
           -I"${googleapis_include_path}" -I"${pg_validate_include_path}" \
           --buf-check-lint_out=. \
           "--buf-check-lint_opt={\"input_config\": ${buf_lint_config}}" \
-          --plugin=protoc-gen-buf-check-lint="${GOBIN}/protoc-gen-buf-check-lint" \
+          --plugin=protoc-gen-buf-lint="${GOBIN}/protoc-gen-buf-lint" \
           "${proto}" 2>&1)
         then
           echo "--- ${proto}"
@@ -296,7 +296,7 @@ install_protoc() {
   export PROTOC_INCLUDE_DIR="${GOBIN}/protoc-v${PROTOC_RELEASE}-include"
 
   go install \
-    github.com/bufbuild/buf/cmd/protoc-gen-buf-check-lint \
+    github.com/bufbuild/buf/cmd/protoc-gen-buf-lint \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
     github.com/envoyproxy/protoc-gen-validate \
