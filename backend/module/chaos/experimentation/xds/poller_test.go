@@ -141,7 +141,7 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 	// Verify runtime of cluster "foo"
 	snapshotFoo, err := cache.GetSnapshot("foo")
 	assert.NoError(t, err)
-	rtdsResourcesClusterFoo := snapshotFoo.GetResourcesAndTtl(gcpResourceV3.RuntimeType)
+	rtdsResourcesClusterFoo := snapshotFoo.GetResourcesAndTTL(gcpResourceV3.RuntimeType)
 	resourcesClusterFoo := rtdsResourcesClusterFoo[rtdsConfig.layerName]
 	assert.NotNil(t, resourcesClusterFoo)
 	fieldsFoo := resourcesClusterFoo.Resource.(*gcpRuntimeServiceV3.Runtime).GetLayer().GetFields()
@@ -151,7 +151,7 @@ func TestRTDSResourcesRefresh(t *testing.T) {
 	// Verify runtime of cluster "foo"
 	snapshotBar, err := cache.GetSnapshot("bar")
 	assert.NoError(t, err)
-	rtdsResourcesClusterBar := snapshotBar.GetResourcesAndTtl(gcpResourceV3.RuntimeType)
+	rtdsResourcesClusterBar := snapshotBar.GetResourcesAndTTL(gcpResourceV3.RuntimeType)
 	resourcesClusterBar := rtdsResourcesClusterBar[rtdsConfig.layerName]
 	assert.NotNil(t, resourcesClusterBar)
 	fieldsBar := resourcesClusterBar.Resource.(*gcpRuntimeServiceV3.Runtime).GetLayer().GetFields()
