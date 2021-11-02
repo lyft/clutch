@@ -143,7 +143,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 			emptyResources[gcpTypes.ExtensionConfig] = resourcesWithTTL
 		}
 
-		err := p.setSnapshot(emptyResources, cluster)
+		err := p.setSnapshot(ctx, emptyResources, cluster)
 		if err != nil {
 			p.setCacheSnapshotFailureCount.Inc(1)
 			p.logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster, "error", err)
@@ -178,7 +178,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 			}
 		}
 
-		err := p.setSnapshot(resources, cluster)
+		err := p.setSnapshot(ctx, resources, cluster)
 		if err != nil {
 			p.logger.Errorw("Unable to set the fault for cluster using ECDS", "cluster", cluster, "error", err)
 		}
@@ -256,7 +256,7 @@ func (p *Poller) createResourceWithTTLForECDSResource(resource *ECDSResource, tt
 	}}
 }
 
-func (p *Poller) setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string) error {
+func (p *Poller) setSnapshot(ctx context.Context, resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string) error {
 	currentSnapshot, _ := p.cache.GetSnapshot(cluster)
 
 	snapshot := gcpCacheV3.Snapshot{}
@@ -282,7 +282,7 @@ func (p *Poller) setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.Re
 	}
 
 	p.logger.Infow("Setting snapshot", "cluster", cluster, "resources", resourceMap)
-	err := p.cache.SetSnapshot(cluster, snapshot)
+	err := p.cache.SetSnapshot(ctx, cluster, snapshot)
 	if err != nil {
 		return err
 	}
