@@ -14,8 +14,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.17.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.8.0
 	github.com/aws/smithy-go v1.8.1
+	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bradleyfalzon/ghinstallation v1.1.1
-	github.com/bufbuild/buf v0.37.0
+	github.com/bufbuild/buf v0.56.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -41,6 +42,7 @@ require (
 	github.com/m3db/prometheus_client_model v0.1.0 // indirect
 	github.com/m3db/prometheus_common v0.1.0 // indirect
 	github.com/m3db/prometheus_procfs v0.8.1 // indirect
+	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2
 	github.com/shurcooL/githubv4 v0.0.0-20210725200734-83ba7b4c9228
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
