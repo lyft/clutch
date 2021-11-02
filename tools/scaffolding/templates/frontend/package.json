@@ -26,7 +26,7 @@
     "@clutch-sh/tools": "^1.0.0-beta"
   },
   "engines": {
-    "node": ">=14.8.1",
+    "node": ">=14.8.0",
     "yarn": "^1.22.5"
   }
 }

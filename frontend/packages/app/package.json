@@ -28,7 +28,7 @@
     "esbuild-loader": "^2.10.0"
   },
   "engines": {
-    "node": ">=14.8.1"
+    "node": ">=14.8.0"
   },
   "proxy": "http://localhost:8080"
 }
