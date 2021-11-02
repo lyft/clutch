@@ -112,7 +112,6 @@ main() {
       done
 
       for proto in "${PROTOS[@]}"; do
-        set -x
         if ! output=$("${PROTOC_BIN}" \
           -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
           -I"${googleapis_include_path}" -I"${pg_validate_include_path}" \
@@ -125,7 +124,6 @@ main() {
           echo "${output}" | sed 's/--buf-lint_out: //' | cut -d":" -f2-
           LINT_OK=false
         fi
-        exit 244
       done
     fi
     ${LINT_OK} && exit 0 || exit 1
