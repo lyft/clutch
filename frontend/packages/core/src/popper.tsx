@@ -89,7 +89,7 @@ export interface PopperProps
   extends Pick<ClickAwayListenerProps, "onClickAway">,
     Pick<MuiPopperProps, "placement"> {
   open: boolean;
-  anchorRef?: React.MutableRefObject<HTMLElement> | React.MutableRefObject<null> | null;
+  anchorRef: React.MutableRefObject<HTMLElement | null>;
   children?: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
   id?: string;
 }
@@ -102,7 +102,7 @@ const Popper = ({
   id,
 }: PopperProps) => (
   <Collapse in={open} timeout="auto" unmountOnExit>
-    <StyledPopper open={open} anchorEl={anchorRef?.current} transition placement={placement}>
+    <StyledPopper open={open} anchorEl={anchorRef.current} transition placement={placement}>
       <Paper>
         <ClickAwayListener onClickAway={onClickAway}>
           <List component="div" disablePadding id={id}>
