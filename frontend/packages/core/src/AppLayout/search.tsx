@@ -129,7 +129,7 @@ const CustomCloseIcon: React.FC = () => {
   );
 };
 
-const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
+const Input = ({ ...params }: AutocompleteRenderInputParams): React.ReactNode => {
   const searchRef = React.useRef();
   const handleKeyPress = (event: KeyboardEvent) => {
     if (searchRef.current) {
