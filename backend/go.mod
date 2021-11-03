@@ -15,7 +15,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.8.0
 	github.com/aws/smithy-go v1.8.1
 	github.com/bradleyfalzon/ghinstallation v1.1.1
-	github.com/bufbuild/buf v0.37.0
+	github.com/bufbuild/buf v0.56.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -25,7 +25,7 @@ require (
 	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/gobwas/glob v0.2.3
-	github.com/golang-migrate/migrate/v4 v4.14.1
+	github.com/golang-migrate/migrate/v4 v4.15.1
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-github/v29 v29.0.3 // indirect
 	github.com/google/go-github/v37 v37.0.0
@@ -51,13 +51,11 @@ require (
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/uber-go/tally v3.4.2+incompatible
 	go.uber.org/zap v1.19.1
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
-	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf
+	golang.org/x/net v0.0.0-20211013171255-e13a2654a71e
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	golang.org/x/sys v0.0.0-20210921065528-437939a70204 // indirect
-	google.golang.org/genproto v0.0.0-20210921142501-181ce0d877f6
-	google.golang.org/grpc v1.40.0
+	google.golang.org/genproto v0.0.0-20211013025323-ce878158c4d4
+	google.golang.org/grpc v1.42.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/square/go-jose.v2 v2.6.0

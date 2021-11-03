@@ -89,7 +89,7 @@ export interface PopperProps
   extends Pick<ClickAwayListenerProps, "onClickAway">,
     Pick<MuiPopperProps, "placement"> {
   open: boolean;
-  anchorRef?: React.MutableRefObject<HTMLElement> | null;
+  anchorRef?: React.MutableRefObject<HTMLElement | null> | null;
   children?: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
   id?: string;
 }
