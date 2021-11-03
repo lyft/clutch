@@ -482,7 +482,8 @@ type SubmitFeedbackRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// client-genereated unique feedback id, which we will also use to update the feedback (essentially replace with the latest)
+	// client-genereated unique feedback id, which we will also use to update the feedback (essentially replace with the
+	// latest)
 	// TODO: remove if we decide to record feedback only when a user clicks the submit button
 	Id       string    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Feedback *Feedback `protobuf:"bytes,2,opt,name=feedback,proto3" json:"feedback,omitempty"`
