@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,14 +32,29 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Status with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Status) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Status with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in StatusMultiError, or nil if none found.
+func (m *Status) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Status) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Status
 
@@ -48,7 +64,26 @@ func (m *Status) Validate() error {
 
 	// no validation rules for Code
 
-	if v, ok := interface{}(m.GetDetails()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDetails()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StatusValidationError{
+					field:  "Details",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StatusValidationError{
+					field:  "Details",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDetails()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return StatusValidationError{
 				field:  "Details",
@@ -58,8 +93,27 @@ func (m *Status) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return StatusMultiError(errors)
+	}
 	return nil
 }
+
+// StatusMultiError is an error wrapping multiple validation errors returned by
+// Status.ValidateAll() if the designated constraints aren't met.
+type StatusMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatusMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatusMultiError) AllErrors() []error { return m }
 
 // StatusValidationError is the validation error returned by Status.Validate if
 // the designated constraints aren't met.
@@ -116,12 +170,26 @@ var _ interface {
 } = StatusValidationError{}
 
 // Validate checks the field values on StatusDetails with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *StatusDetails) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StatusDetails with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in StatusDetailsMultiError, or
+// nil if none found.
+func (m *StatusDetails) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StatusDetails) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -134,7 +202,26 @@ func (m *StatusDetails) Validate() error {
 	for idx, item := range m.GetCauses() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, StatusDetailsValidationError{
+						field:  fmt.Sprintf("Causes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, StatusDetailsValidationError{
+						field:  fmt.Sprintf("Causes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return StatusDetailsValidationError{
 					field:  fmt.Sprintf("Causes[%v]", idx),
@@ -146,8 +233,28 @@ func (m *StatusDetails) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return StatusDetailsMultiError(errors)
+	}
 	return nil
 }
+
+// StatusDetailsMultiError is an error wrapping multiple validation errors
+// returned by StatusDetails.ValidateAll() if the designated constraints
+// aren't met.
+type StatusDetailsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatusDetailsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatusDetailsMultiError) AllErrors() []error { return m }
 
 // StatusDetailsValidationError is the validation error returned by
 // StatusDetails.Validate if the designated constraints aren't met.
@@ -204,12 +311,26 @@ var _ interface {
 } = StatusDetailsValidationError{}
 
 // Validate checks the field values on StatusCause with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *StatusCause) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StatusCause with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in StatusCauseMultiError, or
+// nil if none found.
+func (m *StatusCause) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StatusCause) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Type
 
@@ -217,8 +338,27 @@ func (m *StatusCause) Validate() error {
 
 	// no validation rules for Field
 
+	if len(errors) > 0 {
+		return StatusCauseMultiError(errors)
+	}
 	return nil
 }
+
+// StatusCauseMultiError is an error wrapping multiple validation errors
+// returned by StatusCause.ValidateAll() if the designated constraints aren't met.
+type StatusCauseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatusCauseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatusCauseMultiError) AllErrors() []error { return m }
 
 // StatusCauseValidationError is the validation error returned by
 // StatusCause.Validate if the designated constraints aren't met.

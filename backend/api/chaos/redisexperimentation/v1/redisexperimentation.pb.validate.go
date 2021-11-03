@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,24 +32,62 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on FaultConfig with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *FaultConfig) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on FaultConfig with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in FaultConfigMultiError, or
+// nil if none found.
+func (m *FaultConfig) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *FaultConfig) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetFaultTargeting() == nil {
-		return FaultConfigValidationError{
+		err := FaultConfigValidationError{
 			field:  "FaultTargeting",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetFaultTargeting()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, FaultConfigValidationError{
+					field:  "FaultTargeting",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, FaultConfigValidationError{
+					field:  "FaultTargeting",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FaultConfigValidationError{
 				field:  "FaultTargeting",
@@ -62,7 +101,26 @@ func (m *FaultConfig) Validate() error {
 
 	case *FaultConfig_ErrorFault:
 
-		if v, ok := interface{}(m.GetErrorFault()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetErrorFault()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, FaultConfigValidationError{
+						field:  "ErrorFault",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, FaultConfigValidationError{
+						field:  "ErrorFault",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetErrorFault()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return FaultConfigValidationError{
 					field:  "ErrorFault",
@@ -74,7 +132,26 @@ func (m *FaultConfig) Validate() error {
 
 	case *FaultConfig_LatencyFault:
 
-		if v, ok := interface{}(m.GetLatencyFault()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetLatencyFault()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, FaultConfigValidationError{
+						field:  "LatencyFault",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, FaultConfigValidationError{
+						field:  "LatencyFault",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetLatencyFault()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return FaultConfigValidationError{
 					field:  "LatencyFault",
@@ -85,15 +162,38 @@ func (m *FaultConfig) Validate() error {
 		}
 
 	default:
-		return FaultConfigValidationError{
+		err := FaultConfigValidationError{
 			field:  "Fault",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 
 	}
 
+	if len(errors) > 0 {
+		return FaultConfigMultiError(errors)
+	}
 	return nil
 }
+
+// FaultConfigMultiError is an error wrapping multiple validation errors
+// returned by FaultConfig.ValidateAll() if the designated constraints aren't met.
+type FaultConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FaultConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FaultConfigMultiError) AllErrors() []error { return m }
 
 // FaultConfigValidationError is the validation error returned by
 // FaultConfig.Validate if the designated constraints aren't met.
@@ -150,20 +250,58 @@ var _ interface {
 } = FaultConfigValidationError{}
 
 // Validate checks the field values on ErrorFault with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *ErrorFault) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ErrorFault with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ErrorFaultMultiError, or
+// nil if none found.
+func (m *ErrorFault) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ErrorFault) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetPercentage() == nil {
-		return ErrorFaultValidationError{
+		err := ErrorFaultValidationError{
 			field:  "Percentage",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPercentage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ErrorFaultValidationError{
+					field:  "Percentage",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ErrorFaultValidationError{
+					field:  "Percentage",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ErrorFaultValidationError{
 				field:  "Percentage",
@@ -173,8 +311,27 @@ func (m *ErrorFault) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return ErrorFaultMultiError(errors)
+	}
 	return nil
 }
+
+// ErrorFaultMultiError is an error wrapping multiple validation errors
+// returned by ErrorFault.ValidateAll() if the designated constraints aren't met.
+type ErrorFaultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ErrorFaultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ErrorFaultMultiError) AllErrors() []error { return m }
 
 // ErrorFaultValidationError is the validation error returned by
 // ErrorFault.Validate if the designated constraints aren't met.
@@ -231,21 +388,58 @@ var _ interface {
 } = ErrorFaultValidationError{}
 
 // Validate checks the field values on LatencyFault with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *LatencyFault) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on LatencyFault with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in LatencyFaultMultiError, or
+// nil if none found.
+func (m *LatencyFault) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *LatencyFault) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetPercentage() == nil {
-		return LatencyFaultValidationError{
+		err := LatencyFaultValidationError{
 			field:  "Percentage",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPercentage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, LatencyFaultValidationError{
+					field:  "Percentage",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, LatencyFaultValidationError{
+					field:  "Percentage",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return LatencyFaultValidationError{
 				field:  "Percentage",
@@ -255,8 +449,27 @@ func (m *LatencyFault) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return LatencyFaultMultiError(errors)
+	}
 	return nil
 }
+
+// LatencyFaultMultiError is an error wrapping multiple validation errors
+// returned by LatencyFault.ValidateAll() if the designated constraints aren't met.
+type LatencyFaultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LatencyFaultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LatencyFaultMultiError) AllErrors() []error { return m }
 
 // LatencyFaultValidationError is the validation error returned by
 // LatencyFault.Validate if the designated constraints aren't met.
@@ -313,14 +526,47 @@ var _ interface {
 } = LatencyFaultValidationError{}
 
 // Validate checks the field values on FaultTargeting with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *FaultTargeting) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on FaultTargeting with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in FaultTargetingMultiError,
+// or nil if none found.
+func (m *FaultTargeting) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *FaultTargeting) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetUpstreamCluster()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetUpstreamCluster()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, FaultTargetingValidationError{
+					field:  "UpstreamCluster",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, FaultTargetingValidationError{
+					field:  "UpstreamCluster",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpstreamCluster()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FaultTargetingValidationError{
 				field:  "UpstreamCluster",
@@ -330,7 +576,26 @@ func (m *FaultTargeting) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetDownstreamCluster()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDownstreamCluster()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, FaultTargetingValidationError{
+					field:  "DownstreamCluster",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, FaultTargetingValidationError{
+					field:  "DownstreamCluster",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDownstreamCluster()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FaultTargetingValidationError{
 				field:  "DownstreamCluster",
@@ -340,8 +605,28 @@ func (m *FaultTargeting) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return FaultTargetingMultiError(errors)
+	}
 	return nil
 }
+
+// FaultTargetingMultiError is an error wrapping multiple validation errors
+// returned by FaultTargeting.ValidateAll() if the designated constraints
+// aren't met.
+type FaultTargetingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FaultTargetingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FaultTargetingMultiError) AllErrors() []error { return m }
 
 // FaultTargetingValidationError is the validation error returned by
 // FaultTargeting.Validate if the designated constraints aren't met.
@@ -398,22 +683,60 @@ var _ interface {
 } = FaultTargetingValidationError{}
 
 // Validate checks the field values on SingleCluster with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *SingleCluster) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SingleCluster with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SingleClusterMultiError, or
+// nil if none found.
+func (m *SingleCluster) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SingleCluster) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetName()) < 1 {
-		return SingleClusterValidationError{
+		err := SingleClusterValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return SingleClusterMultiError(errors)
+	}
 	return nil
 }
+
+// SingleClusterMultiError is an error wrapping multiple validation errors
+// returned by SingleCluster.ValidateAll() if the designated constraints
+// aren't met.
+type SingleClusterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SingleClusterMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SingleClusterMultiError) AllErrors() []error { return m }
 
 // SingleClusterValidationError is the validation error returned by
 // SingleCluster.Validate if the designated constraints aren't met.
@@ -470,22 +793,60 @@ var _ interface {
 } = SingleClusterValidationError{}
 
 // Validate checks the field values on FaultPercentage with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *FaultPercentage) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on FaultPercentage with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// FaultPercentageMultiError, or nil if none found.
+func (m *FaultPercentage) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *FaultPercentage) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if val := m.GetPercentage(); val <= 0 || val > 100 {
-		return FaultPercentageValidationError{
+		err := FaultPercentageValidationError{
 			field:  "Percentage",
 			reason: "value must be inside range (0, 100]",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return FaultPercentageMultiError(errors)
+	}
 	return nil
 }
+
+// FaultPercentageMultiError is an error wrapping multiple validation errors
+// returned by FaultPercentage.ValidateAll() if the designated constraints
+// aren't met.
+type FaultPercentageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FaultPercentageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FaultPercentageMultiError) AllErrors() []error { return m }
 
 // FaultPercentageValidationError is the validation error returned by
 // FaultPercentage.Validate if the designated constraints aren't met.

@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,18 +32,53 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on GetFlagsRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *GetFlagsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetFlagsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetFlagsRequestMultiError, or nil if none found.
+func (m *GetFlagsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetFlagsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return GetFlagsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// GetFlagsRequestMultiError is an error wrapping multiple validation errors
+// returned by GetFlagsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetFlagsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetFlagsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetFlagsRequestMultiError) AllErrors() []error { return m }
 
 // GetFlagsRequestValidationError is the validation error returned by
 // GetFlagsRequest.Validate if the designated constraints aren't met.
@@ -99,11 +135,25 @@ var _ interface {
 } = GetFlagsRequestValidationError{}
 
 // Validate checks the field values on Flag with the rules defined in the proto
-// definition for this message. If any rules are violated, an error is returned.
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
 func (m *Flag) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Flag with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FlagMultiError, or nil if none found.
+func (m *Flag) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Flag) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	switch m.Type.(type) {
 
@@ -112,8 +162,27 @@ func (m *Flag) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return FlagMultiError(errors)
+	}
 	return nil
 }
+
+// FlagMultiError is an error wrapping multiple validation errors returned by
+// Flag.ValidateAll() if the designated constraints aren't met.
+type FlagMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FlagMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FlagMultiError) AllErrors() []error { return m }
 
 // FlagValidationError is the validation error returned by Flag.Validate if the
 // designated constraints aren't met.
@@ -170,32 +239,95 @@ var _ interface {
 } = FlagValidationError{}
 
 // Validate checks the field values on GetFlagsResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *GetFlagsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetFlagsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetFlagsResponseMultiError, or nil if none found.
+func (m *GetFlagsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetFlagsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	for key, val := range m.GetFlags() {
-		_ = val
+	var errors []error
 
-		// no validation rules for Flags[key]
+	{
+		sorted_keys := make([]string, len(m.GetFlags()))
+		i := 0
+		for key := range m.GetFlags() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetFlags()[key]
+			_ = val
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return GetFlagsResponseValidationError{
-					field:  fmt.Sprintf("Flags[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
+			// no validation rules for Flags[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, GetFlagsResponseValidationError{
+							field:  fmt.Sprintf("Flags[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, GetFlagsResponseValidationError{
+							field:  fmt.Sprintf("Flags[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return GetFlagsResponseValidationError{
+						field:  fmt.Sprintf("Flags[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
-		}
 
+		}
 	}
 
+	if len(errors) > 0 {
+		return GetFlagsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// GetFlagsResponseMultiError is an error wrapping multiple validation errors
+// returned by GetFlagsResponse.ValidateAll() if the designated constraints
+// aren't met.
+type GetFlagsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetFlagsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetFlagsResponseMultiError) AllErrors() []error { return m }
 
 // GetFlagsResponseValidationError is the validation error returned by
 // GetFlagsResponse.Validate if the designated constraints aren't met.

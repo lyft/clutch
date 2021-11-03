@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,37 +32,100 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Project with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Project) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Project with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ProjectMultiError, or nil if none found.
+func (m *Project) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Project) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
 	// no validation rules for Tier
 
-	for key, val := range m.GetData() {
-		_ = val
+	{
+		sorted_keys := make([]string, len(m.GetData()))
+		i := 0
+		for key := range m.GetData() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetData()[key]
+			_ = val
 
-		// no validation rules for Data[key]
+			// no validation rules for Data[key]
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ProjectValidationError{
-					field:  fmt.Sprintf("Data[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, ProjectValidationError{
+							field:  fmt.Sprintf("Data[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, ProjectValidationError{
+							field:  fmt.Sprintf("Data[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return ProjectValidationError{
+						field:  fmt.Sprintf("Data[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
-		}
 
+		}
 	}
 
-	if v, ok := interface{}(m.GetDependencies()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDependencies()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ProjectValidationError{
+					field:  "Dependencies",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ProjectValidationError{
+					field:  "Dependencies",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDependencies()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ProjectValidationError{
 				field:  "Dependencies",
@@ -71,7 +135,26 @@ func (m *Project) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetOncall()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOncall()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ProjectValidationError{
+					field:  "Oncall",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ProjectValidationError{
+					field:  "Oncall",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOncall()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ProjectValidationError{
 				field:  "Oncall",
@@ -81,8 +164,27 @@ func (m *Project) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return ProjectMultiError(errors)
+	}
 	return nil
 }
+
+// ProjectMultiError is an error wrapping multiple validation errors returned
+// by Project.ValidateAll() if the designated constraints aren't met.
+type ProjectMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ProjectMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ProjectMultiError) AllErrors() []error { return m }
 
 // ProjectValidationError is the validation error returned by Project.Validate
 // if the designated constraints aren't met.
@@ -140,48 +242,140 @@ var _ interface {
 
 // Validate checks the field values on ProjectDependencies with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *ProjectDependencies) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ProjectDependencies with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ProjectDependenciesMultiError, or nil if none found.
+func (m *ProjectDependencies) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ProjectDependencies) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	for key, val := range m.GetUpstreams() {
-		_ = val
+	var errors []error
 
-		// no validation rules for Upstreams[key]
+	{
+		sorted_keys := make([]string, len(m.GetUpstreams()))
+		i := 0
+		for key := range m.GetUpstreams() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetUpstreams()[key]
+			_ = val
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ProjectDependenciesValidationError{
-					field:  fmt.Sprintf("Upstreams[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
+			// no validation rules for Upstreams[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, ProjectDependenciesValidationError{
+							field:  fmt.Sprintf("Upstreams[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, ProjectDependenciesValidationError{
+							field:  fmt.Sprintf("Upstreams[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return ProjectDependenciesValidationError{
+						field:  fmt.Sprintf("Upstreams[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
-		}
 
+		}
 	}
 
-	for key, val := range m.GetDownstreams() {
-		_ = val
+	{
+		sorted_keys := make([]string, len(m.GetDownstreams()))
+		i := 0
+		for key := range m.GetDownstreams() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetDownstreams()[key]
+			_ = val
 
-		// no validation rules for Downstreams[key]
+			// no validation rules for Downstreams[key]
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ProjectDependenciesValidationError{
-					field:  fmt.Sprintf("Downstreams[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, ProjectDependenciesValidationError{
+							field:  fmt.Sprintf("Downstreams[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, ProjectDependenciesValidationError{
+							field:  fmt.Sprintf("Downstreams[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return ProjectDependenciesValidationError{
+						field:  fmt.Sprintf("Downstreams[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
-		}
 
+		}
 	}
 
+	if len(errors) > 0 {
+		return ProjectDependenciesMultiError(errors)
+	}
 	return nil
 }
+
+// ProjectDependenciesMultiError is an error wrapping multiple validation
+// errors returned by ProjectDependencies.ValidateAll() if the designated
+// constraints aren't met.
+type ProjectDependenciesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ProjectDependenciesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ProjectDependenciesMultiError) AllErrors() []error { return m }
 
 // ProjectDependenciesValidationError is the validation error returned by
 // ProjectDependencies.Validate if the designated constraints aren't met.
@@ -240,14 +434,48 @@ var _ interface {
 } = ProjectDependenciesValidationError{}
 
 // Validate checks the field values on Dependency with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Dependency) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Dependency with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DependencyMultiError, or
+// nil if none found.
+func (m *Dependency) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Dependency) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return DependencyMultiError(errors)
+	}
 	return nil
 }
+
+// DependencyMultiError is an error wrapping multiple validation errors
+// returned by Dependency.ValidateAll() if the designated constraints aren't met.
+type DependencyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DependencyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DependencyMultiError) AllErrors() []error { return m }
 
 // DependencyValidationError is the validation error returned by
 // Dependency.Validate if the designated constraints aren't met.
@@ -304,13 +532,46 @@ var _ interface {
 } = DependencyValidationError{}
 
 // Validate checks the field values on OnCall with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *OnCall) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OnCall with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in OnCallMultiError, or nil if none found.
+func (m *OnCall) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OnCall) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetPagerduty()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPagerduty()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OnCallValidationError{
+					field:  "Pagerduty",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OnCallValidationError{
+					field:  "Pagerduty",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPagerduty()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return OnCallValidationError{
 				field:  "Pagerduty",
@@ -320,8 +581,27 @@ func (m *OnCall) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return OnCallMultiError(errors)
+	}
 	return nil
 }
+
+// OnCallMultiError is an error wrapping multiple validation errors returned by
+// OnCall.ValidateAll() if the designated constraints aren't met.
+type OnCallMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OnCallMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OnCallMultiError) AllErrors() []error { return m }
 
 // OnCallValidationError is the validation error returned by OnCall.Validate if
 // the designated constraints aren't met.
@@ -378,14 +658,48 @@ var _ interface {
 } = OnCallValidationError{}
 
 // Validate checks the field values on PagerDuty with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *PagerDuty) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PagerDuty with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PagerDutyMultiError, or nil
+// if none found.
+func (m *PagerDuty) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PagerDuty) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return PagerDutyMultiError(errors)
+	}
 	return nil
 }
+
+// PagerDutyMultiError is an error wrapping multiple validation errors returned
+// by PagerDuty.ValidateAll() if the designated constraints aren't met.
+type PagerDutyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PagerDutyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PagerDutyMultiError) AllErrors() []error { return m }
 
 // PagerDutyValidationError is the validation error returned by
 // PagerDuty.Validate if the designated constraints aren't met.

@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,21 +32,56 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on InstanceID with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *InstanceID) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InstanceID with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in InstanceIDMultiError, or
+// nil if none found.
+func (m *InstanceID) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InstanceID) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Id
 
 	// no validation rules for Region
 
+	if len(errors) > 0 {
+		return InstanceIDMultiError(errors)
+	}
 	return nil
 }
+
+// InstanceIDMultiError is an error wrapping multiple validation errors
+// returned by InstanceID.ValidateAll() if the designated constraints aren't met.
+type InstanceIDMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstanceIDMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstanceIDMultiError) AllErrors() []error { return m }
 
 // InstanceIDValidationError is the validation error returned by
 // InstanceID.Validate if the designated constraints aren't met.
@@ -103,18 +139,52 @@ var _ interface {
 
 // Validate checks the field values on AutoscalingGroupName with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *AutoscalingGroupName) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AutoscalingGroupName with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AutoscalingGroupNameMultiError, or nil if none found.
+func (m *AutoscalingGroupName) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AutoscalingGroupName) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
 	// no validation rules for Region
 
+	if len(errors) > 0 {
+		return AutoscalingGroupNameMultiError(errors)
+	}
 	return nil
 }
+
+// AutoscalingGroupNameMultiError is an error wrapping multiple validation
+// errors returned by AutoscalingGroupName.ValidateAll() if the designated
+// constraints aren't met.
+type AutoscalingGroupNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AutoscalingGroupNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AutoscalingGroupNameMultiError) AllErrors() []error { return m }
 
 // AutoscalingGroupNameValidationError is the validation error returned by
 // AutoscalingGroupName.Validate if the designated constraints aren't met.
@@ -173,19 +243,53 @@ var _ interface {
 } = AutoscalingGroupNameValidationError{}
 
 // Validate checks the field values on KinesisStreamName with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *KinesisStreamName) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on KinesisStreamName with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// KinesisStreamNameMultiError, or nil if none found.
+func (m *KinesisStreamName) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *KinesisStreamName) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
 	// no validation rules for Region
 
+	if len(errors) > 0 {
+		return KinesisStreamNameMultiError(errors)
+	}
 	return nil
 }
+
+// KinesisStreamNameMultiError is an error wrapping multiple validation errors
+// returned by KinesisStreamName.ValidateAll() if the designated constraints
+// aren't met.
+type KinesisStreamNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m KinesisStreamNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m KinesisStreamNameMultiError) AllErrors() []error { return m }
 
 // KinesisStreamNameValidationError is the validation error returned by
 // KinesisStreamName.Validate if the designated constraints aren't met.
@@ -244,19 +348,53 @@ var _ interface {
 } = KinesisStreamNameValidationError{}
 
 // Validate checks the field values on DynamodbTableName with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *DynamodbTableName) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DynamodbTableName with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DynamodbTableNameMultiError, or nil if none found.
+func (m *DynamodbTableName) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DynamodbTableName) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
 	// no validation rules for Region
 
+	if len(errors) > 0 {
+		return DynamodbTableNameMultiError(errors)
+	}
 	return nil
 }
+
+// DynamodbTableNameMultiError is an error wrapping multiple validation errors
+// returned by DynamodbTableName.ValidateAll() if the designated constraints
+// aren't met.
+type DynamodbTableNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DynamodbTableNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DynamodbTableNameMultiError) AllErrors() []error { return m }
 
 // DynamodbTableNameValidationError is the validation error returned by
 // DynamodbTableName.Validate if the designated constraints aren't met.

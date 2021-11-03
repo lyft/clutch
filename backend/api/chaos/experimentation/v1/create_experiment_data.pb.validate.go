@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,42 +32,88 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on CreateExperimentData with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *CreateExperimentData) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateExperimentData with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateExperimentDataMultiError, or nil if none found.
+func (m *CreateExperimentData) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateExperimentData) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if utf8.RuneCountInString(m.GetRunId()) > 100 {
-		return CreateExperimentDataValidationError{
+		err := CreateExperimentDataValidationError{
 			field:  "RunId",
 			reason: "value length must be at most 100 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if !_CreateExperimentData_RunId_Pattern.MatchString(m.GetRunId()) {
-		return CreateExperimentDataValidationError{
+		err := CreateExperimentDataValidationError{
 			field:  "RunId",
 			reason: "value does not match regex pattern \"^[A-Za-z0-9-._~]*$\"",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetConfig() == nil {
-		return CreateExperimentDataValidationError{
+		err := CreateExperimentDataValidationError{
 			field:  "Config",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if a := m.GetConfig(); a != nil {
 
 	}
 
-	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetStartTime()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateExperimentDataValidationError{
+					field:  "StartTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateExperimentDataValidationError{
+					field:  "StartTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CreateExperimentDataValidationError{
 				field:  "StartTime",
@@ -76,7 +123,26 @@ func (m *CreateExperimentData) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetEndTime()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetEndTime()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateExperimentDataValidationError{
+					field:  "EndTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateExperimentDataValidationError{
+					field:  "EndTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetEndTime()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CreateExperimentDataValidationError{
 				field:  "EndTime",
@@ -86,8 +152,28 @@ func (m *CreateExperimentData) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return CreateExperimentDataMultiError(errors)
+	}
 	return nil
 }
+
+// CreateExperimentDataMultiError is an error wrapping multiple validation
+// errors returned by CreateExperimentData.ValidateAll() if the designated
+// constraints aren't met.
+type CreateExperimentDataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateExperimentDataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateExperimentDataMultiError) AllErrors() []error { return m }
 
 // CreateExperimentDataValidationError is the validation error returned by
 // CreateExperimentData.Validate if the designated constraints aren't met.

@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,38 +32,84 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on RequestProxyRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RequestProxyRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RequestProxyRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RequestProxyRequestMultiError, or nil if none found.
+func (m *RequestProxyRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RequestProxyRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if utf8.RuneCountInString(m.GetService()) < 1 {
-		return RequestProxyRequestValidationError{
+		err := RequestProxyRequestValidationError{
 			field:  "Service",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetHttpMethod()) < 1 {
-		return RequestProxyRequestValidationError{
+		err := RequestProxyRequestValidationError{
 			field:  "HttpMethod",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetPath()) < 1 {
-		return RequestProxyRequestValidationError{
+		err := RequestProxyRequestValidationError{
 			field:  "Path",
 			reason: "value length must be at least 1 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRequest()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRequest()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestProxyRequestValidationError{
+					field:  "Request",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestProxyRequestValidationError{
+					field:  "Request",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRequest()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestProxyRequestValidationError{
 				field:  "Request",
@@ -72,8 +119,28 @@ func (m *RequestProxyRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return RequestProxyRequestMultiError(errors)
+	}
 	return nil
 }
+
+// RequestProxyRequestMultiError is an error wrapping multiple validation
+// errors returned by RequestProxyRequest.ValidateAll() if the designated
+// constraints aren't met.
+type RequestProxyRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RequestProxyRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RequestProxyRequestMultiError) AllErrors() []error { return m }
 
 // RequestProxyRequestValidationError is the validation error returned by
 // RequestProxyRequest.Validate if the designated constraints aren't met.
@@ -133,32 +200,94 @@ var _ interface {
 
 // Validate checks the field values on RequestProxyResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RequestProxyResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RequestProxyResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RequestProxyResponseMultiError, or nil if none found.
+func (m *RequestProxyResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RequestProxyResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for HttpStatus
 
-	for key, val := range m.GetHeaders() {
-		_ = val
+	{
+		sorted_keys := make([]string, len(m.GetHeaders()))
+		i := 0
+		for key := range m.GetHeaders() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetHeaders()[key]
+			_ = val
 
-		// no validation rules for Headers[key]
+			// no validation rules for Headers[key]
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return RequestProxyResponseValidationError{
-					field:  fmt.Sprintf("Headers[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, RequestProxyResponseValidationError{
+							field:  fmt.Sprintf("Headers[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, RequestProxyResponseValidationError{
+							field:  fmt.Sprintf("Headers[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return RequestProxyResponseValidationError{
+						field:  fmt.Sprintf("Headers[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
-		}
 
+		}
 	}
 
-	if v, ok := interface{}(m.GetResponse()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetResponse()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestProxyResponseValidationError{
+					field:  "Response",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestProxyResponseValidationError{
+					field:  "Response",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetResponse()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestProxyResponseValidationError{
 				field:  "Response",
@@ -168,8 +297,28 @@ func (m *RequestProxyResponse) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return RequestProxyResponseMultiError(errors)
+	}
 	return nil
 }
+
+// RequestProxyResponseMultiError is an error wrapping multiple validation
+// errors returned by RequestProxyResponse.ValidateAll() if the designated
+// constraints aren't met.
+type RequestProxyResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RequestProxyResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RequestProxyResponseMultiError) AllErrors() []error { return m }
 
 // RequestProxyResponseValidationError is the validation error returned by
 // RequestProxyResponse.Validate if the designated constraints aren't met.

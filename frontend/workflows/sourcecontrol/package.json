@@ -39,6 +39,6 @@
     "@clutch-sh/tools": "^1.0.0-beta"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   }
 }

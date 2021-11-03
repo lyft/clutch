@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,22 +32,56 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on StringField with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *StringField) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StringField with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in StringFieldMultiError, or
+// nil if none found.
+func (m *StringField) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StringField) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Placeholder
 
 	// no validation rules for DefaultValue
 
+	if len(errors) > 0 {
+		return StringFieldMultiError(errors)
+	}
 	return nil
 }
+
+// StringFieldMultiError is an error wrapping multiple validation errors
+// returned by StringField.ValidateAll() if the designated constraints aren't met.
+type StringFieldMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StringFieldMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StringFieldMultiError) AllErrors() []error { return m }
 
 // StringFieldValidationError is the validation error returned by
 // StringField.Validate if the designated constraints aren't met.
@@ -103,11 +138,25 @@ var _ interface {
 } = StringFieldValidationError{}
 
 // Validate checks the field values on Option with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Option) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Option with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in OptionMultiError, or nil if none found.
+func (m *Option) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Option) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for DisplayName
 
@@ -118,8 +167,27 @@ func (m *Option) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return OptionMultiError(errors)
+	}
 	return nil
 }
+
+// OptionMultiError is an error wrapping multiple validation errors returned by
+// Option.ValidateAll() if the designated constraints aren't met.
+type OptionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OptionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OptionMultiError) AllErrors() []error { return m }
 
 // OptionValidationError is the validation error returned by Option.Validate if
 // the designated constraints aren't met.
@@ -176,19 +244,52 @@ var _ interface {
 } = OptionValidationError{}
 
 // Validate checks the field values on OptionField with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *OptionField) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OptionField with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in OptionFieldMultiError, or
+// nil if none found.
+func (m *OptionField) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OptionField) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for IncludeAllOption
 
 	for idx, item := range m.GetOptions() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OptionFieldValidationError{
+						field:  fmt.Sprintf("Options[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OptionFieldValidationError{
+						field:  fmt.Sprintf("Options[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return OptionFieldValidationError{
 					field:  fmt.Sprintf("Options[%v]", idx),
@@ -200,8 +301,27 @@ func (m *OptionField) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return OptionFieldMultiError(errors)
+	}
 	return nil
 }
+
+// OptionFieldMultiError is an error wrapping multiple validation errors
+// returned by OptionField.ValidateAll() if the designated constraints aren't met.
+type OptionFieldMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OptionFieldMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OptionFieldMultiError) AllErrors() []error { return m }
 
 // OptionFieldValidationError is the validation error returned by
 // OptionField.Validate if the designated constraints aren't met.
@@ -258,15 +378,48 @@ var _ interface {
 } = OptionFieldValidationError{}
 
 // Validate checks the field values on Field with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Field) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Field with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FieldMultiError, or nil if none found.
+func (m *Field) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Field) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Name
 
-	if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetMetadata()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, FieldValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, FieldValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FieldValidationError{
 				field:  "Metadata",
@@ -276,8 +429,27 @@ func (m *Field) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return FieldMultiError(errors)
+	}
 	return nil
 }
+
+// FieldMultiError is an error wrapping multiple validation errors returned by
+// Field.ValidateAll() if the designated constraints aren't met.
+type FieldMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FieldMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FieldMultiError) AllErrors() []error { return m }
 
 // FieldValidationError is the validation error returned by Field.Validate if
 // the designated constraints aren't met.
@@ -334,12 +506,26 @@ var _ interface {
 } = FieldValidationError{}
 
 // Validate checks the field values on FieldMetadata with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *FieldMetadata) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on FieldMetadata with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in FieldMetadataMultiError, or
+// nil if none found.
+func (m *FieldMetadata) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *FieldMetadata) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for DisplayName
 
@@ -349,7 +535,26 @@ func (m *FieldMetadata) Validate() error {
 
 	case *FieldMetadata_StringField:
 
-		if v, ok := interface{}(m.GetStringField()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetStringField()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, FieldMetadataValidationError{
+						field:  "StringField",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, FieldMetadataValidationError{
+						field:  "StringField",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetStringField()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return FieldMetadataValidationError{
 					field:  "StringField",
@@ -361,7 +566,26 @@ func (m *FieldMetadata) Validate() error {
 
 	case *FieldMetadata_OptionField:
 
-		if v, ok := interface{}(m.GetOptionField()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetOptionField()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, FieldMetadataValidationError{
+						field:  "OptionField",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, FieldMetadataValidationError{
+						field:  "OptionField",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetOptionField()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return FieldMetadataValidationError{
 					field:  "OptionField",
@@ -373,8 +597,28 @@ func (m *FieldMetadata) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return FieldMetadataMultiError(errors)
+	}
 	return nil
 }
+
+// FieldMetadataMultiError is an error wrapping multiple validation errors
+// returned by FieldMetadata.ValidateAll() if the designated constraints
+// aren't met.
+type FieldMetadataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FieldMetadataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FieldMetadataMultiError) AllErrors() []error { return m }
 
 // FieldMetadataValidationError is the validation error returned by
 // FieldMetadata.Validate if the designated constraints aren't met.
@@ -431,19 +675,53 @@ var _ interface {
 } = FieldMetadataValidationError{}
 
 // Validate checks the field values on SearchMetadata with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *SearchMetadata) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SearchMetadata with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SearchMetadataMultiError,
+// or nil if none found.
+func (m *SearchMetadata) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SearchMetadata) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Enabled
 
 	// no validation rules for AutocompleteEnabled
 
+	if len(errors) > 0 {
+		return SearchMetadataMultiError(errors)
+	}
 	return nil
 }
+
+// SearchMetadataMultiError is an error wrapping multiple validation errors
+// returned by SearchMetadata.ValidateAll() if the designated constraints
+// aren't met.
+type SearchMetadataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SearchMetadataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SearchMetadataMultiError) AllErrors() []error { return m }
 
 // SearchMetadataValidationError is the validation error returned by
 // SearchMetadata.Validate if the designated constraints aren't met.
@@ -500,18 +778,51 @@ var _ interface {
 } = SearchMetadataValidationError{}
 
 // Validate checks the field values on SchemaMetadata with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *SchemaMetadata) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SchemaMetadata with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SchemaMetadataMultiError,
+// or nil if none found.
+func (m *SchemaMetadata) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SchemaMetadata) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for DisplayName
 
 	// no validation rules for Searchable
 
-	if v, ok := interface{}(m.GetSearch()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSearch()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SchemaMetadataValidationError{
+					field:  "Search",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SchemaMetadataValidationError{
+					field:  "Search",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSearch()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SchemaMetadataValidationError{
 				field:  "Search",
@@ -521,8 +832,28 @@ func (m *SchemaMetadata) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SchemaMetadataMultiError(errors)
+	}
 	return nil
 }
+
+// SchemaMetadataMultiError is an error wrapping multiple validation errors
+// returned by SchemaMetadata.ValidateAll() if the designated constraints
+// aren't met.
+type SchemaMetadataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SchemaMetadataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SchemaMetadataMultiError) AllErrors() []error { return m }
 
 // SchemaMetadataValidationError is the validation error returned by
 // SchemaMetadata.Validate if the designated constraints aren't met.
@@ -579,15 +910,48 @@ var _ interface {
 } = SchemaMetadataValidationError{}
 
 // Validate checks the field values on Schema with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Schema) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Schema with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in SchemaMultiError, or nil if none found.
+func (m *Schema) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Schema) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for TypeUrl
 
-	if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetMetadata()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SchemaValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SchemaValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SchemaValidationError{
 				field:  "Metadata",
@@ -600,7 +964,26 @@ func (m *Schema) Validate() error {
 	for idx, item := range m.GetFields() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SchemaValidationError{
+						field:  fmt.Sprintf("Fields[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SchemaValidationError{
+						field:  fmt.Sprintf("Fields[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return SchemaValidationError{
 					field:  fmt.Sprintf("Fields[%v]", idx),
@@ -612,7 +995,26 @@ func (m *Schema) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetError()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SchemaValidationError{
+					field:  "Error",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SchemaValidationError{
+					field:  "Error",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SchemaValidationError{
 				field:  "Error",
@@ -622,8 +1024,27 @@ func (m *Schema) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SchemaMultiError(errors)
+	}
 	return nil
 }
+
+// SchemaMultiError is an error wrapping multiple validation errors returned by
+// Schema.ValidateAll() if the designated constraints aren't met.
+type SchemaMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SchemaMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SchemaMultiError) AllErrors() []error { return m }
 
 // SchemaValidationError is the validation error returned by Schema.Validate if
 // the designated constraints aren't met.
