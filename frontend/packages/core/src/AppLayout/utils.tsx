@@ -1,4 +1,4 @@
-import type { Workflow } from "../AppProvider/workflow";
+import type { Route, Workflow } from "../AppProvider/workflow";
 
 interface GroupedRoutes {
   [category: string]: {
@@ -9,6 +9,45 @@ interface GroupedRoutes {
     }[];
   };
 }
+
+interface TrendingWorkflow {
+  displayName: string;
+  group: string;
+  description: string;
+  path: string;
+}
+
+const getDisplayName = (workflow: Workflow, route: Route, delimiter: string = ":"): string => {
+  let { displayName } = workflow;
+  if (route.displayName) {
+    displayName = `${
+      displayName.toLowerCase() !== workflow.group.toLowerCase()
+        ? `${displayName}${delimiter} `
+        : ""
+    }${route.displayName}`;
+  }
+
+  return displayName;
+};
+
+const workflowsByTrending = (workflows: Workflow[]): TrendingWorkflow[] => {
+  const trending = [];
+
+  workflows.forEach(workflow => {
+    workflow.routes.forEach(route => {
+      if (route.trending) {
+        trending.push({
+          displayName: getDisplayName(workflow, route),
+          group: workflow.group,
+          description: route.description,
+          path: `${workflow.path}/${route.path}`,
+        });
+      }
+    });
+  });
+
+  return trending;
+};
 
 const routesByGrouping = (workflows: Workflow[]): GroupedRoutes => {
   const routes = {};
@@ -21,11 +60,8 @@ const routesByGrouping = (workflows: Workflow[]): GroupedRoutes => {
     routes[category].workflows = [
       ...routes[category].workflows,
       ...workflow.routes.map(route => {
-        const displayName = route.displayName
-          ? `${workflow.displayName} - ${route.displayName}`
-          : workflow.displayName;
         return {
-          displayName,
+          displayName: getDisplayName(workflow, route, " -"),
           path: `${workflow.path}/${route.path}`,
           trending: route.trending,
         };
@@ -66,4 +102,4 @@ const searchIndexes = (workflows: Workflow[]): SearchIndex[] => {
   return indexOptions;
 };
 
-export { routesByGrouping, searchIndexes, sortedGroupings };
+export { routesByGrouping, searchIndexes, sortedGroupings, workflowsByTrending };
