@@ -565,28 +565,69 @@ var _ interface {
 } = GetSurveysResponseValidationError{}
 
 // Validate checks the field values on FeedbackMetadata with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *FeedbackMetadata) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on FeedbackMetadata with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// FeedbackMetadataMultiError, or nil if none found.
+func (m *FeedbackMetadata) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *FeedbackMetadata) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetOrigin()) < 1 {
-		return FeedbackMetadataValidationError{
+		err := FeedbackMetadataValidationError{
 			field:  "Origin",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetSurvey() == nil {
-		return FeedbackMetadataValidationError{
+		err := FeedbackMetadataValidationError{
 			field:  "Survey",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSurvey()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSurvey()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, FeedbackMetadataValidationError{
+					field:  "Survey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, FeedbackMetadataValidationError{
+					field:  "Survey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSurvey()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FeedbackMetadataValidationError{
 				field:  "Survey",
@@ -598,8 +639,28 @@ func (m *FeedbackMetadata) Validate() error {
 
 	// no validation rules for UserSubmitted
 
+	if len(errors) > 0 {
+		return FeedbackMetadataMultiError(errors)
+	}
 	return nil
 }
+
+// FeedbackMetadataMultiError is an error wrapping multiple validation errors
+// returned by FeedbackMetadata.ValidateAll() if the designated constraints
+// aren't met.
+type FeedbackMetadataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FeedbackMetadataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FeedbackMetadataMultiError) AllErrors() []error { return m }
 
 // FeedbackMetadataValidationError is the validation error returned by
 // FeedbackMetadata.Validate if the designated constraints aren't met.
@@ -656,31 +717,58 @@ var _ interface {
 } = FeedbackMetadataValidationError{}
 
 // Validate checks the field values on Feedback with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Feedback) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Feedback with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in FeedbackMultiError, or nil
+// if none found.
+func (m *Feedback) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Feedback) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetUserId()) < 1 {
-		return FeedbackValidationError{
+		err := FeedbackValidationError{
 			field:  "UserId",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetUrlPath()) < 1 {
-		return FeedbackValidationError{
+		err := FeedbackValidationError{
 			field:  "UrlPath",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRating()) < 1 {
-		return FeedbackValidationError{
+		err := FeedbackValidationError{
 			field:  "Rating",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	// no validation rules for FreeformResponse
@@ -688,13 +776,36 @@ func (m *Feedback) Validate() error {
 	// no validation rules for FeedbackType
 
 	if m.GetMetadata() == nil {
-		return FeedbackValidationError{
+		err := FeedbackValidationError{
 			field:  "Metadata",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetMetadata()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, FeedbackValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, FeedbackValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FeedbackValidationError{
 				field:  "Metadata",
@@ -704,8 +815,27 @@ func (m *Feedback) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return FeedbackMultiError(errors)
+	}
 	return nil
 }
+
+// FeedbackMultiError is an error wrapping multiple validation errors returned
+// by Feedback.ValidateAll() if the designated constraints aren't met.
+type FeedbackMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FeedbackMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FeedbackMultiError) AllErrors() []error { return m }
 
 // FeedbackValidationError is the validation error returned by
 // Feedback.Validate if the designated constraints aren't met.
@@ -763,27 +893,68 @@ var _ interface {
 
 // Validate checks the field values on SubmitFeedbackRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *SubmitFeedbackRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SubmitFeedbackRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SubmitFeedbackRequestMultiError, or nil if none found.
+func (m *SubmitFeedbackRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SubmitFeedbackRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetId()) < 1 {
-		return SubmitFeedbackRequestValidationError{
+		err := SubmitFeedbackRequestValidationError{
 			field:  "Id",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetFeedback() == nil {
-		return SubmitFeedbackRequestValidationError{
+		err := SubmitFeedbackRequestValidationError{
 			field:  "Feedback",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetFeedback()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SubmitFeedbackRequestValidationError{
+					field:  "Feedback",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SubmitFeedbackRequestValidationError{
+					field:  "Feedback",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SubmitFeedbackRequestValidationError{
 				field:  "Feedback",
@@ -793,8 +964,28 @@ func (m *SubmitFeedbackRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SubmitFeedbackRequestMultiError(errors)
+	}
 	return nil
 }
+
+// SubmitFeedbackRequestMultiError is an error wrapping multiple validation
+// errors returned by SubmitFeedbackRequest.ValidateAll() if the designated
+// constraints aren't met.
+type SubmitFeedbackRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SubmitFeedbackRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SubmitFeedbackRequestMultiError) AllErrors() []error { return m }
 
 // SubmitFeedbackRequestValidationError is the validation error returned by
 // SubmitFeedbackRequest.Validate if the designated constraints aren't met.
@@ -854,14 +1045,48 @@ var _ interface {
 
 // Validate checks the field values on SubmitFeedbackResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *SubmitFeedbackResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SubmitFeedbackResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SubmitFeedbackResponseMultiError, or nil if none found.
+func (m *SubmitFeedbackResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SubmitFeedbackResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return SubmitFeedbackResponseMultiError(errors)
+	}
 	return nil
 }
+
+// SubmitFeedbackResponseMultiError is an error wrapping multiple validation
+// errors returned by SubmitFeedbackResponse.ValidateAll() if the designated
+// constraints aren't met.
+type SubmitFeedbackResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SubmitFeedbackResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SubmitFeedbackResponseMultiError) AllErrors() []error { return m }
 
 // SubmitFeedbackResponseValidationError is the validation error returned by
 // SubmitFeedbackResponse.Validate if the designated constraints aren't met.
@@ -920,13 +1145,47 @@ var _ interface {
 } = SubmitFeedbackResponseValidationError{}
 
 // Validate checks the field values on Submission with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Submission) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Submission with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SubmissionMultiError, or
+// nil if none found.
+func (m *Submission) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Submission) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetSubmittedAt()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetSubmittedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SubmissionValidationError{
+					field:  "SubmittedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SubmissionValidationError{
+					field:  "SubmittedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSubmittedAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SubmissionValidationError{
 				field:  "SubmittedAt",
@@ -936,7 +1195,26 @@ func (m *Submission) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetFeedback()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SubmissionValidationError{
+					field:  "Feedback",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SubmissionValidationError{
+					field:  "Feedback",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SubmissionValidationError{
 				field:  "Feedback",
@@ -946,8 +1224,27 @@ func (m *Submission) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SubmissionMultiError(errors)
+	}
 	return nil
 }
+
+// SubmissionMultiError is an error wrapping multiple validation errors
+// returned by Submission.ValidateAll() if the designated constraints aren't met.
+type SubmissionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SubmissionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SubmissionMultiError) AllErrors() []error { return m }
 
 // SubmissionValidationError is the validation error returned by
 // Submission.Validate if the designated constraints aren't met.
