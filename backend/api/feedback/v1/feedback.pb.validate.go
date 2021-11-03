@@ -572,7 +572,12 @@ func (m *SubmitFeedbackRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
+	if len(m.GetId()) < 1 {
+		return SubmitFeedbackRequestValidationError{
+			field:  "Id",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	if m.GetFeedback() == nil {
 		return SubmitFeedbackRequestValidationError{
@@ -657,8 +662,6 @@ func (m *SubmitFeedbackResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
-
-	// no validation rules for Id
 
 	return nil
 }

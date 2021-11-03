@@ -91,16 +91,14 @@ message Feedback {
 }
 
 message SubmitFeedbackRequest {
-  // (optional) id of the feedback to update (essentially replace with the latest)
+  // client-genereated unique feedback id, which we will also use to update the feedback (essentially replace with the
+  // latest)
   // TODO: remove if we decide to record feedback only when a user clicks the submit button
-  int64 id = 1;
+  string id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   Feedback feedback = 2 [ (validate.rules).message = {required : true} ];
 }
 
 message SubmitFeedbackResponse {
-  // id of the feedback submission
-  // TODO: remove if we decide to record feedback only when a user clicks the submit button
-  int64 id = 1;
 }
 
 // proto used by the Feedback service

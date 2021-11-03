@@ -12773,7 +12773,7 @@ export namespace clutch {
             interface ISubmitFeedbackRequest {
 
                 /** SubmitFeedbackRequest id */
-                id?: (number|Long|null);
+                id?: (string|null);
 
                 /** SubmitFeedbackRequest feedback */
                 feedback?: (clutch.feedback.v1.IFeedback|null);
@@ -12789,7 +12789,7 @@ export namespace clutch {
                 constructor(properties?: clutch.feedback.v1.ISubmitFeedbackRequest);
 
                 /** SubmitFeedbackRequest id. */
-                public id: (number|Long);
+                public id: string;
 
                 /** SubmitFeedbackRequest feedback. */
                 public feedback?: (clutch.feedback.v1.IFeedback|null);
@@ -12825,9 +12825,6 @@ export namespace clutch {
 
             /** Properties of a SubmitFeedbackResponse. */
             interface ISubmitFeedbackResponse {
-
-                /** SubmitFeedbackResponse id */
-                id?: (number|Long|null);
             }
 
             /** Represents a SubmitFeedbackResponse. */
@@ -12838,9 +12835,6 @@ export namespace clutch {
                  * @param [properties] Properties to set
                  */
                 constructor(properties?: clutch.feedback.v1.ISubmitFeedbackResponse);
-
-                /** SubmitFeedbackResponse id. */
-                public id: (number|Long);
 
                 /**
                  * Verifies a SubmitFeedbackResponse message.

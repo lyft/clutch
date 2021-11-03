@@ -30781,7 +30781,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a SubmitFeedbackRequest.
                  * @memberof clutch.feedback.v1
                  * @interface ISubmitFeedbackRequest
-                 * @property {number|Long|null} [id] SubmitFeedbackRequest id
+                 * @property {string|null} [id] SubmitFeedbackRequest id
                  * @property {clutch.feedback.v1.IFeedback|null} [feedback] SubmitFeedbackRequest feedback
                  */
 
@@ -30802,11 +30802,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * SubmitFeedbackRequest id.
-                 * @member {number|Long} id
+                 * @member {string} id
                  * @memberof clutch.feedback.v1.SubmitFeedbackRequest
                  * @instance
                  */
-                SubmitFeedbackRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                SubmitFeedbackRequest.prototype.id = "";
 
                 /**
                  * SubmitFeedbackRequest feedback.
@@ -30828,8 +30828,8 @@ export const clutch = $root.clutch = (() => {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.id != null && message.hasOwnProperty("id"))
-                        if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                            return "id: integer|Long expected";
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
                     if (message.feedback != null && message.hasOwnProperty("feedback")) {
                         let error = $root.clutch.feedback.v1.Feedback.verify(message.feedback);
                         if (error)
@@ -30851,14 +30851,7 @@ export const clutch = $root.clutch = (() => {
                         return object;
                     let message = new $root.clutch.feedback.v1.SubmitFeedbackRequest();
                     if (object.id != null)
-                        if ($util.Long)
-                            (message.id = $util.Long.fromValue(object.id)).unsigned = false;
-                        else if (typeof object.id === "string")
-                            message.id = parseInt(object.id, 10);
-                        else if (typeof object.id === "number")
-                            message.id = object.id;
-                        else if (typeof object.id === "object")
-                            message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        message.id = String(object.id);
                     if (object.feedback != null) {
                         if (typeof object.feedback !== "object")
                             throw TypeError(".clutch.feedback.v1.SubmitFeedbackRequest.feedback: object expected");
@@ -30881,18 +30874,11 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
-                            object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.id = options.longs === String ? "0" : 0;
+                        object.id = "";
                         object.feedback = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
-                        if (typeof message.id === "number")
-                            object.id = options.longs === String ? String(message.id) : message.id;
-                        else
-                            object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        object.id = message.id;
                     if (message.feedback != null && message.hasOwnProperty("feedback"))
                         object.feedback = $root.clutch.feedback.v1.Feedback.toObject(message.feedback, options);
                     return object;
@@ -30918,7 +30904,6 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a SubmitFeedbackResponse.
                  * @memberof clutch.feedback.v1
                  * @interface ISubmitFeedbackResponse
-                 * @property {number|Long|null} [id] SubmitFeedbackResponse id
                  */
 
                 /**
@@ -30937,14 +30922,6 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * SubmitFeedbackResponse id.
-                 * @member {number|Long} id
-                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
-                 * @instance
-                 */
-                SubmitFeedbackResponse.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                /**
                  * Verifies a SubmitFeedbackResponse message.
                  * @function verify
                  * @memberof clutch.feedback.v1.SubmitFeedbackResponse
@@ -30955,9 +30932,6 @@ export const clutch = $root.clutch = (() => {
                 SubmitFeedbackResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.id != null && message.hasOwnProperty("id"))
-                        if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                            return "id: integer|Long expected";
                     return null;
                 };
 
@@ -30972,17 +30946,7 @@ export const clutch = $root.clutch = (() => {
                 SubmitFeedbackResponse.fromObject = function fromObject(object) {
                     if (object instanceof $root.clutch.feedback.v1.SubmitFeedbackResponse)
                         return object;
-                    let message = new $root.clutch.feedback.v1.SubmitFeedbackResponse();
-                    if (object.id != null)
-                        if ($util.Long)
-                            (message.id = $util.Long.fromValue(object.id)).unsigned = false;
-                        else if (typeof object.id === "string")
-                            message.id = parseInt(object.id, 10);
-                        else if (typeof object.id === "number")
-                            message.id = object.id;
-                        else if (typeof object.id === "object")
-                            message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
-                    return message;
+                    return new $root.clutch.feedback.v1.SubmitFeedbackResponse();
                 };
 
                 /**
@@ -30994,22 +30958,8 @@ export const clutch = $root.clutch = (() => {
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                SubmitFeedbackResponse.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults)
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
-                            object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.id = options.longs === String ? "0" : 0;
-                    if (message.id != null && message.hasOwnProperty("id"))
-                        if (typeof message.id === "number")
-                            object.id = options.longs === String ? String(message.id) : message.id;
-                        else
-                            object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
-                    return object;
+                SubmitFeedbackResponse.toObject = function toObject() {
+                    return {};
                 };
 
                 /**
