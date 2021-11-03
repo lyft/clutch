@@ -121,5 +121,16 @@ module.exports = {
         "@typescript-eslint/no-shadow": ["error"],
       },
     },
+    {
+      files: [
+        "**/.eslintrc.js",
+        "**/babel.config.js",
+        "**/jest.config.js",
+        "**/prettier.config.js",
+      ],
+      rules: {
+        "import/extensions": ["error", "ignorePackages", { js: "always" }],
+      },
+    },
   ],
 };
