@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,15 +32,30 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on AutoscalingGroupSize with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *AutoscalingGroupSize) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AutoscalingGroupSize with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AutoscalingGroupSizeMultiError, or nil if none found.
+func (m *AutoscalingGroupSize) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AutoscalingGroupSize) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Min
 
@@ -47,8 +63,28 @@ func (m *AutoscalingGroupSize) Validate() error {
 
 	// no validation rules for Desired
 
+	if len(errors) > 0 {
+		return AutoscalingGroupSizeMultiError(errors)
+	}
 	return nil
 }
+
+// AutoscalingGroupSizeMultiError is an error wrapping multiple validation
+// errors returned by AutoscalingGroupSize.ValidateAll() if the designated
+// constraints aren't met.
+type AutoscalingGroupSizeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AutoscalingGroupSizeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AutoscalingGroupSizeMultiError) AllErrors() []error { return m }
 
 // AutoscalingGroupSizeValidationError is the validation error returned by
 // AutoscalingGroupSize.Validate if the designated constraints aren't met.
@@ -108,34 +144,79 @@ var _ interface {
 
 // Validate checks the field values on ResizeAutoscalingGroupRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *ResizeAutoscalingGroupRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ResizeAutoscalingGroupRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// ResizeAutoscalingGroupRequestMultiError, or nil if none found.
+func (m *ResizeAutoscalingGroupRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ResizeAutoscalingGroupRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetName()) < 1 {
-		return ResizeAutoscalingGroupRequestValidationError{
+		err := ResizeAutoscalingGroupRequestValidationError{
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return ResizeAutoscalingGroupRequestValidationError{
+		err := ResizeAutoscalingGroupRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetSize() == nil {
-		return ResizeAutoscalingGroupRequestValidationError{
+		err := ResizeAutoscalingGroupRequestValidationError{
 			field:  "Size",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSize()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSize()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ResizeAutoscalingGroupRequestValidationError{
+					field:  "Size",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ResizeAutoscalingGroupRequestValidationError{
+					field:  "Size",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSize()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ResizeAutoscalingGroupRequestValidationError{
 				field:  "Size",
@@ -145,8 +226,28 @@ func (m *ResizeAutoscalingGroupRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return ResizeAutoscalingGroupRequestMultiError(errors)
+	}
 	return nil
 }
+
+// ResizeAutoscalingGroupRequestMultiError is an error wrapping multiple
+// validation errors returned by ResizeAutoscalingGroupRequest.ValidateAll()
+// if the designated constraints aren't met.
+type ResizeAutoscalingGroupRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResizeAutoscalingGroupRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResizeAutoscalingGroupRequestMultiError) AllErrors() []error { return m }
 
 // ResizeAutoscalingGroupRequestValidationError is the validation error
 // returned by ResizeAutoscalingGroupRequest.Validate if the designated
@@ -207,14 +308,48 @@ var _ interface {
 
 // Validate checks the field values on ResizeAutoscalingGroupResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *ResizeAutoscalingGroupResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ResizeAutoscalingGroupResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// ResizeAutoscalingGroupResponseMultiError, or nil if none found.
+func (m *ResizeAutoscalingGroupResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ResizeAutoscalingGroupResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return ResizeAutoscalingGroupResponseMultiError(errors)
+	}
 	return nil
 }
+
+// ResizeAutoscalingGroupResponseMultiError is an error wrapping multiple
+// validation errors returned by ResizeAutoscalingGroupResponse.ValidateAll()
+// if the designated constraints aren't met.
+type ResizeAutoscalingGroupResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResizeAutoscalingGroupResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResizeAutoscalingGroupResponseMultiError) AllErrors() []error { return m }
 
 // ResizeAutoscalingGroupResponseValidationError is the validation error
 // returned by ResizeAutoscalingGroupResponse.Validate if the designated
@@ -274,18 +409,51 @@ var _ interface {
 } = ResizeAutoscalingGroupResponseValidationError{}
 
 // Validate checks the field values on AutoscalingGroup with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *AutoscalingGroup) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AutoscalingGroup with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AutoscalingGroupMultiError, or nil if none found.
+func (m *AutoscalingGroup) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AutoscalingGroup) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
 	// no validation rules for Region
 
-	if v, ok := interface{}(m.GetSize()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSize()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AutoscalingGroupValidationError{
+					field:  "Size",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AutoscalingGroupValidationError{
+					field:  "Size",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSize()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AutoscalingGroupValidationError{
 				field:  "Size",
@@ -298,7 +466,26 @@ func (m *AutoscalingGroup) Validate() error {
 	for idx, item := range m.GetInstances() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AutoscalingGroupValidationError{
+						field:  fmt.Sprintf("Instances[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AutoscalingGroupValidationError{
+						field:  fmt.Sprintf("Instances[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return AutoscalingGroupValidationError{
 					field:  fmt.Sprintf("Instances[%v]", idx),
@@ -310,8 +497,28 @@ func (m *AutoscalingGroup) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return AutoscalingGroupMultiError(errors)
+	}
 	return nil
 }
+
+// AutoscalingGroupMultiError is an error wrapping multiple validation errors
+// returned by AutoscalingGroup.ValidateAll() if the designated constraints
+// aren't met.
+type AutoscalingGroupMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AutoscalingGroupMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AutoscalingGroupMultiError) AllErrors() []error { return m }
 
 // AutoscalingGroupValidationError is the validation error returned by
 // AutoscalingGroup.Validate if the designated constraints aren't met.
@@ -369,28 +576,70 @@ var _ interface {
 
 // Validate checks the field values on GetInstanceRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetInstanceRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetInstanceRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetInstanceRequestMultiError, or nil if none found.
+func (m *GetInstanceRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetInstanceRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetInstanceId()) < 1 {
-		return GetInstanceRequestValidationError{
+		err := GetInstanceRequestValidationError{
 			field:  "InstanceId",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return GetInstanceRequestValidationError{
+		err := GetInstanceRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return GetInstanceRequestMultiError(errors)
+	}
 	return nil
 }
+
+// GetInstanceRequestMultiError is an error wrapping multiple validation errors
+// returned by GetInstanceRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetInstanceRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetInstanceRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetInstanceRequestMultiError) AllErrors() []error { return m }
 
 // GetInstanceRequestValidationError is the validation error returned by
 // GetInstanceRequest.Validate if the designated constraints aren't met.
@@ -450,13 +699,46 @@ var _ interface {
 
 // Validate checks the field values on GetInstanceResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetInstanceResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetInstanceResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetInstanceResponseMultiError, or nil if none found.
+func (m *GetInstanceResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetInstanceResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetInstance()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetInstance()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetInstanceResponseValidationError{
+					field:  "Instance",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetInstanceResponseValidationError{
+					field:  "Instance",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstance()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetInstanceResponseValidationError{
 				field:  "Instance",
@@ -466,8 +748,28 @@ func (m *GetInstanceResponse) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetInstanceResponseMultiError(errors)
+	}
 	return nil
 }
+
+// GetInstanceResponseMultiError is an error wrapping multiple validation
+// errors returned by GetInstanceResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetInstanceResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetInstanceResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetInstanceResponseMultiError) AllErrors() []error { return m }
 
 // GetInstanceResponseValidationError is the validation error returned by
 // GetInstanceResponse.Validate if the designated constraints aren't met.
@@ -527,28 +829,70 @@ var _ interface {
 
 // Validate checks the field values on TerminateInstanceRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *TerminateInstanceRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TerminateInstanceRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// TerminateInstanceRequestMultiError, or nil if none found.
+func (m *TerminateInstanceRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TerminateInstanceRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetInstanceId()) < 1 {
-		return TerminateInstanceRequestValidationError{
+		err := TerminateInstanceRequestValidationError{
 			field:  "InstanceId",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return TerminateInstanceRequestValidationError{
+		err := TerminateInstanceRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return TerminateInstanceRequestMultiError(errors)
+	}
 	return nil
 }
+
+// TerminateInstanceRequestMultiError is an error wrapping multiple validation
+// errors returned by TerminateInstanceRequest.ValidateAll() if the designated
+// constraints aren't met.
+type TerminateInstanceRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TerminateInstanceRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TerminateInstanceRequestMultiError) AllErrors() []error { return m }
 
 // TerminateInstanceRequestValidationError is the validation error returned by
 // TerminateInstanceRequest.Validate if the designated constraints aren't met.
@@ -608,14 +952,48 @@ var _ interface {
 
 // Validate checks the field values on TerminateInstanceResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *TerminateInstanceResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TerminateInstanceResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// TerminateInstanceResponseMultiError, or nil if none found.
+func (m *TerminateInstanceResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TerminateInstanceResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return TerminateInstanceResponseMultiError(errors)
+	}
 	return nil
 }
+
+// TerminateInstanceResponseMultiError is an error wrapping multiple validation
+// errors returned by TerminateInstanceResponse.ValidateAll() if the
+// designated constraints aren't met.
+type TerminateInstanceResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TerminateInstanceResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TerminateInstanceResponseMultiError) AllErrors() []error { return m }
 
 // TerminateInstanceResponseValidationError is the validation error returned by
 // TerminateInstanceResponse.Validate if the designated constraints aren't met.
@@ -675,28 +1053,70 @@ var _ interface {
 
 // Validate checks the field values on RebootInstanceRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RebootInstanceRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RebootInstanceRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RebootInstanceRequestMultiError, or nil if none found.
+func (m *RebootInstanceRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RebootInstanceRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetInstanceId()) < 1 {
-		return RebootInstanceRequestValidationError{
+		err := RebootInstanceRequestValidationError{
 			field:  "InstanceId",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return RebootInstanceRequestValidationError{
+		err := RebootInstanceRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return RebootInstanceRequestMultiError(errors)
+	}
 	return nil
 }
+
+// RebootInstanceRequestMultiError is an error wrapping multiple validation
+// errors returned by RebootInstanceRequest.ValidateAll() if the designated
+// constraints aren't met.
+type RebootInstanceRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RebootInstanceRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RebootInstanceRequestMultiError) AllErrors() []error { return m }
 
 // RebootInstanceRequestValidationError is the validation error returned by
 // RebootInstanceRequest.Validate if the designated constraints aren't met.
@@ -756,14 +1176,48 @@ var _ interface {
 
 // Validate checks the field values on RebootInstanceResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RebootInstanceResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RebootInstanceResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RebootInstanceResponseMultiError, or nil if none found.
+func (m *RebootInstanceResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RebootInstanceResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return RebootInstanceResponseMultiError(errors)
+	}
 	return nil
 }
+
+// RebootInstanceResponseMultiError is an error wrapping multiple validation
+// errors returned by RebootInstanceResponse.ValidateAll() if the designated
+// constraints aren't met.
+type RebootInstanceResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RebootInstanceResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RebootInstanceResponseMultiError) AllErrors() []error { return m }
 
 // RebootInstanceResponseValidationError is the validation error returned by
 // RebootInstanceResponse.Validate if the designated constraints aren't met.
@@ -822,11 +1276,26 @@ var _ interface {
 } = RebootInstanceResponseValidationError{}
 
 // Validate checks the field values on Instance with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Instance) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Instance with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in InstanceMultiError, or nil
+// if none found.
+func (m *Instance) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Instance) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for InstanceId
 
@@ -844,8 +1313,27 @@ func (m *Instance) Validate() error {
 
 	// no validation rules for Tags
 
+	if len(errors) > 0 {
+		return InstanceMultiError(errors)
+	}
 	return nil
 }
+
+// InstanceMultiError is an error wrapping multiple validation errors returned
+// by Instance.ValidateAll() if the designated constraints aren't met.
+type InstanceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InstanceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InstanceMultiError) AllErrors() []error { return m }
 
 // InstanceValidationError is the validation error returned by
 // Instance.Validate if the designated constraints aren't met.
@@ -903,11 +1391,25 @@ var _ interface {
 
 // Validate checks the field values on AutoscalingGroup_Instance with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *AutoscalingGroup_Instance) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AutoscalingGroup_Instance with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AutoscalingGroup_InstanceMultiError, or nil if none found.
+func (m *AutoscalingGroup_Instance) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AutoscalingGroup_Instance) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Id
 
@@ -919,8 +1421,28 @@ func (m *AutoscalingGroup_Instance) Validate() error {
 
 	// no validation rules for LifecycleState
 
+	if len(errors) > 0 {
+		return AutoscalingGroup_InstanceMultiError(errors)
+	}
 	return nil
 }
+
+// AutoscalingGroup_InstanceMultiError is an error wrapping multiple validation
+// errors returned by AutoscalingGroup_Instance.ValidateAll() if the
+// designated constraints aren't met.
+type AutoscalingGroup_InstanceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AutoscalingGroup_InstanceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AutoscalingGroup_InstanceMultiError) AllErrors() []error { return m }
 
 // AutoscalingGroup_InstanceValidationError is the validation error returned by
 // AutoscalingGroup_Instance.Validate if the designated constraints aren't met.

@@ -217,7 +217,7 @@ func (c *rtdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.Disc
 	return nil
 }
 
-func (c *rtdsCallbacks) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
+func (c *rtdsCallbacks) OnStreamResponse(ctx context.Context, streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
 	c.logger.Debugw("RTDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", request.VersionInfo)
 	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
 }
@@ -261,7 +261,7 @@ func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.Disc
 	return nil
 }
 
-func (c *ecdsCallbacks) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
+func (c *ecdsCallbacks) OnStreamResponse(ctx context.Context, streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
 	c.logger.Debugw("ECDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", request.VersionInfo)
 	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
 }

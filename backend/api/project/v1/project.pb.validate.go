@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,18 +32,53 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on GetProjectsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetProjectsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetProjectsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetProjectsRequestMultiError, or nil if none found.
+func (m *GetProjectsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetProjectsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
+	if len(errors) > 0 {
+		return GetProjectsRequestMultiError(errors)
+	}
 	return nil
 }
+
+// GetProjectsRequestMultiError is an error wrapping multiple validation errors
+// returned by GetProjectsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetProjectsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetProjectsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetProjectsRequestMultiError) AllErrors() []error { return m }
 
 // GetProjectsRequestValidationError is the validation error returned by
 // GetProjectsRequest.Validate if the designated constraints aren't met.
@@ -101,14 +137,47 @@ var _ interface {
 } = GetProjectsRequestValidationError{}
 
 // Validate checks the field values on ProjectResult with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *ProjectResult) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ProjectResult with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ProjectResultMultiError, or
+// nil if none found.
+func (m *ProjectResult) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ProjectResult) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetFrom()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetFrom()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ProjectResultValidationError{
+					field:  "From",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ProjectResultValidationError{
+					field:  "From",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFrom()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ProjectResultValidationError{
 				field:  "From",
@@ -118,7 +187,26 @@ func (m *ProjectResult) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetProject()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetProject()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ProjectResultValidationError{
+					field:  "Project",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ProjectResultValidationError{
+					field:  "Project",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetProject()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ProjectResultValidationError{
 				field:  "Project",
@@ -128,8 +216,28 @@ func (m *ProjectResult) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return ProjectResultMultiError(errors)
+	}
 	return nil
 }
+
+// ProjectResultMultiError is an error wrapping multiple validation errors
+// returned by ProjectResult.ValidateAll() if the designated constraints
+// aren't met.
+type ProjectResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ProjectResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ProjectResultMultiError) AllErrors() []error { return m }
 
 // ProjectResultValidationError is the validation error returned by
 // ProjectResult.Validate if the designated constraints aren't met.
@@ -187,31 +295,94 @@ var _ interface {
 
 // Validate checks the field values on GetProjectsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetProjectsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetProjectsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetProjectsResponseMultiError, or nil if none found.
+func (m *GetProjectsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetProjectsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	for key, val := range m.GetResults() {
-		_ = val
+	var errors []error
 
-		// no validation rules for Results[key]
+	{
+		sorted_keys := make([]string, len(m.GetResults()))
+		i := 0
+		for key := range m.GetResults() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetResults()[key]
+			_ = val
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return GetProjectsResponseValidationError{
-					field:  fmt.Sprintf("Results[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
+			// no validation rules for Results[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, GetProjectsResponseValidationError{
+							field:  fmt.Sprintf("Results[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, GetProjectsResponseValidationError{
+							field:  fmt.Sprintf("Results[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return GetProjectsResponseValidationError{
+						field:  fmt.Sprintf("Results[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
-		}
 
+		}
 	}
 
+	if len(errors) > 0 {
+		return GetProjectsResponseMultiError(errors)
+	}
 	return nil
 }
+
+// GetProjectsResponseMultiError is an error wrapping multiple validation
+// errors returned by GetProjectsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetProjectsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetProjectsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetProjectsResponseMultiError) AllErrors() []error { return m }
 
 // GetProjectsResponseValidationError is the validation error returned by
 // GetProjectsResponse.Validate if the designated constraints aren't met.
@@ -271,16 +442,50 @@ var _ interface {
 
 // Validate checks the field values on ProjectResult_From with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *ProjectResult_From) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ProjectResult_From with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ProjectResult_FromMultiError, or nil if none found.
+func (m *ProjectResult_From) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ProjectResult_From) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Selected
 
+	if len(errors) > 0 {
+		return ProjectResult_FromMultiError(errors)
+	}
 	return nil
 }
+
+// ProjectResult_FromMultiError is an error wrapping multiple validation errors
+// returned by ProjectResult_From.ValidateAll() if the designated constraints
+// aren't met.
+type ProjectResult_FromMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ProjectResult_FromMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ProjectResult_FromMultiError) AllErrors() []error { return m }
 
 // ProjectResult_FromValidationError is the validation error returned by
 // ProjectResult_From.Validate if the designated constraints aren't met.

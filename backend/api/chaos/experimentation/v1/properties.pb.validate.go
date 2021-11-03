@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,20 +32,54 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on PropertiesList with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *PropertiesList) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PropertiesList with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PropertiesListMultiError,
+// or nil if none found.
+func (m *PropertiesList) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PropertiesList) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetItems() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PropertiesListValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PropertiesListValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return PropertiesListValidationError{
 					field:  fmt.Sprintf("Items[%v]", idx),
@@ -56,8 +91,28 @@ func (m *PropertiesList) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return PropertiesListMultiError(errors)
+	}
 	return nil
 }
+
+// PropertiesListMultiError is an error wrapping multiple validation errors
+// returned by PropertiesList.ValidateAll() if the designated constraints
+// aren't met.
+type PropertiesListMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PropertiesListMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PropertiesListMultiError) AllErrors() []error { return m }
 
 // PropertiesListValidationError is the validation error returned by
 // PropertiesList.Validate if the designated constraints aren't met.
@@ -114,32 +169,95 @@ var _ interface {
 } = PropertiesListValidationError{}
 
 // Validate checks the field values on PropertiesMap with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *PropertiesMap) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PropertiesMap with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PropertiesMapMultiError, or
+// nil if none found.
+func (m *PropertiesMap) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PropertiesMap) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	for key, val := range m.GetItems() {
-		_ = val
+	var errors []error
 
-		// no validation rules for Items[key]
+	{
+		sorted_keys := make([]string, len(m.GetItems()))
+		i := 0
+		for key := range m.GetItems() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetItems()[key]
+			_ = val
 
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return PropertiesMapValidationError{
-					field:  fmt.Sprintf("Items[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
+			// no validation rules for Items[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, PropertiesMapValidationError{
+							field:  fmt.Sprintf("Items[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, PropertiesMapValidationError{
+							field:  fmt.Sprintf("Items[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return PropertiesMapValidationError{
+						field:  fmt.Sprintf("Items[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
 				}
 			}
-		}
 
+		}
 	}
 
+	if len(errors) > 0 {
+		return PropertiesMapMultiError(errors)
+	}
 	return nil
 }
+
+// PropertiesMapMultiError is an error wrapping multiple validation errors
+// returned by PropertiesMap.ValidateAll() if the designated constraints
+// aren't met.
+type PropertiesMapMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PropertiesMapMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PropertiesMapMultiError) AllErrors() []error { return m }
 
 // PropertiesMapValidationError is the validation error returned by
 // PropertiesMap.Validate if the designated constraints aren't met.
@@ -196,17 +314,51 @@ var _ interface {
 } = PropertiesMapValidationError{}
 
 // Validate checks the field values on Property with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Property) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Property with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PropertyMultiError, or nil
+// if none found.
+func (m *Property) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Property) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Id
 
 	// no validation rules for Label
 
-	if v, ok := interface{}(m.GetDisplayValue()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDisplayValue()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PropertyValidationError{
+					field:  "DisplayValue",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PropertyValidationError{
+					field:  "DisplayValue",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDisplayValue()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return PropertyValidationError{
 				field:  "DisplayValue",
@@ -220,7 +372,26 @@ func (m *Property) Validate() error {
 
 	case *Property_DateValue:
 
-		if v, ok := interface{}(m.GetDateValue()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetDateValue()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PropertyValidationError{
+						field:  "DateValue",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PropertyValidationError{
+						field:  "DateValue",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetDateValue()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return PropertyValidationError{
 					field:  "DateValue",
@@ -241,8 +412,27 @@ func (m *Property) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return PropertyMultiError(errors)
+	}
 	return nil
 }
+
+// PropertyMultiError is an error wrapping multiple validation errors returned
+// by Property.ValidateAll() if the designated constraints aren't met.
+type PropertyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PropertyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PropertyMultiError) AllErrors() []error { return m }
 
 // PropertyValidationError is the validation error returned by
 // Property.Validate if the designated constraints aren't met.

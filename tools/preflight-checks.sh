@@ -6,7 +6,7 @@ did_checks_pass=true
 
 # Minimum versions
 MIN_GO_VERSION="1.17"
-MIN_NODE_VERSION="14.0.0"
+MIN_NODE_VERSION="16.0.0"
 MIN_YARN_VERSION="1.22.0"
 
 # param 1 - required version
