@@ -52,11 +52,12 @@ message AutoscalingGroupSize {
 message ResizeAutoscalingGroupRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.AutoscalingGroup",
-    pattern : "{region}/{name}"
+    pattern : "{account}/{region}/{name}"
   };
 
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 4 [ (validate.rules).string = {min_bytes : 1} ];
 
   AutoscalingGroupSize size = 3 [ (validate.rules).message = {required : true} ];
 }
@@ -67,11 +68,13 @@ message ResizeAutoscalingGroupResponse {
 message AutoscalingGroup {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.AutoscalingGroup",
-    pattern : "{region}/{name}"
+    pattern : "{account}/{region}/{name}"
   };
 
   string name = 1;
   string region = 2;
+  string account = 7;
+
   // The AZs the ASG is running in.
   repeated string zones = 3;
 
@@ -140,11 +143,12 @@ message GetInstanceResponse {
 message TerminateInstanceRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.Instance",
-    pattern : "{region}/{instance_id}"
+    pattern : "{account}/{region}/{instance_id}"
   };
 
   string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message TerminateInstanceResponse {
@@ -153,11 +157,12 @@ message TerminateInstanceResponse {
 message RebootInstanceRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.Instance",
-    pattern : "{region}/{instance_id}"
+    pattern : "{account}/{region}/{instance_id}"
   };
 
   string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message RebootInstanceResponse {

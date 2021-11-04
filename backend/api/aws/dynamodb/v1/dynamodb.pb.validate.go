@@ -60,6 +60,8 @@ func (m *Table) validate(all bool) error {
 
 	// no validation rules for Region
 
+	// no validation rules for Account
+
 	for idx, item := range m.GetGlobalSecondaryIndexes() {
 		_, _ = idx, item
 
@@ -615,6 +617,17 @@ func (m *DescribeTableRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetAccount()) < 1 {
+		err := DescribeTableRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return DescribeTableRequestMultiError(errors)
 	}
@@ -860,6 +873,17 @@ func (m *UpdateCapacityRequest) validate(all bool) error {
 	if len(m.GetRegion()) < 1 {
 		err := UpdateCapacityRequestValidationError{
 			field:  "Region",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetAccount()) < 1 {
+		err := UpdateCapacityRequestValidationError{
+			field:  "Account",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {

@@ -29,6 +29,7 @@ service KinesisAPI {
 message GetStreamRequest {
   string stream_name = 1;
   string region = 2;
+  string account = 3;
 }
 
 message GetStreamResponse {
@@ -40,6 +41,8 @@ message GetStreamResponse {
 message UpdateShardCountRequest {
   string stream_name = 1;
   string region = 2;
+  string account = 4;
+
   int32 target_shard_count = 3;
 }
 
@@ -49,10 +52,12 @@ message UpdateShardCountResponse {
 message Stream {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.kinesis.v1.Stream",
-    pattern : "{region}/{stream_name}"
+    pattern : "{account}/{region}/{stream_name}"
   };
 
   string stream_name = 1;
   string region = 2;
+  string account = 4;
+
   int32 current_shard_count = 3;
 }

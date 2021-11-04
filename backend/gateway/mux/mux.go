@@ -123,8 +123,10 @@ func (a *assetHandler) assetProviderHandler(ctx context.Context, urlPath string)
 			return nil, fmt.Errorf("Unable to aquire the aws client")
 		}
 
+		// TODO: what to do here about this account call ...
 		return awsClient.S3StreamingGet(
 			ctx,
+			"zimride",
 			a.assetCfg.GetS3().Region,
 			a.assetCfg.GetS3().Bucket,
 			path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static")),

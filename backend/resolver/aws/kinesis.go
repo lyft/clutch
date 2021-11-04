@@ -14,14 +14,14 @@ import (
 func (r *res) resolveKinesisStreamForInput(ctx context.Context, input proto.Message) (*resolver.Results, error) {
 	switch i := input.(type) {
 	case *awsv1resolver.KinesisStreamName:
-		return r.kinesisResults(ctx, i.Region, i.Name, 1)
+		return r.kinesisResults(ctx, i.Account, i.Region, i.Name, 1)
 	default:
 		return nil, status.Errorf(codes.Internal, "resolution for type '%T' not implemented", i)
 	}
 }
 
 // Fanout across multiple regions if needed to fetch stream.
-func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint32) (*resolver.Results, error) {
+func (r *res) kinesisResults(ctx context.Context, account, region, id string, limit uint32) (*resolver.Results, error) {
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
 	regions := r.determineRegionsForOption(region)
@@ -29,7 +29,7 @@ func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint3
 		handler.Add(1)
 		go func(region string) {
 			defer handler.Done()
-			stream, err := r.client.DescribeKinesisStream(ctx, region, id)
+			stream, err := r.client.DescribeKinesisStream(ctx, account, region, id)
 			select {
 			case handler.Channel() <- resolver.NewSingleFanoutResult(stream, err):
 				return

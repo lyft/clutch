@@ -189,12 +189,12 @@ func TestDescribeTableValid(t *testing.T) {
 		},
 	}
 
-	result, err := c.DescribeTable(context.Background(), "us-east-1", "test-table")
+	result, err := c.DescribeTable(context.Background(), "default", "us-east-1", "test-table")
 	assert.NoError(t, err)
 	assert.Equal(t, testTableOutput, result)
 
 	m.tableErr = errors.New("error")
-	_, err1 := c.DescribeTable(context.Background(), "us-east-1", "test-table")
+	_, err1 := c.DescribeTable(context.Background(), "default", "us-east-1", "test-table")
 	assert.EqualError(t, err1, "error")
 }
 
@@ -214,7 +214,7 @@ func TestDescribeTableNotValid(t *testing.T) {
 	}
 
 	m.tableErr = errors.New("resource not found")
-	_, err := c.DescribeTable(context.Background(), "us-east-1", "nonexistent-table")
+	_, err := c.DescribeTable(context.Background(), "default", "us-east-1", "nonexistent-table")
 	assert.EqualError(t, err, "resource not found")
 }
 
@@ -233,7 +233,7 @@ func TestDescribeTableWithGsiValid(t *testing.T) {
 		},
 	}
 
-	result, err := c.DescribeTable(context.Background(), "us-east-1", "test-gsi-table")
+	result, err := c.DescribeTable(context.Background(), "default", "us-east-1", "test-gsi-table")
 	assert.NoError(t, err)
 	assert.Equal(t, testTableWithGSIOutput, result)
 }
@@ -321,7 +321,7 @@ func TestIncreaseTableCapacityErrors(t *testing.T) {
 
 			gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
 
-			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
+			result, err := c.UpdateCapacity(context.Background(), "default", "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
@@ -391,7 +391,7 @@ func TestUpdateGSICapacityErrors(t *testing.T) {
 			}
 			gsiUpdates = append(gsiUpdates, &update)
 
-			result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
+			result, err := c.UpdateCapacity(context.Background(), "default", "us-east-1", "test-table", targetTableCapacity, gsiUpdates, false)
 			if err.Error() != tt.want {
 				t.Errorf("\nWant error msg: %s\nGot error msg: %s", tt.want, err)
 			}
@@ -445,7 +445,7 @@ func TestUpdateCapacitySuccess(t *testing.T) {
 	}
 	gsiUpdates = append(gsiUpdates, &update)
 
-	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, false)
+	got, err := c.UpdateCapacity(context.Background(), "default", "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, false)
 	assert.NotNil(t, got)
 	assert.Nil(t, err)
 	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
@@ -497,7 +497,7 @@ func TestIgnoreMaximums(t *testing.T) {
 	}
 	gsiUpdates = append(gsiUpdates, &update)
 
-	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, true)
+	got, err := c.UpdateCapacity(context.Background(), "default", "us-east-1", "test-gsi-table", targetTableCapacity, gsiUpdates, true)
 	assert.NotNil(t, got)
 	assert.Nil(t, err)
 	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
@@ -538,7 +538,7 @@ func TestOnDemandCheck(t *testing.T) {
 
 	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
 
-	result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-ondemand-table", targetTableCapacity, gsiUpdates, false)
+	result, err := c.UpdateCapacity(context.Background(), "default", "us-east-1", "test-ondemand-table", targetTableCapacity, gsiUpdates, false)
 	assert.Nil(t, result)
 	assert.Equal(t, "rpc error: code = FailedPrecondition desc = Table billing mode is not set to PROVISIONED, cannot scale capacities.", err.Error())
 }
@@ -577,7 +577,7 @@ func TestOnDemandCheckInferred(t *testing.T) {
 
 	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
 
-	result, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-ondemand-table", targetTableCapacity, gsiUpdates, false)
+	result, err := c.UpdateCapacity(context.Background(), "default", "us-east-1", "test-ondemand-table", targetTableCapacity, gsiUpdates, false)
 	assert.Nil(t, result)
 	assert.Equal(t, "rpc error: code = FailedPrecondition desc = Table billing mode is not set to PROVISIONED, cannot scale capacities.", err.Error())
 }
@@ -617,7 +617,7 @@ func TestNoBillingMode(t *testing.T) {
 
 	gsiUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
 
-	got, err := c.UpdateCapacity(context.Background(), "us-east-1", "test-table-no-billing", targetTableCapacity, gsiUpdates, false)
+	got, err := c.UpdateCapacity(context.Background(), "default", "us-east-1", "test-table-no-billing", targetTableCapacity, gsiUpdates, false)
 	assert.NotNil(t, got)
 	assert.Nil(t, err)
 	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))

@@ -17,8 +17,8 @@ type kinesisAPI struct {
 	client aws.Client
 }
 
-func (a *kinesisAPI) GetStream(ctx context.Context, request *kinesisv1.GetStreamRequest) (*kinesisv1.GetStreamResponse, error) {
-	stream, err := a.client.DescribeKinesisStream(ctx, request.Region, request.StreamName)
+func (a *kinesisAPI) GetStream(ctx context.Context, req *kinesisv1.GetStreamRequest) (*kinesisv1.GetStreamResponse, error) {
+	stream, err := a.client.DescribeKinesisStream(ctx, req.Account, req.Region, req.StreamName)
 	if err != nil {
 		return nil, err
 	}
@@ -26,8 +26,8 @@ func (a *kinesisAPI) GetStream(ctx context.Context, request *kinesisv1.GetStream
 	return &kinesisv1.GetStreamResponse{Stream: stream}, nil
 }
 
-func (a *kinesisAPI) UpdateShardCount(ctx context.Context, request *kinesisv1.UpdateShardCountRequest) (*kinesisv1.UpdateShardCountResponse, error) {
-	err := a.client.UpdateKinesisShardCount(ctx, request.Region, request.StreamName, request.TargetShardCount)
+func (a *kinesisAPI) UpdateShardCount(ctx context.Context, req *kinesisv1.UpdateShardCountRequest) (*kinesisv1.UpdateShardCountResponse, error) {
+	err := a.client.UpdateKinesisShardCount(ctx, req.Account, req.Region, req.StreamName, req.TargetShardCount)
 	if err != nil {
 		return nil, err
 	}

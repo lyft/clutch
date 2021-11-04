@@ -1722,6 +1722,9 @@ export namespace clutch {
                     /** Table region */
                     region?: (string|null);
 
+                    /** Table account */
+                    account?: (string|null);
+
                     /** Table globalSecondaryIndexes */
                     globalSecondaryIndexes?: (clutch.aws.dynamodb.v1.IGlobalSecondaryIndex[]|null);
 
@@ -1749,6 +1752,9 @@ export namespace clutch {
 
                     /** Table region. */
                     public region: string;
+
+                    /** Table account. */
+                    public account: string;
 
                     /** Table globalSecondaryIndexes. */
                     public globalSecondaryIndexes: clutch.aws.dynamodb.v1.IGlobalSecondaryIndex[];
@@ -2004,6 +2010,9 @@ export namespace clutch {
 
                     /** DescribeTableRequest region */
                     region?: (string|null);
+
+                    /** DescribeTableRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a DescribeTableRequest. */
@@ -2020,6 +2029,9 @@ export namespace clutch {
 
                     /** DescribeTableRequest region. */
                     public region: string;
+
+                    /** DescribeTableRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a DescribeTableRequest message.
@@ -2107,6 +2119,9 @@ export namespace clutch {
                     /** UpdateCapacityRequest region */
                     region?: (string|null);
 
+                    /** UpdateCapacityRequest account */
+                    account?: (string|null);
+
                     /** UpdateCapacityRequest tableThroughput */
                     tableThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
 
@@ -2131,6 +2146,9 @@ export namespace clutch {
 
                     /** UpdateCapacityRequest region. */
                     public region: string;
+
+                    /** UpdateCapacityRequest account. */
+                    public account: string;
 
                     /** UpdateCapacityRequest tableThroughput. */
                     public tableThroughput?: (clutch.aws.dynamodb.v1.IThroughput|null);
@@ -2394,6 +2412,9 @@ export namespace clutch {
                     /** ResizeAutoscalingGroupRequest region */
                     region?: (string|null);
 
+                    /** ResizeAutoscalingGroupRequest account */
+                    account?: (string|null);
+
                     /** ResizeAutoscalingGroupRequest size */
                     size?: (clutch.aws.ec2.v1.IAutoscalingGroupSize|null);
                 }
@@ -2412,6 +2433,9 @@ export namespace clutch {
 
                     /** ResizeAutoscalingGroupRequest region. */
                     public region: string;
+
+                    /** ResizeAutoscalingGroupRequest account. */
+                    public account: string;
 
                     /** ResizeAutoscalingGroupRequest size. */
                     public size?: (clutch.aws.ec2.v1.IAutoscalingGroupSize|null);
@@ -2496,6 +2520,9 @@ export namespace clutch {
                     /** AutoscalingGroup region */
                     region?: (string|null);
 
+                    /** AutoscalingGroup account */
+                    account?: (string|null);
+
                     /** AutoscalingGroup zones */
                     zones?: (string[]|null);
 
@@ -2523,6 +2550,9 @@ export namespace clutch {
 
                     /** AutoscalingGroup region. */
                     public region: string;
+
+                    /** AutoscalingGroup account. */
+                    public account: string;
 
                     /** AutoscalingGroup zones. */
                     public zones: string[];
@@ -2791,6 +2821,9 @@ export namespace clutch {
 
                     /** TerminateInstanceRequest region */
                     region?: (string|null);
+
+                    /** TerminateInstanceRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a TerminateInstanceRequest. */
@@ -2807,6 +2840,9 @@ export namespace clutch {
 
                     /** TerminateInstanceRequest region. */
                     public region: string;
+
+                    /** TerminateInstanceRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a TerminateInstanceRequest message.
@@ -2887,6 +2923,9 @@ export namespace clutch {
 
                     /** RebootInstanceRequest region */
                     region?: (string|null);
+
+                    /** RebootInstanceRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a RebootInstanceRequest. */
@@ -2903,6 +2942,9 @@ export namespace clutch {
 
                     /** RebootInstanceRequest region. */
                     public region: string;
+
+                    /** RebootInstanceRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a RebootInstanceRequest message.
@@ -3159,6 +3201,9 @@ export namespace clutch {
 
                     /** GetStreamRequest region */
                     region?: (string|null);
+
+                    /** GetStreamRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a GetStreamRequest. */
@@ -3175,6 +3220,9 @@ export namespace clutch {
 
                     /** GetStreamRequest region. */
                     public region: string;
+
+                    /** GetStreamRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a GetStreamRequest message.
@@ -3262,6 +3310,9 @@ export namespace clutch {
                     /** UpdateShardCountRequest region */
                     region?: (string|null);
 
+                    /** UpdateShardCountRequest account */
+                    account?: (string|null);
+
                     /** UpdateShardCountRequest targetShardCount */
                     targetShardCount?: (number|null);
                 }
@@ -3280,6 +3331,9 @@ export namespace clutch {
 
                     /** UpdateShardCountRequest region. */
                     public region: string;
+
+                    /** UpdateShardCountRequest account. */
+                    public account: string;
 
                     /** UpdateShardCountRequest targetShardCount. */
                     public targetShardCount: number;
@@ -3364,6 +3418,9 @@ export namespace clutch {
                     /** Stream region */
                     region?: (string|null);
 
+                    /** Stream account */
+                    account?: (string|null);
+
                     /** Stream currentShardCount */
                     currentShardCount?: (number|null);
                 }
@@ -3382,6 +3439,9 @@ export namespace clutch {
 
                     /** Stream region. */
                     public region: string;
+
+                    /** Stream account. */
+                    public account: string;
 
                     /** Stream currentShardCount. */
                     public currentShardCount: number;
@@ -19361,6 +19421,9 @@ export namespace clutch {
 
                     /** AutoscalingGroupName region */
                     region?: (string|null);
+
+                    /** AutoscalingGroupName account */
+                    account?: (string|null);
                 }
 
                 /** Represents an AutoscalingGroupName. */
@@ -19377,6 +19440,9 @@ export namespace clutch {
 
                     /** AutoscalingGroupName region. */
                     public region: string;
+
+                    /** AutoscalingGroupName account. */
+                    public account: string;
 
                     /**
                      * Verifies an AutoscalingGroupName message.
@@ -19415,6 +19481,9 @@ export namespace clutch {
 
                     /** KinesisStreamName region */
                     region?: (string|null);
+
+                    /** KinesisStreamName account */
+                    account?: (string|null);
                 }
 
                 /** Represents a KinesisStreamName. */
@@ -19431,6 +19500,9 @@ export namespace clutch {
 
                     /** KinesisStreamName region. */
                     public region: string;
+
+                    /** KinesisStreamName account. */
+                    public account: string;
 
                     /**
                      * Verifies a KinesisStreamName message.
@@ -19469,6 +19541,9 @@ export namespace clutch {
 
                     /** DynamodbTableName region */
                     region?: (string|null);
+
+                    /** DynamodbTableName account */
+                    account?: (string|null);
                 }
 
                 /** Represents a DynamodbTableName. */
@@ -19485,6 +19560,9 @@ export namespace clutch {
 
                     /** DynamodbTableName region. */
                     public region: string;
+
+                    /** DynamodbTableName account. */
+                    public account: string;
 
                     /**
                      * Verifies a DynamodbTableName message.

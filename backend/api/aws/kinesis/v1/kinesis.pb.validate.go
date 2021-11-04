@@ -61,6 +61,8 @@ func (m *GetStreamRequest) validate(all bool) error {
 
 	// no validation rules for Region
 
+	// no validation rules for Account
+
 	if len(errors) > 0 {
 		return GetStreamRequestMultiError(errors)
 	}
@@ -294,6 +296,8 @@ func (m *UpdateShardCountRequest) validate(all bool) error {
 
 	// no validation rules for Region
 
+	// no validation rules for Account
+
 	// no validation rules for TargetShardCount
 
 	if len(errors) > 0 {
@@ -500,6 +504,8 @@ func (m *Stream) validate(all bool) error {
 	// no validation rules for StreamName
 
 	// no validation rules for Region
+
+	// no validation rules for Account
 
 	// no validation rules for CurrentShardCount
 

@@ -186,6 +186,17 @@ func (m *ResizeAutoscalingGroupRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetAccount()) < 1 {
+		err := ResizeAutoscalingGroupRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if m.GetSize() == nil {
 		err := ResizeAutoscalingGroupRequestValidationError{
 			field:  "Size",
@@ -433,6 +444,8 @@ func (m *AutoscalingGroup) validate(all bool) error {
 	// no validation rules for Name
 
 	// no validation rules for Region
+
+	// no validation rules for Account
 
 	if all {
 		switch v := interface{}(m.GetSize()).(type) {
@@ -882,6 +895,17 @@ func (m *TerminateInstanceRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetAccount()) < 1 {
+		err := TerminateInstanceRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return TerminateInstanceRequestMultiError(errors)
 	}
@@ -1098,6 +1122,17 @@ func (m *RebootInstanceRequest) validate(all bool) error {
 	if len(m.GetRegion()) < 1 {
 		err := RebootInstanceRequestValidationError{
 			field:  "Region",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetAccount()) < 1 {
+		err := RebootInstanceRequestValidationError{
+			field:  "Account",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {
