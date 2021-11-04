@@ -12,7 +12,7 @@ message Config {
   DynamodbConfig dynamodb_config = 3;
 
   // Defaults to "default"
-  string current_account_alias = 4;
+  string account_alias = 4;
   repeated AWSAccount additional_accounts = 5;
 }
 

@@ -125,7 +125,7 @@ func (m *Config) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for CurrentAccountAlias
+	// no validation rules for AccountAlias
 
 	for idx, item := range m.GetAdditionalAccounts() {
 		_, _ = idx, item

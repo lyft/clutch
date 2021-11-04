@@ -6,6 +6,7 @@ package aws
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -13,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -62,8 +64,8 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 	}
 
 	accountAlias := "default"
-	if ac.CurrentAccountAlias == "" {
-		accountAlias = ac.CurrentAccountAlias
+	if ac.AccountAlias == "" {
+		accountAlias = ac.AccountAlias
 	}
 
 	c := &client{
@@ -100,6 +102,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 
 		if _, ok := c.accounts[c.currentAccountAlias]; !ok {
 			c.accounts[c.currentAccountAlias] = &accountClients{
+				regions: ac.Regions,
 				clients: map[string]*regionalClient{},
 			}
 		}
@@ -125,10 +128,77 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		}
 	}
 
+	if err := c.configureAdditonalAccountClient(ac.AdditionalAccounts, ac); err != nil {
+		return nil, err
+	}
+
 	return c, nil
 }
 
-// func configureAdditonalAccountClient(account awsv1.AWSAccount) {}
+func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, ac *awsv1.Config) error {
+	ds := getScalingLimits(ac)
+	awsHTTPClient := &http.Client{}
+
+	for _, account := range accounts {
+		// Create stscred client for this account and share it with all regions?
+		// "arn:aws:iam::277829364062:role/sudo-developer"
+		accountRoleARN := fmt.Sprintf("arn:aws:iam::%s:role/%s", account.AccountNumber, account.IamRole)
+		stsClient := c.accounts[c.currentAccountAlias].clients[c.accounts[c.currentAccountAlias].regions[0]].sts
+		assumeRoleProvider := stscreds.NewAssumeRoleProvider(stsClient, accountRoleARN)
+		credsCache := aws.NewCredentialsCache(assumeRoleProvider)
+
+		for _, region := range account.Regions {
+			regionCfg, err := config.LoadDefaultConfig(context.TODO(),
+				config.WithHTTPClient(awsHTTPClient),
+				config.WithRegion(region),
+				config.WithAssumeRoleCredentialOptions(func(aro *stscreds.AssumeRoleOptions) {
+					// Is this even necessary?
+					aro.RoleARN = accountRoleARN
+				}),
+				config.WithRetryer(func() aws.Retryer {
+					customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
+						so.MaxAttempts = 10
+					})
+					return customRetryer
+				}),
+			)
+			if err != nil {
+				return err
+			}
+
+			// Is there a cleaner way of doing this?
+			regionCfg.Credentials = credsCache
+
+			if _, ok := c.accounts[account.Alias]; !ok {
+				c.accounts[account.Alias] = &accountClients{
+					clients: map[string]*regionalClient{},
+				}
+			}
+
+			c.accounts[account.Alias].clients[region] = &regionalClient{
+				region: region,
+				dynamodbCfg: &awsv1.DynamodbConfig{
+					ScalingLimits: &awsv1.ScalingLimits{
+						MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+						MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+						MaxScaleFactor:        ds.MaxScaleFactor,
+						EnableOverride:        ds.EnableOverride,
+					},
+				},
+
+				s3:          s3.NewFromConfig(regionCfg),
+				kinesis:     kinesis.NewFromConfig(regionCfg),
+				ec2:         ec2.NewFromConfig(regionCfg),
+				autoscaling: autoscaling.NewFromConfig(regionCfg),
+				dynamodb:    dynamodb.NewFromConfig(regionCfg),
+				sts:         sts.NewFromConfig(regionCfg),
+				iam:         iam.NewFromConfig(regionCfg),
+			}
+		}
+	}
+
+	return nil
+}
 
 type Client interface {
 	DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error)
@@ -177,10 +247,10 @@ type regionalClient struct {
 
 // Encapulates information for an aws account
 type accountClients struct {
-	name          string
-	accountNumber int
-	aimRole       string
-	regions       []string
+	// name          string
+	// accountNumber int
+	// aimRole       string
+	regions []string
 
 	clients map[string]*regionalClient
 }
