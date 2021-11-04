@@ -2683,6 +2683,9 @@ export namespace clutch {
 
                     /** GetInstanceRequest region */
                     region?: (string|null);
+
+                    /** GetInstanceRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a GetInstanceRequest. */
@@ -2699,6 +2702,9 @@ export namespace clutch {
 
                     /** GetInstanceRequest region. */
                     public region: string;
+
+                    /** GetInstanceRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a GetInstanceRequest message.
@@ -2978,6 +2984,9 @@ export namespace clutch {
                     /** Instance region */
                     region?: (string|null);
 
+                    /** Instance account */
+                    account?: (string|null);
+
                     /** Instance state */
                     state?: (clutch.aws.ec2.v1.Instance.State|null);
 
@@ -3011,6 +3020,9 @@ export namespace clutch {
 
                     /** Instance region. */
                     public region: string;
+
+                    /** Instance account. */
+                    public account: string;
 
                     /** Instance state. */
                     public state: clutch.aws.ec2.v1.Instance.State;
@@ -19289,6 +19301,9 @@ export namespace clutch {
 
                     /** InstanceID region */
                     region?: (string|null);
+
+                    /** InstanceID account */
+                    account?: (string|null);
                 }
 
                 /** Represents an InstanceID. */
@@ -19305,6 +19320,9 @@ export namespace clutch {
 
                     /** InstanceID region. */
                     public region: string;
+
+                    /** InstanceID account. */
+                    public account: string;
 
                     /**
                      * Verifies an InstanceID message.

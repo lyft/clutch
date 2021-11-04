@@ -25,6 +25,11 @@ message InstanceID {
     display_name : "Region",
     option_field : {include_all_option : true, include_dynamic_options : "regions"},
   } ];
+
+  string account = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Account",
+    option_field : {include_all_option : true, include_dynamic_options : "accounts"},
+  } ];
 }
 
 message AutoscalingGroupName {

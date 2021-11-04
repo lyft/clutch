@@ -618,6 +618,17 @@ func (m *GetInstanceRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetAccount()) < 1 {
+		err := GetInstanceRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return GetInstanceRequestMultiError(errors)
 	}
@@ -1300,6 +1311,8 @@ func (m *Instance) validate(all bool) error {
 	// no validation rules for InstanceId
 
 	// no validation rules for Region
+
+	// no validation rules for Account
 
 	// no validation rules for State
 

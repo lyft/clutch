@@ -6365,6 +6365,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IGetInstanceRequest
                      * @property {string|null} [instanceId] GetInstanceRequest instanceId
                      * @property {string|null} [region] GetInstanceRequest region
+                     * @property {string|null} [account] GetInstanceRequest account
                      */
 
                     /**
@@ -6399,6 +6400,14 @@ export const clutch = $root.clutch = (() => {
                     GetInstanceRequest.prototype.region = "";
 
                     /**
+                     * GetInstanceRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.GetInstanceRequest
+                     * @instance
+                     */
+                    GetInstanceRequest.prototype.account = "";
+
+                    /**
                      * Verifies a GetInstanceRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.GetInstanceRequest
@@ -6415,6 +6424,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -6434,6 +6446,8 @@ export const clutch = $root.clutch = (() => {
                             message.instanceId = String(object.instanceId);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6453,11 +6467,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.instanceId = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6980,6 +6997,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IInstance
                      * @property {string|null} [instanceId] Instance instanceId
                      * @property {string|null} [region] Instance region
+                     * @property {string|null} [account] Instance account
                      * @property {clutch.aws.ec2.v1.Instance.State|null} [state] Instance state
                      * @property {string|null} [instanceType] Instance instanceType
                      * @property {string|null} [publicIpAddress] Instance publicIpAddress
@@ -7019,6 +7037,14 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     Instance.prototype.region = "";
+
+                    /**
+                     * Instance account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.Instance
+                     * @instance
+                     */
+                    Instance.prototype.account = "";
 
                     /**
                      * Instance state.
@@ -7085,6 +7111,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         if (message.state != null && message.hasOwnProperty("state"))
                             switch (message.state) {
                             default:
@@ -7138,6 +7167,8 @@ export const clutch = $root.clutch = (() => {
                             message.instanceId = String(object.instanceId);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         switch (object.state) {
                         case "UNSPECIFIED":
                         case 0:
@@ -7213,6 +7244,7 @@ export const clutch = $root.clutch = (() => {
                             object.publicIpAddress = "";
                             object.privateIpAddress = "";
                             object.availabilityZone = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
@@ -7234,6 +7266,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < keys2.length; ++j)
                                 object.tags[keys2[j]] = message.tags[keys2[j]];
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -46167,6 +46201,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IInstanceID
                      * @property {string|null} [id] InstanceID id
                      * @property {string|null} [region] InstanceID region
+                     * @property {string|null} [account] InstanceID account
                      */
 
                     /**
@@ -46201,6 +46236,14 @@ export const clutch = $root.clutch = (() => {
                     InstanceID.prototype.region = "";
 
                     /**
+                     * InstanceID account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.InstanceID
+                     * @instance
+                     */
+                    InstanceID.prototype.account = "";
+
+                    /**
                      * Verifies an InstanceID message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.InstanceID
@@ -46217,6 +46260,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -46236,6 +46282,8 @@ export const clutch = $root.clutch = (() => {
                             message.id = String(object.id);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -46255,11 +46303,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.id = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.id != null && message.hasOwnProperty("id"))
                             object.id = message.id;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 

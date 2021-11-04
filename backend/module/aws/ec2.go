@@ -36,7 +36,7 @@ func (a *ec2API) TerminateInstance(ctx context.Context, req *ec2v1.TerminateInst
 }
 
 func (a *ec2API) GetInstance(ctx context.Context, req *ec2v1.GetInstanceRequest) (*ec2v1.GetInstanceResponse, error) {
-	instances, err := a.client.DescribeInstances(ctx, req.Region, []string{req.InstanceId})
+	instances, err := a.client.DescribeInstances(ctx, req.Account, req.Region, []string{req.InstanceId})
 	if err != nil {
 		return nil, err
 	}

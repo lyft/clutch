@@ -61,6 +61,8 @@ func (m *InstanceID) validate(all bool) error {
 
 	// no validation rules for Region
 
+	// no validation rules for Account
+
 	if len(errors) > 0 {
 		return InstanceIDMultiError(errors)
 	}

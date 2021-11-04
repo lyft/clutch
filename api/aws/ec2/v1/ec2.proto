@@ -123,11 +123,12 @@ message AutoscalingGroup {
 message GetInstanceRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.Instance",
-    pattern : "{region}/{instance_id}"
+    pattern : "{account}/{region}/{instance_id}"
   };
 
   string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message GetInstanceResponse {
@@ -165,11 +166,12 @@ message RebootInstanceResponse {
 message Instance {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.Instance",
-    pattern : "{region}/{instance_id}"
+    pattern : "{account}/{region}/{instance_id}"
   };
 
   string instance_id = 1;
   string region = 2;
+  string account = 9;
 
   // https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceState.html
   enum State {

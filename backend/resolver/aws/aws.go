@@ -60,6 +60,16 @@ func makeRegionOptions(regions []string) []*resolverv1.Option {
 	return ret
 }
 
+func makeAccountOptions(ar map[string][]string) []*resolverv1.Option {
+	ret := make([]*resolverv1.Option, 0)
+	for account := range ar {
+		ret = append(ret, &resolverv1.Option{
+			Value: &resolverv1.Option_StringValue{StringValue: account},
+		})
+	}
+	return ret
+}
+
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
 	awsClient, ok := service.Registry["clutch.service.aws"]
 	if !ok {
@@ -86,7 +96,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	}
 
 	resolver.HydrateDynamicOptions(schemas, map[string][]*resolverv1.Option{
-		"regions": makeRegionOptions(c.Regions()),
+		"regions":  makeRegionOptions(c.Regions()),
+		"accounts": makeAccountOptions(c.AccountsAndRegions()),
 	})
 
 	r := &res{
@@ -102,6 +113,17 @@ type res struct {
 	client   aws.Client
 	topology topology.Service
 	schemas  resolver.TypeURLToSchemasMap
+}
+
+func (r *res) determineAccountAndRegionsForOption(account, region string) map[string][]string {
+	regions := make(map[string][]string)
+	switch account {
+	case resolver.OptionAll:
+		regions = r.client.AccountsAndRegions()
+	default:
+		regions[account] = []string{region}
+	}
+	return regions
 }
 
 func (r *res) determineRegionsForOption(option string) []string {
@@ -144,14 +166,15 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 			return nil, err
 		}
 		if ok {
-			return r.instanceResults(ctx, patternValues["region"], []string{patternValues["instance_id"]}, limit)
+			return r.instanceResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["instance_id"]}, limit)
 		}
 
 		id, err := normalizeInstanceID(query)
 		if err != nil {
 			return nil, err
 		}
-		return r.instanceResults(ctx, resolver.OptionAll, []string{id}, limit)
+		// TODO (mcutalo): this is gross double option all
+		return r.instanceResults(ctx, resolver.OptionAll, resolver.OptionAll, []string{id}, limit)
 
 	case typeURLAutoscalingGroup:
 		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.AutoscalingGroup)(nil), query)

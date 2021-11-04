@@ -63,9 +63,9 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		return nil, err
 	}
 
-	accountAlias := "default"
+	accountAlias := ac.AccountAlias
 	if ac.AccountAlias == "" {
-		accountAlias = ac.AccountAlias
+		accountAlias = "default"
 	}
 
 	c := &client{
@@ -201,7 +201,7 @@ func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, a
 }
 
 type Client interface {
-	DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error)
+	DescribeInstances(ctx context.Context, account, region string, ids []string) ([]*ec2v1.Instance, error)
 	TerminateInstances(ctx context.Context, region string, ids []string) error
 	RebootInstances(ctx context.Context, region string, ids []string) error
 
@@ -220,6 +220,7 @@ type Client interface {
 	GetCallerIdentity(ctx context.Context, region string) (*sts.GetCallerIdentityOutput, error)
 
 	Regions() []string
+	AccountsAndRegions() map[string][]string
 }
 
 type client struct {
@@ -373,6 +374,16 @@ func newProtoForAutoscalingGroup(group astypes.AutoScalingGroup) *ec2v1.Autoscal
 	return pb
 }
 
+func (c *client) AccountsAndRegions() map[string][]string {
+	ar := make(map[string][]string)
+
+	for name, account := range c.accounts {
+		ar[name] = account.regions
+	}
+
+	return ar
+}
+
 // what is this suppose to do now, like get all regions for all accounts, or just per account.
 func (c *client) Regions() []string {
 	regions := make([]string, 0)
@@ -386,11 +397,13 @@ func (c *client) Regions() []string {
 	return regions
 }
 
-func (c *client) DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error) {
-	cl, err := c.getRegionalClient(region)
-	if err != nil {
-		return nil, err
-	}
+func (c *client) DescribeInstances(ctx context.Context, account, region string, ids []string) ([]*ec2v1.Instance, error) {
+	// cl, err := c.getRegionalClient(region)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	cl := c.accounts[account].clients[region]
 
 	input := &ec2.DescribeInstancesInput{InstanceIds: ids}
 	result, err := cl.ec2.DescribeInstances(ctx, input)
