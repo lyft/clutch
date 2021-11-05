@@ -13,6 +13,7 @@ module.exports = {
       },
     },
     rebootInstance: {
+      hideNav: true,
       componentProps: {
         resolverType: "clutch.aws.ec2.v1.Instance",
       },
@@ -27,14 +28,6 @@ module.exports = {
               "The autoscaling group may take several minutes to bring additional instances online.",
           },
         ],
-      },
-    },
-  },
-  "@clutch-sh/dynamodb": {
-    updateCapacity: {
-      componentProps: {
-        resolverType: "clutch.aws.dynamodb.v1.Table",
-        enableOverride: true,
       },
     },
   },
