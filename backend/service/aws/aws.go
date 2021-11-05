@@ -172,11 +172,11 @@ func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, a
 
 			if _, ok := c.accounts[account.Alias]; !ok {
 				c.accounts[account.Alias] = &accountClients{
-					alias:         account.Alias,
 					accountNumber: account.AccountNumber,
+					alias:         account.Alias,
+					clients:       map[string]*regionalClient{},
 					iamRoleARN:    account.IamRole,
 					regions:       account.Regions,
-					clients:       map[string]*regionalClient{},
 				}
 			}
 

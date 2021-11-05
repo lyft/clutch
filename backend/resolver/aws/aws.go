@@ -126,17 +126,6 @@ func (r *res) determineAccountAndRegionsForOption(account, region string) map[st
 	return regions
 }
 
-func (r *res) determineRegionsForOption(option string) []string {
-	var regions []string
-	switch option {
-	case resolver.OptionAll:
-		regions = r.client.Regions()
-	default:
-		regions = []string{option}
-	}
-	return regions
-}
-
 func (r *res) Schemas() resolver.TypeURLToSchemasMap { return r.schemas }
 
 func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Message, limit uint32) (*resolver.Results, error) {
