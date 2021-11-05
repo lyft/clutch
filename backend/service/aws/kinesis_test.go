@@ -61,6 +61,7 @@ var testAwsStreamOuputWithBadData = &kinesis.DescribeStreamSummaryOutput{
 var testStreamOutPut = &kinesisv1.Stream{
 	StreamName:        "test-stream",
 	Region:            "us-east-1",
+	Account:           "default",
 	CurrentShardCount: 100,
 }
 

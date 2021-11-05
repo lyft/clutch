@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap/zaptest"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -37,8 +38,9 @@ var testDynamodbTable = &types.TableDescription{
 }
 
 var testTableOutput = &dynamodbv1.Table{
-	Name:   "test-table",
-	Region: "us-east-1",
+	Name:    "test-table",
+	Region:  "us-east-1",
+	Account: "default",
 	ProvisionedThroughput: &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
@@ -71,8 +73,9 @@ var testDynamodbTableWithGSI = &types.TableDescription{
 }
 
 var testTableWithGSIOutput = &dynamodbv1.Table{
-	Name:   "test-gsi-table",
-	Region: "us-east-1",
+	Name:    "test-gsi-table",
+	Region:  "us-east-1",
+	Account: "default",
 	ProvisionedThroughput: &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
@@ -179,6 +182,7 @@ func TestDescribeTableValid(t *testing.T) {
 		table: testDynamodbTable,
 	}
 	c := &client{
+		log:                 zaptest.NewLogger(t),
 		currentAccountAlias: "default",
 		accounts: map[string]*accountClients{
 			"default": {
@@ -203,6 +207,7 @@ func TestDescribeTableNotValid(t *testing.T) {
 		table: testDynamodbTable,
 	}
 	c := &client{
+		log:                 zaptest.NewLogger(t),
 		currentAccountAlias: "default",
 		accounts: map[string]*accountClients{
 			"default": {
