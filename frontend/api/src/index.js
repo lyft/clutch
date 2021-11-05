@@ -21658,6 +21658,8 @@ export const clutch = $root.clutch = (() => {
                          * @property {Array.<string>|null} [regions] Config regions
                          * @property {clutch.config.service.aws.v1.IClientConfig|null} [clientConfig] Config clientConfig
                          * @property {clutch.config.service.aws.v1.IDynamodbConfig|null} [dynamodbConfig] Config dynamodbConfig
+                         * @property {string|null} [accountAlias] Config accountAlias
+                         * @property {Array.<clutch.config.service.aws.v1.IAWSAccount>|null} [additionalAccounts] Config additionalAccounts
                          */
 
                         /**
@@ -21670,6 +21672,7 @@ export const clutch = $root.clutch = (() => {
                          */
                         function Config(properties) {
                             this.regions = [];
+                            this.additionalAccounts = [];
                             if (properties)
                                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                     if (properties[keys[i]] != null)
@@ -21701,6 +21704,22 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.dynamodbConfig = null;
 
                         /**
+                         * Config accountAlias.
+                         * @member {string} accountAlias
+                         * @memberof clutch.config.service.aws.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.accountAlias = "";
+
+                        /**
+                         * Config additionalAccounts.
+                         * @member {Array.<clutch.config.service.aws.v1.IAWSAccount>} additionalAccounts
+                         * @memberof clutch.config.service.aws.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.additionalAccounts = $util.emptyArray;
+
+                        /**
                          * Verifies a Config message.
                          * @function verify
                          * @memberof clutch.config.service.aws.v1.Config
@@ -21727,6 +21746,18 @@ export const clutch = $root.clutch = (() => {
                                 let error = $root.clutch.config.service.aws.v1.DynamodbConfig.verify(message.dynamodbConfig);
                                 if (error)
                                     return "dynamodbConfig." + error;
+                            }
+                            if (message.accountAlias != null && message.hasOwnProperty("accountAlias"))
+                                if (!$util.isString(message.accountAlias))
+                                    return "accountAlias: string expected";
+                            if (message.additionalAccounts != null && message.hasOwnProperty("additionalAccounts")) {
+                                if (!Array.isArray(message.additionalAccounts))
+                                    return "additionalAccounts: array expected";
+                                for (let i = 0; i < message.additionalAccounts.length; ++i) {
+                                    let error = $root.clutch.config.service.aws.v1.AWSAccount.verify(message.additionalAccounts[i]);
+                                    if (error)
+                                        return "additionalAccounts." + error;
+                                }
                             }
                             return null;
                         };
@@ -21760,6 +21791,18 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.aws.v1.Config.dynamodbConfig: object expected");
                                 message.dynamodbConfig = $root.clutch.config.service.aws.v1.DynamodbConfig.fromObject(object.dynamodbConfig);
                             }
+                            if (object.accountAlias != null)
+                                message.accountAlias = String(object.accountAlias);
+                            if (object.additionalAccounts) {
+                                if (!Array.isArray(object.additionalAccounts))
+                                    throw TypeError(".clutch.config.service.aws.v1.Config.additionalAccounts: array expected");
+                                message.additionalAccounts = [];
+                                for (let i = 0; i < object.additionalAccounts.length; ++i) {
+                                    if (typeof object.additionalAccounts[i] !== "object")
+                                        throw TypeError(".clutch.config.service.aws.v1.Config.additionalAccounts: object expected");
+                                    message.additionalAccounts[i] = $root.clutch.config.service.aws.v1.AWSAccount.fromObject(object.additionalAccounts[i]);
+                                }
+                            }
                             return message;
                         };
 
@@ -21776,11 +21819,14 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.arrays || options.defaults)
+                            if (options.arrays || options.defaults) {
                                 object.regions = [];
+                                object.additionalAccounts = [];
+                            }
                             if (options.defaults) {
                                 object.clientConfig = null;
                                 object.dynamodbConfig = null;
+                                object.accountAlias = "";
                             }
                             if (message.regions && message.regions.length) {
                                 object.regions = [];
@@ -21791,6 +21837,13 @@ export const clutch = $root.clutch = (() => {
                                 object.clientConfig = $root.clutch.config.service.aws.v1.ClientConfig.toObject(message.clientConfig, options);
                             if (message.dynamodbConfig != null && message.hasOwnProperty("dynamodbConfig"))
                                 object.dynamodbConfig = $root.clutch.config.service.aws.v1.DynamodbConfig.toObject(message.dynamodbConfig, options);
+                            if (message.accountAlias != null && message.hasOwnProperty("accountAlias"))
+                                object.accountAlias = message.accountAlias;
+                            if (message.additionalAccounts && message.additionalAccounts.length) {
+                                object.additionalAccounts = [];
+                                for (let j = 0; j < message.additionalAccounts.length; ++j)
+                                    object.additionalAccounts[j] = $root.clutch.config.service.aws.v1.AWSAccount.toObject(message.additionalAccounts[j], options);
+                            }
                             return object;
                         };
 
@@ -22191,6 +22244,172 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         return ScalingLimits;
+                    })();
+
+                    v1.AWSAccount = (function() {
+
+                        /**
+                         * Properties of a AWSAccount.
+                         * @memberof clutch.config.service.aws.v1
+                         * @interface IAWSAccount
+                         * @property {string|null} [alias] AWSAccount alias
+                         * @property {string|null} [accountNumber] AWSAccount accountNumber
+                         * @property {string|null} [iamRole] AWSAccount iamRole
+                         * @property {Array.<string>|null} [regions] AWSAccount regions
+                         */
+
+                        /**
+                         * Constructs a new AWSAccount.
+                         * @memberof clutch.config.service.aws.v1
+                         * @classdesc Represents a AWSAccount.
+                         * @implements IAWSAccount
+                         * @constructor
+                         * @param {clutch.config.service.aws.v1.IAWSAccount=} [properties] Properties to set
+                         */
+                        function AWSAccount(properties) {
+                            this.regions = [];
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * AWSAccount alias.
+                         * @member {string} alias
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         */
+                        AWSAccount.prototype.alias = "";
+
+                        /**
+                         * AWSAccount accountNumber.
+                         * @member {string} accountNumber
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         */
+                        AWSAccount.prototype.accountNumber = "";
+
+                        /**
+                         * AWSAccount iamRole.
+                         * @member {string} iamRole
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         */
+                        AWSAccount.prototype.iamRole = "";
+
+                        /**
+                         * AWSAccount regions.
+                         * @member {Array.<string>} regions
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         */
+                        AWSAccount.prototype.regions = $util.emptyArray;
+
+                        /**
+                         * Verifies a AWSAccount message.
+                         * @function verify
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        AWSAccount.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.alias != null && message.hasOwnProperty("alias"))
+                                if (!$util.isString(message.alias))
+                                    return "alias: string expected";
+                            if (message.accountNumber != null && message.hasOwnProperty("accountNumber"))
+                                if (!$util.isString(message.accountNumber))
+                                    return "accountNumber: string expected";
+                            if (message.iamRole != null && message.hasOwnProperty("iamRole"))
+                                if (!$util.isString(message.iamRole))
+                                    return "iamRole: string expected";
+                            if (message.regions != null && message.hasOwnProperty("regions")) {
+                                if (!Array.isArray(message.regions))
+                                    return "regions: array expected";
+                                for (let i = 0; i < message.regions.length; ++i)
+                                    if (!$util.isString(message.regions[i]))
+                                        return "regions: string[] expected";
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a AWSAccount message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.aws.v1.AWSAccount} AWSAccount
+                         */
+                        AWSAccount.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.aws.v1.AWSAccount)
+                                return object;
+                            let message = new $root.clutch.config.service.aws.v1.AWSAccount();
+                            if (object.alias != null)
+                                message.alias = String(object.alias);
+                            if (object.accountNumber != null)
+                                message.accountNumber = String(object.accountNumber);
+                            if (object.iamRole != null)
+                                message.iamRole = String(object.iamRole);
+                            if (object.regions) {
+                                if (!Array.isArray(object.regions))
+                                    throw TypeError(".clutch.config.service.aws.v1.AWSAccount.regions: array expected");
+                                message.regions = [];
+                                for (let i = 0; i < object.regions.length; ++i)
+                                    message.regions[i] = String(object.regions[i]);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a AWSAccount message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @static
+                         * @param {clutch.config.service.aws.v1.AWSAccount} message AWSAccount
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        AWSAccount.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.arrays || options.defaults)
+                                object.regions = [];
+                            if (options.defaults) {
+                                object.alias = "";
+                                object.accountNumber = "";
+                                object.iamRole = "";
+                            }
+                            if (message.alias != null && message.hasOwnProperty("alias"))
+                                object.alias = message.alias;
+                            if (message.accountNumber != null && message.hasOwnProperty("accountNumber"))
+                                object.accountNumber = message.accountNumber;
+                            if (message.iamRole != null && message.hasOwnProperty("iamRole"))
+                                object.iamRole = message.iamRole;
+                            if (message.regions && message.regions.length) {
+                                object.regions = [];
+                                for (let j = 0; j < message.regions.length; ++j)
+                                    object.regions[j] = message.regions[j];
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this AWSAccount to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        AWSAccount.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return AWSAccount;
                     })();
 
                     return v1;
