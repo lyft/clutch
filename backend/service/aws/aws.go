@@ -175,6 +175,7 @@ func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, a
 					alias:         account.Alias,
 					accountNumber: account.AccountNumber,
 					iamRoleARN:    account.IamRole,
+					regions:       account.Regions,
 					clients:       map[string]*regionalClient{},
 				}
 			}

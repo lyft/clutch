@@ -23,19 +23,21 @@ func (r *res) resolveDynamodbTableForInput(ctx context.Context, input proto.Mess
 func (r *res) dynamodbResults(ctx context.Context, account, region string, name string, limit uint32) (*resolver.Results, error) {
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
-	regions := r.determineRegionsForOption(region)
-	for _, region := range regions {
-		handler.Add(1)
-		go func(region string) {
-			defer handler.Done()
-			table, err := r.client.DescribeTable(ctx, account, region, name)
-			select {
-			case handler.Channel() <- resolver.NewSingleFanoutResult(table, err):
-				return
-			case <-handler.Cancelled():
-				return
-			}
-		}(region)
+	allAccountRegions := r.determineAccountAndRegionsForOption(account, region)
+	for account := range allAccountRegions {
+		for _, region := range allAccountRegions[account] {
+			handler.Add(1)
+			go func(account, region string) {
+				defer handler.Done()
+				table, err := r.client.DescribeTable(ctx, account, region, name)
+				select {
+				case handler.Channel() <- resolver.NewSingleFanoutResult(table, err):
+					return
+				case <-handler.Cancelled():
+					return
+				}
+			}(account, region)
+		}
 	}
 
 	return handler.Results(limit)

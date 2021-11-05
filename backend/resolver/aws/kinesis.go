@@ -24,19 +24,21 @@ func (r *res) resolveKinesisStreamForInput(ctx context.Context, input proto.Mess
 func (r *res) kinesisResults(ctx context.Context, account, region, id string, limit uint32) (*resolver.Results, error) {
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
-	regions := r.determineRegionsForOption(region)
-	for _, region := range regions {
-		handler.Add(1)
-		go func(region string) {
-			defer handler.Done()
-			stream, err := r.client.DescribeKinesisStream(ctx, account, region, id)
-			select {
-			case handler.Channel() <- resolver.NewSingleFanoutResult(stream, err):
-				return
-			case <-handler.Cancelled():
-				return
-			}
-		}(region)
+	allAccountRegions := r.determineAccountAndRegionsForOption(account, region)
+	for account := range allAccountRegions {
+		for _, region := range allAccountRegions[account] {
+			handler.Add(1)
+			go func(account, region string) {
+				defer handler.Done()
+				stream, err := r.client.DescribeKinesisStream(ctx, account, region, id)
+				select {
+				case handler.Channel() <- resolver.NewSingleFanoutResult(stream, err):
+					return
+				case <-handler.Cancelled():
+					return
+				}
+			}(account, region)
+		}
 	}
 
 	return handler.Results(limit)

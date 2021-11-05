@@ -39,9 +39,8 @@ func (r *res) instanceResults(ctx context.Context, account, region string, ids [
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
 	allAccountRegions := r.determineAccountAndRegionsForOption(account, region)
-	for account, _ := range allAccountRegions {
+	for account := range allAccountRegions {
 		for _, region := range allAccountRegions[account] {
-
 			handler.Add(1)
 			go func(account, region string) {
 				defer handler.Done()
