@@ -95,8 +95,6 @@ func (m *GetSurveysRequest) validate(all bool) error {
 
 	}
 
-	// no validation rules for User
-
 	if len(errors) > 0 {
 		return GetSurveysRequestMultiError(errors)
 	}
@@ -338,8 +336,6 @@ func (m *Survey) validate(all bool) error {
 			}
 		}
 	}
-
-	// no validation rules for Show
 
 	if len(errors) > 0 {
 		return SurveyMultiError(errors)

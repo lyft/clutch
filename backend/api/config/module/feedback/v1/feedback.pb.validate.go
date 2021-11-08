@@ -339,102 +339,55 @@ func (m *SurveyOrigin) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Type.(type) {
-
-	case *SurveyOrigin_Header:
-
-		if m.GetHeader() == nil {
-			err := SurveyOriginValidationError{
-				field:  "Header",
-				reason: "value is required",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		}
-
-		if all {
-			switch v := interface{}(m.GetHeader()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SurveyOriginValidationError{
-						field:  "Header",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, SurveyOriginValidationError{
-						field:  "Header",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetHeader()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return SurveyOriginValidationError{
-					field:  "Header",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *SurveyOrigin_Wizard:
-
-		if m.GetWizard() == nil {
-			err := SurveyOriginValidationError{
-				field:  "Wizard",
-				reason: "value is required",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		}
-
-		if all {
-			switch v := interface{}(m.GetWizard()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, SurveyOriginValidationError{
-						field:  "Wizard",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, SurveyOriginValidationError{
-						field:  "Wizard",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetWizard()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return SurveyOriginValidationError{
-					field:  "Wizard",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	default:
+	if _, ok := Origin_name[int32(m.GetOrigin())]; !ok {
 		err := SurveyOriginValidationError{
-			field:  "Type",
+			field:  "Origin",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetSurvey() == nil {
+		err := SurveyOriginValidationError{
+			field:  "Survey",
 			reason: "value is required",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
+	}
 
+	if all {
+		switch v := interface{}(m.GetSurvey()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SurveyOriginValidationError{
+					field:  "Survey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SurveyOriginValidationError{
+					field:  "Survey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSurvey()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SurveyOriginValidationError{
+				field:  "Survey",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {

@@ -20,14 +20,16 @@ message Survey {
   RatingOptions rating_options = 3 [ (validate.rules).message = {required : true} ];
 }
 
-message SurveyOrigin {
-  oneof type {
-    option (validate.required) = true;
+enum Origin {
+  // currently these are the supported placements for feedback
+  ORIGIN_UNSPECIFIED = 0;
+  HEADER = 1;
+  WIZARD = 2;
+}
 
-    // currently these are the supported origins for feedback
-    Survey header = 1 [ (validate.rules).message = {required : true} ];
-    Survey wizard = 2 [ (validate.rules).message = {required : true} ];
-  }
+message SurveyOrigin {
+  Origin origin = 1 [ (validate.rules).enum = {defined_only : true} ];
+  Survey survey = 2 [ (validate.rules).message = {required : true} ];
 }
 
 message Config {

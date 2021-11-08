@@ -31,8 +31,7 @@ message GetSurveysRequest {
     min_items : 1,
     items : {enum : {defined_only : true, not_in : 0}}
   } ];
-  // future: have rules on whether a user should see the feedback survey
-  string user = 2;
+  // future: add a user field if rules are implemented for whether a user should see the feedback survey
 }
 
 message RatingOptions {
@@ -50,11 +49,10 @@ message Survey {
   string freeform_prompt = 2;
   // feedback options to present to the user (i.e. "bad", "ok", "great")
   RatingOptions rating_options = 3;
-  // future: have rules on whether a user should see the feedback survey
-  bool show = 4;
 }
 
 message GetSurveysResponse {
   // the key will be the feedback origin name
   map<string, Survey> origin_survey = 1;
+  // future: add a field to indicate if a user should see the feedback survey if rules are implemented
 }

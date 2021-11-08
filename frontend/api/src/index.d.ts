@@ -7763,14 +7763,21 @@ export namespace clutch {
                         public toJSON(): { [k: string]: any };
                     }
 
+                    /** Origin enum. */
+                    enum Origin {
+                        ORIGIN_UNSPECIFIED = 0,
+                        HEADER = 1,
+                        WIZARD = 2
+                    }
+
                     /** Properties of a SurveyOrigin. */
                     interface ISurveyOrigin {
 
-                        /** SurveyOrigin header */
-                        header?: (clutch.config.module.feedback.v1.ISurvey|null);
+                        /** SurveyOrigin origin */
+                        origin?: (clutch.config.module.feedback.v1.Origin|null);
 
-                        /** SurveyOrigin wizard */
-                        wizard?: (clutch.config.module.feedback.v1.ISurvey|null);
+                        /** SurveyOrigin survey */
+                        survey?: (clutch.config.module.feedback.v1.ISurvey|null);
                     }
 
                     /** Represents a SurveyOrigin. */
@@ -7782,14 +7789,11 @@ export namespace clutch {
                          */
                         constructor(properties?: clutch.config.module.feedback.v1.ISurveyOrigin);
 
-                        /** SurveyOrigin header. */
-                        public header?: (clutch.config.module.feedback.v1.ISurvey|null);
+                        /** SurveyOrigin origin. */
+                        public origin: clutch.config.module.feedback.v1.Origin;
 
-                        /** SurveyOrigin wizard. */
-                        public wizard?: (clutch.config.module.feedback.v1.ISurvey|null);
-
-                        /** SurveyOrigin type. */
-                        public type?: ("header"|"wizard");
+                        /** SurveyOrigin survey. */
+                        public survey?: (clutch.config.module.feedback.v1.ISurvey|null);
 
                         /**
                          * Verifies a SurveyOrigin message.
@@ -12387,9 +12391,6 @@ export namespace clutch {
 
                 /** GetSurveysRequest origins */
                 origins?: (clutch.feedback.v1.Origin[]|null);
-
-                /** GetSurveysRequest user */
-                user?: (string|null);
             }
 
             /** Represents a GetSurveysRequest. */
@@ -12403,9 +12404,6 @@ export namespace clutch {
 
                 /** GetSurveysRequest origins. */
                 public origins: clutch.feedback.v1.Origin[];
-
-                /** GetSurveysRequest user. */
-                public user: string;
 
                 /**
                  * Verifies a GetSurveysRequest message.
@@ -12507,9 +12505,6 @@ export namespace clutch {
 
                 /** Survey ratingOptions */
                 ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
-
-                /** Survey show */
-                show?: (boolean|null);
             }
 
             /** Represents a Survey. */
@@ -12529,9 +12524,6 @@ export namespace clutch {
 
                 /** Survey ratingOptions. */
                 public ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
-
-                /** Survey show. */
-                public show: boolean;
 
                 /**
                  * Verifies a Survey message.
