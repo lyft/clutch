@@ -18459,14 +18459,30 @@ export const clutch = $root.clutch = (() => {
                         return Survey;
                     })();
 
+                    /**
+                     * Origin enum.
+                     * @name clutch.config.module.feedback.v1.Origin
+                     * @enum {number}
+                     * @property {number} ORIGIN_UNSPECIFIED=0 ORIGIN_UNSPECIFIED value
+                     * @property {number} HEADER=1 HEADER value
+                     * @property {number} WIZARD=2 WIZARD value
+                     */
+                    v1.Origin = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "ORIGIN_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "HEADER"] = 1;
+                        values[valuesById[2] = "WIZARD"] = 2;
+                        return values;
+                    })();
+
                     v1.SurveyOrigin = (function() {
 
                         /**
                          * Properties of a SurveyOrigin.
                          * @memberof clutch.config.module.feedback.v1
                          * @interface ISurveyOrigin
-                         * @property {clutch.config.module.feedback.v1.ISurvey|null} [header] SurveyOrigin header
-                         * @property {clutch.config.module.feedback.v1.ISurvey|null} [wizard] SurveyOrigin wizard
+                         * @property {clutch.config.module.feedback.v1.Origin|null} [origin] SurveyOrigin origin
+                         * @property {clutch.config.module.feedback.v1.ISurvey|null} [survey] SurveyOrigin survey
                          */
 
                         /**
@@ -18485,34 +18501,20 @@ export const clutch = $root.clutch = (() => {
                         }
 
                         /**
-                         * SurveyOrigin header.
-                         * @member {clutch.config.module.feedback.v1.ISurvey|null|undefined} header
+                         * SurveyOrigin origin.
+                         * @member {clutch.config.module.feedback.v1.Origin} origin
                          * @memberof clutch.config.module.feedback.v1.SurveyOrigin
                          * @instance
                          */
-                        SurveyOrigin.prototype.header = null;
+                        SurveyOrigin.prototype.origin = 0;
 
                         /**
-                         * SurveyOrigin wizard.
-                         * @member {clutch.config.module.feedback.v1.ISurvey|null|undefined} wizard
+                         * SurveyOrigin survey.
+                         * @member {clutch.config.module.feedback.v1.ISurvey|null|undefined} survey
                          * @memberof clutch.config.module.feedback.v1.SurveyOrigin
                          * @instance
                          */
-                        SurveyOrigin.prototype.wizard = null;
-
-                        // OneOf field names bound to virtual getters and setters
-                        let $oneOfFields;
-
-                        /**
-                         * SurveyOrigin type.
-                         * @member {"header"|"wizard"|undefined} type
-                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
-                         * @instance
-                         */
-                        Object.defineProperty(SurveyOrigin.prototype, "type", {
-                            get: $util.oneOfGetter($oneOfFields = ["header", "wizard"]),
-                            set: $util.oneOfSetter($oneOfFields)
-                        });
+                        SurveyOrigin.prototype.survey = null;
 
                         /**
                          * Verifies a SurveyOrigin message.
@@ -18525,24 +18527,19 @@ export const clutch = $root.clutch = (() => {
                         SurveyOrigin.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            let properties = {};
-                            if (message.header != null && message.hasOwnProperty("header")) {
-                                properties.type = 1;
-                                {
-                                    let error = $root.clutch.config.module.feedback.v1.Survey.verify(message.header);
-                                    if (error)
-                                        return "header." + error;
+                            if (message.origin != null && message.hasOwnProperty("origin"))
+                                switch (message.origin) {
+                                default:
+                                    return "origin: enum value expected";
+                                case 0:
+                                case 1:
+                                case 2:
+                                    break;
                                 }
-                            }
-                            if (message.wizard != null && message.hasOwnProperty("wizard")) {
-                                if (properties.type === 1)
-                                    return "type: multiple values";
-                                properties.type = 1;
-                                {
-                                    let error = $root.clutch.config.module.feedback.v1.Survey.verify(message.wizard);
-                                    if (error)
-                                        return "wizard." + error;
-                                }
+                            if (message.survey != null && message.hasOwnProperty("survey")) {
+                                let error = $root.clutch.config.module.feedback.v1.Survey.verify(message.survey);
+                                if (error)
+                                    return "survey." + error;
                             }
                             return null;
                         };
@@ -18559,15 +18556,24 @@ export const clutch = $root.clutch = (() => {
                             if (object instanceof $root.clutch.config.module.feedback.v1.SurveyOrigin)
                                 return object;
                             let message = new $root.clutch.config.module.feedback.v1.SurveyOrigin();
-                            if (object.header != null) {
-                                if (typeof object.header !== "object")
-                                    throw TypeError(".clutch.config.module.feedback.v1.SurveyOrigin.header: object expected");
-                                message.header = $root.clutch.config.module.feedback.v1.Survey.fromObject(object.header);
+                            switch (object.origin) {
+                            case "ORIGIN_UNSPECIFIED":
+                            case 0:
+                                message.origin = 0;
+                                break;
+                            case "HEADER":
+                            case 1:
+                                message.origin = 1;
+                                break;
+                            case "WIZARD":
+                            case 2:
+                                message.origin = 2;
+                                break;
                             }
-                            if (object.wizard != null) {
-                                if (typeof object.wizard !== "object")
-                                    throw TypeError(".clutch.config.module.feedback.v1.SurveyOrigin.wizard: object expected");
-                                message.wizard = $root.clutch.config.module.feedback.v1.Survey.fromObject(object.wizard);
+                            if (object.survey != null) {
+                                if (typeof object.survey !== "object")
+                                    throw TypeError(".clutch.config.module.feedback.v1.SurveyOrigin.survey: object expected");
+                                message.survey = $root.clutch.config.module.feedback.v1.Survey.fromObject(object.survey);
                             }
                             return message;
                         };
@@ -18585,16 +18591,14 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (message.header != null && message.hasOwnProperty("header")) {
-                                object.header = $root.clutch.config.module.feedback.v1.Survey.toObject(message.header, options);
-                                if (options.oneofs)
-                                    object.type = "header";
+                            if (options.defaults) {
+                                object.origin = options.enums === String ? "ORIGIN_UNSPECIFIED" : 0;
+                                object.survey = null;
                             }
-                            if (message.wizard != null && message.hasOwnProperty("wizard")) {
-                                object.wizard = $root.clutch.config.module.feedback.v1.Survey.toObject(message.wizard, options);
-                                if (options.oneofs)
-                                    object.type = "wizard";
-                            }
+                            if (message.origin != null && message.hasOwnProperty("origin"))
+                                object.origin = options.enums === String ? $root.clutch.config.module.feedback.v1.Origin[message.origin] : message.origin;
+                            if (message.survey != null && message.hasOwnProperty("survey"))
+                                object.survey = $root.clutch.config.module.feedback.v1.Survey.toObject(message.survey, options);
                             return object;
                         };
 
@@ -29855,7 +29859,6 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.feedback.v1
                  * @interface IGetSurveysRequest
                  * @property {Array.<clutch.feedback.v1.Origin>|null} [origins] GetSurveysRequest origins
-                 * @property {string|null} [user] GetSurveysRequest user
                  */
 
                 /**
@@ -29883,14 +29886,6 @@ export const clutch = $root.clutch = (() => {
                 GetSurveysRequest.prototype.origins = $util.emptyArray;
 
                 /**
-                 * GetSurveysRequest user.
-                 * @member {string} user
-                 * @memberof clutch.feedback.v1.GetSurveysRequest
-                 * @instance
-                 */
-                GetSurveysRequest.prototype.user = "";
-
-                /**
                  * Verifies a GetSurveysRequest message.
                  * @function verify
                  * @memberof clutch.feedback.v1.GetSurveysRequest
@@ -29914,9 +29909,6 @@ export const clutch = $root.clutch = (() => {
                                 break;
                             }
                     }
-                    if (message.user != null && message.hasOwnProperty("user"))
-                        if (!$util.isString(message.user))
-                            return "user: string expected";
                     return null;
                 };
 
@@ -29953,8 +29945,6 @@ export const clutch = $root.clutch = (() => {
                                 break;
                             }
                     }
-                    if (object.user != null)
-                        message.user = String(object.user);
                     return message;
                 };
 
@@ -29973,15 +29963,11 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.arrays || options.defaults)
                         object.origins = [];
-                    if (options.defaults)
-                        object.user = "";
                     if (message.origins && message.origins.length) {
                         object.origins = [];
                         for (let j = 0; j < message.origins.length; ++j)
                             object.origins[j] = options.enums === String ? $root.clutch.feedback.v1.Origin[message.origins[j]] : message.origins[j];
                     }
-                    if (message.user != null && message.hasOwnProperty("user"))
-                        object.user = message.user;
                     return object;
                 };
 
@@ -30143,7 +30129,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [prompt] Survey prompt
                  * @property {string|null} [freeformPrompt] Survey freeformPrompt
                  * @property {clutch.feedback.v1.IRatingOptions|null} [ratingOptions] Survey ratingOptions
-                 * @property {boolean|null} [show] Survey show
                  */
 
                 /**
@@ -30186,14 +30171,6 @@ export const clutch = $root.clutch = (() => {
                 Survey.prototype.ratingOptions = null;
 
                 /**
-                 * Survey show.
-                 * @member {boolean} show
-                 * @memberof clutch.feedback.v1.Survey
-                 * @instance
-                 */
-                Survey.prototype.show = false;
-
-                /**
                  * Verifies a Survey message.
                  * @function verify
                  * @memberof clutch.feedback.v1.Survey
@@ -30215,9 +30192,6 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "ratingOptions." + error;
                     }
-                    if (message.show != null && message.hasOwnProperty("show"))
-                        if (typeof message.show !== "boolean")
-                            return "show: boolean expected";
                     return null;
                 };
 
@@ -30242,8 +30216,6 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.feedback.v1.Survey.ratingOptions: object expected");
                         message.ratingOptions = $root.clutch.feedback.v1.RatingOptions.fromObject(object.ratingOptions);
                     }
-                    if (object.show != null)
-                        message.show = Boolean(object.show);
                     return message;
                 };
 
@@ -30264,7 +30236,6 @@ export const clutch = $root.clutch = (() => {
                         object.prompt = "";
                         object.freeformPrompt = "";
                         object.ratingOptions = null;
-                        object.show = false;
                     }
                     if (message.prompt != null && message.hasOwnProperty("prompt"))
                         object.prompt = message.prompt;
@@ -30272,8 +30243,6 @@ export const clutch = $root.clutch = (() => {
                         object.freeformPrompt = message.freeformPrompt;
                     if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions"))
                         object.ratingOptions = $root.clutch.feedback.v1.RatingOptions.toObject(message.ratingOptions, options);
-                    if (message.show != null && message.hasOwnProperty("show"))
-                        object.show = message.show;
                     return object;
                 };
 
