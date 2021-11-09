@@ -129,7 +129,6 @@ func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, d
 				return err
 			}
 
-			// Is there a cleaner way of doing this?
 			regionCfg.Credentials = credsCache
 
 			if _, ok := c.accounts[account.Alias]; !ok {

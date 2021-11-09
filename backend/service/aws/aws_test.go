@@ -92,6 +92,32 @@ func TestRegions(t *testing.T) {
 	assert.ElementsMatch(t, regions, []string{"us-east-1", "us-west-2", "us-north-5"})
 }
 
+func TestDuplicateRegions(t *testing.T) {
+	c := &client{
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1":  nil,
+					"us-west-2":  nil,
+					"us-north-5": nil,
+				},
+			},
+			"staging": {
+				clients: map[string]*regionalClient{
+					"us-east-1":  nil,
+					"us-west-2":  nil,
+					"us-north-1": nil,
+					"us-north-5": nil,
+				},
+			},
+		},
+	}
+
+	regions := c.Regions()
+	assert.ElementsMatch(t, regions, []string{"us-east-1", "us-west-2", "us-north-1", "us-north-5"})
+}
+
 func TestMissingRegionOnEachServiceCall(t *testing.T) {
 	c := &client{
 		currentAccountAlias: "default",
