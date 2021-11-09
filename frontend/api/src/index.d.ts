@@ -9065,8 +9065,8 @@ export namespace clutch {
                         /** Config dynamodbConfig */
                         dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
 
-                        /** Config accountAlias */
-                        accountAlias?: (string|null);
+                        /** Config primaryAccountAlias */
+                        primaryAccountAlias?: (string|null);
 
                         /** Config additionalAccounts */
                         additionalAccounts?: (clutch.config.service.aws.v1.IAWSAccount[]|null);
@@ -9090,8 +9090,8 @@ export namespace clutch {
                         /** Config dynamodbConfig. */
                         public dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
 
-                        /** Config accountAlias. */
-                        public accountAlias: string;
+                        /** Config primaryAccountAlias. */
+                        public primaryAccountAlias: string;
 
                         /** Config additionalAccounts. */
                         public additionalAccounts: clutch.config.service.aws.v1.IAWSAccount[];
