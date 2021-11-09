@@ -79,7 +79,7 @@ func TestIAMSimulateCustomPolicyErrorHandling(t *testing.T) {
 	assert.Error(t, err1)
 
 	// Test unknown region
-	output2, err2 := c.SimulateCustomPolicy(context.Background(), "us-east-1", simulationInput)
+	output2, err2 := c.SimulateCustomPolicy(context.Background(), "invalid-region-1", simulationInput)
 	assert.Nil(t, output2)
 	assert.Error(t, err2)
 }
