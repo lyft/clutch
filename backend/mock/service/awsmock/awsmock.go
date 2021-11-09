@@ -7,6 +7,7 @@ import (
 	"math/rand"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go/middleware"
@@ -175,6 +176,11 @@ func (s *svc) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCal
 		Arn:     aws.String("arn:aws:sts::000000000000:fake-role"),
 		UserId:  aws.String("some_special_id"),
 	}, nil
+}
+
+// TODO
+func (s *svc) SimulateCustomPolicy(ctx context.Context, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error) {
+	panic("implement me")
 }
 
 func New() clutchawsclient.Client {
