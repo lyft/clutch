@@ -52,8 +52,6 @@ const Landing: React.FC<{}> = () => {
   const { workflows } = useAppContext();
   const trendingWorkflows = workflowsByTrending(workflows);
 
-  console.log("My workflows", workflows);
-
   const navigateTo = (path: string) => {
     navigate(path);
   };
