@@ -10,6 +10,20 @@ message Config {
   repeated string regions = 1 [ (validate.rules).repeated = {min_items : 1} ];
   ClientConfig client_config = 2;
   DynamodbConfig dynamodb_config = 3;
+
+  // The current account alias display name, if this is not set the default will be "default"
+  // The account alias display name will be used when resolving resources.
+  // EG: if this is set to "production" a resource would be referenced like so
+  // "production/us-east-1/my-asg"
+  string primary_account_alias_display_name = 4;
+
+  // If you are using an aws configuration file, this overrides the default profile that is loaded.
+  // TODO: This is currently not implemented, but was created to prevent confusion between
+  // primary_account_alias_display_name
+  string aws_config_profile_name = 5;
+
+  // A list of additional accounts you would like clutch to be able to operate in
+  repeated AWSAccount additional_accounts = 6;
 }
 
 message ClientConfig {
@@ -31,4 +45,17 @@ message ScalingLimits {
   float max_scale_factor = 3;
   // enables whether the service can override safety limits. Defaults to false
   bool enable_override = 4;
+}
+
+message AWSAccount {
+  // The account alias for this account
+  string alias = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  // The account number for the aws account
+  string account_number = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  // The IAM role to use when performing operations against this account
+  // NOTE: The role that Clutch assumes by default must have proper permissions
+  // to assume the role below
+  string iam_role = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  // The list of regions you would like to operate in
+  repeated string regions = 4 [ (validate.rules).repeated = {min_items : 1} ];
 }
