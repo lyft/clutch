@@ -245,7 +245,7 @@ const TextField = ({
             helpText = err;
           });
       }
-    }, 500)
+    }, 250)
   ).current;
   if (autocompleteCallback !== undefined) {
     // TODO (mcutalo): support option.label in the renderOption
