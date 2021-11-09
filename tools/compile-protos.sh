@@ -115,13 +115,13 @@ main() {
         if ! output=$("${PROTOC_BIN}" \
           -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
           -I"${googleapis_include_path}" -I"${pg_validate_include_path}" \
-          --buf-lint_out=. \
-          "--buf-lint_opt={\"input_config\": ${buf_lint_config}}" \
-          --plugin=protoc-gen-buf-lint="${GOBIN}/protoc-gen-buf-lint" \
+          --buf-check-lint_out=. \
+          "--buf-check-lint_opt={\"input_config\": ${buf_lint_config}}" \
+          --plugin=protoc-gen-buf-check-lint="${GOBIN}/protoc-gen-buf-check-lint" \
           "${proto}" 2>&1)
         then
           echo "--- ${proto}"
-          echo "${output}" | sed 's/--buf-lint_out: //' | cut -d":" -f2-
+          echo "${output}" | sed 's/--buf-check-lint_out: //' | cut -d":" -f2-
           LINT_OK=false
         fi
       done
@@ -296,7 +296,7 @@ install_protoc() {
   export PROTOC_INCLUDE_DIR="${GOBIN}/protoc-v${PROTOC_RELEASE}-include"
 
   go install \
-    github.com/bufbuild/buf/cmd/protoc-gen-buf-lint \
+    github.com/bufbuild/buf/cmd/protoc-gen-buf-check-lint \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
     github.com/envoyproxy/protoc-gen-validate \
