@@ -32,7 +32,7 @@ type Config struct {
 	// The current account alias display name, if this is not set the default will be "default"
 	// The account alias display name will be used when resolving resources.
 	// EG: if this is set to "production" a resource would be referenced like so
-	// "production/us-east-1/my-asg"s
+	// "production/us-east-1/my-asg"
 	PrimaryAccountAliasDisplayName string `protobuf:"bytes,4,opt,name=primary_account_alias_display_name,json=primaryAccountAliasDisplayName,proto3" json:"primary_account_alias_display_name,omitempty"`
 	// If you are using an aws configuration file, this overrides the default profile that is loaded.
 	// TODO: This is currently not implemented, but was created to prevent confusion between

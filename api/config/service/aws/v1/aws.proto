@@ -14,7 +14,7 @@ message Config {
   // The current account alias display name, if this is not set the default will be "default"
   // The account alias display name will be used when resolving resources.
   // EG: if this is set to "production" a resource would be referenced like so
-  // "production/us-east-1/my-asg"s
+  // "production/us-east-1/my-asg"
   string primary_account_alias_display_name = 4;
 
   // If you are using an aws configuration file, this overrides the default profile that is loaded.
