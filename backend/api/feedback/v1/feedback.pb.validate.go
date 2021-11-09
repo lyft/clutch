@@ -586,10 +586,21 @@ func (m *FeedbackMetadata) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetOrigin()) < 1 {
+	if _, ok := _FeedbackMetadata_Origin_NotInLookup[m.GetOrigin()]; ok {
 		err := FeedbackMetadataValidationError{
 			field:  "Origin",
-			reason: "value length must be at least 1 bytes",
+			reason: "value must not be in list [0]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := Origin_name[int32(m.GetOrigin())]; !ok {
+		err := FeedbackMetadataValidationError{
+			field:  "Origin",
+			reason: "value must be one of the defined enum values",
 		}
 		if !all {
 			return err
@@ -715,6 +726,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = FeedbackMetadataValidationError{}
+
+var _FeedbackMetadata_Origin_NotInLookup = map[Origin]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on Feedback with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

@@ -30450,7 +30450,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a FeedbackMetadata.
                  * @memberof clutch.feedback.v1
                  * @interface IFeedbackMetadata
-                 * @property {string|null} [origin] FeedbackMetadata origin
+                 * @property {clutch.feedback.v1.Origin|null} [origin] FeedbackMetadata origin
                  * @property {clutch.feedback.v1.ISurvey|null} [survey] FeedbackMetadata survey
                  * @property {boolean|null} [userSubmitted] FeedbackMetadata userSubmitted
                  */
@@ -30472,11 +30472,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * FeedbackMetadata origin.
-                 * @member {string} origin
+                 * @member {clutch.feedback.v1.Origin} origin
                  * @memberof clutch.feedback.v1.FeedbackMetadata
                  * @instance
                  */
-                FeedbackMetadata.prototype.origin = "";
+                FeedbackMetadata.prototype.origin = 0;
 
                 /**
                  * FeedbackMetadata survey.
@@ -30506,8 +30506,14 @@ export const clutch = $root.clutch = (() => {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.origin != null && message.hasOwnProperty("origin"))
-                        if (!$util.isString(message.origin))
-                            return "origin: string expected";
+                        switch (message.origin) {
+                        default:
+                            return "origin: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
                     if (message.survey != null && message.hasOwnProperty("survey")) {
                         let error = $root.clutch.feedback.v1.Survey.verify(message.survey);
                         if (error)
@@ -30531,8 +30537,20 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.feedback.v1.FeedbackMetadata)
                         return object;
                     let message = new $root.clutch.feedback.v1.FeedbackMetadata();
-                    if (object.origin != null)
-                        message.origin = String(object.origin);
+                    switch (object.origin) {
+                    case "ORIGIN_UNSPECIFIED":
+                    case 0:
+                        message.origin = 0;
+                        break;
+                    case "HEADER":
+                    case 1:
+                        message.origin = 1;
+                        break;
+                    case "WIZARD":
+                    case 2:
+                        message.origin = 2;
+                        break;
+                    }
                     if (object.survey != null) {
                         if (typeof object.survey !== "object")
                             throw TypeError(".clutch.feedback.v1.FeedbackMetadata.survey: object expected");
@@ -30557,12 +30575,12 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.origin = "";
+                        object.origin = options.enums === String ? "ORIGIN_UNSPECIFIED" : 0;
                         object.survey = null;
                         object.userSubmitted = false;
                     }
                     if (message.origin != null && message.hasOwnProperty("origin"))
-                        object.origin = message.origin;
+                        object.origin = options.enums === String ? $root.clutch.feedback.v1.Origin[message.origin] : message.origin;
                     if (message.survey != null && message.hasOwnProperty("survey"))
                         object.survey = $root.clutch.feedback.v1.Survey.toObject(message.survey, options);
                     if (message.userSubmitted != null && message.hasOwnProperty("userSubmitted"))

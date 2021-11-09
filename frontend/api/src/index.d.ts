@@ -12635,7 +12635,7 @@ export namespace clutch {
             interface IFeedbackMetadata {
 
                 /** FeedbackMetadata origin */
-                origin?: (string|null);
+                origin?: (clutch.feedback.v1.Origin|null);
 
                 /** FeedbackMetadata survey */
                 survey?: (clutch.feedback.v1.ISurvey|null);
@@ -12654,7 +12654,7 @@ export namespace clutch {
                 constructor(properties?: clutch.feedback.v1.IFeedbackMetadata);
 
                 /** FeedbackMetadata origin. */
-                public origin: string;
+                public origin: clutch.feedback.v1.Origin;
 
                 /** FeedbackMetadata survey. */
                 public survey?: (clutch.feedback.v1.ISurvey|null);

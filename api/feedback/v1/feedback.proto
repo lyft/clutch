@@ -69,7 +69,7 @@ message GetSurveysResponse {
 
 message FeedbackMetadata {
   // extra info on the feedback (i.e. the survey question, the rating options, the feedback origin, etc.)
-  string origin = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  Origin origin = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
   Survey survey = 2 [ (validate.rules).message = {required : true} ];
   // TODO: remove if we decide to record feedback only when a user clicks the submit button
   bool user_submitted = 3;
