@@ -20,7 +20,7 @@ message Config {
   // If you are using an aws configuration file, this overrides the default profile that is loaded.
   // TODO: This is currently not implemented, but was created to prevent confusion between
   // primary_account_alias_display_name
-  string use_account_profile_from_aws_config = 5;
+  string aws_config_profile_name = 5;
 
   // A list of additional accounts you would like clutch to be able to operate in
   repeated AWSAccount additional_accounts = 6;

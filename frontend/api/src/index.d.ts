@@ -8996,8 +8996,8 @@ export namespace clutch {
                         /** Config primaryAccountAliasDisplayName */
                         primaryAccountAliasDisplayName?: (string|null);
 
-                        /** Config useAccountProfileFromAwsConfig */
-                        useAccountProfileFromAwsConfig?: (string|null);
+                        /** Config awsConfigProfileName */
+                        awsConfigProfileName?: (string|null);
 
                         /** Config additionalAccounts */
                         additionalAccounts?: (clutch.config.service.aws.v1.IAWSAccount[]|null);
@@ -9024,8 +9024,8 @@ export namespace clutch {
                         /** Config primaryAccountAliasDisplayName. */
                         public primaryAccountAliasDisplayName: string;
 
-                        /** Config useAccountProfileFromAwsConfig. */
-                        public useAccountProfileFromAwsConfig: string;
+                        /** Config awsConfigProfileName. */
+                        public awsConfigProfileName: string;
 
                         /** Config additionalAccounts. */
                         public additionalAccounts: clutch.config.service.aws.v1.IAWSAccount[];
