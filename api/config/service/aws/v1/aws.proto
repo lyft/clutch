@@ -12,7 +12,7 @@ message Config {
   DynamodbConfig dynamodb_config = 3;
 
   // The current account alias, if this is not set the default will be "default"
-  string account_alias = 4;
+  string primary_account_alias = 4;
   // A list of additional accounts you would like clutch to be able to operate in
   repeated AWSAccount additional_accounts = 5;
 }
