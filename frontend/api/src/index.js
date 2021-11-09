@@ -21658,7 +21658,8 @@ export const clutch = $root.clutch = (() => {
                          * @property {Array.<string>|null} [regions] Config regions
                          * @property {clutch.config.service.aws.v1.IClientConfig|null} [clientConfig] Config clientConfig
                          * @property {clutch.config.service.aws.v1.IDynamodbConfig|null} [dynamodbConfig] Config dynamodbConfig
-                         * @property {string|null} [primaryAccountAlias] Config primaryAccountAlias
+                         * @property {string|null} [primaryAccountAliasDisplayName] Config primaryAccountAliasDisplayName
+                         * @property {string|null} [useAccountProfileFromAwsConfig] Config useAccountProfileFromAwsConfig
                          * @property {Array.<clutch.config.service.aws.v1.IAWSAccount>|null} [additionalAccounts] Config additionalAccounts
                          */
 
@@ -21704,12 +21705,20 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.dynamodbConfig = null;
 
                         /**
-                         * Config primaryAccountAlias.
-                         * @member {string} primaryAccountAlias
+                         * Config primaryAccountAliasDisplayName.
+                         * @member {string} primaryAccountAliasDisplayName
                          * @memberof clutch.config.service.aws.v1.Config
                          * @instance
                          */
-                        Config.prototype.primaryAccountAlias = "";
+                        Config.prototype.primaryAccountAliasDisplayName = "";
+
+                        /**
+                         * Config useAccountProfileFromAwsConfig.
+                         * @member {string} useAccountProfileFromAwsConfig
+                         * @memberof clutch.config.service.aws.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.useAccountProfileFromAwsConfig = "";
 
                         /**
                          * Config additionalAccounts.
@@ -21747,9 +21756,12 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "dynamodbConfig." + error;
                             }
-                            if (message.primaryAccountAlias != null && message.hasOwnProperty("primaryAccountAlias"))
-                                if (!$util.isString(message.primaryAccountAlias))
-                                    return "primaryAccountAlias: string expected";
+                            if (message.primaryAccountAliasDisplayName != null && message.hasOwnProperty("primaryAccountAliasDisplayName"))
+                                if (!$util.isString(message.primaryAccountAliasDisplayName))
+                                    return "primaryAccountAliasDisplayName: string expected";
+                            if (message.useAccountProfileFromAwsConfig != null && message.hasOwnProperty("useAccountProfileFromAwsConfig"))
+                                if (!$util.isString(message.useAccountProfileFromAwsConfig))
+                                    return "useAccountProfileFromAwsConfig: string expected";
                             if (message.additionalAccounts != null && message.hasOwnProperty("additionalAccounts")) {
                                 if (!Array.isArray(message.additionalAccounts))
                                     return "additionalAccounts: array expected";
@@ -21791,8 +21803,10 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.aws.v1.Config.dynamodbConfig: object expected");
                                 message.dynamodbConfig = $root.clutch.config.service.aws.v1.DynamodbConfig.fromObject(object.dynamodbConfig);
                             }
-                            if (object.primaryAccountAlias != null)
-                                message.primaryAccountAlias = String(object.primaryAccountAlias);
+                            if (object.primaryAccountAliasDisplayName != null)
+                                message.primaryAccountAliasDisplayName = String(object.primaryAccountAliasDisplayName);
+                            if (object.useAccountProfileFromAwsConfig != null)
+                                message.useAccountProfileFromAwsConfig = String(object.useAccountProfileFromAwsConfig);
                             if (object.additionalAccounts) {
                                 if (!Array.isArray(object.additionalAccounts))
                                     throw TypeError(".clutch.config.service.aws.v1.Config.additionalAccounts: array expected");
@@ -21826,7 +21840,8 @@ export const clutch = $root.clutch = (() => {
                             if (options.defaults) {
                                 object.clientConfig = null;
                                 object.dynamodbConfig = null;
-                                object.primaryAccountAlias = "";
+                                object.primaryAccountAliasDisplayName = "";
+                                object.useAccountProfileFromAwsConfig = "";
                             }
                             if (message.regions && message.regions.length) {
                                 object.regions = [];
@@ -21837,8 +21852,10 @@ export const clutch = $root.clutch = (() => {
                                 object.clientConfig = $root.clutch.config.service.aws.v1.ClientConfig.toObject(message.clientConfig, options);
                             if (message.dynamodbConfig != null && message.hasOwnProperty("dynamodbConfig"))
                                 object.dynamodbConfig = $root.clutch.config.service.aws.v1.DynamodbConfig.toObject(message.dynamodbConfig, options);
-                            if (message.primaryAccountAlias != null && message.hasOwnProperty("primaryAccountAlias"))
-                                object.primaryAccountAlias = message.primaryAccountAlias;
+                            if (message.primaryAccountAliasDisplayName != null && message.hasOwnProperty("primaryAccountAliasDisplayName"))
+                                object.primaryAccountAliasDisplayName = message.primaryAccountAliasDisplayName;
+                            if (message.useAccountProfileFromAwsConfig != null && message.hasOwnProperty("useAccountProfileFromAwsConfig"))
+                                object.useAccountProfileFromAwsConfig = message.useAccountProfileFromAwsConfig;
                             if (message.additionalAccounts && message.additionalAccounts.length) {
                                 object.additionalAccounts = [];
                                 for (let j = 0; j < message.additionalAccounts.length; ++j)
