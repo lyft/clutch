@@ -40,18 +40,6 @@ import (
 	"github.com/lyft/clutch/backend/service"
 )
 
-// Only need to set the default account once
-// i dont think i really wanna be smart about it, will let the user config it
-// this causes lots of problmes for tests as we need to mock this response
-// if c.currentAccountAlias == "" {
-// 	tmpCfg := iam.NewFromConfig(regionCfg)
-// 	accountAlias, err := tmpCfg.ListAccountAliases(context.Background(), &iam.ListAccountAliasesInput{})
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	c.currentAccountAlias = accountAlias.AccountAliases[0]
-// }
-
 const (
 	Name = "clutch.service.aws"
 )
@@ -63,8 +51,8 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		return nil, err
 	}
 
-	accountAlias := ac.AccountAlias
-	if ac.AccountAlias == "" {
+	accountAlias := ac.PrimaryAccountAliasDisplayName
+	if ac.PrimaryAccountAliasDisplayName == "" {
 		accountAlias = "default"
 	}
 
@@ -108,41 +96,18 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 			}
 		}
 
-		c.accounts[c.currentAccountAlias].clients[region] = &regionalClient{
-			region: region,
-			dynamodbCfg: &awsv1.DynamodbConfig{
-				ScalingLimits: &awsv1.ScalingLimits{
-					MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
-					MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
-					MaxScaleFactor:        ds.MaxScaleFactor,
-					EnableOverride:        ds.EnableOverride,
-				},
-			},
-
-			s3:          s3.NewFromConfig(regionCfg),
-			kinesis:     kinesis.NewFromConfig(regionCfg),
-			ec2:         ec2.NewFromConfig(regionCfg),
-			autoscaling: autoscaling.NewFromConfig(regionCfg),
-			dynamodb:    dynamodb.NewFromConfig(regionCfg),
-			sts:         sts.NewFromConfig(regionCfg),
-			iam:         iam.NewFromConfig(regionCfg),
-		}
+		c.createRegionalClients(c.currentAccountAlias, region, ds, regionCfg)
 	}
 
-	if err := c.configureAdditonalAccountClient(ac.AdditionalAccounts, ac); err != nil {
+	if err := c.configureAdditonalAccountClient(ac.AdditionalAccounts, ds, awsHTTPClient); err != nil {
 		return nil, err
 	}
 
 	return c, nil
 }
 
-func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, ac *awsv1.Config) error {
-	ds := getScalingLimits(ac)
-	awsHTTPClient := &http.Client{}
-
+func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, ds *awsv1.ScalingLimits, awsHTTPClient *http.Client) error {
 	for _, account := range accounts {
-		// Create stscred client for this account and share it with all regions?
-		// "arn:aws:iam::277829364062:role/sudo-developer"
 		accountRoleARN := fmt.Sprintf("arn:aws:iam::%s:role/%s", account.AccountNumber, account.IamRole)
 		stsClient := c.accounts[c.currentAccountAlias].clients[c.accounts[c.currentAccountAlias].regions[0]].sts
 		assumeRoleProvider := stscreds.NewAssumeRoleProvider(stsClient, accountRoleARN)
@@ -152,10 +117,6 @@ func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, a
 			regionCfg, err := config.LoadDefaultConfig(context.TODO(),
 				config.WithHTTPClient(awsHTTPClient),
 				config.WithRegion(region),
-				config.WithAssumeRoleCredentialOptions(func(aro *stscreds.AssumeRoleOptions) {
-					// Is this even necessary?
-					aro.RoleARN = accountRoleARN
-				}),
 				config.WithRetryer(func() aws.Retryer {
 					customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
 						so.MaxAttempts = 10
@@ -180,29 +141,33 @@ func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, a
 				}
 			}
 
-			c.accounts[account.Alias].clients[region] = &regionalClient{
-				region: region,
-				dynamodbCfg: &awsv1.DynamodbConfig{
-					ScalingLimits: &awsv1.ScalingLimits{
-						MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
-						MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
-						MaxScaleFactor:        ds.MaxScaleFactor,
-						EnableOverride:        ds.EnableOverride,
-					},
-				},
-
-				s3:          s3.NewFromConfig(regionCfg),
-				kinesis:     kinesis.NewFromConfig(regionCfg),
-				ec2:         ec2.NewFromConfig(regionCfg),
-				autoscaling: autoscaling.NewFromConfig(regionCfg),
-				dynamodb:    dynamodb.NewFromConfig(regionCfg),
-				sts:         sts.NewFromConfig(regionCfg),
-				iam:         iam.NewFromConfig(regionCfg),
-			}
+			c.createRegionalClients(c.currentAccountAlias, region, ds, regionCfg)
 		}
 	}
 
 	return nil
+}
+
+func (c *client) createRegionalClients(account, region string, ds *awsv1.ScalingLimits, regionCfg aws.Config) {
+	c.accounts[account].clients[region] = &regionalClient{
+		region: region,
+		dynamodbCfg: &awsv1.DynamodbConfig{
+			ScalingLimits: &awsv1.ScalingLimits{
+				MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+				MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+				MaxScaleFactor:        ds.MaxScaleFactor,
+				EnableOverride:        ds.EnableOverride,
+			},
+		},
+
+		s3:          s3.NewFromConfig(regionCfg),
+		kinesis:     kinesis.NewFromConfig(regionCfg),
+		ec2:         ec2.NewFromConfig(regionCfg),
+		autoscaling: autoscaling.NewFromConfig(regionCfg),
+		dynamodb:    dynamodb.NewFromConfig(regionCfg),
+		sts:         sts.NewFromConfig(regionCfg),
+		iam:         iam.NewFromConfig(regionCfg),
+	}
 }
 
 type Client interface {

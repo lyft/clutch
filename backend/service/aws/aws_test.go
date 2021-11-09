@@ -28,8 +28,8 @@ func TestNew(t *testing.T) {
 	regions := []string{"us-east-1", "us-west-2"}
 
 	cfg, _ := anypb.New(&awsv1.Config{
-		Regions:      regions,
-		AccountAlias: "default",
+		Regions:                        regions,
+		PrimaryAccountAliasDisplayName: "default",
 		ClientConfig: &awsv1.ClientConfig{
 			Retries: 10,
 		},

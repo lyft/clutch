@@ -125,7 +125,9 @@ func (m *Config) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for PrimaryAccountAlias
+	// no validation rules for PrimaryAccountAliasDisplayName
+
+	// no validation rules for UseAccountProfileFromAwsConfig
 
 	for idx, item := range m.GetAdditionalAccounts() {
 		_, _ = idx, item
