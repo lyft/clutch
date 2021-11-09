@@ -19,7 +19,14 @@ func TestSTSGetCallerIdentity(t *testing.T) {
 		},
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", sts: stsClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", sts: stsClient},
+				},
+			},
+		},
 	}
 
 	output, err := c.GetCallerIdentity(context.Background(), "us-east-1")
@@ -36,7 +43,14 @@ func TestSTSGetCallerIdentityErrorHandling(t *testing.T) {
 		getIdentityErr: fmt.Errorf("error"),
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", sts: stsClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", sts: stsClient},
+				},
+			},
+		},
 	}
 
 	output1, err1 := c.GetCallerIdentity(context.Background(), "us-east-1")

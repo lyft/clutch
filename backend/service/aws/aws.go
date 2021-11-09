@@ -6,6 +6,7 @@ package aws
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -13,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -48,12 +50,18 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		return nil, err
 	}
 
+	accountAlias := ac.PrimaryAccountAliasDisplayName
+	if ac.PrimaryAccountAliasDisplayName == "" {
+		accountAlias = "default"
+	}
+
 	c := &client{
-		clients:            make(map[string]*regionalClient, len(ac.Regions)),
-		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
-		topologyLock:       semaphore.NewWeighted(1),
-		log:                logger,
-		scope:              scope,
+		accounts:            make(map[string]*accountClients),
+		topologyObjectChan:  make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
+		topologyLock:        semaphore.NewWeighted(1),
+		currentAccountAlias: accountAlias,
+		log:                 logger,
+		scope:               scope,
 	}
 
 	clientRetries := 0
@@ -62,7 +70,6 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 	}
 
 	ds := getScalingLimits(ac)
-
 	awsHTTPClient := &http.Client{}
 
 	for _, region := range ac.Regions {
@@ -80,27 +87,87 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 			return nil, err
 		}
 
-		c.clients[region] = &regionalClient{
-			region: region,
-			dynamodbCfg: &awsv1.DynamodbConfig{
-				ScalingLimits: &awsv1.ScalingLimits{
-					MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
-					MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
-					MaxScaleFactor:        ds.MaxScaleFactor,
-					EnableOverride:        ds.EnableOverride,
-				},
-			},
-
-			s3:          s3.NewFromConfig(regionCfg),
-			kinesis:     kinesis.NewFromConfig(regionCfg),
-			ec2:         ec2.NewFromConfig(regionCfg),
-			autoscaling: autoscaling.NewFromConfig(regionCfg),
-			dynamodb:    dynamodb.NewFromConfig(regionCfg),
-			sts:         sts.NewFromConfig(regionCfg),
+		if _, ok := c.accounts[c.currentAccountAlias]; !ok {
+			c.accounts[c.currentAccountAlias] = &accountClients{
+				alias:   accountAlias,
+				regions: ac.Regions,
+				clients: map[string]*regionalClient{},
+			}
 		}
+
+		c.createRegionalClients(c.currentAccountAlias, region, ds, regionCfg)
+	}
+
+	if err := c.configureAdditonalAccountClient(ac.AdditionalAccounts, ds, awsHTTPClient); err != nil {
+		return nil, err
 	}
 
 	return c, nil
+}
+
+func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, ds *awsv1.ScalingLimits, awsHTTPClient *http.Client) error {
+	for _, account := range accounts {
+		accountRoleARN := fmt.Sprintf("arn:aws:iam::%s:role/%s", account.AccountNumber, account.IamRole)
+		// For doing STS calls it does not matter which region client we are using, as they are not bounded by region
+		// we choose just the first region client
+		stsClient := c.accounts[c.currentAccountAlias].clients[c.accounts[c.currentAccountAlias].regions[0]].sts
+		assumeRoleProvider := stscreds.NewAssumeRoleProvider(stsClient, accountRoleARN)
+		credsCache := aws.NewCredentialsCache(assumeRoleProvider)
+
+		for _, region := range account.Regions {
+			regionCfg, err := config.LoadDefaultConfig(context.TODO(),
+				config.WithHTTPClient(awsHTTPClient),
+				config.WithRegion(region),
+				config.WithRetryer(func() aws.Retryer {
+					customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
+						so.MaxAttempts = 10
+					})
+					return customRetryer
+				}),
+			)
+			if err != nil {
+				return err
+			}
+
+			// Is there a cleaner way of doing this?
+			regionCfg.Credentials = credsCache
+
+			if _, ok := c.accounts[account.Alias]; !ok {
+				c.accounts[account.Alias] = &accountClients{
+					accountNumber: account.AccountNumber,
+					alias:         account.Alias,
+					clients:       map[string]*regionalClient{},
+					iamRoleARN:    account.IamRole,
+					regions:       account.Regions,
+				}
+			}
+
+			c.createRegionalClients(c.currentAccountAlias, region, ds, regionCfg)
+		}
+	}
+
+	return nil
+}
+
+func (c *client) createRegionalClients(account, region string, ds *awsv1.ScalingLimits, regionCfg aws.Config) {
+	c.accounts[account].clients[region] = &regionalClient{
+		region: region,
+		dynamodbCfg: &awsv1.DynamodbConfig{
+			ScalingLimits: &awsv1.ScalingLimits{
+				MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
+				MaxWriteCapacityUnits: ds.MaxWriteCapacityUnits,
+				MaxScaleFactor:        ds.MaxScaleFactor,
+				EnableOverride:        ds.EnableOverride,
+			},
+		},
+
+		s3:          s3.NewFromConfig(regionCfg),
+		kinesis:     kinesis.NewFromConfig(regionCfg),
+		ec2:         ec2.NewFromConfig(regionCfg),
+		autoscaling: autoscaling.NewFromConfig(regionCfg),
+		dynamodb:    dynamodb.NewFromConfig(regionCfg),
+		sts:         sts.NewFromConfig(regionCfg),
+	}
 }
 
 type Client interface {
@@ -126,11 +193,12 @@ type Client interface {
 }
 
 type client struct {
-	clients            map[string]*regionalClient
-	topologyObjectChan chan *topologyv1.UpdateCacheRequest
-	topologyLock       *semaphore.Weighted
-	log                *zap.Logger
-	scope              tally.Scope
+	accounts            map[string]*accountClients
+	topologyObjectChan  chan *topologyv1.UpdateCacheRequest
+	topologyLock        *semaphore.Weighted
+	currentAccountAlias string
+	log                 *zap.Logger
+	scope               tally.Scope
 }
 
 type regionalClient struct {
@@ -146,13 +214,25 @@ type regionalClient struct {
 	sts         stsClient
 }
 
+type accountClients struct {
+	alias         string
+	accountNumber string
+	iamRoleARN    string
+	regions       []string
+
+	clients map[string]*regionalClient
+}
+
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
 func (c *client) InterceptError(e error) error {
 	return ConvertError(e)
 }
 
 func (c *client) getRegionalClient(region string) (*regionalClient, error) {
-	rc, ok := c.clients[region]
+	// TODO (mcutalo): this currently defaults to the current account alias
+	// this will be removed once the multi account bits land
+	// the func signature will also have to be updated to pass in desired account info
+	rc, ok := c.accounts[c.currentAccountAlias].clients[region]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "no client found for region '%s'", region)
 	}
@@ -262,10 +342,21 @@ func newProtoForAutoscalingGroup(group astypes.AutoScalingGroup) *ec2v1.Autoscal
 }
 
 func (c *client) Regions() []string {
-	regions := make([]string, 0, len(c.clients))
-	for region := range c.clients {
-		regions = append(regions, region)
+	uniqueRegions := map[string]bool{}
+
+	for _, account := range c.accounts {
+		for region := range account.clients {
+			uniqueRegions[region] = true
+		}
 	}
+
+	regions := make([]string, len(uniqueRegions))
+	i := 0
+	for region := range uniqueRegions {
+		regions[i] = region
+		i++
+	}
+
 	return regions
 }
 

@@ -28,7 +28,8 @@ func TestNew(t *testing.T) {
 	regions := []string{"us-east-1", "us-west-2"}
 
 	cfg, _ := anypb.New(&awsv1.Config{
-		Regions: regions,
+		Regions:                        regions,
+		PrimaryAccountAliasDisplayName: "default",
 		ClientConfig: &awsv1.ClientConfig{
 			Retries: 10,
 		},
@@ -57,9 +58,10 @@ func TestNew(t *testing.T) {
 	assert.NotNil(t, c.log)
 	assert.NotNil(t, c.scope)
 
-	assert.Len(t, c.clients, len(regions))
+	assert.Len(t, c.accounts["default"].clients, len(regions))
 	addedRegions := make([]string, 0, len(regions))
-	for key, rc := range c.clients {
+
+	for key, rc := range c.accounts[c.currentAccountAlias].clients {
 		addedRegions = append(addedRegions, key)
 		assert.Equal(t, key, rc.region)
 	}
@@ -73,14 +75,33 @@ func TestNewWithWrongConfigType(t *testing.T) {
 }
 
 func TestRegions(t *testing.T) {
-	c := client{}
-	c.clients = map[string]*regionalClient{"us-east-1": nil, "us-west-2": nil, "us-north-5": nil}
-	assert.ElementsMatch(t, c.Regions(), []string{"us-east-1", "us-west-2", "us-north-5"})
+	c := &client{
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1":  nil,
+					"us-west-2":  nil,
+					"us-north-5": nil,
+				},
+			},
+		},
+	}
+
+	regions := c.Regions()
+	assert.ElementsMatch(t, regions, []string{"us-east-1", "us-west-2", "us-north-5"})
 }
 
 func TestMissingRegionOnEachServiceCall(t *testing.T) {
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": nil},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": nil,
+				},
+			},
+		},
 	}
 
 	_, err := c.DescribeInstances(context.Background(), "us-north-5", nil)
@@ -98,8 +119,16 @@ func TestMissingRegionOnEachServiceCall(t *testing.T) {
 
 func TestGetRegionalClient(t *testing.T) {
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": nil},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": nil,
+				},
+			},
+		},
 	}
+
 	_, err := c.getRegionalClient("us-east-1")
 	assert.NoError(t, err)
 
@@ -224,7 +253,14 @@ func TestProtoForAutoscalingGroupInstanceLifecycleState(t *testing.T) {
 func TestDescribeInstances(t *testing.T) {
 	m := &mockEC2{}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", ec2: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", ec2: m},
+				},
+			},
+		},
 	}
 
 	results, err := c.DescribeInstances(context.Background(), "us-east-1", nil)
@@ -246,7 +282,14 @@ func TestDescribeInstances(t *testing.T) {
 func TestTerminateInstances(t *testing.T) {
 	m := &mockEC2{}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", ec2: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", ec2: m},
+				},
+			},
+		},
 	}
 
 	err := c.TerminateInstances(context.Background(), "us-east-1", nil)
@@ -260,7 +303,14 @@ func TestTerminateInstances(t *testing.T) {
 func TestRebootInstances(t *testing.T) {
 	m := &mockEC2{}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", ec2: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", ec2: m},
+				},
+			},
+		},
 	}
 
 	err := c.RebootInstances(context.Background(), "us-east-1", nil)
@@ -297,7 +347,14 @@ func TestResizeAutoscalingGroupErrorHandling(t *testing.T) {
 		updateASGErr: fmt.Errorf("error"),
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient},
+				},
+			},
+		},
 	}
 
 	err1 := c.ResizeAutoscalingGroup(context.Background(), "us-east-1", "asgname", &ec2v1.AutoscalingGroupSize{
@@ -334,7 +391,14 @@ func TestDescribeAutoScalingGroups(t *testing.T) {
 		},
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient},
+				},
+			},
+		},
 	}
 
 	asgs, err := c.DescribeAutoscalingGroups(context.Background(), "us-east-1", []string{"asg-one", "asg-two"})
@@ -354,9 +418,15 @@ func TestDescribeAutoscalingGroupsErrorHandling(t *testing.T) {
 	autoscalingClient := &mockAutoscaling{
 		describeASGErr: fmt.Errorf("error"),
 	}
-
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient},
+				},
+			},
+		},
 	}
 
 	asg1, err1 := c.DescribeAutoscalingGroups(context.Background(), "us-east-1", []string{"asgname"})
