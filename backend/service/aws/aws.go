@@ -98,7 +98,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 			autoscaling: autoscaling.NewFromConfig(regionCfg),
 			dynamodb:    dynamodb.NewFromConfig(regionCfg),
 			sts:         sts.NewFromConfig(regionCfg),
-			iam: 		 iam.NewFromConfig(regionCfg),
+			iam:         iam.NewFromConfig(regionCfg),
 		}
 	}
 
@@ -124,7 +124,7 @@ type Client interface {
 
 	GetCallerIdentity(ctx context.Context, region string) (*sts.GetCallerIdentityOutput, error)
 
-	SimulateCustomPolicy(ctx context.Context,region string,customPolicySimulatorParams *iam.SimulateCustomPolicyInput)(*iam.SimulateCustomPolicyOutput, error)
+	SimulateCustomPolicy(ctx context.Context, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error)
 
 	Regions() []string
 }
@@ -148,7 +148,7 @@ type regionalClient struct {
 	autoscaling autoscalingClient
 	dynamodb    dynamodbClient
 	sts         stsClient
-	iam 		iamClient
+	iam         iamClient
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.

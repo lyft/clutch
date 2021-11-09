@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
+	"github.com/aws/aws-sdk-go-v2/service/iam/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go/middleware"
@@ -178,9 +179,17 @@ func (s *svc) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCal
 	}, nil
 }
 
-// TODO
 func (s *svc) SimulateCustomPolicy(ctx context.Context, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error) {
-	panic("implement me")
+	return &iam.SimulateCustomPolicyOutput{
+		EvaluationResults: []types.EvaluationResult{
+			{EvalActionName: aws.String("s3:GetBucketPolicy"),
+				EvalDecision:         types.PolicyEvaluationDecisionTypeImplicitDeny,
+				EvalResourceName:     aws.String("arn:aws:s3:::a/*"),
+				MissingContextValues: []string{},
+				MatchedStatements:    []types.Statement{},
+			},
+		},
+	}, nil
 }
 
 func New() clutchawsclient.Client {

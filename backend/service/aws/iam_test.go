@@ -14,22 +14,20 @@ import (
 type mockIAM struct {
 	iamClient
 
-	getSimulationResultsErr    error
-	getSimulationResults *iam.SimulateCustomPolicyOutput
+	getSimulationResultsErr error
+	getSimulationResults    *iam.SimulateCustomPolicyOutput
 }
 
-
 func TestIAMSimulateCustomPolicy(t *testing.T) {
-
 	iamClient := &mockIAM{
 		getSimulationResults: &iam.SimulateCustomPolicyOutput{
 			EvaluationResults: []types.EvaluationResult{
-				{	EvalActionName: aws.String("s3:GetBucketPolicy"),
-					EvalDecision: types.PolicyEvaluationDecisionTypeImplicitDeny,
-					EvalResourceName: aws.String("arn:aws:s3:::a/*"),
+				{EvalActionName: aws.String("s3:GetBucketPolicy"),
+					EvalDecision:         types.PolicyEvaluationDecisionTypeImplicitDeny,
+					EvalResourceName:     aws.String("arn:aws:s3:::a/*"),
 					MissingContextValues: []string{},
-					MatchedStatements: []types.Statement{},
-					},
+					MatchedStatements:    []types.Statement{},
+				},
 			},
 		},
 	}
@@ -39,26 +37,25 @@ func TestIAMSimulateCustomPolicy(t *testing.T) {
 	}
 
 	simulationInput := &iam.SimulateCustomPolicyInput{
-		ActionNames: []string{"s3:GetObject"},
+		ActionNames:     []string{"s3:GetObject"},
 		PolicyInputList: []string{`{"Version":"2012-10-17","Statement":[{"Sid":"Stmt1635280953828","Action":["s3:AbortMultipartUpload"],"Effect":"Allow","Resource":"arn:aws:s3:::a/*"}]}`},
-		CallerArn: aws.String("arn:aws:iam::000000000000:user/fake-user"),
-		ResourceArns: []string{"arn:aws:s3:::a/*"},
-		ResourcePolicy: aws.String(`{}`),
+		CallerArn:       aws.String("arn:aws:iam::000000000000:user/fake-user"),
+		ResourceArns:    []string{"arn:aws:s3:::a/*"},
+		ResourcePolicy:  aws.String(`{}`),
 	}
 
 	output, err := c.SimulateCustomPolicy(context.Background(), "us-east-1", simulationInput)
 	assert.NoError(t, err)
 	assert.Equal(t, output, &iam.SimulateCustomPolicyOutput{
 		EvaluationResults: []types.EvaluationResult{
-			{	EvalActionName: aws.String("s3:GetBucketPolicy"),
-				EvalDecision: types.PolicyEvaluationDecisionTypeImplicitDeny,
-				EvalResourceName: aws.String("arn:aws:s3:::a/*"),
+			{EvalActionName: aws.String("s3:GetBucketPolicy"),
+				EvalDecision:         types.PolicyEvaluationDecisionTypeImplicitDeny,
+				EvalResourceName:     aws.String("arn:aws:s3:::a/*"),
 				MissingContextValues: []string{},
-				MatchedStatements: []types.Statement{},
+				MatchedStatements:    []types.Statement{},
 			},
-
 		},
-	},)
+	})
 }
 
 func TestIAMSimulateCustomPolicyErrorHandling(t *testing.T) {
@@ -70,11 +67,11 @@ func TestIAMSimulateCustomPolicyErrorHandling(t *testing.T) {
 	}
 
 	simulationInput := &iam.SimulateCustomPolicyInput{
-		ActionNames: []string{"s3:GetObject"},
+		ActionNames:     []string{"s3:GetObject"},
 		PolicyInputList: []string{`{"Version":"2012-10-17","Statement":[{"Sid":"Stmt1635280953828","Action":["s3:AbortMultipartUpload"],"Effect":"Allow","Resource":"arn:aws:s3:::a/*"}]}`},
-		CallerArn: aws.String("arn:aws:iam::000000000000:role/fake-user"),
-		ResourceArns: []string{"arn:aws:s3:::a/*"},
-		ResourcePolicy: aws.String(`{}`),
+		CallerArn:       aws.String("arn:aws:iam::000000000000:role/fake-user"),
+		ResourceArns:    []string{"arn:aws:s3:::a/*"},
+		ResourcePolicy:  aws.String(`{}`),
 	}
 
 	output1, err1 := c.SimulateCustomPolicy(context.Background(), "us-east-1", simulationInput)
@@ -86,7 +83,6 @@ func TestIAMSimulateCustomPolicyErrorHandling(t *testing.T) {
 	assert.Nil(t, output2)
 	assert.Error(t, err2)
 }
-
 
 func (m *mockIAM) SimulateCustomPolicy(ctx context.Context, params *iam.SimulateCustomPolicyInput, optFns ...func(*iam.Options)) (*iam.SimulateCustomPolicyOutput, error) {
 	if m.getSimulationResultsErr != nil {
