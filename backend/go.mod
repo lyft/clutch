@@ -6,13 +6,13 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.1
 	github.com/aws/aws-sdk-go-v2 v1.11.0
-	github.com/aws/aws-sdk-go-v2/config v1.9.0
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.13.0
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.6.0
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.20.0
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.7.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.17.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.8.0
+	github.com/aws/aws-sdk-go-v2/config v1.10.0
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.14.0
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.7.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.21.0
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.8.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.18.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.9.0
 	github.com/aws/smithy-go v1.9.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
 	github.com/bufbuild/buf v0.56.0
