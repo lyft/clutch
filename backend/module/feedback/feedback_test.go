@@ -34,7 +34,7 @@ func TestNewSurveyLookup(t *testing.T) {
 	}{
 		{surveyOrigin: []*feedbackv1cfg.SurveyOrigin{}, expectedEmpty: true},
 		{surveyOrigin: []*feedbackv1cfg.SurveyOrigin{{
-			Origin: feedbackv1cfg.Origin_WIZARD,
+			Origin: feedbackv1.Origin_WIZARD,
 			Survey: &feedbackv1cfg.Survey{Prompt: "bar"},
 		}},
 		},
