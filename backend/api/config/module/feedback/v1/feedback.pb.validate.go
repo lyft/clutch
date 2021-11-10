@@ -339,16 +339,7 @@ func (m *SurveyOrigin) validate(all bool) error {
 
 	var errors []error
 
-	if _, ok := Origin_name[int32(m.GetOrigin())]; !ok {
-		err := SurveyOriginValidationError{
-			field:  "Origin",
-			reason: "value must be one of the defined enum values",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Origin
 
 	if m.GetSurvey() == nil {
 		err := SurveyOriginValidationError{

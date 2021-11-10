@@ -5,6 +5,7 @@ package clutch.config.module.feedback.v1;
 option go_package = "github.com/lyft/clutch/backend/api/config/module/feedback/v1;feedbackv1";
 
 import "validate/validate.proto";
+import "feedback/v1/feedback.proto";
 
 message RatingOptions {
   // the text (i.e. "bad", "ok", "great") for each value in the rating system
@@ -20,15 +21,8 @@ message Survey {
   RatingOptions rating_options = 3 [ (validate.rules).message = {required : true} ];
 }
 
-enum Origin {
-  // currently these are the supported placements for feedback
-  ORIGIN_UNSPECIFIED = 0;
-  HEADER = 1;
-  WIZARD = 2;
-}
-
 message SurveyOrigin {
-  Origin origin = 1 [ (validate.rules).enum = {defined_only : true} ];
+  clutch.feedback.v1.Origin origin = 1;
   Survey survey = 2 [ (validate.rules).message = {required : true} ];
 }
 
