@@ -7,6 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/feedback/v1;feedbackv1";
 import "google/api/annotations.proto";
 import "api/v1/annotations.proto";
 import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
 
 service FeedbackAPI {
   rpc GetSurveys(GetSurveysRequest) returns (GetSurveysResponse) {
@@ -15,6 +16,13 @@ service FeedbackAPI {
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
+  }
+  rpc SubmitFeedback(SubmitFeedbackRequest) returns (SubmitFeedbackResponse) {
+    option (google.api.http) = {
+      post : "/v1/feedback/submitFeedback"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
   }
 }
 
@@ -57,4 +65,45 @@ message Survey {
 message GetSurveysResponse {
   // the key will be the feedback origin name
   map<string, Survey> origin_survey = 1;
+}
+
+message FeedbackMetadata {
+  // extra info on the feedback (i.e. the survey question, the rating options, the feedback origin, etc.)
+  Origin origin = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
+  Survey survey = 2 [ (validate.rules).message = {required : true} ];
+  // TODO: remove if we decide to record feedback only when a user clicks the submit button
+  bool user_submitted = 3;
+}
+
+message Feedback {
+  // user's email
+  string user_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  // url path of where the feedback was submitted
+  string url_path = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  // rating option the user selected (i.e. "bad", "ok", "great")
+  string rating = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  // (optional) freeform input
+  string freeform_response = 4;
+  // (optional) some UI components (i.e the header) will have a dropdown menu for choosing the type of
+  // feedback to submit (i.e. "General", "K8s Delete Pod")
+  string feedback_type = 5;
+  FeedbackMetadata metadata = 6 [ (validate.rules).message = {required : true} ];
+}
+
+message SubmitFeedbackRequest {
+  // client-genereated unique feedback id, which we will also use to update the feedback (essentially replace with the
+  // latest)
+  // TODO: remove if we decide to record feedback only when a user clicks the submit button
+  string id = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  Feedback feedback = 2 [ (validate.rules).message = {required : true} ];
+}
+
+message SubmitFeedbackResponse {
+}
+
+// proto used by the Feedback service
+message Submission {
+  // timestamp will be populated by the server
+  google.protobuf.Timestamp submitted_at = 1;
+  Feedback feedback = 2;
 }
