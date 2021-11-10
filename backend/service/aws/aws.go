@@ -6,6 +6,7 @@ package aws
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -50,6 +51,12 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		return nil, err
 	}
 
+	// aws_config_profile_name is not currently implemented
+	// if this is set will error out to let the user know what they are trying to do will not work
+	if ac.AwsConfigProfileName != "" {
+		return nil, errors.New("AWS config field [aws_config_profile_name] is not implemented")
+	}
+
 	accountAlias := ac.PrimaryAccountAliasDisplayName
 	if ac.PrimaryAccountAliasDisplayName == "" {
 		accountAlias = "default"
@@ -87,25 +94,17 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 			return nil, err
 		}
 
-		if _, ok := c.accounts[c.currentAccountAlias]; !ok {
-			c.accounts[c.currentAccountAlias] = &accountClients{
-				alias:   accountAlias,
-				regions: ac.Regions,
-				clients: map[string]*regionalClient{},
-			}
-		}
-
-		c.createRegionalClients(c.currentAccountAlias, region, ds, regionCfg)
+		c.createRegionalClients(c.currentAccountAlias, region, ac.Regions, ds, regionCfg)
 	}
 
-	if err := c.configureAdditonalAccountClient(ac.AdditionalAccounts, ds, awsHTTPClient); err != nil {
+	if err := c.configureAdditionalAccountClient(ac.AdditionalAccounts, ds, awsHTTPClient); err != nil {
 		return nil, err
 	}
 
 	return c, nil
 }
 
-func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, ds *awsv1.ScalingLimits, awsHTTPClient *http.Client) error {
+func (c *client) configureAdditionalAccountClient(accounts []*awsv1.AWSAccount, ds *awsv1.ScalingLimits, awsHTTPClient *http.Client) error {
 	for _, account := range accounts {
 		accountRoleARN := fmt.Sprintf("arn:aws:iam::%s:role/%s", account.AccountNumber, account.IamRole)
 		// For doing STS calls it does not matter which region client we are using, as they are not bounded by region
@@ -131,25 +130,23 @@ func (c *client) configureAdditonalAccountClient(accounts []*awsv1.AWSAccount, d
 
 			regionCfg.Credentials = credsCache
 
-			if _, ok := c.accounts[account.Alias]; !ok {
-				c.accounts[account.Alias] = &accountClients{
-					accountNumber: account.AccountNumber,
-					alias:         account.Alias,
-					clients:       map[string]*regionalClient{},
-					iamRoleARN:    account.IamRole,
-					regions:       account.Regions,
-				}
-			}
-
-			c.createRegionalClients(c.currentAccountAlias, region, ds, regionCfg)
+			c.createRegionalClients(account.Alias, region, account.Regions, ds, regionCfg)
 		}
 	}
 
 	return nil
 }
 
-func (c *client) createRegionalClients(account, region string, ds *awsv1.ScalingLimits, regionCfg aws.Config) {
-	c.accounts[account].clients[region] = &regionalClient{
+func (c *client) createRegionalClients(accountAlias, region string, regions []string, ds *awsv1.ScalingLimits, regionCfg aws.Config) {
+	if _, ok := c.accounts[accountAlias]; !ok {
+		c.accounts[accountAlias] = &accountClients{
+			alias:   accountAlias,
+			regions: regions,
+			clients: map[string]*regionalClient{},
+		}
+	}
+
+	c.accounts[accountAlias].clients[region] = &regionalClient{
 		region: region,
 		dynamodbCfg: &awsv1.DynamodbConfig{
 			ScalingLimits: &awsv1.ScalingLimits{
@@ -214,10 +211,8 @@ type regionalClient struct {
 }
 
 type accountClients struct {
-	alias         string
-	accountNumber string
-	iamRoleARN    string
-	regions       []string
+	alias   string
+	regions []string
 
 	clients map[string]*regionalClient
 }
