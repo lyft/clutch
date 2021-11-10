@@ -344,9 +344,11 @@ func (c *client) Regions() []string {
 		}
 	}
 
-	regions := []string{}
+	regions := make([]string, len(uniqueRegions))
+	i := 0
 	for region := range uniqueRegions {
-		regions = append(regions, region)
+		regions[i] = region
+		i++
 	}
 
 	return regions
