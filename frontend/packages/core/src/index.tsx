@@ -54,8 +54,8 @@ import {
   TableRowActions,
   TreeTable,
 } from "./Table";
-import { Typography } from "./typography";
 import Code from "./text";
+import { Typography } from "./typography";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
