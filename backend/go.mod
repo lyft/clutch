@@ -5,15 +5,15 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.1
-	github.com/aws/aws-sdk-go-v2 v1.10.0
-	github.com/aws/aws-sdk-go-v2/config v1.9.0
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.13.0
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.6.0
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.20.0
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.7.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.17.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.8.0
-	github.com/aws/smithy-go v1.8.1
+	github.com/aws/aws-sdk-go-v2 v1.11.0
+	github.com/aws/aws-sdk-go-v2/config v1.10.0
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.14.0
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.7.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.21.0
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.8.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.18.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.9.0
+	github.com/aws/smithy-go v1.9.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
 	github.com/bufbuild/buf v0.37.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
@@ -36,7 +36,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jhump/protoreflect v1.10.1
 	github.com/joho/godotenv v1.4.0
-	github.com/lib/pq v1.10.3
+	github.com/lib/pq v1.10.4
 	github.com/m3db/prometheus_client_golang v0.8.1 // indirect
 	github.com/m3db/prometheus_client_model v0.1.0 // indirect
 	github.com/m3db/prometheus_common v0.1.0 // indirect
