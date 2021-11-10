@@ -41,7 +41,7 @@ func TestNewSurveyLookup(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := NewSurveyLookup(test.surveyOrigin)
+		result := newSurveyLookup(test.surveyOrigin)
 		if test.expectedEmpty {
 			assert.Empty(t, result)
 		} else {
@@ -79,7 +79,7 @@ func TestGetConfigSurveys(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		v, ok := test.surveyMap.GetConfigSurveys(feedbackv1.Origin_WIZARD)
+		v, ok := test.surveyMap.getConfigSurveys(feedbackv1.Origin_WIZARD)
 		if !test.expectedOk {
 			assert.False(t, ok)
 			assert.Nil(t, v)

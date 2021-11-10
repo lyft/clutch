@@ -26,7 +26,7 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 	}
 
 	m := &mod{
-		surveyMap: NewSurveyLookup(config.Origins),
+		surveyMap: newSurveyLookup(config.Origins),
 		logger:    log,
 		scope:     scope,
 	}
@@ -64,7 +64,7 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 	}
 
 	for _, origin := range req.Origins {
-		v, ok := m.surveyMap.GetConfigSurveys(origin)
+		v, ok := m.surveyMap.getConfigSurveys(origin)
 		if !ok {
 			continue
 		}
@@ -94,7 +94,7 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 	}, nil
 }
 
-func NewSurveyLookup(origins []*feedbackv1cfg.SurveyOrigin) SurveyLookup {
+func newSurveyLookup(origins []*feedbackv1cfg.SurveyOrigin) SurveyLookup {
 	if len(origins) == 0 {
 		return SurveyLookup{}
 	}
@@ -112,7 +112,7 @@ func NewSurveyLookup(origins []*feedbackv1cfg.SurveyOrigin) SurveyLookup {
 // GetConfigSurveys uses the SurveyLookup and the origin passed in the API request to
 // check if a survey exists for the origin. If found, the survey is returned.
 // Otherwise ok is false.
-func (sl SurveyLookup) GetConfigSurveys(origin feedbackv1.Origin) (*feedbackv1cfg.Survey, bool) {
+func (sl SurveyLookup) getConfigSurveys(origin feedbackv1.Origin) (*feedbackv1cfg.Survey, bool) {
 	if len(sl.surveys) == 0 {
 		return nil, false
 	}
@@ -121,4 +121,8 @@ func (sl SurveyLookup) GetConfigSurveys(origin feedbackv1.Origin) (*feedbackv1cf
 		return nil, false
 	}
 	return v.Survey, true
+}
+
+func (m *mod) SubmitFeedback(tx context.Context, req *feedbackv1.SubmitFeedbackRequest) (*feedbackv1.SubmitFeedbackResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
