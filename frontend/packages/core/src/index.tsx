@@ -55,6 +55,7 @@ import {
   TreeTable,
 } from "./Table";
 import { Typography } from "./typography";
+import Code from "./text";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
@@ -82,6 +83,7 @@ export {
   client,
   ClipboardButton,
   ClutchApp,
+  Code,
   Confirmation,
   Dialog,
   DialogActions,
