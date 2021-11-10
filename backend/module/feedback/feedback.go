@@ -57,6 +57,9 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 
 	// this scenario shouldn't happen as the feedback config fields cannot be empty
 	if len(m.surveyMap.surveys) == 0 {
+		m.logger.Error("survey questions were not found in the config",
+			zap.Any("config", m.surveyMap.surveys),
+		)
 		return nil, status.Errorf(codes.NotFound, "survey questions were not found")
 	}
 
@@ -79,6 +82,10 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 	// this scenario shouldn't happen as the request and config have to provide defined enum types
 	// TODO: if multiple orgins are requested at once and only some surveys are found, return partial error
 	if len(results) == 0 {
+		m.logger.Error("origins must be one of HEADER or WIZARD",
+			zap.Any("request origins", req.Origins),
+			zap.Any("config origins", m.surveyMap.surveys),
+		)
 		return nil, status.Errorf(codes.InvalidArgument, "origins must be one of HEADER or WIZARD")
 	}
 
