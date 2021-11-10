@@ -33,7 +33,7 @@ export interface WorkflowConfiguration extends BaseWorkflowConfiguration {
   };
 }
 
-interface Route {
+export interface Route {
   component: React.FC<any>;
   description: string;
   displayName?: string;
