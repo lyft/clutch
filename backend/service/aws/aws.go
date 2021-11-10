@@ -78,17 +78,19 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 
 	ds := getScalingLimits(ac)
 	awsHTTPClient := &http.Client{}
+	awsClientCommonOptions := []func(*config.LoadOptions) error{
+		config.WithHTTPClient(awsHTTPClient),
+		config.WithRetryer(func() aws.Retryer {
+			customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
+				so.MaxAttempts = clientRetries
+			})
+			return customRetryer
+		}),
+	}
 
 	for _, region := range ac.Regions {
 		regionCfg, err := config.LoadDefaultConfig(context.TODO(),
-			config.WithHTTPClient(awsHTTPClient),
-			config.WithRegion(region),
-			config.WithRetryer(func() aws.Retryer {
-				customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
-					so.MaxAttempts = clientRetries
-				})
-				return customRetryer
-			}),
+			append(awsClientCommonOptions, config.WithRegion(region))...,
 		)
 		if err != nil {
 			return nil, err
@@ -97,14 +99,14 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		c.createRegionalClients(c.currentAccountAlias, region, ac.Regions, ds, regionCfg)
 	}
 
-	if err := c.configureAdditionalAccountClient(ac.AdditionalAccounts, ds, awsHTTPClient); err != nil {
+	if err := c.configureAdditionalAccountClient(ac.AdditionalAccounts, ds, awsHTTPClient, awsClientCommonOptions); err != nil {
 		return nil, err
 	}
 
 	return c, nil
 }
 
-func (c *client) configureAdditionalAccountClient(accounts []*awsv1.AWSAccount, ds *awsv1.ScalingLimits, awsHTTPClient *http.Client) error {
+func (c *client) configureAdditionalAccountClient(accounts []*awsv1.AWSAccount, ds *awsv1.ScalingLimits, awsHTTPClient *http.Client, awsClientOptions []func(*config.LoadOptions) error) error {
 	for _, account := range accounts {
 		accountRoleARN := fmt.Sprintf("arn:aws:iam::%s:role/%s", account.AccountNumber, account.IamRole)
 		// For doing STS calls it does not matter which region client we are using, as they are not bounded by region
@@ -115,14 +117,7 @@ func (c *client) configureAdditionalAccountClient(accounts []*awsv1.AWSAccount, 
 
 		for _, region := range account.Regions {
 			regionCfg, err := config.LoadDefaultConfig(context.TODO(),
-				config.WithHTTPClient(awsHTTPClient),
-				config.WithRegion(region),
-				config.WithRetryer(func() aws.Retryer {
-					customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
-						so.MaxAttempts = 10
-					})
-					return customRetryer
-				}),
+				append(awsClientOptions, config.WithRegion(region))...,
 			)
 			if err != nil {
 				return err
