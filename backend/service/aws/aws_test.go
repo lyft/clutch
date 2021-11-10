@@ -74,6 +74,41 @@ func TestNewWithWrongConfigType(t *testing.T) {
 	assert.Contains(t, err.Error(), "mismatched message type")
 }
 
+func TestConfigureAdditionalAccountClient(t *testing.T) {
+	cfg, _ := anypb.New(&awsv1.Config{
+		Regions:                        []string{"us-east-1"},
+		PrimaryAccountAliasDisplayName: "default",
+		AdditionalAccounts: []*awsv1.AWSAccount{
+			{
+				Alias:         "dev",
+				AccountNumber: "123",
+				IamRole:       "iam-dev",
+				Regions:       []string{"us-west-1"},
+			},
+			{
+				Alias:         "staging",
+				AccountNumber: "456",
+				IamRole:       "iam-staging",
+				Regions:       []string{"us-west-2"},
+			},
+		},
+	})
+	log := zaptest.NewLogger(t)
+	scope := tally.NewTestScope("", nil)
+	s, err := New(cfg, log, scope)
+	assert.NoError(t, err)
+
+	c, ok := s.(*client)
+	assert.True(t, ok)
+
+	expctedAccounts := []string{"default", "dev", "staging"}
+	for _, expect := range expctedAccounts {
+		val, ok := c.accounts[expect]
+		assert.True(t, ok)
+		assert.NotNil(t, val)
+	}
+}
+
 func TestRegions(t *testing.T) {
 	c := &client{
 		currentAccountAlias: "default",
