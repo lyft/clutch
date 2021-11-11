@@ -180,8 +180,15 @@ func TestDescribeTableValid(t *testing.T) {
 		table: testDynamodbTable,
 	}
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodb: m}},
+		log:                 zaptest.NewLogger(t),
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodb: m},
+				},
+			},
+		},
 	}
 
 	result, err := c.DescribeTable(context.Background(), "us-east-1", "test-table")
@@ -198,8 +205,15 @@ func TestDescribeTableNotValid(t *testing.T) {
 		table: testDynamodbTable,
 	}
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodb: m}},
+		log:                 zaptest.NewLogger(t),
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodb: m},
+				},
+			},
+		},
 	}
 
 	m.tableErr = errors.New("resource not found")
@@ -212,8 +226,15 @@ func TestDescribeTableWithGsiValid(t *testing.T) {
 		table: testDynamodbTableWithGSI,
 	}
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodb: m}},
+		log:                 zaptest.NewLogger(t),
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodb: m},
+				},
+			},
+		},
 	}
 
 	result, err := c.DescribeTable(context.Background(), "us-east-1", "test-gsi-table")
@@ -284,8 +305,14 @@ func TestIncreaseTableCapacityErrors(t *testing.T) {
 	}
 
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m},
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -338,8 +365,14 @@ func TestUpdateGSICapacityErrors(t *testing.T) {
 	}
 
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m},
+				},
+			},
+		},
 	}
 
 	targetTableCapacity := &dynamodbv1.Throughput{
@@ -389,8 +422,14 @@ func TestUpdateCapacitySuccess(t *testing.T) {
 	}
 
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m},
+				},
+			},
+		},
 	}
 
 	targetTableCapacity := &dynamodbv1.Throughput{
@@ -435,8 +474,14 @@ func TestIgnoreMaximums(t *testing.T) {
 	}
 
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m},
+				},
+			},
+		},
 	}
 
 	targetTableCapacity := &dynamodbv1.Throughput{
@@ -480,8 +525,14 @@ func TestOnDemandCheck(t *testing.T) {
 	}
 
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m},
+				},
+			},
+		},
 	}
 
 	targetTableCapacity := &dynamodbv1.Throughput{
@@ -513,8 +564,14 @@ func TestOnDemandCheckInferred(t *testing.T) {
 	}
 
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m},
+				},
+			},
+		},
 	}
 
 	targetTableCapacity := &dynamodbv1.Throughput{
@@ -547,8 +604,14 @@ func TestNoBillingMode(t *testing.T) {
 	}
 
 	c := &client{
-		log:     zaptest.NewLogger(t),
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodbCfg: d, dynamodb: m},
+				},
+			},
+		},
 	}
 
 	targetTableCapacity := &dynamodbv1.Throughput{

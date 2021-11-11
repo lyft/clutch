@@ -43,12 +43,16 @@ func (c *client) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<
 // If a single resource and region takes longer to process it will not block other resources.
 // Additionally this give us the flexibility to tune the frequency based on resource.
 func (c *client) processRegionTopologyObjects(ctx context.Context) {
-	for name, client := range c.clients {
-		c.log.Info("processing topology objects for region", zap.String("region", name))
-		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), client, c.processAllEC2Instances)
-		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllAutoScalingGroups)
-		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllKinesisStreams)
-		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllDynamoDatabases)
+	// TODO (mcutalo): All of these calls will be updated to handle multi account in a following PR
+	// currently there can only be a single account
+	for _, account := range c.accounts {
+		for name, client := range account.clients {
+			c.log.Info("processing topology objects for region", zap.String("region", name))
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), client, c.processAllEC2Instances)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllAutoScalingGroups)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllKinesisStreams)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllDynamoDatabases)
+		}
 	}
 }
 

@@ -7,6 +7,7 @@ require (
 	github.com/Masterminds/squirrel v1.5.1
 	github.com/aws/aws-sdk-go-v2 v1.11.0
 	github.com/aws/aws-sdk-go-v2/config v1.10.0
+	github.com/aws/aws-sdk-go-v2/credentials v1.6.0
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.14.0
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.7.0
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.21.0
