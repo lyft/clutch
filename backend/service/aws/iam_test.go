@@ -33,7 +33,14 @@ func TestIAMSimulateCustomPolicy(t *testing.T) {
 	}
 
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", iam: iamClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", iam: iamClient},
+				},
+			},
+		},
 	}
 
 	simulationInput := &iam.SimulateCustomPolicyInput{
@@ -63,7 +70,14 @@ func TestIAMSimulateCustomPolicyErrorHandling(t *testing.T) {
 		getSimulationResultsErr: fmt.Errorf("error"),
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", iam: iamClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", iam: iamClient},
+				},
+			},
+		},
 	}
 
 	simulationInput := &iam.SimulateCustomPolicyInput{
