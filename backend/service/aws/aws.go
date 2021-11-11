@@ -21,6 +21,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
@@ -180,6 +181,8 @@ type Client interface {
 
 	GetCallerIdentity(ctx context.Context, region string) (*sts.GetCallerIdentityOutput, error)
 
+	SimulateCustomPolicy(ctx context.Context, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error)
+
 	Regions() []string
 }
 
@@ -203,6 +206,7 @@ type regionalClient struct {
 	autoscaling autoscalingClient
 	dynamodb    dynamodbClient
 	sts         stsClient
+	iam         iamClient
 }
 
 type accountClients struct {

@@ -14,11 +14,11 @@ const rotate = keyframes`
 const StyledSvg = styled.svg({
   height: "48px",
   width: "48px",
-  padding: "8px",
+  padding: "1px",
+  verticalAlign: "middle",
   "&:hover": {
     animation: `${rotate} 5s linear`,
   },
-  verticalAlign: "middle",
 });
 
 const Logo: React.FC = () => (

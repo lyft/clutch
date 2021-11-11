@@ -11,6 +11,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.14.0
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.7.0
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.21.0
+	github.com/aws/aws-sdk-go-v2/service/iam v1.12.0
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.8.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.18.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.9.0
@@ -37,7 +38,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jhump/protoreflect v1.10.1
 	github.com/joho/godotenv v1.4.0
-	github.com/lib/pq v1.10.3
+	github.com/lib/pq v1.10.4
 	github.com/m3db/prometheus_client_golang v0.8.1 // indirect
 	github.com/m3db/prometheus_client_model v0.1.0 // indirect
 	github.com/m3db/prometheus_common v0.1.0 // indirect

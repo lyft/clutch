@@ -23,7 +23,8 @@ const ClearAppBar = styled.div({ height: APP_BAR_HEIGHT });
 const Title = styled(Typography)({
   margin: "12px 0px 12px 8px",
   fontWeight: "bold",
-  fontSize: "20px",
+  fontSize: "30px",
+  paddingLeft: "5px",
   color: "rgba(255, 255, 255, 0.87)",
 });
 

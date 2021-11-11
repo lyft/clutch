@@ -4,6 +4,7 @@ import { Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
 import { userId } from "./AppLayout/user";
+import { workflowsByTrending } from "./AppLayout/utils";
 import { MonsterGraphic } from "./Assets/Graphics";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
@@ -49,22 +50,7 @@ const StyledLanding = styled.div({
 const Landing: React.FC<{}> = () => {
   const navigate = useNavigate();
   const { workflows } = useAppContext();
-  const trendingWorkflows = [];
-  workflows.forEach(workflow => {
-    workflow.routes.forEach(route => {
-      const title = route.displayName
-        ? `${workflow.displayName}: ${route.displayName}`
-        : workflow.displayName;
-      if (route.trending) {
-        trendingWorkflows.push({
-          group: workflow.group,
-          title,
-          description: route.description,
-          path: `${workflow.path}/${route.path}`,
-        });
-      }
-    });
-  });
+  const trendingWorkflows = workflowsByTrending(workflows);
 
   const navigateTo = (path: string) => {
     navigate(path);
@@ -92,7 +78,7 @@ const Landing: React.FC<{}> = () => {
               <Grid key={workflow.path} item xs={12} sm={12} md={6} lg={4} xl={4}>
                 <LandingCard
                   group={workflow.group}
-                  title={workflow.title}
+                  title={workflow.displayName}
                   description={workflow.description}
                   onClick={() => navigateTo(workflow.path)}
                   key={workflow.path}
