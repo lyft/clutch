@@ -7,6 +7,8 @@ import (
 	"math/rand"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/iam"
+	"github.com/aws/aws-sdk-go-v2/service/iam/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go/middleware"
@@ -174,6 +176,19 @@ func (s *svc) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCal
 		Account: aws.String("000000000000"),
 		Arn:     aws.String("arn:aws:sts::000000000000:fake-role"),
 		UserId:  aws.String("some_special_id"),
+	}, nil
+}
+
+func (s *svc) SimulateCustomPolicy(ctx context.Context, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error) {
+	return &iam.SimulateCustomPolicyOutput{
+		EvaluationResults: []types.EvaluationResult{
+			{EvalActionName: aws.String("s3:GetBucketPolicy"),
+				EvalDecision:         types.PolicyEvaluationDecisionTypeImplicitDeny,
+				EvalResourceName:     aws.String("arn:aws:s3:::a/*"),
+				MissingContextValues: []string{},
+				MatchedStatements:    []types.Statement{},
+			},
+		},
 	}, nil
 }
 
