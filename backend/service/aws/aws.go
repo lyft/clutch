@@ -159,6 +159,7 @@ func (c *client) createRegionalClients(accountAlias, region string, regions []st
 		autoscaling: autoscaling.NewFromConfig(regionCfg),
 		dynamodb:    dynamodb.NewFromConfig(regionCfg),
 		sts:         sts.NewFromConfig(regionCfg),
+		iam:         iam.NewFromConfig(regionCfg),
 	}
 }
 
