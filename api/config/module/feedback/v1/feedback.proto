@@ -2,9 +2,10 @@ syntax = "proto3";
 
 package clutch.config.module.feedback.v1;
 
-option go_package = "github.com/lyft/clutch/backend/api/config/module/feedback/v1;feedbackv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/module/feedback/v1;feedbackmodv1";
 
 import "validate/validate.proto";
+import "feedback/v1/feedback.proto";
 
 message RatingOptions {
   // the text (i.e. "bad", "ok", "great") for each value in the rating system
@@ -21,13 +22,8 @@ message Survey {
 }
 
 message SurveyOrigin {
-  oneof type {
-    option (validate.required) = true;
-
-    // currently these are the supported origins for feedback
-    Survey header = 1 [ (validate.rules).message = {required : true} ];
-    Survey wizard = 2 [ (validate.rules).message = {required : true} ];
-  }
+  clutch.feedback.v1.Origin origin = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
+  Survey survey = 2 [ (validate.rules).message = {required : true} ];
 }
 
 message Config {

@@ -21,6 +21,7 @@ import (
 	dynamodbmod "github.com/lyft/clutch/backend/module/dynamodb"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/featureflag"
+	"github.com/lyft/clutch/backend/module/feedback"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
 	kinesismod "github.com/lyft/clutch/backend/module/kinesis"
@@ -68,6 +69,7 @@ var Modules = module.Factory{
 	envoytriage.Name:           envoytriage.New,
 	experimentationapi.Name:    experimentationapi.New,
 	featureflag.Name:           featureflag.New,
+	feedback.Name:              feedback.New,
 	healthcheck.Name:           healthcheck.New,
 	k8smod.Name:                k8smod.New,
 	kinesismod.Name:            kinesismod.New,

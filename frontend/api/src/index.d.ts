@@ -7766,11 +7766,11 @@ export namespace clutch {
                     /** Properties of a SurveyOrigin. */
                     interface ISurveyOrigin {
 
-                        /** SurveyOrigin header */
-                        header?: (clutch.config.module.feedback.v1.ISurvey|null);
+                        /** SurveyOrigin origin */
+                        origin?: (clutch.feedback.v1.Origin|null);
 
-                        /** SurveyOrigin wizard */
-                        wizard?: (clutch.config.module.feedback.v1.ISurvey|null);
+                        /** SurveyOrigin survey */
+                        survey?: (clutch.config.module.feedback.v1.ISurvey|null);
                     }
 
                     /** Represents a SurveyOrigin. */
@@ -7782,14 +7782,11 @@ export namespace clutch {
                          */
                         constructor(properties?: clutch.config.module.feedback.v1.ISurveyOrigin);
 
-                        /** SurveyOrigin header. */
-                        public header?: (clutch.config.module.feedback.v1.ISurvey|null);
+                        /** SurveyOrigin origin. */
+                        public origin: clutch.feedback.v1.Origin;
 
-                        /** SurveyOrigin wizard. */
-                        public wizard?: (clutch.config.module.feedback.v1.ISurvey|null);
-
-                        /** SurveyOrigin type. */
-                        public type?: ("header"|"wizard");
+                        /** SurveyOrigin survey. */
+                        public survey?: (clutch.config.module.feedback.v1.ISurvey|null);
 
                         /**
                          * Verifies a SurveyOrigin message.
@@ -10185,6 +10182,582 @@ export namespace clutch {
         }
     }
 
+    /** Namespace feedback. */
+    namespace feedback {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a FeedbackAPI */
+            class FeedbackAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new FeedbackAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetSurveys.
+                 * @param request GetSurveysRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetSurveysResponse
+                 */
+                public getSurveys(request: clutch.feedback.v1.IGetSurveysRequest, callback: clutch.feedback.v1.FeedbackAPI.GetSurveysCallback): void;
+
+                /**
+                 * Calls GetSurveys.
+                 * @param request GetSurveysRequest message or plain object
+                 * @returns Promise
+                 */
+                public getSurveys(request: clutch.feedback.v1.IGetSurveysRequest): Promise<clutch.feedback.v1.GetSurveysResponse>;
+
+                /**
+                 * Calls SubmitFeedback.
+                 * @param request SubmitFeedbackRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and SubmitFeedbackResponse
+                 */
+                public submitFeedback(request: clutch.feedback.v1.ISubmitFeedbackRequest, callback: clutch.feedback.v1.FeedbackAPI.SubmitFeedbackCallback): void;
+
+                /**
+                 * Calls SubmitFeedback.
+                 * @param request SubmitFeedbackRequest message or plain object
+                 * @returns Promise
+                 */
+                public submitFeedback(request: clutch.feedback.v1.ISubmitFeedbackRequest): Promise<clutch.feedback.v1.SubmitFeedbackResponse>;
+            }
+
+            namespace FeedbackAPI {
+
+                /**
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#getSurveys}.
+                 * @param error Error, if any
+                 * @param [response] GetSurveysResponse
+                 */
+                type GetSurveysCallback = (error: (Error|null), response?: clutch.feedback.v1.GetSurveysResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#submitFeedback}.
+                 * @param error Error, if any
+                 * @param [response] SubmitFeedbackResponse
+                 */
+                type SubmitFeedbackCallback = (error: (Error|null), response?: clutch.feedback.v1.SubmitFeedbackResponse) => void;
+            }
+
+            /** Origin enum. */
+            enum Origin {
+                ORIGIN_UNSPECIFIED = 0,
+                HEADER = 1,
+                WIZARD = 2
+            }
+
+            /** Properties of a GetSurveysRequest. */
+            interface IGetSurveysRequest {
+
+                /** GetSurveysRequest origins */
+                origins?: (clutch.feedback.v1.Origin[]|null);
+            }
+
+            /** Represents a GetSurveysRequest. */
+            class GetSurveysRequest implements IGetSurveysRequest {
+
+                /**
+                 * Constructs a new GetSurveysRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IGetSurveysRequest);
+
+                /** GetSurveysRequest origins. */
+                public origins: clutch.feedback.v1.Origin[];
+
+                /**
+                 * Verifies a GetSurveysRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetSurveysRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetSurveysRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetSurveysRequest;
+
+                /**
+                 * Creates a plain object from a GetSurveysRequest message. Also converts values to other types if specified.
+                 * @param message GetSurveysRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.GetSurveysRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetSurveysRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a RatingOptions. */
+            interface IRatingOptions {
+
+                /** RatingOptions one */
+                one?: (string|null);
+
+                /** RatingOptions two */
+                two?: (string|null);
+
+                /** RatingOptions three */
+                three?: (string|null);
+            }
+
+            /** Represents a RatingOptions. */
+            class RatingOptions implements IRatingOptions {
+
+                /**
+                 * Constructs a new RatingOptions.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IRatingOptions);
+
+                /** RatingOptions one. */
+                public one: string;
+
+                /** RatingOptions two. */
+                public two: string;
+
+                /** RatingOptions three. */
+                public three: string;
+
+                /**
+                 * Verifies a RatingOptions message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RatingOptions
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingOptions;
+
+                /**
+                 * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
+                 * @param message RatingOptions
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.RatingOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RatingOptions to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Survey. */
+            interface ISurvey {
+
+                /** Survey prompt */
+                prompt?: (string|null);
+
+                /** Survey freeformPrompt */
+                freeformPrompt?: (string|null);
+
+                /** Survey ratingOptions */
+                ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
+            }
+
+            /** Represents a Survey. */
+            class Survey implements ISurvey {
+
+                /**
+                 * Constructs a new Survey.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.ISurvey);
+
+                /** Survey prompt. */
+                public prompt: string;
+
+                /** Survey freeformPrompt. */
+                public freeformPrompt: string;
+
+                /** Survey ratingOptions. */
+                public ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
+
+                /**
+                 * Verifies a Survey message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Survey message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Survey
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Survey;
+
+                /**
+                 * Creates a plain object from a Survey message. Also converts values to other types if specified.
+                 * @param message Survey
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.Survey, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Survey to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetSurveysResponse. */
+            interface IGetSurveysResponse {
+
+                /** GetSurveysResponse originSurvey */
+                originSurvey?: ({ [k: string]: clutch.feedback.v1.ISurvey }|null);
+            }
+
+            /** Represents a GetSurveysResponse. */
+            class GetSurveysResponse implements IGetSurveysResponse {
+
+                /**
+                 * Constructs a new GetSurveysResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IGetSurveysResponse);
+
+                /** GetSurveysResponse originSurvey. */
+                public originSurvey: { [k: string]: clutch.feedback.v1.ISurvey };
+
+                /**
+                 * Verifies a GetSurveysResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetSurveysResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetSurveysResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetSurveysResponse;
+
+                /**
+                 * Creates a plain object from a GetSurveysResponse message. Also converts values to other types if specified.
+                 * @param message GetSurveysResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.GetSurveysResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetSurveysResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a FeedbackMetadata. */
+            interface IFeedbackMetadata {
+
+                /** FeedbackMetadata origin */
+                origin?: (clutch.feedback.v1.Origin|null);
+
+                /** FeedbackMetadata survey */
+                survey?: (clutch.feedback.v1.ISurvey|null);
+
+                /** FeedbackMetadata userSubmitted */
+                userSubmitted?: (boolean|null);
+            }
+
+            /** Represents a FeedbackMetadata. */
+            class FeedbackMetadata implements IFeedbackMetadata {
+
+                /**
+                 * Constructs a new FeedbackMetadata.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IFeedbackMetadata);
+
+                /** FeedbackMetadata origin. */
+                public origin: clutch.feedback.v1.Origin;
+
+                /** FeedbackMetadata survey. */
+                public survey?: (clutch.feedback.v1.ISurvey|null);
+
+                /** FeedbackMetadata userSubmitted. */
+                public userSubmitted: boolean;
+
+                /**
+                 * Verifies a FeedbackMetadata message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a FeedbackMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns FeedbackMetadata
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.FeedbackMetadata;
+
+                /**
+                 * Creates a plain object from a FeedbackMetadata message. Also converts values to other types if specified.
+                 * @param message FeedbackMetadata
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.FeedbackMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this FeedbackMetadata to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Feedback. */
+            interface IFeedback {
+
+                /** Feedback userId */
+                userId?: (string|null);
+
+                /** Feedback urlPath */
+                urlPath?: (string|null);
+
+                /** Feedback rating */
+                rating?: (string|null);
+
+                /** Feedback freeformResponse */
+                freeformResponse?: (string|null);
+
+                /** Feedback feedbackType */
+                feedbackType?: (string|null);
+
+                /** Feedback metadata */
+                metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
+            }
+
+            /** Represents a Feedback. */
+            class Feedback implements IFeedback {
+
+                /**
+                 * Constructs a new Feedback.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IFeedback);
+
+                /** Feedback userId. */
+                public userId: string;
+
+                /** Feedback urlPath. */
+                public urlPath: string;
+
+                /** Feedback rating. */
+                public rating: string;
+
+                /** Feedback freeformResponse. */
+                public freeformResponse: string;
+
+                /** Feedback feedbackType. */
+                public feedbackType: string;
+
+                /** Feedback metadata. */
+                public metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
+
+                /**
+                 * Verifies a Feedback message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Feedback message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Feedback
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Feedback;
+
+                /**
+                 * Creates a plain object from a Feedback message. Also converts values to other types if specified.
+                 * @param message Feedback
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.Feedback, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Feedback to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a SubmitFeedbackRequest. */
+            interface ISubmitFeedbackRequest {
+
+                /** SubmitFeedbackRequest id */
+                id?: (string|null);
+
+                /** SubmitFeedbackRequest feedback */
+                feedback?: (clutch.feedback.v1.IFeedback|null);
+            }
+
+            /** Represents a SubmitFeedbackRequest. */
+            class SubmitFeedbackRequest implements ISubmitFeedbackRequest {
+
+                /**
+                 * Constructs a new SubmitFeedbackRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.ISubmitFeedbackRequest);
+
+                /** SubmitFeedbackRequest id. */
+                public id: string;
+
+                /** SubmitFeedbackRequest feedback. */
+                public feedback?: (clutch.feedback.v1.IFeedback|null);
+
+                /**
+                 * Verifies a SubmitFeedbackRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a SubmitFeedbackRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns SubmitFeedbackRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.SubmitFeedbackRequest;
+
+                /**
+                 * Creates a plain object from a SubmitFeedbackRequest message. Also converts values to other types if specified.
+                 * @param message SubmitFeedbackRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.SubmitFeedbackRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this SubmitFeedbackRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a SubmitFeedbackResponse. */
+            interface ISubmitFeedbackResponse {
+            }
+
+            /** Represents a SubmitFeedbackResponse. */
+            class SubmitFeedbackResponse implements ISubmitFeedbackResponse {
+
+                /**
+                 * Constructs a new SubmitFeedbackResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.ISubmitFeedbackResponse);
+
+                /**
+                 * Verifies a SubmitFeedbackResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a SubmitFeedbackResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns SubmitFeedbackResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.SubmitFeedbackResponse;
+
+                /**
+                 * Creates a plain object from a SubmitFeedbackResponse message. Also converts values to other types if specified.
+                 * @param message SubmitFeedbackResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.SubmitFeedbackResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this SubmitFeedbackResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Submission. */
+            interface ISubmission {
+
+                /** Submission submittedAt */
+                submittedAt?: (google.protobuf.ITimestamp|null);
+
+                /** Submission feedback */
+                feedback?: (clutch.feedback.v1.IFeedback|null);
+            }
+
+            /** Represents a Submission. */
+            class Submission implements ISubmission {
+
+                /**
+                 * Constructs a new Submission.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.ISubmission);
+
+                /** Submission submittedAt. */
+                public submittedAt?: (google.protobuf.ITimestamp|null);
+
+                /** Submission feedback. */
+                public feedback?: (clutch.feedback.v1.IFeedback|null);
+
+                /**
+                 * Verifies a Submission message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Submission message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Submission
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Submission;
+
+                /**
+                 * Creates a plain object from a Submission message. Also converts values to other types if specified.
+                 * @param message Submission
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.Submission, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Submission to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
     /** Namespace sourcecontrol. */
     namespace sourcecontrol {
 
@@ -12410,594 +12983,6 @@ export namespace clutch {
 
                 /**
                  * Converts this GetFlagsResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-        }
-    }
-
-    /** Namespace feedback. */
-    namespace feedback {
-
-        /** Namespace v1. */
-        namespace v1 {
-
-            /** Represents a FeedbackAPI */
-            class FeedbackAPI extends $protobuf.rpc.Service {
-
-                /**
-                 * Constructs a new FeedbackAPI service.
-                 * @param rpcImpl RPC implementation
-                 * @param [requestDelimited=false] Whether requests are length-delimited
-                 * @param [responseDelimited=false] Whether responses are length-delimited
-                 */
-                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
-
-                /**
-                 * Calls GetSurveys.
-                 * @param request GetSurveysRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and GetSurveysResponse
-                 */
-                public getSurveys(request: clutch.feedback.v1.IGetSurveysRequest, callback: clutch.feedback.v1.FeedbackAPI.GetSurveysCallback): void;
-
-                /**
-                 * Calls GetSurveys.
-                 * @param request GetSurveysRequest message or plain object
-                 * @returns Promise
-                 */
-                public getSurveys(request: clutch.feedback.v1.IGetSurveysRequest): Promise<clutch.feedback.v1.GetSurveysResponse>;
-
-                /**
-                 * Calls SubmitFeedback.
-                 * @param request SubmitFeedbackRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and SubmitFeedbackResponse
-                 */
-                public submitFeedback(request: clutch.feedback.v1.ISubmitFeedbackRequest, callback: clutch.feedback.v1.FeedbackAPI.SubmitFeedbackCallback): void;
-
-                /**
-                 * Calls SubmitFeedback.
-                 * @param request SubmitFeedbackRequest message or plain object
-                 * @returns Promise
-                 */
-                public submitFeedback(request: clutch.feedback.v1.ISubmitFeedbackRequest): Promise<clutch.feedback.v1.SubmitFeedbackResponse>;
-            }
-
-            namespace FeedbackAPI {
-
-                /**
-                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#getSurveys}.
-                 * @param error Error, if any
-                 * @param [response] GetSurveysResponse
-                 */
-                type GetSurveysCallback = (error: (Error|null), response?: clutch.feedback.v1.GetSurveysResponse) => void;
-
-                /**
-                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#submitFeedback}.
-                 * @param error Error, if any
-                 * @param [response] SubmitFeedbackResponse
-                 */
-                type SubmitFeedbackCallback = (error: (Error|null), response?: clutch.feedback.v1.SubmitFeedbackResponse) => void;
-            }
-
-            /** Origin enum. */
-            enum Origin {
-                ORIGIN_UNSPECIFIED = 0,
-                HEADER = 1,
-                WIZARD = 2
-            }
-
-            /** Properties of a GetSurveysRequest. */
-            interface IGetSurveysRequest {
-
-                /** GetSurveysRequest origins */
-                origins?: (clutch.feedback.v1.Origin[]|null);
-
-                /** GetSurveysRequest user */
-                user?: (string|null);
-            }
-
-            /** Represents a GetSurveysRequest. */
-            class GetSurveysRequest implements IGetSurveysRequest {
-
-                /**
-                 * Constructs a new GetSurveysRequest.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.IGetSurveysRequest);
-
-                /** GetSurveysRequest origins. */
-                public origins: clutch.feedback.v1.Origin[];
-
-                /** GetSurveysRequest user. */
-                public user: string;
-
-                /**
-                 * Verifies a GetSurveysRequest message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a GetSurveysRequest message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns GetSurveysRequest
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetSurveysRequest;
-
-                /**
-                 * Creates a plain object from a GetSurveysRequest message. Also converts values to other types if specified.
-                 * @param message GetSurveysRequest
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.GetSurveysRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this GetSurveysRequest to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a RatingOptions. */
-            interface IRatingOptions {
-
-                /** RatingOptions one */
-                one?: (string|null);
-
-                /** RatingOptions two */
-                two?: (string|null);
-
-                /** RatingOptions three */
-                three?: (string|null);
-            }
-
-            /** Represents a RatingOptions. */
-            class RatingOptions implements IRatingOptions {
-
-                /**
-                 * Constructs a new RatingOptions.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.IRatingOptions);
-
-                /** RatingOptions one. */
-                public one: string;
-
-                /** RatingOptions two. */
-                public two: string;
-
-                /** RatingOptions three. */
-                public three: string;
-
-                /**
-                 * Verifies a RatingOptions message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns RatingOptions
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingOptions;
-
-                /**
-                 * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
-                 * @param message RatingOptions
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.RatingOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this RatingOptions to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a Survey. */
-            interface ISurvey {
-
-                /** Survey prompt */
-                prompt?: (string|null);
-
-                /** Survey freeformPrompt */
-                freeformPrompt?: (string|null);
-
-                /** Survey ratingOptions */
-                ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
-
-                /** Survey show */
-                show?: (boolean|null);
-            }
-
-            /** Represents a Survey. */
-            class Survey implements ISurvey {
-
-                /**
-                 * Constructs a new Survey.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.ISurvey);
-
-                /** Survey prompt. */
-                public prompt: string;
-
-                /** Survey freeformPrompt. */
-                public freeformPrompt: string;
-
-                /** Survey ratingOptions. */
-                public ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
-
-                /** Survey show. */
-                public show: boolean;
-
-                /**
-                 * Verifies a Survey message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a Survey message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns Survey
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Survey;
-
-                /**
-                 * Creates a plain object from a Survey message. Also converts values to other types if specified.
-                 * @param message Survey
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.Survey, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this Survey to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a GetSurveysResponse. */
-            interface IGetSurveysResponse {
-
-                /** GetSurveysResponse originSurvey */
-                originSurvey?: ({ [k: string]: clutch.feedback.v1.ISurvey }|null);
-            }
-
-            /** Represents a GetSurveysResponse. */
-            class GetSurveysResponse implements IGetSurveysResponse {
-
-                /**
-                 * Constructs a new GetSurveysResponse.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.IGetSurveysResponse);
-
-                /** GetSurveysResponse originSurvey. */
-                public originSurvey: { [k: string]: clutch.feedback.v1.ISurvey };
-
-                /**
-                 * Verifies a GetSurveysResponse message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a GetSurveysResponse message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns GetSurveysResponse
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetSurveysResponse;
-
-                /**
-                 * Creates a plain object from a GetSurveysResponse message. Also converts values to other types if specified.
-                 * @param message GetSurveysResponse
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.GetSurveysResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this GetSurveysResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a FeedbackMetadata. */
-            interface IFeedbackMetadata {
-
-                /** FeedbackMetadata origin */
-                origin?: (clutch.feedback.v1.Origin|null);
-
-                /** FeedbackMetadata survey */
-                survey?: (clutch.feedback.v1.ISurvey|null);
-
-                /** FeedbackMetadata userSubmitted */
-                userSubmitted?: (boolean|null);
-            }
-
-            /** Represents a FeedbackMetadata. */
-            class FeedbackMetadata implements IFeedbackMetadata {
-
-                /**
-                 * Constructs a new FeedbackMetadata.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.IFeedbackMetadata);
-
-                /** FeedbackMetadata origin. */
-                public origin: clutch.feedback.v1.Origin;
-
-                /** FeedbackMetadata survey. */
-                public survey?: (clutch.feedback.v1.ISurvey|null);
-
-                /** FeedbackMetadata userSubmitted. */
-                public userSubmitted: boolean;
-
-                /**
-                 * Verifies a FeedbackMetadata message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a FeedbackMetadata message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns FeedbackMetadata
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.FeedbackMetadata;
-
-                /**
-                 * Creates a plain object from a FeedbackMetadata message. Also converts values to other types if specified.
-                 * @param message FeedbackMetadata
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.FeedbackMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this FeedbackMetadata to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a Feedback. */
-            interface IFeedback {
-
-                /** Feedback userId */
-                userId?: (string|null);
-
-                /** Feedback urlPath */
-                urlPath?: (string|null);
-
-                /** Feedback rating */
-                rating?: (string|null);
-
-                /** Feedback freeformResponse */
-                freeformResponse?: (string|null);
-
-                /** Feedback feedbackType */
-                feedbackType?: (string|null);
-
-                /** Feedback metadata */
-                metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
-            }
-
-            /** Represents a Feedback. */
-            class Feedback implements IFeedback {
-
-                /**
-                 * Constructs a new Feedback.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.IFeedback);
-
-                /** Feedback userId. */
-                public userId: string;
-
-                /** Feedback urlPath. */
-                public urlPath: string;
-
-                /** Feedback rating. */
-                public rating: string;
-
-                /** Feedback freeformResponse. */
-                public freeformResponse: string;
-
-                /** Feedback feedbackType. */
-                public feedbackType: string;
-
-                /** Feedback metadata. */
-                public metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
-
-                /**
-                 * Verifies a Feedback message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a Feedback message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns Feedback
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Feedback;
-
-                /**
-                 * Creates a plain object from a Feedback message. Also converts values to other types if specified.
-                 * @param message Feedback
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.Feedback, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this Feedback to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a SubmitFeedbackRequest. */
-            interface ISubmitFeedbackRequest {
-
-                /** SubmitFeedbackRequest id */
-                id?: (string|null);
-
-                /** SubmitFeedbackRequest feedback */
-                feedback?: (clutch.feedback.v1.IFeedback|null);
-            }
-
-            /** Represents a SubmitFeedbackRequest. */
-            class SubmitFeedbackRequest implements ISubmitFeedbackRequest {
-
-                /**
-                 * Constructs a new SubmitFeedbackRequest.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.ISubmitFeedbackRequest);
-
-                /** SubmitFeedbackRequest id. */
-                public id: string;
-
-                /** SubmitFeedbackRequest feedback. */
-                public feedback?: (clutch.feedback.v1.IFeedback|null);
-
-                /**
-                 * Verifies a SubmitFeedbackRequest message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a SubmitFeedbackRequest message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns SubmitFeedbackRequest
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.SubmitFeedbackRequest;
-
-                /**
-                 * Creates a plain object from a SubmitFeedbackRequest message. Also converts values to other types if specified.
-                 * @param message SubmitFeedbackRequest
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.SubmitFeedbackRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this SubmitFeedbackRequest to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a SubmitFeedbackResponse. */
-            interface ISubmitFeedbackResponse {
-            }
-
-            /** Represents a SubmitFeedbackResponse. */
-            class SubmitFeedbackResponse implements ISubmitFeedbackResponse {
-
-                /**
-                 * Constructs a new SubmitFeedbackResponse.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.ISubmitFeedbackResponse);
-
-                /**
-                 * Verifies a SubmitFeedbackResponse message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a SubmitFeedbackResponse message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns SubmitFeedbackResponse
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.SubmitFeedbackResponse;
-
-                /**
-                 * Creates a plain object from a SubmitFeedbackResponse message. Also converts values to other types if specified.
-                 * @param message SubmitFeedbackResponse
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.SubmitFeedbackResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this SubmitFeedbackResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a Submission. */
-            interface ISubmission {
-
-                /** Submission submittedAt */
-                submittedAt?: (google.protobuf.ITimestamp|null);
-
-                /** Submission feedback */
-                feedback?: (clutch.feedback.v1.IFeedback|null);
-            }
-
-            /** Represents a Submission. */
-            class Submission implements ISubmission {
-
-                /**
-                 * Constructs a new Submission.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.ISubmission);
-
-                /** Submission submittedAt. */
-                public submittedAt?: (google.protobuf.ITimestamp|null);
-
-                /** Submission feedback. */
-                public feedback?: (clutch.feedback.v1.IFeedback|null);
-
-                /**
-                 * Verifies a Submission message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a Submission message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns Submission
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Submission;
-
-                /**
-                 * Creates a plain object from a Submission message. Also converts values to other types if specified.
-                 * @param message Submission
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.Submission, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this Submission to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
