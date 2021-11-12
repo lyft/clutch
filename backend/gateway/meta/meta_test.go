@@ -49,9 +49,10 @@ func TestGetAction(t *testing.T) {
 func TestResourceNames(t *testing.T) {
 	t.Parallel()
 
+	account := "default"
 	instanceID := "i-1234567890abcdef0"
 	region := "iad"
-	expectedName := "iad/i-1234567890abcdef0"
+	expectedName := "default/iad/i-1234567890abcdef0"
 	typeUrl := "clutch.aws.ec2.v1.Instance"
 
 	tests := []struct {
@@ -68,6 +69,7 @@ func TestResourceNames(t *testing.T) {
 			message: &ec2v1.TerminateInstanceRequest{
 				InstanceId: instanceID,
 				Region:     region,
+				Account:    account,
 			},
 			names: []*auditv1.Resource{{
 				TypeUrl: typeUrl,
@@ -80,6 +82,7 @@ func TestResourceNames(t *testing.T) {
 				Instance: &ec2v1.Instance{
 					InstanceId: instanceID,
 					Region:     region,
+					Account:    account,
 				},
 			},
 			names: []*auditv1.Resource{{
@@ -270,10 +273,11 @@ func TestExtractProtoPatternsValues(t *testing.T) {
 		{
 			id: "ec2 instance",
 			pb: &ec2v1.Instance{
+				Account:    "default",
 				Region:     "us-east-1",
 				InstanceId: "i-000000000",
 			},
-			expect:      "us-east-1/i-000000000",
+			expect:      "default/us-east-1/i-000000000",
 			shouldError: false,
 		},
 		{
@@ -313,30 +317,22 @@ func TestPatternValueMapping(t *testing.T) {
 		{
 			id:     "aws asg",
 			pb:     &ec2v1.AutoscalingGroup{},
-			search: "us-east-1/my-asg-name",
+			search: "default/us-east-1/my-asg-name",
 			result: map[string]string{
-				"region": "us-east-1",
-				"name":   "my-asg-name",
+				"account": "default",
+				"region":  "us-east-1",
+				"name":    "my-asg-name",
 			},
 			ok: true,
 		},
 		{
 			id:     "aws instance",
 			pb:     &ec2v1.Instance{},
-			search: "us-east-1/i-0000000",
+			search: "default/us-east-1/i-0000000",
 			result: map[string]string{
+				"account":     "default",
 				"region":      "us-east-1",
 				"instance_id": "i-0000000",
-			},
-			ok: true,
-		},
-		{
-			id:     "test for partial match",
-			pb:     &ec2v1.Instance{},
-			search: "us-east-1/i-0000000/meow",
-			result: map[string]string{
-				"region":      "us-east-1/i-0000000",
-				"instance_id": "meow",
 			},
 			ok: true,
 		},

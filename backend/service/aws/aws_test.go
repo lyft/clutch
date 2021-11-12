@@ -194,6 +194,7 @@ var testInstance = ec2types.Instance{
 
 var testInstanceProto = ec2v1.Instance{
 	InstanceId:       "i-123456789abcdef0",
+	Account:          "default",
 	Region:           "us-east-1",
 	State:            ec2v1.Instance_RUNNING,
 	InstanceType:     "c5.xlarge",
@@ -238,9 +239,10 @@ var testAutoscalingGroup = astypes.AutoScalingGroup{
 }
 
 var testAutoscalingGroupProto = ec2v1.AutoscalingGroup{
-	Name:   "asgname",
-	Zones:  []string{"us-east-1a", "us-east-1b"},
-	Region: "us-east-1",
+	Name:    "asgname",
+	Zones:   []string{"us-east-1a", "us-east-1b"},
+	Account: "default",
+	Region:  "us-east-1",
 	Size: &ec2v1.AutoscalingGroupSize{
 		Min:     uint32(1),
 		Max:     uint32(10),

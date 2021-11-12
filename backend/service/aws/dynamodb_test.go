@@ -38,8 +38,9 @@ var testDynamodbTable = &types.TableDescription{
 }
 
 var testTableOutput = &dynamodbv1.Table{
-	Name:   "test-table",
-	Region: "us-east-1",
+	Name:    "test-table",
+	Account: "default",
+	Region:  "us-east-1",
 	ProvisionedThroughput: &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
@@ -72,8 +73,9 @@ var testDynamodbTableWithGSI = &types.TableDescription{
 }
 
 var testTableWithGSIOutput = &dynamodbv1.Table{
-	Name:   "test-gsi-table",
-	Region: "us-east-1",
+	Name:    "test-gsi-table",
+	Account: "default",
+	Region:  "us-east-1",
 	ProvisionedThroughput: &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
