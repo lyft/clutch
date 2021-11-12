@@ -117,12 +117,16 @@ export interface TimeData {
   [eventsKey: string]: EventData;
 }
 
+export interface TimeseriesPoint extends IClutch.timeseries.v1.IPoint {
+  href?: string;
+}
+
 export interface EventData {
   /**
    * Mapping of entity names to their event time points (can be projects, etc)
    * See https://github.com/lyft/clutch/blob/main/api/timeseries/v1/timeseries.proto
    */
-  points: { [name: string]: IClutch.timeseries.v1.IPoint[] };
+  points: { [name: string]: TimeseriesPoint[] };
   /** The icon that will be used for this event series on the event timeline */
   icon: React.ReactElement<any> | string;
 }

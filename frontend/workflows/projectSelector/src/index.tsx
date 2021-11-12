@@ -36,10 +36,11 @@ export default register;
 
 export type {
   DashState,
+  EventData,
   TimelineState,
   TimeData,
   TimeDataUpdate,
-  EventData,
+  TimeseriesPoint,
   TimeRangeState,
 } from "./types";
 export {
