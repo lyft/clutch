@@ -178,26 +178,6 @@ func TestMissingRegionOnEachServiceCall(t *testing.T) {
 	assert.Contains(t, err.Error(), "no client found")
 }
 
-func TestGetRegionalClient(t *testing.T) {
-	c := &client{
-		currentAccountAlias: "default",
-		accounts: map[string]*accountClients{
-			"default": {
-				clients: map[string]*regionalClient{
-					"us-east-1": nil,
-				},
-			},
-		},
-	}
-
-	_, err := c.getRegionalClient("us-east-1")
-	assert.NoError(t, err)
-
-	_, err = c.getRegionalClient("us-north-5")
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "no client found")
-}
-
 var testInstance = ec2types.Instance{
 	InstanceId: aws.String("i-123456789abcdef0"),
 	Tags: []ec2types.Tag{

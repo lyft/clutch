@@ -225,21 +225,10 @@ func (c *client) InterceptError(e error) error {
 	return ConvertError(e)
 }
 
-func (c *client) getRegionalClient(region string) (*regionalClient, error) {
-	// TODO (mcutalo): this currently defaults to the current account alias
-	// this will be removed once the multi account bits land
-	// the func signature will also have to be updated to pass in desired account info
-	cl, ok := c.accounts[c.currentAccountAlias].clients[region]
-	if !ok {
-		return nil, status.Errorf(codes.NotFound, "no client found for region '%s'", region)
-	}
-	return cl, nil
-}
-
 func (c *client) getAccountRegionClient(account, region string) (*regionalClient, error) {
 	cl, ok := c.accounts[account].clients[region]
 	if !ok {
-		return nil, status.Errorf(codes.NotFound, "no client found for region '%s'", region)
+		return nil, status.Errorf(codes.NotFound, "no client found for account '%s' in region '%s'", account, region)
 	}
 	return cl, nil
 }
@@ -375,11 +364,9 @@ func (c *client) Accounts() []string {
 
 func (c *client) AccountsAndRegions() map[string][]string {
 	ar := make(map[string][]string)
-
 	for name, account := range c.accounts {
 		ar[name] = account.regions
 	}
-
 	return ar
 }
 
