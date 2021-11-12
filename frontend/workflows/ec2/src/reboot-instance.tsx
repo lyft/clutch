@@ -77,9 +77,10 @@ const RebootInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes 
     resourceData: {},
     rebootData: {
       deps: ["resourceData"],
-      hydrator: (resourceData: { instanceId: string; region: string }) => {
+      hydrator: (resourceData: { instanceId: string; account: string; region: string }) => {
         return client.post("/v1/aws/ec2/rebootInstance", {
           instance_id: resourceData.instanceId,
+          account: resourceData.account,
           region: resourceData.region,
         });
       },

@@ -121,9 +121,10 @@ const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType
     groupData: {},
     resizeData: {
       deps: ["groupData"],
-      hydrator: (groupData: { name: string; region: string; size: string }) => {
+      hydrator: (groupData: { name: string; account: string; region: string; size: string }) => {
         return client.post("/v1/aws/ec2/resizeAutoscalingGroup", {
           name: groupData.name,
+          account: groupData.account,
           region: groupData.region,
           size: groupData.size,
         });

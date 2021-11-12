@@ -52,7 +52,7 @@ func (c *client) DescribeTable(ctx context.Context, account, region, tableName s
 		return nil, err
 	}
 
-	ret := newProtoForTable(result.Table, region)
+	ret := newProtoForTable(result.Table, account, region)
 
 	return ret, nil
 }
@@ -81,7 +81,7 @@ func getGlobalSecondaryIndex(indexes []types.GlobalSecondaryIndexDescription, ta
 	return nil, status.Error(codes.NotFound, "Global secondary index not found.")
 }
 
-func newProtoForTable(t *types.TableDescription, region string) *dynamodbv1.Table {
+func newProtoForTable(t *types.TableDescription, account, region string) *dynamodbv1.Table {
 	currentCapacity := &dynamodbv1.Throughput{
 		WriteCapacityUnits: aws.ToInt64(t.ProvisionedThroughput.WriteCapacityUnits),
 		ReadCapacityUnits:  aws.ToInt64(t.ProvisionedThroughput.ReadCapacityUnits),
@@ -95,6 +95,7 @@ func newProtoForTable(t *types.TableDescription, region string) *dynamodbv1.Tabl
 
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(t.TableName),
+		Account:                account,
 		Region:                 region,
 		GlobalSecondaryIndexes: globalSecondaryIndexes,
 		ProvisionedThroughput:  currentCapacity,
@@ -258,7 +259,7 @@ func (c *client) UpdateCapacity(ctx context.Context, account, region, tableName 
 		return nil, err
 	}
 
-	ret := newProtoForTable(result.TableDescription, region)
+	ret := newProtoForTable(result.TableDescription, account, region)
 
 	return ret, nil
 }

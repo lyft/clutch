@@ -266,8 +266,9 @@ func (c *client) DescribeAutoscalingGroups(ctx context.Context, account, region 
 
 	ret := make([]*ec2v1.AutoscalingGroup, len(result.AutoScalingGroups))
 	for idx, group := range result.AutoScalingGroups {
-		ret[idx] = newProtoForAutoscalingGroup(group)
+		ret[idx] = newProtoForAutoscalingGroup(account, group)
 	}
+
 	return ret, nil
 }
 
@@ -307,10 +308,11 @@ func newProtoForAutoscalingGroupInstance(instance astypes.Instance) *ec2v1.Autos
 	}
 }
 
-func newProtoForAutoscalingGroup(group astypes.AutoScalingGroup) *ec2v1.AutoscalingGroup {
+func newProtoForAutoscalingGroup(account string, group astypes.AutoScalingGroup) *ec2v1.AutoscalingGroup {
 	pb := &ec2v1.AutoscalingGroup{
-		Name:  aws.ToString(group.AutoScalingGroupName),
-		Zones: group.AvailabilityZones,
+		Name:    aws.ToString(group.AutoScalingGroupName),
+		Account: account,
+		Zones:   group.AvailabilityZones,
 		Size: &ec2v1.AutoscalingGroupSize{
 			Min:     uint32(aws.ToInt32(group.MinSize)),
 			Max:     uint32(aws.ToInt32(group.MaxSize)),
@@ -390,7 +392,7 @@ func (c *client) DescribeInstances(ctx context.Context, account, region string, 
 	var ret []*ec2v1.Instance
 	for _, r := range result.Reservations {
 		for _, i := range r.Instances {
-			ret = append(ret, newProtoForInstance(i))
+			ret = append(ret, newProtoForInstance(i, account))
 		}
 	}
 
@@ -433,9 +435,10 @@ func protoForInstanceState(state string) ec2v1.Instance_State {
 	return ec2v1.Instance_State(val)
 }
 
-func newProtoForInstance(i ec2types.Instance) *ec2v1.Instance {
+func newProtoForInstance(i ec2types.Instance, account string) *ec2v1.Instance {
 	ret := &ec2v1.Instance{
 		InstanceId:       aws.ToString(i.InstanceId),
+		Account:          account,
 		State:            protoForInstanceState(string(i.State.Name)),
 		InstanceType:     string(i.InstanceType),
 		PublicIpAddress:  aws.ToString(i.PublicIpAddress),

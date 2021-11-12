@@ -85,7 +85,7 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, account string
 		}
 
 		for _, asg := range output.AutoScalingGroups {
-			protoAsg := newProtoForAutoscalingGroup(asg)
+			protoAsg := newProtoForAutoscalingGroup(account, asg)
 			protoAsg.Account = account
 
 			asgAny, err := anypb.New(protoAsg)
@@ -128,7 +128,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, account string, cli
 
 		for _, reservation := range output.Reservations {
 			for _, instance := range reservation.Instances {
-				protoInstance := newProtoForInstance(instance)
+				protoInstance := newProtoForInstance(instance, account)
 				protoInstance.Account = account
 
 				instanceAny, err := anypb.New(protoInstance)

@@ -136,11 +136,13 @@ const UpdateShardCount: React.FC<WorkflowProps> = ({ heading, resolverType }) =>
       deps: ["resourceData"],
       hydrator: (resourceData: {
         streamName: string;
+        account: string;
         region: string;
         targetShardCount: number;
       }) => {
         return client.post("/v1/aws/kinesis/updateShardCount", {
           stream_name: resourceData.streamName,
+          account: resourceData.account,
           region: resourceData.region,
           target_shard_count: resourceData.targetShardCount,
         });

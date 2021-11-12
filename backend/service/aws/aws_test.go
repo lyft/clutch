@@ -255,7 +255,7 @@ var testAutoscalingGroupProto = ec2v1.AutoscalingGroup{
 }
 
 func TestNewProtoForInstance(t *testing.T) {
-	pb := newProtoForInstance(testInstance)
+	pb := newProtoForInstance(testInstance, "default")
 	assert.Equal(t, &testInstanceProto, pb)
 }
 
@@ -265,7 +265,7 @@ func TestNewProtoForAutoscalingGroupInstance(t *testing.T) {
 }
 
 func TestNewProtoForAutoscalingGroup(t *testing.T) {
-	pb := newProtoForAutoscalingGroup(testAutoscalingGroup)
+	pb := newProtoForAutoscalingGroup("default", testAutoscalingGroup)
 	assert.Equal(t, &testAutoscalingGroupProto, pb)
 }
 
