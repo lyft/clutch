@@ -165,15 +165,15 @@ func TestMissingRegionOnEachServiceCall(t *testing.T) {
 		},
 	}
 
-	_, err := c.DescribeInstances(context.Background(), "us-north-5", nil)
+	_, err := c.DescribeInstances(context.Background(), "default", "us-north-5", nil)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "no client found")
 
-	err = c.TerminateInstances(context.Background(), "us-north-5", nil)
+	err = c.TerminateInstances(context.Background(), "default", "us-north-5", nil)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "no client found")
 
-	err = c.RebootInstances(context.Background(), "us-north-5", nil)
+	err = c.RebootInstances(context.Background(), "default", "us-north-5", nil)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "no client found")
 }
@@ -324,19 +324,19 @@ func TestDescribeInstances(t *testing.T) {
 		},
 	}
 
-	results, err := c.DescribeInstances(context.Background(), "us-east-1", nil)
+	results, err := c.DescribeInstances(context.Background(), "default", "us-east-1", nil)
 	assert.NoError(t, err)
 	assert.Len(t, results, 0)
 
 	m.instances = []ec2types.Instance{testInstance}
 
-	results, err = c.DescribeInstances(context.Background(), "us-east-1", []string{"i-12345"})
+	results, err = c.DescribeInstances(context.Background(), "default", "us-east-1", []string{"i-12345"})
 	assert.NoError(t, err)
 	assert.Len(t, results, 1)
 	assert.Equal(t, &testInstanceProto, results[0])
 
 	m.instancesErr = errors.New("whoops")
-	_, err = c.DescribeInstances(context.Background(), "us-east-1", nil)
+	_, err = c.DescribeInstances(context.Background(), "default", "us-east-1", nil)
 	assert.EqualError(t, err, "whoops")
 }
 
@@ -353,11 +353,11 @@ func TestTerminateInstances(t *testing.T) {
 		},
 	}
 
-	err := c.TerminateInstances(context.Background(), "us-east-1", nil)
+	err := c.TerminateInstances(context.Background(), "default", "us-east-1", nil)
 	assert.NoError(t, err)
 
 	m.terminateErr = errors.New("yikes")
-	err = c.TerminateInstances(context.Background(), "us-east-1", nil)
+	err = c.TerminateInstances(context.Background(), "default", "us-east-1", nil)
 	assert.EqualError(t, err, "yikes")
 }
 
@@ -374,11 +374,11 @@ func TestRebootInstances(t *testing.T) {
 		},
 	}
 
-	err := c.RebootInstances(context.Background(), "us-east-1", nil)
+	err := c.RebootInstances(context.Background(), "default", "us-east-1", nil)
 	assert.NoError(t, err)
 
 	m.rebootErr = errors.New("ohno")
-	err = c.RebootInstances(context.Background(), "us-east-1", nil)
+	err = c.RebootInstances(context.Background(), "default", "us-east-1", nil)
 	assert.EqualError(t, err, "ohno")
 }
 
@@ -418,7 +418,7 @@ func TestResizeAutoscalingGroupErrorHandling(t *testing.T) {
 		},
 	}
 
-	err1 := c.ResizeAutoscalingGroup(context.Background(), "us-east-1", "asgname", &ec2v1.AutoscalingGroupSize{
+	err1 := c.ResizeAutoscalingGroup(context.Background(), "default", "us-east-1", "asgname", &ec2v1.AutoscalingGroupSize{
 		Min:     1,
 		Max:     10,
 		Desired: 5,
@@ -426,7 +426,7 @@ func TestResizeAutoscalingGroupErrorHandling(t *testing.T) {
 	assert.Error(t, err1)
 
 	// Test unknown region
-	err2 := c.ResizeAutoscalingGroup(context.Background(), "choice-region-1", "clutch", &ec2v1.AutoscalingGroupSize{})
+	err2 := c.ResizeAutoscalingGroup(context.Background(), "default", "choice-region-1", "clutch", &ec2v1.AutoscalingGroupSize{})
 	assert.Error(t, err2)
 }
 
@@ -462,7 +462,7 @@ func TestDescribeAutoScalingGroups(t *testing.T) {
 		},
 	}
 
-	asgs, err := c.DescribeAutoscalingGroups(context.Background(), "us-east-1", []string{"asg-one", "asg-two"})
+	asgs, err := c.DescribeAutoscalingGroups(context.Background(), "default", "us-east-1", []string{"asg-one", "asg-two"})
 	assert.NoError(t, err)
 	assert.Len(t, asgs, 2)
 
@@ -490,12 +490,12 @@ func TestDescribeAutoscalingGroupsErrorHandling(t *testing.T) {
 		},
 	}
 
-	asg1, err1 := c.DescribeAutoscalingGroups(context.Background(), "us-east-1", []string{"asgname"})
+	asg1, err1 := c.DescribeAutoscalingGroups(context.Background(), "default", "us-east-1", []string{"asgname"})
 	assert.Nil(t, asg1)
 	assert.Error(t, err1)
 
 	// Test unknown region
-	asg2, err2 := c.DescribeAutoscalingGroups(context.Background(), "unknown-region", []string{"asgname"})
+	asg2, err2 := c.DescribeAutoscalingGroups(context.Background(), "default", "unknown-region", []string{"asgname"})
 	assert.Nil(t, asg2)
 	assert.Error(t, err2)
 }

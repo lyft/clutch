@@ -39,10 +39,9 @@ func getScalingLimits(cfg *awsv1.Config) *awsv1.ScalingLimits {
 	return cfg.DynamodbConfig.ScalingLimits
 }
 
-func (c *client) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
-	cl, err := c.getRegionalClient(region)
+func (c *client) DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error) {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
-		c.log.Error("unable to get regional client", zap.Error(err))
 		return nil, err
 	}
 
@@ -209,10 +208,9 @@ func isProvisioned(t *dynamodb.DescribeTableOutput) bool {
 	return t.Table.BillingModeSummary.BillingMode == types.BillingModeProvisioned
 }
 
-func (c *client) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignore_maximums bool) (*dynamodbv1.Table, error) {
-	cl, err := c.getRegionalClient(region)
+func (c *client) UpdateCapacity(ctx context.Context, account, region, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignore_maximums bool) (*dynamodbv1.Table, error) {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
-		c.log.Error("unable to get regional client", zap.Error(err))
 		return nil, err
 	}
 

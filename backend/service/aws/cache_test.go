@@ -39,7 +39,7 @@ func TestStartTickerForCacheResource(t *testing.T) {
 	// This lets us track the number of invocations to processFakeResource()
 	numProcessFakeResourceCalls := 0
 
-	processFakeResource := func(ctx context.Context, client *regionalClient) {
+	processFakeResource := func(ctx context.Context, account string, client *regionalClient) {
 		numProcessFakeResourceCalls++
 	}
 
@@ -49,7 +49,7 @@ func TestStartTickerForCacheResource(t *testing.T) {
 		cancel()
 	}()
 
-	c.startTickerForCacheResource(ctx, time.Millisecond, &regionalClient{}, processFakeResource)
+	c.startTickerForCacheResource(ctx, time.Millisecond, "default", &regionalClient{}, processFakeResource)
 
 	// This asserts that we setup a ticker, it was invoked at least once, and the cancel context was successful.
 	assert.Greater(t, numProcessFakeResourceCalls, 0)

@@ -18,7 +18,7 @@ type kinesisAPI struct {
 }
 
 func (a *kinesisAPI) GetStream(ctx context.Context, request *kinesisv1.GetStreamRequest) (*kinesisv1.GetStreamResponse, error) {
-	stream, err := a.client.DescribeKinesisStream(ctx, request.Region, request.StreamName)
+	stream, err := a.client.DescribeKinesisStream(ctx, request.Account, request.Region, request.StreamName)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (a *kinesisAPI) GetStream(ctx context.Context, request *kinesisv1.GetStream
 }
 
 func (a *kinesisAPI) UpdateShardCount(ctx context.Context, request *kinesisv1.UpdateShardCountRequest) (*kinesisv1.UpdateShardCountResponse, error) {
-	err := a.client.UpdateKinesisShardCount(ctx, request.Region, request.StreamName, request.TargetShardCount)
+	err := a.client.UpdateKinesisShardCount(ctx, request.Account, request.Region, request.StreamName, request.TargetShardCount)
 	if err != nil {
 		return nil, err
 	}

@@ -31,7 +31,7 @@ service DDBAPI {
 message Table {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
-    pattern : "{region}/{name}"
+    pattern : "{account}/{region}/{name}"
   };
 
   // Enum representing the status of a table.
@@ -101,6 +101,9 @@ message Table {
 
   // Table billing mode.
   BillingMode billing_mode = 6;
+
+  // The aws acccount
+  string account = 7;
 }
 
 // A global secondary index.
@@ -152,6 +155,7 @@ message Throughput {
 message DescribeTableRequest {
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 // The result of requesting a table.
@@ -167,13 +171,15 @@ message DescribeTableResponse {
 message UpdateCapacityRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.dynamodb.v1.Table",
-    pattern : "{region}/{table_name}"
+    pattern : "{account}/{region}/{table_name}"
   };
+
   string table_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
   Throughput table_throughput = 3;
   repeated IndexUpdateAction gsi_updates = 4;
   bool ignore_maximums = 5;
+  string account = 7 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 // The result of requesting a capacity update.

@@ -43,23 +43,21 @@ func (c *client) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<
 // If a single resource and region takes longer to process it will not block other resources.
 // Additionally this give us the flexibility to tune the frequency based on resource.
 func (c *client) processRegionTopologyObjects(ctx context.Context) {
-	// TODO (mcutalo): All of these calls will be updated to handle multi account in a following PR
-	// currently there can only be a single account
 	for _, account := range c.accounts {
 		for name, client := range account.clients {
-			c.log.Info("processing topology objects for region", zap.String("region", name))
-			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), client, c.processAllEC2Instances)
-			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllAutoScalingGroups)
-			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllKinesisStreams)
-			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllDynamoDatabases)
+			c.log.Info("processing topology objects for account in region", zap.String("account", account.alias), zap.String("region", name))
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), account.alias, client, c.processAllEC2Instances)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), account.alias, client, c.processAllAutoScalingGroups)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllKinesisStreams)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllDynamoDatabases)
 		}
 	}
 }
 
-func (c *client) startTickerForCacheResource(ctx context.Context, duration time.Duration, client *regionalClient, resourceFunc func(context.Context, *regionalClient)) {
+func (c *client) startTickerForCacheResource(ctx context.Context, duration time.Duration, account string, client *regionalClient, resourceFunc func(context.Context, string, *regionalClient)) {
 	ticker := time.NewTicker(duration)
 	for {
-		resourceFunc(ctx, client)
+		resourceFunc(ctx, account, client)
 
 		select {
 		case <-ticker.C:
@@ -71,7 +69,7 @@ func (c *client) startTickerForCacheResource(ctx context.Context, duration time.
 	}
 }
 
-func (c *client) processAllAutoScalingGroups(ctx context.Context, client *regionalClient) {
+func (c *client) processAllAutoScalingGroups(ctx context.Context, account string, client *regionalClient) {
 	c.log.Info("starting to process auto scaling groups for region", zap.String("region", client.region))
 	// 100 is the maximum amount of records per page allowed for this API
 	input := autoscaling.DescribeAutoScalingGroupsInput{
@@ -88,6 +86,8 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 
 		for _, asg := range output.AutoScalingGroups {
 			protoAsg := newProtoForAutoscalingGroup(asg)
+			protoAsg.Account = account
+
 			asgAny, err := anypb.New(protoAsg)
 			if err != nil {
 				c.log.Error("unable to marshal asg proto", zap.Error(err))
@@ -111,7 +111,7 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 	}
 }
 
-func (c *client) processAllEC2Instances(ctx context.Context, client *regionalClient) {
+func (c *client) processAllEC2Instances(ctx context.Context, account string, client *regionalClient) {
 	c.log.Info("starting to process ec2 instances for region", zap.String("region", client.region))
 	// 1000 is the maximum amount of records per page allowed for this API
 	input := ec2.DescribeInstancesInput{
@@ -129,6 +129,8 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 		for _, reservation := range output.Reservations {
 			for _, instance := range reservation.Instances {
 				protoInstance := newProtoForInstance(instance)
+				protoInstance.Account = account
+
 				instanceAny, err := anypb.New(protoInstance)
 				if err != nil {
 					c.log.Error("unable to marshal instance proto", zap.Error(err))
@@ -153,7 +155,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 	}
 }
 
-func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalClient) {
+func (c *client) processAllKinesisStreams(ctx context.Context, account string, client *regionalClient) {
 	c.log.Info("starting to process kinesis streams for region", zap.String("region", client.region))
 	// 100 is arbatrary, currently this API does not have a per page limit,
 	// looking at other aws API limits this value felt safe.
@@ -175,7 +177,7 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 		}
 
 		for _, stream := range output.StreamNames {
-			v1Stream, err := c.DescribeKinesisStream(ctx, client.region, stream)
+			v1Stream, err := c.DescribeKinesisStream(ctx, account, client.region, stream)
 			if err != nil {
 				c.log.Error("unable to describe kinesis stream", zap.Error(err))
 				continue
@@ -204,7 +206,7 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 	}
 }
 
-func (c *client) processAllDynamoDatabases(ctx context.Context, client *regionalClient) {
+func (c *client) processAllDynamoDatabases(ctx context.Context, account string, client *regionalClient) {
 	c.log.Info("starting to process dynamodb for region", zap.String("region", client.region))
 
 	input := dynamodb.ListTablesInput{
@@ -220,11 +222,12 @@ func (c *client) processAllDynamoDatabases(ctx context.Context, client *regional
 		}
 
 		for _, t := range output.TableNames {
-			protoTable, err := c.DescribeTable(ctx, client.region, t)
+			protoTable, err := c.DescribeTable(ctx, account, client.region, t)
 			if err != nil {
 				c.log.Error("unable to describe dynamodb table", zap.Error(err))
 				continue
 			}
+			protoTable.Account = account
 
 			tableAny, err := anypb.New(protoTable)
 			if err != nil {

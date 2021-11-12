@@ -164,26 +164,29 @@ func (c *client) createRegionalClients(accountAlias, region string, regions []st
 }
 
 type Client interface {
-	DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error)
-	TerminateInstances(ctx context.Context, region string, ids []string) error
-	RebootInstances(ctx context.Context, region string, ids []string) error
+	DescribeInstances(ctx context.Context, account, region string, ids []string) ([]*ec2v1.Instance, error)
+	TerminateInstances(ctx context.Context, account, region string, ids []string) error
+	RebootInstances(ctx context.Context, account, region string, ids []string) error
 
-	DescribeAutoscalingGroups(ctx context.Context, region string, names []string) ([]*ec2v1.AutoscalingGroup, error)
-	ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error
+	DescribeAutoscalingGroups(ctx context.Context, account, region string, names []string) ([]*ec2v1.AutoscalingGroup, error)
+	ResizeAutoscalingGroup(ctx context.Context, account, region string, name string, size *ec2v1.AutoscalingGroupSize) error
 
-	DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error)
-	UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error
+	DescribeKinesisStream(ctx context.Context, account, region, streamName string) (*kinesisv1.Stream, error)
+	UpdateKinesisShardCount(ctx context.Context, account, region, streamName string, targetShardCount int32) error
 
-	S3GetBucketPolicy(ctx context.Context, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error)
-	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
+	S3GetBucketPolicy(ctx context.Context, account, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error)
+	S3StreamingGet(ctx context.Context, account, region, bucket, key string) (io.ReadCloser, error)
 
-	DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error)
-	UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error)
+	DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error)
+	UpdateCapacity(ctx context.Context, account, region, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error)
 
-	GetCallerIdentity(ctx context.Context, region string) (*sts.GetCallerIdentityOutput, error)
+	GetCallerIdentity(ctx context.Context, account, region string) (*sts.GetCallerIdentityOutput, error)
 
-	SimulateCustomPolicy(ctx context.Context, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error)
+	SimulateCustomPolicy(ctx context.Context, account, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error)
 
+	Accounts() []string
+	AccountsAndRegions() map[string][]string
+	GetPrimaryAccountAlias() string
 	Regions() []string
 }
 
@@ -226,15 +229,23 @@ func (c *client) getRegionalClient(region string) (*regionalClient, error) {
 	// TODO (mcutalo): this currently defaults to the current account alias
 	// this will be removed once the multi account bits land
 	// the func signature will also have to be updated to pass in desired account info
-	rc, ok := c.accounts[c.currentAccountAlias].clients[region]
+	cl, ok := c.accounts[c.currentAccountAlias].clients[region]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "no client found for region '%s'", region)
 	}
-	return rc, nil
+	return cl, nil
 }
 
-func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
-	rc, err := c.getRegionalClient(region)
+func (c *client) getAccountRegionClient(account, region string) (*regionalClient, error) {
+	cl, ok := c.accounts[account].clients[region]
+	if !ok {
+		return nil, status.Errorf(codes.NotFound, "no client found for region '%s'", region)
+	}
+	return cl, nil
+}
+
+func (c *client) ResizeAutoscalingGroup(ctx context.Context, account, region, name string, size *ec2v1.AutoscalingGroupSize) error {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return err
 	}
@@ -246,12 +257,12 @@ func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name
 		MinSize:              aws.Int32(int32(size.Min)),
 	}
 
-	_, err = rc.autoscaling.UpdateAutoScalingGroup(ctx, input)
+	_, err = cl.autoscaling.UpdateAutoScalingGroup(ctx, input)
 	return err
 }
 
-func (c *client) DescribeAutoscalingGroups(ctx context.Context, region string, names []string) ([]*ec2v1.AutoscalingGroup, error) {
-	cl, err := c.getRegionalClient(region)
+func (c *client) DescribeAutoscalingGroups(ctx context.Context, account, region string, names []string) ([]*ec2v1.AutoscalingGroup, error) {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return nil, err
 	}
@@ -354,8 +365,30 @@ func (c *client) Regions() []string {
 	return regions
 }
 
-func (c *client) DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error) {
-	cl, err := c.getRegionalClient(region)
+func (c *client) Accounts() []string {
+	accounts := []string{}
+	for account := range c.accounts {
+		accounts = append(accounts, account)
+	}
+	return accounts
+}
+
+func (c *client) AccountsAndRegions() map[string][]string {
+	ar := make(map[string][]string)
+
+	for name, account := range c.accounts {
+		ar[name] = account.regions
+	}
+
+	return ar
+}
+
+func (c *client) GetPrimaryAccountAlias() string {
+	return c.currentAccountAlias
+}
+
+func (c *client) DescribeInstances(ctx context.Context, account, region string, ids []string) ([]*ec2v1.Instance, error) {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return nil, err
 	}
@@ -377,8 +410,8 @@ func (c *client) DescribeInstances(ctx context.Context, region string, ids []str
 	return ret, nil
 }
 
-func (c *client) TerminateInstances(ctx context.Context, region string, ids []string) error {
-	cl, err := c.getRegionalClient(region)
+func (c *client) TerminateInstances(ctx context.Context, account, region string, ids []string) error {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return err
 	}
@@ -389,8 +422,8 @@ func (c *client) TerminateInstances(ctx context.Context, region string, ids []st
 	return err
 }
 
-func (c *client) RebootInstances(ctx context.Context, region string, ids []string) error {
-	cl, err := c.getRegionalClient(region)
+func (c *client) RebootInstances(ctx context.Context, account, region string, ids []string) error {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return err
 	}

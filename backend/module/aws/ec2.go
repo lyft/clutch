@@ -17,9 +17,9 @@ type ec2API struct {
 	client aws.Client
 }
 
-func (a *ec2API) ResizeAutoscalingGroup(ctx context.Context, request *ec2v1.ResizeAutoscalingGroupRequest) (*ec2v1.ResizeAutoscalingGroupResponse, error) {
+func (a *ec2API) ResizeAutoscalingGroup(ctx context.Context, req *ec2v1.ResizeAutoscalingGroupRequest) (*ec2v1.ResizeAutoscalingGroupResponse, error) {
 	// TODO: additional validation
-	err := a.client.ResizeAutoscalingGroup(ctx, request.Region, request.Name, request.Size)
+	err := a.client.ResizeAutoscalingGroup(ctx, req.Account, req.Region, req.Name, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (a *ec2API) ResizeAutoscalingGroup(ctx context.Context, request *ec2v1.Resi
 }
 
 func (a *ec2API) TerminateInstance(ctx context.Context, req *ec2v1.TerminateInstanceRequest) (*ec2v1.TerminateInstanceResponse, error) {
-	err := a.client.TerminateInstances(ctx, req.Region, []string{req.InstanceId})
+	err := a.client.TerminateInstances(ctx, req.Account, req.Region, []string{req.InstanceId})
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (a *ec2API) TerminateInstance(ctx context.Context, req *ec2v1.TerminateInst
 }
 
 func (a *ec2API) GetInstance(ctx context.Context, req *ec2v1.GetInstanceRequest) (*ec2v1.GetInstanceResponse, error) {
-	instances, err := a.client.DescribeInstances(ctx, req.Region, []string{req.InstanceId})
+	instances, err := a.client.DescribeInstances(ctx, req.Account, req.Region, []string{req.InstanceId})
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (a *ec2API) GetInstance(ctx context.Context, req *ec2v1.GetInstanceRequest)
 }
 
 func (a *ec2API) RebootInstance(ctx context.Context, req *ec2v1.RebootInstanceRequest) (*ec2v1.RebootInstanceResponse, error) {
-	err := a.client.RebootInstances(ctx, req.Region, []string{req.InstanceId})
+	err := a.client.RebootInstances(ctx, req.Account, req.Region, []string{req.InstanceId})
 	if err != nil {
 		return nil, err
 	}

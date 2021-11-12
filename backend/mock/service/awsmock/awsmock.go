@@ -25,30 +25,32 @@ import (
 
 type svc struct{}
 
-func (s *svc) DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error) {
+func (s *svc) DescribeKinesisStream(ctx context.Context, account, region, streamName string) (*kinesisv1.Stream, error) {
 	ret := &kinesisv1.Stream{
 		StreamName:        streamName,
 		Region:            region,
+		Account:           "defaul",
 		CurrentShardCount: int32(32),
 	}
 	return ret, nil
 }
 
-func (s *svc) UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error {
+func (s *svc) UpdateKinesisShardCount(ctx context.Context, account, region, streamName string, targetShardCount int32) error {
 	return nil
 }
 
-func (s *svc) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
+func (s *svc) ResizeAutoscalingGroup(ctx context.Context, account, region, name string, size *ec2v1.AutoscalingGroupSize) error {
 	return nil
 }
 
-func (s *svc) DescribeAutoscalingGroups(ctx context.Context, region string, names []string) ([]*ec2v1.AutoscalingGroup, error) {
+func (s *svc) DescribeAutoscalingGroups(ctx context.Context, account, region string, names []string) ([]*ec2v1.AutoscalingGroup, error) {
 	ret := make([]*ec2v1.AutoscalingGroup, len(names))
 	for idx, name := range names {
 		ret[idx] = &ec2v1.AutoscalingGroup{
-			Name:   name,
-			Region: region,
-			Zones:  []string{region + "a", region + "b"},
+			Name:    name,
+			Region:  region,
+			Account: "default",
+			Zones:   []string{region + "a", region + "b"},
 			Size: &ec2v1.AutoscalingGroupSize{
 				Min:     25,
 				Max:     200,
@@ -79,12 +81,13 @@ func (s *svc) DescribeAutoscalingGroups(ctx context.Context, region string, name
 	return ret, nil
 }
 
-func (s *svc) DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error) {
+func (s *svc) DescribeInstances(ctx context.Context, account, region string, ids []string) ([]*ec2v1.Instance, error) {
 	var ret []*ec2v1.Instance
 	for _, id := range ids {
 		ret = append(ret, &ec2v1.Instance{
 			InstanceId:       id,
 			Region:           region,
+			Account:          "default",
 			State:            ec2v1.Instance_State(rand.Intn(len(ec2v1.Instance_State_value))),
 			InstanceType:     "c3.2xlarge",
 			PublicIpAddress:  "8.1.1.1",
@@ -96,26 +99,26 @@ func (s *svc) DescribeInstances(ctx context.Context, region string, ids []string
 	return ret, nil
 }
 
-func (s *svc) TerminateInstances(ctx context.Context, region string, ids []string) error {
+func (s *svc) TerminateInstances(ctx context.Context, account, region string, ids []string) error {
 	return nil
 }
 
-func (s *svc) RebootInstances(ctx context.Context, region string, ids []string) error {
+func (s *svc) RebootInstances(ctx context.Context, account, region string, ids []string) error {
 	return nil
 }
 
-func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error) {
+func (s *svc) S3StreamingGet(ctx context.Context, account, region, bucket, key string) (io.ReadCloser, error) {
 	panic("implement me")
 }
 
-func (s *svc) S3GetBucketPolicy(ctx context.Context, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error) {
+func (s *svc) S3GetBucketPolicy(ctx context.Context, account, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error) {
 	return &s3.GetBucketPolicyOutput{
 		Policy:         aws.String("{}"),
 		ResultMetadata: middleware.Metadata{},
 	}, nil
 }
 
-func (s *svc) DescribeTable(ctx context.Context, region string, tableName string) (*dynamodbv1.Table, error) {
+func (s *svc) DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error) {
 	currentThroughput := &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
@@ -141,7 +144,7 @@ func (s *svc) DescribeTable(ctx context.Context, region string, tableName string
 	return ret, nil
 }
 
-func (s *svc) UpdateCapacity(ctx context.Context, region string, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error) {
+func (s *svc) UpdateCapacity(ctx context.Context, account, region, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error) {
 	currentThroughput := &dynamodbv1.Throughput{
 		ReadCapacityUnits:  100,
 		WriteCapacityUnits: 200,
@@ -171,7 +174,21 @@ func (s *svc) Regions() []string {
 	return []string{"us-mock-1"}
 }
 
-func (s *svc) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCallerIdentityOutput, error) {
+func (s *svc) Accounts() []string {
+	return []string{"default"}
+}
+
+func (s *svc) AccountsAndRegions() map[string][]string {
+	return map[string][]string{
+		"default": {"us-mock-1"},
+	}
+}
+
+func (s *svc) GetPrimaryAccountAlias() string {
+	return "default"
+}
+
+func (s *svc) GetCallerIdentity(ctx context.Context, account, region string) (*sts.GetCallerIdentityOutput, error) {
 	return &sts.GetCallerIdentityOutput{
 		Account: aws.String("000000000000"),
 		Arn:     aws.String("arn:aws:sts::000000000000:fake-role"),
@@ -179,7 +196,7 @@ func (s *svc) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCal
 	}, nil
 }
 
-func (s *svc) SimulateCustomPolicy(ctx context.Context, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error) {
+func (s *svc) SimulateCustomPolicy(ctx context.Context, account, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error) {
 	return &iam.SimulateCustomPolicyOutput{
 		EvaluationResults: []types.EvaluationResult{
 			{EvalActionName: aws.String("s3:GetBucketPolicy"),

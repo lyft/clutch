@@ -13,8 +13,8 @@ import (
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 )
 
-func (c *client) DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error) {
-	cl, err := c.getRegionalClient(region)
+func (c *client) DescribeKinesisStream(ctx context.Context, account, region, streamName string) (*kinesisv1.Stream, error) {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return nil, err
 	}
@@ -32,6 +32,7 @@ func (c *client) DescribeKinesisStream(ctx context.Context, region string, strea
 
 	var ret = &kinesisv1.Stream{
 		StreamName:        aws.ToString(result.StreamDescriptionSummary.StreamName),
+		Account:           account,
 		Region:            region,
 		CurrentShardCount: aws.ToInt32(result.StreamDescriptionSummary.OpenShardCount),
 	}
@@ -65,8 +66,8 @@ func isRecommendedChange(stream *kinesis.DescribeStreamSummaryOutput, targetShar
 	return nil
 }
 
-func (c *client) UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error {
-	cl, err := c.getRegionalClient(region)
+func (c *client) UpdateKinesisShardCount(ctx context.Context, account, region, streamName string, targetShardCount int32) error {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return err
 	}

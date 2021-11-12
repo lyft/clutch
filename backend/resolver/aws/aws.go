@@ -60,6 +60,16 @@ func makeRegionOptions(regions []string) []*resolverv1.Option {
 	return ret
 }
 
+func makeAccountOptions(accounts []string) []*resolverv1.Option {
+	ret := make([]*resolverv1.Option, len(accounts))
+	for i, account := range accounts {
+		ret[i] = &resolverv1.Option{
+			Value: &resolverv1.Option_StringValue{StringValue: account},
+		}
+	}
+	return ret
+}
+
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
 	awsClient, ok := service.Registry["clutch.service.aws"]
 	if !ok {
@@ -86,7 +96,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	}
 
 	resolver.HydrateDynamicOptions(schemas, map[string][]*resolverv1.Option{
-		"regions": makeRegionOptions(c.Regions()),
+		"regions":  makeRegionOptions(c.Regions()),
+		"accounts": makeAccountOptions(c.Accounts()),
 	})
 
 	r := &res{
@@ -111,6 +122,17 @@ func (r *res) determineRegionsForOption(option string) []string {
 		regions = r.client.Regions()
 	default:
 		regions = []string{option}
+	}
+	return regions
+}
+
+func (r *res) determineAccountAndRegionsForOption(account, region string) map[string][]string {
+	regions := make(map[string][]string)
+	switch account {
+	case resolver.OptionAll:
+		regions = r.client.AccountsAndRegions()
+	default:
+		regions[account] = []string{region}
 	}
 	return regions
 }
@@ -144,14 +166,14 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 			return nil, err
 		}
 		if ok {
-			return r.instanceResults(ctx, patternValues["region"], []string{patternValues["instance_id"]}, limit)
+			return r.instanceResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["instance_id"]}, limit)
 		}
 
 		id, err := normalizeInstanceID(query)
 		if err != nil {
 			return nil, err
 		}
-		return r.instanceResults(ctx, resolver.OptionAll, []string{id}, limit)
+		return r.instanceResults(ctx, resolver.OptionAll, resolver.OptionAll, []string{id}, limit)
 
 	case typeURLAutoscalingGroup:
 		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.AutoscalingGroup)(nil), query)
@@ -159,9 +181,9 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 			return nil, err
 		}
 		if ok {
-			return r.autoscalingGroupResults(ctx, patternValues["region"], []string{patternValues["name"]}, limit)
+			return r.autoscalingGroupResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["name"]}, limit)
 		}
-		return r.autoscalingGroupResults(ctx, resolver.OptionAll, []string{query}, limit)
+		return r.autoscalingGroupResults(ctx, resolver.OptionAll, resolver.OptionAll, []string{query}, limit)
 
 	case typeURLKinesisStream:
 		patternValues, ok, err := meta.ExtractPatternValuesFromString((*kinesisv1api.Stream)(nil), query)
@@ -169,10 +191,10 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 			return nil, err
 		}
 		if ok {
-			return r.kinesisResults(ctx, patternValues["region"], patternValues["stream_name"], limit)
+			return r.kinesisResults(ctx, patternValues["account"], patternValues["region"], patternValues["stream_name"], limit)
 		}
 
-		return r.kinesisResults(ctx, resolver.OptionAll, query, limit)
+		return r.kinesisResults(ctx, resolver.OptionAll, resolver.OptionAll, query, limit)
 
 	case typeURLDynamodbTable:
 		patternValues, ok, err := meta.ExtractPatternValuesFromString((*dynamodbv1api.Table)(nil), query)
@@ -180,10 +202,10 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 			return nil, err
 		}
 		if ok {
-			return r.dynamodbResults(ctx, patternValues["region"], patternValues["name"], limit)
+			return r.dynamodbResults(ctx, patternValues["account"], patternValues["region"], patternValues["name"], limit)
 		}
 
-		return r.dynamodbResults(ctx, resolver.OptionAll, query, limit)
+		return r.dynamodbResults(ctx, resolver.OptionAll, resolver.OptionAll, query, limit)
 
 	default:
 		return nil, status.Errorf(codes.Internal, "resolver search for '%s' not implemented", typeURL)
