@@ -115,17 +115,6 @@ type res struct {
 	schemas  resolver.TypeURLToSchemasMap
 }
 
-func (r *res) determineRegionsForOption(option string) []string {
-	var regions []string
-	switch option {
-	case resolver.OptionAll:
-		regions = r.client.Regions()
-	default:
-		regions = []string{option}
-	}
-	return regions
-}
-
 func (r *res) determineAccountAndRegionsForOption(account, region string) map[string][]string {
 	regions := make(map[string][]string)
 	switch account {
