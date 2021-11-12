@@ -23,4 +23,5 @@ message Point {
   }
   google.protobuf.Any pb = 3;
   string description = 4;
+  string href = 5;
 }
