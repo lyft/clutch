@@ -21715,6 +21715,9 @@ export namespace clutch {
 
                 /** Point description */
                 description?: (string|null);
+
+                /** Point href */
+                href?: (string|null);
             }
 
             /** Represents a Point. */
@@ -21737,6 +21740,9 @@ export namespace clutch {
 
                 /** Point description. */
                 public description: string;
+
+                /** Point href. */
+                public href: string;
 
                 /** Point timestamp. */
                 public timestamp?: ("range"|"millis");
