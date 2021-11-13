@@ -34,9 +34,10 @@ Retry #2: failed
 Retry #3: failed`
 	assert.Equal(t, expectedErrorFormat, err.Error())
 
-	// Retry count should be 3.
+	// Retry count should be 2 as the first attempt is not counted
+	// as a retry.
 	retryAttempts := scope.Snapshot().Counters()["test.retry_attempts+"]
-	assert.Equal(t, int64(3), retryAttempts.Value())
+	assert.Equal(t, int64(2), retryAttempts.Value())
 }
 
 func TestDoSuccess(t *testing.T) {
@@ -53,9 +54,9 @@ func TestDoSuccess(t *testing.T) {
 	)
 	assert.NoError(t, err)
 
-	// Retry count should be 1.
+	// Retry count should be 0 as the first attempt succeeds.
 	retryAttempts := scope.Snapshot().Counters()["test.retry_attempts+"]
-	assert.Equal(t, int64(1), retryAttempts.Value())
+	assert.Equal(t, int64(0), retryAttempts.Value())
 }
 
 func TestDoWithDefaultConfig(t *testing.T) {
@@ -72,9 +73,9 @@ func TestDoWithDefaultConfig(t *testing.T) {
 	)
 	elapsed := time.Since(start)
 	assert.Error(t, err)
-	// Default backoff is one second and since we skip waiting on the last
-	// attempt elapsed should be >=2s instead of >=3s.
-	assert.True(t, elapsed >= 2*time.Second, "3 times default retry should be >=2s")
+	// Default backoff is 100ms and since we skip waiting on the last
+	// attempt elapsed should be >=200ms instead of >=300ms.
+	assert.True(t, elapsed >= 200*time.Millisecond, "3 times default retry should be >=200ms")
 }
 
 func TestDoWithFixedBackoff(t *testing.T) {
@@ -89,7 +90,6 @@ func TestDoWithFixedBackoff(t *testing.T) {
 		scope,
 		errFunc,
 		Delay(time.Second*2),
-		Backoff(FixedBackoff),
 	)
 	elapsed := time.Since(start)
 	assert.Error(t, err)
@@ -134,9 +134,47 @@ func TestDoWithJitterBackoff(t *testing.T) {
 	elapsed := time.Since(start)
 	assert.Error(t, err)
 	// elapsed should be > 3ms.
-	assert.True(t, elapsed > 3*time.Millisecond)
+	assert.True(t, elapsed > 3*time.Millisecond, "4 times 100ms jitter backoff should be > 3ms")
 	// elapsed should be < 400ms.
-	assert.True(t, elapsed < 400*time.Millisecond)
+	assert.True(t, elapsed < 400*time.Millisecond, "4 times 100ms jitter backoff should be < 400ms")
+
+	t.Run("user defined jitter", func(t *testing.T) {
+		start = time.Now()
+		err = Do(
+			context.TODO(),
+			log,
+			scope,
+			errFunc,
+			Retries(4),
+			Jitter(200*time.Millisecond),
+			Backoff(JitterBackoff),
+		)
+		elapsed = time.Since(start)
+		assert.Error(t, err)
+		// elapsed should be > 6ms.
+		assert.True(t, elapsed > 6*time.Millisecond, "4 times 200ms jitter backoff should be > 6ms")
+		// elapsed should be < 800ms.
+		assert.True(t, elapsed < 800*time.Millisecond, "4 times 200 ms jitter backoff should < 800ms")
+	})
+
+	t.Run("when user defined jitter is <= 0", func(t *testing.T) {
+		start = time.Now()
+		err = Do(
+			context.TODO(),
+			log,
+			scope,
+			errFunc,
+			Retries(4),
+			Jitter(-1),
+			Backoff(JitterBackoff),
+		)
+		elapsed = time.Since(start)
+		assert.Error(t, err)
+		// elapsed should be > 3ms.
+		assert.True(t, elapsed > 3*time.Millisecond, "4 times 100ms jitter backoff should be > 3ms")
+		// elapsed should be < 400ms.
+		assert.True(t, elapsed < 400*time.Millisecond, "4 times 100ms jitter backoff should be < 400ms")
+	})
 }
 
 func TestDoWithFailedContext(t *testing.T) {
@@ -158,7 +196,7 @@ func TestDoWithFailedContext(t *testing.T) {
 	assert.Equal(t, context.Canceled, err)
 
 	t.Run("when context deadline exceeds", func(t *testing.T) {
-		ctx, cancel = context.WithTimeout(context.Background(), 3 * time.Second)
+		ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancel()
 
 		err := Do(

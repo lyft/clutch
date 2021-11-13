@@ -41,7 +41,7 @@ err := retry.Do(
 */
 func Do(ctx context.Context, logger *zap.Logger, scope tally.Scope, fn RetryableFunc, opts ...Option) error {
 	if err := ctx.Err(); err != nil {
-		logger.Error("context error", zap.String("err", err.Error()))
+		logger.Error("context error", zap.Error(err))
 		return err
 	}
 
@@ -55,29 +55,32 @@ func Do(ctx context.Context, logger *zap.Logger, scope tally.Scope, fn Retryable
 	}
 
 	for n < config.maxRetries {
-		// Increment retry counter.
-		config.retryCounter.Inc(1)
-
 		err := fn()
-		if err != nil {
-			logger.Error("retry failed", zap.Uint("attempt #", n+1), zap.String("err", err.Error()))
-			errorLog = append(errorLog, err)
-
-			// Avoid waiting if this is the last attempt.
-			if n == config.maxRetries - 1 {
-				break
-			}
-
-			delayTime := config.backoff(n, config)
-
-			select {
-			case <-time.After(delayTime):
-			case <-ctx.Done():
-				return ctx.Err()
-			}
-		} else {
+		if err == nil {
 			return nil
 		}
+
+		logger.Error("attempt failed", zap.Uint("attempt", n+1), zap.Error(err))
+		errorLog = append(errorLog, err)
+
+		// Avoid waiting if this is the last attempt.
+		if n == config.maxRetries-1 {
+			break
+		}
+
+		// Increment the retry counter. First attempt is not
+		// considered as a retry.
+		config.retryCounter.Inc(1)
+
+		delayTime := config.backoff(n, config)
+
+		select {
+		case <-time.After(delayTime):
+			// Time for next retry.
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+
 		n++
 	}
 	return errorLog

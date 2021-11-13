@@ -1,7 +1,8 @@
 package retry
 
 import (
-	"math/rand"
+	"crypto/rand"
+	"math/big"
 	"time"
 
 	"github.com/uber-go/tally"
@@ -23,7 +24,7 @@ type Config struct {
 func defaultConfig(scope tally.Scope) *Config {
 	return &Config{
 		maxRetries:   uint(3),
-		maxDelay:     1 * time.Second,
+		maxDelay:     100 * time.Millisecond,
 		maxJitter:    100 * time.Millisecond,
 		backoff:      DefaultBackoff,
 		retryCounter: scope.Counter("retry_attempts"),
@@ -33,7 +34,7 @@ func defaultConfig(scope tally.Scope) *Config {
 // Option is an option for retry.
 type Option func(*Config)
 
-// Retries sets the number of retries.
+// Retries sets the total number of attempts.
 func Retries(count uint) Option {
 	return func(c *Config) {
 		c.maxRetries = count
@@ -54,22 +55,32 @@ func Delay(delay time.Duration) Option {
 	}
 }
 
-// DefaultBackoff always returns 1 second.
+// Jitter sets the max jitter.
+// Defaults to 100ms if provided value <= 0.
+func Jitter(jitter time.Duration) Option {
+	return func(c *Config) {
+		c.maxJitter = jitter
+		if c.maxJitter <= 0 {
+			c.maxJitter = 100 * time.Millisecond
+		}
+	}
+}
+
+// DefaultBackoff always returns a fixed delay duration.
 func DefaultBackoff(_ uint, c *Config) time.Duration {
 	return c.maxDelay
 }
 
 // ExponentialBackoff returns exponentially increasing backoffs by a power of 2.
 func ExponentialBackoff(i uint, _ *Config) time.Duration {
-	return time.Duration(1<<i) * time.Second
-}
-
-// FixedBackoff returns a fixed delay duration.
-func FixedBackoff(_ uint, c *Config) time.Duration {
-	return c.maxDelay
+	return 1 << i * time.Second
 }
 
 // JitterBackoff returns a random delay duration up to maxJitter.
 func JitterBackoff(_ uint, c *Config) time.Duration {
-	return time.Duration(rand.Int63n(int64(c.maxJitter)))
+	n, err := rand.Int(rand.Reader, big.NewInt(int64(c.maxJitter)))
+	if err != nil {
+		return c.maxJitter
+	}
+	return time.Duration(n.Int64())
 }
