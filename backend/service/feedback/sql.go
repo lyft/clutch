@@ -7,12 +7,12 @@ import (
 )
 
 const createOrUpdateSubmissionQuery = `
-INSERT INTO feedback(client_id, submitted_at, feedback, metadata) VALUES ($1, $2, $3, $4)
+INSERT INTO feedback (client_id, submitted_at, details, metadata) VALUES ($1, $2, $3, $4)
 ON CONFLICT (client_id) DO UPDATE SET
 		client_id = EXCLUDED.client_id,
 		submitted_at = EXCLUDED.submitted_at,
-		feedback = EXCLUDED.feedback,
-		metadata = EXCLUDED.metadata,
+		details = EXCLUDED.details,
+		metadata = EXCLUDED.metadata
 `
 
 func (s *storage) createOrUpdateSubmission(ctx context.Context, submission *submission) error {
