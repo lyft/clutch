@@ -25495,7 +25495,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [rating] Feedback rating
                  * @property {string|null} [freeformResponse] Feedback freeformResponse
                  * @property {string|null} [feedbackType] Feedback feedbackType
-                 * @property {clutch.feedback.v1.IFeedbackMetadata|null} [metadata] Feedback metadata
                  */
 
                 /**
@@ -25554,14 +25553,6 @@ export const clutch = $root.clutch = (() => {
                 Feedback.prototype.feedbackType = "";
 
                 /**
-                 * Feedback metadata.
-                 * @member {clutch.feedback.v1.IFeedbackMetadata|null|undefined} metadata
-                 * @memberof clutch.feedback.v1.Feedback
-                 * @instance
-                 */
-                Feedback.prototype.metadata = null;
-
-                /**
                  * Verifies a Feedback message.
                  * @function verify
                  * @memberof clutch.feedback.v1.Feedback
@@ -25587,11 +25578,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
                         if (!$util.isString(message.feedbackType))
                             return "feedbackType: string expected";
-                    if (message.metadata != null && message.hasOwnProperty("metadata")) {
-                        let error = $root.clutch.feedback.v1.FeedbackMetadata.verify(message.metadata);
-                        if (error)
-                            return "metadata." + error;
-                    }
                     return null;
                 };
 
@@ -25617,11 +25603,6 @@ export const clutch = $root.clutch = (() => {
                         message.freeformResponse = String(object.freeformResponse);
                     if (object.feedbackType != null)
                         message.feedbackType = String(object.feedbackType);
-                    if (object.metadata != null) {
-                        if (typeof object.metadata !== "object")
-                            throw TypeError(".clutch.feedback.v1.Feedback.metadata: object expected");
-                        message.metadata = $root.clutch.feedback.v1.FeedbackMetadata.fromObject(object.metadata);
-                    }
                     return message;
                 };
 
@@ -25644,7 +25625,6 @@ export const clutch = $root.clutch = (() => {
                         object.rating = "";
                         object.freeformResponse = "";
                         object.feedbackType = "";
-                        object.metadata = null;
                     }
                     if (message.userId != null && message.hasOwnProperty("userId"))
                         object.userId = message.userId;
@@ -25656,8 +25636,6 @@ export const clutch = $root.clutch = (() => {
                         object.freeformResponse = message.freeformResponse;
                     if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
                         object.feedbackType = message.feedbackType;
-                    if (message.metadata != null && message.hasOwnProperty("metadata"))
-                        object.metadata = $root.clutch.feedback.v1.FeedbackMetadata.toObject(message.metadata, options);
                     return object;
                 };
 
@@ -25683,6 +25661,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface ISubmitFeedbackRequest
                  * @property {string|null} [id] SubmitFeedbackRequest id
                  * @property {clutch.feedback.v1.IFeedback|null} [feedback] SubmitFeedbackRequest feedback
+                 * @property {clutch.feedback.v1.IFeedbackMetadata|null} [metadata] SubmitFeedbackRequest metadata
                  */
 
                 /**
@@ -25717,6 +25696,14 @@ export const clutch = $root.clutch = (() => {
                 SubmitFeedbackRequest.prototype.feedback = null;
 
                 /**
+                 * SubmitFeedbackRequest metadata.
+                 * @member {clutch.feedback.v1.IFeedbackMetadata|null|undefined} metadata
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
+                 * @instance
+                 */
+                SubmitFeedbackRequest.prototype.metadata = null;
+
+                /**
                  * Verifies a SubmitFeedbackRequest message.
                  * @function verify
                  * @memberof clutch.feedback.v1.SubmitFeedbackRequest
@@ -25734,6 +25721,11 @@ export const clutch = $root.clutch = (() => {
                         let error = $root.clutch.feedback.v1.Feedback.verify(message.feedback);
                         if (error)
                             return "feedback." + error;
+                    }
+                    if (message.metadata != null && message.hasOwnProperty("metadata")) {
+                        let error = $root.clutch.feedback.v1.FeedbackMetadata.verify(message.metadata);
+                        if (error)
+                            return "metadata." + error;
                     }
                     return null;
                 };
@@ -25757,6 +25749,11 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.feedback.v1.SubmitFeedbackRequest.feedback: object expected");
                         message.feedback = $root.clutch.feedback.v1.Feedback.fromObject(object.feedback);
                     }
+                    if (object.metadata != null) {
+                        if (typeof object.metadata !== "object")
+                            throw TypeError(".clutch.feedback.v1.SubmitFeedbackRequest.metadata: object expected");
+                        message.metadata = $root.clutch.feedback.v1.FeedbackMetadata.fromObject(object.metadata);
+                    }
                     return message;
                 };
 
@@ -25776,11 +25773,14 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.id = "";
                         object.feedback = null;
+                        object.metadata = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
                         object.id = message.id;
                     if (message.feedback != null && message.hasOwnProperty("feedback"))
                         object.feedback = $root.clutch.feedback.v1.Feedback.toObject(message.feedback, options);
+                    if (message.metadata != null && message.hasOwnProperty("metadata"))
+                        object.metadata = $root.clutch.feedback.v1.FeedbackMetadata.toObject(message.metadata, options);
                     return object;
                 };
 
@@ -25874,134 +25874,6 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return SubmitFeedbackResponse;
-            })();
-
-            v1.Submission = (function() {
-
-                /**
-                 * Properties of a Submission.
-                 * @memberof clutch.feedback.v1
-                 * @interface ISubmission
-                 * @property {google.protobuf.ITimestamp|null} [submittedAt] Submission submittedAt
-                 * @property {clutch.feedback.v1.IFeedback|null} [feedback] Submission feedback
-                 */
-
-                /**
-                 * Constructs a new Submission.
-                 * @memberof clutch.feedback.v1
-                 * @classdesc Represents a Submission.
-                 * @implements ISubmission
-                 * @constructor
-                 * @param {clutch.feedback.v1.ISubmission=} [properties] Properties to set
-                 */
-                function Submission(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * Submission submittedAt.
-                 * @member {google.protobuf.ITimestamp|null|undefined} submittedAt
-                 * @memberof clutch.feedback.v1.Submission
-                 * @instance
-                 */
-                Submission.prototype.submittedAt = null;
-
-                /**
-                 * Submission feedback.
-                 * @member {clutch.feedback.v1.IFeedback|null|undefined} feedback
-                 * @memberof clutch.feedback.v1.Submission
-                 * @instance
-                 */
-                Submission.prototype.feedback = null;
-
-                /**
-                 * Verifies a Submission message.
-                 * @function verify
-                 * @memberof clutch.feedback.v1.Submission
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                Submission.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.submittedAt != null && message.hasOwnProperty("submittedAt")) {
-                        let error = $root.google.protobuf.Timestamp.verify(message.submittedAt);
-                        if (error)
-                            return "submittedAt." + error;
-                    }
-                    if (message.feedback != null && message.hasOwnProperty("feedback")) {
-                        let error = $root.clutch.feedback.v1.Feedback.verify(message.feedback);
-                        if (error)
-                            return "feedback." + error;
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a Submission message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.feedback.v1.Submission
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.feedback.v1.Submission} Submission
-                 */
-                Submission.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.feedback.v1.Submission)
-                        return object;
-                    let message = new $root.clutch.feedback.v1.Submission();
-                    if (object.submittedAt != null) {
-                        if (typeof object.submittedAt !== "object")
-                            throw TypeError(".clutch.feedback.v1.Submission.submittedAt: object expected");
-                        message.submittedAt = $root.google.protobuf.Timestamp.fromObject(object.submittedAt);
-                    }
-                    if (object.feedback != null) {
-                        if (typeof object.feedback !== "object")
-                            throw TypeError(".clutch.feedback.v1.Submission.feedback: object expected");
-                        message.feedback = $root.clutch.feedback.v1.Feedback.fromObject(object.feedback);
-                    }
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a Submission message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.feedback.v1.Submission
-                 * @static
-                 * @param {clutch.feedback.v1.Submission} message Submission
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                Submission.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults) {
-                        object.submittedAt = null;
-                        object.feedback = null;
-                    }
-                    if (message.submittedAt != null && message.hasOwnProperty("submittedAt"))
-                        object.submittedAt = $root.google.protobuf.Timestamp.toObject(message.submittedAt, options);
-                    if (message.feedback != null && message.hasOwnProperty("feedback"))
-                        object.feedback = $root.clutch.feedback.v1.Feedback.toObject(message.feedback, options);
-                    return object;
-                };
-
-                /**
-                 * Converts this Submission to JSON.
-                 * @function toJSON
-                 * @memberof clutch.feedback.v1.Submission
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                Submission.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return Submission;
             })();
 
             return v1;

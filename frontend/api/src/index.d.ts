@@ -10545,9 +10545,6 @@ export namespace clutch {
 
                 /** Feedback feedbackType */
                 feedbackType?: (string|null);
-
-                /** Feedback metadata */
-                metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
             }
 
             /** Represents a Feedback. */
@@ -10573,9 +10570,6 @@ export namespace clutch {
 
                 /** Feedback feedbackType. */
                 public feedbackType: string;
-
-                /** Feedback metadata. */
-                public metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
 
                 /**
                  * Verifies a Feedback message.
@@ -10614,6 +10608,9 @@ export namespace clutch {
 
                 /** SubmitFeedbackRequest feedback */
                 feedback?: (clutch.feedback.v1.IFeedback|null);
+
+                /** SubmitFeedbackRequest metadata */
+                metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
             }
 
             /** Represents a SubmitFeedbackRequest. */
@@ -10630,6 +10627,9 @@ export namespace clutch {
 
                 /** SubmitFeedbackRequest feedback. */
                 public feedback?: (clutch.feedback.v1.IFeedback|null);
+
+                /** SubmitFeedbackRequest metadata. */
+                public metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
 
                 /**
                  * Verifies a SubmitFeedbackRequest message.
@@ -10697,60 +10697,6 @@ export namespace clutch {
 
                 /**
                  * Converts this SubmitFeedbackResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a Submission. */
-            interface ISubmission {
-
-                /** Submission submittedAt */
-                submittedAt?: (google.protobuf.ITimestamp|null);
-
-                /** Submission feedback */
-                feedback?: (clutch.feedback.v1.IFeedback|null);
-            }
-
-            /** Represents a Submission. */
-            class Submission implements ISubmission {
-
-                /**
-                 * Constructs a new Submission.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.ISubmission);
-
-                /** Submission submittedAt. */
-                public submittedAt?: (google.protobuf.ITimestamp|null);
-
-                /** Submission feedback. */
-                public feedback?: (clutch.feedback.v1.IFeedback|null);
-
-                /**
-                 * Verifies a Submission message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a Submission message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns Submission
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Submission;
-
-                /**
-                 * Creates a plain object from a Submission message. Also converts values to other types if specified.
-                 * @param message Submission
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.Submission, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this Submission to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

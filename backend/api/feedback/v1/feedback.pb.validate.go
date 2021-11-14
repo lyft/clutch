@@ -786,46 +786,6 @@ func (m *Feedback) validate(all bool) error {
 
 	// no validation rules for FeedbackType
 
-	if m.GetMetadata() == nil {
-		err := FeedbackValidationError{
-			field:  "Metadata",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if all {
-		switch v := interface{}(m.GetMetadata()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, FeedbackValidationError{
-					field:  "Metadata",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, FeedbackValidationError{
-					field:  "Metadata",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return FeedbackValidationError{
-				field:  "Metadata",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if len(errors) > 0 {
 		return FeedbackMultiError(errors)
 	}
@@ -969,6 +929,46 @@ func (m *SubmitFeedbackRequest) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return SubmitFeedbackRequestValidationError{
 				field:  "Feedback",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetMetadata() == nil {
+		err := SubmitFeedbackRequestValidationError{
+			field:  "Metadata",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetMetadata()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SubmitFeedbackRequestValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SubmitFeedbackRequestValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SubmitFeedbackRequestValidationError{
+				field:  "Metadata",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1154,159 +1154,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SubmitFeedbackResponseValidationError{}
-
-// Validate checks the field values on Submission with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Submission) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Submission with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in SubmissionMultiError, or
-// nil if none found.
-func (m *Submission) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Submission) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetSubmittedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SubmissionValidationError{
-					field:  "SubmittedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SubmissionValidationError{
-					field:  "SubmittedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSubmittedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SubmissionValidationError{
-				field:  "SubmittedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetFeedback()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SubmissionValidationError{
-					field:  "Feedback",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SubmissionValidationError{
-					field:  "Feedback",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SubmissionValidationError{
-				field:  "Feedback",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return SubmissionMultiError(errors)
-	}
-	return nil
-}
-
-// SubmissionMultiError is an error wrapping multiple validation errors
-// returned by Submission.ValidateAll() if the designated constraints aren't met.
-type SubmissionMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SubmissionMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SubmissionMultiError) AllErrors() []error { return m }
-
-// SubmissionValidationError is the validation error returned by
-// Submission.Validate if the designated constraints aren't met.
-type SubmissionValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SubmissionValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SubmissionValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SubmissionValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SubmissionValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SubmissionValidationError) ErrorName() string { return "SubmissionValidationError" }
-
-// Error satisfies the builtin error interface
-func (e SubmissionValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSubmission.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SubmissionValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SubmissionValidationError{}
