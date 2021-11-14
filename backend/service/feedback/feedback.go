@@ -9,7 +9,6 @@ import (
 
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	feedbackv1 "github.com/lyft/clutch/backend/api/feedback/v1"
@@ -32,13 +31,17 @@ func New(_ *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, errors.New("database does not implement the required interface")
 	}
 
-	return &svc{db: dbClient.DB(), logger: logger, scope: scope}, nil
+	return &svc{storage: &storage{db: dbClient.DB()}, logger: logger, scope: scope}, nil
 }
 
 type svc struct {
-	db     *sql.DB
-	logger *zap.Logger
-	scope  tally.Scope
+	storage *storage
+	logger  *zap.Logger
+	scope   tally.Scope
+}
+
+type storage struct {
+	db *sql.DB
 }
 
 type submission struct {
@@ -52,28 +55,7 @@ type Service interface {
 	SubmitFeedback(ctx context.Context, id string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) error
 }
 
-const createOrUpdateSubmissionQuery = `
-INSERT INTO feedback(client_id, submitted_at, feedback, metadata) VALUES ($1, $2, $3, $4)
-ON CONFLICT (client_id) DO UPDATE SET
-		client_id = EXCLUDED.client_id,
-		submitted_at = EXCLUDED.submitted_at,
-		feedback = EXCLUDED.feedback,
-		metadata = EXCLUDED.metadata,
-`
-
-func (s *svc) createOrUpdateSubmission(ctx context.Context, submission *submission) error {
-	feedbackJSON, err := protojson.Marshal(submission.feedback)
-	if err != nil {
-		return err
-	}
-	metadataJSON, err := protojson.Marshal(submission.metadata)
-	if err != nil {
-		return err
-	}
-	_, err = s.db.ExecContext(ctx, createOrUpdateSubmissionQuery, submission.id, submission.submittedAt, feedbackJSON, metadataJSON)
-	return err
-}
-
+// TODO: check field values
 func (s *svc) SubmitFeedback(ctx context.Context, id string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) error {
 	feedbackSubmission := &submission{
 		id:          id,
@@ -81,6 +63,6 @@ func (s *svc) SubmitFeedback(ctx context.Context, id string, feedback *feedbackv
 		feedback:    feedback,
 		metadata:    metadata,
 	}
-	// TODO: create a sql file?
-	return s.createOrUpdateSubmission(ctx, feedbackSubmission)
+
+	return s.storage.createOrUpdateSubmission(ctx, feedbackSubmission)
 }
