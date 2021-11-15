@@ -26,6 +26,7 @@ export interface ChipProps extends Pick<MuiChipProps, "label"> {
    *  * success:   completion/succeeded
    */
   variant: typeof CHIP_VARIANTS[number];
+  filled?: boolean;
 }
 
 const CHIP_COLOR_MAP = {
@@ -37,7 +38,7 @@ const CHIP_COLOR_MAP = {
   warn: {
     background: "#FEF8E8",
     label: "#D87313",
-    borderColor: "##D87313",
+    borderColor: "#D87313",
   },
   attention: {
     background: "#E2E2E6",
@@ -66,7 +67,7 @@ const CHIP_COLOR_MAP = {
   },
 };
 
-const StyledChip = styled(MuiChip)(
+const StyledChip = styled(MuiChip)<{filled?: boolean}>(
   {
     height: "32px",
     cursor: "inherit",
@@ -80,8 +81,8 @@ const StyledChip = styled(MuiChip)(
     },
   },
   props => ({
-    background: CHIP_COLOR_MAP[props["data-variant"]].background,
-    color: CHIP_COLOR_MAP[props["data-variant"]].label,
+    background: props.filled ? CHIP_COLOR_MAP[props["data-variant"]].borderColor : CHIP_COLOR_MAP[props["data-variant"]].background,
+    color: props.filled ? "#FFFFFF" : CHIP_COLOR_MAP[props["data-variant"]].label,
     borderColor: CHIP_COLOR_MAP[props["data-variant"]].borderColor,
   })
 );
