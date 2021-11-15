@@ -69,13 +69,13 @@ func (s *svc) processSubmission(id string, feedback *feedbackv1.Feedback, metada
 	// rules defined in the proto require that userId, urlPath, and rating not be empty
 	err := feedback.Validate()
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	// rules defined in the proto require specific enums for the origin and that the survey not be nil
 	err = metadata.Validate()
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		return nil, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	// the main question that was asked in the feedback component
