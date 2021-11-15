@@ -5792,6 +5792,9 @@ export namespace clutch {
 
                     /** FaultPercentage percentage */
                     percentage?: (number|null);
+
+                    /** FaultPercentage denominator */
+                    denominator?: (clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType|null);
                 }
 
                 /** Represents a FaultPercentage. */
@@ -5805,6 +5808,9 @@ export namespace clutch {
 
                     /** FaultPercentage percentage. */
                     public percentage: number;
+
+                    /** FaultPercentage denominator. */
+                    public denominator: clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType;
 
                     /**
                      * Verifies a FaultPercentage message.
@@ -5833,6 +5839,16 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace FaultPercentage {
+
+                    /** DenominatorType enum. */
+                    enum DenominatorType {
+                        HUNDRED = 0,
+                        TEN_THOUSAND = 1,
+                        MILLION = 2
+                    }
                 }
 
                 /** Properties of a FaultAbortStatus. */
