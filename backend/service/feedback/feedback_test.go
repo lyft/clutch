@@ -42,19 +42,19 @@ func TestProcessSubmission(t *testing.T) {
 		// userId is empty
 		{
 			id:       id,
-			feedback: &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", Rating: "great"},
+			feedback: &feedbackv1.Feedback{UserId: "", UrlPath: "/k8s/deletePod", Rating: "great"},
 			metadata: vailidMetadataTestCase,
 		},
 		// urlPath is empty
 		{
 			id:       id,
-			feedback: &feedbackv1.Feedback{UserId: "foo@example.com", Rating: "great"},
+			feedback: &feedbackv1.Feedback{UserId: "foo@example.com", UrlPath: "", Rating: "great"},
 			metadata: vailidMetadataTestCase,
 		},
 		// rating is empty
 		{
 			id:       id,
-			feedback: &feedbackv1.Feedback{UserId: "foo@example.com", UrlPath: "/k8s/deletePod"},
+			feedback: &feedbackv1.Feedback{UserId: "foo@example.com", UrlPath: "/k8s/deletePod", Rating: ""},
 			metadata: vailidMetadataTestCase,
 		},
 		// metadata is nil

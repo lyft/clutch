@@ -142,7 +142,7 @@ func (m *mod) SubmitFeedback(ctx context.Context, req *feedbackv1.SubmitFeedback
 	err := m.client.SubmitFeedback(ctx, req.Id, req.Feedback, req.Metadata)
 	if err != nil {
 		m.logger.Error("failed to submit feedback", zap.Error(err))
-		return nil, status.Errorf(codes.Internal, "%v", err)
+		return nil, status.Errorf(codes.FailedPrecondition, "%v", err)
 	}
 	return &feedbackv1.SubmitFeedbackResponse{}, nil
 }
