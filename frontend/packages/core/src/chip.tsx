@@ -67,7 +67,7 @@ const CHIP_COLOR_MAP = {
   },
 };
 
-const StyledChip = styled(MuiChip)<{filled?: boolean}>(
+const StyledChip = styled(MuiChip)<{ filled?: boolean }>(
   {
     height: "32px",
     cursor: "inherit",
@@ -81,7 +81,9 @@ const StyledChip = styled(MuiChip)<{filled?: boolean}>(
     },
   },
   props => ({
-    background: props.filled ? CHIP_COLOR_MAP[props["data-variant"]].borderColor : CHIP_COLOR_MAP[props["data-variant"]].background,
+    background: props.filled
+      ? CHIP_COLOR_MAP[props["data-variant"]].borderColor
+      : CHIP_COLOR_MAP[props["data-variant"]].background,
     color: props.filled ? "#FFFFFF" : CHIP_COLOR_MAP[props["data-variant"]].label,
     borderColor: CHIP_COLOR_MAP[props["data-variant"]].borderColor,
   })
