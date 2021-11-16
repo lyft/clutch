@@ -7,20 +7,16 @@ const LARGE = 48;
 
 export const STYLE_MAP = {
   xsmall: {
-    width: XSMALL,
-    height: XSMALL,
+    size: XSMALL,
   },
   small: {
-    width: SMALL,
-    height: SMALL,
+    size: SMALL,
   },
   medium: {
-    width: MEDIUM,
-    height: MEDIUM,
+    size: MEDIUM,
   },
   large: {
-    width: LARGE,
-    height: LARGE,
+    size: LARGE,
   },
 };
 
@@ -29,8 +25,8 @@ export const VARIANTS = Object.keys(STYLE_MAP);
 export type IconSizeVariant = "xsmall" | "small" | "medium" | "large";
 
 export const StyledSVG = styled.svg<{ size?: IconSizeVariant }>(props => ({
-  width: `${STYLE_MAP[props.size]?.width || STYLE_MAP.small.width}px`,
-  height: `${STYLE_MAP[props.size]?.height || STYLE_MAP.small.height}px`,
+  width: `${STYLE_MAP[props.size]?.size || STYLE_MAP.small.size}px`,
+  height: `${STYLE_MAP[props.size]?.size || STYLE_MAP.small.size}px`,
 }));
 
 export interface SVGProps extends React.SVGProps<SVGSVGElement> {
