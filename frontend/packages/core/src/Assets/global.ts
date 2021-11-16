@@ -1,21 +1,26 @@
 import styled from "@emotion/styled";
 
+const XSMALL = 18;
+const SMALL = 24;
+const MEDIUM = 36;
+const LARGE = 48;
+
 export const STYLE_MAP = {
   xsmall: {
-    width: 18,
-    height: 18,
+    width: XSMALL,
+    height: XSMALL,
   },
   small: {
-    width: 24,
-    height: 24,
+    width: SMALL,
+    height: SMALL,
   },
   medium: {
-    width: 36,
-    height: 36,
+    width: MEDIUM,
+    height: MEDIUM,
   },
   large: {
-    width: 48,
-    height: 48,
+    width: LARGE,
+    height: LARGE,
   },
 };
 
@@ -28,6 +33,6 @@ export const StyledSVG = styled.svg<{ size?: IconSizeVariant }>(props => ({
   height: `${STYLE_MAP[props.size]?.height || STYLE_MAP.small.height}px`,
 }));
 
-export interface SVGProps {
+export interface SVGProps extends React.SVGProps<SVGSVGElement> {
   size?: IconSizeVariant;
 }
