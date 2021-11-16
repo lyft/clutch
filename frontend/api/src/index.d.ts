@@ -5845,9 +5845,10 @@ export namespace clutch {
 
                     /** DenominatorType enum. */
                     enum DenominatorType {
-                        HUNDRED = 0,
-                        TEN_THOUSAND = 1,
-                        MILLION = 2
+                        DENOMINATOR_UNSPECIFIED = 0,
+                        DENOMINATOR_HUNDRED = 1,
+                        DENOMINATOR_TEN_THOUSAND = 2,
+                        DENOMINATOR_MILLION = 3
                     }
                 }
 

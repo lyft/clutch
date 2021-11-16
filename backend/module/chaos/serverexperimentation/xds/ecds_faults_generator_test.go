@@ -207,9 +207,11 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
   var denom serverexperimentation.FaultPercentage_DenominatorType
 	switch faultDenominator {
 	case 10000:
-		denom = serverexperimentation.FaultPercentage_TEN_THOUSAND
+		denom = serverexperimentation.FaultPercentage_DENOMINATOR_TEN_THOUSAND
 	case 1000000:
-		denom = serverexperimentation.FaultPercentage_MILLION	
+		denom = serverexperimentation.FaultPercentage_DENOMINATOR_MILLION
+	default:
+		denom = serverexperimentation.FaultPercentage_DENOMINATOR_HUNDRED
 	}
 
 	switch faultType {

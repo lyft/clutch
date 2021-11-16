@@ -102,11 +102,9 @@ func GetHTTPFaultPercentage(httpFaultConfig *serverexperimentation.HTTPFaultConf
 
 	var denom gcpType.FractionalPercent_DenominatorType
 	switch expPercentage.GetDenominator() {
-	case serverexperimentation.FaultPercentage_HUNDRED:
-		denom = gcpType.FractionalPercent_HUNDRED
-	case serverexperimentation.FaultPercentage_TEN_THOUSAND:
+	case serverexperimentation.FaultPercentage_DENOMINATOR_TEN_THOUSAND:
 		denom = gcpType.FractionalPercent_TEN_THOUSAND
-	case serverexperimentation.FaultPercentage_MILLION:
+	case serverexperimentation.FaultPercentage_DENOMINATOR_MILLION:
 		denom = gcpType.FractionalPercent_MILLION
 	default:
 		denom = gcpType.FractionalPercent_HUNDRED

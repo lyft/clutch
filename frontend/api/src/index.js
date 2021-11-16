@@ -13723,6 +13723,7 @@ export const clutch = $root.clutch = (() => {
                             case 0:
                             case 1:
                             case 2:
+                            case 3:
                                 break;
                             }
                         return null;
@@ -13743,17 +13744,21 @@ export const clutch = $root.clutch = (() => {
                         if (object.percentage != null)
                             message.percentage = object.percentage >>> 0;
                         switch (object.denominator) {
-                        case "HUNDRED":
+                        case "DENOMINATOR_UNSPECIFIED":
                         case 0:
                             message.denominator = 0;
                             break;
-                        case "TEN_THOUSAND":
+                        case "DENOMINATOR_HUNDRED":
                         case 1:
                             message.denominator = 1;
                             break;
-                        case "MILLION":
+                        case "DENOMINATOR_TEN_THOUSAND":
                         case 2:
                             message.denominator = 2;
+                            break;
+                        case "DENOMINATOR_MILLION":
+                        case 3:
+                            message.denominator = 3;
                             break;
                         }
                         return message;
@@ -13774,7 +13779,7 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.defaults) {
                             object.percentage = 0;
-                            object.denominator = options.enums === String ? "HUNDRED" : 0;
+                            object.denominator = options.enums === String ? "DENOMINATOR_UNSPECIFIED" : 0;
                         }
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
                             object.percentage = message.percentage;
@@ -13798,15 +13803,17 @@ export const clutch = $root.clutch = (() => {
                      * DenominatorType enum.
                      * @name clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType
                      * @enum {number}
-                     * @property {number} HUNDRED=0 HUNDRED value
-                     * @property {number} TEN_THOUSAND=1 TEN_THOUSAND value
-                     * @property {number} MILLION=2 MILLION value
+                     * @property {number} DENOMINATOR_UNSPECIFIED=0 DENOMINATOR_UNSPECIFIED value
+                     * @property {number} DENOMINATOR_HUNDRED=1 DENOMINATOR_HUNDRED value
+                     * @property {number} DENOMINATOR_TEN_THOUSAND=2 DENOMINATOR_TEN_THOUSAND value
+                     * @property {number} DENOMINATOR_MILLION=3 DENOMINATOR_MILLION value
                      */
                     FaultPercentage.DenominatorType = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "HUNDRED"] = 0;
-                        values[valuesById[1] = "TEN_THOUSAND"] = 1;
-                        values[valuesById[2] = "MILLION"] = 2;
+                        values[valuesById[0] = "DENOMINATOR_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "DENOMINATOR_HUNDRED"] = 1;
+                        values[valuesById[2] = "DENOMINATOR_TEN_THOUSAND"] = 2;
+                        values[valuesById[3] = "DENOMINATOR_MILLION"] = 3;
                         return values;
                     })();
 
