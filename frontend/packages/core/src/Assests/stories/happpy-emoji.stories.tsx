@@ -1,8 +1,8 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import type { EmojiProps } from "../emojis";
-import { HappyIcon } from "../emojis";
+import HappyIcon from "../emojis/happy-emoji";
+import type { SVGProps } from "../global";
 import { VARIANTS } from "../global";
 
 export default {
@@ -16,4 +16,4 @@ export default {
   },
 } as Meta;
 
-export const Happy: React.FC<EmojiProps> = ({ size }) => <HappyIcon size={size} />;
+export const Happy: React.FC<SVGProps> = ({ size }) => <HappyIcon size={size} />;

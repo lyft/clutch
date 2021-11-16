@@ -1,8 +1,8 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import type { EmojiProps } from "../emojis";
-import { NeutralIcon } from "../emojis";
+import NeutralIcon from "../emojis/neutral-emoji";
+import type { SVGProps } from "../global";
 import { VARIANTS } from "../global";
 
 export default {
@@ -16,4 +16,4 @@ export default {
   },
 } as Meta;
 
-export const Neutral: React.FC<EmojiProps> = ({ size }) => <NeutralIcon size={size} />;
+export const Neutral: React.FC<SVGProps> = ({ size }) => <NeutralIcon size={size} />;
