@@ -52059,6 +52059,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {number|Long|null} [millis] Point millis
                  * @property {google.protobuf.IAny|null} [pb] Point pb
                  * @property {string|null} [description] Point description
+                 * @property {string|null} [href] Point href
                  */
 
                 /**
@@ -52107,6 +52108,14 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 Point.prototype.description = "";
+
+                /**
+                 * Point href.
+                 * @member {string} href
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 */
+                Point.prototype.href = "";
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -52157,6 +52166,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.description != null && message.hasOwnProperty("description"))
                         if (!$util.isString(message.description))
                             return "description: string expected";
+                    if (message.href != null && message.hasOwnProperty("href"))
+                        if (!$util.isString(message.href))
+                            return "href: string expected";
                     return null;
                 };
 
@@ -52193,6 +52205,8 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.description != null)
                         message.description = String(object.description);
+                    if (object.href != null)
+                        message.href = String(object.href);
                     return message;
                 };
 
@@ -52212,6 +52226,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.pb = null;
                         object.description = "";
+                        object.href = "";
                     }
                     if (message.range != null && message.hasOwnProperty("range")) {
                         object.range = $root.clutch.timeseries.v1.TimeRange.toObject(message.range, options);
@@ -52230,6 +52245,8 @@ export const clutch = $root.clutch = (() => {
                         object.pb = $root.google.protobuf.Any.toObject(message.pb, options);
                     if (message.description != null && message.hasOwnProperty("description"))
                         object.description = message.description;
+                    if (message.href != null && message.hasOwnProperty("href"))
+                        object.href = message.href;
                     return object;
                 };
 

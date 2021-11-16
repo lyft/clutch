@@ -207,6 +207,8 @@ func (m *Point) validate(all bool) error {
 
 	// no validation rules for Description
 
+	// no validation rules for Href
+
 	switch m.Timestamp.(type) {
 
 	case *Point_Range:
