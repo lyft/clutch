@@ -1,13 +1,13 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import HappyIcon from "../emojis/happy-emoji";
+import SadEmoji from "../emojis/sad";
 import type { SVGProps } from "../global";
 import { VARIANTS } from "../global";
 
 export default {
   title: "Core/Assets/emojis",
-  component: HappyIcon,
+  component: SadEmoji,
   argTypes: {
     size: {
       options: VARIANTS,
@@ -16,4 +16,4 @@ export default {
   },
 } as Meta;
 
-export const Happy: React.FC<SVGProps> = ({ size }) => <HappyIcon size={size} />;
+export const Sad: React.FC<SVGProps> = ({ size }) => <SadEmoji size={size} />;

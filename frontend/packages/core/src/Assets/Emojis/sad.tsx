@@ -3,7 +3,7 @@ import * as React from "react";
 import type { SVGProps } from "../global";
 import { StyledSVG } from "../global";
 
-const SadIcon = ({ size }: SVGProps) => (
+const SadEmoji = ({ size }: SVGProps) => (
   <StyledSVG size={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="24" cy="24" r="24" fill="#F59E0B" />
     <circle cx="26.087" cy="21.913" r="21.913" fill="#FBBF24" />
@@ -37,4 +37,4 @@ const SadIcon = ({ size }: SVGProps) => (
   </StyledSVG>
 );
 
-export default SadIcon;
+export default SadEmoji;
