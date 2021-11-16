@@ -204,7 +204,7 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 		Name: downstreamCluster,
 	}
 
-  var denom serverexperimentation.FaultPercentage_DenominatorType
+	var denom serverexperimentation.FaultPercentage_DenominatorType
 	switch faultDenominator {
 	case 10000:
 		denom = serverexperimentation.FaultPercentage_DENOMINATOR_TEN_THOUSAND
@@ -225,7 +225,7 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 	case faultTypeLatency:
 		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_LatencyFault{
 			LatencyFault: &serverexperimentation.LatencyFault{
-				Percentage:  &serverexperimentation.FaultPercentage{Percentage: faultNumerator, Denominator: denom},
+				Percentage:      &serverexperimentation.FaultPercentage{Percentage: faultNumerator, Denominator: denom},
 				LatencyDuration: &serverexperimentation.FaultLatencyDuration{FixedDurationMs: faultValue},
 			},
 		}

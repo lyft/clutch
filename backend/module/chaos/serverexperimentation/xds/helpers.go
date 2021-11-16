@@ -3,8 +3,8 @@ package xds
 import (
 	"fmt"
 
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	gcpType "github.com/envoyproxy/go-control-plane/envoy/type/v3"
+
 )
 
 const (
@@ -111,7 +111,7 @@ func GetHTTPFaultPercentage(httpFaultConfig *serverexperimentation.HTTPFaultConf
 	}
 
 	return &gcpType.FractionalPercent{
-		Numerator: expPercentage.GetPercentage(),
+		Numerator:   expPercentage.GetPercentage(),
 		Denominator: denom,
 	}, nil
 }

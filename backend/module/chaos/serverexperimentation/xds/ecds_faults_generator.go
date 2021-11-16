@@ -171,11 +171,11 @@ func (g ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexper
 	var abort *gcpFilterFault.FaultAbort
 	var delay *gcpFilterCommon.FaultDelay
 
-pcntage, err := GetHTTPFaultPercentage(httpFaultConfig)
-if err != nil {
-	return false, nil, nil, err
-}
-switch httpFaultConfig.GetFault().(type) {
+	pcntage, err := GetHTTPFaultPercentage(httpFaultConfig)
+	if err != nil {
+		return false, nil, nil, err
+	}
+	switch httpFaultConfig.GetFault().(type) {
 	case *serverexperimentation.HTTPFaultConfig_AbortFault:
 		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
 		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
@@ -216,7 +216,7 @@ switch httpFaultConfig.GetFault().(type) {
 					Nanos: int32(httpFaultConfig.GetLatencyFault().GetLatencyDuration().GetFixedDurationMs() * 1000000),
 				},
 			},
-			Percentage: pcntage, 
+			Percentage: pcntage,
 		}
 	default:
 		return false, nil, nil, fmt.Errorf("unknown fault type %v", httpFaultConfig)
