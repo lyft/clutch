@@ -71,10 +71,6 @@ func (s *svc) processSubmission(id string, userId string, feedback *feedbackv1.F
 		return nil, status.Errorf(codes.InvalidArgument, "feedback: %v or metadata: %v provided was nil", feedback, metadata)
 	}
 
-	if metadata.Survey == nil {
-		return nil, status.Error(codes.InvalidArgument, "metadata survey provided was nil")
-	}
-
 	// the main question that was asked in the feedback component
 	if metadata.Survey.Prompt == "" {
 		return nil, status.Error(codes.InvalidArgument, "metadata survey prompt was empty")

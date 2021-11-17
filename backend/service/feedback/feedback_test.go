@@ -36,7 +36,7 @@ func TestProcessSubmission(t *testing.T) {
 			feedback: nil,
 			metadata: vailidMetadataTestCase,
 		},
-		// id is empty
+		// id is not the required length
 		{
 			id:       "00000000-0000-0000-0000",
 			userId:   userId,
@@ -56,17 +56,6 @@ func TestProcessSubmission(t *testing.T) {
 			userId:   userId,
 			feedback: validFeedbackTestCase,
 			metadata: nil,
-		},
-		// survey is nil
-		{
-			id:       id,
-			userId:   userId,
-			feedback: validFeedbackTestCase,
-			metadata: &feedbackv1.FeedbackMetadata{
-				Origin:        feedbackv1.Origin_WIZARD,
-				Survey:        nil,
-				UserSubmitted: true,
-			},
 		},
 		// metadata survey prompt is empty
 		{
