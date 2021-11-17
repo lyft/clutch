@@ -179,7 +179,7 @@ message UpdateCapacityRequest {
   Throughput table_throughput = 3;
   repeated IndexUpdateAction gsi_updates = 4;
   bool ignore_maximums = 5;
-  string account = 7 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 6 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 // The result of requesting a capacity update.

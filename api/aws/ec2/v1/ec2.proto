@@ -57,7 +57,7 @@ message ResizeAutoscalingGroupRequest {
 
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
-  string account = 4 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 
   AutoscalingGroupSize size = 3 [ (validate.rules).message = {required : true} ];
 }
@@ -197,6 +197,5 @@ message Instance {
   string availability_zone = 7;
 
   map<string, string> tags = 8;
-
   string account = 9;
 }
