@@ -11,8 +11,9 @@ import (
 )
 
 func TestProcessSubmission(t *testing.T) {
-	id := "uniquefeedbackid"
-	validFeedbackTestCase := &feedbackv1.Feedback{UserId: "foo@example.com", UrlPath: "/k8s/deletePod", Rating: "great"}
+	id := "00000000-0000-0000-0000-000000000000"
+	userId := "foo@example.com"
+	validFeedbackTestCase := &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", Rating: "great"}
 	vailidMetadataTestCase := &feedbackv1.FeedbackMetadata{
 		Origin: feedbackv1.Origin_WIZARD,
 		Survey: &feedbackv1.Survey{
@@ -24,48 +25,42 @@ func TestProcessSubmission(t *testing.T) {
 
 	testErrorCases := []struct {
 		id       string
+		userId   string
 		feedback *feedbackv1.Feedback
 		metadata *feedbackv1.FeedbackMetadata
 	}{
 		// feedback is nil
 		{
 			id:       id,
+			userId:   userId,
 			feedback: nil,
 			metadata: vailidMetadataTestCase,
 		},
 		// id is empty
 		{
-			id:       "",
+			id:       "00000000-0000-0000-0000",
+			userId:   userId,
 			feedback: validFeedbackTestCase,
 			metadata: vailidMetadataTestCase,
 		},
 		// userId is empty
 		{
 			id:       id,
-			feedback: &feedbackv1.Feedback{UserId: "", UrlPath: "/k8s/deletePod", Rating: "great"},
-			metadata: vailidMetadataTestCase,
-		},
-		// urlPath is empty
-		{
-			id:       id,
-			feedback: &feedbackv1.Feedback{UserId: "foo@example.com", UrlPath: "", Rating: "great"},
-			metadata: vailidMetadataTestCase,
-		},
-		// rating is empty
-		{
-			id:       id,
-			feedback: &feedbackv1.Feedback{UserId: "foo@example.com", UrlPath: "/k8s/deletePod", Rating: ""},
+			userId:   "",
+			feedback: &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", Rating: "great"},
 			metadata: vailidMetadataTestCase,
 		},
 		// metadata is nil
 		{
 			id:       id,
+			userId:   userId,
 			feedback: validFeedbackTestCase,
 			metadata: nil,
 		},
 		// survey is nil
 		{
 			id:       id,
+			userId:   userId,
 			feedback: validFeedbackTestCase,
 			metadata: &feedbackv1.FeedbackMetadata{
 				Origin:        feedbackv1.Origin_WIZARD,
@@ -73,22 +68,10 @@ func TestProcessSubmission(t *testing.T) {
 				UserSubmitted: true,
 			},
 		},
-		// origin is unspecified
-		{
-			id:       id,
-			feedback: validFeedbackTestCase,
-			metadata: &feedbackv1.FeedbackMetadata{
-				Origin: feedbackv1.Origin_ORIGIN_UNSPECIFIED,
-				Survey: &feedbackv1.Survey{
-					Prompt:        "Rate your experience",
-					RatingOptions: &feedbackv1.RatingOptions{Three: "great"},
-				},
-				UserSubmitted: true,
-			},
-		},
 		// metadata survey prompt is empty
 		{
 			id:       id,
+			userId:   userId,
 			feedback: validFeedbackTestCase,
 			metadata: &feedbackv1.FeedbackMetadata{
 				Origin: feedbackv1.Origin_WIZARD,
@@ -100,6 +83,7 @@ func TestProcessSubmission(t *testing.T) {
 		// metadata rating options is nil
 		{
 			id:       id,
+			userId:   userId,
 			feedback: validFeedbackTestCase,
 			metadata: &feedbackv1.FeedbackMetadata{
 				Origin: feedbackv1.Origin_WIZARD,
@@ -118,13 +102,13 @@ func TestProcessSubmission(t *testing.T) {
 	s := &svc{storage, logger, scope}
 
 	// happy path
-	submission, err := s.processSubmission(id, validFeedbackTestCase, vailidMetadataTestCase)
+	submission, err := s.processSubmission(id, userId, validFeedbackTestCase, vailidMetadataTestCase)
 	assert.NoError(t, err)
 	assert.NotNil(t, submission)
 
 	// error scenarios
 	for _, test := range testErrorCases {
-		submission, err := s.processSubmission(test.id, test.feedback, test.metadata)
+		submission, err := s.processSubmission(test.id, test.userId, test.feedback, test.metadata)
 		assert.Error(t, err)
 		assert.Nil(t, submission)
 	}

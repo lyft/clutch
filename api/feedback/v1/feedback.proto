@@ -73,8 +73,6 @@ message FeedbackMetadata {
 }
 
 message Feedback {
-  // user's email
-  string user_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   // url path of where the feedback was submitted
   string url_path = 2 [ (validate.rules).string = {min_bytes : 1} ];
   // rating option the user selected (i.e. "bad", "ok", "great")
@@ -90,9 +88,11 @@ message SubmitFeedbackRequest {
   // client-genereated unique feedback id, which we will also use to update the feedback (essentially replace with the
   // latest)
   // TODO: remove if we decide to record feedback only when a user clicks the submit button
-  string id = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  Feedback feedback = 2 [ (validate.rules).message = {required : true} ];
-  FeedbackMetadata metadata = 3 [ (validate.rules).message = {required : true} ];
+  string id = 1 [ (validate.rules).string.len = 36 ];
+  // user's email
+  string user_id = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  Feedback feedback = 3 [ (validate.rules).message = {required : true} ];
+  FeedbackMetadata metadata = 4 [ (validate.rules).message = {required : true} ];
 }
 
 message SubmitFeedbackResponse {

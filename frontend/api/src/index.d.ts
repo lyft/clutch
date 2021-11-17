@@ -10531,9 +10531,6 @@ export namespace clutch {
             /** Properties of a Feedback. */
             interface IFeedback {
 
-                /** Feedback userId */
-                userId?: (string|null);
-
                 /** Feedback urlPath */
                 urlPath?: (string|null);
 
@@ -10555,9 +10552,6 @@ export namespace clutch {
                  * @param [properties] Properties to set
                  */
                 constructor(properties?: clutch.feedback.v1.IFeedback);
-
-                /** Feedback userId. */
-                public userId: string;
 
                 /** Feedback urlPath. */
                 public urlPath: string;
@@ -10606,6 +10600,9 @@ export namespace clutch {
                 /** SubmitFeedbackRequest id */
                 id?: (string|null);
 
+                /** SubmitFeedbackRequest userId */
+                userId?: (string|null);
+
                 /** SubmitFeedbackRequest feedback */
                 feedback?: (clutch.feedback.v1.IFeedback|null);
 
@@ -10624,6 +10621,9 @@ export namespace clutch {
 
                 /** SubmitFeedbackRequest id. */
                 public id: string;
+
+                /** SubmitFeedbackRequest userId. */
+                public userId: string;
 
                 /** SubmitFeedbackRequest feedback. */
                 public feedback?: (clutch.feedback.v1.IFeedback|null);

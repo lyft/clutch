@@ -49,33 +49,30 @@ type storage struct {
 type submission struct {
 	id          string
 	submittedAt time.Time
+	userId      string
 	feedback    *feedbackv1.Feedback
 	metadata    *feedbackv1.FeedbackMetadata
 }
 
 type Service interface {
-	SubmitFeedback(ctx context.Context, id string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) error
+	SubmitFeedback(ctx context.Context, id string, userId string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) error
 }
 
-func (s *svc) processSubmission(id string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) (*submission, error) {
-	if id == "" {
-		return nil, status.Error(codes.InvalidArgument, "client id was empty")
+func (s *svc) processSubmission(id string, userId string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) (*submission, error) {
+	if len(id) < 36 {
+		return nil, status.Error(codes.InvalidArgument, "client id was not a uuid length")
+	}
+
+	if userId == "" {
+		return nil, status.Error(codes.InvalidArgument, "user id was empty")
 	}
 
 	if feedback == nil || metadata == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "feedback: %v or metadata: %v provided was nil", feedback, metadata)
 	}
 
-	// rules defined in the proto require that userId, urlPath, and rating not be empty
-	err := feedback.Validate()
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	// rules defined in the proto require specific enums for the origin and that the survey not be nil
-	err = metadata.Validate()
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "%v", err)
+	if metadata.Survey == nil {
+		return nil, status.Error(codes.InvalidArgument, "metadata survey provided was nil")
 	}
 
 	// the main question that was asked in the feedback component
@@ -90,13 +87,14 @@ func (s *svc) processSubmission(id string, feedback *feedbackv1.Feedback, metada
 	return &submission{
 		id:          id,
 		submittedAt: time.Now(),
+		userId:      userId,
 		feedback:    feedback,
 		metadata:    metadata,
 	}, nil
 }
 
-func (s *svc) SubmitFeedback(ctx context.Context, id string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) error {
-	feedbackSubmission, err := s.processSubmission(id, feedback, metadata)
+func (s *svc) SubmitFeedback(ctx context.Context, id string, userId string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) error {
+	feedbackSubmission, err := s.processSubmission(id, userId, feedback, metadata)
 	if err != nil {
 		return err
 	}

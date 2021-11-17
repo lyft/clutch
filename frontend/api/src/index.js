@@ -25490,7 +25490,6 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a Feedback.
                  * @memberof clutch.feedback.v1
                  * @interface IFeedback
-                 * @property {string|null} [userId] Feedback userId
                  * @property {string|null} [urlPath] Feedback urlPath
                  * @property {string|null} [rating] Feedback rating
                  * @property {string|null} [freeformResponse] Feedback freeformResponse
@@ -25511,14 +25510,6 @@ export const clutch = $root.clutch = (() => {
                             if (properties[keys[i]] != null)
                                 this[keys[i]] = properties[keys[i]];
                 }
-
-                /**
-                 * Feedback userId.
-                 * @member {string} userId
-                 * @memberof clutch.feedback.v1.Feedback
-                 * @instance
-                 */
-                Feedback.prototype.userId = "";
 
                 /**
                  * Feedback urlPath.
@@ -25563,9 +25554,6 @@ export const clutch = $root.clutch = (() => {
                 Feedback.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.userId != null && message.hasOwnProperty("userId"))
-                        if (!$util.isString(message.userId))
-                            return "userId: string expected";
                     if (message.urlPath != null && message.hasOwnProperty("urlPath"))
                         if (!$util.isString(message.urlPath))
                             return "urlPath: string expected";
@@ -25593,8 +25581,6 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.feedback.v1.Feedback)
                         return object;
                     let message = new $root.clutch.feedback.v1.Feedback();
-                    if (object.userId != null)
-                        message.userId = String(object.userId);
                     if (object.urlPath != null)
                         message.urlPath = String(object.urlPath);
                     if (object.rating != null)
@@ -25620,14 +25606,11 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.userId = "";
                         object.urlPath = "";
                         object.rating = "";
                         object.freeformResponse = "";
                         object.feedbackType = "";
                     }
-                    if (message.userId != null && message.hasOwnProperty("userId"))
-                        object.userId = message.userId;
                     if (message.urlPath != null && message.hasOwnProperty("urlPath"))
                         object.urlPath = message.urlPath;
                     if (message.rating != null && message.hasOwnProperty("rating"))
@@ -25660,6 +25643,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.feedback.v1
                  * @interface ISubmitFeedbackRequest
                  * @property {string|null} [id] SubmitFeedbackRequest id
+                 * @property {string|null} [userId] SubmitFeedbackRequest userId
                  * @property {clutch.feedback.v1.IFeedback|null} [feedback] SubmitFeedbackRequest feedback
                  * @property {clutch.feedback.v1.IFeedbackMetadata|null} [metadata] SubmitFeedbackRequest metadata
                  */
@@ -25686,6 +25670,14 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 SubmitFeedbackRequest.prototype.id = "";
+
+                /**
+                 * SubmitFeedbackRequest userId.
+                 * @member {string} userId
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
+                 * @instance
+                 */
+                SubmitFeedbackRequest.prototype.userId = "";
 
                 /**
                  * SubmitFeedbackRequest feedback.
@@ -25717,6 +25709,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.id != null && message.hasOwnProperty("id"))
                         if (!$util.isString(message.id))
                             return "id: string expected";
+                    if (message.userId != null && message.hasOwnProperty("userId"))
+                        if (!$util.isString(message.userId))
+                            return "userId: string expected";
                     if (message.feedback != null && message.hasOwnProperty("feedback")) {
                         let error = $root.clutch.feedback.v1.Feedback.verify(message.feedback);
                         if (error)
@@ -25744,6 +25739,8 @@ export const clutch = $root.clutch = (() => {
                     let message = new $root.clutch.feedback.v1.SubmitFeedbackRequest();
                     if (object.id != null)
                         message.id = String(object.id);
+                    if (object.userId != null)
+                        message.userId = String(object.userId);
                     if (object.feedback != null) {
                         if (typeof object.feedback !== "object")
                             throw TypeError(".clutch.feedback.v1.SubmitFeedbackRequest.feedback: object expected");
@@ -25772,11 +25769,14 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.defaults) {
                         object.id = "";
+                        object.userId = "";
                         object.feedback = null;
                         object.metadata = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
                         object.id = message.id;
+                    if (message.userId != null && message.hasOwnProperty("userId"))
+                        object.userId = message.userId;
                     if (message.feedback != null && message.hasOwnProperty("feedback"))
                         object.feedback = $root.clutch.feedback.v1.Feedback.toObject(message.feedback, options);
                     if (message.metadata != null && message.hasOwnProperty("metadata"))

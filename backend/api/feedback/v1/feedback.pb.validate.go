@@ -749,17 +749,6 @@ func (m *Feedback) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetUserId()) < 1 {
-		err := FeedbackValidationError{
-			field:  "UserId",
-			reason: "value length must be at least 1 bytes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if len(m.GetUrlPath()) < 1 {
 		err := FeedbackValidationError{
 			field:  "UrlPath",
@@ -884,9 +873,21 @@ func (m *SubmitFeedbackRequest) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetId()) < 1 {
+	if utf8.RuneCountInString(m.GetId()) != 36 {
 		err := SubmitFeedbackRequestValidationError{
 			field:  "Id",
+			reason: "value length must be 36 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	if len(m.GetUserId()) < 1 {
+		err := SubmitFeedbackRequestValidationError{
+			field:  "UserId",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {
