@@ -31,10 +31,10 @@ Neutral.args = {
   variant: "neutral",
 };
 
-export const Tertiary = Template.bind({});
-Tertiary.args = {
+export const Secondary = Template.bind({});
+Secondary.args = {
   text: "Submit",
-  variant: "tertiary",
+  variant: "secondary",
 };
 
 export const Disabled = Template.bind({});

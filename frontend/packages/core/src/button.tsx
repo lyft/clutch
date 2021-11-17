@@ -61,7 +61,7 @@ const COLORS = {
       disabled: "#FFFFFF",
     },
   },
-  tertiary: {
+  secondary: {
     background: {
       primary: "transparent",
       hover: "#F5F6FD",
@@ -114,7 +114,7 @@ const StyledBorderButton = styled(StyledButton)({
 });
 
 /** Provides feedback to the user in regards to the action of the button. */
-type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "tertiary";
+type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "secondary";
 
 /** A color palette from a @type ButtonPalette */
 const variantPalette = (variant: ButtonVariant): ButtonPalette => {
