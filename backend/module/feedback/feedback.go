@@ -139,8 +139,7 @@ func (sl SurveyLookup) getConfigSurveys(origin feedbackv1.Origin) (*feedbackv1cf
 }
 
 func (m *mod) SubmitFeedback(ctx context.Context, req *feedbackv1.SubmitFeedbackRequest) (*feedbackv1.SubmitFeedbackResponse, error) {
-	err := m.client.SubmitFeedback(ctx, req.Id, req.UserId, req.Feedback, req.Metadata)
-	if err != nil {
+	if err := m.client.SubmitFeedback(ctx, req.Id, req.UserId, req.Feedback, req.Metadata); err != nil {
 		m.logger.Error("failed to submit feedback", zap.Error(err))
 		return nil, status.Error(codes.FailedPrecondition, err.Error())
 	}
