@@ -8,12 +8,12 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.11.0
 	github.com/aws/aws-sdk-go-v2/config v1.10.1
 	github.com/aws/aws-sdk-go-v2/credentials v1.6.1
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.14.0
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.7.0
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.21.0
-	github.com/aws/aws-sdk-go-v2/service/iam v1.12.0
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.8.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.18.0
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.15.0
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.8.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.22.0
+	github.com/aws/aws-sdk-go-v2/service/iam v1.13.0
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.9.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.19.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.10.0
 	github.com/aws/smithy-go v1.9.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
