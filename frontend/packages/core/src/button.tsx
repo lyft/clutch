@@ -61,6 +61,18 @@ const COLORS = {
       disabled: "#FFFFFF",
     },
   },
+  tertiary: {
+    background: {
+      primary: "transparent",
+      hover: "#F5F6FD",
+      active: "#D7DAF6",
+      disabled: "transparent",
+    },
+    font: {
+      primary: "#3548D4",
+      disabled: "#0D1030",
+    },
+  },
 } as { [key: string]: ButtonPalette };
 
 const colorCss = (palette: ButtonPalette) => {
@@ -102,7 +114,7 @@ const StyledBorderButton = styled(StyledButton)({
 });
 
 /** Provides feedback to the user in regards to the action of the button. */
-type ButtonVariant = "neutral" | "primary" | "danger" | "destructive";
+type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "tertiary";
 
 /** A color palette from a @type ButtonPalette */
 const variantPalette = (variant: ButtonVariant): ButtonPalette => {

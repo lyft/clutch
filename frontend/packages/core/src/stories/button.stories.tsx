@@ -25,10 +25,16 @@ Destructive.args = {
   variant: "destructive",
 };
 
-export const Danger = Template.bind({});
-Danger.args = {
-  text: "Rotate",
-  variant: "danger",
+export const Neutral = Template.bind({});
+Neutral.args = {
+  text: "Back",
+  variant: "neutral",
+};
+
+export const Tertiary = Template.bind({});
+Tertiary.args = {
+  text: "Submit",
+  variant: "tertiary",
 };
 
 export const Disabled = Template.bind({});
