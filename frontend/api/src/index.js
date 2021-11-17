@@ -5596,8 +5596,8 @@ export const clutch = $root.clutch = (() => {
                      * @interface IResizeAutoscalingGroupRequest
                      * @property {string|null} [name] ResizeAutoscalingGroupRequest name
                      * @property {string|null} [region] ResizeAutoscalingGroupRequest region
-                     * @property {string|null} [account] ResizeAutoscalingGroupRequest account
                      * @property {clutch.aws.ec2.v1.IAutoscalingGroupSize|null} [size] ResizeAutoscalingGroupRequest size
+                     * @property {string|null} [account] ResizeAutoscalingGroupRequest account
                      */
 
                     /**
@@ -5632,20 +5632,20 @@ export const clutch = $root.clutch = (() => {
                     ResizeAutoscalingGroupRequest.prototype.region = "";
 
                     /**
-                     * ResizeAutoscalingGroupRequest account.
-                     * @member {string} account
-                     * @memberof clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest
-                     * @instance
-                     */
-                    ResizeAutoscalingGroupRequest.prototype.account = "";
-
-                    /**
                      * ResizeAutoscalingGroupRequest size.
                      * @member {clutch.aws.ec2.v1.IAutoscalingGroupSize|null|undefined} size
                      * @memberof clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest
                      * @instance
                      */
                     ResizeAutoscalingGroupRequest.prototype.size = null;
+
+                    /**
+                     * ResizeAutoscalingGroupRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest
+                     * @instance
+                     */
+                    ResizeAutoscalingGroupRequest.prototype.account = "";
 
                     /**
                      * Verifies a ResizeAutoscalingGroupRequest message.
@@ -5664,14 +5664,14 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
-                        if (message.account != null && message.hasOwnProperty("account"))
-                            if (!$util.isString(message.account))
-                                return "account: string expected";
                         if (message.size != null && message.hasOwnProperty("size")) {
                             let error = $root.clutch.aws.ec2.v1.AutoscalingGroupSize.verify(message.size);
                             if (error)
                                 return "size." + error;
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -5691,13 +5691,13 @@ export const clutch = $root.clutch = (() => {
                             message.name = String(object.name);
                         if (object.region != null)
                             message.region = String(object.region);
-                        if (object.account != null)
-                            message.account = String(object.account);
                         if (object.size != null) {
                             if (typeof object.size !== "object")
                                 throw TypeError(".clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest.size: object expected");
                             message.size = $root.clutch.aws.ec2.v1.AutoscalingGroupSize.fromObject(object.size);
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 

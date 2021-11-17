@@ -57,9 +57,9 @@ message ResizeAutoscalingGroupRequest {
 
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
-  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
-
+  
   AutoscalingGroupSize size = 3 [ (validate.rules).message = {required : true} ];
+  string account = 4 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message ResizeAutoscalingGroupResponse {

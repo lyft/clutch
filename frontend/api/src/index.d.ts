@@ -2412,11 +2412,11 @@ export namespace clutch {
                     /** ResizeAutoscalingGroupRequest region */
                     region?: (string|null);
 
-                    /** ResizeAutoscalingGroupRequest account */
-                    account?: (string|null);
-
                     /** ResizeAutoscalingGroupRequest size */
                     size?: (clutch.aws.ec2.v1.IAutoscalingGroupSize|null);
+
+                    /** ResizeAutoscalingGroupRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a ResizeAutoscalingGroupRequest. */
@@ -2434,11 +2434,11 @@ export namespace clutch {
                     /** ResizeAutoscalingGroupRequest region. */
                     public region: string;
 
-                    /** ResizeAutoscalingGroupRequest account. */
-                    public account: string;
-
                     /** ResizeAutoscalingGroupRequest size. */
                     public size?: (clutch.aws.ec2.v1.IAutoscalingGroupSize|null);
+
+                    /** ResizeAutoscalingGroupRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a ResizeAutoscalingGroupRequest message.

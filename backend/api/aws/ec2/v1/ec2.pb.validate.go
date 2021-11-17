@@ -186,17 +186,6 @@ func (m *ResizeAutoscalingGroupRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if len(m.GetAccount()) < 1 {
-		err := ResizeAutoscalingGroupRequestValidationError{
-			field:  "Account",
-			reason: "value length must be at least 1 bytes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if m.GetSize() == nil {
 		err := ResizeAutoscalingGroupRequestValidationError{
 			field:  "Size",
@@ -235,6 +224,17 @@ func (m *ResizeAutoscalingGroupRequest) validate(all bool) error {
 				cause:  err,
 			}
 		}
+	}
+
+	if len(m.GetAccount()) < 1 {
+		err := ResizeAutoscalingGroupRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
