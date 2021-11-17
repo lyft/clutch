@@ -29,7 +29,7 @@ func (s *svc) DescribeKinesisStream(ctx context.Context, account, region, stream
 	ret := &kinesisv1.Stream{
 		StreamName:        streamName,
 		Region:            region,
-		Account:           "defaul",
+		Account:           "default",
 		CurrentShardCount: int32(32),
 	}
 	return ret, nil
