@@ -16,9 +16,10 @@ type RetryableFunc func() error
 // MultiError is a slice of errors ocurred while retrying.
 type MultiError []error
 
-// Error implements error interface.
+// Error implements the error interface.
 //
-// Returns all the errors ocurred during retry formatted as a string.
+// Returns all the errors occurred during retry formatted as a string separated by
+// newlines.
 func (m MultiError) Error() string {
 	errorLog := make([]string, len(m))
 	for i, e := range m {
@@ -29,7 +30,8 @@ func (m MultiError) Error() string {
 }
 
 /*
-Do retries a given function with delays between each attempts as defined by the caller.
+Do retries a given function with delays between each attempts as defined by the caller
+or their corresponding defaults.
 
 err := retry.Do(
 			ctx,
@@ -45,7 +47,6 @@ func Do(ctx context.Context, logger *zap.Logger, scope tally.Scope, fn Retryable
 		return err
 	}
 
-	n := uint(0)
 	var errorLog MultiError
 
 	config := defaultConfig(scope)
@@ -54,7 +55,7 @@ func Do(ctx context.Context, logger *zap.Logger, scope tally.Scope, fn Retryable
 		opt(config)
 	}
 
-	for n < config.maxRetries {
+	for n := uint(0); n < config.maxRetries; n++ {
 		err := fn()
 		if err == nil {
 			return nil
@@ -80,8 +81,6 @@ func Do(ctx context.Context, logger *zap.Logger, scope tally.Scope, fn Retryable
 		case <-ctx.Done():
 			return ctx.Err()
 		}
-
-		n++
 	}
 	return errorLog
 }
