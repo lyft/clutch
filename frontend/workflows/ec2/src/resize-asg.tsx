@@ -46,6 +46,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
         onUpdate={update}
         data={[
           { name: "Name", value: group.name },
+          { name: "Account", value: group.account },
           { name: "Region", value: group.region },
           { name: "Termination Policy", value: group.terminationPolicies },
           {

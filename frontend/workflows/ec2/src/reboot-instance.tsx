@@ -36,6 +36,7 @@ const InstanceDetails: React.FC<WizardChild> = () => {
 
   const data = [
     { name: "Instance ID", value: instance.instanceId },
+    { name: "Account", value: instance.account },
     { name: "Region", value: instance.region },
     { name: "State", value: instance.state },
     { name: "Instance Type", value: instance.instanceType },
