@@ -116,14 +116,27 @@ type res struct {
 }
 
 func (r *res) determineAccountAndRegionsForOption(account, region string) map[string][]string {
-	regions := make(map[string][]string)
-	switch account {
-	case resolver.OptionAll:
-		regions = r.client.AccountsAndRegions()
-	default:
-		regions[account] = []string{region}
+	options := make(map[string][]string)
+
+	if account != resolver.OptionAll && region != resolver.OptionAll {
+		options[account] = []string{region}
+		return options
+
+		// If we want to fan out to all accounts but limit region for all accounts that have that region
+	} else if account == resolver.OptionAll && region != resolver.OptionAll {
+		for _, a := range r.client.GetAccountsInRegion(region) {
+			options[a] = []string{region}
+		}
+		return options
+
+		// If we want to only limit account but fan out to all regions within that account
+	} else if account != resolver.OptionAll && region == resolver.OptionAll {
+		options[account] = r.client.AccountsAndRegions()[account]
+		return options
 	}
-	return regions
+
+	// If we have a complete fanout for both account and regions return them all
+	return r.client.AccountsAndRegions()
 }
 
 func (r *res) Schemas() resolver.TypeURLToSchemasMap { return r.schemas }

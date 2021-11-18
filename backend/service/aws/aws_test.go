@@ -127,6 +127,35 @@ func TestRegions(t *testing.T) {
 	assert.ElementsMatch(t, regions, []string{"us-east-1", "us-west-2", "us-north-5"})
 }
 
+func TestGetAccountsInRegion(t *testing.T) {
+	c := &client{
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				alias:   "default",
+				regions: []string{"us-east-1", "us-west-2", "us-north-5"},
+			},
+			"staging": {
+				alias:   "staging",
+				regions: []string{"us-east-1"},
+			},
+			"prod": {
+				alias:   "prod",
+				regions: []string{"us-east-2"},
+			},
+			"testing": {
+				alias:   "testing",
+				regions: []string{"us-west-2"},
+			},
+		},
+	}
+
+	assert.ElementsMatch(t, []string{"default", "staging"}, c.GetAccountsInRegion("us-east-1"))
+	assert.ElementsMatch(t, []string{"prod"}, c.GetAccountsInRegion("us-east-2"))
+	assert.ElementsMatch(t, []string{"default", "testing"}, c.GetAccountsInRegion("us-west-2"))
+	assert.ElementsMatch(t, []string{"default"}, c.GetAccountsInRegion("us-north-5"))
+}
+
 func TestDuplicateRegions(t *testing.T) {
 	c := &client{
 		currentAccountAlias: "default",

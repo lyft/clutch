@@ -170,18 +170,54 @@ func (s *svc) UpdateCapacity(ctx context.Context, account, region, tableName str
 	return ret, nil
 }
 
+var accountsAndRegions = map[string][]string{
+	"default":    {"us-mock-1"},
+	"staging":    {"us-mock-1", "us-mock-2"},
+	"production": {"us-mock-1", "us-mock-2", "us-mock-3"},
+}
+
 func (s *svc) Regions() []string {
-	return []string{"us-mock-1"}
+	uniqueRegions := map[string]bool{}
+
+	for _, regions := range accountsAndRegions {
+		for _, r := range regions {
+			uniqueRegions[r] = true
+		}
+	}
+
+	regions := make([]string, len(uniqueRegions))
+	i := 0
+	for region := range uniqueRegions {
+		regions[i] = region
+		i++
+	}
+
+	return regions
 }
 
 func (s *svc) Accounts() []string {
-	return []string{"default"}
+	accounts := []string{}
+	for account := range accountsAndRegions {
+		accounts = append(accounts, account)
+	}
+	return accounts
 }
 
 func (s *svc) AccountsAndRegions() map[string][]string {
-	return map[string][]string{
-		"default": {"us-mock-1"},
+	return accountsAndRegions
+}
+
+func (s *svc) GetAccountsInRegion(region string) []string {
+	accounts := []string{}
+	for a, regions := range accountsAndRegions {
+		for _, r := range regions {
+			if r == region {
+				accounts = append(accounts, a)
+			}
+		}
 	}
+
+	return accounts
 }
 
 func (s *svc) GetPrimaryAccountAlias() string {

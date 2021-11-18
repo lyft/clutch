@@ -186,6 +186,7 @@ type Client interface {
 
 	Accounts() []string
 	AccountsAndRegions() map[string][]string
+	GetAccountsInRegion(region string) []string
 	GetPrimaryAccountAlias() string
 	Regions() []string
 }
@@ -370,6 +371,20 @@ func (c *client) AccountsAndRegions() map[string][]string {
 		ar[name] = account.regions
 	}
 	return ar
+}
+
+// Get all accounts that exist in a specific region
+func (c *client) GetAccountsInRegion(region string) []string {
+	accounts := []string{}
+	for _, a := range c.accounts {
+		for _, r := range a.regions {
+			if r == region {
+				accounts = append(accounts, a.alias)
+			}
+		}
+	}
+
+	return accounts
 }
 
 func (c *client) GetPrimaryAccountAlias() string {
