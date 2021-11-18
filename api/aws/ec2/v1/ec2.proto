@@ -52,13 +52,14 @@ message AutoscalingGroupSize {
 message ResizeAutoscalingGroupRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.AutoscalingGroup",
-    pattern : "{region}/{name}"
+    pattern : "{account}/{region}/{name}"
   };
 
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
 
   AutoscalingGroupSize size = 3 [ (validate.rules).message = {required : true} ];
+  string account = 4 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message ResizeAutoscalingGroupResponse {
@@ -67,7 +68,7 @@ message ResizeAutoscalingGroupResponse {
 message AutoscalingGroup {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.AutoscalingGroup",
-    pattern : "{region}/{name}"
+    pattern : "{account}/{region}/{name}"
   };
 
   string name = 1;
@@ -118,16 +119,18 @@ message AutoscalingGroup {
   }
 
   repeated Instance instances = 6;
+  string account = 7;
 }
 
 message GetInstanceRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.Instance",
-    pattern : "{region}/{instance_id}"
+    pattern : "{account}{region}/{instance_id}"
   };
 
   string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message GetInstanceResponse {
@@ -139,11 +142,12 @@ message GetInstanceResponse {
 message TerminateInstanceRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.Instance",
-    pattern : "{region}/{instance_id}"
+    pattern : "{account}/{region}/{instance_id}"
   };
 
   string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message TerminateInstanceResponse {
@@ -152,11 +156,12 @@ message TerminateInstanceResponse {
 message RebootInstanceRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.Instance",
-    pattern : "{region}/{instance_id}"
+    pattern : "{account}/{region}/{instance_id}"
   };
 
   string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message RebootInstanceResponse {
@@ -165,7 +170,7 @@ message RebootInstanceResponse {
 message Instance {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.ec2.v1.Instance",
-    pattern : "{region}/{instance_id}"
+    pattern : "{account}/{region}/{instance_id}"
   };
 
   string instance_id = 1;
@@ -192,4 +197,5 @@ message Instance {
   string availability_zone = 7;
 
   map<string, string> tags = 8;
+  string account = 9;
 }

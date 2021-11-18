@@ -29,7 +29,7 @@ func TestSTSGetCallerIdentity(t *testing.T) {
 		},
 	}
 
-	output, err := c.GetCallerIdentity(context.Background(), "us-east-1")
+	output, err := c.GetCallerIdentity(context.Background(), "default", "us-east-1")
 	assert.NoError(t, err)
 	assert.Equal(t, output, &sts.GetCallerIdentityOutput{
 		Account: aws.String("000000000000"),
@@ -53,12 +53,12 @@ func TestSTSGetCallerIdentityErrorHandling(t *testing.T) {
 		},
 	}
 
-	output1, err1 := c.GetCallerIdentity(context.Background(), "us-east-1")
+	output1, err1 := c.GetCallerIdentity(context.Background(), "default", "us-east-1")
 	assert.Nil(t, output1)
 	assert.Error(t, err1)
 
 	// Test unknown region
-	output2, err2 := c.GetCallerIdentity(context.Background(), "choice-region-1")
+	output2, err2 := c.GetCallerIdentity(context.Background(), "default", "choice-region-1")
 	assert.Nil(t, output2)
 	assert.Error(t, err2)
 }

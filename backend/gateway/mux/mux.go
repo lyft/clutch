@@ -125,6 +125,7 @@ func (a *assetHandler) assetProviderHandler(ctx context.Context, urlPath string)
 
 		return awsClient.S3StreamingGet(
 			ctx,
+			awsClient.GetPrimaryAccountAlias(),
 			a.assetCfg.GetS3().Region,
 			a.assetCfg.GetS3().Bucket,
 			path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static")),

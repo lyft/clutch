@@ -127,6 +127,8 @@ func (m *Table) validate(all bool) error {
 
 	// no validation rules for BillingMode
 
+	// no validation rules for Account
+
 	if len(errors) > 0 {
 		return TableMultiError(errors)
 	}
@@ -615,6 +617,17 @@ func (m *DescribeTableRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetAccount()) < 1 {
+		err := DescribeTableRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return DescribeTableRequestMultiError(errors)
 	}
@@ -932,6 +945,17 @@ func (m *UpdateCapacityRequest) validate(all bool) error {
 	}
 
 	// no validation rules for IgnoreMaximums
+
+	if len(m.GetAccount()) < 1 {
+		err := UpdateCapacityRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return UpdateCapacityRequestMultiError(errors)

@@ -210,6 +210,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType, enableOverride,
       hydrator: (resourceData, capacityUpdates) => {
         const tableArgs = {
           tableName: resourceData.name,
+          account: resourceData.account,
           region: resourceData.region,
           ignoreMaximums:
             "ignore_maximums" in capacityUpdates ? capacityUpdates.ignore_maximums : false,

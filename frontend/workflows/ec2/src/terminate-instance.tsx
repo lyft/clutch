@@ -39,6 +39,7 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   const data = [
     { name: "Instance ID", value: instance.instanceId },
     { name: "Name", value: instance?.tags?.Name },
+    { name: "Account", value: instance.account },
     { name: "Region", value: instance.region },
     { name: "State", value: instance.state },
     { name: "Instance Type", value: instance.instanceType },
@@ -96,9 +97,10 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
     resourceData: {},
     terminationData: {
       deps: ["resourceData"],
-      hydrator: (resourceData: { instanceId: string; region: string }) => {
+      hydrator: (resourceData: { instanceId: string; account: string; region: string }) => {
         return client.post("/v1/aws/ec2/terminateInstance", {
           instance_id: resourceData.instanceId,
+          account: resourceData.account,
           region: resourceData.region,
         });
       },

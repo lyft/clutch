@@ -6,13 +6,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
-func (c *client) GetCallerIdentity(ctx context.Context, region string) (*sts.GetCallerIdentityOutput, error) {
-	rc, err := c.getRegionalClient(region)
+func (c *client) GetCallerIdentity(ctx context.Context, account, region string) (*sts.GetCallerIdentityOutput, error) {
+	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return nil, err
 	}
 
 	in := &sts.GetCallerIdentityInput{}
-
-	return rc.sts.GetCallerIdentity(ctx, in)
+	return cl.sts.GetCallerIdentity(ctx, in)
 }

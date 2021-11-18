@@ -21,9 +21,15 @@ message InstanceID {
       placeholder : "i-1234567890",
     },
   } ];
+
   string region = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Region",
     option_field : {include_all_option : true, include_dynamic_options : "regions"},
+  } ];
+
+  string account = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Account",
+    option_field : {include_all_option : true, include_dynamic_options : "accounts"},
   } ];
 }
 
@@ -45,6 +51,11 @@ message AutoscalingGroupName {
     display_name : "Region",
     option_field : {include_all_option : true, include_dynamic_options : "regions"},
   } ];
+
+  string account = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Account",
+    option_field : {include_all_option : true, include_dynamic_options : "accounts"},
+  } ];
 }
 
 message KinesisStreamName {
@@ -65,6 +76,11 @@ message KinesisStreamName {
     display_name : "Region",
     option_field : {include_all_option : true, include_dynamic_options : "regions"},
   } ];
+
+  string account = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Account",
+    option_field : {include_all_option : true, include_dynamic_options : "accounts"},
+  } ];
 }
 
 message DynamodbTableName {
@@ -84,5 +100,10 @@ message DynamodbTableName {
   string region = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Region",
     option_field : {include_all_option : true, include_dynamic_options : "regions"},
+  } ];
+
+  string account = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Account",
+    option_field : {include_all_option : true, include_dynamic_options : "accounts"},
   } ];
 }

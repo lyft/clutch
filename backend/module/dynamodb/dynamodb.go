@@ -18,7 +18,7 @@ type dynamodbAPI struct {
 }
 
 func (a *dynamodbAPI) DescribeTable(ctx context.Context, req *dynamodbv1.DescribeTableRequest) (*dynamodbv1.DescribeTableResponse, error) {
-	table, err := a.client.DescribeTable(ctx, req.Region, req.TableName)
+	table, err := a.client.DescribeTable(ctx, req.Account, req.Region, req.TableName)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (a *dynamodbAPI) DescribeTable(ctx context.Context, req *dynamodbv1.Describ
 }
 
 func (a *dynamodbAPI) UpdateCapacity(ctx context.Context, req *dynamodbv1.UpdateCapacityRequest) (*dynamodbv1.UpdateCapacityResponse, error) {
-	result, err := a.client.UpdateCapacity(ctx, req.Region, req.TableName, req.TableThroughput, req.GsiUpdates, req.IgnoreMaximums)
+	result, err := a.client.UpdateCapacity(ctx, req.Account, req.Region, req.TableName, req.TableThroughput, req.GsiUpdates, req.IgnoreMaximums)
 	if err != nil {
 		return nil, err
 	}

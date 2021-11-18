@@ -30,7 +30,7 @@ func TestS3StreamGet(t *testing.T) {
 		},
 	}
 
-	output, err := c.S3StreamingGet(context.Background(), "us-east-1", "clutch", "key")
+	output, err := c.S3StreamingGet(context.Background(), "default", "us-east-1", "clutch", "key")
 	assert.NoError(t, err)
 	assert.Equal(t, output, ioutil.NopCloser(strings.NewReader("choice")))
 }
@@ -50,12 +50,12 @@ func TestS3StreamGetErrorHandling(t *testing.T) {
 		},
 	}
 
-	output1, err1 := c.S3StreamingGet(context.Background(), "us-east-1", "clutch", "key")
+	output1, err1 := c.S3StreamingGet(context.Background(), "default", "us-east-1", "clutch", "key")
 	assert.Nil(t, output1)
 	assert.Error(t, err1)
 
 	// Test unknown region
-	output2, err2 := c.S3StreamingGet(context.Background(), "choice-region-1", "clutch", "key")
+	output2, err2 := c.S3StreamingGet(context.Background(), "default", "choice-region-1", "clutch", "key")
 	assert.Nil(t, output2)
 	assert.Error(t, err2)
 }
@@ -78,7 +78,7 @@ func TestS3GetBucketPolicy(t *testing.T) {
 		},
 	}
 
-	output, err := c.S3GetBucketPolicy(context.Background(), "us-east-1", "clutch", "000000000000")
+	output, err := c.S3GetBucketPolicy(context.Background(), "default", "us-east-1", "clutch", "000000000000")
 	assert.NoError(t, err)
 	assert.Equal(t, output, &s3.GetBucketPolicyOutput{
 		Policy:         aws.String("{}"),
@@ -101,12 +101,12 @@ func TestS3GetBucketPolicyErrorHandling(t *testing.T) {
 		},
 	}
 
-	output1, err1 := c.S3GetBucketPolicy(context.Background(), "us-east-1", "clutch", "000000000000")
+	output1, err1 := c.S3GetBucketPolicy(context.Background(), "default", "us-east-1", "clutch", "000000000000")
 	assert.Nil(t, output1)
 	assert.Error(t, err1)
 
 	// Test unknown region
-	output2, err2 := c.S3GetBucketPolicy(context.Background(), "choice-region-1", "clutch", "000000000000")
+	output2, err2 := c.S3GetBucketPolicy(context.Background(), "default", "choice-region-1", "clutch", "000000000000")
 	assert.Nil(t, output2)
 	assert.Error(t, err2)
 }

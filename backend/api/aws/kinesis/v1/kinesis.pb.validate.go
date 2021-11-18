@@ -57,9 +57,38 @@ func (m *GetStreamRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for StreamName
+	if len(m.GetStreamName()) < 1 {
+		err := GetStreamRequestValidationError{
+			field:  "StreamName",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Region
+	if len(m.GetRegion()) < 1 {
+		err := GetStreamRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetAccount()) < 1 {
+		err := GetStreamRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return GetStreamRequestMultiError(errors)
@@ -290,11 +319,40 @@ func (m *UpdateShardCountRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for StreamName
+	if len(m.GetStreamName()) < 1 {
+		err := UpdateShardCountRequestValidationError{
+			field:  "StreamName",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Region
+	if len(m.GetRegion()) < 1 {
+		err := UpdateShardCountRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for TargetShardCount
+
+	if len(m.GetAccount()) < 1 {
+		err := UpdateShardCountRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return UpdateShardCountRequestMultiError(errors)
@@ -502,6 +560,8 @@ func (m *Stream) validate(all bool) error {
 	// no validation rules for Region
 
 	// no validation rules for CurrentShardCount
+
+	// no validation rules for Account
 
 	if len(errors) > 0 {
 		return StreamMultiError(errors)

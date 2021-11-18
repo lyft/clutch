@@ -5,6 +5,7 @@ package clutch.aws.kinesis.v1;
 option go_package = "github.com/lyft/clutch/backend/api/aws/kinesis/v1;kinesisv1";
 
 import "google/api/annotations.proto";
+import "validate/validate.proto";
 
 import "api/v1/annotations.proto";
 
@@ -27,8 +28,9 @@ service KinesisAPI {
 }
 
 message GetStreamRequest {
-  string stream_name = 1;
-  string region = 2;
+  string stream_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string account = 3 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message GetStreamResponse {
@@ -38,9 +40,10 @@ message GetStreamResponse {
 }
 
 message UpdateShardCountRequest {
-  string stream_name = 1;
-  string region = 2;
+  string stream_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
   int32 target_shard_count = 3;
+  string account = 4 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message UpdateShardCountResponse {
@@ -49,10 +52,11 @@ message UpdateShardCountResponse {
 message Stream {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.kinesis.v1.Stream",
-    pattern : "{region}/{stream_name}"
+    pattern : "{account}/{region}/{stream_name}"
   };
 
   string stream_name = 1;
   string region = 2;
   int32 current_shard_count = 3;
+  string account = 4;
 }

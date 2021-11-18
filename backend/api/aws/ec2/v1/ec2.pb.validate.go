@@ -226,6 +226,17 @@ func (m *ResizeAutoscalingGroupRequest) validate(all bool) error {
 		}
 	}
 
+	if len(m.GetAccount()) < 1 {
+		err := ResizeAutoscalingGroupRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return ResizeAutoscalingGroupRequestMultiError(errors)
 	}
@@ -497,6 +508,8 @@ func (m *AutoscalingGroup) validate(all bool) error {
 
 	}
 
+	// no validation rules for Account
+
 	if len(errors) > 0 {
 		return AutoscalingGroupMultiError(errors)
 	}
@@ -610,6 +623,17 @@ func (m *GetInstanceRequest) validate(all bool) error {
 	if len(m.GetRegion()) < 1 {
 		err := GetInstanceRequestValidationError{
 			field:  "Region",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetAccount()) < 1 {
+		err := GetInstanceRequestValidationError{
+			field:  "Account",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {
@@ -871,6 +895,17 @@ func (m *TerminateInstanceRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetAccount()) < 1 {
+		err := TerminateInstanceRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return TerminateInstanceRequestMultiError(errors)
 	}
@@ -1087,6 +1122,17 @@ func (m *RebootInstanceRequest) validate(all bool) error {
 	if len(m.GetRegion()) < 1 {
 		err := RebootInstanceRequestValidationError{
 			field:  "Region",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetAccount()) < 1 {
+		err := RebootInstanceRequestValidationError{
+			field:  "Account",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {
@@ -1312,6 +1358,8 @@ func (m *Instance) validate(all bool) error {
 	// no validation rules for AvailabilityZone
 
 	// no validation rules for Tags
+
+	// no validation rules for Account
 
 	if len(errors) > 0 {
 		return InstanceMultiError(errors)

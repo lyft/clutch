@@ -28,29 +28,31 @@ func normalizeInstanceID(input string) (string, error) {
 func (r *res) resolveInstancesForInput(ctx context.Context, input proto.Message) (*resolver.Results, error) {
 	switch i := input.(type) {
 	case *awsv1.InstanceID:
-		return r.instanceResults(ctx, i.Region, []string{i.Id}, 1)
+		return r.instanceResults(ctx, i.Account, i.Region, []string{i.Id}, 1)
 	default:
 		return nil, status.Errorf(codes.Internal, "unrecognized input type '%T'", i)
 	}
 }
 
 // Fanout across multiple regions if needed to fetch instances.
-func (r *res) instanceResults(ctx context.Context, region string, ids []string, limit uint32) (*resolver.Results, error) {
+func (r *res) instanceResults(ctx context.Context, account, region string, ids []string, limit uint32) (*resolver.Results, error) {
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
-	regions := r.determineRegionsForOption(region)
-	for _, region := range regions {
-		handler.Add(1)
-		go func(region string) {
-			defer handler.Done()
-			instances, err := r.client.DescribeInstances(ctx, region, ids)
-			select {
-			case handler.Channel() <- resolver.NewFanoutResult(instances, err):
-				return
-			case <-handler.Cancelled():
-				return
-			}
-		}(region)
+	allAccountRegions := r.determineAccountAndRegionsForOption(account, region)
+	for account := range allAccountRegions {
+		for _, region := range allAccountRegions[account] {
+			handler.Add(1)
+			go func(account, region string) {
+				defer handler.Done()
+				instances, err := r.client.DescribeInstances(ctx, account, region, ids)
+				select {
+				case handler.Channel() <- resolver.NewFanoutResult(instances, err):
+					return
+				case <-handler.Cancelled():
+					return
+				}
+			}(account, region)
+		}
 	}
 
 	return handler.Results(limit)
