@@ -134,7 +134,7 @@ message FaultPercentage {
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 1000000} ];
 
   // Specifies the denominator. If the denominator specified is less than the numerator, the final
-  // fractional percentage is capped at 1 (100%). Unspecified denominaotr will be handled as 100.
+  // fractional percentage is capped at 1 (100%). Unspecified denominator will be handled as 100.
   DenominatorType denominator = 2;
 }
 
