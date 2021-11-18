@@ -118,6 +118,7 @@ type res struct {
 func (r *res) determineAccountAndRegionsForOption(account, region string) map[string][]string {
 	options := make(map[string][]string)
 
+	//nolint:gocritic
 	if account != resolver.OptionAll && region != resolver.OptionAll {
 		options[account] = []string{region}
 		return options

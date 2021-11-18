@@ -11,10 +11,9 @@ import (
 
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
-	"github.com/lyft/clutch/backend/resolver"
-
 	"github.com/lyft/clutch/backend/mock/service/awsmock"
 	"github.com/lyft/clutch/backend/mock/service/topologymock"
+	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/topology"
 )
