@@ -694,7 +694,7 @@ type FaultPercentage struct {
 	// (i.e. percentage equal to 50 with denominator set to HUNDRED results in 50/100 = 50%)
 	Percentage uint32 `protobuf:"varint,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
 	// Specifies the denominator. If the denominator specified is less than the numerator, the final
-	// fractional percentage is capped at 1 (100%). Unspecified denominaotr will be handled as 100.
+	// fractional percentage is capped at 1 (100%). Unspecified denominator will be handled as 100.
 	Denominator FaultPercentage_DenominatorType `protobuf:"varint,2,opt,name=denominator,proto3,enum=clutch.chaos.serverexperimentation.v1.FaultPercentage_DenominatorType" json:"denominator,omitempty"`
 }
 
