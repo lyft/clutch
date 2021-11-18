@@ -1407,16 +1407,18 @@ func (m *FaultPercentage) validate(all bool) error {
 
 	var errors []error
 
-	if val := m.GetPercentage(); val <= 0 || val > 100 {
+	if val := m.GetPercentage(); val <= 0 || val > 1000000 {
 		err := FaultPercentageValidationError{
 			field:  "Percentage",
-			reason: "value must be inside range (0, 100]",
+			reason: "value must be inside range (0, 1000000]",
 		}
 		if !all {
 			return err
 		}
 		errors = append(errors, err)
 	}
+
+	// no validation rules for Denominator
 
 	if len(errors) > 0 {
 		return FaultPercentageMultiError(errors)

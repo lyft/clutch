@@ -28,7 +28,7 @@ func TestECDSFaultsGeneration(t *testing.T) {
 	}{
 		{
 			// Abort - Service B -> Service A (Internal)
-			experiment:           createExperiment(t, "serviceA", "serviceB", 10, 404, faultUpstreamServiceTypeInternal, faultTypeAbort),
+			experiment:           createExperiment(t, "serviceA", "serviceB", 10, 100, 404, faultUpstreamServiceTypeInternal, faultTypeAbort),
 			expectedCluster:      "serviceA",
 			expectedResourceName: "envoy.extension_config",
 			expectedAbort: &gcpFilterFault.FaultAbort{
@@ -45,7 +45,7 @@ func TestECDSFaultsGeneration(t *testing.T) {
 		},
 		{
 			// Latency - Service D -> Service A (Internal)
-			experiment:           createExperiment(t, "serviceA", "serviceD", 30, 100, faultUpstreamServiceTypeInternal, faultTypeLatency),
+			experiment:           createExperiment(t, "serviceA", "serviceD", 300000, 1000000, 100, faultUpstreamServiceTypeInternal, faultTypeLatency),
 			expectedCluster:      "serviceA",
 			expectedResourceName: "envoy.extension_config",
 			expectedAbort:        nil,
@@ -56,15 +56,15 @@ func TestECDSFaultsGeneration(t *testing.T) {
 					},
 				},
 				Percentage: &gcpType.FractionalPercent{
-					Numerator:   30,
-					Denominator: gcpType.FractionalPercent_HUNDRED,
+					Numerator:   300000,
+					Denominator: gcpType.FractionalPercent_MILLION,
 				},
 			},
 			expectedHeadersDownstreamCluster: "serviceD",
 		},
 		{
 			// Abort - Service A -> Service X (External)
-			experiment:           createExperiment(t, "serviceX", "serviceA", 65, 400, faultUpstreamServiceTypeExternal, faultTypeAbort),
+			experiment:           createExperiment(t, "serviceX", "serviceA", 6500, 10000, 400, faultUpstreamServiceTypeExternal, faultTypeAbort),
 			expectedCluster:      "serviceA",
 			expectedResourceName: "envoy.egress.extension_config.serviceX",
 			expectedAbort: &gcpFilterFault.FaultAbort{
@@ -72,15 +72,15 @@ func TestECDSFaultsGeneration(t *testing.T) {
 					HttpStatus: 400,
 				},
 				Percentage: &gcpType.FractionalPercent{
-					Numerator:   65,
-					Denominator: gcpType.FractionalPercent_HUNDRED,
+					Numerator:   6500,
+					Denominator: gcpType.FractionalPercent_TEN_THOUSAND,
 				},
 			},
 			expectedDelay: nil,
 		},
 		{
 			// Latency - Service F -> Service Y (External)
-			experiment:           createExperiment(t, "serviceY", "serviceF", 40, 200, faultUpstreamServiceTypeExternal, faultTypeLatency),
+			experiment:           createExperiment(t, "serviceY", "serviceF", 40, 100, 200, faultUpstreamServiceTypeExternal, faultTypeLatency),
 			expectedCluster:      "serviceF",
 			expectedResourceName: "envoy.egress.extension_config.serviceY",
 			expectedAbort:        nil,
@@ -193,7 +193,7 @@ const (
 	faultTypeLatency                 = "latency"
 )
 
-func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentstore.Experiment {
+func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultNumerator uint32, faultDenominator uint32, faultValue uint32, faultInjectorEnforcing string, faultType string) *experimentstore.Experiment {
 	httpConfig := &serverexperimentation.HTTPFaultConfig{}
 
 	upstreamSingleCluster := &serverexperimentation.SingleCluster{
@@ -204,18 +204,28 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 		Name: downstreamCluster,
 	}
 
+	var denom serverexperimentation.FaultPercentage_DenominatorType
+	switch faultDenominator {
+	case 10000:
+		denom = serverexperimentation.FaultPercentage_DENOMINATOR_TEN_THOUSAND
+	case 1000000:
+		denom = serverexperimentation.FaultPercentage_DENOMINATOR_MILLION
+	default:
+		denom = serverexperimentation.FaultPercentage_DENOMINATOR_HUNDRED
+	}
+
 	switch faultType {
 	case faultTypeAbort:
 		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_AbortFault{
 			AbortFault: &serverexperimentation.AbortFault{
-				Percentage:  &serverexperimentation.FaultPercentage{Percentage: faultPercent},
+				Percentage:  &serverexperimentation.FaultPercentage{Percentage: faultNumerator, Denominator: denom},
 				AbortStatus: &serverexperimentation.FaultAbortStatus{HttpStatusCode: faultValue},
 			},
 		}
 	case faultTypeLatency:
 		httpConfig.Fault = &serverexperimentation.HTTPFaultConfig_LatencyFault{
 			LatencyFault: &serverexperimentation.LatencyFault{
-				Percentage:      &serverexperimentation.FaultPercentage{Percentage: faultPercent},
+				Percentage:      &serverexperimentation.FaultPercentage{Percentage: faultNumerator, Denominator: denom},
 				LatencyDuration: &serverexperimentation.FaultLatencyDuration{FixedDurationMs: faultValue},
 			},
 		}
