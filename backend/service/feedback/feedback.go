@@ -1,5 +1,9 @@
 package feedback
 
+// <!-- START clutchdoc -->
+// description: Stores feedback submissions in the database.
+// <!-- END clutchdoc -->
+
 import (
 	"context"
 	"database/sql"

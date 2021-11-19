@@ -1,5 +1,9 @@
 package feedback
 
+// <!-- START clutchdoc -->
+// description: Exposes endpoints to return survey questions for feedback components and to submit feedback submissions.
+// <!-- END clutchdoc -->
+
 import (
 	"context"
 	"errors"
