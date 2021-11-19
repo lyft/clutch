@@ -58,9 +58,9 @@ type submission struct {
 // used to normalize a given emoji rating out of a 100
 // can add more emoji values as new use cases arise
 var emojiRatingScore = map[string]int64{
-	"SAD":     30,
-	"NEUTRAL": 70,
-	"HAPPY":   100,
+	feedbackv1.EmojiRating_SAD.String():     30,
+	feedbackv1.EmojiRating_NEUTRAL.String(): 70,
+	feedbackv1.EmojiRating_HAPPY.String():   100,
 }
 
 type Service interface {
