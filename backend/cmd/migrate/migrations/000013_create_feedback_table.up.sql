@@ -6,6 +6,8 @@ CREATE TABLE feedback (
 
   user_id text,
 
+  score smallint,
+
   -- details: json blob of the feedback details
   details JSONB,
 
@@ -15,5 +17,7 @@ CREATE TABLE feedback (
 );
 
 CREATE INDEX IF NOT EXISTS sort_submissions ON feedback (submitted_at);
+CREATE INDEX IF NOT EXISTS sort_user_id ON feedback (user_id);
+CREATE INDEX IF NOT EXISTS sort_score ON feedback (score);
 CREATE INDEX IF NOT EXISTS details_json ON feedback USING GIN (details jsonb_path_ops);
 CREATE INDEX IF NOT EXISTS metadata_json ON feedback USING GIN (metadata jsonb_path_ops);

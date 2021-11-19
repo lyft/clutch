@@ -22,7 +22,7 @@ func TestCreateOrUpdateSubmission(t *testing.T) {
 		metadata *feedbackv1.FeedbackMetadata
 	}{
 		{
-			feedback: &feedbackv1.Feedback{Rating: "great"},
+			feedback: &feedbackv1.Feedback{RatingLabel: "great"},
 			metadata: &feedbackv1.FeedbackMetadata{UserSubmitted: true},
 		},
 		// a sanity check that nil values aren't going to raise errors
@@ -36,6 +36,7 @@ func TestCreateOrUpdateSubmission(t *testing.T) {
 		s := &submission{
 			id:          "00000000-0000-0000-0000-000000000000",
 			userId:      "foo@example.com",
+			score:       70,
 			submittedAt: time.Now(),
 			feedback:    test.feedback,
 			metadata:    test.metadata,
@@ -47,7 +48,7 @@ func TestCreateOrUpdateSubmission(t *testing.T) {
 		assert.NoError(t, err)
 
 		mock.ExpectExec(createOrUpdateSubmissionQuery).
-			WithArgs(s.id, s.submittedAt, s.userId, feedbackJSON, metadataJSON).
+			WithArgs(s.id, s.submittedAt, s.userId, s.score, feedbackJSON, metadataJSON).
 			WillReturnResult(sqlmock.NewResult(0, 1))
 
 		r := &storage{db: db}

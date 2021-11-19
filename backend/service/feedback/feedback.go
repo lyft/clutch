@@ -50,8 +50,17 @@ type submission struct {
 	id          string
 	submittedAt time.Time
 	userId      string
+	score       int64
 	feedback    *feedbackv1.Feedback
 	metadata    *feedbackv1.FeedbackMetadata
+}
+
+// used to normalize a given emoji rating out of a 100
+// can add more emoji values as new use cases arise
+var emojiRatingScore = map[string]int64{
+	"SAD":     30,
+	"NEUTRAL": 70,
+	"HAPPY":   100,
 }
 
 type Service interface {
@@ -71,12 +80,17 @@ func (s *svc) processSubmission(id string, userId string, feedback *feedbackv1.F
 		return nil, status.Errorf(codes.InvalidArgument, "feedback: %v or metadata: %v provided was nil", feedback, metadata)
 	}
 
+	score, err := calculateRatingScore(feedback.RatingScale)
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+
 	// the main question that was asked in the feedback component
 	if metadata.Survey.Prompt == "" {
 		return nil, status.Error(codes.InvalidArgument, "metadata survey prompt was empty")
 	}
 
-	if metadata.Survey.RatingOptions == nil {
+	if metadata.Survey.RatingLabels == nil {
 		return nil, status.Error(codes.InvalidArgument, "metadata rating options was nil")
 	}
 
@@ -84,9 +98,25 @@ func (s *svc) processSubmission(id string, userId string, feedback *feedbackv1.F
 		id:          id,
 		submittedAt: time.Now(),
 		userId:      userId,
+		score:       score,
 		feedback:    feedback,
 		metadata:    metadata,
 	}, nil
+}
+
+// looks up the enum's rating score using its corresponding rating scale
+func calculateRatingScore(scale *feedbackv1.RatingScale) (int64, error) {
+	switch scale.Type.(type) {
+	case *feedbackv1.RatingScale_Emoji:
+		rating := scale.GetEmoji().String()
+		v, ok := emojiRatingScore[scale.GetEmoji().String()]
+		if !ok {
+			return -1, fmt.Errorf("unsupported rating: %v", rating)
+		}
+		return v, nil
+	default:
+		return -1, fmt.Errorf("unsupported rating scale: %v", scale)
+	}
 }
 
 func (s *svc) SubmitFeedback(ctx context.Context, id string, userId string, feedback *feedbackv1.Feedback, metadata *feedbackv1.FeedbackMetadata) error {

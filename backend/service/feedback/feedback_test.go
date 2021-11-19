@@ -13,12 +13,14 @@ import (
 func TestProcessSubmission(t *testing.T) {
 	id := "00000000-0000-0000-0000-000000000000"
 	userId := "foo@example.com"
-	validFeedbackTestCase := &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", Rating: "great"}
+	validFeedbackTestCase := &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", RatingLabel: "great", RatingScale: &feedbackv1.RatingScale{
+		Type: &feedbackv1.RatingScale_Emoji{Emoji: feedbackv1.EmojiRating_HAPPY},
+	}}
 	vailidMetadataTestCase := &feedbackv1.FeedbackMetadata{
 		Origin: feedbackv1.Origin_WIZARD,
 		Survey: &feedbackv1.Survey{
-			Prompt:        "Rate your experience",
-			RatingOptions: &feedbackv1.RatingOptions{Three: "great"},
+			Prompt:       "Rate your experience",
+			RatingLabels: &feedbackv1.RatingLabels{Type: &feedbackv1.RatingLabels_Emoji{Emoji: &feedbackv1.EmojiRatingLabels{Sad: "bad", Neutral: "ok", Happy: "great"}}},
 		},
 		UserSubmitted: true,
 	}
@@ -47,7 +49,7 @@ func TestProcessSubmission(t *testing.T) {
 		{
 			id:       id,
 			userId:   "",
-			feedback: &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", Rating: "great"},
+			feedback: &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", RatingLabel: "great"},
 			metadata: vailidMetadataTestCase,
 		},
 		// metadata is nil
@@ -65,8 +67,8 @@ func TestProcessSubmission(t *testing.T) {
 			metadata: &feedbackv1.FeedbackMetadata{
 				Origin: feedbackv1.Origin_WIZARD,
 				Survey: &feedbackv1.Survey{
-					Prompt:        "",
-					RatingOptions: &feedbackv1.RatingOptions{Three: "great"},
+					Prompt:       "",
+					RatingLabels: &feedbackv1.RatingLabels{Type: &feedbackv1.RatingLabels_Emoji{Emoji: &feedbackv1.EmojiRatingLabels{Sad: "bad", Neutral: "ok", Happy: "great"}}},
 				}, UserSubmitted: true},
 		},
 		// metadata rating options is nil
@@ -77,8 +79,8 @@ func TestProcessSubmission(t *testing.T) {
 			metadata: &feedbackv1.FeedbackMetadata{
 				Origin: feedbackv1.Origin_WIZARD,
 				Survey: &feedbackv1.Survey{
-					Prompt:        "Rate your experience",
-					RatingOptions: nil,
+					Prompt:       "Rate your experience",
+					RatingLabels: nil,
 				},
 				UserSubmitted: true,
 			},
@@ -100,5 +102,42 @@ func TestProcessSubmission(t *testing.T) {
 		submission, err := s.processSubmission(test.id, test.userId, test.feedback, test.metadata)
 		assert.Error(t, err)
 		assert.Nil(t, submission)
+	}
+}
+
+func TestCalculateRatingScore(t *testing.T) {
+	testCases := []struct {
+		scale         *feedbackv1.RatingScale
+		expectedScore int64
+		expectedErr   bool
+	}{
+		{
+			scale:         &feedbackv1.RatingScale{Type: &feedbackv1.RatingScale_Emoji{Emoji: feedbackv1.EmojiRating_SAD}},
+			expectedScore: 30,
+		},
+		{
+			scale:         &feedbackv1.RatingScale{Type: &feedbackv1.RatingScale_Emoji{Emoji: feedbackv1.EmojiRating_NEUTRAL}},
+			expectedScore: 70,
+		},
+		{
+			scale:         &feedbackv1.RatingScale{Type: &feedbackv1.RatingScale_Emoji{Emoji: feedbackv1.EmojiRating_HAPPY}},
+			expectedScore: 100,
+		},
+		{
+			scale:         &feedbackv1.RatingScale{Type: &feedbackv1.RatingScale_Emoji{Emoji: feedbackv1.EmojiRating_EMOJI_UNSPECIFIED}},
+			expectedScore: -1,
+			expectedErr:   true,
+		},
+	}
+
+	for _, test := range testCases {
+		result, err := calculateRatingScore(test.scale)
+		if test.expectedErr {
+			assert.Error(t, err)
+			assert.Equal(t, test.expectedScore, result)
+		} else {
+			assert.NoError(t, err)
+			assert.Equal(t, test.expectedScore, result)
+		}
 	}
 }

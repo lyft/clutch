@@ -86,11 +86,7 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 		results[origin.String()] = &feedbackv1.Survey{
 			Prompt:         v.Prompt,
 			FreeformPrompt: v.FreeformPrompt,
-			RatingOptions: &feedbackv1.RatingOptions{
-				One:   v.RatingOptions.One,
-				Two:   v.RatingOptions.Two,
-				Three: v.RatingOptions.Three,
-			},
+			RatingLabels:   v.RatingLabels,
 		}
 	}
 
