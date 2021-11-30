@@ -2,7 +2,13 @@ import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
 import Card from "./card";
 import Dash from "./dash";
-import { useDashState, useTimelineState, useTimelineUpdater } from "./dash-hooks";
+import {
+  useDashState,
+  useTimelineState,
+  useTimelineUpdater,
+  useTimeRangeState,
+  useTimeRangeUpdater,
+} from "./dash-hooks";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
@@ -33,6 +39,15 @@ export type {
   TimelineState,
   TimeData,
   TimeDataUpdate,
-  ProjectToPointsMap,
+  EventData,
+  TimeRangeState,
 } from "./types";
-export { Card, Dash, useDashState, useTimelineState, useTimelineUpdater };
+export {
+  Card,
+  Dash,
+  useDashState,
+  useTimelineState,
+  useTimelineUpdater,
+  useTimeRangeState,
+  useTimeRangeUpdater,
+};

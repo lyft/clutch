@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,14 +32,29 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Table with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Table) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Table with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in TableMultiError, or nil if none found.
+func (m *Table) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Table) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -47,7 +63,26 @@ func (m *Table) Validate() error {
 	for idx, item := range m.GetGlobalSecondaryIndexes() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, TableValidationError{
+						field:  fmt.Sprintf("GlobalSecondaryIndexes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, TableValidationError{
+						field:  fmt.Sprintf("GlobalSecondaryIndexes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return TableValidationError{
 					field:  fmt.Sprintf("GlobalSecondaryIndexes[%v]", idx),
@@ -59,7 +94,26 @@ func (m *Table) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetProvisionedThroughput()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetProvisionedThroughput()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, TableValidationError{
+					field:  "ProvisionedThroughput",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, TableValidationError{
+					field:  "ProvisionedThroughput",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetProvisionedThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TableValidationError{
 				field:  "ProvisionedThroughput",
@@ -73,8 +127,29 @@ func (m *Table) Validate() error {
 
 	// no validation rules for BillingMode
 
+	// no validation rules for Account
+
+	if len(errors) > 0 {
+		return TableMultiError(errors)
+	}
 	return nil
 }
+
+// TableMultiError is an error wrapping multiple validation errors returned by
+// Table.ValidateAll() if the designated constraints aren't met.
+type TableMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TableMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TableMultiError) AllErrors() []error { return m }
 
 // TableValidationError is the validation error returned by Table.Validate if
 // the designated constraints aren't met.
@@ -132,15 +207,48 @@ var _ interface {
 
 // Validate checks the field values on GlobalSecondaryIndex with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GlobalSecondaryIndex) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GlobalSecondaryIndex with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GlobalSecondaryIndexMultiError, or nil if none found.
+func (m *GlobalSecondaryIndex) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GlobalSecondaryIndex) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Name
 
-	if v, ok := interface{}(m.GetProvisionedThroughput()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetProvisionedThroughput()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GlobalSecondaryIndexValidationError{
+					field:  "ProvisionedThroughput",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GlobalSecondaryIndexValidationError{
+					field:  "ProvisionedThroughput",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetProvisionedThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GlobalSecondaryIndexValidationError{
 				field:  "ProvisionedThroughput",
@@ -152,8 +260,28 @@ func (m *GlobalSecondaryIndex) Validate() error {
 
 	// no validation rules for Status
 
+	if len(errors) > 0 {
+		return GlobalSecondaryIndexMultiError(errors)
+	}
 	return nil
 }
+
+// GlobalSecondaryIndexMultiError is an error wrapping multiple validation
+// errors returned by GlobalSecondaryIndex.ValidateAll() if the designated
+// constraints aren't met.
+type GlobalSecondaryIndexMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GlobalSecondaryIndexMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GlobalSecondaryIndexMultiError) AllErrors() []error { return m }
 
 // GlobalSecondaryIndexValidationError is the validation error returned by
 // GlobalSecondaryIndex.Validate if the designated constraints aren't met.
@@ -212,16 +340,49 @@ var _ interface {
 } = GlobalSecondaryIndexValidationError{}
 
 // Validate checks the field values on IndexUpdateAction with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *IndexUpdateAction) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IndexUpdateAction with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IndexUpdateActionMultiError, or nil if none found.
+func (m *IndexUpdateAction) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IndexUpdateAction) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Name
 
-	if v, ok := interface{}(m.GetIndexThroughput()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetIndexThroughput()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IndexUpdateActionValidationError{
+					field:  "IndexThroughput",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IndexUpdateActionValidationError{
+					field:  "IndexThroughput",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIndexThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return IndexUpdateActionValidationError{
 				field:  "IndexThroughput",
@@ -231,8 +392,28 @@ func (m *IndexUpdateAction) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return IndexUpdateActionMultiError(errors)
+	}
 	return nil
 }
+
+// IndexUpdateActionMultiError is an error wrapping multiple validation errors
+// returned by IndexUpdateAction.ValidateAll() if the designated constraints
+// aren't met.
+type IndexUpdateActionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IndexUpdateActionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IndexUpdateActionMultiError) AllErrors() []error { return m }
 
 // IndexUpdateActionValidationError is the validation error returned by
 // IndexUpdateAction.Validate if the designated constraints aren't met.
@@ -291,18 +472,52 @@ var _ interface {
 } = IndexUpdateActionValidationError{}
 
 // Validate checks the field values on Throughput with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Throughput) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Throughput with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ThroughputMultiError, or
+// nil if none found.
+func (m *Throughput) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Throughput) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for WriteCapacityUnits
 
 	// no validation rules for ReadCapacityUnits
 
+	if len(errors) > 0 {
+		return ThroughputMultiError(errors)
+	}
 	return nil
 }
+
+// ThroughputMultiError is an error wrapping multiple validation errors
+// returned by Throughput.ValidateAll() if the designated constraints aren't met.
+type ThroughputMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ThroughputMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ThroughputMultiError) AllErrors() []error { return m }
 
 // ThroughputValidationError is the validation error returned by
 // Throughput.Validate if the designated constraints aren't met.
@@ -360,28 +575,81 @@ var _ interface {
 
 // Validate checks the field values on DescribeTableRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *DescribeTableRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DescribeTableRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DescribeTableRequestMultiError, or nil if none found.
+func (m *DescribeTableRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DescribeTableRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetTableName()) < 1 {
-		return DescribeTableRequestValidationError{
+		err := DescribeTableRequestValidationError{
 			field:  "TableName",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return DescribeTableRequestValidationError{
+		err := DescribeTableRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(m.GetAccount()) < 1 {
+		err := DescribeTableRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return DescribeTableRequestMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeTableRequestMultiError is an error wrapping multiple validation
+// errors returned by DescribeTableRequest.ValidateAll() if the designated
+// constraints aren't met.
+type DescribeTableRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeTableRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeTableRequestMultiError) AllErrors() []error { return m }
 
 // DescribeTableRequestValidationError is the validation error returned by
 // DescribeTableRequest.Validate if the designated constraints aren't met.
@@ -441,13 +709,46 @@ var _ interface {
 
 // Validate checks the field values on DescribeTableResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *DescribeTableResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DescribeTableResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DescribeTableResponseMultiError, or nil if none found.
+func (m *DescribeTableResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DescribeTableResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetTable()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetTable()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DescribeTableResponseValidationError{
+					field:  "Table",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DescribeTableResponseValidationError{
+					field:  "Table",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTable()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return DescribeTableResponseValidationError{
 				field:  "Table",
@@ -457,8 +758,28 @@ func (m *DescribeTableResponse) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return DescribeTableResponseMultiError(errors)
+	}
 	return nil
 }
+
+// DescribeTableResponseMultiError is an error wrapping multiple validation
+// errors returned by DescribeTableResponse.ValidateAll() if the designated
+// constraints aren't met.
+type DescribeTableResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeTableResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeTableResponseMultiError) AllErrors() []error { return m }
 
 // DescribeTableResponseValidationError is the validation error returned by
 // DescribeTableResponse.Validate if the designated constraints aren't met.
@@ -518,27 +839,68 @@ var _ interface {
 
 // Validate checks the field values on UpdateCapacityRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *UpdateCapacityRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateCapacityRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateCapacityRequestMultiError, or nil if none found.
+func (m *UpdateCapacityRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateCapacityRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetTableName()) < 1 {
-		return UpdateCapacityRequestValidationError{
+		err := UpdateCapacityRequestValidationError{
 			field:  "TableName",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRegion()) < 1 {
-		return UpdateCapacityRequestValidationError{
+		err := UpdateCapacityRequestValidationError{
 			field:  "Region",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetTableThroughput()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetTableThroughput()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateCapacityRequestValidationError{
+					field:  "TableThroughput",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateCapacityRequestValidationError{
+					field:  "TableThroughput",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTableThroughput()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return UpdateCapacityRequestValidationError{
 				field:  "TableThroughput",
@@ -551,7 +913,26 @@ func (m *UpdateCapacityRequest) Validate() error {
 	for idx, item := range m.GetGsiUpdates() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, UpdateCapacityRequestValidationError{
+						field:  fmt.Sprintf("GsiUpdates[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, UpdateCapacityRequestValidationError{
+						field:  fmt.Sprintf("GsiUpdates[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return UpdateCapacityRequestValidationError{
 					field:  fmt.Sprintf("GsiUpdates[%v]", idx),
@@ -565,8 +946,39 @@ func (m *UpdateCapacityRequest) Validate() error {
 
 	// no validation rules for IgnoreMaximums
 
+	if len(m.GetAccount()) < 1 {
+		err := UpdateCapacityRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return UpdateCapacityRequestMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateCapacityRequestMultiError is an error wrapping multiple validation
+// errors returned by UpdateCapacityRequest.ValidateAll() if the designated
+// constraints aren't met.
+type UpdateCapacityRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateCapacityRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateCapacityRequestMultiError) AllErrors() []error { return m }
 
 // UpdateCapacityRequestValidationError is the validation error returned by
 // UpdateCapacityRequest.Validate if the designated constraints aren't met.
@@ -626,13 +1038,46 @@ var _ interface {
 
 // Validate checks the field values on UpdateCapacityResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *UpdateCapacityResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateCapacityResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateCapacityResponseMultiError, or nil if none found.
+func (m *UpdateCapacityResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateCapacityResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetTable()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetTable()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateCapacityResponseValidationError{
+					field:  "Table",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateCapacityResponseValidationError{
+					field:  "Table",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTable()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return UpdateCapacityResponseValidationError{
 				field:  "Table",
@@ -642,8 +1087,28 @@ func (m *UpdateCapacityResponse) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return UpdateCapacityResponseMultiError(errors)
+	}
 	return nil
 }
+
+// UpdateCapacityResponseMultiError is an error wrapping multiple validation
+// errors returned by UpdateCapacityResponse.ValidateAll() if the designated
+// constraints aren't met.
+type UpdateCapacityResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateCapacityResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateCapacityResponseMultiError) AllErrors() []error { return m }
 
 // UpdateCapacityResponseValidationError is the validation error returned by
 // UpdateCapacityResponse.Validate if the designated constraints aren't met.

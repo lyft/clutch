@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,18 +32,53 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Experiment with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Experiment) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Experiment with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ExperimentMultiError, or
+// nil if none found.
+func (m *Experiment) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Experiment) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for RunId
 
-	if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetConfig()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExperimentValidationError{
+					field:  "Config",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExperimentValidationError{
+					field:  "Config",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ExperimentValidationError{
 				field:  "Config",
@@ -52,7 +88,26 @@ func (m *Experiment) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetStartTime()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExperimentValidationError{
+					field:  "StartTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExperimentValidationError{
+					field:  "StartTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ExperimentValidationError{
 				field:  "StartTime",
@@ -62,7 +117,26 @@ func (m *Experiment) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetEndTime()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetEndTime()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExperimentValidationError{
+					field:  "EndTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExperimentValidationError{
+					field:  "EndTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetEndTime()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ExperimentValidationError{
 				field:  "EndTime",
@@ -74,8 +148,27 @@ func (m *Experiment) Validate() error {
 
 	// no validation rules for Status
 
+	if len(errors) > 0 {
+		return ExperimentMultiError(errors)
+	}
 	return nil
 }
+
+// ExperimentMultiError is an error wrapping multiple validation errors
+// returned by Experiment.ValidateAll() if the designated constraints aren't met.
+type ExperimentMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExperimentMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExperimentMultiError) AllErrors() []error { return m }
 
 // ExperimentValidationError is the validation error returned by
 // Experiment.Validate if the designated constraints aren't met.

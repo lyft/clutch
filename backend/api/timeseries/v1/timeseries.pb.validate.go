@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,31 +32,74 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on TimeRange with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *TimeRange) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TimeRange with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in TimeRangeMultiError, or nil
+// if none found.
+func (m *TimeRange) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TimeRange) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetStartMillis() <= 0 {
-		return TimeRangeValidationError{
+		err := TimeRangeValidationError{
 			field:  "StartMillis",
 			reason: "value must be greater than 0",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetEndMillis() <= 0 {
-		return TimeRangeValidationError{
+		err := TimeRangeValidationError{
 			field:  "EndMillis",
 			reason: "value must be greater than 0",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return TimeRangeMultiError(errors)
+	}
 	return nil
 }
+
+// TimeRangeMultiError is an error wrapping multiple validation errors returned
+// by TimeRange.ValidateAll() if the designated constraints aren't met.
+type TimeRangeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TimeRangeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TimeRangeMultiError) AllErrors() []error { return m }
 
 // TimeRangeValidationError is the validation error returned by
 // TimeRange.Validate if the designated constraints aren't met.
@@ -112,13 +156,46 @@ var _ interface {
 } = TimeRangeValidationError{}
 
 // Validate checks the field values on Point with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Point) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Point with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in PointMultiError, or nil if none found.
+func (m *Point) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Point) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetPb()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPb()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PointValidationError{
+					field:  "Pb",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PointValidationError{
+					field:  "Pb",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPb()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return PointValidationError{
 				field:  "Pb",
@@ -130,11 +207,32 @@ func (m *Point) Validate() error {
 
 	// no validation rules for Description
 
+	// no validation rules for Href
+
 	switch m.Timestamp.(type) {
 
 	case *Point_Range:
 
-		if v, ok := interface{}(m.GetRange()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetRange()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PointValidationError{
+						field:  "Range",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PointValidationError{
+						field:  "Range",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetRange()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return PointValidationError{
 					field:  "Range",
@@ -148,15 +246,38 @@ func (m *Point) Validate() error {
 		// no validation rules for Millis
 
 	default:
-		return PointValidationError{
+		err := PointValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 
 	}
 
+	if len(errors) > 0 {
+		return PointMultiError(errors)
+	}
 	return nil
 }
+
+// PointMultiError is an error wrapping multiple validation errors returned by
+// Point.ValidateAll() if the designated constraints aren't met.
+type PointMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PointMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PointMultiError) AllErrors() []error { return m }
 
 // PointValidationError is the validation error returned by Point.Validate if
 // the designated constraints aren't met.

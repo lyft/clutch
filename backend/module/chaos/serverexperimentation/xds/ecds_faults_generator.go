@@ -171,6 +171,10 @@ func (g ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexper
 	var abort *gcpFilterFault.FaultAbort
 	var delay *gcpFilterCommon.FaultDelay
 
+	percentage, err := GetHTTPFaultPercentage(httpFaultConfig)
+	if err != nil {
+		return false, nil, nil, err
+	}
 	switch httpFaultConfig.GetFault().(type) {
 	case *serverexperimentation.HTTPFaultConfig_AbortFault:
 		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
@@ -190,10 +194,7 @@ func (g ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexper
 			ErrorType: &gcpFilterFault.FaultAbort_HttpStatus{
 				HttpStatus: httpFaultConfig.GetAbortFault().GetAbortStatus().GetHttpStatusCode(),
 			},
-			Percentage: &gcpType.FractionalPercent{
-				Numerator:   httpFaultConfig.GetAbortFault().GetPercentage().GetPercentage(),
-				Denominator: gcpType.FractionalPercent_HUNDRED,
-			},
+			Percentage: percentage,
 		}
 	case *serverexperimentation.HTTPFaultConfig_LatencyFault:
 		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
@@ -215,10 +216,7 @@ func (g ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexper
 					Nanos: int32(httpFaultConfig.GetLatencyFault().GetLatencyDuration().GetFixedDurationMs() * 1000000),
 				},
 			},
-			Percentage: &gcpType.FractionalPercent{
-				Numerator:   httpFaultConfig.GetLatencyFault().GetPercentage().GetPercentage(),
-				Denominator: gcpType.FractionalPercent_HUNDRED,
-			},
+			Percentage: percentage,
 		}
 	default:
 		return false, nil, nil, fmt.Errorf("unknown fault type %v", httpFaultConfig)

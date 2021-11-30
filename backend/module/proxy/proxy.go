@@ -25,7 +25,8 @@ import (
 )
 
 const (
-	Name = "clutch.module.proxy"
+	Name          = "clutch.module.proxy"
+	HostHeaderKey = "Host"
 )
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
@@ -40,7 +41,7 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 		for _, ar := range service.AllowedRequests {
 			_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, ar.Path))
 			if err != nil {
-				return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", service.Name)
+				return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
 			}
 		}
 	}
@@ -71,7 +72,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	isAllowed, err := isAllowedRequest(m.services, req.Service, req.Path, req.HttpMethod)
 	if err != nil {
 		m.logger.Error("Unable to parse the configured URL", zap.Error(err))
-		return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", req.Service)
+		return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", req.Service)
 	}
 
 	if !isAllowed {
@@ -96,7 +97,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, req.Path))
 	if err != nil {
 		m.logger.Error("Unable to parse the configured URL", zap.Error(err))
-		return nil, fmt.Errorf("Unable to parse the configured URL for service [%s]", service.Name)
+		return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
 	}
 
 	// Constructing the request object
@@ -105,6 +106,8 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		URL:    parsedUrl,
 		Header: headers,
 	}
+
+	addExcludedHeaders(request)
 
 	if req.Request != nil {
 		requestJSON, err := protojson.Marshal(req.Request)
@@ -117,9 +120,17 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 
 	response, err := m.client.Do(request)
 	if err != nil {
+		m.scope.Tagged(map[string]string{
+			"service": service.Name,
+		}).Counter("request.error").Inc(1)
 		m.logger.Error("proxy request error", zap.Error(err))
 		return nil, err
 	}
+
+	m.scope.Tagged(map[string]string{
+		"service":     service.Name,
+		"status_code": fmt.Sprintf("%d", response.StatusCode),
+	}).Counter("request").Inc(1)
 
 	// Extract headers from response
 	// TODO: It might make sense to provide a list of allowed headers, as there can be a lot.
@@ -178,4 +189,19 @@ func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method stri
 		}
 	}
 	return false, nil
+}
+
+/*
+For headers that get ignored in the header map, this helper adds their values back to the designated
+fields on the Request struct.
+Context:
+	https://github.com/golang/go/issues/29865
+	https://github.com/golang/go/blob/8c94aa40e6f5e61e8a570e9d20b7d0d4ad8c382d/src/net/http/request.go#L88
+*/
+// TODO: add the other headers that get excluded from the request
+func addExcludedHeaders(request *http.Request) {
+	// Get() is case insensitive
+	if hostHeader := request.Header.Get(HostHeaderKey); hostHeader != "" {
+		request.Host = hostHeader
+	}
 }

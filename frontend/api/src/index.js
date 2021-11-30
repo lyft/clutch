@@ -3925,6 +3925,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [provisionedThroughput] Table provisionedThroughput
                      * @property {clutch.aws.dynamodb.v1.Table.Status|null} [status] Table status
                      * @property {clutch.aws.dynamodb.v1.Table.BillingMode|null} [billingMode] Table billingMode
+                     * @property {string|null} [account] Table account
                      */
 
                     /**
@@ -3992,6 +3993,14 @@ export const clutch = $root.clutch = (() => {
                     Table.prototype.billingMode = 0;
 
                     /**
+                     * Table account.
+                     * @member {string} account
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.account = "";
+
+                    /**
                      * Verifies a Table message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.Table
@@ -4047,6 +4056,9 @@ export const clutch = $root.clutch = (() => {
                             case 3:
                                 break;
                             }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -4137,6 +4149,8 @@ export const clutch = $root.clutch = (() => {
                             message.billingMode = 3;
                             break;
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -4161,6 +4175,7 @@ export const clutch = $root.clutch = (() => {
                             object.provisionedThroughput = null;
                             object.status = options.enums === String ? "UNSPECIFIED" : 0;
                             object.billingMode = options.enums === String ? "BILLING_UNSPECIFIED" : 0;
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -4177,6 +4192,8 @@ export const clutch = $root.clutch = (() => {
                             object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.Status[message.status] : message.status;
                         if (message.billingMode != null && message.hasOwnProperty("billingMode"))
                             object.billingMode = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.BillingMode[message.billingMode] : message.billingMode;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -4712,6 +4729,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IDescribeTableRequest
                      * @property {string|null} [tableName] DescribeTableRequest tableName
                      * @property {string|null} [region] DescribeTableRequest region
+                     * @property {string|null} [account] DescribeTableRequest account
                      */
 
                     /**
@@ -4746,6 +4764,14 @@ export const clutch = $root.clutch = (() => {
                     DescribeTableRequest.prototype.region = "";
 
                     /**
+                     * DescribeTableRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
+                     * @instance
+                     */
+                    DescribeTableRequest.prototype.account = "";
+
+                    /**
                      * Verifies a DescribeTableRequest message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
@@ -4762,6 +4788,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -4781,6 +4810,8 @@ export const clutch = $root.clutch = (() => {
                             message.tableName = String(object.tableName);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -4800,11 +4831,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.tableName = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -4938,6 +4972,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [tableThroughput] UpdateCapacityRequest tableThroughput
                      * @property {Array.<clutch.aws.dynamodb.v1.IIndexUpdateAction>|null} [gsiUpdates] UpdateCapacityRequest gsiUpdates
                      * @property {boolean|null} [ignoreMaximums] UpdateCapacityRequest ignoreMaximums
+                     * @property {string|null} [account] UpdateCapacityRequest account
                      */
 
                     /**
@@ -4997,6 +5032,14 @@ export const clutch = $root.clutch = (() => {
                     UpdateCapacityRequest.prototype.ignoreMaximums = false;
 
                     /**
+                     * UpdateCapacityRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * @instance
+                     */
+                    UpdateCapacityRequest.prototype.account = "";
+
+                    /**
                      * Verifies an UpdateCapacityRequest message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
@@ -5030,6 +5073,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.ignoreMaximums != null && message.hasOwnProperty("ignoreMaximums"))
                             if (typeof message.ignoreMaximums !== "boolean")
                                 return "ignoreMaximums: boolean expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -5066,6 +5112,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.ignoreMaximums != null)
                             message.ignoreMaximums = Boolean(object.ignoreMaximums);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -5089,6 +5137,7 @@ export const clutch = $root.clutch = (() => {
                             object.region = "";
                             object.tableThroughput = null;
                             object.ignoreMaximums = false;
+                            object.account = "";
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
@@ -5103,6 +5152,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (message.ignoreMaximums != null && message.hasOwnProperty("ignoreMaximums"))
                             object.ignoreMaximums = message.ignoreMaximums;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -5546,6 +5597,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [name] ResizeAutoscalingGroupRequest name
                      * @property {string|null} [region] ResizeAutoscalingGroupRequest region
                      * @property {clutch.aws.ec2.v1.IAutoscalingGroupSize|null} [size] ResizeAutoscalingGroupRequest size
+                     * @property {string|null} [account] ResizeAutoscalingGroupRequest account
                      */
 
                     /**
@@ -5588,6 +5640,14 @@ export const clutch = $root.clutch = (() => {
                     ResizeAutoscalingGroupRequest.prototype.size = null;
 
                     /**
+                     * ResizeAutoscalingGroupRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest
+                     * @instance
+                     */
+                    ResizeAutoscalingGroupRequest.prototype.account = "";
+
+                    /**
                      * Verifies a ResizeAutoscalingGroupRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest
@@ -5609,6 +5669,9 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "size." + error;
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -5633,6 +5696,8 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest.size: object expected");
                             message.size = $root.clutch.aws.ec2.v1.AutoscalingGroupSize.fromObject(object.size);
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -5653,6 +5718,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.region = "";
                             object.size = null;
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -5660,6 +5726,8 @@ export const clutch = $root.clutch = (() => {
                             object.region = message.region;
                         if (message.size != null && message.hasOwnProperty("size"))
                             object.size = $root.clutch.aws.ec2.v1.AutoscalingGroupSize.toObject(message.size, options);
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -5767,6 +5835,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.aws.ec2.v1.IAutoscalingGroupSize|null} [size] AutoscalingGroup size
                      * @property {Array.<clutch.aws.ec2.v1.AutoscalingGroup.TerminationPolicy>|null} [terminationPolicies] AutoscalingGroup terminationPolicies
                      * @property {Array.<clutch.aws.ec2.v1.AutoscalingGroup.IInstance>|null} [instances] AutoscalingGroup instances
+                     * @property {string|null} [account] AutoscalingGroup account
                      */
 
                     /**
@@ -5836,6 +5905,14 @@ export const clutch = $root.clutch = (() => {
                     AutoscalingGroup.prototype.instances = $util.emptyArray;
 
                     /**
+                     * AutoscalingGroup account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.AutoscalingGroup
+                     * @instance
+                     */
+                    AutoscalingGroup.prototype.account = "";
+
+                    /**
                      * Verifies an AutoscalingGroup message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.AutoscalingGroup
@@ -5892,6 +5969,9 @@ export const clutch = $root.clutch = (() => {
                                     return "instances." + error;
                             }
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -5978,6 +6058,8 @@ export const clutch = $root.clutch = (() => {
                                 message.instances[i] = $root.clutch.aws.ec2.v1.AutoscalingGroup.Instance.fromObject(object.instances[i]);
                             }
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6003,6 +6085,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.region = "";
                             object.size = null;
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -6025,6 +6108,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.instances.length; ++j)
                                 object.instances[j] = $root.clutch.aws.ec2.v1.AutoscalingGroup.Instance.toObject(message.instances[j], options);
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6365,6 +6450,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IGetInstanceRequest
                      * @property {string|null} [instanceId] GetInstanceRequest instanceId
                      * @property {string|null} [region] GetInstanceRequest region
+                     * @property {string|null} [account] GetInstanceRequest account
                      */
 
                     /**
@@ -6399,6 +6485,14 @@ export const clutch = $root.clutch = (() => {
                     GetInstanceRequest.prototype.region = "";
 
                     /**
+                     * GetInstanceRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.GetInstanceRequest
+                     * @instance
+                     */
+                    GetInstanceRequest.prototype.account = "";
+
+                    /**
                      * Verifies a GetInstanceRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.GetInstanceRequest
@@ -6415,6 +6509,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -6434,6 +6531,8 @@ export const clutch = $root.clutch = (() => {
                             message.instanceId = String(object.instanceId);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6453,11 +6552,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.instanceId = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6588,6 +6690,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface ITerminateInstanceRequest
                      * @property {string|null} [instanceId] TerminateInstanceRequest instanceId
                      * @property {string|null} [region] TerminateInstanceRequest region
+                     * @property {string|null} [account] TerminateInstanceRequest account
                      */
 
                     /**
@@ -6622,6 +6725,14 @@ export const clutch = $root.clutch = (() => {
                     TerminateInstanceRequest.prototype.region = "";
 
                     /**
+                     * TerminateInstanceRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.TerminateInstanceRequest
+                     * @instance
+                     */
+                    TerminateInstanceRequest.prototype.account = "";
+
+                    /**
                      * Verifies a TerminateInstanceRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.TerminateInstanceRequest
@@ -6638,6 +6749,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -6657,6 +6771,8 @@ export const clutch = $root.clutch = (() => {
                             message.instanceId = String(object.instanceId);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6676,11 +6792,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.instanceId = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6784,6 +6903,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IRebootInstanceRequest
                      * @property {string|null} [instanceId] RebootInstanceRequest instanceId
                      * @property {string|null} [region] RebootInstanceRequest region
+                     * @property {string|null} [account] RebootInstanceRequest account
                      */
 
                     /**
@@ -6818,6 +6938,14 @@ export const clutch = $root.clutch = (() => {
                     RebootInstanceRequest.prototype.region = "";
 
                     /**
+                     * RebootInstanceRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @instance
+                     */
+                    RebootInstanceRequest.prototype.account = "";
+
+                    /**
                      * Verifies a RebootInstanceRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
@@ -6834,6 +6962,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -6853,6 +6984,8 @@ export const clutch = $root.clutch = (() => {
                             message.instanceId = String(object.instanceId);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6872,11 +7005,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.instanceId = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6986,6 +7122,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [privateIpAddress] Instance privateIpAddress
                      * @property {string|null} [availabilityZone] Instance availabilityZone
                      * @property {Object.<string,string>|null} [tags] Instance tags
+                     * @property {string|null} [account] Instance account
                      */
 
                     /**
@@ -7069,6 +7206,14 @@ export const clutch = $root.clutch = (() => {
                     Instance.prototype.tags = $util.emptyObject;
 
                     /**
+                     * Instance account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.Instance
+                     * @instance
+                     */
+                    Instance.prototype.account = "";
+
+                    /**
                      * Verifies an Instance message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.Instance
@@ -7119,6 +7264,9 @@ export const clutch = $root.clutch = (() => {
                                 if (!$util.isString(message.tags[key[i]]))
                                     return "tags: string{k:string} expected";
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -7187,6 +7335,8 @@ export const clutch = $root.clutch = (() => {
                             for (let keys = Object.keys(object.tags), i = 0; i < keys.length; ++i)
                                 message.tags[keys[i]] = String(object.tags[keys[i]]);
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -7213,6 +7363,7 @@ export const clutch = $root.clutch = (() => {
                             object.publicIpAddress = "";
                             object.privateIpAddress = "";
                             object.availabilityZone = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
@@ -7234,6 +7385,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < keys2.length; ++j)
                                 object.tags[keys2[j]] = message.tags[keys2[j]];
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -7396,6 +7549,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IGetStreamRequest
                      * @property {string|null} [streamName] GetStreamRequest streamName
                      * @property {string|null} [region] GetStreamRequest region
+                     * @property {string|null} [account] GetStreamRequest account
                      */
 
                     /**
@@ -7430,6 +7584,14 @@ export const clutch = $root.clutch = (() => {
                     GetStreamRequest.prototype.region = "";
 
                     /**
+                     * GetStreamRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.kinesis.v1.GetStreamRequest
+                     * @instance
+                     */
+                    GetStreamRequest.prototype.account = "";
+
+                    /**
                      * Verifies a GetStreamRequest message.
                      * @function verify
                      * @memberof clutch.aws.kinesis.v1.GetStreamRequest
@@ -7446,6 +7608,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -7465,6 +7630,8 @@ export const clutch = $root.clutch = (() => {
                             message.streamName = String(object.streamName);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -7484,11 +7651,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.streamName = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.streamName != null && message.hasOwnProperty("streamName"))
                             object.streamName = message.streamName;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -7620,6 +7790,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [streamName] UpdateShardCountRequest streamName
                      * @property {string|null} [region] UpdateShardCountRequest region
                      * @property {number|null} [targetShardCount] UpdateShardCountRequest targetShardCount
+                     * @property {string|null} [account] UpdateShardCountRequest account
                      */
 
                     /**
@@ -7662,6 +7833,14 @@ export const clutch = $root.clutch = (() => {
                     UpdateShardCountRequest.prototype.targetShardCount = 0;
 
                     /**
+                     * UpdateShardCountRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.kinesis.v1.UpdateShardCountRequest
+                     * @instance
+                     */
+                    UpdateShardCountRequest.prototype.account = "";
+
+                    /**
                      * Verifies an UpdateShardCountRequest message.
                      * @function verify
                      * @memberof clutch.aws.kinesis.v1.UpdateShardCountRequest
@@ -7681,6 +7860,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.targetShardCount != null && message.hasOwnProperty("targetShardCount"))
                             if (!$util.isInteger(message.targetShardCount))
                                 return "targetShardCount: integer expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -7702,6 +7884,8 @@ export const clutch = $root.clutch = (() => {
                             message.region = String(object.region);
                         if (object.targetShardCount != null)
                             message.targetShardCount = object.targetShardCount | 0;
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -7722,6 +7906,7 @@ export const clutch = $root.clutch = (() => {
                             object.streamName = "";
                             object.region = "";
                             object.targetShardCount = 0;
+                            object.account = "";
                         }
                         if (message.streamName != null && message.hasOwnProperty("streamName"))
                             object.streamName = message.streamName;
@@ -7729,6 +7914,8 @@ export const clutch = $root.clutch = (() => {
                             object.region = message.region;
                         if (message.targetShardCount != null && message.hasOwnProperty("targetShardCount"))
                             object.targetShardCount = message.targetShardCount;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -7833,6 +8020,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [streamName] Stream streamName
                      * @property {string|null} [region] Stream region
                      * @property {number|null} [currentShardCount] Stream currentShardCount
+                     * @property {string|null} [account] Stream account
                      */
 
                     /**
@@ -7875,6 +8063,14 @@ export const clutch = $root.clutch = (() => {
                     Stream.prototype.currentShardCount = 0;
 
                     /**
+                     * Stream account.
+                     * @member {string} account
+                     * @memberof clutch.aws.kinesis.v1.Stream
+                     * @instance
+                     */
+                    Stream.prototype.account = "";
+
+                    /**
                      * Verifies a Stream message.
                      * @function verify
                      * @memberof clutch.aws.kinesis.v1.Stream
@@ -7894,6 +8090,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.currentShardCount != null && message.hasOwnProperty("currentShardCount"))
                             if (!$util.isInteger(message.currentShardCount))
                                 return "currentShardCount: integer expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -7915,6 +8114,8 @@ export const clutch = $root.clutch = (() => {
                             message.region = String(object.region);
                         if (object.currentShardCount != null)
                             message.currentShardCount = object.currentShardCount | 0;
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -7935,6 +8136,7 @@ export const clutch = $root.clutch = (() => {
                             object.streamName = "";
                             object.region = "";
                             object.currentShardCount = 0;
+                            object.account = "";
                         }
                         if (message.streamName != null && message.hasOwnProperty("streamName"))
                             object.streamName = message.streamName;
@@ -7942,6 +8144,8 @@ export const clutch = $root.clutch = (() => {
                             object.region = message.region;
                         if (message.currentShardCount != null && message.hasOwnProperty("currentShardCount"))
                             object.currentShardCount = message.currentShardCount;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -13668,6 +13872,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface IFaultPercentage
                      * @property {number|null} [percentage] FaultPercentage percentage
+                     * @property {clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType|null} [denominator] FaultPercentage denominator
                      */
 
                     /**
@@ -13694,6 +13899,14 @@ export const clutch = $root.clutch = (() => {
                     FaultPercentage.prototype.percentage = 0;
 
                     /**
+                     * FaultPercentage denominator.
+                     * @member {clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType} denominator
+                     * @memberof clutch.chaos.serverexperimentation.v1.FaultPercentage
+                     * @instance
+                     */
+                    FaultPercentage.prototype.denominator = 0;
+
+                    /**
                      * Verifies a FaultPercentage message.
                      * @function verify
                      * @memberof clutch.chaos.serverexperimentation.v1.FaultPercentage
@@ -13707,6 +13920,16 @@ export const clutch = $root.clutch = (() => {
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
                             if (!$util.isInteger(message.percentage))
                                 return "percentage: integer expected";
+                        if (message.denominator != null && message.hasOwnProperty("denominator"))
+                            switch (message.denominator) {
+                            default:
+                                return "denominator: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break;
+                            }
                         return null;
                     };
 
@@ -13724,6 +13947,24 @@ export const clutch = $root.clutch = (() => {
                         let message = new $root.clutch.chaos.serverexperimentation.v1.FaultPercentage();
                         if (object.percentage != null)
                             message.percentage = object.percentage >>> 0;
+                        switch (object.denominator) {
+                        case "DENOMINATOR_UNSPECIFIED":
+                        case 0:
+                            message.denominator = 0;
+                            break;
+                        case "DENOMINATOR_HUNDRED":
+                        case 1:
+                            message.denominator = 1;
+                            break;
+                        case "DENOMINATOR_TEN_THOUSAND":
+                        case 2:
+                            message.denominator = 2;
+                            break;
+                        case "DENOMINATOR_MILLION":
+                        case 3:
+                            message.denominator = 3;
+                            break;
+                        }
                         return message;
                     };
 
@@ -13740,10 +13981,14 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.percentage = 0;
+                            object.denominator = options.enums === String ? "DENOMINATOR_UNSPECIFIED" : 0;
+                        }
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
                             object.percentage = message.percentage;
+                        if (message.denominator != null && message.hasOwnProperty("denominator"))
+                            object.denominator = options.enums === String ? $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType[message.denominator] : message.denominator;
                         return object;
                     };
 
@@ -13757,6 +14002,24 @@ export const clutch = $root.clutch = (() => {
                     FaultPercentage.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    /**
+                     * DenominatorType enum.
+                     * @name clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType
+                     * @enum {number}
+                     * @property {number} DENOMINATOR_UNSPECIFIED=0 DENOMINATOR_UNSPECIFIED value
+                     * @property {number} DENOMINATOR_HUNDRED=1 DENOMINATOR_HUNDRED value
+                     * @property {number} DENOMINATOR_TEN_THOUSAND=2 DENOMINATOR_TEN_THOUSAND value
+                     * @property {number} DENOMINATOR_MILLION=3 DENOMINATOR_MILLION value
+                     */
+                    FaultPercentage.DenominatorType = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "DENOMINATOR_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "DENOMINATOR_HUNDRED"] = 1;
+                        values[valuesById[2] = "DENOMINATOR_TEN_THOUSAND"] = 2;
+                        values[valuesById[3] = "DENOMINATOR_MILLION"] = 3;
+                        return values;
+                    })();
 
                     return FaultPercentage;
                 })();
@@ -18166,6 +18429,564 @@ export const clutch = $root.clutch = (() => {
                 return featureflag;
             })();
 
+            module.feedback = (function() {
+
+                /**
+                 * Namespace feedback.
+                 * @memberof clutch.config.module
+                 * @namespace
+                 */
+                const feedback = {};
+
+                feedback.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.module.feedback
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.RatingOptions = (function() {
+
+                        /**
+                         * Properties of a RatingOptions.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @interface IRatingOptions
+                         * @property {string|null} [one] RatingOptions one
+                         * @property {string|null} [two] RatingOptions two
+                         * @property {string|null} [three] RatingOptions three
+                         */
+
+                        /**
+                         * Constructs a new RatingOptions.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @classdesc Represents a RatingOptions.
+                         * @implements IRatingOptions
+                         * @constructor
+                         * @param {clutch.config.module.feedback.v1.IRatingOptions=} [properties] Properties to set
+                         */
+                        function RatingOptions(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * RatingOptions one.
+                         * @member {string} one
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @instance
+                         */
+                        RatingOptions.prototype.one = "";
+
+                        /**
+                         * RatingOptions two.
+                         * @member {string} two
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @instance
+                         */
+                        RatingOptions.prototype.two = "";
+
+                        /**
+                         * RatingOptions three.
+                         * @member {string} three
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @instance
+                         */
+                        RatingOptions.prototype.three = "";
+
+                        /**
+                         * Verifies a RatingOptions message.
+                         * @function verify
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        RatingOptions.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.one != null && message.hasOwnProperty("one"))
+                                if (!$util.isString(message.one))
+                                    return "one: string expected";
+                            if (message.two != null && message.hasOwnProperty("two"))
+                                if (!$util.isString(message.two))
+                                    return "two: string expected";
+                            if (message.three != null && message.hasOwnProperty("three"))
+                                if (!$util.isString(message.three))
+                                    return "three: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.feedback.v1.RatingOptions} RatingOptions
+                         */
+                        RatingOptions.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.feedback.v1.RatingOptions)
+                                return object;
+                            let message = new $root.clutch.config.module.feedback.v1.RatingOptions();
+                            if (object.one != null)
+                                message.one = String(object.one);
+                            if (object.two != null)
+                                message.two = String(object.two);
+                            if (object.three != null)
+                                message.three = String(object.three);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @static
+                         * @param {clutch.config.module.feedback.v1.RatingOptions} message RatingOptions
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        RatingOptions.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.one = "";
+                                object.two = "";
+                                object.three = "";
+                            }
+                            if (message.one != null && message.hasOwnProperty("one"))
+                                object.one = message.one;
+                            if (message.two != null && message.hasOwnProperty("two"))
+                                object.two = message.two;
+                            if (message.three != null && message.hasOwnProperty("three"))
+                                object.three = message.three;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this RatingOptions to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.feedback.v1.RatingOptions
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        RatingOptions.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return RatingOptions;
+                    })();
+
+                    v1.Survey = (function() {
+
+                        /**
+                         * Properties of a Survey.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @interface ISurvey
+                         * @property {string|null} [prompt] Survey prompt
+                         * @property {string|null} [freeformPrompt] Survey freeformPrompt
+                         * @property {clutch.config.module.feedback.v1.IRatingOptions|null} [ratingOptions] Survey ratingOptions
+                         */
+
+                        /**
+                         * Constructs a new Survey.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @classdesc Represents a Survey.
+                         * @implements ISurvey
+                         * @constructor
+                         * @param {clutch.config.module.feedback.v1.ISurvey=} [properties] Properties to set
+                         */
+                        function Survey(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Survey prompt.
+                         * @member {string} prompt
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @instance
+                         */
+                        Survey.prototype.prompt = "";
+
+                        /**
+                         * Survey freeformPrompt.
+                         * @member {string} freeformPrompt
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @instance
+                         */
+                        Survey.prototype.freeformPrompt = "";
+
+                        /**
+                         * Survey ratingOptions.
+                         * @member {clutch.config.module.feedback.v1.IRatingOptions|null|undefined} ratingOptions
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @instance
+                         */
+                        Survey.prototype.ratingOptions = null;
+
+                        /**
+                         * Verifies a Survey message.
+                         * @function verify
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Survey.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.prompt != null && message.hasOwnProperty("prompt"))
+                                if (!$util.isString(message.prompt))
+                                    return "prompt: string expected";
+                            if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
+                                if (!$util.isString(message.freeformPrompt))
+                                    return "freeformPrompt: string expected";
+                            if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions")) {
+                                let error = $root.clutch.config.module.feedback.v1.RatingOptions.verify(message.ratingOptions);
+                                if (error)
+                                    return "ratingOptions." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Survey message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.feedback.v1.Survey} Survey
+                         */
+                        Survey.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.feedback.v1.Survey)
+                                return object;
+                            let message = new $root.clutch.config.module.feedback.v1.Survey();
+                            if (object.prompt != null)
+                                message.prompt = String(object.prompt);
+                            if (object.freeformPrompt != null)
+                                message.freeformPrompt = String(object.freeformPrompt);
+                            if (object.ratingOptions != null) {
+                                if (typeof object.ratingOptions !== "object")
+                                    throw TypeError(".clutch.config.module.feedback.v1.Survey.ratingOptions: object expected");
+                                message.ratingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.fromObject(object.ratingOptions);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Survey message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @static
+                         * @param {clutch.config.module.feedback.v1.Survey} message Survey
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Survey.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.prompt = "";
+                                object.freeformPrompt = "";
+                                object.ratingOptions = null;
+                            }
+                            if (message.prompt != null && message.hasOwnProperty("prompt"))
+                                object.prompt = message.prompt;
+                            if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
+                                object.freeformPrompt = message.freeformPrompt;
+                            if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions"))
+                                object.ratingOptions = $root.clutch.config.module.feedback.v1.RatingOptions.toObject(message.ratingOptions, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Survey to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.feedback.v1.Survey
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Survey.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Survey;
+                    })();
+
+                    v1.SurveyOrigin = (function() {
+
+                        /**
+                         * Properties of a SurveyOrigin.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @interface ISurveyOrigin
+                         * @property {clutch.feedback.v1.Origin|null} [origin] SurveyOrigin origin
+                         * @property {clutch.config.module.feedback.v1.ISurvey|null} [survey] SurveyOrigin survey
+                         */
+
+                        /**
+                         * Constructs a new SurveyOrigin.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @classdesc Represents a SurveyOrigin.
+                         * @implements ISurveyOrigin
+                         * @constructor
+                         * @param {clutch.config.module.feedback.v1.ISurveyOrigin=} [properties] Properties to set
+                         */
+                        function SurveyOrigin(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * SurveyOrigin origin.
+                         * @member {clutch.feedback.v1.Origin} origin
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @instance
+                         */
+                        SurveyOrigin.prototype.origin = 0;
+
+                        /**
+                         * SurveyOrigin survey.
+                         * @member {clutch.config.module.feedback.v1.ISurvey|null|undefined} survey
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @instance
+                         */
+                        SurveyOrigin.prototype.survey = null;
+
+                        /**
+                         * Verifies a SurveyOrigin message.
+                         * @function verify
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        SurveyOrigin.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.origin != null && message.hasOwnProperty("origin"))
+                                switch (message.origin) {
+                                default:
+                                    return "origin: enum value expected";
+                                case 0:
+                                case 1:
+                                case 2:
+                                    break;
+                                }
+                            if (message.survey != null && message.hasOwnProperty("survey")) {
+                                let error = $root.clutch.config.module.feedback.v1.Survey.verify(message.survey);
+                                if (error)
+                                    return "survey." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a SurveyOrigin message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.feedback.v1.SurveyOrigin} SurveyOrigin
+                         */
+                        SurveyOrigin.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.feedback.v1.SurveyOrigin)
+                                return object;
+                            let message = new $root.clutch.config.module.feedback.v1.SurveyOrigin();
+                            switch (object.origin) {
+                            case "ORIGIN_UNSPECIFIED":
+                            case 0:
+                                message.origin = 0;
+                                break;
+                            case "HEADER":
+                            case 1:
+                                message.origin = 1;
+                                break;
+                            case "WIZARD":
+                            case 2:
+                                message.origin = 2;
+                                break;
+                            }
+                            if (object.survey != null) {
+                                if (typeof object.survey !== "object")
+                                    throw TypeError(".clutch.config.module.feedback.v1.SurveyOrigin.survey: object expected");
+                                message.survey = $root.clutch.config.module.feedback.v1.Survey.fromObject(object.survey);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a SurveyOrigin message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @static
+                         * @param {clutch.config.module.feedback.v1.SurveyOrigin} message SurveyOrigin
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        SurveyOrigin.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.origin = options.enums === String ? "ORIGIN_UNSPECIFIED" : 0;
+                                object.survey = null;
+                            }
+                            if (message.origin != null && message.hasOwnProperty("origin"))
+                                object.origin = options.enums === String ? $root.clutch.feedback.v1.Origin[message.origin] : message.origin;
+                            if (message.survey != null && message.hasOwnProperty("survey"))
+                                object.survey = $root.clutch.config.module.feedback.v1.Survey.toObject(message.survey, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this SurveyOrigin to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.feedback.v1.SurveyOrigin
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        SurveyOrigin.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return SurveyOrigin;
+                    })();
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @interface IConfig
+                         * @property {Array.<clutch.config.module.feedback.v1.ISurveyOrigin>|null} [origins] Config origins
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.module.feedback.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.module.feedback.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            this.origins = [];
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config origins.
+                         * @member {Array.<clutch.config.module.feedback.v1.ISurveyOrigin>} origins
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.origins = $util.emptyArray;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.origins != null && message.hasOwnProperty("origins")) {
+                                if (!Array.isArray(message.origins))
+                                    return "origins: array expected";
+                                for (let i = 0; i < message.origins.length; ++i) {
+                                    let error = $root.clutch.config.module.feedback.v1.SurveyOrigin.verify(message.origins[i]);
+                                    if (error)
+                                        return "origins." + error;
+                                }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.feedback.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.feedback.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.module.feedback.v1.Config();
+                            if (object.origins) {
+                                if (!Array.isArray(object.origins))
+                                    throw TypeError(".clutch.config.module.feedback.v1.Config.origins: array expected");
+                                message.origins = [];
+                                for (let i = 0; i < object.origins.length; ++i) {
+                                    if (typeof object.origins[i] !== "object")
+                                        throw TypeError(".clutch.config.module.feedback.v1.Config.origins: object expected");
+                                    message.origins[i] = $root.clutch.config.module.feedback.v1.SurveyOrigin.fromObject(object.origins[i]);
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @static
+                         * @param {clutch.config.module.feedback.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.arrays || options.defaults)
+                                object.origins = [];
+                            if (message.origins && message.origins.length) {
+                                object.origins = [];
+                                for (let j = 0; j < message.origins.length; ++j)
+                                    object.origins[j] = $root.clutch.config.module.feedback.v1.SurveyOrigin.toObject(message.origins[j], options);
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.feedback.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return feedback;
+            })();
+
             module.proxy = (function() {
 
                 /**
@@ -21088,6 +21909,9 @@ export const clutch = $root.clutch = (() => {
                          * @property {Array.<string>|null} [regions] Config regions
                          * @property {clutch.config.service.aws.v1.IClientConfig|null} [clientConfig] Config clientConfig
                          * @property {clutch.config.service.aws.v1.IDynamodbConfig|null} [dynamodbConfig] Config dynamodbConfig
+                         * @property {string|null} [primaryAccountAliasDisplayName] Config primaryAccountAliasDisplayName
+                         * @property {string|null} [awsConfigProfileName] Config awsConfigProfileName
+                         * @property {Array.<clutch.config.service.aws.v1.IAWSAccount>|null} [additionalAccounts] Config additionalAccounts
                          */
 
                         /**
@@ -21100,6 +21924,7 @@ export const clutch = $root.clutch = (() => {
                          */
                         function Config(properties) {
                             this.regions = [];
+                            this.additionalAccounts = [];
                             if (properties)
                                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                     if (properties[keys[i]] != null)
@@ -21131,6 +21956,30 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.dynamodbConfig = null;
 
                         /**
+                         * Config primaryAccountAliasDisplayName.
+                         * @member {string} primaryAccountAliasDisplayName
+                         * @memberof clutch.config.service.aws.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.primaryAccountAliasDisplayName = "";
+
+                        /**
+                         * Config awsConfigProfileName.
+                         * @member {string} awsConfigProfileName
+                         * @memberof clutch.config.service.aws.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.awsConfigProfileName = "";
+
+                        /**
+                         * Config additionalAccounts.
+                         * @member {Array.<clutch.config.service.aws.v1.IAWSAccount>} additionalAccounts
+                         * @memberof clutch.config.service.aws.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.additionalAccounts = $util.emptyArray;
+
+                        /**
                          * Verifies a Config message.
                          * @function verify
                          * @memberof clutch.config.service.aws.v1.Config
@@ -21157,6 +22006,21 @@ export const clutch = $root.clutch = (() => {
                                 let error = $root.clutch.config.service.aws.v1.DynamodbConfig.verify(message.dynamodbConfig);
                                 if (error)
                                     return "dynamodbConfig." + error;
+                            }
+                            if (message.primaryAccountAliasDisplayName != null && message.hasOwnProperty("primaryAccountAliasDisplayName"))
+                                if (!$util.isString(message.primaryAccountAliasDisplayName))
+                                    return "primaryAccountAliasDisplayName: string expected";
+                            if (message.awsConfigProfileName != null && message.hasOwnProperty("awsConfigProfileName"))
+                                if (!$util.isString(message.awsConfigProfileName))
+                                    return "awsConfigProfileName: string expected";
+                            if (message.additionalAccounts != null && message.hasOwnProperty("additionalAccounts")) {
+                                if (!Array.isArray(message.additionalAccounts))
+                                    return "additionalAccounts: array expected";
+                                for (let i = 0; i < message.additionalAccounts.length; ++i) {
+                                    let error = $root.clutch.config.service.aws.v1.AWSAccount.verify(message.additionalAccounts[i]);
+                                    if (error)
+                                        return "additionalAccounts." + error;
+                                }
                             }
                             return null;
                         };
@@ -21190,6 +22054,20 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.aws.v1.Config.dynamodbConfig: object expected");
                                 message.dynamodbConfig = $root.clutch.config.service.aws.v1.DynamodbConfig.fromObject(object.dynamodbConfig);
                             }
+                            if (object.primaryAccountAliasDisplayName != null)
+                                message.primaryAccountAliasDisplayName = String(object.primaryAccountAliasDisplayName);
+                            if (object.awsConfigProfileName != null)
+                                message.awsConfigProfileName = String(object.awsConfigProfileName);
+                            if (object.additionalAccounts) {
+                                if (!Array.isArray(object.additionalAccounts))
+                                    throw TypeError(".clutch.config.service.aws.v1.Config.additionalAccounts: array expected");
+                                message.additionalAccounts = [];
+                                for (let i = 0; i < object.additionalAccounts.length; ++i) {
+                                    if (typeof object.additionalAccounts[i] !== "object")
+                                        throw TypeError(".clutch.config.service.aws.v1.Config.additionalAccounts: object expected");
+                                    message.additionalAccounts[i] = $root.clutch.config.service.aws.v1.AWSAccount.fromObject(object.additionalAccounts[i]);
+                                }
+                            }
                             return message;
                         };
 
@@ -21206,11 +22084,15 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.arrays || options.defaults)
+                            if (options.arrays || options.defaults) {
                                 object.regions = [];
+                                object.additionalAccounts = [];
+                            }
                             if (options.defaults) {
                                 object.clientConfig = null;
                                 object.dynamodbConfig = null;
+                                object.primaryAccountAliasDisplayName = "";
+                                object.awsConfigProfileName = "";
                             }
                             if (message.regions && message.regions.length) {
                                 object.regions = [];
@@ -21221,6 +22103,15 @@ export const clutch = $root.clutch = (() => {
                                 object.clientConfig = $root.clutch.config.service.aws.v1.ClientConfig.toObject(message.clientConfig, options);
                             if (message.dynamodbConfig != null && message.hasOwnProperty("dynamodbConfig"))
                                 object.dynamodbConfig = $root.clutch.config.service.aws.v1.DynamodbConfig.toObject(message.dynamodbConfig, options);
+                            if (message.primaryAccountAliasDisplayName != null && message.hasOwnProperty("primaryAccountAliasDisplayName"))
+                                object.primaryAccountAliasDisplayName = message.primaryAccountAliasDisplayName;
+                            if (message.awsConfigProfileName != null && message.hasOwnProperty("awsConfigProfileName"))
+                                object.awsConfigProfileName = message.awsConfigProfileName;
+                            if (message.additionalAccounts && message.additionalAccounts.length) {
+                                object.additionalAccounts = [];
+                                for (let j = 0; j < message.additionalAccounts.length; ++j)
+                                    object.additionalAccounts[j] = $root.clutch.config.service.aws.v1.AWSAccount.toObject(message.additionalAccounts[j], options);
+                            }
                             return object;
                         };
 
@@ -21621,6 +22512,172 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         return ScalingLimits;
+                    })();
+
+                    v1.AWSAccount = (function() {
+
+                        /**
+                         * Properties of a AWSAccount.
+                         * @memberof clutch.config.service.aws.v1
+                         * @interface IAWSAccount
+                         * @property {string|null} [alias] AWSAccount alias
+                         * @property {string|null} [accountNumber] AWSAccount accountNumber
+                         * @property {string|null} [iamRole] AWSAccount iamRole
+                         * @property {Array.<string>|null} [regions] AWSAccount regions
+                         */
+
+                        /**
+                         * Constructs a new AWSAccount.
+                         * @memberof clutch.config.service.aws.v1
+                         * @classdesc Represents a AWSAccount.
+                         * @implements IAWSAccount
+                         * @constructor
+                         * @param {clutch.config.service.aws.v1.IAWSAccount=} [properties] Properties to set
+                         */
+                        function AWSAccount(properties) {
+                            this.regions = [];
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * AWSAccount alias.
+                         * @member {string} alias
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         */
+                        AWSAccount.prototype.alias = "";
+
+                        /**
+                         * AWSAccount accountNumber.
+                         * @member {string} accountNumber
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         */
+                        AWSAccount.prototype.accountNumber = "";
+
+                        /**
+                         * AWSAccount iamRole.
+                         * @member {string} iamRole
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         */
+                        AWSAccount.prototype.iamRole = "";
+
+                        /**
+                         * AWSAccount regions.
+                         * @member {Array.<string>} regions
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         */
+                        AWSAccount.prototype.regions = $util.emptyArray;
+
+                        /**
+                         * Verifies a AWSAccount message.
+                         * @function verify
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        AWSAccount.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.alias != null && message.hasOwnProperty("alias"))
+                                if (!$util.isString(message.alias))
+                                    return "alias: string expected";
+                            if (message.accountNumber != null && message.hasOwnProperty("accountNumber"))
+                                if (!$util.isString(message.accountNumber))
+                                    return "accountNumber: string expected";
+                            if (message.iamRole != null && message.hasOwnProperty("iamRole"))
+                                if (!$util.isString(message.iamRole))
+                                    return "iamRole: string expected";
+                            if (message.regions != null && message.hasOwnProperty("regions")) {
+                                if (!Array.isArray(message.regions))
+                                    return "regions: array expected";
+                                for (let i = 0; i < message.regions.length; ++i)
+                                    if (!$util.isString(message.regions[i]))
+                                        return "regions: string[] expected";
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a AWSAccount message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.aws.v1.AWSAccount} AWSAccount
+                         */
+                        AWSAccount.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.aws.v1.AWSAccount)
+                                return object;
+                            let message = new $root.clutch.config.service.aws.v1.AWSAccount();
+                            if (object.alias != null)
+                                message.alias = String(object.alias);
+                            if (object.accountNumber != null)
+                                message.accountNumber = String(object.accountNumber);
+                            if (object.iamRole != null)
+                                message.iamRole = String(object.iamRole);
+                            if (object.regions) {
+                                if (!Array.isArray(object.regions))
+                                    throw TypeError(".clutch.config.service.aws.v1.AWSAccount.regions: array expected");
+                                message.regions = [];
+                                for (let i = 0; i < object.regions.length; ++i)
+                                    message.regions[i] = String(object.regions[i]);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a AWSAccount message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @static
+                         * @param {clutch.config.service.aws.v1.AWSAccount} message AWSAccount
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        AWSAccount.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.arrays || options.defaults)
+                                object.regions = [];
+                            if (options.defaults) {
+                                object.alias = "";
+                                object.accountNumber = "";
+                                object.iamRole = "";
+                            }
+                            if (message.alias != null && message.hasOwnProperty("alias"))
+                                object.alias = message.alias;
+                            if (message.accountNumber != null && message.hasOwnProperty("accountNumber"))
+                                object.accountNumber = message.accountNumber;
+                            if (message.iamRole != null && message.hasOwnProperty("iamRole"))
+                                object.iamRole = message.iamRole;
+                            if (message.regions && message.regions.length) {
+                                object.regions = [];
+                                for (let j = 0; j < message.regions.length; ++j)
+                                    object.regions[j] = message.regions[j];
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this AWSAccount to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.aws.v1.AWSAccount
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        AWSAccount.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return AWSAccount;
                     })();
 
                     return v1;
@@ -23881,6 +24938,1339 @@ export const clutch = $root.clutch = (() => {
         })();
 
         return config;
+    })();
+
+    clutch.feedback = (function() {
+
+        /**
+         * Namespace feedback.
+         * @memberof clutch
+         * @namespace
+         */
+        const feedback = {};
+
+        feedback.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.feedback
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.FeedbackAPI = (function() {
+
+                /**
+                 * Constructs a new FeedbackAPI service.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a FeedbackAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function FeedbackAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (FeedbackAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = FeedbackAPI;
+
+                /**
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#getSurveys}.
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @typedef GetSurveysCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.feedback.v1.GetSurveysResponse} [response] GetSurveysResponse
+                 */
+
+                /**
+                 * Calls GetSurveys.
+                 * @function getSurveys
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @instance
+                 * @param {clutch.feedback.v1.IGetSurveysRequest} request GetSurveysRequest message or plain object
+                 * @param {clutch.feedback.v1.FeedbackAPI.GetSurveysCallback} callback Node-style callback called with the error, if any, and GetSurveysResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(FeedbackAPI.prototype.getSurveys = function getSurveys(request, callback) {
+                    return this.rpcCall(getSurveys, $root.clutch.feedback.v1.GetSurveysRequest, $root.clutch.feedback.v1.GetSurveysResponse, request, callback);
+                }, "name", { value: "GetSurveys" });
+
+                /**
+                 * Calls GetSurveys.
+                 * @function getSurveys
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @instance
+                 * @param {clutch.feedback.v1.IGetSurveysRequest} request GetSurveysRequest message or plain object
+                 * @returns {Promise<clutch.feedback.v1.GetSurveysResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#submitFeedback}.
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @typedef SubmitFeedbackCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.feedback.v1.SubmitFeedbackResponse} [response] SubmitFeedbackResponse
+                 */
+
+                /**
+                 * Calls SubmitFeedback.
+                 * @function submitFeedback
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @instance
+                 * @param {clutch.feedback.v1.ISubmitFeedbackRequest} request SubmitFeedbackRequest message or plain object
+                 * @param {clutch.feedback.v1.FeedbackAPI.SubmitFeedbackCallback} callback Node-style callback called with the error, if any, and SubmitFeedbackResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(FeedbackAPI.prototype.submitFeedback = function submitFeedback(request, callback) {
+                    return this.rpcCall(submitFeedback, $root.clutch.feedback.v1.SubmitFeedbackRequest, $root.clutch.feedback.v1.SubmitFeedbackResponse, request, callback);
+                }, "name", { value: "SubmitFeedback" });
+
+                /**
+                 * Calls SubmitFeedback.
+                 * @function submitFeedback
+                 * @memberof clutch.feedback.v1.FeedbackAPI
+                 * @instance
+                 * @param {clutch.feedback.v1.ISubmitFeedbackRequest} request SubmitFeedbackRequest message or plain object
+                 * @returns {Promise<clutch.feedback.v1.SubmitFeedbackResponse>} Promise
+                 * @variation 2
+                 */
+
+                return FeedbackAPI;
+            })();
+
+            /**
+             * Origin enum.
+             * @name clutch.feedback.v1.Origin
+             * @enum {number}
+             * @property {number} ORIGIN_UNSPECIFIED=0 ORIGIN_UNSPECIFIED value
+             * @property {number} HEADER=1 HEADER value
+             * @property {number} WIZARD=2 WIZARD value
+             */
+            v1.Origin = (function() {
+                const valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "ORIGIN_UNSPECIFIED"] = 0;
+                values[valuesById[1] = "HEADER"] = 1;
+                values[valuesById[2] = "WIZARD"] = 2;
+                return values;
+            })();
+
+            v1.GetSurveysRequest = (function() {
+
+                /**
+                 * Properties of a GetSurveysRequest.
+                 * @memberof clutch.feedback.v1
+                 * @interface IGetSurveysRequest
+                 * @property {Array.<clutch.feedback.v1.Origin>|null} [origins] GetSurveysRequest origins
+                 */
+
+                /**
+                 * Constructs a new GetSurveysRequest.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a GetSurveysRequest.
+                 * @implements IGetSurveysRequest
+                 * @constructor
+                 * @param {clutch.feedback.v1.IGetSurveysRequest=} [properties] Properties to set
+                 */
+                function GetSurveysRequest(properties) {
+                    this.origins = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetSurveysRequest origins.
+                 * @member {Array.<clutch.feedback.v1.Origin>} origins
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
+                 * @instance
+                 */
+                GetSurveysRequest.prototype.origins = $util.emptyArray;
+
+                /**
+                 * Verifies a GetSurveysRequest message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetSurveysRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.origins != null && message.hasOwnProperty("origins")) {
+                        if (!Array.isArray(message.origins))
+                            return "origins: array expected";
+                        for (let i = 0; i < message.origins.length; ++i)
+                            switch (message.origins[i]) {
+                            default:
+                                return "origins: enum value[] expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetSurveysRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.GetSurveysRequest} GetSurveysRequest
+                 */
+                GetSurveysRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.GetSurveysRequest)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.GetSurveysRequest();
+                    if (object.origins) {
+                        if (!Array.isArray(object.origins))
+                            throw TypeError(".clutch.feedback.v1.GetSurveysRequest.origins: array expected");
+                        message.origins = [];
+                        for (let i = 0; i < object.origins.length; ++i)
+                            switch (object.origins[i]) {
+                            default:
+                            case "ORIGIN_UNSPECIFIED":
+                            case 0:
+                                message.origins[i] = 0;
+                                break;
+                            case "HEADER":
+                            case 1:
+                                message.origins[i] = 1;
+                                break;
+                            case "WIZARD":
+                            case 2:
+                                message.origins[i] = 2;
+                                break;
+                            }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetSurveysRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
+                 * @static
+                 * @param {clutch.feedback.v1.GetSurveysRequest} message GetSurveysRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetSurveysRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.origins = [];
+                    if (message.origins && message.origins.length) {
+                        object.origins = [];
+                        for (let j = 0; j < message.origins.length; ++j)
+                            object.origins[j] = options.enums === String ? $root.clutch.feedback.v1.Origin[message.origins[j]] : message.origins[j];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetSurveysRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.GetSurveysRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetSurveysRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetSurveysRequest;
+            })();
+
+            v1.RatingOptions = (function() {
+
+                /**
+                 * Properties of a RatingOptions.
+                 * @memberof clutch.feedback.v1
+                 * @interface IRatingOptions
+                 * @property {string|null} [one] RatingOptions one
+                 * @property {string|null} [two] RatingOptions two
+                 * @property {string|null} [three] RatingOptions three
+                 */
+
+                /**
+                 * Constructs a new RatingOptions.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a RatingOptions.
+                 * @implements IRatingOptions
+                 * @constructor
+                 * @param {clutch.feedback.v1.IRatingOptions=} [properties] Properties to set
+                 */
+                function RatingOptions(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * RatingOptions one.
+                 * @member {string} one
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @instance
+                 */
+                RatingOptions.prototype.one = "";
+
+                /**
+                 * RatingOptions two.
+                 * @member {string} two
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @instance
+                 */
+                RatingOptions.prototype.two = "";
+
+                /**
+                 * RatingOptions three.
+                 * @member {string} three
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @instance
+                 */
+                RatingOptions.prototype.three = "";
+
+                /**
+                 * Verifies a RatingOptions message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                RatingOptions.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.one != null && message.hasOwnProperty("one"))
+                        if (!$util.isString(message.one))
+                            return "one: string expected";
+                    if (message.two != null && message.hasOwnProperty("two"))
+                        if (!$util.isString(message.two))
+                            return "two: string expected";
+                    if (message.three != null && message.hasOwnProperty("three"))
+                        if (!$util.isString(message.three))
+                            return "three: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.RatingOptions} RatingOptions
+                 */
+                RatingOptions.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.RatingOptions)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.RatingOptions();
+                    if (object.one != null)
+                        message.one = String(object.one);
+                    if (object.two != null)
+                        message.two = String(object.two);
+                    if (object.three != null)
+                        message.three = String(object.three);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @static
+                 * @param {clutch.feedback.v1.RatingOptions} message RatingOptions
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                RatingOptions.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.one = "";
+                        object.two = "";
+                        object.three = "";
+                    }
+                    if (message.one != null && message.hasOwnProperty("one"))
+                        object.one = message.one;
+                    if (message.two != null && message.hasOwnProperty("two"))
+                        object.two = message.two;
+                    if (message.three != null && message.hasOwnProperty("three"))
+                        object.three = message.three;
+                    return object;
+                };
+
+                /**
+                 * Converts this RatingOptions to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.RatingOptions
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                RatingOptions.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return RatingOptions;
+            })();
+
+            v1.Survey = (function() {
+
+                /**
+                 * Properties of a Survey.
+                 * @memberof clutch.feedback.v1
+                 * @interface ISurvey
+                 * @property {string|null} [prompt] Survey prompt
+                 * @property {string|null} [freeformPrompt] Survey freeformPrompt
+                 * @property {clutch.feedback.v1.IRatingOptions|null} [ratingOptions] Survey ratingOptions
+                 */
+
+                /**
+                 * Constructs a new Survey.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a Survey.
+                 * @implements ISurvey
+                 * @constructor
+                 * @param {clutch.feedback.v1.ISurvey=} [properties] Properties to set
+                 */
+                function Survey(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Survey prompt.
+                 * @member {string} prompt
+                 * @memberof clutch.feedback.v1.Survey
+                 * @instance
+                 */
+                Survey.prototype.prompt = "";
+
+                /**
+                 * Survey freeformPrompt.
+                 * @member {string} freeformPrompt
+                 * @memberof clutch.feedback.v1.Survey
+                 * @instance
+                 */
+                Survey.prototype.freeformPrompt = "";
+
+                /**
+                 * Survey ratingOptions.
+                 * @member {clutch.feedback.v1.IRatingOptions|null|undefined} ratingOptions
+                 * @memberof clutch.feedback.v1.Survey
+                 * @instance
+                 */
+                Survey.prototype.ratingOptions = null;
+
+                /**
+                 * Verifies a Survey message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.Survey
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Survey.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.prompt != null && message.hasOwnProperty("prompt"))
+                        if (!$util.isString(message.prompt))
+                            return "prompt: string expected";
+                    if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
+                        if (!$util.isString(message.freeformPrompt))
+                            return "freeformPrompt: string expected";
+                    if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions")) {
+                        let error = $root.clutch.feedback.v1.RatingOptions.verify(message.ratingOptions);
+                        if (error)
+                            return "ratingOptions." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Survey message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.Survey
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.Survey} Survey
+                 */
+                Survey.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.Survey)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.Survey();
+                    if (object.prompt != null)
+                        message.prompt = String(object.prompt);
+                    if (object.freeformPrompt != null)
+                        message.freeformPrompt = String(object.freeformPrompt);
+                    if (object.ratingOptions != null) {
+                        if (typeof object.ratingOptions !== "object")
+                            throw TypeError(".clutch.feedback.v1.Survey.ratingOptions: object expected");
+                        message.ratingOptions = $root.clutch.feedback.v1.RatingOptions.fromObject(object.ratingOptions);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Survey message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.Survey
+                 * @static
+                 * @param {clutch.feedback.v1.Survey} message Survey
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Survey.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.prompt = "";
+                        object.freeformPrompt = "";
+                        object.ratingOptions = null;
+                    }
+                    if (message.prompt != null && message.hasOwnProperty("prompt"))
+                        object.prompt = message.prompt;
+                    if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
+                        object.freeformPrompt = message.freeformPrompt;
+                    if (message.ratingOptions != null && message.hasOwnProperty("ratingOptions"))
+                        object.ratingOptions = $root.clutch.feedback.v1.RatingOptions.toObject(message.ratingOptions, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this Survey to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.Survey
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Survey.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Survey;
+            })();
+
+            v1.GetSurveysResponse = (function() {
+
+                /**
+                 * Properties of a GetSurveysResponse.
+                 * @memberof clutch.feedback.v1
+                 * @interface IGetSurveysResponse
+                 * @property {Object.<string,clutch.feedback.v1.ISurvey>|null} [originSurvey] GetSurveysResponse originSurvey
+                 */
+
+                /**
+                 * Constructs a new GetSurveysResponse.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a GetSurveysResponse.
+                 * @implements IGetSurveysResponse
+                 * @constructor
+                 * @param {clutch.feedback.v1.IGetSurveysResponse=} [properties] Properties to set
+                 */
+                function GetSurveysResponse(properties) {
+                    this.originSurvey = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetSurveysResponse originSurvey.
+                 * @member {Object.<string,clutch.feedback.v1.ISurvey>} originSurvey
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
+                 * @instance
+                 */
+                GetSurveysResponse.prototype.originSurvey = $util.emptyObject;
+
+                /**
+                 * Verifies a GetSurveysResponse message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetSurveysResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.originSurvey != null && message.hasOwnProperty("originSurvey")) {
+                        if (!$util.isObject(message.originSurvey))
+                            return "originSurvey: object expected";
+                        let key = Object.keys(message.originSurvey);
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.clutch.feedback.v1.Survey.verify(message.originSurvey[key[i]]);
+                            if (error)
+                                return "originSurvey." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetSurveysResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.GetSurveysResponse} GetSurveysResponse
+                 */
+                GetSurveysResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.GetSurveysResponse)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.GetSurveysResponse();
+                    if (object.originSurvey) {
+                        if (typeof object.originSurvey !== "object")
+                            throw TypeError(".clutch.feedback.v1.GetSurveysResponse.originSurvey: object expected");
+                        message.originSurvey = {};
+                        for (let keys = Object.keys(object.originSurvey), i = 0; i < keys.length; ++i) {
+                            if (typeof object.originSurvey[keys[i]] !== "object")
+                                throw TypeError(".clutch.feedback.v1.GetSurveysResponse.originSurvey: object expected");
+                            message.originSurvey[keys[i]] = $root.clutch.feedback.v1.Survey.fromObject(object.originSurvey[keys[i]]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetSurveysResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
+                 * @static
+                 * @param {clutch.feedback.v1.GetSurveysResponse} message GetSurveysResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetSurveysResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.originSurvey = {};
+                    let keys2;
+                    if (message.originSurvey && (keys2 = Object.keys(message.originSurvey)).length) {
+                        object.originSurvey = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.originSurvey[keys2[j]] = $root.clutch.feedback.v1.Survey.toObject(message.originSurvey[keys2[j]], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetSurveysResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.GetSurveysResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetSurveysResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetSurveysResponse;
+            })();
+
+            v1.FeedbackMetadata = (function() {
+
+                /**
+                 * Properties of a FeedbackMetadata.
+                 * @memberof clutch.feedback.v1
+                 * @interface IFeedbackMetadata
+                 * @property {clutch.feedback.v1.Origin|null} [origin] FeedbackMetadata origin
+                 * @property {clutch.feedback.v1.ISurvey|null} [survey] FeedbackMetadata survey
+                 * @property {boolean|null} [userSubmitted] FeedbackMetadata userSubmitted
+                 */
+
+                /**
+                 * Constructs a new FeedbackMetadata.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a FeedbackMetadata.
+                 * @implements IFeedbackMetadata
+                 * @constructor
+                 * @param {clutch.feedback.v1.IFeedbackMetadata=} [properties] Properties to set
+                 */
+                function FeedbackMetadata(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * FeedbackMetadata origin.
+                 * @member {clutch.feedback.v1.Origin} origin
+                 * @memberof clutch.feedback.v1.FeedbackMetadata
+                 * @instance
+                 */
+                FeedbackMetadata.prototype.origin = 0;
+
+                /**
+                 * FeedbackMetadata survey.
+                 * @member {clutch.feedback.v1.ISurvey|null|undefined} survey
+                 * @memberof clutch.feedback.v1.FeedbackMetadata
+                 * @instance
+                 */
+                FeedbackMetadata.prototype.survey = null;
+
+                /**
+                 * FeedbackMetadata userSubmitted.
+                 * @member {boolean} userSubmitted
+                 * @memberof clutch.feedback.v1.FeedbackMetadata
+                 * @instance
+                 */
+                FeedbackMetadata.prototype.userSubmitted = false;
+
+                /**
+                 * Verifies a FeedbackMetadata message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.FeedbackMetadata
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                FeedbackMetadata.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.origin != null && message.hasOwnProperty("origin"))
+                        switch (message.origin) {
+                        default:
+                            return "origin: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
+                    if (message.survey != null && message.hasOwnProperty("survey")) {
+                        let error = $root.clutch.feedback.v1.Survey.verify(message.survey);
+                        if (error)
+                            return "survey." + error;
+                    }
+                    if (message.userSubmitted != null && message.hasOwnProperty("userSubmitted"))
+                        if (typeof message.userSubmitted !== "boolean")
+                            return "userSubmitted: boolean expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a FeedbackMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.FeedbackMetadata
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.FeedbackMetadata} FeedbackMetadata
+                 */
+                FeedbackMetadata.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.FeedbackMetadata)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.FeedbackMetadata();
+                    switch (object.origin) {
+                    case "ORIGIN_UNSPECIFIED":
+                    case 0:
+                        message.origin = 0;
+                        break;
+                    case "HEADER":
+                    case 1:
+                        message.origin = 1;
+                        break;
+                    case "WIZARD":
+                    case 2:
+                        message.origin = 2;
+                        break;
+                    }
+                    if (object.survey != null) {
+                        if (typeof object.survey !== "object")
+                            throw TypeError(".clutch.feedback.v1.FeedbackMetadata.survey: object expected");
+                        message.survey = $root.clutch.feedback.v1.Survey.fromObject(object.survey);
+                    }
+                    if (object.userSubmitted != null)
+                        message.userSubmitted = Boolean(object.userSubmitted);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a FeedbackMetadata message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.FeedbackMetadata
+                 * @static
+                 * @param {clutch.feedback.v1.FeedbackMetadata} message FeedbackMetadata
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                FeedbackMetadata.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.origin = options.enums === String ? "ORIGIN_UNSPECIFIED" : 0;
+                        object.survey = null;
+                        object.userSubmitted = false;
+                    }
+                    if (message.origin != null && message.hasOwnProperty("origin"))
+                        object.origin = options.enums === String ? $root.clutch.feedback.v1.Origin[message.origin] : message.origin;
+                    if (message.survey != null && message.hasOwnProperty("survey"))
+                        object.survey = $root.clutch.feedback.v1.Survey.toObject(message.survey, options);
+                    if (message.userSubmitted != null && message.hasOwnProperty("userSubmitted"))
+                        object.userSubmitted = message.userSubmitted;
+                    return object;
+                };
+
+                /**
+                 * Converts this FeedbackMetadata to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.FeedbackMetadata
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                FeedbackMetadata.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return FeedbackMetadata;
+            })();
+
+            v1.Feedback = (function() {
+
+                /**
+                 * Properties of a Feedback.
+                 * @memberof clutch.feedback.v1
+                 * @interface IFeedback
+                 * @property {string|null} [userId] Feedback userId
+                 * @property {string|null} [urlPath] Feedback urlPath
+                 * @property {string|null} [rating] Feedback rating
+                 * @property {string|null} [freeformResponse] Feedback freeformResponse
+                 * @property {string|null} [feedbackType] Feedback feedbackType
+                 * @property {clutch.feedback.v1.IFeedbackMetadata|null} [metadata] Feedback metadata
+                 */
+
+                /**
+                 * Constructs a new Feedback.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a Feedback.
+                 * @implements IFeedback
+                 * @constructor
+                 * @param {clutch.feedback.v1.IFeedback=} [properties] Properties to set
+                 */
+                function Feedback(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Feedback userId.
+                 * @member {string} userId
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @instance
+                 */
+                Feedback.prototype.userId = "";
+
+                /**
+                 * Feedback urlPath.
+                 * @member {string} urlPath
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @instance
+                 */
+                Feedback.prototype.urlPath = "";
+
+                /**
+                 * Feedback rating.
+                 * @member {string} rating
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @instance
+                 */
+                Feedback.prototype.rating = "";
+
+                /**
+                 * Feedback freeformResponse.
+                 * @member {string} freeformResponse
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @instance
+                 */
+                Feedback.prototype.freeformResponse = "";
+
+                /**
+                 * Feedback feedbackType.
+                 * @member {string} feedbackType
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @instance
+                 */
+                Feedback.prototype.feedbackType = "";
+
+                /**
+                 * Feedback metadata.
+                 * @member {clutch.feedback.v1.IFeedbackMetadata|null|undefined} metadata
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @instance
+                 */
+                Feedback.prototype.metadata = null;
+
+                /**
+                 * Verifies a Feedback message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Feedback.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.userId != null && message.hasOwnProperty("userId"))
+                        if (!$util.isString(message.userId))
+                            return "userId: string expected";
+                    if (message.urlPath != null && message.hasOwnProperty("urlPath"))
+                        if (!$util.isString(message.urlPath))
+                            return "urlPath: string expected";
+                    if (message.rating != null && message.hasOwnProperty("rating"))
+                        if (!$util.isString(message.rating))
+                            return "rating: string expected";
+                    if (message.freeformResponse != null && message.hasOwnProperty("freeformResponse"))
+                        if (!$util.isString(message.freeformResponse))
+                            return "freeformResponse: string expected";
+                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
+                        if (!$util.isString(message.feedbackType))
+                            return "feedbackType: string expected";
+                    if (message.metadata != null && message.hasOwnProperty("metadata")) {
+                        let error = $root.clutch.feedback.v1.FeedbackMetadata.verify(message.metadata);
+                        if (error)
+                            return "metadata." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Feedback message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.Feedback} Feedback
+                 */
+                Feedback.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.Feedback)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.Feedback();
+                    if (object.userId != null)
+                        message.userId = String(object.userId);
+                    if (object.urlPath != null)
+                        message.urlPath = String(object.urlPath);
+                    if (object.rating != null)
+                        message.rating = String(object.rating);
+                    if (object.freeformResponse != null)
+                        message.freeformResponse = String(object.freeformResponse);
+                    if (object.feedbackType != null)
+                        message.feedbackType = String(object.feedbackType);
+                    if (object.metadata != null) {
+                        if (typeof object.metadata !== "object")
+                            throw TypeError(".clutch.feedback.v1.Feedback.metadata: object expected");
+                        message.metadata = $root.clutch.feedback.v1.FeedbackMetadata.fromObject(object.metadata);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Feedback message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @static
+                 * @param {clutch.feedback.v1.Feedback} message Feedback
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Feedback.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.userId = "";
+                        object.urlPath = "";
+                        object.rating = "";
+                        object.freeformResponse = "";
+                        object.feedbackType = "";
+                        object.metadata = null;
+                    }
+                    if (message.userId != null && message.hasOwnProperty("userId"))
+                        object.userId = message.userId;
+                    if (message.urlPath != null && message.hasOwnProperty("urlPath"))
+                        object.urlPath = message.urlPath;
+                    if (message.rating != null && message.hasOwnProperty("rating"))
+                        object.rating = message.rating;
+                    if (message.freeformResponse != null && message.hasOwnProperty("freeformResponse"))
+                        object.freeformResponse = message.freeformResponse;
+                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
+                        object.feedbackType = message.feedbackType;
+                    if (message.metadata != null && message.hasOwnProperty("metadata"))
+                        object.metadata = $root.clutch.feedback.v1.FeedbackMetadata.toObject(message.metadata, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this Feedback to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.Feedback
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Feedback.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Feedback;
+            })();
+
+            v1.SubmitFeedbackRequest = (function() {
+
+                /**
+                 * Properties of a SubmitFeedbackRequest.
+                 * @memberof clutch.feedback.v1
+                 * @interface ISubmitFeedbackRequest
+                 * @property {string|null} [id] SubmitFeedbackRequest id
+                 * @property {clutch.feedback.v1.IFeedback|null} [feedback] SubmitFeedbackRequest feedback
+                 */
+
+                /**
+                 * Constructs a new SubmitFeedbackRequest.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a SubmitFeedbackRequest.
+                 * @implements ISubmitFeedbackRequest
+                 * @constructor
+                 * @param {clutch.feedback.v1.ISubmitFeedbackRequest=} [properties] Properties to set
+                 */
+                function SubmitFeedbackRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * SubmitFeedbackRequest id.
+                 * @member {string} id
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
+                 * @instance
+                 */
+                SubmitFeedbackRequest.prototype.id = "";
+
+                /**
+                 * SubmitFeedbackRequest feedback.
+                 * @member {clutch.feedback.v1.IFeedback|null|undefined} feedback
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
+                 * @instance
+                 */
+                SubmitFeedbackRequest.prototype.feedback = null;
+
+                /**
+                 * Verifies a SubmitFeedbackRequest message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                SubmitFeedbackRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.feedback != null && message.hasOwnProperty("feedback")) {
+                        let error = $root.clutch.feedback.v1.Feedback.verify(message.feedback);
+                        if (error)
+                            return "feedback." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a SubmitFeedbackRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.SubmitFeedbackRequest} SubmitFeedbackRequest
+                 */
+                SubmitFeedbackRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.SubmitFeedbackRequest)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.SubmitFeedbackRequest();
+                    if (object.id != null)
+                        message.id = String(object.id);
+                    if (object.feedback != null) {
+                        if (typeof object.feedback !== "object")
+                            throw TypeError(".clutch.feedback.v1.SubmitFeedbackRequest.feedback: object expected");
+                        message.feedback = $root.clutch.feedback.v1.Feedback.fromObject(object.feedback);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a SubmitFeedbackRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
+                 * @static
+                 * @param {clutch.feedback.v1.SubmitFeedbackRequest} message SubmitFeedbackRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                SubmitFeedbackRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.feedback = null;
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.feedback != null && message.hasOwnProperty("feedback"))
+                        object.feedback = $root.clutch.feedback.v1.Feedback.toObject(message.feedback, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this SubmitFeedbackRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.SubmitFeedbackRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                SubmitFeedbackRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return SubmitFeedbackRequest;
+            })();
+
+            v1.SubmitFeedbackResponse = (function() {
+
+                /**
+                 * Properties of a SubmitFeedbackResponse.
+                 * @memberof clutch.feedback.v1
+                 * @interface ISubmitFeedbackResponse
+                 */
+
+                /**
+                 * Constructs a new SubmitFeedbackResponse.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a SubmitFeedbackResponse.
+                 * @implements ISubmitFeedbackResponse
+                 * @constructor
+                 * @param {clutch.feedback.v1.ISubmitFeedbackResponse=} [properties] Properties to set
+                 */
+                function SubmitFeedbackResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a SubmitFeedbackResponse message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                SubmitFeedbackResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a SubmitFeedbackResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.SubmitFeedbackResponse} SubmitFeedbackResponse
+                 */
+                SubmitFeedbackResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.SubmitFeedbackResponse)
+                        return object;
+                    return new $root.clutch.feedback.v1.SubmitFeedbackResponse();
+                };
+
+                /**
+                 * Creates a plain object from a SubmitFeedbackResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
+                 * @static
+                 * @param {clutch.feedback.v1.SubmitFeedbackResponse} message SubmitFeedbackResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                SubmitFeedbackResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this SubmitFeedbackResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.SubmitFeedbackResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                SubmitFeedbackResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return SubmitFeedbackResponse;
+            })();
+
+            v1.Submission = (function() {
+
+                /**
+                 * Properties of a Submission.
+                 * @memberof clutch.feedback.v1
+                 * @interface ISubmission
+                 * @property {google.protobuf.ITimestamp|null} [submittedAt] Submission submittedAt
+                 * @property {clutch.feedback.v1.IFeedback|null} [feedback] Submission feedback
+                 */
+
+                /**
+                 * Constructs a new Submission.
+                 * @memberof clutch.feedback.v1
+                 * @classdesc Represents a Submission.
+                 * @implements ISubmission
+                 * @constructor
+                 * @param {clutch.feedback.v1.ISubmission=} [properties] Properties to set
+                 */
+                function Submission(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Submission submittedAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} submittedAt
+                 * @memberof clutch.feedback.v1.Submission
+                 * @instance
+                 */
+                Submission.prototype.submittedAt = null;
+
+                /**
+                 * Submission feedback.
+                 * @member {clutch.feedback.v1.IFeedback|null|undefined} feedback
+                 * @memberof clutch.feedback.v1.Submission
+                 * @instance
+                 */
+                Submission.prototype.feedback = null;
+
+                /**
+                 * Verifies a Submission message.
+                 * @function verify
+                 * @memberof clutch.feedback.v1.Submission
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Submission.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.submittedAt != null && message.hasOwnProperty("submittedAt")) {
+                        let error = $root.google.protobuf.Timestamp.verify(message.submittedAt);
+                        if (error)
+                            return "submittedAt." + error;
+                    }
+                    if (message.feedback != null && message.hasOwnProperty("feedback")) {
+                        let error = $root.clutch.feedback.v1.Feedback.verify(message.feedback);
+                        if (error)
+                            return "feedback." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Submission message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.feedback.v1.Submission
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.feedback.v1.Submission} Submission
+                 */
+                Submission.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.Submission)
+                        return object;
+                    let message = new $root.clutch.feedback.v1.Submission();
+                    if (object.submittedAt != null) {
+                        if (typeof object.submittedAt !== "object")
+                            throw TypeError(".clutch.feedback.v1.Submission.submittedAt: object expected");
+                        message.submittedAt = $root.google.protobuf.Timestamp.fromObject(object.submittedAt);
+                    }
+                    if (object.feedback != null) {
+                        if (typeof object.feedback !== "object")
+                            throw TypeError(".clutch.feedback.v1.Submission.feedback: object expected");
+                        message.feedback = $root.clutch.feedback.v1.Feedback.fromObject(object.feedback);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Submission message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.feedback.v1.Submission
+                 * @static
+                 * @param {clutch.feedback.v1.Submission} message Submission
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Submission.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.submittedAt = null;
+                        object.feedback = null;
+                    }
+                    if (message.submittedAt != null && message.hasOwnProperty("submittedAt"))
+                        object.submittedAt = $root.google.protobuf.Timestamp.toObject(message.submittedAt, options);
+                    if (message.feedback != null && message.hasOwnProperty("feedback"))
+                        object.feedback = $root.clutch.feedback.v1.Feedback.toObject(message.feedback, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this Submission to JSON.
+                 * @function toJSON
+                 * @memberof clutch.feedback.v1.Submission
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Submission.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Submission;
+            })();
+
+            return v1;
+        })();
+
+        return feedback;
     })();
 
     clutch.sourcecontrol = (function() {
@@ -44721,6 +47111,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IInstanceID
                      * @property {string|null} [id] InstanceID id
                      * @property {string|null} [region] InstanceID region
+                     * @property {string|null} [account] InstanceID account
                      */
 
                     /**
@@ -44755,6 +47146,14 @@ export const clutch = $root.clutch = (() => {
                     InstanceID.prototype.region = "";
 
                     /**
+                     * InstanceID account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.InstanceID
+                     * @instance
+                     */
+                    InstanceID.prototype.account = "";
+
+                    /**
                      * Verifies an InstanceID message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.InstanceID
@@ -44771,6 +47170,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -44790,6 +47192,8 @@ export const clutch = $root.clutch = (() => {
                             message.id = String(object.id);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -44809,11 +47213,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.id = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.id != null && message.hasOwnProperty("id"))
                             object.id = message.id;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -44839,6 +47246,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IAutoscalingGroupName
                      * @property {string|null} [name] AutoscalingGroupName name
                      * @property {string|null} [region] AutoscalingGroupName region
+                     * @property {string|null} [account] AutoscalingGroupName account
                      */
 
                     /**
@@ -44873,6 +47281,14 @@ export const clutch = $root.clutch = (() => {
                     AutoscalingGroupName.prototype.region = "";
 
                     /**
+                     * AutoscalingGroupName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.AutoscalingGroupName
+                     * @instance
+                     */
+                    AutoscalingGroupName.prototype.account = "";
+
+                    /**
                      * Verifies an AutoscalingGroupName message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.AutoscalingGroupName
@@ -44889,6 +47305,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -44908,6 +47327,8 @@ export const clutch = $root.clutch = (() => {
                             message.name = String(object.name);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -44927,11 +47348,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.name = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -44957,6 +47381,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IKinesisStreamName
                      * @property {string|null} [name] KinesisStreamName name
                      * @property {string|null} [region] KinesisStreamName region
+                     * @property {string|null} [account] KinesisStreamName account
                      */
 
                     /**
@@ -44991,6 +47416,14 @@ export const clutch = $root.clutch = (() => {
                     KinesisStreamName.prototype.region = "";
 
                     /**
+                     * KinesisStreamName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.KinesisStreamName
+                     * @instance
+                     */
+                    KinesisStreamName.prototype.account = "";
+
+                    /**
                      * Verifies a KinesisStreamName message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.KinesisStreamName
@@ -45007,6 +47440,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -45026,6 +47462,8 @@ export const clutch = $root.clutch = (() => {
                             message.name = String(object.name);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -45045,11 +47483,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.name = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -45075,6 +47516,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IDynamodbTableName
                      * @property {string|null} [name] DynamodbTableName name
                      * @property {string|null} [region] DynamodbTableName region
+                     * @property {string|null} [account] DynamodbTableName account
                      */
 
                     /**
@@ -45109,6 +47551,14 @@ export const clutch = $root.clutch = (() => {
                     DynamodbTableName.prototype.region = "";
 
                     /**
+                     * DynamodbTableName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.DynamodbTableName
+                     * @instance
+                     */
+                    DynamodbTableName.prototype.account = "";
+
+                    /**
                      * Verifies a DynamodbTableName message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.DynamodbTableName
@@ -45125,6 +47575,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -45144,6 +47597,8 @@ export const clutch = $root.clutch = (() => {
                             message.name = String(object.name);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -45163,11 +47618,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.name = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -49660,6 +52118,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {number|Long|null} [millis] Point millis
                  * @property {google.protobuf.IAny|null} [pb] Point pb
                  * @property {string|null} [description] Point description
+                 * @property {string|null} [href] Point href
                  */
 
                 /**
@@ -49708,6 +52167,14 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 Point.prototype.description = "";
+
+                /**
+                 * Point href.
+                 * @member {string} href
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 */
+                Point.prototype.href = "";
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -49758,6 +52225,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.description != null && message.hasOwnProperty("description"))
                         if (!$util.isString(message.description))
                             return "description: string expected";
+                    if (message.href != null && message.hasOwnProperty("href"))
+                        if (!$util.isString(message.href))
+                            return "href: string expected";
                     return null;
                 };
 
@@ -49794,6 +52264,8 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.description != null)
                         message.description = String(object.description);
+                    if (object.href != null)
+                        message.href = String(object.href);
                     return message;
                 };
 
@@ -49813,6 +52285,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.pb = null;
                         object.description = "";
+                        object.href = "";
                     }
                     if (message.range != null && message.hasOwnProperty("range")) {
                         object.range = $root.clutch.timeseries.v1.TimeRange.toObject(message.range, options);
@@ -49831,6 +52304,8 @@ export const clutch = $root.clutch = (() => {
                         object.pb = $root.google.protobuf.Any.toObject(message.pb, options);
                     if (message.description != null && message.hasOwnProperty("description"))
                         object.description = message.description;
+                    if (message.href != null && message.hasOwnProperty("href"))
+                        object.href = message.href;
                     return object;
                 };
 

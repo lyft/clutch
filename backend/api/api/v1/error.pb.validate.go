@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,20 +32,54 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on ErrorDetails with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *ErrorDetails) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ErrorDetails with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ErrorDetailsMultiError, or
+// nil if none found.
+func (m *ErrorDetails) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ErrorDetails) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	for idx, item := range m.GetWrapped() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ErrorDetailsValidationError{
+						field:  fmt.Sprintf("Wrapped[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ErrorDetailsValidationError{
+						field:  fmt.Sprintf("Wrapped[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ErrorDetailsValidationError{
 					field:  fmt.Sprintf("Wrapped[%v]", idx),
@@ -56,8 +91,27 @@ func (m *ErrorDetails) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return ErrorDetailsMultiError(errors)
+	}
 	return nil
 }
+
+// ErrorDetailsMultiError is an error wrapping multiple validation errors
+// returned by ErrorDetails.ValidateAll() if the designated constraints aren't met.
+type ErrorDetailsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ErrorDetailsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ErrorDetailsMultiError) AllErrors() []error { return m }
 
 // ErrorDetailsValidationError is the validation error returned by
 // ErrorDetails.Validate if the designated constraints aren't met.

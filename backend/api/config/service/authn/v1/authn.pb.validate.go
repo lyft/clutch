@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,45 +32,95 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on OIDC with the rules defined in the proto
-// definition for this message. If any rules are violated, an error is returned.
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
 func (m *OIDC) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OIDC with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in OIDCMultiError, or nil if none found.
+func (m *OIDC) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OIDC) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetIssuer()) < 1 {
-		return OIDCValidationError{
+		err := OIDCValidationError{
 			field:  "Issuer",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetClientId()) < 1 {
-		return OIDCValidationError{
+		err := OIDCValidationError{
 			field:  "ClientId",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetClientSecret()) < 1 {
-		return OIDCValidationError{
+		err := OIDCValidationError{
 			field:  "ClientSecret",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(m.GetRedirectUrl()) < 1 {
-		return OIDCValidationError{
+		err := OIDCValidationError{
 			field:  "RedirectUrl",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
+	if len(errors) > 0 {
+		return OIDCMultiError(errors)
+	}
 	return nil
 }
+
+// OIDCMultiError is an error wrapping multiple validation errors returned by
+// OIDC.ValidateAll() if the designated constraints aren't met.
+type OIDCMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OIDCMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OIDCMultiError) AllErrors() []error { return m }
 
 // OIDCValidationError is the validation error returned by OIDC.Validate if the
 // designated constraints aren't met.
@@ -126,17 +177,35 @@ var _ interface {
 } = OIDCValidationError{}
 
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Config) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ConfigMultiError, or nil if none found.
+func (m *Config) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Config) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetSessionSecret()) < 1 {
-		return ConfigValidationError{
+		err := ConfigValidationError{
 			field:  "SessionSecret",
 			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	// no validation rules for EnableServiceTokenCreation
@@ -145,7 +214,26 @@ func (m *Config) Validate() error {
 
 	case *Config_Oidc:
 
-		if v, ok := interface{}(m.GetOidc()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetOidc()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  "Oidc",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ConfigValidationError{
+						field:  "Oidc",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetOidc()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ConfigValidationError{
 					field:  "Oidc",
@@ -157,8 +245,27 @@ func (m *Config) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.ValidateAll() if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.

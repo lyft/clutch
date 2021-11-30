@@ -115,7 +115,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 			continue
 		}
 		// in order to remove fault, we need to set the snapshot with default ecds config and default runtime resource
-		emptyResources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
+		emptyResources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTTL)
 
 		p.logger.Debugw("Removing RTDS resource for cluster", "cluster", cluster)
 		runtime, _ := p.createRuntime([][]*RuntimeKeyValue{}, nil)
@@ -125,7 +125,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 			p.logger.Debugw("Removing ECDS resources for cluster", "cluster", cluster)
 			resourceNames := p.ecdsConfig.ecdsResourceMap.getResourcesFromCluster(cluster)
 
-			resourcesWithTTL := make([]gcpTypes.ResourceWithTtl, 0)
+			resourcesWithTTL := make([]gcpTypes.ResourceWithTTL, 0)
 			// iterate over all of the ECDS resource generators and all of the resource names
 			for _, g := range p.ecdsGeneratorsByTypeUrl {
 				for _, n := range resourceNames {
@@ -143,7 +143,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 			emptyResources[gcpTypes.ExtensionConfig] = resourcesWithTTL
 		}
 
-		err := p.setSnapshot(emptyResources, cluster)
+		err := p.setSnapshot(ctx, emptyResources, cluster)
 		if err != nil {
 			p.setCacheSnapshotFailureCount.Inc(1)
 			p.logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster, "error", err)
@@ -154,7 +154,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 
 	activeFaults := 0
 	for cluster := range clustersWithResources {
-		resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
+		resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTTL)
 
 		if rs, ok := rtdsResourcesByCluster[cluster]; ok {
 			p.logger.Debugw("Injecting fault for cluster using RTDS", "cluster", cluster)
@@ -178,7 +178,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 			}
 		}
 
-		err := p.setSnapshot(resources, cluster)
+		err := p.setSnapshot(ctx, resources, cluster)
 		if err != nil {
 			p.logger.Errorw("Unable to set the fault for cluster using ECDS", "cluster", cluster, "error", err)
 		}
@@ -191,7 +191,7 @@ func (p *Poller) refreshCache(ctx context.Context) {
 // for a given cluster but it's  still possible for multiple different experiments to
 // control runtime values for one cluster as long as each of them controls different
 // key-value pairs.
-func (p *Poller) createRuntime(runtimeKeyValues [][]*RuntimeKeyValue, ttl *time.Duration) ([]gcpTypes.ResourceWithTtl, int) {
+func (p *Poller) createRuntime(runtimeKeyValues [][]*RuntimeKeyValue, ttl *time.Duration) ([]gcpTypes.ResourceWithTTL, int) {
 	isUsed := func(usedKeys map[string]bool, keyValues []*RuntimeKeyValue) bool {
 		for _, kv := range keyValues {
 			if val, ok := usedKeys[kv.Key]; ok && val {
@@ -238,25 +238,25 @@ func (p *Poller) createRuntime(runtimeKeyValues [][]*RuntimeKeyValue, ttl *time.
 		resourceTTL = ttl
 	}
 
-	return []gcpTypes.ResourceWithTtl{{
+	return []gcpTypes.ResourceWithTTL{{
 		Resource: &gcpRuntimeServiceV3.Runtime{
 			Name: p.rtdsConfig.layerName,
 			Layer: &pstruct.Struct{
 				Fields: fieldsMap,
 			},
 		},
-		Ttl: resourceTTL,
+		TTL: resourceTTL,
 	}}, appliedKeValueSetsCount
 }
 
-func (p *Poller) createResourceWithTTLForECDSResource(resource *ECDSResource, ttl *time.Duration) []gcpTypes.ResourceWithTtl {
-	return []gcpTypes.ResourceWithTtl{{
+func (p *Poller) createResourceWithTTLForECDSResource(resource *ECDSResource, ttl *time.Duration) []gcpTypes.ResourceWithTTL {
+	return []gcpTypes.ResourceWithTTL{{
 		Resource: resource.ExtensionConfig,
-		Ttl:      ttl,
+		TTL:      ttl,
 	}}
 }
 
-func (p *Poller) setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string) error {
+func (p *Poller) setSnapshot(ctx context.Context, resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTTL, cluster string) error {
 	currentSnapshot, _ := p.cache.GetSnapshot(cluster)
 
 	snapshot := gcpCacheV3.Snapshot{}
@@ -272,7 +272,7 @@ func (p *Poller) setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.Re
 			isNewSnapshotSame = false
 		}
 
-		snapshot.Resources[resourceType] = gcpCacheV3.NewResourcesWithTtl(newComputedVersion, resources)
+		snapshot.Resources[resourceType] = gcpCacheV3.NewResourcesWithTTL(newComputedVersion, resources)
 	}
 
 	if isNewSnapshotSame {
@@ -282,7 +282,7 @@ func (p *Poller) setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.Re
 	}
 
 	p.logger.Infow("Setting snapshot", "cluster", cluster, "resources", resourceMap)
-	err := p.cache.SetSnapshot(cluster, snapshot)
+	err := p.cache.SetSnapshot(ctx, cluster, snapshot)
 	if err != nil {
 		return err
 	}

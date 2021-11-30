@@ -1733,6 +1733,9 @@ export namespace clutch {
 
                     /** Table billingMode */
                     billingMode?: (clutch.aws.dynamodb.v1.Table.BillingMode|null);
+
+                    /** Table account */
+                    account?: (string|null);
                 }
 
                 /** Represents a Table. */
@@ -1761,6 +1764,9 @@ export namespace clutch {
 
                     /** Table billingMode. */
                     public billingMode: clutch.aws.dynamodb.v1.Table.BillingMode;
+
+                    /** Table account. */
+                    public account: string;
 
                     /**
                      * Verifies a Table message.
@@ -2004,6 +2010,9 @@ export namespace clutch {
 
                     /** DescribeTableRequest region */
                     region?: (string|null);
+
+                    /** DescribeTableRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a DescribeTableRequest. */
@@ -2020,6 +2029,9 @@ export namespace clutch {
 
                     /** DescribeTableRequest region. */
                     public region: string;
+
+                    /** DescribeTableRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a DescribeTableRequest message.
@@ -2115,6 +2127,9 @@ export namespace clutch {
 
                     /** UpdateCapacityRequest ignoreMaximums */
                     ignoreMaximums?: (boolean|null);
+
+                    /** UpdateCapacityRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents an UpdateCapacityRequest. */
@@ -2140,6 +2155,9 @@ export namespace clutch {
 
                     /** UpdateCapacityRequest ignoreMaximums. */
                     public ignoreMaximums: boolean;
+
+                    /** UpdateCapacityRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies an UpdateCapacityRequest message.
@@ -2396,6 +2414,9 @@ export namespace clutch {
 
                     /** ResizeAutoscalingGroupRequest size */
                     size?: (clutch.aws.ec2.v1.IAutoscalingGroupSize|null);
+
+                    /** ResizeAutoscalingGroupRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a ResizeAutoscalingGroupRequest. */
@@ -2415,6 +2436,9 @@ export namespace clutch {
 
                     /** ResizeAutoscalingGroupRequest size. */
                     public size?: (clutch.aws.ec2.v1.IAutoscalingGroupSize|null);
+
+                    /** ResizeAutoscalingGroupRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a ResizeAutoscalingGroupRequest message.
@@ -2507,6 +2531,9 @@ export namespace clutch {
 
                     /** AutoscalingGroup instances */
                     instances?: (clutch.aws.ec2.v1.AutoscalingGroup.IInstance[]|null);
+
+                    /** AutoscalingGroup account */
+                    account?: (string|null);
                 }
 
                 /** Represents an AutoscalingGroup. */
@@ -2535,6 +2562,9 @@ export namespace clutch {
 
                     /** AutoscalingGroup instances. */
                     public instances: clutch.aws.ec2.v1.AutoscalingGroup.IInstance[];
+
+                    /** AutoscalingGroup account. */
+                    public account: string;
 
                     /**
                      * Verifies an AutoscalingGroup message.
@@ -2683,6 +2713,9 @@ export namespace clutch {
 
                     /** GetInstanceRequest region */
                     region?: (string|null);
+
+                    /** GetInstanceRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a GetInstanceRequest. */
@@ -2699,6 +2732,9 @@ export namespace clutch {
 
                     /** GetInstanceRequest region. */
                     public region: string;
+
+                    /** GetInstanceRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a GetInstanceRequest message.
@@ -2785,6 +2821,9 @@ export namespace clutch {
 
                     /** TerminateInstanceRequest region */
                     region?: (string|null);
+
+                    /** TerminateInstanceRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a TerminateInstanceRequest. */
@@ -2801,6 +2840,9 @@ export namespace clutch {
 
                     /** TerminateInstanceRequest region. */
                     public region: string;
+
+                    /** TerminateInstanceRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a TerminateInstanceRequest message.
@@ -2881,6 +2923,9 @@ export namespace clutch {
 
                     /** RebootInstanceRequest region */
                     region?: (string|null);
+
+                    /** RebootInstanceRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a RebootInstanceRequest. */
@@ -2897,6 +2942,9 @@ export namespace clutch {
 
                     /** RebootInstanceRequest region. */
                     public region: string;
+
+                    /** RebootInstanceRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a RebootInstanceRequest message.
@@ -2995,6 +3043,9 @@ export namespace clutch {
 
                     /** Instance tags */
                     tags?: ({ [k: string]: string }|null);
+
+                    /** Instance account */
+                    account?: (string|null);
                 }
 
                 /** Represents an Instance. */
@@ -3029,6 +3080,9 @@ export namespace clutch {
 
                     /** Instance tags. */
                     public tags: { [k: string]: string };
+
+                    /** Instance account. */
+                    public account: string;
 
                     /**
                      * Verifies an Instance message.
@@ -3147,6 +3201,9 @@ export namespace clutch {
 
                     /** GetStreamRequest region */
                     region?: (string|null);
+
+                    /** GetStreamRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents a GetStreamRequest. */
@@ -3163,6 +3220,9 @@ export namespace clutch {
 
                     /** GetStreamRequest region. */
                     public region: string;
+
+                    /** GetStreamRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies a GetStreamRequest message.
@@ -3252,6 +3312,9 @@ export namespace clutch {
 
                     /** UpdateShardCountRequest targetShardCount */
                     targetShardCount?: (number|null);
+
+                    /** UpdateShardCountRequest account */
+                    account?: (string|null);
                 }
 
                 /** Represents an UpdateShardCountRequest. */
@@ -3271,6 +3334,9 @@ export namespace clutch {
 
                     /** UpdateShardCountRequest targetShardCount. */
                     public targetShardCount: number;
+
+                    /** UpdateShardCountRequest account. */
+                    public account: string;
 
                     /**
                      * Verifies an UpdateShardCountRequest message.
@@ -3354,6 +3420,9 @@ export namespace clutch {
 
                     /** Stream currentShardCount */
                     currentShardCount?: (number|null);
+
+                    /** Stream account */
+                    account?: (string|null);
                 }
 
                 /** Represents a Stream. */
@@ -3373,6 +3442,9 @@ export namespace clutch {
 
                     /** Stream currentShardCount. */
                     public currentShardCount: number;
+
+                    /** Stream account. */
+                    public account: string;
 
                     /**
                      * Verifies a Stream message.
@@ -5792,6 +5864,9 @@ export namespace clutch {
 
                     /** FaultPercentage percentage */
                     percentage?: (number|null);
+
+                    /** FaultPercentage denominator */
+                    denominator?: (clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType|null);
                 }
 
                 /** Represents a FaultPercentage. */
@@ -5805,6 +5880,9 @@ export namespace clutch {
 
                     /** FaultPercentage percentage. */
                     public percentage: number;
+
+                    /** FaultPercentage denominator. */
+                    public denominator: clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType;
 
                     /**
                      * Verifies a FaultPercentage message.
@@ -5833,6 +5911,17 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace FaultPercentage {
+
+                    /** DenominatorType enum. */
+                    enum DenominatorType {
+                        DENOMINATOR_UNSPECIFIED = 0,
+                        DENOMINATOR_HUNDRED = 1,
+                        DENOMINATOR_TEN_THOUSAND = 2,
+                        DENOMINATOR_MILLION = 3
+                    }
                 }
 
                 /** Properties of a FaultAbortStatus. */
@@ -7637,6 +7726,236 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace feedback. */
+            namespace feedback {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a RatingOptions. */
+                    interface IRatingOptions {
+
+                        /** RatingOptions one */
+                        one?: (string|null);
+
+                        /** RatingOptions two */
+                        two?: (string|null);
+
+                        /** RatingOptions three */
+                        three?: (string|null);
+                    }
+
+                    /** Represents a RatingOptions. */
+                    class RatingOptions implements IRatingOptions {
+
+                        /**
+                         * Constructs a new RatingOptions.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.feedback.v1.IRatingOptions);
+
+                        /** RatingOptions one. */
+                        public one: string;
+
+                        /** RatingOptions two. */
+                        public two: string;
+
+                        /** RatingOptions three. */
+                        public three: string;
+
+                        /**
+                         * Verifies a RatingOptions message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns RatingOptions
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.feedback.v1.RatingOptions;
+
+                        /**
+                         * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
+                         * @param message RatingOptions
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.feedback.v1.RatingOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this RatingOptions to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a Survey. */
+                    interface ISurvey {
+
+                        /** Survey prompt */
+                        prompt?: (string|null);
+
+                        /** Survey freeformPrompt */
+                        freeformPrompt?: (string|null);
+
+                        /** Survey ratingOptions */
+                        ratingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
+                    }
+
+                    /** Represents a Survey. */
+                    class Survey implements ISurvey {
+
+                        /**
+                         * Constructs a new Survey.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.feedback.v1.ISurvey);
+
+                        /** Survey prompt. */
+                        public prompt: string;
+
+                        /** Survey freeformPrompt. */
+                        public freeformPrompt: string;
+
+                        /** Survey ratingOptions. */
+                        public ratingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
+
+                        /**
+                         * Verifies a Survey message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Survey message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Survey
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.feedback.v1.Survey;
+
+                        /**
+                         * Creates a plain object from a Survey message. Also converts values to other types if specified.
+                         * @param message Survey
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.feedback.v1.Survey, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Survey to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a SurveyOrigin. */
+                    interface ISurveyOrigin {
+
+                        /** SurveyOrigin origin */
+                        origin?: (clutch.feedback.v1.Origin|null);
+
+                        /** SurveyOrigin survey */
+                        survey?: (clutch.config.module.feedback.v1.ISurvey|null);
+                    }
+
+                    /** Represents a SurveyOrigin. */
+                    class SurveyOrigin implements ISurveyOrigin {
+
+                        /**
+                         * Constructs a new SurveyOrigin.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.feedback.v1.ISurveyOrigin);
+
+                        /** SurveyOrigin origin. */
+                        public origin: clutch.feedback.v1.Origin;
+
+                        /** SurveyOrigin survey. */
+                        public survey?: (clutch.config.module.feedback.v1.ISurvey|null);
+
+                        /**
+                         * Verifies a SurveyOrigin message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a SurveyOrigin message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns SurveyOrigin
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.feedback.v1.SurveyOrigin;
+
+                        /**
+                         * Creates a plain object from a SurveyOrigin message. Also converts values to other types if specified.
+                         * @param message SurveyOrigin
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.feedback.v1.SurveyOrigin, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this SurveyOrigin to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config origins */
+                        origins?: (clutch.config.module.feedback.v1.ISurveyOrigin[]|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.feedback.v1.IConfig);
+
+                        /** Config origins. */
+                        public origins: clutch.config.module.feedback.v1.ISurveyOrigin[];
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.feedback.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.feedback.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace proxy. */
             namespace proxy {
 
@@ -8759,6 +9078,15 @@ export namespace clutch {
 
                         /** Config dynamodbConfig */
                         dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
+
+                        /** Config primaryAccountAliasDisplayName */
+                        primaryAccountAliasDisplayName?: (string|null);
+
+                        /** Config awsConfigProfileName */
+                        awsConfigProfileName?: (string|null);
+
+                        /** Config additionalAccounts */
+                        additionalAccounts?: (clutch.config.service.aws.v1.IAWSAccount[]|null);
                     }
 
                     /** Represents a Config. */
@@ -8778,6 +9106,15 @@ export namespace clutch {
 
                         /** Config dynamodbConfig. */
                         public dynamodbConfig?: (clutch.config.service.aws.v1.IDynamodbConfig|null);
+
+                        /** Config primaryAccountAliasDisplayName. */
+                        public primaryAccountAliasDisplayName: string;
+
+                        /** Config awsConfigProfileName. */
+                        public awsConfigProfileName: string;
+
+                        /** Config additionalAccounts. */
+                        public additionalAccounts: clutch.config.service.aws.v1.IAWSAccount[];
 
                         /**
                          * Verifies a Config message.
@@ -8965,6 +9302,72 @@ export namespace clutch {
 
                         /**
                          * Converts this ScalingLimits to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a AWSAccount. */
+                    interface IAWSAccount {
+
+                        /** AWSAccount alias */
+                        alias?: (string|null);
+
+                        /** AWSAccount accountNumber */
+                        accountNumber?: (string|null);
+
+                        /** AWSAccount iamRole */
+                        iamRole?: (string|null);
+
+                        /** AWSAccount regions */
+                        regions?: (string[]|null);
+                    }
+
+                    /** Represents a AWSAccount. */
+                    class AWSAccount implements IAWSAccount {
+
+                        /**
+                         * Constructs a new AWSAccount.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.aws.v1.IAWSAccount);
+
+                        /** AWSAccount alias. */
+                        public alias: string;
+
+                        /** AWSAccount accountNumber. */
+                        public accountNumber: string;
+
+                        /** AWSAccount iamRole. */
+                        public iamRole: string;
+
+                        /** AWSAccount regions. */
+                        public regions: string[];
+
+                        /**
+                         * Verifies a AWSAccount message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a AWSAccount message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns AWSAccount
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.aws.v1.AWSAccount;
+
+                        /**
+                         * Creates a plain object from a AWSAccount message. Also converts values to other types if specified.
+                         * @param message AWSAccount
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.aws.v1.AWSAccount, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this AWSAccount to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
@@ -9864,6 +10267,582 @@ export namespace clutch {
                         public toJSON(): { [k: string]: any };
                     }
                 }
+            }
+        }
+    }
+
+    /** Namespace feedback. */
+    namespace feedback {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a FeedbackAPI */
+            class FeedbackAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new FeedbackAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetSurveys.
+                 * @param request GetSurveysRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetSurveysResponse
+                 */
+                public getSurveys(request: clutch.feedback.v1.IGetSurveysRequest, callback: clutch.feedback.v1.FeedbackAPI.GetSurveysCallback): void;
+
+                /**
+                 * Calls GetSurveys.
+                 * @param request GetSurveysRequest message or plain object
+                 * @returns Promise
+                 */
+                public getSurveys(request: clutch.feedback.v1.IGetSurveysRequest): Promise<clutch.feedback.v1.GetSurveysResponse>;
+
+                /**
+                 * Calls SubmitFeedback.
+                 * @param request SubmitFeedbackRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and SubmitFeedbackResponse
+                 */
+                public submitFeedback(request: clutch.feedback.v1.ISubmitFeedbackRequest, callback: clutch.feedback.v1.FeedbackAPI.SubmitFeedbackCallback): void;
+
+                /**
+                 * Calls SubmitFeedback.
+                 * @param request SubmitFeedbackRequest message or plain object
+                 * @returns Promise
+                 */
+                public submitFeedback(request: clutch.feedback.v1.ISubmitFeedbackRequest): Promise<clutch.feedback.v1.SubmitFeedbackResponse>;
+            }
+
+            namespace FeedbackAPI {
+
+                /**
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#getSurveys}.
+                 * @param error Error, if any
+                 * @param [response] GetSurveysResponse
+                 */
+                type GetSurveysCallback = (error: (Error|null), response?: clutch.feedback.v1.GetSurveysResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.feedback.v1.FeedbackAPI#submitFeedback}.
+                 * @param error Error, if any
+                 * @param [response] SubmitFeedbackResponse
+                 */
+                type SubmitFeedbackCallback = (error: (Error|null), response?: clutch.feedback.v1.SubmitFeedbackResponse) => void;
+            }
+
+            /** Origin enum. */
+            enum Origin {
+                ORIGIN_UNSPECIFIED = 0,
+                HEADER = 1,
+                WIZARD = 2
+            }
+
+            /** Properties of a GetSurveysRequest. */
+            interface IGetSurveysRequest {
+
+                /** GetSurveysRequest origins */
+                origins?: (clutch.feedback.v1.Origin[]|null);
+            }
+
+            /** Represents a GetSurveysRequest. */
+            class GetSurveysRequest implements IGetSurveysRequest {
+
+                /**
+                 * Constructs a new GetSurveysRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IGetSurveysRequest);
+
+                /** GetSurveysRequest origins. */
+                public origins: clutch.feedback.v1.Origin[];
+
+                /**
+                 * Verifies a GetSurveysRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetSurveysRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetSurveysRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetSurveysRequest;
+
+                /**
+                 * Creates a plain object from a GetSurveysRequest message. Also converts values to other types if specified.
+                 * @param message GetSurveysRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.GetSurveysRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetSurveysRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a RatingOptions. */
+            interface IRatingOptions {
+
+                /** RatingOptions one */
+                one?: (string|null);
+
+                /** RatingOptions two */
+                two?: (string|null);
+
+                /** RatingOptions three */
+                three?: (string|null);
+            }
+
+            /** Represents a RatingOptions. */
+            class RatingOptions implements IRatingOptions {
+
+                /**
+                 * Constructs a new RatingOptions.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IRatingOptions);
+
+                /** RatingOptions one. */
+                public one: string;
+
+                /** RatingOptions two. */
+                public two: string;
+
+                /** RatingOptions three. */
+                public three: string;
+
+                /**
+                 * Verifies a RatingOptions message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RatingOptions
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingOptions;
+
+                /**
+                 * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
+                 * @param message RatingOptions
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.RatingOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RatingOptions to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Survey. */
+            interface ISurvey {
+
+                /** Survey prompt */
+                prompt?: (string|null);
+
+                /** Survey freeformPrompt */
+                freeformPrompt?: (string|null);
+
+                /** Survey ratingOptions */
+                ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
+            }
+
+            /** Represents a Survey. */
+            class Survey implements ISurvey {
+
+                /**
+                 * Constructs a new Survey.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.ISurvey);
+
+                /** Survey prompt. */
+                public prompt: string;
+
+                /** Survey freeformPrompt. */
+                public freeformPrompt: string;
+
+                /** Survey ratingOptions. */
+                public ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
+
+                /**
+                 * Verifies a Survey message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Survey message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Survey
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Survey;
+
+                /**
+                 * Creates a plain object from a Survey message. Also converts values to other types if specified.
+                 * @param message Survey
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.Survey, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Survey to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetSurveysResponse. */
+            interface IGetSurveysResponse {
+
+                /** GetSurveysResponse originSurvey */
+                originSurvey?: ({ [k: string]: clutch.feedback.v1.ISurvey }|null);
+            }
+
+            /** Represents a GetSurveysResponse. */
+            class GetSurveysResponse implements IGetSurveysResponse {
+
+                /**
+                 * Constructs a new GetSurveysResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IGetSurveysResponse);
+
+                /** GetSurveysResponse originSurvey. */
+                public originSurvey: { [k: string]: clutch.feedback.v1.ISurvey };
+
+                /**
+                 * Verifies a GetSurveysResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetSurveysResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetSurveysResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.GetSurveysResponse;
+
+                /**
+                 * Creates a plain object from a GetSurveysResponse message. Also converts values to other types if specified.
+                 * @param message GetSurveysResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.GetSurveysResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetSurveysResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a FeedbackMetadata. */
+            interface IFeedbackMetadata {
+
+                /** FeedbackMetadata origin */
+                origin?: (clutch.feedback.v1.Origin|null);
+
+                /** FeedbackMetadata survey */
+                survey?: (clutch.feedback.v1.ISurvey|null);
+
+                /** FeedbackMetadata userSubmitted */
+                userSubmitted?: (boolean|null);
+            }
+
+            /** Represents a FeedbackMetadata. */
+            class FeedbackMetadata implements IFeedbackMetadata {
+
+                /**
+                 * Constructs a new FeedbackMetadata.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IFeedbackMetadata);
+
+                /** FeedbackMetadata origin. */
+                public origin: clutch.feedback.v1.Origin;
+
+                /** FeedbackMetadata survey. */
+                public survey?: (clutch.feedback.v1.ISurvey|null);
+
+                /** FeedbackMetadata userSubmitted. */
+                public userSubmitted: boolean;
+
+                /**
+                 * Verifies a FeedbackMetadata message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a FeedbackMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns FeedbackMetadata
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.FeedbackMetadata;
+
+                /**
+                 * Creates a plain object from a FeedbackMetadata message. Also converts values to other types if specified.
+                 * @param message FeedbackMetadata
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.FeedbackMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this FeedbackMetadata to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Feedback. */
+            interface IFeedback {
+
+                /** Feedback userId */
+                userId?: (string|null);
+
+                /** Feedback urlPath */
+                urlPath?: (string|null);
+
+                /** Feedback rating */
+                rating?: (string|null);
+
+                /** Feedback freeformResponse */
+                freeformResponse?: (string|null);
+
+                /** Feedback feedbackType */
+                feedbackType?: (string|null);
+
+                /** Feedback metadata */
+                metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
+            }
+
+            /** Represents a Feedback. */
+            class Feedback implements IFeedback {
+
+                /**
+                 * Constructs a new Feedback.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IFeedback);
+
+                /** Feedback userId. */
+                public userId: string;
+
+                /** Feedback urlPath. */
+                public urlPath: string;
+
+                /** Feedback rating. */
+                public rating: string;
+
+                /** Feedback freeformResponse. */
+                public freeformResponse: string;
+
+                /** Feedback feedbackType. */
+                public feedbackType: string;
+
+                /** Feedback metadata. */
+                public metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
+
+                /**
+                 * Verifies a Feedback message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Feedback message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Feedback
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Feedback;
+
+                /**
+                 * Creates a plain object from a Feedback message. Also converts values to other types if specified.
+                 * @param message Feedback
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.Feedback, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Feedback to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a SubmitFeedbackRequest. */
+            interface ISubmitFeedbackRequest {
+
+                /** SubmitFeedbackRequest id */
+                id?: (string|null);
+
+                /** SubmitFeedbackRequest feedback */
+                feedback?: (clutch.feedback.v1.IFeedback|null);
+            }
+
+            /** Represents a SubmitFeedbackRequest. */
+            class SubmitFeedbackRequest implements ISubmitFeedbackRequest {
+
+                /**
+                 * Constructs a new SubmitFeedbackRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.ISubmitFeedbackRequest);
+
+                /** SubmitFeedbackRequest id. */
+                public id: string;
+
+                /** SubmitFeedbackRequest feedback. */
+                public feedback?: (clutch.feedback.v1.IFeedback|null);
+
+                /**
+                 * Verifies a SubmitFeedbackRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a SubmitFeedbackRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns SubmitFeedbackRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.SubmitFeedbackRequest;
+
+                /**
+                 * Creates a plain object from a SubmitFeedbackRequest message. Also converts values to other types if specified.
+                 * @param message SubmitFeedbackRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.SubmitFeedbackRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this SubmitFeedbackRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a SubmitFeedbackResponse. */
+            interface ISubmitFeedbackResponse {
+            }
+
+            /** Represents a SubmitFeedbackResponse. */
+            class SubmitFeedbackResponse implements ISubmitFeedbackResponse {
+
+                /**
+                 * Constructs a new SubmitFeedbackResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.ISubmitFeedbackResponse);
+
+                /**
+                 * Verifies a SubmitFeedbackResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a SubmitFeedbackResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns SubmitFeedbackResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.SubmitFeedbackResponse;
+
+                /**
+                 * Creates a plain object from a SubmitFeedbackResponse message. Also converts values to other types if specified.
+                 * @param message SubmitFeedbackResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.SubmitFeedbackResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this SubmitFeedbackResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Submission. */
+            interface ISubmission {
+
+                /** Submission submittedAt */
+                submittedAt?: (google.protobuf.ITimestamp|null);
+
+                /** Submission feedback */
+                feedback?: (clutch.feedback.v1.IFeedback|null);
+            }
+
+            /** Represents a Submission. */
+            class Submission implements ISubmission {
+
+                /**
+                 * Constructs a new Submission.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.ISubmission);
+
+                /** Submission submittedAt. */
+                public submittedAt?: (google.protobuf.ITimestamp|null);
+
+                /** Submission feedback. */
+                public feedback?: (clutch.feedback.v1.IFeedback|null);
+
+                /**
+                 * Verifies a Submission message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Submission message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Submission
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Submission;
+
+                /**
+                 * Creates a plain object from a Submission message. Also converts values to other types if specified.
+                 * @param message Submission
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.Submission, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Submission to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
         }
     }
@@ -18699,6 +19678,9 @@ export namespace clutch {
 
                     /** InstanceID region */
                     region?: (string|null);
+
+                    /** InstanceID account */
+                    account?: (string|null);
                 }
 
                 /** Represents an InstanceID. */
@@ -18715,6 +19697,9 @@ export namespace clutch {
 
                     /** InstanceID region. */
                     public region: string;
+
+                    /** InstanceID account. */
+                    public account: string;
 
                     /**
                      * Verifies an InstanceID message.
@@ -18753,6 +19738,9 @@ export namespace clutch {
 
                     /** AutoscalingGroupName region */
                     region?: (string|null);
+
+                    /** AutoscalingGroupName account */
+                    account?: (string|null);
                 }
 
                 /** Represents an AutoscalingGroupName. */
@@ -18769,6 +19757,9 @@ export namespace clutch {
 
                     /** AutoscalingGroupName region. */
                     public region: string;
+
+                    /** AutoscalingGroupName account. */
+                    public account: string;
 
                     /**
                      * Verifies an AutoscalingGroupName message.
@@ -18807,6 +19798,9 @@ export namespace clutch {
 
                     /** KinesisStreamName region */
                     region?: (string|null);
+
+                    /** KinesisStreamName account */
+                    account?: (string|null);
                 }
 
                 /** Represents a KinesisStreamName. */
@@ -18823,6 +19817,9 @@ export namespace clutch {
 
                     /** KinesisStreamName region. */
                     public region: string;
+
+                    /** KinesisStreamName account. */
+                    public account: string;
 
                     /**
                      * Verifies a KinesisStreamName message.
@@ -18861,6 +19858,9 @@ export namespace clutch {
 
                     /** DynamodbTableName region */
                     region?: (string|null);
+
+                    /** DynamodbTableName account */
+                    account?: (string|null);
                 }
 
                 /** Represents a DynamodbTableName. */
@@ -18877,6 +19877,9 @@ export namespace clutch {
 
                     /** DynamodbTableName region. */
                     public region: string;
+
+                    /** DynamodbTableName account. */
+                    public account: string;
 
                     /**
                      * Verifies a DynamodbTableName message.
@@ -20825,6 +21828,9 @@ export namespace clutch {
 
                 /** Point description */
                 description?: (string|null);
+
+                /** Point href */
+                href?: (string|null);
             }
 
             /** Represents a Point. */
@@ -20847,6 +21853,9 @@ export namespace clutch {
 
                 /** Point description. */
                 public description: string;
+
+                /** Point href. */
+                public href: string;
 
                 /** Point timestamp. */
                 public timestamp?: ("range"|"millis");

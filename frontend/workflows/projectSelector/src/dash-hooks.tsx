@@ -1,6 +1,14 @@
 import * as React from "react";
 
-import type { DashAction, DashState, TimeDataUpdate, TimelineAction, TimelineState } from "./types";
+import type {
+  DashAction,
+  DashState,
+  TimeDataUpdate,
+  TimelineAction,
+  TimelineState,
+  TimeRangeAction,
+  TimeRangeState,
+} from "./types";
 
 // Contexts for project selector
 export const ProjectSelectorStateContext = React.createContext<DashState | undefined>(undefined);
@@ -12,6 +20,12 @@ export const ProjectSelectorDispatchContext = React.createContext<
 export const TimelineStateContext = React.createContext<TimelineState | undefined>(undefined);
 export const TimelineDispatchContext = React.createContext<
   ((action: TimelineAction) => void) | undefined
+>(undefined);
+
+// Contexts for time selector
+export const TimeRangeStateContext = React.createContext<TimeRangeState | undefined>(undefined);
+export const TimeRangeDispatchContext = React.createContext<
+  ((action: TimeRangeAction) => void) | undefined
 >(undefined);
 
 // project selector hooks
@@ -61,6 +75,33 @@ export const useTimelineState = (): TimelineState => {
   if (!value) {
     throw new Error(
       "useTimelineState was invoked outside of a valid context, check that it is a child of the Timeline component"
+    );
+  }
+  return value;
+};
+
+// timestamp selection hooks
+type useTimeRangeReturn = {
+  updateTimeRange: (state: TimeRangeState) => void;
+};
+
+// hook for writing
+export const useTimeRangeUpdater = (): useTimeRangeReturn => {
+  const dispatch = React.useContext(TimeRangeDispatchContext);
+
+  return {
+    updateTimeRange: (state: TimeRangeState) => {
+      dispatch && dispatch({ type: "UPDATE", payload: state });
+    },
+  };
+};
+
+// hook for reading
+export const useTimeRangeState = (): TimeRangeState => {
+  const value = React.useContext<TimeRangeState | undefined>(TimeRangeStateContext);
+  if (!value) {
+    throw new Error(
+      "useTimeRangeState was invoked outside of a valid context, check that it is a child of the TimeRange component"
     );
   }
   return value;

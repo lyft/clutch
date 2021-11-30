@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,14 +32,29 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on PodID with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *PodID) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PodID with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in PodIDMultiError, or nil if none found.
+func (m *PodID) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PodID) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -46,8 +62,27 @@ func (m *PodID) Validate() error {
 
 	// no validation rules for Namespace
 
+	if len(errors) > 0 {
+		return PodIDMultiError(errors)
+	}
 	return nil
 }
+
+// PodIDMultiError is an error wrapping multiple validation errors returned by
+// PodID.ValidateAll() if the designated constraints aren't met.
+type PodIDMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PodIDMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PodIDMultiError) AllErrors() []error { return m }
 
 // PodIDValidationError is the validation error returned by PodID.Validate if
 // the designated constraints aren't met.
@@ -104,16 +139,50 @@ var _ interface {
 } = PodIDValidationError{}
 
 // Validate checks the field values on IPAddress with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *IPAddress) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IPAddress with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in IPAddressMultiError, or nil
+// if none found.
+func (m *IPAddress) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IPAddress) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for IpAddress
 
+	if len(errors) > 0 {
+		return IPAddressMultiError(errors)
+	}
 	return nil
 }
+
+// IPAddressMultiError is an error wrapping multiple validation errors returned
+// by IPAddress.ValidateAll() if the designated constraints aren't met.
+type IPAddressMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IPAddressMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IPAddressMultiError) AllErrors() []error { return m }
 
 // IPAddressValidationError is the validation error returned by
 // IPAddress.Validate if the designated constraints aren't met.
@@ -170,11 +239,25 @@ var _ interface {
 } = IPAddressValidationError{}
 
 // Validate checks the field values on HPAName with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *HPAName) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on HPAName with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in HPANameMultiError, or nil if none found.
+func (m *HPAName) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *HPAName) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -182,8 +265,27 @@ func (m *HPAName) Validate() error {
 
 	// no validation rules for Namespace
 
+	if len(errors) > 0 {
+		return HPANameMultiError(errors)
+	}
 	return nil
 }
+
+// HPANameMultiError is an error wrapping multiple validation errors returned
+// by HPAName.ValidateAll() if the designated constraints aren't met.
+type HPANameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m HPANameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m HPANameMultiError) AllErrors() []error { return m }
 
 // HPANameValidationError is the validation error returned by HPAName.Validate
 // if the designated constraints aren't met.
@@ -240,11 +342,26 @@ var _ interface {
 } = HPANameValidationError{}
 
 // Validate checks the field values on Deployment with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Deployment) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Deployment with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DeploymentMultiError, or
+// nil if none found.
+func (m *Deployment) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Deployment) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -252,8 +369,27 @@ func (m *Deployment) Validate() error {
 
 	// no validation rules for Namespace
 
+	if len(errors) > 0 {
+		return DeploymentMultiError(errors)
+	}
 	return nil
 }
+
+// DeploymentMultiError is an error wrapping multiple validation errors
+// returned by Deployment.ValidateAll() if the designated constraints aren't met.
+type DeploymentMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeploymentMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeploymentMultiError) AllErrors() []error { return m }
 
 // DeploymentValidationError is the validation error returned by
 // Deployment.Validate if the designated constraints aren't met.
@@ -310,12 +446,26 @@ var _ interface {
 } = DeploymentValidationError{}
 
 // Validate checks the field values on StatefulSet with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *StatefulSet) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StatefulSet with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in StatefulSetMultiError, or
+// nil if none found.
+func (m *StatefulSet) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StatefulSet) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -323,8 +473,27 @@ func (m *StatefulSet) Validate() error {
 
 	// no validation rules for Namespace
 
+	if len(errors) > 0 {
+		return StatefulSetMultiError(errors)
+	}
 	return nil
 }
+
+// StatefulSetMultiError is an error wrapping multiple validation errors
+// returned by StatefulSet.ValidateAll() if the designated constraints aren't met.
+type StatefulSetMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StatefulSetMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StatefulSetMultiError) AllErrors() []error { return m }
 
 // StatefulSetValidationError is the validation error returned by
 // StatefulSet.Validate if the designated constraints aren't met.
@@ -381,11 +550,25 @@ var _ interface {
 } = StatefulSetValidationError{}
 
 // Validate checks the field values on Service with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Service) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Service with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ServiceMultiError, or nil if none found.
+func (m *Service) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Service) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -393,8 +576,27 @@ func (m *Service) Validate() error {
 
 	// no validation rules for Namespace
 
+	if len(errors) > 0 {
+		return ServiceMultiError(errors)
+	}
 	return nil
 }
+
+// ServiceMultiError is an error wrapping multiple validation errors returned
+// by Service.ValidateAll() if the designated constraints aren't met.
+type ServiceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ServiceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ServiceMultiError) AllErrors() []error { return m }
 
 // ServiceValidationError is the validation error returned by Service.Validate
 // if the designated constraints aren't met.
@@ -451,11 +653,25 @@ var _ interface {
 } = ServiceValidationError{}
 
 // Validate checks the field values on CronJob with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *CronJob) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CronJob with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in CronJobMultiError, or nil if none found.
+func (m *CronJob) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CronJob) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -463,8 +679,27 @@ func (m *CronJob) Validate() error {
 
 	// no validation rules for Namespace
 
+	if len(errors) > 0 {
+		return CronJobMultiError(errors)
+	}
 	return nil
 }
+
+// CronJobMultiError is an error wrapping multiple validation errors returned
+// by CronJob.ValidateAll() if the designated constraints aren't met.
+type CronJobMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CronJobMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CronJobMultiError) AllErrors() []error { return m }
 
 // CronJobValidationError is the validation error returned by CronJob.Validate
 // if the designated constraints aren't met.
@@ -521,11 +756,26 @@ var _ interface {
 } = CronJobValidationError{}
 
 // Validate checks the field values on ConfigMap with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *ConfigMap) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ConfigMap with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ConfigMapMultiError, or nil
+// if none found.
+func (m *ConfigMap) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ConfigMap) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -533,8 +783,27 @@ func (m *ConfigMap) Validate() error {
 
 	// no validation rules for Namespace
 
+	if len(errors) > 0 {
+		return ConfigMapMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMapMultiError is an error wrapping multiple validation errors returned
+// by ConfigMap.ValidateAll() if the designated constraints aren't met.
+type ConfigMapMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMapMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMapMultiError) AllErrors() []error { return m }
 
 // ConfigMapValidationError is the validation error returned by
 // ConfigMap.Validate if the designated constraints aren't met.
@@ -591,11 +860,25 @@ var _ interface {
 } = ConfigMapValidationError{}
 
 // Validate checks the field values on Job with the rules defined in the proto
-// definition for this message. If any rules are violated, an error is returned.
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
 func (m *Job) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Job with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in JobMultiError, or nil if none found.
+func (m *Job) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Job) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
@@ -603,8 +886,27 @@ func (m *Job) Validate() error {
 
 	// no validation rules for Namespace
 
+	if len(errors) > 0 {
+		return JobMultiError(errors)
+	}
 	return nil
 }
+
+// JobMultiError is an error wrapping multiple validation errors returned by
+// Job.ValidateAll() if the designated constraints aren't met.
+type JobMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m JobMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m JobMultiError) AllErrors() []error { return m }
 
 // JobValidationError is the validation error returned by Job.Validate if the
 // designated constraints aren't met.
@@ -661,18 +963,52 @@ var _ interface {
 } = JobValidationError{}
 
 // Validate checks the field values on Namespace with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Namespace) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Namespace with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in NamespaceMultiError, or nil
+// if none found.
+func (m *Namespace) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Namespace) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Name
 
 	// no validation rules for Clientset
 
+	if len(errors) > 0 {
+		return NamespaceMultiError(errors)
+	}
 	return nil
 }
+
+// NamespaceMultiError is an error wrapping multiple validation errors returned
+// by Namespace.ValidateAll() if the designated constraints aren't met.
+type NamespaceMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NamespaceMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NamespaceMultiError) AllErrors() []error { return m }
 
 // NamespaceValidationError is the validation error returned by
 // Namespace.Validate if the designated constraints aren't met.

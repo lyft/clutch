@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package clutch.config.module.feedback.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/module/feedback/v1;feedbackmodv1";
+
+import "validate/validate.proto";
+import "feedback/v1/feedback.proto";
+
+message RatingOptions {
+  // the text (i.e. "bad", "ok", "great") for each value in the rating system
+  // currently a three-point rating system (and UI designs) are supported
+  string one = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string two = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string three = 3 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message Survey {
+  string prompt = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string freeform_prompt = 2;
+  RatingOptions rating_options = 3 [ (validate.rules).message = {required : true} ];
+}
+
+message SurveyOrigin {
+  clutch.feedback.v1.Origin origin = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
+  Survey survey = 2 [ (validate.rules).message = {required : true} ];
+}
+
+message Config {
+  repeated SurveyOrigin origins = 1 [ (validate.rules).repeated = {min_items : 1} ];
+}

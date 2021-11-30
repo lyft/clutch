@@ -19,10 +19,17 @@ func TestSTSGetCallerIdentity(t *testing.T) {
 		},
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", sts: stsClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", sts: stsClient},
+				},
+			},
+		},
 	}
 
-	output, err := c.GetCallerIdentity(context.Background(), "us-east-1")
+	output, err := c.GetCallerIdentity(context.Background(), "default", "us-east-1")
 	assert.NoError(t, err)
 	assert.Equal(t, output, &sts.GetCallerIdentityOutput{
 		Account: aws.String("000000000000"),
@@ -36,15 +43,22 @@ func TestSTSGetCallerIdentityErrorHandling(t *testing.T) {
 		getIdentityErr: fmt.Errorf("error"),
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", sts: stsClient}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", sts: stsClient},
+				},
+			},
+		},
 	}
 
-	output1, err1 := c.GetCallerIdentity(context.Background(), "us-east-1")
+	output1, err1 := c.GetCallerIdentity(context.Background(), "default", "us-east-1")
 	assert.Nil(t, output1)
 	assert.Error(t, err1)
 
 	// Test unknown region
-	output2, err2 := c.GetCallerIdentity(context.Background(), "choice-region-1")
+	output2, err2 := c.GetCallerIdentity(context.Background(), "default", "choice-region-1")
 	assert.Nil(t, output2)
 	assert.Error(t, err2)
 }

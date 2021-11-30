@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,15 +32,30 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on EventFilter with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *EventFilter) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on EventFilter with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in EventFilterMultiError, or
+// nil if none found.
+func (m *EventFilter) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *EventFilter) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Field
 
@@ -50,8 +66,27 @@ func (m *EventFilter) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return EventFilterMultiError(errors)
+	}
 	return nil
 }
+
+// EventFilterMultiError is an error wrapping multiple validation errors
+// returned by EventFilter.ValidateAll() if the designated constraints aren't met.
+type EventFilterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EventFilterMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EventFilterMultiError) AllErrors() []error { return m }
 
 // EventFilterValidationError is the validation error returned by
 // EventFilter.Validate if the designated constraints aren't met.
@@ -108,18 +143,51 @@ var _ interface {
 } = EventFilterValidationError{}
 
 // Validate checks the field values on Filter with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Filter) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Filter with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in FilterMultiError, or nil if none found.
+func (m *Filter) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Filter) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Denylist
 
 	for idx, item := range m.GetRules() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, FilterValidationError{
+						field:  fmt.Sprintf("Rules[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, FilterValidationError{
+						field:  fmt.Sprintf("Rules[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return FilterValidationError{
 					field:  fmt.Sprintf("Rules[%v]", idx),
@@ -131,8 +199,27 @@ func (m *Filter) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return FilterMultiError(errors)
+	}
 	return nil
 }
+
+// FilterMultiError is an error wrapping multiple validation errors returned by
+// Filter.ValidateAll() if the designated constraints aren't met.
+type FilterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m FilterMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m FilterMultiError) AllErrors() []error { return m }
 
 // FilterValidationError is the validation error returned by Filter.Validate if
 // the designated constraints aren't met.
@@ -189,13 +276,47 @@ var _ interface {
 } = FilterValidationError{}
 
 // Validate checks the field values on SinkConfig with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *SinkConfig) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SinkConfig with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SinkConfigMultiError, or
+// nil if none found.
+func (m *SinkConfig) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SinkConfig) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetFilter()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SinkConfigValidationError{
+					field:  "Filter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SinkConfigValidationError{
+					field:  "Filter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SinkConfigValidationError{
 				field:  "Filter",
@@ -205,8 +326,27 @@ func (m *SinkConfig) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SinkConfigMultiError(errors)
+	}
 	return nil
 }
+
+// SinkConfigMultiError is an error wrapping multiple validation errors
+// returned by SinkConfig.ValidateAll() if the designated constraints aren't met.
+type SinkConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SinkConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SinkConfigMultiError) AllErrors() []error { return m }
 
 // SinkConfigValidationError is the validation error returned by
 // SinkConfig.Validate if the designated constraints aren't met.
@@ -263,13 +403,46 @@ var _ interface {
 } = SinkConfigValidationError{}
 
 // Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Config) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ConfigMultiError, or nil if none found.
+func (m *Config) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Config) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetFilter()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ConfigValidationError{
+					field:  "Filter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ConfigValidationError{
+					field:  "Filter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ConfigValidationError{
 				field:  "Filter",
@@ -284,10 +457,14 @@ func (m *Config) Validate() error {
 	case *Config_DbProvider:
 
 		if len(m.GetDbProvider()) < 1 {
-			return ConfigValidationError{
+			err := ConfigValidationError{
 				field:  "DbProvider",
 				reason: "value length must be at least 1 bytes",
 			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
 
 	case *Config_InMemory:
@@ -295,8 +472,27 @@ func (m *Config) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return ConfigMultiError(errors)
+	}
 	return nil
 }
+
+// ConfigMultiError is an error wrapping multiple validation errors returned by
+// Config.ValidateAll() if the designated constraints aren't met.
+type ConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ConfigMultiError) AllErrors() []error { return m }
 
 // ConfigValidationError is the validation error returned by Config.Validate if
 // the designated constraints aren't met.

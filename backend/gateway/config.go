@@ -68,10 +68,14 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 	var seenCfgs []string
 	consolidateConfigs(filepath.Dir(f.ConfigPath), filepath.Base(f.ConfigPath), &cfg, f, &seenCfgs)
 	if err := cfg.Validate(); err != nil {
-		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
+		tmpLogger.Fatal("configuration proto validation failed", zap.Error(err))
 	}
 
 	if f.Validate {
+		if err := ensureUnique(&cfg); err != nil {
+			tmpLogger.Fatal("configuration validation failed", zap.Error(err))
+		}
+
 		tmpLogger.Info("configuration validation was successful")
 		os.Exit(0)
 	}
@@ -86,6 +90,34 @@ func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
 	}
 
 	return &cfg
+}
+
+// Ensure gateway config has unique modules and service entries
+func ensureUnique(cfg *gatewayv1.Config) error {
+	svcs := make(map[string]bool)
+	for _, s := range cfg.GetServices() {
+		if _, seen := svcs[s.GetName()]; seen {
+			return fmt.Errorf("duplicate service found: %s", s.GetName())
+		}
+		svcs[s.GetName()] = true
+	}
+
+	mods := make(map[string]bool)
+	for _, m := range cfg.GetModules() {
+		if _, seen := mods[m.GetName()]; seen {
+			return fmt.Errorf("duplicate module found: %s", m.GetName())
+		}
+		mods[m.GetName()] = true
+	}
+
+	rlvs := make(map[string]bool)
+	for _, r := range cfg.GetResolvers() {
+		if _, seen := rlvs[r.GetName()]; seen {
+			return fmt.Errorf("duplicate resolver found: %s", r.GetName())
+		}
+		rlvs[r.GetName()] = true
+	}
+	return nil
 }
 
 func contains(s *[]string, str string) bool {
