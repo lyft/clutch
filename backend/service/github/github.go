@@ -222,6 +222,10 @@ func int64Ptr(i64 int64) *int64 {
 	return &i64
 }
 
+func intPtr(i int) *int {
+	return &i
+}
+
 func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error) {
 	req := &githubv3.NewPullRequest{
 		Title:               strPtr(title),
