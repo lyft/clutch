@@ -1,7 +1,12 @@
 package feedback
 
+// <!-- START clutchdoc -->
+// description: Exposes endpoints to return survey questions for feedback components and to submit feedback submissions.
+// <!-- END clutchdoc -->
+
 import (
 	"context"
+	"errors"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -12,6 +17,8 @@ import (
 	feedbackv1cfg "github.com/lyft/clutch/backend/api/config/module/feedback/v1"
 	feedbackv1 "github.com/lyft/clutch/backend/api/feedback/v1"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/feedback"
 )
 
 const (
@@ -25,8 +32,19 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 		return nil, err
 	}
 
+	feedbackClient, ok := service.Registry["clutch.service.feedback"]
+	if !ok {
+		return nil, errors.New("could not find service")
+	}
+
+	c, ok := feedbackClient.(feedback.Service)
+	if !ok {
+		return nil, errors.New("service was not the correct type")
+	}
+
 	m := &mod{
 		surveyMap: newSurveyLookup(config.Origins),
+		client:    c,
 		logger:    log,
 		scope:     scope,
 	}
@@ -43,6 +61,7 @@ type SurveyLookup struct {
 
 type mod struct {
 	surveyMap SurveyLookup
+	client    feedback.Service
 	logger    *zap.Logger
 	scope     tally.Scope
 }
@@ -71,11 +90,7 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 		results[origin.String()] = &feedbackv1.Survey{
 			Prompt:         v.Prompt,
 			FreeformPrompt: v.FreeformPrompt,
-			RatingOptions: &feedbackv1.RatingOptions{
-				One:   v.RatingOptions.One,
-				Two:   v.RatingOptions.Two,
-				Three: v.RatingOptions.Three,
-			},
+			RatingLabels:   v.RatingLabels,
 		}
 	}
 
@@ -123,6 +138,10 @@ func (sl SurveyLookup) getConfigSurveys(origin feedbackv1.Origin) (*feedbackv1cf
 	return v.Survey, true
 }
 
-func (m *mod) SubmitFeedback(tx context.Context, req *feedbackv1.SubmitFeedbackRequest) (*feedbackv1.SubmitFeedbackResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "not implemented")
+func (m *mod) SubmitFeedback(ctx context.Context, req *feedbackv1.SubmitFeedbackRequest) (*feedbackv1.SubmitFeedbackResponse, error) {
+	if err := m.client.SubmitFeedback(ctx, req.Id, req.UserId, req.Feedback, req.Metadata); err != nil {
+		m.logger.Error("failed to submit feedback", zap.Error(err))
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+	return &feedbackv1.SubmitFeedbackResponse{}, nil
 }

@@ -7732,66 +7732,6 @@ export namespace clutch {
                 /** Namespace v1. */
                 namespace v1 {
 
-                    /** Properties of a RatingOptions. */
-                    interface IRatingOptions {
-
-                        /** RatingOptions one */
-                        one?: (string|null);
-
-                        /** RatingOptions two */
-                        two?: (string|null);
-
-                        /** RatingOptions three */
-                        three?: (string|null);
-                    }
-
-                    /** Represents a RatingOptions. */
-                    class RatingOptions implements IRatingOptions {
-
-                        /**
-                         * Constructs a new RatingOptions.
-                         * @param [properties] Properties to set
-                         */
-                        constructor(properties?: clutch.config.module.feedback.v1.IRatingOptions);
-
-                        /** RatingOptions one. */
-                        public one: string;
-
-                        /** RatingOptions two. */
-                        public two: string;
-
-                        /** RatingOptions three. */
-                        public three: string;
-
-                        /**
-                         * Verifies a RatingOptions message.
-                         * @param message Plain object to verify
-                         * @returns `null` if valid, otherwise the reason why it is not
-                         */
-                        public static verify(message: { [k: string]: any }): (string|null);
-
-                        /**
-                         * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
-                         * @param object Plain object
-                         * @returns RatingOptions
-                         */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.module.feedback.v1.RatingOptions;
-
-                        /**
-                         * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
-                         * @param message RatingOptions
-                         * @param [options] Conversion options
-                         * @returns Plain object
-                         */
-                        public static toObject(message: clutch.config.module.feedback.v1.RatingOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                        /**
-                         * Converts this RatingOptions to JSON.
-                         * @returns JSON object
-                         */
-                        public toJSON(): { [k: string]: any };
-                    }
-
                     /** Properties of a Survey. */
                     interface ISurvey {
 
@@ -7801,8 +7741,8 @@ export namespace clutch {
                         /** Survey freeformPrompt */
                         freeformPrompt?: (string|null);
 
-                        /** Survey ratingOptions */
-                        ratingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
+                        /** Survey ratingLabels */
+                        ratingLabels?: (clutch.feedback.v1.IRatingLabels|null);
                     }
 
                     /** Represents a Survey. */
@@ -7820,8 +7760,8 @@ export namespace clutch {
                         /** Survey freeformPrompt. */
                         public freeformPrompt: string;
 
-                        /** Survey ratingOptions. */
-                        public ratingOptions?: (clutch.config.module.feedback.v1.IRatingOptions|null);
+                        /** Survey ratingLabels. */
+                        public ratingLabels?: (clutch.feedback.v1.IRatingLabels|null);
 
                         /**
                          * Verifies a Survey message.
@@ -10341,6 +10281,176 @@ export namespace clutch {
                 WIZARD = 2
             }
 
+            /** Properties of an EmojiRatingLabels. */
+            interface IEmojiRatingLabels {
+
+                /** EmojiRatingLabels sad */
+                sad?: (string|null);
+
+                /** EmojiRatingLabels neutral */
+                neutral?: (string|null);
+
+                /** EmojiRatingLabels happy */
+                happy?: (string|null);
+            }
+
+            /** Represents an EmojiRatingLabels. */
+            class EmojiRatingLabels implements IEmojiRatingLabels {
+
+                /**
+                 * Constructs a new EmojiRatingLabels.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IEmojiRatingLabels);
+
+                /** EmojiRatingLabels sad. */
+                public sad: string;
+
+                /** EmojiRatingLabels neutral. */
+                public neutral: string;
+
+                /** EmojiRatingLabels happy. */
+                public happy: string;
+
+                /**
+                 * Verifies an EmojiRatingLabels message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an EmojiRatingLabels message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns EmojiRatingLabels
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.EmojiRatingLabels;
+
+                /**
+                 * Creates a plain object from an EmojiRatingLabels message. Also converts values to other types if specified.
+                 * @param message EmojiRatingLabels
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.EmojiRatingLabels, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this EmojiRatingLabels to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** EmojiRating enum. */
+            enum EmojiRating {
+                EMOJI_UNSPECIFIED = 0,
+                SAD = 1,
+                NEUTRAL = 2,
+                HAPPY = 3
+            }
+
+            /** Properties of a RatingLabels. */
+            interface IRatingLabels {
+
+                /** RatingLabels emoji */
+                emoji?: (clutch.feedback.v1.IEmojiRatingLabels|null);
+            }
+
+            /** Represents a RatingLabels. */
+            class RatingLabels implements IRatingLabels {
+
+                /**
+                 * Constructs a new RatingLabels.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IRatingLabels);
+
+                /** RatingLabels emoji. */
+                public emoji?: (clutch.feedback.v1.IEmojiRatingLabels|null);
+
+                /** RatingLabels type. */
+                public type?: "emoji";
+
+                /**
+                 * Verifies a RatingLabels message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RatingLabels message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RatingLabels
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingLabels;
+
+                /**
+                 * Creates a plain object from a RatingLabels message. Also converts values to other types if specified.
+                 * @param message RatingLabels
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.RatingLabels, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RatingLabels to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a RatingScale. */
+            interface IRatingScale {
+
+                /** RatingScale emoji */
+                emoji?: (clutch.feedback.v1.EmojiRating|null);
+            }
+
+            /** Represents a RatingScale. */
+            class RatingScale implements IRatingScale {
+
+                /**
+                 * Constructs a new RatingScale.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.feedback.v1.IRatingScale);
+
+                /** RatingScale emoji. */
+                public emoji?: (clutch.feedback.v1.EmojiRating|null);
+
+                /** RatingScale type. */
+                public type?: "emoji";
+
+                /**
+                 * Verifies a RatingScale message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RatingScale message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RatingScale
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingScale;
+
+                /**
+                 * Creates a plain object from a RatingScale message. Also converts values to other types if specified.
+                 * @param message RatingScale
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.feedback.v1.RatingScale, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RatingScale to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a GetSurveysRequest. */
             interface IGetSurveysRequest {
 
@@ -10389,66 +10499,6 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a RatingOptions. */
-            interface IRatingOptions {
-
-                /** RatingOptions one */
-                one?: (string|null);
-
-                /** RatingOptions two */
-                two?: (string|null);
-
-                /** RatingOptions three */
-                three?: (string|null);
-            }
-
-            /** Represents a RatingOptions. */
-            class RatingOptions implements IRatingOptions {
-
-                /**
-                 * Constructs a new RatingOptions.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.IRatingOptions);
-
-                /** RatingOptions one. */
-                public one: string;
-
-                /** RatingOptions two. */
-                public two: string;
-
-                /** RatingOptions three. */
-                public three: string;
-
-                /**
-                 * Verifies a RatingOptions message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a RatingOptions message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns RatingOptions
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingOptions;
-
-                /**
-                 * Creates a plain object from a RatingOptions message. Also converts values to other types if specified.
-                 * @param message RatingOptions
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.RatingOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this RatingOptions to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
             /** Properties of a Survey. */
             interface ISurvey {
 
@@ -10458,8 +10508,8 @@ export namespace clutch {
                 /** Survey freeformPrompt */
                 freeformPrompt?: (string|null);
 
-                /** Survey ratingOptions */
-                ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
+                /** Survey ratingLabels */
+                ratingLabels?: (clutch.feedback.v1.IRatingLabels|null);
             }
 
             /** Represents a Survey. */
@@ -10477,8 +10527,8 @@ export namespace clutch {
                 /** Survey freeformPrompt. */
                 public freeformPrompt: string;
 
-                /** Survey ratingOptions. */
-                public ratingOptions?: (clutch.feedback.v1.IRatingOptions|null);
+                /** Survey ratingLabels. */
+                public ratingLabels?: (clutch.feedback.v1.IRatingLabels|null);
 
                 /**
                  * Verifies a Survey message.
@@ -10620,23 +10670,20 @@ export namespace clutch {
             /** Properties of a Feedback. */
             interface IFeedback {
 
-                /** Feedback userId */
-                userId?: (string|null);
-
                 /** Feedback urlPath */
                 urlPath?: (string|null);
 
-                /** Feedback rating */
-                rating?: (string|null);
+                /** Feedback ratingLabel */
+                ratingLabel?: (string|null);
+
+                /** Feedback ratingScale */
+                ratingScale?: (clutch.feedback.v1.IRatingScale|null);
 
                 /** Feedback freeformResponse */
                 freeformResponse?: (string|null);
 
                 /** Feedback feedbackType */
                 feedbackType?: (string|null);
-
-                /** Feedback metadata */
-                metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
             }
 
             /** Represents a Feedback. */
@@ -10648,23 +10695,20 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.feedback.v1.IFeedback);
 
-                /** Feedback userId. */
-                public userId: string;
-
                 /** Feedback urlPath. */
                 public urlPath: string;
 
-                /** Feedback rating. */
-                public rating: string;
+                /** Feedback ratingLabel. */
+                public ratingLabel: string;
+
+                /** Feedback ratingScale. */
+                public ratingScale?: (clutch.feedback.v1.IRatingScale|null);
 
                 /** Feedback freeformResponse. */
                 public freeformResponse: string;
 
                 /** Feedback feedbackType. */
                 public feedbackType: string;
-
-                /** Feedback metadata. */
-                public metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
 
                 /**
                  * Verifies a Feedback message.
@@ -10701,8 +10745,14 @@ export namespace clutch {
                 /** SubmitFeedbackRequest id */
                 id?: (string|null);
 
+                /** SubmitFeedbackRequest userId */
+                userId?: (string|null);
+
                 /** SubmitFeedbackRequest feedback */
                 feedback?: (clutch.feedback.v1.IFeedback|null);
+
+                /** SubmitFeedbackRequest metadata */
+                metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
             }
 
             /** Represents a SubmitFeedbackRequest. */
@@ -10717,8 +10767,14 @@ export namespace clutch {
                 /** SubmitFeedbackRequest id. */
                 public id: string;
 
+                /** SubmitFeedbackRequest userId. */
+                public userId: string;
+
                 /** SubmitFeedbackRequest feedback. */
                 public feedback?: (clutch.feedback.v1.IFeedback|null);
+
+                /** SubmitFeedbackRequest metadata. */
+                public metadata?: (clutch.feedback.v1.IFeedbackMetadata|null);
 
                 /**
                  * Verifies a SubmitFeedbackRequest message.
@@ -10786,60 +10842,6 @@ export namespace clutch {
 
                 /**
                  * Converts this SubmitFeedbackResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a Submission. */
-            interface ISubmission {
-
-                /** Submission submittedAt */
-                submittedAt?: (google.protobuf.ITimestamp|null);
-
-                /** Submission feedback */
-                feedback?: (clutch.feedback.v1.IFeedback|null);
-            }
-
-            /** Represents a Submission. */
-            class Submission implements ISubmission {
-
-                /**
-                 * Constructs a new Submission.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.ISubmission);
-
-                /** Submission submittedAt. */
-                public submittedAt?: (google.protobuf.ITimestamp|null);
-
-                /** Submission feedback. */
-                public feedback?: (clutch.feedback.v1.IFeedback|null);
-
-                /**
-                 * Verifies a Submission message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a Submission message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns Submission
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.Submission;
-
-                /**
-                 * Creates a plain object from a Submission message. Also converts values to other types if specified.
-                 * @param message Submission
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.Submission, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this Submission to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

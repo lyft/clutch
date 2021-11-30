@@ -7,7 +7,6 @@ option go_package = "github.com/lyft/clutch/backend/api/feedback/v1;feedbackv1";
 import "google/api/annotations.proto";
 import "api/v1/annotations.proto";
 import "validate/validate.proto";
-import "google/protobuf/timestamp.proto";
 
 service FeedbackAPI {
   rpc GetSurveys(GetSurveysRequest) returns (GetSurveysResponse) {
@@ -33,6 +32,42 @@ enum Origin {
   WIZARD = 2;
 }
 
+// currently UI components and designs support a three-point emoji scale. as more use cases arise,
+// we can expand to add more emoji options (i.e. for a 4-point scale) and
+// new rating scales (i.e 2-point thumbs up/down scale).
+
+message EmojiRatingLabels {
+  // the corresponding option to show to the user (i.e bad/ok/great)
+  string sad = 1;
+  string neutral = 2;
+  string happy = 3;
+}
+
+enum EmojiRating {
+  // these are used to compute a feedback score out of 100
+  EMOJI_UNSPECIFIED = 0;
+  SAD = 1;
+  NEUTRAL = 2;
+  HAPPY = 3;
+}
+
+// Rating labels are the raw text options that are presented to the user (i.e. bad/ok/great)
+// whereas a rating scale gets normalized to a score out of a 100 to compute a NPS score.
+
+message RatingLabels {
+  oneof type {
+    option (validate.required) = true;
+    EmojiRatingLabels emoji = 1;
+  }
+}
+
+message RatingScale {
+  oneof type {
+    option (validate.required) = true;
+    EmojiRating emoji = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
+  }
+}
+
 message GetSurveysRequest {
   // the origin of the feedback entry. multiple origins can be passed in the request to return their specific survey
   repeated Origin origins = 1 [ (validate.rules).repeated = {
@@ -42,21 +77,13 @@ message GetSurveysRequest {
   // future: add a user field if rules are implemented for whether a user should see the feedback survey
 }
 
-message RatingOptions {
-  // the text (i.e. "bad", "ok", "great") for each value in the rating system
-  // currently a three-point rating system (and UI designs) are supported
-  string one = 1;
-  string two = 2;
-  string three = 3;
-}
-
 message Survey {
   // the prompt for the rating options
   string prompt = 1;
   // the prompt for the freeform feedback
   string freeform_prompt = 2;
-  // feedback options to present to the user (i.e. "bad", "ok", "great")
-  RatingOptions rating_options = 3;
+  // the text options to show to the user (i.e. bad/ok/great) for the corresponding rating scale
+  RatingLabels rating_labels = 3;
 }
 
 message GetSurveysResponse {
@@ -74,34 +101,29 @@ message FeedbackMetadata {
 }
 
 message Feedback {
-  // user's email
-  string user_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   // url path of where the feedback was submitted
-  string url_path = 2 [ (validate.rules).string = {min_bytes : 1} ];
-  // rating option the user selected (i.e. "bad", "ok", "great")
-  string rating = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string url_path = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  // the text option the user selected (i.e. bad/ok/great)
+  string rating_label = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  // the corresponding rating scale selection
+  RatingScale rating_scale = 3 [ (validate.rules).message = {required : true} ];
   // (optional) freeform input
   string freeform_response = 4;
   // (optional) some UI components (i.e the header) will have a dropdown menu for choosing the type of
   // feedback to submit (i.e. "General", "K8s Delete Pod")
   string feedback_type = 5;
-  FeedbackMetadata metadata = 6 [ (validate.rules).message = {required : true} ];
 }
 
 message SubmitFeedbackRequest {
   // client-genereated unique feedback id, which we will also use to update the feedback (essentially replace with the
   // latest)
   // TODO: remove if we decide to record feedback only when a user clicks the submit button
-  string id = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  Feedback feedback = 2 [ (validate.rules).message = {required : true} ];
+  string id = 1 [ (validate.rules).string.len = 36 ];
+  // user's email
+  string user_id = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  Feedback feedback = 3 [ (validate.rules).message = {required : true} ];
+  FeedbackMetadata metadata = 4 [ (validate.rules).message = {required : true} ];
 }
 
 message SubmitFeedbackResponse {
-}
-
-// proto used by the Feedback service
-message Submission {
-  // timestamp will be populated by the server
-  google.protobuf.Timestamp submitted_at = 1;
-  Feedback feedback = 2;
 }
