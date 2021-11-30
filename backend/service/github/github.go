@@ -218,10 +218,6 @@ func boolPtr(b bool) *bool {
 	return &b
 }
 
-func int64Ptr(i64 int64) *int64 {
-	return &i64
-}
-
 func intPtr(i int) *int {
 	return &i
 }
@@ -255,9 +251,9 @@ func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sh
 
 	prInfos := make([]*PullRequestInfo, len(respPRs))
 	for i, pr := range respPRs {
-		prInfos[i] = &PullRequestInfo {
-			Number: pr.GetNumber(),
-			HTMLURL: pr.GetHTMLURL(),
+		prInfos[i] = &PullRequestInfo{
+			Number:     pr.GetNumber(),
+			HTMLURL:    pr.GetHTMLURL(),
 			BranchName: pr.GetHead().GetRef(),
 		}
 	}

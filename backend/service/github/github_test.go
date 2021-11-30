@@ -677,8 +677,8 @@ func TestGetRepository(t *testing.T) {
 type mockPullRequests struct {
 	generalError bool
 
-	actualNumber int
-	actualHTMLURL string
+	actualNumber     int
+	actualHTMLURL    string
 	actualBranchName string
 }
 
@@ -699,48 +699,48 @@ func (m *mockPullRequests) ListPullRequestsWithCommit(ctx context.Context, owner
 
 	return []*githubv3.PullRequest{
 		{
-			Number:              intPtr(m.actualNumber),
-			State:               strPtr("open"),
-			HTMLURL:             strPtr(m.actualHTMLURL),
-			Head:                &githubv3.PullRequestBranch{
-									Ref:   strPtr(m.actualBranchName),
-									SHA:   strPtr(sha),
-									Repo:  &githubv3.Repository{
-										Name:  strPtr(repo),
-									},
-									User:  &githubv3.User{
-										Login: strPtr("octocat"),
-									},
-								},
+			Number:  intPtr(m.actualNumber),
+			State:   strPtr("open"),
+			HTMLURL: strPtr(m.actualHTMLURL),
+			Head: &githubv3.PullRequestBranch{
+				Ref: strPtr(m.actualBranchName),
+				SHA: strPtr(sha),
+				Repo: &githubv3.Repository{
+					Name: strPtr(repo),
+				},
+				User: &githubv3.User{
+					Login: strPtr("octocat"),
+				},
+			},
 		},
 	}, nil, nil
 }
 
 var listPullRequestsWithCommitTests = []struct {
-	name          string
-	errorText     string
-	mockPullReq   *mockPullRequests
-	repoOwner     string
-	repoName      string
-	ref           string
-	sha           string
+	name        string
+	errorText   string
+	mockPullReq *mockPullRequests
+	repoOwner   string
+	repoName    string
+	ref         string
+	sha         string
 }{
 	{
-		name:         "v3 client error",
-		mockPullReq:  &mockPullRequests{generalError: true},
-		errorText:    "we've had a problem",
-		repoOwner:    "my-org",
-		repoName:     "my-repo",
-		ref:          "my-branch",
-		sha:          "asdf12345",
+		name:        "v3 client error",
+		mockPullReq: &mockPullRequests{generalError: true},
+		errorText:   "we've had a problem",
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		ref:         "my-branch",
+		sha:         "asdf12345",
 	},
 	{
-		name:         "happy path",
-		mockPullReq:  &mockPullRequests{},
-		repoOwner:    "my-org",
-		repoName:     "my-repo",
-		ref:          "my-branch",
-		sha:          "asdf12345",
+		name:        "happy path",
+		mockPullReq: &mockPullRequests{},
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		ref:         "my-branch",
+		sha:         "asdf12345",
 	},
 }
 
@@ -756,7 +756,7 @@ func TestListPullRequestsWithCommit(t *testing.T) {
 
 			resp, err := s.ListPullRequestsWithCommit(
 				context.Background(),
-				&RemoteRef {
+				&RemoteRef{
 					RepoOwner: tt.repoOwner,
 					RepoName:  tt.repoName,
 					Ref:       tt.ref,
