@@ -254,12 +254,12 @@ func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sh
 	}
 
 	prInfos := make([]*PullRequestInfo, len(respPRs))
-	for _, pr := range respPRs {
-		prInfos = append(prInfos, &PullRequestInfo{
+	for i, pr := range respPRs {
+		prInfos[i] = &PullRequestInfo {
 			Number: pr.GetNumber(),
 			HTMLURL: pr.GetHTMLURL(),
 			BranchName: pr.GetHead().GetRef(),
-		})
+		}
 	}
 
 	return prInfos, nil

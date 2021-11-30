@@ -63,6 +63,10 @@ func (s svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.Or
 	}, nil
 }
 
+func (s svc) ListPullRequestsWithCommit(ctx context.Context, ref *github.RemoteRef, sha string) ([]*github.PullRequestInfo, error) {
+	panic("implement me")
+}
+
 func (s svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error) {
 	role := "member"
 	return &githubv3.Membership{Role: &role}, nil
