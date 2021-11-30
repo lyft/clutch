@@ -3925,6 +3925,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [provisionedThroughput] Table provisionedThroughput
                      * @property {clutch.aws.dynamodb.v1.Table.Status|null} [status] Table status
                      * @property {clutch.aws.dynamodb.v1.Table.BillingMode|null} [billingMode] Table billingMode
+                     * @property {string|null} [account] Table account
                      */
 
                     /**
@@ -3992,6 +3993,14 @@ export const clutch = $root.clutch = (() => {
                     Table.prototype.billingMode = 0;
 
                     /**
+                     * Table account.
+                     * @member {string} account
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.account = "";
+
+                    /**
                      * Verifies a Table message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.Table
@@ -4047,6 +4056,9 @@ export const clutch = $root.clutch = (() => {
                             case 3:
                                 break;
                             }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -4137,6 +4149,8 @@ export const clutch = $root.clutch = (() => {
                             message.billingMode = 3;
                             break;
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -4161,6 +4175,7 @@ export const clutch = $root.clutch = (() => {
                             object.provisionedThroughput = null;
                             object.status = options.enums === String ? "UNSPECIFIED" : 0;
                             object.billingMode = options.enums === String ? "BILLING_UNSPECIFIED" : 0;
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -4177,6 +4192,8 @@ export const clutch = $root.clutch = (() => {
                             object.status = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.Status[message.status] : message.status;
                         if (message.billingMode != null && message.hasOwnProperty("billingMode"))
                             object.billingMode = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.BillingMode[message.billingMode] : message.billingMode;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -4712,6 +4729,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IDescribeTableRequest
                      * @property {string|null} [tableName] DescribeTableRequest tableName
                      * @property {string|null} [region] DescribeTableRequest region
+                     * @property {string|null} [account] DescribeTableRequest account
                      */
 
                     /**
@@ -4746,6 +4764,14 @@ export const clutch = $root.clutch = (() => {
                     DescribeTableRequest.prototype.region = "";
 
                     /**
+                     * DescribeTableRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
+                     * @instance
+                     */
+                    DescribeTableRequest.prototype.account = "";
+
+                    /**
                      * Verifies a DescribeTableRequest message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.DescribeTableRequest
@@ -4762,6 +4788,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -4781,6 +4810,8 @@ export const clutch = $root.clutch = (() => {
                             message.tableName = String(object.tableName);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -4800,11 +4831,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.tableName = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -4938,6 +4972,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.aws.dynamodb.v1.IThroughput|null} [tableThroughput] UpdateCapacityRequest tableThroughput
                      * @property {Array.<clutch.aws.dynamodb.v1.IIndexUpdateAction>|null} [gsiUpdates] UpdateCapacityRequest gsiUpdates
                      * @property {boolean|null} [ignoreMaximums] UpdateCapacityRequest ignoreMaximums
+                     * @property {string|null} [account] UpdateCapacityRequest account
                      */
 
                     /**
@@ -4997,6 +5032,14 @@ export const clutch = $root.clutch = (() => {
                     UpdateCapacityRequest.prototype.ignoreMaximums = false;
 
                     /**
+                     * UpdateCapacityRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
+                     * @instance
+                     */
+                    UpdateCapacityRequest.prototype.account = "";
+
+                    /**
                      * Verifies an UpdateCapacityRequest message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.UpdateCapacityRequest
@@ -5030,6 +5073,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.ignoreMaximums != null && message.hasOwnProperty("ignoreMaximums"))
                             if (typeof message.ignoreMaximums !== "boolean")
                                 return "ignoreMaximums: boolean expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -5066,6 +5112,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.ignoreMaximums != null)
                             message.ignoreMaximums = Boolean(object.ignoreMaximums);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -5089,6 +5137,7 @@ export const clutch = $root.clutch = (() => {
                             object.region = "";
                             object.tableThroughput = null;
                             object.ignoreMaximums = false;
+                            object.account = "";
                         }
                         if (message.tableName != null && message.hasOwnProperty("tableName"))
                             object.tableName = message.tableName;
@@ -5103,6 +5152,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (message.ignoreMaximums != null && message.hasOwnProperty("ignoreMaximums"))
                             object.ignoreMaximums = message.ignoreMaximums;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -5546,6 +5597,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [name] ResizeAutoscalingGroupRequest name
                      * @property {string|null} [region] ResizeAutoscalingGroupRequest region
                      * @property {clutch.aws.ec2.v1.IAutoscalingGroupSize|null} [size] ResizeAutoscalingGroupRequest size
+                     * @property {string|null} [account] ResizeAutoscalingGroupRequest account
                      */
 
                     /**
@@ -5588,6 +5640,14 @@ export const clutch = $root.clutch = (() => {
                     ResizeAutoscalingGroupRequest.prototype.size = null;
 
                     /**
+                     * ResizeAutoscalingGroupRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest
+                     * @instance
+                     */
+                    ResizeAutoscalingGroupRequest.prototype.account = "";
+
+                    /**
                      * Verifies a ResizeAutoscalingGroupRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest
@@ -5609,6 +5669,9 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "size." + error;
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -5633,6 +5696,8 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.aws.ec2.v1.ResizeAutoscalingGroupRequest.size: object expected");
                             message.size = $root.clutch.aws.ec2.v1.AutoscalingGroupSize.fromObject(object.size);
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -5653,6 +5718,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.region = "";
                             object.size = null;
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -5660,6 +5726,8 @@ export const clutch = $root.clutch = (() => {
                             object.region = message.region;
                         if (message.size != null && message.hasOwnProperty("size"))
                             object.size = $root.clutch.aws.ec2.v1.AutoscalingGroupSize.toObject(message.size, options);
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -5767,6 +5835,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.aws.ec2.v1.IAutoscalingGroupSize|null} [size] AutoscalingGroup size
                      * @property {Array.<clutch.aws.ec2.v1.AutoscalingGroup.TerminationPolicy>|null} [terminationPolicies] AutoscalingGroup terminationPolicies
                      * @property {Array.<clutch.aws.ec2.v1.AutoscalingGroup.IInstance>|null} [instances] AutoscalingGroup instances
+                     * @property {string|null} [account] AutoscalingGroup account
                      */
 
                     /**
@@ -5836,6 +5905,14 @@ export const clutch = $root.clutch = (() => {
                     AutoscalingGroup.prototype.instances = $util.emptyArray;
 
                     /**
+                     * AutoscalingGroup account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.AutoscalingGroup
+                     * @instance
+                     */
+                    AutoscalingGroup.prototype.account = "";
+
+                    /**
                      * Verifies an AutoscalingGroup message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.AutoscalingGroup
@@ -5892,6 +5969,9 @@ export const clutch = $root.clutch = (() => {
                                     return "instances." + error;
                             }
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -5978,6 +6058,8 @@ export const clutch = $root.clutch = (() => {
                                 message.instances[i] = $root.clutch.aws.ec2.v1.AutoscalingGroup.Instance.fromObject(object.instances[i]);
                             }
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6003,6 +6085,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.region = "";
                             object.size = null;
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
@@ -6025,6 +6108,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.instances.length; ++j)
                                 object.instances[j] = $root.clutch.aws.ec2.v1.AutoscalingGroup.Instance.toObject(message.instances[j], options);
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6365,6 +6450,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IGetInstanceRequest
                      * @property {string|null} [instanceId] GetInstanceRequest instanceId
                      * @property {string|null} [region] GetInstanceRequest region
+                     * @property {string|null} [account] GetInstanceRequest account
                      */
 
                     /**
@@ -6399,6 +6485,14 @@ export const clutch = $root.clutch = (() => {
                     GetInstanceRequest.prototype.region = "";
 
                     /**
+                     * GetInstanceRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.GetInstanceRequest
+                     * @instance
+                     */
+                    GetInstanceRequest.prototype.account = "";
+
+                    /**
                      * Verifies a GetInstanceRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.GetInstanceRequest
@@ -6415,6 +6509,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -6434,6 +6531,8 @@ export const clutch = $root.clutch = (() => {
                             message.instanceId = String(object.instanceId);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6453,11 +6552,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.instanceId = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6588,6 +6690,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface ITerminateInstanceRequest
                      * @property {string|null} [instanceId] TerminateInstanceRequest instanceId
                      * @property {string|null} [region] TerminateInstanceRequest region
+                     * @property {string|null} [account] TerminateInstanceRequest account
                      */
 
                     /**
@@ -6622,6 +6725,14 @@ export const clutch = $root.clutch = (() => {
                     TerminateInstanceRequest.prototype.region = "";
 
                     /**
+                     * TerminateInstanceRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.TerminateInstanceRequest
+                     * @instance
+                     */
+                    TerminateInstanceRequest.prototype.account = "";
+
+                    /**
                      * Verifies a TerminateInstanceRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.TerminateInstanceRequest
@@ -6638,6 +6749,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -6657,6 +6771,8 @@ export const clutch = $root.clutch = (() => {
                             message.instanceId = String(object.instanceId);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6676,11 +6792,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.instanceId = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6784,6 +6903,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IRebootInstanceRequest
                      * @property {string|null} [instanceId] RebootInstanceRequest instanceId
                      * @property {string|null} [region] RebootInstanceRequest region
+                     * @property {string|null} [account] RebootInstanceRequest account
                      */
 
                     /**
@@ -6818,6 +6938,14 @@ export const clutch = $root.clutch = (() => {
                     RebootInstanceRequest.prototype.region = "";
 
                     /**
+                     * RebootInstanceRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @instance
+                     */
+                    RebootInstanceRequest.prototype.account = "";
+
+                    /**
                      * Verifies a RebootInstanceRequest message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
@@ -6834,6 +6962,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -6853,6 +6984,8 @@ export const clutch = $root.clutch = (() => {
                             message.instanceId = String(object.instanceId);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -6872,11 +7005,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.instanceId = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -6986,6 +7122,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [privateIpAddress] Instance privateIpAddress
                      * @property {string|null} [availabilityZone] Instance availabilityZone
                      * @property {Object.<string,string>|null} [tags] Instance tags
+                     * @property {string|null} [account] Instance account
                      */
 
                     /**
@@ -7069,6 +7206,14 @@ export const clutch = $root.clutch = (() => {
                     Instance.prototype.tags = $util.emptyObject;
 
                     /**
+                     * Instance account.
+                     * @member {string} account
+                     * @memberof clutch.aws.ec2.v1.Instance
+                     * @instance
+                     */
+                    Instance.prototype.account = "";
+
+                    /**
                      * Verifies an Instance message.
                      * @function verify
                      * @memberof clutch.aws.ec2.v1.Instance
@@ -7119,6 +7264,9 @@ export const clutch = $root.clutch = (() => {
                                 if (!$util.isString(message.tags[key[i]]))
                                     return "tags: string{k:string} expected";
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -7187,6 +7335,8 @@ export const clutch = $root.clutch = (() => {
                             for (let keys = Object.keys(object.tags), i = 0; i < keys.length; ++i)
                                 message.tags[keys[i]] = String(object.tags[keys[i]]);
                         }
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -7213,6 +7363,7 @@ export const clutch = $root.clutch = (() => {
                             object.publicIpAddress = "";
                             object.privateIpAddress = "";
                             object.availabilityZone = "";
+                            object.account = "";
                         }
                         if (message.instanceId != null && message.hasOwnProperty("instanceId"))
                             object.instanceId = message.instanceId;
@@ -7234,6 +7385,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < keys2.length; ++j)
                                 object.tags[keys2[j]] = message.tags[keys2[j]];
                         }
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -7396,6 +7549,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IGetStreamRequest
                      * @property {string|null} [streamName] GetStreamRequest streamName
                      * @property {string|null} [region] GetStreamRequest region
+                     * @property {string|null} [account] GetStreamRequest account
                      */
 
                     /**
@@ -7430,6 +7584,14 @@ export const clutch = $root.clutch = (() => {
                     GetStreamRequest.prototype.region = "";
 
                     /**
+                     * GetStreamRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.kinesis.v1.GetStreamRequest
+                     * @instance
+                     */
+                    GetStreamRequest.prototype.account = "";
+
+                    /**
                      * Verifies a GetStreamRequest message.
                      * @function verify
                      * @memberof clutch.aws.kinesis.v1.GetStreamRequest
@@ -7446,6 +7608,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -7465,6 +7630,8 @@ export const clutch = $root.clutch = (() => {
                             message.streamName = String(object.streamName);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -7484,11 +7651,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.streamName = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.streamName != null && message.hasOwnProperty("streamName"))
                             object.streamName = message.streamName;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -7620,6 +7790,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [streamName] UpdateShardCountRequest streamName
                      * @property {string|null} [region] UpdateShardCountRequest region
                      * @property {number|null} [targetShardCount] UpdateShardCountRequest targetShardCount
+                     * @property {string|null} [account] UpdateShardCountRequest account
                      */
 
                     /**
@@ -7662,6 +7833,14 @@ export const clutch = $root.clutch = (() => {
                     UpdateShardCountRequest.prototype.targetShardCount = 0;
 
                     /**
+                     * UpdateShardCountRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.kinesis.v1.UpdateShardCountRequest
+                     * @instance
+                     */
+                    UpdateShardCountRequest.prototype.account = "";
+
+                    /**
                      * Verifies an UpdateShardCountRequest message.
                      * @function verify
                      * @memberof clutch.aws.kinesis.v1.UpdateShardCountRequest
@@ -7681,6 +7860,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.targetShardCount != null && message.hasOwnProperty("targetShardCount"))
                             if (!$util.isInteger(message.targetShardCount))
                                 return "targetShardCount: integer expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -7702,6 +7884,8 @@ export const clutch = $root.clutch = (() => {
                             message.region = String(object.region);
                         if (object.targetShardCount != null)
                             message.targetShardCount = object.targetShardCount | 0;
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -7722,6 +7906,7 @@ export const clutch = $root.clutch = (() => {
                             object.streamName = "";
                             object.region = "";
                             object.targetShardCount = 0;
+                            object.account = "";
                         }
                         if (message.streamName != null && message.hasOwnProperty("streamName"))
                             object.streamName = message.streamName;
@@ -7729,6 +7914,8 @@ export const clutch = $root.clutch = (() => {
                             object.region = message.region;
                         if (message.targetShardCount != null && message.hasOwnProperty("targetShardCount"))
                             object.targetShardCount = message.targetShardCount;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -7833,6 +8020,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [streamName] Stream streamName
                      * @property {string|null} [region] Stream region
                      * @property {number|null} [currentShardCount] Stream currentShardCount
+                     * @property {string|null} [account] Stream account
                      */
 
                     /**
@@ -7875,6 +8063,14 @@ export const clutch = $root.clutch = (() => {
                     Stream.prototype.currentShardCount = 0;
 
                     /**
+                     * Stream account.
+                     * @member {string} account
+                     * @memberof clutch.aws.kinesis.v1.Stream
+                     * @instance
+                     */
+                    Stream.prototype.account = "";
+
+                    /**
                      * Verifies a Stream message.
                      * @function verify
                      * @memberof clutch.aws.kinesis.v1.Stream
@@ -7894,6 +8090,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.currentShardCount != null && message.hasOwnProperty("currentShardCount"))
                             if (!$util.isInteger(message.currentShardCount))
                                 return "currentShardCount: integer expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -7915,6 +8114,8 @@ export const clutch = $root.clutch = (() => {
                             message.region = String(object.region);
                         if (object.currentShardCount != null)
                             message.currentShardCount = object.currentShardCount | 0;
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -7935,6 +8136,7 @@ export const clutch = $root.clutch = (() => {
                             object.streamName = "";
                             object.region = "";
                             object.currentShardCount = 0;
+                            object.account = "";
                         }
                         if (message.streamName != null && message.hasOwnProperty("streamName"))
                             object.streamName = message.streamName;
@@ -7942,6 +8144,8 @@ export const clutch = $root.clutch = (() => {
                             object.region = message.region;
                         if (message.currentShardCount != null && message.hasOwnProperty("currentShardCount"))
                             object.currentShardCount = message.currentShardCount;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -13668,6 +13872,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface IFaultPercentage
                      * @property {number|null} [percentage] FaultPercentage percentage
+                     * @property {clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType|null} [denominator] FaultPercentage denominator
                      */
 
                     /**
@@ -13694,6 +13899,14 @@ export const clutch = $root.clutch = (() => {
                     FaultPercentage.prototype.percentage = 0;
 
                     /**
+                     * FaultPercentage denominator.
+                     * @member {clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType} denominator
+                     * @memberof clutch.chaos.serverexperimentation.v1.FaultPercentage
+                     * @instance
+                     */
+                    FaultPercentage.prototype.denominator = 0;
+
+                    /**
                      * Verifies a FaultPercentage message.
                      * @function verify
                      * @memberof clutch.chaos.serverexperimentation.v1.FaultPercentage
@@ -13707,6 +13920,16 @@ export const clutch = $root.clutch = (() => {
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
                             if (!$util.isInteger(message.percentage))
                                 return "percentage: integer expected";
+                        if (message.denominator != null && message.hasOwnProperty("denominator"))
+                            switch (message.denominator) {
+                            default:
+                                return "denominator: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break;
+                            }
                         return null;
                     };
 
@@ -13724,6 +13947,24 @@ export const clutch = $root.clutch = (() => {
                         let message = new $root.clutch.chaos.serverexperimentation.v1.FaultPercentage();
                         if (object.percentage != null)
                             message.percentage = object.percentage >>> 0;
+                        switch (object.denominator) {
+                        case "DENOMINATOR_UNSPECIFIED":
+                        case 0:
+                            message.denominator = 0;
+                            break;
+                        case "DENOMINATOR_HUNDRED":
+                        case 1:
+                            message.denominator = 1;
+                            break;
+                        case "DENOMINATOR_TEN_THOUSAND":
+                        case 2:
+                            message.denominator = 2;
+                            break;
+                        case "DENOMINATOR_MILLION":
+                        case 3:
+                            message.denominator = 3;
+                            break;
+                        }
                         return message;
                     };
 
@@ -13740,10 +13981,14 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.percentage = 0;
+                            object.denominator = options.enums === String ? "DENOMINATOR_UNSPECIFIED" : 0;
+                        }
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
                             object.percentage = message.percentage;
+                        if (message.denominator != null && message.hasOwnProperty("denominator"))
+                            object.denominator = options.enums === String ? $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType[message.denominator] : message.denominator;
                         return object;
                     };
 
@@ -13757,6 +14002,24 @@ export const clutch = $root.clutch = (() => {
                     FaultPercentage.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    /**
+                     * DenominatorType enum.
+                     * @name clutch.chaos.serverexperimentation.v1.FaultPercentage.DenominatorType
+                     * @enum {number}
+                     * @property {number} DENOMINATOR_UNSPECIFIED=0 DENOMINATOR_UNSPECIFIED value
+                     * @property {number} DENOMINATOR_HUNDRED=1 DENOMINATOR_HUNDRED value
+                     * @property {number} DENOMINATOR_TEN_THOUSAND=2 DENOMINATOR_TEN_THOUSAND value
+                     * @property {number} DENOMINATOR_MILLION=3 DENOMINATOR_MILLION value
+                     */
+                    FaultPercentage.DenominatorType = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "DENOMINATOR_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "DENOMINATOR_HUNDRED"] = 1;
+                        values[valuesById[2] = "DENOMINATOR_TEN_THOUSAND"] = 2;
+                        values[valuesById[3] = "DENOMINATOR_MILLION"] = 3;
+                        return values;
+                    })();
 
                     return FaultPercentage;
                 })();
@@ -46890,6 +47153,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IInstanceID
                      * @property {string|null} [id] InstanceID id
                      * @property {string|null} [region] InstanceID region
+                     * @property {string|null} [account] InstanceID account
                      */
 
                     /**
@@ -46924,6 +47188,14 @@ export const clutch = $root.clutch = (() => {
                     InstanceID.prototype.region = "";
 
                     /**
+                     * InstanceID account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.InstanceID
+                     * @instance
+                     */
+                    InstanceID.prototype.account = "";
+
+                    /**
                      * Verifies an InstanceID message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.InstanceID
@@ -46940,6 +47212,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -46959,6 +47234,8 @@ export const clutch = $root.clutch = (() => {
                             message.id = String(object.id);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -46978,11 +47255,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.id = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.id != null && message.hasOwnProperty("id"))
                             object.id = message.id;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -47008,6 +47288,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IAutoscalingGroupName
                      * @property {string|null} [name] AutoscalingGroupName name
                      * @property {string|null} [region] AutoscalingGroupName region
+                     * @property {string|null} [account] AutoscalingGroupName account
                      */
 
                     /**
@@ -47042,6 +47323,14 @@ export const clutch = $root.clutch = (() => {
                     AutoscalingGroupName.prototype.region = "";
 
                     /**
+                     * AutoscalingGroupName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.AutoscalingGroupName
+                     * @instance
+                     */
+                    AutoscalingGroupName.prototype.account = "";
+
+                    /**
                      * Verifies an AutoscalingGroupName message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.AutoscalingGroupName
@@ -47058,6 +47347,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -47077,6 +47369,8 @@ export const clutch = $root.clutch = (() => {
                             message.name = String(object.name);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -47096,11 +47390,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.name = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -47126,6 +47423,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IKinesisStreamName
                      * @property {string|null} [name] KinesisStreamName name
                      * @property {string|null} [region] KinesisStreamName region
+                     * @property {string|null} [account] KinesisStreamName account
                      */
 
                     /**
@@ -47160,6 +47458,14 @@ export const clutch = $root.clutch = (() => {
                     KinesisStreamName.prototype.region = "";
 
                     /**
+                     * KinesisStreamName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.KinesisStreamName
+                     * @instance
+                     */
+                    KinesisStreamName.prototype.account = "";
+
+                    /**
                      * Verifies a KinesisStreamName message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.KinesisStreamName
@@ -47176,6 +47482,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -47195,6 +47504,8 @@ export const clutch = $root.clutch = (() => {
                             message.name = String(object.name);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -47214,11 +47525,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.name = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -47244,6 +47558,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IDynamodbTableName
                      * @property {string|null} [name] DynamodbTableName name
                      * @property {string|null} [region] DynamodbTableName region
+                     * @property {string|null} [account] DynamodbTableName account
                      */
 
                     /**
@@ -47278,6 +47593,14 @@ export const clutch = $root.clutch = (() => {
                     DynamodbTableName.prototype.region = "";
 
                     /**
+                     * DynamodbTableName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.DynamodbTableName
+                     * @instance
+                     */
+                    DynamodbTableName.prototype.account = "";
+
+                    /**
                      * Verifies a DynamodbTableName message.
                      * @function verify
                      * @memberof clutch.resolver.aws.v1.DynamodbTableName
@@ -47294,6 +47617,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
                         return null;
                     };
 
@@ -47313,6 +47639,8 @@ export const clutch = $root.clutch = (() => {
                             message.name = String(object.name);
                         if (object.region != null)
                             message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
                         return message;
                     };
 
@@ -47332,11 +47660,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.name = "";
                             object.region = "";
+                            object.account = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
                         return object;
                     };
 
@@ -51829,6 +52160,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {number|Long|null} [millis] Point millis
                  * @property {google.protobuf.IAny|null} [pb] Point pb
                  * @property {string|null} [description] Point description
+                 * @property {string|null} [href] Point href
                  */
 
                 /**
@@ -51877,6 +52209,14 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 Point.prototype.description = "";
+
+                /**
+                 * Point href.
+                 * @member {string} href
+                 * @memberof clutch.timeseries.v1.Point
+                 * @instance
+                 */
+                Point.prototype.href = "";
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -51927,6 +52267,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.description != null && message.hasOwnProperty("description"))
                         if (!$util.isString(message.description))
                             return "description: string expected";
+                    if (message.href != null && message.hasOwnProperty("href"))
+                        if (!$util.isString(message.href))
+                            return "href: string expected";
                     return null;
                 };
 
@@ -51963,6 +52306,8 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.description != null)
                         message.description = String(object.description);
+                    if (object.href != null)
+                        message.href = String(object.href);
                     return message;
                 };
 
@@ -51982,6 +52327,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.pb = null;
                         object.description = "";
+                        object.href = "";
                     }
                     if (message.range != null && message.hasOwnProperty("range")) {
                         object.range = $root.clutch.timeseries.v1.TimeRange.toObject(message.range, options);
@@ -52000,6 +52346,8 @@ export const clutch = $root.clutch = (() => {
                         object.pb = $root.google.protobuf.Any.toObject(message.pb, options);
                     if (message.description != null && message.hasOwnProperty("description"))
                         object.description = message.description;
+                    if (message.href != null && message.hasOwnProperty("href"))
+                        object.href = message.href;
                     return object;
                 };
 

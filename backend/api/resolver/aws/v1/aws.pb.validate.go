@@ -61,6 +61,8 @@ func (m *InstanceID) validate(all bool) error {
 
 	// no validation rules for Region
 
+	// no validation rules for Account
+
 	if len(errors) > 0 {
 		return InstanceIDMultiError(errors)
 	}
@@ -162,6 +164,8 @@ func (m *AutoscalingGroupName) validate(all bool) error {
 	// no validation rules for Name
 
 	// no validation rules for Region
+
+	// no validation rules for Account
 
 	if len(errors) > 0 {
 		return AutoscalingGroupNameMultiError(errors)
@@ -268,6 +272,8 @@ func (m *KinesisStreamName) validate(all bool) error {
 
 	// no validation rules for Region
 
+	// no validation rules for Account
+
 	if len(errors) > 0 {
 		return KinesisStreamNameMultiError(errors)
 	}
@@ -372,6 +378,8 @@ func (m *DynamodbTableName) validate(all bool) error {
 	// no validation rules for Name
 
 	// no validation rules for Region
+
+	// no validation rules for Account
 
 	if len(errors) > 0 {
 		return DynamodbTableNameMultiError(errors)

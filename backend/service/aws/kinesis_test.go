@@ -60,6 +60,7 @@ var testAwsStreamOuputWithBadData = &kinesis.DescribeStreamSummaryOutput{
 
 var testStreamOutPut = &kinesisv1.Stream{
 	StreamName:        "test-stream",
+	Account:           "default",
 	Region:            "us-east-1",
 	CurrentShardCount: 100,
 }
@@ -69,15 +70,22 @@ func TestDescribeStreamWithGoodData(t *testing.T) {
 		stream: testAwsStream,
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", kinesis: m},
+				},
+			},
+		},
 	}
 
-	result, err := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
+	result, err := c.DescribeKinesisStream(context.Background(), "default", "us-east-1", "test-stream")
 	assert.NoError(t, err)
 	assert.Equal(t, testStreamOutPut, result)
 
 	m.streamErr = errors.New("error")
-	_, err1 := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
+	_, err1 := c.DescribeKinesisStream(context.Background(), "default", "us-east-1", "test-stream")
 	assert.EqualError(t, err1, "error")
 }
 
@@ -86,10 +94,17 @@ func TestDescribeStreamWithBadData(t *testing.T) {
 		stream: testAwsStreamWithBadData,
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", kinesis: m},
+				},
+			},
+		},
 	}
 
-	_, err := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
+	_, err := c.DescribeKinesisStream(context.Background(), "default", "us-east-1", "test-stream")
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "AWS returned a negative value for the current shard count")
 }
@@ -99,17 +114,24 @@ func TestUpdateShardCount(t *testing.T) {
 		stream: testAwsStream,
 	}
 	c := &client{
-		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", kinesis: m},
+				},
+			},
+		},
 	}
 
-	err := c.UpdateKinesisShardCount(context.Background(), "us-east-1", "test-stream", 50)
+	err := c.UpdateKinesisShardCount(context.Background(), "default", "us-east-1", "test-stream", 50)
 	assert.NoError(t, err)
 
 	m.updateErr = errors.New("error")
-	err1 := c.UpdateKinesisShardCount(context.Background(), "us-east-1", "test-stream", 50)
+	err1 := c.UpdateKinesisShardCount(context.Background(), "default", "us-east-1", "test-stream", 50)
 	assert.EqualError(t, err1, "error")
 
-	err2 := c.UpdateKinesisShardCount(context.Background(), "us-east-1", "test-stream", 10)
+	err2 := c.UpdateKinesisShardCount(context.Background(), "default", "us-east-1", "test-stream", 10)
 	assert.Error(t, err2)
 	assert.Contains(t, err2.Error(), "new shard count should be a 25% increment of current shard count ranging from 50-200%")
 }
