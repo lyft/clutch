@@ -17,7 +17,11 @@ interface WizardFeedbackProps {
   enableFeedback?: boolean;
 }
 
-export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, ConfirmConfigProps, WizardFeedbackProps {}
+export interface WorkflowProps
+  extends BaseWorkflowProps,
+    ResolverConfigProps,
+    ConfirmConfigProps,
+    WizardFeedbackProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
 export interface ConfirmChild extends WizardChild, ConfirmConfigProps {}
 
