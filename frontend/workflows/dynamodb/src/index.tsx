@@ -11,7 +11,11 @@ interface TableDetailsProps {
   enableOverride?: boolean;
 }
 
-export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, TableDetailsProps {}
+interface WizardFeedbackProps {
+  enableFeedback?: boolean;
+}
+
+export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, TableDetailsProps, WizardFeedbackProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
 export interface TableDetailsChild extends WizardChild, TableDetailsProps {}
 

@@ -1,6 +1,5 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import type { BaseWorkflowProps } from "@clutch-sh/core";
 import {
   Button,
   ButtonGroup,
@@ -15,6 +14,7 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
+import type { WorkflowProps } from "../index";
 import Clusters from "./clusters";
 import Dashboard from "./dashboard";
 import Listeners from "./listeners";
@@ -120,7 +120,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
   );
 };
 
-const RemoteTriage: React.FC<BaseWorkflowProps> = ({ heading }) => {
+const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
   const dataLayout = {
     resourceData: {},
     remoteData: {

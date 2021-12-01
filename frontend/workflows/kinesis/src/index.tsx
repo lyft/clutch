@@ -7,7 +7,11 @@ interface ConfigurationProps {
   resolverType: string;
 }
 
-export interface WorkflowProps extends BaseWorkflowProps, ConfigurationProps {}
+interface WizardFeedbackProps {
+  enableFeedback?: boolean;
+}
+
+export interface WorkflowProps extends BaseWorkflowProps, ConfigurationProps, WizardFeedbackProps {}
 export interface ResolverChild extends WizardChild, ConfigurationProps {}
 
 const register = (): WorkflowConfiguration => {
