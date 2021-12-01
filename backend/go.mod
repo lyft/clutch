@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
-	github.com/Masterminds/squirrel v1.5.1
+	github.com/Masterminds/squirrel v1.5.2
 	github.com/aws/aws-sdk-go-v2 v1.11.1
 	github.com/aws/aws-sdk-go-v2/config v1.10.2
 	github.com/aws/aws-sdk-go-v2/credentials v1.6.2
@@ -53,8 +53,8 @@ require (
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/uber-go/tally v3.4.2+incompatible
 	go.uber.org/zap v1.19.1
-	golang.org/x/net v0.0.0-20211013171255-e13a2654a71e
-	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
+	golang.org/x/net v0.0.0-20211123203042-d83791d6bcd9
+	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/genproto v0.0.0-20211013025323-ce878158c4d4
 	google.golang.org/grpc v1.42.0
@@ -62,7 +62,7 @@ require (
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
-	k8s.io/api v0.22.3
-	k8s.io/apimachinery v0.22.3
-	k8s.io/client-go v0.22.3
+	k8s.io/api v0.22.4
+	k8s.io/apimachinery v0.22.4
+	k8s.io/client-go v0.22.4
 )
