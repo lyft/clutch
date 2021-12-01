@@ -54,13 +54,13 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 
 // SurveyLookup stores a map of the origin to survey mapping that are
 // provided in the feedback module config
-type SurveyLookup struct {
+type surveyLookup struct {
 	// key is the origin name
 	surveys map[string]*feedbackv1cfg.SurveyOrigin
 }
 
 type mod struct {
-	surveyMap SurveyLookup
+	surveyMap surveyLookup
 	client    feedback.Service
 	logger    *zap.Logger
 	scope     tally.Scope
@@ -97,11 +97,13 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 	// this scenario shouldn't happen as the request and config have to provide defined enum types
 	// TODO: if multiple orgins are requested at once and only some surveys are found, return partial error
 	if len(results) == 0 {
-		m.logger.Error("origins must be one of HEADER or WIZARD",
+		msg := "surveys not found for the requested origin(s)"
+		m.logger.Error(
+			msg,
 			zap.Any("request origins", req.Origins),
 			zap.Any("config origins", m.surveyMap.surveys),
 		)
-		return nil, status.Errorf(codes.InvalidArgument, "origins must be one of HEADER or WIZARD")
+		return nil, status.Errorf(codes.InvalidArgument, msg)
 	}
 
 	return &feedbackv1.GetSurveysResponse{
@@ -109,9 +111,9 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 	}, nil
 }
 
-func newSurveyLookup(origins []*feedbackv1cfg.SurveyOrigin) SurveyLookup {
+func newSurveyLookup(origins []*feedbackv1cfg.SurveyOrigin) surveyLookup {
 	if len(origins) == 0 {
-		return SurveyLookup{}
+		return surveyLookup{}
 	}
 
 	surveys := make(map[string]*feedbackv1cfg.SurveyOrigin, len(origins))
@@ -119,7 +121,7 @@ func newSurveyLookup(origins []*feedbackv1cfg.SurveyOrigin) SurveyLookup {
 		surveys[origin.Origin.String()] = origin
 	}
 
-	return SurveyLookup{
+	return surveyLookup{
 		surveys,
 	}
 }
@@ -127,7 +129,7 @@ func newSurveyLookup(origins []*feedbackv1cfg.SurveyOrigin) SurveyLookup {
 // GetConfigSurveys uses the SurveyLookup and the origin passed in the API request to
 // check if a survey exists for the origin. If found, the survey is returned.
 // Otherwise ok is false.
-func (sl SurveyLookup) getConfigSurveys(origin feedbackv1.Origin) (*feedbackv1cfg.Survey, bool) {
+func (sl surveyLookup) getConfigSurveys(origin feedbackv1.Origin) (*feedbackv1cfg.Survey, bool) {
 	if len(sl.surveys) == 0 {
 		return nil, false
 	}

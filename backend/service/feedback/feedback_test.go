@@ -20,7 +20,7 @@ func TestProcessSubmission(t *testing.T) {
 		Origin: feedbackv1.Origin_WIZARD,
 		Survey: &feedbackv1.Survey{
 			Prompt:       "Rate your experience",
-			RatingLabels: &feedbackv1.RatingLabels{Type: &feedbackv1.RatingLabels_Emoji{Emoji: &feedbackv1.EmojiRatingLabels{Sad: "bad", Neutral: "ok", Happy: "great"}}},
+			RatingLabels: []*feedbackv1.RatingLabel{{Type: &feedbackv1.RatingLabel_Emoji{Emoji: feedbackv1.EmojiRating_HAPPY}, Label: "great"}},
 		},
 		UserSubmitted: true,
 	}
@@ -68,7 +68,7 @@ func TestProcessSubmission(t *testing.T) {
 				Origin: feedbackv1.Origin_WIZARD,
 				Survey: &feedbackv1.Survey{
 					Prompt:       "",
-					RatingLabels: &feedbackv1.RatingLabels{Type: &feedbackv1.RatingLabels_Emoji{Emoji: &feedbackv1.EmojiRatingLabels{Sad: "bad", Neutral: "ok", Happy: "great"}}},
+					RatingLabels: []*feedbackv1.RatingLabel{{Type: &feedbackv1.RatingLabel_Emoji{Emoji: feedbackv1.EmojiRating_HAPPY}, Label: "great"}},
 				}, UserSubmitted: true},
 		},
 		// metadata rating options is nil

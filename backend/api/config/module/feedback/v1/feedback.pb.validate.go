@@ -73,10 +73,10 @@ func (m *Survey) validate(all bool) error {
 
 	// no validation rules for FreeformPrompt
 
-	if m.GetRatingLabels() == nil {
+	if len(m.GetRatingLabels()) < 2 {
 		err := SurveyValidationError{
 			field:  "RatingLabels",
-			reason: "value is required",
+			reason: "value must contain at least 2 item(s)",
 		}
 		if !all {
 			return err
@@ -84,33 +84,38 @@ func (m *Survey) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetRatingLabels()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SurveyValidationError{
-					field:  "RatingLabels",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetRatingLabels() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SurveyValidationError{
+						field:  fmt.Sprintf("RatingLabels[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SurveyValidationError{
+						field:  fmt.Sprintf("RatingLabels[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, SurveyValidationError{
-					field:  "RatingLabels",
+				return SurveyValidationError{
+					field:  fmt.Sprintf("RatingLabels[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetRatingLabels()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SurveyValidationError{
-				field:  "RatingLabels",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {

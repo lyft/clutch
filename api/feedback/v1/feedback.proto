@@ -36,13 +36,6 @@ enum Origin {
 // we can expand to add more emoji options (i.e. for a 4-point scale) and
 // new rating scales (i.e 2-point thumbs up/down scale).
 
-message EmojiRatingLabels {
-  // the corresponding option to show to the user (i.e bad/ok/great)
-  string sad = 1;
-  string neutral = 2;
-  string happy = 3;
-}
-
 enum EmojiRating {
   // these are used to compute a feedback score out of 100
   EMOJI_UNSPECIFIED = 0;
@@ -54,11 +47,15 @@ enum EmojiRating {
 // Rating labels are the raw text options that are presented to the user (i.e. bad/ok/great)
 // whereas a rating scale gets normalized to a score out of a 100 to compute a NPS score.
 
-message RatingLabels {
+message RatingLabel {
   oneof type {
     option (validate.required) = true;
-    EmojiRatingLabels emoji = 1;
+
+    // the emoji type from the defined enums (i.e sad/neutral/happy)
+    EmojiRating emoji = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
   }
+  // the corresponding text to show to the user (i.e bad/ok/great)
+  string label = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message RatingScale {
@@ -82,8 +79,8 @@ message Survey {
   string prompt = 1;
   // the prompt for the freeform feedback
   string freeform_prompt = 2;
-  // the text options to show to the user (i.e. bad/ok/great) for the corresponding rating scale
-  RatingLabels rating_labels = 3;
+  // the options to show to the user (i.e. bad/ok/great) for the corresponding rating scale
+  repeated RatingLabel rating_labels = 3;
 }
 
 message GetSurveysResponse {

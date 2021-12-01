@@ -18455,7 +18455,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface ISurvey
                          * @property {string|null} [prompt] Survey prompt
                          * @property {string|null} [freeformPrompt] Survey freeformPrompt
-                         * @property {clutch.feedback.v1.IRatingLabels|null} [ratingLabels] Survey ratingLabels
+                         * @property {Array.<clutch.feedback.v1.IRatingLabel>|null} [ratingLabels] Survey ratingLabels
                          */
 
                         /**
@@ -18467,6 +18467,7 @@ export const clutch = $root.clutch = (() => {
                          * @param {clutch.config.module.feedback.v1.ISurvey=} [properties] Properties to set
                          */
                         function Survey(properties) {
+                            this.ratingLabels = [];
                             if (properties)
                                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                     if (properties[keys[i]] != null)
@@ -18491,11 +18492,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Survey ratingLabels.
-                         * @member {clutch.feedback.v1.IRatingLabels|null|undefined} ratingLabels
+                         * @member {Array.<clutch.feedback.v1.IRatingLabel>} ratingLabels
                          * @memberof clutch.config.module.feedback.v1.Survey
                          * @instance
                          */
-                        Survey.prototype.ratingLabels = null;
+                        Survey.prototype.ratingLabels = $util.emptyArray;
 
                         /**
                          * Verifies a Survey message.
@@ -18515,9 +18516,13 @@ export const clutch = $root.clutch = (() => {
                                 if (!$util.isString(message.freeformPrompt))
                                     return "freeformPrompt: string expected";
                             if (message.ratingLabels != null && message.hasOwnProperty("ratingLabels")) {
-                                let error = $root.clutch.feedback.v1.RatingLabels.verify(message.ratingLabels);
-                                if (error)
-                                    return "ratingLabels." + error;
+                                if (!Array.isArray(message.ratingLabels))
+                                    return "ratingLabels: array expected";
+                                for (let i = 0; i < message.ratingLabels.length; ++i) {
+                                    let error = $root.clutch.feedback.v1.RatingLabel.verify(message.ratingLabels[i]);
+                                    if (error)
+                                        return "ratingLabels." + error;
+                                }
                             }
                             return null;
                         };
@@ -18538,10 +18543,15 @@ export const clutch = $root.clutch = (() => {
                                 message.prompt = String(object.prompt);
                             if (object.freeformPrompt != null)
                                 message.freeformPrompt = String(object.freeformPrompt);
-                            if (object.ratingLabels != null) {
-                                if (typeof object.ratingLabels !== "object")
-                                    throw TypeError(".clutch.config.module.feedback.v1.Survey.ratingLabels: object expected");
-                                message.ratingLabels = $root.clutch.feedback.v1.RatingLabels.fromObject(object.ratingLabels);
+                            if (object.ratingLabels) {
+                                if (!Array.isArray(object.ratingLabels))
+                                    throw TypeError(".clutch.config.module.feedback.v1.Survey.ratingLabels: array expected");
+                                message.ratingLabels = [];
+                                for (let i = 0; i < object.ratingLabels.length; ++i) {
+                                    if (typeof object.ratingLabels[i] !== "object")
+                                        throw TypeError(".clutch.config.module.feedback.v1.Survey.ratingLabels: object expected");
+                                    message.ratingLabels[i] = $root.clutch.feedback.v1.RatingLabel.fromObject(object.ratingLabels[i]);
+                                }
                             }
                             return message;
                         };
@@ -18559,17 +18569,21 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
+                            if (options.arrays || options.defaults)
+                                object.ratingLabels = [];
                             if (options.defaults) {
                                 object.prompt = "";
                                 object.freeformPrompt = "";
-                                object.ratingLabels = null;
                             }
                             if (message.prompt != null && message.hasOwnProperty("prompt"))
                                 object.prompt = message.prompt;
                             if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
                                 object.freeformPrompt = message.freeformPrompt;
-                            if (message.ratingLabels != null && message.hasOwnProperty("ratingLabels"))
-                                object.ratingLabels = $root.clutch.feedback.v1.RatingLabels.toObject(message.ratingLabels, options);
+                            if (message.ratingLabels && message.ratingLabels.length) {
+                                object.ratingLabels = [];
+                                for (let j = 0; j < message.ratingLabels.length; ++j)
+                                    object.ratingLabels[j] = $root.clutch.feedback.v1.RatingLabel.toObject(message.ratingLabels[j], options);
+                            }
                             return object;
                         };
 
@@ -24926,141 +24940,6 @@ export const clutch = $root.clutch = (() => {
                 return values;
             })();
 
-            v1.EmojiRatingLabels = (function() {
-
-                /**
-                 * Properties of an EmojiRatingLabels.
-                 * @memberof clutch.feedback.v1
-                 * @interface IEmojiRatingLabels
-                 * @property {string|null} [sad] EmojiRatingLabels sad
-                 * @property {string|null} [neutral] EmojiRatingLabels neutral
-                 * @property {string|null} [happy] EmojiRatingLabels happy
-                 */
-
-                /**
-                 * Constructs a new EmojiRatingLabels.
-                 * @memberof clutch.feedback.v1
-                 * @classdesc Represents an EmojiRatingLabels.
-                 * @implements IEmojiRatingLabels
-                 * @constructor
-                 * @param {clutch.feedback.v1.IEmojiRatingLabels=} [properties] Properties to set
-                 */
-                function EmojiRatingLabels(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * EmojiRatingLabels sad.
-                 * @member {string} sad
-                 * @memberof clutch.feedback.v1.EmojiRatingLabels
-                 * @instance
-                 */
-                EmojiRatingLabels.prototype.sad = "";
-
-                /**
-                 * EmojiRatingLabels neutral.
-                 * @member {string} neutral
-                 * @memberof clutch.feedback.v1.EmojiRatingLabels
-                 * @instance
-                 */
-                EmojiRatingLabels.prototype.neutral = "";
-
-                /**
-                 * EmojiRatingLabels happy.
-                 * @member {string} happy
-                 * @memberof clutch.feedback.v1.EmojiRatingLabels
-                 * @instance
-                 */
-                EmojiRatingLabels.prototype.happy = "";
-
-                /**
-                 * Verifies an EmojiRatingLabels message.
-                 * @function verify
-                 * @memberof clutch.feedback.v1.EmojiRatingLabels
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                EmojiRatingLabels.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.sad != null && message.hasOwnProperty("sad"))
-                        if (!$util.isString(message.sad))
-                            return "sad: string expected";
-                    if (message.neutral != null && message.hasOwnProperty("neutral"))
-                        if (!$util.isString(message.neutral))
-                            return "neutral: string expected";
-                    if (message.happy != null && message.hasOwnProperty("happy"))
-                        if (!$util.isString(message.happy))
-                            return "happy: string expected";
-                    return null;
-                };
-
-                /**
-                 * Creates an EmojiRatingLabels message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.feedback.v1.EmojiRatingLabels
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.feedback.v1.EmojiRatingLabels} EmojiRatingLabels
-                 */
-                EmojiRatingLabels.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.feedback.v1.EmojiRatingLabels)
-                        return object;
-                    let message = new $root.clutch.feedback.v1.EmojiRatingLabels();
-                    if (object.sad != null)
-                        message.sad = String(object.sad);
-                    if (object.neutral != null)
-                        message.neutral = String(object.neutral);
-                    if (object.happy != null)
-                        message.happy = String(object.happy);
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from an EmojiRatingLabels message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.feedback.v1.EmojiRatingLabels
-                 * @static
-                 * @param {clutch.feedback.v1.EmojiRatingLabels} message EmojiRatingLabels
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                EmojiRatingLabels.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults) {
-                        object.sad = "";
-                        object.neutral = "";
-                        object.happy = "";
-                    }
-                    if (message.sad != null && message.hasOwnProperty("sad"))
-                        object.sad = message.sad;
-                    if (message.neutral != null && message.hasOwnProperty("neutral"))
-                        object.neutral = message.neutral;
-                    if (message.happy != null && message.hasOwnProperty("happy"))
-                        object.happy = message.happy;
-                    return object;
-                };
-
-                /**
-                 * Converts this EmojiRatingLabels to JSON.
-                 * @function toJSON
-                 * @memberof clutch.feedback.v1.EmojiRatingLabels
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                EmojiRatingLabels.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return EmojiRatingLabels;
-            })();
-
             /**
              * EmojiRating enum.
              * @name clutch.feedback.v1.EmojiRating
@@ -25079,24 +24958,25 @@ export const clutch = $root.clutch = (() => {
                 return values;
             })();
 
-            v1.RatingLabels = (function() {
+            v1.RatingLabel = (function() {
 
                 /**
-                 * Properties of a RatingLabels.
+                 * Properties of a RatingLabel.
                  * @memberof clutch.feedback.v1
-                 * @interface IRatingLabels
-                 * @property {clutch.feedback.v1.IEmojiRatingLabels|null} [emoji] RatingLabels emoji
+                 * @interface IRatingLabel
+                 * @property {clutch.feedback.v1.EmojiRating|null} [emoji] RatingLabel emoji
+                 * @property {string|null} [label] RatingLabel label
                  */
 
                 /**
-                 * Constructs a new RatingLabels.
+                 * Constructs a new RatingLabel.
                  * @memberof clutch.feedback.v1
-                 * @classdesc Represents a RatingLabels.
-                 * @implements IRatingLabels
+                 * @classdesc Represents a RatingLabel.
+                 * @implements IRatingLabel
                  * @constructor
-                 * @param {clutch.feedback.v1.IRatingLabels=} [properties] Properties to set
+                 * @param {clutch.feedback.v1.IRatingLabel=} [properties] Properties to set
                  */
-                function RatingLabels(properties) {
+                function RatingLabel(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -25104,103 +24984,137 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * RatingLabels emoji.
-                 * @member {clutch.feedback.v1.IEmojiRatingLabels|null|undefined} emoji
-                 * @memberof clutch.feedback.v1.RatingLabels
+                 * RatingLabel emoji.
+                 * @member {clutch.feedback.v1.EmojiRating|null|undefined} emoji
+                 * @memberof clutch.feedback.v1.RatingLabel
                  * @instance
                  */
-                RatingLabels.prototype.emoji = null;
+                RatingLabel.prototype.emoji = null;
+
+                /**
+                 * RatingLabel label.
+                 * @member {string} label
+                 * @memberof clutch.feedback.v1.RatingLabel
+                 * @instance
+                 */
+                RatingLabel.prototype.label = "";
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
 
                 /**
-                 * RatingLabels type.
+                 * RatingLabel type.
                  * @member {"emoji"|undefined} type
-                 * @memberof clutch.feedback.v1.RatingLabels
+                 * @memberof clutch.feedback.v1.RatingLabel
                  * @instance
                  */
-                Object.defineProperty(RatingLabels.prototype, "type", {
+                Object.defineProperty(RatingLabel.prototype, "type", {
                     get: $util.oneOfGetter($oneOfFields = ["emoji"]),
                     set: $util.oneOfSetter($oneOfFields)
                 });
 
                 /**
-                 * Verifies a RatingLabels message.
+                 * Verifies a RatingLabel message.
                  * @function verify
-                 * @memberof clutch.feedback.v1.RatingLabels
+                 * @memberof clutch.feedback.v1.RatingLabel
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                RatingLabels.verify = function verify(message) {
+                RatingLabel.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     let properties = {};
                     if (message.emoji != null && message.hasOwnProperty("emoji")) {
                         properties.type = 1;
-                        {
-                            let error = $root.clutch.feedback.v1.EmojiRatingLabels.verify(message.emoji);
-                            if (error)
-                                return "emoji." + error;
+                        switch (message.emoji) {
+                        default:
+                            return "emoji: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            break;
                         }
                     }
+                    if (message.label != null && message.hasOwnProperty("label"))
+                        if (!$util.isString(message.label))
+                            return "label: string expected";
                     return null;
                 };
 
                 /**
-                 * Creates a RatingLabels message from a plain object. Also converts values to their respective internal types.
+                 * Creates a RatingLabel message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.feedback.v1.RatingLabels
+                 * @memberof clutch.feedback.v1.RatingLabel
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.feedback.v1.RatingLabels} RatingLabels
+                 * @returns {clutch.feedback.v1.RatingLabel} RatingLabel
                  */
-                RatingLabels.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.feedback.v1.RatingLabels)
+                RatingLabel.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.feedback.v1.RatingLabel)
                         return object;
-                    let message = new $root.clutch.feedback.v1.RatingLabels();
-                    if (object.emoji != null) {
-                        if (typeof object.emoji !== "object")
-                            throw TypeError(".clutch.feedback.v1.RatingLabels.emoji: object expected");
-                        message.emoji = $root.clutch.feedback.v1.EmojiRatingLabels.fromObject(object.emoji);
+                    let message = new $root.clutch.feedback.v1.RatingLabel();
+                    switch (object.emoji) {
+                    case "EMOJI_UNSPECIFIED":
+                    case 0:
+                        message.emoji = 0;
+                        break;
+                    case "SAD":
+                    case 1:
+                        message.emoji = 1;
+                        break;
+                    case "NEUTRAL":
+                    case 2:
+                        message.emoji = 2;
+                        break;
+                    case "HAPPY":
+                    case 3:
+                        message.emoji = 3;
+                        break;
                     }
+                    if (object.label != null)
+                        message.label = String(object.label);
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a RatingLabels message. Also converts values to other types if specified.
+                 * Creates a plain object from a RatingLabel message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.feedback.v1.RatingLabels
+                 * @memberof clutch.feedback.v1.RatingLabel
                  * @static
-                 * @param {clutch.feedback.v1.RatingLabels} message RatingLabels
+                 * @param {clutch.feedback.v1.RatingLabel} message RatingLabel
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                RatingLabels.toObject = function toObject(message, options) {
+                RatingLabel.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
+                    if (options.defaults)
+                        object.label = "";
                     if (message.emoji != null && message.hasOwnProperty("emoji")) {
-                        object.emoji = $root.clutch.feedback.v1.EmojiRatingLabels.toObject(message.emoji, options);
+                        object.emoji = options.enums === String ? $root.clutch.feedback.v1.EmojiRating[message.emoji] : message.emoji;
                         if (options.oneofs)
                             object.type = "emoji";
                     }
+                    if (message.label != null && message.hasOwnProperty("label"))
+                        object.label = message.label;
                     return object;
                 };
 
                 /**
-                 * Converts this RatingLabels to JSON.
+                 * Converts this RatingLabel to JSON.
                  * @function toJSON
-                 * @memberof clutch.feedback.v1.RatingLabels
+                 * @memberof clutch.feedback.v1.RatingLabel
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                RatingLabels.prototype.toJSON = function toJSON() {
+                RatingLabel.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return RatingLabels;
+                return RatingLabel;
             })();
 
             v1.RatingScale = (function() {
@@ -25485,7 +25399,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface ISurvey
                  * @property {string|null} [prompt] Survey prompt
                  * @property {string|null} [freeformPrompt] Survey freeformPrompt
-                 * @property {clutch.feedback.v1.IRatingLabels|null} [ratingLabels] Survey ratingLabels
+                 * @property {Array.<clutch.feedback.v1.IRatingLabel>|null} [ratingLabels] Survey ratingLabels
                  */
 
                 /**
@@ -25497,6 +25411,7 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.feedback.v1.ISurvey=} [properties] Properties to set
                  */
                 function Survey(properties) {
+                    this.ratingLabels = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -25521,11 +25436,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Survey ratingLabels.
-                 * @member {clutch.feedback.v1.IRatingLabels|null|undefined} ratingLabels
+                 * @member {Array.<clutch.feedback.v1.IRatingLabel>} ratingLabels
                  * @memberof clutch.feedback.v1.Survey
                  * @instance
                  */
-                Survey.prototype.ratingLabels = null;
+                Survey.prototype.ratingLabels = $util.emptyArray;
 
                 /**
                  * Verifies a Survey message.
@@ -25545,9 +25460,13 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isString(message.freeformPrompt))
                             return "freeformPrompt: string expected";
                     if (message.ratingLabels != null && message.hasOwnProperty("ratingLabels")) {
-                        let error = $root.clutch.feedback.v1.RatingLabels.verify(message.ratingLabels);
-                        if (error)
-                            return "ratingLabels." + error;
+                        if (!Array.isArray(message.ratingLabels))
+                            return "ratingLabels: array expected";
+                        for (let i = 0; i < message.ratingLabels.length; ++i) {
+                            let error = $root.clutch.feedback.v1.RatingLabel.verify(message.ratingLabels[i]);
+                            if (error)
+                                return "ratingLabels." + error;
+                        }
                     }
                     return null;
                 };
@@ -25568,10 +25487,15 @@ export const clutch = $root.clutch = (() => {
                         message.prompt = String(object.prompt);
                     if (object.freeformPrompt != null)
                         message.freeformPrompt = String(object.freeformPrompt);
-                    if (object.ratingLabels != null) {
-                        if (typeof object.ratingLabels !== "object")
-                            throw TypeError(".clutch.feedback.v1.Survey.ratingLabels: object expected");
-                        message.ratingLabels = $root.clutch.feedback.v1.RatingLabels.fromObject(object.ratingLabels);
+                    if (object.ratingLabels) {
+                        if (!Array.isArray(object.ratingLabels))
+                            throw TypeError(".clutch.feedback.v1.Survey.ratingLabels: array expected");
+                        message.ratingLabels = [];
+                        for (let i = 0; i < object.ratingLabels.length; ++i) {
+                            if (typeof object.ratingLabels[i] !== "object")
+                                throw TypeError(".clutch.feedback.v1.Survey.ratingLabels: object expected");
+                            message.ratingLabels[i] = $root.clutch.feedback.v1.RatingLabel.fromObject(object.ratingLabels[i]);
+                        }
                     }
                     return message;
                 };
@@ -25589,17 +25513,21 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
+                    if (options.arrays || options.defaults)
+                        object.ratingLabels = [];
                     if (options.defaults) {
                         object.prompt = "";
                         object.freeformPrompt = "";
-                        object.ratingLabels = null;
                     }
                     if (message.prompt != null && message.hasOwnProperty("prompt"))
                         object.prompt = message.prompt;
                     if (message.freeformPrompt != null && message.hasOwnProperty("freeformPrompt"))
                         object.freeformPrompt = message.freeformPrompt;
-                    if (message.ratingLabels != null && message.hasOwnProperty("ratingLabels"))
-                        object.ratingLabels = $root.clutch.feedback.v1.RatingLabels.toObject(message.ratingLabels, options);
+                    if (message.ratingLabels && message.ratingLabels.length) {
+                        object.ratingLabels = [];
+                        for (let j = 0; j < message.ratingLabels.length; ++j)
+                            object.ratingLabels[j] = $root.clutch.feedback.v1.RatingLabel.toObject(message.ratingLabels[j], options);
+                    }
                     return object;
                 };
 

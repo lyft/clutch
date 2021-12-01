@@ -7742,7 +7742,7 @@ export namespace clutch {
                         freeformPrompt?: (string|null);
 
                         /** Survey ratingLabels */
-                        ratingLabels?: (clutch.feedback.v1.IRatingLabels|null);
+                        ratingLabels?: (clutch.feedback.v1.IRatingLabel[]|null);
                     }
 
                     /** Represents a Survey. */
@@ -7761,7 +7761,7 @@ export namespace clutch {
                         public freeformPrompt: string;
 
                         /** Survey ratingLabels. */
-                        public ratingLabels?: (clutch.feedback.v1.IRatingLabels|null);
+                        public ratingLabels: clutch.feedback.v1.IRatingLabel[];
 
                         /**
                          * Verifies a Survey message.
@@ -10281,66 +10281,6 @@ export namespace clutch {
                 WIZARD = 2
             }
 
-            /** Properties of an EmojiRatingLabels. */
-            interface IEmojiRatingLabels {
-
-                /** EmojiRatingLabels sad */
-                sad?: (string|null);
-
-                /** EmojiRatingLabels neutral */
-                neutral?: (string|null);
-
-                /** EmojiRatingLabels happy */
-                happy?: (string|null);
-            }
-
-            /** Represents an EmojiRatingLabels. */
-            class EmojiRatingLabels implements IEmojiRatingLabels {
-
-                /**
-                 * Constructs a new EmojiRatingLabels.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.feedback.v1.IEmojiRatingLabels);
-
-                /** EmojiRatingLabels sad. */
-                public sad: string;
-
-                /** EmojiRatingLabels neutral. */
-                public neutral: string;
-
-                /** EmojiRatingLabels happy. */
-                public happy: string;
-
-                /**
-                 * Verifies an EmojiRatingLabels message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates an EmojiRatingLabels message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns EmojiRatingLabels
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.EmojiRatingLabels;
-
-                /**
-                 * Creates a plain object from an EmojiRatingLabels message. Also converts values to other types if specified.
-                 * @param message EmojiRatingLabels
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.feedback.v1.EmojiRatingLabels, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this EmojiRatingLabels to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
             /** EmojiRating enum. */
             enum EmojiRating {
                 EMOJI_UNSPECIFIED = 0,
@@ -10349,52 +10289,58 @@ export namespace clutch {
                 HAPPY = 3
             }
 
-            /** Properties of a RatingLabels. */
-            interface IRatingLabels {
+            /** Properties of a RatingLabel. */
+            interface IRatingLabel {
 
-                /** RatingLabels emoji */
-                emoji?: (clutch.feedback.v1.IEmojiRatingLabels|null);
+                /** RatingLabel emoji */
+                emoji?: (clutch.feedback.v1.EmojiRating|null);
+
+                /** RatingLabel label */
+                label?: (string|null);
             }
 
-            /** Represents a RatingLabels. */
-            class RatingLabels implements IRatingLabels {
+            /** Represents a RatingLabel. */
+            class RatingLabel implements IRatingLabel {
 
                 /**
-                 * Constructs a new RatingLabels.
+                 * Constructs a new RatingLabel.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.feedback.v1.IRatingLabels);
+                constructor(properties?: clutch.feedback.v1.IRatingLabel);
 
-                /** RatingLabels emoji. */
-                public emoji?: (clutch.feedback.v1.IEmojiRatingLabels|null);
+                /** RatingLabel emoji. */
+                public emoji?: (clutch.feedback.v1.EmojiRating|null);
 
-                /** RatingLabels type. */
+                /** RatingLabel label. */
+                public label: string;
+
+                /** RatingLabel type. */
                 public type?: "emoji";
 
                 /**
-                 * Verifies a RatingLabels message.
+                 * Verifies a RatingLabel message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a RatingLabels message from a plain object. Also converts values to their respective internal types.
+                 * Creates a RatingLabel message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns RatingLabels
+                 * @returns RatingLabel
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingLabels;
+                public static fromObject(object: { [k: string]: any }): clutch.feedback.v1.RatingLabel;
 
                 /**
-                 * Creates a plain object from a RatingLabels message. Also converts values to other types if specified.
-                 * @param message RatingLabels
+                 * Creates a plain object from a RatingLabel message. Also converts values to other types if specified.
+                 * @param message RatingLabel
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.feedback.v1.RatingLabels, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.feedback.v1.RatingLabel, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this RatingLabels to JSON.
+                 * Converts this RatingLabel to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -10509,7 +10455,7 @@ export namespace clutch {
                 freeformPrompt?: (string|null);
 
                 /** Survey ratingLabels */
-                ratingLabels?: (clutch.feedback.v1.IRatingLabels|null);
+                ratingLabels?: (clutch.feedback.v1.IRatingLabel[]|null);
             }
 
             /** Represents a Survey. */
@@ -10528,7 +10474,7 @@ export namespace clutch {
                 public freeformPrompt: string;
 
                 /** Survey ratingLabels. */
-                public ratingLabels?: (clutch.feedback.v1.IRatingLabels|null);
+                public ratingLabels: clutch.feedback.v1.IRatingLabel[];
 
                 /**
                  * Verifies a Survey message.

@@ -60,22 +60,22 @@ func TestNewSurveyLookup(t *testing.T) {
 func TestGetConfigSurveys(t *testing.T) {
 	// match
 	testCases := []struct {
-		surveyMap            SurveyLookup
+		surveyMap            surveyLookup
 		expectedOk           bool
 		expectedSurveyPrompt string
 	}{
 		{
-			surveyMap:  SurveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{}},
+			surveyMap:  surveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{}},
 			expectedOk: false,
 		},
 		{
-			surveyMap: SurveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
+			surveyMap: surveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
 				"FOO": &feedbackv1cfg.SurveyOrigin{},
 			}},
 			expectedOk: false,
 		},
 		{
-			surveyMap: SurveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
+			surveyMap: surveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
 				"WIZARD": &feedbackv1cfg.SurveyOrigin{Survey: &feedbackv1cfg.Survey{Prompt: "bar"}},
 			}},
 			expectedOk: true,
