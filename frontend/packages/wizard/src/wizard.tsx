@@ -30,6 +30,12 @@ interface WizardProps extends Pick<ContainerProps, "width"> {
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
 }
 
+// To be used in a workflow's configuration file
+export interface WizardConfigProps {
+  // If true and if the WizardStep is used, a feedback component will be added to a workflow's last step.
+  enableFeedback?: boolean;
+}
+
 export interface WizardChild {
   name: string;
 }

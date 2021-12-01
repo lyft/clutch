@@ -1,12 +1,9 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { WizardConfigProps } from "@clutch-sh/wizard";
 
 import RemoteTriage from "./remote-triage";
 
-interface WizardFeedbackProps {
-  enableFeedback?: boolean;
-}
-
-export interface WorkflowProps extends BaseWorkflowProps, WizardFeedbackProps {}
+export interface WorkflowProps extends BaseWorkflowProps, WizardConfigProps {}
 
 const register = (): WorkflowConfiguration => {
   return {

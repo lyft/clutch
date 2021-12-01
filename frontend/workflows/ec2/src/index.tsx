@@ -1,5 +1,5 @@
 import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clutch-sh/core";
-import type { WizardChild } from "@clutch-sh/wizard";
+import type { WizardChild, WizardConfigProps } from "@clutch-sh/wizard";
 
 import RebootInstance from "./reboot-instance";
 import ResizeAutoscalingGroup from "./resize-asg";
@@ -13,15 +13,11 @@ interface ConfirmConfigProps {
   notes?: NoteConfig[];
 }
 
-interface WizardFeedbackProps {
-  enableFeedback?: boolean;
-}
-
 export interface WorkflowProps
   extends BaseWorkflowProps,
     ResolverConfigProps,
     ConfirmConfigProps,
-    WizardFeedbackProps {}
+    WizardConfigProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
 export interface ConfirmChild extends WizardChild, ConfirmConfigProps {}
 

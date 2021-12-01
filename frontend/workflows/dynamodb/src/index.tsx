@@ -1,5 +1,5 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
-import type { WizardChild } from "@clutch-sh/wizard";
+import type { WizardChild, WizardConfigProps } from "@clutch-sh/wizard";
 
 import UpdateCapacity from "./update-capacity";
 
@@ -11,15 +11,11 @@ interface TableDetailsProps {
   enableOverride?: boolean;
 }
 
-interface WizardFeedbackProps {
-  enableFeedback?: boolean;
-}
-
 export interface WorkflowProps
   extends BaseWorkflowProps,
     ResolverConfigProps,
     TableDetailsProps,
-    WizardFeedbackProps {}
+    WizardConfigProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
 export interface TableDetailsChild extends WizardChild, TableDetailsProps {}
 
