@@ -13563,6 +13563,34 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public listEvents(request: clutch.k8s.v1.IListEventsRequest): Promise<clutch.k8s.v1.ListEventsResponse>;
+
+                /**
+                 * Calls DescribeNode.
+                 * @param request DescribeNodeRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeNodeResponse
+                 */
+                public describeNode(request: clutch.k8s.v1.IDescribeNodeRequest, callback: clutch.k8s.v1.K8sAPI.DescribeNodeCallback): void;
+
+                /**
+                 * Calls DescribeNode.
+                 * @param request DescribeNodeRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeNode(request: clutch.k8s.v1.IDescribeNodeRequest): Promise<clutch.k8s.v1.DescribeNodeResponse>;
+
+                /**
+                 * Calls UpdateNode.
+                 * @param request UpdateNodeRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and UpdateNodeResponse
+                 */
+                public updateNode(request: clutch.k8s.v1.IUpdateNodeRequest, callback: clutch.k8s.v1.K8sAPI.UpdateNodeCallback): void;
+
+                /**
+                 * Calls UpdateNode.
+                 * @param request UpdateNodeRequest message or plain object
+                 * @returns Promise
+                 */
+                public updateNode(request: clutch.k8s.v1.IUpdateNodeRequest): Promise<clutch.k8s.v1.UpdateNodeResponse>;
             }
 
             namespace K8sAPI {
@@ -13762,6 +13790,20 @@ export namespace clutch {
                  * @param [response] ListEventsResponse
                  */
                 type ListEventsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListEventsResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeNode}.
+                 * @param error Error, if any
+                 * @param [response] DescribeNodeResponse
+                 */
+                type DescribeNodeCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeNodeResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateNode}.
+                 * @param error Error, if any
+                 * @param [response] UpdateNodeResponse
+                 */
+                type UpdateNodeCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateNodeResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -18971,6 +19013,282 @@ export namespace clutch {
 
                 /**
                  * Converts this RemoveObjectMetaFields to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Node. */
+            interface INode {
+
+                /** Node name */
+                name?: (string|null);
+
+                /** Node cluster */
+                cluster?: (string|null);
+
+                /** Node unschedulable */
+                unschedulable?: (boolean|null);
+            }
+
+            /** Represents a Node. */
+            class Node implements INode {
+
+                /**
+                 * Constructs a new Node.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.INode);
+
+                /** Node name. */
+                public name: string;
+
+                /** Node cluster. */
+                public cluster: string;
+
+                /** Node unschedulable. */
+                public unschedulable: boolean;
+
+                /**
+                 * Verifies a Node message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Node message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Node
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Node;
+
+                /**
+                 * Creates a plain object from a Node message. Also converts values to other types if specified.
+                 * @param message Node
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Node, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Node to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeNodeRequest. */
+            interface IDescribeNodeRequest {
+
+                /** DescribeNodeRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeNodeRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeNodeRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DescribeNodeRequest. */
+            class DescribeNodeRequest implements IDescribeNodeRequest {
+
+                /**
+                 * Constructs a new DescribeNodeRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeNodeRequest);
+
+                /** DescribeNodeRequest clientset. */
+                public clientset: string;
+
+                /** DescribeNodeRequest cluster. */
+                public cluster: string;
+
+                /** DescribeNodeRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DescribeNodeRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeNodeRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeNodeRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeNodeRequest;
+
+                /**
+                 * Creates a plain object from a DescribeNodeRequest message. Also converts values to other types if specified.
+                 * @param message DescribeNodeRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeNodeRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeNodeRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeNodeResponse. */
+            interface IDescribeNodeResponse {
+
+                /** DescribeNodeResponse node */
+                node?: (clutch.k8s.v1.INode|null);
+            }
+
+            /** Represents a DescribeNodeResponse. */
+            class DescribeNodeResponse implements IDescribeNodeResponse {
+
+                /**
+                 * Constructs a new DescribeNodeResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeNodeResponse);
+
+                /** DescribeNodeResponse node. */
+                public node?: (clutch.k8s.v1.INode|null);
+
+                /**
+                 * Verifies a DescribeNodeResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeNodeResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeNodeResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeNodeResponse;
+
+                /**
+                 * Creates a plain object from a DescribeNodeResponse message. Also converts values to other types if specified.
+                 * @param message DescribeNodeResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeNodeResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeNodeResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdateNodeRequest. */
+            interface IUpdateNodeRequest {
+
+                /** UpdateNodeRequest clientset */
+                clientset?: (string|null);
+
+                /** UpdateNodeRequest cluster */
+                cluster?: (string|null);
+
+                /** UpdateNodeRequest name */
+                name?: (string|null);
+
+                /** UpdateNodeRequest unschedulable */
+                unschedulable?: (boolean|null);
+            }
+
+            /** Represents an UpdateNodeRequest. */
+            class UpdateNodeRequest implements IUpdateNodeRequest {
+
+                /**
+                 * Constructs a new UpdateNodeRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdateNodeRequest);
+
+                /** UpdateNodeRequest clientset. */
+                public clientset: string;
+
+                /** UpdateNodeRequest cluster. */
+                public cluster: string;
+
+                /** UpdateNodeRequest name. */
+                public name: string;
+
+                /** UpdateNodeRequest unschedulable. */
+                public unschedulable: boolean;
+
+                /**
+                 * Verifies an UpdateNodeRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateNodeRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateNodeRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateNodeRequest;
+
+                /**
+                 * Creates a plain object from an UpdateNodeRequest message. Also converts values to other types if specified.
+                 * @param message UpdateNodeRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdateNodeRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateNodeRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdateNodeResponse. */
+            interface IUpdateNodeResponse {
+            }
+
+            /** Represents an UpdateNodeResponse. */
+            class UpdateNodeResponse implements IUpdateNodeResponse {
+
+                /**
+                 * Constructs a new UpdateNodeResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdateNodeResponse);
+
+                /**
+                 * Verifies an UpdateNodeResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateNodeResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateNodeResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateNodeResponse;
+
+                /**
+                 * Creates a plain object from an UpdateNodeResponse message. Also converts values to other types if specified.
+                 * @param message UpdateNodeResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdateNodeResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateNodeResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
