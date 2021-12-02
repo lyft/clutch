@@ -32744,6 +32744,72 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeNode}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeNodeCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeNodeResponse} [response] DescribeNodeResponse
+                 */
+
+                /**
+                 * Calls DescribeNode.
+                 * @function describeNode
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeNodeRequest} request DescribeNodeRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeNodeCallback} callback Node-style callback called with the error, if any, and DescribeNodeResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeNode = function describeNode(request, callback) {
+                    return this.rpcCall(describeNode, $root.clutch.k8s.v1.DescribeNodeRequest, $root.clutch.k8s.v1.DescribeNodeResponse, request, callback);
+                }, "name", { value: "DescribeNode" });
+
+                /**
+                 * Calls DescribeNode.
+                 * @function describeNode
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeNodeRequest} request DescribeNodeRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeNodeResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateNode}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef UpdateNodeCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.UpdateNodeResponse} [response] UpdateNodeResponse
+                 */
+
+                /**
+                 * Calls UpdateNode.
+                 * @function updateNode
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdateNodeRequest} request UpdateNodeRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.UpdateNodeCallback} callback Node-style callback called with the error, if any, and UpdateNodeResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.updateNode = function updateNode(request, callback) {
+                    return this.rpcCall(updateNode, $root.clutch.k8s.v1.UpdateNodeRequest, $root.clutch.k8s.v1.UpdateNodeResponse, request, callback);
+                }, "name", { value: "UpdateNode" });
+
+                /**
+                 * Calls UpdateNode.
+                 * @function updateNode
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdateNodeRequest} request UpdateNodeRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.UpdateNodeResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -45544,6 +45610,611 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return RemoveObjectMetaFields;
+            })();
+
+            v1.Node = (function() {
+
+                /**
+                 * Properties of a Node.
+                 * @memberof clutch.k8s.v1
+                 * @interface INode
+                 * @property {string|null} [name] Node name
+                 * @property {string|null} [cluster] Node cluster
+                 * @property {boolean|null} [unschedulable] Node unschedulable
+                 */
+
+                /**
+                 * Constructs a new Node.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a Node.
+                 * @implements INode
+                 * @constructor
+                 * @param {clutch.k8s.v1.INode=} [properties] Properties to set
+                 */
+                function Node(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Node name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.Node
+                 * @instance
+                 */
+                Node.prototype.name = "";
+
+                /**
+                 * Node cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.Node
+                 * @instance
+                 */
+                Node.prototype.cluster = "";
+
+                /**
+                 * Node unschedulable.
+                 * @member {boolean} unschedulable
+                 * @memberof clutch.k8s.v1.Node
+                 * @instance
+                 */
+                Node.prototype.unschedulable = false;
+
+                /**
+                 * Verifies a Node message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Node
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Node.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.unschedulable != null && message.hasOwnProperty("unschedulable"))
+                        if (typeof message.unschedulable !== "boolean")
+                            return "unschedulable: boolean expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Node message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Node
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Node} Node
+                 */
+                Node.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Node)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Node();
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.unschedulable != null)
+                        message.unschedulable = Boolean(object.unschedulable);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Node message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Node
+                 * @static
+                 * @param {clutch.k8s.v1.Node} message Node
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Node.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.name = "";
+                        object.cluster = "";
+                        object.unschedulable = false;
+                    }
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.unschedulable != null && message.hasOwnProperty("unschedulable"))
+                        object.unschedulable = message.unschedulable;
+                    return object;
+                };
+
+                /**
+                 * Converts this Node to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Node
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Node.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Node;
+            })();
+
+            v1.DescribeNodeRequest = (function() {
+
+                /**
+                 * Properties of a DescribeNodeRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeNodeRequest
+                 * @property {string|null} [clientset] DescribeNodeRequest clientset
+                 * @property {string|null} [cluster] DescribeNodeRequest cluster
+                 * @property {string|null} [name] DescribeNodeRequest name
+                 */
+
+                /**
+                 * Constructs a new DescribeNodeRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeNodeRequest.
+                 * @implements IDescribeNodeRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeNodeRequest=} [properties] Properties to set
+                 */
+                function DescribeNodeRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeNodeRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeNodeRequest
+                 * @instance
+                 */
+                DescribeNodeRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeNodeRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeNodeRequest
+                 * @instance
+                 */
+                DescribeNodeRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeNodeRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeNodeRequest
+                 * @instance
+                 */
+                DescribeNodeRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DescribeNodeRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeNodeRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeNodeRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeNodeRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeNodeRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeNodeRequest} DescribeNodeRequest
+                 */
+                DescribeNodeRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeNodeRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeNodeRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeNodeRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeNodeRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeNodeRequest} message DescribeNodeRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeNodeRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeNodeRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeNodeRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeNodeRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeNodeRequest;
+            })();
+
+            v1.DescribeNodeResponse = (function() {
+
+                /**
+                 * Properties of a DescribeNodeResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeNodeResponse
+                 * @property {clutch.k8s.v1.INode|null} [node] DescribeNodeResponse node
+                 */
+
+                /**
+                 * Constructs a new DescribeNodeResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeNodeResponse.
+                 * @implements IDescribeNodeResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeNodeResponse=} [properties] Properties to set
+                 */
+                function DescribeNodeResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeNodeResponse node.
+                 * @member {clutch.k8s.v1.INode|null|undefined} node
+                 * @memberof clutch.k8s.v1.DescribeNodeResponse
+                 * @instance
+                 */
+                DescribeNodeResponse.prototype.node = null;
+
+                /**
+                 * Verifies a DescribeNodeResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeNodeResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeNodeResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.node != null && message.hasOwnProperty("node")) {
+                        let error = $root.clutch.k8s.v1.Node.verify(message.node);
+                        if (error)
+                            return "node." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeNodeResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeNodeResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeNodeResponse} DescribeNodeResponse
+                 */
+                DescribeNodeResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeNodeResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeNodeResponse();
+                    if (object.node != null) {
+                        if (typeof object.node !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeNodeResponse.node: object expected");
+                        message.node = $root.clutch.k8s.v1.Node.fromObject(object.node);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeNodeResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeNodeResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeNodeResponse} message DescribeNodeResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeNodeResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.node = null;
+                    if (message.node != null && message.hasOwnProperty("node"))
+                        object.node = $root.clutch.k8s.v1.Node.toObject(message.node, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeNodeResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeNodeResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeNodeResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeNodeResponse;
+            })();
+
+            v1.UpdateNodeRequest = (function() {
+
+                /**
+                 * Properties of an UpdateNodeRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdateNodeRequest
+                 * @property {string|null} [clientset] UpdateNodeRequest clientset
+                 * @property {string|null} [cluster] UpdateNodeRequest cluster
+                 * @property {string|null} [name] UpdateNodeRequest name
+                 * @property {boolean|null} [unschedulable] UpdateNodeRequest unschedulable
+                 */
+
+                /**
+                 * Constructs a new UpdateNodeRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdateNodeRequest.
+                 * @implements IUpdateNodeRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdateNodeRequest=} [properties] Properties to set
+                 */
+                function UpdateNodeRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * UpdateNodeRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.UpdateNodeRequest
+                 * @instance
+                 */
+                UpdateNodeRequest.prototype.clientset = "";
+
+                /**
+                 * UpdateNodeRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.UpdateNodeRequest
+                 * @instance
+                 */
+                UpdateNodeRequest.prototype.cluster = "";
+
+                /**
+                 * UpdateNodeRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.UpdateNodeRequest
+                 * @instance
+                 */
+                UpdateNodeRequest.prototype.name = "";
+
+                /**
+                 * UpdateNodeRequest unschedulable.
+                 * @member {boolean} unschedulable
+                 * @memberof clutch.k8s.v1.UpdateNodeRequest
+                 * @instance
+                 */
+                UpdateNodeRequest.prototype.unschedulable = false;
+
+                /**
+                 * Verifies an UpdateNodeRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdateNodeRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateNodeRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.unschedulable != null && message.hasOwnProperty("unschedulable"))
+                        if (typeof message.unschedulable !== "boolean")
+                            return "unschedulable: boolean expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateNodeRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdateNodeRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdateNodeRequest} UpdateNodeRequest
+                 */
+                UpdateNodeRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdateNodeRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.UpdateNodeRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.unschedulable != null)
+                        message.unschedulable = Boolean(object.unschedulable);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an UpdateNodeRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdateNodeRequest
+                 * @static
+                 * @param {clutch.k8s.v1.UpdateNodeRequest} message UpdateNodeRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateNodeRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.name = "";
+                        object.unschedulable = false;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.unschedulable != null && message.hasOwnProperty("unschedulable"))
+                        object.unschedulable = message.unschedulable;
+                    return object;
+                };
+
+                /**
+                 * Converts this UpdateNodeRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdateNodeRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateNodeRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return UpdateNodeRequest;
+            })();
+
+            v1.UpdateNodeResponse = (function() {
+
+                /**
+                 * Properties of an UpdateNodeResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdateNodeResponse
+                 */
+
+                /**
+                 * Constructs a new UpdateNodeResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdateNodeResponse.
+                 * @implements IUpdateNodeResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdateNodeResponse=} [properties] Properties to set
+                 */
+                function UpdateNodeResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies an UpdateNodeResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdateNodeResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateNodeResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateNodeResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdateNodeResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdateNodeResponse} UpdateNodeResponse
+                 */
+                UpdateNodeResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdateNodeResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.UpdateNodeResponse();
+                };
+
+                /**
+                 * Creates a plain object from an UpdateNodeResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdateNodeResponse
+                 * @static
+                 * @param {clutch.k8s.v1.UpdateNodeResponse} message UpdateNodeResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateNodeResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this UpdateNodeResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdateNodeResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateNodeResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return UpdateNodeResponse;
             })();
 
             v1.Status = (function() {
