@@ -52147,6 +52147,141 @@ export const clutch = $root.clutch = (() => {
                     return Namespace;
                 })();
 
+                v1.Node = (function() {
+
+                    /**
+                     * Properties of a Node.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface INode
+                     * @property {string|null} [name] Node name
+                     * @property {string|null} [cluster] Node cluster
+                     * @property {string|null} [clientset] Node clientset
+                     */
+
+                    /**
+                     * Constructs a new Node.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a Node.
+                     * @implements INode
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.INode=} [properties] Properties to set
+                     */
+                    function Node(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Node name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.Node
+                     * @instance
+                     */
+                    Node.prototype.name = "";
+
+                    /**
+                     * Node cluster.
+                     * @member {string} cluster
+                     * @memberof clutch.resolver.k8s.v1.Node
+                     * @instance
+                     */
+                    Node.prototype.cluster = "";
+
+                    /**
+                     * Node clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.Node
+                     * @instance
+                     */
+                    Node.prototype.clientset = "";
+
+                    /**
+                     * Verifies a Node message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.Node
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Node.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.cluster != null && message.hasOwnProperty("cluster"))
+                            if (!$util.isString(message.cluster))
+                                return "cluster: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Node message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.Node
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.Node} Node
+                     */
+                    Node.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.Node)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.Node();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.cluster != null)
+                            message.cluster = String(object.cluster);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Node message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.Node
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.Node} message Node
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Node.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.cluster = "";
+                            object.clientset = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.cluster != null && message.hasOwnProperty("cluster"))
+                            object.cluster = message.cluster;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Node to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.Node
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Node.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Node;
+                })();
+
                 return v1;
             })();
 

@@ -21834,6 +21834,66 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+
+                /** Properties of a Node. */
+                interface INode {
+
+                    /** Node name */
+                    name?: (string|null);
+
+                    /** Node cluster */
+                    cluster?: (string|null);
+
+                    /** Node clientset */
+                    clientset?: (string|null);
+                }
+
+                /** Represents a Node. */
+                class Node implements INode {
+
+                    /**
+                     * Constructs a new Node.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.INode);
+
+                    /** Node name. */
+                    public name: string;
+
+                    /** Node cluster. */
+                    public cluster: string;
+
+                    /** Node clientset. */
+                    public clientset: string;
+
+                    /**
+                     * Verifies a Node message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Node message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Node
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.Node;
+
+                    /**
+                     * Creates a plain object from a Node message. Also converts values to other types if specified.
+                     * @param message Node
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.Node, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Node to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
         }
     }
