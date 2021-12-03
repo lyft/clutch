@@ -2,6 +2,9 @@ import React from "react";
 import {
   Button,
   ButtonGroup,
+  FeatureOn,
+  NPSWizard,
+  SimpleFeatureFlag,
   Step,
   Stepper,
   useLocation,
@@ -136,6 +139,11 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
             <Grid container direction="column" justify="center" alignItems="center">
               {child}
             </Grid>
+            <SimpleFeatureFlag feature="npsWizard">
+              <FeatureOn>
+                <NPSWizard />
+              </FeatureOn>
+            </SimpleFeatureFlag>
           </WizardContext.Provider>
         </DataLayoutContext.Provider>
         <Grid container justify="center">

@@ -115,6 +115,7 @@ const StyledBorderButton = styled(StyledButton)({
 
 /** Provides feedback to the user in regards to the action of the button. */
 type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "secondary";
+type ButtonSize = "small" | "medium";
 
 /** A color palette from a @type ButtonPalette */
 const variantPalette = (variant: ButtonVariant): ButtonPalette => {
@@ -146,22 +147,31 @@ const StyledIconButton = styled(MuiIconButton)<{ palette: ButtonPalette }>(
   {
     height: "48px",
     width: "48px",
-    padding: "12px",
   },
-  props => colorCss(props.palette)
+  props => ({
+    padding: props.size && props.size === "medium" ? "6px" : "12px",
+    ...colorCss(props.palette),
+  })
 );
 
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
+  size?: ButtonSize;
   children: React.ReactElement;
 }
 
-/** An button to wrap icons with default themes based on use case. */
-const IconButton = ({ variant = "primary", children, ...props }: IconButtonProps) => (
-  <StyledIconButton {...props} palette={variantPalette(variant)}>
-    {children}
-  </StyledIconButton>
+/**
+ * A button to wrap icons with default themes based on use case.
+ * Will forwardRef so that tooltips can be wrapped around the buttons
+ * @param variant valid color variant
+ */
+const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
+  ({ variant = "primary", size = "small", children, ...props }: IconButtonProps, ref) => (
+    <StyledIconButton palette={variantPalette(variant)} size={size} {...props} {...{ ref }}>
+      {children}
+    </StyledIconButton>
+  )
 );
 
 const ButtonGroupContainer = styled(Grid)(
@@ -189,7 +199,7 @@ export interface ButtonGroupProps {
   children: React.ReactElement<ButtonProps> | React.ReactElement<ButtonProps>[];
   /** Justification of buttons. */
   justify?: GridJustification;
-  /** Position of button group border. Defautls to top. */
+  /** Position of button group border. Defaults to top. */
   border?: "top" | "bottom";
 }
 

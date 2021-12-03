@@ -49,6 +49,7 @@
     "react-router": "^6.0.0-beta",
     "react-router-dom": "^6.0.0-beta",
     "superstruct": "~0.15.0",
+    "uuid": "^8.3.2",
     "yup": "^0.32.8"
   },
   "devDependencies": {
