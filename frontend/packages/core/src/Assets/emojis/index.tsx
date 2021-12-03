@@ -4,8 +4,8 @@ import HappyEmoji from "./happy";
 import NeutralEmoji from "./neutral";
 import SadEmoji from "./sad";
 
-const Emoji = ({ type, ...props }) => {
-  switch (type ?? type.toUpperCase()) {
+const Emoji = ({ type = "", ...props }) => {
+  switch (type.toUpperCase()) {
     case "HAPPY":
       return <HappyEmoji {...props} />;
     case "NEUTRAL":
