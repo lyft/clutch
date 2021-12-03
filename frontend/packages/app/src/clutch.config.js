@@ -60,5 +60,11 @@ module.exports = {
     kubeDashboard: {
       trending: true,
     },
+    cordonNode: {
+      trending: true,
+      componentProps: {
+        resolverType: "clutch.k8s.v1.Node",
+      },
+    },
   },
 };
