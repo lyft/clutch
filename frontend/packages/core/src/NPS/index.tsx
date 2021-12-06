@@ -2,7 +2,7 @@
  * TODO
 
  * [] Clean up NPS component
- * [] Move Wizard feedback to end of wizard component
+ * [x] Move Wizard feedback to end of wizard component
  * [x] Separate anytime and wizard into separate files
  * [] Clean up css
  * [] Fetch options for anytime
@@ -10,9 +10,11 @@
  * [x] Styling for anytime
  * [x] Fix paper styling and wizard overlapping anytime
  * [x] Adjust iconbutton sizing for large
- * [] Convert to using types for IClutch
+ * [x] Convert to using types for IClutch
  * [] Unit tests
- * [] Integrate with new feedback wizard option
+ * [x] Integrate with new feedback wizard option
+ * [] Add comments around functionality
+ * [] fetch feedback survey on page load vs component render
  */
 
 export { default as NPSWizard } from "./wizard";

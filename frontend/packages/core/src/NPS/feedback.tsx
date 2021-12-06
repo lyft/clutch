@@ -18,6 +18,7 @@ import type { ClutchError } from "../Network/errors";
 
 interface FeedbackOptions {
   origin: "ORIGIN_UNSPECIFIED" | "WIZARD" | "ANYTIME";
+  onSubmit?: (submit: boolean) => void;
 }
 
 type Rating = {
@@ -32,8 +33,7 @@ interface Survey extends IClutch.feedback.v1.ISurvey {
   feedbackType?: { label: string }[];
 }
 
-/** Defaults */
-
+// Defaults in case of API failure
 const defaults: Survey = {
   prompt: "Rate Your Experience using Clutch",
   freeformPrompt: "What would you recommend to improve this workflow?",
@@ -80,6 +80,14 @@ const StyledAlert = styled(Alert)({
 
 /** Components */
 
+/**
+ * EmojiRatings component which will take an array of emojis and given ratings and create IconButtons with them and return them on selection
+ *
+ * @param ratings given array of ratings to display
+ * @param setRating function which will return the given selected rating
+ * @param size allows overriding of a given size, "large" is the only appropriate value
+ * @returns rendered EmojiRatings component
+ */
 const EmojiRatings = ({ ratings = [], setRating, size }) => {
   const [selectedRating, selectRating] = useState<Rating>(null);
 
@@ -105,6 +113,7 @@ const EmojiRatings = ({ ratings = [], setRating, size }) => {
     setRating(rating);
   };
 
+  // Will convert a given integer to a typed enum key
   const getKey = (map, val) => Object.keys(map).find(key => map[key] === val);
 
   return (
@@ -146,7 +155,14 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   const [survey, setSurvey] = useState<Survey>({});
   const requestId = uuid();
   const maxLength = 180;
+  const debounceTimer = 500;
 
+  const trimmed =
+    feedback.trim().length > maxLength
+      ? `${feedback.trim().substring(0, maxLength - 3)}...`
+      : feedback;
+
+  /** Property objects used to extend components and remove unnecessary console warnings */
   const AlertProps = {
     iconMapping: {
       info: <MuiSuccessIcon style={{ color: "#3548d4" }} />,
@@ -164,6 +180,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
     },
   };
 
+  // Will fetch the survey results for the given origin on load
   useEffect(() => {
     // let data: IClutch.feedback.v1.ISurvey = defaults;
     let data: Survey = defaults;
@@ -186,21 +203,18 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
       });
   }, []);
 
+  // Will debounce feedback requests to the server in case of multiple quick changes to selected
   const sendFeedback = useCallback(
     debounce((formData: IClutch.feedback.v1.ISubmitFeedbackRequest) => {
       client.post("/v1/feedback/submitFeedback", { userId: userId(), ...formData }).catch(e => {
         // eslint-disable-next-line no-console
         console.error(e);
       });
-    }, 500),
+    }, debounceTimer),
     []
   );
 
-  const trimmed =
-    feedback.trim().length > maxLength
-      ? `${feedback.trim().substring(0, maxLength - 3)}...`
-      : feedback;
-
+  // On a change to submit or selected will attempt to send a feedback request
   useEffect(() => {
     if (selected) {
       sendFeedback({
@@ -226,6 +240,9 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   const submitFeedback = e => {
     e.preventDefault();
     setSubmit(true);
+    if (opts.onSubmit) {
+      opts.onSubmit(true);
+    }
   };
 
   return (

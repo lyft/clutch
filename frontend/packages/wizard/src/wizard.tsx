@@ -27,7 +27,7 @@ const Heading = styled(Typography)({
   fontSize: "26px",
 });
 
-interface WizardProps extends Pick<ContainerProps, "width"> {
+interface WizardProps extends Pick<ContainerProps, "width" | "enableFeedback"> {
   heading?: string;
   dataLayout: ManagerLayout;
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
@@ -53,6 +53,7 @@ interface WizardStepData {
 
 interface ContainerProps {
   width?: "default" | "full";
+  enableFeedback?: boolean;
 }
 
 const Container = styled(MuiContainer)<ContainerProps>(
@@ -70,7 +71,13 @@ const Paper = styled(MuiPaper)({
   padding: "32px",
 });
 
-const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProps) => {
+const Wizard = ({
+  heading,
+  width = "default",
+  dataLayout,
+  children,
+  enableFeedback,
+}: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
@@ -139,28 +146,34 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
             <Grid container direction="column" justify="center" alignItems="center">
               {child}
             </Grid>
-            <SimpleFeatureFlag feature="npsWizard">
-              <FeatureOn>
-                <NPSWizard />
-              </FeatureOn>
-            </SimpleFeatureFlag>
           </WizardContext.Provider>
         </DataLayoutContext.Provider>
         <Grid container justify="center">
-          {((state.activeStep === lastStepIndex && !isLoading && isMultistep) || hasError) && (
-            <ButtonGroup>
-              <Button
-                text="Start Over"
-                onClick={() => {
-                  dataLayoutManager.reset();
-                  setSearchParams({});
-                  dispatch(WizardAction.RESET);
-                  if (origin) {
-                    navigate(origin);
-                  }
-                }}
-              />
-            </ButtonGroup>
+          {state.activeStep === lastStepIndex && !isLoading && (
+            <>
+              {enableFeedback && (
+                <SimpleFeatureFlag feature="npsWizard">
+                  <FeatureOn>
+                    <NPSWizard />
+                  </FeatureOn>
+                </SimpleFeatureFlag>
+              )}
+              {(isMultistep || hasError) && (
+                <ButtonGroup>
+                  <Button
+                    text="Start Over"
+                    onClick={() => {
+                      dataLayoutManager.reset();
+                      setSearchParams({});
+                      dispatch(WizardAction.RESET);
+                      if (origin) {
+                        navigate(origin);
+                      }
+                    }}
+                  />
+                </ButtonGroup>
+              )}
+            </>
           )}
         </Grid>
       </>

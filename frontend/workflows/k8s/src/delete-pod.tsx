@@ -91,7 +91,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
+const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType, enableFeedback }) => {
   const dataLayout = {
     resolverInput: {},
     resourceData: {},
@@ -110,7 +110,7 @@ const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout} heading={heading} enableFeedback={enableFeedback}>
       <PodIdentifier name="Lookup" resolverType={resolverType} />
       <PodDetails name="Verify" />
       <Confirm name="Confirmation" />
