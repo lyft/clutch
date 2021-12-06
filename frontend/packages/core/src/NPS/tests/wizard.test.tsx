@@ -6,13 +6,17 @@ import { NPSWizard } from "..";
 
 describe("<NPSWizard />", () => {
   describe("basic rendering", () => {
+    let wrapper;
+
+    beforeEach(() => {
+      wrapper = shallow(<NPSWizard />);
+    });
+
     it("renders", () => {
-      const wrapper = shallow(<NPSWizard />);
       expect(wrapper.find(NPSWizard)).toBeDefined();
     });
 
     it("renders feedback with wizard property", () => {
-      const wrapper = shallow(<NPSWizard />);
       expect(wrapper.contains(<NPSFeedback origin="WIZARD" />)).toEqual(true);
     });
   });

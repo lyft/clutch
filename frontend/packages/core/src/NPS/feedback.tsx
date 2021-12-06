@@ -10,7 +10,7 @@ import { userId } from "../AppLayout/user";
 import Emoji from "../Assets/emojis";
 import { Button, IconButton } from "../button";
 import { Alert, Tooltip } from "../Feedback";
-import { Select, TextField } from "../Input";
+import { TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
 
@@ -26,20 +26,10 @@ type Rating = {
   label: string;
 };
 
-// TODO: (jslaughter) update with milestone 2 anytime typing
-interface Survey extends IClutch.feedback.v1.ISurvey {
-  freeformLabel?: string;
-  feedbackTypeLabel?: string;
-  feedbackType?: { label: string }[];
-}
-
 // Defaults in case of API failure
-const defaults: Survey = {
+const defaults: IClutch.feedback.v1.ISurvey = {
   prompt: "Rate Your Experience using Clutch",
-  freeformPrompt: "What would you recommend to improve this workflow?",
-  freeformLabel: "Do you have any thought's you'd like to share? (optional)",
-  feedbackTypeLabel: "Choose a type of feedback you want to submit",
-  feedbackType: [{ label: "General" }, { label: "Dash" }],
+  freeformPrompt: "What would you recommend to improve this?",
   ratingLabels: [
     {
       emoji: 1,
@@ -58,15 +48,11 @@ const defaults: Survey = {
 
 /** Styling */
 
-const Text = styled.span<{ origin: string }>(
-  {
-    fontWeight: "bold",
-    color: "#0D1030",
-  },
-  props => ({
-    fontSize: props.origin === "ANYTIME" ? "16px" : "14px",
-  })
-);
+const Text = styled.span({
+  fontWeight: "bold",
+  color: "#0D1030",
+  fontSize: "14px",
+});
 
 const StyledGrid = styled(MuiGrid)({
   borderRadius: "8px",
@@ -88,13 +74,11 @@ const StyledAlert = styled(Alert)({
  * @param size allows overriding of a given size, "large" is the only appropriate value
  * @returns rendered EmojiRatings component
  */
-const EmojiRatings = ({ ratings = [], setRating, size }) => {
+const EmojiRatings = ({ ratings = [], setRating }) => {
   const [selectedRating, selectRating] = useState<Rating>(null);
 
-  // TODO: (jslaughter) Update with large sizing with material-ui@5
   const StyledIconButton = styled(IconButton)<{
     selected: boolean;
-    overridesize: string;
   }>(
     {
       "&:hover": {
@@ -102,8 +86,6 @@ const EmojiRatings = ({ ratings = [], setRating, size }) => {
       },
     },
     props => ({
-      height: props.overridesize === "large" ? "60px" : "48px",
-      width: props.overridesize === "large" ? "60px" : "48px",
       opacity: props.selected ? 1 : 0.5,
     })
   );
@@ -113,7 +95,7 @@ const EmojiRatings = ({ ratings = [], setRating, size }) => {
     setRating(rating);
   };
 
-  // Will convert a given integer to a typed enum key
+  // Will convert a given integer to a typed enum key if necessary
   const getKey = (map, val) => Object.keys(map).find(key => map[key] === val);
 
   return (
@@ -133,7 +115,6 @@ const EmojiRatings = ({ ratings = [], setRating, size }) => {
               variant="neutral"
               size="medium"
               selected={selectedRating?.label === label}
-              overridesize={size}
               onClick={() => select(rating)}
             >
               <Emoji type={emoji} size="large" />
@@ -145,14 +126,20 @@ const EmojiRatings = ({ ratings = [], setRating, size }) => {
   );
 };
 
+/**
+ * NPS feedback component which is the base for both Wizard and Anytime
+ * Will fetch given survey options from the server based on the given origin
+ * Then display a feedback component based on the given emoji ratings
+ *
+ * @param opts Available feedback options
+ * @returns NPSFeedback component
+ */
 const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) => {
   const [hasSubmit, setSubmit] = useState<boolean>(false);
   const [selected, setSelected] = useState<Rating>(null);
   const [feedback, setFeedback] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
-  // const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
-  const [type, setType] = useState<string>(null);
-  const [survey, setSurvey] = useState<Survey>({});
+  const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
   const requestId = uuid();
   const maxLength = 180;
   const debounceTimer = 500;
@@ -162,7 +149,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
       ? `${feedback.trim().substring(0, maxLength - 3)}...`
       : feedback;
 
-  /** Property objects used to extend components and remove unnecessary console warnings */
+  /** Property objects used to extend components and remove console warnings */
   const AlertProps = {
     iconMapping: {
       info: <MuiSuccessIcon style={{ color: "#3548d4" }} />,
@@ -182,8 +169,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
 
   // Will fetch the survey results for the given origin on load
   useEffect(() => {
-    // let data: IClutch.feedback.v1.ISurvey = defaults;
-    let data: Survey = defaults;
+    let data: IClutch.feedback.v1.ISurvey = defaults;
 
     client
       .post("/v1/feedback/getSurveys", {
@@ -206,10 +192,12 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   // Will debounce feedback requests to the server in case of multiple quick changes to selected
   const sendFeedback = useCallback(
     debounce((formData: IClutch.feedback.v1.ISubmitFeedbackRequest) => {
-      client.post("/v1/feedback/submitFeedback", { userId: userId(), ...formData }).catch(e => {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      });
+      client
+        .post("/v1/feedback/submitFeedback", { userId: userId(), ...formData })
+        .catch((err: ClutchError) => {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        });
     }, debounceTimer),
     []
   );
@@ -226,7 +214,6 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
           },
           urlPath: window.location.pathname,
           freeformResponse: trimmed,
-          feedbackType: type,
         },
         metadata: {
           origin: IClutch.feedback.v1.Origin[opts.origin],
@@ -237,6 +224,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
     }
   }, [selected, hasSubmit]);
 
+  // Form onSubmit handler
   const submitFeedback = e => {
     e.preventDefault();
     setSubmit(true);
@@ -249,47 +237,23 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
     <>
       {hasSubmit ? (
         <StyledAlert severity="info" {...AlertProps}>
-          <Text origin={opts.origin}>Thank you for your feedback!</Text>
+          <Text>Thank you for your feedback!</Text>
         </StyledAlert>
       ) : (
         <form onSubmit={submitFeedback}>
-          <StyledGrid
-            container
-            direction="row"
-            alignItems="center"
-            justify={opts.origin === "WIZARD" ? "center" : "flex-end"}
-          >
-            <MuiGrid item xs={opts.origin === "WIZARD" ? 6 : 12}>
-              <Text origin={opts.origin}>{survey.prompt}</Text>
+          <StyledGrid container direction="row" alignItems="center" justify="center">
+            <MuiGrid item xs={6}>
+              <Text>{survey.prompt}</Text>
             </MuiGrid>
-            <MuiGrid
-              item
-              xs={opts.origin === "WIZARD" ? 6 : 12}
-              style={{ display: "flex", justifyContent: "space-around" }}
-            >
-              <EmojiRatings
-                size={opts.origin === "ANYTIME" ? "large" : "medium"}
-                ratings={survey.ratingLabels}
-                setRating={setSelected}
-              />
+            <MuiGrid item xs={6} style={{ display: "flex", justifyContent: "space-around" }}>
+              <EmojiRatings ratings={survey.ratingLabels} setRating={setSelected} />
             </MuiGrid>
             {selected !== null && (
               <>
-                {opts.origin === "ANYTIME" && (
-                  <MuiGrid item xs={12} style={{ marginTop: "32px", marginBottom: "16px" }}>
-                    <Select
-                      name="anytimeSelect"
-                      label={survey.feedbackTypeLabel}
-                      options={survey.feedbackType}
-                      onChange={setType}
-                    />
-                  </MuiGrid>
-                )}
                 <MuiGrid item xs={12}>
                   <TextField
                     multiline
                     placeholder={survey.freeformPrompt}
-                    label={opts.origin === "ANYTIME" ? survey.freeformLabel : null}
                     value={feedback}
                     helperText={`${feedback.trim().length} / ${maxLength}`}
                     error={error}
@@ -301,12 +265,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
                   />
                 </MuiGrid>
                 <MuiGrid item xs={4}>
-                  <Button
-                    type="submit"
-                    text="Submit"
-                    variant={opts.origin === "WIZARD" ? "secondary" : "primary"}
-                    disabled={error}
-                  />
+                  <Button type="submit" text="Submit" variant="secondary" disabled={error} />
                 </MuiGrid>
               </>
             )}
