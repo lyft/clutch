@@ -1,8 +1,11 @@
 import React from "react";
+import { matchers } from "@emotion/jest";
 import { shallow } from "enzyme";
 
-import NPSFeedback from "../feedback";
 import { NPSWizard } from "..";
+
+// Add the custom matchers provided by '@emotion/jest'
+expect.extend(matchers);
 
 describe("<NPSWizard />", () => {
   describe("basic rendering", () => {
@@ -12,12 +15,26 @@ describe("<NPSWizard />", () => {
       wrapper = shallow(<NPSWizard />);
     });
 
+    afterEach(() => {
+      wrapper.unmount();
+    });
+
     it("renders", () => {
       expect(wrapper.find(NPSWizard)).toBeDefined();
     });
 
     it("renders feedback with wizard property", () => {
-      expect(wrapper.contains(<NPSFeedback origin="WIZARD" />)).toEqual(true);
+      expect(wrapper.find("NPSFeedback").props().origin).toBe("WIZARD");
+    });
+
+    it("renders the container with a bluish background", () => {
+      expect(wrapper).toHaveStyleRule("background", "#F9F9FE");
+    });
+
+    it("removes the bluish background after submission", () => {
+      wrapper.find("NPSFeedback").prop("onSubmit")(true);
+      wrapper.update();
+      expect(wrapper).toHaveStyleRule("background", "unset");
     });
   });
 });

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@material-ui/core";
@@ -27,7 +27,7 @@ type Rating = {
 };
 
 // Defaults in case of API failure
-const defaults: IClutch.feedback.v1.ISurvey = {
+export const defaults: IClutch.feedback.v1.ISurvey = {
   prompt: "Rate Your Experience using Clutch",
   freeformPrompt: "What would you recommend to improve this?",
   ratingLabels: [
@@ -74,7 +74,7 @@ const StyledAlert = styled(Alert)({
  * @param size allows overriding of a given size, "large" is the only appropriate value
  * @returns rendered EmojiRatings component
  */
-const EmojiRatings = ({ ratings = [], setRating }) => {
+export const EmojiRatings = ({ ratings = [], setRating }) => {
   const [selectedRating, selectRating] = useState<Rating>(null);
 
   const StyledIconButton = styled(IconButton)<{
@@ -168,7 +168,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   };
 
   // Will fetch the survey results for the given origin on load
-  useEffect(() => {
+  React.useEffect(() => {
     let data: IClutch.feedback.v1.ISurvey = defaults;
 
     client
@@ -190,7 +190,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   }, []);
 
   // Will debounce feedback requests to the server in case of multiple quick changes to selected
-  const sendFeedback = useCallback(
+  const sendFeedback = React.useCallback(
     debounce((formData: IClutch.feedback.v1.ISubmitFeedbackRequest) => {
       client
         .post("/v1/feedback/submitFeedback", { userId: userId(), ...formData })
@@ -203,7 +203,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   );
 
   // On a change to submit or selected will attempt to send a feedback request
-  useEffect(() => {
+  React.useEffect(() => {
     if (selected) {
       sendFeedback({
         id: requestId,
@@ -226,7 +226,9 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
 
   // Form onSubmit handler
   const submitFeedback = e => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     setSubmit(true);
     if (opts.onSubmit) {
       opts.onSubmit(true);
@@ -255,11 +257,11 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
                     multiline
                     placeholder={survey.freeformPrompt}
                     value={feedback}
-                    helperText={`${feedback.trim().length} / ${maxLength}`}
+                    helperText={`${feedback?.trim().length} / ${maxLength}`}
                     error={error}
                     onChange={e => {
-                      setFeedback(e.target.value);
-                      setError(e.target.value.trim().length > maxLength);
+                      setFeedback(e?.target?.value);
+                      setError(e?.target?.value?.trim().length > maxLength);
                     }}
                     {...textFieldProps}
                   />
