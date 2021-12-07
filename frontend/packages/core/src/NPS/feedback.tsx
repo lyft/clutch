@@ -24,7 +24,7 @@ interface FeedbackOptions {
 
 // Defaults in case of API failure
 export const defaults: IClutch.feedback.v1.ISurvey = {
-  prompt: "Rate Your Experience using Clutch",
+  prompt: "Rate Your Experience",
   freeformPrompt: "What would you recommend to improve this?",
   ratingLabels: [
     {
@@ -48,11 +48,6 @@ const Text = styled.span({
   fontWeight: "bold",
   color: "#0D1030",
   fontSize: "14px",
-});
-
-const StyledGrid = styled(MuiGrid)({
-  borderRadius: "8px",
-  padding: "20px",
 });
 
 const StyledAlert = styled(Alert)({
@@ -178,7 +173,13 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
         </StyledAlert>
       ) : (
         <form onSubmit={submitFeedback}>
-          <StyledGrid container direction="row" alignItems="center" justify="center">
+          <MuiGrid
+            container
+            direction="row"
+            alignItems="center"
+            justify="center"
+            style={{ padding: "20px" }}
+          >
             <MuiGrid item xs={6}>
               <Text>{survey.prompt}</Text>
             </MuiGrid>
@@ -206,7 +207,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
                 </MuiGrid>
               </>
             )}
-          </StyledGrid>
+          </MuiGrid>
         </form>
       )}
     </>

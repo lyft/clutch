@@ -7,6 +7,7 @@ const NPSContainer = styled.div<{ submit: boolean }>(
   {
     width: "50%",
     margin: "auto",
+    borderRadius: "8px",
   },
   props => ({
     background: props.submit ? "unset" : "#F9F9FE",
