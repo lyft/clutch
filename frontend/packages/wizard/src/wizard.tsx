@@ -27,10 +27,11 @@ const Heading = styled(Typography)({
   fontSize: "26px",
 });
 
-interface WizardProps extends Pick<ContainerProps, "width" | "enableFeedback"> {
-  heading?: string;
-  dataLayout: ManagerLayout;
+interface WizardProps extends Pick<ContainerProps, "width"> {
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
+  dataLayout: ManagerLayout;
+  enableFeedback?: boolean;
+  heading?: string;
 }
 
 // To be used in a workflow's configuration file
@@ -53,7 +54,6 @@ interface WizardStepData {
 
 interface ContainerProps {
   width?: "default" | "full";
-  enableFeedback?: boolean;
 }
 
 const Container = styled(MuiContainer)<ContainerProps>(
