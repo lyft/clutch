@@ -115,7 +115,7 @@ const StyledBorderButton = styled(StyledButton)({
 
 /** Provides feedback to the user in regards to the action of the button. */
 type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "secondary";
-type ButtonSize = "small" | "medium";
+type IconButtonSize = "small" | "medium";
 
 const ICON_BUTTON_STYLE_MAP = {
   small: {
@@ -158,7 +158,7 @@ const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
 
 const StyledIconButton = styled(MuiIconButton)<{
   palette: ButtonPalette;
-  size: ButtonSize;
+  size: IconButtonSize;
 }>({}, props => ({
   width: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
   height: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
@@ -169,7 +169,7 @@ const StyledIconButton = styled(MuiIconButton)<{
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
-  size?: ButtonSize;
+  size?: IconButtonSize;
   children: React.ReactElement;
 }
 
