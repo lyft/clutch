@@ -55,15 +55,15 @@ const EmojiRatings = ({ ratings = [], setRating }) => {
         }
 
         return (
-          <Tooltip key={label} title={capitalize(label)}>
+          <Tooltip key={label} title={capitalize(label)} placement="top">
             <StyledIconButton
               key={`rating-${emoji}`}
               variant="neutral"
-              size="medium"
+              size="small"
               selected={selectedRating?.label === label}
               onClick={() => select(rating)}
             >
-              <Emoji type={emoji} size="large" />
+              <Emoji type={emoji} />
             </StyledIconButton>
           </Tooltip>
         );

@@ -117,6 +117,19 @@ const StyledBorderButton = styled(StyledButton)({
 type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "secondary";
 type ButtonSize = "small" | "medium";
 
+const ICON_BUTTON_STYLE_MAP = {
+  small: {
+    size: 32,
+    padding: 4,
+  },
+  medium: {
+    size: 48,
+    padding: 12,
+  },
+};
+
+export const ICON_BUTTON_VARIANTS = Object.keys(ICON_BUTTON_STYLE_MAP);
+
 /** A color palette from a @type ButtonPalette */
 const variantPalette = (variant: ButtonVariant): ButtonPalette => {
   const v = variant === "destructive" ? "danger" : variant;
@@ -143,16 +156,15 @@ const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
   );
 };
 
-const StyledIconButton = styled(MuiIconButton)<{ palette: ButtonPalette }>(
-  {
-    height: "48px",
-    width: "48px",
-  },
-  props => ({
-    padding: props.size && props.size === "medium" ? "6px" : "12px",
-    ...colorCss(props.palette),
-  })
-);
+const StyledIconButton = styled(MuiIconButton)<{
+  palette: ButtonPalette;
+  size: ButtonSize;
+}>({}, props => ({
+  width: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  height: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  padding: `${ICON_BUTTON_STYLE_MAP[props.size]?.padding || ICON_BUTTON_STYLE_MAP.small.padding}px`,
+  ...colorCss(props.palette),
+}));
 
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   /** The button variantion. Defaults to primary. */
@@ -167,7 +179,7 @@ export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "
  * @param variant valid color variant
  */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ variant = "primary", size = "small", children, ...props }: IconButtonProps, ref) => (
+  ({ variant = "primary", size = "medium", children, ...props }: IconButtonProps, ref) => (
     <StyledIconButton palette={variantPalette(variant)} size={size} {...props} {...{ ref }}>
       {children}
     </StyledIconButton>
