@@ -3,7 +3,7 @@ import { clutch as IClutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import { capitalize, isInteger } from "lodash";
 
-import Emoji from "../Assets/emojis";
+import Emoji, { EmojiType } from "../Assets/emojis";
 import { IconButton } from "../button";
 import { Tooltip } from "../Feedback";
 
@@ -63,7 +63,7 @@ const EmojiRatings = ({ ratings = [], setRating }) => {
               selected={selectedRating?.label === label}
               onClick={() => select(rating)}
             >
-              <Emoji type={emoji} />
+              <Emoji type={emoji as EmojiType} />
             </StyledIconButton>
           </Tooltip>
         );

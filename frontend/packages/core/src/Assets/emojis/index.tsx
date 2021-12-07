@@ -1,11 +1,19 @@
 import React from "react";
 
+import type { SVGProps } from "../global";
+
 import HappyEmoji from "./happy";
 import NeutralEmoji from "./neutral";
 import SadEmoji from "./sad";
 
-const Emoji = ({ type = "", ...props }) => {
-  switch (type.toUpperCase()) {
+export type EmojiType = "HAPPY" | "NEUTRAL" | "SAD";
+
+interface EmojiProps extends SVGProps {
+  type: EmojiType;
+}
+
+const Emoji = ({ type, ...props }: EmojiProps) => {
+  switch (type) {
     case "HAPPY":
       return <HappyEmoji {...props} />;
     case "NEUTRAL":
@@ -13,7 +21,7 @@ const Emoji = ({ type = "", ...props }) => {
     case "SAD":
       return <SadEmoji {...props} />;
     default:
-      throw new Error(`Emoji '${type}' is an invalid type`);
+      return null;
   }
 };
 
