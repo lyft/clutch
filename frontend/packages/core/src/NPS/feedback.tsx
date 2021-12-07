@@ -49,6 +49,13 @@ const StyledButton = styled(Button)({
   height: "18px",
 });
 
+const StyledTextField = styled(TextField)({
+  marginTop: "15px",
+  ".MuiInputBase-root": {
+    fontSize: "14px",
+  },
+});
+
 /**
  * NPS feedback component which is the base for both Wizard and Anytime
  * Will fetch given survey options from the server based on the given origin
@@ -88,10 +95,6 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
     InputProps: {
       rows: 3,
       rowsMax: 3,
-    },
-    style: {
-      marginTop: "15px",
-      ".MuiInputBase-root": "16px",
     },
   };
 
@@ -188,7 +191,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
             {selected !== null && (
               <>
                 <MuiGrid item xs={12}>
-                  <TextField
+                  <StyledTextField
                     multiline
                     placeholder={survey.freeformPrompt}
                     value={feedback}
