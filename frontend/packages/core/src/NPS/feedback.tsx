@@ -74,7 +74,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   const [feedback, setFeedback] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
-  const requestId = uuid();
+  const [requestId, setRequestId] = useState<string>("");
   const maxLength = 180;
   const debounceTimer = 500;
 
@@ -119,6 +119,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
         console.error(err);
       })
       .finally(() => {
+        setRequestId(uuid());
         setSurvey(data);
       });
   }, []);
