@@ -178,7 +178,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
             direction="row"
             alignItems="center"
             justify="center"
-            style={{ padding: "20px" }}
+            style={{ padding: "16px" }}
           >
             <MuiGrid item xs={6}>
               <Text>{survey.prompt}</Text>
