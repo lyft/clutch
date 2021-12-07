@@ -177,6 +177,9 @@ export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "
  * A button to wrap icons with default themes based on use case.
  * Will forwardRef so that tooltips can be wrapped around the buttons
  * @param variant valid color variant
+ * @param size a valid size for the IconButton
+ * @param children any children to render inside of the IconButton
+ * @returns rendered IconButton component
  */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ variant = "primary", size = "medium", children, ...props }: IconButtonProps, ref) => (
