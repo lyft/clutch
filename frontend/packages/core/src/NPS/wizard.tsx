@@ -16,13 +16,9 @@ const NPSContainer = styled.div<{ submit: boolean }>(
 const NPSWizard = () => {
   const [hasSubmit, setSubmit] = useState<boolean>(false);
 
-  const onSubmit = (submit: boolean) => {
-    setSubmit(submit);
-  };
-
   return (
     <NPSContainer submit={hasSubmit}>
-      <NPSFeedback origin="WIZARD" onSubmit={onSubmit} />
+      <NPSFeedback origin="WIZARD" onSubmit={setSubmit} />
     </NPSContainer>
   );
 };

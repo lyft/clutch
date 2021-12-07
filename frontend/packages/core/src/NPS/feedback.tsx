@@ -3,16 +3,17 @@ import { clutch as IClutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@material-ui/core";
 import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
-import { capitalize, debounce, isInteger } from "lodash";
+import { debounce } from "lodash";
 import { v4 as uuid } from "uuid";
 
 import { userId } from "../AppLayout/user";
-import Emoji from "../Assets/emojis";
-import { Button, IconButton } from "../button";
-import { Alert, Tooltip } from "../Feedback";
+import { Button } from "../button";
+import { Alert } from "../Feedback";
 import { TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
+
+import EmojiRatings, { Rating } from "./emojiRatings";
 
 /** Interfaces */
 
@@ -20,11 +21,6 @@ interface FeedbackOptions {
   origin: "ORIGIN_UNSPECIFIED" | "WIZARD" | "ANYTIME";
   onSubmit?: (submit: boolean) => void;
 }
-
-type Rating = {
-  emoji: string;
-  label: string;
-};
 
 // Defaults in case of API failure
 export const defaults: IClutch.feedback.v1.ISurvey = {
@@ -63,68 +59,6 @@ const StyledAlert = styled(Alert)({
   margin: "32px",
   alignItems: "center",
 });
-
-/** Components */
-
-/**
- * EmojiRatings component which will take an array of emojis and given ratings and create IconButtons with them and return them on selection
- *
- * @param ratings given array of ratings to display
- * @param setRating function which will return the given selected rating
- * @param size allows overriding of a given size, "large" is the only appropriate value
- * @returns rendered EmojiRatings component
- */
-export const EmojiRatings = ({ ratings = [], setRating }) => {
-  const [selectedRating, selectRating] = useState<Rating>(null);
-
-  const StyledIconButton = styled(IconButton)<{
-    selected: boolean;
-  }>(
-    {
-      "&:hover": {
-        opacity: 1,
-      },
-    },
-    props => ({
-      opacity: props.selected ? 1 : 0.5,
-    })
-  );
-
-  const select = (rating: Rating) => {
-    selectRating(rating);
-    setRating(rating);
-  };
-
-  // Will convert a given integer to a typed enum key if necessary
-  const getKey = (map, val) => Object.keys(map).find(key => map[key] === val);
-
-  return (
-    <>
-      {ratings.map((rating: Rating) => {
-        const { label } = rating;
-        let { emoji } = rating;
-
-        if (isInteger(emoji)) {
-          emoji = getKey(IClutch.feedback.v1.EmojiRating, emoji);
-        }
-
-        return (
-          <Tooltip key={label} title={capitalize(label)}>
-            <StyledIconButton
-              key={`rating-${emoji}`}
-              variant="neutral"
-              size="medium"
-              selected={selectedRating?.label === label}
-              onClick={() => select(rating)}
-            >
-              <Emoji type={emoji} size="large" />
-            </StyledIconButton>
-          </Tooltip>
-        );
-      })}
-    </>
-  );
-};
 
 /**
  * NPS feedback component which is the base for both Wizard and Anytime
