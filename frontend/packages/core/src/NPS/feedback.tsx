@@ -91,6 +91,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
     },
     style: {
       marginTop: "15px",
+      ".MuiInputBase-root": "16px",
     },
   };
 
