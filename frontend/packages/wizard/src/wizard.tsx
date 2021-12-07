@@ -149,7 +149,7 @@ const Wizard = ({
           </WizardContext.Provider>
         </DataLayoutContext.Provider>
         <Grid container justify="center">
-          {state.activeStep === lastStepIndex && !isLoading && (
+          {((state.activeStep === lastStepIndex && !isLoading) || hasError) && (
             <>
               {enableFeedback && (
                 <SimpleFeatureFlag feature="npsWizard">
