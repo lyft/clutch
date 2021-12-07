@@ -219,7 +219,7 @@ describe("<NPSFeedback />", () => {
 
       expect(wrapper.find({ item: true })).toHaveLength(4);
       expect(wrapper.find("TextField")).toBeDefined();
-      expect(wrapper.find("Button")).toBeDefined();
+      expect(wrapper.find("Styled(Button)")).toBeDefined();
     });
 
     it("will update the length on feedback if input is given", () => {
@@ -264,7 +264,7 @@ describe("<NPSFeedback />", () => {
     it("will disable the submit button upon error", () => {
       clickEmoji(wrapper);
 
-      let submitButton = wrapper.find("Button");
+      let submitButton = wrapper.find("Styled(Button)");
 
       expect(submitButton.prop("disabled")).toBeFalsy();
 
@@ -272,7 +272,7 @@ describe("<NPSFeedback />", () => {
 
       wrapper.update();
 
-      submitButton = wrapper.find("Button");
+      submitButton = wrapper.find("Styled(Button)");
 
       expect(submitButton.prop("disabled")).toBeTruthy();
     });
@@ -317,7 +317,7 @@ describe("<NPSFeedback />", () => {
 
       wrapper.update();
 
-      expect(wrapper.find("Button").prop("variant")).toEqual("secondary");
+      expect(wrapper.find("Styled(Button)").prop("variant")).toEqual("secondary");
     });
   });
 });

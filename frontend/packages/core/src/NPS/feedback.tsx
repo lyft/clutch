@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
+import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@material-ui/core";
 import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
 import { debounce } from "lodash";
@@ -41,6 +42,12 @@ export const defaults: IClutch.feedback.v1.ISurvey = {
     },
   ],
 };
+
+const StyledButton = styled(Button)({
+  fontSize: "14px",
+  padding: "0 8px",
+  height: "18px",
+});
 
 /**
  * NPS feedback component which is the base for both Wizard and Anytime
@@ -193,8 +200,8 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
                     {...textFieldProps}
                   />
                 </MuiGrid>
-                <MuiGrid item xs={4}>
-                  <Button type="submit" text="Submit" variant="secondary" disabled={error} />
+                <MuiGrid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
+                  <StyledButton type="submit" text="Submit" variant="secondary" disabled={error} />
                 </MuiGrid>
               </>
             )}
