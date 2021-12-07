@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
-import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@material-ui/core";
 import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
 import { debounce } from "lodash";
@@ -12,6 +11,7 @@ import { Alert } from "../Feedback";
 import { TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
+import { Typography } from "../typography";
 
 import EmojiRatings, { Rating } from "./emojiRatings";
 
@@ -42,19 +42,6 @@ export const defaults: IClutch.feedback.v1.ISurvey = {
   ],
 };
 
-/** Styling */
-
-const Text = styled.span({
-  fontWeight: "bold",
-  color: "#0D1030",
-  fontSize: "14px",
-});
-
-const StyledAlert = styled(Alert)({
-  margin: "32px",
-  alignItems: "center",
-});
-
 /**
  * NPS feedback component which is the base for both Wizard and Anytime
  * Will fetch given survey options from the server based on the given origin
@@ -82,6 +69,10 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   const AlertProps = {
     iconMapping: {
       info: <MuiSuccessIcon style={{ color: "#3548d4" }} />,
+    },
+    style: {
+      margin: "32px",
+      alignItems: "center",
     },
   };
 
@@ -168,9 +159,9 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
   return (
     <>
       {hasSubmit ? (
-        <StyledAlert severity="info" {...AlertProps}>
-          <Text>Thank you for your feedback!</Text>
-        </StyledAlert>
+        <Alert severity="info" {...AlertProps}>
+          <Typography variant="subtitle3">Thank you for your feedback!</Typography>
+        </Alert>
       ) : (
         <form onSubmit={submitFeedback}>
           <MuiGrid
@@ -181,7 +172,7 @@ const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) =
             style={{ padding: "16px" }}
           >
             <MuiGrid item xs={6}>
-              <Text>{survey.prompt}</Text>
+              <Typography variant="subtitle3">{survey.prompt}</Typography>
             </MuiGrid>
             <MuiGrid item xs={6} style={{ display: "flex", justifyContent: "space-around" }}>
               <EmojiRatings ratings={survey.ratingLabels} setRating={setSelected} />

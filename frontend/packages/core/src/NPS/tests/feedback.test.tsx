@@ -78,7 +78,7 @@ describe("<NPSFeedback />", () => {
       });
 
       it("renders survey text prompt", () => {
-        expect(wrapper.find({ item: true }).at(0).find("Styled(span)").first().text()).toEqual(
+        expect(wrapper.find({ item: true }).at(0).find("Typography").childAt(0).text()).toEqual(
           wizardTestResult.prompt
         );
       });
@@ -100,10 +100,10 @@ describe("<NPSFeedback />", () => {
 
         wrapper.update();
 
-        const alert = wrapper.find("Styled(Alert)");
+        const alert = wrapper.find("Alert");
 
         expect(alert).toBeDefined();
-        expect(alert.find("Styled(span)").text()).toEqual("Thank you for your feedback!");
+        expect(alert.find("Typography").childAt(0).text()).toEqual("Thank you for your feedback!");
       });
 
       it("sends feedback upon emoji selection change", () => {
@@ -144,7 +144,7 @@ describe("<NPSFeedback />", () => {
       });
 
       it("renders default text prompt", () => {
-        expect(wrapper.find({ item: true }).at(0).find("Styled(span)").first().text()).toEqual(
+        expect(wrapper.find({ item: true }).at(0).find("Typography").childAt(0).text()).toEqual(
           defaults.prompt
         );
       });
