@@ -115,7 +115,6 @@ const StyledBorderButton = styled(StyledButton)({
 
 /** Provides feedback to the user in regards to the action of the button. */
 type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "secondary";
-type IconButtonSize = "small" | "medium";
 
 const ICON_BUTTON_STYLE_MAP = {
   small: {
@@ -127,6 +126,7 @@ const ICON_BUTTON_STYLE_MAP = {
     padding: 12,
   },
 };
+type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
 
 export const ICON_BUTTON_VARIANTS = Object.keys(ICON_BUTTON_STYLE_MAP);
 

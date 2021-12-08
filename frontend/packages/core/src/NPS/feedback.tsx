@@ -56,8 +56,26 @@ const StyledTextField = styled(TextField)({
   },
 });
 
+const FeedbackAlert = () => {
+  const AlertProps = {
+    iconMapping: {
+      info: <MuiSuccessIcon style={{ color: "#3548d4" }} />,
+    },
+    style: {
+      margin: "32px",
+      alignItems: "center",
+    },
+  };
+
+  return (
+    <Alert severity="info" {...AlertProps}>
+      <Typography variant="subtitle3">Thank you for your feedback!</Typography>
+    </Alert>
+  );
+};
+
 /**
- * NPS feedback component which is the base for both Wizard and Anytime
+ * NPS feedback component which is the base for both Wizard and Anytime.
  * Will fetch given survey options from the server based on the given origin
  * Then display a feedback component based on the given emoji ratings
  *
@@ -65,7 +83,7 @@ const StyledTextField = styled(TextField)({
  * @returns NPSFeedback component
  */
 const NPSFeedback = (opts: FeedbackOptions) => {
-  const [hasSubmit, setSubmit] = useState<boolean>(false);
+  const [hasSubmit, setHasSubmit] = useState<boolean>(false);
   const [selected, setSelected] = useState<Rating>(null);
   const [freeformFeedback, setFreeformFeedback] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
@@ -78,17 +96,6 @@ const NPSFeedback = (opts: FeedbackOptions) => {
     freeformFeedback.trim().length > maxLength
       ? `${freeformFeedback.trim().substring(0, maxLength - 3)}...`
       : freeformFeedback;
-
-  /** Property objects used to extend components and remove console warnings */
-  const AlertProps = {
-    iconMapping: {
-      info: <MuiSuccessIcon style={{ color: "#3548d4" }} />,
-    },
-    style: {
-      margin: "32px",
-      alignItems: "center",
-    },
-  };
 
   const textFieldProps = {
     fullWidth: true,
@@ -144,7 +151,7 @@ const NPSFeedback = (opts: FeedbackOptions) => {
           ratingScale: {
             emoji: IClutch.feedback.v1.EmojiRating[selected.emoji],
           },
-          urlPath: window.location.pathname,
+          urlPath: `${window.location.pathname}${window.location.search ?? ""}`,
           freeformResponse: trimmed,
         },
         metadata: {
@@ -161,58 +168,55 @@ const NPSFeedback = (opts: FeedbackOptions) => {
     if (e) {
       e.preventDefault();
     }
-    setSubmit(true);
+    setHasSubmit(true);
     if (opts.onSubmit) {
       opts.onSubmit(true);
     }
   };
 
+  if (hasSubmit) {
+    return <FeedbackAlert />;
+  }
+
   return (
-    <>
-      {hasSubmit ? (
-        <Alert severity="info" {...AlertProps}>
-          <Typography variant="subtitle3">Thank you for your feedback!</Typography>
-        </Alert>
-      ) : (
-        <form onSubmit={submitFeedback}>
-          <MuiGrid
-            container
-            direction="row"
-            alignItems="center"
-            justify="center"
-            style={{ padding: "16px" }}
-          >
-            <MuiGrid item xs={6}>
-              <Typography variant="subtitle3">{survey.prompt}</Typography>
+    <form onSubmit={submitFeedback}>
+      <MuiGrid
+        container
+        direction="row"
+        alignItems="center"
+        justify="center"
+        style={{ padding: "16px" }}
+      >
+        <MuiGrid item xs={6}>
+          <Typography variant="subtitle3">{survey.prompt}</Typography>
+        </MuiGrid>
+        <MuiGrid item xs={6} style={{ display: "flex", justifyContent: "space-around" }}>
+          <EmojiRatings ratings={survey.ratingLabels} setRating={setSelected} />
+        </MuiGrid>
+        {selected !== null && (
+          <>
+            <MuiGrid item xs={12}>
+              <StyledTextField
+                multiline
+                fullWidth
+                placeholder={survey.freeformPrompt}
+                value={freeformFeedback}
+                helperText={`${freeformFeedback?.trim().length} / ${maxLength}`}
+                error={error}
+                onChange={e => {
+                  setFreeformFeedback(e?.target?.value);
+                  setError(e?.target?.value?.trim().length > maxLength);
+                }}
+                {...textFieldProps}
+              />
             </MuiGrid>
-            <MuiGrid item xs={6} style={{ display: "flex", justifyContent: "space-around" }}>
-              <EmojiRatings ratings={survey.ratingLabels} setRating={setSelected} />
+            <MuiGrid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
+              <StyledButton type="submit" text="Submit" variant="secondary" disabled={error} />
             </MuiGrid>
-            {selected !== null && (
-              <>
-                <MuiGrid item xs={12}>
-                  <StyledTextField
-                    multiline
-                    placeholder={survey.freeformPrompt}
-                    value={freeformFeedback}
-                    helperText={`${freeformFeedback?.trim().length} / ${maxLength}`}
-                    error={error}
-                    onChange={e => {
-                      setFreeformFeedback(e?.target?.value);
-                      setError(e?.target?.value?.trim().length > maxLength);
-                    }}
-                    {...textFieldProps}
-                  />
-                </MuiGrid>
-                <MuiGrid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
-                  <StyledButton type="submit" text="Submit" variant="secondary" disabled={error} />
-                </MuiGrid>
-              </>
-            )}
-          </MuiGrid>
-        </form>
-      )}
-    </>
+          </>
+        )}
+      </MuiGrid>
+    </form>
   );
 };
 

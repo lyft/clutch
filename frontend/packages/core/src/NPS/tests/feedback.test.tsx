@@ -97,10 +97,12 @@ describe("<NPSFeedback />", () => {
 
         wrapper.update();
 
-        const alert = wrapper.find("Alert");
+        const alert = wrapper.find("FeedbackAlert");
 
         expect(alert).toBeDefined();
-        expect(alert.find("Typography").childAt(0).text()).toEqual("Thank you for your feedback!");
+        expect(alert.dive().find("Typography").childAt(0).text()).toEqual(
+          "Thank you for your feedback!"
+        );
       });
 
       it("sends feedback upon emoji selection change", () => {

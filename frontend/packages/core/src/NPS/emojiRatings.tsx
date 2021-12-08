@@ -12,15 +12,22 @@ export type Rating = {
   label: string;
 };
 
+type EmojiRatingsProps = {
+  ratings: IClutch.feedback.v1.IRatingLabel[];
+  setRating: (Rating) => void;
+};
+
+// Will convert a given integer to a typed enum key if necessary
+const getKey = (map, val): string => Object.keys(map).find(key => map[key] === val);
+
 /**
  * EmojiRatings component which will take an array of emojis and given ratings and create IconButtons with them and return them on selection
  *
  * @param ratings given array of ratings to display
  * @param setRating function which will return the given selected rating
- * @param size allows overriding of a given size, "large" is the only appropriate value
  * @returns rendered EmojiRatings component
  */
-const EmojiRatings = ({ ratings = [], setRating }) => {
+const EmojiRatings = ({ ratings = [], setRating }: EmojiRatingsProps) => {
   const [selectedRating, selectRating] = useState<Rating>(null);
 
   const StyledIconButton = styled(IconButton)<{
@@ -41,18 +48,13 @@ const EmojiRatings = ({ ratings = [], setRating }) => {
     setRating(rating);
   };
 
-  // Will convert a given integer to a typed enum key if necessary
-  const getKey = (map, val) => Object.keys(map).find(key => map[key] === val);
-
   return (
     <>
-      {ratings.map((rating: Rating) => {
+      {ratings.map((rating: IClutch.feedback.v1.IRatingLabel) => {
         const { label } = rating;
-        let { emoji } = rating;
-
-        if (isInteger(emoji)) {
-          emoji = getKey(IClutch.feedback.v1.EmojiRating, emoji);
-        }
+        const emoji = isInteger(rating.emoji)
+          ? getKey(IClutch.feedback.v1.EmojiRating, rating.emoji)
+          : rating.emoji;
 
         return (
           <Tooltip key={label} title={capitalize(label)} placement="top">
@@ -61,7 +63,7 @@ const EmojiRatings = ({ ratings = [], setRating }) => {
               variant="neutral"
               size="small"
               selected={selectedRating?.label === label}
-              onClick={() => select(rating)}
+              onClick={() => select({ label, emoji: emoji as string })}
             >
               <Emoji type={emoji as EmojiType} />
             </StyledIconButton>
