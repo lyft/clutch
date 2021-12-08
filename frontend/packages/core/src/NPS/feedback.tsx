@@ -19,7 +19,7 @@ import EmojiRatings, { Rating } from "./emojiRatings";
 /** Interfaces */
 
 interface FeedbackOptions {
-  origin: "ORIGIN_UNSPECIFIED" | "WIZARD" | "ANYTIME";
+  origin: "WIZARD" | "ANYTIME";
   onSubmit?: (submit: boolean) => void;
 }
 
