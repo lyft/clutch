@@ -67,7 +67,7 @@ const StyledTextField = styled(TextField)({
 const NPSFeedback = (opts: FeedbackOptions ) => {
   const [hasSubmit, setSubmit] = useState<boolean>(false);
   const [selected, setSelected] = useState<Rating>(null);
-  const [feedback, setFeedback] = useState<string>("");
+  const [freeformFeedback, setFreeformFeedback] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
   const [requestId, setRequestId] = useState<string>("");
