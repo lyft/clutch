@@ -41,9 +41,6 @@ describe("<NPSFeedback />", () => {
 
       const anytimeWrapper = shallow(<NPSFeedback origin="ANYTIME" />);
       expect(anytimeWrapper).toBeTruthy();
-
-      const unspecifiedWrapper = shallow(<NPSFeedback origin="ORIGIN_UNSPECIFIED" />);
-      expect(unspecifiedWrapper).toBeTruthy();
     });
 
     describe("api success", () => {

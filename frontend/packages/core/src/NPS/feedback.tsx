@@ -64,7 +64,7 @@ const StyledTextField = styled(TextField)({
  * @param opts Available feedback options
  * @returns NPSFeedback component
  */
-const NPSFeedback = (opts: FeedbackOptions ) => {
+const NPSFeedback = (opts: FeedbackOptions) => {
   const [hasSubmit, setSubmit] = useState<boolean>(false);
   const [selected, setSelected] = useState<Rating>(null);
   const [freeformFeedback, setFreeformFeedback] = useState<string>("");
@@ -75,9 +75,9 @@ const NPSFeedback = (opts: FeedbackOptions ) => {
   const debounceTimer = 500;
 
   const trimmed =
-    feedback.trim().length > maxLength
-      ? `${feedback.trim().substring(0, maxLength - 3)}...`
-      : feedback;
+    freeformFeedback.trim().length > maxLength
+      ? `${freeformFeedback.trim().substring(0, maxLength - 3)}...`
+      : freeformFeedback;
 
   /** Property objects used to extend components and remove console warnings */
   const AlertProps = {
@@ -194,11 +194,11 @@ const NPSFeedback = (opts: FeedbackOptions ) => {
                   <StyledTextField
                     multiline
                     placeholder={survey.freeformPrompt}
-                    value={feedback}
-                    helperText={`${feedback?.trim().length} / ${maxLength}`}
+                    value={freeformFeedback}
+                    helperText={`${freeformFeedback?.trim().length} / ${maxLength}`}
                     error={error}
                     onChange={e => {
-                      setFeedback(e?.target?.value);
+                      setFreeformFeedback(e?.target?.value);
                       setError(e?.target?.value?.trim().length > maxLength);
                     }}
                     {...textFieldProps}
