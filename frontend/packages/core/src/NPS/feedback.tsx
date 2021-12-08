@@ -64,7 +64,7 @@ const StyledTextField = styled(TextField)({
  * @param opts Available feedback options
  * @returns NPSFeedback component
  */
-const NPSFeedback = (opts: FeedbackOptions = { origin: "ORIGIN_UNSPECIFIED" }) => {
+const NPSFeedback = (opts: FeedbackOptions ) => {
   const [hasSubmit, setSubmit] = useState<boolean>(false);
   const [selected, setSelected] = useState<Rating>(null);
   const [feedback, setFeedback] = useState<string>("");
