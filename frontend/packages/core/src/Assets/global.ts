@@ -22,7 +22,7 @@ export const STYLE_MAP = {
 
 export const VARIANTS = Object.keys(STYLE_MAP);
 
-export type IconSizeVariant = "xsmall" | "small" | "medium" | "large";
+export type IconSizeVariant = keyof typeof STYLE_MAP;
 
 export const StyledSVG = styled.svg<{ size?: IconSizeVariant }>(props => ({
   width: `${STYLE_MAP[props.size]?.size || STYLE_MAP.small.size}px`,

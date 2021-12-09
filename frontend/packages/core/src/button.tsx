@@ -116,6 +116,20 @@ const StyledBorderButton = styled(StyledButton)({
 /** Provides feedback to the user in regards to the action of the button. */
 type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "secondary";
 
+const ICON_BUTTON_STYLE_MAP = {
+  small: {
+    size: 32,
+    padding: 4,
+  },
+  medium: {
+    size: 48,
+    padding: 12,
+  },
+};
+type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
+
+export const ICON_BUTTON_VARIANTS = Object.keys(ICON_BUTTON_STYLE_MAP);
+
 /** A color palette from a @type ButtonPalette */
 const variantPalette = (variant: ButtonVariant): ButtonPalette => {
   const v = variant === "destructive" ? "danger" : variant;
@@ -142,26 +156,37 @@ const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
   );
 };
 
-const StyledIconButton = styled(MuiIconButton)<{ palette: ButtonPalette }>(
-  {
-    height: "48px",
-    width: "48px",
-    padding: "12px",
-  },
-  props => colorCss(props.palette)
-);
+const StyledIconButton = styled(MuiIconButton)<{
+  palette: ButtonPalette;
+  size: IconButtonSize;
+}>({}, props => ({
+  width: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  height: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  padding: `${ICON_BUTTON_STYLE_MAP[props.size]?.padding || ICON_BUTTON_STYLE_MAP.small.padding}px`,
+  ...colorCss(props.palette),
+}));
 
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
+  size?: IconButtonSize;
   children: React.ReactElement;
 }
 
-/** An button to wrap icons with default themes based on use case. */
-const IconButton = ({ variant = "primary", children, ...props }: IconButtonProps) => (
-  <StyledIconButton {...props} palette={variantPalette(variant)}>
-    {children}
-  </StyledIconButton>
+/**
+ * A button to wrap icons with default themes based on use case.
+ * Will forwardRef so that tooltips can be wrapped around the buttons
+ * @param variant valid color variant
+ * @param size a valid size for the IconButton
+ * @param children any children to render inside of the IconButton
+ * @returns rendered IconButton component
+ */
+const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
+  ({ variant = "primary", size = "medium", children, ...props }: IconButtonProps, ref) => (
+    <StyledIconButton palette={variantPalette(variant)} size={size} {...props} {...{ ref }}>
+      {children}
+    </StyledIconButton>
+  )
 );
 
 const ButtonGroupContainer = styled(Grid)(
@@ -189,7 +214,7 @@ export interface ButtonGroupProps {
   children: React.ReactElement<ButtonProps> | React.ReactElement<ButtonProps>[];
   /** Justification of buttons. */
   justify?: GridJustification;
-  /** Position of button group border. Defautls to top. */
+  /** Position of button group border. Defaults to top. */
   border?: "top" | "bottom";
 }
 
