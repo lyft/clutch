@@ -121,7 +121,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
   );
 };
 
-const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
+const RemoteTriage: React.FC<WorkflowProps> = ({ heading, enableFeedback }) => {
   const dataLayout = {
     resourceData: {},
     remoteData: {
@@ -144,7 +144,7 @@ const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout} heading={heading} enableFeedback={enableFeedback}>
       <TriageIdentifier name="Lookup" />
       <TriageDetails name="Details" />
     </Wizard>

@@ -144,7 +144,12 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
-const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const ResizeHPA: React.FC<WorkflowProps> = ({
+  heading,
+  resolverType,
+  notes = [],
+  enableFeedback,
+}) => {
   const dataLayout = {
     hpaData: {},
     inputData: {},
@@ -168,7 +173,7 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout} heading={heading} enableFeedback={enableFeedback}>
       <HPAIdentifier name="Lookup" resolverType={resolverType} />
       <HPADetails name="Modify" />
       <Confirm name="Confirmation" notes={notes} />

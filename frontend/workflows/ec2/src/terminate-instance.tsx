@@ -92,7 +92,12 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({
+  heading,
+  resolverType,
+  notes = [],
+  enableFeedback,
+}) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {
@@ -108,7 +113,7 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout} heading={heading} enableFeedback={enableFeedback}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
       <InstanceDetails name="Verify" />
       <Confirm name="Confirmation" notes={notes} />
