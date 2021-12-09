@@ -8,8 +8,8 @@ const BaseTooltip = ({ className, ...props }: MuiTooltipProps) => (
 );
 
 // TODO: sync with Design on margins for each possible placement
-const StyledTooltip = styled(BaseTooltip)((props: { maxWidth?: string }) => ({
-  maxWidth: props.maxWidth,
+const StyledTooltip = styled(BaseTooltip)((props: { maxwidth?: string }) => ({
+  maxWidth: props.maxwidth,
   backgroundColor: "#0D1030",
   borderRadius: "6px",
   "&.MuiTooltip-tooltipPlacementLeft": {
@@ -37,7 +37,7 @@ export interface TooltipProps extends Pick<MuiTooltipProps, "interactive" | "pla
 
 const Tooltip = ({ children, maxWidth = "300px", title, ...props }: TooltipProps) => {
   return (
-    <StyledTooltip title={title} maxWidth={maxWidth} {...props}>
+    <StyledTooltip title={title} maxwidth={maxWidth} {...props}>
       {children}
     </StyledTooltip>
   );
