@@ -5,16 +5,16 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.2
-	github.com/aws/aws-sdk-go-v2 v1.11.1
-	github.com/aws/aws-sdk-go-v2/config v1.10.2
-	github.com/aws/aws-sdk-go-v2/credentials v1.6.2
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.15.1
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.8.1
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.22.0
-	github.com/aws/aws-sdk-go-v2/service/iam v1.13.1
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.9.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.19.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.10.1
+	github.com/aws/aws-sdk-go-v2 v1.11.2
+	github.com/aws/aws-sdk-go-v2/config v1.11.0
+	github.com/aws/aws-sdk-go-v2/credentials v1.6.4
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.16.1
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.10.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.25.0
+	github.com/aws/aws-sdk-go-v2/service/iam v1.13.2
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.10.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.21.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.11.1
 	github.com/aws/smithy-go v1.9.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
 	github.com/bufbuild/buf v0.56.0
@@ -62,7 +62,7 @@ require (
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
-	k8s.io/api v0.22.4
-	k8s.io/apimachinery v0.22.4
-	k8s.io/client-go v0.22.4
+	k8s.io/api v0.23.0
+	k8s.io/apimachinery v0.23.0
+	k8s.io/client-go v0.23.0
 )
