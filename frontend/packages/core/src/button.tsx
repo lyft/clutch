@@ -166,10 +166,10 @@ const StyledIconButton = styled(MuiIconButton)<{
   ...colorCss(props.palette),
 }));
 
-export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
+export interface IconButtonProps
+  extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick" | "size"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
-  size?: IconButtonSize;
   children: React.ReactElement;
 }
 

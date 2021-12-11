@@ -15,6 +15,8 @@ export type Rating = {
 type EmojiRatingsProps = {
   ratings: IClutch.feedback.v1.IRatingLabel[];
   setRating: (Rating) => void;
+  placement?: "top" | "bottom";
+  size?: "small" | "medium" | "large";
 };
 
 // Will convert a given integer to a typed enum key if necessary
@@ -27,11 +29,18 @@ const getKey = (map, val): string => Object.keys(map).find(key => map[key] === v
  * @param setRating function which will return the given selected rating
  * @returns rendered EmojiRatings component
  */
-const EmojiRatings = ({ ratings = [], setRating }: EmojiRatingsProps) => {
+const EmojiRatings = ({
+  ratings = [],
+  setRating,
+  placement = "top",
+  size = "small",
+}: EmojiRatingsProps) => {
   const [selectedRating, selectRating] = useState<Rating>(null);
 
+  // TODO: (jslaughter) Update with large sizing with material-ui@5
   const StyledIconButton = styled(IconButton)<{
     selected: boolean;
+    overrideSize: boolean;
   }>(
     {
       "&:hover": {
@@ -39,6 +48,8 @@ const EmojiRatings = ({ ratings = [], setRating }: EmojiRatingsProps) => {
       },
     },
     props => ({
+      height: props.overrideSize ? "60px" : null,
+      width: props.overrideSize ? "60px" : null,
       opacity: props.selected ? 1 : 0.5,
     })
   );
@@ -57,15 +68,16 @@ const EmojiRatings = ({ ratings = [], setRating }: EmojiRatingsProps) => {
           : rating.emoji;
 
         return (
-          <Tooltip key={label} title={capitalize(label)} placement="top">
+          <Tooltip key={label} title={capitalize(label)} {...placement}>
             <StyledIconButton
+              overrideSize={size === "large"}
               key={`rating-${emoji}`}
               variant="neutral"
-              size="small"
               selected={selectedRating?.label === label}
               onClick={() => select({ label, emoji: emoji as string })}
+              size="small"
             >
-              <Emoji type={emoji as EmojiType} />
+              <Emoji type={emoji as EmojiType} size={size} />
             </StyledIconButton>
           </Tooltip>
         );
