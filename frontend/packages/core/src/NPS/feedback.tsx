@@ -158,6 +158,7 @@ const NPSFeedback = (opts: FeedbackOptions) => {
           origin: IClutch.feedback.v1.Origin[opts.origin],
           userSubmitted: hasSubmit,
           survey,
+          ...(window.location.search && {urlSearchParams: window.location.search}),
         },
       });
     }
