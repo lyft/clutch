@@ -16,12 +16,6 @@ const StyledProgressContainer = styled.div({
   },
 });
 
-const StyledIconButton = styled(IconButton)({
-  width: "32px",
-  height: "32px",
-  padding: "8px",
-});
-
 interface CardProps {
   avatar?: React.ReactNode;
   children: React.ReactNode;
@@ -43,9 +37,9 @@ const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps)
       <ClutchCard>
         <CardHeader
           actions={
-            <StyledIconButton onClick={handleExpandClick} variant="neutral">
+            <IconButton onClick={handleExpandClick} size="small" variant="neutral">
               {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </StyledIconButton>
+            </IconButton>
           }
           avatar={avatar}
           summary={summary}

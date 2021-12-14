@@ -10,10 +10,14 @@ import (
 
 	feedbackv1cfg "github.com/lyft/clutch/backend/api/config/module/feedback/v1"
 	feedbackv1 "github.com/lyft/clutch/backend/api/feedback/v1"
+	"github.com/lyft/clutch/backend/mock/service/feedbackmock"
 	"github.com/lyft/clutch/backend/module/moduletest"
+	"github.com/lyft/clutch/backend/service"
 )
 
 func TestModule(t *testing.T) {
+	service.Registry["clutch.service.feedback"] = feedbackmock.New()
+
 	config, _ := anypb.New(&feedbackv1cfg.Config{})
 	log := zaptest.NewLogger(t)
 	scope := tally.NewTestScope("", nil)
@@ -56,22 +60,22 @@ func TestNewSurveyLookup(t *testing.T) {
 func TestGetConfigSurveys(t *testing.T) {
 	// match
 	testCases := []struct {
-		surveyMap            SurveyLookup
+		surveyMap            surveyLookup
 		expectedOk           bool
 		expectedSurveyPrompt string
 	}{
 		{
-			surveyMap:  SurveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{}},
+			surveyMap:  surveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{}},
 			expectedOk: false,
 		},
 		{
-			surveyMap: SurveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
+			surveyMap: surveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
 				"FOO": &feedbackv1cfg.SurveyOrigin{},
 			}},
 			expectedOk: false,
 		},
 		{
-			surveyMap: SurveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
+			surveyMap: surveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
 				"WIZARD": &feedbackv1cfg.SurveyOrigin{Survey: &feedbackv1cfg.Survey{Prompt: "bar"}},
 			}},
 			expectedOk: true,

@@ -339,6 +339,18 @@ func (s *svc) ListEvents(_ context.Context, clientset, cluster, namespace, name 
 	}, nil
 }
 
+func (s *svc) DescribeNode(_ context.Context, clientset, cluster, name string) (*k8sv1.Node, error) {
+	return &k8sv1.Node{
+		Cluster:       "fake-cluster-name",
+		Name:          name,
+		Unschedulable: false,
+	}, nil
+}
+
+func (s *svc) UpdateNode(_ context.Context, clientset, cluster, name string, unschedulable bool) error {
+	return nil
+}
+
 func (*svc) Clientsets(ctx context.Context) ([]string, error) {
 	return []string{"fake-user@fake-cluster"}, nil
 }

@@ -21,7 +21,7 @@ import (
 	dynamodbmod "github.com/lyft/clutch/backend/module/dynamodb"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/featureflag"
-	"github.com/lyft/clutch/backend/module/feedback"
+	feedbackmod "github.com/lyft/clutch/backend/module/feedback"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
 	kinesismod "github.com/lyft/clutch/backend/module/kinesis"
@@ -45,6 +45,7 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 	"github.com/lyft/clutch/backend/service/envoyadmin"
+	feedbackservice "github.com/lyft/clutch/backend/service/feedback"
 	"github.com/lyft/clutch/backend/service/github"
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 	sourcegraphservice "github.com/lyft/clutch/backend/service/sourcegraph"
@@ -69,7 +70,7 @@ var Modules = module.Factory{
 	envoytriage.Name:           envoytriage.New,
 	experimentationapi.Name:    experimentationapi.New,
 	featureflag.Name:           featureflag.New,
-	feedback.Name:              feedback.New,
+	feedbackmod.Name:           feedbackmod.New,
 	healthcheck.Name:           healthcheck.New,
 	k8smod.Name:                k8smod.New,
 	kinesismod.Name:            kinesismod.New,
@@ -92,6 +93,7 @@ var Services = service.Factory{
 	bot.Name:                 bot.New,
 	envoyadmin.Name:          envoyadmin.New,
 	experimentstore.Name:     experimentstore.New,
+	feedbackservice.Name:     feedbackservice.New,
 	github.Name:              github.New,
 	k8sservice.Name:          k8sservice.New,
 	loggingsink.Name:         loggingsink.New,

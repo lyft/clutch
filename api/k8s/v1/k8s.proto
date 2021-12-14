@@ -235,6 +235,22 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+
+  rpc DescribeNode(DescribeNodeRequest) returns (DescribeNodeResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeNode"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc UpdateNode(UpdateNodeRequest) returns (UpdateNodeResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/updateNode"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
+  }
 }
 
 message DescribePodRequest {
@@ -1140,4 +1156,46 @@ message ObjectMetaFields {
 message RemoveObjectMetaFields {
   repeated string labels = 1 [ (validate.rules).repeated = {unique : true} ];
   repeated string annotations = 2 [ (validate.rules).repeated = {unique : true} ];
+}
+
+message Node {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Node",
+    pattern : "{cluster}/{name}"
+  };
+  string name = 1;
+  string cluster = 2;
+  bool unschedulable = 3;
+}
+
+message DescribeNodeRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Node",
+    pattern : "{cluster}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 3 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DescribeNodeResponse {
+  option (clutch.api.v1.reference).fields = "node";
+
+  Node node = 1 [ (clutch.api.v1.log) = false ];
+}
+
+message UpdateNodeRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Node",
+    pattern : "{cluster}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  bool unschedulable = 4;
+}
+
+message UpdateNodeResponse {
 }

@@ -1,6 +1,7 @@
 import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clutch-sh/core";
-import type { WizardChild } from "@clutch-sh/wizard";
+import type { WizardChild, WizardConfigProps } from "@clutch-sh/wizard";
 
+import CordonNode from "./cordon-node";
 import DeletePod from "./delete-pod";
 import KubeDashboard from "./k8s-dashboard";
 import ResizeHPA from "./resize-hpa";
@@ -13,7 +14,11 @@ interface ConfirmConfigProps {
   notes?: NoteConfig[];
 }
 
-export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, ConfirmConfigProps {}
+export interface WorkflowProps
+  extends BaseWorkflowProps,
+    ResolverConfigProps,
+    ConfirmConfigProps,
+    WizardConfigProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
 export interface ConfirmChild extends WizardChild, ConfirmConfigProps {}
 
@@ -47,6 +52,13 @@ const register = (): WorkflowConfiguration => {
         description: "Dashboard for Kubernetes Resources.",
         component: KubeDashboard,
         requiredConfigProps: [],
+      },
+      cordonNode: {
+        path: "node/cordon",
+        displayName: "Cordon/Uncordon Node",
+        description: "Cordon or uncordon a node",
+        component: CordonNode,
+        requiredConfigProps: ["resolverType"],
       },
     },
   };

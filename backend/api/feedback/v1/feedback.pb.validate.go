@@ -35,6 +35,297 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on RatingLabel with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *RatingLabel) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RatingLabel with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RatingLabelMultiError, or
+// nil if none found.
+func (m *RatingLabel) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RatingLabel) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetLabel()) < 1 {
+		err := RatingLabelValidationError{
+			field:  "Label",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	switch m.Type.(type) {
+
+	case *RatingLabel_Emoji:
+
+		if _, ok := _RatingLabel_Emoji_NotInLookup[m.GetEmoji()]; ok {
+			err := RatingLabelValidationError{
+				field:  "Emoji",
+				reason: "value must not be in list [0]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := EmojiRating_name[int32(m.GetEmoji())]; !ok {
+			err := RatingLabelValidationError{
+				field:  "Emoji",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	default:
+		err := RatingLabelValidationError{
+			field:  "Type",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	if len(errors) > 0 {
+		return RatingLabelMultiError(errors)
+	}
+	return nil
+}
+
+// RatingLabelMultiError is an error wrapping multiple validation errors
+// returned by RatingLabel.ValidateAll() if the designated constraints aren't met.
+type RatingLabelMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RatingLabelMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RatingLabelMultiError) AllErrors() []error { return m }
+
+// RatingLabelValidationError is the validation error returned by
+// RatingLabel.Validate if the designated constraints aren't met.
+type RatingLabelValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RatingLabelValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RatingLabelValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RatingLabelValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RatingLabelValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RatingLabelValidationError) ErrorName() string { return "RatingLabelValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RatingLabelValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRatingLabel.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RatingLabelValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RatingLabelValidationError{}
+
+var _RatingLabel_Emoji_NotInLookup = map[EmojiRating]struct{}{
+	0: {},
+}
+
+// Validate checks the field values on RatingScale with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *RatingScale) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RatingScale with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RatingScaleMultiError, or
+// nil if none found.
+func (m *RatingScale) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RatingScale) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch m.Type.(type) {
+
+	case *RatingScale_Emoji:
+
+		if _, ok := _RatingScale_Emoji_NotInLookup[m.GetEmoji()]; ok {
+			err := RatingScaleValidationError{
+				field:  "Emoji",
+				reason: "value must not be in list [0]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := EmojiRating_name[int32(m.GetEmoji())]; !ok {
+			err := RatingScaleValidationError{
+				field:  "Emoji",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	default:
+		err := RatingScaleValidationError{
+			field:  "Type",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	if len(errors) > 0 {
+		return RatingScaleMultiError(errors)
+	}
+	return nil
+}
+
+// RatingScaleMultiError is an error wrapping multiple validation errors
+// returned by RatingScale.ValidateAll() if the designated constraints aren't met.
+type RatingScaleMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RatingScaleMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RatingScaleMultiError) AllErrors() []error { return m }
+
+// RatingScaleValidationError is the validation error returned by
+// RatingScale.Validate if the designated constraints aren't met.
+type RatingScaleValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RatingScaleValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RatingScaleValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RatingScaleValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RatingScaleValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RatingScaleValidationError) ErrorName() string { return "RatingScaleValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RatingScaleValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRatingScale.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RatingScaleValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RatingScaleValidationError{}
+
+var _RatingScale_Emoji_NotInLookup = map[EmojiRating]struct{}{
+	0: {},
+}
+
 // Validate checks the field values on GetSurveysRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -178,111 +469,6 @@ var _GetSurveysRequest_Origins_NotInLookup = map[Origin]struct{}{
 	0: {},
 }
 
-// Validate checks the field values on RatingOptions with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *RatingOptions) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on RatingOptions with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in RatingOptionsMultiError, or
-// nil if none found.
-func (m *RatingOptions) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *RatingOptions) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for One
-
-	// no validation rules for Two
-
-	// no validation rules for Three
-
-	if len(errors) > 0 {
-		return RatingOptionsMultiError(errors)
-	}
-	return nil
-}
-
-// RatingOptionsMultiError is an error wrapping multiple validation errors
-// returned by RatingOptions.ValidateAll() if the designated constraints
-// aren't met.
-type RatingOptionsMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m RatingOptionsMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m RatingOptionsMultiError) AllErrors() []error { return m }
-
-// RatingOptionsValidationError is the validation error returned by
-// RatingOptions.Validate if the designated constraints aren't met.
-type RatingOptionsValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e RatingOptionsValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e RatingOptionsValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e RatingOptionsValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e RatingOptionsValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e RatingOptionsValidationError) ErrorName() string { return "RatingOptionsValidationError" }
-
-// Error satisfies the builtin error interface
-func (e RatingOptionsValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sRatingOptions.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = RatingOptionsValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = RatingOptionsValidationError{}
-
 // Validate checks the field values on Survey with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -308,33 +494,38 @@ func (m *Survey) validate(all bool) error {
 
 	// no validation rules for FreeformPrompt
 
-	if all {
-		switch v := interface{}(m.GetRatingOptions()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SurveyValidationError{
-					field:  "RatingOptions",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetRatingLabels() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SurveyValidationError{
+						field:  fmt.Sprintf("RatingLabels[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SurveyValidationError{
+						field:  fmt.Sprintf("RatingLabels[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, SurveyValidationError{
-					field:  "RatingOptions",
+				return SurveyValidationError{
+					field:  fmt.Sprintf("RatingLabels[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetRatingOptions()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SurveyValidationError{
-				field:  "RatingOptions",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {
@@ -749,17 +940,6 @@ func (m *Feedback) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetUserId()) < 1 {
-		err := FeedbackValidationError{
-			field:  "UserId",
-			reason: "value length must be at least 1 bytes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if len(m.GetUrlPath()) < 1 {
 		err := FeedbackValidationError{
 			field:  "UrlPath",
@@ -771,9 +951,9 @@ func (m *Feedback) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if len(m.GetRating()) < 1 {
+	if len(m.GetRatingLabel()) < 1 {
 		err := FeedbackValidationError{
-			field:  "Rating",
+			field:  "RatingLabel",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {
@@ -782,13 +962,9 @@ func (m *Feedback) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for FreeformResponse
-
-	// no validation rules for FeedbackType
-
-	if m.GetMetadata() == nil {
+	if m.GetRatingScale() == nil {
 		err := FeedbackValidationError{
-			field:  "Metadata",
+			field:  "RatingScale",
 			reason: "value is required",
 		}
 		if !all {
@@ -798,11 +974,11 @@ func (m *Feedback) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetMetadata()).(type) {
+		switch v := interface{}(m.GetRatingScale()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, FeedbackValidationError{
-					field:  "Metadata",
+					field:  "RatingScale",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -810,21 +986,25 @@ func (m *Feedback) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, FeedbackValidationError{
-					field:  "Metadata",
+					field:  "RatingScale",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetRatingScale()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FeedbackValidationError{
-				field:  "Metadata",
+				field:  "RatingScale",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
+
+	// no validation rules for FreeformResponse
+
+	// no validation rules for FeedbackType
 
 	if len(errors) > 0 {
 		return FeedbackMultiError(errors)
@@ -924,9 +1104,21 @@ func (m *SubmitFeedbackRequest) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetId()) < 1 {
+	if utf8.RuneCountInString(m.GetId()) != 36 {
 		err := SubmitFeedbackRequestValidationError{
 			field:  "Id",
+			reason: "value length must be 36 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	if len(m.GetUserId()) < 1 {
+		err := SubmitFeedbackRequestValidationError{
+			field:  "UserId",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {
@@ -969,6 +1161,46 @@ func (m *SubmitFeedbackRequest) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return SubmitFeedbackRequestValidationError{
 				field:  "Feedback",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetMetadata() == nil {
+		err := SubmitFeedbackRequestValidationError{
+			field:  "Metadata",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetMetadata()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SubmitFeedbackRequestValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SubmitFeedbackRequestValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SubmitFeedbackRequestValidationError{
+				field:  "Metadata",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1154,159 +1386,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SubmitFeedbackResponseValidationError{}
-
-// Validate checks the field values on Submission with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Submission) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Submission with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in SubmissionMultiError, or
-// nil if none found.
-func (m *Submission) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Submission) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetSubmittedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SubmissionValidationError{
-					field:  "SubmittedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SubmissionValidationError{
-					field:  "SubmittedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSubmittedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SubmissionValidationError{
-				field:  "SubmittedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetFeedback()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SubmissionValidationError{
-					field:  "Feedback",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SubmissionValidationError{
-					field:  "Feedback",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetFeedback()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SubmissionValidationError{
-				field:  "Feedback",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return SubmissionMultiError(errors)
-	}
-	return nil
-}
-
-// SubmissionMultiError is an error wrapping multiple validation errors
-// returned by Submission.ValidateAll() if the designated constraints aren't met.
-type SubmissionMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SubmissionMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SubmissionMultiError) AllErrors() []error { return m }
-
-// SubmissionValidationError is the validation error returned by
-// Submission.Validate if the designated constraints aren't met.
-type SubmissionValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SubmissionValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SubmissionValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SubmissionValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SubmissionValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SubmissionValidationError) ErrorName() string { return "SubmissionValidationError" }
-
-// Error satisfies the builtin error interface
-func (e SubmissionValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSubmission.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SubmissionValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SubmissionValidationError{}

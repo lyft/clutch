@@ -32,6 +32,7 @@ const Name = "clutch.resolver.k8s"
 
 var typeURLPod = meta.TypeURL((*k8sv1api.Pod)(nil))
 var typeURLHPA = meta.TypeURL((*k8sv1api.HPA)(nil))
+var typeURLNode = meta.TypeURL((*k8sv1api.Node)(nil))
 
 var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	typeURLPod: {
@@ -39,6 +40,9 @@ var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	},
 	typeURLHPA: {
 		(*k8sv1resolver.HPAName)(nil),
+	},
+	typeURLNode: {
+		(*k8sv1resolver.Node)(nil),
 	},
 }
 
@@ -144,6 +148,24 @@ func (r *res) resolveForHPA(ctx context.Context, input proto.Message) ([]*k8sv1a
 	}
 }
 
+func (r *res) locateByNodeName(ctx context.Context, in *k8sv1resolver.Node) ([]*k8sv1api.Node, error) {
+	// Only possible to get one at a time by name.
+	node, err := r.svc.DescribeNode(ctx, in.Clientset, in.Cluster, in.Name)
+	if err != nil {
+		return nil, err
+	}
+	return []*k8sv1api.Node{node}, nil
+}
+
+func (r *res) resolveForNode(ctx context.Context, input proto.Message) ([]*k8sv1api.Node, error) {
+	switch i := input.(type) {
+	case *k8sv1resolver.Node:
+		return r.locateByNodeName(ctx, i)
+	default:
+		return nil, status.Errorf(codes.Internal, "unrecognized input type '%T'", i)
+	}
+}
+
 func (r *res) Resolve(ctx context.Context, typeURL string, input proto.Message, limit uint32) (*resolver.Results, error) {
 	switch typeURL {
 	case typeURLPod:
@@ -154,6 +176,12 @@ func (r *res) Resolve(ctx context.Context, typeURL string, input proto.Message, 
 		return &resolver.Results{Messages: resolver.MessageSlice(result)}, nil
 	case typeURLHPA:
 		result, err := r.resolveForHPA(ctx, input)
+		if err != nil {
+			return nil, err
+		}
+		return &resolver.Results{Messages: resolver.MessageSlice(result)}, nil
+	case typeURLNode:
+		result, err := r.resolveForNode(ctx, input)
 		if err != nil {
 			return nil, err
 		}
@@ -233,6 +261,37 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 						return
 					}
 				}(clientset, cluster, namespace, hpaQuery)
+			}
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "did not understand input")
+		}
+	case typeURLNode:
+		if idPattern.MatchString(query) {
+			patternValues, ok, err := meta.ExtractPatternValuesFromString((*k8sv1api.Node)(nil), query)
+			if err != nil {
+				return nil, err
+			}
+
+			nodeQuery := query
+			cluster := ""
+
+			if ok {
+				nodeQuery = patternValues["name"]
+				cluster = patternValues["cluster"]
+			}
+
+			for _, clientset := range clientsets {
+				handler.Add(1)
+				go func(clientset, cluster, query string) {
+					defer handler.Done()
+					node, err := r.svc.DescribeNode(ctx, clientset, cluster, query)
+					select {
+					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.Node{node}, err):
+						return
+					case <-handler.Cancelled():
+						return
+					}
+				}(clientset, cluster, nodeQuery)
 			}
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "did not understand input")
