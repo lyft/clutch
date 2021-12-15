@@ -243,8 +243,11 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 }
 
 func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string) ([]*PullRequestInfo, error) {
-	// PullRequestListOptions left as nil since default opts are sufficient (State: "open", Sort: "created")
-	respPRs, _, err := s.rest.PullRequests.ListPullRequestsWithCommit(ctx, ref.RepoOwner, ref.RepoName, sha, nil)
+	// Possible values for State: "open", "closed", "all". Default is "open", manually setting it to "all".
+	opts := &githubv3.PullRequestListOptions{
+		State: "all",
+	}
+	respPRs, _, err := s.rest.PullRequests.ListPullRequestsWithCommit(ctx, ref.RepoOwner, ref.RepoName, sha, opts)
 	if err != nil {
 		return nil, err
 	}
