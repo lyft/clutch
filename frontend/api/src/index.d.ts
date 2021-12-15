@@ -10564,6 +10564,9 @@ export namespace clutch {
 
                 /** FeedbackMetadata userSubmitted */
                 userSubmitted?: (boolean|null);
+
+                /** FeedbackMetadata urlSearchParams */
+                urlSearchParams?: (string|null);
             }
 
             /** Represents a FeedbackMetadata. */
@@ -10583,6 +10586,9 @@ export namespace clutch {
 
                 /** FeedbackMetadata userSubmitted. */
                 public userSubmitted: boolean;
+
+                /** FeedbackMetadata urlSearchParams. */
+                public urlSearchParams: string;
 
                 /**
                  * Verifies a FeedbackMetadata message.

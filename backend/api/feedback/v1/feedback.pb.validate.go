@@ -837,6 +837,8 @@ func (m *FeedbackMetadata) validate(all bool) error {
 
 	// no validation rules for UserSubmitted
 
+	// no validation rules for UrlSearchParams
+
 	if len(errors) > 0 {
 		return FeedbackMetadataMultiError(errors)
 	}
