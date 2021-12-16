@@ -7,6 +7,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/moduletest"
@@ -58,5 +59,5 @@ func (t *TestServer) Stop() {
 }
 
 func (t *TestServer) ClientConn() (*grpc.ClientConn, error) {
-	return grpc.Dial("localhost:9000", grpc.WithInsecure())
+	return grpc.Dial("localhost:9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 }
