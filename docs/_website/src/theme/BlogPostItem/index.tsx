@@ -6,6 +6,7 @@ import Link from '@docusaurus/Link';
 import MDXComponents from '@theme/MDXComponents';
 import Share from '@site/src/components/Share';
 import styles from './styles.module.css';
+import Image from '../../components/Image';
 const MONTHS = [
   'January',
   'February',
@@ -39,6 +40,7 @@ function BlogPostItem(props) {
     const month = MONTHS[parseInt(match[1], 10) - 1];
     const day = parseInt(match[2], 10);
     return (
+      <MDXProvider components={{...MDXComponents, img: Image, Image}}>
       <header>
         <TitleHeading
           className={clsx('margin-bottom--sm', styles.blogPostTitle)}>
@@ -75,18 +77,18 @@ function BlogPostItem(props) {
           </div>
         </div>
       </header>
+      </MDXProvider>
     );
   };
 
   return (
-    <>
-
+    <MDXProvider components={{ ...MDXComponents, img: Image }}>
       <Seo {...{keywords, image}} />
 
       <article className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
         {renderPostHeader()}
         <section className="markdown">
-          <MDXProvider components={MDXComponents}>{children}</MDXProvider>
+          {children}
         </section>
         {(tags.length > 0 || truncated) && (
           <footer className="row margin-vert--md">
@@ -114,7 +116,7 @@ function BlogPostItem(props) {
           </footer>
         )}
       </article>
-    </>
+    </MDXProvider>
   );
 }
 
