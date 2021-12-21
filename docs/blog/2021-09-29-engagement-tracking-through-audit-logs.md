@@ -9,15 +9,13 @@ image: https://raw.githubusercontent.com/lyft/clutch/5eb15c33b5593d38f75d921c4a9
 hide_table_of_contents: false
 ---
 
-import Image from '@site/src/components/Image';
-
 Like most companies, Lyft is data driven. We have hypotheses and use data to support or invalidate them. If you are reading this blog, you probably have a Clutch gateway instance running and have a custom workflow built. If you ever wondered how often those workflows are being used, we will show you how you can easily use Clutch’s built-in [Security Auditing](https://clutch.sh/docs/advanced/security-auditing) as a way to track and report on usage. The audit middleware saves data on each incoming request to a database and any additional sinks of your choosing. With this data, we can track usage of Clutch itself and its integrations.
 
 <!--truncate-->
 
 Here’s a recap of Clutch’s security auditing architecture ([Security Auditing](https://clutch.sh/docs/advanced/security-auditing)):
 
-<Image alt="Clutch Component Architecture" src="https://raw.githubusercontent.com/lyft/clutch/main/docs/_website/static/img/docs/audit-architecture-diagram.png" width="75%" variant="centered" />
+<img alt="Clutch Component Architecture" src="https://raw.githubusercontent.com/lyft/clutch/main/docs/_website/static/img/docs/audit-architecture-diagram.png" width="75%" variant="centered" />
 
 ## Where are events stored
 
@@ -67,7 +65,7 @@ WHERE
 
 Using a 'Business Intelligence' tool, we can take this data and create nice charts to examine usage over time. We like to look at unique users per month and week as well as actions performed over the last 14 days and 90 days. From these charts, we can easily see which workflows are the most frequently used and how often Clutch is being used.
 
-<Image alt="Clutch Basic Tracking Dashboard" src="https://raw.githubusercontent.com/lyft/clutch/5eb15c33b5593d38f75d921c4a9c711f16c5b552/docs/_website/static/img/docs/metrics-charts.png" />
+<img alt="Clutch Basic Tracking Dashboard" src="https://raw.githubusercontent.com/lyft/clutch/5eb15c33b5593d38f75d921c4a9c711f16c5b552/docs/_website/static/img/docs/metrics-charts.png" />
 
 If you don’t have a charting tool, you’ll need a query for each of these charts.
 
