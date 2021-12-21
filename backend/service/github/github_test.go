@@ -24,6 +24,10 @@ var (
 	timestamp = time.Unix(1569010072, 0)
 )
 
+func intPtr(i int) *int {
+	return &i
+}
+
 type getfileMock struct {
 	v4client
 
@@ -724,7 +728,20 @@ var listPullRequestsWithCommitTests = []struct {
 	repoName    string
 	ref         string
 	sha         string
+	opts        *githubv3.PullRequestListOptions
 }{
+	{
+		name:        "happy path",
+		mockPullReq: &mockPullRequests{},
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		ref:         "my-branch",
+		sha:         "asdf12345",
+		opts: &githubv3.PullRequestListOptions{
+			// Possible values for State: "open", "closed", "all". Default is "open", manually setting it to "all".
+			State: "all",
+		},
+	},
 	{
 		name:        "v3 client error",
 		mockPullReq: &mockPullRequests{generalError: true},
@@ -733,14 +750,9 @@ var listPullRequestsWithCommitTests = []struct {
 		repoName:    "my-repo",
 		ref:         "my-branch",
 		sha:         "asdf12345",
-	},
-	{
-		name:        "happy path",
-		mockPullReq: &mockPullRequests{},
-		repoOwner:   "my-org",
-		repoName:    "my-repo",
-		ref:         "my-branch",
-		sha:         "asdf12345",
+		opts: &githubv3.PullRequestListOptions{
+			State: "all",
+		},
 	},
 }
 
@@ -761,7 +773,8 @@ func TestListPullRequestsWithCommit(t *testing.T) {
 					RepoName:  tt.repoName,
 					Ref:       tt.ref,
 				},
-				tt.sha)
+				tt.sha,
+				tt.opts)
 
 			if tt.errorText != "" {
 				assert.Error(t, err)

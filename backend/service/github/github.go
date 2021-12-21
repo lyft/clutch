@@ -103,7 +103,7 @@ type Client interface {
 	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
 	GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error)
 	ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error)
-	ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string) ([]*PullRequestInfo, error)
+	ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.PullRequestListOptions) ([]*PullRequestInfo, error)
 	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
 	GetUser(ctx context.Context, username string) (*githubv3.User, error)
 }
@@ -218,10 +218,6 @@ func boolPtr(b bool) *bool {
 	return &b
 }
 
-func intPtr(i int) *int {
-	return &i
-}
-
 func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error) {
 	req := &githubv3.NewPullRequest{
 		Title:               strPtr(title),
@@ -242,11 +238,7 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 	}, nil
 }
 
-func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string) ([]*PullRequestInfo, error) {
-	// Possible values for State: "open", "closed", "all". Default is "open", manually setting it to "all".
-	opts := &githubv3.PullRequestListOptions{
-		State: "all",
-	}
+func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.PullRequestListOptions) ([]*PullRequestInfo, error) {
 	respPRs, _, err := s.rest.PullRequests.ListPullRequestsWithCommit(ctx, ref.RepoOwner, ref.RepoName, sha, opts)
 	if err != nil {
 		return nil, err
