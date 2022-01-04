@@ -5,6 +5,7 @@ import _ from "lodash";
 import { AccordionGroup } from "../accordion";
 import { useWizardContext } from "../Contexts";
 import { Error } from "../Feedback";
+import type { NoteConfig } from "../Feedback";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 import { useSearchParams } from "../navigation";
@@ -58,6 +59,10 @@ interface ResolverProps {
    *  enableAutocomplete bool is used to enable/disable autocomplete at the workflow level rather than the schema level.
    */
   enableAutocomplete?: boolean;
+  /**
+   *  Notes can be used to pass in extra information to the user about the workflow
+   */
+  notes?: NoteConfig[];
 }
 
 const Resolver: React.FC<ResolverProps> = ({
