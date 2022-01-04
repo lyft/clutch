@@ -195,5 +195,5 @@ preflight-checks:
 
 .PHONY: util-bump-aws # renovate does not bump all AWS packages together, this makes it easy to upgrade all of them at once
 util-bump-aws:
-	cd backend && go list -m -f '{{.Path}}' all | grep aws-sdk-go | tr '\n' ' ' | xargs go get -u
+	cd backend && go list -m -f '{{if not .Indirect}}{{.Path}}{{end}}' all | grep aws-sdk-go | tr '\n' ' ' | xargs go get -u
 
