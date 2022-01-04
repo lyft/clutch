@@ -4,7 +4,7 @@ import _ from "lodash";
 
 import { AccordionGroup } from "../accordion";
 import { useWizardContext } from "../Contexts";
-import { Error } from "../Feedback";
+import { Error, NotePanel } from "../Feedback";
 import type { NoteConfig } from "../Feedback";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
@@ -72,6 +72,7 @@ const Resolver: React.FC<ResolverProps> = ({
   variant = "dual",
   apiPackage,
   enableAutocomplete = true,
+  notes = [],
 }) => {
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
@@ -137,6 +138,7 @@ const Resolver: React.FC<ResolverProps> = ({
               <SchemaResolver key={schema.typeUrl} schema={schema} submitHandler={submitHandler} />
             ))}
           </AccordionGroup>
+          <NotePanel notes={notes} />
         </Loadable>
       )}
     </Loadable>
