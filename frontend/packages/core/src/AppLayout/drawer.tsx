@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import {
   Avatar as MuiAvatar,
@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import _ from "lodash";
 
+import type { Workflow } from "../AppProvider/workflow";
 import { useAppContext } from "../Contexts";
 import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
@@ -90,12 +91,20 @@ const Avatar = styled(MuiAvatar)({
 interface GroupProps {
   heading: string;
   open: boolean;
+  selected: boolean;
   updateOpenGroup: (heading: string) => void;
   closeGroup: () => void;
   children: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
 }
 
-const Group = ({ heading, open = false, updateOpenGroup, closeGroup, children }: GroupProps) => {
+const Group = ({
+  heading,
+  open = false,
+  selected = false,
+  updateOpenGroup,
+  closeGroup,
+  children,
+}: GroupProps) => {
   const anchorRef = React.useRef(null);
 
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
@@ -103,13 +112,14 @@ const Group = ({ heading, open = false, updateOpenGroup, closeGroup, children }:
   if (React.Children.count(children) === 0) {
     return null;
   }
+
   // TODO (dschaller): revisit how we handle long groups once we have designs.
   // n.b. this is a stop-gap solution to prevent long groups from looking unreadable.
   return (
     <GroupList data-qa="workflowGroup">
       <GroupListItem
         button
-        selected={open}
+        selected={open || selected}
         ref={anchorRef}
         aria-controls={open ? "workflow-options" : undefined}
         aria-haspopup="true"
@@ -148,7 +158,9 @@ const Link: React.FC<LinkProps> = ({ to, text }) => {
 
 const Drawer: React.FC = () => {
   const { workflows } = useAppContext();
+  const [activeWorkflow, setActiveWorkflow] = React.useState<Workflow>(null);
   const [openGroup, setOpenGroup] = React.useState("");
+  const location = useLocation();
 
   const updateOpenGroup = (group: string) => {
     if (openGroup === group) {
@@ -158,16 +170,44 @@ const Drawer: React.FC = () => {
     }
   };
 
+  /**
+   * Will break a path down and iterate through given workflows to see if there is a matching path.
+   * If it finds a given path it will set that workflow as the active one so it can stay selected.
+   */
+  React.useEffect(() => {
+    // /ec2/asg/resize -> ["", "ec2", "asg", "resize"] -> ["ec2", "asg", "resize"]
+    const splitPath = location.pathname.split("/").filter(Boolean);
+    setActiveWorkflow(null);
+
+    if (splitPath.length) {
+      workflows.some(w => {
+        if (splitPath[0] === w.path) {
+          return w.routes.some(r => {
+            if (r.path === splitPath.slice(1).join("/")) {
+              setActiveWorkflow(w);
+            }
+
+            return activeWorkflow !== null;
+          });
+        }
+
+        return false;
+      });
+    }
+  }, [location]);
+
   return (
     <DrawerPanel data-qa="drawer" variant="permanent">
       {sortedGroupings(workflows).map(grouping => {
         const value = routesByGrouping(workflows)[grouping];
         const sortedWorkflows = _.sortBy(value.workflows, w => w.displayName);
+
         return (
           <Group
             key={grouping}
             heading={grouping}
             open={openGroup === grouping}
+            selected={openGroup === grouping || activeWorkflow?.group === grouping}
             updateOpenGroup={updateOpenGroup}
             closeGroup={() => setOpenGroup("")}
           >
