@@ -4,8 +4,8 @@ import _ from "lodash";
 
 import { AccordionGroup } from "../accordion";
 import { useWizardContext } from "../Contexts";
-import { Error, NotePanel } from "../Feedback";
 import type { NoteConfig } from "../Feedback";
+import { Error, NotePanel } from "../Feedback";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 import { useSearchParams } from "../navigation";
