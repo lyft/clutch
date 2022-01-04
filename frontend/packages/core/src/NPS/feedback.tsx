@@ -184,6 +184,7 @@ const NPSFeedback = ({ origin = "ANYTIME", onSubmit }: FeedbackOptions) => {
           origin: IClutch.feedback.v1.Origin[origin],
           userSubmitted: hasSubmit,
           survey,
+          urlSearchParams: window.location.search,
         },
       });
     }

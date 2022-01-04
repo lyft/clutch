@@ -25674,6 +25674,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {clutch.feedback.v1.Origin|null} [origin] FeedbackMetadata origin
                  * @property {clutch.feedback.v1.ISurvey|null} [survey] FeedbackMetadata survey
                  * @property {boolean|null} [userSubmitted] FeedbackMetadata userSubmitted
+                 * @property {string|null} [urlSearchParams] FeedbackMetadata urlSearchParams
                  */
 
                 /**
@@ -25716,6 +25717,14 @@ export const clutch = $root.clutch = (() => {
                 FeedbackMetadata.prototype.userSubmitted = false;
 
                 /**
+                 * FeedbackMetadata urlSearchParams.
+                 * @member {string} urlSearchParams
+                 * @memberof clutch.feedback.v1.FeedbackMetadata
+                 * @instance
+                 */
+                FeedbackMetadata.prototype.urlSearchParams = "";
+
+                /**
                  * Verifies a FeedbackMetadata message.
                  * @function verify
                  * @memberof clutch.feedback.v1.FeedbackMetadata
@@ -25743,6 +25752,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.userSubmitted != null && message.hasOwnProperty("userSubmitted"))
                         if (typeof message.userSubmitted !== "boolean")
                             return "userSubmitted: boolean expected";
+                    if (message.urlSearchParams != null && message.hasOwnProperty("urlSearchParams"))
+                        if (!$util.isString(message.urlSearchParams))
+                            return "urlSearchParams: string expected";
                     return null;
                 };
 
@@ -25779,6 +25791,8 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.userSubmitted != null)
                         message.userSubmitted = Boolean(object.userSubmitted);
+                    if (object.urlSearchParams != null)
+                        message.urlSearchParams = String(object.urlSearchParams);
                     return message;
                 };
 
@@ -25799,6 +25813,7 @@ export const clutch = $root.clutch = (() => {
                         object.origin = options.enums === String ? "ORIGIN_UNSPECIFIED" : 0;
                         object.survey = null;
                         object.userSubmitted = false;
+                        object.urlSearchParams = "";
                     }
                     if (message.origin != null && message.hasOwnProperty("origin"))
                         object.origin = options.enums === String ? $root.clutch.feedback.v1.Origin[message.origin] : message.origin;
@@ -25806,6 +25821,8 @@ export const clutch = $root.clutch = (() => {
                         object.survey = $root.clutch.feedback.v1.Survey.toObject(message.survey, options);
                     if (message.userSubmitted != null && message.hasOwnProperty("userSubmitted"))
                         object.userSubmitted = message.userSubmitted;
+                    if (message.urlSearchParams != null && message.hasOwnProperty("urlSearchParams"))
+                        object.urlSearchParams = message.urlSearchParams;
                     return object;
                 };
 

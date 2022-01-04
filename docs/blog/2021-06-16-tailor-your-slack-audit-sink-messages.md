@@ -10,21 +10,19 @@ image: https://user-images.githubusercontent.com/39421794/122236515-937b3280-ce8
 hide_table_of_contents: false
 ---
 
-import Image from '@site/src/components/Image';
-
 Imagine being on call for a service and getting paged for high CPU but not knowing why. Traffic hasn't increased and no recent deployments have happened. However, through the Clutch Slack sink, you can see in Slack that a teammate resized your service’s [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale)/[ASG](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html). Visibility into infrastructure changes is a top level concern for Clutch, which is why the Slack sink is one of the out-of-the-box features.
 
 <!--truncate-->
 
 For each operation performed in Clutch, an audit event is created and can be forward to a channel in your Slack workspace. The Slack sink creates a standard message for all workflows, which answers the questions: what operation was performed, what resources were modified, and who performed the operation.
 
-<Image alt="Clutch Standard Slack Audit Message" src="https://user-images.githubusercontent.com/39421794/122236235-57e06880-ce8c-11eb-8ec7-52963f23c4b9.png" />
+<img alt="Clutch Standard Slack Audit Message" src="https://user-images.githubusercontent.com/39421794/122236235-57e06880-ce8c-11eb-8ec7-52963f23c4b9.png" />
 
 The standard message captures key security information, but what if you wanted to add even more information that was specific to a workflow? What if you wanted to customize the information to suit your team's needs? We had the same thoughts and embarked on the next iteration of the Slack sink to support these use cases. Read on to learn more about this recent extension!
 
 ## Background
 
-<Image alt="Clutch Audit Architecture" src="https://user-images.githubusercontent.com/39421794/122236515-937b3280-ce8c-11eb-9144-67058f4ef78e.png" variant="centered" />
+<img alt="Clutch Audit Architecture" src="https://user-images.githubusercontent.com/39421794/122236515-937b3280-ce8c-11eb-9144-67058f4ef78e.png" variant="centered" />
 
 For each incoming API request into Clutch, an audit event is [created, persisted, and then forwarded](https://clutch.sh/docs/advanced/security-auditing/) to the sinks. The role of a sink is simple: process the audit event appropriately for your needs and forward the event to other systems (Clutch ships with logging and Slack sinks and you can easily add new ones, such as Microsoft Teams). The sinks utilize the recorded information in an audit event to create an output. For example, the Slack sink’s [standard message](https://github.com/lyft/clutch/blob/b56d9a929361fb590144bd8fd25d6b34d0fd5289/backend/service/auditsink/slack/slack.go#L114-L131) is created using the [event's](https://github.com/lyft/clutch/blob/b56d9a929361fb590144bd8fd25d6b34d0fd5289/api/audit/v1/audit.proto#L60-L76) `username`, `service_name`, `method_name`, and `resources` fields.
 
@@ -122,7 +120,7 @@ A few things to highlight from the example:
 
 That minimal configuration is all that’s needed to set up this feature for any Clutch workflow!
 
-<Image alt="Clutch Custom Slack Audit Message" src="https://user-images.githubusercontent.com/39421794/122236354-734b7380-ce8c-11eb-97e4-146222eda962.png" />
+<img alt="Clutch Custom Slack Audit Message" src="https://user-images.githubusercontent.com/39421794/122236354-734b7380-ce8c-11eb-97e4-146222eda962.png" />
 
 ## Under the Hood
 

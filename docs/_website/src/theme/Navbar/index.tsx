@@ -9,7 +9,7 @@ import Toggle from '@theme/Toggle';
 import useThemeContext from '@theme/hooks/useThemeContext';
 import useHideableNavbar from '@theme/hooks/useHideableNavbar';
 import useLockBodyScroll from '@theme/hooks/useLockBodyScroll';
-import useWindowSize, { windowSizes } from '@theme/hooks/useWindowSize';
+import useWindowSize from '@theme/hooks/useWindowSize';
 import Logo from '@theme/Logo';
 
 import styles from './styles.module.css';
@@ -241,7 +241,7 @@ function Navbar() {
   const windowSize = useWindowSize();
 
   useEffect(() => {
-    if (windowSize === windowSizes.desktop) {
+    if (windowSize === 'desktop') {
       setSidebarShown(false);
     }
   }, [windowSize]);

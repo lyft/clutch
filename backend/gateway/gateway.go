@@ -16,6 +16,7 @@ import (
 	tallyprom "github.com/uber-go/tally/prometheus"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
@@ -248,7 +249,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	// Create a client connection for the registrar to make grpc-gateway's handlers available.
 	// TODO: stand up a private loopback listener for the grpcServer and connect to that instead.
 	opts := []grpc.DialOption{
-		grpc.WithInsecure(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
 	if cfg.Gateway.MaxResponseSizeBytes > 0 {
 		opts = append(opts, grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(int(cfg.Gateway.MaxResponseSizeBytes))))

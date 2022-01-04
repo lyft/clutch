@@ -8,9 +8,9 @@
     "swizzle": "docusaurus swizzle"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-alpha",
-    "@docusaurus/plugin-debug": "^2.0.0-alpha",
-    "@docusaurus/preset-classic": "^2.0.0-alpha",
+    "@docusaurus/core": "^2.0.0-beta",
+    "@docusaurus/plugin-debug": "^2.0.0-beta",
+    "@docusaurus/preset-classic": "^2.0.0-beta",
     "classnames": "^2.2.6",
     "prismjs": "^1.21.0",
     "react": "^17.0.0",
@@ -30,8 +30,8 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.0.0-alpha",
-    "@tsconfig/docusaurus": "^1.0.2",
+    "@docusaurus/module-type-aliases": "^2.0.0-beta",
+    "@tsconfig/docusaurus": "^1.0.4",
     "@types/node": "^16.0.0",
     "@types/react": "^17.0.0",
     "@types/react-helmet": "^6.1.0",

@@ -462,7 +462,7 @@ const AmiiboLookup: React.FC<WizardChild> = () => {
 
 This will present a text field which updates a data layout called `userInput` on changes and a button for users to click when they are ready to search.
 
-<Image alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/lookup-panel.png ')} width="75%" variant="centered"/>
+<img alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/lookup-panel.png ')} width="75%" variant="centered"/>
 
 Now let's build a way to display the details panel.
 
@@ -510,7 +510,7 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
 
 Once the `amiiboData` data layout has been hydrated a table will be displayed with all amiibo matching the input criteria.
 
-<Image alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/details-panel.png ')} width="75%" variant="centered" />
+<img alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/details-panel.png ')} width="75%" variant="centered" />
 
 Let's tie these two components together.
 
@@ -608,7 +608,7 @@ module.exports = {
 
 If everything is in order you should see an Amiibo card on the homepage that you can use to access your workflow!
 
-<Image alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/landing-page.png ')} width="50%" variant="centered" />
+<img alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/landing-page.png ')} width="50%" variant="centered" />
 
 That's it! You should be able to remove all the remaining generated code.
 

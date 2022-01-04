@@ -95,6 +95,7 @@ message FeedbackMetadata {
   Survey survey = 2 [ (validate.rules).message = {required : true} ];
   // TODO: remove if we decide to record feedback only when a user clicks the submit button
   bool user_submitted = 3;
+  string url_search_params = 4;
 }
 
 message Feedback {
