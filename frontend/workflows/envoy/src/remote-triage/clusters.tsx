@@ -3,7 +3,7 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { AccordionRow, StatusIcon, styled, Table, TableRow } from "@clutch-sh/core";
 import _ from "lodash";
 
-const BarContainer = styled("rect")<{ $fill: string; $width: string; }>(
+const BarContainer = styled("rect")<{ $fill: string; $width: string }>(
   {
     height: "12px",
   },

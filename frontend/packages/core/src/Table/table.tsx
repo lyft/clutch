@@ -20,8 +20,8 @@ import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import { Popper, PopperItem } from "../popper";
-import { Typography } from "../typography";
 import styled from "../styled";
+import { Typography } from "../typography";
 
 const StyledPaper = styled(MuiPaper)({
   border: "1px solid #E7E7EA",

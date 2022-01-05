@@ -6,7 +6,7 @@ const transientOptions: Parameters<CreateStyled>[1] = {
 };
 
 const styled = (tag: any, options?: StyledOptions<any>) => {
-  return emotion(tag, {...transientOptions, ...(options || {})});
+  return emotion(tag, { ...transientOptions, ...(options || {}) });
 };
 
 export default styled;

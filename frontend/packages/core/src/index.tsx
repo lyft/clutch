@@ -25,6 +25,7 @@ import Paper from "./paper";
 import { Popper, PopperItem } from "./popper";
 import Resolver from "./Resolver";
 import { Step, Stepper } from "./stepper";
+import styled from "./styled";
 import { Tab, Tabs } from "./tab";
 import {
   AccordionRow,
@@ -38,7 +39,6 @@ import {
 } from "./Table";
 import Code from "./text";
 import { Typography } from "./typography";
-import styled from "./styled";
 
 export * from "./Input";
 export * from "./Feedback";

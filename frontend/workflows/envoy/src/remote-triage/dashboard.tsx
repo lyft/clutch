@@ -9,7 +9,7 @@ const SummaryCardTitle = styled("div")({
   color: "#0D1030",
 });
 
-const SummaryCardBody = styled("div")<{ $color?: string; }>(
+const SummaryCardBody = styled("div")<{ $color?: string }>(
   {
     fontWeight: "bold",
     fontSize: "20px",
