@@ -117,6 +117,7 @@ const Resolver: React.FC<ResolverProps> = ({
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           {state.resolverFetchError && <Error subject={state.resolverFetchError} />}
+          <NotePanel notes={notes} />
           {(variant === "dual" || variant === "query") && (
             <>
               <SchemaLabel>Search</SchemaLabel>
@@ -138,7 +139,6 @@ const Resolver: React.FC<ResolverProps> = ({
               <SchemaResolver key={schema.typeUrl} schema={schema} submitHandler={submitHandler} />
             ))}
           </AccordionGroup>
-          <NotePanel notes={notes} />
         </Loadable>
       )}
     </Loadable>
