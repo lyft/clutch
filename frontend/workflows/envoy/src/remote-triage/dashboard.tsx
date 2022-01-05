@@ -1,22 +1,21 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Grid, MetadataTable, Paper } from "@clutch-sh/core";
-import styled from "@emotion/styled";
+import { Grid, MetadataTable, Paper, styled } from "@clutch-sh/core";
 import { Pie } from "@nivo/pie";
 
-const SummaryCardTitle = styled.div({
+const SummaryCardTitle = styled("div")({
   fontWeight: 600,
   fontSize: "14px",
   color: "#0D1030",
 });
 
-const SummaryCardBody = styled.div(
+const SummaryCardBody = styled("div")<{ $color?: string; }>(
   {
     fontWeight: "bold",
     fontSize: "20px",
   },
   props => ({
-    color: props.color ? props.color : "#3548D4",
+    color: props.$color ? props.$color : "#3548D4",
   })
 );
 
@@ -24,12 +23,12 @@ const FeaturedSummaryContainer = styled(Grid)({
   flexBasis: "60%",
 });
 
-const PieContainer = styled.div({
+const PieContainer = styled("div")({
   display: "flex",
   justifyContent: "space-evenly",
 });
 
-const PieLegendContainer = styled.div({
+const PieLegendContainer = styled("div")({
   display: "flex",
   textAlign: "center",
   justifyContent: "space-evenly",
@@ -70,7 +69,7 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
             {summary?.data?.map(d => (
               <div key={d.id}>
                 <SummaryCardTitle>{d.id}</SummaryCardTitle>
-                <SummaryCardBody color={d.color}>{d.value}</SummaryCardBody>
+                <SummaryCardBody $color={d.color}>{d.value}</SummaryCardBody>
               </div>
             ))}
           </PieLegendContainer>
@@ -85,7 +84,7 @@ const SummariesContainer = styled(Grid)({
   flexBasis: "40%",
 });
 
-const InformationContainer = styled.div({
+const InformationContainer = styled("div")({
   padding: "16px 0",
 });
 

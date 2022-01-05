@@ -38,6 +38,7 @@ import {
 } from "./Table";
 import Code from "./text";
 import { Typography } from "./typography";
+import styled from "./styled";
 
 export * from "./Input";
 export * from "./Feedback";
@@ -88,6 +89,7 @@ export {
   StatusIcon,
   Step,
   Stepper,
+  styled,
   Tab,
   Table,
   TableCell,
