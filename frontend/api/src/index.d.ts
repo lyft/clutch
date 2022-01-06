@@ -10101,6 +10101,12 @@ export namespace clutch {
 
                     /** Properties of a Config. */
                     interface IConfig {
+
+                        /** Config host */
+                        host?: (string|null);
+
+                        /** Config port */
+                        port?: (number|null);
                     }
 
                     /** Represents a Config. */
@@ -10111,6 +10117,12 @@ export namespace clutch {
                          * @param [properties] Properties to set
                          */
                         constructor(properties?: clutch.config.service.temporal.v1.IConfig);
+
+                        /** Config host. */
+                        public host: string;
+
+                        /** Config port. */
+                        public port: number;
 
                         /**
                          * Verifies a Config message.

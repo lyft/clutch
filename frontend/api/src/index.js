@@ -24563,6 +24563,8 @@ export const clutch = $root.clutch = (() => {
                          * Properties of a Config.
                          * @memberof clutch.config.service.temporal.v1
                          * @interface IConfig
+                         * @property {string|null} [host] Config host
+                         * @property {number|null} [port] Config port
                          */
 
                         /**
@@ -24581,6 +24583,22 @@ export const clutch = $root.clutch = (() => {
                         }
 
                         /**
+                         * Config host.
+                         * @member {string} host
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.host = "";
+
+                        /**
+                         * Config port.
+                         * @member {number} port
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.port = 0;
+
+                        /**
                          * Verifies a Config message.
                          * @function verify
                          * @memberof clutch.config.service.temporal.v1.Config
@@ -24591,6 +24609,12 @@ export const clutch = $root.clutch = (() => {
                         Config.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                if (!$util.isString(message.host))
+                                    return "host: string expected";
+                            if (message.port != null && message.hasOwnProperty("port"))
+                                if (!$util.isInteger(message.port))
+                                    return "port: integer expected";
                             return null;
                         };
 
@@ -24605,7 +24629,12 @@ export const clutch = $root.clutch = (() => {
                         Config.fromObject = function fromObject(object) {
                             if (object instanceof $root.clutch.config.service.temporal.v1.Config)
                                 return object;
-                            return new $root.clutch.config.service.temporal.v1.Config();
+                            let message = new $root.clutch.config.service.temporal.v1.Config();
+                            if (object.host != null)
+                                message.host = String(object.host);
+                            if (object.port != null)
+                                message.port = object.port >>> 0;
+                            return message;
                         };
 
                         /**
@@ -24617,8 +24646,19 @@ export const clutch = $root.clutch = (() => {
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
-                        Config.toObject = function toObject() {
-                            return {};
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.host = "";
+                                object.port = 0;
+                            }
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                object.host = message.host;
+                            if (message.port != null && message.hasOwnProperty("port"))
+                                object.port = message.port;
+                            return object;
                         };
 
                         /**

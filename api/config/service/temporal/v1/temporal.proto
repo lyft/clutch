@@ -7,4 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/config/service/temporal/
 import "validate/validate.proto";
 
 message Config {
+
+  string host = 1 [ (validate.rules).string.address = true ];
+  uint32 port = 2 [ (validate.rules).uint32 = {lte : 65535} ];
 }

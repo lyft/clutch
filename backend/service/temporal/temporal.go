@@ -25,7 +25,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 	}
 
 	tc, err := client.NewClient(client.Options{
-		HostPort:           "",
+		HostPort:           fmt.Sprintf("%s:%d", config.Host, config.Port),
 		Namespace:          "",
 		Logger:             nil,
 		MetricsHandler:     &metricsHandler{Scope: scope},
