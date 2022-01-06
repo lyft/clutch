@@ -8,6 +8,8 @@ import "validate/validate.proto";
 
 message Config {
 
-  string host = 1 [ (validate.rules).string.address = true ];
+  // Using a "dns:///" prefixed address for the host will periodically resolve all IPs for DNS address given and round
+  // robin amongst them.
+  string host = 1 [ (validate.rules).string = {min_bytes : 1} ];
   uint32 port = 2 [ (validate.rules).uint32 = {lte : 65535} ];
 }

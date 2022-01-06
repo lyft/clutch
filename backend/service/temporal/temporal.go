@@ -1,20 +1,21 @@
 package temporal
 
+// <!-- START clutchdoc -->
+// description: Workflow client for temporal.io.
+// <!-- END clutchdoc -->
+
 import (
 	"fmt"
 
 	"github.com/uber-go/tally"
 	"go.temporal.io/sdk/client"
+	"go.temporal.io/sdk/log"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	temporalv1 "github.com/lyft/clutch/backend/api/config/service/temporal/v1"
 	"github.com/lyft/clutch/backend/service"
 )
-
-// <!-- START clutchdoc -->
-// description: Workflow client for temporal.io.
-// <!-- END clutchdoc -->
 
 const Name = "clutch.service.temporal"
 
@@ -23,23 +24,40 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
+	return newClient(config, logger, scope)
+}
 
+type ClientManager interface {
+	GetNamespaceClient(namespace string) (client.Client, error)
+}
+
+func newClient(cfg *temporalv1.Config, logger *zap.Logger, scope tally.Scope) (ClientManager, error) {
+	ret := &clientImpl{
+		hostPort:       fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+		metricsHandler: newMetricsHandler(scope),
+		logger:         newTemporalLogger(logger),
+	}
+	return ret, nil
+}
+
+type clientImpl struct {
+	hostPort       string
+	logger         log.Logger
+	metricsHandler client.MetricsHandler
+}
+
+func (c *clientImpl) GetNamespaceClient(namespace string) (client.Client, error) {
 	tc, err := client.NewClient(client.Options{
-		HostPort:           fmt.Sprintf("%s:%d", config.Host, config.Port),
-		Namespace:          "",
-		Logger:             newTemporalLogger(logger),
-		MetricsHandler:     newMetricsHandler(scope),
-		Identity:           "",
-		DataConverter:      nil,
-		ContextPropagators: nil,
-		ConnectionOptions:  client.ConnectionOptions{},
-		HeadersProvider:    nil,
-		TrafficController:  nil,
-		Interceptors:       nil,
+		HostPort:       c.hostPort,
+		Logger:         c.logger,
+		MetricsHandler: c.metricsHandler,
+		Namespace:      namespace,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return nil, fmt.Errorf("implement me")
+	// TODO: cache clients? is there any benefit?
+
+	return tc, err
 }

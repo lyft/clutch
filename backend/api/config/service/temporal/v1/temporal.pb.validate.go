@@ -56,17 +56,15 @@ func (m *Config) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateHostname(m.GetHost()); err != nil {
-		if ip := net.ParseIP(m.GetHost()); ip == nil {
-			err := ConfigValidationError{
-				field:  "Host",
-				reason: "value must be a valid hostname, or ip address",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
+	if len(m.GetHost()) < 1 {
+		err := ConfigValidationError{
+			field:  "Host",
+			reason: "value length must be at least 1 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetPort() > 65535 {
@@ -83,36 +81,6 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
-	return nil
-}
-
-func (m *Config) _validateHostname(host string) error {
-	s := strings.ToLower(strings.TrimSuffix(host, "."))
-
-	if len(host) > 253 {
-		return errors.New("hostname cannot exceed 253 characters")
-	}
-
-	for _, part := range strings.Split(s, ".") {
-		if l := len(part); l == 0 || l > 63 {
-			return errors.New("hostname part must be non-empty and cannot exceed 63 characters")
-		}
-
-		if part[0] == '-' {
-			return errors.New("hostname parts cannot begin with hyphens")
-		}
-
-		if part[len(part)-1] == '-' {
-			return errors.New("hostname parts cannot end with hyphens")
-		}
-
-		for _, r := range part {
-			if (r < 'a' || r > 'z') && (r < '0' || r > '9') && r != '-' {
-				return fmt.Errorf("hostname parts can only contain alphanumeric characters or hyphens, got %q", string(r))
-			}
-		}
-	}
-
 	return nil
 }
 
