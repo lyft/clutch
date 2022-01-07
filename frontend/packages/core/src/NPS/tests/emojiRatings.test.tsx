@@ -64,7 +64,6 @@ describe("<EmojiRatings />", () => {
     let [firstEmoji] = component.toJSON();
 
     expect(firstEmoji).toHaveStyleRule("opacity", "0.5");
-    expect(firstEmoji.props.selected).toBeFalsy();
 
     act(() => {
       firstEmoji.props.onClick();
@@ -73,7 +72,6 @@ describe("<EmojiRatings />", () => {
     [firstEmoji] = component.toJSON();
 
     expect(firstEmoji).toHaveStyleRule("opacity", "1");
-    expect(firstEmoji.props.selected).toBeTruthy();
   });
 
   it("will fetch emojis based on integers with a given enum", () => {

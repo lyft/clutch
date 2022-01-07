@@ -1,7 +1,6 @@
 import React from "react";
 import type { ClutchError } from "@clutch-sh/core";
-import { Error, Loadable, useWizardContext } from "@clutch-sh/core";
-import styled from "@emotion/styled";
+import { Error, Loadable, styled, useWizardContext } from "@clutch-sh/core";
 import { Grid as MuiGrid } from "@material-ui/core";
 
 const Grid = styled(MuiGrid)({
