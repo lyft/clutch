@@ -125,8 +125,12 @@ const ICON_BUTTON_STYLE_MAP = {
     size: 48,
     padding: 12,
   },
+  large: {
+    size: 64,
+    padding: 6,
+  },
 };
-type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
+export type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
 
 export const ICON_BUTTON_VARIANTS = Object.keys(ICON_BUTTON_STYLE_MAP);
 
@@ -158,19 +162,22 @@ const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
 
 const StyledIconButton = styled(MuiIconButton)<{
   palette: ButtonPalette;
-  size: IconButtonSize;
+  iconsize: IconButtonSize;
 }>({}, props => ({
-  width: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
-  height: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
-  padding: `${ICON_BUTTON_STYLE_MAP[props.size]?.padding || ICON_BUTTON_STYLE_MAP.small.padding}px`,
+  width: `${ICON_BUTTON_STYLE_MAP[props.iconsize]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  height: `${ICON_BUTTON_STYLE_MAP[props.iconsize]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  padding: `${
+    ICON_BUTTON_STYLE_MAP[props.iconsize]?.padding || ICON_BUTTON_STYLE_MAP.small.padding
+  }px`,
   ...colorCss(props.palette),
 }));
 
-export interface IconButtonProps
-  extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick" | "size"> {
+// TODO: (jslaughter) Update when large sizing is available with material-ui@5
+export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
   children: React.ReactElement;
+  size?: IconButtonSize;
 }
 
 /**
@@ -183,7 +190,7 @@ export interface IconButtonProps
  */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ variant = "primary", size = "medium", children, ...props }: IconButtonProps, ref) => (
-    <StyledIconButton palette={variantPalette(variant)} size={size} {...props} {...{ ref }}>
+    <StyledIconButton palette={variantPalette(variant)} iconsize={size} {...props} {...{ ref }}>
       {children}
     </StyledIconButton>
   )

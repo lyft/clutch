@@ -13,15 +13,15 @@ expect.extend(matchers);
 describe("<EmojiRatings />", () => {
   const stringExample = [
     {
-      emoji: "SAD",
+      emoji: 1,
       label: "bad",
     },
     {
-      emoji: "NEUTRAL",
+      emoji: 2,
       label: "ok",
     },
     {
-      emoji: "HAPPY",
+      emoji: 3,
       label: "great",
     },
   ];

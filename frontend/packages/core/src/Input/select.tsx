@@ -5,6 +5,7 @@ import {
   FormControl as MuiFormControl,
   FormHelperText as MuiFormHelperText,
   InputLabel as MuiInputLabel,
+  ListSubheader,
   MenuItem,
   Select as MuiSelect,
 } from "@material-ui/core";
@@ -174,12 +175,17 @@ const StyledSelect = styled(BaseSelect)({
   ".MuiSelect-select:focus": {
     backgroundColor: "inherit",
   },
+
+  ".MuiListSubheader-root": {
+    color: "#939495",
+  },
 });
 
-interface SelectOption {
+export interface SelectOption {
   label: string;
   value?: string;
   startAdornment?: React.ReactElement;
+  group?: SelectOption[];
 }
 
 export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
@@ -204,16 +210,24 @@ const Select = ({
   const defaultIdx = defaultOption < options.length && defaultOption > 0 ? defaultOption : 0;
   const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
 
+  // Flattens all options and sub grouped options for easier retrieval
+  const flatOptions: SelectOption[] = options
+    .map(option => (option.group ? option.group.map(groupOption => groupOption) : option))
+    .reduce((pre: any, cur: any) => pre.concat(cur), []);
+
   React.useEffect(() => {
-    if (options.length !== 0) {
-      onChange && onChange(options[selectedIdx]?.value || options[selectedIdx].label);
+    if (flatOptions.length !== 0) {
+      onChange && onChange(flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label);
     }
   }, []);
 
   const updateSelectedOption = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
     const { value } = event.target;
-    const optionValues = options.map(o => o?.value || o.label);
-    setSelectedIdx(optionValues.indexOf(value));
+    // handle if selecting a header option
+    if (!value) {
+      return;
+    }
+    setSelectedIdx(flatOptions.findIndex(opt => opt?.value === value || opt?.label === value));
     onChange && onChange(value);
   };
 
@@ -221,24 +235,38 @@ const Select = ({
     return null;
   }
 
+  const menuItem = option => (
+    <MenuItem key={option.label} value={option?.value || option.label}>
+      {option?.startAdornment &&
+        React.cloneElement(option.startAdornment, {
+          style: { height: "100%", marginRight: "8px", ...option.startAdornment.props.style },
+        })}
+      {option.label}
+    </MenuItem>
+  );
+
+  const renderSelectItems = option => {
+    if (option.group) {
+      return [
+        <ListSubheader>{option.label}</ListSubheader>,
+        option.group.map(opt => menuItem(opt)),
+      ];
+    }
+    return menuItem(option);
+  };
+
   return (
     <StyledFormControl id={name} key={name} fullWidth disabled={disabled} error={error}>
       {label && <StyledInputLabel>{label}</StyledInputLabel>}
-      <StyledSelect
-        id={`${name}-select`}
-        value={options[selectedIdx]?.value || options[selectedIdx].label}
-        onChange={updateSelectedOption}
-      >
-        {options.map(option => (
-          <MenuItem key={option.label} value={option?.value || option.label}>
-            {option?.startAdornment &&
-              React.cloneElement(option.startAdornment, {
-                style: { height: "100%", marginRight: "8px", ...option.startAdornment.props.style },
-              })}
-            {option.label}
-          </MenuItem>
-        ))}
-      </StyledSelect>
+      {flatOptions.length && (
+        <StyledSelect
+          id={`${name}-select`}
+          value={flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label}
+          onChange={updateSelectedOption}
+        >
+          {options?.map(option => renderSelectItems(option))}
+        </StyledSelect>
+      )}
       {helperText && (
         <StyledFormHelperText>
           {error && <ErrorIcon />}

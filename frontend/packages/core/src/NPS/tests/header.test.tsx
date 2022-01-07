@@ -3,17 +3,17 @@ import { matchers } from "@emotion/jest";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import { mount, shallow } from "enzyme";
 
-import { NPSAnytime } from "..";
+import { NPSHeader } from "..";
 
 // Add the custom matchers provided by '@emotion/jest'
 expect.extend(matchers);
 
-describe("<NPSAnytime />", () => {
+describe("<NPSHeader />", () => {
   describe("basic rendering", () => {
     let wrapper;
 
     beforeEach(() => {
-      wrapper = shallow(<NPSAnytime />);
+      wrapper = shallow(<NPSHeader />);
     });
 
     afterEach(() => {
@@ -21,7 +21,7 @@ describe("<NPSAnytime />", () => {
     });
 
     it("renders", () => {
-      expect(wrapper.find(NPSAnytime)).toBeDefined();
+      expect(wrapper.find(NPSHeader)).toBeDefined();
     });
 
     it("renders clickable feedback icon", () => {
@@ -41,6 +41,8 @@ describe("<NPSAnytime />", () => {
 
       expect(wrapper.find("Styled(Component)").at(1).prop("open")).toBeTruthy();
     });
+
+    it("closes the popper on click outside", () => {});
 
     // it("renders anytime feedback inside of popper", () => {
     //   const mounted = mount(<NPSAnytime />);

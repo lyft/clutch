@@ -1,9 +1,19 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Grow as MuiGrow, Paper as MuiPaper, Popper as MuiPopper } from "@material-ui/core";
+import {
+  ClickAwayListener,
+  Grow as MuiGrow,
+  MenuList,
+  Paper as MuiPaper,
+  Popper as MuiPopper,
+} from "@material-ui/core";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import { sortBy } from "lodash";
 
+import type { Workflow } from "../AppProvider/workflow";
 import { IconButton } from "../button";
+import { useAppContext } from "../Contexts";
+import type { SelectOption } from "../Input";
 
 import NPSFeedback from "./feedback";
 
@@ -20,7 +30,8 @@ const Popper = styled(MuiPopper)({
 const Paper = styled(MuiPaper)({
   width: "420px",
   border: "1px solid #E7E7EA",
-  boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+  boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
+  borderRadius: "8px",
 });
 
 const StyledFeedbackIcon = styled(IconButton)<{ open: boolean }>(
@@ -40,12 +51,43 @@ const StyledFeedbackIcon = styled(IconButton)<{ open: boolean }>(
   })
 );
 
-const AnytimeFeedback = () => {
+const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => {
+  const feedbackTypes: SelectOption[] = [{ label: "General" }];
+
+  workflows.forEach(workflow => {
+    feedbackTypes.push({
+      label: workflow.group,
+      group: sortBy(
+        workflow.routes.map(route => ({
+          label: route.displayName,
+          value: `/${workflow.path}/${route.path}`,
+        })),
+        ["label"]
+      ),
+    });
+  });
+
+  return feedbackTypes;
+};
+
+const HeaderFeedback = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const anchorRef = React.useRef(null);
+  const { workflows } = useAppContext();
 
   const handleToggle = () => {
     setOpen(!open);
+  };
+
+  const handleClose = event => {
+    // handler so that it wont close when selecting an item in the select
+    if (event.target.localName === "body") {
+      return;
+    }
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+    setOpen(false);
   };
 
   const FeedbackIconProps = {
@@ -72,9 +114,16 @@ const AnytimeFeedback = () => {
             {...TransitionProps}
             placement={placement === "bottom" ? "center top" : "center bottom"}
           >
-            <Paper>
-              <NPSFeedback origin="ANYTIME" />
-            </Paper>
+            {/* Get an error about a failed prop type without the fragment, needs further investigation */}
+            <>
+              <Paper>
+                <ClickAwayListener onClickAway={handleClose}>
+                  <MenuList autoFocusItem={open} id="options">
+                    <NPSFeedback origin="HEADER" feedbackTypes={generateFeedbackTypes(workflows)} />
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </>
           </Grow>
         )}
       </Popper>
@@ -82,4 +131,4 @@ const AnytimeFeedback = () => {
   );
 };
 
-export default AnytimeFeedback;
+export default HeaderFeedback;

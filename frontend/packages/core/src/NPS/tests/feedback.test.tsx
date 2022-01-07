@@ -39,8 +39,8 @@ describe("<NPSFeedback />", () => {
       const wizardWrapper = shallow(<NPSFeedback origin="WIZARD" />);
       expect(wizardWrapper).toBeTruthy();
 
-      const anytimeWrapper = shallow(<NPSFeedback origin="ANYTIME" />);
-      expect(anytimeWrapper).toBeTruthy();
+      const headerWrapper = shallow(<NPSFeedback origin="HEADER" />);
+      expect(headerWrapper).toBeTruthy();
     });
 
     describe("api success", () => {
@@ -323,4 +323,6 @@ describe("<NPSFeedback />", () => {
       expect(wrapper.find("Styled(Button)").prop("variant")).toEqual("secondary");
     });
   });
+
+  describe("Header Origin Rendering", () => {});
 });

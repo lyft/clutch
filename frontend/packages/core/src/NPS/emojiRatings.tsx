@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { capitalize, isInteger } from "lodash";
 
 import Emoji, { EmojiType } from "../Assets/emojis";
+import type { IconButtonSize } from "../button";
 import { IconButton } from "../button";
 import { Tooltip } from "../Feedback";
 
@@ -16,7 +17,7 @@ type EmojiRatingsProps = {
   ratings: IClutch.feedback.v1.IRatingLabel[];
   setRating: (Rating) => void;
   placement?: "top" | "bottom";
-  size?: "small" | "medium" | "large";
+  size?: IconButtonSize;
 };
 
 // Will convert a given integer to a typed enum key if necessary
@@ -37,10 +38,8 @@ const EmojiRatings = ({
 }: EmojiRatingsProps) => {
   const [selectedRating, selectRating] = useState<Rating>(null);
 
-  // TODO: (jslaughter) Update with large sizing with material-ui@5
   const StyledIconButton = styled(IconButton)<{
     selected: boolean;
-    overrideSize: boolean;
   }>(
     {
       "&:hover": {
@@ -48,8 +47,6 @@ const EmojiRatings = ({
       },
     },
     props => ({
-      height: props.overrideSize ? "60px" : null,
-      width: props.overrideSize ? "60px" : null,
       opacity: props.selected ? 1 : 0.5,
     })
   );
@@ -68,14 +65,13 @@ const EmojiRatings = ({
           : rating.emoji;
 
         return (
-          <Tooltip key={label} title={capitalize(label)} {...placement}>
+          <Tooltip key={label} title={capitalize(label)} placement={placement}>
             <StyledIconButton
-              overrideSize={size === "large"}
               key={`rating-${emoji}`}
               variant="neutral"
               selected={selectedRating?.label === label}
               onClick={() => select({ label, emoji: emoji as string })}
-              size="small"
+              size={size}
             >
               <Emoji type={emoji as EmojiType} size={size} />
             </StyledIconButton>
