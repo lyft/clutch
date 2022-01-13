@@ -16,7 +16,7 @@ const backgroundColors = {
   warning: "linear-gradient(to right, #FFCC80 8px, #FFFDE6 0%)",
 };
 
-const StyledAlert = styled(MuiAlert)<{ $severity: MuiAlertProps["severity"] }>(
+const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
   {
     borderRadius: "8px",
     padding: "16px",
@@ -40,7 +40,7 @@ const StyledAlert = styled(MuiAlert)<{ $severity: MuiAlertProps["severity"] }>(
     },
   },
   props => ({
-    background: backgroundColors[props.$severity],
+    background: backgroundColors[props.severity],
   })
 );
 
@@ -78,7 +78,7 @@ export interface AlertProps extends Pick<MuiAlertProps, "severity" | "action"> {
 }
 
 export const Alert: React.FC<AlertProps> = ({ severity = "info", title, children, ...props }) => (
-  <StyledAlert $severity={severity} iconMapping={iconMappings} {...props}>
+  <StyledAlert severity={severity} iconMapping={iconMappings} {...props}>
     {title && <AlertTitle>{title}</AlertTitle>}
     {children}
   </StyledAlert>
