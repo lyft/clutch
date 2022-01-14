@@ -704,7 +704,7 @@ func (m *mockPullRequests) ListPullRequestsWithCommit(ctx context.Context, owner
 	return []*githubv3.PullRequest{
 		{
 			Number:  intPtr(m.actualNumber),
-			State:   strPtr("open"),
+			State:   strPtr(opts.State),
 			HTMLURL: strPtr(m.actualHTMLURL),
 			Head: &githubv3.PullRequestBranch{
 				Ref: strPtr(m.actualBranchName),
