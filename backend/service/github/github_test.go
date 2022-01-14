@@ -728,7 +728,7 @@ var listPullRequestsWithCommitTests = []struct {
 	repoName    string
 	ref         string
 	sha         string
-	state       string
+	opts        *githubv3.PullRequestListOptions
 }{
 	{
 		name:        "happy path",
@@ -737,7 +737,10 @@ var listPullRequestsWithCommitTests = []struct {
 		repoName:    "my-repo",
 		ref:         "my-branch",
 		sha:         "asdf12345",
-		state:       "all",
+		opts: &githubv3.PullRequestListOptions{
+			// Possible values for State: "open", "closed", "all". Default is "open", manually setting it to "all".
+			State: "all",
+		},
 	},
 	{
 		name:        "v3 client error",
@@ -747,7 +750,9 @@ var listPullRequestsWithCommitTests = []struct {
 		repoName:    "my-repo",
 		ref:         "my-branch",
 		sha:         "asdf12345",
-		state:       "all",
+		opts: &githubv3.PullRequestListOptions{
+			State: "all",
+		},
 	},
 }
 
@@ -769,7 +774,7 @@ func TestListPullRequestsWithCommit(t *testing.T) {
 					Ref:       tt.ref,
 				},
 				tt.sha,
-				tt.state)
+				tt.opts)
 
 			if tt.errorText != "" {
 				assert.Error(t, err)
