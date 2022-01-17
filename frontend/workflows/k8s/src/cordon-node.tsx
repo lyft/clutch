@@ -9,6 +9,7 @@ import {
   Resolver,
   Switch,
   useWizardContext,
+  NoteConfig
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
@@ -28,7 +29,14 @@ const NodeIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
     onSubmit();
   };
 
-  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
+  const cordonNodeNotes: NoteConfig[] = [
+    {
+      severity: "info",
+      text: "Node Name is CLUSTER/NODE. Ex: `core-staging-1/ip-10-43-42-137.ec2.internal`",
+    },
+  ];
+
+  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={cordonNodeNotes} />;
 };
 
 const NodeDetails: React.FC<WizardChild> = () => {
