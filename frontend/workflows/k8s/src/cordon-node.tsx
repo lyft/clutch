@@ -6,10 +6,10 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NoteConfig,
   Resolver,
   Switch,
   useWizardContext,
-  NoteConfig
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
@@ -36,7 +36,9 @@ const NodeIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
     },
   ];
 
-  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={cordonNodeNotes} />;
+  return (
+    <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={cordonNodeNotes} />
+  );
 };
 
 const NodeDetails: React.FC<WizardChild> = () => {
