@@ -28,7 +28,7 @@ const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
   return (
     <Paper elevation={0}>
       <Alert severity={severity}>
-        <Grid container justify="center" alignItems="center">
+        <Grid container justify="flex-start" alignItems="center">
           {children}
         </Grid>
       </Alert>
