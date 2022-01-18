@@ -2,12 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
-import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
 import { NPSHeader } from "../NPS";
 
-import HeaderPopper from "./headerPopper";
 import Logo from "./logo";
 import Notifications from "./notifications";
 import SearchField from "./search";
@@ -51,10 +49,7 @@ const Header: React.FC = () => {
             {showNotifications && <Notifications />}
             <SimpleFeatureFlag feature="npsAnytime">
               <FeatureOn>
-                <HeaderPopper>
-                  <ChatBubbleOutlineIcon />
-                </HeaderPopper>
-                {/* <NPSHeader /> */}
+                <NPSHeader />
               </FeatureOn>
             </SimpleFeatureFlag>
             <UserInformation />
