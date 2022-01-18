@@ -1,7 +1,8 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import type { ChipProps as MuiChipProps } from "@material-ui/core";
 import { Chip as MuiChip } from "@material-ui/core";
+
+import styled from "./styled";
 
 const CHIP_VARIANTS = [
   "error",
@@ -12,6 +13,7 @@ const CHIP_VARIANTS = [
   "pending",
   "success",
 ] as const;
+
 export interface ChipProps extends Pick<MuiChipProps, "label"> {
   /**
    * Variant of chip.
@@ -67,7 +69,10 @@ const CHIP_COLOR_MAP = {
   },
 };
 
-const StyledChip = styled(MuiChip)<{ filled?: boolean }>(
+const StyledChip = styled(MuiChip)<{
+  $filled: ChipProps["filled"];
+  $variant: ChipProps["variant"];
+}>(
   {
     height: "32px",
     cursor: "inherit",
@@ -81,14 +86,16 @@ const StyledChip = styled(MuiChip)<{ filled?: boolean }>(
     },
   },
   props => ({
-    background: props.filled
-      ? CHIP_COLOR_MAP[props["data-variant"]].borderColor
-      : CHIP_COLOR_MAP[props["data-variant"]].background,
-    color: props.filled ? "#FFFFFF" : CHIP_COLOR_MAP[props["data-variant"]].label,
-    borderColor: CHIP_COLOR_MAP[props["data-variant"]].borderColor,
+    background: props.$filled
+      ? CHIP_COLOR_MAP[props.$variant].borderColor
+      : CHIP_COLOR_MAP[props.$variant].background,
+    color: props.$filled ? "#FFFFFF" : CHIP_COLOR_MAP[props.$variant].label,
+    borderColor: CHIP_COLOR_MAP[props.$variant].borderColor,
   })
 );
 
-const Chip = ({ variant, ...props }: ChipProps) => <StyledChip data-variant={variant} {...props} />;
+const Chip = ({ variant, filled = false, ...props }: ChipProps) => (
+  <StyledChip $variant={variant} $filled={filled} {...props} />
+);
 
 export { Chip, CHIP_VARIANTS };

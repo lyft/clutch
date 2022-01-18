@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -18,6 +17,7 @@ import { object } from "yup";
 
 import { useWizardContext } from "../Contexts";
 import TextField from "../Input/text-field";
+import styled from "../styled";
 
 interface RowData {
   input?: {
@@ -33,13 +33,15 @@ interface IdentifiableRowData extends RowData {
   id: string;
 }
 
-const TableContainer = styled(MuiTableContainer)(
+const TableContainer = styled(MuiTableContainer)<{
+  $maxHeight?: MetadataTableProps["maxHeight"];
+}>(
   {
     borderWidth: "0",
     border: "0",
   },
   props => ({
-    maxHeight: props["data-max-height"] || "fit-content",
+    maxHeight: props.$maxHeight || "fit-content",
   })
 );
 
@@ -212,7 +214,7 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
   }, []);
 
   return (
-    <TableContainer data-max-height={maxHeight}>
+    <TableContainer $maxHeight={maxHeight}>
       {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && <DevTool control={control} />}
       <Table>
         <TableBody>

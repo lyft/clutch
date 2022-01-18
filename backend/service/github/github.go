@@ -103,6 +103,7 @@ type Client interface {
 	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
 	GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error)
 	ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error)
+	ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.PullRequestListOptions) ([]*PullRequestInfo, error)
 	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
 	GetUser(ctx context.Context, username string) (*githubv3.User, error)
 }
@@ -117,8 +118,9 @@ func (s *svc) CreateIssueComment(ctx context.Context, ref *RemoteRef, number int
 }
 
 type PullRequestInfo struct {
-	Number  int
-	HTMLURL string
+	Number     int
+	HTMLURL    string
+	BranchName string
 }
 
 type svc struct {
@@ -234,6 +236,24 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 		// There are many possible URLs to return, but the HTML one is most human friendly
 		HTMLURL: pr.GetHTMLURL(),
 	}, nil
+}
+
+func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.PullRequestListOptions) ([]*PullRequestInfo, error) {
+	respPRs, _, err := s.rest.PullRequests.ListPullRequestsWithCommit(ctx, ref.RepoOwner, ref.RepoName, sha, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	prInfos := make([]*PullRequestInfo, len(respPRs))
+	for i, pr := range respPRs {
+		prInfos[i] = &PullRequestInfo{
+			Number:     pr.GetNumber(),
+			HTMLURL:    pr.GetHTMLURL(),
+			BranchName: pr.GetHead().GetRef(),
+		}
+	}
+
+	return prInfos, nil
 }
 
 type CreateBranchRequest struct {

@@ -1,9 +1,21 @@
 import * as React from "react";
-import styled from "@emotion/styled";
+
+import styled from "./styled";
 
 const REGULAR = 400;
 const MEDIUM = 500;
 const BOLD = 700;
+
+interface StyleMapProps {
+  [key: string]: {
+    size: string;
+    weight: number;
+    lineHeight: string;
+    props?: {
+      [key: string]: unknown;
+    };
+  };
+}
 
 const STYLE_MAP = {
   h1: {
@@ -101,7 +113,7 @@ const STYLE_MAP = {
     weight: REGULAR,
     lineHeight: "18",
   },
-};
+} as StyleMapProps;
 
 export const VARIANTS = Object.keys(STYLE_MAP);
 
@@ -124,12 +136,11 @@ type TextVariant =
   | "overline"
   | "input";
 
-const StyledTypography = styled.div<{ color?: string; variant: TextVariant }>(props => ({
-  color: props.color,
-  fontSize: `${STYLE_MAP[props?.variant || 0].size}px`,
-  fontWeight: STYLE_MAP[props?.variant || 0].weight,
-  lineHeight: `${STYLE_MAP[props?.variant || 0].lineHeight}px`,
-  ...STYLE_MAP[props?.variant || 0].props,
+const StyledTypography = styled("div")<{ $variant: TypographyProps["variant"] }>(props => ({
+  fontSize: `${STYLE_MAP[props.$variant].size}px`,
+  fontWeight: STYLE_MAP[props.$variant].weight,
+  lineHeight: `${STYLE_MAP[props.$variant].lineHeight}px`,
+  ...(STYLE_MAP[props.$variant]?.props || {}),
 }));
 
 export interface TypographyProps {
@@ -139,7 +150,7 @@ export interface TypographyProps {
 }
 
 const Typography = ({ variant, children, color = "#0D1030" }: TypographyProps) => (
-  <StyledTypography variant={variant} color={color}>
+  <StyledTypography $variant={variant} color={color}>
     {children}
   </StyledTypography>
 );

@@ -7,6 +7,7 @@ import {
   SimpleFeatureFlag,
   Step,
   Stepper,
+  styled,
   useLocation,
   useNavigate,
   useSearchParams,
@@ -15,7 +16,6 @@ import {
 } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import styled from "@emotion/styled";
 import { Container as MuiContainer, Grid, Paper as MuiPaper, Typography } from "@material-ui/core";
 
 import { useWizardState, WizardAction } from "./state";
@@ -56,13 +56,13 @@ interface ContainerProps {
   width?: "default" | "full";
 }
 
-const Container = styled(MuiContainer)<ContainerProps>(
+const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   {
     padding: "32px",
     maxWidth: "unset",
   },
   props => ({
-    width: props.width === "full" ? "100%" : "800px",
+    width: props.$width === "full" ? "100%" : "800px",
   })
 );
 
@@ -185,7 +185,7 @@ const Wizard = ({
   };
 
   return (
-    <Container width={width}>
+    <Container $width={width}>
       <Grid
         container
         direction="column"

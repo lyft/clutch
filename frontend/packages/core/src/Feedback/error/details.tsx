@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "@emotion/styled";
 import {
   Accordion as MuiAccordion,
   AccordionDetails as MuiAccordionDetails,
@@ -14,12 +13,13 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import type { ClutchError } from "../../Network/errors";
 import { isClutchErrorDetails } from "../../Network/errors";
 import { grpcCodeToText } from "../../Network/grpc";
+import styled from "../../styled";
 
 import ErrorDetailsDialog from "./dialog";
 
 const ERROR_DETAILS_RENDER_MAX = 4;
 
-const ErrorDetailDivider = styled.div({
+const ErrorDetailDivider = styled("div")({
   background: "linear-gradient(to right, #DB3615 8px, rgba(219, 54, 21, 0.4) 0%)",
   height: "1px",
   width: "100%",
@@ -31,7 +31,7 @@ const Accordion = styled(MuiAccordion)({
   },
 });
 
-const AccordionSummary = styled(MuiAccordionSummary)(
+const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
   {
     background: "linear-gradient(to right, #DB3615 8px, #FDE9E7 0%)",
     color: "#0D1030",
@@ -48,8 +48,8 @@ const AccordionSummary = styled(MuiAccordionSummary)(
     },
   },
   props => ({
-    borderBottomLeftRadius: props["data-expanded"] ? "0" : "8px",
-    borderBottomRightRadius: props["data-expanded"] ? "0" : "8px",
+    borderBottomLeftRadius: props.$expanded ? "0" : "8px",
+    borderBottomRightRadius: props.$expanded ? "0" : "8px",
   })
 );
 
@@ -63,14 +63,14 @@ const AccordionDetails = styled(MuiAccordionDetails)({
   flexDirection: "column",
 });
 
-const ListItem = styled.li({
+const ListItem = styled("li")({
   "::marker": {
     color: "rgba(13, 16, 48, 0.6)",
   },
   padding: "2px 0",
 });
 
-const ErrorDetailContainer = styled.div({
+const ErrorDetailContainer = styled("div")({
   width: "100%",
   border: "1px solid #E7E7EA",
   padding: "16px 16px 16px 24px",
@@ -78,7 +78,7 @@ const ErrorDetailContainer = styled.div({
   borderTop: "unset",
 });
 
-const ErrorDetailText = styled.div({
+const ErrorDetailText = styled("div")({
   color: "rgba(13, 16, 48, 0.6)",
   fontSize: "14px",
   lineHeight: "24px",
@@ -119,7 +119,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
       <Accordion elevation={0} expanded={expanded}>
         <AccordionSummary
           aria-controls="panel1a-content"
-          data-expanded={expanded}
+          $expanded={expanded}
           onClick={() => setExpanded(!expanded)}
         >
           {!expanded ? (

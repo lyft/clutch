@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import type {
   ButtonProps as MuiButtonProps,
   GridJustification,
@@ -8,6 +7,8 @@ import type {
 import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@material-ui/core";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+
+import styled from "./styled";
 
 interface ButtonPalette {
   /** A palette of background colors used for the various button states. */
@@ -161,15 +162,15 @@ const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
 };
 
 const StyledIconButton = styled(MuiIconButton)<{
-  palette: ButtonPalette;
-  iconsize: IconButtonSize;
+  $palette: ButtonPalette;
+  $size?: IconButtonSize;
 }>({}, props => ({
-  width: `${ICON_BUTTON_STYLE_MAP[props.iconsize]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
-  height: `${ICON_BUTTON_STYLE_MAP[props.iconsize]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  width: `${ICON_BUTTON_STYLE_MAP[props.$size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  height: `${ICON_BUTTON_STYLE_MAP[props.$size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
   padding: `${
-    ICON_BUTTON_STYLE_MAP[props.iconsize]?.padding || ICON_BUTTON_STYLE_MAP.small.padding
+    ICON_BUTTON_STYLE_MAP[props.$size]?.padding || ICON_BUTTON_STYLE_MAP.small.padding
   }px`,
-  ...colorCss(props.palette),
+  ...colorCss(props.$palette),
 }));
 
 // TODO: (jslaughter) Update when large sizing is available with material-ui@5
@@ -190,7 +191,7 @@ export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "
  */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ variant = "primary", size = "medium", children, ...props }: IconButtonProps, ref) => (
-    <StyledIconButton palette={variantPalette(variant)} iconsize={size} {...props} {...{ ref }}>
+    <StyledIconButton $palette={variantPalette(variant)} $size={size} {...props} {...{ ref }}>
       {children}
     </StyledIconButton>
   )
