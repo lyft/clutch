@@ -13,6 +13,7 @@ import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
 
+import { useRecoilState } from "recoil";
 export interface UserConfiguration {
   [packageName: string]: {
     [key: string]: ConfiguredRoute;
@@ -52,6 +53,8 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+  const [isDarkMode, setIsDarkMode] = useRecoilState(themeAtom);
 
   const loadWorkflows = () => {
     registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {

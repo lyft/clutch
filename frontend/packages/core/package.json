@@ -52,7 +52,8 @@
     "react-test-renderer": "^17.0.2",
     "superstruct": "~0.15.0",
     "uuid": "^8.3.2",
-    "yup": "^0.32.8"
+    "yup": "^0.32.8",
+    "recoil": "^0.5.2"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"

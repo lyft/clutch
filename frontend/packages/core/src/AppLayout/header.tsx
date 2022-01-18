@@ -7,7 +7,7 @@ import Logo from "./logo";
 import Notifications from "./notifications";
 import SearchField from "./search";
 import { UserInformation } from "./user";
-
+import DarkModeToggle from "./darkModeToggle";
 export const APP_BAR_HEIGHT = "64px";
 
 const AppBar = styled(MuiAppBar)({
@@ -45,6 +45,7 @@ const Header: React.FC = () => {
             </Box>
             {showNotifications && <Notifications />}
             <UserInformation />
+            <DarkModeToggle isDarkMode={true} toggleDarkMode={()=>{}}/>
           </Grid>
         </Toolbar>
       </AppBar>

@@ -4,7 +4,7 @@ import { createMuiTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@ma
 import { useTheme as useMuiTheme } from "@material-ui/core/styles";
 import type { PaletteOptions } from "@material-ui/core/styles/createPalette";
 import { StylesProvider } from "@material-ui/styles";
-
+import { atom } from "recoil"; 
 interface ClutchPalette extends PaletteOptions {
   accent: {
     main: string;
@@ -90,6 +90,11 @@ const useTheme = () => {
 interface ThemeProps {
   variant?: "light";
 }
+
+export const themeAtom = atom({
+  key: "isDarkMode",
+  default: false
+});
 
 const Theme: React.FC<ThemeProps> = ({ children }) => {
   const theme = lightTheme;
