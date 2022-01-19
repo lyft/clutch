@@ -5,4 +5,3 @@ export { default as RadioGroup } from "./radio-group";
 export { default as Select } from "./select";
 export { default as Switch } from "./switchToggle";
 export { default as TextField } from "./text-field";
-export type { SelectOption } from "./select";
