@@ -195,8 +195,8 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
             {...TransitionProps}
             placement={placement === "bottom" ? "center top" : "center bottom"}
           >
-            <ClickAwayListener onClickAway={handleClose}>
-              <Paper>
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
                   <AvatarMenuItem>
                     <AvatarListItemIcon>
@@ -211,8 +211,8 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
                     </MenuItem>
                   ))}
                 </MenuList>
-              </Paper>
-            </ClickAwayListener>
+              </ClickAwayListener>
+            </Paper>
           </Grow>
         )}
       </Popper>

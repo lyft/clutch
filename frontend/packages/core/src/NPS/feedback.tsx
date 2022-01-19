@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
-import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@material-ui/core";
 import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
 import { debounce } from "lodash";
@@ -13,6 +12,7 @@ import type { SelectOption } from "../Input";
 import { Select, TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
+import styled from "../styled";
 import { Typography } from "../typography";
 
 import EmojiRatings, { Rating } from "./emojiRatings";
@@ -47,8 +47,8 @@ export const defaults: IClutch.feedback.v1.ISurvey = {
   ],
 };
 
-const StyledButton = styled(Button)<{ origin: Origins }>({}, props =>
-  props.origin === "WIZARD"
+const StyledButton = styled(Button)<{ $origin: Origins }>({}, props =>
+  props.$origin === "WIZARD"
     ? {
         fontSize: "14px",
         padding: "0 8px",
@@ -57,13 +57,13 @@ const StyledButton = styled(Button)<{ origin: Origins }>({}, props =>
     : null
 );
 
-const StyledTextField = styled(TextField)<{ origin: Origins }>(
+const StyledTextField = styled(TextField)<{ $origin: Origins }>(
   {
     margin: "16px 0px 32px 0px",
   },
   props => ({
     ".MuiInputBase-root": {
-      fontSize: props.origin === "WIZARD" ? "14px" : "16px",
+      fontSize: props.$origin === "WIZARD" ? "14px" : "16px",
     },
   })
 );
@@ -104,6 +104,7 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
   const [requestId, setRequestId] = useState<string>("");
   const maxLength = 180;
   const debounceTimer = 500;
+  const wizardOrigin = origin === "WIZARD";
 
   const trimmed =
     freeformFeedback.trim().length > maxLength
@@ -203,29 +204,28 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
         container
         direction="row"
         alignItems="center"
-        justify={origin === "WIZARD" ? "center" : "flex-end"}
-        style={{ padding: origin === "WIZARD" ? "16px" : "32px" }}
+        style={{ padding: wizardOrigin ? "16px" : "32px" }}
       >
-        <MuiGrid item xs={origin === "WIZARD" ? 6 : 12}>
-          <Typography variant={origin === "WIZARD" ? "subtitle3" : "subtitle2"}>
+        <MuiGrid item xs>
+          <Typography variant={wizardOrigin ? "subtitle3" : "subtitle2"}>
             {survey.prompt}
           </Typography>
         </MuiGrid>
         <MuiGrid
           item
-          xs={origin === "WIZARD" ? 6 : 12}
+          xs={wizardOrigin ? 6 : 12}
           style={{ margin: "8px 0px", display: "flex", justifyContent: "space-around" }}
         >
           <EmojiRatings
             ratings={survey.ratingLabels}
             setRating={setSelectedEmoji}
-            placement={origin === "WIZARD" ? "top" : "bottom"}
-            size={origin === "WIZARD" ? "small" : "large"}
+            placement={wizardOrigin ? "top" : "bottom"}
+            size={wizardOrigin ? "small" : "large"}
           />
         </MuiGrid>
         {selectedEmoji !== null && (
           <>
-            {origin === "HEADER" && options.feedbackTypes && (
+            {!wizardOrigin && options.feedbackTypes && (
               <MuiGrid item xs={12} style={{ margin: "32px 0px 16px 0px" }}>
                 <Select
                   name="anytimeSelect"
@@ -239,7 +239,7 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
               <StyledTextField
                 multiline
                 fullWidth
-                origin={origin}
+                $origin={origin}
                 placeholder={survey.freeformPrompt}
                 value={freeformFeedback}
                 helperText={`${freeformFeedback?.trim().length} / ${maxLength}`}
@@ -256,14 +256,14 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
               xs={12}
               style={{
                 display: "flex",
-                justifyContent: origin === "WIZARD" ? "center" : "flex-end",
+                justifyContent: wizardOrigin ? "center" : "flex-end",
               }}
             >
               <StyledButton
-                origin={origin}
+                $origin={origin}
                 type="submit"
                 text="Submit"
-                variant={origin === "WIZARD" ? "secondary" : "primary"}
+                variant={wizardOrigin ? "secondary" : "primary"}
                 disabled={error}
               />
             </MuiGrid>

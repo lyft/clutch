@@ -1,8 +1,10 @@
 import React from "react";
 import { matchers } from "@emotion/jest";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
-import { mount, shallow } from "enzyme";
+import { shallow } from "enzyme";
 
+import * as ApplicationContext from "../../Contexts/app-context";
+import contextValues from "../../Contexts/tests/testContext";
 import { NPSHeader } from "..";
 
 // Add the custom matchers provided by '@emotion/jest'
@@ -13,6 +15,8 @@ describe("<NPSHeader />", () => {
     let wrapper;
 
     beforeEach(() => {
+      jest.spyOn(ApplicationContext, "useAppContext").mockReturnValue(contextValues);
+      jest.useFakeTimers();
       wrapper = shallow(<NPSHeader />);
     });
 
@@ -35,24 +39,11 @@ describe("<NPSHeader />", () => {
 
       expect(wrapper.find("Styled(Component)").at(1).prop("open")).toBeFalsy();
 
-      feedbackIcon.prop("onClick")(null);
+      feedbackIcon.prop("onClick")();
 
       wrapper.update();
 
       expect(wrapper.find("Styled(Component)").at(1).prop("open")).toBeTruthy();
     });
-
-    it("closes the popper on click outside", () => {});
-
-    // it("renders anytime feedback inside of popper", () => {
-    //   const mounted = mount(<NPSAnytime />);
-    //   console.log(mounted.debug());
-    //   const feedbackIcon = mounted.find("#anytimeFeedbackIcon");
-    //   feedbackIcon.prop("onClick")(null);
-
-    //   mounted.update();
-
-    //   console.log(mounted.debug());
-    // });
   });
 });

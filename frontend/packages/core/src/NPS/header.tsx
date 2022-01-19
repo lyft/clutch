@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "@emotion/styled";
 import {
   ClickAwayListener,
   Grow as MuiGrow,
@@ -14,6 +13,7 @@ import type { Workflow } from "../AppProvider/workflow";
 import { IconButton } from "../button";
 import { useAppContext } from "../Contexts";
 import type { SelectOption } from "../Input";
+import styled from "../styled";
 
 import NPSFeedback from "./feedback";
 
@@ -34,7 +34,7 @@ const Paper = styled(MuiPaper)({
   borderRadius: "8px",
 });
 
-const StyledFeedbackIcon = styled(IconButton)<{ open: boolean }>(
+const StyledFeedbackIcon = styled(IconButton)<{ $open: boolean }>(
   {
     color: "#ffffff",
     marginRight: "8px",
@@ -47,11 +47,11 @@ const StyledFeedbackIcon = styled(IconButton)<{ open: boolean }>(
     },
   },
   props => ({
-    background: props.open ? "#2d3db4" : "unset",
+    background: props.$open ? "#2d3db4" : "unset",
   })
 );
 
-const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => {
+export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => {
   const feedbackTypes: SelectOption[] = [{ label: "General" }];
 
   workflows.forEach(workflow => {
@@ -101,7 +101,7 @@ const HeaderFeedback = () => {
         variant="neutral"
         ref={anchorRef}
         aria-controls={open ? "anytime-feedback" : undefined}
-        open={open}
+        $open={open}
         aria-haspopup="true"
         onClick={handleToggle}
         {...FeedbackIconProps}

@@ -2,14 +2,18 @@ import React from "react";
 import { matchers } from "@emotion/jest";
 import { shallow } from "enzyme";
 
+import contextValues from "../../Contexts/tests/testContext";
 import { client } from "../../Network";
 import NPSFeedback, { defaults } from "../feedback";
+import { generateFeedbackTypes } from "../header";
 
-// Add the custom matchers provided by '@emotion/jest'
+// Adds the custom matchers provided by '@emotion/jest'
 expect.extend(matchers);
 
+const feedbackTypes = generateFeedbackTypes(contextValues.workflows);
+
 describe("<NPSFeedback />", () => {
-  const wizardTestResult = {
+  const defaultResult = {
     prompt: "Test Prompt",
     freeformPrompt: "Test Freeform",
     ratingLabels: [
@@ -35,23 +39,13 @@ describe("<NPSFeedback />", () => {
   };
 
   describe("basic functionality", () => {
-    it("renders feedback with given origin", () => {
-      const wizardWrapper = shallow(<NPSFeedback origin="WIZARD" />);
-      expect(wizardWrapper).toBeTruthy();
-
-      const headerWrapper = shallow(<NPSFeedback origin="HEADER" />);
-      expect(headerWrapper).toBeTruthy();
-    });
-
     describe("api success", () => {
       let wrapper;
       let useEffect;
       let spy;
-
       const mockUseEffect = () => {
         useEffect.mockImplementationOnce(f => f());
       };
-
       beforeEach(() => {
         useEffect = jest.spyOn(React, "useEffect");
         mockUseEffect();
@@ -60,7 +54,8 @@ describe("<NPSFeedback />", () => {
             resolve({
               data: {
                 originSurvey: {
-                  WIZARD: wizardTestResult,
+                  WIZARD: defaultResult,
+                  HEADER: defaultResult,
                 },
               },
             });
@@ -68,65 +63,49 @@ describe("<NPSFeedback />", () => {
         );
         wrapper = shallow(<NPSFeedback origin="WIZARD" />);
       });
-
       afterEach(() => {
         wrapper.unmount();
         spy.mockClear();
       });
-
       it("renders survey text prompt", () => {
         expect(wrapper.find({ item: true }).at(0).find("Typography").childAt(0).text()).toEqual(
-          wizardTestResult.prompt
+          defaultResult.prompt
         );
       });
-
       it("renders emojis to <EmojiRatings />", () => {
-        expect(wrapper.find("EmojiRatings").prop("ratings")).toEqual(wizardTestResult.ratingLabels);
+        expect(wrapper.find("EmojiRatings").prop("ratings")).toEqual(defaultResult.ratingLabels);
       });
-
       it("renders text placeholder", () => {
         clickEmoji(wrapper);
-
         expect(wrapper.find("Styled(TextField)").prop("placeholder")).toEqual(
-          wizardTestResult.freeformPrompt
+          defaultResult.freeformPrompt
         );
       });
-
       it("displays a successful submission alert after submit", () => {
         wrapper.find("form").prop("onSubmit")(null);
-
         wrapper.update();
-
         const alert = wrapper.find("FeedbackAlert");
-
         expect(alert).toBeDefined();
         expect(alert.dive().find("Typography").childAt(0).text()).toEqual(
           "Thank you for your feedback!"
         );
       });
-
       it("sends feedback upon emoji selection change", () => {
         mockUseEffect();
         spy.mockClear();
-
         expect(spy).not.toHaveBeenCalled();
         expect(spy).toHaveBeenCalledTimes(0);
-
         clickEmoji(wrapper);
-
         expect(spy).toHaveBeenCalled();
         expect(spy).toHaveBeenCalledTimes(1);
       });
     });
-
     describe("api failure", () => {
       let wrapper;
       let useEffect;
-
       const mockUseEffect = () => {
         useEffect.mockImplementationOnce(f => f());
       };
-
       beforeEach(() => {
         useEffect = jest.spyOn(React, "useEffect");
         mockUseEffect();
@@ -137,24 +116,19 @@ describe("<NPSFeedback />", () => {
         );
         wrapper = shallow(<NPSFeedback origin="WIZARD" />);
       });
-
       afterEach(() => {
         wrapper.unmount();
       });
-
       it("renders default text prompt", () => {
         expect(wrapper.find({ item: true }).at(0).find("Typography").childAt(0).text()).toEqual(
           defaults.prompt
         );
       });
-
       it("renders default emojis to <EmojiRatings />", () => {
         expect(wrapper.find("EmojiRatings").prop("ratings")).toEqual(defaults.ratingLabels);
       });
-
       it("renders default text placeholder", () => {
         clickEmoji(wrapper);
-
         expect(wrapper.find("Styled(TextField)").prop("placeholder")).toEqual(
           defaults.freeformPrompt
         );
@@ -186,7 +160,7 @@ describe("<NPSFeedback />", () => {
           resolve({
             data: {
               originSurvey: {
-                WIZARD: wizardTestResult,
+                WIZARD: defaultResult,
               },
             },
           });
@@ -298,7 +272,7 @@ describe("<NPSFeedback />", () => {
           resolve({
             data: {
               originSurvey: {
-                WIZARD: wizardTestResult,
+                WIZARD: defaultResult,
               },
             },
           });
@@ -311,8 +285,8 @@ describe("<NPSFeedback />", () => {
       wrapper.unmount();
     });
 
-    it("center aligns the grid", () => {
-      expect(wrapper.find("form").childAt(0).prop("justify")).toEqual("center");
+    it("renders", () => {
+      expect(wrapper).toBeDefined();
     });
 
     it("styles the submit button correctly", () => {
@@ -324,5 +298,43 @@ describe("<NPSFeedback />", () => {
     });
   });
 
-  describe("Header Origin Rendering", () => {});
+  describe("Header Origin Rendering", () => {
+    let wrapper;
+    let useEffect;
+
+    const mockUseEffect = () => {
+      useEffect.mockImplementationOnce(f => f());
+    };
+
+    beforeEach(() => {
+      useEffect = jest.spyOn(React, "useEffect");
+      mockUseEffect();
+      jest.spyOn(client, "post").mockReturnValue(
+        new Promise((resolve, reject) => {
+          resolve({
+            data: {
+              originSurvey: {
+                HEADER: defaultResult,
+              },
+            },
+          });
+        })
+      );
+      wrapper = shallow(<NPSFeedback origin="HEADER" feedbackTypes={feedbackTypes} />);
+    });
+
+    afterEach(() => {
+      wrapper.unmount();
+    });
+
+    it("renders", () => {
+      expect(wrapper).toBeDefined();
+    });
+
+    it("styles the submit button correctly", () => {
+      clickEmoji(wrapper);
+
+      expect(wrapper.find("Styled(Button)").prop("variant")).toEqual("primary");
+    });
+  });
 });
