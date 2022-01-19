@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { flatten } from "lodash";
 
 const StyledFormControl = styled(MuiFormControl)({
   "label + .MuiInput-formControl": {
@@ -214,9 +215,11 @@ const Select = ({
   const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
 
   // Flattens all options and sub grouped options for easier retrieval
-  const flatOptions: SelectOption[] = options
-    .map(option => (option.group ? option.group.map(groupOption => groupOption) : option))
-    .reduce((pre: any, cur: any) => pre.concat(cur), []);
+  const flatOptions: BaseSelectOptions[] = flatten(
+    options.map((option: SelectOption) =>
+      option.group ? option.group.map(groupOption => groupOption) : option
+    )
+  );
 
   React.useEffect(() => {
     if (flatOptions.length !== 0) {
@@ -234,7 +237,7 @@ const Select = ({
     onChange && onChange(value);
   };
 
-  if (options.length === 0) {
+  if (flatOptions.length === 0) {
     return null;
   }
 
