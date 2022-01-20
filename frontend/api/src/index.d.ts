@@ -11483,6 +11483,9 @@ export namespace clutch {
 
                     /** Project oncall */
                     oncall?: (clutch.core.project.v1.IOnCall|null);
+
+                    /** Project links */
+                    links?: (clutch.core.project.v1.ILink[]|null);
                 }
 
                 /** Represents a Project. */
@@ -11514,6 +11517,9 @@ export namespace clutch {
 
                     /** Project oncall. */
                     public oncall?: (clutch.core.project.v1.IOnCall|null);
+
+                    /** Project links. */
+                    public links: clutch.core.project.v1.ILink[];
 
                     /**
                      * Verifies a Project message.
@@ -11737,6 +11743,66 @@ export namespace clutch {
 
                     /**
                      * Converts this PagerDuty to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Link. */
+                interface ILink {
+
+                    /** Link text */
+                    text?: (string|null);
+
+                    /** Link link */
+                    link?: (string|null);
+
+                    /** Link assetDir */
+                    assetDir?: (string|null);
+                }
+
+                /** Represents a Link. */
+                class Link implements ILink {
+
+                    /**
+                     * Constructs a new Link.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.ILink);
+
+                    /** Link text. */
+                    public text: string;
+
+                    /** Link link. */
+                    public link: string;
+
+                    /** Link assetDir. */
+                    public assetDir: string;
+
+                    /**
+                     * Verifies a Link message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Link message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Link
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Link;
+
+                    /**
+                     * Creates a plain object from a Link message. Also converts values to other types if specified.
+                     * @param message Link
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.Link, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Link to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

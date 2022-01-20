@@ -18,6 +18,7 @@ message Project {
   map<string, google.protobuf.Value> data = 5;
   ProjectDependencies dependencies = 6;
   OnCall oncall = 7;
+  repeated Link links = 8;
 }
 
 // Dependencies could be either upstream or downstream of this project.
@@ -42,4 +43,13 @@ message PagerDuty {
   // A project may have more than one PagerDuty service id
   // https://developer.pagerduty.com/api-reference/docs/CONCEPTS.md#services
   repeated string service_ids = 1;
+}
+
+// TODO: add description
+message Link {
+  // TODO: add description
+  string text = 1;
+  string link = 2;
+  // TODO: add description
+  string asset_dir = 3;
 }
