@@ -1,9 +1,14 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import type { LinkProps as MuiLinkProps } from "@material-ui/core";
 import { Link as MuiLink } from "@material-ui/core";
 
-const StyledLink = styled(MuiLink)(
+import styled from "./styled";
+
+type TextTransform = "none" | "capitalize" | "uppercase" | "lowercase" | "initial" | "inherit";
+
+const StyledLink = styled(MuiLink)<{
+  $textTransform: LinkProps["textTransform"];
+}>(
   {
     display: "flex",
     width: "100%",
@@ -14,12 +19,12 @@ const StyledLink = styled(MuiLink)(
     textOverflow: "ellipsis",
   },
   props => ({
-    textTransform: props["data-text-transform"],
+    textTransform: props.$textTransform,
   })
 );
 
 export interface LinkProps extends Pick<MuiLinkProps, "href" | "children"> {
-  textTransform?: "none" | "capitalize" | "uppercase" | "lowercase" | "initial" | "inherit";
+  textTransform?: TextTransform;
 }
 
 export const Link = ({ href, textTransform = "none", children, ...props }: LinkProps) => (
@@ -27,7 +32,7 @@ export const Link = ({ href, textTransform = "none", children, ...props }: LinkP
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    data-text-transform={textTransform}
+    $textTransform={textTransform}
     {...props}
   >
     {children}

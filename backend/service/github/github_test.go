@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"testing"
 	"time"
 
@@ -22,6 +23,10 @@ const problem = "we've had a problem"
 var (
 	timestamp = time.Unix(1569010072, 0)
 )
+
+func intPtr(i int) *int {
+	return &i
+}
 
 type getfileMock struct {
 	v4client
@@ -669,6 +674,118 @@ func TestGetRepository(t *testing.T) {
 
 			a.Equal(gotDefaultBranch, tt.wantDefaultBranch)
 			a.Nil(err)
+		})
+	}
+}
+
+type mockPullRequests struct {
+	generalError bool
+
+	actualNumber     int
+	actualHTMLURL    string
+	actualBranchName string
+}
+
+// Dummy mock of Create API so mockPullRequests implements v3pullrequests
+func (m *mockPullRequests) Create(ctx context.Context, owner string, repo string, pull *githubv3.NewPullRequest) (*githubv3.PullRequest, *githubv3.Response, error) {
+	return &githubv3.PullRequest{}, &githubv3.Response{}, nil
+}
+
+// Mock of ListPullRequestsWithCommit API
+func (m *mockPullRequests) ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.PullRequestListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error) {
+	if m.generalError {
+		return nil, nil, errors.New(problem)
+	}
+
+	m.actualNumber = 1347
+	m.actualHTMLURL = fmt.Sprintf("https://github.com/%s/%s/pull/%s", owner, repo, strconv.Itoa(m.actualNumber))
+	m.actualBranchName = "my-branch"
+
+	return []*githubv3.PullRequest{
+		{
+			Number:  intPtr(m.actualNumber),
+			State:   strPtr(opts.State),
+			HTMLURL: strPtr(m.actualHTMLURL),
+			Head: &githubv3.PullRequestBranch{
+				Ref: strPtr(m.actualBranchName),
+				SHA: strPtr(sha),
+				Repo: &githubv3.Repository{
+					Name: strPtr(repo),
+				},
+				User: &githubv3.User{
+					Login: strPtr("octocat"),
+				},
+			},
+		},
+	}, nil, nil
+}
+
+var listPullRequestsWithCommitTests = []struct {
+	name        string
+	errorText   string
+	mockPullReq *mockPullRequests
+	repoOwner   string
+	repoName    string
+	ref         string
+	sha         string
+	opts        *githubv3.PullRequestListOptions
+}{
+	{
+		name:        "happy path",
+		mockPullReq: &mockPullRequests{},
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		ref:         "my-branch",
+		sha:         "asdf12345",
+		opts: &githubv3.PullRequestListOptions{
+			// Possible values for State: "open", "closed", "all". Default is "open", manually setting it to "all".
+			State: "all",
+		},
+	},
+	{
+		name:        "v3 client error",
+		mockPullReq: &mockPullRequests{generalError: true},
+		errorText:   "we've had a problem",
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		ref:         "my-branch",
+		sha:         "asdf12345",
+		opts: &githubv3.PullRequestListOptions{
+			State: "all",
+		},
+	},
+}
+
+func TestListPullRequestsWithCommit(t *testing.T) {
+	for _, tt := range listPullRequestsWithCommitTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			s := &svc{rest: v3client{
+				PullRequests: tt.mockPullReq,
+			}}
+
+			resp, err := s.ListPullRequestsWithCommit(
+				context.Background(),
+				&RemoteRef{
+					RepoOwner: tt.repoOwner,
+					RepoName:  tt.repoName,
+					Ref:       tt.ref,
+				},
+				tt.sha,
+				tt.opts)
+
+			if tt.errorText != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorText)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, 1, len(resp))
+				assert.Equal(t, tt.mockPullReq.actualNumber, resp[0].Number)
+				assert.Equal(t, tt.mockPullReq.actualHTMLURL, resp[0].HTMLURL)
+				assert.Equal(t, tt.mockPullReq.actualBranchName, resp[0].BranchName)
+			}
 		})
 	}
 }

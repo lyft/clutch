@@ -33,6 +33,8 @@ type v3repositories interface {
 type v3pullrequests interface {
 	// Create a new pull request on the specified repository.
 	Create(ctx context.Context, owner string, repo string, pull *githubv3.NewPullRequest) (*githubv3.PullRequest, *githubv3.Response, error)
+	// ListPullRequestsWithCommit returns pull requests associated with a commit SHA.
+	ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.PullRequestListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error)
 }
 
 type v4client interface {

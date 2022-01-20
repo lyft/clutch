@@ -2,6 +2,8 @@ package githubmock
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 
 	"github.com/golang/protobuf/ptypes/any"
 	githubv3 "github.com/google/go-github/v37/github"
@@ -60,6 +62,17 @@ func (s svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.Or
 	login := "clutch"
 	return []*githubv3.Organization{
 		{Login: &login},
+	}, nil
+}
+
+func (s svc) ListPullRequestsWithCommit(ctx context.Context, ref *github.RemoteRef, sha string, opts *githubv3.PullRequestListOptions) ([]*github.PullRequestInfo, error) {
+	prNumber := 12345
+	return []*github.PullRequestInfo{
+		{
+			Number:     prNumber,
+			HTMLURL:    fmt.Sprintf("https://github.com/%s/%s/pull/%s", ref.RepoOwner, ref.RepoName, strconv.Itoa(prNumber)),
+			BranchName: "my-branch",
+		},
 	}, nil
 }
 

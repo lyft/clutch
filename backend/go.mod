@@ -5,17 +5,17 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.2
-	github.com/aws/aws-sdk-go-v2 v1.11.2
-	github.com/aws/aws-sdk-go-v2/config v1.11.1
-	github.com/aws/aws-sdk-go-v2/credentials v1.6.5
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.17.0
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.11.0
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.26.0
-	github.com/aws/aws-sdk-go-v2/service/iam v1.14.0
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.11.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.22.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.12.0
-	github.com/aws/smithy-go v1.9.0
+	github.com/aws/aws-sdk-go-v2 v1.12.0
+	github.com/aws/aws-sdk-go-v2/config v1.12.0
+	github.com/aws/aws-sdk-go-v2/credentials v1.7.0
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.18.0
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.12.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.27.0
+	github.com/aws/aws-sdk-go-v2/service/iam v1.15.0
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.12.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.23.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.13.0
+	github.com/aws/smithy-go v1.9.1
 	github.com/bradleyfalzon/ghinstallation v1.1.1
 	github.com/bufbuild/buf v0.56.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
@@ -44,7 +44,7 @@ require (
 	github.com/m3db/prometheus_common v0.1.0 // indirect
 	github.com/m3db/prometheus_procfs v0.8.1 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2
-	github.com/shurcooL/githubv4 v0.0.0-20220106005112-0707a5a90543
+	github.com/shurcooL/githubv4 v0.0.0-20220115235240-a14260e6f8a2
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546

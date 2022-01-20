@@ -6,6 +6,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NoteConfig,
   Resolver,
   Switch,
   useWizardContext,
@@ -28,7 +29,16 @@ const NodeIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
     onSubmit();
   };
 
-  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
+  const cordonNodeNotes: NoteConfig[] = [
+    {
+      severity: "info",
+      text: "Node Name is CLUSTER/NODE. Ex: `core-staging-1/ip-10-43-42-137.ec2.internal`",
+    },
+  ];
+
+  return (
+    <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={cordonNodeNotes} />
+  );
 };
 
 const NodeDetails: React.FC<WizardChild> = () => {
