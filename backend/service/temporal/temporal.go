@@ -44,7 +44,10 @@ func newClient(cfg *temporalv1.Config, logger *zap.Logger, scope tally.Scope) (C
 		if err != nil {
 			return nil, err
 		}
-		ret.copts.TLS = &tls.Config{RootCAs: certs}
+		ret.copts.TLS = &tls.Config{
+			RootCAs:    certs,
+			MinVersion: tls.VersionTLS12,
+		}
 	}
 	return ret, nil
 }
