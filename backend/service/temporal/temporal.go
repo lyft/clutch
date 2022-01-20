@@ -5,6 +5,8 @@ package temporal
 // <!-- END clutchdoc -->
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 
 	"github.com/uber-go/tally"
@@ -37,6 +39,13 @@ func newClient(cfg *temporalv1.Config, logger *zap.Logger, scope tally.Scope) (C
 		metricsHandler: newMetricsHandler(scope),
 		logger:         newTemporalLogger(logger),
 	}
+	if cfg.ConnectionOptions != nil && cfg.ConnectionOptions.UseSystemCaBundle {
+		certs, err := x509.SystemCertPool()
+		if err != nil {
+			return nil, err
+		}
+		ret.copts.TLS = &tls.Config{RootCAs: certs}
+	}
 	return ret, nil
 }
 
@@ -44,14 +53,16 @@ type clientImpl struct {
 	hostPort       string
 	logger         log.Logger
 	metricsHandler client.MetricsHandler
+	copts          client.ConnectionOptions
 }
 
 func (c *clientImpl) GetNamespaceClient(namespace string) (client.Client, error) {
 	tc, err := client.NewClient(client.Options{
-		HostPort:       c.hostPort,
-		Logger:         c.logger,
-		MetricsHandler: c.metricsHandler,
-		Namespace:      namespace,
+		HostPort:          c.hostPort,
+		Logger:            c.logger,
+		MetricsHandler:    c.metricsHandler,
+		Namespace:         namespace,
+		ConnectionOptions: c.copts,
 	})
 	if err != nil {
 		return nil, err

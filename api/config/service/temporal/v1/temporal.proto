@@ -12,4 +12,9 @@ message Config {
   // robin amongst them.
   string host = 1 [ (validate.rules).string = {min_bytes : 1} ];
   uint32 port = 2 [ (validate.rules).uint32 = {lte : 65535} ];
+  ConnectionOptions connection_options = 3;
+}
+
+message ConnectionOptions {
+  bool use_system_ca_bundle = 1;
 }
