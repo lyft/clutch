@@ -194,14 +194,4 @@ export const CLUTCH_DARKMODE_STATES_NEUTRAL_PRESSED  = "#FFFFFF2E";
 export const CLUTCH_DARKMODE_STATES_NEUTRAL_SELECTED = "#FFFFFF40";
 
 
-
-
-
-
-
-
-
-
-
-
-// COLORS NOT IN FIGMA ////////////////////////////////////////////////////////
+// EXTRA COLORS (TODO) ////////////////////////////////////////////////////////
