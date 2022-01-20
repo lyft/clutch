@@ -179,6 +179,8 @@ const StyledSelect = styled(BaseSelect)({
 
   ".MuiListSubheader-root": {
     color: "#939495",
+    cursor: "default",
+    "pointer-events": "none", // disables the select from closing on clicking the subheader
   },
 });
 
