@@ -3,6 +3,7 @@ import { clutch as IClutch } from "@clutch-sh/api";
 import { capitalize, isInteger } from "lodash";
 
 import Emoji, { EmojiType } from "../Assets/emojis";
+import type { IconSizeVariant } from "../Assets/global";
 import type { IconButtonSize } from "../button";
 import { IconButton } from "../button";
 import { Tooltip } from "../Feedback";
@@ -18,6 +19,7 @@ type EmojiRatingsProps = {
   setRating: (Rating) => void;
   placement?: "top" | "bottom";
   size?: IconButtonSize;
+  emojiSize?: IconSizeVariant;
 };
 
 // Will convert a given integer to a typed enum key if necessary
@@ -35,6 +37,7 @@ const EmojiRatings = ({
   setRating,
   placement = "top",
   size = "small",
+  emojiSize = "medium",
 }: EmojiRatingsProps) => {
   const [selectedRating, selectRating] = useState<Rating>(null);
 
@@ -73,7 +76,7 @@ const EmojiRatings = ({
               onClick={() => select({ label, emoji: emoji as string })}
               size={size}
             >
-              <Emoji type={emoji as EmojiType} size={size} />
+              <Emoji type={emoji as EmojiType} size={emojiSize} />
             </StyledIconButton>
           </Tooltip>
         );

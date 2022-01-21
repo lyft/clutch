@@ -204,7 +204,7 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
         container
         direction="row"
         alignItems="center"
-        style={{ padding: wizardOrigin ? "16px" : "32px" }}
+        style={{ padding: wizardOrigin ? "16px" : "24px" }}
       >
         <MuiGrid item xs>
           <Typography variant={wizardOrigin ? "subtitle3" : "subtitle2"}>
@@ -214,7 +214,7 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
         <MuiGrid
           item
           xs={wizardOrigin ? 6 : 12}
-          style={{ margin: "8px 0px", display: "flex", justifyContent: "space-around" }}
+          style={{ display: "flex", justifyContent: "space-around" }}
         >
           <EmojiRatings
             ratings={survey.ratingLabels}
