@@ -1,13 +1,13 @@
 export interface NeutralColors {
-  5: string;
+  5: string; // PRIMARY BUTTON DISABLED / STROKE TERTIARY
   10: string;
-  12: string;
+  12: string; // SECONDARY BUTTON PRESSED / FOCUSED
   15: string;
   20: string;
   25: string;
-  30: string;
+  30: string; // STROKE SECONDARY / TEXT TERTIARY
   40: string;
-  50: string;
+  50: string; // TEXT SECONDARY
   60: string;
   70: string;
   80: string;
@@ -16,10 +16,10 @@ export interface NeutralColors {
 }
 
 export interface BlueColors {
-  10: string;
-  20: string;
-  30: string;
-  40: string;
+  10: string; // BG
+  20: string; // HOVER
+  30: string; // FOCUSED
+  40: string; // PRESSED
   50: string;
   60: string;
   70: string;

@@ -4,15 +4,15 @@ import type { ClutchPalette } from "./colortypes";
 
 export const LIGHT_MODE: ClutchPalette = {
   NEUTRAL: {
-    5: "#F8F8F9", // PRIMARY BUTTON DISABLED / STROKE TERTIARY
+    5: "#F8F8F9",
     10: "#E2E2E6",
-    12: "#E2E2E6", // SECONDARY BUTTON PRESSED / FOCUSED
+    12: "#E2E2E6",
     15: "#DBDBE0",
     20: "#CFCFD6",
     25: "#C2C3CB",
-    30: "#A3A4B0", // STROKE SECONDARY / TEXT TERTIARY
+    30: "#A3A4B0",
     40: "#868797",
-    50: "#6E7083", // TEXT SECONDARY
+    50: "#6E7083",
     60: "#56586E",
     70: "#494C64",
     80: "#31344F",
@@ -100,15 +100,15 @@ export const LIGHT_MODE: ClutchPalette = {
 
 export const DARK_MODE: ClutchPalette = {
   NEUTRAL: {
-    5: "#272946", // PRIMARY BUTTON DISABLED / STROKE TERTIARY
+    5: "#272946",
     10: "#33344F",
-    12: "#373953", // SECONDARY BUTTON PRESSED / FOCUSED
+    12: "#373953",
     15: "#3E4059",
     20: "#494B63",
     25: "#55566D",
-    30: "#606176", // STROKE SECONDARY / TEXT TERTIARY
+    30: "#606176",
     40: "#77788A",
-    50: "#8D8E9D", // TEXT SECONDARY
+    50: "#8D8E9D",
     60: "#A4A5B1",
     70: "#B0B0BB",
     80: "#BBBBC4",
@@ -116,10 +116,10 @@ export const DARK_MODE: ClutchPalette = {
     100: "#E8E8EB",
   },
   BLUE: {
-    10: "#050653", // BG
-    20: "#060869", // HOVER
-    30: "#13117C", // FOCUSED
-    40: "#161DBC", // PRESSED
+    10: "#050653",
+    20: "#060869",
+    30: "#13117C",
+    40: "#161DBC",
     50: "#2A4FF6",
     60: "#4281F6",
     70: "#5AABF6",
