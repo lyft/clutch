@@ -1,113 +1,113 @@
 export interface NeutralColors {
-    5: string;
-    10: string;
-    12: string;
-    15: string;
-    20: string;
-    25: string;
-    30: string;
-    40: string;
-    50: string;
-    60: string;
-    70: string;
-    80: string;
-    90: string;
-    100: string;
-  }
-  
+  5: string;
+  10: string;
+  12: string;
+  15: string;
+  20: string;
+  25: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
 export interface BlueColors {
-    10: string;
-    20: string;
-    30: string;
-    40: string;
-    50: string;
-    60: string;
-    70: string;
-    80: string;
-    90: string;
-    100: string;
-  }
-  
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
 export interface GreenColors {
-    10: string;
-    20: string;
-    30: string;
-    40: string;
-    50: string;
-    60: string;
-    70: string;
-    80: string;
-    90: string;
-    100: string;
-  }
-  
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
 export interface AmberColors {
-    10: string;
-    20: string;
-    30: string;
-    40: string;
-    50: string;
-    60: string;
-    70: string;
-    80: string;
-    90: string;
-    100: string;
-  }
-  
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
 export interface RedColors {
-    10: string;
-    20: string;
-    30: string;
-    40: string;
-    50: string;
-    60: string;
-    70: string;
-    80: string;
-    90: string;
-    100: string;
-  }
-  
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
 export interface StrokeColors {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-    inverse: string;
-  }
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  inverse: string;
+}
 
 export interface StatesColors {
-    primaryHover: string;
-    primaryFocused: string;
-    primaryPressed: string;
-    primarySelected: string;
-    neutralHover: string;
-    neutralFocused: string;
-    neutralPressed: string;
-    neutralSelected: string;
-  }
-  
+  primaryHover: string;
+  primaryFocused: string;
+  primaryPressed: string;
+  primarySelected: string;
+  neutralHover: string;
+  neutralFocused: string;
+  neutralPressed: string;
+  neutralSelected: string;
+}
+
 export interface BackgroundColors {
-    primary: string;
-    secondary: string;
-  }
-  
+  primary: string;
+  secondary: string;
+}
+
 export interface MainColors {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-    interactive: string;
-    negative: string;
-    positive: string;
-    inverse: string;
-  }
-  
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  interactive: string;
+  negative: string;
+  positive: string;
+  inverse: string;
+}
+
 export interface ClutchPalette {
-    NEUTRAL: NeutralColors;
-    BLUE: BlueColors;
-    GREEN: GreenColors;
-    AMBER: AmberColors;
-    RED: RedColors;
-    STROKE: StrokeColors;
-    BACKGROUND: BackgroundColors;
-    STATES: StatesColors;
-    MAIN: MainColors; // Typography and Icons
-  }
+  NEUTRAL: NeutralColors;
+  BLUE: BlueColors;
+  GREEN: GreenColors;
+  AMBER: AmberColors;
+  RED: RedColors;
+  STROKE: StrokeColors;
+  BACKGROUND: BackgroundColors;
+  STATES: StatesColors;
+  MAIN: MainColors; // Typography and Icons
+}
