@@ -1,19 +1,120 @@
 // COLORS FROM FIGMA
 // NOTE THAT THOSE WITH GRADIENTS ONLY HAVE THEIR BASES
 
-interface CLUTCH_PALETTE {
-  NEUTRAL: {};
-  BLUE: {};
-  GREEN: {};
-  AMBER: {};
-  RED: {};
-  STROKE: {};
-  BACKGROUND: {};
-  STATES: {};
-  MAIN: {}; // Typography and Icons
+interface NeutralColors {
+  5: string;
+  10: string;
+  12: string;
+  15: string;
+  20: string;
+  25: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
 }
 
-export const LIGHT_MODE: CLUTCH_PALETTE = {
+interface BlueColors {
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
+interface GreenColors {
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
+interface AmberColors {
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
+interface RedColors {
+  10: string;
+  20: string;
+  30: string;
+  40: string;
+  50: string;
+  60: string;
+  70: string;
+  80: string;
+  90: string;
+  100: string;
+}
+
+interface StrokeColors {
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  inverse: string;
+}
+interface StatesColors {
+  primaryHover: string;
+  primaryFocused: string;
+  primaryPressed: string;
+  primarySelected: string;
+  neutralHover: string;
+  neutralFocused: string;
+  neutralPressed: string;
+  neutralSelected: string;
+}
+
+interface BackgroundColors {
+  primary: string;
+  secondary: string;
+}
+
+interface MainColors {
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  interactive: string;
+  negative: string;
+  positive: string;
+  inverse: string;
+}
+
+interface ClutchPalette {
+  NEUTRAL: NeutralColors;
+  BLUE: BlueColors;
+  GREEN: GreenColors;
+  AMBER: AmberColors;
+  RED: RedColors;
+  STROKE: StrokeColors;
+  BACKGROUND: BackgroundColors;
+  STATES: StatesColors;
+  MAIN: MainColors; // Typography and Icons
+}
+
+export const LIGHT_MODE: ClutchPalette = {
   NEUTRAL: {
     5: "#F8F8F9", // PRIMARY BUTTON DISABLED / STROKE TERTIARY
     10: "#E2E2E6",
@@ -79,37 +180,37 @@ export const LIGHT_MODE: CLUTCH_PALETTE = {
     100: "#811500",
   },
   STROKE: {
-    PRIMARY: "#0D1030",
-    SECONDARY: "#0D103061",
-    TERTIARY: "#0D10301A",
-    INVERSE: "#FFFFFF",
+    primary: "#0D1030",
+    secondary: "#0D103061",
+    tertiary: "#0D10301A",
+    inverse: "#FFFFFF",
   },
   BACKGROUND: {
-    PRIMARY: "#FFFFFF",
-    SECONDARY: "#F9FAFE",
+    primary: "#FFFFFF",
+    secondary: "#F9FAFE",
   },
   STATES: {
-    PRIMARY_HOVER: "#3548D41A",
-    PRIMARY_FOCUSED: "#3548D40D",
-    PRIMARY_PRESSED: "#3548D426",
-    PRIMARY_SELECTED: "#3548D433",
-    NEUTRAL_HOVER: "#0D10301A",
-    NEUTRAL_FOCUSED: "#0D10300D",
-    NEUTRAL_PRESSED: "#0D103021",
-    NEUTRAL_SELECTED: "#0D103026",
+    primaryHover: "#3548D41A",
+    primaryFocused: "#3548D40D",
+    primaryPressed: "#3548D426",
+    primarySelected: "#3548D433",
+    neutralHover: "#0D10301A",
+    neutralFocused: "#0D10300D",
+    neutralPressed: "#0D103021",
+    neutralSelected: "#0D103026",
   },
   MAIN: {
-    PRIMARY: "#0D1030",
-    SECONDARY: "#0D103099",
-    TERTIARY: "#0D103061",
-    INTERACTIVE: "#3548D4",
-    NEGATIVE: "#DB3615",
-    POSITIVE: "#1C872A",
-    INVERSE: "#FFFFFF",
+    primary: "#0D1030",
+    secondary: "#0D103099",
+    tertiary: "#0D103061",
+    interactive: "#3548D4",
+    negative: "#DB3615",
+    positive: "#1C872A",
+    inverse: "#FFFFFF",
   },
 };
 
-export const DARK_MODE: CLUTCH_PALETTE = {
+export const DARK_MODE: ClutchPalette = {
   NEUTRAL: {
     5: "#272946", // PRIMARY BUTTON DISABLED / STROKE TERTIARY
     10: "#33344F",
@@ -175,34 +276,33 @@ export const DARK_MODE: CLUTCH_PALETTE = {
     100: "#FBE8E7",
   },
   STROKE: {
-    PRIMARY: "#FFFFFFDE",
-    SECONDARY: "#FFFFFF73",
-    TERTIARY: "#FFFFFF40",
-    INVERSE: "#0D1030",
+    primary: "#FFFFFFDE",
+    secondary: "#FFFFFF73",
+    tertiary: "#FFFFFF40",
+    inverse: "#0D1030",
   },
   BACKGROUND: {
-    PRIMARY: "#FFFFFF0F",
-    SECONDARY: "#0D1030",
-    INVERSE: "#0D1030",
+    primary: "#FFFFFF0F",
+    secondary: "#0D1030",
   },
   STATES: {
-    PRIMARY_HOVER: "#5AABF60D",
-    PRIMARY_FOCUSED: "#5AABF61A",
-    PRIMARY_PRESSED: "#5AABF626",
-    PRIMARY_SELECTED: "#5AABF633",
-    NEUTRAL_HOVER: "#FFFFFF12",
-    NEUTRAL_FOCUSED: "#FFFFFF1F",
-    NEUTRAL_PRESSED: "#FFFFFF2E",
-    NEUTRAL_SELECTED: "#FFFFFF40",
+    primaryHover: "#5AABF60D",
+    primaryFocused: "#5AABF61A",
+    primaryPressed: "#5AABF626",
+    primarySelected: "#5AABF633",
+    neutralHover: "#FFFFFF12",
+    neutralFocused: "#FFFFFF1F",
+    neutralPressed: "#FFFFFF2E",
+    neutralSelected: "#FFFFFF40",
   },
   MAIN: {
-    PRIMARY: "#FFFFFFE5",
-    SECONDARY: "#FFFFFFBF",
-    TERTIARY: "#FFFFFF61",
-    INTERACTIVE: "#3548D4",
-    NEGATIVE: "#DB3615",
-    POSITIVE: "#1C872A",
-    INVERSE: "#0D1030",
+    primary: "#FFFFFFE5",
+    secondary: "#FFFFFFBF",
+    tertiary: "#FFFFFF61",
+    interactive: "#3548D4",
+    negative: "#DB3615",
+    positive: "#1C872A",
+    inverse: "#0D1030",
   },
 };
 
