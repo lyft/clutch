@@ -456,7 +456,6 @@ func TestMaxTableUpdates(t *testing.T) {
 	for _, tt := range successTests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-
 			targetTableCapacity := &dynamodbv1.Throughput{
 				ReadCapacityUnits:  tt.targetRCU,
 				WriteCapacityUnits: tt.targetWCU,
