@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )

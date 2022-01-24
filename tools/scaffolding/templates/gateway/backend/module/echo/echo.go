@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/lyft/clutch/backend/module"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 
 	echov1 "{{ .RepoProvider}}/{{ .RepoOwner }}/{{ .RepoName}}/backend/api/echo/v1"

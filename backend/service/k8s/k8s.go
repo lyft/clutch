@@ -8,7 +8,7 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/sync/semaphore"
 	batchv1 "k8s.io/api/batch/v1"

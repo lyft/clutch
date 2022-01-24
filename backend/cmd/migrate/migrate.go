@@ -13,7 +13,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
