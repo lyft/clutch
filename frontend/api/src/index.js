@@ -25846,11 +25846,10 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a Feedback.
                  * @memberof clutch.feedback.v1
                  * @interface IFeedback
-                 * @property {string|null} [urlPath] Feedback urlPath
+                 * @property {string|null} [feedbackType] Feedback feedbackType
                  * @property {string|null} [ratingLabel] Feedback ratingLabel
                  * @property {clutch.feedback.v1.IRatingScale|null} [ratingScale] Feedback ratingScale
                  * @property {string|null} [freeformResponse] Feedback freeformResponse
-                 * @property {string|null} [feedbackType] Feedback feedbackType
                  */
 
                 /**
@@ -25869,12 +25868,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * Feedback urlPath.
-                 * @member {string} urlPath
+                 * Feedback feedbackType.
+                 * @member {string} feedbackType
                  * @memberof clutch.feedback.v1.Feedback
                  * @instance
                  */
-                Feedback.prototype.urlPath = "";
+                Feedback.prototype.feedbackType = "";
 
                 /**
                  * Feedback ratingLabel.
@@ -25901,14 +25900,6 @@ export const clutch = $root.clutch = (() => {
                 Feedback.prototype.freeformResponse = "";
 
                 /**
-                 * Feedback feedbackType.
-                 * @member {string} feedbackType
-                 * @memberof clutch.feedback.v1.Feedback
-                 * @instance
-                 */
-                Feedback.prototype.feedbackType = "";
-
-                /**
                  * Verifies a Feedback message.
                  * @function verify
                  * @memberof clutch.feedback.v1.Feedback
@@ -25919,9 +25910,9 @@ export const clutch = $root.clutch = (() => {
                 Feedback.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.urlPath != null && message.hasOwnProperty("urlPath"))
-                        if (!$util.isString(message.urlPath))
-                            return "urlPath: string expected";
+                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
+                        if (!$util.isString(message.feedbackType))
+                            return "feedbackType: string expected";
                     if (message.ratingLabel != null && message.hasOwnProperty("ratingLabel"))
                         if (!$util.isString(message.ratingLabel))
                             return "ratingLabel: string expected";
@@ -25933,9 +25924,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.freeformResponse != null && message.hasOwnProperty("freeformResponse"))
                         if (!$util.isString(message.freeformResponse))
                             return "freeformResponse: string expected";
-                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
-                        if (!$util.isString(message.feedbackType))
-                            return "feedbackType: string expected";
                     return null;
                 };
 
@@ -25951,8 +25939,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.feedback.v1.Feedback)
                         return object;
                     let message = new $root.clutch.feedback.v1.Feedback();
-                    if (object.urlPath != null)
-                        message.urlPath = String(object.urlPath);
+                    if (object.feedbackType != null)
+                        message.feedbackType = String(object.feedbackType);
                     if (object.ratingLabel != null)
                         message.ratingLabel = String(object.ratingLabel);
                     if (object.ratingScale != null) {
@@ -25962,8 +25950,6 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.freeformResponse != null)
                         message.freeformResponse = String(object.freeformResponse);
-                    if (object.feedbackType != null)
-                        message.feedbackType = String(object.feedbackType);
                     return message;
                 };
 
@@ -25981,22 +25967,19 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.urlPath = "";
+                        object.feedbackType = "";
                         object.ratingLabel = "";
                         object.ratingScale = null;
                         object.freeformResponse = "";
-                        object.feedbackType = "";
                     }
-                    if (message.urlPath != null && message.hasOwnProperty("urlPath"))
-                        object.urlPath = message.urlPath;
+                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
+                        object.feedbackType = message.feedbackType;
                     if (message.ratingLabel != null && message.hasOwnProperty("ratingLabel"))
                         object.ratingLabel = message.ratingLabel;
                     if (message.ratingScale != null && message.hasOwnProperty("ratingScale"))
                         object.ratingScale = $root.clutch.feedback.v1.RatingScale.toObject(message.ratingScale, options);
                     if (message.freeformResponse != null && message.hasOwnProperty("freeformResponse"))
                         object.freeformResponse = message.freeformResponse;
-                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
-                        object.feedbackType = message.feedbackType;
                     return object;
                 };
 
