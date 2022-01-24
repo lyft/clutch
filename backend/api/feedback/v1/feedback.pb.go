@@ -507,7 +507,7 @@ type Feedback struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// url path or workflow name that received feedback
+	// workflow url path or feature name that received feedback
 	FeedbackType string `protobuf:"bytes,1,opt,name=feedback_type,json=feedbackType,proto3" json:"feedback_type,omitempty"`
 	// the text option the user selected (i.e. bad/ok/great)
 	RatingLabel string `protobuf:"bytes,2,opt,name=rating_label,json=ratingLabel,proto3" json:"rating_label,omitempty"`

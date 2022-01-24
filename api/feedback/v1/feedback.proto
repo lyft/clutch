@@ -98,7 +98,7 @@ message FeedbackMetadata {
 }
 
 message Feedback {
-  // url path or workflow name that received feedback
+  // workflow url path or feature name that received feedback
   string feedback_type = 1 [ (validate.rules).string = {min_bytes : 1} ];
   // the text option the user selected (i.e. bad/ok/great)
   string rating_label = 2 [ (validate.rules).string = {min_bytes : 1} ];
