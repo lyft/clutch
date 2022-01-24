@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.2
-	github.com/aws/aws-sdk-go-v2 v1.12.0
+	github.com/aws/aws-sdk-go-v2 v1.13.0
 	github.com/aws/aws-sdk-go-v2/config v1.12.0
 	github.com/aws/aws-sdk-go-v2/credentials v1.7.0
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.18.0
@@ -15,7 +15,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.12.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.23.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.13.0
-	github.com/aws/smithy-go v1.9.1
+	github.com/aws/smithy-go v1.10.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
 	github.com/bufbuild/buf v0.56.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
