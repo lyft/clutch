@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// TODO: metricsHandler can be replaced with 'go.temporal.io/sdk/contrib/tally' once we upgrade to tally/v4.
 type metricsHandler struct {
 	scope tally.Scope
 }
