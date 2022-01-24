@@ -52,5 +52,4 @@ func TestLogWrapper(t *testing.T) {
 		assert.Equal(t, "bar", l.ContextMap()["foo"])
 		assert.Equal(t, "pop", l.ContextMap()["blip"])
 	}
-
 }
