@@ -39,10 +39,6 @@ require (
 	github.com/jhump/protoreflect v1.10.1
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.4
-	github.com/m3db/prometheus_client_golang v0.8.1 // indirect
-	github.com/m3db/prometheus_client_model v0.1.0 // indirect
-	github.com/m3db/prometheus_common v0.1.0 // indirect
-	github.com/m3db/prometheus_procfs v0.8.1 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2
 	github.com/shurcooL/githubv4 v0.0.0-20220115235240-a14260e6f8a2
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
@@ -50,8 +46,7 @@ require (
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
 	github.com/slack-go/slack v0.10.1
 	github.com/stretchr/testify v1.7.0
-	github.com/twmb/murmur3 v1.1.5 // indirect
-	github.com/uber-go/tally v3.4.2+incompatible
+	github.com/uber-go/tally/v4 v4.1.1
 	go.uber.org/zap v1.20.0
 	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
