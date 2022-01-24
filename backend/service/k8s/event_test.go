@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	corev1 "k8s.io/api/core/v1"
@@ -28,8 +29,9 @@ func testEventClientset() k8s.Interface {
 				Namespace: "testing-namespace",
 				Name:      "Pod1",
 			},
-			Reason:  "testing-reason-1",
-			Message: "testing-message-1",
+			Reason:    "testing-reason-1",
+			Message:   "testing-message-1",
+			EventTime: metav1.MicroTime{Time: time.Unix(1, 0)},
 		},
 		&corev1.Event{
 			ObjectMeta: metav1.ObjectMeta{
@@ -41,14 +43,14 @@ func testEventClientset() k8s.Interface {
 				Namespace: "testing-namespace",
 				Name:      "Pod1",
 			},
-			Reason:  "testing-reason-2",
-			Message: "testing-message-2",
+			Reason:    "testing-reason-2",
+			Message:   "testing-message-2",
+			EventTime: metav1.MicroTime{Time: time.Unix(2, 0)},
 		},
 	}
 
 	return fake.NewSimpleClientset(testEvents...)
 }
-
 func TestListEvents(t *testing.T) {
 	cs := testEventClientset()
 	s := &svc{
@@ -71,5 +73,7 @@ func TestListEvents(t *testing.T) {
 		reason := fmt.Sprintf("testing-reason-%d", i+1)
 		assert.Equal(t, reason, v.Reason)
 		assert.Equal(t, kind, v.Kind)
+		timeVal := (int64)(i + 1)
+		assert.Equal(t, time.Unix(timeVal, 0).UnixMilli(), v.EventTimeMillis)
 	}
 }
