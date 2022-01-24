@@ -2,32 +2,11 @@ package temporal
 
 import (
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest/observer"
 )
-
-func TestMetricsWrapper(t *testing.T) {
-	s := tally.NewTestScope("foo", map[string]string{"test_tag": "tagged"})
-	mh := newMetricsHandler(s)
-
-	mh.Counter("num_occurrences").Inc(3)
-	mh.Timer("elapsed").Record(time.Second * 5)
-	mh.Gauge("num_active").Update(6)
-
-	taggedScope := mh.WithTags(map[string]string{"test_tag": "retagged"})
-	taggedScope.Counter("num_occurrences").Inc(4)
-
-	snap := s.Snapshot()
-	assert.EqualValues(t, snap.Counters()["foo.num_occurrences+test_tag=tagged"].Value(), 3)
-	assert.EqualValues(t, snap.Counters()["foo.num_occurrences+test_tag=retagged"].Value(), 4)
-	assert.Len(t, snap.Timers()["foo.elapsed+test_tag=tagged"].Values(), 1)
-	assert.Equal(t, snap.Timers()["foo.elapsed+test_tag=tagged"].Values()[0], 5*time.Second)
-	assert.EqualValues(t, snap.Gauges()["foo.num_active+test_tag=tagged"].Value(), 6)
-}
 
 func TestLogWrapper(t *testing.T) {
 	core, logs := observer.New(zap.DebugLevel)

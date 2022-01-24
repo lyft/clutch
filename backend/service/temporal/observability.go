@@ -1,36 +1,9 @@
 package temporal
 
 import (
-	"github.com/uber-go/tally"
-	"go.temporal.io/sdk/client"
 	"go.temporal.io/sdk/log"
 	"go.uber.org/zap"
 )
-
-// TODO: metricsHandler can be replaced with 'go.temporal.io/sdk/contrib/tally' once we upgrade to tally/v4.
-type metricsHandler struct {
-	scope tally.Scope
-}
-
-func newMetricsHandler(scope tally.Scope) client.MetricsHandler {
-	return &metricsHandler{scope: scope}
-}
-
-func (m *metricsHandler) Counter(name string) client.MetricsCounter {
-	return m.scope.Counter(name)
-}
-
-func (m *metricsHandler) Gauge(name string) client.MetricsGauge {
-	return m.scope.Gauge(name)
-}
-
-func (m *metricsHandler) Timer(name string) client.MetricsTimer {
-	return m.scope.Timer(name)
-}
-
-func (m *metricsHandler) WithTags(tags map[string]string) client.MetricsHandler {
-	return &metricsHandler{scope: m.scope.Tagged(tags)}
-}
 
 func newTemporalLogger(logger *zap.Logger) log.Logger {
 	return &temporalLogger{

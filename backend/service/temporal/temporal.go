@@ -9,8 +9,9 @@ import (
 	"crypto/x509"
 	"fmt"
 
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.temporal.io/sdk/client"
+	temporaltally "go.temporal.io/sdk/contrib/tally"
 	"go.temporal.io/sdk/log"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -36,7 +37,7 @@ type ClientManager interface {
 func newClient(cfg *temporalv1.Config, logger *zap.Logger, scope tally.Scope) (ClientManager, error) {
 	ret := &clientImpl{
 		hostPort:       fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
-		metricsHandler: newMetricsHandler(scope),
+		metricsHandler: temporaltally.NewMetricsHandler(scope),
 		logger:         newTemporalLogger(logger),
 
 		// Disable the healthcheck by default (i.e. connect lazily) as it's not normally preferable (see config proto documentation).
