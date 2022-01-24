@@ -17,4 +17,10 @@ message Config {
 
 message ConnectionOptions {
   bool use_system_ca_bundle = 1;
+
+  // If set to true, the Temporal client will attempt to connect to the Temporal server when GetNamespaceClient is
+  // called. In general the health check should not be enabled unless the only purpose of the configured Clutch instance
+  // is to execute Temporal worker code, as it may block Clutch from running at all in the event Temporal is down. This
+  // can create a circular dependency if Clutch also hosts tools that could be used to mitigate a Temporal outage.
+  bool enable_health_check = 2;
 }

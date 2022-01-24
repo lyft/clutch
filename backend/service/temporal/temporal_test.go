@@ -32,14 +32,14 @@ func TestNewClientWithConnectionOptions(t *testing.T) {
 	cfg := &temporalv1.Config{
 		Host:              "dns:///example.com",
 		Port:              9233,
-		ConnectionOptions: &temporalv1.ConnectionOptions{UseSystemCaBundle: true},
+		ConnectionOptions: &temporalv1.ConnectionOptions{UseSystemCaBundle: true, EnableHealthCheck: true},
 	}
 	c, err := newClient(cfg, zap.NewNop(), tally.NoopScope)
 	assert.NoError(t, err)
 
 	impl := c.(*clientImpl)
 	assert.NotNil(t, impl.copts.TLS.RootCAs)
-	assert.True(t, impl.copts.DisableHealthCheck)
+	assert.False(t, impl.copts.DisableHealthCheck)
 }
 
 func TestGetNamespaceClient(t *testing.T) {
