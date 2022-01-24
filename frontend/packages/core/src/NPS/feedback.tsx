@@ -220,7 +220,7 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
             ratings={survey.ratingLabels}
             setRating={setSelectedEmoji}
             placement={wizardOrigin ? "top" : "bottom"}
-            size={wizardOrigin ? "small" : "large"}
+            buttonSize={wizardOrigin ? "small" : "medium"}
           />
         </MuiGrid>
         {selectedEmoji !== null && (

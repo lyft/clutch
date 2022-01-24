@@ -18,7 +18,7 @@ type EmojiRatingsProps = {
   ratings: IClutch.feedback.v1.IRatingLabel[];
   setRating: (Rating) => void;
   placement?: "top" | "bottom";
-  size?: IconButtonSize;
+  buttonSize?: IconButtonSize;
   emojiSize?: IconSizeVariant;
 };
 
@@ -36,13 +36,14 @@ const EmojiRatings = ({
   ratings = [],
   setRating,
   placement = "top",
-  size = "small",
+  buttonSize = "small",
   emojiSize = "medium",
 }: EmojiRatingsProps) => {
   const [selectedRating, selectRating] = useState<Rating>(null);
 
   const StyledIconButton = styled(IconButton)<{
     $selected: boolean;
+    size: string;
   }>(
     {
       "&:hover": {
@@ -51,6 +52,7 @@ const EmojiRatings = ({
     },
     props => ({
       opacity: props.$selected ? 1 : 0.5,
+      ...(props?.size === "medium" && { padding: "6px" }),
     })
   );
 
@@ -74,7 +76,7 @@ const EmojiRatings = ({
               variant="neutral"
               $selected={selectedRating?.label === label}
               onClick={() => select({ label, emoji: emoji as string })}
-              size={size}
+              size={buttonSize}
             >
               <Emoji type={emoji as EmojiType} size={emojiSize} />
             </StyledIconButton>

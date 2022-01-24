@@ -28,7 +28,7 @@ const Popper = styled(MuiPopper)({
 });
 
 const Paper = styled(MuiPaper)({
-  width: "420px",
+  width: "350px",
   border: "1px solid #E7E7EA",
   boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
   borderRadius: "8px",
