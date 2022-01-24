@@ -8,51 +8,51 @@ import (
 )
 
 type metricsHandler struct {
-	tally.Scope
+	scope tally.Scope
 }
 
 func newMetricsHandler(scope tally.Scope) client.MetricsHandler {
-	return &metricsHandler{Scope: scope}
+	return &metricsHandler{scope: scope}
 }
 
 func (m *metricsHandler) Counter(name string) client.MetricsCounter {
-	return m.Scope.Counter(name)
+	return m.scope.Counter(name)
 }
 
 func (m *metricsHandler) Gauge(name string) client.MetricsGauge {
-	return m.Scope.Gauge(name)
+	return m.scope.Gauge(name)
 }
 
 func (m *metricsHandler) Timer(name string) client.MetricsTimer {
-	return m.Scope.Timer(name)
+	return m.scope.Timer(name)
 }
 
 func (m *metricsHandler) WithTags(tags map[string]string) client.MetricsHandler {
-	return &metricsHandler{Scope: m.Scope.Tagged(tags)}
+	return &metricsHandler{scope: m.scope.Tagged(tags)}
 }
 
 func newTemporalLogger(logger *zap.Logger) log.Logger {
 	return &temporalLogger{
-		SugaredLogger: logger.Sugar(),
+		sl: logger.Sugar(),
 	}
 }
 
 type temporalLogger struct {
-	*zap.SugaredLogger
+	sl *zap.SugaredLogger
 }
 
 func (t *temporalLogger) Debug(msg string, keyvals ...interface{}) {
-	t.SugaredLogger.Debugw(msg, keyvals...)
+	t.sl.Debugw(msg, keyvals...)
 }
 
 func (t *temporalLogger) Info(msg string, keyvals ...interface{}) {
-	t.SugaredLogger.Infow(msg, keyvals...)
+	t.sl.Infow(msg, keyvals...)
 }
 
 func (t *temporalLogger) Warn(msg string, keyvals ...interface{}) {
-	t.SugaredLogger.Warnw(msg, keyvals...)
+	t.sl.Warnw(msg, keyvals...)
 }
 
 func (t *temporalLogger) Error(msg string, keyvals ...interface{}) {
-	t.SugaredLogger.Errorw(msg, keyvals...)
+	t.sl.Errorw(msg, keyvals...)
 }
