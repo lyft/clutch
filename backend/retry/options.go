@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 )
 
 // BackoffStrategy is used to determine the delay between retries.

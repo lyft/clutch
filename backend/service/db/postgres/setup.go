@@ -12,7 +12,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes/any"
 	_ "github.com/lib/pq"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 
 	postgresv1 "github.com/lyft/clutch/backend/api/config/service/db/postgres/v1"
