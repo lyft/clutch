@@ -6,7 +6,7 @@ import (
 	"reflect"
 
 	protodeprecated "github.com/golang/protobuf/proto"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"

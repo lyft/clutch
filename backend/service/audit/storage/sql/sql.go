@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/protobuf/encoding/protojson"

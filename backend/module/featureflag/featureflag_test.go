@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 
 	featureflagv1 "github.com/lyft/clutch/backend/api/config/module/featureflag/v1"

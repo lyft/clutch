@@ -11,7 +11,7 @@ import (
 
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
