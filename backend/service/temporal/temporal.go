@@ -38,7 +38,11 @@ func newClient(cfg *temporalv1.Config, logger *zap.Logger, scope tally.Scope) (C
 		hostPort:       fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		metricsHandler: newMetricsHandler(scope),
 		logger:         newTemporalLogger(logger),
+
+		// Explicitly disable the healthcheck (i.e. connect lazily) so service instantiation will not block server startup.
+		copts: client.ConnectionOptions{DisableHealthCheck: true},
 	}
+
 	if cfg.ConnectionOptions != nil && cfg.ConnectionOptions.UseSystemCaBundle {
 		certs, err := x509.SystemCertPool()
 		if err != nil {
