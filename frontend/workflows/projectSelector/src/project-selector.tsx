@@ -92,12 +92,8 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
       users: string[];
       projects: string[];
     };
-    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-      // if the project is custom
-      if (state[Group.PROJECTS][p].custom) {
-        requestParams.projects.push(p);
-      }
-    });
+
+    requestParams.projects = Object.keys(state[Group.PROJECTS]);
 
     client
       .post("/v1/project/getProjects", requestParams as IClutch.project.v1.GetProjectsRequest)
@@ -118,7 +114,8 @@ const ProjectSelector = () => {
 
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
-  const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
+  // TODO: restore usage of loadStoredState once we fix the issue with deprecated projects
+  const [state, dispatch] = React.useReducer(selectorReducer, initialState);
 
   React.useEffect(() => {
     const interval = setInterval(() => hydrateProjects(state, dispatch), 30000);
