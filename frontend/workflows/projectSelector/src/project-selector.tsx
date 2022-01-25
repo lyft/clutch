@@ -12,7 +12,7 @@ import { useDashUpdater } from "./dash-hooks";
 import { deriveStateData, DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
-import { loadStoredState, storeState } from "./storage";
+import { storeState } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
 
@@ -93,7 +93,12 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
       projects: string[];
     };
 
-    requestParams.projects = Object.keys(state[Group.PROJECTS]);
+    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
+      // if the project is custom
+      if (state[Group.PROJECTS][p].custom) {
+        requestParams.projects.push(p);
+      }
+    });
 
     client
       .post("/v1/project/getProjects", requestParams as IClutch.project.v1.GetProjectsRequest)
