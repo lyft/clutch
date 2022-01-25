@@ -72,3 +72,38 @@ WithStartAdornment.args = {
     },
   ],
 };
+
+export const WithGrouping = Template.bind({});
+WithGrouping.args = {
+  ...Primary.args,
+  options: [
+    {
+      label: "Option 1",
+    },
+    {
+      label: "Group 1",
+      group: [
+        {
+          label: "Sub Option 1",
+        },
+        {
+          label: "Sub Option 2",
+        },
+      ],
+    },
+    {
+      label: "Group 2",
+      group: [
+        {
+          label: "Sub Option 3",
+        },
+        {
+          label: "Sub Option 4",
+        },
+      ],
+    },
+    {
+      label: "Option 2",
+    },
+  ],
+};

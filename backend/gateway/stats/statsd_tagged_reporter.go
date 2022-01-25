@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/cactus/go-statsd-client/statsd"
-	"github.com/uber-go/tally"
-	tallystatsd "github.com/uber-go/tally/statsd"
+	"github.com/uber-go/tally/v4"
+	tallystatsd "github.com/uber-go/tally/v4/statsd"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )

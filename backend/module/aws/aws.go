@@ -8,7 +8,7 @@ import (
 	"errors"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
