@@ -191,7 +191,7 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
           count={items?.length ?? 0}
           rowsPerPage={rowsPerPage}
           page={page}
-          onChangePage={handleChangePage}
+          onPageChange={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>

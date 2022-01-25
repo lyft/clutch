@@ -98,8 +98,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
         notes={[
           {
             severity: "info",
-            text:
-              "These changes are not immediate. Expect some delay length correlated to the size of the stream",
+            text: "These changes are not immediate. Expect some delay length correlated to the size of the stream",
           },
         ]}
       />

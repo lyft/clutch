@@ -34,8 +34,8 @@ const StringField = (
   onChange: (e: ResolverChangeEvent) => void,
   validation: any
 ): React.ReactElement => {
-  const errorMsg =
-    validation?.errors?.[field.name]?.message || validation?.errors?.[field.name]?.type || "";
+  const { name, metadata } = field;
+  const errorMsg = validation?.errors?.[name]?.message || validation?.errors?.[name]?.type || "";
 
   const handleChanges = (event: React.ChangeEvent<ChangeEventTarget> | React.KeyboardEvent) => {
     onChange(convertChangeEvent(event));
@@ -43,16 +43,16 @@ const StringField = (
 
   return (
     <TextField
-      key={field.metadata.displayName || field.name}
-      placeholder={field.metadata.stringField.placeholder}
-      defaultValue={field.metadata.stringField.defaultValue || null}
-      required={field.metadata.required || false}
-      name={field.name}
-      label={field.metadata.displayName || field.name}
+      key={metadata.displayName || name}
+      placeholder={metadata.stringField.placeholder}
+      defaultValue={metadata.stringField.defaultValue || null}
+      required={metadata.required || false}
+      name={name}
+      label={metadata.displayName || name}
       onChange={handleChanges}
       onKeyDown={handleChanges}
       onFocus={handleChanges}
-      inputRef={validation.register({ required: field.metadata.required || false })}
+      inputRef={validation.register({ required: metadata.required || false })}
       helperText={errorMsg}
       error={!!errorMsg}
     />
@@ -63,11 +63,12 @@ const OptionField = (
   field: clutch.resolver.v1.IField,
   onChange: (e: ResolverChangeEvent) => void
 ): React.ReactElement => {
-  const sortedOptions = _.sortBy(field.metadata.optionField.options, o => o.displayName);
+  const { name, metadata } = field;
+  const sortedOptions = _.sortBy(metadata.optionField.options, o => o.displayName);
   React.useEffect(() => {
     onChange({
       target: {
-        name: field.name,
+        name,
         value: sortedOptions?.[0]?.stringValue,
       },
       initialLoad: true,
@@ -80,7 +81,7 @@ const OptionField = (
   const updateSelectedOption = (value: string) => {
     onChange({
       target: {
-        name: field.name,
+        name,
         value,
       },
     });
@@ -88,10 +89,10 @@ const OptionField = (
 
   return (
     <Select
-      key={field.metadata.displayName}
-      label={field.metadata.displayName}
+      key={metadata.displayName}
+      label={metadata.displayName}
       onChange={updateSelectedOption}
-      name={field.name}
+      name={name}
       options={options}
     />
   );

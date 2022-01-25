@@ -1,6 +1,6 @@
 import React from "react";
 import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
-import { createMuiTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@material-ui/core";
+import { createTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@material-ui/core";
 import { useTheme as useMuiTheme } from "@material-ui/core/styles";
 import type { PaletteOptions } from "@material-ui/core/styles/createPalette";
 import { StylesProvider } from "@material-ui/styles";
@@ -50,7 +50,7 @@ const lightPalette = (): ClutchPalette => {
 };
 
 const lightTheme = () => {
-  return createMuiTheme({
+  return createTheme({
     palette: lightPalette(),
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
@@ -88,7 +88,7 @@ const useTheme = () => {
 };
 
 interface ThemeProps {
-  variant?: "light";
+  variant?: "light"; // eslint-disable-line react/no-unused-prop-types
 }
 
 const Theme: React.FC<ThemeProps> = ({ children }) => {

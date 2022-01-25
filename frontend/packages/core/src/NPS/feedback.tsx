@@ -89,6 +89,7 @@ const NPSFeedback = (opts: FeedbackOptions) => {
   const [error, setError] = useState<boolean>(false);
   const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
   const [requestId, setRequestId] = useState<string>("");
+  const { origin, onSubmit } = opts;
   const maxLength = 180;
   const debounceTimer = 500;
 
@@ -111,12 +112,12 @@ const NPSFeedback = (opts: FeedbackOptions) => {
 
     client
       .post("/v1/feedback/getSurveys", {
-        origins: [opts.origin],
+        origins: [origin],
       })
       .then(response => {
         const surveyData: IClutch.feedback.v1.IGetSurveysResponse = response?.data?.originSurvey;
 
-        data = surveyData[opts.origin] ?? defaults;
+        data = surveyData[origin] ?? defaults;
       })
       .catch((err: ClutchError) => {
         // eslint-disable-next-line no-console
@@ -155,7 +156,7 @@ const NPSFeedback = (opts: FeedbackOptions) => {
           freeformResponse: trimmed,
         },
         metadata: {
-          origin: IClutch.feedback.v1.Origin[opts.origin],
+          origin: IClutch.feedback.v1.Origin[origin],
           userSubmitted: hasSubmit,
           survey,
           urlSearchParams: window.location.search,
@@ -170,8 +171,8 @@ const NPSFeedback = (opts: FeedbackOptions) => {
       e.preventDefault();
     }
     setHasSubmit(true);
-    if (opts.onSubmit) {
-      opts.onSubmit(true);
+    if (onSubmit) {
+      onSubmit(true);
     }
   };
 
