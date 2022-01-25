@@ -47,7 +47,7 @@ const Header: React.FC = () => {
               <SearchField />
             </Box>
             {showNotifications && <Notifications />}
-            <SimpleFeatureFlag feature="npsAnytime">
+            <SimpleFeatureFlag feature="npsHeader">
               <FeatureOn>
                 <NPSHeader />
               </FeatureOn>
