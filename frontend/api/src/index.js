@@ -25846,11 +25846,10 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a Feedback.
                  * @memberof clutch.feedback.v1
                  * @interface IFeedback
-                 * @property {string|null} [urlPath] Feedback urlPath
+                 * @property {string|null} [feedbackType] Feedback feedbackType
                  * @property {string|null} [ratingLabel] Feedback ratingLabel
                  * @property {clutch.feedback.v1.IRatingScale|null} [ratingScale] Feedback ratingScale
                  * @property {string|null} [freeformResponse] Feedback freeformResponse
-                 * @property {string|null} [feedbackType] Feedback feedbackType
                  */
 
                 /**
@@ -25869,12 +25868,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * Feedback urlPath.
-                 * @member {string} urlPath
+                 * Feedback feedbackType.
+                 * @member {string} feedbackType
                  * @memberof clutch.feedback.v1.Feedback
                  * @instance
                  */
-                Feedback.prototype.urlPath = "";
+                Feedback.prototype.feedbackType = "";
 
                 /**
                  * Feedback ratingLabel.
@@ -25901,14 +25900,6 @@ export const clutch = $root.clutch = (() => {
                 Feedback.prototype.freeformResponse = "";
 
                 /**
-                 * Feedback feedbackType.
-                 * @member {string} feedbackType
-                 * @memberof clutch.feedback.v1.Feedback
-                 * @instance
-                 */
-                Feedback.prototype.feedbackType = "";
-
-                /**
                  * Verifies a Feedback message.
                  * @function verify
                  * @memberof clutch.feedback.v1.Feedback
@@ -25919,9 +25910,9 @@ export const clutch = $root.clutch = (() => {
                 Feedback.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.urlPath != null && message.hasOwnProperty("urlPath"))
-                        if (!$util.isString(message.urlPath))
-                            return "urlPath: string expected";
+                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
+                        if (!$util.isString(message.feedbackType))
+                            return "feedbackType: string expected";
                     if (message.ratingLabel != null && message.hasOwnProperty("ratingLabel"))
                         if (!$util.isString(message.ratingLabel))
                             return "ratingLabel: string expected";
@@ -25933,9 +25924,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.freeformResponse != null && message.hasOwnProperty("freeformResponse"))
                         if (!$util.isString(message.freeformResponse))
                             return "freeformResponse: string expected";
-                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
-                        if (!$util.isString(message.feedbackType))
-                            return "feedbackType: string expected";
                     return null;
                 };
 
@@ -25951,8 +25939,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.feedback.v1.Feedback)
                         return object;
                     let message = new $root.clutch.feedback.v1.Feedback();
-                    if (object.urlPath != null)
-                        message.urlPath = String(object.urlPath);
+                    if (object.feedbackType != null)
+                        message.feedbackType = String(object.feedbackType);
                     if (object.ratingLabel != null)
                         message.ratingLabel = String(object.ratingLabel);
                     if (object.ratingScale != null) {
@@ -25962,8 +25950,6 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.freeformResponse != null)
                         message.freeformResponse = String(object.freeformResponse);
-                    if (object.feedbackType != null)
-                        message.feedbackType = String(object.feedbackType);
                     return message;
                 };
 
@@ -25981,22 +25967,19 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.urlPath = "";
+                        object.feedbackType = "";
                         object.ratingLabel = "";
                         object.ratingScale = null;
                         object.freeformResponse = "";
-                        object.feedbackType = "";
                     }
-                    if (message.urlPath != null && message.hasOwnProperty("urlPath"))
-                        object.urlPath = message.urlPath;
+                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
+                        object.feedbackType = message.feedbackType;
                     if (message.ratingLabel != null && message.hasOwnProperty("ratingLabel"))
                         object.ratingLabel = message.ratingLabel;
                     if (message.ratingScale != null && message.hasOwnProperty("ratingScale"))
                         object.ratingScale = $root.clutch.feedback.v1.RatingScale.toObject(message.ratingScale, options);
                     if (message.freeformResponse != null && message.hasOwnProperty("freeformResponse"))
                         object.freeformResponse = message.freeformResponse;
-                    if (message.feedbackType != null && message.hasOwnProperty("feedbackType"))
-                        object.feedbackType = message.feedbackType;
                     return object;
                 };
 
@@ -44519,6 +44502,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [namespace] Event namespace
                  * @property {string|null} [involvedObjectName] Event involvedObjectName
                  * @property {clutch.k8s.v1.ObjectKind|null} [kind] Event kind
+                 * @property {number|Long|null} [eventTimeMillis] Event eventTimeMillis
                  */
 
                 /**
@@ -44593,6 +44577,14 @@ export const clutch = $root.clutch = (() => {
                 Event.prototype.kind = 0;
 
                 /**
+                 * Event eventTimeMillis.
+                 * @member {number|Long} eventTimeMillis
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.eventTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
                  * Verifies an Event message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Event
@@ -44630,6 +44622,9 @@ export const clutch = $root.clutch = (() => {
                         case 2:
                             break;
                         }
+                    if (message.eventTimeMillis != null && message.hasOwnProperty("eventTimeMillis"))
+                        if (!$util.isInteger(message.eventTimeMillis) && !(message.eventTimeMillis && $util.isInteger(message.eventTimeMillis.low) && $util.isInteger(message.eventTimeMillis.high)))
+                            return "eventTimeMillis: integer|Long expected";
                     return null;
                 };
 
@@ -44671,6 +44666,15 @@ export const clutch = $root.clutch = (() => {
                         message.kind = 2;
                         break;
                     }
+                    if (object.eventTimeMillis != null)
+                        if ($util.Long)
+                            (message.eventTimeMillis = $util.Long.fromValue(object.eventTimeMillis)).unsigned = false;
+                        else if (typeof object.eventTimeMillis === "string")
+                            message.eventTimeMillis = parseInt(object.eventTimeMillis, 10);
+                        else if (typeof object.eventTimeMillis === "number")
+                            message.eventTimeMillis = object.eventTimeMillis;
+                        else if (typeof object.eventTimeMillis === "object")
+                            message.eventTimeMillis = new $util.LongBits(object.eventTimeMillis.low >>> 0, object.eventTimeMillis.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -44695,6 +44699,11 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = "";
                         object.involvedObjectName = "";
                         object.kind = options.enums === String ? "UNSPECIFIED" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.eventTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.eventTimeMillis = options.longs === String ? "0" : 0;
                     }
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
@@ -44710,6 +44719,11 @@ export const clutch = $root.clutch = (() => {
                         object.involvedObjectName = message.involvedObjectName;
                     if (message.kind != null && message.hasOwnProperty("kind"))
                         object.kind = options.enums === String ? $root.clutch.k8s.v1.ObjectKind[message.kind] : message.kind;
+                    if (message.eventTimeMillis != null && message.hasOwnProperty("eventTimeMillis"))
+                        if (typeof message.eventTimeMillis === "number")
+                            object.eventTimeMillis = options.longs === String ? String(message.eventTimeMillis) : message.eventTimeMillis;
+                        else
+                            object.eventTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.eventTimeMillis) : options.longs === Number ? new $util.LongBits(message.eventTimeMillis.low >>> 0, message.eventTimeMillis.high >>> 0).toNumber() : message.eventTimeMillis;
                     return object;
                 };
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gobwas/glob"
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )

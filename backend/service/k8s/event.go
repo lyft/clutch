@@ -47,6 +47,7 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 		Description:        k8sEvent.Message,
 		InvolvedObjectName: k8sEvent.InvolvedObject.Name,
 		Kind:               protoForObjectKind(k8sEvent.InvolvedObject.Kind),
+		EventTimeMillis:    k8sEvent.EventTime.UnixMilli(),
 	}
 }
 

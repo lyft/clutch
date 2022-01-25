@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 
 	feedbackv1 "github.com/lyft/clutch/backend/api/feedback/v1"
@@ -13,7 +13,7 @@ import (
 func TestProcessSubmission(t *testing.T) {
 	id := "00000000-0000-0000-0000-000000000000"
 	userId := "foo@example.com"
-	validFeedbackTestCase := &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", RatingLabel: "great", RatingScale: &feedbackv1.RatingScale{
+	validFeedbackTestCase := &feedbackv1.Feedback{FeedbackType: "/k8s/deletePod", RatingLabel: "great", RatingScale: &feedbackv1.RatingScale{
 		Type: &feedbackv1.RatingScale_Emoji{Emoji: feedbackv1.EmojiRating_HAPPY},
 	}}
 	vailidMetadataTestCase := &feedbackv1.FeedbackMetadata{
@@ -49,7 +49,7 @@ func TestProcessSubmission(t *testing.T) {
 		{
 			id:       id,
 			userId:   "",
-			feedback: &feedbackv1.Feedback{UrlPath: "/k8s/deletePod", RatingLabel: "great"},
+			feedback: &feedbackv1.Feedback{FeedbackType: "/k8s/deletePod", RatingLabel: "great"},
 			metadata: vailidMetadataTestCase,
 		},
 		// metadata is nil

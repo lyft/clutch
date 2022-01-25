@@ -1,7 +1,7 @@
 package stats
 
 import (
-	tallyprom "github.com/uber-go/tally/prometheus"
+	tallyprom "github.com/uber-go/tally/v4/prometheus"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )

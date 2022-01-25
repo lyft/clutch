@@ -165,13 +165,12 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
       sendFeedback({
         id: requestId,
         feedback: {
-          feedbackType,
+          feedbackType: wizardOrigin ? window.location.pathname : feedbackType,
           freeformResponse: trimmed,
           ratingLabel: selectedEmoji.label,
           ratingScale: {
             emoji: IClutch.feedback.v1.EmojiRating[selectedEmoji.emoji],
           },
-          urlPath: window.location.pathname,
         },
         metadata: {
           survey,

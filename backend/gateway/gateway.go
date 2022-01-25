@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/uber-go/tally"
-	tallyprom "github.com/uber-go/tally/prometheus"
+	"github.com/uber-go/tally/v4"
+	tallyprom "github.com/uber-go/tally/v4/prometheus"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

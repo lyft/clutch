@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
 	"google.golang.org/protobuf/encoding/protojson"
