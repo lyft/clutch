@@ -19718,6 +19718,9 @@ export namespace clutch {
 
                 /** GetProjectsResponse results */
                 results?: ({ [k: string]: clutch.project.v1.IProjectResult }|null);
+
+                /** GetProjectsResponse partialFailures */
+                partialFailures?: (google.rpc.IStatus[]|null);
             }
 
             /** Represents a GetProjectsResponse. */
@@ -19731,6 +19734,9 @@ export namespace clutch {
 
                 /** GetProjectsResponse results. */
                 public results: { [k: string]: clutch.project.v1.IProjectResult };
+
+                /** GetProjectsResponse partialFailures. */
+                public partialFailures: google.rpc.IStatus[];
 
                 /**
                  * Verifies a GetProjectsResponse message.
