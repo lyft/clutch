@@ -2,9 +2,7 @@ import React from "react";
 import {
   Button,
   ButtonGroup,
-  FeatureOn,
   NPSWizard,
-  SimpleFeatureFlag,
   Step,
   Stepper,
   styled,
@@ -151,13 +149,7 @@ const Wizard = ({
         <Grid container justify="center">
           {((state.activeStep === lastStepIndex && !isLoading) || hasError) && (
             <>
-              {enableFeedback && (
-                <SimpleFeatureFlag feature="npsWizard">
-                  <FeatureOn>
-                    <NPSWizard />
-                  </FeatureOn>
-                </SimpleFeatureFlag>
-              )}
+              {enableFeedback && <NPSWizard />}
               {(isMultistep || hasError) && (
                 <ButtonGroup>
                   <Button
