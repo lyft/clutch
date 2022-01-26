@@ -151,7 +151,7 @@ const NPSFeedback = (opts: FeedbackOptions) => {
           ratingScale: {
             emoji: IClutch.feedback.v1.EmojiRating[selected.emoji],
           },
-          urlPath: window.location.pathname,
+          feedbackType: window.location.pathname,
           freeformResponse: trimmed,
         },
         metadata: {

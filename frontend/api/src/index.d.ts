@@ -10622,8 +10622,8 @@ export namespace clutch {
             /** Properties of a Feedback. */
             interface IFeedback {
 
-                /** Feedback urlPath */
-                urlPath?: (string|null);
+                /** Feedback feedbackType */
+                feedbackType?: (string|null);
 
                 /** Feedback ratingLabel */
                 ratingLabel?: (string|null);
@@ -10633,9 +10633,6 @@ export namespace clutch {
 
                 /** Feedback freeformResponse */
                 freeformResponse?: (string|null);
-
-                /** Feedback feedbackType */
-                feedbackType?: (string|null);
             }
 
             /** Represents a Feedback. */
@@ -10647,8 +10644,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.feedback.v1.IFeedback);
 
-                /** Feedback urlPath. */
-                public urlPath: string;
+                /** Feedback feedbackType. */
+                public feedbackType: string;
 
                 /** Feedback ratingLabel. */
                 public ratingLabel: string;
@@ -10658,9 +10655,6 @@ export namespace clutch {
 
                 /** Feedback freeformResponse. */
                 public freeformResponse: string;
-
-                /** Feedback feedbackType. */
-                public feedbackType: string;
 
                 /**
                  * Verifies a Feedback message.
