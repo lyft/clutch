@@ -91,29 +91,35 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
         <div id="App">
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
             <Routes>
-              <Route path="/*" element={<AppLayout isLoading={isLoading} />}>
-                <Route key="landing" path="/" element={<Landing />} />
+              <Route path="/" element={<AppLayout isLoading={isLoading} />}>
+                <Route path="/" element={<Landing />} />
                 {workflows.map((workflow: Workflow) => (
-                  <ErrorBoundary workflow={workflow} key={workflow.path.split("/")[0]}>
-                    <Route path={`${workflow.path}/*`} element={<Outlet />}>
-                      {workflow.routes.map(route => {
-                        const heading = route.displayName
-                          ? `${workflow.displayName}: ${route.displayName}`
-                          : workflow.displayName;
-                        return (
-                          <Route
-                            key={workflow.path}
-                            path={`${route.path}`}
-                            element={React.cloneElement(<route.component />, {
-                              ...route.componentProps,
-                              heading,
-                            })}
-                          />
-                        );
-                      })}
-                      <Route key={`${workflow.path}/notFound`} path="*" element={<NotFound />} />
-                    </Route>
-                  </ErrorBoundary>
+                  <Route
+                    path={`${workflow.path}/*`}
+                    key={workflow.path.split("/")[0]}
+                    element={
+                      <ErrorBoundary workflow={workflow} key={workflow.path.split("/")[0]}>
+                        <Outlet />
+                      </ErrorBoundary>
+                    }
+                  >
+                    {workflow.routes.map(route => {
+                      const heading = route.displayName
+                        ? `${workflow.displayName}: ${route.displayName}`
+                        : workflow.displayName;
+                      return (
+                        <Route
+                          key={workflow.path}
+                          path={`${route.path}`}
+                          element={React.cloneElement(<route.component />, {
+                            ...route.componentProps,
+                            heading,
+                          })}
+                        />
+                      );
+                    })}
+                    <Route key={`${workflow.path}/notFound`} path="*" element={<NotFound />} />
+                  </Route>
                 ))}
                 <Route key="notFound" path="*" element={<NotFound />} />
               </Route>
