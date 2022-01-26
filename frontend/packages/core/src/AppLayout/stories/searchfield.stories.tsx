@@ -64,7 +64,7 @@ const Grid = styled(MuiGrid)({
 });
 
 const Template = () => (
-  <Grid container alignItems="center" justify="center">
+  <Grid container alignItems="center" justifyContent="center">
     <Box>
       <SearchField />
     </Box>

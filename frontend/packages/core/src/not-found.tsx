@@ -16,7 +16,7 @@ const NotFound: React.FC<{}> = () => (
   <Container
     container
     direction="column"
-    justify="center"
+    justifyContent="center"
     alignItems="center"
     style={{ minHeight: "80vh" }}
   >

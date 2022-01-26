@@ -17,7 +17,7 @@ const Grid = styled(MuiGrid)({
 });
 
 const Template = (props: UserInformationProps) => (
-  <Grid container alignItems="center" justify="center">
+  <Grid container alignItems="center" justifyContent="center">
     <UserInformation {...props} />
   </Grid>
 );

@@ -113,7 +113,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       }
 
       return (
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid container direction="column" justifyContent="center" alignItems="center">
           <Dialog onClose={this.onDetailsClose} open={showDetails} title="Stack Trace">
             <DialogContent>
               <Code>{errorInfo?.componentStack || "Could not determine stack trace"}</Code>

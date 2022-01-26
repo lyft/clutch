@@ -175,7 +175,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                 </ul>
               </div>
             )}
-            <Grid container justify="flex-end">
+            <Grid container justifyContent="flex-end">
               <DialogButton onClick={() => setDetailsOpen(true)}>More Details</DialogButton>
             </Grid>
           </ErrorDetailContainer>

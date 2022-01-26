@@ -90,7 +90,13 @@ export interface AlertPanelProps {
 }
 
 export const AlertPanel = ({ direction = "column", children }: AlertPanelProps) => (
-  <Grid container direction={direction} justify="center" alignContent="space-between" wrap="nowrap">
+  <Grid
+    container
+    direction={direction}
+    justifyContent="center"
+    alignContent="space-between"
+    wrap="nowrap"
+  >
     {children}
   </Grid>
 );

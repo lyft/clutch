@@ -36,7 +36,7 @@ interface LoadableProps {
 const Loadable: React.FC<LoadableProps> = ({ isLoading, variant, children }) => {
   if (variant === "overlay") {
     return (
-      <ContentContainer container direction="column" justify="center" alignItems="center">
+      <ContentContainer container direction="column" justifyContent="center" alignItems="center">
         <ChildrenContainer>{children}</ChildrenContainer>
         {isLoading && <LoadingOveray />}
       </ContentContainer>

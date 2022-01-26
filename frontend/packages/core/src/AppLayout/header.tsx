@@ -39,7 +39,7 @@ const Header: React.FC = () => {
             <Logo />
           </Link>
           <Title>clutch</Title>
-          <Grid container alignItems="center" justify="flex-end">
+          <Grid container alignItems="center" justifyContent="flex-end">
             <Box>
               <SearchField />
             </Box>

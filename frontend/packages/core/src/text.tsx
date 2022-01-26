@@ -37,13 +37,13 @@ const Code = ({ children, showCopyButton = true }: CodeProps) => (
   <Pre>
     {showCopyButton && (
       // TODO: Figure out a more permanent fix for the copy button
-      <CopyButtonContainer container justify="flex-end">
+      <CopyButtonContainer container justifyContent="flex-end">
         <Fab variant="round" size="small">
           <ClipboardButton text={children} />
         </Fab>
       </CopyButtonContainer>
     )}
-    <ContentContainer justify="flex-start" alignItems="center">
+    <ContentContainer justifyContent="flex-start" alignItems="center">
       {children}
     </ContentContainer>
   </Pre>

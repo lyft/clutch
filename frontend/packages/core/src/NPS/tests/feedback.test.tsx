@@ -312,7 +312,7 @@ describe("<NPSFeedback />", () => {
     });
 
     it("center aligns the grid", () => {
-      expect(wrapper.find("form").childAt(0).prop("justify")).toEqual("center");
+      expect(wrapper.find("form").childAt(0).prop("justifyContent")).toEqual("center");
     });
 
     it("styles the submit button correctly", () => {

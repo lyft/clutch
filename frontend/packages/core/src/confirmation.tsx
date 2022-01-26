@@ -37,7 +37,7 @@ const SubtitleContainer = styled.div({
 });
 
 const Confirmation: React.FC<{ action: string }> = ({ action, children }) => (
-  <Grid container direction="column" justify="center" alignItems="center">
+  <Grid container direction="column" justifyContent="center" alignItems="center">
     <IconContainer item>
       <Icon />
     </IconContainer>

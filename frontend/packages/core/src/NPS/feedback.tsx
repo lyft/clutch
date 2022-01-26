@@ -186,7 +186,7 @@ const NPSFeedback = (opts: FeedbackOptions) => {
         container
         direction="row"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
         style={{ padding: "16px" }}
       >
         <MuiGrid item xs={6}>

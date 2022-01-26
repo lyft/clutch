@@ -9,11 +9,13 @@ exports[`Not Found component renders correctly 1`] = `
       </WithStyles(CssBaseline)>
       <StylesProvider injectFirst={true}>
         <NotFound>
-          <Styled(WithStyles(ForwardRef(Grid))) container={true} direction=\\"column\\" justify=\\"center\\" alignItems=\\"center\\" style={{...}}>
-            <WithStyles(ForwardRef(Grid)) container={true} direction=\\"column\\" justify=\\"center\\" alignItems=\\"center\\" style={{...}} className=\\"css-1rc10fs\\">
-              <ForwardRef(Grid) classes={{...}} container={true} direction=\\"column\\" justify=\\"center\\" alignItems=\\"center\\" style={{...}} className=\\"css-1rc10fs\\">
-                <div className=\\"MuiGrid-root css-1rc10fs MuiGrid-container MuiGrid-direction-xs-column MuiGrid-align-items-xs-center MuiGrid-justify-xs-center\\" style={{...}}>
+          <Styled(WithStyles(ForwardRef(Grid))) container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}}>
+            <Noop />
+            <WithStyles(ForwardRef(Grid)) container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}} className=\\"css-1rc10fs\\">
+              <ForwardRef(Grid) classes={{...}} container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}} className=\\"css-1rc10fs\\">
+                <div className=\\"MuiGrid-root css-1rc10fs MuiGrid-container MuiGrid-direction-xs-column MuiGrid-align-items-xs-center MuiGrid-justify-content-xs-center\\" style={{...}}>
                   <Styled(WithStyles(ForwardRef(Grid))) item={true}>
+                    <Noop />
                     <WithStyles(ForwardRef(Grid)) item={true} className=\\"css-sm4uoy\\">
                       <ForwardRef(Grid) classes={{...}} item={true} className=\\"css-sm4uoy\\">
                         <div className=\\"MuiGrid-root css-sm4uoy MuiGrid-item\\">

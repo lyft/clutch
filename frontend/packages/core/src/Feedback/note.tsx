@@ -28,7 +28,7 @@ const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
   return (
     <Paper elevation={0}>
       <Alert severity={severity}>
-        <Grid container justify="flex-start" alignItems="center">
+        <Grid container justifyContent="flex-start" alignItems="center">
           {children}
         </Grid>
       </Alert>
@@ -40,7 +40,7 @@ const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, chil
   <NotePanelContainer
     container
     direction={direction}
-    justify="center"
+    justifyContent="center"
     alignContent="space-between"
     wrap="nowrap"
   >

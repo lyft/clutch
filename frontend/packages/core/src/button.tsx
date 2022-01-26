@@ -223,7 +223,7 @@ export interface ButtonGroupProps {
 
 /** A set of buttons to group together. */
 const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonGroupProps) => (
-  <ButtonGroupContainer container justify={justify} data-border={border}>
+  <ButtonGroupContainer container justifyContent={justify} data-border={border}>
     {children}
   </ButtonGroupContainer>
 );

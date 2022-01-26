@@ -33,7 +33,7 @@ export const StatusIcon: React.FC<StatusProps> = ({
     justifyContent = "center";
   }
   return (
-    <Grid container alignItems="center" justify={justifyContent} {...props}>
+    <Grid container alignItems="center" justifyContent={justifyContent} {...props}>
       {variant === "neutral" && (
         <>
           <StyledStatusIcon data-color="#C2C8F2" /> {children}
