@@ -114,7 +114,7 @@ export const LIGHT_MODE_CHOICES: ClutchColorChoices = {
     tertiary: "#0D103061",
     inverse: "#FFFFFF",
   },
-}
+};
 
 export const DARK_MODE: ClutchPalette = {
   Neutral: {
@@ -226,6 +226,6 @@ export const DARK_MODE_CHOICES: ClutchColorChoices = {
     tertiary: "#FFFFFF61",
     inverse: "#0D1030",
   },
-}
+};
 
 // EXTRA COLORS (TODO) ////////////////////////////////////////////////////////
