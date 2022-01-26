@@ -47233,6 +47233,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.project.v1
                  * @interface IGetProjectsResponse
                  * @property {Object.<string,clutch.project.v1.IProjectResult>|null} [results] GetProjectsResponse results
+                 * @property {Array.<google.rpc.IStatus>|null} [partialFailures] GetProjectsResponse partialFailures
                  */
 
                 /**
@@ -47245,6 +47246,7 @@ export const clutch = $root.clutch = (() => {
                  */
                 function GetProjectsResponse(properties) {
                     this.results = {};
+                    this.partialFailures = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -47258,6 +47260,14 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 GetProjectsResponse.prototype.results = $util.emptyObject;
+
+                /**
+                 * GetProjectsResponse partialFailures.
+                 * @member {Array.<google.rpc.IStatus>} partialFailures
+                 * @memberof clutch.project.v1.GetProjectsResponse
+                 * @instance
+                 */
+                GetProjectsResponse.prototype.partialFailures = $util.emptyArray;
 
                 /**
                  * Verifies a GetProjectsResponse message.
@@ -47278,6 +47288,15 @@ export const clutch = $root.clutch = (() => {
                             let error = $root.clutch.project.v1.ProjectResult.verify(message.results[key[i]]);
                             if (error)
                                 return "results." + error;
+                        }
+                    }
+                    if (message.partialFailures != null && message.hasOwnProperty("partialFailures")) {
+                        if (!Array.isArray(message.partialFailures))
+                            return "partialFailures: array expected";
+                        for (let i = 0; i < message.partialFailures.length; ++i) {
+                            let error = $root.google.rpc.Status.verify(message.partialFailures[i]);
+                            if (error)
+                                return "partialFailures." + error;
                         }
                     }
                     return null;
@@ -47305,6 +47324,16 @@ export const clutch = $root.clutch = (() => {
                             message.results[keys[i]] = $root.clutch.project.v1.ProjectResult.fromObject(object.results[keys[i]]);
                         }
                     }
+                    if (object.partialFailures) {
+                        if (!Array.isArray(object.partialFailures))
+                            throw TypeError(".clutch.project.v1.GetProjectsResponse.partialFailures: array expected");
+                        message.partialFailures = [];
+                        for (let i = 0; i < object.partialFailures.length; ++i) {
+                            if (typeof object.partialFailures[i] !== "object")
+                                throw TypeError(".clutch.project.v1.GetProjectsResponse.partialFailures: object expected");
+                            message.partialFailures[i] = $root.google.rpc.Status.fromObject(object.partialFailures[i]);
+                        }
+                    }
                     return message;
                 };
 
@@ -47321,6 +47350,8 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
+                    if (options.arrays || options.defaults)
+                        object.partialFailures = [];
                     if (options.objects || options.defaults)
                         object.results = {};
                     let keys2;
@@ -47328,6 +47359,11 @@ export const clutch = $root.clutch = (() => {
                         object.results = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.results[keys2[j]] = $root.clutch.project.v1.ProjectResult.toObject(message.results[keys2[j]], options);
+                    }
+                    if (message.partialFailures && message.partialFailures.length) {
+                        object.partialFailures = [];
+                        for (let j = 0; j < message.partialFailures.length; ++j)
+                            object.partialFailures[j] = $root.google.rpc.Status.toObject(message.partialFailures[j], options);
                     }
                     return object;
                 };
