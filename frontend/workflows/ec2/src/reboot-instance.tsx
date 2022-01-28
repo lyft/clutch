@@ -73,12 +73,7 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
-const RebootInstance: React.FC<WorkflowProps> = ({
-  heading,
-  resolverType,
-  notes = [],
-  enableFeedback,
-}) => {
+const RebootInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resourceData: {},
     rebootData: {
@@ -94,7 +89,7 @@ const RebootInstance: React.FC<WorkflowProps> = ({
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading} enableFeedback={enableFeedback}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
       <InstanceDetails name="Verify" />
       <Confirm name="Confirmation" notes={notes} />

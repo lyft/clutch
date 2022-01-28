@@ -87,7 +87,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType, enableFeedback }) => {
+const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
   const dataLayout = {
     resolverInput: {},
     resourceData: {},
@@ -106,7 +106,7 @@ const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType, enableFeed
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading} enableFeedback={enableFeedback}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <NodeIdentifier name="Lookup" resolverType={resolverType} />
       <NodeDetails name="Verify" />
       <Confirm name="Confirmation" />
