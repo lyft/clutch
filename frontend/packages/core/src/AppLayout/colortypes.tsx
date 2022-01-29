@@ -8,14 +8,15 @@ export interface StrokeColors {
 }
 
 export interface StatesColors {
-  primaryHover: string;
-  primaryFocused: string;
-  primaryPressed: string;
-  primarySelected: string;
-  neutralHover: string;
-  neutralFocused: string;
-  neutralPressed: string;
-  neutralSelected: string;
+  activeHover: string;
+  activeFocused: string;
+  activePressed: string;
+  activeSelected: string;
+  defaultHover: string;
+  defaultFocused: string;
+  defaultPressed: string;
+  defaultSelected: string;
+  defaultDisabled: string;
 }
 
 export interface BackgroundColors {
