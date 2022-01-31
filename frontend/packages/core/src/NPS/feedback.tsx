@@ -17,12 +17,14 @@ import { Typography } from "../typography";
 
 import EmojiRatings, { Rating } from "./emojiRatings";
 
+let wizardOrigin;
+
 /** Interfaces */
 
-type Origins = "WIZARD" | "HEADER";
+type Origin = "WIZARD" | "HEADER";
 
 interface FeedbackOptions {
-  origin: Origins;
+  origin: Origin;
   feedbackTypes?: SelectOption[];
   onSubmit?: (submit: boolean) => void;
 }
@@ -47,8 +49,8 @@ export const defaults: IClutch.feedback.v1.ISurvey = {
   ],
 };
 
-const StyledButton = styled(Button)<{ $origin: Origins }>({}, props =>
-  props.$origin === "WIZARD"
+const StyledButton = styled(Button)({}, () =>
+  wizardOrigin
     ? {
         fontSize: "14px",
         padding: "0 8px",
@@ -57,13 +59,13 @@ const StyledButton = styled(Button)<{ $origin: Origins }>({}, props =>
     : null
 );
 
-const StyledTextField = styled(TextField)<{ $origin: Origins }>(
+const StyledTextField = styled(TextField)(
   {
     margin: "16px 0px 32px 0px",
   },
-  props => ({
+  () => ({
     ".MuiInputBase-root": {
-      fontSize: props.$origin === "WIZARD" ? "14px" : "16px",
+      fontSize: wizardOrigin ? "14px" : "16px",
     },
   })
 );
@@ -94,9 +96,9 @@ const FeedbackAlert = () => {
  * @param opts Available feedback options
  * @returns NPSFeedback component
  */
-const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
+const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOptions) => {
   const [hasSubmit, setHasSubmit] = useState<boolean>(false);
-  const [selectedEmoji, setSelectedEmoji] = useState<Rating>(null);
+  const [selectedRating, setSelectedRating] = useState<Rating>(null);
   const [freeformFeedback, setFreeformFeedback] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
@@ -104,7 +106,7 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
   const [requestId, setRequestId] = useState<string>("");
   const maxLength = 180;
   const debounceTimer = 500;
-  const wizardOrigin = origin === "WIZARD";
+  wizardOrigin = origin === "WIZARD";
 
   const trimmed =
     freeformFeedback.trim().length > maxLength
@@ -140,8 +142,8 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
         setRequestId(uuid());
         setSurvey(data);
 
-        if (options.feedbackTypes && options.feedbackTypes.length) {
-          setFeedbackType(options.feedbackTypes[0].value || options.feedbackTypes[0].label);
+        if (feedbackTypes && feedbackTypes.length) {
+          setFeedbackType(feedbackTypes[0].value || feedbackTypes[0].label);
         }
       });
   }, []);
@@ -161,15 +163,15 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
 
   // On a change to submit or selected will attempt to send a feedback request
   React.useEffect(() => {
-    if (selectedEmoji) {
+    if (selectedRating) {
       sendFeedback({
         id: requestId,
         feedback: {
           feedbackType: wizardOrigin ? window.location.pathname : feedbackType,
           freeformResponse: trimmed,
-          ratingLabel: selectedEmoji.label,
+          ratingLabel: selectedRating.label,
           ratingScale: {
-            emoji: IClutch.feedback.v1.EmojiRating[selectedEmoji.emoji],
+            emoji: IClutch.feedback.v1.EmojiRating[selectedRating.emoji],
           },
         },
         metadata: {
@@ -180,7 +182,7 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
         },
       });
     }
-  }, [selectedEmoji, feedbackType, hasSubmit]);
+  }, [selectedRating, feedbackType, hasSubmit]);
 
   // Form onSubmit handler
   const submitFeedback = e => {
@@ -188,8 +190,8 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
       e.preventDefault();
     }
     setHasSubmit(true);
-    if (options.onSubmit) {
-      options.onSubmit(true);
+    if (onSubmit) {
+      onSubmit(true);
     }
   };
 
@@ -217,19 +219,19 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
         >
           <EmojiRatings
             ratings={survey.ratingLabels}
-            setRating={setSelectedEmoji}
+            setRating={setSelectedRating}
             placement={wizardOrigin ? "top" : "bottom"}
             buttonSize={wizardOrigin ? "small" : "medium"}
           />
         </MuiGrid>
-        {selectedEmoji !== null && (
+        {selectedRating !== null && (
           <>
-            {!wizardOrigin && options.feedbackTypes && (
+            {!wizardOrigin && feedbackTypes && (
               <MuiGrid item xs={12} style={{ margin: "32px 0px 16px 0px" }}>
                 <Select
                   name="anytimeSelect"
                   label="Choose a type of feedback you want to submit"
-                  options={options.feedbackTypes}
+                  options={feedbackTypes}
                   onChange={setFeedbackType}
                 />
               </MuiGrid>
@@ -238,7 +240,6 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
               <StyledTextField
                 multiline
                 fullWidth
-                $origin={origin}
                 placeholder={survey.freeformPrompt}
                 value={freeformFeedback}
                 helperText={`${freeformFeedback?.trim().length} / ${maxLength}`}
@@ -259,7 +260,6 @@ const NPSFeedback = ({ origin = "HEADER", ...options }: FeedbackOptions) => {
               }}
             >
               <StyledButton
-                $origin={origin}
                 type="submit"
                 text="Submit"
                 variant={wizardOrigin ? "secondary" : "primary"}

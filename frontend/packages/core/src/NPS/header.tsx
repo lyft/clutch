@@ -29,7 +29,6 @@ const Popper = styled(MuiPopper)({
 
 const Paper = styled(MuiPaper)({
   width: "350px",
-  border: "1px solid #E7E7EA",
   boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
   borderRadius: "8px",
 });
@@ -90,21 +89,17 @@ const HeaderFeedback = () => {
     setOpen(false);
   };
 
-  const FeedbackIconProps = {
-    edge: "end",
-    id: "anytimeFeedbackIcon",
-  };
-
   return (
     <>
       <StyledFeedbackIcon
         variant="neutral"
         ref={anchorRef}
-        aria-controls={open ? "anytime-feedback" : undefined}
+        aria-controls={open ? "header-feedback" : undefined}
         $open={open}
         aria-haspopup="true"
         onClick={handleToggle}
-        {...FeedbackIconProps}
+        edge="end"
+        id="headerFeedbackIcon"
       >
         <ChatBubbleOutlineIcon />
       </StyledFeedbackIcon>
