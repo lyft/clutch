@@ -13,7 +13,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.28.0
 	github.com/aws/aws-sdk-go-v2/service/iam v1.16.0
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.13.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.1
 	github.com/aws/aws-sdk-go-v2/service/sts v1.14.0
 	github.com/aws/smithy-go v1.10.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
