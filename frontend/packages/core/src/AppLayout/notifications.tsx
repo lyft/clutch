@@ -111,7 +111,7 @@ const Notifications: React.FC<NotificationsProp> = ({ data }) => {
                 <MenuList
                   autoFocusItem={open}
                   id="notification-options"
-                  onKeyDown={() => handleListKeyDown}
+                  onKeyDown={e => handleListKeyDown(e)}
                 >
                   {data?.map(d => {
                     return (
