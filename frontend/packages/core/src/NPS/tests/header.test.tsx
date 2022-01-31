@@ -29,13 +29,13 @@ describe("<NPSHeader />", () => {
     });
 
     it("renders clickable feedback icon", () => {
-      const feedbackIcon = wrapper.find("#anytimeFeedbackIcon");
+      const feedbackIcon = wrapper.find("#headerFeedbackIcon");
       expect(feedbackIcon).toBeTruthy();
       expect(feedbackIcon.children().contains(<ChatBubbleOutlineIcon />)).toBeTruthy();
     });
 
     it("opens a popper on click of feedback icon", () => {
-      const feedbackIcon = wrapper.find("#anytimeFeedbackIcon");
+      const feedbackIcon = wrapper.find("#headerFeedbackIcon");
 
       expect(wrapper.find("Styled(Component)").at(1).prop("open")).toBeFalsy();
 
