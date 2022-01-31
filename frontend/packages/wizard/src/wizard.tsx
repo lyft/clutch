@@ -16,7 +16,7 @@ import {
 } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import { Container as MuiContainer, Grid, Paper as MuiPaper, Typography } from "@material-ui/core";
+import { Container as MuiContainer, Grid, Paper as MuiPaper, Typography } from "@mui/material";
 
 import { useWizardState, WizardAction } from "./state";
 import type { WizardStepProps } from "./step";
@@ -143,12 +143,12 @@ const Wizard = ({
       <>
         <DataLayoutContext.Provider value={dataLayoutManager}>
           <WizardContext.Provider value={() => context(child)}>
-            <Grid container direction="column" justify="center" alignItems="center">
+            <Grid container direction="column" justifyContent="center" alignItems="center">
               {child}
             </Grid>
           </WizardContext.Provider>
         </DataLayoutContext.Provider>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           {((state.activeStep === lastStepIndex && !isLoading) || hasError) && (
             <>
               {enableFeedback && (
@@ -189,7 +189,7 @@ const Wizard = ({
       <Grid
         container
         direction="column"
-        justify="center"
+        justifyContent="center"
         alignItems="stretch"
         style={{ display: "inline" }}
       >
