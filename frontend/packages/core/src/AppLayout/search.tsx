@@ -279,7 +279,7 @@ const SearchField: React.FC = () => {
             popupIcon={<CustomCloseIcon />}
             forcePopupIcon={!!showOptions}
             noOptionsText="No results found"
-            onKeyDown={() => handleListKeyDown}
+            onKeyDown={e => handleListKeyDown(e)}
           />
         </ClickAwayListener>
       ) : (
