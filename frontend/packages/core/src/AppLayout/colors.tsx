@@ -1,4 +1,4 @@
-// COLORS FROM FIGMA as of 01-29-2022
+// COLORS FROM FIGMA as of 01-31-2022
 // NOTE THAT THOSE WITH GRADIENTS ONLY HAVE THEIR BASES
 import type { ClutchColorChoices, ClutchPalette } from "./colortypes";
 
