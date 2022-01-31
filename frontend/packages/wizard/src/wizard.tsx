@@ -136,26 +136,28 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
           </WizardContext.Provider>
         </DataLayoutContext.Provider>
         <Grid container justify="center">
-          {((state.activeStep === lastStepIndex && !isLoading && isMultistep) || hasError) && (
+          {((state.activeStep === lastStepIndex && !isLoading) || hasError) && (
             <>
               <SimpleFeatureFlag feature="npsWizard">
                 <FeatureOn>
                   <NPSWizard />
                 </FeatureOn>
               </SimpleFeatureFlag>
-              <ButtonGroup>
-                <Button
-                  text="Start Over"
-                  onClick={() => {
-                    dataLayoutManager.reset();
-                    setSearchParams({});
-                    dispatch(WizardAction.RESET);
-                    if (origin) {
-                      navigate(origin);
-                    }
-                  }}
-                />
-              </ButtonGroup>
+              {(isMultistep || hasError) && (
+                <ButtonGroup>
+                  <Button
+                    text="Start Over"
+                    onClick={() => {
+                      dataLayoutManager.reset();
+                      setSearchParams({});
+                      dispatch(WizardAction.RESET);
+                      if (origin) {
+                        navigate(origin);
+                      }
+                    }}
+                  />
+                </ButtonGroup>
+              )}
             </>
           )}
         </Grid>
