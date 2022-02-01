@@ -58,7 +58,7 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
       label: workflow.group,
       group: sortBy(
         workflow.routes.map(route => ({
-          label: route.displayName,
+          label: route.displayName || workflow.displayName,
           value: `/${workflow.path}/${route.path}`,
         })),
         ["label"]
