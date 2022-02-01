@@ -3,9 +3,9 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import { Divider, LinearProgress } from "@material-ui/core";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
+import { Divider, LinearProgress } from "@mui/material";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";

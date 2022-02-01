@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Checkbox, Switch } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import IconButton from "@material-ui/core/IconButton";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ClearIcon from "@material-ui/icons/Clear";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ClearIcon from "@mui/icons-material/Clear";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import IconButton from "@mui/material/IconButton";
 
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
 import type { Group } from "./types";
@@ -213,6 +213,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                           payload: { group, projects: [key] },
                         })
                       }
+                      size="large"
                     >
                       <ClearIcon />
                     </IconButton>

@@ -17,7 +17,7 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import styled from "@emotion/styled";
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 

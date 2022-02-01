@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Box } from "@material-ui/core";
+import { Box } from "@mui/material";
 import _ from "lodash";
 
 import {

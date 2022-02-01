@@ -13,7 +13,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import SearchIcon from "@material-ui/icons/Search";
+import SearchIcon from "@mui/icons-material/Search";
 import * as yup from "yup";
 
 const Container = styled.div({
@@ -85,7 +85,7 @@ const K8sDashSearch = ({ onSubmit }) => {
               helperText={errors?.clientset?.message}
               inputRef={register}
             />
-            <IconButton type="submit">
+            <IconButton type="submit" size="large">
               <SearchIcon />
             </IconButton>
           </FormRow>
