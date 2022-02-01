@@ -17,8 +17,6 @@ import { Typography } from "../typography";
 
 import EmojiRatings, { Rating } from "./emojiRatings";
 
-let wizardOrigin;
-
 /** Interfaces */
 
 type Origin = "WIZARD" | "HEADER";
@@ -49,8 +47,8 @@ export const defaults: IClutch.feedback.v1.ISurvey = {
   ],
 };
 
-const StyledButton = styled(Button)({}, () =>
-  wizardOrigin
+const StyledButton = styled(Button)<{ $origin: Origin }>({}, ({ $origin }) =>
+  $origin === "WIZARD"
     ? {
         fontSize: "14px",
         padding: "0 8px",
@@ -59,13 +57,13 @@ const StyledButton = styled(Button)({}, () =>
     : null
 );
 
-const StyledTextField = styled(TextField)(
+const StyledTextField = styled(TextField)<{ $origin: Origin }>(
   {
     margin: "16px 0px 32px 0px",
   },
-  () => ({
+  ({ $origin }) => ({
     ".MuiInputBase-root": {
-      fontSize: wizardOrigin ? "14px" : "16px",
+      fontSize: $origin === "WIZARD" ? "14px" : "16px",
     },
   })
 );
@@ -106,7 +104,7 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
   const [requestId, setRequestId] = useState<string>("");
   const maxLength = 180;
   const debounceTimer = 500;
-  wizardOrigin = origin === "WIZARD";
+  const wizardOrigin = origin === "WIZARD";
 
   const trimmed =
     freeformFeedback.trim().length > maxLength
@@ -240,6 +238,7 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
               <StyledTextField
                 multiline
                 fullWidth
+                $origin={origin}
                 placeholder={survey.freeformPrompt}
                 value={freeformFeedback}
                 helperText={`${freeformFeedback?.trim().length} / ${maxLength}`}
@@ -262,6 +261,7 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
               <StyledButton
                 type="submit"
                 text="Submit"
+                $origin={origin}
                 variant={wizardOrigin ? "secondary" : "primary"}
                 disabled={error}
               />
