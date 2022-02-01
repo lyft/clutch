@@ -24539,6 +24539,288 @@ export const clutch = $root.clutch = (() => {
                 return sourcegraph;
             })();
 
+            service.temporal = (function() {
+
+                /**
+                 * Namespace temporal.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const temporal = {};
+
+                temporal.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.temporal
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.temporal.v1
+                         * @interface IConfig
+                         * @property {string|null} [host] Config host
+                         * @property {number|null} [port] Config port
+                         * @property {clutch.config.service.temporal.v1.IConnectionOptions|null} [connectionOptions] Config connectionOptions
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.temporal.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.temporal.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config host.
+                         * @member {string} host
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.host = "";
+
+                        /**
+                         * Config port.
+                         * @member {number} port
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.port = 0;
+
+                        /**
+                         * Config connectionOptions.
+                         * @member {clutch.config.service.temporal.v1.IConnectionOptions|null|undefined} connectionOptions
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.connectionOptions = null;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                if (!$util.isString(message.host))
+                                    return "host: string expected";
+                            if (message.port != null && message.hasOwnProperty("port"))
+                                if (!$util.isInteger(message.port))
+                                    return "port: integer expected";
+                            if (message.connectionOptions != null && message.hasOwnProperty("connectionOptions")) {
+                                let error = $root.clutch.config.service.temporal.v1.ConnectionOptions.verify(message.connectionOptions);
+                                if (error)
+                                    return "connectionOptions." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.temporal.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.temporal.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.temporal.v1.Config();
+                            if (object.host != null)
+                                message.host = String(object.host);
+                            if (object.port != null)
+                                message.port = object.port >>> 0;
+                            if (object.connectionOptions != null) {
+                                if (typeof object.connectionOptions !== "object")
+                                    throw TypeError(".clutch.config.service.temporal.v1.Config.connectionOptions: object expected");
+                                message.connectionOptions = $root.clutch.config.service.temporal.v1.ConnectionOptions.fromObject(object.connectionOptions);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @static
+                         * @param {clutch.config.service.temporal.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.host = "";
+                                object.port = 0;
+                                object.connectionOptions = null;
+                            }
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                object.host = message.host;
+                            if (message.port != null && message.hasOwnProperty("port"))
+                                object.port = message.port;
+                            if (message.connectionOptions != null && message.hasOwnProperty("connectionOptions"))
+                                object.connectionOptions = $root.clutch.config.service.temporal.v1.ConnectionOptions.toObject(message.connectionOptions, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.temporal.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    v1.ConnectionOptions = (function() {
+
+                        /**
+                         * Properties of a ConnectionOptions.
+                         * @memberof clutch.config.service.temporal.v1
+                         * @interface IConnectionOptions
+                         * @property {boolean|null} [useSystemCaBundle] ConnectionOptions useSystemCaBundle
+                         * @property {boolean|null} [enableHealthCheck] ConnectionOptions enableHealthCheck
+                         */
+
+                        /**
+                         * Constructs a new ConnectionOptions.
+                         * @memberof clutch.config.service.temporal.v1
+                         * @classdesc Represents a ConnectionOptions.
+                         * @implements IConnectionOptions
+                         * @constructor
+                         * @param {clutch.config.service.temporal.v1.IConnectionOptions=} [properties] Properties to set
+                         */
+                        function ConnectionOptions(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * ConnectionOptions useSystemCaBundle.
+                         * @member {boolean} useSystemCaBundle
+                         * @memberof clutch.config.service.temporal.v1.ConnectionOptions
+                         * @instance
+                         */
+                        ConnectionOptions.prototype.useSystemCaBundle = false;
+
+                        /**
+                         * ConnectionOptions enableHealthCheck.
+                         * @member {boolean} enableHealthCheck
+                         * @memberof clutch.config.service.temporal.v1.ConnectionOptions
+                         * @instance
+                         */
+                        ConnectionOptions.prototype.enableHealthCheck = false;
+
+                        /**
+                         * Verifies a ConnectionOptions message.
+                         * @function verify
+                         * @memberof clutch.config.service.temporal.v1.ConnectionOptions
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        ConnectionOptions.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.useSystemCaBundle != null && message.hasOwnProperty("useSystemCaBundle"))
+                                if (typeof message.useSystemCaBundle !== "boolean")
+                                    return "useSystemCaBundle: boolean expected";
+                            if (message.enableHealthCheck != null && message.hasOwnProperty("enableHealthCheck"))
+                                if (typeof message.enableHealthCheck !== "boolean")
+                                    return "enableHealthCheck: boolean expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a ConnectionOptions message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.temporal.v1.ConnectionOptions
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.temporal.v1.ConnectionOptions} ConnectionOptions
+                         */
+                        ConnectionOptions.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.temporal.v1.ConnectionOptions)
+                                return object;
+                            let message = new $root.clutch.config.service.temporal.v1.ConnectionOptions();
+                            if (object.useSystemCaBundle != null)
+                                message.useSystemCaBundle = Boolean(object.useSystemCaBundle);
+                            if (object.enableHealthCheck != null)
+                                message.enableHealthCheck = Boolean(object.enableHealthCheck);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a ConnectionOptions message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.temporal.v1.ConnectionOptions
+                         * @static
+                         * @param {clutch.config.service.temporal.v1.ConnectionOptions} message ConnectionOptions
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        ConnectionOptions.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.useSystemCaBundle = false;
+                                object.enableHealthCheck = false;
+                            }
+                            if (message.useSystemCaBundle != null && message.hasOwnProperty("useSystemCaBundle"))
+                                object.useSystemCaBundle = message.useSystemCaBundle;
+                            if (message.enableHealthCheck != null && message.hasOwnProperty("enableHealthCheck"))
+                                object.enableHealthCheck = message.enableHealthCheck;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this ConnectionOptions to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.temporal.v1.ConnectionOptions
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        ConnectionOptions.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return ConnectionOptions;
+                    })();
+
+                    return v1;
+                })();
+
+                return temporal;
+            })();
+
             service.topology = (function() {
 
                 /**
