@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 
+import { FeatureOn, SimpleFeatureFlag } from "../flags";
+import { NPSHeader } from "../NPS";
+
 import Logo from "./logo";
 import Notifications from "./notifications";
 import SearchField from "./search";
@@ -44,6 +47,11 @@ const Header: React.FC = () => {
               <SearchField />
             </Box>
             {showNotifications && <Notifications />}
+            <SimpleFeatureFlag feature="npsHeader">
+              <FeatureOn>
+                <NPSHeader />
+              </FeatureOn>
+            </SimpleFeatureFlag>
             <UserInformation />
           </Grid>
         </Toolbar>
