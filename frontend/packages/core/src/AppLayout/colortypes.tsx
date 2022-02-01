@@ -1,30 +1,23 @@
 import type { Color } from "@material-ui/core";
 
-export interface StrokeColors {
+export interface StrokeColor {
   primary: string;
   secondary: string;
   tertiary: string;
   inverse: string;
 }
 
-export interface StatesColors {
-  activeHover: string;
-  activeFocused: string;
-  activePressed: string;
-  activeSelected: string;
-  defaultHover: string;
-  defaultFocused: string;
-  defaultPressed: string;
-  defaultSelected: string;
-  defaultDisabled: string;
+export interface StateColor {
+  active: string;
+  default: string;
 }
 
-export interface BackgroundColors {
+export interface BackgroundColor {
   primary: string;
   secondary: string;
 }
 
-export interface TypographyColors {
+export interface TypographyColor {
   primary: string;
   secondary: string;
   tertiary: string;
@@ -32,16 +25,22 @@ export interface TypographyColors {
 }
 
 export interface ClutchPalette {
-  Neutral: Color;
-  Blue: Color;
-  Green: Color;
-  Amber: Color;
-  Red: Color;
+  neutral: Color;
+  blue: Color;
+  green: Color;
+  amber: Color;
+  red: Color;
 }
 // TODO: choose a better name for this
 export interface ClutchColorChoices {
-  Stroke: StrokeColors;
-  Background: BackgroundColors;
-  States: StatesColors;
-  Typography: TypographyColors; // Typography and Icons
+  stroke: StrokeColor;
+  background: BackgroundColor;
+  typography: TypographyColor; // Typography and Icons
+  states: {
+    hover: StateColor;
+    focused: StateColor;
+    pressed: StateColor;
+    selected: StateColor;
+    disabled: StateColor;
+  }
 }

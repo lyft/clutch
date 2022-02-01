@@ -3,7 +3,7 @@
 import type { ClutchColorChoices, ClutchPalette } from "./colortypes";
 
 export const LIGHT_MODE: ClutchPalette = {
-  Neutral: {
+  neutral: {
     50: "#F8F8F9",
     100: "#F0F1F3",
     200: "#DBDBE0",
@@ -19,7 +19,7 @@ export const LIGHT_MODE: ClutchPalette = {
     A400: "",
     A700: "",
   },
-  Blue: {
+  blue: {
     50: "#F9F9FE",
     100: "#F5F6FD",
     200: "#EBEDFB",
@@ -35,7 +35,7 @@ export const LIGHT_MODE: ClutchPalette = {
     A400: "",
     A700: "",
   },
-  Green: {
+  green: {
     50: "#E5FCE8",
     100: "#CBF7CF",
     200: "#ACF2B2",
@@ -51,7 +51,7 @@ export const LIGHT_MODE: ClutchPalette = {
     A400: "",
     A700: "",
   },
-  Amber: {
+  amber: {
     50: "#FFFBEB",
     100: "#FEF3C7",
     200: "#FDE68A",
@@ -67,7 +67,7 @@ export const LIGHT_MODE: ClutchPalette = {
     A400: "",
     A700: "",
   },
-  Red: {
+  red: {
     50: "#FFF4F3",
     100: "#FDDCD2",
     200: "#F6A996",
@@ -85,8 +85,8 @@ export const LIGHT_MODE: ClutchPalette = {
   },
 };
 
-// TODO: come up with a better name
-// The reason why I separated them from above is the above is JUST colors
+/*
+// TODO: Once colors are added to palettes, use them in choices
 export const LIGHT_MODE_CHOICES: ClutchColorChoices = {
   Stroke: {
     primary: "#0D1030",
@@ -116,9 +116,10 @@ export const LIGHT_MODE_CHOICES: ClutchColorChoices = {
     inverse: "#FFFFFF",
   },
 };
+*/
 
 export const DARK_MODE: ClutchPalette = {
-  Neutral: {
+  neutral: {
     50: "#232542",
     100: "#30324E",
     200: "#3E4059",
@@ -134,7 +135,7 @@ export const DARK_MODE: ClutchPalette = {
     A400: "",
     A700: "",
   },
-  Blue: {
+  blue: {
     50: "#090A42",
     100: "#050656",
     200: "#0A086B",
@@ -150,7 +151,7 @@ export const DARK_MODE: ClutchPalette = {
     A400: "",
     A700: "",
   },
-  Green: {
+  green: {
     50: "#002C05",
     100: "#084713",
     200: "#145F1D",
@@ -166,7 +167,7 @@ export const DARK_MODE: ClutchPalette = {
     A400: "",
     A700: "",
   },
-  Amber: {
+  amber: {
     50: "#352215",
     100: "#7E3E02",
     200: "#985304",
@@ -182,7 +183,7 @@ export const DARK_MODE: ClutchPalette = {
     A400: "",
     A700: "",
   },
-  Red: {
+  red: {
     50: "#501306",
     100: "#621809",
     200: "#751E0D",
@@ -200,6 +201,8 @@ export const DARK_MODE: ClutchPalette = {
   },
 };
 
+/*
+// TODO: Once colors are added to palettes, use them in choices
 export const DARK_MODE_CHOICES: ClutchColorChoices = {
   Stroke: {
     primary: "#FFFFFFDE",
@@ -229,5 +232,6 @@ export const DARK_MODE_CHOICES: ClutchColorChoices = {
     inverse: "#0D1030",
   },
 };
+*/
 
 // EXTRA COLORS (TODO) ////////////////////////////////////////////////////////
