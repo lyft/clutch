@@ -1,7 +1,7 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
 import styled from "@emotion/styled";
-import { Box, Grid as MuiGrid } from "@material-ui/core";
+import { Box, Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
@@ -64,7 +64,7 @@ const Grid = styled(MuiGrid)({
 });
 
 const Template = () => (
-  <Grid container alignItems="center" justify="center">
+  <Grid container alignItems="center" justifyContent="center">
     <Box>
       <SearchField />
     </Box>

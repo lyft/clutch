@@ -5,9 +5,9 @@ import {
   Avatar as MuiAvatar,
   Drawer as MuiDrawer,
   List,
-  ListItem,
+  ListItemButton,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import _ from "lodash";
 
 import { useAppContext } from "../Contexts";
@@ -35,7 +35,7 @@ const GroupList = styled(List)({
   padding: "0px",
 });
 
-const GroupListItem = styled(ListItem)({
+const GroupListItem = styled(ListItemButton)({
   flexDirection: "column",
   minHeight: "82px",
   padding: "16px 8px 16px 8px",
@@ -108,7 +108,6 @@ const Group = ({ heading, open = false, updateOpenGroup, closeGroup, children }:
   return (
     <GroupList data-qa="workflowGroup">
       <GroupListItem
-        button
         selected={open}
         ref={anchorRef}
         aria-controls={open ? "workflow-options" : undefined}

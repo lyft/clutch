@@ -9,8 +9,8 @@ import {
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+} from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const StyledNotificationsIcon = styled(IconButton)({
   color: "#ffffff",

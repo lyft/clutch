@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Fab, Link } from "@material-ui/core";
-import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import { Fab, Link } from "@mui/material";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
 const Button = styled(Fab)({
   position: "fixed",
