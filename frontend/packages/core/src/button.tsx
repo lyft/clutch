@@ -1,12 +1,11 @@
 import * as React from "react";
+import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import type {
   ButtonProps as MuiButtonProps,
-  GridJustification,
   IconButtonProps as MuiIconButtonProps,
-} from "@material-ui/core";
-import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@material-ui/core";
-import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+} from "@mui/material";
+import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@mui/material";
 
 import styled from "./styled";
 
@@ -127,7 +126,6 @@ const ICON_BUTTON_STYLE_MAP = {
     padding: 12,
   },
 };
-type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
 
 export const ICON_BUTTON_VARIANTS = Object.keys(ICON_BUTTON_STYLE_MAP);
 
@@ -169,10 +167,10 @@ const StyledIconButton = styled(MuiIconButton)<{
   ...colorCss(props.$palette),
 }));
 
-export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
+export interface IconButtonProps
+  extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick" | "size"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
-  size?: IconButtonSize;
   children: React.ReactElement;
 }
 
@@ -216,14 +214,14 @@ export interface ButtonGroupProps {
   /** Buttons within the group. */
   children: React.ReactElement<ButtonProps> | React.ReactElement<ButtonProps>[];
   /** Justification of buttons. */
-  justify?: GridJustification;
+  justify?: string;
   /** Position of button group border. Defaults to top. */
   border?: "top" | "bottom";
 }
 
 /** A set of buttons to group together. */
 const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonGroupProps) => (
-  <ButtonGroupContainer container justify={justify} data-border={border}>
+  <ButtonGroupContainer container justifyContent={justify} data-border={border}>
     {children}
   </ButtonGroupContainer>
 );
