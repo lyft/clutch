@@ -139,15 +139,6 @@ const autoComplete = async (search: string): Promise<any> => {
 const Form = styled.form({});
 
 const ProjectSelector = () => {
-  const validation = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    shouldFocusError: false,
-  });
-
-  const handleChanges = (event: React.ChangeEvent<ChangeEventTarget> | React.KeyboardEvent) => {
-    setCustomProject(convertChangeEvent(event).target.value);
-  };
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
@@ -220,6 +211,16 @@ const ProjectSelector = () => {
   };
 
   const hasError = state.error !== undefined && state.error !== null;
+
+  const validation = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+  });
+
+  const handleChanges = (event: React.ChangeEvent<ChangeEventTarget> | React.KeyboardEvent) => {
+    setCustomProject(convertChangeEvent(event).target.value);
+  };
 
   return (
     <DispatchContext.Provider value={dispatch}>
