@@ -184,7 +184,7 @@ const StyledSelect = styled(BaseSelect)({
   },
 
   ".MuiList-root": {
-    maxHeight: "400px",
+    maxHeight: "50vh",
   },
 });
 
