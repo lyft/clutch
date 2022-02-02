@@ -102,7 +102,6 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
   const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
   const [feedbackType, setFeedbackType] = useState<string>(null);
   const [requestId, setRequestId] = useState<string>("");
-  const { origin, onSubmit } = opts;
   const maxLength = 180;
   const debounceTimer = 500;
   const wizardOrigin = origin === "WIZARD";
