@@ -7,6 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/project/v1;projectv1";
 import "api/v1/annotations.proto";
 import "core/project/v1/project.proto";
 import "google/api/annotations.proto";
+import "google/rpc/status.proto";
 
 service ProjectAPI {
   rpc GetProjects(GetProjectsRequest) returns (GetProjectsResponse) {
@@ -35,4 +36,5 @@ message ProjectResult {
 
 message GetProjectsResponse {
   map<string, ProjectResult> results = 1;
+  repeated google.rpc.Status partial_failures = 2;
 }
