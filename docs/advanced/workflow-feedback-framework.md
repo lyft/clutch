@@ -4,8 +4,17 @@ title: Workflow Feedback Collection
 ---
 
 Clutch has support for collecting and storing feedback on your workflows through:
-- An in-line feedback placement on workflows that use the [Wizard component](https://clutch.sh/docs/development/frontend/overview/#clutch-shwizard), allowing users to leave feedback directly in the last step of the workflow operation.
+- An in-line feedback placement on workflows that use the [Wizard component](https://clutch.sh/docs/development/frontend/overview/#clutch-shwizard), allowing users to leave feedback directly in the workflow.
+
+<p align="center">
+<img alt="Wizard Feedback Placement" src="https://user-images.githubusercontent.com/39421794/152175146-78139eca-3722-4ae9-a4be-7bb5488bbb15.png" width="50%"/>
+</p>
+
 - A feedback placement on the app header, allowing users to leave feedback anytime. Users can provide general feedback or specify a feedback type in their submission, so this placement is also useful for workflows that don’t use the Wizard.
+
+<p align="center">
+<img alt="Header Feedback Placement" src="https://user-images.githubusercontent.com/39421794/152175327-8bb57711-053f-4b08-8034-ab24d92dfeb1.png" width="50%"/>
+</p>
 
 ## Components
 The Clutch feedback framework consists of three parts: frontend, backend server, and [feature flags](https://clutch.sh/docs/development/feature-flags). Below are the components responsible for enabling feedback collection in Clutch. **Registration of all the components is required**.
@@ -67,12 +76,12 @@ services:
 ```
 
 #### Customization
-The survey questions for each feedback placement are driven by the clutch-config. As seen in the example above, provide the question that you want the user to rate as well as the label (which will be used as the tooltip text for corresponding emoji option) for each emoji rating.
+The survey questions for each feedback placement are driven by the clutch-config. Provide the question that you want the user to rate as well as the label (which will be used as the tooltip text for the corresponding emoji option) for each emoji rating.
 
 ## Backend
 
 ### Feedback Service
-The feedback service has two responsibilties: normalize the feedback rating to a score out a 100 (described below) and save the feedback to the database.
+The feedback service has two responsibilities: normalize the feedback rating to a score out a 100 (described below) and save the feedback to the database.
 
 #### Rating System
 The Clutch feedback framework currently ships with a three-point emoji rating scale, which gets normalized to a raw score out of a 100 (sad emoji: 30, neutral emoji: 70, happy emoji: 100). There are two main benefits:
@@ -125,4 +134,4 @@ Some pieces to highlight:
 - `ratingScale`: the scale presented to the user as well as the scale option the user selected. This is then normalized to a score out of 100.
 - `metadata`: additional contextual information on the feedback submission, such as what was the survey question, what was the origin (i.e. Wizard or header placement), the url search params (to know what the user was looking up), and whether the feedback was formally submitted (described below).
 
-In order to collect as much feedback data as possible, a `submitSuvey` API call is made every time an emoji rating is selected, even if the user did not click the submit button. Because of this, the feedback service uses the `client_id` from the feedback submission to continue updating the user’s feedback throughout the session to ensure we store the most recent submission. As part of this, there is a `userSubmitted` field in the feedback metadata to know whether the submission was formally submitted.
+In order to collect as much feedback data as possible, a `submitSuvey` API call is made every time an emoji rating is selected even if the user did not click the submit button. Because of this, the feedback service uses the `client_id` from the feedback submission to continue updating the user’s feedback throughout the session to ensure we store the most recent submission. As part of this, there is a `userSubmitted` field in the feedback metadata to know whether the submission was formally submitted.
