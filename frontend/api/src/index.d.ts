@@ -18743,6 +18743,12 @@ export namespace clutch {
 
                 /** Event eventTimeMillis */
                 eventTimeMillis?: (number|Long|null);
+
+                /** Event lastTimestampMillis */
+                lastTimestampMillis?: (number|Long|null);
+
+                /** Event creationTimeMillis */
+                creationTimeMillis?: (number|Long|null);
             }
 
             /** Represents an Event. */
@@ -18777,6 +18783,12 @@ export namespace clutch {
 
                 /** Event eventTimeMillis. */
                 public eventTimeMillis: (number|Long);
+
+                /** Event lastTimestampMillis. */
+                public lastTimestampMillis: (number|Long);
+
+                /** Event creationTimeMillis. */
+                public creationTimeMillis: (number|Long);
 
                 /**
                  * Verifies an Event message.

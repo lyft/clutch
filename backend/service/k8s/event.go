@@ -39,15 +39,21 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 	if clusterName == "" {
 		clusterName = cluster
 	}
+	// Note for LastTimestamp, CreationTime, and EventTime - in k8s 1.25 LastTimestamp is deprecated in favor of
+	// EventTime. However, some objects currently use EventTime, while others use LastTimestamp. Using the
+	// CreationTime from the Metadata is an option as it refers to the creation of the object by the server.
+	// See https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#ObjectMeta
 	return &k8sapiv1.Event{
-		Cluster:            clusterName,
-		Namespace:          k8sEvent.Namespace,
-		Name:               k8sEvent.Name,
-		Reason:             k8sEvent.Reason,
-		Description:        k8sEvent.Message,
-		InvolvedObjectName: k8sEvent.InvolvedObject.Name,
-		Kind:               protoForObjectKind(k8sEvent.InvolvedObject.Kind),
-		EventTimeMillis:    k8sEvent.EventTime.UnixMilli(),
+		Cluster:             clusterName,
+		Namespace:           k8sEvent.Namespace,
+		Name:                k8sEvent.Name,
+		Reason:              k8sEvent.Reason,
+		Description:         k8sEvent.Message,
+		InvolvedObjectName:  k8sEvent.InvolvedObject.Name,
+		Kind:                protoForObjectKind(k8sEvent.InvolvedObject.Kind),
+		LastTimestampMillis: k8sEvent.LastTimestamp.UnixMilli(),
+		CreationTimeMillis:  k8sEvent.GetObjectMeta().GetCreationTimestamp().UnixMilli(),
+		EventTimeMillis:     k8sEvent.EventTime.UnixMilli(),
 	}
 }
 

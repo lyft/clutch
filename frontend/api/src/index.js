@@ -44785,6 +44785,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [involvedObjectName] Event involvedObjectName
                  * @property {clutch.k8s.v1.ObjectKind|null} [kind] Event kind
                  * @property {number|Long|null} [eventTimeMillis] Event eventTimeMillis
+                 * @property {number|Long|null} [lastTimestampMillis] Event lastTimestampMillis
+                 * @property {number|Long|null} [creationTimeMillis] Event creationTimeMillis
                  */
 
                 /**
@@ -44867,6 +44869,22 @@ export const clutch = $root.clutch = (() => {
                 Event.prototype.eventTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
+                 * Event lastTimestampMillis.
+                 * @member {number|Long} lastTimestampMillis
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.lastTimestampMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Event creationTimeMillis.
+                 * @member {number|Long} creationTimeMillis
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.creationTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
                  * Verifies an Event message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Event
@@ -44907,6 +44925,12 @@ export const clutch = $root.clutch = (() => {
                     if (message.eventTimeMillis != null && message.hasOwnProperty("eventTimeMillis"))
                         if (!$util.isInteger(message.eventTimeMillis) && !(message.eventTimeMillis && $util.isInteger(message.eventTimeMillis.low) && $util.isInteger(message.eventTimeMillis.high)))
                             return "eventTimeMillis: integer|Long expected";
+                    if (message.lastTimestampMillis != null && message.hasOwnProperty("lastTimestampMillis"))
+                        if (!$util.isInteger(message.lastTimestampMillis) && !(message.lastTimestampMillis && $util.isInteger(message.lastTimestampMillis.low) && $util.isInteger(message.lastTimestampMillis.high)))
+                            return "lastTimestampMillis: integer|Long expected";
+                    if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
+                        if (!$util.isInteger(message.creationTimeMillis) && !(message.creationTimeMillis && $util.isInteger(message.creationTimeMillis.low) && $util.isInteger(message.creationTimeMillis.high)))
+                            return "creationTimeMillis: integer|Long expected";
                     return null;
                 };
 
@@ -44957,6 +44981,24 @@ export const clutch = $root.clutch = (() => {
                             message.eventTimeMillis = object.eventTimeMillis;
                         else if (typeof object.eventTimeMillis === "object")
                             message.eventTimeMillis = new $util.LongBits(object.eventTimeMillis.low >>> 0, object.eventTimeMillis.high >>> 0).toNumber();
+                    if (object.lastTimestampMillis != null)
+                        if ($util.Long)
+                            (message.lastTimestampMillis = $util.Long.fromValue(object.lastTimestampMillis)).unsigned = false;
+                        else if (typeof object.lastTimestampMillis === "string")
+                            message.lastTimestampMillis = parseInt(object.lastTimestampMillis, 10);
+                        else if (typeof object.lastTimestampMillis === "number")
+                            message.lastTimestampMillis = object.lastTimestampMillis;
+                        else if (typeof object.lastTimestampMillis === "object")
+                            message.lastTimestampMillis = new $util.LongBits(object.lastTimestampMillis.low >>> 0, object.lastTimestampMillis.high >>> 0).toNumber();
+                    if (object.creationTimeMillis != null)
+                        if ($util.Long)
+                            (message.creationTimeMillis = $util.Long.fromValue(object.creationTimeMillis)).unsigned = false;
+                        else if (typeof object.creationTimeMillis === "string")
+                            message.creationTimeMillis = parseInt(object.creationTimeMillis, 10);
+                        else if (typeof object.creationTimeMillis === "number")
+                            message.creationTimeMillis = object.creationTimeMillis;
+                        else if (typeof object.creationTimeMillis === "object")
+                            message.creationTimeMillis = new $util.LongBits(object.creationTimeMillis.low >>> 0, object.creationTimeMillis.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -44986,6 +45028,16 @@ export const clutch = $root.clutch = (() => {
                             object.eventTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.eventTimeMillis = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.lastTimestampMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.lastTimestampMillis = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.creationTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.creationTimeMillis = options.longs === String ? "0" : 0;
                     }
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
@@ -45006,6 +45058,16 @@ export const clutch = $root.clutch = (() => {
                             object.eventTimeMillis = options.longs === String ? String(message.eventTimeMillis) : message.eventTimeMillis;
                         else
                             object.eventTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.eventTimeMillis) : options.longs === Number ? new $util.LongBits(message.eventTimeMillis.low >>> 0, message.eventTimeMillis.high >>> 0).toNumber() : message.eventTimeMillis;
+                    if (message.lastTimestampMillis != null && message.hasOwnProperty("lastTimestampMillis"))
+                        if (typeof message.lastTimestampMillis === "number")
+                            object.lastTimestampMillis = options.longs === String ? String(message.lastTimestampMillis) : message.lastTimestampMillis;
+                        else
+                            object.lastTimestampMillis = options.longs === String ? $util.Long.prototype.toString.call(message.lastTimestampMillis) : options.longs === Number ? new $util.LongBits(message.lastTimestampMillis.low >>> 0, message.lastTimestampMillis.high >>> 0).toNumber() : message.lastTimestampMillis;
+                    if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
+                        if (typeof message.creationTimeMillis === "number")
+                            object.creationTimeMillis = options.longs === String ? String(message.creationTimeMillis) : message.creationTimeMillis;
+                        else
+                            object.creationTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.creationTimeMillis) : options.longs === Number ? new $util.LongBits(message.creationTimeMillis.low >>> 0, message.creationTimeMillis.high >>> 0).toNumber() : message.creationTimeMillis;
                     return object;
                 };
 
