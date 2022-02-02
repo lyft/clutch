@@ -41,7 +41,11 @@ const visibilityOptions = {
 };
 
 const RepositoryDetails: React.FC<WizardChild> = () => {
-  const { register, errors, handleSubmit } = useForm({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),

@@ -30,7 +30,11 @@ const Content = styled.div({
 });
 
 const K8sDashSearch = ({ onSubmit }) => {
-  const { errors, handleSubmit, register } = useForm({
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),

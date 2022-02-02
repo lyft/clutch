@@ -111,7 +111,11 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({ environments, onS
       return accumulator;
     }, schema);
 
-  const { register, errors, handleSubmit } = useForm({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(yup.object().shape(schema)),
