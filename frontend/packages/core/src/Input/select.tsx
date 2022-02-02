@@ -182,6 +182,10 @@ const StyledSelect = styled(BaseSelect)({
     cursor: "default",
     pointerEvents: "none", // disables the select from closing on clicking the subheader
   },
+
+  ".MuiList-root": {
+    maxHeight: "400px",
+  },
 });
 
 interface BaseSelectOptions {

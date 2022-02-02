@@ -68,6 +68,12 @@ const StyledTextField = styled(TextField)<{ $origin: Origin }>(
   })
 );
 
+const StyledSelect = styled(Select)({
+  ".MuiPaper-root .MuiList-root": {
+    maxHeight: "400px",
+  },
+});
+
 const FeedbackAlert = () => {
   const AlertProps = {
     iconMapping: {
@@ -213,7 +219,7 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
         <MuiGrid
           item
           xs={wizardOrigin ? 6 : 12}
-          style={{ display: "flex", justifyContent: "space-around" }}
+          style={{ display: "flex", justifyContent: "space-around", paddingTop: "8px" }}
         >
           <EmojiRatings
             ratings={survey.ratingLabels}
@@ -225,8 +231,8 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
         {selectedRating !== null && (
           <>
             {!wizardOrigin && feedbackTypes && (
-              <MuiGrid item xs={12} style={{ margin: "32px 0px 16px 0px" }}>
-                <Select
+              <MuiGrid item xs={12} style={{ margin: "24px 0px 16px 0px" }}>
+                <StyledSelect
                   name="anytimeSelect"
                   label="Choose a type of feedback you want to submit"
                   options={feedbackTypes}

@@ -53,18 +53,28 @@ const StyledFeedbackIcon = styled(IconButton)<{ $open: boolean }>(
 export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => {
   const feedbackTypes: SelectOption[] = [{ label: "General" }];
 
+  const typeMap = {};
+
   workflows.forEach(workflow => {
-    feedbackTypes.push({
-      label: workflow.group,
-      group: sortBy(
-        workflow.routes.map(route => ({
-          label: route.displayName || workflow.displayName,
-          value: `/${workflow.path}/${route.path}`,
-        })),
-        ["label"]
-      ),
-    });
+    const { group, path, routes, displayName } = workflow;
+
+    if (!typeMap[group]) {
+      typeMap[group] = [];
+    }
+
+    typeMap[group].push(
+      ...routes.map(route => ({
+        label: route.displayName || displayName,
+        value: `/${path}/${route.path}`,
+      }))
+    );
   });
+
+  feedbackTypes.push(
+    ...Object.keys(typeMap)
+      .sort()
+      .map(label => ({ label, group: sortBy(typeMap[label], ["label"]) }))
+  );
 
   return feedbackTypes;
 };
