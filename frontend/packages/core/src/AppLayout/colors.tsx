@@ -1,4 +1,4 @@
-// COLORS FROM FIGMA as of 01-31-2022
+// COLORS FROM FIGMA as of Feb-02-2022
 // NOTE THAT THOSE WITH GRADIENTS ONLY HAVE THEIR BASES
 import type { ClutchColorChoices, ClutchPalette } from "./colortypes";
 
@@ -85,38 +85,48 @@ export const LIGHT_MODE: ClutchPalette = {
   },
 };
 
-/*
 // TODO: Once colors are added to palettes, use them in choices
 export const LIGHT_MODE_CHOICES: ClutchColorChoices = {
-  Stroke: {
-    primary: "#0D1030",
-    secondary: "#0D103073",
-    tertiary: "#0D103040",
+  typography: {
+    primary: LIGHT_MODE.neutral[900],
+    secondary: `${LIGHT_MODE.neutral[900]}A6`,
+    tertiary: `${LIGHT_MODE.neutral[900]}7A`,
     inverse: "#FFFFFF",
   },
-  Background: {
+  stroke: {
+    primary: LIGHT_MODE.neutral[900],
+    secondary: `${LIGHT_MODE.neutral[900]}73`,
+    tertiary: `${LIGHT_MODE.neutral[900]}40`,
+    inverse: "#FFFFFF",
+  },
+  background: {
     primary: "#FFFFFF",
-    secondary: "#F9FAFE",
+    secondary: LIGHT_MODE.blue[50],
+    header: "", // gradient
   },
-  States: {
-    activeHover: "#3548D41A",
-    activeFocused: "#3548D40D",
-    activePressed: "#3548D426",
-    activeSelected: "#3548D433",
-    defaultHover: "#0D10301A",
-    defaultFocused: "#0D10300D",
-    defaultPressed: "#0D103021",
-    defaultSelected: "#0D103026",
-    defaultDisabled: "#0D103040",
-  },
-  Typography: {
-    primary: "#0D1030",
-    secondary: "#0D1030A6",
-    tertiary: "#0D10307A",
-    inverse: "#FFFFFF",
+  states: {
+    hover: {
+      active: `${LIGHT_MODE.blue[600]}0D`,
+      default: `${LIGHT_MODE.neutral[900]}0D`,
+    },
+    focused: {
+      active: `${LIGHT_MODE.blue[600]}1A`,
+      default: `${LIGHT_MODE.neutral[900]}1A`,
+    },
+    pressed: {
+      active: `${LIGHT_MODE.blue[600]}26`,
+      default: `${LIGHT_MODE.neutral[900]}21`,
+    },
+    selected: {
+      active: `${LIGHT_MODE.blue[600]}1F`,
+      default: `${LIGHT_MODE.neutral[900]}26`,
+    },
+    disabled: {
+      active: "", // blank on design system
+      default: `${LIGHT_MODE.neutral[900]}08`,
+    },
   },
 };
-*/
 
 export const DARK_MODE: ClutchPalette = {
   neutral: {
@@ -201,37 +211,46 @@ export const DARK_MODE: ClutchPalette = {
   },
 };
 
-/*
-// TODO: Once colors are added to palettes, use them in choices
 export const DARK_MODE_CHOICES: ClutchColorChoices = {
-  Stroke: {
-    primary: "#FFFFFFDE",
-    secondary: "#FFFFFF73",
-    tertiary: "#FFFFFF40",
+  typography: {
+    primary: `${DARK_MODE.neutral[900]}E6`,
+    secondary: `${DARK_MODE.neutral[900]}BF`,
+    tertiary: `${DARK_MODE.neutral[900]}73`,
     inverse: "#0D1030",
   },
-  Background: {
-    primary: "#FFFFFF0F",
-    secondary: "#0D1030",
-  },
-  States: {
-    activeHover: "#5AABF60D",
-    activeFocused: "#5AABF61A",
-    activePressed: "#5AABF626",
-    activeSelected: "#5AABF61F",
-    defaultHover: "#FFFFFF12",
-    defaultFocused: "#FFFFFF1F",
-    defaultPressed: "#FFFFFF2E",
-    defaultSelected: "#FFFFFF40",
-    defaultDisabled: "#FFFFFF0D",
-  },
-  Typography: {
-    primary: "#FFFFFFE5",
-    secondary: "#FFFFFFBF",
-    tertiary: "#FFFFFF7A",
+  stroke: {
+    primary: `${DARK_MODE.neutral[900]}DE`,
+    secondary: `${DARK_MODE.neutral[900]}73`,
+    tertiary: `${DARK_MODE.neutral[900]}40`,
     inverse: "#0D1030",
+  },
+  background: {
+    primary: "", // gradient
+    secondary: DARK_MODE.blue[50],
+    header: "#0D1030",
+  },
+  states: {
+    hover: {
+      active: `${DARK_MODE.blue[600]}0D`,
+      default: `${DARK_MODE.neutral[900]}12`,
+    },
+    focused: {
+      active: `${DARK_MODE.blue[600]}1A`,
+      default: `${DARK_MODE.neutral[900]}1F`,
+    },
+    pressed: {
+      active: `${DARK_MODE.blue[600]}26`,
+      default: `${DARK_MODE.neutral[900]}2E`,
+    },
+    selected: {
+      active: `${DARK_MODE.blue[600]}1F`,
+      default: `${DARK_MODE.neutral[900]}40`,
+    },
+    disabled: {
+      active: "", // blank on design system
+      default: `${DARK_MODE.neutral[900]}0D`,
+    },
   },
 };
-*/
 
 // EXTRA COLORS (TODO) ////////////////////////////////////////////////////////

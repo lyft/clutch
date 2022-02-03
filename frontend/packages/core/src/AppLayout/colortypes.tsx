@@ -15,6 +15,7 @@ export interface StateColor {
 export interface BackgroundColor {
   primary: string;
   secondary: string;
+  header: string;
 }
 
 export interface TypographyColor {
@@ -42,5 +43,5 @@ export interface ClutchColorChoices {
     pressed: StateColor;
     selected: StateColor;
     disabled: StateColor;
-  }
+  };
 }
