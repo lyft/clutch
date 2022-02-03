@@ -54,7 +54,8 @@
         "advanced/auth",
         "advanced/chaos-experimentation",
         "advanced/security-auditing",
-        "advanced/topology"
+        "advanced/topology",
+        "advanced/workflow-feedback-framework"
       ]
     },
     "configuration",
