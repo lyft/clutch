@@ -6,5 +6,5 @@
   "blockHosts": ["*google-analytics.com", "*googletagmanager.com"],
   "fixturesFolder": false,
   "pluginsFile": false,
-  "video": false
+  "video": true
 }
