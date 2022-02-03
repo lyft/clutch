@@ -65,7 +65,7 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
     typeMap[group].push(
       ...routes.map(route => ({
         label: route.displayName || displayName,
-        value: `/${path}/${route.path}`,
+        value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
       }))
     );
   });
