@@ -1,5 +1,5 @@
 import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clutch-sh/core";
-import type { WizardChild, WizardConfigProps } from "@clutch-sh/wizard";
+import type { WizardChild } from "@clutch-sh/wizard";
 
 import CordonNode from "./cordon-node";
 import DeletePod from "./delete-pod";
@@ -14,11 +14,7 @@ interface ConfirmConfigProps {
   notes?: NoteConfig[];
 }
 
-export interface WorkflowProps
-  extends BaseWorkflowProps,
-    ResolverConfigProps,
-    ConfirmConfigProps,
-    WizardConfigProps {}
+export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, ConfirmConfigProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
 export interface ConfirmChild extends WizardChild, ConfirmConfigProps {}
 
