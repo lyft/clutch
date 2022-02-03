@@ -84,7 +84,6 @@ const contextValues: { workflows: any[] } = {
           requiredConfigProps: ["resolverType"],
           componentProps: {
             resolverType: "clutch.k8s.v1.Pod",
-            enableFeedback: true,
           },
         },
         {

@@ -48,7 +48,6 @@ module.exports = {
     deletePod: {
       componentProps: {
         resolverType: "clutch.k8s.v1.Pod",
-        enableFeedback: true,
       },
     },
     resizeHPA: {

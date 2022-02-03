@@ -30,14 +30,7 @@ const Heading = styled(Typography)({
 interface WizardProps extends Pick<ContainerProps, "width"> {
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
   dataLayout: ManagerLayout;
-  enableFeedback?: boolean;
   heading?: string;
-}
-
-// To be used in a workflow's configuration file
-export interface WizardConfigProps {
-  // If true and if the WizardStep is used, a feedback component will be added to a workflow's last step.
-  enableFeedback?: boolean;
 }
 
 export interface WizardChild {
@@ -71,13 +64,7 @@ const Paper = styled(MuiPaper)({
   padding: "32px",
 });
 
-const Wizard = ({
-  heading,
-  width = "default",
-  dataLayout,
-  children,
-  enableFeedback,
-}: WizardProps) => {
+const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
@@ -151,13 +138,11 @@ const Wizard = ({
         <Grid container justifyContent="center">
           {((state.activeStep === lastStepIndex && !isLoading) || hasError) && (
             <>
-              {enableFeedback && (
-                <SimpleFeatureFlag feature="npsWizard">
-                  <FeatureOn>
-                    <NPSWizard />
-                  </FeatureOn>
-                </SimpleFeatureFlag>
-              )}
+              <SimpleFeatureFlag feature="npsWizard">
+                <FeatureOn>
+                  <NPSWizard />
+                </FeatureOn>
+              </SimpleFeatureFlag>
               {(isMultistep || hasError) && (
                 <ButtonGroup>
                   <Button
