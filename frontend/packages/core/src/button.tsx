@@ -126,8 +126,12 @@ const ICON_BUTTON_STYLE_MAP = {
     size: 48,
     padding: 12,
   },
+  large: {
+    size: 64,
+    padding: 6,
+  },
 };
-type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
+export type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
 
 export const ICON_BUTTON_VARIANTS = Object.keys(ICON_BUTTON_STYLE_MAP);
 
@@ -159,7 +163,7 @@ const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
 
 const StyledIconButton = styled(MuiIconButton)<{
   $palette: ButtonPalette;
-  $size?: IconButtonProps["size"];
+  $size?: IconButtonSize;
 }>({}, props => ({
   width: `${ICON_BUTTON_STYLE_MAP[props.$size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
   height: `${ICON_BUTTON_STYLE_MAP[props.$size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
@@ -169,11 +173,12 @@ const StyledIconButton = styled(MuiIconButton)<{
   ...colorCss(props.$palette),
 }));
 
+// TODO: (jslaughter) Update when large sizing is available with material-ui@5
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
-  size?: IconButtonSize;
   children: React.ReactElement;
+  size?: IconButtonSize;
 }
 
 /**
