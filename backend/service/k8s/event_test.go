@@ -78,8 +78,6 @@ func TestListEvents(t *testing.T) {
 		assert.Equal(t, reason, v.Reason)
 		assert.Equal(t, kind, v.Kind)
 		timeVal := (int64)(i + 1)
-		assert.Equal(t, time.Unix(timeVal, 0).UnixMilli(), v.EventTimeMillis)
-		assert.Equal(t, time.Unix(timeVal, 0).UnixMilli(), v.LastTimestampMillis)
 		assert.Equal(t, time.Unix(timeVal, 0).UnixMilli(), v.CreationTimeMillis)
 	}
 }

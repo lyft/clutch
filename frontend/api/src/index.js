@@ -44784,8 +44784,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [namespace] Event namespace
                  * @property {string|null} [involvedObjectName] Event involvedObjectName
                  * @property {clutch.k8s.v1.ObjectKind|null} [kind] Event kind
-                 * @property {number|Long|null} [eventTimeMillis] Event eventTimeMillis
-                 * @property {number|Long|null} [lastTimestampMillis] Event lastTimestampMillis
                  * @property {number|Long|null} [creationTimeMillis] Event creationTimeMillis
                  */
 
@@ -44861,22 +44859,6 @@ export const clutch = $root.clutch = (() => {
                 Event.prototype.kind = 0;
 
                 /**
-                 * Event eventTimeMillis.
-                 * @member {number|Long} eventTimeMillis
-                 * @memberof clutch.k8s.v1.Event
-                 * @instance
-                 */
-                Event.prototype.eventTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                /**
-                 * Event lastTimestampMillis.
-                 * @member {number|Long} lastTimestampMillis
-                 * @memberof clutch.k8s.v1.Event
-                 * @instance
-                 */
-                Event.prototype.lastTimestampMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                /**
                  * Event creationTimeMillis.
                  * @member {number|Long} creationTimeMillis
                  * @memberof clutch.k8s.v1.Event
@@ -44922,12 +44904,6 @@ export const clutch = $root.clutch = (() => {
                         case 2:
                             break;
                         }
-                    if (message.eventTimeMillis != null && message.hasOwnProperty("eventTimeMillis"))
-                        if (!$util.isInteger(message.eventTimeMillis) && !(message.eventTimeMillis && $util.isInteger(message.eventTimeMillis.low) && $util.isInteger(message.eventTimeMillis.high)))
-                            return "eventTimeMillis: integer|Long expected";
-                    if (message.lastTimestampMillis != null && message.hasOwnProperty("lastTimestampMillis"))
-                        if (!$util.isInteger(message.lastTimestampMillis) && !(message.lastTimestampMillis && $util.isInteger(message.lastTimestampMillis.low) && $util.isInteger(message.lastTimestampMillis.high)))
-                            return "lastTimestampMillis: integer|Long expected";
                     if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
                         if (!$util.isInteger(message.creationTimeMillis) && !(message.creationTimeMillis && $util.isInteger(message.creationTimeMillis.low) && $util.isInteger(message.creationTimeMillis.high)))
                             return "creationTimeMillis: integer|Long expected";
@@ -44972,24 +44948,6 @@ export const clutch = $root.clutch = (() => {
                         message.kind = 2;
                         break;
                     }
-                    if (object.eventTimeMillis != null)
-                        if ($util.Long)
-                            (message.eventTimeMillis = $util.Long.fromValue(object.eventTimeMillis)).unsigned = false;
-                        else if (typeof object.eventTimeMillis === "string")
-                            message.eventTimeMillis = parseInt(object.eventTimeMillis, 10);
-                        else if (typeof object.eventTimeMillis === "number")
-                            message.eventTimeMillis = object.eventTimeMillis;
-                        else if (typeof object.eventTimeMillis === "object")
-                            message.eventTimeMillis = new $util.LongBits(object.eventTimeMillis.low >>> 0, object.eventTimeMillis.high >>> 0).toNumber();
-                    if (object.lastTimestampMillis != null)
-                        if ($util.Long)
-                            (message.lastTimestampMillis = $util.Long.fromValue(object.lastTimestampMillis)).unsigned = false;
-                        else if (typeof object.lastTimestampMillis === "string")
-                            message.lastTimestampMillis = parseInt(object.lastTimestampMillis, 10);
-                        else if (typeof object.lastTimestampMillis === "number")
-                            message.lastTimestampMillis = object.lastTimestampMillis;
-                        else if (typeof object.lastTimestampMillis === "object")
-                            message.lastTimestampMillis = new $util.LongBits(object.lastTimestampMillis.low >>> 0, object.lastTimestampMillis.high >>> 0).toNumber();
                     if (object.creationTimeMillis != null)
                         if ($util.Long)
                             (message.creationTimeMillis = $util.Long.fromValue(object.creationTimeMillis)).unsigned = false;
@@ -45025,16 +44983,6 @@ export const clutch = $root.clutch = (() => {
                         object.kind = options.enums === String ? "UNSPECIFIED" : 0;
                         if ($util.Long) {
                             let long = new $util.Long(0, 0, false);
-                            object.eventTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.eventTimeMillis = options.longs === String ? "0" : 0;
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
-                            object.lastTimestampMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.lastTimestampMillis = options.longs === String ? "0" : 0;
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
                             object.creationTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.creationTimeMillis = options.longs === String ? "0" : 0;
@@ -45053,16 +45001,6 @@ export const clutch = $root.clutch = (() => {
                         object.involvedObjectName = message.involvedObjectName;
                     if (message.kind != null && message.hasOwnProperty("kind"))
                         object.kind = options.enums === String ? $root.clutch.k8s.v1.ObjectKind[message.kind] : message.kind;
-                    if (message.eventTimeMillis != null && message.hasOwnProperty("eventTimeMillis"))
-                        if (typeof message.eventTimeMillis === "number")
-                            object.eventTimeMillis = options.longs === String ? String(message.eventTimeMillis) : message.eventTimeMillis;
-                        else
-                            object.eventTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.eventTimeMillis) : options.longs === Number ? new $util.LongBits(message.eventTimeMillis.low >>> 0, message.eventTimeMillis.high >>> 0).toNumber() : message.eventTimeMillis;
-                    if (message.lastTimestampMillis != null && message.hasOwnProperty("lastTimestampMillis"))
-                        if (typeof message.lastTimestampMillis === "number")
-                            object.lastTimestampMillis = options.longs === String ? String(message.lastTimestampMillis) : message.lastTimestampMillis;
-                        else
-                            object.lastTimestampMillis = options.longs === String ? $util.Long.prototype.toString.call(message.lastTimestampMillis) : options.longs === Number ? new $util.LongBits(message.lastTimestampMillis.low >>> 0, message.lastTimestampMillis.high >>> 0).toNumber() : message.lastTimestampMillis;
                     if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
                         if (typeof message.creationTimeMillis === "number")
                             object.creationTimeMillis = options.longs === String ? String(message.creationTimeMillis) : message.creationTimeMillis;

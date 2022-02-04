@@ -18741,12 +18741,6 @@ export namespace clutch {
                 /** Event kind */
                 kind?: (clutch.k8s.v1.ObjectKind|null);
 
-                /** Event eventTimeMillis */
-                eventTimeMillis?: (number|Long|null);
-
-                /** Event lastTimestampMillis */
-                lastTimestampMillis?: (number|Long|null);
-
                 /** Event creationTimeMillis */
                 creationTimeMillis?: (number|Long|null);
             }
@@ -18780,12 +18774,6 @@ export namespace clutch {
 
                 /** Event kind. */
                 public kind: clutch.k8s.v1.ObjectKind;
-
-                /** Event eventTimeMillis. */
-                public eventTimeMillis: (number|Long);
-
-                /** Event lastTimestampMillis. */
-                public lastTimestampMillis: (number|Long);
 
                 /** Event creationTimeMillis. */
                 public creationTimeMillis: (number|Long);
