@@ -2,30 +2,30 @@
 
 exports[`Start Experiment workflow renders correctly 1`] = `
 "<Styled(div)>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
-  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
+  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
   <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={-1} onChange={[Function: onChange]} />
-  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
+  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
 </Styled(div)>"
 `;
 
 exports[`Start Experiment workflow renders correctly with environments selection enabled 1`] = `
 "<Styled(div)>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
-  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
+  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
   <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
+  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
 </Styled(div)>"
 `;
 
 exports[`Start Experiment workflow renders correctly with upstream cluster type selection enabled 1`] = `
 "<Styled(div)>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
-  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
+  <TextField name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
   <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={-1} onChange={[Function: onChange]} />
-  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: ee]} error={false} helperText=\\"\\" />
+  <TextField name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: H]} inputRef={[Function: ref]} error={false} helperText=\\"\\" onBlur={[Function: H]} />
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
 </Styled(div)>"
 `;
