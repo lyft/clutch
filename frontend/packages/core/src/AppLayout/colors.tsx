@@ -139,7 +139,7 @@ export const DARK_MODE: ClutchPalette = {
     600: "#A4A5B1",
     700: "#D2D2D8",
     800: "#E8E8EB",
-    900: "#F8F8F9",
+    900: "#FFFFFF",
     A100: "",
     A200: "",
     A400: "",
