@@ -1,16 +1,8 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import type { ChangeEventTarget, ClutchError } from "@clutch-sh/core";
-import {
-  client,
-  convertChangeEvent,
-  TextField,
-  Tooltip,
-  TooltipContainer,
-  Typography,
-  userId,
-} from "@clutch-sh/core";
+import type { ClutchError } from "@clutch-sh/core";
+import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
@@ -212,14 +204,14 @@ const ProjectSelector = () => {
 
   const hasError = state.error !== undefined && state.error !== null;
 
-  const validation = useForm({
+  const { handleSubmit } = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
     shouldFocusError: false,
   });
 
-  const handleChanges = (event: React.ChangeEvent<ChangeEventTarget> | React.KeyboardEvent) => {
-    setCustomProject(convertChangeEvent(event).target.value);
+  const handleChanges = event => {
+    setCustomProject(event.target.value);
   };
 
   return (
@@ -270,7 +262,7 @@ const ProjectSelector = () => {
           </StyledProgressContainer>
           <Divider />
           {/* TODO: add plus icon in the text field */}
-          <Form onSubmit={validation.handleSubmit(() => handleAdd())} noValidate>
+          <Form onSubmit={handleSubmit(handleAdd)} noValidate>
             <StyledProjectTextField
               disabled={state.loading}
               placeholder="Add a project"

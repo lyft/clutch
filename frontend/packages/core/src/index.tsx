@@ -44,7 +44,6 @@ export * from "./Input";
 export * from "./Feedback";
 export * from "./Assets/emojis";
 export * from "./NPS";
-export * from "./Resolver/hydrator";
 
 export { default as ClutchApp } from "./AppProvider";
 

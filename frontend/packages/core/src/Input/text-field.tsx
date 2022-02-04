@@ -266,6 +266,8 @@ const TextField = ({
           onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
         }
         defaultValue={{ id: defaultVal, label: defaultVal }}
+        // the input's text is selected on focus. It helps the user clear the selected value.
+        selectOnFocus
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
