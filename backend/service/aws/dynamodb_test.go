@@ -349,7 +349,6 @@ func TestGetScalingLimitsCustom(t *testing.T) {
 // condition 1 (success) : target is exactly x times the scaling factor
 // condition 2 (failure) : target is 1 above x times the scaling factor
 func TestCustomScaleFactor(t *testing.T) {
-
 	// scale factor to be used in this test
 	// Change the number to represent a different limit
 	testScaleFactor := float32(3.5)
