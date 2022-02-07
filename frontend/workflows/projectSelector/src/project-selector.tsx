@@ -12,7 +12,7 @@ import { useDashUpdater } from "./dash-hooks";
 import { deriveStateData, DispatchContext, StateContext } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
-import { storeState } from "./storage";
+import { loadStoredState, storeState } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
 
@@ -92,7 +92,6 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
       users: string[];
       projects: string[];
     };
-
     _.forEach(Object.keys(state[Group.PROJECTS]), p => {
       // if the project is custom
       if (state[Group.PROJECTS][p].custom) {
@@ -119,8 +118,7 @@ const ProjectSelector = () => {
 
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
-  // TODO: restore usage of loadStoredState once we fix the issue with deprecated projects
-  const [state, dispatch] = React.useReducer(selectorReducer, initialState);
+  const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
   React.useEffect(() => {
     const interval = setInterval(() => hydrateProjects(state, dispatch), 30000);
