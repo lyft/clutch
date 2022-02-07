@@ -277,7 +277,7 @@ const TextField = ({
           */
           // if (reason === "reset"){
             // setInputValue("") <-- used to clear out the value in the text field
-            // event.target.value = ""
+            // event.target.value = "" <-- try to clear out the input value directly
             // setKey(_.uniqueId()) <--- used to trigger a component re-render
             return
           // }
