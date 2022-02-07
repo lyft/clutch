@@ -12,8 +12,8 @@ import {
   TimeRangeStateContext,
 } from "./dash-hooks";
 import { hoursToMs } from "./helpers";
-import ProjectSelector from "./project-selector";
 import type { ProjectSelectorError } from "./project-selector";
+import ProjectSelector from "./project-selector";
 import type {
   DashAction,
   DashState,
