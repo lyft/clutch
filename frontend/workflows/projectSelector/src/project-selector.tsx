@@ -130,7 +130,11 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
         if (partialFailures && partialFailures.length) {
           const missing: string[] = [];
           partialFailures.forEach(failure => {
-            missing.push(...(failure.details || [])?.map(detail => _.get(detail, "name")));
+            (failure.details || []).forEach(detail => {
+              if (_.get(detail, ["data", "disabled"])) {
+                missing.push(_.get(detail, "name"));
+              }
+            });
           });
 
           dispatch({
@@ -176,7 +180,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     }
 
     if (onError && state[Group.DEPRECATED] && Object.keys(state[Group.DEPRECATED]).length) {
-      onError({ projects: state[Group.DEPRECATED], type: "DEPRECATED" });
+      onError({ projects: Object.keys(state[Group.DEPRECATED]), type: "DEPRECATED" });
     }
 
     const dashState: DashState = { projectData: {}, selected: [] };
