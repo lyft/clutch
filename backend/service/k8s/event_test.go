@@ -21,31 +21,35 @@ func testEventClientset() k8s.Interface {
 	testEvents := []runtime.Object{
 		&corev1.Event{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:      "testing-event-name-1",
-				Namespace: "testing-namespace",
+				Name:              "testing-event-name-1",
+				Namespace:         "testing-namespace",
+				CreationTimestamp: metav1.Time{Time: time.Unix(1, 0)},
 			},
 			InvolvedObject: corev1.ObjectReference{
 				Kind:      "Pod",
 				Namespace: "testing-namespace",
 				Name:      "Pod1",
 			},
-			Reason:    "testing-reason-1",
-			Message:   "testing-message-1",
-			EventTime: metav1.MicroTime{Time: time.Unix(1, 0)},
+			Reason:        "testing-reason-1",
+			Message:       "testing-message-1",
+			EventTime:     metav1.MicroTime{Time: time.Unix(1, 0)},
+			LastTimestamp: metav1.Time{Time: time.Unix(1, 0)},
 		},
 		&corev1.Event{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:      "testing-event-name-2",
-				Namespace: "testing-namespace",
+				Name:              "testing-event-name-2",
+				Namespace:         "testing-namespace",
+				CreationTimestamp: metav1.Time{Time: time.Unix(2, 0)},
 			},
 			InvolvedObject: corev1.ObjectReference{
 				Kind:      "Pod",
 				Namespace: "testing-namespace",
 				Name:      "Pod1",
 			},
-			Reason:    "testing-reason-2",
-			Message:   "testing-message-2",
-			EventTime: metav1.MicroTime{Time: time.Unix(2, 0)},
+			Reason:        "testing-reason-2",
+			Message:       "testing-message-2",
+			EventTime:     metav1.MicroTime{Time: time.Unix(2, 0)},
+			LastTimestamp: metav1.Time{Time: time.Unix(2, 0)},
 		},
 	}
 
@@ -74,6 +78,6 @@ func TestListEvents(t *testing.T) {
 		assert.Equal(t, reason, v.Reason)
 		assert.Equal(t, kind, v.Kind)
 		timeVal := (int64)(i + 1)
-		assert.Equal(t, time.Unix(timeVal, 0).UnixMilli(), v.EventTimeMillis)
+		assert.Equal(t, time.Unix(timeVal, 0).UnixMilli(), v.CreationTimeMillis)
 	}
 }
