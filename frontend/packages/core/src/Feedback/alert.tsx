@@ -73,7 +73,7 @@ const iconMappings = {
   warning: <WarningIcon />,
 };
 
-export interface AlertProps extends Pick<MuiAlertProps, "severity" | "action"> {
+export interface AlertProps extends Pick<MuiAlertProps, "severity" | "action" | "onClose"> {
   title?: React.ReactNode;
 }
 

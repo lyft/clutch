@@ -208,10 +208,33 @@ const selectorReducer = (state: State, action: Action): State => {
       );
       return newState;
     }
+    case "HYDRATE_DEPRECATION": {
+      // if our payload is empty, return the original state without modifying anything
+      if (!action?.payload?.result) {
+        return state;
+      }
+
+      const newState = { ...state };
+
+      const { missing, type } = action.payload.result;
+
+      // add any deprecated projects onto our current deprecated array
+      // we do not care about upstreams / downstreams, just top level projects
+      if (type === "PROJECTS") {
+        newState[Group.DEPRECATED] = _.uniq([...newState[Group.DEPRECATED], ...missing]);
+      }
+
+      // remove all deprecated or missing projects from the state
+      newState[Group.PROJECTS] = _.omit(state[Group.PROJECTS], missing);
+      newState[Group.UPSTREAM] = _.omit(state[Group.UPSTREAM], missing);
+      newState[Group.DOWNSTREAM] = _.omit(state[Group.DOWNSTREAM], missing);
+
+      return newState;
+    }
     case "HYDRATE_ERROR": {
       /**
        * TODO: do we want to handle the error state differently? For example, when we render the error on the UI,
-       * it won't disapper unless there's a successful API call or if the user refreshes the page. If a user performs other
+       * it won't disappear unless there's a successful API call or if the user refreshes the page. If a user performs other
        * actions, such as use the toggle/checkbox/ etc. the error message will be still be on the page
        */
       const err = action?.payload?.result as ClutchError;

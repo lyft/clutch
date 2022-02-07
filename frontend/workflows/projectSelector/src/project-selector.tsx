@@ -16,10 +16,22 @@ import { loadStoredState, storeState } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
 
+type ProjectSelectorErrorTypes = "DEPRECATED";
+
+export interface ProjectSelectorError {
+  projects: string[];
+  type: ProjectSelectorErrorTypes;
+}
+
+interface ProjectSelectorProps {
+  onError?: (ProjectSelectorError) => void;
+}
+
 const initialState: State = {
   [Group.PROJECTS]: {},
   [Group.UPSTREAM]: {},
   [Group.DOWNSTREAM]: {},
+  [Group.DEPRECATED]: [],
   projectData: {},
   loading: false,
   error: undefined,
@@ -63,20 +75,32 @@ const StyledProgressContainer = styled.div({
 });
 
 // Determines if every project has projectData (i.e. the effect has finished fetching the data)
-const allPresent = (state: State): boolean => {
-  let ret = true;
-  const allProjects = new Set([
-    ...Object.keys(state[Group.PROJECTS]),
-    ...Object.keys(state[Group.UPSTREAM]),
-    ...Object.keys(state[Group.DOWNSTREAM]),
-  ]);
-  allProjects.forEach(p => {
-    if (!(p in state.projectData) || _.isEmpty(state.projectData?.[p])) {
-      ret = false;
-    }
-    return ret; // Will stop iteration early if false encountered.
-  });
-  return ret;
+const allPresent = (state: State, dispatch: React.Dispatch<Action>): boolean => {
+  const projectCheck = project =>
+    project in state.projectData && !_.isEmpty(state.projectData?.[project]);
+
+  // check for data on all of our top level projects
+  const PROJECTS = Array.from(new Set(Object.keys(state[Group.PROJECTS])));
+  if (!PROJECTS.every(projectCheck)) {
+    // missing data for a project, return
+    return false;
+  }
+
+  const upDownKeys = Array.from(
+    new Set([...Object.keys(state[Group.UPSTREAM]), ...Object.keys(state[Group.UPSTREAM])])
+  );
+
+  // we've received all data for our projects, check the upstreams / downstreams
+  const missing = upDownKeys.filter(p => !projectCheck(p));
+  if (missing.length) {
+    // we're missing upstreams / downstreams, remove them from our state
+    dispatch({
+      type: "HYDRATE_DEPRECATION",
+      payload: { result: { missing, type: "STREAMS" } },
+    });
+  }
+
+  return true;
 };
 
 const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
@@ -84,7 +108,10 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
   // - Are any services missing from state.projectdata?
   // - Are projects empty (first load)?
   // - Is loading not already in progress?
-  if (!state.loading && (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent(state))) {
+  if (
+    !state.loading &&
+    (Object.keys(state[Group.PROJECTS]).length === 0 || !allPresent(state, dispatch))
+  ) {
     dispatch({ type: "HYDRATE_START" });
 
     // TODO: have userId check be server driven
@@ -92,17 +119,25 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
       users: string[];
       projects: string[];
     };
-    _.forEach(Object.keys(state[Group.PROJECTS]), p => {
-      // if the project is custom
-      if (state[Group.PROJECTS][p].custom) {
-        requestParams.projects.push(p);
-      }
-    });
+
+    requestParams.projects = Object.keys(state[Group.PROJECTS]);
 
     client
       .post("/v1/project/getProjects", requestParams as IClutch.project.v1.GetProjectsRequest)
       .then(resp => {
-        const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
+        const { results, partialFailures } = resp.data as IClutch.project.v1.GetProjectsResponse;
+
+        if (partialFailures && partialFailures.length) {
+          const missing: string[] = [];
+          partialFailures.forEach(failure => {
+            missing.push(...(failure.details || [])?.map(detail => _.get(detail, "name")));
+          });
+
+          dispatch({
+            type: "HYDRATE_DEPRECATION",
+            payload: { result: { missing, type: "PROJECTS" } },
+          });
+        }
         dispatch({ type: "HYDRATE_END", payload: { result: results || {} } });
       })
       .catch((err: ClutchError) => {
@@ -111,7 +146,7 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
   }
 };
 
-const ProjectSelector = () => {
+const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
@@ -135,9 +170,13 @@ const ProjectSelector = () => {
 
   // This hook updates the global dash state based on the currently selected projects for cards to consume (including upstreams and downstreams).
   React.useEffect(() => {
-    if (!allPresent(state)) {
+    if (!allPresent(state, dispatch)) {
       // Need to wait for the data.
       return;
+    }
+
+    if (onError && state[Group.DEPRECATED] && state[Group.DEPRECATED].length) {
+      onError({ projects: state[Group.DEPRECATED], type: "DEPRECATED" });
     }
 
     const dashState: DashState = { projectData: {}, selected: [] };

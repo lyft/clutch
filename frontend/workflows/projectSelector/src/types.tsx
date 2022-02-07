@@ -5,6 +5,7 @@ export enum Group {
   PROJECTS,
   UPSTREAM,
   DOWNSTREAM,
+  DEPRECATED,
 }
 
 type UserActionKind =
@@ -24,7 +25,11 @@ interface UserPayload {
   projects?: string[];
 }
 
-type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END" | "HYDRATE_ERROR";
+type BackgroundActionKind =
+  | "HYDRATE_START"
+  | "HYDRATE_END"
+  | "HYDRATE_ERROR"
+  | "HYDRATE_DEPRECATION";
 
 interface BackgroundAction {
   type: BackgroundActionKind;
@@ -41,6 +46,7 @@ export interface GlobalProjectState {
   [Group.PROJECTS]: GroupState;
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
+  [Group.DEPRECATED]: string[];
 }
 
 export interface GroupState {

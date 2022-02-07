@@ -13,6 +13,7 @@ import {
 } from "./dash-hooks";
 import { hoursToMs } from "./helpers";
 import ProjectSelector from "./project-selector";
+import type { ProjectSelectorError } from "./project-selector";
 import type {
   DashAction,
   DashState,
@@ -21,6 +22,17 @@ import type {
   TimeRangeAction,
   TimeRangeState,
 } from "./types";
+
+export interface DashError {
+  title: string;
+  message: string;
+  data?: React.ReactNode;
+}
+
+interface DashProps {
+  children: React.ReactNode;
+  onError?: (DashError) => void;
+}
 
 const initialState: DashState = {
   selected: [],
@@ -88,13 +100,36 @@ const timeRangeReducer = (state: TimeRangeState, action: TimeRangeAction): TimeR
   }
 };
 
-const Dash = ({ children }) => {
+const Dash = ({ children, onError }: DashProps) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
   const [timelineState, timelineDispatch] = React.useReducer(timelineReducer, initialTimelineState);
   const [timeRangeState, timeRangeDispatch] = React.useReducer(
     timeRangeReducer,
     initialTimeRangeState
   );
+
+  const returnDashError = ({ projects, type }: ProjectSelectorError) => {
+    if (onError && type === "DEPRECATED") {
+      const errorData: DashError = {
+        title: "Project Deprecation",
+        message:
+          "The following projects have been deprecated and removed from the current selections:",
+      };
+
+      if (projects && projects.length) {
+        errorData.data = (
+          <ul>
+            {projects.map(project => (
+              <li>{project}</li>
+            ))}
+          </ul>
+        );
+      }
+
+      onError(errorData);
+    }
+  };
+
   return (
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">
       {/* TODO: Maybe in the future invert proj selector and timeline contexts */}
@@ -104,7 +139,7 @@ const Dash = ({ children }) => {
             <TimeRangeStateContext.Provider value={timeRangeState}>
               <TimelineDispatchContext.Provider value={timelineDispatch}>
                 <TimelineStateContext.Provider value={timelineState}>
-                  <ProjectSelector />
+                  <ProjectSelector onError={returnDashError} />
                   <CardContainer>{children}</CardContainer>
                 </TimelineStateContext.Provider>
               </TimelineDispatchContext.Provider>
