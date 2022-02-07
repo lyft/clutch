@@ -221,7 +221,9 @@ const selectorReducer = (state: State, action: Action): State => {
       // add any deprecated projects onto our current deprecated array
       // we do not care about upstreams / downstreams, just top level projects
       if (type === "PROJECTS") {
-        newState[Group.DEPRECATED] = _.uniq([...newState[Group.DEPRECATED], ...missing]);
+        missing.forEach(project => {
+          newState[Group.DEPRECATED][project] = { checked: false };
+        });
       }
 
       // remove all deprecated or missing projects from the state

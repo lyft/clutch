@@ -31,7 +31,7 @@ const initialState: State = {
   [Group.PROJECTS]: {},
   [Group.UPSTREAM]: {},
   [Group.DOWNSTREAM]: {},
-  [Group.DEPRECATED]: [],
+  [Group.DEPRECATED]: {},
   projectData: {},
   loading: false,
   error: undefined,
@@ -175,7 +175,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
       return;
     }
 
-    if (onError && state[Group.DEPRECATED] && state[Group.DEPRECATED].length) {
+    if (onError && state[Group.DEPRECATED] && Object.keys(state[Group.DEPRECATED]).length) {
       onError({ projects: state[Group.DEPRECATED], type: "DEPRECATED" });
     }
 

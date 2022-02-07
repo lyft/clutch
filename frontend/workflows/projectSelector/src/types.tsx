@@ -46,7 +46,7 @@ export interface GlobalProjectState {
   [Group.PROJECTS]: GroupState;
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
-  [Group.DEPRECATED]: string[];
+  [Group.DEPRECATED]: GroupState;
 }
 
 export interface GroupState {
