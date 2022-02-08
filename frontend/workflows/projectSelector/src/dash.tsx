@@ -25,7 +25,6 @@ import type {
 
 export interface DashError {
   title: string;
-  message: string;
   data?: React.ReactNode;
 }
 
@@ -108,25 +107,20 @@ const Dash = ({ children, onError }: DashProps) => {
     initialTimeRangeState
   );
 
-  const returnDashError = ({ projects, type }: ProjectSelectorError) => {
-    if (onError && type === "DEPRECATED") {
-      const errorData: DashError = {
-        title: "Project Deprecation",
-        message:
-          "The following projects have been deprecated and removed from the current selections:",
+  const returnDashError = ({ errors }: ProjectSelectorError) => {
+    if (onError && errors && errors.length) {
+      const dashError: DashError = {
+        title: "The following failed to load:",
       };
+      dashError.data = (
+        <ul>
+          {errors.map(error => (
+            <li>{error.message}</li>
+          ))}
+        </ul>
+      );
 
-      if (projects && projects.length) {
-        errorData.data = (
-          <ul>
-            {projects.map(project => (
-              <li>{project}</li>
-            ))}
-          </ul>
-        );
-      }
-
-      onError(errorData);
+      onError(dashError);
     }
   };
 

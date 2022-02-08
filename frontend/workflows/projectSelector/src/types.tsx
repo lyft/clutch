@@ -1,11 +1,10 @@
-import type { clutch as IClutch } from "@clutch-sh/api";
+import type { clutch as IClutch, google as IGoogle } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 
 export enum Group {
   PROJECTS,
   UPSTREAM,
   DOWNSTREAM,
-  DEPRECATED,
 }
 
 type UserActionKind =
@@ -25,11 +24,7 @@ interface UserPayload {
   projects?: string[];
 }
 
-type BackgroundActionKind =
-  | "HYDRATE_START"
-  | "HYDRATE_END"
-  | "HYDRATE_ERROR"
-  | "HYDRATE_DEPRECATION";
+type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END" | "HYDRATE_ERROR";
 
 interface BackgroundAction {
   type: BackgroundActionKind;
@@ -46,7 +41,6 @@ export interface GlobalProjectState {
   [Group.PROJECTS]: GroupState;
   [Group.UPSTREAM]: GroupState;
   [Group.DOWNSTREAM]: GroupState;
-  [Group.DEPRECATED]: GroupState;
 }
 
 export interface GroupState {
@@ -100,6 +94,7 @@ const isGlobalProjectState = (state: GlobalProjectState | Object): state is Glob
 
 export interface State extends GlobalProjectState {
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
+  projectErrors: IGoogle.rpc.IStatus[];
   loading: boolean;
   error: ClutchError | undefined;
 }

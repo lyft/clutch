@@ -6,6 +6,7 @@ import {
   deriveSwitchStatus,
   exclusiveProjectDependencies,
   PROJECT_TYPE_URL,
+  removeMissingProjects,
   updateGroupstate,
 } from "./helpers";
 import type { Action, ProjectState, State } from "./types";
@@ -208,43 +209,39 @@ const selectorReducer = (state: State, action: Action): State => {
       );
       return newState;
     }
-    case "HYDRATE_DEPRECATION": {
-      // if our payload is empty, return the original state without modifying anything
-      if (!action?.payload?.result) {
-        return state;
-      }
-
-      const newState = { ...state };
-
-      const { missing, type } = action.payload.result;
-
-      // add any deprecated projects onto our current deprecated array
-      // we do not care about upstreams / downstreams, just top level projects
-      if (type === "PROJECTS") {
-        missing.forEach(project => {
-          newState[Group.DEPRECATED][project] = { checked: false };
-        });
-      }
-
-      // remove all deprecated or missing projects from the state
-      newState[Group.PROJECTS] = _.omit(state[Group.PROJECTS], missing);
-      newState[Group.UPSTREAM] = _.omit(state[Group.UPSTREAM], missing);
-      newState[Group.DOWNSTREAM] = _.omit(state[Group.DOWNSTREAM], missing);
-
-      return newState;
-    }
     case "HYDRATE_ERROR": {
       /**
        * TODO: do we want to handle the error state differently? For example, when we render the error on the UI,
        * it won't disappear unless there's a successful API call or if the user refreshes the page. If a user performs other
        * actions, such as use the toggle/checkbox/ etc. the error message will be still be on the page
        */
-      const err = action?.payload?.result as ClutchError;
+
+      const { result } = action?.payload || { result: {} };
+      const validState = { ...state };
+
+      // Will handle given partial failures
+      if (result?.partialFailures) {
+        result.partialFailures.forEach(failure => {
+          if (failure.details && failure.details.length) {
+            const details = failure.details[0];
+            validState.projectErrors.push({ message: failure.message, details });
+          }
+        });
+
+        return removeMissingProjects(
+          validState,
+          validState.projectErrors.map((e: any) => e.details.name)
+        );
+      }
+      if (result?.missing && result?.missing.length) {
+        return removeMissingProjects(state, result?.missing || []);
+      }
+
+      const err = result as ClutchError;
       if (err.status.code !== 404) {
         return { ...state, loading: false, error: action?.payload?.result };
       }
       const errorMsg = err.message;
-      const validState = { ...state };
       let projects = validState[Group.PROJECTS];
       if (errorMsg) {
         // this message is guaranteed to follow this format from the server

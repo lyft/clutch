@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { clutch as IClutch } from "@clutch-sh/api";
+import type { clutch as IClutch, google as IGoogle } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
@@ -9,19 +9,20 @@ import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
-import { deriveStateData, DispatchContext, StateContext } from "./helpers";
+import {
+  deriveStateData,
+  DispatchContext,
+  exclusiveProjectDependencies,
+  StateContext,
+} from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
 import { loadStoredState, storeState } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
-import { exclusiveProjectDependencies } from "./helpers";
-
-type ProjectSelectorErrorTypes = "DEPRECATED";
 
 export interface ProjectSelectorError {
-  projects: string[];
-  type: ProjectSelectorErrorTypes;
+  errors: IGoogle.rpc.IStatus[];
 }
 
 interface ProjectSelectorProps {
@@ -32,8 +33,8 @@ const initialState: State = {
   [Group.PROJECTS]: {},
   [Group.UPSTREAM]: {},
   [Group.DOWNSTREAM]: {},
-  [Group.DEPRECATED]: {},
   projectData: {},
+  projectErrors: [],
   loading: false,
   error: undefined,
 };
@@ -108,10 +109,7 @@ const allPresent = (state: State, dispatch: React.Dispatch<Action>): boolean => 
   const missing = upDownKeys.filter(p => !projectCheck(p));
   if (missing.length) {
     // we're missing upstreams / downstreams, remove them from our state
-    dispatch({
-      type: "HYDRATE_DEPRECATION",
-      payload: { result: { missing, type: "STREAMS" } },
-    });
+    dispatch({ type: "HYDRATE_ERROR", payload: { result: { missing } } });
   }
 
   return true;
@@ -142,16 +140,9 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
         const { results, partialFailures } = resp.data as IClutch.project.v1.GetProjectsResponse;
 
         if (partialFailures && partialFailures.length) {
-          const missing: string[] = [];
-          partialFailures.forEach(failure => {
-            (failure.details || []).forEach(detail => {
-              missing.push(_.get(detail, "name"));
-            });
-          });
-
           dispatch({
-            type: "HYDRATE_DEPRECATION",
-            payload: { result: { missing, type: "PROJECTS" } },
+            type: "HYDRATE_ERROR",
+            payload: { result: { partialFailures } },
           });
         }
         dispatch({ type: "HYDRATE_END", payload: { result: results || {} } });
@@ -191,8 +182,8 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
       return;
     }
 
-    if (onError && state[Group.DEPRECATED] && Object.keys(state[Group.DEPRECATED]).length) {
-      onError({ projects: Object.keys(state[Group.DEPRECATED]), type: "DEPRECATED" });
+    if (onError && state.projectErrors && state.projectErrors.length) {
+      onError({ errors: state.projectErrors });
     }
 
     const dashState: DashState = { projectData: {}, selected: [] };
