@@ -10,7 +10,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.8.0
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.19.0
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.13.0
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.28.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.29.0
 	github.com/aws/aws-sdk-go-v2/service/iam v1.16.0
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.13.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.1
@@ -49,11 +49,11 @@ require (
 	github.com/uber-go/tally/v4 v4.1.1
 	go.temporal.io/sdk v1.13.0
 	go.temporal.io/sdk/contrib/tally v0.1.0
-	go.uber.org/zap v1.20.0
-	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f
+	go.uber.org/zap v1.21.0
+	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20220118154757-00ab72f36ad5
+	google.golang.org/genproto v0.0.0-20220207182018-5a513245cc53
 	google.golang.org/grpc v1.44.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
 	google.golang.org/protobuf v1.27.1

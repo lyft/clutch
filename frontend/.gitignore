@@ -19,7 +19,8 @@ package-lock.json
 
 # testing
 /coverage
-**/screenshots
+**/cypress/screenshots
+**/cypress/videos
 
 # production
 **/build
