@@ -290,6 +290,7 @@ const TextField = ({
       {...textFieldProps}
       defaultValue={defaultValue}
       onChange={onChange}
+      value={value}
       {...props}
     />
   );
