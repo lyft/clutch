@@ -15,6 +15,7 @@ import selectorReducer from "./selector-reducer";
 import { loadStoredState, storeState } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
+import { exclusiveProjectDependencies } from "./helpers";
 
 type ProjectSelectorErrorTypes = "DEPRECATED";
 
@@ -79,18 +80,31 @@ const allPresent = (state: State, dispatch: React.Dispatch<Action>): boolean => 
   const projectCheck = project =>
     project in state.projectData && !_.isEmpty(state.projectData?.[project]);
 
-  // check for data on all of our top level projects
-  const PROJECTS = Array.from(new Set(Object.keys(state[Group.PROJECTS])));
-  if (!PROJECTS.every(projectCheck)) {
-    // missing data for a project, return
+  // verify that we have all data for our top level projects
+  const projectKeys = Object.keys(state[Group.PROJECTS]);
+  if (!projectKeys.every(projectCheck)) {
+    // missing data for a direct project, return
     return false;
   }
 
-  const upDownKeys = Array.from(
-    new Set([...Object.keys(state[Group.UPSTREAM]), ...Object.keys(state[Group.UPSTREAM])])
+  // we have data for our projects, pull the dependencies from each to check
+  // instead of relying on our state
+  const dependencies: string[] = [];
+  projectKeys.forEach(p => {
+    const { upstreams, downstreams } = exclusiveProjectDependencies(state, Group.PROJECTS, p);
+    dependencies.push(...upstreams, ...downstreams);
+  });
+
+  if (!dependencies.every(projectCheck)) {
+    // missing data for a dependency, return
+    return false;
+  }
+
+  const upDownKeys: string[] = Array.from(
+    new Set([...Object.keys(state[Group.UPSTREAM]), ...Object.keys(state[Group.DOWNSTREAM])])
   );
 
-  // we've received all data for our projects, check the upstreams / downstreams
+  // we've received all data for our projects, check for mismatch in up / down streams in our state and remove them
   const missing = upDownKeys.filter(p => !projectCheck(p));
   if (missing.length) {
     // we're missing upstreams / downstreams, remove them from our state
@@ -131,9 +145,7 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
           const missing: string[] = [];
           partialFailures.forEach(failure => {
             (failure.details || []).forEach(detail => {
-              if (_.get(detail, ["data", "disabled"])) {
-                missing.push(_.get(detail, "name"));
-              }
+              missing.push(_.get(detail, "name"));
             });
           });
 
