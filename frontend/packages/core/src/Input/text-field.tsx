@@ -191,6 +191,7 @@ const TextField = ({
   endAdornment,
   autocompleteCallback,
   defaultValue,
+  value,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -231,12 +232,6 @@ const TextField = ({
   // We maintain a defaultVal to prevent the value from changing from underneath
   // the component. This is required because autocomplete is uncontrolled.
   const [defaultVal] = React.useState<string>((defaultValue as string) || "");
-
-  // an attempt to try to control the value displayed in the text field
-  // const [inputValue, setInputValue] = React.useState("");
-
-  // an attempt to try to trigger a component re-render
-  // const [key, setKey] = React.useState(_.uniqueId());
   const [autoCompleteOptions, setAutoCompleteOptions] = React.useState<AutocompleteResultProps[]>(
     []
   );
@@ -257,32 +252,14 @@ const TextField = ({
     // TODO (mcutalo): support option.label in the renderOption
     return (
       <Autocomplete
-        // key={key} <-- an attempt to try to trigger a component re-render
         freeSolo
         size="small"
         options={autoCompleteOptions}
         PopperComponent={Popper}
-        getOptionLabel={option =>
+        getOptionLabel={(option: string | any) =>
           typeof option === "string" ? option : option?.id || option.label
         }
-        // the attempt here was to use onChange to make this debounce call and
-        // use the onInput chnage to make the setInputValue call as per this example:
-        // https://mui.com/components/autocomplete/#controlled-states
-        // onChange={(__, v) => autoCompleteDebounce(v)}
-        onInputChange={(event, v, reason) => {
-          autoCompleteDebounce(v)
-          // setInputValue(v) < -- an attempt to try to control the value displayed in the text field
-          /**
-           * if the reason is equal to reset (i.e. a submission), then update the state calls.
-          */
-          // if (reason === "reset"){
-            // setInputValue("") <-- used to clear out the value in the text field
-            // event.target.value = "" <-- try to clear out the input value directly
-            // setKey(_.uniqueId()) <--- used to trigger a component re-render
-            return
-          // }
-        }
-      }
+        onInputChange={(__, v) => autoCompleteDebounce(v)}
         renderOption={(option: AutocompleteResultProps) => (
           <AutocompleteResult id={option.id} label={option.label} />
         )}
@@ -290,7 +267,7 @@ const TextField = ({
           onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
         }
         defaultValue={{ id: defaultVal, label: defaultVal }}
-        // inputValue={inputValue} <-- the text field value
+        value={value}
         // the input's text is selected on focus. It helps the user clear the selected value.
         selectOnFocus
         renderInput={inputProps => (
@@ -301,9 +278,6 @@ const TextField = ({
               ...textFieldProps.InputProps,
               ref: inputProps.InputProps.ref,
             }}
-            // an attempt to see if we missed forwarding some props/handlers to the text field
-            // defaultValue={defaultValue}
-            // onChange={onChange}
             {...props}
           />
         )}
