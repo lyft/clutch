@@ -221,16 +221,19 @@ const selectorReducer = (state: State, action: Action): State => {
 
       // Will handle given partial failures
       if (result?.partialFailures) {
+        validState.projectErrors = [];
         result.partialFailures.forEach(failure => {
           if (failure.details && failure.details.length) {
-            const details = failure.details[0];
-            validState.projectErrors.push({ message: failure.message, details });
+            validState.projectErrors.push({
+              message: failure.message,
+              details: failure.details[0],
+            });
           }
         });
 
         return removeMissingProjects(
           validState,
-          validState.projectErrors.map((e: any) => e.details.name)
+          validState.projectErrors.map((e: any) => e.details?.name || "")
         );
       }
       if (result?.missing && result?.missing.length) {
