@@ -1,4 +1,5 @@
 import React from "react";
+import type { FieldValues, UseFormReturn } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import _ from "lodash";
 
@@ -32,29 +33,34 @@ const convertChangeEvent = (
 const StringField = (
   field: clutch.resolver.v1.IField,
   onChange: (e: ResolverChangeEvent) => void,
-  validation: any
+  validation: UseFormReturn<FieldValues, object>
 ): React.ReactElement => {
   const { name, metadata } = field;
-  const errorMsg = validation?.errors?.[name]?.message || validation?.errors?.[name]?.type || "";
+  const errorMsg =
+    validation?.formState?.errors?.[name]?.message ||
+    validation?.formState?.errors?.[name]?.type ||
+    "";
 
   const handleChanges = (event: React.ChangeEvent<ChangeEventTarget> | React.KeyboardEvent) => {
     onChange(convertChangeEvent(event));
   };
 
+  const reg = {
+    ...validation.register(name, { required: metadata?.required || false }),
+  };
   return (
     <TextField
       key={metadata.displayName || name}
       placeholder={metadata.stringField.placeholder}
       defaultValue={metadata.stringField.defaultValue || null}
-      required={metadata.required || false}
-      name={name}
       label={metadata.displayName || name}
+      inputRef={reg.ref}
+      helperText={errorMsg}
+      error={!!errorMsg}
       onChange={handleChanges}
       onKeyDown={handleChanges}
       onFocus={handleChanges}
-      inputRef={validation.register({ required: metadata.required || false })}
-      helperText={errorMsg}
-      error={!!errorMsg}
+      {...reg}
     />
   );
 };
@@ -106,7 +112,7 @@ const FIELD_TYPES = {
 const hydrateField = (
   field: clutch.resolver.v1.IField,
   onChange: (e: ResolverChangeEvent) => void,
-  validation: any
+  validation: UseFormReturn<FieldValues, object>
 ) => {
   let component;
   Object.keys(FIELD_TYPES).some(type => {

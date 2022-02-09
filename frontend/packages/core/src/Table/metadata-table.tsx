@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -136,17 +137,18 @@ const ImmutableRow: React.FC<ImmutableRowProps> = ({ data }) => {
 interface MutableRowProps extends ImmutableRowProps {
   onUpdate: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   onReturn: () => void;
-  validation: any;
+  validation: UseFormReturn<FieldValues, object>;
 }
 
 const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
-  const error = validation.errors?.[data.name];
+  const error = validation?.formState?.errors?.[data.name];
 
   // intercept the update callback to prevent updates if there are form errors present
   // based on the validation.
   const updateCallback = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
     error ? () => {} : onUpdate(e);
 
+  const reg = validation.register(data.name);
   return (
     <TableRow key={data.id}>
       <KeyCell data={data} />
@@ -164,9 +166,10 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
             onChange={updateCallback}
             onReturn={onReturn}
             onFocus={updateCallback}
-            inputRef={validation.register}
+            inputRef={reg.ref}
             helperText={error?.message || ""}
             error={!!error || false}
+            {...reg}
           />
         </Grid>
       </TableCell>
