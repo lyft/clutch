@@ -89,14 +89,14 @@ const allPresent = (state: State, dispatch: React.Dispatch<Action>): boolean => 
   }
 
   // we have data for our projects, pull the dependencies from each to check
-  // instead of relying on our state
+  // (instead of relying on our state)
   const dependencies: string[] = [];
   projectKeys.forEach(p => {
     const { upstreams, downstreams } = exclusiveProjectDependencies(state, Group.PROJECTS, p);
     dependencies.push(...upstreams, ...downstreams);
   });
 
-  if (!dependencies.every(projectCheck)) {
+  if (!_.uniq(dependencies).every(projectCheck)) {
     // missing data for a dependency, return
     return false;
   }
@@ -162,14 +162,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   const { updateSelected } = useDashUpdater();
   const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
-  React.useEffect(() => {
-    const interval = setInterval(() => hydrateProjects(state, dispatch), 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  React.useEffect(() => {
-    hydrateProjects(state, dispatch);
-  }, [state[Group.PROJECTS]]);
+  React.useEffect(() => hydrateProjects(state, dispatch), [state[Group.PROJECTS]]);
 
   // computes the final state for rendering across other components
   // (ie. filters out upstream/downstreams that are "hidden")
@@ -181,6 +174,8 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
       // Need to wait for the data.
       return;
     }
+
+    const interval = setInterval(() => hydrateProjects(state, dispatch), 30000);
 
     if (onError && state.projectErrors && state.projectErrors.length) {
       onError({ errors: state.projectErrors });
@@ -215,6 +210,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     // Update!
     storeState(state);
     updateSelected(dashState);
+    return () => clearInterval(interval);
   }, [state]);
 
   const handleAdd = () => {

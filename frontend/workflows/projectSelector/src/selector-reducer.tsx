@@ -225,8 +225,8 @@ const selectorReducer = (state: State, action: Action): State => {
         result.partialFailures.forEach(failure => {
           if (failure.details && failure.details.length) {
             validState.projectErrors.push({
-              message: failure.message,
-              details: failure.details[0],
+              message: failure.message || "",
+              details: failure.details[0] || {},
             });
           }
         });
@@ -236,6 +236,7 @@ const selectorReducer = (state: State, action: Action): State => {
           validState.projectErrors.map((e: any) => e.details?.name || "")
         );
       }
+
       if (result?.missing && result?.missing.length) {
         return removeMissingProjects(state, result?.missing || []);
       }
