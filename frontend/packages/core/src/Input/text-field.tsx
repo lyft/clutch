@@ -236,9 +236,9 @@ const TextField = ({
     []
   );
   const autoCompleteDebounce = React.useRef(
-    _.debounce(value => {
+    _.debounce(val => {
       if (autocompleteCallback !== undefined) {
-        autocompleteCallback(value)
+        autocompleteCallback(val)
           .then(data => {
             setAutoCompleteOptions(data.results);
           })
