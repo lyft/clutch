@@ -9700,7 +9700,7 @@ func (m *Event) validate(all bool) error {
 
 	// no validation rules for Kind
 
-	// no validation rules for EventTimeMillis
+	// no validation rules for CreationTimeMillis
 
 	if len(errors) > 0 {
 		return EventMultiError(errors)

@@ -131,6 +131,7 @@ const StyledSelect = styled(BaseSelect)({
     marginTop: "5px",
     border: "none",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+    maxHeight: "50vh",
   },
 
   "&.Mui-focused > .MuiSelect-root": {
@@ -180,7 +181,7 @@ const StyledSelect = styled(BaseSelect)({
   ".MuiListSubheader-root": {
     color: "#939495",
     cursor: "default",
-    "pointer-events": "none", // disables the select from closing on clicking the subheader
+    pointerEvents: "none", // disables the select from closing on clicking the subheader
   },
 });
 
