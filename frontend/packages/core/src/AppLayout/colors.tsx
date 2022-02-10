@@ -113,7 +113,6 @@ export const LIGHT_MODE_CHOICES: ClutchColorChoices = {
     selectedAlpha: 15,
     disabledAlpha: 3,
   },
-  },
 };
 
 export const DARK_MODE: ClutchPalette = {
