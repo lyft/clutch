@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { google as IGoogle } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import { Box } from "@material-ui/core";
 import _ from "lodash";
@@ -23,13 +24,31 @@ import type {
   TimeRangeState,
 } from "./types";
 
+/**
+ * DashError: used for defining general errors to display
+ */
 export interface DashError {
+  /**
+   * title: Message to show for the error alert
+   */
   title: string;
+  /**
+   * data: (optional) React component which will render under the Title
+   */
   data?: React.ReactNode;
 }
 
+/**
+ * DashProps: Defined input properties of the Dash component
+ */
 interface DashProps {
+  /**
+   * children: The children to render
+   */
   children: React.ReactNode;
+  /**
+   * onError: (optional) error handler which will accept a DashError as input
+   */
   onError?: (DashError) => void;
 }
 
@@ -107,6 +126,8 @@ const Dash = ({ children, onError }: DashProps) => {
     initialTimeRangeState
   );
 
+  // Will take a returned ProjectSelectorError and generate a rendered component of the error messages
+  // and return it to the parent component
   const returnDashError = ({ errors }: ProjectSelectorError) => {
     if (onError && errors && errors.length) {
       const dashError: DashError = {
@@ -114,7 +135,7 @@ const Dash = ({ children, onError }: DashProps) => {
       };
       dashError.data = (
         <ul>
-          {errors.map(error => (
+          {errors.map((error: IGoogle.rpc.IStatus) => (
             <li>{error.message}</li>
           ))}
         </ul>

@@ -21,11 +21,23 @@ import { loadStoredState, storeState } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
 
+/**
+ * ProjectSelectorError: use for defining error types that will be propagated to the parent component
+ */
 export interface ProjectSelectorError {
+  /**
+   * errors: Partial failure errors from the server
+   */
   errors: IGoogle.rpc.IStatus[];
 }
 
+/**
+ * ProjectSelectorProps: Defined input properties of ProjectSelector component
+ */
 interface ProjectSelectorProps {
+  /**
+   * onError: (optional) error handle which will accept a ProjectSelectorError as input
+   */
   onError?: (ProjectSelectorError) => void;
 }
 
@@ -132,6 +144,7 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
       projects: string[];
     };
 
+    // since default projects are always included in the response, no reason to only filter on custom projects
     requestParams.projects = Object.keys(state[Group.PROJECTS]);
 
     client
@@ -162,7 +175,14 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   const { updateSelected } = useDashUpdater();
   const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
-  React.useEffect(() => hydrateProjects(state, dispatch), [state[Group.PROJECTS]]);
+  React.useEffect(() => {
+    const interval = setInterval(() => hydrateProjects(state, dispatch), 30000);
+    return () => clearInterval(interval);
+  }, [state]);
+
+  React.useEffect(() => {
+    hydrateProjects(state, dispatch);
+  }, [state[Group.PROJECTS]]);
 
   // computes the final state for rendering across other components
   // (ie. filters out upstream/downstreams that are "hidden")
@@ -174,8 +194,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
       // Need to wait for the data.
       return;
     }
-
-    const interval = setInterval(() => hydrateProjects(state, dispatch), 30000);
 
     if (onError && state.projectErrors && state.projectErrors.length) {
       onError({ errors: state.projectErrors });
@@ -210,7 +228,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     // Update!
     storeState(state);
     updateSelected(dashState);
-    return () => clearInterval(interval);
   }, [state]);
 
   const handleAdd = () => {
