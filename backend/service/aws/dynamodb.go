@@ -14,7 +14,8 @@ import (
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 )
 
-// defaults for the dynamodb settings config
+// defaults for the dynamodb settings config as set by AWS
+// https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ServiceQuotas.html#default-limits-throughput-capacity-modes
 const (
 	AwsMaxRCU       = 40000
 	AwsMaxWCU       = 40000
@@ -31,7 +32,7 @@ func getScalingLimits(cfg *awsv1.Config) *awsv1.ScalingLimits {
 		ds := &awsv1.ScalingLimits{
 			MaxReadCapacityUnits:  AwsMaxRCU,
 			MaxWriteCapacityUnits: AwsMaxWCU,
-			MaxScaleFactor:        SafeScaleFactor,
+			MaxScaleFactor:        float32(SafeScaleFactor),
 			EnableOverride:        false,
 		}
 		return ds
@@ -190,10 +191,10 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 		}
 
 		// check for increases that exceed max increase scale
-		if (float32(*target.ReadCapacityUnits / *current.ReadCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+		if (float32(*target.ReadCapacityUnits) / float32(*current.ReadCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
 			return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
 		}
-		if (float32(*target.WriteCapacityUnits / *current.WriteCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+		if (float32(*target.WriteCapacityUnits) / float32(*current.WriteCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
 			return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
 		}
 	}

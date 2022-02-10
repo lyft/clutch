@@ -41,7 +41,11 @@ const visibilityOptions = {
 };
 
 const RepositoryDetails: React.FC<WizardChild> = () => {
-  const { register, errors, handleSubmit } = useForm({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
@@ -50,6 +54,9 @@ const RepositoryDetails: React.FC<WizardChild> = () => {
   const repositoryData = useDataLayout("repositoryData");
   const repositoryOptions = repositoryData.displayValue()
     .data as IClutch.sourcecontrol.v1.GetRepositoryOptionsResponse;
+
+  const nameValidation = register("name");
+  const descriptionValidation = register("description");
 
   return (
     <WizardStep error={repositoryData.error} isLoading={repositoryData.isLoading}>
@@ -66,17 +73,19 @@ const RepositoryDetails: React.FC<WizardChild> = () => {
           label="Name"
           name="name"
           onChange={e => repositoryData.updateData("name", e.target.value)}
-          inputRef={register}
+          inputRef={nameValidation.ref}
           helperText={errors.name ? errors.name.message : ""}
           error={!!errors.name}
+          {...nameValidation}
         />
         <TextField
           label="Description"
           name="description"
           onChange={e => repositoryData.updateData("description", e.target.value)}
-          inputRef={register}
+          inputRef={descriptionValidation.ref}
           error={!!errors.description}
           helperText={errors.description ? errors.description.message : ""}
+          {...descriptionValidation}
         />
         <Select
           name="visibility"
