@@ -38,10 +38,12 @@ export interface ClutchColorChoices {
   background: BackgroundColor;
   typography: TypographyColor; // Typography and Icons
   states: {
-    hover: StateColor;
-    focused: StateColor;
-    pressed: StateColor;
-    selected: StateColor;
-    disabled: StateColor;
+    active: string;
+    default: string;
+    hoverAlpha: number;
+    focusedAlpha: number;
+    pressedAlpha: number;
+    selectedAlpha: number;
+    disabledAlpha: number;
   };
 }

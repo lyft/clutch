@@ -105,26 +105,14 @@ export const LIGHT_MODE_CHOICES: ClutchColorChoices = {
     header: "", // gradient
   },
   states: {
-    hover: {
-      active: `${LIGHT_MODE.blue[600]}0D`,
-      default: `${LIGHT_MODE.neutral[900]}0D`,
-    },
-    focused: {
-      active: `${LIGHT_MODE.blue[600]}1A`,
-      default: `${LIGHT_MODE.neutral[900]}1A`,
-    },
-    pressed: {
-      active: `${LIGHT_MODE.blue[600]}26`,
-      default: `${LIGHT_MODE.neutral[900]}21`,
-    },
-    selected: {
-      active: `${LIGHT_MODE.blue[600]}1F`,
-      default: `${LIGHT_MODE.neutral[900]}26`,
-    },
-    disabled: {
-      active: "", // blank on design system
-      default: `${LIGHT_MODE.neutral[900]}08`,
-    },
+    active: LIGHT_MODE.blue[600],
+    default: LIGHT_MODE.neutral[900],
+    hoverAlpha: 5,
+    focusedAlpha: 10,
+    pressedAlpha: 13,
+    selectedAlpha: 15,
+    disabledAlpha: 3,
+  },
   },
 };
 
@@ -230,26 +218,13 @@ export const DARK_MODE_CHOICES: ClutchColorChoices = {
     header: "#0D1030",
   },
   states: {
-    hover: {
-      active: `${DARK_MODE.blue[600]}0D`,
-      default: `${DARK_MODE.neutral[900]}12`,
-    },
-    focused: {
-      active: `${DARK_MODE.blue[600]}1A`,
-      default: `${DARK_MODE.neutral[900]}1F`,
-    },
-    pressed: {
-      active: `${DARK_MODE.blue[600]}26`,
-      default: `${DARK_MODE.neutral[900]}2E`,
-    },
-    selected: {
-      active: `${DARK_MODE.blue[600]}1F`,
-      default: `${DARK_MODE.neutral[900]}40`,
-    },
-    disabled: {
-      active: "", // blank on design system
-      default: `${DARK_MODE.neutral[900]}0D`,
-    },
+    active: DARK_MODE.blue[600],
+    default: DARK_MODE.neutral[900],
+    hoverAlpha: 7,
+    focusedAlpha: 12,
+    pressedAlpha: 18,
+    selectedAlpha: 25,
+    disabledAlpha: 5,
   },
 };
 
