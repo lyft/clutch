@@ -4,6 +4,8 @@ import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext } from "../Contexts/app-context";
+import type { HydrateData } from "../Contexts/short-link-context";
+import { ShortLinkContext } from "../Contexts/short-link-context";
 import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
 import NotFound from "../not-found";
@@ -52,6 +54,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [hydration, setHydration] = React.useState<HydrateData>(undefined);
 
   const loadWorkflows = () => {
     registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
@@ -65,6 +68,24 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     const interval = setInterval(loadWorkflows, FEATURE_FLAG_POLL_RATE);
     return () => clearInterval(interval);
   }, []);
+
+  const ShortLinks = () => {
+    const returnedData = {
+      route: "/dash",
+      data: {
+        dashState: {
+          "0": { clutch: { checked: true } },
+          "1": {},
+          "2": {},
+        },
+        dashSplitEvents: true,
+      },
+    };
+
+    setHydration({ data: returnedData.data });
+
+    return <div>Hello</div>;
+  };
 
   const [discoverableWorkflows, setDiscoverableWorkflows] = React.useState([]);
   React.useEffect(() => {
@@ -90,34 +111,37 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       <Theme variant="light">
         <div id="App">
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
-            <Routes>
-              <Route path="/*" element={<AppLayout isLoading={isLoading} />}>
-                <Route key="landing" path="/" element={<Landing />} />
-                {workflows.map((workflow: Workflow) => (
-                  <ErrorBoundary workflow={workflow} key={workflow.path.split("/")[0]}>
-                    <Route path={`${workflow.path}/*`} element={<Outlet />}>
-                      {workflow.routes.map(route => {
-                        const heading = route.displayName
-                          ? `${workflow.displayName}: ${route.displayName}`
-                          : workflow.displayName;
-                        return (
-                          <Route
-                            key={workflow.path}
-                            path={`${route.path}`}
-                            element={React.cloneElement(<route.component />, {
-                              ...route.componentProps,
-                              heading,
-                            })}
-                          />
-                        );
-                      })}
-                      <Route key={`${workflow.path}/notFound`} path="*" element={<NotFound />} />
-                    </Route>
-                  </ErrorBoundary>
-                ))}
-                <Route key="notFound" path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
+            <ShortLinkContext.Provider value={{ hydration }}>
+              <Routes>
+                <Route path="/*" element={<AppLayout isLoading={isLoading} />}>
+                  <Route key="landing" path="/" element={<Landing />} />
+                  {workflows.map((workflow: Workflow) => (
+                    <ErrorBoundary workflow={workflow} key={workflow.path.split("/")[0]}>
+                      <Route path={`${workflow.path}/*`} element={<Outlet />}>
+                        {workflow.routes.map(route => {
+                          const heading = route.displayName
+                            ? `${workflow.displayName}: ${route.displayName}`
+                            : workflow.displayName;
+                          return (
+                            <Route
+                              key={workflow.path}
+                              path={`${route.path}`}
+                              element={React.cloneElement(<route.component />, {
+                                ...route.componentProps,
+                                heading,
+                              })}
+                            />
+                          );
+                        })}
+                        <Route key={`${workflow.path}/notFound`} path="*" element={<NotFound />} />
+                      </Route>
+                    </ErrorBoundary>
+                  ))}
+                  <Route key="short-links" path="/sl/*" element={<ShortLinks />} />
+                  <Route key="notFound" path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </ShortLinkContext.Provider>
           </ApplicationContext.Provider>
         </div>
       </Theme>
