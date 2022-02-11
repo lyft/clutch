@@ -252,7 +252,7 @@ const TextField = ({
     return (
       <Autocomplete
         freeSolo
-        size="small"
+        fullWidth
         options={autoCompleteOptions}
         PopperComponent={Popper}
         getOptionLabel={option =>

@@ -263,7 +263,7 @@ const SearchField: React.FC = () => {
           <Autocomplete
             autoComplete
             selectOnFocus
-            fullWidth
+            size="small"
             inputValue={inputValue}
             renderInput={Input}
             renderOption={renderResult}
