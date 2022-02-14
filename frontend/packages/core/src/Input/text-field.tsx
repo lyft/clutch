@@ -163,6 +163,7 @@ export interface TextFieldProps
       | "defaultValue"
       | "disabled"
       | "error"
+      | "fullWidth"
       | "helperText"
       | "id"
       | "inputRef"
@@ -180,7 +181,6 @@ export interface TextFieldProps
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
   autocompleteCallback?: (v: string) => Promise<{ results: { id?: string; label: string }[] }>;
-  autocompleteFullWidth?: boolean;
 }
 
 const TextField = ({
@@ -192,7 +192,7 @@ const TextField = ({
   endAdornment,
   autocompleteCallback,
   defaultValue,
-  autocompleteFullWidth = true,
+  fullWidth = true,
   value,
   ...props
 }: TextFieldProps) => {
@@ -256,7 +256,7 @@ const TextField = ({
       <Autocomplete
         freeSolo
         size="small"
-        fullWidth={autocompleteFullWidth}
+        fullWidth={fullWidth}
         options={autoCompleteOptions}
         PopperComponent={Popper}
         getOptionLabel={(option: string | any) =>
