@@ -35,6 +35,7 @@ const register = (): WorkflowConfiguration => {
 export default register;
 
 export type {
+  DashError,
   DashState,
   TimelineState,
   TimeData,
