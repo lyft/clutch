@@ -6,6 +6,7 @@ import {
   deriveSwitchStatus,
   exclusiveProjectDependencies,
   PROJECT_TYPE_URL,
+  removeMissingProjects,
   updateGroupstate,
 } from "./helpers";
 import type { Action, ProjectState, State } from "./types";
@@ -211,15 +212,40 @@ const selectorReducer = (state: State, action: Action): State => {
     case "HYDRATE_ERROR": {
       /**
        * TODO: do we want to handle the error state differently? For example, when we render the error on the UI,
-       * it won't disapper unless there's a successful API call or if the user refreshes the page. If a user performs other
+       * it won't disappear unless there's a successful API call or if the user refreshes the page. If a user performs other
        * actions, such as use the toggle/checkbox/ etc. the error message will be still be on the page
        */
-      const err = action?.payload?.result as ClutchError;
+
+      const { result } = action?.payload || { result: {} };
+      const validState = { ...state };
+
+      // Will handle given partial failures
+      if (result?.partialFailures) {
+        validState.projectErrors = [];
+        result.partialFailures.forEach(failure => {
+          if (failure.details && failure.details.length) {
+            validState.projectErrors.push({
+              message: failure.message || "",
+              details: failure.details[0] || {},
+            });
+          }
+        });
+
+        return removeMissingProjects(
+          validState,
+          validState.projectErrors.map((e: any) => e.details?.name || "")
+        );
+      }
+
+      if (result?.missing && result?.missing.length) {
+        return removeMissingProjects(state, result?.missing || []);
+      }
+
+      const err = result as ClutchError;
       if (err.status.code !== 404) {
         return { ...state, loading: false, error: action?.payload?.result };
       }
       const errorMsg = err.message;
-      const validState = { ...state };
       let projects = validState[Group.PROJECTS];
       if (errorMsg) {
         // this message is guaranteed to follow this format from the server
