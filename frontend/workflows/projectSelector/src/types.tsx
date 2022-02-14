@@ -99,6 +99,20 @@ export interface State extends GlobalProjectState {
   error: ClutchError | undefined;
 }
 
+/**
+ * DashError: used for defining general errors to display
+ */
+export interface DashError {
+  /**
+   * title: Message to show for the error alert
+   */
+  title: string;
+  /**
+   * data: (optional) React component which will render under the Title
+   */
+  data?: React.ReactNode;
+}
+
 export interface DashState {
   // Contains the names of selected projects, upstreams, and downstreams merged together.
   selected: string[];

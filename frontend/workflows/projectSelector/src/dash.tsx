@@ -17,26 +17,13 @@ import type { ProjectSelectorError } from "./project-selector";
 import ProjectSelector from "./project-selector";
 import type {
   DashAction,
+  DashError,
   DashState,
   TimelineAction,
   TimelineState,
   TimeRangeAction,
   TimeRangeState,
 } from "./types";
-
-/**
- * DashError: used for defining general errors to display
- */
-export interface DashError {
-  /**
-   * title: Message to show for the error alert
-   */
-  title: string;
-  /**
-   * data: (optional) React component which will render under the Title
-   */
-  data?: React.ReactNode;
-}
 
 /**
  * DashProps: Defined input properties of the Dash component
