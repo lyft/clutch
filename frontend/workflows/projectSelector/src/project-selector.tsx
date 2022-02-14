@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useForm } from "react-hook-form";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
@@ -112,6 +113,23 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
   }
 };
 
+const autoComplete = async (search: string): Promise<any> => {
+  // Check the length of the search query as the user might empty out the search
+  // which will still trigger the on change handler
+  if (search.length === 0) {
+    return { results: [] };
+  }
+
+  const response = await client.post("/v1/resolver/autocomplete", {
+    want: `type.googleapis.com/clutch.core.project.v1.Project`,
+    search,
+  });
+
+  return { results: response?.data?.results || [] };
+};
+
+const Form = styled.form({});
+
 const ProjectSelector = () => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
@@ -186,6 +204,16 @@ const ProjectSelector = () => {
 
   const hasError = state.error !== undefined && state.error !== null;
 
+  const { handleSubmit } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+  });
+
+  const handleChanges = event => {
+    setCustomProject(event.target.value);
+  };
+
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={derivedState}>
@@ -234,15 +262,18 @@ const ProjectSelector = () => {
           </StyledProgressContainer>
           <Divider />
           {/* TODO: add plus icon in the text field */}
-          <StyledProjectTextField
-            disabled={state.loading}
-            placeholder="Add a project"
-            value={customProject}
-            onChange={e => setCustomProject(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && handleAdd()}
-            helperText={state.error?.message}
-            error={hasError}
-          />
+          <Form onSubmit={handleSubmit(handleAdd)} noValidate>
+            <StyledProjectTextField
+              disabled={state.loading}
+              placeholder="Add a project"
+              value={customProject}
+              onChange={handleChanges}
+              onKeyDown={handleChanges}
+              helperText={state.error?.message}
+              error={hasError}
+              autocompleteCallback={v => autoComplete(v)}
+            />
+          </Form>
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />

@@ -193,6 +193,7 @@ const TextField = ({
   autocompleteCallback,
   defaultValue,
   autocompleteFullWidth = true,
+  value,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -237,9 +238,9 @@ const TextField = ({
     []
   );
   const autoCompleteDebounce = React.useRef(
-    _.debounce(value => {
+    _.debounce(val => {
       if (autocompleteCallback !== undefined) {
-        autocompleteCallback(value)
+        autocompleteCallback(val)
           .then(data => {
             setAutoCompleteOptions(data.results);
           })
@@ -258,7 +259,7 @@ const TextField = ({
         fullWidth={autocompleteFullWidth}
         options={autoCompleteOptions}
         PopperComponent={Popper}
-        getOptionLabel={option =>
+        getOptionLabel={(option: string | any) =>
           typeof option === "string" ? option : option?.id || option.label
         }
         onInputChange={(__, v) => autoCompleteDebounce(v)}
@@ -269,6 +270,9 @@ const TextField = ({
           onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
         }
         defaultValue={{ id: defaultVal, label: defaultVal }}
+        value={value}
+        // the input's text is selected on focus. It helps the user clear the selected value.
+        selectOnFocus
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
@@ -289,6 +293,7 @@ const TextField = ({
       {...textFieldProps}
       defaultValue={defaultValue}
       onChange={onChange}
+      value={value}
       {...props}
     />
   );
