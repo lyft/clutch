@@ -154,6 +154,23 @@ const deriveStateData = (state: State): State => {
   return newState;
 };
 
+/**
+ * Will remove a list of given projects from the Projects, Upstreams and Downstreams to keep the state up to date
+ *
+ * @param state given state
+ * @param missing array of projects to remove
+ * @returns the new state with the missing projects omitted
+ */
+const removeMissingProjects = (state: State, missing: string[]): State => {
+  const newState = { ...state };
+
+  newState[Group.PROJECTS] = _.omit(state[Group.PROJECTS], missing);
+  newState[Group.UPSTREAM] = _.omit(state[Group.UPSTREAM], missing);
+  newState[Group.DOWNSTREAM] = _.omit(state[Group.DOWNSTREAM], missing);
+
+  return newState;
+};
+
 const hoursToMs = (hours: number): number => {
   return hours * 60 * 60 * 1000;
 };
@@ -164,6 +181,7 @@ export {
   DispatchContext,
   exclusiveProjectDependencies,
   PROJECT_TYPE_URL,
+  removeMissingProjects,
   StateContext,
   updateGroupstate,
   useDispatch,

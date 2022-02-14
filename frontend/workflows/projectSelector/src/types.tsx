@@ -1,4 +1,4 @@
-import type { clutch as IClutch } from "@clutch-sh/api";
+import type { clutch as IClutch, google as IGoogle } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 
 export enum Group {
@@ -94,6 +94,7 @@ const isGlobalProjectState = (state: GlobalProjectState | Object): state is Glob
 
 export interface State extends GlobalProjectState {
   projectData: { [projectName: string]: IClutch.core.project.v1.IProject };
+  projectErrors: IGoogle.rpc.IStatus[];
   loading: boolean;
   error: ClutchError | undefined;
 }
