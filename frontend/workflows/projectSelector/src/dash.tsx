@@ -118,7 +118,7 @@ const Dash = ({ children, onError }: DashProps) => {
   const returnDashError = ({ errors }: ProjectSelectorError) => {
     if (onError && errors && errors.length) {
       const dashError: DashError = {
-        title: "The following failed to load:",
+        title: "The following projects failed:",
       };
       dashError.data = (
         <ul>
