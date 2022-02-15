@@ -92,7 +92,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
             <Routes>
               <Route path="/*" element={<AppLayout isLoading={isLoading} />}>
-                <Route key="landing" path="/" element={<Landing />} />
+                <Route key="landing" path="" element={<Landing />} />
                 {workflows.map((workflow: Workflow) => (
                   <ErrorBoundary workflow={workflow} key={workflow.path.split("/")[0]}>
                     <Route path={`${workflow.path}/*`} element={<Outlet />}>

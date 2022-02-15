@@ -491,7 +491,7 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={amiiboData.error} isLoading={amiiboData.isLoading}>
-      <Table headings={["Name", "Image", "Series", "Type"]}>
+      <Table columns={["Name", "Image", "Series", "Type"]}>
         {amiiboResults.map((amiibo, index: number) => (
           <TableRow key={index}>
             {amiibo.name}
@@ -616,6 +616,7 @@ That's it! You should be able to remove all the remaining generated code.
 
 Run the frontend with the new workflow:
 ```bash
+make yarn-lock
 make frontend-dev
 ```
 
