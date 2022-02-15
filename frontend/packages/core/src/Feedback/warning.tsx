@@ -1,18 +1,16 @@
 import React from "react";
-import styled from "@emotion/styled";
 import { Snackbar } from "@material-ui/core";
-import { Alert as MuiAlert } from "@material-ui/lab";
+import type { AlertProps as MuiAlertProps } from "@material-ui/lab";
 
-const Alert = styled(MuiAlert)({
-  margin: "5px",
-});
+import { Alert } from "./alert";
 
-export interface WarningProps {
+export interface WarningProps extends Pick<MuiAlertProps, "severity" | "action" | "onClose"> {
   message: any;
+  title?: React.ReactNode;
   onClose?: () => void;
 }
 
-const Warning: React.FC<WarningProps> = ({ message, onClose }) => {
+const Warning: React.FC<WarningProps> = ({ message, title, onClose, severity = "warning" }) => {
   const [open, setOpen] = React.useState(true);
 
   const onDismiss = () => {
@@ -30,7 +28,7 @@ const Warning: React.FC<WarningProps> = ({ message, onClose }) => {
       onClose={() => setOpen(false)}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
-      <Alert elevation={6} variant="filled" onClose={onDismiss} severity="warning">
+      <Alert elevation={6} variant="filled" onClose={onDismiss} title={title} severity={severity}>
         {message}
       </Alert>
     </Snackbar>
