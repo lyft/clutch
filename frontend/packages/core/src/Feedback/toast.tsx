@@ -33,7 +33,12 @@ const Toast: React.FC<ToastProps> = ({
       open={open}
       autoHideDuration={duration}
       onExiting={onDismiss}
-      onClose={() => setOpen(false)}
+      onClose={(_, reason) => {
+        // This way it will not auto close when clicking in the window, will instead wait on the timeout or onClose
+        if (reason !== "clickaway") {
+          setOpen(false);
+        }
+      }}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
       <Alert
