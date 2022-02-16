@@ -42,6 +42,7 @@ export type {
   TimeDataUpdate,
   EventData,
   TimeRangeState,
+  GlobalProjectState,
 } from "./types";
 export {
   Card,

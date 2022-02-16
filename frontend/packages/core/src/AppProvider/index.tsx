@@ -1,10 +1,17 @@
 import React from "react";
-import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext } from "../Contexts/app-context";
-import type { HydrateData } from "../Contexts/short-link-context";
+import type { HydrateData, HydratedData } from "../Contexts/short-link-context";
 import { ShortLinkContext } from "../Contexts/short-link-context";
 import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
@@ -19,6 +26,17 @@ export interface UserConfiguration {
   [packageName: string]: {
     [key: string]: ConfiguredRoute;
   };
+}
+
+interface ClutchAppProps {
+  availableWorkflows: {
+    [key: string]: () => WorkflowConfiguration;
+  };
+  configuration: UserConfiguration;
+}
+
+interface ShortLinkHydratorProps {
+  hydrate: (HydrateData) => void;
 }
 
 /**
@@ -41,12 +59,206 @@ const featureFlagFilter = (workflows: Workflow[]): Promise<Workflow[]> => {
   );
 };
 
-interface ClutchAppProps {
-  availableWorkflows: {
-    [key: string]: () => WorkflowConfiguration;
+const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const returnedData: { [key: string]: HydrateData } = {
+    "1234": {
+      route: "/dash",
+      data: {
+        dash: {
+          state: {
+            "0": {
+              clutch: { checked: true },
+              clutchdata: { checked: true },
+              lyftkube: { checked: true },
+            },
+            "1": {
+              acl: { checked: false },
+              tcseditor: { checked: false },
+              cdcconnector: { checked: false },
+              deployapi: { checked: false },
+              incidentassistant: { checked: false },
+              infraevents: { checked: false },
+              dynamodbquerier: { checked: false },
+              omnibot: { checked: false },
+              servicecatalog: { checked: false },
+            },
+            "2": {
+              deployapi: { checked: false },
+              sloportal: { checked: false },
+              loadtestbot: { checked: false },
+              omnibot: { checked: false },
+            },
+          },
+          splitEvents: true,
+        },
+      },
+    },
+    "2456": {
+      route: "/dash",
+      data: {
+        dash: {
+          state: {
+            "0": {
+              lyftkube: { checked: true },
+              ridesapi: { checked: true, custom: true },
+            },
+            "1": {
+              acl: { checked: false },
+              tcseditor: { checked: false },
+              cdcconnector: { checked: true },
+              deployapi: { checked: false },
+              incidentassistant: { checked: false },
+              infraevents: { checked: false },
+              dynamodbquerier: { checked: false },
+              omnibot: { checked: false },
+              servicecatalog: { checked: false },
+              jobscheduler: { checked: false },
+              ridestate: { checked: false },
+              rateandpay: { checked: false },
+              ridescheduler: { checked: false },
+              badcompanions: { checked: false },
+              dsfeatures: { checked: false },
+              riderperks: { checked: false },
+              locations: { checked: false },
+              ridehistory: { checked: false },
+              driverearnings: { checked: false },
+              enterprisedispatch: { checked: false },
+              trips: { checked: false },
+              userpreferences: { checked: false },
+              cancels: { checked: false },
+              drivermode: { checked: false },
+              reflection: { checked: false },
+              enterprise: { checked: false },
+              messaging: { checked: false },
+              green: { checked: false },
+              viewport: { checked: false },
+              karma: { checked: false },
+              wallet: { checked: false },
+              taskqueue: { checked: false },
+              pusher: { checked: false },
+              hourscompliance: { checked: false },
+              rideprograms: { checked: false },
+              drivermonitor: { checked: false },
+              driverqueues: { checked: false },
+              routestate: { checked: false },
+              businessprograms: { checked: false },
+              fare: { checked: false },
+              ratecards: { checked: false },
+              ratelimit: { checked: false },
+              cancelproperties: { checked: false },
+              supply: { checked: false },
+              routesapi: { checked: false },
+              payapi: { checked: false },
+              places: { checked: false },
+              offerings: { checked: false },
+              legacyridetypes: { checked: false },
+              push: { checked: false },
+              autonomous: { checked: false },
+              enterprisepayapi: { checked: false },
+              deliveries: { checked: false },
+              matchingexecution: { checked: false },
+              compliance: { checked: true },
+              users: { checked: false },
+              custodian: { checked: false },
+              etaproxy: { checked: false },
+              ledger: { checked: false },
+              tcs: { checked: false },
+              routes: { checked: false },
+              asynctransitionupdates: { checked: false },
+              txnhub: { checked: false },
+              ufo: { checked: false },
+              dispatch: { checked: false },
+              locationssearch: { checked: false },
+              matchingstate: { checked: false },
+              pricing: { checked: false },
+              regions: { checked: false },
+              walletapi: { checked: false },
+              sharedpayments: { checked: false },
+              tripsapi: { checked: false },
+              ratings: { checked: false },
+              rides: { checked: false },
+              coupons: { checked: false },
+              venues: { checked: false },
+              usergroups: { checked: false },
+              pickupoptimizer: { checked: false },
+              switchboard: { checked: false },
+              passengerqueues: { checked: false },
+              ridelocations: { checked: false },
+            },
+            "2": {
+              deployapi: { checked: false },
+              sloportal: { checked: false },
+              loadtestbot: { checked: false },
+              omnibot: { checked: false },
+              displaycomponents: { checked: false },
+              passengerqueues: { checked: false },
+              wwwdriverxpfe: { checked: false },
+              autonomousinride: { checked: false },
+              cancels: { checked: false },
+              drivermode: { checked: false },
+              riderdelight: { checked: false },
+              walletapi: { checked: false },
+              incentiveguarantees: { checked: false },
+              graphql: { checked: false },
+              venues: { checked: false },
+              messaging: { checked: false },
+              rateandpay: { checked: false },
+              migrationworkers: { checked: false },
+              legacyridescheduler: { checked: false },
+              payapi: { checked: false },
+              www2: { checked: false },
+              incentiveshistory: { checked: false },
+              lyftentertainment: { checked: false },
+              karma: { checked: false },
+              routesapi: { checked: false },
+              deliveries: { checked: false },
+              drivermonitor: { checked: false },
+              ledger: { checked: false },
+              resourcemgmt: { checked: false },
+              sandbox: { checked: false },
+              autonomouspartners: { checked: false },
+              ridechat: { checked: false },
+              campaignscheduler: { checked: false },
+              ridestate: { checked: false },
+              pusher: { checked: false },
+              banners: { checked: false },
+              ratings: { checked: false },
+              tripsapi: { checked: false },
+              autonomousvsm: { checked: false },
+              sharelocation: { checked: false },
+              custodian: { checked: false },
+              enterprisedispatch: { checked: false },
+              matchingexecution: { checked: false },
+              robocop: { checked: false },
+              green: { checked: false },
+              ridescheduler: { checked: false },
+              routestate: { checked: false },
+              autonomous: { checked: false },
+              tripintent: { checked: false },
+              wwwenterprisefe: { checked: false },
+              ampdevicemanager: { checked: false },
+            },
+          },
+          splitEvents: false,
+        },
+      },
+    },
   };
-  configuration: UserConfiguration;
-}
+
+  React.useEffect(() => {
+    const matches = pathname.match(/(\/sl\/)(.*)/i);
+    if (matches && matches[2] && returnedData[matches[2]]) {
+      const data = returnedData[matches[2]];
+      hydrate(data.data);
+      navigate(data.route);
+    }
+  }, [pathname]);
+
+  return null;
+};
 
 const ClutchApp: React.FC<ClutchAppProps> = ({
   availableWorkflows,
@@ -54,7 +266,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [hydration, setHydration] = React.useState<HydrateData>(undefined);
+  const [hydration, setHydration] = React.useState<HydratedData>(undefined);
 
   const loadWorkflows = () => {
     registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
@@ -68,24 +280,6 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     const interval = setInterval(loadWorkflows, FEATURE_FLAG_POLL_RATE);
     return () => clearInterval(interval);
   }, []);
-
-  const ShortLinks = () => {
-    const returnedData = {
-      route: "/dash",
-      data: {
-        dashState: {
-          "0": { clutch: { checked: true } },
-          "1": {},
-          "2": {},
-        },
-        dashSplitEvents: true,
-      },
-    };
-
-    setHydration({ data: returnedData.data });
-
-    return <div>Hello</div>;
-  };
 
   const [discoverableWorkflows, setDiscoverableWorkflows] = React.useState([]);
   React.useEffect(() => {
@@ -137,7 +331,11 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                       </Route>
                     </ErrorBoundary>
                   ))}
-                  <Route key="short-links" path="/sl/*" element={<ShortLinks />} />
+                  <Route
+                    key="short-links"
+                    path="/sl/*"
+                    element={<ShortLinkHydrator hydrate={setHydration} />}
+                  />
                   <Route key="notFound" path="*" element={<NotFound />} />
                 </Route>
               </Routes>
