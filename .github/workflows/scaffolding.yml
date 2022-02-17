@@ -9,7 +9,7 @@ on:
     branches:
     - main
     paths:
-    - .github/workflows/frontend.yml
+    - .github/workflows/scaffolding.yml
 env:
   GOPATH: ${{ github.workspace }}/go
   GOBIN: ${{ github.workspace }}/go/bin
