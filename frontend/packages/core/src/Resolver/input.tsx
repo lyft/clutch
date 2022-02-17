@@ -79,12 +79,19 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
   const error = validation.formState.errors?.query;
   const reg = validation.register("query", { required: true });
   return (
-    <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
+    <Form
+      onSubmit={validation.handleSubmit(({ query }) => {
+        setQueryData(query);
+        submitHandler({ query });
+      })}
+      noValidate
+    >
       <TextField
         label={typeLabel}
         name="query"
         required
         defaultValue={queryData}
+        value={queryData}
         onChange={handleChanges}
         onKeyDown={handleChanges}
         onFocus={handleChanges}
