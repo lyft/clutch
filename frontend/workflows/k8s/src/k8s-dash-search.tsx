@@ -30,11 +30,7 @@ const Content = styled.div({
 });
 
 const K8sDashSearch = ({ onSubmit }) => {
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = useForm({
+  const { errors, handleSubmit, register } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
@@ -68,9 +64,6 @@ const K8sDashSearch = ({ onSubmit }) => {
       });
   };
 
-  const namespaceValidation = register("namespace");
-  const clientsetValidation = register("clientset");
-
   return (
     <Container>
       <Paper>
@@ -82,8 +75,7 @@ const K8sDashSearch = ({ onSubmit }) => {
               name="namespace"
               error={!!errors?.namespace}
               helperText={errors?.namespace?.message}
-              inputRef={namespaceValidation.ref}
-              {...namespaceValidation}
+              inputRef={register}
             />
             <TextField
               defaultValue={inputData.displayValue()?.clientset}
@@ -91,8 +83,7 @@ const K8sDashSearch = ({ onSubmit }) => {
               name="clientset"
               error={!!errors?.clientset}
               helperText={errors?.clientset?.message}
-              inputRef={clientsetValidation.ref}
-              {...clientsetValidation}
+              inputRef={register}
             />
             <IconButton type="submit">
               <SearchIcon />
