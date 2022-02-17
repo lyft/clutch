@@ -5,11 +5,6 @@ on:
       - main
     paths-ignore:
       - 'docs/**'
-  pull_request:
-    branches:
-    - main
-    paths:
-    - .github/workflows/scaffolding.yml
 env:
   GOPATH: ${{ github.workspace }}/go
   GOBIN: ${{ github.workspace }}/go/bin
