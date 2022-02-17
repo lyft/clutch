@@ -5,6 +5,11 @@ on:
       - main
     paths-ignore:
       - 'docs/**'
+  pull_request:
+    branches:
+    - main
+    paths:
+    - .github/workflows/frontend.yml
 env:
   GOPATH: ${{ github.workspace }}/go
   GOBIN: ${{ github.workspace }}/go/bin
@@ -27,5 +32,5 @@ jobs:
         run: yes | go run scaffolder.go -m gateway -p ${{ github.sha }} -o ${{ github.repository_owner }}
         working-directory: ${{ env.PACKAGEPATH }}/tools/scaffolding
       - name: build scaffolding
-        run: make
+        run: make yarn-lock && make
         working-directory: ${{ github.workspace }}/go/src/github.com/runner/clutch-custom-gateway
