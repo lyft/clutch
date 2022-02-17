@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 
@@ -31,6 +31,17 @@ const Title = styled(Typography)({
   color: "rgba(255, 255, 255, 0.87)",
 });
 
+const ShortLinker = () => {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    console.log("ROUTE CHANGE", location);
+    // change temp hydrate data
+  }, [location]);
+
+  return <div>Hello</div>;
+};
+
 const Header: React.FC = () => {
   const showNotifications = false;
 
@@ -46,6 +57,7 @@ const Header: React.FC = () => {
             <Box>
               <SearchField />
             </Box>
+            <ShortLinker />
             {showNotifications && <Notifications />}
             <SimpleFeatureFlag feature="npsHeader">
               <FeatureOn>

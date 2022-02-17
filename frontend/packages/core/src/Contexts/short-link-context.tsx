@@ -1,5 +1,4 @@
 import React from "react";
-import type { GlobalProjectState } from "@clutch-sh/project-selector";
 
 export interface HydrateData {
   route: string;
@@ -7,14 +6,15 @@ export interface HydrateData {
 }
 
 export interface HydratedData {
-  dash?: {
-    state?: GlobalProjectState;
-    splitEvents?: boolean;
+  [key: string]: {
+    [key: string]: any;
   };
 }
 
 interface ContextProps {
   hydration?: HydratedData;
+  tempHydrateStore?: HydrateData;
+  storeHydration?: (data: any) => void;
 }
 
 const ShortLinkContext = React.createContext<ContextProps>(undefined);

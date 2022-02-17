@@ -267,12 +267,23 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [hydration, setHydration] = React.useState<HydratedData>(undefined);
+  const [tempHydrateStore, setTempHydrateStore] = React.useState<HydrateData>(undefined);
+  // const location = useLocation();
 
   const loadWorkflows = () => {
     registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
       setWorkflows(w);
       setIsLoading(false);
     });
+  };
+
+  // React.useEffect(() => {
+  //   console.log("ROUTE CHANGE", location);
+  //   // change temp hydrate data
+  // }, [location]);
+
+  const storeHydration = (data: any) => {
+    console.log("STORING SOME DATA", data);
   };
 
   React.useEffect(() => {
@@ -305,7 +316,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       <Theme variant="light">
         <div id="App">
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
-            <ShortLinkContext.Provider value={{ hydration }}>
+            <ShortLinkContext.Provider value={{ hydration, tempHydrateStore, storeHydration }}>
               <Routes>
                 <Route path="/*" element={<AppLayout isLoading={isLoading} />}>
                   <Route key="landing" path="/" element={<Landing />} />
