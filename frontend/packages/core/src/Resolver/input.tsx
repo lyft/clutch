@@ -91,7 +91,6 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
         name="query"
         required
         defaultValue={queryData}
-        value={queryData}
         onChange={handleChanges}
         onKeyDown={handleChanges}
         onFocus={handleChanges}
