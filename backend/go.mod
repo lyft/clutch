@@ -17,7 +17,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.14.0
 	github.com/aws/smithy-go v1.10.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
-	github.com/bufbuild/buf v0.56.0
+	github.com/bufbuild/buf v1.0.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -36,7 +36,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.3
 	github.com/iancoleman/strcase v0.2.0
-	github.com/jhump/protoreflect v1.10.3
+	github.com/jhump/protoreflect v1.11.1-0.20220213155251-0c2aedc66cf4
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.4
 	github.com/mitchellh/hashstructure/v2 v2.0.2
@@ -53,8 +53,8 @@ require (
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20220207182018-5a513245cc53
-	google.golang.org/grpc v1.44.0
+	google.golang.org/genproto v0.0.0-20220211171837-173942840c17
+	google.golang.org/grpc v1.45.0-dev.0.20220209221444-a354b1eec350
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/square/go-jose.v2 v2.6.0
