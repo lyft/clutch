@@ -2,8 +2,8 @@ import React from "react";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
-import type { WarningProps } from "../toast";
-import { Warning } from "../toast";
+import type { WarningProps } from "../warning";
+import Warning from "../warning";
 
 export default {
   title: "Core/Feedback/Warning",

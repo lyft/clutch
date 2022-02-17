@@ -9,10 +9,6 @@ export interface ToastProps extends AlertProps {
   onClose?: () => void;
 }
 
-export interface WarningProps extends ToastProps {
-  message: any;
-}
-
 const Toast: React.FC<ToastProps> = ({
   onClose,
   severity = "warning",
@@ -49,24 +45,6 @@ const Toast: React.FC<ToastProps> = ({
         {...props}
       />
     </Snackbar>
-  );
-};
-
-/**
- * Warning component
- * @param message the message to display in the warning
- * @deprecated use Toast component
- */
-export const Warning: React.FC<WarningProps> = ({ message, ...props }) => {
-  if (process.env.NODE_ENV === "development") {
-    // eslint-disable-next-line no-console
-    console.warn("Warning component is deprecated, please use Toast component instead");
-  }
-
-  return (
-    <Toast severity="warning" {...props}>
-      {message}
-    </Toast>
   );
 };
 
