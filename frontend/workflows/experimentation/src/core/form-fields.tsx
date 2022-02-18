@@ -1,4 +1,5 @@
 import React from "react";
+import type { FieldValues, UseFormRegister } from "react-hook-form";
 import { RadioGroup, Select, TextField } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 
@@ -15,7 +16,7 @@ const FieldContainer = styled.div({
 interface FormProps {
   state: any;
   items: FormItem[];
-  register: any;
+  register: UseFormRegister<FieldValues>;
   errors: any;
 }
 
@@ -68,6 +69,8 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
         }
         if (["text", "number"].indexOf(field.type) >= 0) {
           const customProps: TextFieldProps = field.inputProps as TextFieldProps;
+          const fieldValidation = register(field.name);
+
           return (
             <TextField
               key={field.label}
@@ -80,9 +83,10 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
                 copiedData[field.name] = e.target.value;
                 setData(copiedData);
               }}
-              inputRef={register}
+              inputRef={fieldValidation.ref}
               error={!!errors[field.name]}
               helperText={errors[field.name] ? errors[field.name].message : ""}
+              {...fieldValidation}
             />
           );
         }
