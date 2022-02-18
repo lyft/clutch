@@ -59,7 +59,6 @@ const StringField = (
       onChange={handleChanges}
       onKeyDown={handleChanges}
       onFocus={handleChanges}
-      {...reg}
     />
   );
 };

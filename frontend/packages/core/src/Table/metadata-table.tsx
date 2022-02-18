@@ -148,7 +148,6 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
   const updateCallback = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
     error ? () => {} : onUpdate(e);
 
-  const reg = validation.register(data.name);
   return (
     <TableRow key={data.id}>
       <KeyCell data={data} />
@@ -166,10 +165,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
             onChange={updateCallback}
             onReturn={onReturn}
             onFocus={updateCallback}
-            inputRef={reg.ref}
             helperText={error?.message || ""}
             error={!!error || false}
-            {...reg}
+            formRegistration={validation.register}
           />
         </Grid>
       </TableCell>
@@ -225,7 +223,9 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
             return row.input !== undefined && onUpdate ? (
               <MutableRow
                 data={row}
-                onUpdate={e => onUpdate(e.target.id, e.target.value)}
+                onUpdate={e => {
+                  onUpdate(e.target.id, e.target.value);
+                }}
                 onReturn={onSubmit}
                 key={row.id}
                 validation={validation}

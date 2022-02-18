@@ -55,9 +55,6 @@ const RepositoryDetails: React.FC<WizardChild> = () => {
   const repositoryOptions = repositoryData.displayValue()
     .data as IClutch.sourcecontrol.v1.GetRepositoryOptionsResponse;
 
-  const nameValidation = register("name");
-  const descriptionValidation = register("description");
-
   return (
     <WizardStep error={repositoryData.error} isLoading={repositoryData.isLoading}>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -73,19 +70,17 @@ const RepositoryDetails: React.FC<WizardChild> = () => {
           label="Name"
           name="name"
           onChange={e => repositoryData.updateData("name", e.target.value)}
-          inputRef={nameValidation.ref}
           helperText={errors.name ? errors.name.message : ""}
           error={!!errors.name}
-          {...nameValidation}
+          formRegistration={register}
         />
         <TextField
           label="Description"
           name="description"
           onChange={e => repositoryData.updateData("description", e.target.value)}
-          inputRef={descriptionValidation.ref}
           error={!!errors.description}
           helperText={errors.description ? errors.description.message : ""}
-          {...descriptionValidation}
+          formRegistration={register}
         />
         <Select
           name="visibility"
