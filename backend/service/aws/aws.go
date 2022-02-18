@@ -228,7 +228,7 @@ func (c *client) InterceptError(e error) error {
 
 func (c *client) getAccountRegionClient(account, region string) (*regionalClient, error) {
 	accountClients, ok := c.accounts[account]
-	if !ok {
+	if !ok || accountClients == nil {
 		return nil, status.Errorf(codes.NotFound, "account %s not found", account)
 	}
 	cl, ok := accountClients.clients[region]
