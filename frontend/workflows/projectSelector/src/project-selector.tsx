@@ -9,7 +9,7 @@ import {
   TooltipContainer,
   Typography,
   userId,
-  useShortLinkContext,
+  useStorageContext,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
@@ -26,7 +26,7 @@ import {
 } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
-import { loadStoredState, storeState } from "./storage";
+import { COMPONENT_NAME, loadStoredState, storeState } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
 
@@ -197,31 +197,29 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
 
-  const { hydration } = useShortLinkContext();
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
-  // const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
 
-  const customHydrateState = hydration?.dash?.state;
+  const {
+    hydrateStore,
+    data: { store, retrieve, remove },
+  } = useShortLinkContext();
 
-  const hydrateState = customHydrateState
-    ? _.merge(initialState, customHydrateState)
-    : loadStoredState(initialState);
+  const [state, dispatch] = React.useReducer(
+    selectorReducer,
+    loadStoredState(retrieve, remove, initialState)
+  );
 
-  const [state, dispatch] = React.useReducer(selectorReducer, hydrateState);
-
-  console.log("MY STATE", state);
+  const customHydrateState = hydrateStore[COMPONENT_NAME];
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      console.log("IN USE EFFECT INTERVAL 1", state);
       hydrateProjects(state, dispatch);
     }, 30000);
     return () => clearInterval(interval);
   }, [state]);
 
   React.useEffect(() => {
-    console.log("IN USE EFFECT 2", state);
     hydrateProjects(state, dispatch);
   }, [state[Group.PROJECTS]]);
 
@@ -231,7 +229,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   // This hook updates the global dash state based on the currently selected projects for cards to consume (including upstreams and downstreams).
   React.useEffect(() => {
-    console.log("IN USE EFFECT 3", state);
     if (!allPresent(state, dispatch)) {
       // Need to wait for the data.
       return;
@@ -268,7 +265,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     });
 
     // Update!
-    storeState(state);
+    storeState(store, state, !customHydrateState);
     updateSelected(dashState);
   }, [state]);
 

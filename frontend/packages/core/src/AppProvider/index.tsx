@@ -11,8 +11,8 @@ import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext } from "../Contexts/app-context";
-import type { HydrateData, HydratedData } from "../Contexts/short-link-context";
-import { ShortLinkContext } from "../Contexts/short-link-context";
+import type { HydrateData, HydratedData } from "../Contexts/storage-context";
+import { StorageContext } from "../Contexts/storage-context";
 import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
 import NotFound from "../not-found";
@@ -67,8 +67,8 @@ const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
     "1234": {
       route: "/dash",
       data: {
-        dash: {
-          state: {
+        ProjectSelector: {
+          dashState: {
             "0": {
               clutch: { checked: true },
               clutchdata: { checked: true },
@@ -92,15 +92,18 @@ const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
               omnibot: { checked: false },
             },
           },
-          splitEvents: true,
+        },
+        TimelineView: {
+          dashTimelineEventFilters: ["alerts", "deploys"],
+          dashSplitEvents: false,
         },
       },
     },
     "2456": {
       route: "/dash",
       data: {
-        dash: {
-          state: {
+        ProjectSelector: {
+          dashState: {
             "0": {
               lyftkube: { checked: true },
               ridesapi: { checked: true, custom: true },
@@ -242,7 +245,6 @@ const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
               ampdevicemanager: { checked: false },
             },
           },
-          splitEvents: false,
         },
       },
     },
@@ -266,9 +268,8 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [hydration, setHydration] = React.useState<HydratedData>(undefined);
-  const [tempHydrateStore, setTempHydrateStore] = React.useState<HydrateData>(undefined);
-  // const location = useLocation();
+  const [hydrateStore, setHydrateStore] = React.useState<HydratedData>(undefined);
+  const [tempHydrateStore, setTempHydrateStore] = React.useState<HydratedData>({});
 
   const loadWorkflows = () => {
     registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
@@ -277,13 +278,76 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     });
   };
 
-  // React.useEffect(() => {
-  //   console.log("ROUTE CHANGE", location);
-  //   // change temp hydrate data
-  // }, [location]);
+  const localStore = (key: string, data: any) => {
+    console.log("Storing Local Data", { key, data });
+    if (key) {
+      try {
+        window.localStorage.setItem(key, JSON.stringify(data));
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
+    }
+  };
 
-  const storeHydration = (data: any) => {
-    console.log("STORING SOME DATA", data);
+  const store = (componentName: string, key: string, data: any, local = true) => {
+    console.log("Storing Data", { componentName, key, data, local });
+    // we're clearing our temporary data
+    if (!componentName && !key) {
+      setTempHydrateStore({});
+    } else {
+      if (componentName) {
+        const newTempHydrate = { ...tempHydrateStore };
+
+        if (key) {
+          // if we have a specific key, set it directly to the data
+          newTempHydrate[componentName][key] = data;
+        } else {
+          // if we dont have a specific key, we'll just extend the data onto the component
+          newTempHydrate[componentName] = { ...newTempHydrate[componentName], ...data };
+        }
+        setTempHydrateStore(newTempHydrate);
+      }
+      if (key && local) {
+        localStore(key, data);
+      }
+    }
+  };
+
+  const retrieve = (componentName: string, key: string, defaultData?: any): any => {
+    console.log("Retrieving Data", { componentName, key, defaultData });
+    if (hydrateStore && hydrateStore[componentName] && hydrateStore[componentName][key]) {
+      return hydrateStore[componentName][key];
+    }
+
+    const localData = window.localStorage.getItem(key);
+    if (localData) {
+      try {
+        return JSON.parse(localData);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
+    }
+
+    return defaultData;
+  };
+
+  const remove = (componentName: string, key: string, local = true) => {
+    console.log("Removing Data", { componentName, key, local });
+    store(componentName, key, undefined);
+
+    const newTempHydrate = { ...tempHydrateStore };
+    if (componentName && key) {
+      delete newTempHydrate[componentName][key];
+    } else if (componentName) {
+      delete newTempHydrate[componentName];
+    }
+    setTempHydrateStore(newTempHydrate);
+
+    if (local) {
+      window.localStorage.removeItem(key);
+    }
   };
 
   React.useEffect(() => {
@@ -316,7 +380,13 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       <Theme variant="light">
         <div id="App">
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
-            <ShortLinkContext.Provider value={{ hydration, tempHydrateStore, storeHydration }}>
+            <StorageContext.Provider
+              value={{
+                hydrateStore,
+                tempHydrateStore,
+                data: { retrieve, store, localStore, remove },
+              }}
+            >
               <Routes>
                 <Route path="/*" element={<AppLayout isLoading={isLoading} />}>
                   <Route key="landing" path="/" element={<Landing />} />
@@ -345,12 +415,12 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                   <Route
                     key="short-links"
                     path="/sl/*"
-                    element={<ShortLinkHydrator hydrate={setHydration} />}
+                    element={<ShortLinkHydrator hydrate={setHydrateStore} />}
                   />
                   <Route key="notFound" path="*" element={<NotFound />} />
                 </Route>
               </Routes>
-            </ShortLinkContext.Provider>
+            </StorageContext.Provider>
           </ApplicationContext.Provider>
         </div>
       </Theme>

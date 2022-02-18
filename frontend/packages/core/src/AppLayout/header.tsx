@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 
@@ -9,6 +9,7 @@ import { NPSHeader } from "../NPS";
 import Logo from "./logo";
 import Notifications from "./notifications";
 import SearchField from "./search";
+import ShortLinker from "./shortLinker";
 import { UserInformation } from "./user";
 
 export const APP_BAR_HEIGHT = "64px";
@@ -31,17 +32,6 @@ const Title = styled(Typography)({
   color: "rgba(255, 255, 255, 0.87)",
 });
 
-const ShortLinker = () => {
-  const location = useLocation();
-
-  React.useEffect(() => {
-    console.log("ROUTE CHANGE", location);
-    // change temp hydrate data
-  }, [location]);
-
-  return <div>Hello</div>;
-};
-
 const Header: React.FC = () => {
   const showNotifications = false;
 
@@ -57,7 +47,11 @@ const Header: React.FC = () => {
             <Box>
               <SearchField />
             </Box>
+            {/* <SimpleFeatureFlag feature="shortLinks">
+              <FeatureOn> */}
             <ShortLinker />
+            {/* </FeatureOn>
+            </SimpleFeatureFlag> */}
             {showNotifications && <Notifications />}
             <SimpleFeatureFlag feature="npsHeader">
               <FeatureOn>

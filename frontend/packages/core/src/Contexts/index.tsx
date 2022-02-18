@@ -1,3 +1,3 @@
 export { ApplicationContext, useAppContext } from "./app-context";
-export { ShortLinkContext, useShortLinkContext } from "./short-link-context";
+export { StorageContext, useStorageContext } from "./storage-context";
 export { WizardContext, useWizardContext } from "./wizard-context";
