@@ -76,8 +76,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
     schemas.filter(schema => schema?.metadata?.search?.autocompleteEnabled === true).length >= 1 &&
     enableAutocomplete;
 
-  const error = validation.formState.errors?.query;
-  const reg = validation.register("query", { required: true });
+  const error = validation.errors?.query;
   return (
     <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
       <TextField
@@ -88,12 +87,11 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
         onChange={handleChanges}
         onKeyDown={handleChanges}
         onFocus={handleChanges}
-        inputRef={reg.ref}
+        inputRef={validation.register({ required: true })}
         error={!!error}
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
         autocompleteCallback={isAutoCompleteEnabled ? v => autoComplete(inputType, v) : undefined}
-        {...reg}
       />
     </Form>
   );

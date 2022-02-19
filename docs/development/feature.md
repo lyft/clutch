@@ -195,7 +195,7 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
 
@@ -288,7 +288,7 @@ import (
 	"errors"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 
 	amiibov1 "github.com/{path_to_gateway}/backend/api/amiibo/v1"
@@ -491,7 +491,7 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={amiiboData.error} isLoading={amiiboData.isLoading}>
-      <Table headings={["Name", "Image", "Series", "Type"]}>
+      <Table columns={["Name", "Image", "Series", "Type"]}>
         {amiiboResults.map((amiibo, index: number) => (
           <TableRow key={index}>
             {amiibo.name}
@@ -616,6 +616,7 @@ That's it! You should be able to remove all the remaining generated code.
 
 Run the frontend with the new workflow:
 ```bash
+make yarn-lock
 make frontend-dev
 ```
 
