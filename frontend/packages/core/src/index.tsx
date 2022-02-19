@@ -44,7 +44,7 @@ export * from "./Feedback";
 export * from "./Assets/emojis";
 export * from "./NPS";
 
-export { useShortLinkContext, ShortLinkContext, useWizardContext, WizardContext } from "./Contexts";
+export { useStorageContext, StorageContext, useWizardContext, WizardContext } from "./Contexts";
 
 export { default as ClutchApp } from "./AppProvider";
 

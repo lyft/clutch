@@ -17,8 +17,8 @@ interface ContextProps {
   data: {
     store: (componentName: string, key: string, data: any, local?: boolean) => void;
     localStore: (key: string, data: any) => void;
-    retrieve: (componentName: string, key: string, defaultData?: any) => any;
-    remove: (componentName: string, key: string, local?: boolean) => void;
+    retrieve: (componentName: string, key?: string, defaultData?: any) => any;
+    remove: (componentName: string, key?: string, local?: boolean) => void;
   };
 }
 

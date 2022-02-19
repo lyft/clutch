@@ -203,14 +203,14 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   const {
     hydrateStore,
     data: { store, retrieve, remove },
-  } = useShortLinkContext();
+  } = useStorageContext();
 
   const [state, dispatch] = React.useReducer(
     selectorReducer,
     loadStoredState(retrieve, remove, initialState)
   );
 
-  const customHydrateState = hydrateStore[COMPONENT_NAME];
+  const customHydrateState = (hydrateStore || {})[COMPONENT_NAME];
 
   React.useEffect(() => {
     const interval = setInterval(() => {

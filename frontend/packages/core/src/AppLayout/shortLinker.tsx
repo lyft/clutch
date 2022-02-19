@@ -7,10 +7,12 @@ import {
   Paper as MuiPaper,
   Popper as MuiPopper,
 } from "@material-ui/core";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 import LinkIcon from "@material-ui/icons/Link";
 
 import { IconButton } from "../button";
-import { useShortLinkContext } from "../Contexts";
+import { useStorageContext } from "../Contexts";
+import { TextField } from "../Input";
 import styled from "../styled";
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
@@ -24,7 +26,9 @@ const Popper = styled(MuiPopper)({
 });
 
 const Paper = styled(MuiPaper)({
-  width: "350px",
+  width: "450px",
+  height: "100px",
+  padding: "15px",
   boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
   borderRadius: "8px",
 });
@@ -53,7 +57,8 @@ const ShortLinker = () => {
   const {
     tempHydrateStore,
     data: { store },
-  } = useShortLinkContext();
+  } = useStorageContext();
+  const [shortLink, setShortLink] = React.useState("https://clutch.lyft.net/sl/1234");
 
   React.useEffect(() => {
     console.log("CLEARING STORAGE");
@@ -106,7 +111,12 @@ const ShortLinker = () => {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id="options">
-                    {JSON.stringify(tempHydrateStore) || {}}
+                    <TextField
+                      disabled
+                      readOnly
+                      value={shortLink}
+                      endAdornment={<FileCopyIcon />}
+                    />
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
