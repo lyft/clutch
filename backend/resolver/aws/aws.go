@@ -7,6 +7,7 @@ package aws
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
@@ -164,6 +165,9 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (*resolver.Results, error) {
 	switch typeURL {
 	case typeURLInstance:
+		fmt.Println(query)
+		fmt.Println(query)
+		fmt.Println(query)
 		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.Instance)(nil), query)
 		if err != nil {
 			return nil, err

@@ -109,6 +109,32 @@ func TestConfigureAdditionalAccountClient(t *testing.T) {
 	}
 }
 
+func TestGetAccountRegionClient(t *testing.T) {
+	c := &client{
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1":  nil,
+					"us-west-2":  nil,
+					"us-north-5": nil,
+				},
+			},
+		},
+	}
+
+	_, err := c.getAccountRegionClient("default", "us-east-1")
+	assert.NoError(t, err)
+
+	_, err = c.getAccountRegionClient("aws://", "us-west-3")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "not found")
+
+	_, err = c.getAccountRegionClient("default", "us-west-3")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
+}
+
 func TestRegions(t *testing.T) {
 	c := &client{
 		currentAccountAlias: "default",
