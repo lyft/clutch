@@ -95,9 +95,10 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                 <Route key="landing" path="" element={<Landing />} />
                 {workflows.map((workflow: Workflow) => (
                   <Route
-                    path={`${workflow.path}/*`}
+                    path={`${workflow.path}/`}
+                    key={workflow.path.split("/")[0]}
                     element={
-                      <ErrorBoundary workflow={workflow} key={workflow.path.split("/")[0]}>
+                      <ErrorBoundary workflow={workflow}>
                         <Outlet />
                       </ErrorBoundary>
                     }
