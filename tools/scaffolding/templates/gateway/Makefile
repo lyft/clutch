@@ -38,13 +38,13 @@ backend-with-assets: frontend
 frontend: yarn-install
 	$(YARN) --cwd frontend build
 
-.PHONY: yarn-lock
-yarn-lock: yarn-ensure
-	$(YARN) --cwd frontend install
-
 .PHONY: yarn-install
 yarn-install: yarn-ensure
+ifneq ("$(wildcard frontend/yarn.lock)","")
 	$(YARN) --cwd frontend install --frozen-lockfile
+else
+	$(YARN) --cwd frontend install
+endif 
 
 .PHONY: yarn-ensure
 yarn-ensure:
