@@ -398,12 +398,13 @@ The frontend consists of a few pieces that work together to display your workflo
 
 To simplify the creation of workflows you can run a scaffolding tool. It will prompt you for some information and produce a new workflow with some templates.
 
-To get started run the generator and provide the details about our Amiibo workflow.
+To get started run the generator within Clutch and provide the details about our Amiibo workflow.
 ```
 > make scaffold-workflow
 *** Is the destination okay:
 > clutch/frontend/workflows
-Is this okay? [Y/n]: Y
+Is this okay? [Y/n]: n
+Enter the destination folder [clutch/frontend/workflows]: {path_to_gateway}/frontend/workflows
 Enter the name of this workflow [Hello World]: Amiibo
 Enter a description of the workflow [Greet the world]: Lookup all Amiibo by name
 Enter the developer's name [dschaller]: Lyft
