@@ -344,8 +344,8 @@ import (
     "github.com/lyft/clutch/backend/cmd/assets"
     "github.com/lyft/clutch/backend/gateway"
     // highlight-start
-    amiibomod "github.com/{path_to_gateway}/module/amiibo"
-    amiiboservice "github.com/{path_to_gateway}/service/amiibo"
+    amiibomod "github.com/{path_to_gateway}/backend/module/amiibo"
+    amiiboservice "github.com/{path_to_gateway}/backend/service/amiibo"
     // highlight-end
 )
 
