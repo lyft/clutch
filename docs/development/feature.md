@@ -616,7 +616,6 @@ That's it! You should be able to remove all the remaining generated code.
 
 Run the frontend with the new workflow:
 ```bash
-make yarn-lock
 make frontend-dev
 ```
 
