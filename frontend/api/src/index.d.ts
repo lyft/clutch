@@ -10093,6 +10093,128 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace temporal. */
+            namespace temporal {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config host */
+                        host?: (string|null);
+
+                        /** Config port */
+                        port?: (number|null);
+
+                        /** Config connectionOptions */
+                        connectionOptions?: (clutch.config.service.temporal.v1.IConnectionOptions|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.temporal.v1.IConfig);
+
+                        /** Config host. */
+                        public host: string;
+
+                        /** Config port. */
+                        public port: number;
+
+                        /** Config connectionOptions. */
+                        public connectionOptions?: (clutch.config.service.temporal.v1.IConnectionOptions|null);
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.temporal.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.temporal.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a ConnectionOptions. */
+                    interface IConnectionOptions {
+
+                        /** ConnectionOptions useSystemCaBundle */
+                        useSystemCaBundle?: (boolean|null);
+
+                        /** ConnectionOptions enableHealthCheck */
+                        enableHealthCheck?: (boolean|null);
+                    }
+
+                    /** Represents a ConnectionOptions. */
+                    class ConnectionOptions implements IConnectionOptions {
+
+                        /**
+                         * Constructs a new ConnectionOptions.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.temporal.v1.IConnectionOptions);
+
+                        /** ConnectionOptions useSystemCaBundle. */
+                        public useSystemCaBundle: boolean;
+
+                        /** ConnectionOptions enableHealthCheck. */
+                        public enableHealthCheck: boolean;
+
+                        /**
+                         * Verifies a ConnectionOptions message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a ConnectionOptions message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns ConnectionOptions
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.temporal.v1.ConnectionOptions;
+
+                        /**
+                         * Creates a plain object from a ConnectionOptions message. Also converts values to other types if specified.
+                         * @param message ConnectionOptions
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.temporal.v1.ConnectionOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this ConnectionOptions to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace topology. */
             namespace topology {
 
@@ -18619,8 +18741,8 @@ export namespace clutch {
                 /** Event kind */
                 kind?: (clutch.k8s.v1.ObjectKind|null);
 
-                /** Event eventTimeMillis */
-                eventTimeMillis?: (number|Long|null);
+                /** Event creationTimeMillis */
+                creationTimeMillis?: (number|Long|null);
             }
 
             /** Represents an Event. */
@@ -18653,8 +18775,8 @@ export namespace clutch {
                 /** Event kind. */
                 public kind: clutch.k8s.v1.ObjectKind;
 
-                /** Event eventTimeMillis. */
-                public eventTimeMillis: (number|Long);
+                /** Event creationTimeMillis. */
+                public creationTimeMillis: (number|Long);
 
                 /**
                  * Verifies an Event message.
