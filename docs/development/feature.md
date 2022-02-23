@@ -424,17 +424,18 @@ Let's update the component.
 Define a functional component for the amiibo lookup by adding the highlighted lines.
 
 ```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
-// highlight-start
+//highlight-next-line
 import type { ChangeEvent } from "react";
 import React from "react";
+// highlight-start
 import { Button, ButtonGroup, TextField, useWizardContext } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 // highlight-end
 // WizardStep will display a warning at the end of this step. That's ok!
 // It'll be unused temporarily now that WelcomeStep is commented out.
 // In a future step this will be used again.
-import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import type { WizardChild } from "@clutch-sh/wizard";
+import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
 import type { WorkflowProps } from ".";
 
@@ -535,7 +536,8 @@ Now let's build a way to display the details panel.
 ```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
 import type { ChangeEvent } from "react";
 import React from "react";
-import { Button, ButtonGroup, // highlight-start Table, TableRow, // highlight-end TextField, useWizardContext } from "@clutch-sh/core";
+// highlight-next-line
+import { Button, ButtonGroup, Table, TableRow, TextField, useWizardContext } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
