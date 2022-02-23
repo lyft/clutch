@@ -421,7 +421,7 @@ You should now have a new Amiibo workflow in the destination directory outlined 
 ##### Component
 Let's update the component.
 
-Start by removing all the code in `hello-world.tsx`. Next, define a functional component for the amiibo lookup by adding the highlighted lines.
+Define a functional component for the amiibo lookup by adding the highlighted lines.
 
 ```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
 import React from "react";
