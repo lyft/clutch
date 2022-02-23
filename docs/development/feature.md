@@ -780,6 +780,7 @@ const register = (): WorkflowConfiguration => {
 };
 
 export default register;
+
 ```
 
 Next, open your `clutch.config.js` file and add the amiibo configuration highlighted below:
