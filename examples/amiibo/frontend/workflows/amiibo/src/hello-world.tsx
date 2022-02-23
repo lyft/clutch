@@ -1,18 +1,18 @@
-import React, { ChangeEvent } from "react";
-import _ from "lodash";
+import type { ChangeEvent } from "react";
+import React from "react";
 import {
   Button,
   ButtonGroup,
   client,
-  useWizardContext,
   Table,
   TableRow,
   TextField,
+  useWizardContext,
 } from "@clutch-sh/core";
-
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import _ from "lodash";
 
 import type { WorkflowProps } from ".";
 
@@ -20,15 +20,15 @@ const AmiiboLookup: React.FC<WizardChild> = () => {
   const { onSubmit } = useWizardContext();
   const userInput = useDataLayout("userInput");
 
-  const onChange = ((event: ChangeEvent<{value: string}>) => {
-    userInput.assign({name: event.target.value});
-  });
+  const onChange = (event: ChangeEvent<{ value: string }>) => {
+    userInput.assign({ name: event.target.value });
+  };
 
   return (
     <>
-      <TextField onChange={onChange} onReturn={onSubmit}/>
+      <TextField onChange={onChange} onReturn={onSubmit} />
       <ButtonGroup>
-        <Button text="Search" onClick={onSubmit}/>
+        <Button text="Search" onClick={onSubmit} />
       </ButtonGroup>
     </>
   );
@@ -44,10 +44,10 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={amiiboData.error} isLoading={amiiboData.isLoading}>
       <Table columns={["Name", "Image", "Series", "Type"]}>
-        {amiiboResults.map((amiibo, index: number) => (
-          <TableRow key={index}>
+        {amiiboResults.map(amiibo => (
+          <TableRow key={amiibo.imageUrl}>
             {amiibo.name}
-            <img src={amiibo.imageUrl} height="75px"/>
+            <img alt={amiibo.name} src={amiibo.imageUrl} height="75px" />
             {amiibo.amiiboSeries}
             {amiibo.type}
           </TableRow>
@@ -57,7 +57,7 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
   );
 };
 
-const Amiibo: React.FC<WorkflowProps> = ({ heading }) => {
+const HelloWorld: React.FC<WorkflowProps> = ({ heading }) => {
   const dataLayout = {
     userInput: {},
     amiiboData: {
@@ -82,4 +82,4 @@ const Amiibo: React.FC<WorkflowProps> = ({ heading }) => {
   );
 };
 
-export default Amiibo;
+export default HelloWorld;
