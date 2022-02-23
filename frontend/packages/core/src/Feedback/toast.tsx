@@ -3,22 +3,26 @@ import { Snackbar } from "@material-ui/core";
 
 import type { AlertProps } from "./alert";
 import { Alert } from "./alert";
+import type { SnackbarProps, SnackbarCloseReason } from "@material-ui/core";
 
-export interface ToastProps extends AlertProps {
-  duration?: number;
+export interface ToastProps
+  extends Pick<SnackbarProps, "anchorOrigin" | "autoHideDuration">,
+    Pick<AlertProps, "title" | "severity"> {
   onClose?: () => void;
 }
 
 const Toast: React.FC<ToastProps> = ({
   onClose,
+  title,
   severity = "warning",
-  duration = 6000,
-  ...props
+  autoHideDuration = 6000,
+  anchorOrigin = { vertical: "bottom", horizontal: "right" },
+  children,
 }) => {
   const [open, setOpen] = React.useState(true);
 
   const onDismiss = () => {
-    if (onClose !== undefined) {
+    if (open && onClose !== undefined) {
       onClose();
     }
     setOpen(false);
@@ -27,23 +31,25 @@ const Toast: React.FC<ToastProps> = ({
   return (
     <Snackbar
       open={open}
-      autoHideDuration={duration}
+      autoHideDuration={autoHideDuration}
       onExiting={onDismiss}
-      onClose={(_, reason) => {
+      anchorOrigin={anchorOrigin}
+      onClose={(_, reason: SnackbarCloseReason) => {
         // This way it will not auto close when clicking in the window, will instead wait on the timeout or onClose
         if (reason !== "clickaway") {
           setOpen(false);
         }
       }}
-      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
       <Alert
         elevation={6}
         variant="filled"
         onClose={onClose ? onDismiss : null}
         severity={severity}
-        {...props}
-      />
+        title={title}
+      >
+        {children}
+      </Alert>
     </Snackbar>
   );
 };

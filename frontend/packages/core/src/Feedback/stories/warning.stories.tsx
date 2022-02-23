@@ -10,7 +10,7 @@ export default {
   component: Warning,
 } as Meta;
 
-const Template = (props: WarningProps) => <Warning duration={null} {...props} />;
+const Template = (props: WarningProps) => <Warning {...props} />;
 
 export const Primary = Template.bind({});
 Primary.args = {

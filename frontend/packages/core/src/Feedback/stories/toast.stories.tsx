@@ -32,7 +32,7 @@ export default {
         type: { summary: "function" },
       },
     },
-    duration: {
+    autoHideDuration: {
       description: "Auto-hide duration for Toast",
       defaultValue: null,
       disable: true,
@@ -47,11 +47,20 @@ export default {
         type: { summary: "React.ReactNode" },
       },
     },
+    anchorOrigin: {
+      control: "object",
+      description: "Location of Toast",
+      defaultValue: { vertical: "bottom", horizontal: "right" },
+      table: {
+        type: { summary: "object" },
+        defaultValue: { summary: `{ vertical: "bottom", horizontal: "right" }` },
+      },
+    },
   },
 } as Meta;
 
 const Template = ({ severity, ...props }: ToastProps) => (
-  <Toast duration={null} severity={severity} {...props}>
+  <Toast autoHideDuration={null} severity={severity} {...props}>
     Informational {severity} Toast
   </Toast>
 );
