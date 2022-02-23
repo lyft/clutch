@@ -427,12 +427,7 @@ Define a functional component for the amiibo lookup by adding the highlighted li
 // highlight-start
 import type { ChangeEvent } from "react";
 import React from "react";
-import {
-  Button,
-  ButtonGroup,
-  TextField,
-  useWizardContext,
-} from "@clutch-sh/core";
+import { Button, ButtonGroup, TextField, useWizardContext } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 // highlight-end
 // WizardStep will display a warning at the end of this step. That's ok!
@@ -455,15 +450,15 @@ const AmiiboLookup: React.FC<WizardChild> = () => {
   const { onSubmit } = useWizardContext();
   const userInput = useDataLayout("userInput");
 
-  const onChange = ((event: ChangeEvent<{value: string}>) => {
-    userInput.assign({name: event.target.value});
-  });
+  const onChange = (event: ChangeEvent<{ value: string }>) => {
+    userInput.assign({ name: event.target.value });
+  };
 
   return (
     <>
-      <TextField onChange={onChange} onReturn={onSubmit}/>
+      <TextField onChange={onChange} onReturn={onSubmit} />
       <ButtonGroup>
-        <Button text="Search" onClick={onSubmit}/>
+        <Button text="Search" onClick={onSubmit} />
       </ButtonGroup>
     </>
   );
@@ -486,6 +481,7 @@ const HelloWorld: React.FC<WorkflowProps> = ({ heading }) => {
 };
 
 export default HelloWorld;
+
 ```
 
 There are two new imports (`@clutch-sh/core` and `@clutch-sh/data-layout`) added in the code above. Let's add these to the workflows dependencies.
@@ -539,16 +535,7 @@ Now let's build a way to display the details panel.
 ```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
 import type { ChangeEvent } from "react";
 import React from "react";
-import {
-  Button,
-  ButtonGroup,
-  // highlight-start
-  Table,
-  TableRow,
-  // highlight-end
-  TextField,
-  useWizardContext,
-} from "@clutch-sh/core";
+import { Button, ButtonGroup, // highlight-start Table, TableRow, // highlight-end TextField, useWizardContext } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
@@ -561,15 +548,15 @@ const AmiiboLookup: React.FC<WizardChild> = () => {
   const { onSubmit } = useWizardContext();
   const userInput = useDataLayout("userInput");
 
-  const onChange = ((event: ChangeEvent<{value: string}>) => {
-    userInput.assign({name: event.target.value});
-  });
+  const onChange = (event: ChangeEvent<{ value: string }>) => {
+    userInput.assign({ name: event.target.value });
+  };
 
   return (
     <>
-      <TextField onChange={onChange} onReturn={onSubmit}/>
+      <TextField onChange={onChange} onReturn={onSubmit} />
       <ButtonGroup>
-        <Button text="Search" onClick={onSubmit}/>
+        <Button text="Search" onClick={onSubmit} />
       </ButtonGroup>
     </>
   );
@@ -612,6 +599,7 @@ const HelloWorld: React.FC<WorkflowProps> = ({ heading }) => {
 };
 
 export default HelloWorld;
+
 ```
 
 There is another new import (`lodash`) added in the code above. Let's also add this to the workflows dependencies.
@@ -678,7 +666,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-  import _ from "lodash";
+import _ from "lodash";
 
 import type { WorkflowProps } from ".";
 
@@ -686,15 +674,15 @@ const AmiiboLookup: React.FC<WizardChild> = () => {
   const { onSubmit } = useWizardContext();
   const userInput = useDataLayout("userInput");
 
-  const onChange = ((event: ChangeEvent<{value: string}>) => {
-    userInput.assign({name: event.target.value});
-  });
+  const onChange = (event: ChangeEvent<{ value: string }>) => {
+    userInput.assign({ name: event.target.value });
+  };
 
   return (
     <>
-      <TextField onChange={onChange} onReturn={onSubmit}/>
+      <TextField onChange={onChange} onReturn={onSubmit} />
       <ButtonGroup>
-        <Button text="Search" onClick={onSubmit}/>
+        <Button text="Search" onClick={onSubmit} />
       </ButtonGroup>
     </>
   );
