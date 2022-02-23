@@ -752,6 +752,7 @@ The final step is registering this new Amiibo workflow with the Clutch app. Firs
 
 ```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/index.tsx"
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+
 // highlight-next-line
 import HelloWorld from "./hello-world";
 
@@ -772,7 +773,7 @@ const register = (): WorkflowConfiguration => {
         path: "/lookup",
         description: "Lookup all Amiibo by name.",
 	// highlight-next-line
-        component: Amiibo,
+        component: HelloWorld,
       },
     },
   };
