@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 import contextValues from "../../Contexts/tests/testContext";
 import { client } from "../../Network";
-import NPSFeedback, { defaults } from "../feedback";
+import NPSFeedback, { defaults, FEEDBACK_MAX_LENGTH } from "../feedback";
 import { generateFeedbackTypes } from "../header";
 
 // Adds the custom matchers provided by '@emotion/jest'
@@ -137,7 +137,7 @@ describe("<NPSFeedback />", () => {
   });
 
   describe("basic rendering", () => {
-    const maxLength = 180;
+    const maxLength = FEEDBACK_MAX_LENGTH;
     let wrapper;
     let useEffect;
 
