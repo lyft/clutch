@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package clutch.config.service.shortlink.v1;
-
-option go_package = "github.com/lyft/clutch/backend/api/config/service/shortlink/v1;shortlinkv1";
-
-message Config {
-}

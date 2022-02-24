@@ -10031,56 +10031,6 @@ export namespace clutch {
                 }
             }
 
-            /** Namespace shortlink. */
-            namespace shortlink {
-
-                /** Namespace v1. */
-                namespace v1 {
-
-                    /** Properties of a Config. */
-                    interface IConfig {
-                    }
-
-                    /** Represents a Config. */
-                    class Config implements IConfig {
-
-                        /**
-                         * Constructs a new Config.
-                         * @param [properties] Properties to set
-                         */
-                        constructor(properties?: clutch.config.service.shortlink.v1.IConfig);
-
-                        /**
-                         * Verifies a Config message.
-                         * @param message Plain object to verify
-                         * @returns `null` if valid, otherwise the reason why it is not
-                         */
-                        public static verify(message: { [k: string]: any }): (string|null);
-
-                        /**
-                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
-                         * @param object Plain object
-                         * @returns Config
-                         */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.service.shortlink.v1.Config;
-
-                        /**
-                         * Creates a plain object from a Config message. Also converts values to other types if specified.
-                         * @param message Config
-                         * @param [options] Conversion options
-                         * @returns Plain object
-                         */
-                        public static toObject(message: clutch.config.service.shortlink.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                        /**
-                         * Converts this Config to JSON.
-                         * @returns JSON object
-                         */
-                        public toJSON(): { [k: string]: any };
-                    }
-                }
-            }
-
             /** Namespace sourcegraph. */
             namespace sourcegraph {
 
@@ -22202,8 +22152,8 @@ export namespace clutch {
             /** Properties of a CreateResponse. */
             interface ICreateResponse {
 
-                /** CreateResponse link */
-                link?: (string|null);
+                /** CreateResponse hash */
+                hash?: (string|null);
             }
 
             /** Represents a CreateResponse. */
@@ -22215,8 +22165,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.shortlink.v1.ICreateResponse);
 
-                /** CreateResponse link. */
-                public link: string;
+                /** CreateResponse hash. */
+                public hash: string;
 
                 /**
                  * Verifies a CreateResponse message.

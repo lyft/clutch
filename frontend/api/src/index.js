@@ -24397,108 +24397,6 @@ export const clutch = $root.clutch = (() => {
                 return k8s;
             })();
 
-            service.shortlink = (function() {
-
-                /**
-                 * Namespace shortlink.
-                 * @memberof clutch.config.service
-                 * @namespace
-                 */
-                const shortlink = {};
-
-                shortlink.v1 = (function() {
-
-                    /**
-                     * Namespace v1.
-                     * @memberof clutch.config.service.shortlink
-                     * @namespace
-                     */
-                    const v1 = {};
-
-                    v1.Config = (function() {
-
-                        /**
-                         * Properties of a Config.
-                         * @memberof clutch.config.service.shortlink.v1
-                         * @interface IConfig
-                         */
-
-                        /**
-                         * Constructs a new Config.
-                         * @memberof clutch.config.service.shortlink.v1
-                         * @classdesc Represents a Config.
-                         * @implements IConfig
-                         * @constructor
-                         * @param {clutch.config.service.shortlink.v1.IConfig=} [properties] Properties to set
-                         */
-                        function Config(properties) {
-                            if (properties)
-                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                    if (properties[keys[i]] != null)
-                                        this[keys[i]] = properties[keys[i]];
-                        }
-
-                        /**
-                         * Verifies a Config message.
-                         * @function verify
-                         * @memberof clutch.config.service.shortlink.v1.Config
-                         * @static
-                         * @param {Object.<string,*>} message Plain object to verify
-                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                         */
-                        Config.verify = function verify(message) {
-                            if (typeof message !== "object" || message === null)
-                                return "object expected";
-                            return null;
-                        };
-
-                        /**
-                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
-                         * @function fromObject
-                         * @memberof clutch.config.service.shortlink.v1.Config
-                         * @static
-                         * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.config.service.shortlink.v1.Config} Config
-                         */
-                        Config.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.config.service.shortlink.v1.Config)
-                                return object;
-                            return new $root.clutch.config.service.shortlink.v1.Config();
-                        };
-
-                        /**
-                         * Creates a plain object from a Config message. Also converts values to other types if specified.
-                         * @function toObject
-                         * @memberof clutch.config.service.shortlink.v1.Config
-                         * @static
-                         * @param {clutch.config.service.shortlink.v1.Config} message Config
-                         * @param {$protobuf.IConversionOptions} [options] Conversion options
-                         * @returns {Object.<string,*>} Plain object
-                         */
-                        Config.toObject = function toObject() {
-                            return {};
-                        };
-
-                        /**
-                         * Converts this Config to JSON.
-                         * @function toJSON
-                         * @memberof clutch.config.service.shortlink.v1.Config
-                         * @instance
-                         * @returns {Object.<string,*>} JSON object
-                         */
-                        Config.prototype.toJSON = function toJSON() {
-                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                        };
-
-                        return Config;
-                    })();
-
-                    return v1;
-                })();
-
-                return shortlink;
-            })();
-
             service.sourcegraph = (function() {
 
                 /**
@@ -52989,7 +52887,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a CreateResponse.
                  * @memberof clutch.shortlink.v1
                  * @interface ICreateResponse
-                 * @property {string|null} [link] CreateResponse link
+                 * @property {string|null} [hash] CreateResponse hash
                  */
 
                 /**
@@ -53008,12 +52906,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CreateResponse link.
-                 * @member {string} link
+                 * CreateResponse hash.
+                 * @member {string} hash
                  * @memberof clutch.shortlink.v1.CreateResponse
                  * @instance
                  */
-                CreateResponse.prototype.link = "";
+                CreateResponse.prototype.hash = "";
 
                 /**
                  * Verifies a CreateResponse message.
@@ -53026,9 +52924,9 @@ export const clutch = $root.clutch = (() => {
                 CreateResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.link != null && message.hasOwnProperty("link"))
-                        if (!$util.isString(message.link))
-                            return "link: string expected";
+                    if (message.hash != null && message.hasOwnProperty("hash"))
+                        if (!$util.isString(message.hash))
+                            return "hash: string expected";
                     return null;
                 };
 
@@ -53044,8 +52942,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.shortlink.v1.CreateResponse)
                         return object;
                     let message = new $root.clutch.shortlink.v1.CreateResponse();
-                    if (object.link != null)
-                        message.link = String(object.link);
+                    if (object.hash != null)
+                        message.hash = String(object.hash);
                     return message;
                 };
 
@@ -53063,9 +52961,9 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults)
-                        object.link = "";
-                    if (message.link != null && message.hasOwnProperty("link"))
-                        object.link = message.link;
+                        object.hash = "";
+                    if (message.hash != null && message.hasOwnProperty("hash"))
+                        object.hash = message.hash;
                     return object;
                 };
 

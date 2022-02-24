@@ -212,7 +212,7 @@ func (m *CreateResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Link
+	// no validation rules for Hash
 
 	if len(errors) > 0 {
 		return CreateResponseMultiError(errors)

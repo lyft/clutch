@@ -34,7 +34,7 @@ message CreateRequest {
 }
 
 message CreateResponse {
-  string link = 1;
+  string hash = 1;
 }
 
 message GetRequest {
@@ -46,6 +46,10 @@ message GetResponse {
   repeated ShareableState state = 2;
 }
 
+// ShareableState stores a key identifier that maps to state.
+// This is analogous to a map, however we are not using a map here as that will restrict
+// our ability to further expand on this message.
+// For example adding a "revision" identifier in the future.
 message ShareableState {
   string key = 1 [ (validate.rules).string = {min_bytes : 1} ];
   google.protobuf.Any state = 2 [ (validate.rules).any.required = true ];
