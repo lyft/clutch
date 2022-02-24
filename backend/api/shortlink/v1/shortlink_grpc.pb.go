@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ShortlinkAPIClient interface {
-	Create(ctx context.Context, in *CreateShortlinkRequest, opts ...grpc.CallOption) (*CreateShortlinkResponse, error)
-	Get(ctx context.Context, in *GetShortlinkRequest, opts ...grpc.CallOption) (*GetShortlinkResponse, error)
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 }
 
 type shortlinkAPIClient struct {
@@ -34,8 +34,8 @@ func NewShortlinkAPIClient(cc grpc.ClientConnInterface) ShortlinkAPIClient {
 	return &shortlinkAPIClient{cc}
 }
 
-func (c *shortlinkAPIClient) Create(ctx context.Context, in *CreateShortlinkRequest, opts ...grpc.CallOption) (*CreateShortlinkResponse, error) {
-	out := new(CreateShortlinkResponse)
+func (c *shortlinkAPIClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
 	err := c.cc.Invoke(ctx, "/clutch.shortlink.v1.ShortlinkAPI/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -43,8 +43,8 @@ func (c *shortlinkAPIClient) Create(ctx context.Context, in *CreateShortlinkRequ
 	return out, nil
 }
 
-func (c *shortlinkAPIClient) Get(ctx context.Context, in *GetShortlinkRequest, opts ...grpc.CallOption) (*GetShortlinkResponse, error) {
-	out := new(GetShortlinkResponse)
+func (c *shortlinkAPIClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
 	err := c.cc.Invoke(ctx, "/clutch.shortlink.v1.ShortlinkAPI/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -56,18 +56,18 @@ func (c *shortlinkAPIClient) Get(ctx context.Context, in *GetShortlinkRequest, o
 // All implementations should embed UnimplementedShortlinkAPIServer
 // for forward compatibility
 type ShortlinkAPIServer interface {
-	Create(context.Context, *CreateShortlinkRequest) (*CreateShortlinkResponse, error)
-	Get(context.Context, *GetShortlinkRequest) (*GetShortlinkResponse, error)
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
+	Get(context.Context, *GetRequest) (*GetResponse, error)
 }
 
 // UnimplementedShortlinkAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedShortlinkAPIServer struct {
 }
 
-func (UnimplementedShortlinkAPIServer) Create(context.Context, *CreateShortlinkRequest) (*CreateShortlinkResponse, error) {
+func (UnimplementedShortlinkAPIServer) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedShortlinkAPIServer) Get(context.Context, *GetShortlinkRequest) (*GetShortlinkResponse, error) {
+func (UnimplementedShortlinkAPIServer) Get(context.Context, *GetRequest) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 
@@ -83,7 +83,7 @@ func RegisterShortlinkAPIServer(s grpc.ServiceRegistrar, srv ShortlinkAPIServer)
 }
 
 func _ShortlinkAPI_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateShortlinkRequest)
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -95,13 +95,13 @@ func _ShortlinkAPI_Create_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/clutch.shortlink.v1.ShortlinkAPI/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ShortlinkAPIServer).Create(ctx, req.(*CreateShortlinkRequest))
+		return srv.(ShortlinkAPIServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _ShortlinkAPI_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetShortlinkRequest)
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func _ShortlinkAPI_Get_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: "/clutch.shortlink.v1.ShortlinkAPI/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ShortlinkAPIServer).Get(ctx, req.(*GetShortlinkRequest))
+		return srv.(ShortlinkAPIServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

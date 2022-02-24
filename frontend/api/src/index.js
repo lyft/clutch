@@ -52784,7 +52784,7 @@ export const clutch = $root.clutch = (() => {
                  * @typedef CreateCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
-                 * @param {clutch.shortlink.v1.CreateShortlinkResponse} [response] CreateShortlinkResponse
+                 * @param {clutch.shortlink.v1.CreateResponse} [response] CreateResponse
                  */
 
                 /**
@@ -52792,13 +52792,13 @@ export const clutch = $root.clutch = (() => {
                  * @function create
                  * @memberof clutch.shortlink.v1.ShortlinkAPI
                  * @instance
-                 * @param {clutch.shortlink.v1.ICreateShortlinkRequest} request CreateShortlinkRequest message or plain object
-                 * @param {clutch.shortlink.v1.ShortlinkAPI.CreateCallback} callback Node-style callback called with the error, if any, and CreateShortlinkResponse
+                 * @param {clutch.shortlink.v1.ICreateRequest} request CreateRequest message or plain object
+                 * @param {clutch.shortlink.v1.ShortlinkAPI.CreateCallback} callback Node-style callback called with the error, if any, and CreateResponse
                  * @returns {undefined}
                  * @variation 1
                  */
                 Object.defineProperty(ShortlinkAPI.prototype.create = function create(request, callback) {
-                    return this.rpcCall(create, $root.clutch.shortlink.v1.CreateShortlinkRequest, $root.clutch.shortlink.v1.CreateShortlinkResponse, request, callback);
+                    return this.rpcCall(create, $root.clutch.shortlink.v1.CreateRequest, $root.clutch.shortlink.v1.CreateResponse, request, callback);
                 }, "name", { value: "Create" });
 
                 /**
@@ -52806,8 +52806,8 @@ export const clutch = $root.clutch = (() => {
                  * @function create
                  * @memberof clutch.shortlink.v1.ShortlinkAPI
                  * @instance
-                 * @param {clutch.shortlink.v1.ICreateShortlinkRequest} request CreateShortlinkRequest message or plain object
-                 * @returns {Promise<clutch.shortlink.v1.CreateShortlinkResponse>} Promise
+                 * @param {clutch.shortlink.v1.ICreateRequest} request CreateRequest message or plain object
+                 * @returns {Promise<clutch.shortlink.v1.CreateResponse>} Promise
                  * @variation 2
                  */
 
@@ -52817,7 +52817,7 @@ export const clutch = $root.clutch = (() => {
                  * @typedef GetCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
-                 * @param {clutch.shortlink.v1.GetShortlinkResponse} [response] GetShortlinkResponse
+                 * @param {clutch.shortlink.v1.GetResponse} [response] GetResponse
                  */
 
                 /**
@@ -52825,13 +52825,13 @@ export const clutch = $root.clutch = (() => {
                  * @function get
                  * @memberof clutch.shortlink.v1.ShortlinkAPI
                  * @instance
-                 * @param {clutch.shortlink.v1.IGetShortlinkRequest} request GetShortlinkRequest message or plain object
-                 * @param {clutch.shortlink.v1.ShortlinkAPI.GetCallback} callback Node-style callback called with the error, if any, and GetShortlinkResponse
+                 * @param {clutch.shortlink.v1.IGetRequest} request GetRequest message or plain object
+                 * @param {clutch.shortlink.v1.ShortlinkAPI.GetCallback} callback Node-style callback called with the error, if any, and GetResponse
                  * @returns {undefined}
                  * @variation 1
                  */
                 Object.defineProperty(ShortlinkAPI.prototype.get = function get(request, callback) {
-                    return this.rpcCall(get, $root.clutch.shortlink.v1.GetShortlinkRequest, $root.clutch.shortlink.v1.GetShortlinkResponse, request, callback);
+                    return this.rpcCall(get, $root.clutch.shortlink.v1.GetRequest, $root.clutch.shortlink.v1.GetResponse, request, callback);
                 }, "name", { value: "Get" });
 
                 /**
@@ -52839,33 +52839,33 @@ export const clutch = $root.clutch = (() => {
                  * @function get
                  * @memberof clutch.shortlink.v1.ShortlinkAPI
                  * @instance
-                 * @param {clutch.shortlink.v1.IGetShortlinkRequest} request GetShortlinkRequest message or plain object
-                 * @returns {Promise<clutch.shortlink.v1.GetShortlinkResponse>} Promise
+                 * @param {clutch.shortlink.v1.IGetRequest} request GetRequest message or plain object
+                 * @returns {Promise<clutch.shortlink.v1.GetResponse>} Promise
                  * @variation 2
                  */
 
                 return ShortlinkAPI;
             })();
 
-            v1.CreateShortlinkRequest = (function() {
+            v1.CreateRequest = (function() {
 
                 /**
-                 * Properties of a CreateShortlinkRequest.
+                 * Properties of a CreateRequest.
                  * @memberof clutch.shortlink.v1
-                 * @interface ICreateShortlinkRequest
-                 * @property {string|null} [path] CreateShortlinkRequest path
-                 * @property {Array.<clutch.shortlink.v1.IShareableState>|null} [state] CreateShortlinkRequest state
+                 * @interface ICreateRequest
+                 * @property {string|null} [path] CreateRequest path
+                 * @property {Array.<clutch.shortlink.v1.IShareableState>|null} [state] CreateRequest state
                  */
 
                 /**
-                 * Constructs a new CreateShortlinkRequest.
+                 * Constructs a new CreateRequest.
                  * @memberof clutch.shortlink.v1
-                 * @classdesc Represents a CreateShortlinkRequest.
-                 * @implements ICreateShortlinkRequest
+                 * @classdesc Represents a CreateRequest.
+                 * @implements ICreateRequest
                  * @constructor
-                 * @param {clutch.shortlink.v1.ICreateShortlinkRequest=} [properties] Properties to set
+                 * @param {clutch.shortlink.v1.ICreateRequest=} [properties] Properties to set
                  */
-                function CreateShortlinkRequest(properties) {
+                function CreateRequest(properties) {
                     this.state = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -52874,30 +52874,30 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CreateShortlinkRequest path.
+                 * CreateRequest path.
                  * @member {string} path
-                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @memberof clutch.shortlink.v1.CreateRequest
                  * @instance
                  */
-                CreateShortlinkRequest.prototype.path = "";
+                CreateRequest.prototype.path = "";
 
                 /**
-                 * CreateShortlinkRequest state.
+                 * CreateRequest state.
                  * @member {Array.<clutch.shortlink.v1.IShareableState>} state
-                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @memberof clutch.shortlink.v1.CreateRequest
                  * @instance
                  */
-                CreateShortlinkRequest.prototype.state = $util.emptyArray;
+                CreateRequest.prototype.state = $util.emptyArray;
 
                 /**
-                 * Verifies a CreateShortlinkRequest message.
+                 * Verifies a CreateRequest message.
                  * @function verify
-                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @memberof clutch.shortlink.v1.CreateRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                CreateShortlinkRequest.verify = function verify(message) {
+                CreateRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.path != null && message.hasOwnProperty("path"))
@@ -52916,26 +52916,26 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a CreateShortlinkRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a CreateRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @memberof clutch.shortlink.v1.CreateRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.shortlink.v1.CreateShortlinkRequest} CreateShortlinkRequest
+                 * @returns {clutch.shortlink.v1.CreateRequest} CreateRequest
                  */
-                CreateShortlinkRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.shortlink.v1.CreateShortlinkRequest)
+                CreateRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.CreateRequest)
                         return object;
-                    let message = new $root.clutch.shortlink.v1.CreateShortlinkRequest();
+                    let message = new $root.clutch.shortlink.v1.CreateRequest();
                     if (object.path != null)
                         message.path = String(object.path);
                     if (object.state) {
                         if (!Array.isArray(object.state))
-                            throw TypeError(".clutch.shortlink.v1.CreateShortlinkRequest.state: array expected");
+                            throw TypeError(".clutch.shortlink.v1.CreateRequest.state: array expected");
                         message.state = [];
                         for (let i = 0; i < object.state.length; ++i) {
                             if (typeof object.state[i] !== "object")
-                                throw TypeError(".clutch.shortlink.v1.CreateShortlinkRequest.state: object expected");
+                                throw TypeError(".clutch.shortlink.v1.CreateRequest.state: object expected");
                             message.state[i] = $root.clutch.shortlink.v1.ShareableState.fromObject(object.state[i]);
                         }
                     }
@@ -52943,15 +52943,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a CreateShortlinkRequest message. Also converts values to other types if specified.
+                 * Creates a plain object from a CreateRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @memberof clutch.shortlink.v1.CreateRequest
                  * @static
-                 * @param {clutch.shortlink.v1.CreateShortlinkRequest} message CreateShortlinkRequest
+                 * @param {clutch.shortlink.v1.CreateRequest} message CreateRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                CreateShortlinkRequest.toObject = function toObject(message, options) {
+                CreateRequest.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -52970,37 +52970,37 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this CreateShortlinkRequest to JSON.
+                 * Converts this CreateRequest to JSON.
                  * @function toJSON
-                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @memberof clutch.shortlink.v1.CreateRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                CreateShortlinkRequest.prototype.toJSON = function toJSON() {
+                CreateRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return CreateShortlinkRequest;
+                return CreateRequest;
             })();
 
-            v1.CreateShortlinkResponse = (function() {
+            v1.CreateResponse = (function() {
 
                 /**
-                 * Properties of a CreateShortlinkResponse.
+                 * Properties of a CreateResponse.
                  * @memberof clutch.shortlink.v1
-                 * @interface ICreateShortlinkResponse
-                 * @property {string|null} [link] CreateShortlinkResponse link
+                 * @interface ICreateResponse
+                 * @property {string|null} [link] CreateResponse link
                  */
 
                 /**
-                 * Constructs a new CreateShortlinkResponse.
+                 * Constructs a new CreateResponse.
                  * @memberof clutch.shortlink.v1
-                 * @classdesc Represents a CreateShortlinkResponse.
-                 * @implements ICreateShortlinkResponse
+                 * @classdesc Represents a CreateResponse.
+                 * @implements ICreateResponse
                  * @constructor
-                 * @param {clutch.shortlink.v1.ICreateShortlinkResponse=} [properties] Properties to set
+                 * @param {clutch.shortlink.v1.ICreateResponse=} [properties] Properties to set
                  */
-                function CreateShortlinkResponse(properties) {
+                function CreateResponse(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -53008,22 +53008,22 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CreateShortlinkResponse link.
+                 * CreateResponse link.
                  * @member {string} link
-                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @memberof clutch.shortlink.v1.CreateResponse
                  * @instance
                  */
-                CreateShortlinkResponse.prototype.link = "";
+                CreateResponse.prototype.link = "";
 
                 /**
-                 * Verifies a CreateShortlinkResponse message.
+                 * Verifies a CreateResponse message.
                  * @function verify
-                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @memberof clutch.shortlink.v1.CreateResponse
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                CreateShortlinkResponse.verify = function verify(message) {
+                CreateResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.link != null && message.hasOwnProperty("link"))
@@ -53033,32 +53033,32 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a CreateShortlinkResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a CreateResponse message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @memberof clutch.shortlink.v1.CreateResponse
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.shortlink.v1.CreateShortlinkResponse} CreateShortlinkResponse
+                 * @returns {clutch.shortlink.v1.CreateResponse} CreateResponse
                  */
-                CreateShortlinkResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.shortlink.v1.CreateShortlinkResponse)
+                CreateResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.CreateResponse)
                         return object;
-                    let message = new $root.clutch.shortlink.v1.CreateShortlinkResponse();
+                    let message = new $root.clutch.shortlink.v1.CreateResponse();
                     if (object.link != null)
                         message.link = String(object.link);
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a CreateShortlinkResponse message. Also converts values to other types if specified.
+                 * Creates a plain object from a CreateResponse message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @memberof clutch.shortlink.v1.CreateResponse
                  * @static
-                 * @param {clutch.shortlink.v1.CreateShortlinkResponse} message CreateShortlinkResponse
+                 * @param {clutch.shortlink.v1.CreateResponse} message CreateResponse
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                CreateShortlinkResponse.toObject = function toObject(message, options) {
+                CreateResponse.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -53070,37 +53070,37 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this CreateShortlinkResponse to JSON.
+                 * Converts this CreateResponse to JSON.
                  * @function toJSON
-                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @memberof clutch.shortlink.v1.CreateResponse
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                CreateShortlinkResponse.prototype.toJSON = function toJSON() {
+                CreateResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return CreateShortlinkResponse;
+                return CreateResponse;
             })();
 
-            v1.GetShortlinkRequest = (function() {
+            v1.GetRequest = (function() {
 
                 /**
-                 * Properties of a GetShortlinkRequest.
+                 * Properties of a GetRequest.
                  * @memberof clutch.shortlink.v1
-                 * @interface IGetShortlinkRequest
-                 * @property {string|null} [shortlinkHash] GetShortlinkRequest shortlinkHash
+                 * @interface IGetRequest
+                 * @property {string|null} [shortlinkHash] GetRequest shortlinkHash
                  */
 
                 /**
-                 * Constructs a new GetShortlinkRequest.
+                 * Constructs a new GetRequest.
                  * @memberof clutch.shortlink.v1
-                 * @classdesc Represents a GetShortlinkRequest.
-                 * @implements IGetShortlinkRequest
+                 * @classdesc Represents a GetRequest.
+                 * @implements IGetRequest
                  * @constructor
-                 * @param {clutch.shortlink.v1.IGetShortlinkRequest=} [properties] Properties to set
+                 * @param {clutch.shortlink.v1.IGetRequest=} [properties] Properties to set
                  */
-                function GetShortlinkRequest(properties) {
+                function GetRequest(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -53108,22 +53108,22 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetShortlinkRequest shortlinkHash.
+                 * GetRequest shortlinkHash.
                  * @member {string} shortlinkHash
-                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @memberof clutch.shortlink.v1.GetRequest
                  * @instance
                  */
-                GetShortlinkRequest.prototype.shortlinkHash = "";
+                GetRequest.prototype.shortlinkHash = "";
 
                 /**
-                 * Verifies a GetShortlinkRequest message.
+                 * Verifies a GetRequest message.
                  * @function verify
-                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @memberof clutch.shortlink.v1.GetRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                GetShortlinkRequest.verify = function verify(message) {
+                GetRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
@@ -53133,32 +53133,32 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a GetShortlinkRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a GetRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @memberof clutch.shortlink.v1.GetRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.shortlink.v1.GetShortlinkRequest} GetShortlinkRequest
+                 * @returns {clutch.shortlink.v1.GetRequest} GetRequest
                  */
-                GetShortlinkRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.shortlink.v1.GetShortlinkRequest)
+                GetRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.GetRequest)
                         return object;
-                    let message = new $root.clutch.shortlink.v1.GetShortlinkRequest();
+                    let message = new $root.clutch.shortlink.v1.GetRequest();
                     if (object.shortlinkHash != null)
                         message.shortlinkHash = String(object.shortlinkHash);
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a GetShortlinkRequest message. Also converts values to other types if specified.
+                 * Creates a plain object from a GetRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @memberof clutch.shortlink.v1.GetRequest
                  * @static
-                 * @param {clutch.shortlink.v1.GetShortlinkRequest} message GetShortlinkRequest
+                 * @param {clutch.shortlink.v1.GetRequest} message GetRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                GetShortlinkRequest.toObject = function toObject(message, options) {
+                GetRequest.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -53170,38 +53170,38 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this GetShortlinkRequest to JSON.
+                 * Converts this GetRequest to JSON.
                  * @function toJSON
-                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @memberof clutch.shortlink.v1.GetRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                GetShortlinkRequest.prototype.toJSON = function toJSON() {
+                GetRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return GetShortlinkRequest;
+                return GetRequest;
             })();
 
-            v1.GetShortlinkResponse = (function() {
+            v1.GetResponse = (function() {
 
                 /**
-                 * Properties of a GetShortlinkResponse.
+                 * Properties of a GetResponse.
                  * @memberof clutch.shortlink.v1
-                 * @interface IGetShortlinkResponse
-                 * @property {string|null} [path] GetShortlinkResponse path
-                 * @property {Array.<clutch.shortlink.v1.IShareableState>|null} [state] GetShortlinkResponse state
+                 * @interface IGetResponse
+                 * @property {string|null} [path] GetResponse path
+                 * @property {Array.<clutch.shortlink.v1.IShareableState>|null} [state] GetResponse state
                  */
 
                 /**
-                 * Constructs a new GetShortlinkResponse.
+                 * Constructs a new GetResponse.
                  * @memberof clutch.shortlink.v1
-                 * @classdesc Represents a GetShortlinkResponse.
-                 * @implements IGetShortlinkResponse
+                 * @classdesc Represents a GetResponse.
+                 * @implements IGetResponse
                  * @constructor
-                 * @param {clutch.shortlink.v1.IGetShortlinkResponse=} [properties] Properties to set
+                 * @param {clutch.shortlink.v1.IGetResponse=} [properties] Properties to set
                  */
-                function GetShortlinkResponse(properties) {
+                function GetResponse(properties) {
                     this.state = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -53210,30 +53210,30 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetShortlinkResponse path.
+                 * GetResponse path.
                  * @member {string} path
-                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @memberof clutch.shortlink.v1.GetResponse
                  * @instance
                  */
-                GetShortlinkResponse.prototype.path = "";
+                GetResponse.prototype.path = "";
 
                 /**
-                 * GetShortlinkResponse state.
+                 * GetResponse state.
                  * @member {Array.<clutch.shortlink.v1.IShareableState>} state
-                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @memberof clutch.shortlink.v1.GetResponse
                  * @instance
                  */
-                GetShortlinkResponse.prototype.state = $util.emptyArray;
+                GetResponse.prototype.state = $util.emptyArray;
 
                 /**
-                 * Verifies a GetShortlinkResponse message.
+                 * Verifies a GetResponse message.
                  * @function verify
-                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @memberof clutch.shortlink.v1.GetResponse
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                GetShortlinkResponse.verify = function verify(message) {
+                GetResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.path != null && message.hasOwnProperty("path"))
@@ -53252,26 +53252,26 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a GetShortlinkResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a GetResponse message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @memberof clutch.shortlink.v1.GetResponse
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.shortlink.v1.GetShortlinkResponse} GetShortlinkResponse
+                 * @returns {clutch.shortlink.v1.GetResponse} GetResponse
                  */
-                GetShortlinkResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.shortlink.v1.GetShortlinkResponse)
+                GetResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.GetResponse)
                         return object;
-                    let message = new $root.clutch.shortlink.v1.GetShortlinkResponse();
+                    let message = new $root.clutch.shortlink.v1.GetResponse();
                     if (object.path != null)
                         message.path = String(object.path);
                     if (object.state) {
                         if (!Array.isArray(object.state))
-                            throw TypeError(".clutch.shortlink.v1.GetShortlinkResponse.state: array expected");
+                            throw TypeError(".clutch.shortlink.v1.GetResponse.state: array expected");
                         message.state = [];
                         for (let i = 0; i < object.state.length; ++i) {
                             if (typeof object.state[i] !== "object")
-                                throw TypeError(".clutch.shortlink.v1.GetShortlinkResponse.state: object expected");
+                                throw TypeError(".clutch.shortlink.v1.GetResponse.state: object expected");
                             message.state[i] = $root.clutch.shortlink.v1.ShareableState.fromObject(object.state[i]);
                         }
                     }
@@ -53279,15 +53279,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a GetShortlinkResponse message. Also converts values to other types if specified.
+                 * Creates a plain object from a GetResponse message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @memberof clutch.shortlink.v1.GetResponse
                  * @static
-                 * @param {clutch.shortlink.v1.GetShortlinkResponse} message GetShortlinkResponse
+                 * @param {clutch.shortlink.v1.GetResponse} message GetResponse
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                GetShortlinkResponse.toObject = function toObject(message, options) {
+                GetResponse.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -53306,17 +53306,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this GetShortlinkResponse to JSON.
+                 * Converts this GetResponse to JSON.
                  * @function toJSON
-                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @memberof clutch.shortlink.v1.GetResponse
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                GetShortlinkResponse.prototype.toJSON = function toJSON() {
+                GetResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return GetShortlinkResponse;
+                return GetResponse;
             })();
 
             v1.ShareableState = (function() {

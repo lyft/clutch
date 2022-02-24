@@ -32,7 +32,7 @@ var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
 func request_ShortlinkAPI_Create_0(ctx context.Context, marshaler runtime.Marshaler, client ShortlinkAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateShortlinkRequest
+	var protoReq CreateRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -49,7 +49,7 @@ func request_ShortlinkAPI_Create_0(ctx context.Context, marshaler runtime.Marsha
 }
 
 func local_request_ShortlinkAPI_Create_0(ctx context.Context, marshaler runtime.Marshaler, server ShortlinkAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateShortlinkRequest
+	var protoReq CreateRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -66,7 +66,7 @@ func local_request_ShortlinkAPI_Create_0(ctx context.Context, marshaler runtime.
 }
 
 func request_ShortlinkAPI_Get_0(ctx context.Context, marshaler runtime.Marshaler, client ShortlinkAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetShortlinkRequest
+	var protoReq GetRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -83,7 +83,7 @@ func request_ShortlinkAPI_Get_0(ctx context.Context, marshaler runtime.Marshaler
 }
 
 func local_request_ShortlinkAPI_Get_0(ctx context.Context, marshaler runtime.Marshaler, server ShortlinkAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetShortlinkRequest
+	var protoReq GetRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

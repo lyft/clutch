@@ -35,22 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on CreateShortlinkRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CreateShortlinkRequest) Validate() error {
+// Validate checks the field values on CreateRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CreateRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CreateShortlinkRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CreateShortlinkRequestMultiError, or nil if none found.
-func (m *CreateShortlinkRequest) ValidateAll() error {
+// ValidateAll checks the field values on CreateRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CreateRequestMultiError, or
+// nil if none found.
+func (m *CreateRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CreateShortlinkRequest) validate(all bool) error {
+func (m *CreateRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -58,7 +58,7 @@ func (m *CreateShortlinkRequest) validate(all bool) error {
 	var errors []error
 
 	if len(m.GetPath()) < 1 {
-		err := CreateShortlinkRequestValidationError{
+		err := CreateRequestValidationError{
 			field:  "Path",
 			reason: "value length must be at least 1 bytes",
 		}
@@ -69,7 +69,7 @@ func (m *CreateShortlinkRequest) validate(all bool) error {
 	}
 
 	if len(m.GetState()) < 1 {
-		err := CreateShortlinkRequestValidationError{
+		err := CreateRequestValidationError{
 			field:  "State",
 			reason: "value must contain at least 1 item(s)",
 		}
@@ -86,7 +86,7 @@ func (m *CreateShortlinkRequest) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, CreateShortlinkRequestValidationError{
+					errors = append(errors, CreateRequestValidationError{
 						field:  fmt.Sprintf("State[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -94,7 +94,7 @@ func (m *CreateShortlinkRequest) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, CreateShortlinkRequestValidationError{
+					errors = append(errors, CreateRequestValidationError{
 						field:  fmt.Sprintf("State[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -103,7 +103,7 @@ func (m *CreateShortlinkRequest) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return CreateShortlinkRequestValidationError{
+				return CreateRequestValidationError{
 					field:  fmt.Sprintf("State[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -114,18 +114,18 @@ func (m *CreateShortlinkRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return CreateShortlinkRequestMultiError(errors)
+		return CreateRequestMultiError(errors)
 	}
 	return nil
 }
 
-// CreateShortlinkRequestMultiError is an error wrapping multiple validation
-// errors returned by CreateShortlinkRequest.ValidateAll() if the designated
-// constraints aren't met.
-type CreateShortlinkRequestMultiError []error
+// CreateRequestMultiError is an error wrapping multiple validation errors
+// returned by CreateRequest.ValidateAll() if the designated constraints
+// aren't met.
+type CreateRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CreateShortlinkRequestMultiError) Error() string {
+func (m CreateRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -134,11 +134,11 @@ func (m CreateShortlinkRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CreateShortlinkRequestMultiError) AllErrors() []error { return m }
+func (m CreateRequestMultiError) AllErrors() []error { return m }
 
-// CreateShortlinkRequestValidationError is the validation error returned by
-// CreateShortlinkRequest.Validate if the designated constraints aren't met.
-type CreateShortlinkRequestValidationError struct {
+// CreateRequestValidationError is the validation error returned by
+// CreateRequest.Validate if the designated constraints aren't met.
+type CreateRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -146,24 +146,22 @@ type CreateShortlinkRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e CreateShortlinkRequestValidationError) Field() string { return e.field }
+func (e CreateRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CreateShortlinkRequestValidationError) Reason() string { return e.reason }
+func (e CreateRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CreateShortlinkRequestValidationError) Cause() error { return e.cause }
+func (e CreateRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CreateShortlinkRequestValidationError) Key() bool { return e.key }
+func (e CreateRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CreateShortlinkRequestValidationError) ErrorName() string {
-	return "CreateShortlinkRequestValidationError"
-}
+func (e CreateRequestValidationError) ErrorName() string { return "CreateRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e CreateShortlinkRequestValidationError) Error() string {
+func (e CreateRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -175,14 +173,14 @@ func (e CreateShortlinkRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCreateShortlinkRequest.%s: %s%s",
+		"invalid %sCreateRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CreateShortlinkRequestValidationError{}
+var _ error = CreateRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -190,24 +188,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CreateShortlinkRequestValidationError{}
+} = CreateRequestValidationError{}
 
-// Validate checks the field values on CreateShortlinkResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CreateShortlinkResponse) Validate() error {
+// Validate checks the field values on CreateResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CreateResponse) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CreateShortlinkResponse with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// CreateShortlinkResponseMultiError, or nil if none found.
-func (m *CreateShortlinkResponse) ValidateAll() error {
+// ValidateAll checks the field values on CreateResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CreateResponseMultiError,
+// or nil if none found.
+func (m *CreateResponse) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CreateShortlinkResponse) validate(all bool) error {
+func (m *CreateResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -217,18 +215,18 @@ func (m *CreateShortlinkResponse) validate(all bool) error {
 	// no validation rules for Link
 
 	if len(errors) > 0 {
-		return CreateShortlinkResponseMultiError(errors)
+		return CreateResponseMultiError(errors)
 	}
 	return nil
 }
 
-// CreateShortlinkResponseMultiError is an error wrapping multiple validation
-// errors returned by CreateShortlinkResponse.ValidateAll() if the designated
-// constraints aren't met.
-type CreateShortlinkResponseMultiError []error
+// CreateResponseMultiError is an error wrapping multiple validation errors
+// returned by CreateResponse.ValidateAll() if the designated constraints
+// aren't met.
+type CreateResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CreateShortlinkResponseMultiError) Error() string {
+func (m CreateResponseMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -237,11 +235,11 @@ func (m CreateShortlinkResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CreateShortlinkResponseMultiError) AllErrors() []error { return m }
+func (m CreateResponseMultiError) AllErrors() []error { return m }
 
-// CreateShortlinkResponseValidationError is the validation error returned by
-// CreateShortlinkResponse.Validate if the designated constraints aren't met.
-type CreateShortlinkResponseValidationError struct {
+// CreateResponseValidationError is the validation error returned by
+// CreateResponse.Validate if the designated constraints aren't met.
+type CreateResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -249,24 +247,22 @@ type CreateShortlinkResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e CreateShortlinkResponseValidationError) Field() string { return e.field }
+func (e CreateResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CreateShortlinkResponseValidationError) Reason() string { return e.reason }
+func (e CreateResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CreateShortlinkResponseValidationError) Cause() error { return e.cause }
+func (e CreateResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CreateShortlinkResponseValidationError) Key() bool { return e.key }
+func (e CreateResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CreateShortlinkResponseValidationError) ErrorName() string {
-	return "CreateShortlinkResponseValidationError"
-}
+func (e CreateResponseValidationError) ErrorName() string { return "CreateResponseValidationError" }
 
 // Error satisfies the builtin error interface
-func (e CreateShortlinkResponseValidationError) Error() string {
+func (e CreateResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -278,14 +274,14 @@ func (e CreateShortlinkResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCreateShortlinkResponse.%s: %s%s",
+		"invalid %sCreateResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CreateShortlinkResponseValidationError{}
+var _ error = CreateResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -293,24 +289,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CreateShortlinkResponseValidationError{}
+} = CreateResponseValidationError{}
 
-// Validate checks the field values on GetShortlinkRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetShortlinkRequest) Validate() error {
+// Validate checks the field values on GetRequest with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetShortlinkRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetShortlinkRequestMultiError, or nil if none found.
-func (m *GetShortlinkRequest) ValidateAll() error {
+// ValidateAll checks the field values on GetRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetRequestMultiError, or
+// nil if none found.
+func (m *GetRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetShortlinkRequest) validate(all bool) error {
+func (m *GetRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -318,7 +314,7 @@ func (m *GetShortlinkRequest) validate(all bool) error {
 	var errors []error
 
 	if len(m.GetShortlinkHash()) < 1 {
-		err := GetShortlinkRequestValidationError{
+		err := GetRequestValidationError{
 			field:  "ShortlinkHash",
 			reason: "value length must be at least 1 bytes",
 		}
@@ -329,18 +325,17 @@ func (m *GetShortlinkRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetShortlinkRequestMultiError(errors)
+		return GetRequestMultiError(errors)
 	}
 	return nil
 }
 
-// GetShortlinkRequestMultiError is an error wrapping multiple validation
-// errors returned by GetShortlinkRequest.ValidateAll() if the designated
-// constraints aren't met.
-type GetShortlinkRequestMultiError []error
+// GetRequestMultiError is an error wrapping multiple validation errors
+// returned by GetRequest.ValidateAll() if the designated constraints aren't met.
+type GetRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetShortlinkRequestMultiError) Error() string {
+func (m GetRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -349,11 +344,11 @@ func (m GetShortlinkRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetShortlinkRequestMultiError) AllErrors() []error { return m }
+func (m GetRequestMultiError) AllErrors() []error { return m }
 
-// GetShortlinkRequestValidationError is the validation error returned by
-// GetShortlinkRequest.Validate if the designated constraints aren't met.
-type GetShortlinkRequestValidationError struct {
+// GetRequestValidationError is the validation error returned by
+// GetRequest.Validate if the designated constraints aren't met.
+type GetRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -361,24 +356,22 @@ type GetShortlinkRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetShortlinkRequestValidationError) Field() string { return e.field }
+func (e GetRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetShortlinkRequestValidationError) Reason() string { return e.reason }
+func (e GetRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetShortlinkRequestValidationError) Cause() error { return e.cause }
+func (e GetRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetShortlinkRequestValidationError) Key() bool { return e.key }
+func (e GetRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetShortlinkRequestValidationError) ErrorName() string {
-	return "GetShortlinkRequestValidationError"
-}
+func (e GetRequestValidationError) ErrorName() string { return "GetRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetShortlinkRequestValidationError) Error() string {
+func (e GetRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -390,14 +383,14 @@ func (e GetShortlinkRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetShortlinkRequest.%s: %s%s",
+		"invalid %sGetRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetShortlinkRequestValidationError{}
+var _ error = GetRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -405,24 +398,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetShortlinkRequestValidationError{}
+} = GetRequestValidationError{}
 
-// Validate checks the field values on GetShortlinkResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetShortlinkResponse) Validate() error {
+// Validate checks the field values on GetResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetResponse) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetShortlinkResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetShortlinkResponseMultiError, or nil if none found.
-func (m *GetShortlinkResponse) ValidateAll() error {
+// ValidateAll checks the field values on GetResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetResponseMultiError, or
+// nil if none found.
+func (m *GetResponse) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetShortlinkResponse) validate(all bool) error {
+func (m *GetResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -438,7 +431,7 @@ func (m *GetShortlinkResponse) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetShortlinkResponseValidationError{
+					errors = append(errors, GetResponseValidationError{
 						field:  fmt.Sprintf("State[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -446,7 +439,7 @@ func (m *GetShortlinkResponse) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetShortlinkResponseValidationError{
+					errors = append(errors, GetResponseValidationError{
 						field:  fmt.Sprintf("State[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -455,7 +448,7 @@ func (m *GetShortlinkResponse) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetShortlinkResponseValidationError{
+				return GetResponseValidationError{
 					field:  fmt.Sprintf("State[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -466,18 +459,17 @@ func (m *GetShortlinkResponse) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetShortlinkResponseMultiError(errors)
+		return GetResponseMultiError(errors)
 	}
 	return nil
 }
 
-// GetShortlinkResponseMultiError is an error wrapping multiple validation
-// errors returned by GetShortlinkResponse.ValidateAll() if the designated
-// constraints aren't met.
-type GetShortlinkResponseMultiError []error
+// GetResponseMultiError is an error wrapping multiple validation errors
+// returned by GetResponse.ValidateAll() if the designated constraints aren't met.
+type GetResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetShortlinkResponseMultiError) Error() string {
+func (m GetResponseMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -486,11 +478,11 @@ func (m GetShortlinkResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetShortlinkResponseMultiError) AllErrors() []error { return m }
+func (m GetResponseMultiError) AllErrors() []error { return m }
 
-// GetShortlinkResponseValidationError is the validation error returned by
-// GetShortlinkResponse.Validate if the designated constraints aren't met.
-type GetShortlinkResponseValidationError struct {
+// GetResponseValidationError is the validation error returned by
+// GetResponse.Validate if the designated constraints aren't met.
+type GetResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -498,24 +490,22 @@ type GetShortlinkResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetShortlinkResponseValidationError) Field() string { return e.field }
+func (e GetResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetShortlinkResponseValidationError) Reason() string { return e.reason }
+func (e GetResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetShortlinkResponseValidationError) Cause() error { return e.cause }
+func (e GetResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetShortlinkResponseValidationError) Key() bool { return e.key }
+func (e GetResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetShortlinkResponseValidationError) ErrorName() string {
-	return "GetShortlinkResponseValidationError"
-}
+func (e GetResponseValidationError) ErrorName() string { return "GetResponseValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetShortlinkResponseValidationError) Error() string {
+func (e GetResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -527,14 +517,14 @@ func (e GetShortlinkResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetShortlinkResponse.%s: %s%s",
+		"invalid %sGetResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetShortlinkResponseValidationError{}
+var _ error = GetResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -542,7 +532,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetShortlinkResponseValidationError{}
+} = GetResponseValidationError{}
 
 // Validate checks the field values on ShareableState with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

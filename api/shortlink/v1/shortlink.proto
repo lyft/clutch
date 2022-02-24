@@ -11,7 +11,7 @@ import "validate/validate.proto";
 import "api/v1/annotations.proto";
 
 service ShortlinkAPI {
-  rpc Create(CreateShortlinkRequest) returns (CreateShortlinkResponse) {
+  rpc Create(CreateRequest) returns (CreateResponse) {
     option (google.api.http) = {
       post : "/v1/shortlink/create"
       body : "*"
@@ -19,7 +19,7 @@ service ShortlinkAPI {
     option (clutch.api.v1.action).type = CREATE;
   }
 
-  rpc Get(GetShortlinkRequest) returns (GetShortlinkResponse) {
+  rpc Get(GetRequest) returns (GetResponse) {
     option (google.api.http) = {
       post : "/v1/shortlink/get"
       body : "*"
@@ -28,20 +28,20 @@ service ShortlinkAPI {
   }
 }
 
-message CreateShortlinkRequest {
+message CreateRequest {
   string path = 1 [ (validate.rules).string = {min_bytes : 1} ];
   repeated ShareableState state = 2 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
-message CreateShortlinkResponse {
+message CreateResponse {
   string link = 1;
 }
 
-message GetShortlinkRequest {
+message GetRequest {
   string shortlink_hash = 1 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
-message GetShortlinkResponse {
+message GetResponse {
   string path = 1;
   repeated ShareableState state = 2;
 }
