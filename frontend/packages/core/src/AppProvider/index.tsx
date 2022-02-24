@@ -106,7 +106,6 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                         </ErrorBoundary>
                       }
                     >
-                      <Route key={`${workflow.path}/landing`} path="" element={<NotFound />} />
                       {workflow.routes.map(route => {
                         const heading = route.displayName
                           ? `${workflow.displayName}: ${route.displayName}`
