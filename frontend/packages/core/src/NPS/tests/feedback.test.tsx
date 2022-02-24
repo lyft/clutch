@@ -219,7 +219,7 @@ describe("<NPSFeedback />", () => {
     it("will display an error on feedback if more input is given than maxLength", () => {
       clickEmoji(wrapper);
 
-      const testValue = generateRandomString(200);
+      const testValue = generateRandomString(FEEDBACK_MAX_LENGTH * 2);
 
       let textField = wrapper.find("Styled(TextField)");
 
@@ -244,7 +244,7 @@ describe("<NPSFeedback />", () => {
       expect(submitButton.prop("disabled")).toBeFalsy();
 
       wrapper.find("Styled(TextField)").prop("onChange")({
-        target: { value: generateRandomString(181) },
+        target: { value: generateRandomString(FEEDBACK_MAX_LENGTH + 1) },
       });
 
       wrapper.update();
