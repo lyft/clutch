@@ -24397,6 +24397,108 @@ export const clutch = $root.clutch = (() => {
                 return k8s;
             })();
 
+            service.shortlink = (function() {
+
+                /**
+                 * Namespace shortlink.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const shortlink = {};
+
+                shortlink.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.shortlink
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.shortlink.v1
+                         * @interface IConfig
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.shortlink.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.shortlink.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.shortlink.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.shortlink.v1.Config)
+                                return object;
+                            return new $root.clutch.config.service.shortlink.v1.Config();
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {clutch.config.service.shortlink.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject() {
+                            return {};
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return shortlink;
+            })();
+
             service.sourcegraph = (function() {
 
                 /**
@@ -52638,6 +52740,712 @@ export const clutch = $root.clutch = (() => {
         })();
 
         return resolver;
+    })();
+
+    clutch.shortlink = (function() {
+
+        /**
+         * Namespace shortlink.
+         * @memberof clutch
+         * @namespace
+         */
+        const shortlink = {};
+
+        shortlink.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.shortlink
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.ShortlinkAPI = (function() {
+
+                /**
+                 * Constructs a new ShortlinkAPI service.
+                 * @memberof clutch.shortlink.v1
+                 * @classdesc Represents a ShortlinkAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function ShortlinkAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (ShortlinkAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = ShortlinkAPI;
+
+                /**
+                 * Callback as used by {@link clutch.shortlink.v1.ShortlinkAPI#create}.
+                 * @memberof clutch.shortlink.v1.ShortlinkAPI
+                 * @typedef CreateCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.shortlink.v1.CreateShortlinkResponse} [response] CreateShortlinkResponse
+                 */
+
+                /**
+                 * Calls Create.
+                 * @function create
+                 * @memberof clutch.shortlink.v1.ShortlinkAPI
+                 * @instance
+                 * @param {clutch.shortlink.v1.ICreateShortlinkRequest} request CreateShortlinkRequest message or plain object
+                 * @param {clutch.shortlink.v1.ShortlinkAPI.CreateCallback} callback Node-style callback called with the error, if any, and CreateShortlinkResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(ShortlinkAPI.prototype.create = function create(request, callback) {
+                    return this.rpcCall(create, $root.clutch.shortlink.v1.CreateShortlinkRequest, $root.clutch.shortlink.v1.CreateShortlinkResponse, request, callback);
+                }, "name", { value: "Create" });
+
+                /**
+                 * Calls Create.
+                 * @function create
+                 * @memberof clutch.shortlink.v1.ShortlinkAPI
+                 * @instance
+                 * @param {clutch.shortlink.v1.ICreateShortlinkRequest} request CreateShortlinkRequest message or plain object
+                 * @returns {Promise<clutch.shortlink.v1.CreateShortlinkResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.shortlink.v1.ShortlinkAPI#get}.
+                 * @memberof clutch.shortlink.v1.ShortlinkAPI
+                 * @typedef GetCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.shortlink.v1.GetShortlinkResponse} [response] GetShortlinkResponse
+                 */
+
+                /**
+                 * Calls Get.
+                 * @function get
+                 * @memberof clutch.shortlink.v1.ShortlinkAPI
+                 * @instance
+                 * @param {clutch.shortlink.v1.IGetShortlinkRequest} request GetShortlinkRequest message or plain object
+                 * @param {clutch.shortlink.v1.ShortlinkAPI.GetCallback} callback Node-style callback called with the error, if any, and GetShortlinkResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(ShortlinkAPI.prototype.get = function get(request, callback) {
+                    return this.rpcCall(get, $root.clutch.shortlink.v1.GetShortlinkRequest, $root.clutch.shortlink.v1.GetShortlinkResponse, request, callback);
+                }, "name", { value: "Get" });
+
+                /**
+                 * Calls Get.
+                 * @function get
+                 * @memberof clutch.shortlink.v1.ShortlinkAPI
+                 * @instance
+                 * @param {clutch.shortlink.v1.IGetShortlinkRequest} request GetShortlinkRequest message or plain object
+                 * @returns {Promise<clutch.shortlink.v1.GetShortlinkResponse>} Promise
+                 * @variation 2
+                 */
+
+                return ShortlinkAPI;
+            })();
+
+            v1.CreateShortlinkRequest = (function() {
+
+                /**
+                 * Properties of a CreateShortlinkRequest.
+                 * @memberof clutch.shortlink.v1
+                 * @interface ICreateShortlinkRequest
+                 * @property {string|null} [path] CreateShortlinkRequest path
+                 * @property {Array.<clutch.shortlink.v1.IShareableState>|null} [state] CreateShortlinkRequest state
+                 */
+
+                /**
+                 * Constructs a new CreateShortlinkRequest.
+                 * @memberof clutch.shortlink.v1
+                 * @classdesc Represents a CreateShortlinkRequest.
+                 * @implements ICreateShortlinkRequest
+                 * @constructor
+                 * @param {clutch.shortlink.v1.ICreateShortlinkRequest=} [properties] Properties to set
+                 */
+                function CreateShortlinkRequest(properties) {
+                    this.state = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateShortlinkRequest path.
+                 * @member {string} path
+                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @instance
+                 */
+                CreateShortlinkRequest.prototype.path = "";
+
+                /**
+                 * CreateShortlinkRequest state.
+                 * @member {Array.<clutch.shortlink.v1.IShareableState>} state
+                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @instance
+                 */
+                CreateShortlinkRequest.prototype.state = $util.emptyArray;
+
+                /**
+                 * Verifies a CreateShortlinkRequest message.
+                 * @function verify
+                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateShortlinkRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.path != null && message.hasOwnProperty("path"))
+                        if (!$util.isString(message.path))
+                            return "path: string expected";
+                    if (message.state != null && message.hasOwnProperty("state")) {
+                        if (!Array.isArray(message.state))
+                            return "state: array expected";
+                        for (let i = 0; i < message.state.length; ++i) {
+                            let error = $root.clutch.shortlink.v1.ShareableState.verify(message.state[i]);
+                            if (error)
+                                return "state." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateShortlinkRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.shortlink.v1.CreateShortlinkRequest} CreateShortlinkRequest
+                 */
+                CreateShortlinkRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.CreateShortlinkRequest)
+                        return object;
+                    let message = new $root.clutch.shortlink.v1.CreateShortlinkRequest();
+                    if (object.path != null)
+                        message.path = String(object.path);
+                    if (object.state) {
+                        if (!Array.isArray(object.state))
+                            throw TypeError(".clutch.shortlink.v1.CreateShortlinkRequest.state: array expected");
+                        message.state = [];
+                        for (let i = 0; i < object.state.length; ++i) {
+                            if (typeof object.state[i] !== "object")
+                                throw TypeError(".clutch.shortlink.v1.CreateShortlinkRequest.state: object expected");
+                            message.state[i] = $root.clutch.shortlink.v1.ShareableState.fromObject(object.state[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateShortlinkRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @static
+                 * @param {clutch.shortlink.v1.CreateShortlinkRequest} message CreateShortlinkRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateShortlinkRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.state = [];
+                    if (options.defaults)
+                        object.path = "";
+                    if (message.path != null && message.hasOwnProperty("path"))
+                        object.path = message.path;
+                    if (message.state && message.state.length) {
+                        object.state = [];
+                        for (let j = 0; j < message.state.length; ++j)
+                            object.state[j] = $root.clutch.shortlink.v1.ShareableState.toObject(message.state[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateShortlinkRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.shortlink.v1.CreateShortlinkRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateShortlinkRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateShortlinkRequest;
+            })();
+
+            v1.CreateShortlinkResponse = (function() {
+
+                /**
+                 * Properties of a CreateShortlinkResponse.
+                 * @memberof clutch.shortlink.v1
+                 * @interface ICreateShortlinkResponse
+                 * @property {string|null} [link] CreateShortlinkResponse link
+                 */
+
+                /**
+                 * Constructs a new CreateShortlinkResponse.
+                 * @memberof clutch.shortlink.v1
+                 * @classdesc Represents a CreateShortlinkResponse.
+                 * @implements ICreateShortlinkResponse
+                 * @constructor
+                 * @param {clutch.shortlink.v1.ICreateShortlinkResponse=} [properties] Properties to set
+                 */
+                function CreateShortlinkResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateShortlinkResponse link.
+                 * @member {string} link
+                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @instance
+                 */
+                CreateShortlinkResponse.prototype.link = "";
+
+                /**
+                 * Verifies a CreateShortlinkResponse message.
+                 * @function verify
+                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateShortlinkResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.link != null && message.hasOwnProperty("link"))
+                        if (!$util.isString(message.link))
+                            return "link: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateShortlinkResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.shortlink.v1.CreateShortlinkResponse} CreateShortlinkResponse
+                 */
+                CreateShortlinkResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.CreateShortlinkResponse)
+                        return object;
+                    let message = new $root.clutch.shortlink.v1.CreateShortlinkResponse();
+                    if (object.link != null)
+                        message.link = String(object.link);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateShortlinkResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @static
+                 * @param {clutch.shortlink.v1.CreateShortlinkResponse} message CreateShortlinkResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateShortlinkResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.link = "";
+                    if (message.link != null && message.hasOwnProperty("link"))
+                        object.link = message.link;
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateShortlinkResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.shortlink.v1.CreateShortlinkResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateShortlinkResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateShortlinkResponse;
+            })();
+
+            v1.GetShortlinkRequest = (function() {
+
+                /**
+                 * Properties of a GetShortlinkRequest.
+                 * @memberof clutch.shortlink.v1
+                 * @interface IGetShortlinkRequest
+                 * @property {string|null} [shortlinkHash] GetShortlinkRequest shortlinkHash
+                 */
+
+                /**
+                 * Constructs a new GetShortlinkRequest.
+                 * @memberof clutch.shortlink.v1
+                 * @classdesc Represents a GetShortlinkRequest.
+                 * @implements IGetShortlinkRequest
+                 * @constructor
+                 * @param {clutch.shortlink.v1.IGetShortlinkRequest=} [properties] Properties to set
+                 */
+                function GetShortlinkRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetShortlinkRequest shortlinkHash.
+                 * @member {string} shortlinkHash
+                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @instance
+                 */
+                GetShortlinkRequest.prototype.shortlinkHash = "";
+
+                /**
+                 * Verifies a GetShortlinkRequest message.
+                 * @function verify
+                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetShortlinkRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
+                        if (!$util.isString(message.shortlinkHash))
+                            return "shortlinkHash: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetShortlinkRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.shortlink.v1.GetShortlinkRequest} GetShortlinkRequest
+                 */
+                GetShortlinkRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.GetShortlinkRequest)
+                        return object;
+                    let message = new $root.clutch.shortlink.v1.GetShortlinkRequest();
+                    if (object.shortlinkHash != null)
+                        message.shortlinkHash = String(object.shortlinkHash);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetShortlinkRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @static
+                 * @param {clutch.shortlink.v1.GetShortlinkRequest} message GetShortlinkRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetShortlinkRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.shortlinkHash = "";
+                    if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
+                        object.shortlinkHash = message.shortlinkHash;
+                    return object;
+                };
+
+                /**
+                 * Converts this GetShortlinkRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.shortlink.v1.GetShortlinkRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetShortlinkRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetShortlinkRequest;
+            })();
+
+            v1.GetShortlinkResponse = (function() {
+
+                /**
+                 * Properties of a GetShortlinkResponse.
+                 * @memberof clutch.shortlink.v1
+                 * @interface IGetShortlinkResponse
+                 * @property {string|null} [path] GetShortlinkResponse path
+                 * @property {Array.<clutch.shortlink.v1.IShareableState>|null} [state] GetShortlinkResponse state
+                 */
+
+                /**
+                 * Constructs a new GetShortlinkResponse.
+                 * @memberof clutch.shortlink.v1
+                 * @classdesc Represents a GetShortlinkResponse.
+                 * @implements IGetShortlinkResponse
+                 * @constructor
+                 * @param {clutch.shortlink.v1.IGetShortlinkResponse=} [properties] Properties to set
+                 */
+                function GetShortlinkResponse(properties) {
+                    this.state = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetShortlinkResponse path.
+                 * @member {string} path
+                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @instance
+                 */
+                GetShortlinkResponse.prototype.path = "";
+
+                /**
+                 * GetShortlinkResponse state.
+                 * @member {Array.<clutch.shortlink.v1.IShareableState>} state
+                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @instance
+                 */
+                GetShortlinkResponse.prototype.state = $util.emptyArray;
+
+                /**
+                 * Verifies a GetShortlinkResponse message.
+                 * @function verify
+                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetShortlinkResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.path != null && message.hasOwnProperty("path"))
+                        if (!$util.isString(message.path))
+                            return "path: string expected";
+                    if (message.state != null && message.hasOwnProperty("state")) {
+                        if (!Array.isArray(message.state))
+                            return "state: array expected";
+                        for (let i = 0; i < message.state.length; ++i) {
+                            let error = $root.clutch.shortlink.v1.ShareableState.verify(message.state[i]);
+                            if (error)
+                                return "state." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetShortlinkResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.shortlink.v1.GetShortlinkResponse} GetShortlinkResponse
+                 */
+                GetShortlinkResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.GetShortlinkResponse)
+                        return object;
+                    let message = new $root.clutch.shortlink.v1.GetShortlinkResponse();
+                    if (object.path != null)
+                        message.path = String(object.path);
+                    if (object.state) {
+                        if (!Array.isArray(object.state))
+                            throw TypeError(".clutch.shortlink.v1.GetShortlinkResponse.state: array expected");
+                        message.state = [];
+                        for (let i = 0; i < object.state.length; ++i) {
+                            if (typeof object.state[i] !== "object")
+                                throw TypeError(".clutch.shortlink.v1.GetShortlinkResponse.state: object expected");
+                            message.state[i] = $root.clutch.shortlink.v1.ShareableState.fromObject(object.state[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetShortlinkResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @static
+                 * @param {clutch.shortlink.v1.GetShortlinkResponse} message GetShortlinkResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetShortlinkResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.state = [];
+                    if (options.defaults)
+                        object.path = "";
+                    if (message.path != null && message.hasOwnProperty("path"))
+                        object.path = message.path;
+                    if (message.state && message.state.length) {
+                        object.state = [];
+                        for (let j = 0; j < message.state.length; ++j)
+                            object.state[j] = $root.clutch.shortlink.v1.ShareableState.toObject(message.state[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetShortlinkResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.shortlink.v1.GetShortlinkResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetShortlinkResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetShortlinkResponse;
+            })();
+
+            v1.ShareableState = (function() {
+
+                /**
+                 * Properties of a ShareableState.
+                 * @memberof clutch.shortlink.v1
+                 * @interface IShareableState
+                 * @property {string|null} [key] ShareableState key
+                 * @property {google.protobuf.IAny|null} [state] ShareableState state
+                 */
+
+                /**
+                 * Constructs a new ShareableState.
+                 * @memberof clutch.shortlink.v1
+                 * @classdesc Represents a ShareableState.
+                 * @implements IShareableState
+                 * @constructor
+                 * @param {clutch.shortlink.v1.IShareableState=} [properties] Properties to set
+                 */
+                function ShareableState(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ShareableState key.
+                 * @member {string} key
+                 * @memberof clutch.shortlink.v1.ShareableState
+                 * @instance
+                 */
+                ShareableState.prototype.key = "";
+
+                /**
+                 * ShareableState state.
+                 * @member {google.protobuf.IAny|null|undefined} state
+                 * @memberof clutch.shortlink.v1.ShareableState
+                 * @instance
+                 */
+                ShareableState.prototype.state = null;
+
+                /**
+                 * Verifies a ShareableState message.
+                 * @function verify
+                 * @memberof clutch.shortlink.v1.ShareableState
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ShareableState.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.key != null && message.hasOwnProperty("key"))
+                        if (!$util.isString(message.key))
+                            return "key: string expected";
+                    if (message.state != null && message.hasOwnProperty("state")) {
+                        let error = $root.google.protobuf.Any.verify(message.state);
+                        if (error)
+                            return "state." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ShareableState message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.shortlink.v1.ShareableState
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.shortlink.v1.ShareableState} ShareableState
+                 */
+                ShareableState.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.ShareableState)
+                        return object;
+                    let message = new $root.clutch.shortlink.v1.ShareableState();
+                    if (object.key != null)
+                        message.key = String(object.key);
+                    if (object.state != null) {
+                        if (typeof object.state !== "object")
+                            throw TypeError(".clutch.shortlink.v1.ShareableState.state: object expected");
+                        message.state = $root.google.protobuf.Any.fromObject(object.state);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ShareableState message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.shortlink.v1.ShareableState
+                 * @static
+                 * @param {clutch.shortlink.v1.ShareableState} message ShareableState
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ShareableState.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.key = "";
+                        object.state = null;
+                    }
+                    if (message.key != null && message.hasOwnProperty("key"))
+                        object.key = message.key;
+                    if (message.state != null && message.hasOwnProperty("state"))
+                        object.state = $root.google.protobuf.Any.toObject(message.state, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ShareableState to JSON.
+                 * @function toJSON
+                 * @memberof clutch.shortlink.v1.ShareableState
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ShareableState.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ShareableState;
+            })();
+
+            return v1;
+        })();
+
+        return shortlink;
     })();
 
     clutch.sourcegraph = (function() {

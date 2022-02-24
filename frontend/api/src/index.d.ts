@@ -10031,6 +10031,56 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace shortlink. */
+            namespace shortlink {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.shortlink.v1.IConfig);
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.shortlink.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.shortlink.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace sourcegraph. */
             namespace sourcegraph {
 
@@ -22028,6 +22078,329 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+            }
+        }
+    }
+
+    /** Namespace shortlink. */
+    namespace shortlink {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a ShortlinkAPI */
+            class ShortlinkAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new ShortlinkAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls Create.
+                 * @param request CreateShortlinkRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and CreateShortlinkResponse
+                 */
+                public create(request: clutch.shortlink.v1.ICreateShortlinkRequest, callback: clutch.shortlink.v1.ShortlinkAPI.CreateCallback): void;
+
+                /**
+                 * Calls Create.
+                 * @param request CreateShortlinkRequest message or plain object
+                 * @returns Promise
+                 */
+                public create(request: clutch.shortlink.v1.ICreateShortlinkRequest): Promise<clutch.shortlink.v1.CreateShortlinkResponse>;
+
+                /**
+                 * Calls Get.
+                 * @param request GetShortlinkRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetShortlinkResponse
+                 */
+                public get(request: clutch.shortlink.v1.IGetShortlinkRequest, callback: clutch.shortlink.v1.ShortlinkAPI.GetCallback): void;
+
+                /**
+                 * Calls Get.
+                 * @param request GetShortlinkRequest message or plain object
+                 * @returns Promise
+                 */
+                public get(request: clutch.shortlink.v1.IGetShortlinkRequest): Promise<clutch.shortlink.v1.GetShortlinkResponse>;
+            }
+
+            namespace ShortlinkAPI {
+
+                /**
+                 * Callback as used by {@link clutch.shortlink.v1.ShortlinkAPI#create}.
+                 * @param error Error, if any
+                 * @param [response] CreateShortlinkResponse
+                 */
+                type CreateCallback = (error: (Error|null), response?: clutch.shortlink.v1.CreateShortlinkResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.shortlink.v1.ShortlinkAPI#get}.
+                 * @param error Error, if any
+                 * @param [response] GetShortlinkResponse
+                 */
+                type GetCallback = (error: (Error|null), response?: clutch.shortlink.v1.GetShortlinkResponse) => void;
+            }
+
+            /** Properties of a CreateShortlinkRequest. */
+            interface ICreateShortlinkRequest {
+
+                /** CreateShortlinkRequest path */
+                path?: (string|null);
+
+                /** CreateShortlinkRequest state */
+                state?: (clutch.shortlink.v1.IShareableState[]|null);
+            }
+
+            /** Represents a CreateShortlinkRequest. */
+            class CreateShortlinkRequest implements ICreateShortlinkRequest {
+
+                /**
+                 * Constructs a new CreateShortlinkRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.ICreateShortlinkRequest);
+
+                /** CreateShortlinkRequest path. */
+                public path: string;
+
+                /** CreateShortlinkRequest state. */
+                public state: clutch.shortlink.v1.IShareableState[];
+
+                /**
+                 * Verifies a CreateShortlinkRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateShortlinkRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateShortlinkRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.CreateShortlinkRequest;
+
+                /**
+                 * Creates a plain object from a CreateShortlinkRequest message. Also converts values to other types if specified.
+                 * @param message CreateShortlinkRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.CreateShortlinkRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateShortlinkRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateShortlinkResponse. */
+            interface ICreateShortlinkResponse {
+
+                /** CreateShortlinkResponse link */
+                link?: (string|null);
+            }
+
+            /** Represents a CreateShortlinkResponse. */
+            class CreateShortlinkResponse implements ICreateShortlinkResponse {
+
+                /**
+                 * Constructs a new CreateShortlinkResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.ICreateShortlinkResponse);
+
+                /** CreateShortlinkResponse link. */
+                public link: string;
+
+                /**
+                 * Verifies a CreateShortlinkResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateShortlinkResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateShortlinkResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.CreateShortlinkResponse;
+
+                /**
+                 * Creates a plain object from a CreateShortlinkResponse message. Also converts values to other types if specified.
+                 * @param message CreateShortlinkResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.CreateShortlinkResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateShortlinkResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetShortlinkRequest. */
+            interface IGetShortlinkRequest {
+
+                /** GetShortlinkRequest shortlinkHash */
+                shortlinkHash?: (string|null);
+            }
+
+            /** Represents a GetShortlinkRequest. */
+            class GetShortlinkRequest implements IGetShortlinkRequest {
+
+                /**
+                 * Constructs a new GetShortlinkRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.IGetShortlinkRequest);
+
+                /** GetShortlinkRequest shortlinkHash. */
+                public shortlinkHash: string;
+
+                /**
+                 * Verifies a GetShortlinkRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetShortlinkRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetShortlinkRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.GetShortlinkRequest;
+
+                /**
+                 * Creates a plain object from a GetShortlinkRequest message. Also converts values to other types if specified.
+                 * @param message GetShortlinkRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.GetShortlinkRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetShortlinkRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetShortlinkResponse. */
+            interface IGetShortlinkResponse {
+
+                /** GetShortlinkResponse path */
+                path?: (string|null);
+
+                /** GetShortlinkResponse state */
+                state?: (clutch.shortlink.v1.IShareableState[]|null);
+            }
+
+            /** Represents a GetShortlinkResponse. */
+            class GetShortlinkResponse implements IGetShortlinkResponse {
+
+                /**
+                 * Constructs a new GetShortlinkResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.IGetShortlinkResponse);
+
+                /** GetShortlinkResponse path. */
+                public path: string;
+
+                /** GetShortlinkResponse state. */
+                public state: clutch.shortlink.v1.IShareableState[];
+
+                /**
+                 * Verifies a GetShortlinkResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetShortlinkResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetShortlinkResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.GetShortlinkResponse;
+
+                /**
+                 * Creates a plain object from a GetShortlinkResponse message. Also converts values to other types if specified.
+                 * @param message GetShortlinkResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.GetShortlinkResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetShortlinkResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ShareableState. */
+            interface IShareableState {
+
+                /** ShareableState key */
+                key?: (string|null);
+
+                /** ShareableState state */
+                state?: (google.protobuf.IAny|null);
+            }
+
+            /** Represents a ShareableState. */
+            class ShareableState implements IShareableState {
+
+                /**
+                 * Constructs a new ShareableState.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.IShareableState);
+
+                /** ShareableState key. */
+                public key: string;
+
+                /** ShareableState state. */
+                public state?: (google.protobuf.IAny|null);
+
+                /**
+                 * Verifies a ShareableState message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ShareableState message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ShareableState
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.ShareableState;
+
+                /**
+                 * Creates a plain object from a ShareableState message. Also converts values to other types if specified.
+                 * @param message ShareableState
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.ShareableState, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ShareableState to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
         }
     }

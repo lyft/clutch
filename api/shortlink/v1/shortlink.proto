@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package clutch.shortlink.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/shortlink/v1;shortlinkv1";
+
+import "google/protobuf/any.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
+
+service ShortlinkAPI {
+  rpc Create(CreateShortlinkRequest) returns (CreateShortlinkResponse) {
+    option (google.api.http) = {
+      post : "/v1/shortlink/create"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+
+  rpc Get(GetShortlinkRequest) returns (GetShortlinkResponse) {
+    option (google.api.http) = {
+      post : "/v1/shortlink/get"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message CreateShortlinkRequest {
+  string path = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  repeated ShareableState state = 2 [ (validate.rules).repeated = {min_items : 1} ];
+}
+
+message CreateShortlinkResponse {
+  string link = 1;
+}
+
+message GetShortlinkRequest {
+  string shortlink_hash = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message GetShortlinkResponse {
+  string path = 1;
+  repeated ShareableState state = 2;
+}
+
+message ShareableState {
+  string key = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  google.protobuf.Any state = 2 [ (validate.rules).any.required = true ];
+}
