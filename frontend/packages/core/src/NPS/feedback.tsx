@@ -85,7 +85,7 @@ const FeedbackAlert = () => {
     </Alert>
   );
 };
-export const FEEDBACK_MAX_LENGTH = 360;
+export const FEEDBACK_MAX_LENGTH = 280;
 /**
  * NPS feedback component which is the base for both Wizard and Anytime.
  * Will fetch given survey options from the server based on the given origin
