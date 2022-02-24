@@ -1,9 +1,9 @@
 import React from "react";
+import type { SnackbarCloseReason, SnackbarProps } from "@material-ui/core";
 import { Snackbar } from "@material-ui/core";
 
 import type { AlertProps } from "./alert";
 import { Alert } from "./alert";
-import type { SnackbarProps, SnackbarCloseReason } from "@material-ui/core";
 
 export interface ToastProps
   extends Pick<SnackbarProps, "anchorOrigin" | "autoHideDuration">,
