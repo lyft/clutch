@@ -1,9 +1,11 @@
 import * as React from "react";
+import { useForm } from "react-hook-form";
 import type { clutch as IClutch, google as IGoogle } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
@@ -166,6 +168,23 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
   }
 };
 
+const autoComplete = async (search: string): Promise<any> => {
+  // Check the length of the search query as the user might empty out the search
+  // which will still trigger the on change handler
+  if (search.length === 0) {
+    return { results: [] };
+  }
+
+  const response = await client.post("/v1/resolver/autocomplete", {
+    want: `type.googleapis.com/clutch.core.project.v1.Project`,
+    search,
+  });
+
+  return { results: response?.data?.results || [] };
+};
+
+const Form = styled.form({});
+
 const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
@@ -243,6 +262,16 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   const hasError = state.error !== undefined && state.error !== null;
 
+  const { handleSubmit } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+  });
+
+  const handleChanges = event => {
+    setCustomProject(event.target.value);
+  };
+
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={derivedState}>
@@ -290,16 +319,18 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
             {state.loading && <LinearProgress color="secondary" />}
           </StyledProgressContainer>
           <Divider />
-          {/* TODO: add plus icon in the text field */}
-          <StyledProjectTextField
-            disabled={state.loading}
-            placeholder="Add a project"
-            value={customProject}
-            onChange={e => setCustomProject(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && handleAdd()}
-            helperText={state.error?.message}
-            error={hasError}
-          />
+          <Form noValidate onSubmit={handleSubmit(handleAdd)}>
+            <StyledProjectTextField
+              disabled={state.loading}
+              placeholder="Add a project"
+              value={customProject}
+              onChange={handleChanges}
+              helperText={state.error?.message}
+              error={hasError}
+              autocompleteCallback={v => autoComplete(v)}
+              endAdornment={<AddIcon />}
+            />
+          </Form>
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
