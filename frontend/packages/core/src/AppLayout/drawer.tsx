@@ -15,7 +15,7 @@ import { useAppContext } from "../Contexts";
 import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
 
-import { routesByGrouping, sortedGroupings } from "./utils";
+import { routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
 
 // sidebar
 const DrawerPanel = styled(MuiDrawer)({
@@ -163,37 +163,12 @@ const Drawer: React.FC = () => {
   const location = useLocation();
 
   const updateOpenGroup = (group: string) => {
-    if (openGroup === group) {
-      setOpenGroup("");
-    } else {
-      setOpenGroup(group);
-    }
+    setOpenGroup(openGroup === group ? "" : group);
   };
 
-  /**
-   * Will break a path down and iterate through given workflows to see if there is a matching path.
-   * If it finds a given path it will set that workflow as the active one so it can stay selected.
-   */
   React.useEffect(() => {
-    // /ec2/asg/resize -> ["", "ec2", "asg", "resize"] -> ["ec2", "asg", "resize"]
-    const splitPath = location.pathname.split("/").filter(Boolean);
     setActiveWorkflow(null);
-
-    if (splitPath.length) {
-      workflows.some(w => {
-        if (splitPath[0] === w.path) {
-          return w.routes.some(r => {
-            if (r.path === splitPath.slice(1).join("/")) {
-              setActiveWorkflow(w);
-            }
-
-            return activeWorkflow !== null;
-          });
-        }
-
-        return false;
-      });
-    }
+    setActiveWorkflow(workflowByRoute(workflows, location.pathname));
   }, [location]);
 
   return (
