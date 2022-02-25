@@ -32,12 +32,11 @@ const Toast: React.FC<ToastProps> = ({
     <Snackbar
       open={open}
       autoHideDuration={autoHideDuration}
-      onExiting={onDismiss}
       anchorOrigin={anchorOrigin}
       onClose={(_, reason: SnackbarCloseReason) => {
         // This way it will not auto close when clicking in the window, will instead wait on the timeout or onClose
         if (reason !== "clickaway") {
-          setOpen(false);
+          onDismiss();
         }
       }}
     >
