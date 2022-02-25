@@ -1,39 +1,27 @@
 import React from "react";
-import styled from "@emotion/styled";
-import { Snackbar } from "@material-ui/core";
-import { Alert as MuiAlert } from "@material-ui/lab";
 
-const Alert = styled(MuiAlert)({
-  margin: "5px",
-});
+import Toast from "./toast";
 
 export interface WarningProps {
   message: any;
   onClose?: () => void;
 }
 
+/**
+ * Warning component
+ * @param message the message to display in the warning
+ * @deprecated use Toast component
+ */
 const Warning: React.FC<WarningProps> = ({ message, onClose }) => {
-  const [open, setOpen] = React.useState(true);
-
-  const onDismiss = () => {
-    if (onClose !== undefined) {
-      onClose();
-    }
-    setOpen(false);
-  };
+  if (process.env.NODE_ENV === "development") {
+    // eslint-disable-next-line no-console
+    console.warn("Warning component is deprecated, please use Toast component instead");
+  }
 
   return (
-    <Snackbar
-      open={open}
-      autoHideDuration={6000}
-      onExiting={onDismiss}
-      onClose={() => setOpen(false)}
-      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-    >
-      <Alert elevation={6} variant="filled" onClose={onDismiss} severity="warning">
-        {message}
-      </Alert>
-    </Snackbar>
+    <Toast severity="warning" onClose={onClose}>
+      {message}
+    </Toast>
   );
 };
 

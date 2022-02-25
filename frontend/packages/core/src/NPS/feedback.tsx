@@ -85,7 +85,7 @@ const FeedbackAlert = () => {
     </Alert>
   );
 };
-
+export const FEEDBACK_MAX_LENGTH = 280;
 /**
  * NPS feedback component which is the base for both Wizard and Anytime.
  * Will fetch given survey options from the server based on the given origin
@@ -102,7 +102,7 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
   const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
   const [feedbackType, setFeedbackType] = useState<string>(null);
   const [requestId, setRequestId] = useState<string>("");
-  const maxLength = 180;
+  const maxLength = FEEDBACK_MAX_LENGTH;
   const debounceTimer = 500;
   const wizardOrigin = origin === "WIZARD";
 

@@ -410,11 +410,21 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
               }}
             >
               <Routes>
-                <Route path="/*" element={<AppLayout isLoading={isLoading} />}>
+                <Route path="/" element={<AppLayout isLoading={isLoading} />}>
                   <Route key="landing" path="" element={<Landing />} />
-                  {workflows.map((workflow: Workflow) => (
-                    <ErrorBoundary workflow={workflow} key={workflow.path.split("/")[0]}>
-                      <Route path={`${workflow.path}/*`} element={<Outlet />}>
+                  {workflows.map((workflow: Workflow) => {
+                    const workflowPath = workflow.path.replace(/^\/+/, "").replace(/\/+$/, "");
+                    const workflowKey = workflow.path.split("/")[0];
+                    return (
+                      <Route
+                        path={`${workflowPath}/`}
+                        key={workflowKey}
+                        element={
+                          <ErrorBoundary workflow={workflow}>
+                            <Outlet />
+                          </ErrorBoundary>
+                        }
+                      >
                         {workflow.routes.map(route => {
                           const heading = route.displayName
                             ? `${workflow.displayName}: ${route.displayName}`
@@ -422,7 +432,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                           return (
                             <Route
                               key={workflow.path}
-                              path={`${route.path}`}
+                              path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
                               element={React.cloneElement(<route.component />, {
                                 ...route.componentProps,
                                 heading,
@@ -432,8 +442,8 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                         })}
                         <Route key={`${workflow.path}/notFound`} path="*" element={<NotFound />} />
                       </Route>
-                    </ErrorBoundary>
-                  ))}
+                    );
+                  })}
                   <Route
                     key="short-links"
                     path="/sl/*"

@@ -5,7 +5,7 @@ set -euo pipefail
 
 BE_STARTUP_COUNT=0
 FE_STARTUP_COUNT=0
-STARTUP_WAIT=120
+STARTUP_WAIT=240
 
 make backend-dev-mock &
 until curl --output /dev/null --silent --fail http://localhost:8080/healthcheck; do
