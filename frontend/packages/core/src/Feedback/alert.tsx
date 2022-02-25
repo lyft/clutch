@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import { Grid } from "@material-ui/core";
 import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
 import MuiErrorIcon from "@material-ui/icons/Error";
@@ -8,6 +7,8 @@ import MuiWarningIcon from "@material-ui/icons/Warning";
 import type { AlertProps as MuiAlertProps } from "@material-ui/lab";
 import { Alert as MuiAlert, AlertTitle as MuiAlertTitle } from "@material-ui/lab";
 
+import styled from "../styled";
+
 const backgroundColors = {
   error: "linear-gradient(to right, #DB3615 8px, #FDE9E7 0%)",
   info: "linear-gradient(to right, #3548D4 8px, #EBEDFB 0%)",
@@ -15,7 +16,7 @@ const backgroundColors = {
   warning: "linear-gradient(to right, #FFCC80 8px, #FFFDE6 0%)",
 };
 
-const StyledAlert = styled(MuiAlert)(
+const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
   {
     borderRadius: "8px",
     padding: "16px",
@@ -72,7 +73,8 @@ const iconMappings = {
   warning: <WarningIcon />,
 };
 
-export interface AlertProps extends Pick<MuiAlertProps, "severity" | "action"> {
+export interface AlertProps
+  extends Pick<MuiAlertProps, "severity" | "action" | "onClose" | "elevation" | "variant"> {
   title?: React.ReactNode;
 }
 

@@ -7,7 +7,7 @@ import (
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slacktest"
 	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest"

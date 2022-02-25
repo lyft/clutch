@@ -942,9 +942,9 @@ func (m *Feedback) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetUrlPath()) < 1 {
+	if len(m.GetFeedbackType()) < 1 {
 		err := FeedbackValidationError{
-			field:  "UrlPath",
+			field:  "FeedbackType",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {
@@ -1005,8 +1005,6 @@ func (m *Feedback) validate(all bool) error {
 	}
 
 	// no validation rules for FreeformResponse
-
-	// no validation rules for FeedbackType
 
 	if len(errors) > 0 {
 		return FeedbackMultiError(errors)

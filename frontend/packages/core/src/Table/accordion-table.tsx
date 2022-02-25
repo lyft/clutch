@@ -1,8 +1,9 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import { IconButton as MuiIconButton, TableRow } from "@material-ui/core";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+
+import styled from "../styled";
 
 import type { TableRowProps } from "./table";
 import { TableCell } from "./table";
@@ -12,8 +13,8 @@ const IconButton = styled(MuiIconButton)({
   color: "#0D1030",
 });
 
-const ChevronRight = styled(ChevronRightIcon)(props => ({
-  color: props?.["data-disabled"] ? "#E7E7EA" : "unset",
+const ChevronRight = styled(ChevronRightIcon)<{ $disabled: boolean }>(props => ({
+  color: props?.$disabled ? "#E7E7EA" : "unset",
 }));
 
 export interface AccordionRowProps {
@@ -36,7 +37,7 @@ export const AccordionRow = ({ columns, children }: AccordionRowProps) => {
         {columns.map((heading: any, index: number) => {
           const icon = (
             <IconButton onClick={onClick}>
-              {open ? <KeyboardArrowDownIcon /> : <ChevronRight data-disabled={!hasChildren} />}
+              {open ? <KeyboardArrowDownIcon /> : <ChevronRight $disabled={!hasChildren} />}
             </IconButton>
           );
           return (

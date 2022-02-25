@@ -1103,6 +1103,12 @@ message Event {
   string involved_object_name = 6;
   // kind of the object e.g pod, deployment, service, etc
   ObjectKind kind = 7;
+
+  // This creation time refers to the metadata creation time, which the server
+  // marks when the object is created. This is generally the same as the
+  // `lastTimestamp` and `eventTime` fields in the Event object.
+  // https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#ObjectMeta
+  int64 creation_time_millis = 10;
 }
 
 message ListEventsRequest {

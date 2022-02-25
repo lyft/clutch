@@ -1,5 +1,5 @@
 # Frontend build.
-FROM node:16.13.0-buster as nodebuild
+FROM node:16.14.0-buster as nodebuild
 COPY ./frontend ./frontend
 COPY ./tools/install-yarn.sh ./tools/install-yarn.sh
 COPY ./tools/preflight-checks.sh ./tools/preflight-checks.sh
@@ -8,7 +8,7 @@ COPY Makefile .
 RUN make frontend
 
 # Backend build.
-FROM golang:1.17.5-buster as gobuild
+FROM golang:1.17.7-buster as gobuild
 WORKDIR /go/src/github.com/lyft/clutch
 COPY ./backend ./backend
 COPY ./tools/preflight-checks.sh ./tools/preflight-checks.sh

@@ -7,6 +7,7 @@ import {
   SimpleFeatureFlag,
   Step,
   Stepper,
+  styled,
   useLocation,
   useNavigate,
   useSearchParams,
@@ -15,7 +16,6 @@ import {
 } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import styled from "@emotion/styled";
 import { Container as MuiContainer, Grid, Paper as MuiPaper, Typography } from "@material-ui/core";
 
 import { useWizardState, WizardAction } from "./state";
@@ -30,14 +30,7 @@ const Heading = styled(Typography)({
 interface WizardProps extends Pick<ContainerProps, "width"> {
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
   dataLayout: ManagerLayout;
-  enableFeedback?: boolean;
   heading?: string;
-}
-
-// To be used in a workflow's configuration file
-export interface WizardConfigProps {
-  // If true and if the WizardStep is used, a feedback component will be added to a workflow's last step.
-  enableFeedback?: boolean;
 }
 
 export interface WizardChild {
@@ -56,13 +49,13 @@ interface ContainerProps {
   width?: "default" | "full";
 }
 
-const Container = styled(MuiContainer)<ContainerProps>(
+const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   {
     padding: "32px",
     maxWidth: "unset",
   },
   props => ({
-    width: props.width === "full" ? "100%" : "800px",
+    width: props.$width === "full" ? "100%" : "800px",
   })
 );
 
@@ -71,13 +64,7 @@ const Paper = styled(MuiPaper)({
   padding: "32px",
 });
 
-const Wizard = ({
-  heading,
-  width = "default",
-  dataLayout,
-  children,
-  enableFeedback,
-}: WizardProps) => {
+const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
@@ -151,13 +138,11 @@ const Wizard = ({
         <Grid container justify="center">
           {((state.activeStep === lastStepIndex && !isLoading) || hasError) && (
             <>
-              {enableFeedback && (
-                <SimpleFeatureFlag feature="npsWizard">
-                  <FeatureOn>
-                    <NPSWizard />
-                  </FeatureOn>
-                </SimpleFeatureFlag>
-              )}
+              <SimpleFeatureFlag feature="npsWizard">
+                <FeatureOn>
+                  <NPSWizard />
+                </FeatureOn>
+              </SimpleFeatureFlag>
               {(isMultistep || hasError) && (
                 <ButtonGroup>
                   <Button
@@ -185,7 +170,7 @@ const Wizard = ({
   };
 
   return (
-    <Container width={width}>
+    <Container $width={width}>
       <Grid
         container
         direction="column"

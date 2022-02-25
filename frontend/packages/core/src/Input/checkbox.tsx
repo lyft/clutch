@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import type { CheckboxProps as MuiCheckboxProps } from "@material-ui/core";
 import {
   Checkbox as MuiCheckbox,
@@ -10,6 +9,8 @@ import {
   Grid,
 } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
+
+import styled from "../styled";
 
 const FormControl = styled(MuiFormControl)({
   width: "75%",
@@ -41,19 +42,26 @@ const StyledCheckbox = styled(MuiCheckbox)({
   },
 });
 
-const Icon = styled.div<{ disabled: boolean; size: string }>(
+type Size = "20px" | "24px";
+
+interface StyledIconProps {
+  $disabled: CheckboxProps["disabled"];
+  $size: Size;
+}
+
+const Icon = styled("div")<StyledIconProps>(
   {
     borderRadius: "2px",
     boxSizing: "border-box",
   },
   props => ({
-    height: props.size,
-    width: props.size,
-    border: props.disabled ? "1px solid #e7e7ea" : "1px solid #6e7083",
+    height: props.$size,
+    width: props.$size,
+    border: props.$disabled ? "1px solid #e7e7ea" : "1px solid #6e7083",
   })
 );
 
-const SelectedIcon = styled.div<{ disabled: boolean; size: string }>(
+const SelectedIcon = styled("div")<StyledIconProps>(
   {
     borderRadius: "2px",
     boxSizing: "border-box",
@@ -62,12 +70,12 @@ const SelectedIcon = styled.div<{ disabled: boolean; size: string }>(
     },
   },
   props => ({
-    height: props.size,
-    width: props.size,
-    background: props.disabled ? "#e7e7eA" : "#3548d4",
+    height: props.$size,
+    width: props.$size,
+    background: props.$disabled ? "#e7e7eA" : "#3548d4",
     ".MuiSvgIcon-root": {
-      height: props.size,
-      width: props.size,
+      height: props.$size,
+      width: props.$size,
     },
   })
 );
@@ -76,7 +84,7 @@ export interface CheckboxProps
   extends Pick<MuiCheckboxProps, "checked" | "disabled" | "name" | "onChange" | "size"> {}
 
 // TODO (sperry): add 16px size variant
-const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled, size, ...props }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled = false, size, ...props }) => {
   let sizePx;
   switch (size) {
     case "small":
@@ -90,9 +98,9 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled, size, ...props }
     <StyledCheckbox
       checked={checked}
       size={size}
-      icon={<Icon disabled={disabled} size={sizePx} />}
+      icon={<Icon $disabled={disabled} $size={sizePx} />}
       checkedIcon={
-        <SelectedIcon disabled={disabled} size={sizePx}>
+        <SelectedIcon $disabled={disabled} $size={sizePx}>
           <CheckIcon />
         </SelectedIcon>
       }

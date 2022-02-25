@@ -163,6 +163,7 @@ export interface TextFieldProps
       | "defaultValue"
       | "disabled"
       | "error"
+      | "fullWidth"
       | "helperText"
       | "id"
       | "inputRef"
@@ -191,6 +192,7 @@ const TextField = ({
   endAdornment,
   autocompleteCallback,
   defaultValue,
+  fullWidth = true,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -253,9 +255,10 @@ const TextField = ({
       <Autocomplete
         freeSolo
         size="small"
+        fullWidth={fullWidth}
         options={autoCompleteOptions}
         PopperComponent={Popper}
-        getOptionLabel={option =>
+        getOptionLabel={(option: string | any) =>
           typeof option === "string" ? option : option?.id || option.label
         }
         onInputChange={(__, v) => autoCompleteDebounce(v)}

@@ -1,5 +1,10 @@
 import * as React from "react";
-import styled from "@emotion/styled";
+// import styled from "@emotion/styled";
+import type {
+  TableCellProps as MuiTableCellProps,
+  TableProps as MuiTableProps,
+  TableRowProps as MuiTableRowProps,
+} from "@material-ui/core";
 import {
   IconButton,
   Paper as MuiPaper,
@@ -8,15 +13,14 @@ import {
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableHead as MuiTableHead,
-  TableProps as MuiTableProps,
   TableRow as MuiTableRow,
-  TableRowProps as MuiTableRowProps,
   useMediaQuery,
 } from "@material-ui/core";
 import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import { Popper, PopperItem } from "../popper";
+import styled from "../styled";
 import { Typography } from "../typography";
 
 const StyledPaper = styled(MuiPaper)({
@@ -24,10 +28,10 @@ const StyledPaper = styled(MuiPaper)({
 });
 
 const StyledTable = styled(MuiTable)<{
-  actions: boolean;
-  columnCount: number;
-  compress: boolean;
-  responsive?: boolean;
+  $hasActionsColumn?: TableProps["actionsColumn"];
+  $columnCount: number;
+  $compress: boolean;
+  $responsive?: TableProps["responsive"];
 }>(
   {
     minWidth: "100%",
@@ -35,8 +39,10 @@ const StyledTable = styled(MuiTable)<{
     alignItems: "center",
   },
   props => ({
-    display: !props.responsive ? "table" : props.compress ? "table" : "grid",
-    gridTemplateColumns: `repeat(${props.columnCount}, auto)${props.actions ? " 80px" : ""}`,
+    display: !props.$responsive ? "table" : props.$compress ? "table" : "grid",
+    gridTemplateColumns: `repeat(${props.$columnCount}, auto)${
+      props.$hasActionsColumn ? " 80px" : ""
+    }`,
   })
 );
 
@@ -49,7 +55,9 @@ const StyledTableHead = styled(MuiTableHead)({
   backgroundColor: "#D7DAF6",
 });
 
-const StyledTableRow = styled(MuiTableRow)<{ responsive?: boolean }>(
+const StyledTableRow = styled(MuiTableRow)<{
+  $responsive?: TableRowProps["responsive"];
+}>(
   {
     ":nth-of-type(even)": {
       background: "#F8F8F9",
@@ -59,14 +67,14 @@ const StyledTableRow = styled(MuiTableRow)<{ responsive?: boolean }>(
     },
   },
   props => ({
-    display: props.responsive ? "contents" : "",
+    display: props.$responsive ? "contents" : "",
   })
 );
 
 const StyledTableCell = styled(MuiTableCell)<{
-  border?: boolean;
-  responsive?: boolean;
-  action?: boolean;
+  $border?: TableCellProps["border"];
+  $responsive?: TableCellProps["responsive"];
+  $action?: TableCellProps["action"];
 }>(
   {
     alignItems: "center",
@@ -78,14 +86,24 @@ const StyledTableCell = styled(MuiTableCell)<{
     minHeight: "100%",
   },
   props => ({
-    borderBottom: props?.border ? "1px solid #E7E7EA" : "0",
-    display: props.responsive ? "flex" : "",
-    width: !props.responsive && props.action ? "80px" : "",
+    borderBottom: props?.$border ? "1px solid #E7E7EA" : "0",
+    display: props.$responsive ? "flex" : "",
+    width: !props.$responsive && props.$action ? "80px" : "",
   })
 );
 
-export interface TableContainerProps {
-  children: React.ReactElement<MuiTableProps>;
+interface TableCellProps extends MuiTableCellProps {
+  action?: boolean;
+  border?: boolean;
+  responsive?: boolean;
+}
+
+const TableCell = ({ action, border, responsive, ...props }: TableCellProps) => (
+  <StyledTableCell $action={action} $border={border} $responsive={responsive} {...props} />
+);
+
+interface TableContainerProps {
+  children: React.ReactElement<TableProps>;
 }
 
 const TableContainer = ({ children }: TableContainerProps) => (
@@ -94,7 +112,7 @@ const TableContainer = ({ children }: TableContainerProps) => (
   </MuiTableContainer>
 );
 
-export interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
+interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   /** The names of the columns. This must be set (even to empty string) to render the table. */
   columns: string[];
   /** The breakpoint at which to compress the table rows. By default the small breakpoint is used. */
@@ -126,10 +144,10 @@ const Table: React.FC<TableProps> = ({
   return (
     <TableContainer>
       <StyledTable
-        compress={compress}
-        columnCount={columns?.length}
-        actions={actionsColumn}
-        responsive={responsive}
+        $compress={compress}
+        $columnCount={columns?.length}
+        $hasActionsColumn={actionsColumn}
+        $responsive={responsive}
         {...props}
       >
         {/*
@@ -139,12 +157,12 @@ const Table: React.FC<TableProps> = ({
         {showHeader && columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0 && (
           <StyledTableHead>
             {columns.map(h => (
-              <StyledTableCell responsive={responsive}>
+              <StyledTableCell $responsive={responsive}>
                 <Typography variant="subtitle3">{h}</Typography>
               </StyledTableCell>
             ))}
             {actionsColumn && !(responsive && compress) && (
-              <StyledTableCell responsive={responsive} action />
+              <StyledTableCell $responsive={responsive} $action />
             )}
           </StyledTableHead>
         )}
@@ -173,10 +191,10 @@ export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
 }
 
 const TableRow = ({ children = [], onClick, cellDefault, responsive = false }: TableRowProps) => (
-  <StyledTableRow onClick={onClick} responsive={responsive}>
+  <StyledTableRow onClick={onClick} $responsive={responsive}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
-      <StyledTableCell key={index} responsive={responsive}>
+      <StyledTableCell key={index} $responsive={responsive}>
         {value === null && cellDefault !== undefined ? cellDefault : value}
       </StyledTableCell>
     ))}
@@ -225,11 +243,7 @@ const TableRowActions = ({ children }: TableRowActionsProps) => {
   );
 };
 
-export {
-  StyledTableCell as TableCell,
-  Table,
-  TableContainer,
-  TableRow,
-  TableRowAction,
-  TableRowActions,
-};
+export { TableCell, Table, TableContainer, TableRow, TableRowAction, TableRowActions };
+
+export type { TableProps };
+export type { TableContainerProps };

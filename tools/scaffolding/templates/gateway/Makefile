@@ -40,12 +40,16 @@ frontend: yarn-install
 
 .PHONY: yarn-install
 yarn-install: yarn-ensure
+ifneq ("$(wildcard frontend/yarn.lock)","")
+	$(YARN) --cwd frontend install --frozen-lockfile
+else
 	$(YARN) --cwd frontend install
+endif 
 
 .PHONY: yarn-ensure
 yarn-ensure:
 	@$(SHELL) $(TOOLS_MODULE_DIR)/install-yarn.sh
 
 .PHONY: frontend-dev # Start the frontend in development mode.
-frontend-dev: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend start
+frontend-dev: yarn-ensure yarn-install
+	$(YARN) --cwd frontend start

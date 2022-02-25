@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import type {
   ButtonProps as MuiButtonProps,
   GridJustification,
@@ -8,6 +7,8 @@ import type {
 import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@material-ui/core";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+
+import styled from "./styled";
 
 interface ButtonPalette {
   /** A palette of background colors used for the various button states. */
@@ -125,8 +126,12 @@ const ICON_BUTTON_STYLE_MAP = {
     size: 48,
     padding: 12,
   },
+  large: {
+    size: 64,
+    padding: 6,
+  },
 };
-type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
+export type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
 
 export const ICON_BUTTON_VARIANTS = Object.keys(ICON_BUTTON_STYLE_MAP);
 
@@ -157,20 +162,23 @@ const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
 };
 
 const StyledIconButton = styled(MuiIconButton)<{
-  palette: ButtonPalette;
-  size: IconButtonSize;
+  $palette: ButtonPalette;
+  $size?: IconButtonSize;
 }>({}, props => ({
-  width: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
-  height: `${ICON_BUTTON_STYLE_MAP[props.size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
-  padding: `${ICON_BUTTON_STYLE_MAP[props.size]?.padding || ICON_BUTTON_STYLE_MAP.small.padding}px`,
-  ...colorCss(props.palette),
+  width: `${ICON_BUTTON_STYLE_MAP[props.$size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  height: `${ICON_BUTTON_STYLE_MAP[props.$size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
+  padding: `${
+    ICON_BUTTON_STYLE_MAP[props.$size]?.padding || ICON_BUTTON_STYLE_MAP.small.padding
+  }px`,
+  ...colorCss(props.$palette),
 }));
 
+// TODO: (jslaughter) Update when large sizing is available with material-ui@5
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
-  size?: IconButtonSize;
   children: React.ReactElement;
+  size?: IconButtonSize;
 }
 
 /**
@@ -183,7 +191,7 @@ export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "
  */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ variant = "primary", size = "medium", children, ...props }: IconButtonProps, ref) => (
-    <StyledIconButton palette={variantPalette(variant)} size={size} {...props} {...{ ref }}>
+    <StyledIconButton $palette={variantPalette(variant)} $size={size} {...props} {...{ ref }}>
       {children}
     </StyledIconButton>
   )

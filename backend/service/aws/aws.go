@@ -26,7 +26,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/iancoleman/strcase"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/sync/semaphore"
 	"google.golang.org/grpc/codes"
@@ -227,7 +227,11 @@ func (c *client) InterceptError(e error) error {
 }
 
 func (c *client) getAccountRegionClient(account, region string) (*regionalClient, error) {
-	cl, ok := c.accounts[account].clients[region]
+	accountClients, ok := c.accounts[account]
+	if !ok || accountClients == nil {
+		return nil, status.Errorf(codes.NotFound, "account %s not found", account)
+	}
+	cl, ok := accountClients.clients[region]
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "no client found for account '%s' in region '%s'", account, region)
 	}

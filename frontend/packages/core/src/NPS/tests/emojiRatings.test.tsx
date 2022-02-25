@@ -13,24 +13,30 @@ expect.extend(matchers);
 describe("<EmojiRatings />", () => {
   const stringExample = [
     {
-      emoji: "SAD",
+      emoji: 1,
       label: "bad",
     },
     {
-      emoji: "NEUTRAL",
+      emoji: 2,
       label: "ok",
     },
     {
-      emoji: "HAPPY",
+      emoji: 3,
       label: "great",
     },
   ];
+
+  const emojiMap = {
+    1: "SAD",
+    2: "NEUTRAL",
+    3: "HAPPY",
+  };
 
   it("will display a given list of emojis and their capitalized labels", () => {
     const wrapper = shallow(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
     wrapper.children().forEach((node, i) => {
       expect(node.find("Tooltip").prop("title")).toEqual(capitalize(stringExample[i].label));
-      expect(node.find("Emoji").prop("type")).toEqual(stringExample[i].emoji);
+      expect(node.find("Emoji").prop("type")).toEqual(emojiMap[stringExample[i].emoji]);
     });
   });
 
@@ -64,7 +70,6 @@ describe("<EmojiRatings />", () => {
     let [firstEmoji] = component.toJSON();
 
     expect(firstEmoji).toHaveStyleRule("opacity", "0.5");
-    expect(firstEmoji.props.selected).toBeFalsy();
 
     act(() => {
       firstEmoji.props.onClick();
@@ -73,21 +78,14 @@ describe("<EmojiRatings />", () => {
     [firstEmoji] = component.toJSON();
 
     expect(firstEmoji).toHaveStyleRule("opacity", "1");
-    expect(firstEmoji.props.selected).toBeTruthy();
   });
 
   it("will fetch emojis based on integers with a given enum", () => {
-    const enumExample = [
-      { emoji: 1, label: "bad" },
-      { emoji: 2, label: "ok" },
-      { emoji: 3, label: "great" },
-    ];
-
     const enums = IClutch.feedback.v1.EmojiRating;
-    const wrapper = shallow(<EmojiRatings ratings={enumExample} setRating={() => {}} />);
+    const wrapper = shallow(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
 
     wrapper.children().forEach((node, i) => {
-      expect(enums[node.find("Emoji").prop("type")]).toEqual(enumExample[i].emoji);
+      expect(enums[node.find("Emoji").prop("type")]).toEqual(stringExample[i].emoji);
     });
   });
 
@@ -111,6 +109,6 @@ describe("<EmojiRatings />", () => {
 
     wrapper.update();
 
-    expect(selected).toEqual(stringExample[1]);
+    expect(selected.emoji).toEqual(emojiMap[stringExample[1].emoji]);
   });
 });

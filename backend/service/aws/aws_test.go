@@ -15,7 +15,7 @@ import (
 	"github.com/aws/smithy-go"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -107,6 +107,32 @@ func TestConfigureAdditionalAccountClient(t *testing.T) {
 		assert.True(t, ok)
 		assert.NotNil(t, val)
 	}
+}
+
+func TestGetAccountRegionClient(t *testing.T) {
+	c := &client{
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1":  nil,
+					"us-west-2":  nil,
+					"us-north-5": nil,
+				},
+			},
+		},
+	}
+
+	_, err := c.getAccountRegionClient("default", "us-east-1")
+	assert.NoError(t, err)
+
+	_, err = c.getAccountRegionClient("aws://", "us-west-3")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "not found")
+
+	_, err = c.getAccountRegionClient("default", "us-west-3")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
 }
 
 func TestRegions(t *testing.T) {

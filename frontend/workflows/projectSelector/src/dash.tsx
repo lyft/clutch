@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { google as IGoogle } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import { Box } from "@material-ui/core";
 import _ from "lodash";
@@ -12,15 +13,31 @@ import {
   TimeRangeStateContext,
 } from "./dash-hooks";
 import { hoursToMs } from "./helpers";
+import type { ProjectSelectorError } from "./project-selector";
 import ProjectSelector from "./project-selector";
 import type {
   DashAction,
+  DashError,
   DashState,
   TimelineAction,
   TimelineState,
   TimeRangeAction,
   TimeRangeState,
 } from "./types";
+
+/**
+ * DashProps: Defined input properties of the Dash component
+ */
+interface DashProps {
+  /**
+   * children: The children to render
+   */
+  children: React.ReactNode;
+  /**
+   * onError: (optional) error handler which will accept a DashError as input
+   */
+  onError?: (DashError) => void;
+}
 
 const initialState: DashState = {
   selected: [],
@@ -88,13 +105,33 @@ const timeRangeReducer = (state: TimeRangeState, action: TimeRangeAction): TimeR
   }
 };
 
-const Dash = ({ children }) => {
+const Dash = ({ children, onError }: DashProps) => {
   const [state, dispatch] = React.useReducer(dashReducer, initialState);
   const [timelineState, timelineDispatch] = React.useReducer(timelineReducer, initialTimelineState);
   const [timeRangeState, timeRangeDispatch] = React.useReducer(
     timeRangeReducer,
     initialTimeRangeState
   );
+
+  // Will take a returned ProjectSelectorError and generate a rendered component of the error messages
+  // and return it to the parent component
+  const returnDashError = ({ errors }: ProjectSelectorError) => {
+    if (onError && errors && errors.length) {
+      const dashError: DashError = {
+        title: "The following projects failed:",
+      };
+      dashError.data = (
+        <ul>
+          {errors.map((error: IGoogle.rpc.IStatus) => (
+            <li>{error.message}</li>
+          ))}
+        </ul>
+      );
+
+      onError(dashError);
+    }
+  };
+
   return (
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">
       {/* TODO: Maybe in the future invert proj selector and timeline contexts */}
@@ -104,7 +141,7 @@ const Dash = ({ children }) => {
             <TimeRangeStateContext.Provider value={timeRangeState}>
               <TimelineDispatchContext.Provider value={timelineDispatch}>
                 <TimelineStateContext.Provider value={timelineState}>
-                  <ProjectSelector />
+                  <ProjectSelector onError={returnDashError} />
                   <CardContainer>{children}</CardContainer>
                 </TimelineStateContext.Provider>
               </TimelineDispatchContext.Provider>

@@ -14,7 +14,8 @@ import (
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 )
 
-// defaults for the dynamodb settings config
+// defaults for the dynamodb settings config as set by AWS
+// https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ServiceQuotas.html#default-limits-throughput-capacity-modes
 const (
 	AwsMaxRCU       = 40000
 	AwsMaxWCU       = 40000
@@ -31,7 +32,7 @@ func getScalingLimits(cfg *awsv1.Config) *awsv1.ScalingLimits {
 		ds := &awsv1.ScalingLimits{
 			MaxReadCapacityUnits:  AwsMaxRCU,
 			MaxWriteCapacityUnits: AwsMaxWCU,
-			MaxScaleFactor:        SafeScaleFactor,
+			MaxScaleFactor:        float32(SafeScaleFactor),
 			EnableOverride:        false,
 		}
 		return ds
@@ -180,18 +181,20 @@ func isValidIncrease(client *regionalClient, current *types.ProvisionedThroughpu
 	// override not enabled in config or override not set to true in args
 	if !client.dynamodbCfg.ScalingLimits.EnableOverride || !ignore_maximums {
 		// check for targets that exceed max limits
-		if *target.ReadCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits {
+		if *target.ReadCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits &&
+			*current.ReadCapacityUnits < client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits { // don't apply this check to tables with RCU already above max
 			return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxReadCapacityUnits)
 		}
-		if *target.WriteCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits {
+		if *target.WriteCapacityUnits > client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits &&
+			*current.WriteCapacityUnits < client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits { // don't apply this check to tables with WCU already above max
 			return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds maximum allowed limits [%d]", client.dynamodbCfg.ScalingLimits.MaxWriteCapacityUnits)
 		}
 
 		// check for increases that exceed max increase scale
-		if (float32(*target.ReadCapacityUnits / *current.ReadCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+		if (float32(*target.ReadCapacityUnits) / float32(*current.ReadCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
 			return status.Errorf(codes.FailedPrecondition, "Target read capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
 		}
-		if (float32(*target.WriteCapacityUnits / *current.WriteCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
+		if (float32(*target.WriteCapacityUnits) / float32(*current.WriteCapacityUnits)) > client.dynamodbCfg.ScalingLimits.MaxScaleFactor {
 			return status.Errorf(codes.FailedPrecondition, "Target write capacity exceeds the scale limit of [%.1f]x current capacity", client.dynamodbCfg.ScalingLimits.MaxScaleFactor)
 		}
 	}

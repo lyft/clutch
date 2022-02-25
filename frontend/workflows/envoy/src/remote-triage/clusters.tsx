@@ -1,24 +1,23 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { AccordionRow, StatusIcon, Table, TableRow } from "@clutch-sh/core";
-import styled from "@emotion/styled";
+import { AccordionRow, StatusIcon, styled, Table, TableRow } from "@clutch-sh/core";
 import _ from "lodash";
 
-const BarContainer = styled.rect(
+const BarContainer = styled("rect")<{ $fill: string; $width: string }>(
   {
     height: "12px",
   },
   props => ({
-    width: props.width,
-    fill: props.fill,
-    strokeWidth: props.fill === "transparent" ? "1px" : "0",
+    width: props.$width,
+    fill: props.$fill,
+    strokeWidth: props.$fill === "transparent" ? "1px" : "0",
     stroke: "#C2C8F2",
   })
 );
 
 const Bar = ({ fill, width }) => (
   <svg width={width} height="12px">
-    <BarContainer fill={fill} width={width} />
+    <BarContainer $fill={fill} $width={width} />
   </svg>
 );
 

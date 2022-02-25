@@ -6,6 +6,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NoteConfig,
   Resolver,
   Switch,
   useWizardContext,
@@ -28,7 +29,16 @@ const NodeIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
     onSubmit();
   };
 
-  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
+  const cordonNodeNotes: NoteConfig[] = [
+    {
+      severity: "info",
+      text: "Node Name is CLUSTER/NODE. Ex: `core-staging-1/ip-10-43-42-137.ec2.internal`",
+    },
+  ];
+
+  return (
+    <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={cordonNodeNotes} />
+  );
 };
 
 const NodeDetails: React.FC<WizardChild> = () => {
@@ -77,7 +87,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType, enableFeedback }) => {
+const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
   const dataLayout = {
     resolverInput: {},
     resourceData: {},
@@ -96,7 +106,7 @@ const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType, enableFeed
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading} enableFeedback={enableFeedback}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <NodeIdentifier name="Lookup" resolverType={resolverType} />
       <NodeDetails name="Verify" />
       <Confirm name="Confirmation" />

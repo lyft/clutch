@@ -25,6 +25,7 @@ import Paper from "./paper";
 import { Popper, PopperItem } from "./popper";
 import Resolver from "./Resolver";
 import { Step, Stepper } from "./stepper";
+import styled from "./styled";
 import { Tab, Tabs } from "./tab";
 import {
   AccordionRow,
@@ -88,6 +89,7 @@ export {
   StatusIcon,
   Step,
   Stepper,
+  styled,
   Tab,
   Table,
   TableCell,

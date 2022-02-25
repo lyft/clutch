@@ -10093,6 +10093,128 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace temporal. */
+            namespace temporal {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config host */
+                        host?: (string|null);
+
+                        /** Config port */
+                        port?: (number|null);
+
+                        /** Config connectionOptions */
+                        connectionOptions?: (clutch.config.service.temporal.v1.IConnectionOptions|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.temporal.v1.IConfig);
+
+                        /** Config host. */
+                        public host: string;
+
+                        /** Config port. */
+                        public port: number;
+
+                        /** Config connectionOptions. */
+                        public connectionOptions?: (clutch.config.service.temporal.v1.IConnectionOptions|null);
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.temporal.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.temporal.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a ConnectionOptions. */
+                    interface IConnectionOptions {
+
+                        /** ConnectionOptions useSystemCaBundle */
+                        useSystemCaBundle?: (boolean|null);
+
+                        /** ConnectionOptions enableHealthCheck */
+                        enableHealthCheck?: (boolean|null);
+                    }
+
+                    /** Represents a ConnectionOptions. */
+                    class ConnectionOptions implements IConnectionOptions {
+
+                        /**
+                         * Constructs a new ConnectionOptions.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.temporal.v1.IConnectionOptions);
+
+                        /** ConnectionOptions useSystemCaBundle. */
+                        public useSystemCaBundle: boolean;
+
+                        /** ConnectionOptions enableHealthCheck. */
+                        public enableHealthCheck: boolean;
+
+                        /**
+                         * Verifies a ConnectionOptions message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a ConnectionOptions message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns ConnectionOptions
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.temporal.v1.ConnectionOptions;
+
+                        /**
+                         * Creates a plain object from a ConnectionOptions message. Also converts values to other types if specified.
+                         * @param message ConnectionOptions
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.temporal.v1.ConnectionOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this ConnectionOptions to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace topology. */
             namespace topology {
 
@@ -10622,8 +10744,8 @@ export namespace clutch {
             /** Properties of a Feedback. */
             interface IFeedback {
 
-                /** Feedback urlPath */
-                urlPath?: (string|null);
+                /** Feedback feedbackType */
+                feedbackType?: (string|null);
 
                 /** Feedback ratingLabel */
                 ratingLabel?: (string|null);
@@ -10633,9 +10755,6 @@ export namespace clutch {
 
                 /** Feedback freeformResponse */
                 freeformResponse?: (string|null);
-
-                /** Feedback feedbackType */
-                feedbackType?: (string|null);
             }
 
             /** Represents a Feedback. */
@@ -10647,8 +10766,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.feedback.v1.IFeedback);
 
-                /** Feedback urlPath. */
-                public urlPath: string;
+                /** Feedback feedbackType. */
+                public feedbackType: string;
 
                 /** Feedback ratingLabel. */
                 public ratingLabel: string;
@@ -10658,9 +10777,6 @@ export namespace clutch {
 
                 /** Feedback freeformResponse. */
                 public freeformResponse: string;
-
-                /** Feedback feedbackType. */
-                public feedbackType: string;
 
                 /**
                  * Verifies a Feedback message.
@@ -18624,6 +18740,9 @@ export namespace clutch {
 
                 /** Event kind */
                 kind?: (clutch.k8s.v1.ObjectKind|null);
+
+                /** Event creationTimeMillis */
+                creationTimeMillis?: (number|Long|null);
             }
 
             /** Represents an Event. */
@@ -18655,6 +18774,9 @@ export namespace clutch {
 
                 /** Event kind. */
                 public kind: clutch.k8s.v1.ObjectKind;
+
+                /** Event creationTimeMillis. */
+                public creationTimeMillis: (number|Long);
 
                 /**
                  * Verifies an Event message.
@@ -19718,6 +19840,9 @@ export namespace clutch {
 
                 /** GetProjectsResponse results */
                 results?: ({ [k: string]: clutch.project.v1.IProjectResult }|null);
+
+                /** GetProjectsResponse partialFailures */
+                partialFailures?: (google.rpc.IStatus[]|null);
             }
 
             /** Represents a GetProjectsResponse. */
@@ -19731,6 +19856,9 @@ export namespace clutch {
 
                 /** GetProjectsResponse results. */
                 public results: { [k: string]: clutch.project.v1.IProjectResult };
+
+                /** GetProjectsResponse partialFailures. */
+                public partialFailures: google.rpc.IStatus[];
 
                 /**
                  * Verifies a GetProjectsResponse message.
@@ -21900,6 +22028,329 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+            }
+        }
+    }
+
+    /** Namespace shortlink. */
+    namespace shortlink {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a ShortlinkAPI */
+            class ShortlinkAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new ShortlinkAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls Create.
+                 * @param request CreateRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and CreateResponse
+                 */
+                public create(request: clutch.shortlink.v1.ICreateRequest, callback: clutch.shortlink.v1.ShortlinkAPI.CreateCallback): void;
+
+                /**
+                 * Calls Create.
+                 * @param request CreateRequest message or plain object
+                 * @returns Promise
+                 */
+                public create(request: clutch.shortlink.v1.ICreateRequest): Promise<clutch.shortlink.v1.CreateResponse>;
+
+                /**
+                 * Calls Get.
+                 * @param request GetRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetResponse
+                 */
+                public get(request: clutch.shortlink.v1.IGetRequest, callback: clutch.shortlink.v1.ShortlinkAPI.GetCallback): void;
+
+                /**
+                 * Calls Get.
+                 * @param request GetRequest message or plain object
+                 * @returns Promise
+                 */
+                public get(request: clutch.shortlink.v1.IGetRequest): Promise<clutch.shortlink.v1.GetResponse>;
+            }
+
+            namespace ShortlinkAPI {
+
+                /**
+                 * Callback as used by {@link clutch.shortlink.v1.ShortlinkAPI#create}.
+                 * @param error Error, if any
+                 * @param [response] CreateResponse
+                 */
+                type CreateCallback = (error: (Error|null), response?: clutch.shortlink.v1.CreateResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.shortlink.v1.ShortlinkAPI#get}.
+                 * @param error Error, if any
+                 * @param [response] GetResponse
+                 */
+                type GetCallback = (error: (Error|null), response?: clutch.shortlink.v1.GetResponse) => void;
+            }
+
+            /** Properties of a CreateRequest. */
+            interface ICreateRequest {
+
+                /** CreateRequest path */
+                path?: (string|null);
+
+                /** CreateRequest state */
+                state?: (clutch.shortlink.v1.IShareableState[]|null);
+            }
+
+            /** Represents a CreateRequest. */
+            class CreateRequest implements ICreateRequest {
+
+                /**
+                 * Constructs a new CreateRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.ICreateRequest);
+
+                /** CreateRequest path. */
+                public path: string;
+
+                /** CreateRequest state. */
+                public state: clutch.shortlink.v1.IShareableState[];
+
+                /**
+                 * Verifies a CreateRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.CreateRequest;
+
+                /**
+                 * Creates a plain object from a CreateRequest message. Also converts values to other types if specified.
+                 * @param message CreateRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.CreateRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateResponse. */
+            interface ICreateResponse {
+
+                /** CreateResponse hash */
+                hash?: (string|null);
+            }
+
+            /** Represents a CreateResponse. */
+            class CreateResponse implements ICreateResponse {
+
+                /**
+                 * Constructs a new CreateResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.ICreateResponse);
+
+                /** CreateResponse hash. */
+                public hash: string;
+
+                /**
+                 * Verifies a CreateResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.CreateResponse;
+
+                /**
+                 * Creates a plain object from a CreateResponse message. Also converts values to other types if specified.
+                 * @param message CreateResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.CreateResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetRequest. */
+            interface IGetRequest {
+
+                /** GetRequest shortlinkHash */
+                shortlinkHash?: (string|null);
+            }
+
+            /** Represents a GetRequest. */
+            class GetRequest implements IGetRequest {
+
+                /**
+                 * Constructs a new GetRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.IGetRequest);
+
+                /** GetRequest shortlinkHash. */
+                public shortlinkHash: string;
+
+                /**
+                 * Verifies a GetRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.GetRequest;
+
+                /**
+                 * Creates a plain object from a GetRequest message. Also converts values to other types if specified.
+                 * @param message GetRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.GetRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetResponse. */
+            interface IGetResponse {
+
+                /** GetResponse path */
+                path?: (string|null);
+
+                /** GetResponse state */
+                state?: (clutch.shortlink.v1.IShareableState[]|null);
+            }
+
+            /** Represents a GetResponse. */
+            class GetResponse implements IGetResponse {
+
+                /**
+                 * Constructs a new GetResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.IGetResponse);
+
+                /** GetResponse path. */
+                public path: string;
+
+                /** GetResponse state. */
+                public state: clutch.shortlink.v1.IShareableState[];
+
+                /**
+                 * Verifies a GetResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.GetResponse;
+
+                /**
+                 * Creates a plain object from a GetResponse message. Also converts values to other types if specified.
+                 * @param message GetResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.GetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ShareableState. */
+            interface IShareableState {
+
+                /** ShareableState key */
+                key?: (string|null);
+
+                /** ShareableState state */
+                state?: (google.protobuf.IAny|null);
+            }
+
+            /** Represents a ShareableState. */
+            class ShareableState implements IShareableState {
+
+                /**
+                 * Constructs a new ShareableState.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.shortlink.v1.IShareableState);
+
+                /** ShareableState key. */
+                public key: string;
+
+                /** ShareableState state. */
+                public state?: (google.protobuf.IAny|null);
+
+                /**
+                 * Verifies a ShareableState message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ShareableState message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ShareableState
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.ShareableState;
+
+                /**
+                 * Creates a plain object from a ShareableState message. Also converts values to other types if specified.
+                 * @param message ShareableState
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.shortlink.v1.ShareableState, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ShareableState to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
         }
     }

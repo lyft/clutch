@@ -1,11 +1,13 @@
 import React from "react";
-import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import type { WizardChild } from "@clutch-sh/wizard";
+import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
 import type { WorkflowProps } from ".";
 
 const WelcomeStep: React.FC<WizardChild> = () => (
-  <WizardStep isLoading={false} error={undefined}>Hello World!</WizardStep>
+  <WizardStep isLoading={false} error={undefined}>
+    Hello World!
+  </WizardStep>
 );
 
 const HelloWorld: React.FC<WorkflowProps> = ({ heading }) => {

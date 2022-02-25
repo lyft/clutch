@@ -23,7 +23,7 @@ const StyledLanding = styled.div({
 
   "& .welcome svg": {
     flex: "0 0 auto",
-    marginRight: "24px",
+    margin: "auto 24px auto 0",
   },
 
   "& .welcome .welcomeText": {

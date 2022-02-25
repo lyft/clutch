@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
-import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@material-ui/core";
 import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
 import { debounce } from "lodash";
@@ -9,17 +8,22 @@ import { v4 as uuid } from "uuid";
 import { userId } from "../AppLayout/user";
 import { Button } from "../button";
 import { Alert } from "../Feedback";
-import { TextField } from "../Input";
+import type { SelectOption } from "../Input";
+import { Select, TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
+import styled from "../styled";
 import { Typography } from "../typography";
 
 import EmojiRatings, { Rating } from "./emojiRatings";
 
 /** Interfaces */
 
+type Origin = "WIZARD" | "HEADER";
+
 interface FeedbackOptions {
-  origin: "WIZARD" | "ANYTIME";
+  origin: Origin;
+  feedbackTypes?: SelectOption[];
   onSubmit?: (submit: boolean) => void;
 }
 
@@ -43,18 +47,26 @@ export const defaults: IClutch.feedback.v1.ISurvey = {
   ],
 };
 
-const StyledButton = styled(Button)({
-  fontSize: "14px",
-  padding: "0 8px",
-  height: "18px",
-});
+const StyledButton = styled(Button)<{ $origin: Origin }>({}, ({ $origin }) =>
+  $origin === "WIZARD"
+    ? {
+        fontSize: "14px",
+        padding: "0 8px",
+        height: "18px",
+      }
+    : null
+);
 
-const StyledTextField = styled(TextField)({
-  marginTop: "15px",
-  ".MuiInputBase-root": {
-    fontSize: "14px",
+const StyledTextField = styled(TextField)<{ $origin: Origin }>(
+  {
+    margin: "16px 0px 32px 0px",
   },
-});
+  ({ $origin }) => ({
+    ".MuiInputBase-root": {
+      fontSize: $origin === "WIZARD" ? "14px" : "16px",
+    },
+  })
+);
 
 const FeedbackAlert = () => {
   const AlertProps = {
@@ -73,7 +85,7 @@ const FeedbackAlert = () => {
     </Alert>
   );
 };
-
+export const FEEDBACK_MAX_LENGTH = 280;
 /**
  * NPS feedback component which is the base for both Wizard and Anytime.
  * Will fetch given survey options from the server based on the given origin
@@ -82,15 +94,17 @@ const FeedbackAlert = () => {
  * @param opts Available feedback options
  * @returns NPSFeedback component
  */
-const NPSFeedback = (opts: FeedbackOptions) => {
+const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOptions) => {
   const [hasSubmit, setHasSubmit] = useState<boolean>(false);
-  const [selected, setSelected] = useState<Rating>(null);
+  const [selectedRating, setSelectedRating] = useState<Rating>(null);
   const [freeformFeedback, setFreeformFeedback] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const [survey, setSurvey] = useState<IClutch.feedback.v1.ISurvey>({});
+  const [feedbackType, setFeedbackType] = useState<string>(null);
   const [requestId, setRequestId] = useState<string>("");
-  const maxLength = 180;
+  const maxLength = FEEDBACK_MAX_LENGTH;
   const debounceTimer = 500;
+  const wizardOrigin = origin === "WIZARD";
 
   const trimmed =
     freeformFeedback.trim().length > maxLength
@@ -111,12 +125,12 @@ const NPSFeedback = (opts: FeedbackOptions) => {
 
     client
       .post("/v1/feedback/getSurveys", {
-        origins: [opts.origin],
+        origins: [origin],
       })
       .then(response => {
         const surveyData: IClutch.feedback.v1.IGetSurveysResponse = response?.data?.originSurvey;
 
-        data = surveyData[opts.origin] ?? defaults;
+        data = surveyData[origin] ?? defaults;
       })
       .catch((err: ClutchError) => {
         // eslint-disable-next-line no-console
@@ -125,6 +139,10 @@ const NPSFeedback = (opts: FeedbackOptions) => {
       .finally(() => {
         setRequestId(uuid());
         setSurvey(data);
+
+        if (feedbackTypes && feedbackTypes.length) {
+          setFeedbackType(feedbackTypes[0].value || feedbackTypes[0].label);
+        }
       });
   }, []);
 
@@ -143,26 +161,26 @@ const NPSFeedback = (opts: FeedbackOptions) => {
 
   // On a change to submit or selected will attempt to send a feedback request
   React.useEffect(() => {
-    if (selected) {
+    if (selectedRating) {
       sendFeedback({
         id: requestId,
         feedback: {
-          ratingLabel: selected.label,
-          ratingScale: {
-            emoji: IClutch.feedback.v1.EmojiRating[selected.emoji],
-          },
-          urlPath: window.location.pathname,
+          feedbackType: wizardOrigin ? window.location.pathname : feedbackType,
           freeformResponse: trimmed,
+          ratingLabel: selectedRating.label,
+          ratingScale: {
+            emoji: IClutch.feedback.v1.EmojiRating[selectedRating.emoji],
+          },
         },
         metadata: {
-          origin: IClutch.feedback.v1.Origin[opts.origin],
-          userSubmitted: hasSubmit,
           survey,
+          origin: IClutch.feedback.v1.Origin[origin],
+          userSubmitted: hasSubmit,
           urlSearchParams: window.location.search,
         },
       });
     }
-  }, [selected, hasSubmit]);
+  }, [selectedRating, feedbackType, hasSubmit]);
 
   // Form onSubmit handler
   const submitFeedback = e => {
@@ -170,8 +188,8 @@ const NPSFeedback = (opts: FeedbackOptions) => {
       e.preventDefault();
     }
     setHasSubmit(true);
-    if (opts.onSubmit) {
-      opts.onSubmit(true);
+    if (onSubmit) {
+      onSubmit(true);
     }
   };
 
@@ -185,21 +203,42 @@ const NPSFeedback = (opts: FeedbackOptions) => {
         container
         direction="row"
         alignItems="center"
-        justify="center"
-        style={{ padding: "16px" }}
+        style={{ padding: wizardOrigin ? "16px" : "24px" }}
       >
-        <MuiGrid item xs={6}>
-          <Typography variant="subtitle3">{survey.prompt}</Typography>
+        <MuiGrid item xs>
+          <Typography variant={wizardOrigin ? "subtitle3" : "subtitle2"}>
+            {survey.prompt}
+          </Typography>
         </MuiGrid>
-        <MuiGrid item xs={6} style={{ display: "flex", justifyContent: "space-around" }}>
-          <EmojiRatings ratings={survey.ratingLabels} setRating={setSelected} />
+        <MuiGrid
+          item
+          xs={wizardOrigin ? 6 : 12}
+          style={{ display: "flex", justifyContent: "space-around", paddingTop: "8px" }}
+        >
+          <EmojiRatings
+            ratings={survey.ratingLabels}
+            setRating={setSelectedRating}
+            placement={wizardOrigin ? "top" : "bottom"}
+            buttonSize={wizardOrigin ? "small" : "medium"}
+          />
         </MuiGrid>
-        {selected !== null && (
+        {selectedRating !== null && (
           <>
+            {!wizardOrigin && feedbackTypes && (
+              <MuiGrid item xs={12} style={{ margin: "24px 0px 16px 0px" }}>
+                <Select
+                  name="anytimeSelect"
+                  label="Choose a type of feedback you want to submit"
+                  options={feedbackTypes}
+                  onChange={setFeedbackType}
+                />
+              </MuiGrid>
+            )}
             <MuiGrid item xs={12}>
               <StyledTextField
                 multiline
                 fullWidth
+                $origin={origin}
                 placeholder={survey.freeformPrompt}
                 value={freeformFeedback}
                 helperText={`${freeformFeedback?.trim().length} / ${maxLength}`}
@@ -211,8 +250,21 @@ const NPSFeedback = (opts: FeedbackOptions) => {
                 {...textFieldProps}
               />
             </MuiGrid>
-            <MuiGrid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
-              <StyledButton type="submit" text="Submit" variant="secondary" disabled={error} />
+            <MuiGrid
+              item
+              xs={12}
+              style={{
+                display: "flex",
+                justifyContent: wizardOrigin ? "center" : "flex-end",
+              }}
+            >
+              <StyledButton
+                type="submit"
+                text="Submit"
+                $origin={origin}
+                variant={wizardOrigin ? "secondary" : "primary"}
+                disabled={error}
+              />
             </MuiGrid>
           </>
         )}
