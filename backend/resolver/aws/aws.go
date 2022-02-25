@@ -7,7 +7,6 @@ package aws
 import (
 	"context"
 	"errors"
-	"strings"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
@@ -29,7 +28,6 @@ import (
 )
 
 const Name = "clutch.resolver.aws"
-const AccountNotFoundString = "account not found"
 
 // Output types (want).
 var typeURLInstance = meta.TypeURL((*ec2v1api.Instance)(nil))
@@ -170,11 +168,11 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		if err != nil {
 			return nil, err
 		}
+
 		if ok {
-			res, err := r.instanceResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["instance_id"]}, limit)
 			// in the case of account not found, we continue to the below flow of only being concerned with the ID, rather than the account and region
-			if (err != nil && !strings.Contains(err.Error(), AccountNotFoundString)) || err == nil {
-				return res, err
+			if _, ok := r.client.AccountsAndRegions()[(patternValues["account"])]; ok {
+				return r.instanceResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["instance_id"]}, limit)
 			}
 		}
 

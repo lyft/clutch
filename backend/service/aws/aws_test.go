@@ -128,7 +128,7 @@ func TestGetAccountRegionClient(t *testing.T) {
 
 	_, err = c.getAccountRegionClient("aws://", "us-west-3")
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "not found")
+	assert.Contains(t, err.Error(), "account not found")
 
 	_, err = c.getAccountRegionClient("default", "us-west-3")
 	assert.Error(t, err)
