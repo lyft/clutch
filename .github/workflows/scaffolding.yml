@@ -27,5 +27,5 @@ jobs:
         run: yes | go run scaffolder.go -m gateway -p ${{ github.sha }} -o ${{ github.repository_owner }}
         working-directory: ${{ env.PACKAGEPATH }}/tools/scaffolding
       - name: build scaffolding
-        run: make yarn-lock && make
+        run: make
         working-directory: ${{ github.workspace }}/go/src/github.com/runner/clutch-custom-gateway

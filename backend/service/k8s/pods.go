@@ -40,11 +40,7 @@ func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name
 		return err
 	}
 
-	var gracePeriod int64
-	opts := metav1.DeleteOptions{}
-	opts.GracePeriodSeconds = &gracePeriod
-
-	return cs.CoreV1().Pods(cs.Namespace()).Delete(ctx, name, opts)
+	return cs.CoreV1().Pods(cs.Namespace()).Delete(ctx, name, metav1.DeleteOptions{})
 }
 
 func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error) {
