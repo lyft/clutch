@@ -29,6 +29,7 @@ import (
 )
 
 const Name = "clutch.resolver.aws"
+const AccountNotFoundString = "account not found"
 
 // Output types (want).
 var typeURLInstance = meta.TypeURL((*ec2v1api.Instance)(nil))
@@ -165,19 +166,16 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (*resolver.Results, error) {
 	switch typeURL {
 	case typeURLInstance:
-		// Output from kubectl when getting nodes has them in the format of: aws:///us-east-1/i-0f8f8f8f
-		// To allow users to use this format in queries, we can remove the prefix.
-		// Note that if we don't do this, the aws:// will be considered the account due to the pattern matching
-		// done via the protobuf.
-		// TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged.
-		query = strings.TrimPrefix(query, "aws:///")
-
 		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.Instance)(nil), query)
 		if err != nil {
 			return nil, err
 		}
 		if ok {
-			return r.instanceResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["instance_id"]}, limit)
+			res, err := r.instanceResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["instance_id"]}, limit)
+			// in the case of account not found, we continue to the below flow of only being concerned with the ID, rather than the account and region
+			if (err != nil && !strings.Contains(err.Error(), AccountNotFoundString)) || err == nil {
+				return res, err
+			}
 		}
 
 		id, err := normalizeInstanceID(query)
