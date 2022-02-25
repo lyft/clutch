@@ -167,7 +167,6 @@ const Drawer: React.FC = () => {
   };
 
   React.useEffect(() => {
-    setActiveWorkflow(null);
     setActiveWorkflow(workflowByRoute(workflows, location.pathname));
   }, [location]);
 
