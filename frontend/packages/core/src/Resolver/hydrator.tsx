@@ -44,9 +44,6 @@ const StringField = (
     onChange(convertChangeEvent(event));
   };
 
-  const reg = {
-    ...validation.register(field.name, { required: field?.metadata?.required || false }),
-  };
   return (
     <TextField
       key={field.metadata.displayName || field.name}
