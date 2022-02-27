@@ -303,11 +303,11 @@ const TextField = ({
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
+            {...textFieldProps}
             InputProps={{
               ...textFieldProps.InputProps,
               ref: inputProps.InputProps.ref,
             }}
-            {...textFieldProps}
             {...props}
           />
         )}
