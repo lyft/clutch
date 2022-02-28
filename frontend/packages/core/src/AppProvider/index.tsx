@@ -9,7 +9,7 @@ import Landing from "../landing";
 import NotFound from "../not-found";
 
 import { registeredWorkflows } from "./registrar";
-import { Theme } from "./themes";
+import { ThemeProvider } from "../Theme";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
 
@@ -87,7 +87,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 
   return (
     <Router>
-      <Theme variant="light">
+      <ThemeProvider variant="light">
         <div id="App">
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
             <Routes>
@@ -120,7 +120,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
             </Routes>
           </ApplicationContext.Provider>
         </div>
-      </Theme>
+      </ThemeProvider>
     </Router>
   );
 };
