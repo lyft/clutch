@@ -175,7 +175,8 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				return r.instanceResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["instance_id"]}, limit)
 			}
 		}
-
+		// TODO: Inform the client that a "fanout" search is being performed since the pattern of account/region/instance_id was not matched
+		// Could potentially use warning toast, note, or something else
 		id, err := normalizeInstanceID(query)
 		if err != nil {
 			return nil, err
