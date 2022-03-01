@@ -30,7 +30,7 @@ service ShortlinkAPI {
 
 message CreateRequest {
   string path = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  ShortlinkState state = 2 [ (validate.rules).any.required = true ];
+  repeated ShareableState state = 2 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
 message CreateResponse {
@@ -44,13 +44,6 @@ message GetRequest {
 message GetResponse {
   string path = 1;
   repeated ShareableState state = 2;
-}
-
-// We need this wrapper message for ShareableState which enables us to
-// json marshal this object to be saved into the database.
-// As we cant marshal a list of protos with a wrapper proto object.
-message ShortlinkState {
-  repeated ShareableState state = 2 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
 // ShareableState stores a key identifier that maps to state.

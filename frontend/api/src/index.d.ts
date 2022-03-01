@@ -22102,7 +22102,7 @@ export namespace clutch {
                 path?: (string|null);
 
                 /** CreateRequest state */
-                state?: (clutch.shortlink.v1.IShortlinkState|null);
+                state?: (clutch.shortlink.v1.IShareableState[]|null);
             }
 
             /** Represents a CreateRequest. */
@@ -22118,7 +22118,7 @@ export namespace clutch {
                 public path: string;
 
                 /** CreateRequest state. */
-                public state?: (clutch.shortlink.v1.IShortlinkState|null);
+                public state: clutch.shortlink.v1.IShareableState[];
 
                 /**
                  * Verifies a CreateRequest message.
@@ -22294,54 +22294,6 @@ export namespace clutch {
 
                 /**
                  * Converts this GetResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a ShortlinkState. */
-            interface IShortlinkState {
-
-                /** ShortlinkState state */
-                state?: (clutch.shortlink.v1.IShareableState[]|null);
-            }
-
-            /** Represents a ShortlinkState. */
-            class ShortlinkState implements IShortlinkState {
-
-                /**
-                 * Constructs a new ShortlinkState.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.shortlink.v1.IShortlinkState);
-
-                /** ShortlinkState state. */
-                public state: clutch.shortlink.v1.IShareableState[];
-
-                /**
-                 * Verifies a ShortlinkState message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a ShortlinkState message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns ShortlinkState
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.shortlink.v1.ShortlinkState;
-
-                /**
-                 * Creates a plain object from a ShortlinkState message. Also converts values to other types if specified.
-                 * @param message ShortlinkState
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.shortlink.v1.ShortlinkState, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this ShortlinkState to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
