@@ -104,6 +104,7 @@ func (m *TimeRange) validate(all bool) error {
 	if len(errors) > 0 {
 		return TimeRangeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -268,6 +269,7 @@ func (m *GetEventsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetEventsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -371,6 +373,7 @@ func (m *Resource) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResourceMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -498,6 +501,7 @@ func (m *RequestMetadata) validate(all bool) error {
 	if len(errors) > 0 {
 		return RequestMetadataMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -626,6 +630,7 @@ func (m *ResponseMetadata) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResponseMetadataMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -890,6 +895,7 @@ func (m *RequestEvent) validate(all bool) error {
 	if len(errors) > 0 {
 		return RequestEventMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1051,6 +1057,7 @@ func (m *Event) validate(all bool) error {
 	if len(errors) > 0 {
 		return EventMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1183,6 +1190,7 @@ func (m *GetEventsResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetEventsResponseMultiError(errors)
 	}
+
 	return nil
 }
 

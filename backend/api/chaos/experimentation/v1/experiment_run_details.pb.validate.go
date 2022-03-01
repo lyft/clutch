@@ -122,6 +122,7 @@ func (m *ExperimentRunDetails) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExperimentRunDetailsMultiError(errors)
 	}
+
 	return nil
 }
 

@@ -61,6 +61,7 @@ func (m *Action) validate(all bool) error {
 	if len(errors) > 0 {
 		return ActionMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -162,6 +163,7 @@ func (m *Pattern) validate(all bool) error {
 	if len(errors) > 0 {
 		return PatternMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -294,6 +296,7 @@ func (m *Identifier) validate(all bool) error {
 	if len(errors) > 0 {
 		return IdentifierMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -392,6 +395,7 @@ func (m *Reference) validate(all bool) error {
 	if len(errors) > 0 {
 		return ReferenceMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -492,6 +496,7 @@ func (m *Redacted) validate(all bool) error {
 	if len(errors) > 0 {
 		return RedactedMultiError(errors)
 	}
+
 	return nil
 }
 

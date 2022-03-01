@@ -66,6 +66,7 @@ func (m *AutoscalingGroupSize) validate(all bool) error {
 	if len(errors) > 0 {
 		return AutoscalingGroupSizeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -240,6 +241,7 @@ func (m *ResizeAutoscalingGroupRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResizeAutoscalingGroupRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -342,6 +344,7 @@ func (m *ResizeAutoscalingGroupResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResizeAutoscalingGroupResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -513,6 +516,7 @@ func (m *AutoscalingGroup) validate(all bool) error {
 	if len(errors) > 0 {
 		return AutoscalingGroupMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -645,6 +649,7 @@ func (m *GetInstanceRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetInstanceRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -775,6 +780,7 @@ func (m *GetInstanceResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetInstanceResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -909,6 +915,7 @@ func (m *TerminateInstanceRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return TerminateInstanceRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1010,6 +1017,7 @@ func (m *TerminateInstanceResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return TerminateInstanceResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1144,6 +1152,7 @@ func (m *RebootInstanceRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return RebootInstanceRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1245,6 +1254,7 @@ func (m *RebootInstanceResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return RebootInstanceResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1364,6 +1374,7 @@ func (m *Instance) validate(all bool) error {
 	if len(errors) > 0 {
 		return InstanceMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1472,6 +1483,7 @@ func (m *AutoscalingGroup_Instance) validate(all bool) error {
 	if len(errors) > 0 {
 		return AutoscalingGroup_InstanceMultiError(errors)
 	}
+
 	return nil
 }
 

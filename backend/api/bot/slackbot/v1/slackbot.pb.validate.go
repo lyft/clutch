@@ -73,6 +73,7 @@ func (m *Bot) validate(all bool) error {
 	if len(errors) > 0 {
 		return BotMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -248,6 +249,7 @@ func (m *Event) validate(all bool) error {
 	if len(errors) > 0 {
 		return EventMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -424,6 +426,7 @@ func (m *EventRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return EventRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -524,6 +527,7 @@ func (m *EventResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return EventResponseMultiError(errors)
 	}
+
 	return nil
 }
 

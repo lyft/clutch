@@ -116,6 +116,7 @@ func (m *Connection) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConnectionMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -274,6 +275,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 

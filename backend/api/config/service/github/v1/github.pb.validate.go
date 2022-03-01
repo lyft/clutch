@@ -122,6 +122,7 @@ func (m *AppConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return AppConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -277,6 +278,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 

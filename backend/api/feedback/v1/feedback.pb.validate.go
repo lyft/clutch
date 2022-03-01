@@ -109,6 +109,7 @@ func (m *RatingLabel) validate(all bool) error {
 	if len(errors) > 0 {
 		return RatingLabelMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -182,7 +183,7 @@ var _ interface {
 	ErrorName() string
 } = RatingLabelValidationError{}
 
-var _RatingLabel_Emoji_NotInLookup = map[EmojiRating]struct{}{
+var _RatingLabel_Emoji_NotInLookup = map[*EmojiRating]struct{}{
 	0: {},
 }
 
@@ -249,6 +250,7 @@ func (m *RatingScale) validate(all bool) error {
 	if len(errors) > 0 {
 		return RatingScaleMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -322,7 +324,7 @@ var _ interface {
 	ErrorName() string
 } = RatingScaleValidationError{}
 
-var _RatingScale_Emoji_NotInLookup = map[EmojiRating]struct{}{
+var _RatingScale_Emoji_NotInLookup = map[*EmojiRating]struct{}{
 	0: {},
 }
 
@@ -389,6 +391,7 @@ func (m *GetSurveysRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetSurveysRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -531,6 +534,7 @@ func (m *Survey) validate(all bool) error {
 	if len(errors) > 0 {
 		return SurveyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -675,6 +679,7 @@ func (m *GetSurveysResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetSurveysResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -842,6 +847,7 @@ func (m *FeedbackMetadata) validate(all bool) error {
 	if len(errors) > 0 {
 		return FeedbackMetadataMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1009,6 +1015,7 @@ func (m *Feedback) validate(all bool) error {
 	if len(errors) > 0 {
 		return FeedbackMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1210,6 +1217,7 @@ func (m *SubmitFeedbackRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return SubmitFeedbackRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1311,6 +1319,7 @@ func (m *SubmitFeedbackResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return SubmitFeedbackResponseMultiError(errors)
 	}
+
 	return nil
 }
 

@@ -60,6 +60,7 @@ func (m *FetchRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return FetchRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -158,6 +159,7 @@ func (m *FetchResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return FetchResponseMultiError(errors)
 	}
+
 	return nil
 }
 

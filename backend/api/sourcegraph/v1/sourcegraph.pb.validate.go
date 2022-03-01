@@ -93,6 +93,7 @@ func (m *CompareCommitsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompareCommitsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -228,6 +229,7 @@ func (m *CompareCommitsResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompareCommitsResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -336,6 +338,7 @@ func (m *Commit) validate(all bool) error {
 	if len(errors) > 0 {
 		return CommitMultiError(errors)
 	}
+
 	return nil
 }
 
