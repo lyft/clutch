@@ -10,6 +10,7 @@ import (
 	"github.com/lyft/clutch/backend/mock/service/feedbackmock"
 	"github.com/lyft/clutch/backend/mock/service/githubmock"
 	"github.com/lyft/clutch/backend/mock/service/k8smock"
+	"github.com/lyft/clutch/backend/mock/service/shortlinkmock"
 	"github.com/lyft/clutch/backend/mock/service/topologymock"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/audit"
@@ -19,6 +20,7 @@ import (
 	"github.com/lyft/clutch/backend/service/feedback"
 	"github.com/lyft/clutch/backend/service/github"
 	"github.com/lyft/clutch/backend/service/k8s"
+	"github.com/lyft/clutch/backend/service/shortlink"
 	"github.com/lyft/clutch/backend/service/topology"
 )
 
@@ -30,6 +32,7 @@ var MockServiceFactory = service.Factory{
 	feedback.Name:        feedbackmock.NewAsService,
 	github.Name:          githubmock.NewAsService,
 	k8s.Name:             k8smock.NewAsService,
+	shortlink.Name:       shortlinkmock.NewAsService,
 	topology.Name:        topologymock.NewAsService,
 }
 
