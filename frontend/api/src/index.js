@@ -52752,7 +52752,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.shortlink.v1
                  * @interface ICreateRequest
                  * @property {string|null} [path] CreateRequest path
-                 * @property {Array.<clutch.shortlink.v1.IShareableState>|null} [state] CreateRequest state
+                 * @property {clutch.shortlink.v1.IShortlinkState|null} [state] CreateRequest state
                  */
 
                 /**
@@ -52764,7 +52764,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.shortlink.v1.ICreateRequest=} [properties] Properties to set
                  */
                 function CreateRequest(properties) {
-                    this.state = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -52781,11 +52780,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * CreateRequest state.
-                 * @member {Array.<clutch.shortlink.v1.IShareableState>} state
+                 * @member {clutch.shortlink.v1.IShortlinkState|null|undefined} state
                  * @memberof clutch.shortlink.v1.CreateRequest
                  * @instance
                  */
-                CreateRequest.prototype.state = $util.emptyArray;
+                CreateRequest.prototype.state = null;
 
                 /**
                  * Verifies a CreateRequest message.
@@ -52802,13 +52801,9 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isString(message.path))
                             return "path: string expected";
                     if (message.state != null && message.hasOwnProperty("state")) {
-                        if (!Array.isArray(message.state))
-                            return "state: array expected";
-                        for (let i = 0; i < message.state.length; ++i) {
-                            let error = $root.clutch.shortlink.v1.ShareableState.verify(message.state[i]);
-                            if (error)
-                                return "state." + error;
-                        }
+                        let error = $root.clutch.shortlink.v1.ShortlinkState.verify(message.state);
+                        if (error)
+                            return "state." + error;
                     }
                     return null;
                 };
@@ -52827,15 +52822,10 @@ export const clutch = $root.clutch = (() => {
                     let message = new $root.clutch.shortlink.v1.CreateRequest();
                     if (object.path != null)
                         message.path = String(object.path);
-                    if (object.state) {
-                        if (!Array.isArray(object.state))
-                            throw TypeError(".clutch.shortlink.v1.CreateRequest.state: array expected");
-                        message.state = [];
-                        for (let i = 0; i < object.state.length; ++i) {
-                            if (typeof object.state[i] !== "object")
-                                throw TypeError(".clutch.shortlink.v1.CreateRequest.state: object expected");
-                            message.state[i] = $root.clutch.shortlink.v1.ShareableState.fromObject(object.state[i]);
-                        }
+                    if (object.state != null) {
+                        if (typeof object.state !== "object")
+                            throw TypeError(".clutch.shortlink.v1.CreateRequest.state: object expected");
+                        message.state = $root.clutch.shortlink.v1.ShortlinkState.fromObject(object.state);
                     }
                     return message;
                 };
@@ -52853,17 +52843,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.arrays || options.defaults)
-                        object.state = [];
-                    if (options.defaults)
+                    if (options.defaults) {
                         object.path = "";
+                        object.state = null;
+                    }
                     if (message.path != null && message.hasOwnProperty("path"))
                         object.path = message.path;
-                    if (message.state && message.state.length) {
-                        object.state = [];
-                        for (let j = 0; j < message.state.length; ++j)
-                            object.state[j] = $root.clutch.shortlink.v1.ShareableState.toObject(message.state[j], options);
-                    }
+                    if (message.state != null && message.hasOwnProperty("state"))
+                        object.state = $root.clutch.shortlink.v1.ShortlinkState.toObject(message.state, options);
                     return object;
                 };
 
@@ -53217,6 +53204,124 @@ export const clutch = $root.clutch = (() => {
                 return GetResponse;
             })();
 
+            v1.ShortlinkState = (function() {
+
+                /**
+                 * Properties of a ShortlinkState.
+                 * @memberof clutch.shortlink.v1
+                 * @interface IShortlinkState
+                 * @property {Array.<clutch.shortlink.v1.IShareableState>|null} [state] ShortlinkState state
+                 */
+
+                /**
+                 * Constructs a new ShortlinkState.
+                 * @memberof clutch.shortlink.v1
+                 * @classdesc Represents a ShortlinkState.
+                 * @implements IShortlinkState
+                 * @constructor
+                 * @param {clutch.shortlink.v1.IShortlinkState=} [properties] Properties to set
+                 */
+                function ShortlinkState(properties) {
+                    this.state = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ShortlinkState state.
+                 * @member {Array.<clutch.shortlink.v1.IShareableState>} state
+                 * @memberof clutch.shortlink.v1.ShortlinkState
+                 * @instance
+                 */
+                ShortlinkState.prototype.state = $util.emptyArray;
+
+                /**
+                 * Verifies a ShortlinkState message.
+                 * @function verify
+                 * @memberof clutch.shortlink.v1.ShortlinkState
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ShortlinkState.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.state != null && message.hasOwnProperty("state")) {
+                        if (!Array.isArray(message.state))
+                            return "state: array expected";
+                        for (let i = 0; i < message.state.length; ++i) {
+                            let error = $root.clutch.shortlink.v1.ShareableState.verify(message.state[i]);
+                            if (error)
+                                return "state." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ShortlinkState message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.shortlink.v1.ShortlinkState
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.shortlink.v1.ShortlinkState} ShortlinkState
+                 */
+                ShortlinkState.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.shortlink.v1.ShortlinkState)
+                        return object;
+                    let message = new $root.clutch.shortlink.v1.ShortlinkState();
+                    if (object.state) {
+                        if (!Array.isArray(object.state))
+                            throw TypeError(".clutch.shortlink.v1.ShortlinkState.state: array expected");
+                        message.state = [];
+                        for (let i = 0; i < object.state.length; ++i) {
+                            if (typeof object.state[i] !== "object")
+                                throw TypeError(".clutch.shortlink.v1.ShortlinkState.state: object expected");
+                            message.state[i] = $root.clutch.shortlink.v1.ShareableState.fromObject(object.state[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ShortlinkState message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.shortlink.v1.ShortlinkState
+                 * @static
+                 * @param {clutch.shortlink.v1.ShortlinkState} message ShortlinkState
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ShortlinkState.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.state = [];
+                    if (message.state && message.state.length) {
+                        object.state = [];
+                        for (let j = 0; j < message.state.length; ++j)
+                            object.state[j] = $root.clutch.shortlink.v1.ShareableState.toObject(message.state[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ShortlinkState to JSON.
+                 * @function toJSON
+                 * @memberof clutch.shortlink.v1.ShortlinkState
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ShortlinkState.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ShortlinkState;
+            })();
+
             v1.ShareableState = (function() {
 
                 /**
@@ -53224,7 +53329,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.shortlink.v1
                  * @interface IShareableState
                  * @property {string|null} [key] ShareableState key
-                 * @property {google.protobuf.IAny|null} [state] ShareableState state
+                 * @property {google.protobuf.IValue|null} [state] ShareableState state
                  */
 
                 /**
@@ -53252,7 +53357,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * ShareableState state.
-                 * @member {google.protobuf.IAny|null|undefined} state
+                 * @member {google.protobuf.IValue|null|undefined} state
                  * @memberof clutch.shortlink.v1.ShareableState
                  * @instance
                  */
@@ -53273,7 +53378,7 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isString(message.key))
                             return "key: string expected";
                     if (message.state != null && message.hasOwnProperty("state")) {
-                        let error = $root.google.protobuf.Any.verify(message.state);
+                        let error = $root.google.protobuf.Value.verify(message.state);
                         if (error)
                             return "state." + error;
                     }
@@ -53297,7 +53402,7 @@ export const clutch = $root.clutch = (() => {
                     if (object.state != null) {
                         if (typeof object.state !== "object")
                             throw TypeError(".clutch.shortlink.v1.ShareableState.state: object expected");
-                        message.state = $root.google.protobuf.Any.fromObject(object.state);
+                        message.state = $root.google.protobuf.Value.fromObject(object.state);
                     }
                     return message;
                 };
@@ -53322,7 +53427,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.key != null && message.hasOwnProperty("key"))
                         object.key = message.key;
                     if (message.state != null && message.hasOwnProperty("state"))
-                        object.state = $root.google.protobuf.Any.toObject(message.state, options);
+                        object.state = $root.google.protobuf.Value.toObject(message.state, options);
                     return object;
                 };
 

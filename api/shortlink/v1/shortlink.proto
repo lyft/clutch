@@ -7,6 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/shortlink/v1;shortlinkv1
 import "google/protobuf/any.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "google/protobuf/struct.proto";
 
 import "api/v1/annotations.proto";
 
@@ -30,7 +31,7 @@ service ShortlinkAPI {
 
 message CreateRequest {
   string path = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  repeated ShareableState state = 2 [ (validate.rules).repeated = {min_items : 1} ];
+  ShortlinkState state = 2 [ (validate.rules).any.required = true ];
 }
 
 message CreateResponse {
@@ -38,12 +39,19 @@ message CreateResponse {
 }
 
 message GetRequest {
-  string shortlink_hash = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string hash = 1 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message GetResponse {
   string path = 1;
   repeated ShareableState state = 2;
+}
+
+// We need this wrapper message for ShareableState which enables us to
+// json marshal this object to be saved into the database.
+// As we cant marshal a list of protos with a wrapper proto object.
+message ShortlinkState {
+  repeated ShareableState state = 2 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
 // ShareableState stores a key identifier that maps to state.
@@ -52,5 +60,5 @@ message GetResponse {
 // For example adding a "revision" identifier in the future.
 message ShareableState {
   string key = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  google.protobuf.Any state = 2 [ (validate.rules).any.required = true ];
+  google.protobuf.Value state = 2 [ (validate.rules).any.required = true ];
 }
