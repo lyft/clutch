@@ -22200,8 +22200,8 @@ export namespace clutch {
             /** Properties of a GetRequest. */
             interface IGetRequest {
 
-                /** GetRequest shortlinkHash */
-                shortlinkHash?: (string|null);
+                /** GetRequest hash */
+                hash?: (string|null);
             }
 
             /** Represents a GetRequest. */
@@ -22213,8 +22213,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.shortlink.v1.IGetRequest);
 
-                /** GetRequest shortlinkHash. */
-                public shortlinkHash: string;
+                /** GetRequest hash. */
+                public hash: string;
 
                 /**
                  * Verifies a GetRequest message.

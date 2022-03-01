@@ -52974,7 +52974,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a GetRequest.
                  * @memberof clutch.shortlink.v1
                  * @interface IGetRequest
-                 * @property {string|null} [shortlinkHash] GetRequest shortlinkHash
+                 * @property {string|null} [hash] GetRequest hash
                  */
 
                 /**
@@ -52993,12 +52993,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetRequest shortlinkHash.
-                 * @member {string} shortlinkHash
+                 * GetRequest hash.
+                 * @member {string} hash
                  * @memberof clutch.shortlink.v1.GetRequest
                  * @instance
                  */
-                GetRequest.prototype.shortlinkHash = "";
+                GetRequest.prototype.hash = "";
 
                 /**
                  * Verifies a GetRequest message.
@@ -53011,9 +53011,9 @@ export const clutch = $root.clutch = (() => {
                 GetRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
-                        if (!$util.isString(message.shortlinkHash))
-                            return "shortlinkHash: string expected";
+                    if (message.hash != null && message.hasOwnProperty("hash"))
+                        if (!$util.isString(message.hash))
+                            return "hash: string expected";
                     return null;
                 };
 
@@ -53029,8 +53029,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.shortlink.v1.GetRequest)
                         return object;
                     let message = new $root.clutch.shortlink.v1.GetRequest();
-                    if (object.shortlinkHash != null)
-                        message.shortlinkHash = String(object.shortlinkHash);
+                    if (object.hash != null)
+                        message.hash = String(object.hash);
                     return message;
                 };
 
@@ -53048,9 +53048,9 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults)
-                        object.shortlinkHash = "";
-                    if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
-                        object.shortlinkHash = message.shortlinkHash;
+                        object.hash = "";
+                    if (message.hash != null && message.hasOwnProperty("hash"))
+                        object.hash = message.hash;
                     return object;
                 };
 
