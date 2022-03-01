@@ -313,9 +313,9 @@ func (m *GetRequest) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetShortlinkHash()) < 1 {
+	if len(m.GetHash()) < 1 {
 		err := GetRequestValidationError{
-			field:  "ShortlinkHash",
+			field:  "Hash",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {

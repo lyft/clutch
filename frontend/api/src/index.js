@@ -52987,7 +52987,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a GetRequest.
                  * @memberof clutch.shortlink.v1
                  * @interface IGetRequest
-                 * @property {string|null} [shortlinkHash] GetRequest shortlinkHash
+                 * @property {string|null} [hash] GetRequest hash
                  */
 
                 /**
@@ -53006,12 +53006,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetRequest shortlinkHash.
-                 * @member {string} shortlinkHash
+                 * GetRequest hash.
+                 * @member {string} hash
                  * @memberof clutch.shortlink.v1.GetRequest
                  * @instance
                  */
-                GetRequest.prototype.shortlinkHash = "";
+                GetRequest.prototype.hash = "";
 
                 /**
                  * Verifies a GetRequest message.
@@ -53024,9 +53024,9 @@ export const clutch = $root.clutch = (() => {
                 GetRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
-                        if (!$util.isString(message.shortlinkHash))
-                            return "shortlinkHash: string expected";
+                    if (message.hash != null && message.hasOwnProperty("hash"))
+                        if (!$util.isString(message.hash))
+                            return "hash: string expected";
                     return null;
                 };
 
@@ -53042,8 +53042,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.shortlink.v1.GetRequest)
                         return object;
                     let message = new $root.clutch.shortlink.v1.GetRequest();
-                    if (object.shortlinkHash != null)
-                        message.shortlinkHash = String(object.shortlinkHash);
+                    if (object.hash != null)
+                        message.hash = String(object.hash);
                     return message;
                 };
 
@@ -53061,9 +53061,9 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults)
-                        object.shortlinkHash = "";
-                    if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
-                        object.shortlinkHash = message.shortlinkHash;
+                        object.hash = "";
+                    if (message.hash != null && message.hasOwnProperty("hash"))
+                        object.hash = message.hash;
                     return object;
                 };
 
@@ -53224,7 +53224,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.shortlink.v1
                  * @interface IShareableState
                  * @property {string|null} [key] ShareableState key
-                 * @property {google.protobuf.IAny|null} [state] ShareableState state
+                 * @property {google.protobuf.IValue|null} [state] ShareableState state
                  */
 
                 /**
@@ -53252,7 +53252,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * ShareableState state.
-                 * @member {google.protobuf.IAny|null|undefined} state
+                 * @member {google.protobuf.IValue|null|undefined} state
                  * @memberof clutch.shortlink.v1.ShareableState
                  * @instance
                  */
@@ -53273,7 +53273,7 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isString(message.key))
                             return "key: string expected";
                     if (message.state != null && message.hasOwnProperty("state")) {
-                        let error = $root.google.protobuf.Any.verify(message.state);
+                        let error = $root.google.protobuf.Value.verify(message.state);
                         if (error)
                             return "state." + error;
                     }
@@ -53297,7 +53297,7 @@ export const clutch = $root.clutch = (() => {
                     if (object.state != null) {
                         if (typeof object.state !== "object")
                             throw TypeError(".clutch.shortlink.v1.ShareableState.state: object expected");
-                        message.state = $root.google.protobuf.Any.fromObject(object.state);
+                        message.state = $root.google.protobuf.Value.fromObject(object.state);
                     }
                     return message;
                 };
@@ -53322,7 +53322,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.key != null && message.hasOwnProperty("key"))
                         object.key = message.key;
                     if (message.state != null && message.hasOwnProperty("state"))
-                        object.state = $root.google.protobuf.Any.toObject(message.state, options);
+                        object.state = $root.google.protobuf.Value.toObject(message.state, options);
                     return object;
                 };
 
