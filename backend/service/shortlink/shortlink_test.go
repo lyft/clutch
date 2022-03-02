@@ -1,36 +1,174 @@
 package shortlink
 
 import (
+	"context"
 	"testing"
 
+	"github.com/DATA-DOG/go-sqlmock"
+
 	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/structpb"
+
+	shortlinkv1cfg "github.com/lyft/clutch/backend/api/config/service/shortlink/v1"
+	shortlinkv1 "github.com/lyft/clutch/backend/api/shortlink/v1"
+	"github.com/lyft/clutch/backend/mock/service/dbmock"
+	"github.com/lyft/clutch/backend/service"
 )
+
+func TestNewDefaults(t *testing.T) {
+	service.Registry["clutch.service.db.postgres"] = dbmock.NewMockDB()
+	cfg := &shortlinkv1cfg.Config{}
+
+	anycfg, err := anypb.New(cfg)
+	assert.NoError(t, err)
+
+	c, err := New(anycfg, zap.NewNop(), tally.NoopScope)
+	assert.NoError(t, err)
+
+	slClient := c.(*client)
+	assert.Equal(t, defaultHashChars, slClient.hashChars)
+	assert.Equal(t, defaultHashLength, slClient.hashLength)
+}
+
+func TestNewWithOverrides(t *testing.T) {
+	service.Registry["clutch.service.db.postgres"] = dbmock.NewMockDB()
+	cfg := &shortlinkv1cfg.Config{
+		HashChars:  "abc",
+		HashLength: 3,
+	}
+
+	anycfg, err := anypb.New(cfg)
+	assert.NoError(t, err)
+
+	c, err := New(anycfg, zap.NewNop(), tally.NoopScope)
+	assert.NoError(t, err)
+
+	slClient := c.(*client)
+	assert.Equal(t, "abc", slClient.hashChars)
+	assert.Equal(t, 3, slClient.hashLength)
+}
+
+// func TestGetShortlink(t *testing.T) {
+
+// 	// Custom converter
+// 	c := &sqlmock.ValueConverterOption()
+
+// 	m := dbmock.NewMockDB()
+// 	m.Register()
+
+// 	slClient := &client{
+// 		hashChars:  "a",
+// 		hashLength: 1,
+// 		db:         m.DB(),
+// 		log:        zap.NewNop(),
+// 	}
+
+// 	// state := &shortlinkv1.CreateRequest{
+// 	// 	State: []*shortlinkv1.ShareableState{
+// 	// 		{
+// 	// 			Key: "mock",
+// 	// 			State: &structpb.Value{
+// 	// 				Kind: &structpb.Value_StringValue{StringValue: "mock string"},
+// 	// 			},
+// 	// 		},
+// 	// 	},
+// 	// }
+
+// 	// state := []*shortlinkv1.ShareableState{
+// 	// 	{
+// 	// 		Key: "mock",
+// 	// 		State: &structpb.Value{
+// 	// 			Kind: &structpb.Value_StringValue{StringValue: "mock string"},
+// 	// 		},
+// 	// 	},
+// 	// }
+
+// 	// stateJson, err := protoAnyForState(state)
+// 	// assert.NoError(t, err)
+
+// 	rows := sqlmock.NewRows([]string{"page_path", "state"})
+// 	rows.AddRow("/test", "state")
+
+// 	m.Mock.ExpectQuery("SELECT page_path, state FROM shortlink WHERE slhash = .*").
+// 		WillReturnRows(rows)
+
+// 	_, _, err := slClient.Get(context.TODO(), "test")
+// 	assert.NoError(t, err)
+// 	m.MustMeetExpectations()
+// }
+
+func TestCreateShortlinkWithRetries(t *testing.T) {
+	m := dbmock.NewMockDB()
+	m.Register()
+
+	slClient := &client{
+		hashChars:  "a",
+		hashLength: 1,
+		db:         m.DB(),
+	}
+
+	m.Mock.ExpectExec("INSERT INTO shortlink").WithArgs(
+		"a", "/test", []byte("state"),
+	).WillReturnResult(sqlmock.NewResult(1, 1))
+
+	hash, err := slClient.createShortlinkWithRetries(context.TODO(), "/test", []byte("state"))
+	assert.NoError(t, err)
+	assert.NotNil(t, hash)
+	m.MustMeetExpectations()
+}
 
 func TestGenerateShortlinkHash(t *testing.T) {
 	tests := []struct {
-		id           string
-		input        int
+		name         string
+		inputChars   string
+		inputLength  int
 		expectLength int
 		shouldError  bool
 	}{
 		{
-			id:           "len of 10",
-			input:        10,
+			name:         "lower alpha 10 len",
+			inputChars:   "abcdefghijklmnopqrstuvwxyz",
+			inputLength:  10,
 			expectLength: 10,
 			shouldError:  false,
+		},
+		{
+			name:         "zero len",
+			inputChars:   "",
+			inputLength:  10,
+			expectLength: 0,
+			shouldError:  true,
 		},
 	}
 
 	for _, test := range tests {
-		t.Run(test.id, func(t *testing.T) {
-			hash, err := generateShortlinkHash(test.input)
+		t.Run(test.name, func(t *testing.T) {
+			hash, err := generateShortlinkHash(test.inputChars, test.inputLength)
 			if test.shouldError {
 				assert.Error(t, err)
-				assert.Nil(t, hash)
+				assert.Empty(t, hash)
 			} else {
 				assert.NoError(t, err)
 				assert.Len(t, hash, test.expectLength)
 			}
 		})
 	}
+}
+
+func TestProtoAnyForState(t *testing.T) {
+	state := []*shortlinkv1.ShareableState{
+		{
+			Key: "mock",
+			State: &structpb.Value{
+				Kind: &structpb.Value_StringValue{StringValue: "mock string"},
+			},
+		},
+	}
+
+	any, err := protoAnyForState(state)
+	assert.NoError(t, err)
+	assert.NotNil(t, any)
 }

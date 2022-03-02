@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	// shortlinkv1cfg "github.com/lyft/clutch/backend/api/config/service/shortlink/v1"
+	shortlinkv1cfg "github.com/lyft/clutch/backend/api/config/service/shortlink/v1"
 	shortlinkv1 "github.com/lyft/clutch/backend/api/shortlink/v1"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
@@ -22,8 +22,8 @@ import (
 
 const (
 	Name                  = "clutch.service.shortlink"
-	hashChars             = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	hashLength            = 10
+	defaultHashChars      = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	defaultHashLength     = 10
 	maxHashCollisionRetry = 5
 
 	// If we hit a key collision inserting a duplicate hash this error is thrown.
@@ -38,7 +38,8 @@ type Service interface {
 }
 
 type client struct {
-	// config *shortlinkv1cfg.Config
+	hashChars  string
+	hashLength int
 
 	db    *sql.DB
 	log   *zap.Logger
@@ -46,11 +47,11 @@ type client struct {
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
-	// slConfig := &shortlinkv1cfg.Config{}
-	// err := cfg.UnmarshalTo(slConfig)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	slConfig := &shortlinkv1cfg.Config{}
+	err := cfg.UnmarshalTo(slConfig)
+	if err != nil {
+		return nil, err
+	}
 
 	p, ok := service.Registry[pgservice.Name]
 	if !ok {
@@ -62,11 +63,22 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, errors.New("Unable to get the datastore client")
 	}
 
+	hashChars := defaultHashChars
+	if slConfig.HashChars != "" {
+		hashChars = slConfig.HashChars
+	}
+
+	hashLength := defaultHashLength
+	if slConfig.HashLength > 0 {
+		hashLength = int(slConfig.HashLength)
+	}
+
 	c := &client{
-		// config: slConfig,
-		db:    dbClient.DB(),
-		log:   logger,
-		scope: scope,
+		hashChars:  hashChars,
+		hashLength: hashLength,
+		db:         dbClient.DB(),
+		log:        logger,
+		scope:      scope,
 	}
 
 	return c, nil
@@ -83,7 +95,7 @@ func (c *client) Create(ctx context.Context, path string, state []*shortlinkv1.S
 
 func (c *client) createShortlinkWithRetries(ctx context.Context, path string, state []byte) (string, error) {
 	for i := 0; i < maxHashCollisionRetry; i++ {
-		hash, err := generateShortlinkHash(hashLength)
+		hash, err := generateShortlinkHash(c.hashChars, c.hashLength)
 		if err != nil {
 			return "", err
 		}
@@ -139,6 +151,24 @@ func (c *client) Get(ctx context.Context, hash string) (string, []*shortlinkv1.S
 	return path, state.State, nil
 }
 
+func generateShortlinkHash(chars string, length int) (string, error) {
+	if len(chars) == 0 || length == 0 {
+		return "", errors.New("chars or length are invalid lengths")
+	}
+
+	hash := make([]byte, length)
+	for i := 0; i < length; i++ {
+		num, err := rand.Int(rand.Reader, big.NewInt(int64(len(chars))))
+		if err != nil {
+			return "", err
+		}
+
+		hash[i] = chars[num.Int64()]
+	}
+
+	return string(hash), nil
+}
+
 func protoAnyForState(state []*shortlinkv1.ShareableState) ([]byte, error) {
 	stateJson, err := protojson.Marshal(&shortlinkv1.CreateRequest{
 		State: state,
@@ -148,19 +178,4 @@ func protoAnyForState(state []*shortlinkv1.ShareableState) ([]byte, error) {
 	}
 
 	return stateJson, nil
-}
-
-func generateShortlinkHash(length int) (string, error) {
-	hash := make([]byte, length)
-
-	for i := 0; i < length; i++ {
-		num, err := rand.Int(rand.Reader, big.NewInt(int64(len(hashChars))))
-		if err != nil {
-			return "", err
-		}
-
-		hash[i] = hashChars[num.Int64()]
-	}
-
-	return string(hash), nil
 }

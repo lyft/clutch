@@ -10,8 +10,8 @@ import (
 	"github.com/lyft/clutch/backend/service/db/postgres"
 )
 
-func NewMockDB() *MockDB {
-	db, mock, err := sqlmock.New()
+func NewMockDB(options ...func(*sqlmock.sqlmock) error) *MockDB {
+	db, mock, err := sqlmock.New(options)
 	if err != nil {
 		panic(err)
 	}

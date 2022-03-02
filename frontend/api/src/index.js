@@ -24397,6 +24397,162 @@ export const clutch = $root.clutch = (() => {
                 return k8s;
             })();
 
+            service.shortlink = (function() {
+
+                /**
+                 * Namespace shortlink.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const shortlink = {};
+
+                shortlink.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.shortlink
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.shortlink.v1
+                         * @interface IConfig
+                         * @property {string|null} [hashChars] Config hashChars
+                         * @property {number|Long|null} [hashLength] Config hashLength
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.shortlink.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.shortlink.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config hashChars.
+                         * @member {string} hashChars
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.hashChars = "";
+
+                        /**
+                         * Config hashLength.
+                         * @member {number|Long} hashLength
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.hashLength = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.hashChars != null && message.hasOwnProperty("hashChars"))
+                                if (!$util.isString(message.hashChars))
+                                    return "hashChars: string expected";
+                            if (message.hashLength != null && message.hasOwnProperty("hashLength"))
+                                if (!$util.isInteger(message.hashLength) && !(message.hashLength && $util.isInteger(message.hashLength.low) && $util.isInteger(message.hashLength.high)))
+                                    return "hashLength: integer|Long expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.shortlink.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.shortlink.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.shortlink.v1.Config();
+                            if (object.hashChars != null)
+                                message.hashChars = String(object.hashChars);
+                            if (object.hashLength != null)
+                                if ($util.Long)
+                                    (message.hashLength = $util.Long.fromValue(object.hashLength)).unsigned = false;
+                                else if (typeof object.hashLength === "string")
+                                    message.hashLength = parseInt(object.hashLength, 10);
+                                else if (typeof object.hashLength === "number")
+                                    message.hashLength = object.hashLength;
+                                else if (typeof object.hashLength === "object")
+                                    message.hashLength = new $util.LongBits(object.hashLength.low >>> 0, object.hashLength.high >>> 0).toNumber();
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {clutch.config.service.shortlink.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.hashChars = "";
+                                if ($util.Long) {
+                                    let long = new $util.Long(0, 0, false);
+                                    object.hashLength = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.hashLength = options.longs === String ? "0" : 0;
+                            }
+                            if (message.hashChars != null && message.hasOwnProperty("hashChars"))
+                                object.hashChars = message.hashChars;
+                            if (message.hashLength != null && message.hasOwnProperty("hashLength"))
+                                if (typeof message.hashLength === "number")
+                                    object.hashLength = options.longs === String ? String(message.hashLength) : message.hashLength;
+                                else
+                                    object.hashLength = options.longs === String ? $util.Long.prototype.toString.call(message.hashLength) : options.longs === Number ? new $util.LongBits(message.hashLength.low >>> 0, message.hashLength.high >>> 0).toNumber() : message.hashLength;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return shortlink;
+            })();
+
             service.sourcegraph = (function() {
 
                 /**
