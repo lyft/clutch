@@ -12,4 +12,3 @@ message Config {
   // By default its set to 10
   int64 hash_length = 2;
 }
-
