@@ -25,8 +25,12 @@ type Config struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	HashChars  string `protobuf:"bytes,1,opt,name=hash_chars,json=hashChars,proto3" json:"hash_chars,omitempty"`
-	HashLength int64  `protobuf:"varint,2,opt,name=hash_length,json=hashLength,proto3" json:"hash_length,omitempty"`
+	// Hash chars is the list of characters that will be used when generating the hash.
+	// By default its set to [a-zA-Z0-9]
+	HashChars string `protobuf:"bytes,1,opt,name=hash_chars,json=hashChars,proto3" json:"hash_chars,omitempty"`
+	// This sets the length of the hash being generated.
+	// By default its set to 10
+	HashLength int64 `protobuf:"varint,2,opt,name=hash_length,json=hashLength,proto3" json:"hash_length,omitempty"`
 }
 
 func (x *Config) Reset() {
