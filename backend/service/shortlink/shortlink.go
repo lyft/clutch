@@ -93,6 +93,11 @@ func (c *client) Create(ctx context.Context, path string, state []*shortlinkv1.S
 	return c.createShortlinkWithRetries(ctx, path, stateJson)
 }
 
+// createShortlinkWithRetries retries the insert of a new shortlink
+// This function generates a shortlink hash which is used as the primary key in the shortlink table
+// There could be a possibility of a collision depending on the configuration
+// With the default settings in place [a-zA-Z0-9] and a default subset length of 10,
+// this leaves us with 390,164,706,723,052,800 permutations.
 func (c *client) createShortlinkWithRetries(ctx context.Context, path string, state []byte) (string, error) {
 	for i := 0; i < maxHashCollisionRetry; i++ {
 		hash, err := generateShortlinkHash(c.hashChars, c.hashLength)
@@ -151,6 +156,7 @@ func (c *client) Get(ctx context.Context, hash string) (string, []*shortlinkv1.S
 	return path, state.State, nil
 }
 
+// generateShortlinkHash generates a hash from a set of characters to the length specified
 func generateShortlinkHash(chars string, length int) (string, error) {
 	if len(chars) == 0 || length == 0 {
 		return "", errors.New("chars or length are invalid lengths")
