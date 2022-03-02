@@ -171,8 +171,9 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 
 		if ok {
 			// in the case of account not found, we continue to the below flow of only being concerned with the ID, rather than the account and region
-			if _, ok := r.client.AccountsAndRegions()[(patternValues["account"])]; ok {
-				return r.instanceResults(ctx, patternValues["account"], patternValues["region"], []string{patternValues["instance_id"]}, limit)
+			acc := patternValues["account"]
+			if _, ok := r.client.AccountsAndRegions()[acc]; ok {
+				return r.instanceResults(ctx, acc, patternValues["region"], []string{patternValues["instance_id"]}, limit)
 			}
 		}
 		// TODO: Inform the client that a "fanout" search is being performed since the pattern of account/region/instance_id was not matched
