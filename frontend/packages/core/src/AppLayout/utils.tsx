@@ -71,6 +71,28 @@ const routesByGrouping = (workflows: Workflow[]): GroupedRoutes => {
   return routes;
 };
 
+/**
+ * Will break a path down and iterate through given workflows to see if there is a matching path.
+ */
+const workflowByRoute = (workflows: Workflow[], route: string): Workflow => {
+  const [baseRoute, ...subRoutes] = route.split("/").filter(Boolean);
+  const subRoute = subRoutes.join("/");
+  let returnFlow = null;
+
+  const filtered = workflows.filter((workflow: Workflow) => workflow.path === baseRoute);
+
+  filtered.some((workflow: Workflow) => {
+    return workflow.routes.some((wroute: any) => {
+      if (wroute.path === subRoute) {
+        returnFlow = workflow;
+      }
+      return returnFlow !== null;
+    });
+  });
+
+  return returnFlow;
+};
+
 const sortedGroupings = (workflows: Workflow[]): string[] => {
   return Object.keys(routesByGrouping(workflows)).sort();
 };
@@ -102,4 +124,4 @@ const searchIndexes = (workflows: Workflow[]): SearchIndex[] => {
   return indexOptions;
 };
 
-export { routesByGrouping, searchIndexes, sortedGroupings, workflowsByTrending };
+export { routesByGrouping, searchIndexes, sortedGroupings, workflowByRoute, workflowsByTrending };
