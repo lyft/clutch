@@ -183,7 +183,7 @@ var _ interface {
 	ErrorName() string
 } = RatingLabelValidationError{}
 
-var _RatingLabel_Emoji_NotInLookup = map[*EmojiRating]struct{}{
+var _RatingLabel_Emoji_NotInLookup = map[EmojiRating]struct{}{
 	0: {},
 }
 
@@ -324,7 +324,7 @@ var _ interface {
 	ErrorName() string
 } = RatingScaleValidationError{}
 
-var _RatingScale_Emoji_NotInLookup = map[*EmojiRating]struct{}{
+var _RatingScale_Emoji_NotInLookup = map[EmojiRating]struct{}{
 	0: {},
 }
 
