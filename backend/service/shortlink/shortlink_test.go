@@ -51,54 +51,41 @@ func TestNewWithOverrides(t *testing.T) {
 	assert.Equal(t, 3, slClient.hashLength)
 }
 
-// func TestGetShortlink(t *testing.T) {
+func TestGetShortlink(t *testing.T) {
+	m := dbmock.NewMockDB()
+	m.Register()
 
-// 	// Custom converter
-// 	c := &sqlmock.ValueConverterOption()
+	slClient := &client{
+		hashChars:  "a",
+		hashLength: 1,
+		db:         m.DB(),
+		log:        zap.NewNop(),
+	}
 
-// 	m := dbmock.NewMockDB()
-// 	m.Register()
+	expectedState := []*shortlinkv1.ShareableState{
+		{
+			Key: "mock",
+			State: &structpb.Value{
+				Kind: &structpb.Value_StringValue{StringValue: "mock string"},
+			},
+		},
+	}
 
-// 	slClient := &client{
-// 		hashChars:  "a",
-// 		hashLength: 1,
-// 		db:         m.DB(),
-// 		log:        zap.NewNop(),
-// 	}
+	stateJson, err := protoAnyForState(expectedState)
+	assert.NoError(t, err)
 
-// 	// state := &shortlinkv1.CreateRequest{
-// 	// 	State: []*shortlinkv1.ShareableState{
-// 	// 		{
-// 	// 			Key: "mock",
-// 	// 			State: &structpb.Value{
-// 	// 				Kind: &structpb.Value_StringValue{StringValue: "mock string"},
-// 	// 			},
-// 	// 		},
-// 	// 	},
-// 	// }
+	rows := sqlmock.NewRows([]string{"page_path", "state"})
+	rows.AddRow("/test", stateJson)
 
-// 	// state := []*shortlinkv1.ShareableState{
-// 	// 	{
-// 	// 		Key: "mock",
-// 	// 		State: &structpb.Value{
-// 	// 			Kind: &structpb.Value_StringValue{StringValue: "mock string"},
-// 	// 		},
-// 	// 	},
-// 	// }
+	m.Mock.ExpectQuery("SELECT page_path, state FROM shortlink WHERE slhash = .*").
+		WillReturnRows(rows)
 
-// 	// stateJson, err := protoAnyForState(state)
-// 	// assert.NoError(t, err)
-
-// 	rows := sqlmock.NewRows([]string{"page_path", "state"})
-// 	rows.AddRow("/test", "state")
-
-// 	m.Mock.ExpectQuery("SELECT page_path, state FROM shortlink WHERE slhash = .*").
-// 		WillReturnRows(rows)
-
-// 	_, _, err := slClient.Get(context.TODO(), "test")
-// 	assert.NoError(t, err)
-// 	m.MustMeetExpectations()
-// }
+	path, actualState, err := slClient.Get(context.TODO(), "test")
+	assert.NoError(t, err)
+	assert.Equal(t, "/test", path)
+	assert.Equal(t, expectedState, actualState)
+	m.MustMeetExpectations()
+}
 
 func TestCreateShortlinkWithRetries(t *testing.T) {
 	m := dbmock.NewMockDB()

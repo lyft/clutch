@@ -139,10 +139,16 @@ func (c *client) Get(ctx context.Context, hash string) (string, []*shortlinkv1.S
 	}
 
 	var path string
-	var state *shortlinkv1.CreateRequest
+	var state shortlinkv1.CreateRequest
 	for rows.Next() {
-		if err := rows.Scan(&path, &state); err != nil {
+		var byteState []byte
+		if err := rows.Scan(&path, &byteState); err != nil {
 			c.log.Error("Error scanning row", zap.Error(err))
+			return "", nil, err
+		}
+
+		if err := protojson.Unmarshal(byteState, &state); err != nil {
+			c.log.Error("Error unmarshaling data field", zap.Error(err))
 			return "", nil, err
 		}
 	}
