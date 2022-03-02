@@ -22200,8 +22200,8 @@ export namespace clutch {
             /** Properties of a GetRequest. */
             interface IGetRequest {
 
-                /** GetRequest shortlinkHash */
-                shortlinkHash?: (string|null);
+                /** GetRequest hash */
+                hash?: (string|null);
             }
 
             /** Represents a GetRequest. */
@@ -22213,8 +22213,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.shortlink.v1.IGetRequest);
 
-                /** GetRequest shortlinkHash. */
-                public shortlinkHash: string;
+                /** GetRequest hash. */
+                public hash: string;
 
                 /**
                  * Verifies a GetRequest message.
@@ -22306,7 +22306,7 @@ export namespace clutch {
                 key?: (string|null);
 
                 /** ShareableState state */
-                state?: (google.protobuf.IAny|null);
+                state?: (google.protobuf.IValue|null);
             }
 
             /** Represents a ShareableState. */
@@ -22322,7 +22322,7 @@ export namespace clutch {
                 public key: string;
 
                 /** ShareableState state. */
-                public state?: (google.protobuf.IAny|null);
+                public state?: (google.protobuf.IValue|null);
 
                 /**
                  * Verifies a ShareableState message.
