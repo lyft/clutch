@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"database/sql"
 	"errors"
-	"math/big"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/golang/protobuf/ptypes/any"
@@ -156,17 +155,17 @@ func generateShortlink(chars string, length int) (string, error) {
 		return "", errors.New("chars or length are invalid lengths")
 	}
 
-	hash := make([]byte, length)
-	for i := 0; i < length; i++ {
-		num, err := rand.Int(rand.Reader, big.NewInt(int64(len(chars))))
-		if err != nil {
-			return "", err
-		}
-
-		hash[i] = chars[num.Int64()]
+	res := make([]byte, length)
+	_, err := rand.Read(res)
+	if err != nil {
+		return "", err
 	}
 
-	return string(hash), nil
+	for i := 0; i < length; i++ {
+		res[i] = chars[int(int(res[i])%len(chars))]
+	}
+
+	return string(res), nil
 }
 
 func marshalShareableState(state []*shortlinkv1.ShareableState) ([]byte, error) {
