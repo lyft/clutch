@@ -85,7 +85,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 }
 
 func (c *client) Create(ctx context.Context, path string, state []*shortlinkv1.ShareableState) (string, error) {
-	stateJson, err := protoAnyForState(state)
+	stateJson, err := marshalShareableState(state)
 	if err != nil {
 		return "", err
 	}
@@ -97,7 +97,7 @@ func (c *client) Create(ctx context.Context, path string, state []*shortlinkv1.S
 // This function generates a shortlink hash which is used as the primary key in the shortlink table
 // There could be a possibility of a collision depending on the configuration
 // With the default settings in place [a-zA-Z0-9] and a default subset length of 10,
-// this leaves us with 390,164,706,723,052,800 permutations.
+// this leaves us with 62^10.
 func (c *client) createShortlinkWithRetries(ctx context.Context, path string, state []byte) (string, error) {
 	for i := 0; i < maxHashCollisionRetry; i++ {
 		hash, err := generateShortlinkHash(c.hashChars, c.hashLength)
@@ -130,32 +130,20 @@ func (c *client) Get(ctx context.Context, hash string) (string, []*shortlinkv1.S
 	query := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Select("page_path, state").
 		From("shortlink").
-		Where(sq.Eq{"slhash": hash}).
-		Limit(1)
+		Where(sq.Eq{"slhash": hash})
 
-	rows, err := query.RunWith(c.db).QueryContext(ctx)
-	if err != nil {
+	row := query.RunWith(c.db).QueryRowContext(ctx)
+
+	var path string
+	var byteState []byte
+	if err := row.Scan(&path, &byteState); err != nil {
+		c.log.Error("Error scanning row", zap.Error(err))
 		return "", nil, err
 	}
 
-	var path string
 	var state shortlinkv1.CreateRequest
-	for rows.Next() {
-		var byteState []byte
-		if err := rows.Scan(&path, &byteState); err != nil {
-			c.log.Error("Error scanning row", zap.Error(err))
-			return "", nil, err
-		}
-
-		if err := protojson.Unmarshal(byteState, &state); err != nil {
-			c.log.Error("Error unmarshaling data field", zap.Error(err))
-			return "", nil, err
-		}
-	}
-
-	// Rows.Err will report the last error encountered by Rows.Scan.
-	if err := rows.Err(); err != nil {
-		c.log.Error("Error processing rows for topology search query", zap.Error(err))
+	if err := protojson.Unmarshal(byteState, &state); err != nil {
+		c.log.Error("Error unmarshaling data field", zap.Error(err))
 		return "", nil, err
 	}
 
@@ -181,13 +169,12 @@ func generateShortlinkHash(chars string, length int) (string, error) {
 	return string(hash), nil
 }
 
-func protoAnyForState(state []*shortlinkv1.ShareableState) ([]byte, error) {
+func marshalShareableState(state []*shortlinkv1.ShareableState) ([]byte, error) {
 	stateJson, err := protojson.Marshal(&shortlinkv1.CreateRequest{
 		State: state,
 	})
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
-
 	return stateJson, nil
 }

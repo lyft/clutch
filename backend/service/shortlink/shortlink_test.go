@@ -70,7 +70,7 @@ func TestGetShortlink(t *testing.T) {
 		},
 	}
 
-	stateJson, err := protoAnyForState(expectedState)
+	stateJson, err := marshalShareableState(expectedState)
 	assert.NoError(t, err)
 
 	rows := sqlmock.NewRows([]string{"page_path", "state"})
@@ -145,16 +145,68 @@ func TestGenerateShortlinkHash(t *testing.T) {
 }
 
 func TestProtoAnyForState(t *testing.T) {
-	state := []*shortlinkv1.ShareableState{
+	tests := []struct {
+		name   string
+		expect string
+		input  []*shortlinkv1.ShareableState
+	}{
 		{
-			Key: "mock",
-			State: &structpb.Value{
-				Kind: &structpb.Value_StringValue{StringValue: "mock string"},
+			name:   "string value",
+			expect: `{"state":[{"key":"mock","state":"mock string"}]}`,
+			input: []*shortlinkv1.ShareableState{
+				{
+					Key: "mock",
+					State: &structpb.Value{
+						Kind: &structpb.Value_StringValue{StringValue: "mock string"},
+					},
+				},
+			},
+		},
+		{
+			name:   "numbers",
+			expect: `{"state":[{"key":"mock","state":{"key":123,"key1":345}}]}`,
+			input: []*shortlinkv1.ShareableState{
+				{
+					Key: "mock",
+					State: &structpb.Value{
+						Kind: &structpb.Value_StructValue{
+							StructValue: &structpb.Struct{
+								Fields: map[string]*structpb.Value{
+									"key":  structpb.NewNumberValue(123),
+									"key1": structpb.NewNumberValue(345),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name:   "nested object",
+			expect: `{"state":[{"key":"mock","state":{"key":true,"key1":"value"}}]}`,
+			input: []*shortlinkv1.ShareableState{
+				{
+					Key: "mock",
+					State: &structpb.Value{
+						Kind: &structpb.Value_StructValue{
+							StructValue: &structpb.Struct{
+								Fields: map[string]*structpb.Value{
+									"key":  structpb.NewBoolValue(true),
+									"key1": structpb.NewStringValue("value"),
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
 
-	any, err := protoAnyForState(state)
-	assert.NoError(t, err)
-	assert.NotNil(t, any)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			marshal, err := marshalShareableState(test.input)
+			assert.NoError(t, err)
+			assert.Equal(t, test.expect, string(marshal))
+		})
+	}
 }
