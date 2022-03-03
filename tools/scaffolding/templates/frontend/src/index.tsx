@@ -16,6 +16,7 @@ const register = (): WorkflowConfiguration => {
     routes: {
       landing: {
         path: "{{ .URLPath }}",
+        displayName: "{{ .Name }}",
         description: "{{ .Description }}.",
         component: HelloWorld,
       },
