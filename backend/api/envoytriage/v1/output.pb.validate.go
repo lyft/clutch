@@ -64,6 +64,7 @@ func (m *HostStatus) validate(all bool) error {
 	if len(errors) > 0 {
 		return HostStatusMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -198,6 +199,7 @@ func (m *ClusterStatus) validate(all bool) error {
 	if len(errors) > 0 {
 		return ClusterStatusMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -331,6 +333,7 @@ func (m *Clusters) validate(all bool) error {
 	if len(errors) > 0 {
 		return ClustersMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -458,6 +461,7 @@ func (m *ConfigDump) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigDumpMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -560,6 +564,7 @@ func (m *ListenerStatus) validate(all bool) error {
 	if len(errors) > 0 {
 		return ListenerStatusMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -693,6 +698,7 @@ func (m *Listeners) validate(all bool) error {
 	if len(errors) > 0 {
 		return ListenersMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -824,6 +830,7 @@ func (m *Runtime) validate(all bool) error {
 	if len(errors) > 0 {
 		return RuntimeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -951,6 +958,7 @@ func (m *ServerInfo) validate(all bool) error {
 	if len(errors) > 0 {
 		return ServerInfoMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1082,6 +1090,7 @@ func (m *Stats) validate(all bool) error {
 	if len(errors) > 0 {
 		return StatsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1189,6 +1198,7 @@ func (m *Runtime_Entry) validate(all bool) error {
 	if len(errors) > 0 {
 		return Runtime_EntryMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1292,6 +1302,7 @@ func (m *Stats_Stat) validate(all bool) error {
 	if len(errors) > 0 {
 		return Stats_StatMultiError(errors)
 	}
+
 	return nil
 }
 

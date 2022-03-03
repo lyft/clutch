@@ -169,6 +169,7 @@ func (m *RepositoryParameters) validate(all bool) error {
 	if len(errors) > 0 {
 		return RepositoryParametersMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -305,6 +306,7 @@ func (m *CreateRepositoryOptions) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateRepositoryOptionsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -437,6 +439,7 @@ func (m *UpdateRepositoryOptions) validate(all bool) error {
 	if len(errors) > 0 {
 		return UpdateRepositoryOptionsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -540,6 +543,7 @@ func (m *CommitComparison) validate(all bool) error {
 	if len(errors) > 0 {
 		return CommitComparisonMultiError(errors)
 	}
+
 	return nil
 }
 

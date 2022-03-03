@@ -109,6 +109,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -259,6 +260,7 @@ func (m *RestClientConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return RestClientConfigMultiError(errors)
 	}
+
 	return nil
 }
 

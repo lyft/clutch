@@ -94,6 +94,7 @@ func (m *GetTopologyRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetTopologyRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -229,6 +230,7 @@ func (m *GetTopologyResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetTopologyResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -392,6 +394,7 @@ func (m *SearchRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return SearchRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -527,6 +530,7 @@ func (m *SearchResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return SearchResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -628,6 +632,7 @@ func (m *FeatureQuery) validate(all bool) error {
 	if len(errors) > 0 {
 		return FeatureQueryMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -757,6 +762,7 @@ func (m *Constraint) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConstraintMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -922,6 +928,7 @@ func (m *MetadataQuery) validate(all bool) error {
 	if len(errors) > 0 {
 		return MetadataQueryMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1126,6 +1133,7 @@ func (m *Query) validate(all bool) error {
 	if len(errors) > 0 {
 		return QueryMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1374,6 +1382,7 @@ func (m *QueryResult) validate(all bool) error {
 	if len(errors) > 0 {
 		return QueryResultMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1521,6 +1530,7 @@ func (m *Node) validate(all bool) error {
 	if len(errors) > 0 {
 		return NodeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1670,6 +1680,7 @@ func (m *Edge) validate(all bool) error {
 	if len(errors) > 0 {
 		return EdgeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1845,6 +1856,7 @@ func (m *Resource) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResourceMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1974,6 +1986,7 @@ func (m *UpdateCacheRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return UpdateCacheRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2088,6 +2101,7 @@ func (m *SearchRequest_Sort) validate(all bool) error {
 	if len(errors) > 0 {
 		return SearchRequest_SortMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2222,6 +2236,7 @@ func (m *SearchRequest_Filter) validate(all bool) error {
 	if len(errors) > 0 {
 		return SearchRequest_FilterMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2345,6 +2360,7 @@ func (m *SearchRequest_Filter_Search) validate(all bool) error {
 	if len(errors) > 0 {
 		return SearchRequest_Filter_SearchMultiError(errors)
 	}
+
 	return nil
 }
 

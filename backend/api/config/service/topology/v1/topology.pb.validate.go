@@ -88,6 +88,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -246,6 +247,7 @@ func (m *Cache) validate(all bool) error {
 	if len(errors) > 0 {
 		return CacheMultiError(errors)
 	}
+
 	return nil
 }
 

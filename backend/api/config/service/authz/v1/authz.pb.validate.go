@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = apiv1.ActionType(0)
 )
 
 // Validate checks the field values on Principal with the rules defined in the
@@ -80,6 +84,7 @@ func (m *Principal) validate(all bool) error {
 	if len(errors) > 0 {
 		return PrincipalMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -261,6 +266,7 @@ func (m *RoleBinding) validate(all bool) error {
 	if len(errors) > 0 {
 		return RoleBindingMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -380,6 +386,7 @@ func (m *Policy) validate(all bool) error {
 	if len(errors) > 0 {
 		return PolicyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -522,6 +529,7 @@ func (m *Role) validate(all bool) error {
 	if len(errors) > 0 {
 		return RoleMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -687,6 +695,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 

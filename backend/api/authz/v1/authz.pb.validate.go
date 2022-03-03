@@ -65,6 +65,7 @@ func (m *Subject) validate(all bool) error {
 	if len(errors) > 0 {
 		return SubjectMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -209,6 +210,7 @@ func (m *CheckRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CheckRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -309,6 +311,7 @@ func (m *CheckResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return CheckResponseMultiError(errors)
 	}
+
 	return nil
 }
 
