@@ -56,9 +56,24 @@ func newShortlinkAPI(svc shortlink.Service) shortlinkv1.ShortlinkAPIServer {
 }
 
 func (s *shortlinkAPI) Create(ctx context.Context, req *shortlinkv1.CreateRequest) (*shortlinkv1.CreateResponse, error) {
-	return nil, errors.New("not implemented")
+	hash, err := s.shortlink.Create(ctx, req.Path, req.State)
+	if err != nil {
+		return nil, err
+	}
+
+	return &shortlinkv1.CreateResponse{
+		Hash: hash,
+	}, nil
 }
 
 func (s *shortlinkAPI) Get(ctx context.Context, req *shortlinkv1.GetRequest) (*shortlinkv1.GetResponse, error) {
-	return nil, errors.New("not implemented")
+	path, state, err := s.shortlink.Get(ctx, req.Hash)
+	if err != nil {
+		return nil, err
+	}
+
+	return &shortlinkv1.GetResponse{
+		Path:  path,
+		State: state,
+	}, nil
 }
