@@ -28,15 +28,15 @@ func TestNewDefaults(t *testing.T) {
 	assert.NoError(t, err)
 
 	slClient := c.(*client)
-	assert.Equal(t, defaultHashChars, slClient.hashChars)
-	assert.Equal(t, defaultHashLength, slClient.hashLength)
+	assert.Equal(t, defaultShortlinkChars, slClient.shortlinkChars)
+	assert.Equal(t, defaultShortlinkLength, slClient.shortlinkLength)
 }
 
 func TestNewWithOverrides(t *testing.T) {
 	service.Registry["clutch.service.db.postgres"] = dbmock.NewMockDB()
 	cfg := &shortlinkv1cfg.Config{
-		HashChars:  "abc",
-		HashLength: 3,
+		ShortlinkChars:  "abc",
+		ShortlinkLength: 3,
 	}
 
 	anycfg, err := anypb.New(cfg)
@@ -46,8 +46,8 @@ func TestNewWithOverrides(t *testing.T) {
 	assert.NoError(t, err)
 
 	slClient := c.(*client)
-	assert.Equal(t, "abc", slClient.hashChars)
-	assert.Equal(t, 3, slClient.hashLength)
+	assert.Equal(t, "abc", slClient.shortlinkChars)
+	assert.Equal(t, 3, slClient.shortlinkLength)
 }
 
 func TestGetShortlink(t *testing.T) {
@@ -55,10 +55,10 @@ func TestGetShortlink(t *testing.T) {
 	m.Register()
 
 	slClient := &client{
-		hashChars:  "a",
-		hashLength: 1,
-		db:         m.DB(),
-		log:        zap.NewNop(),
+		shortlinkChars:  "a",
+		shortlinkLength: 1,
+		db:              m.DB(),
+		log:             zap.NewNop(),
 	}
 
 	expectedState := []*shortlinkv1.ShareableState{
@@ -91,9 +91,9 @@ func TestCreateShortlinkWithRetries(t *testing.T) {
 	m.Register()
 
 	slClient := &client{
-		hashChars:  "a",
-		hashLength: 1,
-		db:         m.DB(),
+		shortlinkChars:  "a",
+		shortlinkLength: 1,
+		db:              m.DB(),
 	}
 
 	m.Mock.ExpectExec("INSERT INTO shortlink").WithArgs(
@@ -106,7 +106,7 @@ func TestCreateShortlinkWithRetries(t *testing.T) {
 	m.MustMeetExpectations()
 }
 
-func TestGenerateShortlinkHash(t *testing.T) {
+func TestGenerateShortlink(t *testing.T) {
 	tests := []struct {
 		name         string
 		inputChars   string
@@ -132,7 +132,7 @@ func TestGenerateShortlinkHash(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			hash, err := generateShortlinkHash(test.inputChars, test.inputLength)
+			hash, err := generateShortlink(test.inputChars, test.inputLength)
 			if test.shouldError {
 				assert.Error(t, err)
 				assert.Empty(t, hash)

@@ -56,9 +56,9 @@ func (m *Config) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for HashChars
+	// no validation rules for ShortlinkChars
 
-	// no validation rules for HashLength
+	// no validation rules for ShortlinkLength
 
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)

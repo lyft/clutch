@@ -21,13 +21,13 @@ import (
 )
 
 const (
-	Name                  = "clutch.service.shortlink"
-	defaultHashChars      = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	defaultHashLength     = 10
-	maxHashCollisionRetry = 5
+	Name                   = "clutch.service.shortlink"
+	defaultShortlinkChars  = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	defaultShortlinkLength = 10
+	maxCollisionRetry      = 5
 
-	// If we hit a key collision inserting a duplicate hash this error is thrown.
-	// We catch this error and retry up to the maxHashCollisionRetry limit.
+	// If we hit a key collision inserting a duplicate random string this error is thrown.
+	// We catch this error and retry up to the maxCollisionRetry limit.
 	// https://www.postgresql.org/docs/9.3/errcodes-appendix.html
 	pgUniqueErrorCode = "23505"
 )
@@ -38,8 +38,8 @@ type Service interface {
 }
 
 type client struct {
-	hashChars  string
-	hashLength int
+	shortlinkChars  string
+	shortlinkLength int
 
 	db    *sql.DB
 	log   *zap.Logger
@@ -63,22 +63,22 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, errors.New("Unable to get the datastore client")
 	}
 
-	hashChars := defaultHashChars
-	if slConfig.HashChars != "" {
-		hashChars = slConfig.HashChars
+	chars := defaultShortlinkChars
+	if slConfig.ShortlinkChars != "" {
+		chars = slConfig.ShortlinkChars
 	}
 
-	hashLength := defaultHashLength
-	if slConfig.HashLength > 0 {
-		hashLength = int(slConfig.HashLength)
+	length := defaultShortlinkLength
+	if slConfig.ShortlinkLength > 0 {
+		length = int(slConfig.ShortlinkLength)
 	}
 
 	c := &client{
-		hashChars:  hashChars,
-		hashLength: hashLength,
-		db:         dbClient.DB(),
-		log:        logger,
-		scope:      scope,
+		shortlinkChars:  chars,
+		shortlinkLength: length,
+		db:              dbClient.DB(),
+		log:             logger,
+		scope:           scope,
 	}
 
 	return c, nil
@@ -99,8 +99,8 @@ func (c *client) Create(ctx context.Context, path string, state []*shortlinkv1.S
 // With the default settings in place [a-zA-Z0-9] and a default subset length of 10,
 // this leaves us with 62^10.
 func (c *client) createShortlinkWithRetries(ctx context.Context, path string, state []byte) (string, error) {
-	for i := 0; i < maxHashCollisionRetry; i++ {
-		hash, err := generateShortlinkHash(c.hashChars, c.hashLength)
+	for i := 0; i < maxCollisionRetry; i++ {
+		hash, err := generateShortlink(c.shortlinkChars, c.shortlinkLength)
 		if err != nil {
 			return "", err
 		}
@@ -150,8 +150,8 @@ func (c *client) Get(ctx context.Context, hash string) (string, []*shortlinkv1.S
 	return path, state.State, nil
 }
 
-// generateShortlinkHash generates a hash from a set of characters to the length specified
-func generateShortlinkHash(chars string, length int) (string, error) {
+// generateShortlink generates a random string from a set of characters to the length specified
+func generateShortlink(chars string, length int) (string, error) {
 	if len(chars) == 0 || length == 0 {
 		return "", errors.New("chars or length are invalid lengths")
 	}

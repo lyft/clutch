@@ -10040,11 +10040,11 @@ export namespace clutch {
                     /** Properties of a Config. */
                     interface IConfig {
 
-                        /** Config hashChars */
-                        hashChars?: (string|null);
+                        /** Config shortlinkChars */
+                        shortlinkChars?: (string|null);
 
-                        /** Config hashLength */
-                        hashLength?: (number|Long|null);
+                        /** Config shortlinkLength */
+                        shortlinkLength?: (number|Long|null);
                     }
 
                     /** Represents a Config. */
@@ -10056,11 +10056,11 @@ export namespace clutch {
                          */
                         constructor(properties?: clutch.config.service.shortlink.v1.IConfig);
 
-                        /** Config hashChars. */
-                        public hashChars: string;
+                        /** Config shortlinkChars. */
+                        public shortlinkChars: string;
 
-                        /** Config hashLength. */
-                        public hashLength: (number|Long);
+                        /** Config shortlinkLength. */
+                        public shortlinkLength: (number|Long);
 
                         /**
                          * Verifies a Config message.

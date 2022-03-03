@@ -24421,8 +24421,8 @@ export const clutch = $root.clutch = (() => {
                          * Properties of a Config.
                          * @memberof clutch.config.service.shortlink.v1
                          * @interface IConfig
-                         * @property {string|null} [hashChars] Config hashChars
-                         * @property {number|Long|null} [hashLength] Config hashLength
+                         * @property {string|null} [shortlinkChars] Config shortlinkChars
+                         * @property {number|Long|null} [shortlinkLength] Config shortlinkLength
                          */
 
                         /**
@@ -24441,20 +24441,20 @@ export const clutch = $root.clutch = (() => {
                         }
 
                         /**
-                         * Config hashChars.
-                         * @member {string} hashChars
+                         * Config shortlinkChars.
+                         * @member {string} shortlinkChars
                          * @memberof clutch.config.service.shortlink.v1.Config
                          * @instance
                          */
-                        Config.prototype.hashChars = "";
+                        Config.prototype.shortlinkChars = "";
 
                         /**
-                         * Config hashLength.
-                         * @member {number|Long} hashLength
+                         * Config shortlinkLength.
+                         * @member {number|Long} shortlinkLength
                          * @memberof clutch.config.service.shortlink.v1.Config
                          * @instance
                          */
-                        Config.prototype.hashLength = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                        Config.prototype.shortlinkLength = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                         /**
                          * Verifies a Config message.
@@ -24467,12 +24467,12 @@ export const clutch = $root.clutch = (() => {
                         Config.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.hashChars != null && message.hasOwnProperty("hashChars"))
-                                if (!$util.isString(message.hashChars))
-                                    return "hashChars: string expected";
-                            if (message.hashLength != null && message.hasOwnProperty("hashLength"))
-                                if (!$util.isInteger(message.hashLength) && !(message.hashLength && $util.isInteger(message.hashLength.low) && $util.isInteger(message.hashLength.high)))
-                                    return "hashLength: integer|Long expected";
+                            if (message.shortlinkChars != null && message.hasOwnProperty("shortlinkChars"))
+                                if (!$util.isString(message.shortlinkChars))
+                                    return "shortlinkChars: string expected";
+                            if (message.shortlinkLength != null && message.hasOwnProperty("shortlinkLength"))
+                                if (!$util.isInteger(message.shortlinkLength) && !(message.shortlinkLength && $util.isInteger(message.shortlinkLength.low) && $util.isInteger(message.shortlinkLength.high)))
+                                    return "shortlinkLength: integer|Long expected";
                             return null;
                         };
 
@@ -24488,17 +24488,17 @@ export const clutch = $root.clutch = (() => {
                             if (object instanceof $root.clutch.config.service.shortlink.v1.Config)
                                 return object;
                             let message = new $root.clutch.config.service.shortlink.v1.Config();
-                            if (object.hashChars != null)
-                                message.hashChars = String(object.hashChars);
-                            if (object.hashLength != null)
+                            if (object.shortlinkChars != null)
+                                message.shortlinkChars = String(object.shortlinkChars);
+                            if (object.shortlinkLength != null)
                                 if ($util.Long)
-                                    (message.hashLength = $util.Long.fromValue(object.hashLength)).unsigned = false;
-                                else if (typeof object.hashLength === "string")
-                                    message.hashLength = parseInt(object.hashLength, 10);
-                                else if (typeof object.hashLength === "number")
-                                    message.hashLength = object.hashLength;
-                                else if (typeof object.hashLength === "object")
-                                    message.hashLength = new $util.LongBits(object.hashLength.low >>> 0, object.hashLength.high >>> 0).toNumber();
+                                    (message.shortlinkLength = $util.Long.fromValue(object.shortlinkLength)).unsigned = false;
+                                else if (typeof object.shortlinkLength === "string")
+                                    message.shortlinkLength = parseInt(object.shortlinkLength, 10);
+                                else if (typeof object.shortlinkLength === "number")
+                                    message.shortlinkLength = object.shortlinkLength;
+                                else if (typeof object.shortlinkLength === "object")
+                                    message.shortlinkLength = new $util.LongBits(object.shortlinkLength.low >>> 0, object.shortlinkLength.high >>> 0).toNumber();
                             return message;
                         };
 
@@ -24516,20 +24516,20 @@ export const clutch = $root.clutch = (() => {
                                 options = {};
                             let object = {};
                             if (options.defaults) {
-                                object.hashChars = "";
+                                object.shortlinkChars = "";
                                 if ($util.Long) {
                                     let long = new $util.Long(0, 0, false);
-                                    object.hashLength = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                    object.shortlinkLength = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                                 } else
-                                    object.hashLength = options.longs === String ? "0" : 0;
+                                    object.shortlinkLength = options.longs === String ? "0" : 0;
                             }
-                            if (message.hashChars != null && message.hasOwnProperty("hashChars"))
-                                object.hashChars = message.hashChars;
-                            if (message.hashLength != null && message.hasOwnProperty("hashLength"))
-                                if (typeof message.hashLength === "number")
-                                    object.hashLength = options.longs === String ? String(message.hashLength) : message.hashLength;
+                            if (message.shortlinkChars != null && message.hasOwnProperty("shortlinkChars"))
+                                object.shortlinkChars = message.shortlinkChars;
+                            if (message.shortlinkLength != null && message.hasOwnProperty("shortlinkLength"))
+                                if (typeof message.shortlinkLength === "number")
+                                    object.shortlinkLength = options.longs === String ? String(message.shortlinkLength) : message.shortlinkLength;
                                 else
-                                    object.hashLength = options.longs === String ? $util.Long.prototype.toString.call(message.hashLength) : options.longs === Number ? new $util.LongBits(message.hashLength.low >>> 0, message.hashLength.high >>> 0).toNumber() : message.hashLength;
+                                    object.shortlinkLength = options.longs === String ? $util.Long.prototype.toString.call(message.shortlinkLength) : options.longs === Number ? new $util.LongBits(message.shortlinkLength.low >>> 0, message.shortlinkLength.high >>> 0).toNumber() : message.shortlinkLength;
                             return object;
                         };
 

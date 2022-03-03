@@ -5,10 +5,10 @@ package clutch.config.service.shortlink.v1;
 option go_package = "github.com/lyft/clutch/backend/api/config/service/shortlink/v1;shortlinkv1";
 
 message Config {
-  // Hash chars is the list of characters that will be used when generating the hash.
+  // Chars is the list of characters that will be used when generating the random string.
   // By default its set to [a-zA-Z0-9]
-  string hash_chars = 1;
-  // This sets the length of the hash being generated.
+  string shortlink_chars = 1;
+  // This sets the length of the random string being generated.
   // By default its set to 10
-  int64 hash_length = 2;
+  int64 shortlink_length = 2;
 }
