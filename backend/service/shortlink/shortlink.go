@@ -162,7 +162,7 @@ func generateShortlink(chars string, length int) (string, error) {
 	}
 
 	for i := 0; i < length; i++ {
-		res[i] = chars[int(int(res[i])%len(chars))]
+		res[i] = chars[int(res[i])%len(chars)]
 	}
 
 	return string(res), nil
