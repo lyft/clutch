@@ -67,10 +67,4 @@ module.exports = {
       },
     },
   },
-  "@clutch-sh/projectCatalog": {
-    catalog: {
-      hideNav: true,
-      trending: false,
-    },
-  },
 };
