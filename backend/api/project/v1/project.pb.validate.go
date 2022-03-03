@@ -60,6 +60,7 @@ func (m *GetProjectsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetProjectsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -219,6 +220,7 @@ func (m *ProjectResult) validate(all bool) error {
 	if len(errors) > 0 {
 		return ProjectResultMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -398,6 +400,7 @@ func (m *GetProjectsResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetProjectsResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -501,6 +504,7 @@ func (m *ProjectResult_From) validate(all bool) error {
 	if len(errors) > 0 {
 		return ProjectResult_FromMultiError(errors)
 	}
+
 	return nil
 }
 

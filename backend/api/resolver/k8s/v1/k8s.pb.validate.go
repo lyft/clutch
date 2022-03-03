@@ -65,6 +65,7 @@ func (m *PodID) validate(all bool) error {
 	if len(errors) > 0 {
 		return PodIDMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -165,6 +166,7 @@ func (m *IPAddress) validate(all bool) error {
 	if len(errors) > 0 {
 		return IPAddressMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -268,6 +270,7 @@ func (m *HPAName) validate(all bool) error {
 	if len(errors) > 0 {
 		return HPANameMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -372,6 +375,7 @@ func (m *Deployment) validate(all bool) error {
 	if len(errors) > 0 {
 		return DeploymentMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -476,6 +480,7 @@ func (m *StatefulSet) validate(all bool) error {
 	if len(errors) > 0 {
 		return StatefulSetMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -579,6 +584,7 @@ func (m *Service) validate(all bool) error {
 	if len(errors) > 0 {
 		return ServiceMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -682,6 +688,7 @@ func (m *CronJob) validate(all bool) error {
 	if len(errors) > 0 {
 		return CronJobMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -786,6 +793,7 @@ func (m *ConfigMap) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMapMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -889,6 +897,7 @@ func (m *Job) validate(all bool) error {
 	if len(errors) > 0 {
 		return JobMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -991,6 +1000,7 @@ func (m *Namespace) validate(all bool) error {
 	if len(errors) > 0 {
 		return NamespaceMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1094,6 +1104,7 @@ func (m *Node) validate(all bool) error {
 	if len(errors) > 0 {
 		return NodeMultiError(errors)
 	}
+
 	return nil
 }
 

@@ -62,6 +62,7 @@ func (m *LoginRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return LoginRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -198,6 +199,7 @@ func (m *LoginResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return LoginResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -305,6 +307,7 @@ func (m *CallbackRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CallbackRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -408,6 +411,7 @@ func (m *CallbackResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return CallbackResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -569,6 +573,7 @@ func (m *CreateTokenRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateTokenRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -676,6 +681,7 @@ func (m *CreateTokenResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateTokenResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -781,6 +787,7 @@ func (m *LoginResponse_Token) validate(all bool) error {
 	if len(errors) > 0 {
 		return LoginResponse_TokenMultiError(errors)
 	}
+
 	return nil
 }
 

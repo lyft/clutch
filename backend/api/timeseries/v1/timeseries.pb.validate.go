@@ -82,6 +82,7 @@ func (m *TimeRange) validate(all bool) error {
 	if len(errors) > 0 {
 		return TimeRangeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -260,6 +261,7 @@ func (m *Point) validate(all bool) error {
 	if len(errors) > 0 {
 		return PointMultiError(errors)
 	}
+
 	return nil
 }
 

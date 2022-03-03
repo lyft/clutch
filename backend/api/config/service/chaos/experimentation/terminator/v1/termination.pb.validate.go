@@ -165,6 +165,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -293,6 +294,7 @@ func (m *MaxTimeTerminationCriterion) validate(all bool) error {
 	if len(errors) > 0 {
 		return MaxTimeTerminationCriterionMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -440,6 +442,7 @@ func (m *Config_PerConfigTypeConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return Config_PerConfigTypeConfigMultiError(errors)
 	}
+
 	return nil
 }
 

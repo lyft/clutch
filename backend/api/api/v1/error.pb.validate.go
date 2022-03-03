@@ -94,6 +94,7 @@ func (m *ErrorDetails) validate(all bool) error {
 	if len(errors) > 0 {
 		return ErrorDetailsMultiError(errors)
 	}
+
 	return nil
 }
 

@@ -64,6 +64,7 @@ func (m *StringField) validate(all bool) error {
 	if len(errors) > 0 {
 		return StringFieldMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -170,6 +171,7 @@ func (m *Option) validate(all bool) error {
 	if len(errors) > 0 {
 		return OptionMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -304,6 +306,7 @@ func (m *OptionField) validate(all bool) error {
 	if len(errors) > 0 {
 		return OptionFieldMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -432,6 +435,7 @@ func (m *Field) validate(all bool) error {
 	if len(errors) > 0 {
 		return FieldMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -600,6 +604,7 @@ func (m *FieldMetadata) validate(all bool) error {
 	if len(errors) > 0 {
 		return FieldMetadataMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -703,6 +708,7 @@ func (m *SearchMetadata) validate(all bool) error {
 	if len(errors) > 0 {
 		return SearchMetadataMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -835,6 +841,7 @@ func (m *SchemaMetadata) validate(all bool) error {
 	if len(errors) > 0 {
 		return SchemaMetadataMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1027,6 +1034,7 @@ func (m *Schema) validate(all bool) error {
 	if len(errors) > 0 {
 		return SchemaMultiError(errors)
 	}
+
 	return nil
 }
 

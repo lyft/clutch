@@ -176,6 +176,7 @@ func (m *HTTPFaultConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return HTTPFaultConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -355,6 +356,7 @@ func (m *AbortFault) validate(all bool) error {
 	if len(errors) > 0 {
 		return AbortFaultMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -533,6 +535,7 @@ func (m *LatencyFault) validate(all bool) error {
 	if len(errors) > 0 {
 		return LatencyFaultMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -707,6 +710,7 @@ func (m *FaultTargeting) validate(all bool) error {
 	if len(errors) > 0 {
 		return FaultTargetingMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -896,6 +900,7 @@ func (m *UpstreamEnforcing) validate(all bool) error {
 	if len(errors) > 0 {
 		return UpstreamEnforcingMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1087,6 +1092,7 @@ func (m *DownstreamEnforcing) validate(all bool) error {
 	if len(errors) > 0 {
 		return DownstreamEnforcingMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1199,6 +1205,7 @@ func (m *SingleCluster) validate(all bool) error {
 	if len(errors) > 0 {
 		return SingleClusterMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1309,6 +1316,7 @@ func (m *ClusterPercentage) validate(all bool) error {
 	if len(errors) > 0 {
 		return ClusterPercentageMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1423,6 +1431,7 @@ func (m *FaultPercentage) validate(all bool) error {
 	if len(errors) > 0 {
 		return FaultPercentageMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1533,6 +1542,7 @@ func (m *FaultAbortStatus) validate(all bool) error {
 	if len(errors) > 0 {
 		return FaultAbortStatusMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1643,6 +1653,7 @@ func (m *FaultLatencyDuration) validate(all bool) error {
 	if len(errors) > 0 {
 		return FaultLatencyDurationMultiError(errors)
 	}
+
 	return nil
 }
 

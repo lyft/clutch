@@ -167,6 +167,7 @@ func (m *Project) validate(all bool) error {
 	if len(errors) > 0 {
 		return ProjectMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -357,6 +358,7 @@ func (m *ProjectDependencies) validate(all bool) error {
 	if len(errors) > 0 {
 		return ProjectDependenciesMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -458,6 +460,7 @@ func (m *Dependency) validate(all bool) error {
 	if len(errors) > 0 {
 		return DependencyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -584,6 +587,7 @@ func (m *OnCall) validate(all bool) error {
 	if len(errors) > 0 {
 		return OnCallMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -682,6 +686,7 @@ func (m *PagerDuty) validate(all bool) error {
 	if len(errors) > 0 {
 		return PagerDutyMultiError(errors)
 	}
+
 	return nil
 }
 

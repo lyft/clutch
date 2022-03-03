@@ -222,6 +222,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -331,6 +332,7 @@ func (m *Config_ECDSAllowList) validate(all bool) error {
 	if len(errors) > 0 {
 		return Config_ECDSAllowListMultiError(errors)
 	}
+
 	return nil
 }
 

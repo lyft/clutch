@@ -201,6 +201,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -323,6 +324,7 @@ func (m *TCPSocket) validate(all bool) error {
 	if len(errors) > 0 {
 		return TCPSocketMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -466,6 +468,7 @@ func (m *Listener) validate(all bool) error {
 	if len(errors) > 0 {
 		return ListenerMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -719,6 +722,7 @@ func (m *Stats) validate(all bool) error {
 	if len(errors) > 0 {
 		return StatsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -892,6 +896,7 @@ func (m *Timeouts) validate(all bool) error {
 	if len(errors) > 0 {
 		return TimeoutsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1293,6 +1298,7 @@ func (m *GatewayOptions) validate(all bool) error {
 	if len(errors) > 0 {
 		return GatewayOptionsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1426,6 +1432,7 @@ func (m *Assets) validate(all bool) error {
 	if len(errors) > 0 {
 		return AssetsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1534,6 +1541,7 @@ func (m *Logger) validate(all bool) error {
 	if len(errors) > 0 {
 		return LoggerMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1672,6 +1680,7 @@ func (m *Middleware) validate(all bool) error {
 	if len(errors) > 0 {
 		return MiddlewareMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1809,6 +1818,7 @@ func (m *Service) validate(all bool) error {
 	if len(errors) > 0 {
 		return ServiceMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1947,6 +1957,7 @@ func (m *Resolver) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResolverMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2084,6 +2095,7 @@ func (m *Module) validate(all bool) error {
 	if len(errors) > 0 {
 		return ModuleMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2182,6 +2194,7 @@ func (m *Stats_LogReporter) validate(all bool) error {
 	if len(errors) > 0 {
 		return Stats_LogReporterMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2320,6 +2333,7 @@ func (m *Stats_StatsdReporter) validate(all bool) error {
 	if len(errors) > 0 {
 		return Stats_StatsdReporterMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2423,6 +2437,7 @@ func (m *Stats_PrometheusReporter) validate(all bool) error {
 	if len(errors) > 0 {
 		return Stats_PrometheusReporterMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2554,6 +2569,7 @@ func (m *Stats_GoRuntimeStats) validate(all bool) error {
 	if len(errors) > 0 {
 		return Stats_GoRuntimeStatsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2666,6 +2682,7 @@ func (m *Stats_StatsdReporter_PointTags) validate(all bool) error {
 	if len(errors) > 0 {
 		return Stats_StatsdReporter_PointTagsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2813,6 +2830,7 @@ func (m *Timeouts_Entry) validate(all bool) error {
 	if len(errors) > 0 {
 		return Timeouts_EntryMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -2918,6 +2936,7 @@ func (m *Assets_S3Provider) validate(all bool) error {
 	if len(errors) > 0 {
 		return Assets_S3ProviderMultiError(errors)
 	}
+
 	return nil
 }
 
