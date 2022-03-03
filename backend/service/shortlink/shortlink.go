@@ -127,7 +127,7 @@ func (c *client) createShortlinkWithRetries(ctx context.Context, path string, st
 
 func (c *client) Get(ctx context.Context, hash string) (string, []*shortlinkv1.ShareableState, error) {
 	query := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
-		Select("page_path, state").
+		Select("page_path", "state").
 		From("shortlink").
 		Where(sq.Eq{"slhash": hash})
 
