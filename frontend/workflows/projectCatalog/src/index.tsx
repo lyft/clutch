@@ -15,7 +15,7 @@ const register = (): WorkflowConfiguration => {
       catalog: {
         path: "/",
         displayName: "Project Catalog",
-        description: "Project Catalog",
+        description: "A searchable catalog of services",
         component: () => null,
         featureFlag: "projectCatalog",
       },
