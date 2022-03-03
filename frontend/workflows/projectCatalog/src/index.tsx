@@ -14,6 +14,7 @@ const register = (): WorkflowConfiguration => {
     routes: {
       catalog: {
         path: "/",
+        displayName: "Project Catalog",
         description: "Project Catalog",
         component: () => null,
         featureFlag: "projectCatalog",
