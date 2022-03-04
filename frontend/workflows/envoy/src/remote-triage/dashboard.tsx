@@ -1,7 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, MetadataTable, Paper, styled } from "@clutch-sh/core";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Cell, Pie, PieChart } from "recharts";
 
 const SummaryCardTitle = styled("div")({
   fontWeight: 600,
@@ -60,20 +60,20 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
       <Paper>
         <SummaryCardTitle>{summary.name}</SummaryCardTitle>
         <PieContainer>
-            <PieChart width={PIECHART_OUTER_RADIUS * 2}>
-              <Pie
-                data={pieChartData}
-                dataKey="value"
-                innerRadius={PIECHART_INNER_RADIUS}
-                outerRadius={PIECHART_OUTER_RADIUS}
-                legendType="none"
-                animationDuration={PIECHART_ANIMATION_DURATION_MS}
-              >
-                {pieChartData.map(d => (
-                  <Cell key={`cell-${d.id}-${d.value}-${d.color}`} fill={d.color} />
-                ))}
-              </Pie>
-            </PieChart>
+          <PieChart width={PIECHART_OUTER_RADIUS * 2} height={PIECHART_OUTER_RADIUS * 2}>
+            <Pie
+              data={pieChartData}
+              dataKey="value"
+              innerRadius={PIECHART_INNER_RADIUS}
+              outerRadius={PIECHART_OUTER_RADIUS}
+              legendType="none"
+              animationDuration={PIECHART_ANIMATION_DURATION_MS}
+            >
+              {pieChartData.map(d => (
+                <Cell key={`cell-${d.id}-${d.value}-${d.color}`} fill={d.color} />
+              ))}
+            </Pie>
+          </PieChart>
           <PieLegendContainer>
             <div>
               <SummaryCardTitle>Total</SummaryCardTitle>
