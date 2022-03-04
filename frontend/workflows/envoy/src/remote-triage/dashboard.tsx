@@ -26,6 +26,8 @@ const FeaturedSummaryContainer = styled(Grid)({
 const PieContainer = styled("div")({
   display: "flex",
   justifyContent: "space-evenly",
+  width: "100%",
+  height: "100%",
 });
 
 const PieLegendContainer = styled("div")({
@@ -51,13 +53,16 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
   const pieChartData = summary?.data?.map(d => {
     return { id: d.id, value: d.value, color: d.color };
   });
+  console.log(summary);
+  console.log(summary?.data);
+  console.log(pieChartData);
   return (
     <FeaturedSummaryContainer item>
       <Paper>
         <SummaryCardTitle>{summary.name}</SummaryCardTitle>
         <PieContainer>
           <PieChart>
-            <Pie data={pieChartData || []} dataKey="value" innerRadius={70} outerRadius={100}>
+            <Pie data={pieChartData} dataKey="value" innerRadius={70} outerRadius={100} legendType={"none"}>
               {pieChartData.map(d => (
                 <Cell key={`cell-${d.id}-${d.value}-${d.color}`} fill={d.color} />
               ))}
