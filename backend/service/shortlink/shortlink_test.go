@@ -206,7 +206,7 @@ func TestProtoAnyForState(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			marshal, err := marshalShareableState(test.input)
 			assert.NoError(t, err)
-			assert.Equal(t, test.expect, string(marshal))
+			assert.JSONEq(t, test.expect, string(marshal))
 		})
 	}
 }
