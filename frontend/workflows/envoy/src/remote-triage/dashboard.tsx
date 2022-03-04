@@ -53,8 +53,11 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
   const pieChartData = summary?.data?.map(d => {
     return { id: d.id, value: d.value, color: d.color };
   });
+  // @ts-ignore
   console.log(summary);
+  // @ts-ignore
   console.log(summary?.data);
+  // @ts-ignore
   console.log(pieChartData);
   return (
     <FeaturedSummaryContainer item>
