@@ -49,12 +49,7 @@ const PIECHART_INNER_RADIUS = 70;
 const PIECHART_ANIMATION_DURATION_MS = 200;
 
 const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
-  const values = summary?.data?.map(d => d.value);
-  const total = values.reduce((t, value) => t + value);
-  // We transform the data from the summary format to a format used for Recharts Library
-  const pieChartData = summary?.data?.map(d => {
-    return { id: d.id, value: d.value, color: d.color };
-  });
+  const total = (summary?.data || []).reduce((t, { value = 0 }) => t + value, 0);
   return (
     <FeaturedSummaryContainer item>
       <Paper>
@@ -62,14 +57,14 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
         <PieContainer>
           <PieChart width={PIECHART_OUTER_RADIUS * 2} height={PIECHART_OUTER_RADIUS * 2}>
             <Pie
-              data={pieChartData}
+              data={summary?.data || []}
               dataKey="value"
               innerRadius={PIECHART_INNER_RADIUS}
               outerRadius={PIECHART_OUTER_RADIUS}
               legendType="none"
               animationDuration={PIECHART_ANIMATION_DURATION_MS}
             >
-              {pieChartData.map(d => (
+              {summary?.data?.map(d => (
                 <Cell key={`cell-${d.id}-${d.value}-${d.color}`} fill={d.color} />
               ))}
             </Pie>
