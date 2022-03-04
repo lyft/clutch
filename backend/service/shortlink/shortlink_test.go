@@ -163,6 +163,18 @@ func TestProtoAnyForState(t *testing.T) {
 			},
 		},
 		{
+			name:   "assert with json string spaces",
+			expect: `{"state":[ { "key": "mock",  "state":  "mock string" }]}`,
+			input: []*shortlinkv1.ShareableState{
+				{
+					Key: "mock",
+					State: &structpb.Value{
+						Kind: &structpb.Value_StringValue{StringValue: "mock string"},
+					},
+				},
+			},
+		},
+		{
 			name:   "numbers",
 			expect: `{"state":[{"key":"mock","state":{"key":123,"key1":345}}]}`,
 			input: []*shortlinkv1.ShareableState{
