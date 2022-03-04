@@ -26,8 +26,6 @@ const FeaturedSummaryContainer = styled(Grid)({
 const PieContainer = styled("div")({
   display: "flex",
   justifyContent: "space-evenly",
-  width: "100%",
-  height: "100%",
 });
 
 const PieLegendContainer = styled("div")({
@@ -46,6 +44,10 @@ interface FeaturedSummaryProps {
   }[];
 }
 
+const PIECHART_OUTER_RADIUS = 100;
+const PIECHART_INNER_RADIUS = 70;
+const PIECHART_ANIMATION_DURATION_MS = 200;
+
 const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
   const values = summary?.data?.map(d => d.value);
   const total = values.reduce((t, value) => t + value);
@@ -53,32 +55,25 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
   const pieChartData = summary?.data?.map(d => {
     return { id: d.id, value: d.value, color: d.color };
   });
-  // @ts-ignore
-  console.log(summary);
-  // @ts-ignore
-  console.log(summary?.data);
-  // @ts-ignore
-  console.log(pieChartData);
   return (
     <FeaturedSummaryContainer item>
       <Paper>
         <SummaryCardTitle>{summary.name}</SummaryCardTitle>
         <PieContainer>
-          <ResponsiveContainer>
-            <PieChart>
+            <PieChart width={PIECHART_OUTER_RADIUS * 2}>
               <Pie
                 data={pieChartData}
                 dataKey="value"
-                innerRadius={70}
-                outerRadius={100}
+                innerRadius={PIECHART_INNER_RADIUS}
+                outerRadius={PIECHART_OUTER_RADIUS}
                 legendType="none"
+                animationDuration={PIECHART_ANIMATION_DURATION_MS}
               >
                 {pieChartData.map(d => (
                   <Cell key={`cell-${d.id}-${d.value}-${d.color}`} fill={d.color} />
                 ))}
               </Pie>
             </PieChart>
-          </ResponsiveContainer>
           <PieLegendContainer>
             <div>
               <SummaryCardTitle>Total</SummaryCardTitle>
