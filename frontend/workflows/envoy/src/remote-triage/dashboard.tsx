@@ -65,7 +65,7 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
               animationDuration={PIECHART_ANIMATION_DURATION_MS}
             >
               {summary?.data?.map(d => (
-                <Cell key={`cell-${d.id}-${d.value}-${d.color}`} fill={d.color} />
+                <Cell key={`cell-${d.id}`} fill={d.color} />
               ))}
             </Pie>
           </PieChart>
