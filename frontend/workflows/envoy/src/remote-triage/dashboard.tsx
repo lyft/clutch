@@ -1,7 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, MetadataTable, Paper, styled } from "@clutch-sh/core";
-import { Cell, Pie, PieChart } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 const SummaryCardTitle = styled("div")({
   fontWeight: 600,
@@ -64,13 +64,21 @@ const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
       <Paper>
         <SummaryCardTitle>{summary.name}</SummaryCardTitle>
         <PieContainer>
-          <PieChart>
-            <Pie data={pieChartData} dataKey="value" innerRadius={70} outerRadius={100} legendType={"none"}>
-              {pieChartData.map(d => (
-                <Cell key={`cell-${d.id}-${d.value}-${d.color}`} fill={d.color} />
-              ))}
-            </Pie>
-          </PieChart>
+          <ResponsiveContainer>
+            <PieChart>
+              <Pie
+                data={pieChartData}
+                dataKey="value"
+                innerRadius={70}
+                outerRadius={100}
+                legendType="none"
+              >
+                {pieChartData.map(d => (
+                  <Cell key={`cell-${d.id}-${d.value}-${d.color}`} fill={d.color} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
           <PieLegendContainer>
             <div>
               <SummaryCardTitle>Total</SummaryCardTitle>
