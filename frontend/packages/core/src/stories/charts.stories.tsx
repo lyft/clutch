@@ -1,4 +1,5 @@
 import * as React from "react";
+import { styled } from "@clutch-sh/core";
 import type { Meta } from "@storybook/react";
 
 import TimeseriesChart from "../Charts/timeseries-chart";
@@ -7,6 +8,11 @@ export default {
   title: "Core/TimeseriesChart",
   component: TimeseriesChart,
 } as Meta;
+
+const ChartContainer = styled("div")({
+  width: 600,
+  height: 400,
+});
 
 export const Primary = () => {
   const mockData = [
@@ -29,7 +35,7 @@ export const Primary = () => {
 
   const mockLines = [
     {
-      dataKey: "",
+      dataKey: "value",
       color: "red",
     },
   ];
@@ -38,11 +44,13 @@ export const Primary = () => {
   // TimeseriesChart
   // const TimeseriesChart = ({data, xAxisDataKey, yAxisDataKey, lines, refLines }: TimeseriesChartProps) => {
   return (
-    <TimeseriesChart
-      data={mockData}
-      xAxisDataKey="timestamp"
-      yAxisDataKey="value"
-      lines={mockLines}
-    />
+    <ChartContainer>
+      <TimeseriesChart
+        data={mockData}
+        xAxisDataKey="timestamp"
+        yAxisDataKey="value"
+        lines={mockLines}
+      />
+    </ChartContainer>
   );
 };

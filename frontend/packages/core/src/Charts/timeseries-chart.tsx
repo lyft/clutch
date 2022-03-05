@@ -19,6 +19,8 @@ export interface ReferenceLineProps {
 export interface LineProps {
   dataKey: string;
   color: string;
+  strokeWidth?: number;
+  animationDuration?: number;
 }
 export interface TimeseriesChartProps {
   data: any;
@@ -26,7 +28,7 @@ export interface TimeseriesChartProps {
   yAxisDataKey?: string;
   lines: LineProps[];
   refLines?: ReferenceLineProps[];
-  // To add: ref dots, ref areas, zoom enabled, auto colors, legend enabled, cartesian grid options
+  // TODO: add ref dots, ref areas, zoom enabled, auto colors, legend enabled, cartesian grid options
 }
 
 /*
@@ -59,8 +61,13 @@ const TimeseriesChart = ({
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey={xAxisDataKey} type="number" scale="time" />
-        <YAxis dataKey={yAxisDataKey} />
+        <XAxis
+          dataKey={xAxisDataKey}
+          type="number"
+          scale="time"
+          domain={["dataMin - 1000", "dataMax + 1000"]}
+        />
+        <YAxis dataKey={yAxisDataKey} domain={["dataMin", "dataMax"]} />
         <Tooltip />
         <Legend />
         {lines
@@ -71,6 +78,7 @@ const TimeseriesChart = ({
                   type="linear"
                   dataKey={line.dataKey}
                   stroke={line.color}
+                  animationDuration={line.animationDuration !== null ? line.animationDuration : 500}
                 />
               );
             })
