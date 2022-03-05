@@ -9,35 +9,40 @@ export default {
 } as Meta;
 
 export const Primary = () => {
-
   const mockData = [
     {
-        lineName: "line1",
-        timestamp: 1546300800000,
-        value: 10
+      lineName: "line1",
+      timestamp: 1546300800000,
+      value: 10,
     },
     {
-        lineName: "line1",
-        timestamp: 1546300900000,
-        value: 20
+      lineName: "line1",
+      timestamp: 1546300900000,
+      value: 20,
     },
     {
-        lineName: "line1",
-        timestamp: 1546301000000,
-        value: 30
+      lineName: "line1",
+      timestamp: 1546301000000,
+      value: 30,
     },
-  ]
+  ];
 
   const mockLines = [
     {
-        dataKey: "",
-        color: "red"
-    }
-
-  ]
-  //data
+      dataKey: "",
+      color: "red",
+    },
+  ];
+  // data
   // reference lines
   // TimeseriesChart
   // const TimeseriesChart = ({data, xAxisDataKey, yAxisDataKey, lines, refLines }: TimeseriesChartProps) => {
-  return <TimeseriesChart data={mockData} xAxisDataKey={"timestamp"} yAxisDataKey={"value"} lines={mockLines} />;
+  return (
+    <TimeseriesChart
+      data={mockData}
+      xAxisDataKey="timestamp"
+      yAxisDataKey="value"
+      lines={mockLines}
+    />
+  );
 };
