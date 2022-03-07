@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import type { Meta } from "@storybook/react";
 
 import TimeseriesChart, { TimeseriesReferenceLineProps } from "../Charts/timeseries";
