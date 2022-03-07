@@ -10,8 +10,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { tickFormatterFunc, calculateDomainEdges } from "./helpers";
 
+import { calculateDomainEdges, tickFormatterFunc } from "./helpers";
 
 export type ReferenceLineAxis = "x" | "y";
 /*
@@ -42,6 +42,7 @@ export interface TimeseriesChartProps {
   // The assumption is that multiple lines would want to share the same Y Axis.
   drawDots?: boolean;
   enableLegend?: boolean;
+  enableGrid?: boolean;
   // TODO: add ref dots, ref areas, zoom enabled, auto colors,
   // tooltip options, activeDot options, dark mode / styling,
 }
@@ -67,18 +68,19 @@ const TimeseriesChart = ({
   singleLineMode = true,
   drawDots = true,
   enableLegend = true,
+  enableGrid = true,
 }: TimeseriesChartProps) => {
   if (singleLineMode) {
     data.sort((a, b) => a[xAxisDataKey] - b[xAxisDataKey]);
   }
 
-  const [yAxisDomainMin, yAxisDomainMax] = calculateDomainEdges(data, yAxisDataKey, .1);
-  const [xAxisDomainMin, xAxisDomainMax] = calculateDomainEdges(data, xAxisDataKey, .1);
+  const [yAxisDomainMin, yAxisDomainMax] = calculateDomainEdges(data, yAxisDataKey, 0.1);
+  const [xAxisDomainMin, xAxisDomainMax] = calculateDomainEdges(data, xAxisDataKey, 0.1);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
-        <CartesianGrid />
+        {enableGrid ? <CartesianGrid /> : null}
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
@@ -91,7 +93,7 @@ const TimeseriesChart = ({
         ) : (
           <YAxis type="number" />
         )}
-        <Tooltip />
+        <Tooltip labelFormatter={tickFormatterFunc} />
         {enableLegend ? <Legend /> : null}
         {lines
           ? lines.map((line, index) => {
