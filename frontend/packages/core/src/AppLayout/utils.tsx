@@ -97,6 +97,28 @@ const sortedGroupings = (workflows: Workflow[]): string[] => {
   return Object.keys(routesByGrouping(workflows)).sort();
 };
 
+const workflowByRoute = (workflows: Workflow[], route: string): Workflow => {
+  const [baseRoute, ...subRoutes] = route.split("/").filter(String);
+  const subRoute = subRoutes.join("/");
+  let returnFlow = null;
+
+  const filtered = workflows.filter((workflow: Workflow) => workflow.path === baseRoute);
+
+  filtered.forEach((workflow: Workflow) => {
+    workflow.routes.forEach((wroute: any) => {
+      if (wroute.path === subRoute) {
+        returnFlow = workflow;
+        return null;
+      }
+    });
+    if (returnFlow) {
+      return null;
+    }
+  });
+
+  return returnFlow;
+};
+
 export interface SearchIndex {
   category: string;
   label: string;

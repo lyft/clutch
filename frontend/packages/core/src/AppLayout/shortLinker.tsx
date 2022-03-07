@@ -2,18 +2,21 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import {
   ClickAwayListener,
+  Grid,
   Grow as MuiGrow,
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
 } from "@material-ui/core";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
 import LinkIcon from "@material-ui/icons/Link";
 
-import { IconButton } from "../button";
-import { useStorageContext } from "../Contexts";
+import { Button, ClipboardButton, IconButton } from "../button";
+import { useAppContext, useStorageContext } from "../Contexts";
 import { TextField } from "../Input";
+import { client } from "../Network";
 import styled from "../styled";
+
+import { workflowByRoute } from "./utils";
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
   transformOrigin: props.placement,
@@ -53,26 +56,32 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
 const ShortLinker = () => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
-  const location = useLocation();
+  const { workflows } = useAppContext();
   const {
     tempHydrateStore,
     data: { store },
   } = useStorageContext();
-  const [shortLink, setShortLink] = React.useState("https://clutch.lyft.net/sl/1234");
+  const location = useLocation();
+  const [shortLink, setShortLink] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    console.log("CLEARING STORAGE");
+    if (workflows.length) {
+    }
+    // Will clear our temp storage on location change
     store(null, null, {});
   }, [location]);
 
   React.useEffect(() => {
-    console.log("CHECKING STORAGE", tempHydrateStore);
-  }, [tempHydrateStore]);
+    if (workflows.length) {
+      console.log(workflowByRoute(workflows, location.pathname));
+    }
+  }, [workflows]);
 
   // on click, take current route and temp hydrate data and do stuff
 
   const handleToggle = () => {
     setOpen(!open);
+    setShortLink(null);
   };
 
   const handleClose = event => {
@@ -84,6 +93,23 @@ const ShortLinker = () => {
       return;
     }
     setOpen(false);
+  };
+
+  const generateShortLink = () => {
+    // call api with tempHydrateStore and route
+    // client
+    //   .post("/v1/...", { route: window.location.href, data: tempHydrateStore })
+    //   .then(response => {
+    //     setShortLink(`${window.location.origin}/sl/${response.code}`);
+    //   })
+    //   .catch((error: ClutchError) => {
+    //     console.warn("failed to generate short link", error); // eslint-disable-line
+    //     // throw a toast???
+    //   });
+    // get code
+    // set short link
+    const code = 1234;
+    setShortLink(`${window.location.origin}/sl/${code}`);
   };
 
   return (
@@ -106,17 +132,21 @@ const ShortLinker = () => {
             {...TransitionProps}
             placement={placement === "bottom" ? "center top" : "center bottom"}
           >
-            {/* Get an error about a failed prop type without the fragment, needs further investigation */}
             <>
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id="options">
-                    <TextField
-                      disabled
-                      readOnly
-                      value={shortLink}
-                      endAdornment={<FileCopyIcon />}
-                    />
+                    <Grid style={{ display: "flex", justifyContent: "center" }}>
+                      {!shortLink && (
+                        <Button onClick={generateShortLink} text="Generate Short Link" />
+                      )}
+                      {shortLink && (
+                        <>
+                          <TextField disabled readOnly value={shortLink} />
+                          <ClipboardButton text={shortLink} tooltip="Copy Short Link" />
+                        </>
+                      )}
+                    </Grid>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

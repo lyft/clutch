@@ -254,7 +254,7 @@ const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
     const matches = pathname.match(/(\/sl\/)(.*)/i);
     if (matches && matches[2] && returnedData[matches[2]]) {
       const data = returnedData[matches[2]];
-      console.log("HYDRATING", data.data);
+      // console.log("HYDRATING", data.data);
       hydrate(data.data);
       navigate(data.route);
     }
@@ -280,7 +280,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   };
 
   const localStore = (key: string, data: any) => {
-    console.log("Storing Local Data", { key, data });
+    // console.log("Storing Local Data", { key, data });
     if (key) {
       try {
         window.localStorage.setItem(key, JSON.stringify(data));
@@ -292,7 +292,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   };
 
   const store = (componentName: string, key: string, data: any, local = true) => {
-    console.log("Storing Data", { componentName, key, data, local });
+    // console.log("Storing Data", { componentName, key, data, local });
     // we're clearing our temporary data
     if (!componentName && !key) {
       setTempHydrateStore({});
@@ -320,18 +320,19 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   };
 
   const retrieve = (componentName: string, key?: string, defaultData?: any): any => {
-    console.group("Retrieval");
-    console.log({ componentName, key, defaultData });
+    // console.group("Retrieval");
+    // console.log({ componentName, key, defaultData });
     if (hydrateStore && hydrateStore[componentName]) {
-      console.log("Verified componentName", hydrateStore[componentName]);
+      // console.log("Verified componentName", hydrateStore[componentName]);
       if (key && hydrateStore[componentName][key]) {
-        console.log("Have a key", key);
-        console.log("returning", hydrateStore[componentName][key]);
-        console.groupEnd();
+        // console.log("Have a key", key);
+        // console.log("returning", hydrateStore[componentName][key]);
+        // console.groupEnd();
         return hydrateStore[componentName][key];
-      } else if (!key) {
-        console.log("returning", hydrateStore[componentName]);
-        console.groupEnd();
+      }
+      if (!key) {
+        // console.log("returning", hydrateStore[componentName]);
+        // console.groupEnd();
         return hydrateStore[componentName];
       }
     }
@@ -340,8 +341,8 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       const localData = window.localStorage.getItem(key);
       if (localData) {
         try {
-          console.log("returning local data", localData);
-          console.groupEnd();
+          // console.log("returning local data", localData);
+          // console.groupEnd();
           return JSON.parse(localData);
         } catch (e) {
           // eslint-disable-next-line no-console
@@ -350,14 +351,14 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       }
     }
 
-    console.log("Returning default", defaultData);
-    console.groupEnd();
+    // console.log("Returning default", defaultData);
+    // console.groupEnd();
 
     return defaultData;
   };
 
   const remove = (componentName: string, key?: string, local = true) => {
-    console.log("Removing Data", { componentName, key, local });
+    // console.log("Removing Data", { componentName, key, local });
 
     const newTempHydrate = { ...tempHydrateStore };
     if (componentName && key) {
