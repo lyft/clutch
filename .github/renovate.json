@@ -18,9 +18,25 @@
   "rebaseWhen": "conflicted",
   "labels": ["dependencies"],
   "lockFileMaintenance": {
-    "enabled": true
+    "enabled": false
   },
   "packageRules": [
+    {
+      "matchDatasources": ["npm", "node"],
+      "stabilityDays": 14,
+      "schedule": ["every 2 week on monday"]
+    },
+    {
+      "matchPackagePatterns": ["^eslint"],
+      "groupName": "eslint",
+      "postUpgradeTasks": {
+        "commands": ["make frontend-lint-fix"]
+      }
+    },
+    {
+      "matchPackagePatterns": ["^jest|^enzyme"],
+      "groupName": "unittest"
+    },
     {
       "extends": ["schedule:weekly"],
       "matchPackagePatterns": ["^github.com/aws/"]
@@ -36,5 +52,6 @@
     }
   ],
   "postUpdateOptions": ["gomodTidy"],
-  "ignoreDeps": ["@date-io/core", "babel-jest", "eslint", "jest", "esbuild"]
+  "allowedPostUpgradeCommands": ["make frontend-lint-fix"],
+  "ignoreDeps": ["@date-io/core", "babel-jest", "esbuild"]
 }
