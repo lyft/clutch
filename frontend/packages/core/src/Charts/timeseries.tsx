@@ -11,11 +11,10 @@ import {
   YAxis,
 } from "recharts";
 
-
-const tickFormatterFunc = (timeStamp) => {
+const tickFormatterFunc = timeStamp => {
   const date = new Date(timeStamp);
   return date.toLocaleTimeString();
-}
+};
 
 export type ReferenceLineAxis = "x" | "y";
 /*
@@ -42,10 +41,10 @@ export interface TimeseriesChartProps {
   yAxisDataKey?: string;
   lines: LineProps[];
   refLines?: TimeseriesReferenceLineProps[];
-  singleLineMode?: boolean; // if false, the Y Axis will be based off the max and min of all data combined 
+  singleLineMode?: boolean; // if false, the Y Axis will be based off the max and min of all data combined
   // The assumption is that multiple lines would want to share the same Y Axis.
-  // TODO: add ref dots, ref areas, zoom enabled, auto colors, legend enabled, cartesian grid options, 
-  // tooltip options, activeDot options, dark mode / styling, 
+  // TODO: add ref dots, ref areas, zoom enabled, auto colors, legend enabled,
+  // tooltip options, activeDot options, dark mode / styling,
 }
 
 /*
@@ -70,11 +69,11 @@ const TimeseriesChart = ({
 }: TimeseriesChartProps) => {
   if (singleLineMode) {
     data.sort((a, b) => a[xAxisDataKey] - b[xAxisDataKey]);
-  } 
+  }
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid />
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
@@ -82,7 +81,11 @@ const TimeseriesChart = ({
           domain={["dataMin - 1000", "dataMax + 1000"]}
           tickFormatter={tickFormatterFunc}
         />
-        {singleLineMode ? <YAxis dataKey={yAxisDataKey} domain={["dataMin", "dataMax"]} type="number" /> : <YAxis type="number" /> }
+        {singleLineMode ? (
+          <YAxis dataKey={yAxisDataKey} domain={["dataMin", "dataMax"]} type="number" />
+        ) : (
+          <YAxis type="number" />
+        )}
         <Tooltip />
         <Legend />
         {lines
@@ -93,7 +96,9 @@ const TimeseriesChart = ({
                   type="linear"
                   dataKey={line.dataKey}
                   stroke={line.color}
-                  animationDuration={line.animationDuration !== null ? line.animationDuration : null}
+                  animationDuration={
+                    line.animationDuration !== null ? line.animationDuration : null
+                  }
                 />
               );
             })
@@ -106,6 +111,7 @@ const TimeseriesChart = ({
                   x={refLine.coordinate}
                   label={refLine.label}
                   stroke={refLine.color}
+                  strokeDasharray="3 3"
                 />
               ) : (
                 <ReferenceLine
@@ -113,6 +119,7 @@ const TimeseriesChart = ({
                   y={refLine.coordinate}
                   label={refLine.label}
                   stroke={refLine.color}
+                  strokeDasharray="3 4"
                 />
               );
             })

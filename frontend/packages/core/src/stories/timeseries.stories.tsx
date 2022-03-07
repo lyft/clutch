@@ -20,7 +20,6 @@ export const Primary = () => {
       lineName: "line1",
       timestamp: 1546300800000,
       value: 5,
-
     },
     {
       lineName: "line1",
@@ -36,7 +35,6 @@ export const Primary = () => {
       lineName: "line2",
       timestamp: 1546300700000,
       value: 5,
-
     },
     {
       lineName: "line2",
@@ -86,8 +84,8 @@ export const Primary = () => {
   const mockData3 = [
     {
       lineName: "line1",
-      timestamp: 1546300800000,
-      value: 30,
+      timestamp: 1546301000000,
+      value: 10,
     },
     {
       lineName: "line1",
@@ -96,8 +94,8 @@ export const Primary = () => {
     },
     {
       lineName: "line1",
-      timestamp: 1546301000000,
-      value: 10,
+      timestamp: 1546300800000,
+      value: 30,
     },
   ];
 
@@ -107,15 +105,15 @@ export const Primary = () => {
       color: "red",
       animationDuration: 0,
     },
-  ]
+  ];
 
   const mockLines2 = [
     {
       dataKey: "value",
-      color: "pink",
+      color: "purple",
       animationDuration: 2000,
     },
-  ]
+  ];
 
   const mockMultipleLines = [
     {
@@ -126,7 +124,7 @@ export const Primary = () => {
     {
       dataKey: "value2",
       color: "blue",
-    }
+    },
   ];
 
   const mockRefLines: TimeseriesReferenceLineProps[] = [
@@ -141,7 +139,7 @@ export const Primary = () => {
       coordinate: 17,
       label: "ref line 2",
       color: "red",
-    }
+    },
   ];
 
   return (
@@ -151,7 +149,7 @@ export const Primary = () => {
         xAxisDataKey="timestamp"
         yAxisDataKey="value"
         lines={mockLines}
-      /> 
+      />
       <TimeseriesChart
         data={mockDataMultiLine}
         xAxisDataKey="timestamp"
