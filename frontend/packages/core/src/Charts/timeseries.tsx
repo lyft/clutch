@@ -11,7 +11,7 @@ import {
   YAxis,
 } from "recharts";
 
-import { calculateDomainEdges, localTimeFormatter } from "./helpers";
+import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./helpers";
 
 export type ReferenceLineAxis = "x" | "y";
 /*
@@ -58,12 +58,12 @@ export interface TimeseriesChartProps {
   the XAxis, and same for Y. Note that we currently set the XAxis to be a time scale, hence the name
   Timeseries Chart).
   
-  *** VERY IMPORTANT ***
   The data will be internally sorted by the XAxis dataKey when using single line mode. When having multiple lines
   (singleLineMode is false) then the user is responsible for sorting and grouping the data appropriately. 
   If they do not sort and group it, there can be discontinuities in the lines. Also, when using multiple lines,
   the user should pass the yAxisDataKey as the biggest ranged y axis datakey in the data, otherwise data will get chopped off.
-  *** END VERY IMPORTANT ***
+
+  The timestamps are interpreted as unix milliseconds.
 */
 const TimeseriesChart = ({
   data,
@@ -99,7 +99,9 @@ const TimeseriesChart = ({
   // Depending on the distance between the max and min timestamps, we calculate a set of ticks at certain intervals
   // (I.e. if there are several minutes, we might use minute intervals, whereas if there are only a few minutes range,
   // we would use 30 second intervals, and if the range consists of hours, we might use 15 or 30 minute intervals)
+  let ticks = [];
   if (friendlyTicks) {
+    ticks = calculateTicks(data, xAxisDataKey);
   }
 
   return (
@@ -109,10 +111,10 @@ const TimeseriesChart = ({
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
-          scale="linear"
           domain={[xAxisDomainMin, xAxisDomainMax]}
           tickFormatter={tickFormatterFunc}
-          allowDataOverflow={true}
+          allowDataOverflow
+          ticks={friendlyTicks ? ticks : null}
         />
         {
           // Note that if a number is NaN Recharts will default the domain to `auto`

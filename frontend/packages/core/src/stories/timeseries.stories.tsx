@@ -51,12 +51,12 @@ export const Primary = () => {
   const mockDataMultiLine = [
     {
       lineName: "line1",
-      timestamp: 1546301800,
+      timestamp: 1546201800,
       value2: 15,
     },
     {
       lineName: "line1",
-      timestamp: 1546301900,
+      timestamp: 1546291900,
       value2: 20,
     },
     {
@@ -66,12 +66,12 @@ export const Primary = () => {
     },
     {
       lineName: "line2",
-      timestamp: 1546301820,
+      timestamp: 1546201820,
       value: 10,
     },
     {
       lineName: "line2",
-      timestamp: 1546301930,
+      timestamp: 1546291930,
       value: 20,
     },
     {
@@ -151,6 +151,7 @@ export const Primary = () => {
         lines={mockLines}
         xDomainSpread={0.2}
         yDomainSpread={0.2}
+        friendlyTicks
       />
       <TimeseriesChart
         data={mockDataMultiLine}
@@ -160,6 +161,7 @@ export const Primary = () => {
         singleLineMode={false}
         xDomainSpread={0.2}
         yDomainSpread={0.2}
+        friendlyTicks
       />
       <TimeseriesChart
         data={mockData3}
