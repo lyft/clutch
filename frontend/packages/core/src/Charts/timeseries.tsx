@@ -10,11 +10,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { tickFormatterFunc, calculateDomainEdges } from "./helpers";
 
-const tickFormatterFunc = timeStamp => {
-  const date = new Date(timeStamp);
-  return date.toLocaleTimeString();
-};
 
 export type ReferenceLineAxis = "x" | "y";
 /*
@@ -43,7 +40,9 @@ export interface TimeseriesChartProps {
   refLines?: TimeseriesReferenceLineProps[];
   singleLineMode?: boolean; // if false, the Y Axis will be based off the max and min of all data combined
   // The assumption is that multiple lines would want to share the same Y Axis.
-  // TODO: add ref dots, ref areas, zoom enabled, auto colors, legend enabled,
+  drawDots?: boolean;
+  enableLegend?: boolean;
+  // TODO: add ref dots, ref areas, zoom enabled, auto colors,
   // tooltip options, activeDot options, dark mode / styling,
 }
 
@@ -66,10 +65,16 @@ const TimeseriesChart = ({
   lines,
   refLines,
   singleLineMode = true,
+  drawDots = true,
+  enableLegend = true,
 }: TimeseriesChartProps) => {
   if (singleLineMode) {
     data.sort((a, b) => a[xAxisDataKey] - b[xAxisDataKey]);
   }
+
+  const [yAxisDomainMin, yAxisDomainMax] = calculateDomainEdges(data, yAxisDataKey, .1);
+  const [xAxisDomainMin, xAxisDomainMax] = calculateDomainEdges(data, xAxisDataKey, .1);
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
@@ -78,16 +83,16 @@ const TimeseriesChart = ({
           dataKey={xAxisDataKey}
           type="number"
           scale="time"
-          domain={["dataMin - 1000", "dataMax + 1000"]}
+          domain={[xAxisDomainMin, xAxisDomainMax]}
           tickFormatter={tickFormatterFunc}
         />
         {singleLineMode ? (
-          <YAxis dataKey={yAxisDataKey} domain={["dataMin", "dataMax"]} type="number" />
+          <YAxis dataKey={yAxisDataKey} domain={[yAxisDomainMin, yAxisDomainMax]} type="number" />
         ) : (
           <YAxis type="number" />
         )}
         <Tooltip />
-        <Legend />
+        {enableLegend ? <Legend /> : null}
         {lines
           ? lines.map((line, index) => {
               return (
@@ -99,6 +104,7 @@ const TimeseriesChart = ({
                   animationDuration={
                     line.animationDuration !== null ? line.animationDuration : null
                   }
+                  dot={drawDots}
                 />
               );
             })

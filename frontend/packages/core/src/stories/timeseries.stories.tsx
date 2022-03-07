@@ -163,6 +163,8 @@ export const Primary = () => {
         yAxisDataKey="value"
         lines={mockLines2}
         refLines={mockRefLines}
+        drawDots={false}
+        enableLegend={false}
       />
     </ChartContainer>
   );
