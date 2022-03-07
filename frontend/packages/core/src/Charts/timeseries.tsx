@@ -11,7 +11,7 @@ import {
   YAxis,
 } from "recharts";
 
-import { calculateDomainEdges, tickFormatterFunc } from "./helpers";
+import { calculateDomainEdges, localTimeFormatter } from "./helpers";
 
 export type ReferenceLineAxis = "x" | "y";
 /*
@@ -43,6 +43,10 @@ export interface TimeseriesChartProps {
   drawDots?: boolean;
   enableLegend?: boolean;
   enableGrid?: boolean;
+  tickFormatterFunc?: (timeStamp: number) => string;
+  xDomainSpread?: number | null;
+  yDomainSpread?: number | null;
+  friendlyTicks?: boolean;
   // TODO: add ref dots, ref areas, zoom enabled, auto colors,
   // tooltip options, activeDot options, dark mode / styling,
 }
@@ -56,7 +60,8 @@ export interface TimeseriesChartProps {
   *** VERY IMPORTANT ***
   The data will be internally sorted by the XAxis dataKey when using single line mode. When having multiple lines
   (singleLineMode is false) then the user is responsible for sorting and grouping the data appropriately. 
-  If they do not sort and group it, there can be discontinuities in the lines.
+  If they do not sort and group it, there can be discontinuities in the lines. Also, when using multiple lines,
+  the user should pass the yAxisDataKey as the biggest ranged y axis datakey in the data, otherwise data will get chopped off.
   *** END VERY IMPORTANT ***
 */
 const TimeseriesChart = ({
@@ -69,13 +74,31 @@ const TimeseriesChart = ({
   drawDots = true,
   enableLegend = true,
   enableGrid = true,
+  tickFormatterFunc = localTimeFormatter,
+  xDomainSpread,
+  yDomainSpread,
+  friendlyTicks = false,
 }: TimeseriesChartProps) => {
   if (singleLineMode) {
     data.sort((a, b) => a[xAxisDataKey] - b[xAxisDataKey]);
   }
+  const [yAxisDomainMin, yAxisDomainMax] = calculateDomainEdges(
+    data,
+    yAxisDataKey,
+    yDomainSpread === null ? 0 : yDomainSpread
+  );
+  const [xAxisDomainMin, xAxisDomainMax] = calculateDomainEdges(
+    data,
+    xAxisDataKey,
+    xDomainSpread === null ? 0 : xDomainSpread
+  );
 
-  const [yAxisDomainMin, yAxisDomainMax] = calculateDomainEdges(data, yAxisDataKey, 0.1);
-  const [xAxisDomainMin, xAxisDomainMax] = calculateDomainEdges(data, xAxisDataKey, 0.1);
+  // In the spirit of making a friendly UX, there is an option to generate evenly spaced, round-timestamped, ticks.
+  // Depending on the distance between the max and min timestamps, we calculate a set of ticks at certain intervals
+  // (I.e. if there are several minutes, we might use minute intervals, whereas if there are only a few minutes range,
+  // we would use 30 second intervals, and if the range consists of hours, we might use 15 or 30 minute intervals)
+  if (friendlyTicks) {
+  }
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -88,11 +111,14 @@ const TimeseriesChart = ({
           domain={[xAxisDomainMin, xAxisDomainMax]}
           tickFormatter={tickFormatterFunc}
         />
-        {singleLineMode ? (
-          <YAxis dataKey={yAxisDataKey} domain={[yAxisDomainMin, yAxisDomainMax]} type="number" />
-        ) : (
-          <YAxis type="number" />
-        )}
+        {
+          // Note that if a number is NaN Recharts will default the domain to `auto`
+          singleLineMode ? (
+            <YAxis dataKey={yAxisDataKey} domain={[yAxisDomainMin, yAxisDomainMax]} type="number" />
+          ) : (
+            <YAxis type="number" domain={[yAxisDomainMin, yAxisDomainMax]} />
+          )
+        }
         <Tooltip labelFormatter={tickFormatterFunc} />
         {enableLegend ? <Legend /> : null}
         {lines
@@ -127,7 +153,7 @@ const TimeseriesChart = ({
                   y={refLine.coordinate}
                   label={refLine.label}
                   stroke={refLine.color}
-                  strokeDasharray="3 4"
+                  strokeDasharray="4 4"
                 />
               );
             })

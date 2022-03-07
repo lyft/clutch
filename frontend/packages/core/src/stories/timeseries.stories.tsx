@@ -149,13 +149,17 @@ export const Primary = () => {
         xAxisDataKey="timestamp"
         yAxisDataKey="value"
         lines={mockLines}
+        xDomainSpread={0.2}
+        yDomainSpread={0.2}
       />
       <TimeseriesChart
         data={mockDataMultiLine}
         xAxisDataKey="timestamp"
-        yAxisDataKey="value"
+        yAxisDataKey="value2"
         lines={mockMultipleLines}
         singleLineMode={false}
+        xDomainSpread={0.2}
+        yDomainSpread={0.2}
       />
       <TimeseriesChart
         data={mockData3}
@@ -165,6 +169,9 @@ export const Primary = () => {
         refLines={mockRefLines}
         drawDots={false}
         enableLegend={false}
+        enableGrid={false}
+        tickFormatterFunc={null}
+        xDomainSpread={null}
       />
     </ChartContainer>
   );
