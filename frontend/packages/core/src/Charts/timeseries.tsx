@@ -46,6 +46,7 @@ export interface TimeseriesChartProps {
   tickFormatterFunc?: (timeStamp: number) => string;
   xDomainSpread?: number | null;
   yDomainSpread?: number | null;
+  connectNulls?: boolean;
   friendlyTicks?: boolean;
   // TODO: add ref dots, ref areas, zoom enabled, auto colors,
   // tooltip options, activeDot options, dark mode / styling,
@@ -77,6 +78,7 @@ const TimeseriesChart = ({
   tickFormatterFunc = localTimeFormatter,
   xDomainSpread,
   yDomainSpread,
+  connectNulls = false,
   friendlyTicks = false,
 }: TimeseriesChartProps) => {
   if (singleLineMode) {
@@ -107,9 +109,10 @@ const TimeseriesChart = ({
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
-          scale="time"
+          scale="linear"
           domain={[xAxisDomainMin, xAxisDomainMax]}
           tickFormatter={tickFormatterFunc}
+          allowDataOverflow={true}
         />
         {
           // Note that if a number is NaN Recharts will default the domain to `auto`
@@ -133,6 +136,7 @@ const TimeseriesChart = ({
                     line.animationDuration !== null ? line.animationDuration : null
                   }
                   dot={drawDots}
+                  connectNulls={connectNulls}
                 />
               );
             })

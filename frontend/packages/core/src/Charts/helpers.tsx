@@ -28,4 +28,27 @@ export const calculateDomainEdges = (data, dataKey: string, edgeRatio: number) =
   return [minEdge, maxEdge];
 };
 
-export const calculateTicks = (data, dataKey: string) => {};
+export const calculateTicks = (data, dataKey: string) => {
+  /*
+    const { min, max } = getMinAndMaxOfRangeUsingKey(data, dataKey);
+
+    // Zoom levels
+
+    const diff = max - min;
+    switch(diff) {
+        case 0:
+
+        case 1:
+
+        case 2:
+
+        case 3:
+    }
+
+        const now = new Date();
+        const domainToday = d3.scaleTime().domain([d3.timeDay.floor(now), d3.timeDay.ceil(now)]);
+        const timeFormatter = (tick) => {return d3.timeFormat('%H:%M:%S')(new Date(tick));};
+        const ticks = domainToday.ticks(d3.timeHour.every(1));
+
+*/
+};
