@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Paper, TextField, Toast, Typography } from "@clutch-sh/core";
+import { Grid, Paper, TextField, Toast, Typography, useNavigate } from "@clutch-sh/core";
 import { Box, CircularProgress } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
@@ -18,7 +18,12 @@ const initialState: CatalogState = {
 };
 
 const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
+  const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(catalogReducer, initialState);
+
+  const navigateToProject = project => {
+    navigate(`/catalog/${project.name}`);
+  };
 
   const setError = err => dispatch({ type: "HYDRATE_ERROR", payload: { result: err.message } });
 
@@ -83,7 +88,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
       </div>
       <Grid container direction="row" spacing={5}>
         {state.projects.map(p => (
-          <Grid item>
+          <Grid item onClick={() => navigateToProject(p)}>
             <ProjectCard project={p} onRemove={() => triggerProjectRemove(p)} />
           </Grid>
         ))}

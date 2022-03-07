@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Card, Grid, IconButton, Typography, useNavigate } from "@clutch-sh/core";
+import { Card, Grid, IconButton, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -32,20 +32,15 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
-  const navigate = useNavigate();
-  const navigateToProject = () => {
-    navigate(`/catalog/${project.name}`);
-  };
-
   const remove = event => {
     event.stopPropagation();
     onRemove();
   };
 
   return (
-    <StyledCard onClick={navigateToProject}>
+    <StyledCard>
       <Grid container wrap="nowrap">
-        <Grid container item direction="row" alignItems="center" style={{ marginTop: "16px" }}>
+        <Grid container item direction="row" alignItems="flex-end" style={{ marginTop: "16px" }}>
           <Grid item xs={1}>
             <LanguageIcon language={project.languages?.[0]} />
           </Grid>
