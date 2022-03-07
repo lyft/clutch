@@ -91,6 +91,7 @@ func (m *ListViewItem) validate(all bool) error {
 	if len(errors) > 0 {
 		return ListViewItemMultiError(errors)
 	}
+
 	return nil
 }
 

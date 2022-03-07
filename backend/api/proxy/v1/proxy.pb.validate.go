@@ -122,6 +122,7 @@ func (m *RequestProxyRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return RequestProxyRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -300,6 +301,7 @@ func (m *RequestProxyResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return RequestProxyResponseMultiError(errors)
 	}
+
 	return nil
 }
 

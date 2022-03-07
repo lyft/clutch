@@ -10031,6 +10031,68 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace shortlink. */
+            namespace shortlink {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config shortlinkChars */
+                        shortlinkChars?: (string|null);
+
+                        /** Config shortlinkLength */
+                        shortlinkLength?: (number|Long|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.shortlink.v1.IConfig);
+
+                        /** Config shortlinkChars. */
+                        public shortlinkChars: string;
+
+                        /** Config shortlinkLength. */
+                        public shortlinkLength: (number|Long);
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.shortlink.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.shortlink.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace sourcegraph. */
             namespace sourcegraph {
 
@@ -22200,8 +22262,8 @@ export namespace clutch {
             /** Properties of a GetRequest. */
             interface IGetRequest {
 
-                /** GetRequest shortlinkHash */
-                shortlinkHash?: (string|null);
+                /** GetRequest hash */
+                hash?: (string|null);
             }
 
             /** Represents a GetRequest. */
@@ -22213,8 +22275,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.shortlink.v1.IGetRequest);
 
-                /** GetRequest shortlinkHash. */
-                public shortlinkHash: string;
+                /** GetRequest hash. */
+                public hash: string;
 
                 /**
                  * Verifies a GetRequest message.
@@ -22306,7 +22368,7 @@ export namespace clutch {
                 key?: (string|null);
 
                 /** ShareableState state */
-                state?: (google.protobuf.IAny|null);
+                state?: (google.protobuf.IValue|null);
             }
 
             /** Represents a ShareableState. */
@@ -22322,7 +22384,7 @@ export namespace clutch {
                 public key: string;
 
                 /** ShareableState state. */
-                public state?: (google.protobuf.IAny|null);
+                public state?: (google.protobuf.IValue|null);
 
                 /**
                  * Verifies a ShareableState message.

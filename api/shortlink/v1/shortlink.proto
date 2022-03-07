@@ -4,9 +4,9 @@ package clutch.shortlink.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/shortlink/v1;shortlinkv1";
 
-import "google/protobuf/any.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "google/protobuf/struct.proto";
 
 import "api/v1/annotations.proto";
 
@@ -38,7 +38,7 @@ message CreateResponse {
 }
 
 message GetRequest {
-  string shortlink_hash = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string hash = 1 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message GetResponse {
@@ -52,5 +52,5 @@ message GetResponse {
 // For example adding a "revision" identifier in the future.
 message ShareableState {
   string key = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  google.protobuf.Any state = 2 [ (validate.rules).any.required = true ];
+  google.protobuf.Value state = 2 [ (validate.rules).any.required = true ];
 }

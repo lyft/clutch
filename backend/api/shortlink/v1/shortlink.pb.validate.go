@@ -116,6 +116,7 @@ func (m *CreateRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -217,6 +218,7 @@ func (m *CreateResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -313,9 +315,9 @@ func (m *GetRequest) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetShortlinkHash()) < 1 {
+	if len(m.GetHash()) < 1 {
 		err := GetRequestValidationError{
-			field:  "ShortlinkHash",
+			field:  "Hash",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {
@@ -327,6 +329,7 @@ func (m *GetRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -461,6 +464,7 @@ func (m *GetResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -585,6 +589,7 @@ func (m *ShareableState) validate(all bool) error {
 	if len(errors) > 0 {
 		return ShareableStateMultiError(errors)
 	}
+
 	return nil
 }
 

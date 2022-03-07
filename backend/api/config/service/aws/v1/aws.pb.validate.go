@@ -166,6 +166,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -275,6 +276,7 @@ func (m *ClientConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return ClientConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -402,6 +404,7 @@ func (m *DynamodbConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return DynamodbConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -535,6 +538,7 @@ func (m *ScalingLimits) validate(all bool) error {
 	if len(errors) > 0 {
 		return ScalingLimitsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -678,6 +682,7 @@ func (m *AWSAccount) validate(all bool) error {
 	if len(errors) > 0 {
 		return AWSAccountMultiError(errors)
 	}
+
 	return nil
 }
 

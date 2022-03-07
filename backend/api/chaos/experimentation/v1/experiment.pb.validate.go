@@ -151,6 +151,7 @@ func (m *Experiment) validate(all bool) error {
 	if len(errors) > 0 {
 		return ExperimentMultiError(errors)
 	}
+
 	return nil
 }
 

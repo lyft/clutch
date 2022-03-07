@@ -176,6 +176,7 @@ func (m *FaultConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return FaultConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -314,6 +315,7 @@ func (m *ErrorFault) validate(all bool) error {
 	if len(errors) > 0 {
 		return ErrorFaultMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -452,6 +454,7 @@ func (m *LatencyFault) validate(all bool) error {
 	if len(errors) > 0 {
 		return LatencyFaultMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -608,6 +611,7 @@ func (m *FaultTargeting) validate(all bool) error {
 	if len(errors) > 0 {
 		return FaultTargetingMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -718,6 +722,7 @@ func (m *SingleCluster) validate(all bool) error {
 	if len(errors) > 0 {
 		return SingleClusterMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -828,6 +833,7 @@ func (m *FaultPercentage) validate(all bool) error {
 	if len(errors) > 0 {
 		return FaultPercentageMultiError(errors)
 	}
+
 	return nil
 }
 

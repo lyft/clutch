@@ -145,6 +145,7 @@ func (m *SlackConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return SlackConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -265,6 +266,7 @@ func (m *CustomMessage) validate(all bool) error {
 	if len(errors) > 0 {
 		return CustomMessageMultiError(errors)
 	}
+
 	return nil
 }
 

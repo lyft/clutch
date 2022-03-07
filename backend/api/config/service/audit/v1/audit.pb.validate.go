@@ -69,6 +69,7 @@ func (m *EventFilter) validate(all bool) error {
 	if len(errors) > 0 {
 		return EventFilterMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -202,6 +203,7 @@ func (m *Filter) validate(all bool) error {
 	if len(errors) > 0 {
 		return FilterMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -329,6 +331,7 @@ func (m *SinkConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return SinkConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -475,6 +478,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 
