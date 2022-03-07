@@ -112,7 +112,7 @@ const TimeseriesChart = ({
           dataKey={xAxisDataKey}
           type="number"
           domain={[xAxisDomainMin, xAxisDomainMax]}
-          tickFormatter={tickFormatterFunc}
+          tickFormatter={tickFormatterFunc || null}
           allowDataOverflow
           ticks={friendlyTicks ? ticks : null}
         />
@@ -124,7 +124,7 @@ const TimeseriesChart = ({
             <YAxis type="number" domain={[yAxisDomainMin, yAxisDomainMax]} />
           )
         }
-        <Tooltip labelFormatter={tickFormatterFunc} />
+        <Tooltip labelFormatter={tickFormatterFunc || null} />
         {enableLegend ? <Legend /> : null}
         {lines
           ? lines.map((line, index) => {

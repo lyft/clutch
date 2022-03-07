@@ -1,3 +1,4 @@
+// TODO: add more formatting funcs
 export const localTimeFormatter = timeStamp => {
   const date = new Date(timeStamp);
   return date.toLocaleTimeString();
