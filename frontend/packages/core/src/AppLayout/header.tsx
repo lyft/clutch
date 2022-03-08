@@ -47,11 +47,11 @@ const Header: React.FC = () => {
             <Box>
               <SearchField />
             </Box>
-            {/* <SimpleFeatureFlag feature="shortLinks">
-              <FeatureOn> */}
-            <ShortLinker />
-            {/* </FeatureOn>
-            </SimpleFeatureFlag> */}
+            <SimpleFeatureFlag feature="shortLinks">
+              <FeatureOn>
+                <ShortLinker />
+              </FeatureOn>
+            </SimpleFeatureFlag>
             {showNotifications && <Notifications />}
             <SimpleFeatureFlag feature="npsHeader">
               <FeatureOn>

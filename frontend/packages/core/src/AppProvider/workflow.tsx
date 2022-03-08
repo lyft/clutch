@@ -24,10 +24,12 @@ interface BaseWorkflowConfiguration {
 }
 
 export interface Workflow extends BaseWorkflowConfiguration {
+  shortLink?: boolean;
   routes: ConfiguredRoute[];
 }
 
 export interface WorkflowConfiguration extends BaseWorkflowConfiguration {
+  shortLink?: boolean;
   routes: {
     [key: string]: Route;
   };

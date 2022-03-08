@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   ClickAwayListener,
   Grid,
@@ -12,8 +13,10 @@ import LinkIcon from "@material-ui/icons/Link";
 
 import { Button, ClipboardButton, IconButton } from "../button";
 import { useAppContext, useStorageContext } from "../Contexts";
+import { Toast } from "../Feedback";
 import { TextField } from "../Input";
 import { client } from "../Network";
+import type { ClutchError } from "../Network/errors";
 import styled from "../styled";
 
 import { workflowByRoute } from "./utils";
@@ -29,7 +32,7 @@ const Popper = styled(MuiPopper)({
 });
 
 const Paper = styled(MuiPaper)({
-  width: "450px",
+  width: "400px",
   height: "100px",
   padding: "15px",
   boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
@@ -54,30 +57,39 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
 );
 
 const ShortLinker = () => {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
   const { workflows } = useAppContext();
   const {
     tempHydrateStore,
     data: { store },
   } = useStorageContext();
+  const anchorRef = React.useRef(null);
   const location = useLocation();
+  const [open, setOpen] = React.useState(false);
   const [shortLink, setShortLink] = React.useState<string | null>(null);
+  const [validWorkflow, setValidWorkflow] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<ClutchError | null>(null);
 
+  const checkValidWorkflow = () => {
+    const workflow = workflowByRoute(workflows, location.pathname);
+
+    setValidWorkflow(workflow?.shortLink ?? false);
+  };
+
+  // will trigger on a location change, emptying out our temporary storage and rechecking the workflow
   React.useEffect(() => {
     if (workflows.length) {
+      checkValidWorkflow();
     }
-    // Will clear our temp storage on location change
+
     store(null, null, {});
   }, [location]);
 
+  // Used for initial load to verify that once our workflows have loaded we are on a valid workflow
   React.useEffect(() => {
     if (workflows.length) {
-      console.log(workflowByRoute(workflows, location.pathname));
+      checkValidWorkflow();
     }
   }, [workflows]);
-
-  // on click, take current route and temp hydrate data and do stuff
 
   const handleToggle = () => {
     setOpen(!open);
@@ -85,35 +97,45 @@ const ShortLinker = () => {
   };
 
   const handleClose = event => {
-    // handler so that it wont close when selecting an item in the select
-    if (event.target.localName === "body") {
-      return;
-    }
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
     setOpen(false);
   };
 
+  // Will rotate our object into an array of type IShareableState to send in the API request
+  const rotateStore = (): IClutch.shortlink.v1.IShareableState[] =>
+    Object.keys(tempHydrateStore).map(key => ({ key, state: tempHydrateStore[key] }));
+
   const generateShortLink = () => {
-    // call api with tempHydrateStore and route
-    // client
-    //   .post("/v1/...", { route: window.location.href, data: tempHydrateStore })
-    //   .then(response => {
-    //     setShortLink(`${window.location.origin}/sl/${response.code}`);
-    //   })
-    //   .catch((error: ClutchError) => {
-    //     console.warn("failed to generate short link", error); // eslint-disable-line
-    //     // throw a toast???
-    //   });
-    // get code
-    // set short link
-    const code = 1234;
-    setShortLink(`${window.location.origin}/sl/${code}`);
+    const requestData: IClutch.shortlink.v1.ICreateRequest = {
+      path: `${location.pathname}${location.search}`,
+      state: rotateStore(),
+    };
+
+    client
+      .post("/v1/shortlink/create", requestData)
+      .then(response => {
+        const { hash } = response.data as IClutch.shortlink.v1.ICreateResponse;
+        setShortLink(`${window.location.origin}/sl/${hash}`);
+      })
+      .catch((err: ClutchError) => {
+        console.warn("failed to generate short link", err); // eslint-disable-line
+        setError(err);
+      });
   };
+
+  if (!validWorkflow) {
+    return null;
+  }
 
   return (
     <>
+      {error && (
+        <Toast severity="error" onClose={() => setError(null)}>
+          Unable to generate shortlink
+        </Toast>
+      )}
       <StyledLinkIcon
         variant="neutral"
         ref={anchorRef}
