@@ -67,8 +67,8 @@ export interface TimeseriesChartProps {
 */
 const TimeseriesChart = ({
   data,
-  xAxisDataKey,
-  yAxisDataKey,
+  xAxisDataKey = "timestamp",
+  yAxisDataKey = "value",
   lines,
   refLines,
   singleLineMode = true,
