@@ -47,7 +47,7 @@ export interface TimeseriesChartProps {
   xDomainSpread?: number | null;
   yDomainSpread?: number | null;
   connectNulls?: boolean;
-  friendlyTicks?: boolean;
+  regularIntervalTicks?: boolean;
   // TODO: add ref dots, ref areas, zoom enabled, auto colors,
   // tooltip options, activeDot options, dark mode / styling,
 }
@@ -76,10 +76,10 @@ const TimeseriesChart = ({
   enableLegend = true,
   enableGrid = true,
   tickFormatterFunc = localTimeFormatter,
-  xDomainSpread,
-  yDomainSpread,
+  xDomainSpread = 0.2,
+  yDomainSpread = 0.2,
   connectNulls = false,
-  friendlyTicks = false,
+  regularIntervalTicks = false,
 }: TimeseriesChartProps) => {
   if (singleLineMode) {
     data.sort((a, b) => a[xAxisDataKey] - b[xAxisDataKey]);
@@ -100,7 +100,7 @@ const TimeseriesChart = ({
   // (I.e. if there are several minutes, we might use minute intervals, whereas if there are only a few minutes range,
   // we would use 30 second intervals, and if the range consists of hours, we might use 15 or 30 minute intervals)
   let ticks = [];
-  if (friendlyTicks) {
+  if (regularIntervalTicks) {
     ticks = calculateTicks(data, xAxisDataKey);
   }
 
@@ -114,7 +114,7 @@ const TimeseriesChart = ({
           domain={[xAxisDomainMin, xAxisDomainMax]}
           tickFormatter={tickFormatterFunc || null}
           allowDataOverflow
-          ticks={friendlyTicks ? ticks : null}
+          ticks={regularIntervalTicks ? ticks : null}
         />
         {
           // Note that if a number is NaN Recharts will default the domain to `auto`
@@ -134,36 +134,28 @@ const TimeseriesChart = ({
                   type="linear"
                   dataKey={line.dataKey}
                   stroke={line.color}
-                  animationDuration={
-                    line.animationDuration !== null ? line.animationDuration : null
-                  }
+                  animationDuration={line.animationDuration ?? null}
                   dot={drawDots}
                   connectNulls={connectNulls}
                 />
               );
             })
           : null}
-        {refLines
-          ? refLines.map((refLine, index) => {
-              return refLine.axis === "x" ? (
-                <ReferenceLine
-                  key={index.toString() + refLine.axis + refLine.coordinate.toString()}
-                  x={refLine.coordinate}
-                  label={refLine.label}
-                  stroke={refLine.color}
-                  strokeDasharray="3 3"
-                />
-              ) : (
-                <ReferenceLine
-                  key={index.toString() + refLine.axis + refLine.coordinate.toString()}
-                  y={refLine.coordinate}
-                  label={refLine.label}
-                  stroke={refLine.color}
-                  strokeDasharray="4 4"
-                />
-              );
-            })
-          : null}
+        {refLines &&
+          refLines.map((refLine, index) => {
+            const props = {
+              strokeDashArray: refLine.axis === "x" ? "3 3" : "4 4",
+            };
+            props[refLine.axis] = refLine.coordinate;
+            return (
+              <ReferenceLine
+                key={index.toString() + refLine.axis + refLine.coordinate.toString()}
+                label={refLine.label}
+                stroke={refLine.color}
+                {...props}
+              />
+            );
+          })}
       </LineChart>
     </ResponsiveContainer>
   );

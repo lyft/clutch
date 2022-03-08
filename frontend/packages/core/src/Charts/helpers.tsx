@@ -1,18 +1,16 @@
 // TODO: add more formatting funcs
-export const localTimeFormatter = timeStamp => {
-  const date = new Date(timeStamp);
-  return date.toLocaleTimeString();
+export const localTimeFormatter = (timestamp: number) => {
+  return new Date(timestamp).toLocaleTimeString();
 };
 
-const getMinAndMaxOfRangeUsingKey = (data, key) => {
-  const min = Math.min(...data.filter(d => d[key]).map(d => d[key]));
-  const max = Math.max(...data.filter(d => d[key]).map(d => d[key]));
-  return { min, max };
+const getMinAndMaxOfRangeUsingKey = (data: any, key: string) => {
+  const filtered = data.filter(d => d[key]).map(d => d[key]);
+  return { min: Math.min(filtered), max: Math.max(filtered) };
 };
 
 // Edge ratio refers to the multiplicative part of the amount that will be added to the max,
 // and subtracted from the min.
-export const calculateDomainEdges = (data, dataKey: string, edgeRatio: number) => {
+export const calculateDomainEdges = (data: any, dataKey: string, edgeRatio: number) => {
   // Get the max and min of the domain, then calculate a certain amount`out from each edge.
   const { min, max } = getMinAndMaxOfRangeUsingKey(data, dataKey);
   if (edgeRatio <= 0) {
@@ -66,7 +64,7 @@ const zoomLevelsToIntervals = {
 
 // This function allows us to get the starting point for our ticks, as well as the space between ticks.
 // We have presets according to the span between the min and max timestamps.
-const getLeftSideAndIntervalForTicks = (min, max) => {
+const getLeftSideAndIntervalForTicks = (min: number, max: number) => {
   const diff = max - min;
   let zoomLevel = "";
   switch (true) {
@@ -122,7 +120,7 @@ const getLeftSideAndIntervalForTicks = (min, max) => {
 // We modulo down to the closest similar timestamp based off the difference between the min and max.
 // We then iterate from that value to the max pushing timestamps to our array when we land on an
 // appropriate interval.
-export const calculateTicks = (data, dataKey: string) => {
+export const calculateTicks = (data: any, dataKey: string) => {
   const { min, max } = getMinAndMaxOfRangeUsingKey(data, dataKey);
   const { leftSide, interval } = getLeftSideAndIntervalForTicks(min, max);
   const ticks = [];

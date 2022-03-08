@@ -11,10 +11,10 @@ export default {
 
 const ChartContainer = styled("div")({
   width: 900,
-  height: 200,
+  height: 400,
 });
 
-export const Primary = () => {
+export const SingleDataLine = () => {
   const mockDataSingleLine = [
     {
       lineName: "line1",
@@ -32,22 +32,46 @@ export const Primary = () => {
       value: 30,
     },
     {
-      lineName: "line2",
+      lineName: "line1",
       timestamp: 1546300700000,
       value: 5,
     },
     {
-      lineName: "line2",
+      lineName: "line1",
       timestamp: 1546300600000,
       value: 20,
     },
     {
-      lineName: "line2",
+      lineName: "line1",
       timestamp: 1546301800000,
       value: 30,
     },
   ];
 
+  const mockLines = [
+    {
+      dataKey: "value",
+      color: "red",
+      animationDuration: 0,
+    },
+  ];
+
+  return (
+    <ChartContainer>
+      <TimeseriesChart
+        data={mockDataSingleLine}
+        xAxisDataKey="timestamp"
+        yAxisDataKey="value"
+        lines={mockLines}
+        xDomainSpread={0.2}
+        yDomainSpread={0.2}
+        regularIntervalTicks
+      />
+    </ChartContainer>
+  );
+};
+
+export const MultiLine = () => {
   const mockDataMultiLine = [
     {
       lineName: "line1",
@@ -81,7 +105,36 @@ export const Primary = () => {
     },
   ];
 
-  const mockData3 = [
+  const mockMultipleLines = [
+    {
+      dataKey: "value",
+      color: "red",
+      animationDuration: 0,
+    },
+    {
+      dataKey: "value2",
+      color: "blue",
+    },
+  ];
+
+  return (
+    <ChartContainer>
+      <TimeseriesChart
+        data={mockDataMultiLine}
+        xAxisDataKey="timestamp"
+        yAxisDataKey="value2"
+        lines={mockMultipleLines}
+        singleLineMode={false}
+        xDomainSpread={0.3}
+        yDomainSpread={0.3}
+        regularIntervalTicks
+      />
+    </ChartContainer>
+  );
+};
+
+export const ReferenceLinesAndThingsDisabled = () => {
+  const mockData = [
     {
       lineName: "line1",
       timestamp: 1546301000000,
@@ -102,28 +155,8 @@ export const Primary = () => {
   const mockLines = [
     {
       dataKey: "value",
-      color: "red",
-      animationDuration: 0,
-    },
-  ];
-
-  const mockLines2 = [
-    {
-      dataKey: "value",
       color: "purple",
       animationDuration: 2000,
-    },
-  ];
-
-  const mockMultipleLines = [
-    {
-      dataKey: "value",
-      color: "red",
-      animationDuration: 0,
-    },
-    {
-      dataKey: "value2",
-      color: "blue",
     },
   ];
 
@@ -145,29 +178,10 @@ export const Primary = () => {
   return (
     <ChartContainer>
       <TimeseriesChart
-        data={mockDataSingleLine}
+        data={mockData}
         xAxisDataKey="timestamp"
         yAxisDataKey="value"
         lines={mockLines}
-        xDomainSpread={0.2}
-        yDomainSpread={0.2}
-        friendlyTicks
-      />
-      <TimeseriesChart
-        data={mockDataMultiLine}
-        xAxisDataKey="timestamp"
-        yAxisDataKey="value2"
-        lines={mockMultipleLines}
-        singleLineMode={false}
-        xDomainSpread={0.2}
-        yDomainSpread={0.2}
-        friendlyTicks
-      />
-      <TimeseriesChart
-        data={mockData3}
-        xAxisDataKey="timestamp"
-        yAxisDataKey="value"
-        lines={mockLines2}
         refLines={mockRefLines}
         drawDots={false}
         enableLegend={false}
