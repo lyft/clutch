@@ -1,7 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, MetadataTable, Paper, styled } from "@clutch-sh/core";
-import { Pie } from "@nivo/pie";
+import { Cell, Pie, PieChart } from "recharts";
 
 const SummaryCardTitle = styled("div")({
   fontWeight: 600,
@@ -44,23 +44,31 @@ interface FeaturedSummaryProps {
   }[];
 }
 
+const PIECHART_OUTER_RADIUS = 100;
+const PIECHART_INNER_RADIUS = 70;
+const PIECHART_ANIMATION_DURATION_MS = 200;
+
 const FeaturedSummary = ({ summary }: { summary: FeaturedSummaryProps }) => {
-  const values = summary?.data?.map(d => d.value);
-  const total = values.reduce((t, value) => t + value);
+  const total = (summary?.data || []).reduce((t, { value = 0 }) => t + value, 0);
   return (
     <FeaturedSummaryContainer item>
       <Paper>
         <SummaryCardTitle>{summary.name}</SummaryCardTitle>
         <PieContainer>
-          <Pie
-            data={summary?.data || []}
-            height={215}
-            width={215}
-            innerRadius={0.75}
-            colors={{ datum: "data.color" }}
-            enableArcLabels={false}
-            isInteractive={false}
-          />
+          <PieChart width={PIECHART_OUTER_RADIUS * 2} height={PIECHART_OUTER_RADIUS * 2}>
+            <Pie
+              data={summary?.data || []}
+              dataKey="value"
+              innerRadius={PIECHART_INNER_RADIUS}
+              outerRadius={PIECHART_OUTER_RADIUS}
+              legendType="none"
+              animationDuration={PIECHART_ANIMATION_DURATION_MS}
+            >
+              {summary?.data?.map(d => (
+                <Cell key={`cell-${d.id}`} fill={d.color} />
+              ))}
+            </Pie>
+          </PieChart>
           <PieLegendContainer>
             <div>
               <SummaryCardTitle>Total</SummaryCardTitle>

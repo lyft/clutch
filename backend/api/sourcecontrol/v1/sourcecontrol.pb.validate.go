@@ -60,6 +60,7 @@ func (m *GetRepositoryOptionsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetRepositoryOptionsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -165,6 +166,7 @@ func (m *Entity) validate(all bool) error {
 	if len(errors) > 0 {
 		return EntityMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -297,6 +299,7 @@ func (m *GetRepositoryOptionsResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetRepositoryOptionsResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -499,6 +502,7 @@ func (m *CreateRepositoryRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateRepositoryRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -602,6 +606,7 @@ func (m *CreateRepositoryResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateRepositoryResponseMultiError(errors)
 	}
+
 	return nil
 }
 

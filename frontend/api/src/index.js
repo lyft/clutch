@@ -24397,6 +24397,162 @@ export const clutch = $root.clutch = (() => {
                 return k8s;
             })();
 
+            service.shortlink = (function() {
+
+                /**
+                 * Namespace shortlink.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const shortlink = {};
+
+                shortlink.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.shortlink
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.shortlink.v1
+                         * @interface IConfig
+                         * @property {string|null} [shortlinkChars] Config shortlinkChars
+                         * @property {number|Long|null} [shortlinkLength] Config shortlinkLength
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.shortlink.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.shortlink.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config shortlinkChars.
+                         * @member {string} shortlinkChars
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.shortlinkChars = "";
+
+                        /**
+                         * Config shortlinkLength.
+                         * @member {number|Long} shortlinkLength
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.shortlinkLength = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.shortlinkChars != null && message.hasOwnProperty("shortlinkChars"))
+                                if (!$util.isString(message.shortlinkChars))
+                                    return "shortlinkChars: string expected";
+                            if (message.shortlinkLength != null && message.hasOwnProperty("shortlinkLength"))
+                                if (!$util.isInteger(message.shortlinkLength) && !(message.shortlinkLength && $util.isInteger(message.shortlinkLength.low) && $util.isInteger(message.shortlinkLength.high)))
+                                    return "shortlinkLength: integer|Long expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.shortlink.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.shortlink.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.shortlink.v1.Config();
+                            if (object.shortlinkChars != null)
+                                message.shortlinkChars = String(object.shortlinkChars);
+                            if (object.shortlinkLength != null)
+                                if ($util.Long)
+                                    (message.shortlinkLength = $util.Long.fromValue(object.shortlinkLength)).unsigned = false;
+                                else if (typeof object.shortlinkLength === "string")
+                                    message.shortlinkLength = parseInt(object.shortlinkLength, 10);
+                                else if (typeof object.shortlinkLength === "number")
+                                    message.shortlinkLength = object.shortlinkLength;
+                                else if (typeof object.shortlinkLength === "object")
+                                    message.shortlinkLength = new $util.LongBits(object.shortlinkLength.low >>> 0, object.shortlinkLength.high >>> 0).toNumber();
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @static
+                         * @param {clutch.config.service.shortlink.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.shortlinkChars = "";
+                                if ($util.Long) {
+                                    let long = new $util.Long(0, 0, false);
+                                    object.shortlinkLength = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.shortlinkLength = options.longs === String ? "0" : 0;
+                            }
+                            if (message.shortlinkChars != null && message.hasOwnProperty("shortlinkChars"))
+                                object.shortlinkChars = message.shortlinkChars;
+                            if (message.shortlinkLength != null && message.hasOwnProperty("shortlinkLength"))
+                                if (typeof message.shortlinkLength === "number")
+                                    object.shortlinkLength = options.longs === String ? String(message.shortlinkLength) : message.shortlinkLength;
+                                else
+                                    object.shortlinkLength = options.longs === String ? $util.Long.prototype.toString.call(message.shortlinkLength) : options.longs === Number ? new $util.LongBits(message.shortlinkLength.low >>> 0, message.shortlinkLength.high >>> 0).toNumber() : message.shortlinkLength;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.shortlink.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return shortlink;
+            })();
+
             service.sourcegraph = (function() {
 
                 /**
@@ -52987,7 +53143,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a GetRequest.
                  * @memberof clutch.shortlink.v1
                  * @interface IGetRequest
-                 * @property {string|null} [shortlinkHash] GetRequest shortlinkHash
+                 * @property {string|null} [hash] GetRequest hash
                  */
 
                 /**
@@ -53006,12 +53162,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetRequest shortlinkHash.
-                 * @member {string} shortlinkHash
+                 * GetRequest hash.
+                 * @member {string} hash
                  * @memberof clutch.shortlink.v1.GetRequest
                  * @instance
                  */
-                GetRequest.prototype.shortlinkHash = "";
+                GetRequest.prototype.hash = "";
 
                 /**
                  * Verifies a GetRequest message.
@@ -53024,9 +53180,9 @@ export const clutch = $root.clutch = (() => {
                 GetRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
-                        if (!$util.isString(message.shortlinkHash))
-                            return "shortlinkHash: string expected";
+                    if (message.hash != null && message.hasOwnProperty("hash"))
+                        if (!$util.isString(message.hash))
+                            return "hash: string expected";
                     return null;
                 };
 
@@ -53042,8 +53198,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.shortlink.v1.GetRequest)
                         return object;
                     let message = new $root.clutch.shortlink.v1.GetRequest();
-                    if (object.shortlinkHash != null)
-                        message.shortlinkHash = String(object.shortlinkHash);
+                    if (object.hash != null)
+                        message.hash = String(object.hash);
                     return message;
                 };
 
@@ -53061,9 +53217,9 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults)
-                        object.shortlinkHash = "";
-                    if (message.shortlinkHash != null && message.hasOwnProperty("shortlinkHash"))
-                        object.shortlinkHash = message.shortlinkHash;
+                        object.hash = "";
+                    if (message.hash != null && message.hasOwnProperty("hash"))
+                        object.hash = message.hash;
                     return object;
                 };
 
@@ -53224,7 +53380,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.shortlink.v1
                  * @interface IShareableState
                  * @property {string|null} [key] ShareableState key
-                 * @property {google.protobuf.IAny|null} [state] ShareableState state
+                 * @property {google.protobuf.IValue|null} [state] ShareableState state
                  */
 
                 /**
@@ -53252,7 +53408,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * ShareableState state.
-                 * @member {google.protobuf.IAny|null|undefined} state
+                 * @member {google.protobuf.IValue|null|undefined} state
                  * @memberof clutch.shortlink.v1.ShareableState
                  * @instance
                  */
@@ -53273,7 +53429,7 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isString(message.key))
                             return "key: string expected";
                     if (message.state != null && message.hasOwnProperty("state")) {
-                        let error = $root.google.protobuf.Any.verify(message.state);
+                        let error = $root.google.protobuf.Value.verify(message.state);
                         if (error)
                             return "state." + error;
                     }
@@ -53297,7 +53453,7 @@ export const clutch = $root.clutch = (() => {
                     if (object.state != null) {
                         if (typeof object.state !== "object")
                             throw TypeError(".clutch.shortlink.v1.ShareableState.state: object expected");
-                        message.state = $root.google.protobuf.Any.fromObject(object.state);
+                        message.state = $root.google.protobuf.Value.fromObject(object.state);
                     }
                     return message;
                 };
@@ -53322,7 +53478,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.key != null && message.hasOwnProperty("key"))
                         object.key = message.key;
                     if (message.state != null && message.hasOwnProperty("state"))
-                        object.state = $root.google.protobuf.Any.toObject(message.state, options);
+                        object.state = $root.google.protobuf.Value.toObject(message.state, options);
                     return object;
                 };
 

@@ -93,6 +93,7 @@ func (m *Config) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -259,6 +260,7 @@ func (m *Service) validate(all bool) error {
 	if len(errors) > 0 {
 		return ServiceMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -379,6 +381,7 @@ func (m *AllowRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return AllowRequestMultiError(errors)
 	}
+
 	return nil
 }
 

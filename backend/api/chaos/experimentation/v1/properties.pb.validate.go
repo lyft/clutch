@@ -94,6 +94,7 @@ func (m *PropertiesList) validate(all bool) error {
 	if len(errors) > 0 {
 		return PropertiesListMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -239,6 +240,7 @@ func (m *PropertiesMap) validate(all bool) error {
 	if len(errors) > 0 {
 		return PropertiesMapMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -415,6 +417,7 @@ func (m *Property) validate(all bool) error {
 	if len(errors) > 0 {
 		return PropertyMultiError(errors)
 	}
+
 	return nil
 }
 

@@ -93,6 +93,7 @@ func (m *GetStreamRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetStreamRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -221,6 +222,7 @@ func (m *GetStreamResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetStreamResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -357,6 +359,7 @@ func (m *UpdateShardCountRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return UpdateShardCountRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -458,6 +461,7 @@ func (m *UpdateShardCountResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return UpdateShardCountResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -566,6 +570,7 @@ func (m *Stream) validate(all bool) error {
 	if len(errors) > 0 {
 		return StreamMultiError(errors)
 	}
+
 	return nil
 }
 

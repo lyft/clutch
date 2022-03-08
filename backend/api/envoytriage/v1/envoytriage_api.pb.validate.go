@@ -94,6 +94,7 @@ func (m *ReadRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return ReadRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -261,6 +262,7 @@ func (m *ReadOperation) validate(all bool) error {
 	if len(errors) > 0 {
 		return ReadOperationMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -394,6 +396,7 @@ func (m *ReadResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return ReadResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -515,6 +518,7 @@ func (m *Address) validate(all bool) error {
 	if len(errors) > 0 {
 		return AddressMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -729,6 +733,7 @@ func (m *Result) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResultMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -835,6 +840,7 @@ func (m *NodeMetadata) validate(all bool) error {
 	if len(errors) > 0 {
 		return NodeMetadataMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -945,6 +951,7 @@ func (m *ReadOperation_Include) validate(all bool) error {
 	if len(errors) > 0 {
 		return ReadOperation_IncludeMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1220,6 +1227,7 @@ func (m *Result_Output) validate(all bool) error {
 	if len(errors) > 0 {
 		return Result_OutputMultiError(errors)
 	}
+
 	return nil
 }
 

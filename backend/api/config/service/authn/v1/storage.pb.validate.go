@@ -71,6 +71,7 @@ func (m *StorageConfig) validate(all bool) error {
 	if len(errors) > 0 {
 		return StorageConfigMultiError(errors)
 	}
+
 	return nil
 }
 
