@@ -62,6 +62,9 @@ const fetchProjects = (
     })
     .catch((err: ClutchError) => {
       const projects = loadProjects();
+
+      // will perform a regex to pull out a project name from an error message
+      // sample error message -> "unable to find project: test project"
       const missingProject = err.message.match(/.*:\W(.*)/)[1];
       if (err.status.code === 404 && missingProject && projects?.[missingProject]) {
         delete projects?.[missingProject];

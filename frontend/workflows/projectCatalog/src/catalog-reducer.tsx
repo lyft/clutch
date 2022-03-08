@@ -1,5 +1,6 @@
 import type { Action, CatalogState } from "./types";
 
+// TODO: Migrate all local storage actions from ./storage.tsx to here
 const catalogReducer = (state: CatalogState, action: Action): CatalogState => {
   switch (action.type) {
     case "ADD_PROJECT": {

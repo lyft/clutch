@@ -35,6 +35,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
     );
   }, []);
 
+  // TODO: Decouple some of the logic in the storage functions and migrate it to the reducer
   const triggerProjectAdd = () => {
     dispatch({ type: "SEARCH_START" });
     addProject(
