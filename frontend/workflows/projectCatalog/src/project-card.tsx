@@ -10,8 +10,7 @@ const StyledCard = styled(Card)({
   width: "384px",
   height: "214px",
   overflow: "hidden",
-  padding: "16px",
-  marginLeft: "8px",
+  padding: "13px 17px 64px 36px",
   ":hover": {
     backgroundColor: "#F5F6FD",
     ".remove": {
@@ -39,19 +38,21 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
 
   return (
     <StyledCard>
+      <Grid container justify="flex-end">
+        <Grid item className="remove">
+          <IconButton size="small" variant="neutral" onClick={remove}>
+            <CloseIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
       <Grid container wrap="nowrap">
-        <Grid container item direction="row" alignItems="flex-end" style={{ marginTop: "16px" }}>
+        <Grid container item direction="row" alignItems="flex-end">
           <Grid item xs={1}>
             <LanguageIcon language={project.languages?.[0]} />
           </Grid>
           <Grid item xs={11}>
             <Typography variant="caption2">{project?.name}</Typography>
           </Grid>
-        </Grid>
-        <Grid item className="remove">
-          <IconButton size="small" variant="neutral" onClick={remove}>
-            <CloseIcon />
-          </IconButton>
         </Grid>
       </Grid>
       <Grid
