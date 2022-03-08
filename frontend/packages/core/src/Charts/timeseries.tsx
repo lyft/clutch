@@ -87,12 +87,12 @@ const TimeseriesChart = ({
   const [yAxisDomainMin, yAxisDomainMax] = calculateDomainEdges(
     data,
     yAxisDataKey,
-    yDomainSpread === null ? 0 : yDomainSpread
+    yDomainSpread ?? 0
   );
   const [xAxisDomainMin, xAxisDomainMax] = calculateDomainEdges(
     data,
     xAxisDataKey,
-    xDomainSpread === null ? 0 : xDomainSpread
+    xDomainSpread ?? 0
   );
 
   // In the spirit of making a friendly UX, there is an option to generate evenly spaced, round-timestamped, ticks.
@@ -134,7 +134,7 @@ const TimeseriesChart = ({
                   type="linear"
                   dataKey={line.dataKey}
                   stroke={line.color}
-                  animationDuration={line.animationDuration ?? null}
+                  animationDuration={line.animationDuration ?? 0}
                   dot={drawDots}
                   connectNulls={connectNulls}
                 />
@@ -143,15 +143,14 @@ const TimeseriesChart = ({
           : null}
         {refLines &&
           refLines.map((refLine, index) => {
-            const props = {
-              strokeDashArray: refLine.axis === "x" ? "3 3" : "4 4",
-            };
+            const props = {};
             props[refLine.axis] = refLine.coordinate;
             return (
               <ReferenceLine
                 key={index.toString() + refLine.axis + refLine.coordinate.toString()}
                 label={refLine.label}
                 stroke={refLine.color}
+                strokeDasharray={refLine.axis === "x" ? "3 3" : "4 4"}
                 {...props}
               />
             );

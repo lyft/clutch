@@ -5,7 +5,7 @@ export const localTimeFormatter = (timestamp: number) => {
 
 const getMinAndMaxOfRangeUsingKey = (data: any, key: string) => {
   const filtered = data.filter(d => d[key]).map(d => d[key]);
-  return { min: Math.min(filtered), max: Math.max(filtered) };
+  return { min: Math.min(...filtered), max: Math.max(...filtered) };
 };
 
 // Edge ratio refers to the multiplicative part of the amount that will be added to the max,

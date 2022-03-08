@@ -63,8 +63,8 @@ export const SingleDataLine = () => {
         xAxisDataKey="timestamp"
         yAxisDataKey="value"
         lines={mockLines}
-        xDomainSpread={0.2}
-        yDomainSpread={0.2}
+        xDomainSpread={0.3}
+        yDomainSpread={0.3}
         regularIntervalTicks
       />
     </ChartContainer>
@@ -127,7 +127,6 @@ export const MultiLine = () => {
         singleLineMode={false}
         xDomainSpread={0.3}
         yDomainSpread={0.3}
-        regularIntervalTicks
       />
     </ChartContainer>
   );
