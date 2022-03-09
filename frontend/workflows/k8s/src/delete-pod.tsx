@@ -19,7 +19,7 @@ import _ from "lodash";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
-const PodIdentifier: React.FC<ResolverChild> = ({ resolverType, notes }) => {
+const PodIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) => {
   const { onSubmit } = useWizardContext();
   const resolvedResourceData = useDataLayout("resourceData");
   const resolverInput = useDataLayout("resolverInput");
