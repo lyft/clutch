@@ -11,21 +11,33 @@ export interface HydratedData {
   };
 }
 
-interface ContextProps {
-  hydrateStore?: HydratedData;
-  tempHydrateStore?: HydratedData;
-  data: {
-    store: (componentName: string, key: string, data: any, local?: boolean) => void;
-    localStore: (key: string, data: any) => void;
-    retrieve: (componentName: string, key?: string, defaultData?: any) => any;
-    remove: (componentName: string, key?: string, local?: boolean) => void;
+export interface StorageState {
+  shortLinked: boolean;
+  store: HydratedData;
+  tempStore: HydratedData;
+}
+
+type StoreDataFn = (componentName: string, key: string, data: any, local?: boolean) => void;
+type RemoveDataFn = (componentName: string, key: string, local?: boolean) => void;
+type RetrieveDataFn = (componentName: string, key: string, defaultData: any) => any;
+type ClearDataFn = () => void;
+
+export interface StorageContextProps {
+  shortLinked: boolean;
+  store?: HydratedData;
+  tempStore?: HydratedData;
+  functions: {
+    storeData: StoreDataFn;
+    removeData: RemoveDataFn;
+    retrieveData: RetrieveDataFn;
+    clearData: ClearDataFn;
   };
 }
 
-const StorageContext = React.createContext<ContextProps>(undefined);
+const StorageContext = React.createContext<StorageContextProps>(undefined);
 
 const useStorageContext = () => {
-  return React.useContext<ContextProps>(StorageContext);
+  return React.useContext<StorageContextProps>(StorageContext);
 };
 
 export { StorageContext, useStorageContext };

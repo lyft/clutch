@@ -25,7 +25,7 @@ import {
 } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
-import { COMPONENT_NAME, loadStoredState, storeState } from "./storage";
+import { loadStoredState, storeState } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
 
@@ -135,7 +135,7 @@ const allPresent = (state: State, dispatch: React.Dispatch<Action>): boolean => 
   return true;
 };
 
-const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
+const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>, shortLinked: boolean) => {
   // Determine if any hydration is required.
   // - Are any services missing from state.projectdata?
   // - Are projects empty (first load)?
@@ -147,10 +147,15 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
     dispatch({ type: "HYDRATE_START" });
 
     // TODO: have userId check be server driven
-    const requestParams = { users: [userId()], projects: [] } as {
+    const requestParams = { users: [], projects: [] } as {
       users: string[];
       projects: string[];
     };
+
+    // will only push the userId if we're not shortlinked so that the API will not return the users default projects
+    if (!shortLinked) {
+      requestParams.users.push(userId());
+    }
 
     // since default projects are always included in the response, no reason to only filter on custom projects
     requestParams.projects = Object.keys(state[Group.PROJECTS]);
@@ -183,26 +188,24 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   const { updateSelected } = useDashUpdater();
 
   const {
-    hydrateStore,
-    data: { store, retrieve, remove },
+    shortLinked,
+    functions: { storeData, retrieveData, removeData },
   } = useStorageContext();
 
   const [state, dispatch] = React.useReducer(
     selectorReducer,
-    loadStoredState(retrieve, remove, initialState)
+    loadStoredState(retrieveData, removeData, !shortLinked, initialState)
   );
-
-  const customHydrateState = (hydrateStore || {})[COMPONENT_NAME];
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      hydrateProjects(state, dispatch);
+      hydrateProjects(state, dispatch, shortLinked);
     }, 30000);
     return () => clearInterval(interval);
   }, [state]);
 
   React.useEffect(() => {
-    hydrateProjects(state, dispatch);
+    hydrateProjects(state, dispatch, shortLinked);
   }, [state[Group.PROJECTS]]);
 
   // computes the final state for rendering across other components
@@ -247,7 +250,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     });
 
     // Update!
-    storeState(store, state, !customHydrateState);
+    storeState(storeData, state, !shortLinked);
     updateSelected(dashState);
   }, [state]);
 

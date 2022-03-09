@@ -1,4 +1,4 @@
-export { Alert } from "./alert";
+export * from "./alert";
 export { default as Error } from "./error";
 export { default as Hint } from "./hint";
 export { Note, NotePanel } from "./note";

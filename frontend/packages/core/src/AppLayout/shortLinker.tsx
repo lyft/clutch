@@ -59,8 +59,8 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
 const ShortLinker = () => {
   const { workflows } = useAppContext();
   const {
-    tempHydrateStore,
-    data: { store },
+    tempStore,
+    functions: { clearData },
   } = useStorageContext();
   const anchorRef = React.useRef(null);
   const location = useLocation();
@@ -81,7 +81,7 @@ const ShortLinker = () => {
       checkValidWorkflow();
     }
 
-    store(null, null, {});
+    clearData();
   }, [location]);
 
   // Used for initial load to verify that once our workflows have loaded we are on a valid workflow
@@ -105,7 +105,7 @@ const ShortLinker = () => {
 
   // Will rotate our object into an array of type IShareableState to send in the API request
   const rotateStore = (): IClutch.shortlink.v1.IShareableState[] =>
-    Object.keys(tempHydrateStore).map(key => ({ key, state: tempHydrateStore[key] }));
+    Object.keys(tempStore).map(key => ({ key, state: tempStore[key] }));
 
   const generateShortLink = () => {
     const requestData: IClutch.shortlink.v1.ICreateRequest = {

@@ -14,11 +14,10 @@ const STORAGE_STATE_KEY = "dashState";
  *   * the stored state does not have the correct type
  *   * the stored state is not valid JSON
  */
-const loadStoredState = (retrieve, remove, state: State): State => {
+const loadStoredState = (retrieve, remove, shortLinked: boolean, state: State): State => {
   // Grab stored state
   const storedState = retrieve(COMPONENT_NAME, STORAGE_STATE_KEY);
-  // Grab stored state from local storage
-  // const storedState = window.localStorage.getItem(STORAGE_STATE_KEY);
+
   // If stored state does not exist return state unmodified
   if (!storedState) {
     return state;
@@ -31,7 +30,7 @@ const loadStoredState = (retrieve, remove, state: State): State => {
       return _.merge(state, storedState);
     }
     // If stored state is not in the correct format purge it and return state unmodified
-    remove(COMPONENT_NAME, STORAGE_STATE_KEY);
+    remove(COMPONENT_NAME, STORAGE_STATE_KEY, !shortLinked);
     return state;
   } catch {
     // If any errors occur return unmodified state
@@ -39,13 +38,13 @@ const loadStoredState = (retrieve, remove, state: State): State => {
   }
 };
 
-const storeState = (store, state: State, local: boolean) => {
+const storeState = (storeData, state: State, local: boolean) => {
   const localState = {
     [Group.PROJECTS]: state[Group.PROJECTS],
     [Group.UPSTREAM]: state[Group.UPSTREAM],
     [Group.DOWNSTREAM]: state[Group.DOWNSTREAM],
   } as GlobalProjectState;
-  store(COMPONENT_NAME, STORAGE_STATE_KEY, localState, local);
+  storeData(COMPONENT_NAME, STORAGE_STATE_KEY, localState, local);
 };
 
 export { loadStoredState, storeState };
