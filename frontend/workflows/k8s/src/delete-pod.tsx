@@ -91,7 +91,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType, notes=[] }) => {
+const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resolverInput: {},
     resourceData: {},
