@@ -24,7 +24,17 @@ const storeLocalData = (key: string, data: any) => {
 
 const removeLocalData = (key: string) => window.localStorage.removeItem(key);
 
-const retrieveLocalData = (key: string) => window.localStorage.getItem(key);
+const retrieveLocalData = (key: string) => {
+  const localData = window.localStorage.getItem(key);
+
+  if (localData) {
+    try {
+      return JSON.parse(localData);
+    } catch (_) {
+      return localData;
+    }
+  }
+};
 
 const retrieveData = (
   storageState: StorageState,
@@ -39,15 +49,7 @@ const retrieveData = (
   }
 
   if (key.length) {
-    const localData = retrieveLocalData(key);
-
-    if (localData) {
-      try {
-        return JSON.parse(localData);
-      } catch (_) {
-        return localData;
-      }
-    }
+    return retrieveLocalData(key) ?? defaultData;
   }
 
   return defaultData;
