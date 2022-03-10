@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 
 import { useNavigate } from "../navigation";
@@ -11,7 +11,7 @@ interface ShortLinkHydratorProps {
 }
 
 /**
- * Component that will be present for a route which will look for a short link
+ * Component that will be present for a route which will look for a short link hash
  * - If found
  * - It will call down to the API with the hash and ask for any data pertaining to it
  * - If the API call is successful
@@ -22,14 +22,12 @@ interface ShortLinkHydratorProps {
  *   - Then navigate back to the home page
  */
 const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
-  const { pathname } = useLocation();
+  const { hash } = useParams();
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    // Looking for a route similar to: "/sl/1234"
-    const matches = pathname.match(/(\/sl\/)(.*)/i);
-    if (matches && matches[2]) {
-      const requestData: IClutch.shortlink.v1.IGetRequest = { hash: matches[2] };
+    if (hash) {
+      const requestData: IClutch.shortlink.v1.IGetRequest = { hash };
 
       client
         .post("/v1/shortlink/get", requestData)
@@ -40,11 +38,11 @@ const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
         })
         .catch((error: ClutchError) => {
           // eslint-disable-next-line no-console
-          console.warn(`Shortlink ${matches[2]} errored, redirecting home`, error?.message);
+          console.warn(`Shortlink ${hash} errored, redirecting home`, error?.message);
           navigate("/");
         });
     }
-  }, [pathname]);
+  }, [hash]);
 
   // currently return null so that nothing is rendered
   // TODO: either make a loading spinner or something to go here if the API calls are not responsive enough
