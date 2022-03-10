@@ -132,6 +132,11 @@ export const MultiLine = () => {
   );
 };
 
+/** *
+ * This example shows that users can have raw values rather than using a formatter func
+ * for the ticks along the X-Axis. It also shows reference lines and the disabling of
+ * other options.
+ */
 export const ReferenceLinesAndThingsDisabled = () => {
   const mockData = [
     {
@@ -183,8 +188,8 @@ export const ReferenceLinesAndThingsDisabled = () => {
         lines={mockLines}
         refLines={mockRefLines}
         drawDots={false}
-        enableLegend={false}
-        enableGrid={false}
+        legend={false}
+        grid={false}
         tickFormatterFunc={null}
         xDomainSpread={null}
       />

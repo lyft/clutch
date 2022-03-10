@@ -41,8 +41,8 @@ export interface TimeseriesChartProps {
   singleLineMode?: boolean; // if false, the Y Axis will be based off the max and min of all data combined
   // The assumption is that multiple lines would want to share the same Y Axis.
   drawDots?: boolean;
-  enableLegend?: boolean;
-  enableGrid?: boolean;
+  legend?: boolean;
+  grid?: boolean;
   tickFormatterFunc?: (timeStamp: number) => string;
   xDomainSpread?: number | null;
   yDomainSpread?: number | null;
@@ -73,8 +73,8 @@ const TimeseriesChart = ({
   refLines,
   singleLineMode = true,
   drawDots = true,
-  enableLegend = true,
-  enableGrid = true,
+  legend = true,
+  grid = true,
   tickFormatterFunc = localTimeFormatter,
   xDomainSpread = 0.2,
   yDomainSpread = 0.2,
@@ -107,12 +107,12 @@ const TimeseriesChart = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
-        {enableGrid ? <CartesianGrid /> : null}
+        {grid ? <CartesianGrid /> : null}
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
           domain={[xAxisDomainMin, xAxisDomainMax]}
-          tickFormatter={tickFormatterFunc || null}
+          tickFormatter={tickFormatterFunc}
           allowDataOverflow
           ticks={regularIntervalTicks ? ticks : null}
         />
@@ -125,12 +125,12 @@ const TimeseriesChart = ({
           )
         }
         <Tooltip labelFormatter={tickFormatterFunc || null} />
-        {enableLegend ? <Legend /> : null}
+        {legend ? <Legend /> : null}
         {lines
           ? lines.map((line, index) => {
               return (
                 <Line
-                  key={index.toString() + line.dataKey + line.color}
+                  key={index.toString() + line.dataKey}
                   type="linear"
                   dataKey={line.dataKey}
                   stroke={line.color}
@@ -147,7 +147,7 @@ const TimeseriesChart = ({
             props[refLine.axis] = refLine.coordinate;
             return (
               <ReferenceLine
-                key={index.toString() + refLine.axis + refLine.coordinate.toString()}
+                key={index.toString() + refLine.coordinate.toString()}
                 label={refLine.label}
                 stroke={refLine.color}
                 strokeDasharray={refLine.axis === "x" ? "3 3" : "4 4"}
