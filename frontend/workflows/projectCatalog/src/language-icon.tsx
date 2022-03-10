@@ -1,5 +1,5 @@
 import React from "react";
-import { faGolang, faJava, faJs, faPython } from "@fortawesome/free-brands-svg-icons";
+import { faGolang, faJava, faJs, faPython, faRust } from "@fortawesome/free-brands-svg-icons";
 import { faGear, faTerminal } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
 
