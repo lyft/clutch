@@ -19,7 +19,7 @@ import _ from "lodash";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
-const PodIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
+const PodIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) => {
   const { onSubmit } = useWizardContext();
   const resolvedResourceData = useDataLayout("resourceData");
   const resolverInput = useDataLayout("resolverInput");
@@ -31,7 +31,7 @@ const PodIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
     onSubmit();
   };
 
-  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
+  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={notes} />;
 };
 
 const PodDetails: React.FC<WizardChild> = () => {
@@ -91,7 +91,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
+const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resolverInput: {},
     resourceData: {},
@@ -111,7 +111,7 @@ const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <PodIdentifier name="Lookup" resolverType={resolverType} />
+      <PodIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
       <PodDetails name="Verify" />
       <Confirm name="Confirmation" />
     </Wizard>
