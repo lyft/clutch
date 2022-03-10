@@ -42,7 +42,7 @@ const Note: React.FC<NoteProps> = ({ severity = "info", link = "", children }) =
         <Grid container justify="flex-start" alignItems="center">
           {children}
         </Grid>
-        {link ? <Link href={link}>{link}</Link> : null}
+        {link && <Link href={link}>{link}</Link>}
       </Alert>
     </Paper>
   );
