@@ -19,6 +19,7 @@ import Landing from "../landing";
 import NotFound from "../not-found";
 
 import { registeredWorkflows } from "./registrar";
+import ShortLinkHydrator from "./short-link-hydrator";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
@@ -152,6 +153,15 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                       </Route>
                     );
                   })}
+                  <Route
+                    key="short-links"
+                    path="/sl/*"
+                    element={
+                      <ShortLinkHydrator
+                        hydrate={data => dispatch({ type: "HYDRATE", payload: { data } })}
+                      />
+                    }
+                  />
                   <Route key="notFound" path="*" element={<NotFound />} />
                 </Route>
               </Routes>
