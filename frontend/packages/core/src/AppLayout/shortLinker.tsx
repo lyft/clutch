@@ -59,8 +59,7 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
 const ShortLinker = () => {
   const { workflows } = useAppContext();
   const {
-    tempStore,
-    functions: { clearData },
+    functions: { clearData, tempData },
   } = useStorageContext();
   const anchorRef = React.useRef(null);
   const location = useLocation();
@@ -104,13 +103,13 @@ const ShortLinker = () => {
   };
 
   // Will rotate our object into an array of type IShareableState to send in the API request
-  const rotateStore = (): IClutch.shortlink.v1.IShareableState[] =>
+  const rotateStore = (tempStore): IClutch.shortlink.v1.IShareableState[] =>
     Object.keys(tempStore).map(key => ({ key, state: tempStore[key] }));
 
   const generateShortLink = () => {
     const requestData: IClutch.shortlink.v1.ICreateRequest = {
       path: `${location.pathname}${location.search}`,
-      state: rotateStore(),
+      state: rotateStore(tempData()),
     };
 
     client

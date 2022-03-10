@@ -21,16 +21,16 @@ type StoreDataFn = (componentName: string, key: string, data: any, local?: boole
 type RemoveDataFn = (componentName: string, key: string, local?: boolean) => void;
 type RetrieveDataFn = (componentName: string, key: string, defaultData: any) => any;
 type ClearDataFn = () => void;
+type TempDataFn = () => HydratedData;
 
 export interface StorageContextProps {
   shortLinked: boolean;
-  store?: HydratedData;
-  tempStore?: HydratedData;
   functions: {
     storeData: StoreDataFn;
     removeData: RemoveDataFn;
     retrieveData: RetrieveDataFn;
     clearData: ClearDataFn;
+    tempData: TempDataFn;
   };
 }
 

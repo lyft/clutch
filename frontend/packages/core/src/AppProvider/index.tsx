@@ -131,8 +131,6 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   };
 
   const storageProviderProps: StorageContextProps = {
-    store: storageState.store,
-    tempStore: storageState.tempStore,
     shortLinked: storageState.shortLinked,
     functions: {
       storeData: (componentName: string, key: string, data: any, local?: boolean) =>
@@ -140,6 +138,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       removeData: (componentName: string, key: string, local?: boolean) =>
         dispatch({ type: "REMOVE_DATA", payload: { componentName, key, local } }),
       clearData: () => dispatch({ type: "EMPTY_DATA" }),
+      tempData: () => storageState.tempStore,
       retrieveData,
     },
   };
