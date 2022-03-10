@@ -8,8 +8,8 @@ import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@materia
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
+import { Tooltip } from "./Feedback/tooltip";
 import styled from "./styled";
-import { Tooltip } from "./Feedback";
 
 interface ButtonPalette {
   /** A palette of background colors used for the various button states. */
