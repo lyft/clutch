@@ -67,18 +67,16 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 
   const storageProviderProps: StorageContextProps = {
     shortLinked: storageState.shortLinked,
-    functions: {
-      storeData: (componentName: string, key: string, data: any, localStorage?: boolean) =>
-        dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
-      storeLocalData,
-      removeData: (componentName: string, key: string, localStorage?: boolean) =>
-        dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
-      removeLocalData,
-      retrieveData: (...args) => retrieveData(storageState, ...args),
-      retrieveLocalData,
-      clearTempData: () => dispatch({ type: "EMPTY_TEMP_DATA" }),
-      tempData: () => defaultStorageState.tempStore,
-    },
+    storeData: (componentName: string, key: string, data: any, localStorage?: boolean) =>
+      dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
+    storeLocalData,
+    removeData: (componentName: string, key: string, localStorage?: boolean) =>
+      dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
+    removeLocalData,
+    retrieveData: (...args) => retrieveData(storageState, ...args),
+    retrieveLocalData,
+    clearTempData: () => dispatch({ type: "EMPTY_TEMP_DATA" }),
+    tempData: () => defaultStorageState.tempStore,
   };
 
   const loadWorkflows = () => {

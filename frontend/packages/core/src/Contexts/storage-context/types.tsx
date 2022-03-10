@@ -57,32 +57,25 @@ export interface StorageState {
   tempStore: HydratedData;
 }
 
-export type StoreDataFn = (
-  componentName: string,
-  key: string,
-  data: any,
-  localStorage?: boolean
-) => void;
-export type StoreLocalDataFn = (key: string, data: any) => void;
-export type RemoveDataFn = (componentName: string, key: string, localStorage?: boolean) => void;
-export type RemoveLocalDataFn = (key: string) => void;
-export type RetrieveDataFn = (componentName: string, key: string, defaultData?: any) => any;
-export type RetrieveLocalDataFn = (key: string, defaultData?: any) => any;
-export type ClearTempDataFn = () => void;
-export type TempDataFn = () => HydratedData;
+type StoreDataFn = (componentName: string, key: string, data: any, localStorage?: boolean) => void;
+type StoreLocalDataFn = (key: string, data: any) => void;
+type RemoveDataFn = (componentName: string, key: string, localStorage?: boolean) => void;
+type RemoveLocalDataFn = (key: string) => void;
+type RetrieveDataFn = (componentName: string, key: string, defaultData?: any) => any;
+type RetrieveLocalDataFn = (key: string, defaultData?: any) => any;
+type ClearTempDataFn = () => void;
+type TempDataFn = () => HydratedData;
 
 export interface StorageContextProps {
   shortLinked: boolean;
-  functions: {
-    storeData: StoreDataFn;
-    storeLocalData: StoreLocalDataFn;
-    removeData: RemoveDataFn;
-    removeLocalData: RemoveLocalDataFn;
-    retrieveData: RetrieveDataFn;
-    retrieveLocalData: RetrieveLocalDataFn;
-    clearTempData: ClearTempDataFn;
-    tempData: TempDataFn;
-  };
+  storeData: StoreDataFn;
+  storeLocalData: StoreLocalDataFn;
+  removeData: RemoveDataFn;
+  removeLocalData: RemoveLocalDataFn;
+  retrieveData: RetrieveDataFn;
+  retrieveLocalData: RetrieveLocalDataFn;
+  clearTempData: ClearTempDataFn;
+  tempData: TempDataFn;
 }
 
 const defaultStorageState: StorageState = {

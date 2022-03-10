@@ -44,8 +44,9 @@ export * from "./Feedback";
 export * from "./Assets/emojis";
 export * from "./NPS";
 
-export { useStorageContext, useWizardContext, WizardContext } from "./Contexts";
 export { default as ClutchApp } from "./AppProvider";
+
+export { useStorageContext, useWizardContext, WizardContext } from "./Contexts";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
