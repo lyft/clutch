@@ -25,6 +25,9 @@ const LanguageIcon = ({ language, size = "lg", ...props }: LanguageIconProps) =>
     case "java":
       icon = faJava;
       break;
+    case "rust":
+      icon = faRust;
+      break;
     default:
       icon = faGear;
   }
