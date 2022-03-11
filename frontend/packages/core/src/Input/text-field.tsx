@@ -266,9 +266,11 @@ const TextField = ({
         renderOption={(option: AutocompleteResultProps) => (
           <AutocompleteResult id={option.id} label={option.label} />
         )}
-        onSelectCapture={e =>
-          onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
-        }
+        onSelectCapture={e => {
+          if (onChange) {
+            onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+          }
+        }}
         defaultValue={{ id: defaultVal, label: defaultVal }}
         value={value}
         renderInput={inputProps => (
