@@ -26,10 +26,11 @@ export interface HydratedData {
 
 type StorageActionKind = "STORE_DATA" | "REMOVE_DATA";
 
-type BackgroundStorageActionKind = "EMPTY_TEMP_DATA" | "HYDRATE";
+type BackgroundStorageActionKind = "EMPTY_TEMP_DATA" | "CLEAR_SHORT_LINK" | "HYDRATE";
 
-interface BackgroundPayload {
+export interface BackgroundPayload {
   data?: IClutch.shortlink.v1.IShareableState[];
+  route?: string;
 }
 
 export interface UserPayload {
@@ -53,6 +54,7 @@ export type Action = StorageAction | BackgroundAction;
 
 export interface StorageState {
   shortLinked: boolean;
+  shortLinkedRoute?: string;
   store: HydratedData;
   tempStore: HydratedData;
 }
@@ -63,6 +65,7 @@ type RemoveDataFn = (componentName: string, key: string, localStorage?: boolean)
 type RemoveLocalDataFn = (key: string) => void;
 type RetrieveDataFn = (componentName: string, key: string, defaultData?: any) => any;
 type RetrieveLocalDataFn = (key: string, defaultData?: any) => any;
+type ClearShortLinkFn = (route: string) => void;
 type ClearTempDataFn = () => void;
 type TempDataFn = () => HydratedData;
 
@@ -74,6 +77,7 @@ export interface StorageContextProps {
   removeLocalData: RemoveLocalDataFn;
   retrieveData: RetrieveDataFn;
   retrieveLocalData: RetrieveLocalDataFn;
+  clearShortLink: ClearShortLinkFn;
   clearTempData: ClearTempDataFn;
   tempData: TempDataFn;
 }
