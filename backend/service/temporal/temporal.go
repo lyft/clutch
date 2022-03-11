@@ -39,13 +39,10 @@ func newClient(cfg *temporalv1.Config, logger *zap.Logger, scope tally.Scope) (C
 		hostPort:       fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		metricsHandler: temporaltally.NewMetricsHandler(scope),
 		logger:         newTemporalLogger(logger),
-
-		// Disable the healthcheck by default (i.e. connect lazily) as it's not normally preferable (see config proto documentation).
-		copts: client.ConnectionOptions{DisableHealthCheck: true},
+		copts:          client.ConnectionOptions{},
 	}
 
 	if cfg.ConnectionOptions != nil {
-		ret.copts.DisableHealthCheck = !cfg.ConnectionOptions.EnableHealthCheck
 		if cfg.ConnectionOptions.UseSystemCaBundle {
 			certs, err := x509.SystemCertPool()
 			if err != nil {
@@ -67,6 +64,9 @@ type clientImpl struct {
 	copts          client.ConnectionOptions
 }
 
+type lazyClient struct {
+}
+
 func (c *clientImpl) GetNamespaceClient(namespace string) (client.Client, error) {
 	tc, err := client.NewClient(client.Options{
 		HostPort:          c.hostPort,
@@ -80,6 +80,8 @@ func (c *clientImpl) GetNamespaceClient(namespace string) (client.Client, error)
 	}
 
 	// TODO: cache clients? is there any benefit?
+
+	tc.CompleteActivity()
 
 	return tc, err
 }

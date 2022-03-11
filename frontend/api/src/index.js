@@ -24860,7 +24860,6 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.temporal.v1
                          * @interface IConnectionOptions
                          * @property {boolean|null} [useSystemCaBundle] ConnectionOptions useSystemCaBundle
-                         * @property {boolean|null} [enableHealthCheck] ConnectionOptions enableHealthCheck
                          */
 
                         /**
@@ -24887,14 +24886,6 @@ export const clutch = $root.clutch = (() => {
                         ConnectionOptions.prototype.useSystemCaBundle = false;
 
                         /**
-                         * ConnectionOptions enableHealthCheck.
-                         * @member {boolean} enableHealthCheck
-                         * @memberof clutch.config.service.temporal.v1.ConnectionOptions
-                         * @instance
-                         */
-                        ConnectionOptions.prototype.enableHealthCheck = false;
-
-                        /**
                          * Verifies a ConnectionOptions message.
                          * @function verify
                          * @memberof clutch.config.service.temporal.v1.ConnectionOptions
@@ -24908,9 +24899,6 @@ export const clutch = $root.clutch = (() => {
                             if (message.useSystemCaBundle != null && message.hasOwnProperty("useSystemCaBundle"))
                                 if (typeof message.useSystemCaBundle !== "boolean")
                                     return "useSystemCaBundle: boolean expected";
-                            if (message.enableHealthCheck != null && message.hasOwnProperty("enableHealthCheck"))
-                                if (typeof message.enableHealthCheck !== "boolean")
-                                    return "enableHealthCheck: boolean expected";
                             return null;
                         };
 
@@ -24928,8 +24916,6 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.service.temporal.v1.ConnectionOptions();
                             if (object.useSystemCaBundle != null)
                                 message.useSystemCaBundle = Boolean(object.useSystemCaBundle);
-                            if (object.enableHealthCheck != null)
-                                message.enableHealthCheck = Boolean(object.enableHealthCheck);
                             return message;
                         };
 
@@ -24946,14 +24932,10 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults) {
+                            if (options.defaults)
                                 object.useSystemCaBundle = false;
-                                object.enableHealthCheck = false;
-                            }
                             if (message.useSystemCaBundle != null && message.hasOwnProperty("useSystemCaBundle"))
                                 object.useSystemCaBundle = message.useSystemCaBundle;
-                            if (message.enableHealthCheck != null && message.hasOwnProperty("enableHealthCheck"))
-                                object.enableHealthCheck = message.enableHealthCheck;
                             return object;
                         };
 

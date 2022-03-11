@@ -10226,9 +10226,6 @@ export namespace clutch {
 
                         /** ConnectionOptions useSystemCaBundle */
                         useSystemCaBundle?: (boolean|null);
-
-                        /** ConnectionOptions enableHealthCheck */
-                        enableHealthCheck?: (boolean|null);
                     }
 
                     /** Represents a ConnectionOptions. */
@@ -10242,9 +10239,6 @@ export namespace clutch {
 
                         /** ConnectionOptions useSystemCaBundle. */
                         public useSystemCaBundle: boolean;
-
-                        /** ConnectionOptions enableHealthCheck. */
-                        public enableHealthCheck: boolean;
 
                         /**
                          * Verifies a ConnectionOptions message.
