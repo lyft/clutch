@@ -20123,6 +20123,332 @@ export namespace clutch {
         }
     }
 
+    /** Namespace quicklinks. */
+    namespace quicklinks {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a QuickLinksAPI */
+            class QuickLinksAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new QuickLinksAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetQuickLinks.
+                 * @param request GetQuickLinksRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetQuickLinksResponse
+                 */
+                public getQuickLinks(request: clutch.quicklinks.v1.IGetQuickLinksRequest, callback: clutch.quicklinks.v1.QuickLinksAPI.GetQuickLinksCallback): void;
+
+                /**
+                 * Calls GetQuickLinks.
+                 * @param request GetQuickLinksRequest message or plain object
+                 * @returns Promise
+                 */
+                public getQuickLinks(request: clutch.quicklinks.v1.IGetQuickLinksRequest): Promise<clutch.quicklinks.v1.GetQuickLinksResponse>;
+            }
+
+            namespace QuickLinksAPI {
+
+                /**
+                 * Callback as used by {@link clutch.quicklinks.v1.QuickLinksAPI#getQuickLinks}.
+                 * @param error Error, if any
+                 * @param [response] GetQuickLinksResponse
+                 */
+                type GetQuickLinksCallback = (error: (Error|null), response?: clutch.quicklinks.v1.GetQuickLinksResponse) => void;
+            }
+
+            /** Properties of a Link. */
+            interface ILink {
+
+                /** Link name */
+                name?: (string|null);
+
+                /** Link url */
+                url?: (string|null);
+
+                /** Link imagePath */
+                imagePath?: (string|null);
+            }
+
+            /** Represents a Link. */
+            class Link implements ILink {
+
+                /**
+                 * Constructs a new Link.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.quicklinks.v1.ILink);
+
+                /** Link name. */
+                public name: string;
+
+                /** Link url. */
+                public url: string;
+
+                /** Link imagePath. */
+                public imagePath: string;
+
+                /**
+                 * Verifies a Link message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Link message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Link
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.quicklinks.v1.Link;
+
+                /**
+                 * Creates a plain object from a Link message. Also converts values to other types if specified.
+                 * @param message Link
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.quicklinks.v1.Link, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Link to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a LinkEntity. */
+            interface ILinkEntity {
+
+                /** LinkEntity name */
+                name?: (string|null);
+
+                /** LinkEntity links */
+                links?: (clutch.quicklinks.v1.ILink[]|null);
+            }
+
+            /** Represents a LinkEntity. */
+            class LinkEntity implements ILinkEntity {
+
+                /**
+                 * Constructs a new LinkEntity.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.quicklinks.v1.ILinkEntity);
+
+                /** LinkEntity name. */
+                public name: string;
+
+                /** LinkEntity links. */
+                public links: clutch.quicklinks.v1.ILink[];
+
+                /**
+                 * Verifies a LinkEntity message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a LinkEntity message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns LinkEntity
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.quicklinks.v1.LinkEntity;
+
+                /**
+                 * Creates a plain object from a LinkEntity message. Also converts values to other types if specified.
+                 * @param message LinkEntity
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.quicklinks.v1.LinkEntity, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this LinkEntity to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a SlackInfo. */
+            interface ISlackInfo {
+
+                /** SlackInfo teamName */
+                teamName?: (string|null);
+
+                /** SlackInfo botName */
+                botName?: (string|null);
+
+                /** SlackInfo channelName */
+                channelName?: (string|null);
+            }
+
+            /** Represents a SlackInfo. */
+            class SlackInfo implements ISlackInfo {
+
+                /**
+                 * Constructs a new SlackInfo.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.quicklinks.v1.ISlackInfo);
+
+                /** SlackInfo teamName. */
+                public teamName: string;
+
+                /** SlackInfo botName. */
+                public botName: string;
+
+                /** SlackInfo channelName. */
+                public channelName: string;
+
+                /**
+                 * Verifies a SlackInfo message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a SlackInfo message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns SlackInfo
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.quicklinks.v1.SlackInfo;
+
+                /**
+                 * Creates a plain object from a SlackInfo message. Also converts values to other types if specified.
+                 * @param message SlackInfo
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.quicklinks.v1.SlackInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this SlackInfo to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetQuickLinksRequest. */
+            interface IGetQuickLinksRequest {
+
+                /** GetQuickLinksRequest projectName */
+                projectName?: (string|null);
+
+                /** GetQuickLinksRequest projectEnvironment */
+                projectEnvironment?: (string|null);
+
+                /** GetQuickLinksRequest slackInfo */
+                slackInfo?: (clutch.quicklinks.v1.ISlackInfo|null);
+            }
+
+            /** Represents a GetQuickLinksRequest. */
+            class GetQuickLinksRequest implements IGetQuickLinksRequest {
+
+                /**
+                 * Constructs a new GetQuickLinksRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.quicklinks.v1.IGetQuickLinksRequest);
+
+                /** GetQuickLinksRequest projectName. */
+                public projectName: string;
+
+                /** GetQuickLinksRequest projectEnvironment. */
+                public projectEnvironment: string;
+
+                /** GetQuickLinksRequest slackInfo. */
+                public slackInfo?: (clutch.quicklinks.v1.ISlackInfo|null);
+
+                /**
+                 * Verifies a GetQuickLinksRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetQuickLinksRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetQuickLinksRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.quicklinks.v1.GetQuickLinksRequest;
+
+                /**
+                 * Creates a plain object from a GetQuickLinksRequest message. Also converts values to other types if specified.
+                 * @param message GetQuickLinksRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.quicklinks.v1.GetQuickLinksRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetQuickLinksRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetQuickLinksResponse. */
+            interface IGetQuickLinksResponse {
+
+                /** GetQuickLinksResponse linkEntities */
+                linkEntities?: (clutch.quicklinks.v1.ILinkEntity[]|null);
+            }
+
+            /** Represents a GetQuickLinksResponse. */
+            class GetQuickLinksResponse implements IGetQuickLinksResponse {
+
+                /**
+                 * Constructs a new GetQuickLinksResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.quicklinks.v1.IGetQuickLinksResponse);
+
+                /** GetQuickLinksResponse linkEntities. */
+                public linkEntities: clutch.quicklinks.v1.ILinkEntity[];
+
+                /**
+                 * Verifies a GetQuickLinksResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetQuickLinksResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetQuickLinksResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.quicklinks.v1.GetQuickLinksResponse;
+
+                /**
+                 * Creates a plain object from a GetQuickLinksResponse message. Also converts values to other types if specified.
+                 * @param message GetQuickLinksResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.quicklinks.v1.GetQuickLinksResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetQuickLinksResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
     /** Namespace resolver. */
     namespace resolver {
 
