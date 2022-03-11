@@ -30,6 +30,14 @@ export interface LinearTimelineData {
   // ...
 }
 
+/**
+ *
+ * @param data - an object that maps the lanes to their datapoints
+ * @param xAxisDataKey - the key in the data object that contains the timestamps (defaulted to "timestamp")
+ * @param regularIntervalTicks - whether to show regularly spaced ticks on the X-Axis (defaulted to true)
+ * @param tickFormatterFunction - a function that formats the ticks on the X-Axis (defaulted to localTimeFormatter)
+ * @param legend - whether to show the legend (defaulted to true)
+ */
 export interface LinearTimelineProps {
   data: LinearTimelineData;
   xAxisDataKey: string;
@@ -38,6 +46,10 @@ export interface LinearTimelineProps {
   legend?: boolean;
 }
 
+/**
+ * We wrap the ScatterPlot Recharts component for use in linear timeline views. This is more useful than the
+ * wrapper for linecharts for this specific use case of having "lanes" of events and their timestamps.
+ */
 const LinearTimeline = ({
   data,
   xAxisDataKey = "timestamp",
@@ -50,6 +62,9 @@ const LinearTimeline = ({
   }, []);
   const [xAxisDomainMin, xAxisDomainMax] = calculateDomainEdges(combinedData, xAxisDataKey, 0.2);
   let ticks = [];
+  // If we want regularly spaced interval ticks along the X-Axis, we need to calculate the ticks ourselves,
+  // rather than letting Recharts calculate them for us. We calculate them using the distance between the
+  // max and min of the timestamps.
   if (regularIntervalTicks) {
     ticks = calculateTicks(combinedData, xAxisDataKey);
   }
