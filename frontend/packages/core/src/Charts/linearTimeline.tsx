@@ -14,11 +14,11 @@ import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./help
 
 export interface LinearTimelineDataPoint {
   timestamp: number;
-  // more to come
 }
 
 // Note that shape can be a set of shapes denoted by preset strings ("circle", "square", etc.)
 // or a custom SVG element
+// See https://recharts.org/en-US/api/Scatter#shape for more details
 export interface LinearTimelineDataPoints {
   points: LinearTimelineDataPoint[];
   shape?: any;
@@ -27,7 +27,11 @@ export interface LinearTimelineDataPoints {
 
 export interface LinearTimelineData {
   [lane: string]: LinearTimelineDataPoints;
-  // ...
+}
+
+interface CustomTooltipProps {
+  active: boolean;
+  payload: any; // A huge object that contains all the info for the data point and more
 }
 
 /**
@@ -92,7 +96,7 @@ const LinearTimeline = ({
   };
 
   // TODO: Allow for proper styling and make things less hacky than "payload[0]"
-  const formatTooltip = ({ active, payload, label }) => {
+  const formatTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active) {
       return <div>{localTimeFormatter(payload[0].value)}</div>;
     }
