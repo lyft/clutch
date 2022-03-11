@@ -76,6 +76,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     removeLocalData,
     retrieveData: (...args) => retrieveData(storageState, ...args),
     retrieveLocalData,
+    clearShortLink: (route: string) => dispatch({ type: "CLEAR_SHORT_LINK", payload: { route } }),
     clearTempData: () => dispatch({ type: "EMPTY_TEMP_DATA" }),
     tempData: () => defaultStorageState.tempStore,
   };

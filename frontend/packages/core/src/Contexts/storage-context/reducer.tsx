@@ -1,5 +1,5 @@
 import { removeLocalData, rotateDataFromAPI, storeLocalData } from "./helpers";
-import type { Action, StorageState, UserPayload } from "./types";
+import type { Action, BackgroundPayload, StorageState, UserPayload } from "./types";
 
 /**
  * Reducer for the StorageContext
@@ -49,26 +49,37 @@ const storageContextReducer = (state: StorageState, action: Action): StorageStat
 
       return newState;
     }
+    // Will take an input route and check to see if we're already shortlinked and if we are, will only clear if the route is different
+    case "CLEAR_SHORT_LINK": {
+      const { route = "" } = action.payload as BackgroundPayload;
+
+      if (state.shortLinked && state.shortLinkedRoute !== route) {
+        return { ...state, store: {}, shortLinked: false, shortLinkedRoute: undefined };
+      }
+
+      return state;
+    }
     // Will clear out the temporary storage
     case "EMPTY_TEMP_DATA": {
       return { ...state, tempStore: {} };
     }
     // Will take a given input of data from an API and add it to the state as 'store', the only time this portion of the state should ever be modified
     case "HYDRATE": {
-      let newState = { ...state };
+      const { data, route } = action.payload as BackgroundPayload;
 
-      if (action.payload && action.payload.data) {
-        newState = {
-          ...newState,
-          store: rotateDataFromAPI(action.payload.data),
+      if (data && route) {
+        return {
+          ...state,
+          store: rotateDataFromAPI(data),
           shortLinked: true,
+          shortLinkedRoute: route,
         };
       }
 
-      return newState;
+      return state;
     }
     default:
-      throw new Error("Unkown storage reducer action");
+      throw new Error("Unknown storage reducer action");
   }
 };
 
