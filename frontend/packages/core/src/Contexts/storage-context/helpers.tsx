@@ -6,7 +6,7 @@ import type { HydratedData, StorageState } from "./types";
 const rotateDataFromAPI = (data: IClutch.shortlink.v1.IShareableState[]): HydratedData => {
   const hydrated: HydratedData = {};
 
-  data.forEach(({ key = "", state = {} }) => {
+  data.forEach(({ key, state = {} }) => {
     hydrated[key] = state;
   });
 
