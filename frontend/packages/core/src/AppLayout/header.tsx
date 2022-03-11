@@ -49,8 +49,8 @@ const Header: React.FC = () => {
           <Grid container alignItems="center" justify="flex-end">
             {shortLinked && (
               <Alert severity="warning" collapsible hover>
-                You have visited this page from a ShortLink, your local changes will not be saved.
-                Please reload to continue as normal.
+                You have visited this page from a ShortLink, your local changes will not be saved
+                while here. Please reload to continue as normal.
               </Alert>
             )}
             <Box>

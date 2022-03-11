@@ -7,7 +7,7 @@ import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
 
 interface ShortLinkHydratorProps {
-  hydrate: (HydrateData) => void;
+  hydrate: (data: IClutch.shortlink.v1.IShareableState[], route: string) => void;
 }
 
 /**
@@ -33,7 +33,9 @@ const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
         .post("/v1/shortlink/get", requestData)
         .then(response => {
           const { path = "/", state } = response.data as IClutch.shortlink.v1.IGetResponse;
-          hydrate(state);
+
+          // we only want the pathname to match against so we pull off any search params for storage
+          hydrate(state, path.split("?")[0]);
           navigate(path);
         })
         .catch((error: ClutchError) => {

@@ -70,7 +70,7 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
  */
 const ShortLinker = () => {
   const { workflows } = useAppContext();
-  const { clearTempData, tempData } = useStorageContext();
+  const { shortLinked, clearShortLink, clearTempData, tempData } = useStorageContext();
   const anchorRef = React.useRef(null);
   const location = useLocation();
   const [open, setOpen] = React.useState(false);
@@ -85,12 +85,17 @@ const ShortLinker = () => {
   };
 
   // will trigger on a location change, emptying out our temporary storage and rechecking the workflow
+  // will also check if we're currently shortlinked and will call on change to possibly clear the state
   React.useEffect(() => {
     if (workflows.length) {
       checkValidWorkflow();
     }
 
-    clearTempData();
+    if (shortLinked) {
+      clearShortLink(location.pathname);
+    } else {
+      clearTempData();
+    }
   }, [location]);
 
   // Used for initial load to verify that once our workflows have loaded we are on a valid workflow

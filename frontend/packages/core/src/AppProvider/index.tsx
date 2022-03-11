@@ -159,7 +159,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                     path="/sl/*"
                     element={
                       <ShortLinkHydrator
-                        hydrate={data => dispatch({ type: "HYDRATE", payload: { data } })}
+                        hydrate={(data, route) =>
+                          dispatch({ type: "HYDRATE", payload: { data, route } })
+                        }
                       />
                     }
                   />
