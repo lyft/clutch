@@ -28262,6 +28262,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Object.<string,google.protobuf.IValue>|null} [data] Project data
                      * @property {clutch.core.project.v1.IProjectDependencies|null} [dependencies] Project dependencies
                      * @property {clutch.core.project.v1.IOnCall|null} [oncall] Project oncall
+                     * @property {Array.<clutch.core.project.v1.ILinkEntity>|null} [links] Project links
                      */
 
                     /**
@@ -28276,6 +28277,7 @@ export const clutch = $root.clutch = (() => {
                         this.owners = [];
                         this.languages = [];
                         this.data = {};
+                        this.links = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -28339,6 +28341,14 @@ export const clutch = $root.clutch = (() => {
                     Project.prototype.oncall = null;
 
                     /**
+                     * Project links.
+                     * @member {Array.<clutch.core.project.v1.ILinkEntity>} links
+                     * @memberof clutch.core.project.v1.Project
+                     * @instance
+                     */
+                    Project.prototype.links = $util.emptyArray;
+
+                    /**
                      * Verifies a Project message.
                      * @function verify
                      * @memberof clutch.core.project.v1.Project
@@ -28388,6 +28398,15 @@ export const clutch = $root.clutch = (() => {
                             let error = $root.clutch.core.project.v1.OnCall.verify(message.oncall);
                             if (error)
                                 return "oncall." + error;
+                        }
+                        if (message.links != null && message.hasOwnProperty("links")) {
+                            if (!Array.isArray(message.links))
+                                return "links: array expected";
+                            for (let i = 0; i < message.links.length; ++i) {
+                                let error = $root.clutch.core.project.v1.LinkEntity.verify(message.links[i]);
+                                if (error)
+                                    return "links." + error;
+                            }
                         }
                         return null;
                     };
@@ -28442,6 +28461,16 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.core.project.v1.Project.oncall: object expected");
                             message.oncall = $root.clutch.core.project.v1.OnCall.fromObject(object.oncall);
                         }
+                        if (object.links) {
+                            if (!Array.isArray(object.links))
+                                throw TypeError(".clutch.core.project.v1.Project.links: array expected");
+                            message.links = [];
+                            for (let i = 0; i < object.links.length; ++i) {
+                                if (typeof object.links[i] !== "object")
+                                    throw TypeError(".clutch.core.project.v1.Project.links: object expected");
+                                message.links[i] = $root.clutch.core.project.v1.LinkEntity.fromObject(object.links[i]);
+                            }
+                        }
                         return message;
                     };
 
@@ -28461,6 +28490,7 @@ export const clutch = $root.clutch = (() => {
                         if (options.arrays || options.defaults) {
                             object.owners = [];
                             object.languages = [];
+                            object.links = [];
                         }
                         if (options.objects || options.defaults)
                             object.data = {};
@@ -28494,6 +28524,11 @@ export const clutch = $root.clutch = (() => {
                             object.dependencies = $root.clutch.core.project.v1.ProjectDependencies.toObject(message.dependencies, options);
                         if (message.oncall != null && message.hasOwnProperty("oncall"))
                             object.oncall = $root.clutch.core.project.v1.OnCall.toObject(message.oncall, options);
+                        if (message.links && message.links.length) {
+                            object.links = [];
+                            for (let j = 0; j < message.links.length; ++j)
+                                object.links[j] = $root.clutch.core.project.v1.LinkEntity.toObject(message.links[j], options);
+                        }
                         return object;
                     };
 
@@ -28997,6 +29032,277 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return PagerDuty;
+                })();
+
+                v1.Link = (function() {
+
+                    /**
+                     * Properties of a Link.
+                     * @memberof clutch.core.project.v1
+                     * @interface ILink
+                     * @property {string|null} [name] Link name
+                     * @property {string|null} [url] Link url
+                     * @property {string|null} [imagePath] Link imagePath
+                     */
+
+                    /**
+                     * Constructs a new Link.
+                     * @memberof clutch.core.project.v1
+                     * @classdesc Represents a Link.
+                     * @implements ILink
+                     * @constructor
+                     * @param {clutch.core.project.v1.ILink=} [properties] Properties to set
+                     */
+                    function Link(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Link name.
+                     * @member {string} name
+                     * @memberof clutch.core.project.v1.Link
+                     * @instance
+                     */
+                    Link.prototype.name = "";
+
+                    /**
+                     * Link url.
+                     * @member {string} url
+                     * @memberof clutch.core.project.v1.Link
+                     * @instance
+                     */
+                    Link.prototype.url = "";
+
+                    /**
+                     * Link imagePath.
+                     * @member {string} imagePath
+                     * @memberof clutch.core.project.v1.Link
+                     * @instance
+                     */
+                    Link.prototype.imagePath = "";
+
+                    /**
+                     * Verifies a Link message.
+                     * @function verify
+                     * @memberof clutch.core.project.v1.Link
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Link.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.url != null && message.hasOwnProperty("url"))
+                            if (!$util.isString(message.url))
+                                return "url: string expected";
+                        if (message.imagePath != null && message.hasOwnProperty("imagePath"))
+                            if (!$util.isString(message.imagePath))
+                                return "imagePath: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Link message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.core.project.v1.Link
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.core.project.v1.Link} Link
+                     */
+                    Link.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.project.v1.Link)
+                            return object;
+                        let message = new $root.clutch.core.project.v1.Link();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.url != null)
+                            message.url = String(object.url);
+                        if (object.imagePath != null)
+                            message.imagePath = String(object.imagePath);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Link message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.core.project.v1.Link
+                     * @static
+                     * @param {clutch.core.project.v1.Link} message Link
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Link.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.url = "";
+                            object.imagePath = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.url != null && message.hasOwnProperty("url"))
+                            object.url = message.url;
+                        if (message.imagePath != null && message.hasOwnProperty("imagePath"))
+                            object.imagePath = message.imagePath;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Link to JSON.
+                     * @function toJSON
+                     * @memberof clutch.core.project.v1.Link
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Link.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Link;
+                })();
+
+                v1.LinkEntity = (function() {
+
+                    /**
+                     * Properties of a LinkEntity.
+                     * @memberof clutch.core.project.v1
+                     * @interface ILinkEntity
+                     * @property {string|null} [name] LinkEntity name
+                     * @property {Array.<clutch.core.project.v1.ILink>|null} [links] LinkEntity links
+                     */
+
+                    /**
+                     * Constructs a new LinkEntity.
+                     * @memberof clutch.core.project.v1
+                     * @classdesc Represents a LinkEntity.
+                     * @implements ILinkEntity
+                     * @constructor
+                     * @param {clutch.core.project.v1.ILinkEntity=} [properties] Properties to set
+                     */
+                    function LinkEntity(properties) {
+                        this.links = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * LinkEntity name.
+                     * @member {string} name
+                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @instance
+                     */
+                    LinkEntity.prototype.name = "";
+
+                    /**
+                     * LinkEntity links.
+                     * @member {Array.<clutch.core.project.v1.ILink>} links
+                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @instance
+                     */
+                    LinkEntity.prototype.links = $util.emptyArray;
+
+                    /**
+                     * Verifies a LinkEntity message.
+                     * @function verify
+                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    LinkEntity.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.links != null && message.hasOwnProperty("links")) {
+                            if (!Array.isArray(message.links))
+                                return "links: array expected";
+                            for (let i = 0; i < message.links.length; ++i) {
+                                let error = $root.clutch.core.project.v1.Link.verify(message.links[i]);
+                                if (error)
+                                    return "links." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a LinkEntity message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.core.project.v1.LinkEntity} LinkEntity
+                     */
+                    LinkEntity.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.project.v1.LinkEntity)
+                            return object;
+                        let message = new $root.clutch.core.project.v1.LinkEntity();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.links) {
+                            if (!Array.isArray(object.links))
+                                throw TypeError(".clutch.core.project.v1.LinkEntity.links: array expected");
+                            message.links = [];
+                            for (let i = 0; i < object.links.length; ++i) {
+                                if (typeof object.links[i] !== "object")
+                                    throw TypeError(".clutch.core.project.v1.LinkEntity.links: object expected");
+                                message.links[i] = $root.clutch.core.project.v1.Link.fromObject(object.links[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a LinkEntity message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @static
+                     * @param {clutch.core.project.v1.LinkEntity} message LinkEntity
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    LinkEntity.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults)
+                            object.links = [];
+                        if (options.defaults)
+                            object.name = "";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.links && message.links.length) {
+                            object.links = [];
+                            for (let j = 0; j < message.links.length; ++j)
+                                object.links[j] = $root.clutch.core.project.v1.Link.toObject(message.links[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this LinkEntity to JSON.
+                     * @function toJSON
+                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    LinkEntity.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return LinkEntity;
                 })();
 
                 return v1;
@@ -48220,748 +48526,6 @@ export const clutch = $root.clutch = (() => {
         })();
 
         return proxy;
-    })();
-
-    clutch.quicklinks = (function() {
-
-        /**
-         * Namespace quicklinks.
-         * @memberof clutch
-         * @namespace
-         */
-        const quicklinks = {};
-
-        quicklinks.v1 = (function() {
-
-            /**
-             * Namespace v1.
-             * @memberof clutch.quicklinks
-             * @namespace
-             */
-            const v1 = {};
-
-            v1.QuickLinksAPI = (function() {
-
-                /**
-                 * Constructs a new QuickLinksAPI service.
-                 * @memberof clutch.quicklinks.v1
-                 * @classdesc Represents a QuickLinksAPI
-                 * @extends $protobuf.rpc.Service
-                 * @constructor
-                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
-                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
-                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
-                 */
-                function QuickLinksAPI(rpcImpl, requestDelimited, responseDelimited) {
-                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
-                }
-
-                (QuickLinksAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = QuickLinksAPI;
-
-                /**
-                 * Callback as used by {@link clutch.quicklinks.v1.QuickLinksAPI#getQuickLinks}.
-                 * @memberof clutch.quicklinks.v1.QuickLinksAPI
-                 * @typedef GetQuickLinksCallback
-                 * @type {function}
-                 * @param {Error|null} error Error, if any
-                 * @param {clutch.quicklinks.v1.GetQuickLinksResponse} [response] GetQuickLinksResponse
-                 */
-
-                /**
-                 * Calls GetQuickLinks.
-                 * @function getQuickLinks
-                 * @memberof clutch.quicklinks.v1.QuickLinksAPI
-                 * @instance
-                 * @param {clutch.quicklinks.v1.IGetQuickLinksRequest} request GetQuickLinksRequest message or plain object
-                 * @param {clutch.quicklinks.v1.QuickLinksAPI.GetQuickLinksCallback} callback Node-style callback called with the error, if any, and GetQuickLinksResponse
-                 * @returns {undefined}
-                 * @variation 1
-                 */
-                Object.defineProperty(QuickLinksAPI.prototype.getQuickLinks = function getQuickLinks(request, callback) {
-                    return this.rpcCall(getQuickLinks, $root.clutch.quicklinks.v1.GetQuickLinksRequest, $root.clutch.quicklinks.v1.GetQuickLinksResponse, request, callback);
-                }, "name", { value: "GetQuickLinks" });
-
-                /**
-                 * Calls GetQuickLinks.
-                 * @function getQuickLinks
-                 * @memberof clutch.quicklinks.v1.QuickLinksAPI
-                 * @instance
-                 * @param {clutch.quicklinks.v1.IGetQuickLinksRequest} request GetQuickLinksRequest message or plain object
-                 * @returns {Promise<clutch.quicklinks.v1.GetQuickLinksResponse>} Promise
-                 * @variation 2
-                 */
-
-                return QuickLinksAPI;
-            })();
-
-            v1.Link = (function() {
-
-                /**
-                 * Properties of a Link.
-                 * @memberof clutch.quicklinks.v1
-                 * @interface ILink
-                 * @property {string|null} [name] Link name
-                 * @property {string|null} [url] Link url
-                 * @property {string|null} [imagePath] Link imagePath
-                 */
-
-                /**
-                 * Constructs a new Link.
-                 * @memberof clutch.quicklinks.v1
-                 * @classdesc Represents a Link.
-                 * @implements ILink
-                 * @constructor
-                 * @param {clutch.quicklinks.v1.ILink=} [properties] Properties to set
-                 */
-                function Link(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * Link name.
-                 * @member {string} name
-                 * @memberof clutch.quicklinks.v1.Link
-                 * @instance
-                 */
-                Link.prototype.name = "";
-
-                /**
-                 * Link url.
-                 * @member {string} url
-                 * @memberof clutch.quicklinks.v1.Link
-                 * @instance
-                 */
-                Link.prototype.url = "";
-
-                /**
-                 * Link imagePath.
-                 * @member {string} imagePath
-                 * @memberof clutch.quicklinks.v1.Link
-                 * @instance
-                 */
-                Link.prototype.imagePath = "";
-
-                /**
-                 * Verifies a Link message.
-                 * @function verify
-                 * @memberof clutch.quicklinks.v1.Link
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                Link.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.name != null && message.hasOwnProperty("name"))
-                        if (!$util.isString(message.name))
-                            return "name: string expected";
-                    if (message.url != null && message.hasOwnProperty("url"))
-                        if (!$util.isString(message.url))
-                            return "url: string expected";
-                    if (message.imagePath != null && message.hasOwnProperty("imagePath"))
-                        if (!$util.isString(message.imagePath))
-                            return "imagePath: string expected";
-                    return null;
-                };
-
-                /**
-                 * Creates a Link message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.quicklinks.v1.Link
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.quicklinks.v1.Link} Link
-                 */
-                Link.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.quicklinks.v1.Link)
-                        return object;
-                    let message = new $root.clutch.quicklinks.v1.Link();
-                    if (object.name != null)
-                        message.name = String(object.name);
-                    if (object.url != null)
-                        message.url = String(object.url);
-                    if (object.imagePath != null)
-                        message.imagePath = String(object.imagePath);
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a Link message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.quicklinks.v1.Link
-                 * @static
-                 * @param {clutch.quicklinks.v1.Link} message Link
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                Link.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults) {
-                        object.name = "";
-                        object.url = "";
-                        object.imagePath = "";
-                    }
-                    if (message.name != null && message.hasOwnProperty("name"))
-                        object.name = message.name;
-                    if (message.url != null && message.hasOwnProperty("url"))
-                        object.url = message.url;
-                    if (message.imagePath != null && message.hasOwnProperty("imagePath"))
-                        object.imagePath = message.imagePath;
-                    return object;
-                };
-
-                /**
-                 * Converts this Link to JSON.
-                 * @function toJSON
-                 * @memberof clutch.quicklinks.v1.Link
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                Link.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return Link;
-            })();
-
-            v1.LinkEntity = (function() {
-
-                /**
-                 * Properties of a LinkEntity.
-                 * @memberof clutch.quicklinks.v1
-                 * @interface ILinkEntity
-                 * @property {string|null} [name] LinkEntity name
-                 * @property {Array.<clutch.quicklinks.v1.ILink>|null} [links] LinkEntity links
-                 */
-
-                /**
-                 * Constructs a new LinkEntity.
-                 * @memberof clutch.quicklinks.v1
-                 * @classdesc Represents a LinkEntity.
-                 * @implements ILinkEntity
-                 * @constructor
-                 * @param {clutch.quicklinks.v1.ILinkEntity=} [properties] Properties to set
-                 */
-                function LinkEntity(properties) {
-                    this.links = [];
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * LinkEntity name.
-                 * @member {string} name
-                 * @memberof clutch.quicklinks.v1.LinkEntity
-                 * @instance
-                 */
-                LinkEntity.prototype.name = "";
-
-                /**
-                 * LinkEntity links.
-                 * @member {Array.<clutch.quicklinks.v1.ILink>} links
-                 * @memberof clutch.quicklinks.v1.LinkEntity
-                 * @instance
-                 */
-                LinkEntity.prototype.links = $util.emptyArray;
-
-                /**
-                 * Verifies a LinkEntity message.
-                 * @function verify
-                 * @memberof clutch.quicklinks.v1.LinkEntity
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                LinkEntity.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.name != null && message.hasOwnProperty("name"))
-                        if (!$util.isString(message.name))
-                            return "name: string expected";
-                    if (message.links != null && message.hasOwnProperty("links")) {
-                        if (!Array.isArray(message.links))
-                            return "links: array expected";
-                        for (let i = 0; i < message.links.length; ++i) {
-                            let error = $root.clutch.quicklinks.v1.Link.verify(message.links[i]);
-                            if (error)
-                                return "links." + error;
-                        }
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a LinkEntity message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.quicklinks.v1.LinkEntity
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.quicklinks.v1.LinkEntity} LinkEntity
-                 */
-                LinkEntity.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.quicklinks.v1.LinkEntity)
-                        return object;
-                    let message = new $root.clutch.quicklinks.v1.LinkEntity();
-                    if (object.name != null)
-                        message.name = String(object.name);
-                    if (object.links) {
-                        if (!Array.isArray(object.links))
-                            throw TypeError(".clutch.quicklinks.v1.LinkEntity.links: array expected");
-                        message.links = [];
-                        for (let i = 0; i < object.links.length; ++i) {
-                            if (typeof object.links[i] !== "object")
-                                throw TypeError(".clutch.quicklinks.v1.LinkEntity.links: object expected");
-                            message.links[i] = $root.clutch.quicklinks.v1.Link.fromObject(object.links[i]);
-                        }
-                    }
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a LinkEntity message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.quicklinks.v1.LinkEntity
-                 * @static
-                 * @param {clutch.quicklinks.v1.LinkEntity} message LinkEntity
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                LinkEntity.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.arrays || options.defaults)
-                        object.links = [];
-                    if (options.defaults)
-                        object.name = "";
-                    if (message.name != null && message.hasOwnProperty("name"))
-                        object.name = message.name;
-                    if (message.links && message.links.length) {
-                        object.links = [];
-                        for (let j = 0; j < message.links.length; ++j)
-                            object.links[j] = $root.clutch.quicklinks.v1.Link.toObject(message.links[j], options);
-                    }
-                    return object;
-                };
-
-                /**
-                 * Converts this LinkEntity to JSON.
-                 * @function toJSON
-                 * @memberof clutch.quicklinks.v1.LinkEntity
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                LinkEntity.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return LinkEntity;
-            })();
-
-            v1.SlackInfo = (function() {
-
-                /**
-                 * Properties of a SlackInfo.
-                 * @memberof clutch.quicklinks.v1
-                 * @interface ISlackInfo
-                 * @property {string|null} [teamName] SlackInfo teamName
-                 * @property {string|null} [botName] SlackInfo botName
-                 * @property {string|null} [channelName] SlackInfo channelName
-                 */
-
-                /**
-                 * Constructs a new SlackInfo.
-                 * @memberof clutch.quicklinks.v1
-                 * @classdesc Represents a SlackInfo.
-                 * @implements ISlackInfo
-                 * @constructor
-                 * @param {clutch.quicklinks.v1.ISlackInfo=} [properties] Properties to set
-                 */
-                function SlackInfo(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * SlackInfo teamName.
-                 * @member {string} teamName
-                 * @memberof clutch.quicklinks.v1.SlackInfo
-                 * @instance
-                 */
-                SlackInfo.prototype.teamName = "";
-
-                /**
-                 * SlackInfo botName.
-                 * @member {string} botName
-                 * @memberof clutch.quicklinks.v1.SlackInfo
-                 * @instance
-                 */
-                SlackInfo.prototype.botName = "";
-
-                /**
-                 * SlackInfo channelName.
-                 * @member {string} channelName
-                 * @memberof clutch.quicklinks.v1.SlackInfo
-                 * @instance
-                 */
-                SlackInfo.prototype.channelName = "";
-
-                /**
-                 * Verifies a SlackInfo message.
-                 * @function verify
-                 * @memberof clutch.quicklinks.v1.SlackInfo
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                SlackInfo.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.teamName != null && message.hasOwnProperty("teamName"))
-                        if (!$util.isString(message.teamName))
-                            return "teamName: string expected";
-                    if (message.botName != null && message.hasOwnProperty("botName"))
-                        if (!$util.isString(message.botName))
-                            return "botName: string expected";
-                    if (message.channelName != null && message.hasOwnProperty("channelName"))
-                        if (!$util.isString(message.channelName))
-                            return "channelName: string expected";
-                    return null;
-                };
-
-                /**
-                 * Creates a SlackInfo message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.quicklinks.v1.SlackInfo
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.quicklinks.v1.SlackInfo} SlackInfo
-                 */
-                SlackInfo.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.quicklinks.v1.SlackInfo)
-                        return object;
-                    let message = new $root.clutch.quicklinks.v1.SlackInfo();
-                    if (object.teamName != null)
-                        message.teamName = String(object.teamName);
-                    if (object.botName != null)
-                        message.botName = String(object.botName);
-                    if (object.channelName != null)
-                        message.channelName = String(object.channelName);
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a SlackInfo message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.quicklinks.v1.SlackInfo
-                 * @static
-                 * @param {clutch.quicklinks.v1.SlackInfo} message SlackInfo
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                SlackInfo.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults) {
-                        object.teamName = "";
-                        object.botName = "";
-                        object.channelName = "";
-                    }
-                    if (message.teamName != null && message.hasOwnProperty("teamName"))
-                        object.teamName = message.teamName;
-                    if (message.botName != null && message.hasOwnProperty("botName"))
-                        object.botName = message.botName;
-                    if (message.channelName != null && message.hasOwnProperty("channelName"))
-                        object.channelName = message.channelName;
-                    return object;
-                };
-
-                /**
-                 * Converts this SlackInfo to JSON.
-                 * @function toJSON
-                 * @memberof clutch.quicklinks.v1.SlackInfo
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                SlackInfo.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return SlackInfo;
-            })();
-
-            v1.GetQuickLinksRequest = (function() {
-
-                /**
-                 * Properties of a GetQuickLinksRequest.
-                 * @memberof clutch.quicklinks.v1
-                 * @interface IGetQuickLinksRequest
-                 * @property {string|null} [projectName] GetQuickLinksRequest projectName
-                 * @property {string|null} [projectEnvironment] GetQuickLinksRequest projectEnvironment
-                 * @property {clutch.quicklinks.v1.ISlackInfo|null} [slackInfo] GetQuickLinksRequest slackInfo
-                 */
-
-                /**
-                 * Constructs a new GetQuickLinksRequest.
-                 * @memberof clutch.quicklinks.v1
-                 * @classdesc Represents a GetQuickLinksRequest.
-                 * @implements IGetQuickLinksRequest
-                 * @constructor
-                 * @param {clutch.quicklinks.v1.IGetQuickLinksRequest=} [properties] Properties to set
-                 */
-                function GetQuickLinksRequest(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * GetQuickLinksRequest projectName.
-                 * @member {string} projectName
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksRequest
-                 * @instance
-                 */
-                GetQuickLinksRequest.prototype.projectName = "";
-
-                /**
-                 * GetQuickLinksRequest projectEnvironment.
-                 * @member {string} projectEnvironment
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksRequest
-                 * @instance
-                 */
-                GetQuickLinksRequest.prototype.projectEnvironment = "";
-
-                /**
-                 * GetQuickLinksRequest slackInfo.
-                 * @member {clutch.quicklinks.v1.ISlackInfo|null|undefined} slackInfo
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksRequest
-                 * @instance
-                 */
-                GetQuickLinksRequest.prototype.slackInfo = null;
-
-                /**
-                 * Verifies a GetQuickLinksRequest message.
-                 * @function verify
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksRequest
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                GetQuickLinksRequest.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.projectName != null && message.hasOwnProperty("projectName"))
-                        if (!$util.isString(message.projectName))
-                            return "projectName: string expected";
-                    if (message.projectEnvironment != null && message.hasOwnProperty("projectEnvironment"))
-                        if (!$util.isString(message.projectEnvironment))
-                            return "projectEnvironment: string expected";
-                    if (message.slackInfo != null && message.hasOwnProperty("slackInfo")) {
-                        let error = $root.clutch.quicklinks.v1.SlackInfo.verify(message.slackInfo);
-                        if (error)
-                            return "slackInfo." + error;
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a GetQuickLinksRequest message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksRequest
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.quicklinks.v1.GetQuickLinksRequest} GetQuickLinksRequest
-                 */
-                GetQuickLinksRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.quicklinks.v1.GetQuickLinksRequest)
-                        return object;
-                    let message = new $root.clutch.quicklinks.v1.GetQuickLinksRequest();
-                    if (object.projectName != null)
-                        message.projectName = String(object.projectName);
-                    if (object.projectEnvironment != null)
-                        message.projectEnvironment = String(object.projectEnvironment);
-                    if (object.slackInfo != null) {
-                        if (typeof object.slackInfo !== "object")
-                            throw TypeError(".clutch.quicklinks.v1.GetQuickLinksRequest.slackInfo: object expected");
-                        message.slackInfo = $root.clutch.quicklinks.v1.SlackInfo.fromObject(object.slackInfo);
-                    }
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a GetQuickLinksRequest message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksRequest
-                 * @static
-                 * @param {clutch.quicklinks.v1.GetQuickLinksRequest} message GetQuickLinksRequest
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                GetQuickLinksRequest.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults) {
-                        object.projectName = "";
-                        object.projectEnvironment = "";
-                        object.slackInfo = null;
-                    }
-                    if (message.projectName != null && message.hasOwnProperty("projectName"))
-                        object.projectName = message.projectName;
-                    if (message.projectEnvironment != null && message.hasOwnProperty("projectEnvironment"))
-                        object.projectEnvironment = message.projectEnvironment;
-                    if (message.slackInfo != null && message.hasOwnProperty("slackInfo"))
-                        object.slackInfo = $root.clutch.quicklinks.v1.SlackInfo.toObject(message.slackInfo, options);
-                    return object;
-                };
-
-                /**
-                 * Converts this GetQuickLinksRequest to JSON.
-                 * @function toJSON
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksRequest
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                GetQuickLinksRequest.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return GetQuickLinksRequest;
-            })();
-
-            v1.GetQuickLinksResponse = (function() {
-
-                /**
-                 * Properties of a GetQuickLinksResponse.
-                 * @memberof clutch.quicklinks.v1
-                 * @interface IGetQuickLinksResponse
-                 * @property {Array.<clutch.quicklinks.v1.ILinkEntity>|null} [linkEntities] GetQuickLinksResponse linkEntities
-                 */
-
-                /**
-                 * Constructs a new GetQuickLinksResponse.
-                 * @memberof clutch.quicklinks.v1
-                 * @classdesc Represents a GetQuickLinksResponse.
-                 * @implements IGetQuickLinksResponse
-                 * @constructor
-                 * @param {clutch.quicklinks.v1.IGetQuickLinksResponse=} [properties] Properties to set
-                 */
-                function GetQuickLinksResponse(properties) {
-                    this.linkEntities = [];
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * GetQuickLinksResponse linkEntities.
-                 * @member {Array.<clutch.quicklinks.v1.ILinkEntity>} linkEntities
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksResponse
-                 * @instance
-                 */
-                GetQuickLinksResponse.prototype.linkEntities = $util.emptyArray;
-
-                /**
-                 * Verifies a GetQuickLinksResponse message.
-                 * @function verify
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksResponse
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                GetQuickLinksResponse.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.linkEntities != null && message.hasOwnProperty("linkEntities")) {
-                        if (!Array.isArray(message.linkEntities))
-                            return "linkEntities: array expected";
-                        for (let i = 0; i < message.linkEntities.length; ++i) {
-                            let error = $root.clutch.quicklinks.v1.LinkEntity.verify(message.linkEntities[i]);
-                            if (error)
-                                return "linkEntities." + error;
-                        }
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a GetQuickLinksResponse message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksResponse
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.quicklinks.v1.GetQuickLinksResponse} GetQuickLinksResponse
-                 */
-                GetQuickLinksResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.quicklinks.v1.GetQuickLinksResponse)
-                        return object;
-                    let message = new $root.clutch.quicklinks.v1.GetQuickLinksResponse();
-                    if (object.linkEntities) {
-                        if (!Array.isArray(object.linkEntities))
-                            throw TypeError(".clutch.quicklinks.v1.GetQuickLinksResponse.linkEntities: array expected");
-                        message.linkEntities = [];
-                        for (let i = 0; i < object.linkEntities.length; ++i) {
-                            if (typeof object.linkEntities[i] !== "object")
-                                throw TypeError(".clutch.quicklinks.v1.GetQuickLinksResponse.linkEntities: object expected");
-                            message.linkEntities[i] = $root.clutch.quicklinks.v1.LinkEntity.fromObject(object.linkEntities[i]);
-                        }
-                    }
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a GetQuickLinksResponse message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksResponse
-                 * @static
-                 * @param {clutch.quicklinks.v1.GetQuickLinksResponse} message GetQuickLinksResponse
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                GetQuickLinksResponse.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.arrays || options.defaults)
-                        object.linkEntities = [];
-                    if (message.linkEntities && message.linkEntities.length) {
-                        object.linkEntities = [];
-                        for (let j = 0; j < message.linkEntities.length; ++j)
-                            object.linkEntities[j] = $root.clutch.quicklinks.v1.LinkEntity.toObject(message.linkEntities[j], options);
-                    }
-                    return object;
-                };
-
-                /**
-                 * Converts this GetQuickLinksResponse to JSON.
-                 * @function toJSON
-                 * @memberof clutch.quicklinks.v1.GetQuickLinksResponse
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                GetQuickLinksResponse.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return GetQuickLinksResponse;
-            })();
-
-            return v1;
-        })();
-
-        return quicklinks;
     })();
 
     clutch.resolver = (function() {
