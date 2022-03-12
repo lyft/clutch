@@ -5,7 +5,7 @@ import type { Meta } from "@storybook/react";
 import TimeseriesChart, { TimeseriesReferenceLineProps } from "../Charts/timeseries";
 
 export default {
-  title: "Core/TimeseriesChart",
+  title: "Core/Charts/TimeseriesChart",
   component: TimeseriesChart,
 } as Meta;
 
