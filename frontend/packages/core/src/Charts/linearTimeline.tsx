@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -16,12 +16,14 @@ export interface LinearTimelineDataPoint {
   timestamp: number;
 }
 
-// Note that shape can be a set of shapes denoted by preset strings ("circle", "square", etc.)
-// or a custom SVG element
+export interface LinearTimelineShape {}
+
+type PresetShape = "circle" | "square" | "cross" | "diamond" | "star" | "triangle" | "wye";
+// Note that shape can be a preset of one of the shapes or a custom SVG element
 // See https://recharts.org/en-US/api/Scatter#shape for more details
 export interface LinearTimelineDataPoints {
   points: LinearTimelineDataPoint[];
-  shape?: any;
+  shape?: ReactElement<SVGElement> | ((props: any) => ReactElement<SVGElement>) | PresetShape;
   color?: string;
 }
 
