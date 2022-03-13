@@ -18,7 +18,7 @@ import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
-const InstanceIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
+const InstanceIdentifier: React.FC<ResolverChild> = ({ resolverType, inputTransformer }) => {
   const { onSubmit } = useWizardContext();
   const resolvedResourceData = useDataLayout("resourceData");
 
@@ -28,7 +28,7 @@ const InstanceIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
     onSubmit();
   };
 
-  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
+  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} inputTransformer={inputTransformer} />;
 };
 
 const InstanceDetails: React.FC<WizardChild> = () => {
@@ -92,7 +92,7 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [], inputTransformer }) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {
@@ -109,7 +109,7 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <InstanceIdentifier name="Lookup" resolverType={resolverType} />
+      <InstanceIdentifier name="Lookup" resolverType={resolverType} inputTransformer={inputTransformer}/>
       <InstanceDetails name="Verify" />
       <Confirm name="Confirmation" notes={notes} />
     </Wizard>

@@ -63,6 +63,11 @@ interface ResolverProps {
    *  Notes can be used to pass in extra information to the user about the workflow
    */
   notes?: NoteConfig[];
+  /**
+   * A function that can transform the resolver input, returning a modified string. Useful in cases such as removing
+   * certain prefixes or suffixes, or replacing certain substrings.
+   */
+  inputTransformer?: (input: string) => string;
 }
 
 const Resolver: React.FC<ResolverProps> = ({
@@ -73,6 +78,7 @@ const Resolver: React.FC<ResolverProps> = ({
   apiPackage,
   enableAutocomplete = true,
   notes = [],
+  inputTransformer,
 }) => {
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
@@ -84,8 +90,18 @@ const Resolver: React.FC<ResolverProps> = ({
     dispatch({ type: ResolverAction.RESOLVING });
 
     // Copy incoming data, trimming whitespace from any string values (usually artifact of cut and paste into tool).
-    const inputData = _.mapValues(data, v => (_.isString(v) && _.trim(v)) || v);
-
+    // If a inputTransformer function is defined, then use it after trimming.
+    const inputData = _.mapValues(data, v => {
+      if(_.isString(v)) {
+        if (inputTransformer) {
+          return inputTransformer(_.trim(v));
+        } else {
+          return _.trim(v);
+        }
+      }
+      return v;
+    });
+    
     // Resolve!
     resolveResource(
       type,

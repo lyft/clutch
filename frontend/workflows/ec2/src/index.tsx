@@ -7,6 +7,7 @@ import TerminateInstance from "./terminate-instance";
 
 interface ResolverConfigProps {
   resolverType: string;
+  ipnutTransformer: (input: string) => string;
 }
 
 interface ConfirmConfigProps {
