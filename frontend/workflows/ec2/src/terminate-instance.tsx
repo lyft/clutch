@@ -28,7 +28,14 @@ const InstanceIdentifier: React.FC<ResolverChild> = ({ resolverType, inputTransf
     onSubmit();
   };
 
-  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} inputTransformer={inputTransformer} />;
+  return (
+    <Resolver
+      type={resolverType}
+      searchLimit={1}
+      onResolve={onResolve}
+      inputTransformer={inputTransformer}
+    />
+  );
 };
 
 const InstanceDetails: React.FC<WizardChild> = () => {
@@ -92,7 +99,12 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [], inputTransformer }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({
+  heading,
+  resolverType,
+  notes = [],
+  inputTransformer,
+}) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {
@@ -109,7 +121,11 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <InstanceIdentifier name="Lookup" resolverType={resolverType} inputTransformer={inputTransformer}/>
+      <InstanceIdentifier
+        name="Lookup"
+        resolverType={resolverType}
+        inputTransformer={inputTransformer}
+      />
       <InstanceDetails name="Verify" />
       <Confirm name="Confirmation" notes={notes} />
     </Wizard>

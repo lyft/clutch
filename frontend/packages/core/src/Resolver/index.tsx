@@ -92,16 +92,15 @@ const Resolver: React.FC<ResolverProps> = ({
     // Copy incoming data, trimming whitespace from any string values (usually artifact of cut and paste into tool).
     // If a inputTransformer function is defined, then use it after trimming.
     const inputData = _.mapValues(data, v => {
-      if(_.isString(v)) {
+      if (_.isString(v)) {
         if (inputTransformer) {
           return inputTransformer(_.trim(v));
-        } else {
-          return _.trim(v);
         }
+        return _.trim(v);
       }
       return v;
     });
-    
+
     // Resolve!
     resolveResource(
       type,
