@@ -28262,7 +28262,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Object.<string,google.protobuf.IValue>|null} [data] Project data
                      * @property {clutch.core.project.v1.IProjectDependencies|null} [dependencies] Project dependencies
                      * @property {clutch.core.project.v1.IOnCall|null} [oncall] Project oncall
-                     * @property {Array.<clutch.core.project.v1.ILinkEntity>|null} [links] Project links
+                     * @property {Array.<clutch.core.project.v1.ILinkGroup>|null} [linkGroups] Project linkGroups
                      */
 
                     /**
@@ -28277,7 +28277,7 @@ export const clutch = $root.clutch = (() => {
                         this.owners = [];
                         this.languages = [];
                         this.data = {};
-                        this.links = [];
+                        this.linkGroups = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -28341,12 +28341,12 @@ export const clutch = $root.clutch = (() => {
                     Project.prototype.oncall = null;
 
                     /**
-                     * Project links.
-                     * @member {Array.<clutch.core.project.v1.ILinkEntity>} links
+                     * Project linkGroups.
+                     * @member {Array.<clutch.core.project.v1.ILinkGroup>} linkGroups
                      * @memberof clutch.core.project.v1.Project
                      * @instance
                      */
-                    Project.prototype.links = $util.emptyArray;
+                    Project.prototype.linkGroups = $util.emptyArray;
 
                     /**
                      * Verifies a Project message.
@@ -28399,13 +28399,13 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "oncall." + error;
                         }
-                        if (message.links != null && message.hasOwnProperty("links")) {
-                            if (!Array.isArray(message.links))
-                                return "links: array expected";
-                            for (let i = 0; i < message.links.length; ++i) {
-                                let error = $root.clutch.core.project.v1.LinkEntity.verify(message.links[i]);
+                        if (message.linkGroups != null && message.hasOwnProperty("linkGroups")) {
+                            if (!Array.isArray(message.linkGroups))
+                                return "linkGroups: array expected";
+                            for (let i = 0; i < message.linkGroups.length; ++i) {
+                                let error = $root.clutch.core.project.v1.LinkGroup.verify(message.linkGroups[i]);
                                 if (error)
-                                    return "links." + error;
+                                    return "linkGroups." + error;
                             }
                         }
                         return null;
@@ -28461,14 +28461,14 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.core.project.v1.Project.oncall: object expected");
                             message.oncall = $root.clutch.core.project.v1.OnCall.fromObject(object.oncall);
                         }
-                        if (object.links) {
-                            if (!Array.isArray(object.links))
-                                throw TypeError(".clutch.core.project.v1.Project.links: array expected");
-                            message.links = [];
-                            for (let i = 0; i < object.links.length; ++i) {
-                                if (typeof object.links[i] !== "object")
-                                    throw TypeError(".clutch.core.project.v1.Project.links: object expected");
-                                message.links[i] = $root.clutch.core.project.v1.LinkEntity.fromObject(object.links[i]);
+                        if (object.linkGroups) {
+                            if (!Array.isArray(object.linkGroups))
+                                throw TypeError(".clutch.core.project.v1.Project.linkGroups: array expected");
+                            message.linkGroups = [];
+                            for (let i = 0; i < object.linkGroups.length; ++i) {
+                                if (typeof object.linkGroups[i] !== "object")
+                                    throw TypeError(".clutch.core.project.v1.Project.linkGroups: object expected");
+                                message.linkGroups[i] = $root.clutch.core.project.v1.LinkGroup.fromObject(object.linkGroups[i]);
                             }
                         }
                         return message;
@@ -28490,7 +28490,7 @@ export const clutch = $root.clutch = (() => {
                         if (options.arrays || options.defaults) {
                             object.owners = [];
                             object.languages = [];
-                            object.links = [];
+                            object.linkGroups = [];
                         }
                         if (options.objects || options.defaults)
                             object.data = {};
@@ -28524,10 +28524,10 @@ export const clutch = $root.clutch = (() => {
                             object.dependencies = $root.clutch.core.project.v1.ProjectDependencies.toObject(message.dependencies, options);
                         if (message.oncall != null && message.hasOwnProperty("oncall"))
                             object.oncall = $root.clutch.core.project.v1.OnCall.toObject(message.oncall, options);
-                        if (message.links && message.links.length) {
-                            object.links = [];
-                            for (let j = 0; j < message.links.length; ++j)
-                                object.links[j] = $root.clutch.core.project.v1.LinkEntity.toObject(message.links[j], options);
+                        if (message.linkGroups && message.linkGroups.length) {
+                            object.linkGroups = [];
+                            for (let j = 0; j < message.linkGroups.length; ++j)
+                                object.linkGroups[j] = $root.clutch.core.project.v1.LinkGroup.toObject(message.linkGroups[j], options);
                         }
                         return object;
                     };
@@ -29042,7 +29042,6 @@ export const clutch = $root.clutch = (() => {
                      * @interface ILink
                      * @property {string|null} [name] Link name
                      * @property {string|null} [url] Link url
-                     * @property {string|null} [imagePath] Link imagePath
                      */
 
                     /**
@@ -29077,14 +29076,6 @@ export const clutch = $root.clutch = (() => {
                     Link.prototype.url = "";
 
                     /**
-                     * Link imagePath.
-                     * @member {string} imagePath
-                     * @memberof clutch.core.project.v1.Link
-                     * @instance
-                     */
-                    Link.prototype.imagePath = "";
-
-                    /**
                      * Verifies a Link message.
                      * @function verify
                      * @memberof clutch.core.project.v1.Link
@@ -29101,9 +29092,6 @@ export const clutch = $root.clutch = (() => {
                         if (message.url != null && message.hasOwnProperty("url"))
                             if (!$util.isString(message.url))
                                 return "url: string expected";
-                        if (message.imagePath != null && message.hasOwnProperty("imagePath"))
-                            if (!$util.isString(message.imagePath))
-                                return "imagePath: string expected";
                         return null;
                     };
 
@@ -29123,8 +29111,6 @@ export const clutch = $root.clutch = (() => {
                             message.name = String(object.name);
                         if (object.url != null)
                             message.url = String(object.url);
-                        if (object.imagePath != null)
-                            message.imagePath = String(object.imagePath);
                         return message;
                     };
 
@@ -29144,14 +29130,11 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.name = "";
                             object.url = "";
-                            object.imagePath = "";
                         }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.url != null && message.hasOwnProperty("url"))
                             object.url = message.url;
-                        if (message.imagePath != null && message.hasOwnProperty("imagePath"))
-                            object.imagePath = message.imagePath;
                         return object;
                     };
 
@@ -29169,25 +29152,26 @@ export const clutch = $root.clutch = (() => {
                     return Link;
                 })();
 
-                v1.LinkEntity = (function() {
+                v1.LinkGroup = (function() {
 
                     /**
-                     * Properties of a LinkEntity.
+                     * Properties of a LinkGroup.
                      * @memberof clutch.core.project.v1
-                     * @interface ILinkEntity
-                     * @property {string|null} [name] LinkEntity name
-                     * @property {Array.<clutch.core.project.v1.ILink>|null} [links] LinkEntity links
+                     * @interface ILinkGroup
+                     * @property {string|null} [name] LinkGroup name
+                     * @property {Array.<clutch.core.project.v1.ILink>|null} [links] LinkGroup links
+                     * @property {string|null} [imagePath] LinkGroup imagePath
                      */
 
                     /**
-                     * Constructs a new LinkEntity.
+                     * Constructs a new LinkGroup.
                      * @memberof clutch.core.project.v1
-                     * @classdesc Represents a LinkEntity.
-                     * @implements ILinkEntity
+                     * @classdesc Represents a LinkGroup.
+                     * @implements ILinkGroup
                      * @constructor
-                     * @param {clutch.core.project.v1.ILinkEntity=} [properties] Properties to set
+                     * @param {clutch.core.project.v1.ILinkGroup=} [properties] Properties to set
                      */
-                    function LinkEntity(properties) {
+                    function LinkGroup(properties) {
                         this.links = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -29196,30 +29180,38 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * LinkEntity name.
+                     * LinkGroup name.
                      * @member {string} name
-                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @memberof clutch.core.project.v1.LinkGroup
                      * @instance
                      */
-                    LinkEntity.prototype.name = "";
+                    LinkGroup.prototype.name = "";
 
                     /**
-                     * LinkEntity links.
+                     * LinkGroup links.
                      * @member {Array.<clutch.core.project.v1.ILink>} links
-                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @memberof clutch.core.project.v1.LinkGroup
                      * @instance
                      */
-                    LinkEntity.prototype.links = $util.emptyArray;
+                    LinkGroup.prototype.links = $util.emptyArray;
 
                     /**
-                     * Verifies a LinkEntity message.
+                     * LinkGroup imagePath.
+                     * @member {string} imagePath
+                     * @memberof clutch.core.project.v1.LinkGroup
+                     * @instance
+                     */
+                    LinkGroup.prototype.imagePath = "";
+
+                    /**
+                     * Verifies a LinkGroup message.
                      * @function verify
-                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @memberof clutch.core.project.v1.LinkGroup
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    LinkEntity.verify = function verify(message) {
+                    LinkGroup.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.name != null && message.hasOwnProperty("name"))
@@ -29234,53 +29226,60 @@ export const clutch = $root.clutch = (() => {
                                     return "links." + error;
                             }
                         }
+                        if (message.imagePath != null && message.hasOwnProperty("imagePath"))
+                            if (!$util.isString(message.imagePath))
+                                return "imagePath: string expected";
                         return null;
                     };
 
                     /**
-                     * Creates a LinkEntity message from a plain object. Also converts values to their respective internal types.
+                     * Creates a LinkGroup message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @memberof clutch.core.project.v1.LinkGroup
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.core.project.v1.LinkEntity} LinkEntity
+                     * @returns {clutch.core.project.v1.LinkGroup} LinkGroup
                      */
-                    LinkEntity.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.core.project.v1.LinkEntity)
+                    LinkGroup.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.project.v1.LinkGroup)
                             return object;
-                        let message = new $root.clutch.core.project.v1.LinkEntity();
+                        let message = new $root.clutch.core.project.v1.LinkGroup();
                         if (object.name != null)
                             message.name = String(object.name);
                         if (object.links) {
                             if (!Array.isArray(object.links))
-                                throw TypeError(".clutch.core.project.v1.LinkEntity.links: array expected");
+                                throw TypeError(".clutch.core.project.v1.LinkGroup.links: array expected");
                             message.links = [];
                             for (let i = 0; i < object.links.length; ++i) {
                                 if (typeof object.links[i] !== "object")
-                                    throw TypeError(".clutch.core.project.v1.LinkEntity.links: object expected");
+                                    throw TypeError(".clutch.core.project.v1.LinkGroup.links: object expected");
                                 message.links[i] = $root.clutch.core.project.v1.Link.fromObject(object.links[i]);
                             }
                         }
+                        if (object.imagePath != null)
+                            message.imagePath = String(object.imagePath);
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a LinkEntity message. Also converts values to other types if specified.
+                     * Creates a plain object from a LinkGroup message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @memberof clutch.core.project.v1.LinkGroup
                      * @static
-                     * @param {clutch.core.project.v1.LinkEntity} message LinkEntity
+                     * @param {clutch.core.project.v1.LinkGroup} message LinkGroup
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    LinkEntity.toObject = function toObject(message, options) {
+                    LinkGroup.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
                         if (options.arrays || options.defaults)
                             object.links = [];
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.name = "";
+                            object.imagePath = "";
+                        }
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.links && message.links.length) {
@@ -29288,21 +29287,23 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.links.length; ++j)
                                 object.links[j] = $root.clutch.core.project.v1.Link.toObject(message.links[j], options);
                         }
+                        if (message.imagePath != null && message.hasOwnProperty("imagePath"))
+                            object.imagePath = message.imagePath;
                         return object;
                     };
 
                     /**
-                     * Converts this LinkEntity to JSON.
+                     * Converts this LinkGroup to JSON.
                      * @function toJSON
-                     * @memberof clutch.core.project.v1.LinkEntity
+                     * @memberof clutch.core.project.v1.LinkGroup
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    LinkEntity.prototype.toJSON = function toJSON() {
+                    LinkGroup.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return LinkEntity;
+                    return LinkGroup;
                 })();
 
                 return v1;

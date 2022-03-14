@@ -11662,8 +11662,8 @@ export namespace clutch {
                     /** Project oncall */
                     oncall?: (clutch.core.project.v1.IOnCall|null);
 
-                    /** Project links */
-                    links?: (clutch.core.project.v1.ILinkEntity[]|null);
+                    /** Project linkGroups */
+                    linkGroups?: (clutch.core.project.v1.ILinkGroup[]|null);
                 }
 
                 /** Represents a Project. */
@@ -11696,8 +11696,8 @@ export namespace clutch {
                     /** Project oncall. */
                     public oncall?: (clutch.core.project.v1.IOnCall|null);
 
-                    /** Project links. */
-                    public links: clutch.core.project.v1.ILinkEntity[];
+                    /** Project linkGroups. */
+                    public linkGroups: clutch.core.project.v1.ILinkGroup[];
 
                     /**
                      * Verifies a Project message.
@@ -11934,9 +11934,6 @@ export namespace clutch {
 
                     /** Link url */
                     url?: (string|null);
-
-                    /** Link imagePath */
-                    imagePath?: (string|null);
                 }
 
                 /** Represents a Link. */
@@ -11953,9 +11950,6 @@ export namespace clutch {
 
                     /** Link url. */
                     public url: string;
-
-                    /** Link imagePath. */
-                    public imagePath: string;
 
                     /**
                      * Verifies a Link message.
@@ -11986,55 +11980,61 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a LinkEntity. */
-                interface ILinkEntity {
+                /** Properties of a LinkGroup. */
+                interface ILinkGroup {
 
-                    /** LinkEntity name */
+                    /** LinkGroup name */
                     name?: (string|null);
 
-                    /** LinkEntity links */
+                    /** LinkGroup links */
                     links?: (clutch.core.project.v1.ILink[]|null);
+
+                    /** LinkGroup imagePath */
+                    imagePath?: (string|null);
                 }
 
-                /** Represents a LinkEntity. */
-                class LinkEntity implements ILinkEntity {
+                /** Represents a LinkGroup. */
+                class LinkGroup implements ILinkGroup {
 
                     /**
-                     * Constructs a new LinkEntity.
+                     * Constructs a new LinkGroup.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.core.project.v1.ILinkEntity);
+                    constructor(properties?: clutch.core.project.v1.ILinkGroup);
 
-                    /** LinkEntity name. */
+                    /** LinkGroup name. */
                     public name: string;
 
-                    /** LinkEntity links. */
+                    /** LinkGroup links. */
                     public links: clutch.core.project.v1.ILink[];
 
+                    /** LinkGroup imagePath. */
+                    public imagePath: string;
+
                     /**
-                     * Verifies a LinkEntity message.
+                     * Verifies a LinkGroup message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a LinkEntity message from a plain object. Also converts values to their respective internal types.
+                     * Creates a LinkGroup message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns LinkEntity
+                     * @returns LinkGroup
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.LinkEntity;
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.LinkGroup;
 
                     /**
-                     * Creates a plain object from a LinkEntity message. Also converts values to other types if specified.
-                     * @param message LinkEntity
+                     * Creates a plain object from a LinkGroup message. Also converts values to other types if specified.
+                     * @param message LinkGroup
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.core.project.v1.LinkEntity, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.core.project.v1.LinkGroup, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this LinkEntity to JSON.
+                     * Converts this LinkGroup to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

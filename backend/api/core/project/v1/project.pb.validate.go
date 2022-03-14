@@ -164,7 +164,7 @@ func (m *Project) validate(all bool) error {
 		}
 	}
 
-	for idx, item := range m.GetLinks() {
+	for idx, item := range m.GetLinkGroups() {
 		_, _ = idx, item
 
 		if all {
@@ -172,7 +172,7 @@ func (m *Project) validate(all bool) error {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, ProjectValidationError{
-						field:  fmt.Sprintf("Links[%v]", idx),
+						field:  fmt.Sprintf("LinkGroups[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -180,7 +180,7 @@ func (m *Project) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, ProjectValidationError{
-						field:  fmt.Sprintf("Links[%v]", idx),
+						field:  fmt.Sprintf("LinkGroups[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -189,7 +189,7 @@ func (m *Project) validate(all bool) error {
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ProjectValidationError{
-					field:  fmt.Sprintf("Links[%v]", idx),
+					field:  fmt.Sprintf("LinkGroups[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -819,8 +819,6 @@ func (m *Link) validate(all bool) error {
 
 	// no validation rules for Url
 
-	// no validation rules for ImagePath
-
 	if len(errors) > 0 {
 		return LinkMultiError(errors)
 	}
@@ -898,22 +896,22 @@ var _ interface {
 	ErrorName() string
 } = LinkValidationError{}
 
-// Validate checks the field values on LinkEntity with the rules defined in the
+// Validate checks the field values on LinkGroup with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *LinkEntity) Validate() error {
+func (m *LinkGroup) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on LinkEntity with the rules defined in
+// ValidateAll checks the field values on LinkGroup with the rules defined in
 // the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in LinkEntityMultiError, or
-// nil if none found.
-func (m *LinkEntity) ValidateAll() error {
+// result is a list of violation errors wrapped in LinkGroupMultiError, or nil
+// if none found.
+func (m *LinkGroup) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *LinkEntity) validate(all bool) error {
+func (m *LinkGroup) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -929,7 +927,7 @@ func (m *LinkEntity) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, LinkEntityValidationError{
+					errors = append(errors, LinkGroupValidationError{
 						field:  fmt.Sprintf("Links[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -937,7 +935,7 @@ func (m *LinkEntity) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, LinkEntityValidationError{
+					errors = append(errors, LinkGroupValidationError{
 						field:  fmt.Sprintf("Links[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -946,7 +944,7 @@ func (m *LinkEntity) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return LinkEntityValidationError{
+				return LinkGroupValidationError{
 					field:  fmt.Sprintf("Links[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -956,19 +954,21 @@ func (m *LinkEntity) validate(all bool) error {
 
 	}
 
+	// no validation rules for ImagePath
+
 	if len(errors) > 0 {
-		return LinkEntityMultiError(errors)
+		return LinkGroupMultiError(errors)
 	}
 
 	return nil
 }
 
-// LinkEntityMultiError is an error wrapping multiple validation errors
-// returned by LinkEntity.ValidateAll() if the designated constraints aren't met.
-type LinkEntityMultiError []error
+// LinkGroupMultiError is an error wrapping multiple validation errors returned
+// by LinkGroup.ValidateAll() if the designated constraints aren't met.
+type LinkGroupMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m LinkEntityMultiError) Error() string {
+func (m LinkGroupMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -977,11 +977,11 @@ func (m LinkEntityMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m LinkEntityMultiError) AllErrors() []error { return m }
+func (m LinkGroupMultiError) AllErrors() []error { return m }
 
-// LinkEntityValidationError is the validation error returned by
-// LinkEntity.Validate if the designated constraints aren't met.
-type LinkEntityValidationError struct {
+// LinkGroupValidationError is the validation error returned by
+// LinkGroup.Validate if the designated constraints aren't met.
+type LinkGroupValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -989,22 +989,22 @@ type LinkEntityValidationError struct {
 }
 
 // Field function returns field value.
-func (e LinkEntityValidationError) Field() string { return e.field }
+func (e LinkGroupValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e LinkEntityValidationError) Reason() string { return e.reason }
+func (e LinkGroupValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e LinkEntityValidationError) Cause() error { return e.cause }
+func (e LinkGroupValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e LinkEntityValidationError) Key() bool { return e.key }
+func (e LinkGroupValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e LinkEntityValidationError) ErrorName() string { return "LinkEntityValidationError" }
+func (e LinkGroupValidationError) ErrorName() string { return "LinkGroupValidationError" }
 
 // Error satisfies the builtin error interface
-func (e LinkEntityValidationError) Error() string {
+func (e LinkGroupValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1016,14 +1016,14 @@ func (e LinkEntityValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sLinkEntity.%s: %s%s",
+		"invalid %sLinkGroup.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = LinkEntityValidationError{}
+var _ error = LinkGroupValidationError{}
 
 var _ interface {
 	Field() string
@@ -1031,4 +1031,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = LinkEntityValidationError{}
+} = LinkGroupValidationError{}
