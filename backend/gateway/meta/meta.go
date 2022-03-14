@@ -8,6 +8,7 @@ import (
 
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/grpcreflect"
+	"google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -34,6 +35,8 @@ var (
 
 const typePrefix = "type.googleapis.com/"
 
+var apiPattern = regexp.MustCompile(`^/v\d+/`)
+
 func TypeURL(pb proto.Message) string {
 	return typePrefix + string(pb.ProtoReflect().Descriptor().FullName())
 }
@@ -49,7 +52,42 @@ func GenerateGRPCMetadata(server *grpc.Server) error {
 		for _, md := range sd.GetMethods() {
 			methodName := fmt.Sprintf("/%s/%s", sd.GetFullyQualifiedName(), md.GetName())
 			mds[methodName] = md
+
+			opts := md.GetMethodOptions()
+
+			if !proto.HasExtension(opts, annotations.E_Http) {
+				fmt.Println("it doesn't have it!")
+			} else {
+				ext := proto.GetExtension(opts, annotations.E_Http)
+				aext := ext.(*annotations.HttpRule)
+				if aext.Pattern != nil {
+					pattern := ""
+					switch v := aext.Pattern.(type) {
+					case *annotations.HttpRule_Custom:
+						pattern = v.Custom.Path
+					case *annotations.HttpRule_Delete:
+						pattern = v.Delete
+					case *annotations.HttpRule_Get:
+						pattern = v.Get
+					case *annotations.HttpRule_Patch:
+						pattern = v.Patch
+					case *annotations.HttpRule_Post:
+						pattern = v.Post
+					case *annotations.HttpRule_Put:
+						pattern = v.Put
+					default:
+						return fmt.Errorf("unknown type for HTTP annotation '%T'", v)
+					}
+
+					if apiPattern.MatchString(pattern) {
+						return fmt.Errorf("pattern for '%s' must start with /v1/ (or other version number), instead found '%s'", methodName, pattern)
+					}
+				}
+
+			}
+
 		}
+
 	}
 
 	methodDescriptors = mds
