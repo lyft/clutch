@@ -8,7 +8,7 @@ COPY Makefile .
 RUN make frontend
 
 # Backend build.
-FROM golang:1.17.8-buster as gobuild
+FROM golang:1.18.0-buster as gobuild
 WORKDIR /go/src/github.com/lyft/clutch
 COPY ./backend ./backend
 COPY ./tools/preflight-checks.sh ./tools/preflight-checks.sh
