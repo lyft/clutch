@@ -67,7 +67,7 @@ func (p *OIDCProvider) GetAuthCodeURL(ctx context.Context, state string) (string
 
 func (p *OIDCProvider) ValidateStateNonce(state string) (string, error) {
 	claims := &stateClaims{}
-	_, err := jwt.ParseWithClaims(state, claims, func(token *jwt.Token) (interface{}, error) {
+	_, err := jwt.ParseWithClaims(state, claims, func(token *jwt.Token) (any, error) {
 		return []byte(p.sessionSecret), nil
 	})
 	if err != nil {
@@ -176,7 +176,7 @@ func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenTyp
 func (p *OIDCProvider) RefreshToken(ctx context.Context, t *oauth2.Token) (*oauth2.Token, error) {
 	// Extract claims from refresh token. They are also validated by the parser (i.e. to check for expiry).
 	claims := &jwt.StandardClaims{}
-	_, err := jwt.ParseWithClaims(t.RefreshToken, claims, func(token *jwt.Token) (interface{}, error) {
+	_, err := jwt.ParseWithClaims(t.RefreshToken, claims, func(token *jwt.Token) (any, error) {
 		return []byte(p.sessionSecret), nil
 	})
 	if err != nil {
@@ -298,7 +298,7 @@ func DefaultClaimsFromOIDCToken(ctx context.Context, t *oidc.IDToken) (*Claims, 
 
 func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, error) {
 	claims := &Claims{}
-	_, err := jwt.ParseWithClaims(rawToken, claims, func(token *jwt.Token) (interface{}, error) {
+	_, err := jwt.ParseWithClaims(rawToken, claims, func(token *jwt.Token) (any, error) {
 		return []byte(p.sessionSecret), nil
 	})
 	if err != nil {

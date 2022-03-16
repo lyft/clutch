@@ -290,7 +290,7 @@ func (p *Poller) setSnapshot(ctx context.Context, resourceMap map[gcpTypes.Respo
 	return nil
 }
 
-func computeChecksum(item interface{}) (string, error) {
+func computeChecksum(item any) (string, error) {
 	hash, err := hashstructure.Hash(item, hashstructure.FormatV1, &hashstructure.HashOptions{TagName: "json"})
 	if err != nil {
 		return "", err

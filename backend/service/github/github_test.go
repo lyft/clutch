@@ -36,7 +36,7 @@ type getfileMock struct {
 	truncated, binary bool
 }
 
-func (g *getfileMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
+func (g *getfileMock) Query(ctx context.Context, query any, variables map[string]any) error {
 	q, ok := query.(*getFileQuery)
 	if !ok {
 		panic("not a query")
@@ -622,7 +622,7 @@ type getRepositoryMock struct {
 	branchName string
 }
 
-func (g *getRepositoryMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
+func (g *getRepositoryMock) Query(ctx context.Context, query any, variables map[string]any) error {
 	q, ok := query.(*getRepositoryQuery)
 	if !ok {
 		panic("not a query")

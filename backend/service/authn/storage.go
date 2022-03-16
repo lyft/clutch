@@ -127,7 +127,7 @@ func (s *storage) Read(ctx context.Context, userID string, provider string) (*oa
 		if err != nil {
 			return nil, err
 		}
-		ret = ret.WithExtra(map[string]interface{}{"id_token": string(it)})
+		ret = ret.WithExtra(map[string]any{"id_token": string(it)})
 	}
 
 	return ret, nil

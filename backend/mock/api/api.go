@@ -21,7 +21,7 @@ func FromYAML(s string, message proto.Message) proto.Message {
 func AnyFromYAML(s string) *anypb.Any {
 	a := &anypb.Any{}
 
-	var obj map[string]interface{}
+	var obj map[string]any
 	if err := yaml.Unmarshal([]byte(s), &obj); err != nil {
 		panic(err)
 	}
@@ -34,7 +34,7 @@ func AnyFromYAML(s string) *anypb.Any {
 }
 
 func yamlToJSON(s string) []byte {
-	var obj map[string]interface{}
+	var obj map[string]any
 	if err := yaml.Unmarshal([]byte(s), &obj); err != nil {
 		panic(err)
 	}

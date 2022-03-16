@@ -10,7 +10,7 @@ import (
 // GenerateStrategicPatch will return a patch that yields
 // the modified object when applied to the original object,
 // or an error if either of the two objects is invalid.
-func GenerateStrategicPatch(original, modified runtime.Object, dataStruct interface{}) ([]byte, error) {
+func GenerateStrategicPatch(original, modified runtime.Object, dataStruct any) ([]byte, error) {
 	oldBytes, err := json.Marshal(original)
 	if err != nil {
 		return nil, err

@@ -40,7 +40,7 @@ var VirtualFS = func() http.FileSystem {
 	return fs
 }()
 
-type vfsgen۰FS map[string]interface{}
+type vfsgen۰FS map[string]any
 
 func (fs vfsgen۰FS) Open(path string) (http.File, error) {
 	path = pathpkg.Clean("/" + path)
@@ -84,7 +84,7 @@ func (f *vfsgen۰FileInfo) Size() int64        { return int64(len(f.content)) }
 func (f *vfsgen۰FileInfo) Mode() os.FileMode  { return 0444 }
 func (f *vfsgen۰FileInfo) ModTime() time.Time { return f.modTime }
 func (f *vfsgen۰FileInfo) IsDir() bool        { return false }
-func (f *vfsgen۰FileInfo) Sys() interface{}   { return nil }
+func (f *vfsgen۰FileInfo) Sys() any           { return nil }
 
 // vfsgen۰File is an opened file instance.
 type vfsgen۰File struct {
@@ -114,7 +114,7 @@ func (d *vfsgen۰DirInfo) Size() int64        { return 0 }
 func (d *vfsgen۰DirInfo) Mode() os.FileMode  { return 0755 | os.ModeDir }
 func (d *vfsgen۰DirInfo) ModTime() time.Time { return d.modTime }
 func (d *vfsgen۰DirInfo) IsDir() bool        { return true }
-func (d *vfsgen۰DirInfo) Sys() interface{}   { return nil }
+func (d *vfsgen۰DirInfo) Sys() any           { return nil }
 
 // vfsgen۰Dir is an opened dir instance.
 type vfsgen۰Dir struct {

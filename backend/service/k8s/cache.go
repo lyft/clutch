@@ -189,19 +189,19 @@ func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDep
 	}
 }
 
-func (s *svc) informerAddHandler(obj interface{}) {
+func (s *svc) informerAddHandler(obj any) {
 	s.processInformerEvent(obj, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 }
 
-func (s *svc) informerUpdateHandler(oldObj, newObj interface{}) {
+func (s *svc) informerUpdateHandler(oldObj, newObj any) {
 	s.processInformerEvent(newObj, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 }
 
-func (s *svc) informerDeleteHandler(obj interface{}) {
+func (s *svc) informerDeleteHandler(obj any) {
 	s.processInformerEvent(obj, topologyv1.UpdateCacheRequest_DELETE)
 }
 
-func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCacheRequest_Action) {
+func (s *svc) processInformerEvent(obj any, action topologyv1.UpdateCacheRequest_Action) {
 	switch objType := obj.(type) {
 	case *corev1.Pod:
 		pod := podDescription(objType, "")

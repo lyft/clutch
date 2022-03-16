@@ -112,7 +112,7 @@ func TestStoreWithIDToken(t *testing.T) {
 		RefreshToken: "r",
 		Expiry:       now,
 	}
-	tok = tok.WithExtra(map[string]interface{}{"id_token": "i"})
+	tok = tok.WithExtra(map[string]any{"id_token": "i"})
 
 	m.Mock.ExpectExec("INSERT INTO authn_tokens").
 		WithArgs(
@@ -138,7 +138,7 @@ func TestStoreWithoutRefreshToken(t *testing.T) {
 		AccessToken: "a",
 		Expiry:      now,
 	}
-	tok = tok.WithExtra(map[string]interface{}{"id_token": "i"})
+	tok = tok.WithExtra(map[string]any{"id_token": "i"})
 
 	m.Mock.ExpectExec("INSERT INTO authn_tokens").
 		WithArgs(

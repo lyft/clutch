@@ -15,13 +15,13 @@ func TestLightweightInformer(t *testing.T) {
 	deleteActionChan := make(chan int)
 
 	informerHandlers := cache.ResourceEventHandlerFuncs{
-		AddFunc: func(obj interface{}) {
+		AddFunc: func(obj any) {
 			addActionChan <- 1
 		},
-		UpdateFunc: func(oldObj, newObj interface{}) {
+		UpdateFunc: func(oldObj, newObj any) {
 			updateActionChan <- 1
 		},
-		DeleteFunc: func(obj interface{}) {
+		DeleteFunc: func(obj any) {
 			deleteActionChan <- 1
 		},
 	}

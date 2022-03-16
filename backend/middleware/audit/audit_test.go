@@ -60,7 +60,7 @@ func (m *mockAuditor) UpdateRequestEvent(ctx context.Context, id int64, update *
 	return nil
 }
 
-func fakeHandler(ctx context.Context, req interface{}) (interface{}, error) {
+func fakeHandler(ctx context.Context, req any) (any, error) {
 	return &healthcheckv1.HealthcheckResponse{}, nil
 }
 
@@ -148,7 +148,7 @@ func TestInterceptorWithRedaction(t *testing.T) {
 		context.Background(),
 		logTestProto,
 		&grpc.UnaryServerInfo{FullMethod: "/foo/bar"},
-		func(ctx context.Context, req interface{}) (interface{}, error) {
+		func(ctx context.Context, req any) (any, error) {
 			// We must assert that the fields that were redacted are still present on the request object
 			assert.Equal(t, "test", req.(*testpb.LogOptionsTester).StrLogFalse)
 			assert.Equal(t, "test", req.(*testpb.LogOptionsTester).Nested.StrLogFalse)

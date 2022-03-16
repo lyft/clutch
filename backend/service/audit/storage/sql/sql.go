@@ -145,7 +145,7 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 	return c.query(ctx, readEventsRangeStatement, start, *end)
 }
 
-func (c *client) query(ctx context.Context, query string, args ...interface{}) ([]*auditv1.Event, error) {
+func (c *client) query(ctx context.Context, query string, args ...any) ([]*auditv1.Event, error) {
 	rows, err := c.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		c.logger.Error("error querying db", zap.Error(err))

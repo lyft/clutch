@@ -42,7 +42,7 @@ func generateServicesConfig(host string) []*proxyv1cfg.Service {
 }
 
 func structpbFromBody(body []byte) *structpb.Value {
-	var bodyData interface{}
+	var bodyData any
 	err := json.NewDecoder(bytes.NewReader(body)).Decode(&bodyData)
 	if err != nil {
 		panic(err)

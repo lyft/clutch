@@ -151,7 +151,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		Headers:    resHeaders,
 	}
 
-	var bodyData interface{}
+	var bodyData any
 	err = json.NewDecoder(response.Body).Decode(&bodyData)
 	switch {
 	// There is no body data so do nothing

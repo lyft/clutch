@@ -45,7 +45,7 @@ type migrateLogger struct {
 	logger *zap.SugaredLogger
 }
 
-func (m *migrateLogger) Printf(format string, v ...interface{}) {
+func (m *migrateLogger) Printf(format string, v ...any) {
 	m.logger.Infof(strings.TrimRight(format, "\n"), v...)
 }
 

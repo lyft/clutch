@@ -47,7 +47,7 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func fakeHandler(ctx context.Context, req interface{}) (interface{}, error) {
+func fakeHandler(ctx context.Context, req any) (any, error) {
 	return &healthcheckv1.HealthcheckResponse{}, nil
 }
 
@@ -106,7 +106,7 @@ func TestStatusCodeFilter(t *testing.T) {
 		}, log, nil)
 		assert.NoError(t, err)
 
-		fakeHandler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		fakeHandler := func(ctx context.Context, req any) (any, error) {
 			return &healthcheckv1.HealthcheckResponse{}, nil
 		}
 
@@ -160,7 +160,7 @@ func TestLogContent(t *testing.T) {
 		}, log, nil)
 		assert.NoError(t, err)
 
-		fakeHandler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		fakeHandler := func(ctx context.Context, req any) (any, error) {
 			return &healthcheckv1.HealthcheckResponse{}, nil
 		}
 

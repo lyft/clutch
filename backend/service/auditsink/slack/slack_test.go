@@ -250,7 +250,7 @@ func TestFormatCustomText(t *testing.T) {
 
 func TestSlackList(t *testing.T) {
 	testCases := []struct {
-		input          interface{}
+		input          any
 		expectedOutput string
 	}{
 		{

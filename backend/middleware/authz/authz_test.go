@@ -40,7 +40,7 @@ func TestNoClaims(t *testing.T) {
 
 	req := &healthcheckv1.HealthcheckRequest{}
 	info := &grpc.UnaryServerInfo{FullMethod: "/clutch.HealthcheckAPI/Healthcheck"}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return nil, nil
 	}
 
@@ -58,7 +58,7 @@ func TestAllowlist(t *testing.T) {
 
 	req := &healthcheckv1.HealthcheckRequest{}
 	info := &grpc.UnaryServerInfo{FullMethod: "/clutch.authn.v1.AuthnAPI/Callback"}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}
 
@@ -96,7 +96,7 @@ func TestNoResources(t *testing.T) {
 
 	req := &healthcheckv1.HealthcheckRequest{}
 	info := &grpc.UnaryServerInfo{FullMethod: "/clutch.foo/Bar"}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}
 

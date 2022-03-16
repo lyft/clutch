@@ -15,18 +15,18 @@ type temporalLogger struct {
 	sl *zap.SugaredLogger
 }
 
-func (t *temporalLogger) Debug(msg string, keyvals ...interface{}) {
+func (t *temporalLogger) Debug(msg string, keyvals ...any) {
 	t.sl.Debugw(msg, keyvals...)
 }
 
-func (t *temporalLogger) Info(msg string, keyvals ...interface{}) {
+func (t *temporalLogger) Info(msg string, keyvals ...any) {
 	t.sl.Infow(msg, keyvals...)
 }
 
-func (t *temporalLogger) Warn(msg string, keyvals ...interface{}) {
+func (t *temporalLogger) Warn(msg string, keyvals ...any) {
 	t.sl.Warnw(msg, keyvals...)
 }
 
-func (t *temporalLogger) Error(msg string, keyvals ...interface{}) {
+func (t *temporalLogger) Error(msg string, keyvals ...any) {
 	t.sl.Errorw(msg, keyvals...)
 }

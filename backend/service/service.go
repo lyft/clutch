@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type Service interface{}
+type Service any
 
 type Factory map[string]func(*any.Any, *zap.Logger, tally.Scope) (Service, error)
 

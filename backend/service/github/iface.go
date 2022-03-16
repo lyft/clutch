@@ -38,8 +38,8 @@ type v3pullrequests interface {
 }
 
 type v4client interface {
-	Query(ctx context.Context, q interface{}, variables map[string]interface{}) error
-	Mutate(ctx context.Context, m interface{}, input githubv4.Input, variables map[string]interface{}) error
+	Query(ctx context.Context, q any, variables map[string]any) error
+	Mutate(ctx context.Context, m any, input githubv4.Input, variables map[string]any) error
 }
 
 type v3issues interface {

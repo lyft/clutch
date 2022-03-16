@@ -199,7 +199,7 @@ func TestAPIBody(t *testing.T) {
 	m := (*ec2v1.Instance)(nil)
 
 	var tests = []struct {
-		input     interface{}
+		input     any
 		expectNil bool
 	}{
 		// case: type is proto.message

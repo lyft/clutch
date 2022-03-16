@@ -58,7 +58,7 @@ func (m *mid) evaluate(ctx context.Context, r *authzv1.CheckRequest) error {
 }
 
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
 		// Never interfere with allowlisted flows.
 		for _, allow := range authn.AlwaysAllowedMethods {
 			if middleware.MatchMethodOrResource(allow, info.FullMethod) {

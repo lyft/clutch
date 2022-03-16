@@ -81,7 +81,7 @@ func TestTimeoutOkay(t *testing.T) {
 	m, err := New(&gatewayv1.Timeouts{Default: durationpb.New(time.Second)}, nil, nil)
 	assert.NoError(t, err)
 
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}
 
@@ -96,7 +96,7 @@ func TestTimeoutWithinBoost(t *testing.T) {
 	m, err := New(&gatewayv1.Timeouts{Default: durationpb.New(time.Nanosecond)}, nil, nil)
 	assert.NoError(t, err)
 
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		time.Sleep(time.Millisecond) // Sleep for longer than timeout but less than boost.
 		select {
 		case <-ctx.Done():
@@ -123,7 +123,7 @@ func TestTimeoutBlockForMoreThanBoost(t *testing.T) {
 	m, err := New(&gatewayv1.Timeouts{Default: durationpb.New(time.Nanosecond)}, log, nil)
 	assert.NoError(t, err)
 
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		time.Sleep(boost * 4)
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}
@@ -153,7 +153,7 @@ func TestInfiniteTimeout(t *testing.T) {
 	m, err := New(cfg, nil, nil)
 	assert.NoError(t, err)
 
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		time.Sleep(boost + time.Millisecond)
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}

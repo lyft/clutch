@@ -58,7 +58,7 @@ func NewLightweightInformer(
 		ObjectType:       objType,
 		FullResyncPeriod: 0,
 		RetryOnError:     false,
-		Process: func(obj interface{}) error {
+		Process: func(obj any) error {
 			for _, d := range obj.(cache.Deltas) {
 				incomingObjectMeta, err := meta.Accessor(d.Object)
 				if err != nil {

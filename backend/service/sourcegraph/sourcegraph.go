@@ -91,7 +91,7 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 		}
 	}()
 
-	variables := map[string]interface{}{
+	variables := map[string]any{
 		"name": graphql.String(req.Repository),
 		"base": graphql.String(req.Base),
 		"head": graphql.String(req.Head),

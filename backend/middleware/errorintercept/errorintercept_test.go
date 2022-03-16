@@ -19,7 +19,7 @@ func TestNew(t *testing.T) {
 
 func TestEmpty(t *testing.T) {
 	m := &Middleware{}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}
 
@@ -32,7 +32,7 @@ func TestEmpty(t *testing.T) {
 
 func TestSkipsIfErrNil(t *testing.T) {
 	m := &Middleware{}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}
 
@@ -51,7 +51,7 @@ func TestCallsIfErr(t *testing.T) {
 	m := &Middleware{}
 
 	originalErr := errors.New("whoopsie daisy")
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return nil, originalErr
 	}
 
@@ -76,7 +76,7 @@ func TestMultipleInterceptors(t *testing.T) {
 	m := &Middleware{}
 
 	e := errors.New("whoopsie daisy")
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return nil, e
 	}
 

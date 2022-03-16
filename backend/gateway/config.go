@@ -161,7 +161,7 @@ func consolidateConfigs(cfgBaseDir, cfgFile string, cfg *gatewayv1.Config, f *Fl
 }
 
 func executeTemplate(contents []byte) ([]byte, error) {
-	tmpl := template.New("config").Funcs(map[string]interface{}{
+	tmpl := template.New("config").Funcs(map[string]any{
 		"getenv": os.Getenv,
 		"getboolenv": func(key string) bool {
 			b, _ := strconv.ParseBool(os.Getenv(key))
@@ -246,7 +246,7 @@ func replaceVarTemplateToken(data string) string {
 
 func parseYAML(contents []byte, pb proto.Message) error {
 	// Decode YAML.
-	var rawConfig map[string]interface{}
+	var rawConfig map[string]any
 	if err := yaml.Unmarshal(contents, &rawConfig); err != nil {
 		return err
 	}

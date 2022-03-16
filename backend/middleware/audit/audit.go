@@ -51,7 +51,7 @@ type mid struct {
 type auditEntryContextKey struct{}
 
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 		if meta.IsAuditDisabled(info.FullMethod) {
 			return handler(ctx, req)
 		}
@@ -88,7 +88,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	}
 }
 
-func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo) (*auditv1.RequestEvent, error) {
+func (m *mid) eventFromRequest(ctx context.Context, req any, info *grpc.UnaryServerInfo) (*auditv1.RequestEvent, error) {
 	svc, method, ok := middleware.SplitFullMethod(info.FullMethod)
 	if !ok {
 		m.logger.Warn("could not parse gRPC method", zap.String("fullMethod", info.FullMethod))
@@ -116,7 +116,7 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 	}, nil
 }
 
-func (m *mid) eventFromResponse(resp interface{}, err error) (*auditv1.RequestEvent, error) {
+func (m *mid) eventFromResponse(resp any, err error) (*auditv1.RequestEvent, error) {
 	s := status.Convert(err)
 	if s == nil {
 		s = status.New(codes.OK, "")

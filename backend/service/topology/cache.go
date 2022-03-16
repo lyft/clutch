@@ -166,10 +166,10 @@ func convertBatchInsertToSlice(batch map[string]*topologyv1.Resource) []*topolog
 	return batchInsert
 }
 
-func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface{}, string) {
+func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]any, string) {
 	queryParams := make([]string, 0, len(obj))
 	// Total object length x 4 as 4 is the number of columns we need to populate.
-	queryArgs := make([]interface{}, 0, len(obj)*4)
+	queryArgs := make([]any, 0, len(obj)*4)
 
 	for i, o := range obj {
 		// To parameterize all of the inputs for the bulk insert we need to increment the variable name.

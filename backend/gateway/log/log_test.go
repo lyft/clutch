@@ -34,7 +34,7 @@ func TestProtoField(t *testing.T) {
 	assert.NoError(t, logger.Sync())
 	assert.NoError(t, w.Flush())
 
-	o := make(map[string]interface{})
+	o := make(map[string]any)
 	assert.NoError(t, json.Unmarshal(b.Bytes(), &o))
 	assert.Contains(t, b.String(), `{"@type":"type.googleapis.com/clutch.healthcheck.v1.HealthcheckRequest"}`)
 }
@@ -86,7 +86,7 @@ func TestNamedErrorField(t *testing.T) {
 		assert.NoError(t, logger.Sync())
 		assert.NoError(t, w.Flush())
 
-		o := make(map[string]interface{})
+		o := make(map[string]any)
 		assert.NoError(t, json.Unmarshal(b.Bytes(), &o))
 		assert.Contains(t, b.String(), test.expectedMsg)
 
@@ -113,7 +113,7 @@ func TestErrorField(t *testing.T) {
 	assert.NoError(t, logger.Sync())
 	assert.NoError(t, w.Flush())
 
-	o := make(map[string]interface{})
+	o := make(map[string]any)
 	assert.NoError(t, json.Unmarshal(b.Bytes(), &o))
 	assert.Contains(t, b.String(), "error")
 	assert.Contains(t, b.String(), "yikes")

@@ -60,7 +60,7 @@ func TypeURL(m protodeprecated.Message) string {
 	return TypePrefix + string(protodeprecated.MessageReflect(m).Descriptor().FullName())
 }
 
-func MarshalProtoSlice(pbs interface{}) ([]*anypb.Any, error) {
+func MarshalProtoSlice(pbs any) ([]*anypb.Any, error) {
 	if pbs == nil {
 		return nil, nil
 	}

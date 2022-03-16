@@ -303,7 +303,7 @@ func resolvePattern(pb proto.Message, pattern *apiv1.Pattern) *auditv1.Resource 
 
 // APIBody returns a API request/response interface as an anypb.Any message, with any redaction or clearing based on
 // message or field annotations.
-func APIBody(body interface{}) (*anypb.Any, error) {
+func APIBody(body any) (*anypb.Any, error) {
 	m, ok := body.(proto.Message)
 	if !ok {
 		// body is not the type/value we want to process
@@ -324,7 +324,7 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 since structpb.NewValue has a limited set of types that it supports.
 More details here: https://github.com/golang/protobuf/issues/1302#issuecomment-805453221
 */
-func ToValue(data interface{}) (*structpb.Value, error) {
+func ToValue(data any) (*structpb.Value, error) {
 	b, err := json.Marshal(data)
 	if err != nil {
 		return nil, err

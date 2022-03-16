@@ -50,8 +50,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 // The struct is used in a Go template and the fields need to be exported
 type auditTemplateData struct {
-	Request  map[string]interface{}
-	Response map[string]interface{}
+	Request  map[string]any
+	Response map[string]any
 }
 
 // TODO: (sperry) expand on helper funcs
@@ -183,9 +183,9 @@ func getAuditTemplateData(event *auditv1.RequestEvent) (*auditTemplateData, erro
 		return nil, err
 	}
 
-	var requestMetadata map[string]interface{}
-	var responseMetadata map[string]interface{}
-	// json -> map[string]interface{}
+	var requestMetadata map[string]any
+	var responseMetadata map[string]any
+	// json -> map[string]any
 	err = json.Unmarshal(reqJSON, &requestMetadata)
 	if err != nil {
 		return nil, err
@@ -203,7 +203,7 @@ func getAuditTemplateData(event *auditv1.RequestEvent) (*auditTemplateData, erro
 
 // helper func for formatting custom slack messages
 // for inputs that are type slice/map, returns a formatted slack list
-func slackList(data interface{}) string {
+func slackList(data any) string {
 	if data == nil {
 		return defaultNone
 	}

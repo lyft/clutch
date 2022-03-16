@@ -11,7 +11,7 @@ import (
 func TestLogWrapper(t *testing.T) {
 	core, logs := observer.New(zap.DebugLevel)
 	tl := newTemporalLogger(zap.New(core))
-	args := []interface{}{zap.String("foo", "bar"), zap.String("blip", "pop")}
+	args := []any{zap.String("foo", "bar"), zap.String("blip", "pop")}
 	tl.Debug("debugz", args...)
 	tl.Info("infoz", args...)
 	tl.Warn("warnz", args...)

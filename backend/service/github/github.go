@@ -382,7 +382,7 @@ func newService(config *githubv1.Config, scope tally.Scope) (Client, error) {
 
 func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, error) {
 	q := &getFileQuery{}
-	params := map[string]interface{}{
+	params := map[string]any{
 		"owner":   githubv4.String(ref.RepoOwner),
 		"name":    githubv4.String(ref.RepoName),
 		"path":    githubv4.String(path),
@@ -460,7 +460,7 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 
 func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, error) {
 	q := &getRepositoryQuery{}
-	params := map[string]interface{}{
+	params := map[string]any{
 		"owner": githubv4.String(repo.RepoOwner),
 		"name":  githubv4.String(repo.RepoName),
 	}

@@ -398,7 +398,7 @@ oidc:
 			assert.NoError(t, err)
 
 			providerToken := &oauth2.Token{AccessToken: "AAAA", RefreshToken: refreshToken}
-			providerToken = providerToken.WithExtra(map[string]interface{}{"id_token": createIDToken(mockprovider.Key)})
+			providerToken = providerToken.WithExtra(map[string]any{"id_token": createIDToken(mockprovider.Key)})
 
 			if tc.invalidateProviderToken {
 				providerToken.Expiry = time.Now().Add(-1 * time.Hour)

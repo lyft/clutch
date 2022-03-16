@@ -14,7 +14,7 @@ type FanoutResult struct {
 	Err      error
 }
 
-func NewFanoutResult(pbSlice interface{}, err error) FanoutResult {
+func NewFanoutResult(pbSlice any, err error) FanoutResult {
 	return FanoutResult{
 		Messages: MessageSlice(pbSlice),
 		Err:      err,
@@ -93,7 +93,7 @@ func NewFanoutHandler(ctx context.Context) (context.Context, FanoutHandler) {
 }
 
 // MessageSlice takes a slice of protobuf objects and converts them to a slice of generic protobuf Messages.
-func MessageSlice(s interface{}) []proto.Message {
+func MessageSlice(s any) []proto.Message {
 	rs := reflect.ValueOf(s)
 	ret := make([]proto.Message, rs.Len())
 	for i := 0; i < rs.Len(); i++ {
