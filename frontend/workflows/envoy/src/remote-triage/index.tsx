@@ -8,7 +8,6 @@ import {
   Tab,
   Tabs,
   TextField,
-  useSearchParams,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -37,10 +36,13 @@ const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
   const { onSubmit } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
 
-  if (host) {
-    resourceData.value.host = host;
-    onSubmit();
-  }
+  React.useEffect(() => {
+    if (host) {
+      resourceData.value.host = host;
+      onSubmit();
+    }
+    return () => {};
+  }, [host]);
 
   return (
     <>
@@ -128,8 +130,8 @@ const TriageDetails: React.FC<WizardChild> = () => {
 };
 
 const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
-  const [searchParams, ,] = useSearchParams();
-  const hostParam = searchParams.get("q");
+  const urlParams = new URLSearchParams(window.location.search);
+  const hostParam = urlParams.get("host");
 
   const dataLayout = {
     resourceData: {},
