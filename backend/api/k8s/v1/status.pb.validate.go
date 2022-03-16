@@ -96,6 +96,7 @@ func (m *Status) validate(all bool) error {
 	if len(errors) > 0 {
 		return StatusMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -236,6 +237,7 @@ func (m *StatusDetails) validate(all bool) error {
 	if len(errors) > 0 {
 		return StatusDetailsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -341,6 +343,7 @@ func (m *StatusCause) validate(all bool) error {
 	if len(errors) > 0 {
 		return StatusCauseMultiError(errors)
 	}
+
 	return nil
 }
 

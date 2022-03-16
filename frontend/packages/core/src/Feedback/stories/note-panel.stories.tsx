@@ -24,6 +24,16 @@ Primary.args = {
       severity: "warning",
       text: "Warning message.",
     },
+    {
+      severity: "info",
+      text: "Message with a link",
+      link: "https://clutch.sh/docs",
+    },
+    {
+      severity: "info",
+      text: "message with a location (only useful to developers, not visible to end users)",
+      location: "intro",
+    },
   ],
 };
 

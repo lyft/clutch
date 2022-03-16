@@ -60,6 +60,7 @@ func (m *GetFlagsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetFlagsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -165,6 +166,7 @@ func (m *Flag) validate(all bool) error {
 	if len(errors) > 0 {
 		return FlagMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -309,6 +311,7 @@ func (m *GetFlagsResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetFlagsResponseMultiError(errors)
 	}
+
 	return nil
 }
 

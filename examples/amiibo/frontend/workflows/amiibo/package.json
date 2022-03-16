@@ -7,23 +7,29 @@
   "author": "hello@example.com",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rm -rf dist",
-    "compile": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --no-comments --ignore **/tests",
-    "compile:watch": "yarn run compile --watch",
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
+    "compile:watch": "yarn compile:dev --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
-    "test:watch": "yarn run test --watch",
-    "tsc": "tsc --outDir ./dist",
-    "upgrade": "yarn upgrade"
+    "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch/wizard": "^0.1.0",
+    "@clutch-sh/core": "^1.0.0-beta",
+    "@clutch-sh/data-layout": "^1.0.0-beta",
+    "@clutch-sh/wizard": "^1.0.0-beta",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@clutch/tools": "^0.1.0"
+    "@clutch-sh/tools": "^1.0.0-beta"
+  },
+  "engines": {
+    "node": ">=16.0.0 <17",
+    "yarn": "^1.22.5"
   }
 }

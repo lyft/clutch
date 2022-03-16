@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 import contextValues from "../../Contexts/tests/testContext";
 import { client } from "../../Network";
-import NPSFeedback, { defaults } from "../feedback";
+import NPSFeedback, { defaults, FEEDBACK_MAX_LENGTH } from "../feedback";
 import { generateFeedbackTypes } from "../header";
 
 // Adds the custom matchers provided by '@emotion/jest'
@@ -137,7 +137,7 @@ describe("<NPSFeedback />", () => {
   });
 
   describe("basic rendering", () => {
-    const maxLength = 180;
+    const maxLength = FEEDBACK_MAX_LENGTH;
     let wrapper;
     let useEffect;
 
@@ -219,7 +219,7 @@ describe("<NPSFeedback />", () => {
     it("will display an error on feedback if more input is given than maxLength", () => {
       clickEmoji(wrapper);
 
-      const testValue = generateRandomString(200);
+      const testValue = generateRandomString(FEEDBACK_MAX_LENGTH * 2);
 
       let textField = wrapper.find("Styled(TextField)");
 
@@ -244,7 +244,7 @@ describe("<NPSFeedback />", () => {
       expect(submitButton.prop("disabled")).toBeFalsy();
 
       wrapper.find("Styled(TextField)").prop("onChange")({
-        target: { value: generateRandomString(181) },
+        target: { value: generateRandomString(FEEDBACK_MAX_LENGTH + 1) },
       });
 
       wrapper.update();

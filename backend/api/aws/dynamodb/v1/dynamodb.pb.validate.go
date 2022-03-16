@@ -132,6 +132,7 @@ func (m *Table) validate(all bool) error {
 	if len(errors) > 0 {
 		return TableMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -263,6 +264,7 @@ func (m *GlobalSecondaryIndex) validate(all bool) error {
 	if len(errors) > 0 {
 		return GlobalSecondaryIndexMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -395,6 +397,7 @@ func (m *IndexUpdateAction) validate(all bool) error {
 	if len(errors) > 0 {
 		return IndexUpdateActionMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -500,6 +503,7 @@ func (m *Throughput) validate(all bool) error {
 	if len(errors) > 0 {
 		return ThroughputMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -631,6 +635,7 @@ func (m *DescribeTableRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return DescribeTableRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -761,6 +766,7 @@ func (m *DescribeTableResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return DescribeTableResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -960,6 +966,7 @@ func (m *UpdateCapacityRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return UpdateCapacityRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1090,6 +1097,7 @@ func (m *UpdateCapacityResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return UpdateCapacityResponseMultiError(errors)
 	}
+
 	return nil
 }
 

@@ -64,6 +64,7 @@ func (m *AutocompleteResult) validate(all bool) error {
 	if len(errors) > 0 {
 		return AutocompleteResultMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -189,6 +190,7 @@ func (m *AutocompleteRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return AutocompleteRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -324,6 +326,7 @@ func (m *AutocompleteResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return AutocompleteResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -453,6 +456,7 @@ func (m *ResolveRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResolveRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -620,6 +624,7 @@ func (m *ResolveResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return ResolveResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -743,6 +748,7 @@ func (m *SearchRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return SearchRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -910,6 +916,7 @@ func (m *SearchResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return SearchResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1020,6 +1027,7 @@ func (m *GetObjectSchemasRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetObjectSchemasRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1157,6 +1165,7 @@ func (m *GetObjectSchemasResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetObjectSchemasResponseMultiError(errors)
 	}
+
 	return nil
 }
 

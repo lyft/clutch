@@ -66,6 +66,7 @@ func (m *InstanceID) validate(all bool) error {
 	if len(errors) > 0 {
 		return InstanceIDMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -170,6 +171,7 @@ func (m *AutoscalingGroupName) validate(all bool) error {
 	if len(errors) > 0 {
 		return AutoscalingGroupNameMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -277,6 +279,7 @@ func (m *KinesisStreamName) validate(all bool) error {
 	if len(errors) > 0 {
 		return KinesisStreamNameMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -384,6 +387,7 @@ func (m *DynamodbTableName) validate(all bool) error {
 	if len(errors) > 0 {
 		return DynamodbTableNameMultiError(errors)
 	}
+
 	return nil
 }
 

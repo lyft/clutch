@@ -8,6 +8,7 @@ import ResizeHPA from "./resize-hpa";
 
 interface ResolverConfigProps {
   resolverType: string;
+  notes?: NoteConfig[];
 }
 
 interface ConfirmConfigProps {

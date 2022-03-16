@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package clutch.shortlink.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/shortlink/v1;shortlinkv1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "google/protobuf/struct.proto";
+
+import "api/v1/annotations.proto";
+
+service ShortlinkAPI {
+  rpc Create(CreateRequest) returns (CreateResponse) {
+    option (google.api.http) = {
+      post : "/v1/shortlink/create"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+
+  rpc Get(GetRequest) returns (GetResponse) {
+    option (google.api.http) = {
+      post : "/v1/shortlink/get"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message CreateRequest {
+  string path = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  repeated ShareableState state = 2 [ (validate.rules).repeated = {min_items : 1} ];
+}
+
+message CreateResponse {
+  string hash = 1;
+}
+
+message GetRequest {
+  string hash = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message GetResponse {
+  string path = 1;
+  repeated ShareableState state = 2;
+}
+
+// ShareableState stores a key identifier that maps to state.
+// This is analogous to a map, however we are not using a map here as that will restrict
+// our ability to further expand on this message.
+// For example adding a "revision" identifier in the future.
+message ShareableState {
+  string key = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  google.protobuf.Value state = 2 [ (validate.rules).any.required = true ];
+}
