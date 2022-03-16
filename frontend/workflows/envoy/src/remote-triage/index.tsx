@@ -9,6 +9,7 @@ import {
   Tabs,
   TextField,
   useWizardContext,
+  useSearchParams,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
@@ -32,9 +33,14 @@ const INCLUDE_OPTIONS = {
   serverInfo: true,
 };
 
-const TriageIdentifier: React.FC<WizardChild> = () => {
+const TriageIdentifier: React.FC<WizardChild> = ({ host="" }) => {
   const { onSubmit } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
+
+  if (host) {
+    resourceData.value["host"] = host;
+    onSubmit();
+  }
 
   return (
     <>
@@ -122,6 +128,9 @@ const TriageDetails: React.FC<WizardChild> = () => {
 };
 
 const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
+  const [searchParams, _] = useSearchParams();
+  const hostParam = searchParams.get("q");
+  
   const dataLayout = {
     resourceData: {},
     remoteData: {
@@ -145,7 +154,7 @@ const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <TriageIdentifier name="Lookup" />
+      <TriageIdentifier name="Lookup" host={hostParam} />
       <TriageDetails name="Details" />
     </Wizard>
   );
