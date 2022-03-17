@@ -32,7 +32,7 @@ type GetProjectsRequest struct {
 	Projects []string `protobuf:"bytes,1,rep,name=projects,proto3" json:"projects,omitempty"`
 	Users    []string `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
 	// If this is set to true, the api will return all project dependencies for the requested projects.
-	// By default this is set to true.
+	// https://github.com/lyft/clutch/blob/2304adf0e0189734d8a36803964214ee3bc73fbc/api/core/project/v1/project.proto#L19
 	ReturnDependencies bool `protobuf:"varint,3,opt,name=return_dependencies,json=returnDependencies,proto3" json:"return_dependencies,omitempty"`
 }
 
