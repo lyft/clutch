@@ -57,7 +57,7 @@ func (m *GetProjectsRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ComputeDependencies
+	// no validation rules for ReturnDependencies
 
 	if len(errors) > 0 {
 		return GetProjectsRequestMultiError(errors)

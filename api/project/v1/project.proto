@@ -22,9 +22,9 @@ service ProjectAPI {
 message GetProjectsRequest {
   repeated string projects = 1;
   repeated string users = 2;
-  // If this is set to true, we will compute all project dependencies for the requested projects.
+  // If this is set to true, the api will return all project dependencies for the requested projects.
   // By default this is set to true.
-  bool compute_dependencies = 3;
+  bool return_dependencies = 3;
 }
 
 message ProjectResult {
