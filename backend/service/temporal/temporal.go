@@ -35,7 +35,12 @@ type ClientManager interface {
 	GetNamespaceClient(namespace string) (Client, error)
 }
 
+// Client exists to protect users from creating a connection during instantiation of a component,
+// since Temporal's NewClient function has the side effect of connecting to the server. See
+// https://github.com/temporalio/sdk-go/issues/753 for more details.
 type Client interface {
+	// GetConnection will connect to the server in order to check its capabilities on the first call.
+	// Subsequent calls to GetConnection will return a cached client.
 	GetConnection() (temporalclient.Client, error)
 }
 
