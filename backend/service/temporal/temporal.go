@@ -8,9 +8,10 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"sync"
 
 	"github.com/uber-go/tally/v4"
-	"go.temporal.io/sdk/client"
+	temporalclient "go.temporal.io/sdk/client"
 	temporaltally "go.temporal.io/sdk/contrib/tally"
 	"go.temporal.io/sdk/log"
 	"go.uber.org/zap"
@@ -31,15 +32,19 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 }
 
 type ClientManager interface {
-	GetNamespaceClient(namespace string) (client.Client, error)
+	GetNamespaceClient(namespace string) (Client, error)
+}
+
+type Client interface {
+	GetConnection() (temporalclient.Client, error)
 }
 
 func newClient(cfg *temporalv1.Config, logger *zap.Logger, scope tally.Scope) (ClientManager, error) {
-	ret := &clientImpl{
+	ret := &clientManagerImpl{
 		hostPort:       fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		metricsHandler: temporaltally.NewMetricsHandler(scope),
 		logger:         newTemporalLogger(logger),
-		copts:          client.ConnectionOptions{},
+		copts:          temporalclient.ConnectionOptions{},
 	}
 
 	if cfg.ConnectionOptions != nil {
@@ -57,31 +62,43 @@ func newClient(cfg *temporalv1.Config, logger *zap.Logger, scope tally.Scope) (C
 	return ret, nil
 }
 
-type clientImpl struct {
+type clientManagerImpl struct {
 	hostPort       string
 	logger         log.Logger
-	metricsHandler client.MetricsHandler
-	copts          client.ConnectionOptions
+	metricsHandler temporalclient.MetricsHandler
+	copts          temporalclient.ConnectionOptions
 }
 
-type lazyClient struct {
+func (c *clientManagerImpl) GetNamespaceClient(namespace string) (Client, error) {
+	return &lazyClientImpl{
+		opts: &temporalclient.Options{
+			HostPort:          c.hostPort,
+			Logger:            c.logger,
+			MetricsHandler:    c.metricsHandler,
+			Namespace:         namespace,
+			ConnectionOptions: c.copts,
+		},
+	}, nil
 }
 
-func (c *clientImpl) GetNamespaceClient(namespace string) (client.Client, error) {
-	tc, err := client.NewClient(client.Options{
-		HostPort:          c.hostPort,
-		Logger:            c.logger,
-		MetricsHandler:    c.metricsHandler,
-		Namespace:         namespace,
-		ConnectionOptions: c.copts,
-	})
-	if err != nil {
-		return nil, err
+type lazyClientImpl struct {
+	mu           sync.Mutex
+	cachedClient temporalclient.Client
+
+	opts *temporalclient.Options
+}
+
+func (l *lazyClientImpl) GetConnection() (temporalclient.Client, error) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	if l.cachedClient == nil {
+		c, err := temporalclient.NewClient(*l.opts)
+		if err != nil {
+			return nil, err
+		}
+		l.cachedClient = c
 	}
 
-	// TODO: cache clients? is there any benefit?
-
-	tc.CompleteActivity()
-
-	return tc, err
+	return l.cachedClient, nil
 }

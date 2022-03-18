@@ -20,7 +20,7 @@ func TestNew(t *testing.T) {
 
 	c, err := New(anycfg, zap.NewNop(), tally.NoopScope)
 	assert.NoError(t, err)
-	impl := c.(*clientImpl)
+	impl := c.(*clientManagerImpl)
 	assert.NotNil(t, impl.logger)
 	assert.NotNil(t, impl.metricsHandler)
 	assert.Nil(t, impl.copts.TLS)
@@ -37,7 +37,7 @@ func TestNewClientWithConnectionOptions(t *testing.T) {
 	c, err := newClient(cfg, zap.NewNop(), tally.NoopScope)
 	assert.NoError(t, err)
 
-	impl := c.(*clientImpl)
+	impl := c.(*clientManagerImpl)
 	assert.NotNil(t, impl.copts.TLS.RootCAs)
 	assert.False(t, impl.copts.DisableHealthCheck)
 }
