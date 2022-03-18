@@ -109,7 +109,7 @@ const LinearTimeline = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart>
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid />
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
