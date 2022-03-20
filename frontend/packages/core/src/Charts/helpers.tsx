@@ -1,6 +1,13 @@
-// TODO: add more formatting funcs
 export const localTimeFormatter = (timestamp: number) => {
   return new Date(timestamp).toLocaleTimeString();
+};
+
+export const isoTimeFormatter = (timestamp: number) => {
+  return new Date(timestamp).toISOString();
+};
+
+export const dateTimeFormatter = (timestamp: number) => {
+  return new Date(timestamp).toDateString();
 };
 
 const getMinAndMaxOfRangeUsingKey = (data: any, key: string) => {
