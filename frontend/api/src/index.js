@@ -47576,6 +47576,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IGetProjectsRequest
                  * @property {Array.<string>|null} [projects] GetProjectsRequest projects
                  * @property {Array.<string>|null} [users] GetProjectsRequest users
+                 * @property {boolean|null} [includeDependencies] GetProjectsRequest includeDependencies
                  */
 
                 /**
@@ -47612,6 +47613,14 @@ export const clutch = $root.clutch = (() => {
                 GetProjectsRequest.prototype.users = $util.emptyArray;
 
                 /**
+                 * GetProjectsRequest includeDependencies.
+                 * @member {boolean} includeDependencies
+                 * @memberof clutch.project.v1.GetProjectsRequest
+                 * @instance
+                 */
+                GetProjectsRequest.prototype.includeDependencies = false;
+
+                /**
                  * Verifies a GetProjectsRequest message.
                  * @function verify
                  * @memberof clutch.project.v1.GetProjectsRequest
@@ -47636,6 +47645,9 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.users[i]))
                                 return "users: string[] expected";
                     }
+                    if (message.includeDependencies != null && message.hasOwnProperty("includeDependencies"))
+                        if (typeof message.includeDependencies !== "boolean")
+                            return "includeDependencies: boolean expected";
                     return null;
                 };
 
@@ -47665,6 +47677,8 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < object.users.length; ++i)
                             message.users[i] = String(object.users[i]);
                     }
+                    if (object.includeDependencies != null)
+                        message.includeDependencies = Boolean(object.includeDependencies);
                     return message;
                 };
 
@@ -47685,6 +47699,8 @@ export const clutch = $root.clutch = (() => {
                         object.projects = [];
                         object.users = [];
                     }
+                    if (options.defaults)
+                        object.includeDependencies = false;
                     if (message.projects && message.projects.length) {
                         object.projects = [];
                         for (let j = 0; j < message.projects.length; ++j)
@@ -47695,6 +47711,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.users.length; ++j)
                             object.users[j] = message.users[j];
                     }
+                    if (message.includeDependencies != null && message.hasOwnProperty("includeDependencies"))
+                        object.includeDependencies = message.includeDependencies;
                     return object;
                 };
 
