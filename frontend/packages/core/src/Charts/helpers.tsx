@@ -131,3 +131,9 @@ export const calculateTicks = (data: any, dataKey: string) => {
 
   return ticks;
 };
+
+
+export interface CustomTooltipProps {
+  active: boolean;
+  payload: any; // A huge object that contains all the info for the data point and more
+}

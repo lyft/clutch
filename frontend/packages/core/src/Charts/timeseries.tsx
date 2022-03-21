@@ -12,26 +12,13 @@ import {
 } from "recharts";
 
 import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./helpers";
+import type { CustomTooltipProps, LineProps, TimeseriesReferenceLineProps, TimeseriesStylingProps } from "./types";
 
-export type ReferenceLineAxis = "x" | "y";
 /*
   For reference lines (dashed lines), you can set the `axis` property to "x" or "y" to denote which axis 
   the line is on. These can be useful for showing limits or thresholds on graphs.
   There is already a type called `ReferenceLineProps` in Recharts so we avoid that name
 */
-export interface TimeseriesReferenceLineProps {
-  axis: ReferenceLineAxis;
-  coordinate: number;
-  color: string;
-  label?: string;
-}
-
-export interface LineProps {
-  dataKey: string;
-  color: string;
-  strokeWidth?: number;
-  animationDuration?: number;
-}
 export interface TimeseriesChartProps {
   data: any;
   xAxisDataKey?: string;
@@ -48,8 +35,8 @@ export interface TimeseriesChartProps {
   yDomainSpread?: number | null;
   connectNulls?: boolean;
   regularIntervalTicks?: boolean;
-  // TODO: add ref dots, ref areas, zoom enabled, auto colors,
-  // tooltip options, activeDot options, dark mode / styling,
+  tooltipFormatterFunc?: ({ active, payload }: CustomTooltipProps) => JSX.Element
+  stylingProps?: TimeseriesStylingProps;
 }
 
 /*
@@ -80,6 +67,8 @@ const TimeseriesChart = ({
   yDomainSpread = 0.2,
   connectNulls = false,
   regularIntervalTicks = false,
+  tooltipFormatterFunc = null,
+  stylingProps = {},
 }: TimeseriesChartProps) => {
   if (singleLineMode) {
     data.sort((a, b) => a[xAxisDataKey] - b[xAxisDataKey]);
@@ -107,7 +96,7 @@ const TimeseriesChart = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
-        {grid ? <CartesianGrid /> : null}
+        {grid ? <CartesianGrid stroke={stylingProps?.gridStroke} fill={stylingProps?.gridBackgroundColor} /> : null}
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
@@ -115,13 +104,14 @@ const TimeseriesChart = ({
           tickFormatter={tickFormatterFunc}
           allowDataOverflow
           ticks={regularIntervalTicks ? ticks : null}
+          stroke={stylingProps?.xAxisStroke}
         />
         {
           // Note that if a number is NaN Recharts will default the domain to `auto`
           singleLineMode ? (
-            <YAxis dataKey={yAxisDataKey} domain={[yAxisDomainMin, yAxisDomainMax]} type="number" />
+            <YAxis dataKey={yAxisDataKey} domain={[yAxisDomainMin, yAxisDomainMax]} stroke={stylingProps?.yAxisStroke} type="number" />
           ) : (
-            <YAxis type="number" domain={[yAxisDomainMin, yAxisDomainMax]} />
+            <YAxis type="number" domain={[yAxisDomainMin, yAxisDomainMax]} stroke={stylingProps?.yAxisStroke} />
           )
         }
         <Tooltip labelFormatter={tickFormatterFunc || null} />
