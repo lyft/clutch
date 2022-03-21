@@ -19861,8 +19861,8 @@ export namespace clutch {
                 /** GetProjectsRequest users */
                 users?: (string[]|null);
 
-                /** GetProjectsRequest includeDependencies */
-                includeDependencies?: (boolean|null);
+                /** GetProjectsRequest excludeDependencies */
+                excludeDependencies?: (boolean|null);
             }
 
             /** Represents a GetProjectsRequest. */
@@ -19880,8 +19880,8 @@ export namespace clutch {
                 /** GetProjectsRequest users. */
                 public users: string[];
 
-                /** GetProjectsRequest includeDependencies. */
-                public includeDependencies: boolean;
+                /** GetProjectsRequest excludeDependencies. */
+                public excludeDependencies: boolean;
 
                 /**
                  * Verifies a GetProjectsRequest message.
