@@ -156,8 +156,8 @@ github.com/aws/aws-sdk-go-v2/service/autoscaling v1.22.1 h1:9kvgpjvAJynrMyNKE71r
 github.com/aws/aws-sdk-go-v2/service/autoscaling v1.22.1/go.mod h1:Rj8xktogEjzRs4G7uGkm/y62b0FGuE8m2sFk5sl8gHU=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.0 h1:qnx+WyIH9/AD+wAxi05WCMNanO236ceqHg6hChCWs3M=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.0/go.mod h1:+Kc1UmbE37ijaAsb3KogW6FR8z0myjX6VtdcCkQEK0k=
-github.com/aws/aws-sdk-go-v2/service/ec2 v1.31.0 h1:8Q6WYZvgBylP7kh7S5gQvGKpsjphcZPEuytwl/JxxoA=
-github.com/aws/aws-sdk-go-v2/service/ec2 v1.31.0/go.mod h1:Z8942YP2VgLQpgPCx06iXCrOt7mxxCe0dESCm9FFhgs=
+github.com/aws/aws-sdk-go-v2/service/ec2 v1.32.0 h1:0Vbs1G2zV7uvBhMj7o/igTzAg1/roh4ksgIr5oRKFIo=
+github.com/aws/aws-sdk-go-v2/service/ec2 v1.32.0/go.mod h1:Z8942YP2VgLQpgPCx06iXCrOt7mxxCe0dESCm9FFhgs=
 github.com/aws/aws-sdk-go-v2/service/iam v1.18.0 h1:ZYpP40/QE7/R0zDxdrZyGGUijX26iB+Pint/NYzF/tQ=
 github.com/aws/aws-sdk-go-v2/service/iam v1.18.0/go.mod h1:9wRsXAkRJ7qBWIDTFYa66Cx+oQJsPEnBYCPrinanpS8=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.2.2/go.mod h1:EASdTcM1lGhUe1/p4gkojHwlGJkeoRjjr1sRCzup3Is=

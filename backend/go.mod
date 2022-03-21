@@ -10,7 +10,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.10.0
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.22.1
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.0
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.31.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.32.0
 	github.com/aws/aws-sdk-go-v2/service/iam v1.18.0
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.26.0
