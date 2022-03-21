@@ -2,7 +2,8 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import type { Meta } from "@storybook/react";
 
-import TimeseriesChart, { TimeseriesReferenceLineProps } from "../Charts/timeseries";
+import TimeseriesChart from "../Charts/timeseries";
+import type { TimeseriesReferenceLineProps } from "../Charts/types";
 
 export default {
   title: "Core/Charts/TimeseriesChart",
@@ -192,6 +193,69 @@ export const ReferenceLinesAndThingsDisabled = () => {
         grid={false}
         tickFormatterFunc={null}
         xDomainSpread={null}
+      />
+    </ChartContainer>
+  );
+};
+
+export const StyledChart = () => {
+  const mockDataSingleLine = [
+    {
+      lineName: "line1",
+      timestamp: 1546300800000,
+      value: 5,
+    },
+    {
+      lineName: "line1",
+      timestamp: 1546300900000,
+      value: 20,
+    },
+    {
+      lineName: "line1",
+      timestamp: 1546301000000,
+      value: 30,
+    },
+    {
+      lineName: "line1",
+      timestamp: 1546300700000,
+      value: 5,
+    },
+    {
+      lineName: "line1",
+      timestamp: 1546300600000,
+      value: 20,
+    },
+    {
+      lineName: "line1",
+      timestamp: 1546301800000,
+      value: 30,
+    },
+  ];
+
+  const mockLines = [
+    {
+      dataKey: "value",
+      color: "red",
+      animationDuration: 0,
+    },
+  ];
+
+  return (
+    <ChartContainer>
+      <TimeseriesChart
+        data={mockDataSingleLine}
+        xAxisDataKey="timestamp"
+        yAxisDataKey="value"
+        lines={mockLines}
+        xDomainSpread={0.3}
+        yDomainSpread={0.3}
+        regularIntervalTicks
+        stylingProps={{
+          gridBackgroundColor: "pink",
+          gridStroke: "blue",
+          xAxisStroke: "green",
+          yAxisStroke: "orange",
+        }}
       />
     </ChartContainer>
   );

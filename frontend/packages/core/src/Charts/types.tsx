@@ -1,4 +1,4 @@
-import { ReactElement } from "react"; 
+import type { ReactElement } from "react";
 
 export type ReferenceLineAxis = "x" | "y";
 export interface LinearTimelineDataPoint {
@@ -50,8 +50,6 @@ export interface LineProps {
 export interface TimeseriesStylingProps {
   xAxisStroke?: string;
   yAxisStroke?: string;
-  tooltipBackgroundColor?: string;
-  tooltipTextColor?: string;
   gridBackgroundColor?: string;
   gridStroke?: string;
 }

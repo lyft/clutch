@@ -12,7 +12,12 @@ import {
 } from "recharts";
 
 import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./helpers";
-import type { CustomTooltipProps, LineProps, TimeseriesReferenceLineProps, TimeseriesStylingProps } from "./types";
+import type {
+  CustomTooltipProps,
+  LineProps,
+  TimeseriesReferenceLineProps,
+  TimeseriesStylingProps,
+} from "./types";
 
 /*
   For reference lines (dashed lines), you can set the `axis` property to "x" or "y" to denote which axis 
@@ -35,7 +40,7 @@ export interface TimeseriesChartProps {
   yDomainSpread?: number | null;
   connectNulls?: boolean;
   regularIntervalTicks?: boolean;
-  tooltipFormatterFunc?: ({ active, payload }: CustomTooltipProps) => JSX.Element
+  tooltipFormatterFunc?: ({ active, payload }: CustomTooltipProps) => JSX.Element;
   stylingProps?: TimeseriesStylingProps;
 }
 
@@ -52,6 +57,7 @@ export interface TimeseriesChartProps {
 
   The timestamps are interpreted as unix milliseconds.
 */
+// TODO(smonero): add tests for this component
 const TimeseriesChart = ({
   data,
   xAxisDataKey = "timestamp",
@@ -96,7 +102,12 @@ const TimeseriesChart = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
-        {grid ? <CartesianGrid stroke={stylingProps?.gridStroke} fill={stylingProps?.gridBackgroundColor} /> : null}
+        {grid ? (
+          <CartesianGrid
+            stroke={stylingProps?.gridStroke}
+            fill={stylingProps?.gridBackgroundColor}
+          />
+        ) : null}
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
@@ -109,12 +120,22 @@ const TimeseriesChart = ({
         {
           // Note that if a number is NaN Recharts will default the domain to `auto`
           singleLineMode ? (
-            <YAxis dataKey={yAxisDataKey} domain={[yAxisDomainMin, yAxisDomainMax]} stroke={stylingProps?.yAxisStroke} type="number" />
+            <YAxis
+              dataKey={yAxisDataKey}
+              domain={[yAxisDomainMin, yAxisDomainMax]}
+              stroke={stylingProps?.yAxisStroke}
+              type="number"
+            />
           ) : (
-            <YAxis type="number" domain={[yAxisDomainMin, yAxisDomainMax]} stroke={stylingProps?.yAxisStroke} />
+            <YAxis
+              type="number"
+              domain={[yAxisDomainMin, yAxisDomainMax]}
+              stroke={stylingProps?.yAxisStroke}
+            />
           )
         }
-        <Tooltip labelFormatter={tickFormatterFunc || null} />
+        {/* TODO(smonero): add a default for tooltip formatting */}
+        <Tooltip formatter={tooltipFormatterFunc} />
         {legend ? <Legend /> : null}
         {lines
           ? lines.map((line, index) => {

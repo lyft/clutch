@@ -11,7 +11,7 @@ import {
 } from "recharts";
 
 import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./helpers";
-import type { LinearTimelineData, LinearTimelineStylingProps, CustomTooltipProps,  } from "./types";
+import type { CustomTooltipProps, LinearTimelineData, LinearTimelineStylingProps } from "./types";
 
 /**
  *
@@ -27,7 +27,7 @@ export interface LinearTimelineProps {
   regularIntervalTicks?: boolean;
   tickFormatterFunc?: (timestamp: number) => string;
   legend?: boolean;
-  tooltipFormatterFunc?: ({ active, payload }: CustomTooltipProps) => JSX.Element
+  tooltipFormatterFunc?: ({ active, payload }: CustomTooltipProps) => JSX.Element;
   stylingProps?: LinearTimelineStylingProps;
 }
 
@@ -35,12 +35,14 @@ export interface LinearTimelineProps {
  * We wrap the ScatterPlot Recharts component for use in linear timeline views. This is more useful than the
  * wrapper for linecharts for this specific use case of having "lanes" of events and their timestamps.
  */
+// TODO(smonero): add tests for this component
 const LinearTimeline = ({
   data,
   xAxisDataKey = "timestamp",
   regularIntervalTicks = true,
   tickFormatterFunc = localTimeFormatter,
   legend = true,
+  // Note that we don't set the default tooltipFormatter here because we pass the styling vals into the default
   tooltipFormatterFunc = null,
   stylingProps = {},
 }: LinearTimelineProps) => {
@@ -81,7 +83,16 @@ const LinearTimeline = ({
   // TODO: Allow for proper styling and make things less hacky than "payload[0]"
   const defaultFormatTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active) {
-      return <div style={{backgroundColor:stylingProps?.tooltipBackgroundColor, color:stylingProps?.tooltipTextColor}}>{localTimeFormatter(payload[0].value)}</div>;
+      return (
+        <div
+          style={{
+            backgroundColor: stylingProps?.tooltipBackgroundColor,
+            color: stylingProps?.tooltipTextColor,
+          }}
+        >
+          {localTimeFormatter(payload[0].value)}
+        </div>
+      );
     }
 
     return null;
@@ -90,7 +101,7 @@ const LinearTimeline = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart>
-        <CartesianGrid fill={stylingProps?.gridBackgroundColor} stroke={stylingProps?.gridStroke}/>
+        <CartesianGrid fill={stylingProps?.gridBackgroundColor} stroke={stylingProps?.gridStroke} />
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
