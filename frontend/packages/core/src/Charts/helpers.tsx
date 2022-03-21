@@ -51,7 +51,6 @@ const weekDuration = 7 * dayDuration;
 const monthDuration = 30 * dayDuration;
 const yearDuration = 365 * dayDuration;
 
-// TODO: Add special formatting function for years and dates, and the big timestamps
 const zoomLevelsToIntervals = {
   oneMin: fifteenSeconds,
   threeMins: fifteenSeconds,
