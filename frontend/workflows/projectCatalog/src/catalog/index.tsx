@@ -3,7 +3,8 @@ import { Grid, Paper, TextField, Toast, Typography, useNavigate } from "@clutch-
 import { Box, CircularProgress } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
-import type { WorkflowProps } from ".";
+import type { WorkflowProps } from "..";
+
 import catalogReducer from "./catalog-reducer";
 import ProjectCard from "./project-card";
 import { addProject, getProjects, removeProject } from "./storage";

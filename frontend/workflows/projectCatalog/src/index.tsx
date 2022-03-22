@@ -1,6 +1,7 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
 import Catalog from "./catalog";
+import Details from "./details";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
@@ -19,13 +20,13 @@ const register = (): WorkflowConfiguration => {
         displayName: "Project Catalog",
         description: "A searchable catalog of services",
         component: Catalog,
-        featureFlag: "projectCatalog",
+        // featureFlag: "projectCatalog",
       },
       details: {
-        path: "/:project",
+        path: "/:projectId",
         description: "Service Detail View",
-        component: () => null,
-        featureFlag: "projectCatalog",
+        component: Details,
+        // featureFlag: "projectCatalog",
       },
     },
   };
