@@ -101,7 +101,10 @@ const LinearTimeline = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart>
-        <CartesianGrid fill={stylingProps?.gridBackgroundColor ?? "black"} stroke={stylingProps?.gridStroke ?? "white"} />
+        <CartesianGrid
+          fill={stylingProps?.gridBackgroundColor ?? "black"}
+          stroke={stylingProps?.gridStroke ?? "white"}
+        />
         <XAxis
           dataKey={xAxisDataKey}
           type="number"

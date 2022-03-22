@@ -2,9 +2,9 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import type { Meta } from "@storybook/react";
 
+import { dateTimeFormatter, isoTimeFormatter } from "../Charts/helpers";
 import TimeseriesChart from "../Charts/timeseries";
 import type { TimeseriesReferenceLineProps } from "../Charts/types";
-import { dateTimeFormatter, isoTimeFormatter } from "../Charts/helpers";
 
 export default {
   title: "Core/Charts/TimeseriesChart",
