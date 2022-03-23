@@ -1,6 +1,13 @@
-// TODO: add more formatting funcs
 export const localTimeFormatter = (timestamp: number) => {
   return new Date(timestamp).toLocaleTimeString();
+};
+
+export const isoTimeFormatter = (timestamp: number) => {
+  return new Date(timestamp).toISOString();
+};
+
+export const dateTimeFormatter = (timestamp: number) => {
+  return new Date(timestamp).toDateString();
 };
 
 const getMinAndMaxOfRangeUsingKey = (data: any, key: string) => {
@@ -44,7 +51,6 @@ const weekDuration = 7 * dayDuration;
 const monthDuration = 30 * dayDuration;
 const yearDuration = 365 * dayDuration;
 
-// TODO: Add special formatting function for years and dates, and the big timestamps
 const zoomLevelsToIntervals = {
   oneMin: fifteenSeconds,
   threeMins: fifteenSeconds,

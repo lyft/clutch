@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import type { Meta } from "@storybook/react";
 
+import { dateTimeFormatter, isoTimeFormatter } from "../Charts/helpers";
 import TimeseriesChart, { TimeseriesReferenceLineProps } from "../Charts/timeseries";
 
 export default {
@@ -66,6 +67,26 @@ export const SingleDataLine = () => {
         xDomainSpread={0.3}
         yDomainSpread={0.3}
         regularIntervalTicks
+      />
+      <TimeseriesChart
+        data={mockDataSingleLine}
+        xAxisDataKey="timestamp"
+        yAxisDataKey="value"
+        lines={mockLines}
+        xDomainSpread={0.3}
+        yDomainSpread={0.3}
+        regularIntervalTicks
+        tickFormatterFunc={isoTimeFormatter}
+      />
+      <TimeseriesChart
+        data={mockDataSingleLine}
+        xAxisDataKey="timestamp"
+        yAxisDataKey="value"
+        lines={mockLines}
+        xDomainSpread={0.3}
+        yDomainSpread={0.3}
+        regularIntervalTicks
+        tickFormatterFunc={dateTimeFormatter}
       />
     </ChartContainer>
   );
