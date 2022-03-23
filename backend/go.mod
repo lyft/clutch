@@ -44,7 +44,7 @@ require (
 	github.com/slack-go/slack v0.10.2
 	github.com/stretchr/testify v1.7.1
 	github.com/uber-go/tally/v4 v4.1.1
-	go.temporal.io/sdk v1.13.1
+	go.temporal.io/sdk v1.14.0
 	go.temporal.io/sdk/contrib/tally v0.1.0
 	go.uber.org/zap v1.21.0
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f
@@ -130,7 +130,7 @@ require (
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
-	go.temporal.io/api v1.6.1-0.20211110205628-60c98e9cbfe2 // indirect
+	go.temporal.io/api v1.7.1-0.20220223032354-6e6fe738916a // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa // indirect

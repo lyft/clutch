@@ -208,8 +208,6 @@ func (m *ConnectionOptions) validate(all bool) error {
 
 	// no validation rules for UseSystemCaBundle
 
-	// no validation rules for EnableHealthCheck
-
 	if len(errors) > 0 {
 		return ConnectionOptionsMultiError(errors)
 	}
