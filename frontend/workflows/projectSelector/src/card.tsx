@@ -33,29 +33,29 @@ const Card = ({ avatar, children, error, isLoading, summary, title }: CardProps)
   };
 
   return (
-    // <Grid item xs={12} sm={12} md={12} lg={6}>
-    <ClutchCard>
-      <CardHeader
-        actions={
-          <IconButton onClick={handleExpandClick} size="small" variant="neutral">
-            {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        }
-        avatar={avatar}
-        summary={summary}
-        title={title}
-      >
-        <StyledProgressContainer>
-          {isLoading && <LinearProgress color="secondary" />}
-        </StyledProgressContainer>
-      </CardHeader>
-      {expanded && (
-        <CardContent padding={0} collapsible maxHeight={500}>
-          {error ? <Error subject={error} /> : children}
-        </CardContent>
-      )}
-    </ClutchCard>
-    // </Grid>
+    <Grid item xs={12} sm={12} md={12} lg={6}>
+      <ClutchCard>
+        <CardHeader
+          actions={
+            <IconButton onClick={handleExpandClick} size="small" variant="neutral">
+              {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          }
+          avatar={avatar}
+          summary={summary}
+          title={title}
+        >
+          <StyledProgressContainer>
+            {isLoading && <LinearProgress color="secondary" />}
+          </StyledProgressContainer>
+        </CardHeader>
+        {expanded && (
+          <CardContent padding={0} collapsible maxHeight={500}>
+            {error ? <Error subject={error} /> : children}
+          </CardContent>
+        )}
+      </ClutchCard>
+    </Grid>
   );
 };
 

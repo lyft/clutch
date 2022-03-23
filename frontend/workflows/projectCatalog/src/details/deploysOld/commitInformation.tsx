@@ -1,13 +1,8 @@
 import React from "react";
-import { Grid, Link, styled, Tooltip, Typography } from "@clutch-sh/core";
-import { faCodeCommit } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link, styled, Tooltip, Typography } from "@clutch-sh/core";
 import { Avatar } from "@material-ui/core";
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { uniqBy } from "lodash";
-
-import EnvironmentIcon from "./environmentIcon";
-import type { Environments } from "./types";
 
 const unknownUser = "Unknown User";
 const githubBaseURL = "https://github.com/";
@@ -35,13 +30,7 @@ export interface CommitInfo {
   commits: Commit[];
   /** The base ref that will be used for comparisons. This should be one commit before the first one in commits. */
   baseRef?: string;
-  environment?: Environments;
 }
-
-const Icon = styled("div")({
-  height: "20px",
-  width: "20px",
-});
 
 const StyledAvatarGroup = styled(AvatarGroup)({
   ".MuiAvatarGroup-avatar": {
@@ -115,12 +104,16 @@ const commitMessage = (commits: Commit[]) => {
   );
 };
 
-const CommitInformation = ({ repositoryName, commits, baseRef, environment }: CommitInfo) => {
+const CommitInformation = ({ repositoryName, commits, baseRef }: CommitInfo) => {
   const commitCount = commits.length;
   const firstRef = shortSha(commits?.[0]?.ref);
   const lastRef = shortSha(commits?.[commits.length - 1]?.ref);
 
   const linkPath = commitCount === 1 ? `commit/${firstRef}` : `compare/${baseRef}...${lastRef}`;
+  const message =
+    commitCount === 1
+      ? `${firstRef} (1 commit)`
+      : `${firstRef}...${lastRef} (${commitCount} commits)`;
   // Filter out commits missing authors
   const validCommits = commits.filter(c => c.author);
   // Deduplicate the commit authors
@@ -153,42 +146,25 @@ const CommitInformation = ({ repositoryName, commits, baseRef, environment }: Co
     <StyledCommitContainer>
       <Typography variant="input">{commitMessage(commits)}</Typography>
       {commits && commits.length > 0 && (
-        <Grid container direction="row" alignItems="center" spacing={2}>
-          {environment && (
-            <Grid item>
-              <Tooltip title={environment}>
-                <Icon>{EnvironmentIcon(environment)}</Icon>
+        <StyledCommitRange>
+          <Link href={`http://github.com/${repositoryName}/${linkPath}`}>{message}</Link>
+          <StyledAvatarGroup max={4} spacing={4}>
+            {authors.length !== 0 ? (
+              authors.map((u, idx) => (
+                <Tooltip title={u.username || "unknown"} key={u.username || idx}>
+                  <StyledAvatar
+                    alt={u?.username || "username"}
+                    src={`${githubBaseURL + u?.username?.replaceAll(" ", "")}.png`}
+                  />
+                </Tooltip>
+              ))
+            ) : (
+              <Tooltip title={unknownUser} key={unknownUser}>
+                <StyledAvatar alt={unknownUser} src={`${githubBaseURL}ghost.png`} />
               </Tooltip>
-            </Grid>
-          )}
-          <Grid item>
-            <StyledCommitRange>
-              <Link href={`http://github.com/${repositoryName}/${linkPath}`}>
-                <Typography variant="body4" color="#3548D4">
-                  {lastRef}
-                </Typography>
-              </Link>
-              <FontAwesomeIcon icon={faCodeCommit} />
-              <Typography variant="body4">{commitCount}</Typography>
-              <StyledAvatarGroup max={4} spacing={4}>
-                {authors.length !== 0 ? (
-                  authors.map((u, idx) => (
-                    <Tooltip title={u.username || "unknown"} key={u.username || idx}>
-                      <StyledAvatar
-                        alt={u?.username || "username"}
-                        src={`${githubBaseURL + u?.username?.replaceAll(" ", "")}.png`}
-                      />
-                    </Tooltip>
-                  ))
-                ) : (
-                  <Tooltip title={unknownUser} key={unknownUser}>
-                    <StyledAvatar alt={unknownUser} src={`${githubBaseURL}ghost.png`} />
-                  </Tooltip>
-                )}
-              </StyledAvatarGroup>
-            </StyledCommitRange>
-          </Grid>
-        </Grid>
+            )}
+          </StyledAvatarGroup>
+        </StyledCommitRange>
       )}
     </StyledCommitContainer>
   );

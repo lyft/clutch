@@ -1,117 +1,60 @@
 import React from "react";
-import type { ClutchError } from "@clutch-sh/core";
-import { styled, Table, TableRow, Toast, Tooltip, Typography } from "@clutch-sh/core";
-import { Card } from "@clutch-sh/project-selector";
-import SecurityIcon from "@material-ui/icons/Security";
+import { Grid } from "@clutch-sh/core";
 
-import { DefaultSummaryTitle, EventTime, setMilliseconds } from "../helpers";
+import DeployEventIcon from "../../assets/DeployEvent";
+import ProjectCard, { LastEvent, StyledLink } from "../card";
 
+import type { CommitInfo } from "./commitInformation";
 import CommitInformation from "./commitInformation";
-import EnvironmentIcon from "./environmentIcon";
-import StatusIcon from "./statusIcon";
-import type { DeployInfo, DeployJobInformation } from "./types";
 
-export interface ProjectDeploysProps {
-  fetchDeploys: () => Promise<DeployInfo>;
-  singleProject?: boolean;
+const Deploys = ({ deploys }: { deploys: CommitInfo[] }) => (
+  <>
+    {deploys.map(deploy => (
+      <Grid item xs={12}>
+        <CommitInformation {...deploy} />
+      </Grid>
+    ))}
+  </>
+);
+
+export interface ProjectDeploys {
+  title?: string;
+  lastDeploy?: number;
+  deploys: CommitInfo[];
+  seeMore: {
+    text: string;
+    url: string;
+  };
 }
 
-const Icon = styled("div")({
-  fontSize: "24px",
-  display: "flex",
-  justifyContent: "center",
-});
-
-const StyledCard = styled(Card)({
-  width: "100%",
-  height: "100%",
-});
-
-const ProjectDeploys = ({ fetchDeploys, singleProject = true }: ProjectDeploysProps) => {
-  const [error, setError] = React.useState<ClutchError | undefined>(undefined);
-  const [deploys, setDeploys] = React.useState<DeployInfo>(undefined);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-  React.useEffect(() => {
-    setIsLoading(true);
-    fetchDeploys()
-      .then((res: DeployInfo) => setDeploys(res))
-      .catch((err: ClutchError) => {
-        setError(err);
-
-        // eslint-disable-next-line no-console
-        console.error("Failed to fetch deploys", err.message);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+const ProjectDeploysCard = ({
+  title = "Deploys",
+  lastDeploy,
+  seeMore,
+  deploys,
+}: ProjectDeploys) => {
+  const titleData = {
+    text: title,
+    icon: <DeployEventIcon />,
+    endAdornment: <LastEvent time={lastDeploy} />,
+  };
 
   return (
-    <>
-      {error && <Toast>Failed to fetch Deploys</Toast>}
-      <StyledCard
-        avatar={<SecurityIcon />}
-        title="Deploys"
-        error={error}
-        isLoading={isLoading}
-        summary={[
-          {
-            title: deploys?.lastDeploy ? (
-              <Typography variant="subtitle2">
-                <EventTime date={setMilliseconds(deploys.lastDeploy)} />
-              </Typography>
-            ) : (
-              <DefaultSummaryTitle />
-            ),
-            subheader: "Last deploy",
-          },
-          {
-            title: deploys?.inProgress ? (
-              <Typography variant="subtitle2" color="#3548D4">
-                {deploys.inProgress}
-              </Typography>
-            ) : (
-              <DefaultSummaryTitle />
-            ),
-            subheader: "In progress",
-          },
-          {
-            title: deploys?.failures ? (
-              <Typography variant="subtitle2" color="#DB3615">
-                {deploys.failures}
-              </Typography>
-            ) : (
-              <DefaultSummaryTitle />
-            ),
-            subheader: "Failed",
-          },
-        ]}
-      >
-        <Table columns={["", "", "", "", ""]} responsive>
-          {deploys?.jobs?.length ? (
-            deploys?.jobs?.map((job: DeployJobInformation) => {
-              return (
-                <TableRow key={job.name}>
-                  {!singleProject && <div>{job.name}</div>}
-                  <CommitInformation {...job.commitMetadata} />
-                  <EventTime date={job.timestamp} />
-                  <Tooltip title={job.status} placement="top">
-                    <Icon>{StatusIcon(job.status)}</Icon>
-                  </Tooltip>
-                  <Tooltip title={job.environment} placement="top">
-                    <Icon>{EnvironmentIcon(job.environment)}</Icon>
-                  </Tooltip>
-                </TableRow>
-              );
-            })
-          ) : (
-            <TableRow>
-              <div>No deploys found for selected project(s)</div>
-            </TableRow>
-          )}
-        </Table>
-      </StyledCard>
-    </>
+    <ProjectCard {...titleData}>
+      {deploys?.length && (
+        <Grid container direction="row" spacing={2}>
+          <Deploys deploys={deploys} />
+        </Grid>
+      )}
+      {seeMore && (
+        <Grid container item direction="column" alignItems="flex-end" style={{ marginTop: "10px" }}>
+          <Grid item xs={6}>
+            <StyledLink href={seeMore.url}>{seeMore.text}</StyledLink>
+          </Grid>
+        </Grid>
+      )}
+    </ProjectCard>
   );
 };
 
-export default ProjectDeploys;
+export default ProjectDeploysCard;

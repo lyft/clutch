@@ -1,32 +1,35 @@
-export type Urgency = "HIGH" | "LOW";
-export type Status = "ack" | "open" | "closed";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-export interface Assignment {
-  assignee: string;
-  at: string;
-}
-
-export interface Incident {
-  id: string;
-  urgency: Urgency;
+export interface User {
+  name: string;
   url?: string;
-  created: string;
-  description: string;
-  assignments?: Assignment[];
-  status: Status;
 }
 
-export interface Alert {
-  incidents?: Incident[];
+export interface OnCall {
+  text: string;
+  icon?: IconProp;
+  users?: User[];
+  url?: string;
 }
 
-export interface Alerts {
-  [key: string]: Alert;
+interface Summary {
+  count: number;
+  url?: string;
 }
 
-export interface AlertInfo {
-  lastAlert?: number | Long | null;
-  acknowledged?: number;
-  open?: number;
-  projectAlerts?: Alerts;
+export interface AlertSummary {
+  open?: Summary;
+  triggered?: Summary;
+  acknowledged?: Summary;
+}
+
+export interface ProjectAlerts {
+  title?: string;
+  lastAlert?: number;
+  summary?: AlertSummary;
+  onCall?: OnCall;
+  create?: {
+    text: string;
+    url: string;
+  };
 }
