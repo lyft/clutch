@@ -1,43 +1,44 @@
 import React from "react";
-import { Button, Grid } from "@clutch-sh/core";
+import { Button, ClutchError, Grid } from "@clutch-sh/core";
 
 import AlertEventIcon from "../../assets/AlertEvent";
+import type { BaseProjectCardProps } from "../card";
 import ProjectCard, { LastEvent, StyledLink, StyledRow } from "../card";
 
 import OnCallRow from "./onCallRow";
 import SummaryRow from "./summaryRow";
 import type { ProjectAlerts } from "./types";
 
-const ProjectAlertsCard = ({
-  create,
-  lastAlert,
-  onCall,
-  summary,
-  title = "Alerts",
-}: ProjectAlerts) => {
-  const titleData = {
-    text: title,
+interface ProjectAlertsProps {
+  data: ProjectAlerts;
+  error?: ClutchError | undefined;
+  loading?: boolean;
+}
+
+const ProjectAlertsCard = ({ data, loading, error }: ProjectAlertsProps) => {
+  const titleData: BaseProjectCardProps = {
+    text: data?.title ?? "Alerts",
     icon: <AlertEventIcon />,
-    endAdornment: <LastEvent time={lastAlert} />,
+    endAdornment: <LastEvent time={data?.lastAlert} />,
   };
 
   return (
-    <ProjectCard {...titleData}>
-      {summary && (
+    <ProjectCard loading={loading} error={error} {...titleData}>
+      {data?.summary && (
         <StyledRow container item direction="row" justify="space-evenly">
-          <SummaryRow {...summary} />
+          <SummaryRow {...data.summary} />
         </StyledRow>
       )}
-      {onCall && (
+      {data?.onCall && (
         <StyledRow container item direction="column" spacing={1}>
-          <OnCallRow {...onCall} />
+          <OnCallRow {...data.onCall} />
         </StyledRow>
       )}
-      {create && (
+      {data?.create && (
         <Grid container item direction="column" alignItems="flex-end">
           <Grid item xs={6}>
-            <StyledLink href={create.url}>
-              <Button text={create.text} />
+            <StyledLink href={data.create.url}>
+              <Button text={data.create.text} />
             </StyledLink>
           </Grid>
         </Grid>

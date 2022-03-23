@@ -7,36 +7,10 @@ import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { uniqBy } from "lodash";
 
 import EnvironmentIcon from "./environmentIcon";
-import type { Environments } from "./types";
+import type { Commit, CommitInfo } from "./types";
 
 const unknownUser = "Unknown User";
 const githubBaseURL = "https://github.com/";
-
-interface CommitAuthor {
-  username?: string | null;
-  email?: string | null;
-}
-
-interface Commit {
-  /** Commit ref */
-  ref?: string | null;
-
-  /** Commit message */
-  message?: string | null;
-
-  /** Commit author */
-  author?: CommitAuthor | null;
-}
-
-export interface CommitInfo {
-  /** The name of repository including owner / org */
-  repositoryName: string;
-  /** The commits that will be spanned for the comparison */
-  commits: Commit[];
-  /** The base ref that will be used for comparisons. This should be one commit before the first one in commits. */
-  baseRef?: string;
-  environment?: Environments;
-}
 
 const Icon = styled("div")({
   height: "20px",

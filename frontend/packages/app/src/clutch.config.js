@@ -74,6 +74,7 @@ module.exports = {
     },
     details: {
       hideNav: true,
+      componentProps: {},
     },
   },
 };

@@ -23,6 +23,7 @@ interface ProjectRequests {
 
 export interface ProjectRepository {
   name: string;
+  repo: string;
   url?: string;
   icon?: IconProp;
   requests?: ProjectRequests;
@@ -37,4 +38,5 @@ export interface ProjectInfo {
   languages?: string[];
   messenger?: ProjectMessenger;
   chips?: ProjectInfoChip[];
+  serviceIds?: string[];
 }

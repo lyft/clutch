@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@material-ui/icons/Group";
 import { capitalize } from "lodash";
 
-import ProjectCard, { TitleRowProps } from "../card";
+import type { BaseProjectCardProps } from "../card";
+import ProjectCard from "../card";
 
 import ChipsRow from "./chipsRow";
 import LanguageRow from "./languageRow";
@@ -15,7 +16,7 @@ import RepositoryRow from "./repositoryRow";
 import type { ProjectInfo } from "./types";
 
 interface ProjectInfoProps {
-  info: ProjectInfo;
+  data: ProjectInfo;
   error?: ClutchError | undefined;
   loading?: boolean;
 }
@@ -34,42 +35,42 @@ const DisabledItem = ({ name }: { name: string }) => (
   </Grid>
 );
 
-const ProjectInfoCard = ({ info, loading }: ProjectInfoProps) => {
-  const [titleData, setTitleData] = React.useState<TitleRowProps>(null);
+const ProjectInfoCard = ({ data, loading, error }: ProjectInfoProps) => {
+  const [titleData, setTitleData] = React.useState<BaseProjectCardProps>(null);
 
   React.useEffect(() => {
-    if (info) {
-      const capitalized = capitalize(info.name);
+    if (data) {
+      const capitalized = capitalize(data.name);
       setTitleData({
         text: capitalized,
         icon: <GroupIcon />,
-        endAdornment: info.disabled ? <DisabledItem name={capitalized} /> : null,
+        endAdornment: data.disabled ? <DisabledItem name={capitalized} /> : null,
       });
     }
-  }, [info]);
+  }, [data]);
 
   return (
     <>
       {titleData && (
-        <ProjectCard {...titleData}>
-          {info?.messenger && (
+        <ProjectCard loading={loading} error={error} {...titleData}>
+          {data?.messenger && (
             <StyledRow container spacing={1}>
-              <MessengerRow {...info.messenger} />
+              <MessengerRow {...data.messenger} />
             </StyledRow>
           )}
-          {info?.repository && (
+          {data?.repository && (
             <StyledRow container spacing={1} justify="flex-start" alignItems="center">
-              <RepositoryRow {...info.repository} />
+              <RepositoryRow {...data.repository} />
             </StyledRow>
           )}
-          {info?.languages?.length && (
+          {data?.languages?.length && (
             <StyledRow container spacing={1} justify="flex-start" alignItems="flex-end">
-              <LanguageRow languages={info.languages} />
+              <LanguageRow languages={data.languages} />
             </StyledRow>
           )}
-          {info?.chips?.length && (
+          {data?.chips?.length && (
             <StyledRow container spacing={1}>
-              <ChipsRow chips={info.chips} />
+              <ChipsRow chips={data.chips} />
             </StyledRow>
           )}
         </ProjectCard>

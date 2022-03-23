@@ -1,5 +1,14 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
+export interface AlertMassageOptions {
+  offset?: number;
+  statuses?: string[];
+  title?: string;
+  text?: string;
+  icon?: IconProp;
+  url?: string;
+}
+
 export interface User {
   name: string;
   url?: string;

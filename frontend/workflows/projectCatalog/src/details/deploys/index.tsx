@@ -1,11 +1,18 @@
 import React from "react";
-import { Grid } from "@clutch-sh/core";
+import { ClutchError, Grid } from "@clutch-sh/core";
 
 import DeployEventIcon from "../../assets/DeployEvent";
+import type { BaseProjectCardProps } from "../card";
 import ProjectCard, { LastEvent, StyledLink } from "../card";
 
-import type { CommitInfo } from "./commitInformation";
 import CommitInformation from "./commitInformation";
+import type { CommitInfo, ProjectDeploys } from "./types";
+
+interface ProjectDeploysProps {
+  data: ProjectDeploys;
+  error?: ClutchError | undefined;
+  loading?: boolean;
+}
 
 const Deploys = ({ deploys }: { deploys: CommitInfo[] }) => (
   <>
@@ -17,39 +24,24 @@ const Deploys = ({ deploys }: { deploys: CommitInfo[] }) => (
   </>
 );
 
-export interface ProjectDeploys {
-  title?: string;
-  lastDeploy?: number;
-  deploys: CommitInfo[];
-  seeMore: {
-    text: string;
-    url: string;
-  };
-}
-
-const ProjectDeploysCard = ({
-  title = "Deploys",
-  lastDeploy,
-  seeMore,
-  deploys,
-}: ProjectDeploys) => {
-  const titleData = {
-    text: title,
+const ProjectDeploysCard = ({ data, error, loading }: ProjectDeploysProps) => {
+  const titleData: BaseProjectCardProps = {
+    text: data?.title ?? "Deploys",
     icon: <DeployEventIcon />,
-    endAdornment: <LastEvent time={lastDeploy} />,
+    endAdornment: <LastEvent time={data?.lastDeploy} />,
   };
 
   return (
-    <ProjectCard {...titleData}>
-      {deploys?.length && (
+    <ProjectCard loading={loading} error={error} {...titleData}>
+      {data?.deploys?.length && (
         <Grid container direction="row" spacing={2}>
-          <Deploys deploys={deploys} />
+          <Deploys deploys={data?.deploys} />
         </Grid>
       )}
-      {seeMore && (
+      {data?.seeMore && (
         <Grid container item direction="column" alignItems="flex-end" style={{ marginTop: "10px" }}>
           <Grid item xs={6}>
-            <StyledLink href={seeMore.url}>{seeMore.text}</StyledLink>
+            <StyledLink href={data.seeMore.url}>{data.seeMore.text}</StyledLink>
           </Grid>
         </Grid>
       )}
