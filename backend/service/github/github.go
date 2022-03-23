@@ -268,11 +268,15 @@ type CreateBranchRequest struct {
 
 	// The commit message for files added.
 	CommitMessage string
+
+	// Fetch only ReferenceName specified branch.
+	SingleBranch bool
 }
 
 // Creates a new branch with a commit containing files and pushes it to the remote.
 func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error {
 	cloneOpts := &git.CloneOptions{
+		SingleBranch:  req.SingleBranch,
 		Depth:         1,
 		URL:           fmt.Sprintf("https://github.com/%s/%s", req.Ref.RepoOwner, req.Ref.RepoName),
 		ReferenceName: plumbing.NewBranchReferenceName(req.Ref.Ref),
