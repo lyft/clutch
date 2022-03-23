@@ -111,12 +111,13 @@ func RegisterTopologyAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/GetTopology", runtime.WithHTTPPathPattern("/v1/topology/getTopology"))
+		var err error
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/GetTopology", runtime.WithHTTPPathPattern("/v1/topology/getTopology"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_TopologyAPI_GetTopology_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_TopologyAPI_GetTopology_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -134,12 +135,13 @@ func RegisterTopologyAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/Search", runtime.WithHTTPPathPattern("/v1/topology/search"))
+		var err error
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/Search", runtime.WithHTTPPathPattern("/v1/topology/search"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_TopologyAPI_Search_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_TopologyAPI_Search_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -196,12 +198,13 @@ func RegisterTopologyAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/GetTopology", runtime.WithHTTPPathPattern("/v1/topology/getTopology"))
+		var err error
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/GetTopology", runtime.WithHTTPPathPattern("/v1/topology/getTopology"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_TopologyAPI_GetTopology_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_TopologyAPI_GetTopology_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -216,12 +219,13 @@ func RegisterTopologyAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/Search", runtime.WithHTTPPathPattern("/v1/topology/search"))
+		var err error
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/clutch.topology.v1.TopologyAPI/Search", runtime.WithHTTPPathPattern("/v1/topology/search"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_TopologyAPI_Search_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_TopologyAPI_Search_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
