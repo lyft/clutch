@@ -36,21 +36,26 @@ const Details: React.FC<DetailWorkflowProps> = ({ children }) => {
 
   React.useEffect(() => {
     if (children) {
+      const tempMetaCards = [];
+      const tempDynamicCards = [];
       React.Children.forEach(children, child => {
         if (React.isValidElement(child)) {
           const { type } = child?.props;
 
           switch (type) {
             case "Metadata":
-              setMetaCards([...metaCards, child]);
+              tempMetaCards.push(child);
               break;
             case "Dynamic":
-              setDynamicCards([...dynamicCards, child]);
+              tempDynamicCards.push(child);
               break;
             default: // Do nothing, invalid card
           }
         }
       });
+
+      setMetaCards(tempMetaCards);
+      setDynamicCards(tempDynamicCards);
     }
   }, [children]);
 
