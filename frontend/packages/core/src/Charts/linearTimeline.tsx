@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import {
   CartesianGrid,
   Legend,
@@ -11,30 +11,7 @@ import {
 } from "recharts";
 
 import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./helpers";
-
-export interface LinearTimelineDataPoint {
-  timestamp: number;
-}
-
-export interface LinearTimelineShape {}
-
-type PresetShape = "circle" | "square" | "cross" | "diamond" | "star" | "triangle" | "wye";
-// Note that shape can be a preset of one of the shapes or a custom SVG element
-// See https://recharts.org/en-US/api/Scatter#shape for more details
-export interface LinearTimelineDataPoints {
-  points: LinearTimelineDataPoint[];
-  shape?: ReactElement<SVGElement> | ((props: any) => ReactElement<SVGElement>) | PresetShape;
-  color?: string;
-}
-
-export interface LinearTimelineData {
-  [lane: string]: LinearTimelineDataPoints;
-}
-
-interface CustomTooltipProps {
-  active: boolean;
-  payload: any; // A huge object that contains all the info for the data point and more
-}
+import type { CustomTooltipProps, LinearTimelineData, LinearTimelineStylingProps } from "./types";
 
 /**
  *
@@ -50,18 +27,24 @@ export interface LinearTimelineProps {
   regularIntervalTicks?: boolean;
   tickFormatterFunc?: (timestamp: number) => string;
   legend?: boolean;
+  tooltipFormatterFunc?: ({ active, payload }: CustomTooltipProps) => JSX.Element;
+  stylingProps?: LinearTimelineStylingProps;
 }
 
 /**
  * We wrap the ScatterPlot Recharts component for use in linear timeline views. This is more useful than the
  * wrapper for linecharts for this specific use case of having "lanes" of events and their timestamps.
  */
+// TODO(smonero): add tests for this component
 const LinearTimeline = ({
   data,
   xAxisDataKey = "timestamp",
   regularIntervalTicks = true,
   tickFormatterFunc = localTimeFormatter,
   legend = true,
+  // Note that we don't set the default tooltipFormatter here because we pass the styling vals into the default
+  tooltipFormatterFunc = null,
+  stylingProps = {},
 }: LinearTimelineProps) => {
   const combinedData = Object.keys(data).reduce((acc, lane) => {
     return [...acc, ...data[lane].points];
@@ -98,9 +81,18 @@ const LinearTimeline = ({
   };
 
   // TODO: Allow for proper styling and make things less hacky than "payload[0]"
-  const formatTooltip = ({ active, payload }: CustomTooltipProps) => {
+  const defaultFormatTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active) {
-      return <div>{localTimeFormatter(payload[0].value)}</div>;
+      return (
+        <div
+          style={{
+            backgroundColor: stylingProps?.tooltipBackgroundColor,
+            color: stylingProps?.tooltipTextColor,
+          }}
+        >
+          {localTimeFormatter(payload[0].value)}
+        </div>
+      );
     }
 
     return null;
@@ -109,7 +101,10 @@ const LinearTimeline = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart>
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid
+          fill={stylingProps?.gridBackgroundColor ?? "black"}
+          stroke={stylingProps?.gridStroke ?? "white"}
+        />
         <XAxis
           dataKey={xAxisDataKey}
           type="number"
@@ -117,11 +112,12 @@ const LinearTimeline = ({
           tickFormatter={tickFormatterFunc}
           allowDataOverflow
           ticks={regularIntervalTicks ? ticks : null}
+          stroke={stylingProps?.xAxisStroke}
         />
         {/* Note due to https://github.com/recharts/recharts/issues/2563 we cannot use a "category" type scatter plot
             To get around this we do a workaround of numbering each lane and hiding the numbers from the user */}
         <YAxis dataKey="laneID" type="number" padding={{ bottom: 30, top: 30 }} hide />
-        <Tooltip content={formatTooltip} />
+        <Tooltip content={tooltipFormatterFunc ?? defaultFormatTooltip} />
         {/* TODO: Use the Z-Axis for a "zoom" amount to enlarge or shrink icon size */}
         {legend ? <Legend iconSize={18} formatter={formatIdsToNames} /> : null}
         {Object.keys(dataWithIds).map(lane => {

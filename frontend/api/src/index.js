@@ -24860,7 +24860,6 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.temporal.v1
                          * @interface IConnectionOptions
                          * @property {boolean|null} [useSystemCaBundle] ConnectionOptions useSystemCaBundle
-                         * @property {boolean|null} [enableHealthCheck] ConnectionOptions enableHealthCheck
                          */
 
                         /**
@@ -24887,14 +24886,6 @@ export const clutch = $root.clutch = (() => {
                         ConnectionOptions.prototype.useSystemCaBundle = false;
 
                         /**
-                         * ConnectionOptions enableHealthCheck.
-                         * @member {boolean} enableHealthCheck
-                         * @memberof clutch.config.service.temporal.v1.ConnectionOptions
-                         * @instance
-                         */
-                        ConnectionOptions.prototype.enableHealthCheck = false;
-
-                        /**
                          * Verifies a ConnectionOptions message.
                          * @function verify
                          * @memberof clutch.config.service.temporal.v1.ConnectionOptions
@@ -24908,9 +24899,6 @@ export const clutch = $root.clutch = (() => {
                             if (message.useSystemCaBundle != null && message.hasOwnProperty("useSystemCaBundle"))
                                 if (typeof message.useSystemCaBundle !== "boolean")
                                     return "useSystemCaBundle: boolean expected";
-                            if (message.enableHealthCheck != null && message.hasOwnProperty("enableHealthCheck"))
-                                if (typeof message.enableHealthCheck !== "boolean")
-                                    return "enableHealthCheck: boolean expected";
                             return null;
                         };
 
@@ -24928,8 +24916,6 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.service.temporal.v1.ConnectionOptions();
                             if (object.useSystemCaBundle != null)
                                 message.useSystemCaBundle = Boolean(object.useSystemCaBundle);
-                            if (object.enableHealthCheck != null)
-                                message.enableHealthCheck = Boolean(object.enableHealthCheck);
                             return message;
                         };
 
@@ -24946,14 +24932,10 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults) {
+                            if (options.defaults)
                                 object.useSystemCaBundle = false;
-                                object.enableHealthCheck = false;
-                            }
                             if (message.useSystemCaBundle != null && message.hasOwnProperty("useSystemCaBundle"))
                                 object.useSystemCaBundle = message.useSystemCaBundle;
-                            if (message.enableHealthCheck != null && message.hasOwnProperty("enableHealthCheck"))
-                                object.enableHealthCheck = message.enableHealthCheck;
                             return object;
                         };
 
@@ -47576,6 +47558,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IGetProjectsRequest
                  * @property {Array.<string>|null} [projects] GetProjectsRequest projects
                  * @property {Array.<string>|null} [users] GetProjectsRequest users
+                 * @property {boolean|null} [excludeDependencies] GetProjectsRequest excludeDependencies
                  */
 
                 /**
@@ -47612,6 +47595,14 @@ export const clutch = $root.clutch = (() => {
                 GetProjectsRequest.prototype.users = $util.emptyArray;
 
                 /**
+                 * GetProjectsRequest excludeDependencies.
+                 * @member {boolean} excludeDependencies
+                 * @memberof clutch.project.v1.GetProjectsRequest
+                 * @instance
+                 */
+                GetProjectsRequest.prototype.excludeDependencies = false;
+
+                /**
                  * Verifies a GetProjectsRequest message.
                  * @function verify
                  * @memberof clutch.project.v1.GetProjectsRequest
@@ -47636,6 +47627,9 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.users[i]))
                                 return "users: string[] expected";
                     }
+                    if (message.excludeDependencies != null && message.hasOwnProperty("excludeDependencies"))
+                        if (typeof message.excludeDependencies !== "boolean")
+                            return "excludeDependencies: boolean expected";
                     return null;
                 };
 
@@ -47665,6 +47659,8 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < object.users.length; ++i)
                             message.users[i] = String(object.users[i]);
                     }
+                    if (object.excludeDependencies != null)
+                        message.excludeDependencies = Boolean(object.excludeDependencies);
                     return message;
                 };
 
@@ -47685,6 +47681,8 @@ export const clutch = $root.clutch = (() => {
                         object.projects = [];
                         object.users = [];
                     }
+                    if (options.defaults)
+                        object.excludeDependencies = false;
                     if (message.projects && message.projects.length) {
                         object.projects = [];
                         for (let j = 0; j < message.projects.length; ++j)
@@ -47695,6 +47693,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.users.length; ++j)
                             object.users[j] = message.users[j];
                     }
+                    if (message.excludeDependencies != null && message.hasOwnProperty("excludeDependencies"))
+                        object.excludeDependencies = message.excludeDependencies;
                     return object;
                 };
 

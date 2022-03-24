@@ -22,6 +22,9 @@ service ProjectAPI {
 message GetProjectsRequest {
   repeated string projects = 1;
   repeated string users = 2;
+  // If this is set to true, the api will exclude all project dependencies for the requested projects.
+  // https://github.com/lyft/clutch/blob/2304adf0e0189734d8a36803964214ee3bc73fbc/api/core/project/v1/project.proto#L19
+  bool exclude_dependencies = 3;
 }
 
 message ProjectResult {

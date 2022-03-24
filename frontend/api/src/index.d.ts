@@ -10226,9 +10226,6 @@ export namespace clutch {
 
                         /** ConnectionOptions useSystemCaBundle */
                         useSystemCaBundle?: (boolean|null);
-
-                        /** ConnectionOptions enableHealthCheck */
-                        enableHealthCheck?: (boolean|null);
                     }
 
                     /** Represents a ConnectionOptions. */
@@ -10242,9 +10239,6 @@ export namespace clutch {
 
                         /** ConnectionOptions useSystemCaBundle. */
                         public useSystemCaBundle: boolean;
-
-                        /** ConnectionOptions enableHealthCheck. */
-                        public enableHealthCheck: boolean;
 
                         /**
                          * Verifies a ConnectionOptions message.
@@ -19860,6 +19854,9 @@ export namespace clutch {
 
                 /** GetProjectsRequest users */
                 users?: (string[]|null);
+
+                /** GetProjectsRequest excludeDependencies */
+                excludeDependencies?: (boolean|null);
             }
 
             /** Represents a GetProjectsRequest. */
@@ -19876,6 +19873,9 @@ export namespace clutch {
 
                 /** GetProjectsRequest users. */
                 public users: string[];
+
+                /** GetProjectsRequest excludeDependencies. */
+                public excludeDependencies: boolean;
 
                 /**
                  * Verifies a GetProjectsRequest message.
