@@ -830,5 +830,4 @@ func TestNewService(t *testing.T) {
 
 	assert.Empty(t, s.(*svc).personalAccessToken)
 	assert.NotNil(t, s.(*svc).appTransport)
-
 }
