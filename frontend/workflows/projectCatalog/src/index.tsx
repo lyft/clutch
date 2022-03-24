@@ -9,6 +9,8 @@ import fetchAlerts from "./details/resolvers/alerts";
 import fetchProject from "./details/resolvers/info";
 import Catalog from "./catalog";
 import Details from "./details";
+export { default as MetaCard } from "./details/cards/meta";
+export { default as DynamicCard } from "./details/cards/dynamic";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 export interface DetailWorkflowProps extends WorkflowProps {
@@ -43,20 +45,25 @@ const register = (): WorkflowConfiguration => {
         description: "Service Detail View",
         component: props => (
           <Details
-          cards=[
-            <MetaCard1 />,
-            <DynamicCard2 />
-          ],
+            // cards=[
+            //   <MetaCard1 />,
+            //   <DynamicCard2 />
+            // ],
             projectResolver={fetchProject}
             alertsResolver={fetchAlerts}
             deployResolver={fetchDeploys}
             {...props}
-          ><MetaCard1 /><DynamicCard2 fetchFunction /></Details>
+          >
+            {/* <MetaCard1 />
+            <DynamicCard2 fetchFunction /> */}
+          </Details>
         ),
         // featureFlag: "projectCatalog",
       },
     },
   };
 };
+
+export { Details };
 
 export default register;
