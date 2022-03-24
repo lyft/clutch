@@ -7,6 +7,35 @@ import { LinearProgress } from "@material-ui/core";
 import type { DetailsCardTypes } from "../..";
 import { EventTime, setMilliseconds } from "../helpers";
 
+interface TitleRowProps {
+  title: string;
+  titleIcon?: React.ReactNode;
+  endAdornment?: React.ReactNode;
+}
+
+export interface BaseCardProps extends TitleRowProps {
+  type?: DetailsCardTypes;
+  loading?: boolean;
+  error?: ClutchError | undefined;
+  reloadInterval?: number;
+  autoReload?: boolean;
+  fetchDataFn?: () => Promise<any>;
+  onSuccess?: (data: any) => void;
+  onError?: (error: ClutchError | undefined) => void;
+}
+
+export interface ProjectCardProps extends BaseCardProps {
+  children?: React.ReactNode;
+}
+
+interface BaseCardState {
+  data?: any;
+  interval?: number;
+  loading?: boolean;
+  reloadInterval?: number;
+  error?: ClutchError | undefined;
+}
+
 const StyledCard = styled(Card)({
   width: "100%",
   height: "fit-content",
@@ -40,35 +69,6 @@ const LinkText = ({ text, link }: { text: string; link?: string }) => {
 
   return returnText;
 };
-
-interface TitleRowProps {
-  title: string;
-  titleIcon?: React.ReactNode;
-  endAdornment?: React.ReactNode;
-}
-
-export interface BaseCardProps extends TitleRowProps {
-  type?: DetailsCardTypes;
-  loading?: boolean;
-  error?: ClutchError | undefined;
-  reloadInterval?: number;
-  autoReload?: boolean;
-  fetchDataFn?: () => Promise<any>;
-  onSuccess?: (data: any) => void;
-  onError?: (error: ClutchError | undefined) => void;
-}
-
-export interface ProjectCardProps extends BaseCardProps {
-  children?: React.ReactNode;
-}
-
-interface BaseCardState {
-  data?: any;
-  interval?: number;
-  loading?: boolean;
-  reloadInterval?: number;
-  error?: ClutchError | undefined;
-}
 
 const LastEvent = ({ time }: { time: number }) => (
   <>
