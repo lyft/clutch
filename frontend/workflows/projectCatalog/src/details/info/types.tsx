@@ -33,7 +33,7 @@ export interface ProjectInfo {
   owner: string;
   name: string;
   disabled?: boolean;
-  description?: string;
+  description?: string | undefined;
   repository: ProjectRepository;
   languages?: string[];
   messenger?: ProjectMessenger;

@@ -3,7 +3,7 @@ import { Grid } from "@clutch-sh/core";
 import { faCode, faCodeBranch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { LinkText } from "../card";
+import { LinkText } from "../cards/base";
 
 import type { ProjectRepository } from "./types";
 

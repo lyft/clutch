@@ -8,7 +8,6 @@ import Code from "../text";
 
 export interface BaseWorkflowProps {
   heading: string;
-  [key: string]: any;
 }
 
 interface Developer {

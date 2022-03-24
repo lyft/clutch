@@ -4,7 +4,7 @@ import { capitalize } from "lodash";
 
 interface ProjectHeaderProps {
   name: string;
-  description: string;
+  description?: string;
 }
 
 const TextLink = styled("a")({

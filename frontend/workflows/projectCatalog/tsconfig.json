@@ -6,7 +6,7 @@
     "rootDir": "./src",
     "strict": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../../../../workflows/projectCatalog/src/cards/containers"],
   "references": [
     { "path": "../../api" },
     { "path": "../../packages/core" },

@@ -1,13 +1,8 @@
 import React from "react";
-import { Card, Grid, styled } from "@clutch-sh/core";
+import { Grid } from "@clutch-sh/core";
 import { faGithub, faSlack } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-const StyledCard = styled(Card)({
-  width: "100%",
-  height: "fit-content",
-  padding: "15px",
-});
+import { StyledCard } from "./card";
 
 const QuickLinksCard = () => {
   return (

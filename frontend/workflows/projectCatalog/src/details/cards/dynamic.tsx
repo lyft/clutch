@@ -1,16 +1,14 @@
 import React from "react";
+
+import type { DetailsCardTypes } from "../..";
+
 import BaseCardComponent, { BaseCard } from "./base";
-import type { ExtendedProjectCardProps } from "./base";
 
 class DynamicCard extends BaseCardComponent {
-  static displayName = "DynamicCard";
-
-  constructor(props: ExtendedProjectCardProps) {
-    super(props);
-  }
-
   render() {
-    return <BaseCard {...this.props} />;
+    return (
+      <BaseCard {...this.props} loading={this.state.loading} type={"Dynamic" as DetailsCardTypes} />
+    );
   }
 }
 

@@ -3,6 +3,8 @@ import { Card, ClutchError, Error, Grid, Link, styled, Typography } from "@clutc
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LinearProgress } from "@material-ui/core";
+
+import type { DetailsCardTypes } from "../..";
 import { EventTime, setMilliseconds } from "../helpers";
 
 const StyledCard = styled(Card)({
@@ -29,24 +31,35 @@ const StyledRow = styled(Grid)({
   marginBottom: "15px",
 });
 
-export interface BaseProjectCardProps {
-  text: string;
-  icon?: React.ReactNode;
+const LinkText = ({ text, link }: { text: string; link?: string }) => {
+  const returnText = <Typography variant="body2">{text}</Typography>;
+
+  if (link && text) {
+    return <StyledLink href={link}>{returnText}</StyledLink>;
+  }
+
+  return returnText;
+};
+
+interface TitleRowProps {
+  title: string;
+  titleIcon?: React.ReactNode;
   endAdornment?: React.ReactNode;
-  loadData?: () => Promise<any>;
-  setData?: (data: any) => void;
+}
+
+export interface BaseCardProps extends TitleRowProps {
+  type?: DetailsCardTypes;
   loading?: boolean;
   error?: ClutchError | undefined;
   reloadInterval?: number;
   autoReload?: boolean;
+  fetchDataFn?: () => Promise<any>;
+  onSuccess?: (data: any) => void;
+  onError?: (error: ClutchError | undefined) => void;
 }
 
-export interface ExtendedProjectCardProps extends BaseProjectCardProps {
+export interface ProjectCardProps extends BaseCardProps {
   children?: React.ReactNode;
-}
-
-interface BaseCardProps {
-  interval?: number;
 }
 
 interface BaseCardState {
@@ -74,15 +87,15 @@ const LastEvent = ({ time }: { time: number }) => (
   </>
 );
 
-const TitleRow = ({ text, icon, endAdornment }: BaseProjectCardProps) => (
+const TitleRow = ({ title, titleIcon, endAdornment }: TitleRowProps) => (
   <>
-    {icon && (
+    {titleIcon && (
       <Grid item xs={1}>
-        {icon}
+        {titleIcon}
       </Grid>
     )}
     <Grid item xs={8}>
-      <Typography variant="h4">{text}</Typography>
+      <Typography variant="h4">{title}</Typography>
     </Grid>
     {endAdornment && (
       <Grid
@@ -100,18 +113,18 @@ const TitleRow = ({ text, icon, endAdornment }: BaseProjectCardProps) => (
   </>
 );
 
-export const BaseCard = ({
+const BaseCard = ({
   children,
-  text,
-  icon,
+  title,
+  titleIcon,
   endAdornment,
   loading,
   error,
-}: ExtendedProjectCardProps) => {
+}: ProjectCardProps) => {
   return (
     <StyledCard container direction="row">
       <Grid container item direction="row" alignItems="flex-start">
-        <TitleRow text={text} icon={icon} endAdornment={endAdornment} />
+        <TitleRow title={title} titleIcon={titleIcon} endAdornment={endAdornment} />
       </Grid>
       <StyledRow>
         {loading && (
@@ -120,18 +133,15 @@ export const BaseCard = ({
           </StyledProgressContainer>
         )}
       </StyledRow>
-      {/* {children} */}
       {error ? <Error subject={error} /> : children}
     </StyledCard>
   );
 };
 
-class BaseCardComponent extends React.Component<ExtendedProjectCardProps, BaseCardState> {
-  static displayName = "BaseCard";
-
-  constructor(props: ExtendedProjectCardProps) {
+class BaseCardComponent extends React.Component<BaseCardProps, BaseCardState> {
+  constructor(props: BaseCardProps) {
     super(props);
-    const { loadData, autoReload, loading = false, error, reloadInterval = 30000 } = this.props;
+    const { loading = false, error, reloadInterval = 30000 } = this.props;
     this.state = {
       error,
       loading,
@@ -139,54 +149,70 @@ class BaseCardComponent extends React.Component<ExtendedProjectCardProps, BaseCa
       interval: undefined,
       data: undefined,
     };
-    console.log(this.props);
+  }
 
-    if (loadData && autoReload) {
-      this.fetchData(loadData);
-      this.setPromiseInterval();
+  componentDidMount() {
+    const { fetchDataFn, autoReload } = this.props;
+
+    if (fetchDataFn) {
+      this.fetchData(fetchDataFn);
+
+      if (autoReload) {
+        this.setPromiseInterval();
+      }
     }
   }
 
-  componentDidCatch(baseError) {
-    this.setState(state => ({ ...state, baseError }));
+  componentDidCatch(error) {
+    this.setState(state => ({ ...state, error }));
   }
 
   componentWillUnmount() {
-    if (this.state.interval) {
-      clearInterval(this.state.interval);
+    const { interval } = this.state;
+
+    if (interval) {
+      clearInterval(interval);
+    }
+  }
+
+  setPromiseInterval() {
+    const { fetchDataFn, autoReload } = this.props;
+    const { interval, reloadInterval } = this.state;
+    if (fetchDataFn && autoReload) {
+      if (interval) {
+        clearInterval(interval);
+        this.setState(state => ({ ...state, interval: undefined }));
+      }
+
+      const newInterval = setInterval(() => this.fetchData(fetchDataFn), reloadInterval);
+      this.setState(state => ({ ...state, interval: newInterval }));
     }
   }
 
   fetchData(promise: () => Promise<any>) {
+    const { onSuccess, onError } = this.props;
     this.setState(state => ({ ...state, loading: true }));
-    console.log("Calling fetch data");
 
     promise()
       .then(data => {
-        if (this.props.setData) {
-          this.props.setData(data);
+        if (onSuccess) {
+          onSuccess(data);
         }
       })
-      .catch(error => this.setState(state => ({ ...state, error })))
+      .catch(error => {
+        if (onError) {
+          onError(error);
+        }
+        this.setState(state => ({ ...state, error }));
+      })
       .finally(() => this.setState(state => ({ ...state, loading: false })));
-  }
-
-  setPromiseInterval() {
-    const { loadData, autoReload } = this.props;
-    if (loadData && autoReload) {
-      if (this.state.interval) {
-        clearInterval(this.state.interval);
-        this.setState(state => ({ ...state, interval: undefined }));
-      }
-
-      const interval = setInterval(() => this.fetchData(loadData), this.state.reloadInterval);
-      this.setState(state => ({ ...state, interval }));
-    }
   }
 
   render() {
     return <></>;
   }
 }
+
+export { BaseCard, LastEvent, LinkText, StyledCard, StyledLink, StyledRow };
 
 export default BaseCardComponent;
