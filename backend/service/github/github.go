@@ -359,7 +359,7 @@ func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) 
 
 	var httpClient *http.Client
 
-	switch config.GetAuth().(type) {
+	switch auth := config.GetAuth().(type) {
 	case *githubv1.Config_AccessToken:
 		token := config.GetAccessToken()
 		ret.personalAccessToken = token
@@ -389,6 +389,8 @@ func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) 
 		ret.appTransport = itr
 
 		httpClient = &http.Client{Transport: itr}
+	default:
+		return nil, fmt.Errorf("did not recognize auth config type '%T'", auth)
 	}
 	httpClient.Transport = &StatsRoundTripper{Wrapped: httpClient.Transport, scope: scope}
 
