@@ -50,7 +50,6 @@ export interface ErrorProps {
 }
 
 const Error = ({ subject: error, onRetry }: ErrorProps) => {
-  console.log("My error", error);
   const action =
     onRetry !== undefined ? (
       <IconButton aria-label="retry" color="inherit" size="small" onClick={() => onRetry()}>
@@ -78,7 +77,7 @@ const Error = ({ subject: error, onRetry }: ErrorProps) => {
 
   return (
     <div>
-      {/* <ErrorAlert
+      <ErrorAlert
         severity="error"
         title={error.status.text}
         data-detailed={hasDetails}
@@ -94,7 +93,7 @@ const Error = ({ subject: error, onRetry }: ErrorProps) => {
           ))}
         </ErrorSummaryContainer>
       </ErrorAlert>
-      {hasDetails && <ErrorDetails error={error} />} */}
+      {hasDetails && <ErrorDetails error={error} />}
     </div>
   );
 };

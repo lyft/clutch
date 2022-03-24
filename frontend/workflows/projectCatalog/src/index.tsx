@@ -33,13 +33,13 @@ const register = (): WorkflowConfiguration => {
         displayName: "Project Catalog",
         description: "A searchable catalog of services",
         component: Catalog,
-        // featureFlag: "projectCatalog",
+        featureFlag: "projectCatalog",
       },
       details: {
         path: "/:projectId",
         description: "Service Detail View",
         component: Details,
-        // featureFlag: "projectCatalog",
+        featureFlag: "projectCatalog",
       },
     },
   };

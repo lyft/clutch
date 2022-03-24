@@ -2,7 +2,7 @@ import React from "react";
 import { Grid } from "@clutch-sh/core";
 import { faGithub, faSlack } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { StyledCard } from "./card";
+import { StyledCard } from "./cards/base";
 
 const QuickLinksCard = () => {
   return (
