@@ -232,25 +232,25 @@ const TextField = ({
   const textFieldProps = {
     name,
     onFocus: e => {
-      changeCallback(e);
       if (formValidation !== undefined) {
         formValidation.onChange(e);
       }
+      changeCallback(e);
     },
     onBlur: e => {
-      changeCallback(e);
       if (formValidation !== undefined) {
         formValidation.onBlur(e);
       }
+      changeCallback(e);
     },
     error,
     helperText: helpText,
     InputProps: {
       onChange: e => {
-        changeCallback(e);
         if (formValidation !== undefined) {
           formValidation.onChange(e);
         }
+        changeCallback(e);
       },
       onKeyDown,
       readOnly,
@@ -294,14 +294,14 @@ const TextField = ({
         renderOption={(option: AutocompleteResultProps) => (
           <AutocompleteResult id={option.id} label={option.label} />
         )}
-        defaultValue={{ id: defaultVal, label: defaultVal }}
-        value={value}
         onSelectCapture={e => {
           if (formValidation !== undefined) {
             formValidation.onChange(e);
           }
           changeCallback(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
         }}
+        defaultValue={{ id: defaultVal, label: defaultVal }}
+        value={value}
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
