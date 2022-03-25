@@ -8,7 +8,7 @@ const LOCAL_STORAGE_STATE_KEY = "catalogState";
 /** Attempts to load projects stored in local storage. */
 const loadProjects = (): { [key: string]: string } => {
   const storedProjects = window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY);
-  if (storedProjects === undefined) {
+  if (storedProjects === null || storedProjects === undefined) {
     return {};
   }
   try {
@@ -45,19 +45,24 @@ const fetchProjects = (
     .then(resp => {
       const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
       const selectedProjects = Object.values(results)
-        .filter(r => r.from.selected)
+        .filter(r => r?.from?.selected)
         .map(r => r.project);
 
       let projectStorage = {};
       if (!Object.keys(loadProjects()).length) {
         selectedProjects.forEach(p => {
-          projectStorage[p.name] = Date.now();
+          if (p && p.name) {
+            projectStorage[p.name] = Date.now();
+          }
         });
         writeProjects(projectStorage);
       } else {
         projectStorage = loadProjects();
       }
-      const tsProjects = selectedProjects.map(p => ({ ...p, ts: projectStorage[p.name] }));
+      const tsProjects = selectedProjects.map(p => ({
+        ...p,
+        ts: p && p.name ? projectStorage[p.name] : null,
+      }));
       onSuccess(_.reverse(_.sortBy(tsProjects, ["ts"])));
     })
     .catch((err: ClutchError) => {
@@ -65,12 +70,17 @@ const fetchProjects = (
 
       // will perform a regex to pull out a project name from an error message
       // sample error message -> "unable to find project: test project"
-      const missingProject = err.message.match(/.*:\W(.*)/)[1];
-      if (err.status.code === 404 && missingProject && projects?.[missingProject]) {
-        delete projects?.[missingProject];
-        writeProjects(projects);
-        if (retry > 0) {
-          fetchProjects(onSuccess, onError, retry - 1);
+      const missingProjectMatch = err.message.match(/.*:\W(.*)/);
+
+      if (missingProjectMatch && missingProjectMatch[1]) {
+        const missingProject = missingProjectMatch[1];
+
+        if (err.status.code === 404 && missingProject && projects?.[missingProject]) {
+          delete projects?.[missingProject];
+          writeProjects(projects);
+          if (retry > 0) {
+            fetchProjects(onSuccess, onError, retry - 1);
+          }
         }
       }
       onError(err);

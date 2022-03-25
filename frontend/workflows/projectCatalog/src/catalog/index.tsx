@@ -40,7 +40,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
   const triggerProjectAdd = () => {
     dispatch({ type: "SEARCH_START" });
     addProject(
-      state.search,
+      state?.search || "",
       projects => {
         dispatch({ type: "ADD_PROJECT", payload: { projects } });
         dispatch({ type: "SEARCH_END" });

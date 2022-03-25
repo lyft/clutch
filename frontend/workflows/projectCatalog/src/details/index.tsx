@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@material-ui/icons/Group";
 import { capitalize } from "lodash";
 
-import type { DetailWorkflowProps } from "..";
+import type { DetailsCard, DetailWorkflowProps } from "..";
 
 import MetaCard from "./cards/meta";
 import type { ProjectInfo } from "./info/types";
@@ -15,6 +15,8 @@ import fetchProject from "./resolvers/info";
 import { ProjectDetailsContext } from "./context";
 import ProjectHeader from "./header";
 import ProjectInfoCard from "./info";
+
+type CardTyping = React.ReactNode | DetailsCard;
 
 const StyledContainer = styled(Grid)({
   padding: "20px",
@@ -31,13 +33,14 @@ const DisabledItem = ({ name }: { name: string }) => (
 const Details: React.FC<DetailWorkflowProps> = ({ children }) => {
   const { projectId } = useParams();
   const [projectInfo, setProjectInfo] = React.useState<ProjectInfo | null>(null);
-  const [metaCards, setMetaCards] = React.useState<any[]>([]);
-  const [dynamicCards, setDynamicCards] = React.useState<any[]>([]);
+  const [metaCards, setMetaCards] = React.useState<CardTyping[]>([]);
+  const [dynamicCards, setDynamicCards] = React.useState<CardTyping[]>([]);
 
   React.useEffect(() => {
     if (children) {
-      const tempMetaCards = [];
-      const tempDynamicCards = [];
+      const tempMetaCards: CardTyping[] = [];
+      const tempDynamicCards: CardTyping[] = [];
+
       React.Children.forEach(children, child => {
         if (React.isValidElement(child)) {
           const { type } = child?.props;

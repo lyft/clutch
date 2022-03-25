@@ -48,7 +48,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
       <Grid container wrap="nowrap">
         <Grid container item direction="row" alignItems="flex-end">
           <Grid item xs={1}>
-            <LanguageIcon language={project.languages?.[0]} />
+            <LanguageIcon language={(project?.languages || [])[0]} />
           </Grid>
           <Grid item xs={11}>
             <Typography variant="caption2">{project?.name}</Typography>

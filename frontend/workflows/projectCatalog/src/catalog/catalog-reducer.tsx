@@ -4,13 +4,13 @@ import type { Action, CatalogState } from "./types";
 const catalogReducer = (state: CatalogState, action: Action): CatalogState => {
   switch (action.type) {
     case "ADD_PROJECT": {
-      return { ...state, projects: action?.payload?.projects };
+      return { ...state, projects: action?.payload?.projects || [] };
     }
     case "REMOVE_PROJECT": {
-      return { ...state, projects: action?.payload?.projects };
+      return { ...state, projects: action?.payload?.projects || [] };
     }
     case "SEARCH": {
-      return { ...state, search: action.payload.search };
+      return { ...state, search: action?.payload?.search };
     }
     case "SEARCH_START": {
       return { ...state, isSearching: true };

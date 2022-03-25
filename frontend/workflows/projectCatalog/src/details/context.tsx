@@ -6,10 +6,10 @@ interface ContextProps {
   projectInfo: ProjectInfo | null;
 }
 
-const ProjectDetailsContext = React.createContext<ContextProps>(undefined);
+const ProjectDetailsContext = React.createContext<ContextProps | undefined>(undefined);
 
 const useProjectDetailsContext = () => {
-  return React.useContext<ContextProps>(ProjectDetailsContext);
+  return React.useContext<ContextProps | undefined>(ProjectDetailsContext);
 };
 
 export { ProjectDetailsContext, useProjectDetailsContext };
