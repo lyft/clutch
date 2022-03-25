@@ -436,6 +436,13 @@ type oidcProviderClaims struct {
 }
 
 func (pc *oidcProviderClaims) Check(grantType string) error {
+	if len(pc.GrantTypesSupported) == 0 {
+		// if the list of supported grant types was omitted by the provider we fall
+		// back to the defaults defined by the OpenID Provider Metadata spec
+		// https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+		pc.GrantTypesSupported = append(pc.GrantTypesSupported, "authorization_code")
+		pc.GrantTypesSupported = append(pc.GrantTypesSupported, "implicit")
+	}
 	for _, gt := range pc.GrantTypesSupported {
 		if gt == grantType {
 			return nil
