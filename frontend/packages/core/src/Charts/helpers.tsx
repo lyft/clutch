@@ -10,7 +10,13 @@ export const dateTimeFormatter = (timestamp: number) => {
   return new Date(timestamp).toDateString();
 };
 
-const getMinAndMaxOfRangeUsingKey = (data: any, key: string) => {
+export const getMinAndMaxOfRangeUsingKey = (data: any, key: string) => {
+  if (!data) {
+    return {
+      min: null,
+      max: null,
+    };
+  }
   const filtered = data.filter(d => d[key]).map(d => d[key]);
   return { min: Math.min(...filtered), max: Math.max(...filtered) };
 };
@@ -20,7 +26,17 @@ const getMinAndMaxOfRangeUsingKey = (data: any, key: string) => {
 export const calculateDomainEdges = (data: any, dataKey: string, edgeRatio: number) => {
   // Get the max and min of the domain, then calculate a certain amount`out from each edge.
   const { min, max } = getMinAndMaxOfRangeUsingKey(data, dataKey);
-  if (edgeRatio <= 0) {
+  if (
+    edgeRatio <= 0 ||
+    min === null ||
+    max === null ||
+    min === Infinity ||
+    max === -Infinity ||
+    min === undefined ||
+    max === undefined ||
+    Number.isNaN(min) ||
+    Number.isNaN(max)
+  ) {
     return [min, max];
   }
   if (max === min) {
@@ -70,7 +86,24 @@ const zoomLevelsToIntervals = {
 
 // This function allows us to get the starting point for our ticks, as well as the space between ticks.
 // We have presets according to the span between the min and max timestamps.
-const getLeftSideAndIntervalForTicks = (min: number, max: number) => {
+export const getLeftSideAndIntervalForTicks = (min: number, max: number) => {
+  if (
+    min === null ||
+    max === null ||
+    min === Infinity ||
+    max === -Infinity ||
+    min === undefined ||
+    max === undefined ||
+    Number.isNaN(min) ||
+    Number.isNaN(max) ||
+    min > max
+  ) {
+    return {
+      leftSide: null,
+      interval: null,
+    };
+  }
+
   const diff = max - min;
   let zoomLevel = "";
   switch (true) {
@@ -130,6 +163,21 @@ export const calculateTicks = (data: any, dataKey: string) => {
   const { min, max } = getMinAndMaxOfRangeUsingKey(data, dataKey);
   const { leftSide, interval } = getLeftSideAndIntervalForTicks(min, max);
   const ticks = [];
+
+  if (
+    leftSide === null ||
+    interval === null ||
+    min === null ||
+    max === null ||
+    min === Infinity ||
+    max === -Infinity ||
+    min === undefined ||
+    max === undefined ||
+    Number.isNaN(min) ||
+    Number.isNaN(max)
+  ) {
+    return ticks;
+  }
 
   for (let i = leftSide; i <= max; i += interval) {
     ticks.push(i);
