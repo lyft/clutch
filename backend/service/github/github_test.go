@@ -861,5 +861,4 @@ func TestCommitAuthorFromContext(t *testing.T) {
 	result = commitOptionsFromClaims(ctx)
 	assert.Equal(t, "daniel123 via Clutch", result.Author.Name)
 	assert.Equal(t, "<>", result.Author.Email)
-
 }
