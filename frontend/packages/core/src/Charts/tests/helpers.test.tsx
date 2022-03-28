@@ -1,7 +1,6 @@
 import {
   calculateDomainEdges,
   calculateTicks,
-  dateTimeFormatter,
   getLeftSideAndIntervalForTicks,
   getMinAndMaxOfRangeUsingKey,
   isoTimeFormatter,
@@ -11,12 +10,6 @@ describe("helper functions for charts", () => {
   describe("isoTimeFormatter", () => {
     test("a timestamp", () => {
       expect(isoTimeFormatter(60)).toBe("1970-01-01T00:00:00.060Z");
-    });
-  });
-
-  describe("dateTimeFormatter", () => {
-    test("a timestamp", () => {
-      expect(dateTimeFormatter(60)).toBe("Wed Dec 31 1969");
     });
   });
 
