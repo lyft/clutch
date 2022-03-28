@@ -26,17 +26,7 @@ export const getMinAndMaxOfRangeUsingKey = (data: any, key: string) => {
 export const calculateDomainEdges = (data: any, dataKey: string, edgeRatio: number) => {
   // Get the max and min of the domain, then calculate a certain amount`out from each edge.
   const { min, max } = getMinAndMaxOfRangeUsingKey(data, dataKey);
-  if (
-    edgeRatio <= 0 ||
-    min === null ||
-    max === null ||
-    min === Infinity ||
-    max === -Infinity ||
-    min === undefined ||
-    max === undefined ||
-    Number.isNaN(min) ||
-    Number.isNaN(max)
-  ) {
+  if (edgeRatio <= 0 || !Number.isFinite(min) || !Number.isFinite(max)) {
     return [min, max];
   }
   if (max === min) {
@@ -87,17 +77,7 @@ const zoomLevelsToIntervals = {
 // This function allows us to get the starting point for our ticks, as well as the space between ticks.
 // We have presets according to the span between the min and max timestamps.
 export const getLeftSideAndIntervalForTicks = (min: number, max: number) => {
-  if (
-    min === null ||
-    max === null ||
-    min === Infinity ||
-    max === -Infinity ||
-    min === undefined ||
-    max === undefined ||
-    Number.isNaN(min) ||
-    Number.isNaN(max) ||
-    min > max
-  ) {
+  if (!Number.isFinite(min) || !Number.isFinite(max) || min > max) {
     return {
       leftSide: null,
       interval: null,
@@ -165,16 +145,10 @@ export const calculateTicks = (data: any, dataKey: string) => {
   const ticks = [];
 
   if (
-    leftSide === null ||
-    interval === null ||
-    min === null ||
-    max === null ||
-    min === Infinity ||
-    max === -Infinity ||
-    min === undefined ||
-    max === undefined ||
-    Number.isNaN(min) ||
-    Number.isNaN(max)
+    !Number.isFinite(leftSide) ||
+    !Number.isFinite(interval) ||
+    !Number.isFinite(min) ||
+    !Number.isFinite(max)
   ) {
     return ticks;
   }
