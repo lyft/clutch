@@ -14,6 +14,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	githubv3 "github.com/google/go-github/v37/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"
@@ -23,6 +24,7 @@ import (
 	githubconfigv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
 	githubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 const problem = "we've had a problem"
@@ -830,4 +832,34 @@ func TestNewService(t *testing.T) {
 
 	assert.Empty(t, s.(*svc).personalAccessToken)
 	assert.NotNil(t, s.(*svc).appTransport)
+}
+
+func TestCommitAuthorFromContext(t *testing.T) {
+	ctx := context.Background()
+	ctx = authn.ContextWithAnonymousClaims(ctx)
+
+	result := commitOptionsFromClaims(ctx)
+	assert.Equal(t, "Anonymous User via Clutch", result.Author.Name)
+	assert.Equal(t, "<>", result.Author.Email)
+
+	ctx = authn.ContextWithClaims(ctx, &authn.Claims{
+		StandardClaims: &jwt.StandardClaims{
+			Subject: "daniel@example.com",
+		},
+	})
+
+	result = commitOptionsFromClaims(ctx)
+	assert.Equal(t, "daniel@example.com via Clutch", result.Author.Name)
+	assert.Equal(t, "<daniel@example.com>", result.Author.Email)
+
+	ctx = authn.ContextWithClaims(ctx, &authn.Claims{
+		StandardClaims: &jwt.StandardClaims{
+			Subject: "daniel123",
+		},
+	})
+
+	result = commitOptionsFromClaims(ctx)
+	assert.Equal(t, "daniel123 via Clutch", result.Author.Name)
+	assert.Equal(t, "<>", result.Author.Email)
+
 }
