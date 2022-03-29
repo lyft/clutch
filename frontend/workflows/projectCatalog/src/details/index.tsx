@@ -31,7 +31,7 @@ const DisabledItem = ({ name }: { name: string }) => (
   </Grid>
 );
 
-const Details: React.FC<DetailWorkflowProps> = ({ children }) => {
+const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
   const { projectId } = useParams();
   const [projectInfo, setProjectInfo] = React.useState<ProjectInfo | null>(null);
   const [metaCards, setMetaCards] = React.useState<CardTyping[]>([]);
@@ -88,7 +88,7 @@ const Details: React.FC<DetailWorkflowProps> = ({ children }) => {
                     projectInfo?.disabled ? <DisabledItem name={projectInfo?.name} /> : null
                   }
                 >
-                  {projectInfo && <ProjectInfoCard data={projectInfo} />}
+                  {projectInfo && <ProjectInfoCard data={projectInfo} addtlChips={chips} />}
                 </MetaCard>
               </Grid>
               {/* Custom Meta Cards */}

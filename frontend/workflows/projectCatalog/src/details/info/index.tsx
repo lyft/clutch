@@ -5,10 +5,11 @@ import ChipsRow from "./chipsRow";
 import LanguageRow from "./languageRow";
 import MessengerRow from "./messengerRow";
 import RepositoryRow from "./repositoryRow";
-import type { ProjectInfo } from "./types";
+import type { ProjectInfo, ProjectInfoChip } from "./types";
 
 interface ProjectInfoProps {
   data: ProjectInfo;
+  addtlChips?: ProjectInfoChip[];
 }
 
 const StyledRow = styled(Grid)({
@@ -17,29 +18,37 @@ const StyledRow = styled(Grid)({
   width: "100%",
 });
 
-const ProjectInfoCard = ({ data }: ProjectInfoProps) => (
-  <>
-    {data?.messenger && (
-      <StyledRow container spacing={1}>
-        <MessengerRow {...data.messenger} />
-      </StyledRow>
-    )}
-    {data?.repository && (
-      <StyledRow container spacing={1} justify="flex-start" alignItems="center">
-        <RepositoryRow {...data.repository} />
-      </StyledRow>
-    )}
-    {data?.languages?.length && (
-      <StyledRow container spacing={1} justify="flex-start" alignItems="flex-end">
-        <LanguageRow languages={data.languages} />
-      </StyledRow>
-    )}
-    {data?.chips?.length && (
-      <StyledRow container spacing={1}>
-        <ChipsRow chips={data.chips} />
-      </StyledRow>
-    )}
-  </>
-);
+const ProjectInfoCard = ({ data, addtlChips }: ProjectInfoProps) => {
+  const [chips, setChips] = React.useState<ProjectInfoChip[]>([]);
+
+  React.useEffect(() => {
+    setChips((data?.chips || []).concat(addtlChips ?? []));
+  }, [data, addtlChips]);
+
+  return (
+    <>
+      {data?.messenger && (
+        <StyledRow container spacing={1}>
+          <MessengerRow {...data.messenger} />
+        </StyledRow>
+      )}
+      {data?.repository && (
+        <StyledRow container spacing={1} justify="flex-start" alignItems="center">
+          <RepositoryRow {...data.repository} />
+        </StyledRow>
+      )}
+      {data?.languages?.length ? (
+        <StyledRow container spacing={1} justify="flex-start" alignItems="flex-end">
+          <LanguageRow languages={data.languages} />
+        </StyledRow>
+      ) : null}
+      {chips.length > 0 && (
+        <StyledRow container spacing={1}>
+          <ChipsRow chips={chips} />
+        </StyledRow>
+      )}
+    </>
+  );
+};
 
 export default ProjectInfoCard;
