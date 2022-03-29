@@ -13,15 +13,15 @@ import {
 
 // If only a single link, then no popper is necessary
 const QuickLink = ({ link, linkGroupName, linkGroupImage }) => {
-    <Grid item key={link.name}>
-      <Tooltip title={linkGroupName}>
-        <TooltipContainer>
-          <Link href={link.url}>
-            <img width="32px" height="32px" src={linkGroupImage} alt={link.name} />
-          </Link>
-        </TooltipContainer>
-      </Tooltip>
-    </Grid>
+  <Grid item key={link.name}>
+    <Tooltip title={linkGroupName}>
+      <TooltipContainer>
+        <Link href={link.url}>
+          <img width="32px" height="32px" src={linkGroupImage} alt={link.name} />
+        </Link>
+      </TooltipContainer>
+    </Tooltip>
+  </Grid>;
 };
 
 // Have a popper in the case of multiple links per group
