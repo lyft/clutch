@@ -2,7 +2,7 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { client } from "@clutch-sh/core";
 import { faGithub, faSlack } from "@fortawesome/free-brands-svg-icons";
 
-import type { ProjectInfo } from "../info/types";
+import type { ProjectInfo } from "./types";
 
 const massageProjectInfo = (project: IClutch.core.project.v1.IProject = {}): ProjectInfo => {
   const messengerLink = (project?.linkGroups || []).find(lg => lg.name === "Slack");

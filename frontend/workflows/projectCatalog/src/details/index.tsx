@@ -8,8 +8,8 @@ import { capitalize } from "lodash";
 
 import type { DetailWorkflowProps } from "..";
 
+import fetchProject from "./info/resolver";
 import type { ProjectInfo } from "./info/types";
-import fetchProject from "./resolvers/info";
 import type { DetailsCard } from "./card";
 import { MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
