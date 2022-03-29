@@ -1,6 +1,13 @@
 import React from "react";
 import type { ReactTimeagoProps as TimeAgoProps } from "react-timeago";
 import TimeAgo from "react-timeago";
+import { Grid, Link, styled, Typography } from "@clutch-sh/core";
+import { faClock } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+const StyledLink = styled(Link)({
+  whiteSpace: "nowrap",
+});
 
 const unitformatter = (unit: string): string => {
   switch (unit) {
@@ -24,6 +31,16 @@ const EventTime = ({ onClick, ...props }: EventTimeProps) => (
   />
 );
 
+const LinkText = ({ text, link }: { text: string; link?: string }) => {
+  const returnText = <Typography variant="body2">{text}</Typography>;
+
+  if (link && text) {
+    return <StyledLink href={link}>{returnText}</StyledLink>;
+  }
+
+  return returnText;
+};
+
 const parseTimestamp = (timestamp?: number | Long | null): number => {
   return parseInt(timestamp?.toString() || "0", 10);
 };
@@ -33,4 +50,21 @@ const setMilliseconds = (timestamp?: number | Long | null): number => {
   return ts.setUTCMilliseconds(parseTimestamp(timestamp));
 };
 
-export { EventTime, unitformatter, setMilliseconds };
+const LastEvent = ({ time }: { time: number }) => (
+  <>
+    {time && (
+      <>
+        <Grid item>
+          <FontAwesomeIcon icon={faClock} />
+        </Grid>
+        <Grid item>
+          <Typography variant="body4">
+            <EventTime date={setMilliseconds(time)} /> ago
+          </Typography>
+        </Grid>
+      </>
+    )}
+  </>
+);
+
+export { LastEvent, LinkText, EventTime, unitformatter, setMilliseconds };
