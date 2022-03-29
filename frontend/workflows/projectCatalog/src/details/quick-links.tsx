@@ -13,7 +13,6 @@ import {
 
 // If only a single link, then no popper is necessary
 const QuickLink = ({ link, linkGroupName, linkGroupImage }) => {
-  return (
     <Grid item key={link.name}>
       <Tooltip title={linkGroupName}>
         <TooltipContainer>
@@ -23,7 +22,6 @@ const QuickLink = ({ link, linkGroupName, linkGroupImage }) => {
         </TooltipContainer>
       </Tooltip>
     </Grid>
-  );
 };
 
 // Have a popper in the case of multiple links per group
