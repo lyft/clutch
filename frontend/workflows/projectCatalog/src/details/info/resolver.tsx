@@ -5,7 +5,9 @@ import { faGithub, faSlack } from "@fortawesome/free-brands-svg-icons";
 import type { ProjectInfo, ProjectRepository } from "./types";
 
 const getRepoData = (repo: string): ProjectRepository => {
-  const repoInfo: any = {};
+  const repoInfo: any = {
+    repo,
+  };
 
   const [base, splitProject] = repo.split(":");
   const project = splitProject.replace(".git", "");
