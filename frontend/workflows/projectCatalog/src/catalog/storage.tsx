@@ -26,7 +26,7 @@ const writeProjects = (projects: { [key: string]: string }) => {
 
 const projectRequest = () => {
   const projects = loadProjects();
-  const requestData = {} as IClutch.project.v1.GetProjectsRequest;
+  const requestData = { excludeDependencies: true } as IClutch.project.v1.GetProjectsRequest;
   if (!Object.keys(projects).length) {
     requestData.users = [userId()];
   } else {

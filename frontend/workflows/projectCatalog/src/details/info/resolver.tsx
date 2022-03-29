@@ -59,7 +59,7 @@ const massageProjectInfo = (project: IClutch.core.project.v1.IProject = {}): Pro
 
 const fetchProject = (project: string): Promise<ProjectInfo> =>
   client
-    .post("/v1/project/getProjects", { projects: [project], exclude_dependencies: true })
+    .post("/v1/project/getProjects", { projects: [project], excludeDependencies: true })
     .then(resp => {
       const { results = {} } = resp.data as IClutch.project.v1.GetProjectsResponse;
 
