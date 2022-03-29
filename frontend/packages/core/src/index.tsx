@@ -10,6 +10,7 @@ import {
 } from "./accordion";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
 import { Card, CardContent, CardHeader } from "./card";
+import { Chip } from "./chip";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
@@ -43,7 +44,6 @@ export * from "./Input";
 export * from "./Feedback";
 export * from "./Assets/emojis";
 export * from "./NPS";
-export * from "./chip";
 
 export { default as ClutchApp } from "./AppProvider";
 
@@ -65,6 +65,7 @@ export {
   Card,
   CardContent,
   CardHeader,
+  Chip,
   client,
   ClipboardButton,
   Code,

@@ -14,7 +14,7 @@ const CHIP_VARIANTS = [
   "success",
 ] as const;
 
-export interface ChipProps extends Pick<MuiChipProps, "label" | "size" | "icon"> {
+export interface ChipProps extends Pick<MuiChipProps, "label"> {
   /**
    * Variant of chip.
    *
@@ -72,9 +72,9 @@ const CHIP_COLOR_MAP = {
 const StyledChip = styled(MuiChip)<{
   $filled: ChipProps["filled"];
   $variant: ChipProps["variant"];
-  size: "small" | "medium";
 }>(
   {
+    height: "32px",
     cursor: "inherit",
     borderStyle: "solid",
     borderWidth: "1px",
@@ -86,7 +86,6 @@ const StyledChip = styled(MuiChip)<{
     },
   },
   props => ({
-    height: props.size === "small" ? "24px" : "32px",
     background: props.$filled
       ? CHIP_COLOR_MAP[props.$variant].borderColor
       : CHIP_COLOR_MAP[props.$variant].background,
@@ -95,8 +94,8 @@ const StyledChip = styled(MuiChip)<{
   })
 );
 
-const Chip = ({ variant, filled = false, size = "medium", ...props }: ChipProps) => (
-  <StyledChip $variant={variant} $filled={filled} size={size} {...props} />
+const Chip = ({ variant, filled = false, ...props }: ChipProps) => (
+  <StyledChip $variant={variant} $filled={filled} {...props} />
 );
 
 export { Chip, CHIP_VARIANTS };

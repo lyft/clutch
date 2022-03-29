@@ -1,17 +1,29 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "importsNotUsedAsValues": "error",
+    "incremental": true,
+    "jsx": "react",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
     "outDir": "./dist",
+    "preserveConstEnums": true,
     "rootDir": "./src",
-    "strict": true
+    "target": "ES2018",
+    "types": ["jest", "node", "long"],
   },
-  "include": ["src/**/*"],
-  "references": [
-    { "path": "../../api" },
-    { "path": "../../packages/core" },
-    { "path": "../../packages/data-layout" },
-    { "path": "../../packages/wizard" },
-    { "path": "../projectSelector" }
+  "include": [
+    "src/**/*",
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.stories.ts*",
+    "**/*.stories.js*",
+    "**/*.test.js*",
+    "**/*.test.ts*",
+    "**/dist/*"
   ]
 }
