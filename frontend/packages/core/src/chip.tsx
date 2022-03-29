@@ -72,7 +72,7 @@ const CHIP_COLOR_MAP = {
 const StyledChip = styled(MuiChip)<{
   $filled: ChipProps["filled"];
   $variant: ChipProps["variant"];
-  size: "small" | "medium";
+  size: ChipProps["size"];
 }>(
   {
     cursor: "inherit",
