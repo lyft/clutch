@@ -1,16 +1,19 @@
 {
   "name": "@clutch-sh/project-catalog",
-  "version": "0.1.0",
-  "private": true,
-  "description": " Project Catalog",
+  "version": "1.0.0-beta",
+  "description": "Clutch Project Catalog",
   "license": "Apache-2.0",
-  "author": "hello@example.com",
+  "author": "clutch@lyft.com",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
-    "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
-    "compile:watch": "yarn compile:dev --watch",
+    "compile:dev": "node build.mjs $PWD",
+    "compile:watch": "node build.mjs $PWD -w",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "test": "jest --passWithNoTests",
@@ -18,18 +21,24 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
+    "@clutch-sh/api": "^1.0.0-beta",
     "@clutch-sh/core": "^1.0.0-beta",
+    "@clutch-sh/data-layout": "^1.0.0-beta",
+    "@clutch-sh/project-selector": "^0.1.0-beta",
     "@clutch-sh/wizard": "^1.0.0-beta",
     "@emotion/styled": "^11.3.0",
-    "@fortawesome/fontawesome-svg-core": "^1.3.0",
-    "@fortawesome/free-brands-svg-icons": "^6.0.0",
-    "@fortawesome/free-solid-svg-icons": "^6.0.0",
-    "@fortawesome/react-fontawesome": "^0.1.17",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-brands-svg-icons": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.0.0-beta",
+    "react-timeago": "^6.0.0"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"
