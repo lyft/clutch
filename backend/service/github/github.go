@@ -20,6 +20,7 @@ import (
 	"github.com/go-git/go-billy/v5/memfs"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/object"
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/golang/protobuf/ptypes/any"
@@ -34,6 +35,7 @@ import (
 	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 const Name = "clutch.service.github"
@@ -297,6 +299,26 @@ type CreateBranchRequest struct {
 	SingleBranch bool
 }
 
+func commitOptionsFromClaims(ctx context.Context) *git.CommitOptions {
+	ret := &git.CommitOptions{Author: &object.Signature{}}
+
+	subject := "Anonymous User" // Used if auth is disabled or it's the actual anonymous user.
+	if claims, err := authn.ClaimsFromContext(ctx); err == nil && claims.Subject != authn.AnonymousSubject {
+		subject = claims.Subject
+	}
+	ret.Author.Name = fmt.Sprintf("%s via Clutch", subject)
+
+	// If it looks like an email, make it the email, otherwise the email will be left blank. This could be enhanced
+	// via a default email from config if needed for other use cases.
+	email := ""
+	if strings.Contains(subject, "@") {
+		email = subject
+	}
+	ret.Author.Email = fmt.Sprintf("<%s>", email)
+
+	return ret
+}
+
 // Creates a new branch with a commit containing files and pushes it to the remote.
 func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error {
 	cloneOpts := &git.CloneOptions{
@@ -335,11 +357,8 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 		}
 	}
 
-	if err := wt.AddGlob("."); err != nil {
-		return err
-	}
-
-	if _, err := wt.Commit(req.CommitMessage, &git.CommitOptions{}); err != nil {
+	opts := commitOptionsFromClaims(ctx)
+	if _, err := wt.Commit(req.CommitMessage, opts); err != nil {
 		return err
 	}
 
