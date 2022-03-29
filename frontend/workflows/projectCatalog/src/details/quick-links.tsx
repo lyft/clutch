@@ -12,7 +12,7 @@ import {
 } from "@clutch-sh/core";
 
 // If only a single link, then no popper is necessary
-const QuickLink = ({ link, linkGroupName, linkGroupImage }) => {
+const QuickLink = ({ link, linkGroupName, linkGroupImage }) => (
   <Grid item key={link.name}>
     <Tooltip title={linkGroupName}>
       <TooltipContainer>
@@ -21,8 +21,8 @@ const QuickLink = ({ link, linkGroupName, linkGroupImage }) => {
         </Link>
       </TooltipContainer>
     </Tooltip>
-  </Grid>;
-};
+  </Grid>
+);
 
 // Have a popper in the case of multiple links per group
 const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
@@ -64,8 +64,7 @@ export interface QuickLinksCardInput {
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
 }
 
-const QuickLinksCard = ({ linkGroups }: QuickLinksCardInput) => {
-  return (
+const QuickLinksCard = ({ linkGroups }: QuickLinksCardInput) => (
     <Card>
       <Grid
         container
@@ -95,7 +94,6 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksCardInput) => {
         })}
       </Grid>
     </Card>
-  );
-};
+);
 
 export default QuickLinksCard;
