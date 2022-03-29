@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Card, Grid } from "@clutch-sh/core";
+import { Card, Grid, Tooltip, Link } from "@clutch-sh/core";
 
 const QuickLinksCard = (linkGroups: IClutch.core.project.v1.ILinkGroup[]) => {
   return (
@@ -17,10 +16,12 @@ const QuickLinksCard = (linkGroups: IClutch.core.project.v1.ILinkGroup[]) => {
         {linkGroups?.map(linkGroup => {
           return linkGroup.links?.map(link => {
             return (
-              <Grid item key={link.name}>
-                <Link to={link.url}>
-                  <img width="29px" height="29px" src={linkGroup.imagePath} alt={link.name} />
-                </Link>
+              <Grid item key={link.name} >
+                <Tooltip title={linkGroup.name}>
+                  <Link href={link.url}>
+                    <img width="29px" height="29px" src={linkGroup.imagePath} alt={link.name} />
+                  </Link>
+                </Tooltip>
               </Grid>
             );
           });
