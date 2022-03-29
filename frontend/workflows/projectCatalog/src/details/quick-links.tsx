@@ -1,15 +1,26 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Card, Grid, Link, Popper, PopperItem, Tooltip, Typography } from "@clutch-sh/core";
+import {
+  Card,
+  Grid,
+  Link,
+  Popper,
+  PopperItem,
+  Tooltip,
+  TooltipContainer,
+  Typography,
+} from "@clutch-sh/core";
 
 // If only a single link, then no popper is necessary
 const QuickLink = ({ link, linkGroupName, linkGroupImage }) => {
   return (
     <Grid item key={link.name}>
       <Tooltip title={linkGroupName}>
-        <Link href={link.url}>
-          <img width="32px" height="32px" src={linkGroupImage} alt={link.name} />
-        </Link>
+        <TooltipContainer>
+          <Link href={link.url}>
+            <img width="32px" height="32px" src={linkGroupImage} alt={link.name} />
+          </Link>
+        </TooltipContainer>
       </Tooltip>
     </Grid>
   );
@@ -23,7 +34,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
   return (
     <Grid item key={linkGroupName}>
       <Tooltip title={linkGroupName}>
-        <span>
+        <TooltipContainer>
           {/* eslint-disable */}
           <img
             width="32px"
@@ -46,7 +57,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
               );
             })}
           </Popper>
-        </span>
+          </TooltipContainer>
       </Tooltip>
     </Grid>
   );
