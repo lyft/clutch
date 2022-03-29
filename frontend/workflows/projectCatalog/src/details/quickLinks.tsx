@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Card, Grid } from "@clutch-sh/core";
 
-const QuickLinks = (project: IClutch.core.project.v1.IProject) => {
+const QuickLinks = (linkGroups: IClutch.core.project.v1.ILinkGroup[]) => {
   return (
     <Card>
       <Grid
@@ -14,17 +14,11 @@ const QuickLinks = (project: IClutch.core.project.v1.IProject) => {
         spacing={1}
         style={{ padding: "7px 0" }}
       >
-        {project?.linkGroups?.map(linkGroup => {
+        {linkGroups?.map(linkGroup => {
           return linkGroup.links?.map(link => {
             return (
               <Grid item key={link.name}>
-                <Link
-                  to={link.url}
-                  style={{
-                    textDecoration: "none",
-                    color: "inherit",
-                  }}
-                >
+                <Link to={link.url}>
                   <img width="29px" height="29px" src={linkGroup.imagePath} alt={link.name} />
                 </Link>
               </Grid>
