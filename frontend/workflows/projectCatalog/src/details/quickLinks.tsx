@@ -17,7 +17,7 @@ const QuickLinks = (project: IClutch.core.project.v1.IProject) => {
         {project?.linkGroups?.map(linkGroup => {
           return linkGroup.links?.map(link => {
             return (
-              <Grid item key={link.id}>
+              <Grid item key={link.name}>
                 <Link
                   to={link.url}
                   style={{
@@ -25,7 +25,7 @@ const QuickLinks = (project: IClutch.core.project.v1.IProject) => {
                     color: "inherit",
                   }}
                 >
-                  <img src={link.imagePath} alt={link.name} />
+                  <img src={linkGroup.imagePath} alt={link.name} />
                 </Link>
               </Grid>
             );
