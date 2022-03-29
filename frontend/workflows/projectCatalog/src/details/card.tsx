@@ -2,7 +2,7 @@ import React from "react";
 import { Card, ClutchError, Error, Grid, styled, Typography } from "@clutch-sh/core";
 import { LinearProgress } from "@material-ui/core";
 
-export type CardTypes = "Dynamic" | "Meta";
+export type CardTypes = "Dynamic" | "Metadata";
 
 export interface DetailsCard {
   type: CardTypes;
@@ -143,6 +143,6 @@ const BaseCard = (props: CardProps) => {
 
 const DynamicCard = (props: BaseCardProps) => <BaseCard type="Dynamic" {...props} />;
 
-const MetaCard = (props: BaseCardProps) => <BaseCard type="Meta" {...props} />;
+const MetaCard = (props: BaseCardProps) => <BaseCard type="Metadata" {...props} />;
 
 export { DynamicCard, MetaCard, StyledCard };
