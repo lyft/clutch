@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Card, Grid } from "@clutch-sh/core";
 
-const QuickLinks = (linkGroups: IClutch.core.project.v1.ILinkGroup[]) => {
+const QuickLinksCard = (linkGroups: IClutch.core.project.v1.ILinkGroup[]) => {
   return (
     <Card>
       <Grid
@@ -30,4 +30,4 @@ const QuickLinks = (linkGroups: IClutch.core.project.v1.ILinkGroup[]) => {
   );
 };
 
-export default QuickLinks;
+export default QuickLinksCard;
