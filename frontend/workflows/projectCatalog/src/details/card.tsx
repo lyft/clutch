@@ -91,39 +91,40 @@ const CardBody = ({ loading, error, children }: CardBodyProps) => (
 
 const BaseCard = (props: CardProps) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [clutchError, setClutchError] = React.useState<ClutchError | undefined>(undefined);
+  const [cardError, setCardError] = React.useState<ClutchError | undefined>(undefined);
   const { children, title, titleIcon, endAdornment, loading, error } = props;
 
-  const fetchData = (promise: () => Promise<any>) => {
-    const { onSuccess, onError } = props;
+  const fetchData = () => {
+    const { fetchDataFn, onSuccess, onError } = props;
 
-    setIsLoading(true);
+    if (fetchDataFn) {
+      setIsLoading(true);
 
-    promise()
-      .then(data => {
-        if (onSuccess) {
-          onSuccess(data);
-        }
-      })
-      .catch(err => {
-        if (onError) {
-          onError(err);
-        }
-        setClutchError(err);
-      })
-      .finally(() => setIsLoading(false));
+      fetchDataFn()
+        .then(data => {
+          if (onSuccess) {
+            onSuccess(data);
+          }
+          setCardError(undefined);
+        })
+        .catch(err => {
+          if (onError) {
+            onError(err);
+          }
+          setCardError(err);
+        })
+        .finally(() => setIsLoading(false));
+    }
   };
 
   React.useEffect(() => {
-    const { fetchDataFn, autoReload, reloadInterval = 30000 } = props;
+    const { autoReload, reloadInterval = 30000 } = props;
     let interval;
 
-    if (fetchDataFn) {
-      fetchData(fetchDataFn);
+    fetchData();
 
-      if (autoReload) {
-        interval = setInterval(() => fetchData(fetchDataFn), reloadInterval);
-      }
+    if (autoReload) {
+      interval = setInterval(fetchData, reloadInterval);
     }
 
     return () => (interval ? clearInterval(interval) : undefined);
@@ -134,7 +135,7 @@ const BaseCard = (props: CardProps) => {
       <Grid container item direction="row" alignItems="flex-start">
         <CardTitle title={title} titleIcon={titleIcon} endAdornment={endAdornment} />
       </Grid>
-      <CardBody loading={loading || isLoading} error={error || clutchError}>
+      <CardBody loading={loading || isLoading} error={error || cardError}>
         {children}
       </CardBody>
     </StyledCard>
