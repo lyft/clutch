@@ -24,7 +24,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
     <Grid item key={linkGroupName}>
       <Tooltip title={linkGroupName}>
         <span>
-          {/* @ts-ignore */}
+          {/* eslint-disable */}
           <img
             width="32px"
             height="32px"
@@ -32,7 +32,6 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
             alt={linkGroupName}
             onClick={() => setOpen(true)}
             ref={anchorRef}
-            role="button"
           />
           <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)}>
             {links.map(link => {
