@@ -1,8 +1,59 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Card, Grid, Tooltip, Link } from "@clutch-sh/core";
+import { Card, Grid, Link, Popper, PopperItem, Tooltip, Typography } from "@clutch-sh/core";
 
-const QuickLinksCard = (linkGroups: IClutch.core.project.v1.ILinkGroup[]) => {
+// If only a single link, then no popper is necessary
+const QuickLink = ({ link, linkGroupName, linkGroupImage }) => {
+  return (
+    <Grid item key={link.name}>
+      <Tooltip title={linkGroupName}>
+        <Link href={link.url}>
+          <img width="32px" height="32px" src={linkGroupImage} alt={link.name} />
+        </Link>
+      </Tooltip>
+    </Grid>
+  );
+};
+
+// Have a popper in the case of multiple links per group
+const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
+  const anchorRef = React.useRef(null);
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <Grid item key={linkGroupName}>
+      <Tooltip title={linkGroupName}>
+        <>
+          <img
+            width="32px"
+            height="32px"
+            src={linkGroupImage}
+            alt={linkGroupName}
+            ref={anchorRef}
+          />
+          <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)}>
+            {links.map(link => {
+              return (
+                <PopperItem key={link.name}>
+                  <Link href={link.url}>
+                    <Typography color="inherit" variant="body4">
+                      {link.name}
+                    </Typography>
+                  </Link>
+                </PopperItem>
+              );
+            })}
+          </Popper>
+        </>
+      </Tooltip>
+    </Grid>
+  );
+};
+export interface QuickLinksCardInput {
+  linkGroups: IClutch.core.project.v1.ILinkGroup[];
+}
+
+const QuickLinksCard = ({ linkGroups }: QuickLinksCardInput) => {
   return (
     <Card>
       <Grid
@@ -14,17 +65,22 @@ const QuickLinksCard = (linkGroups: IClutch.core.project.v1.ILinkGroup[]) => {
         style={{ padding: "7px 0" }}
       >
         {linkGroups?.map(linkGroup => {
-          return linkGroup.links?.map(link => {
+          if (linkGroup.links?.length === 1) {
             return (
-              <Grid item key={link.name} >
-                <Tooltip title={linkGroup.name}>
-                  <Link href={link.url}>
-                    <img width="29px" height="29px" src={linkGroup.imagePath} alt={link.name} />
-                  </Link>
-                </Tooltip>
-              </Grid>
+              <QuickLink
+                link={linkGroup.links[0]}
+                linkGroupName={linkGroup.name}
+                linkGroupImage={linkGroup.imagePath}
+              />
             );
-          });
+          }
+          return (
+            <QuickLinkGroup
+              linkGroupName={linkGroup.name}
+              linkGroupImage={linkGroup.imagePath}
+              links={linkGroup.links}
+            />
+          );
         })}
       </Grid>
     </Card>
