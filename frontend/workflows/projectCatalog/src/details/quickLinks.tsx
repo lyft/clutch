@@ -25,7 +25,7 @@ const QuickLinks = (project: IClutch.core.project.v1.IProject) => {
                     color: "inherit",
                   }}
                 >
-                  <img src={linkGroup.imagePath} alt={link.name} />
+                  <img width="29px" height="29px" src={linkGroup.imagePath} alt={link.name} />
                 </Link>
               </Grid>
             );
