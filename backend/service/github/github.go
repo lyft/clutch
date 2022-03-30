@@ -314,7 +314,7 @@ func commitOptionsFromClaims(ctx context.Context) *git.CommitOptions {
 	if strings.Contains(subject, "@") {
 		email = subject
 	}
-	ret.Author.Email = fmt.Sprintf("<%s>", email)
+	ret.Author.Email = email
 
 	return ret
 }
@@ -358,6 +358,7 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 	}
 
 	opts := commitOptionsFromClaims(ctx)
+	s.logger.Info(fmt.Sprintf("Commit author: %s", opts.Author.String()))
 	if _, err := wt.Commit(req.CommitMessage, opts); err != nil {
 		return err
 	}
