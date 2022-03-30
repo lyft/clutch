@@ -72,7 +72,14 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
             case CardType.DYNAMIC:
               tempDynamicCards.push(child);
               break;
-            default: // Do nothing, invalid card
+            default: {
+              if (child.type === DynamicCard) {
+                tempDynamicCards.push(child);
+              } else if (child.type === MetaCard) {
+                tempMetaCards.push(child);
+              }
+              // Do nothing, invalid card
+            }
           }
         }
       });
