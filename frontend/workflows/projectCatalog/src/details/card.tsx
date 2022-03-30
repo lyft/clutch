@@ -130,7 +130,7 @@ const BaseCard = ({
   };
 
   React.useEffect(() => {
-    const { autoReload, reloadInterval = 30000 } = props;
+    const { autoReload = false, reloadInterval = 30000 } = props;
     let interval;
 
     fetchData();
