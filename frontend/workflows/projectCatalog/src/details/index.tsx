@@ -95,7 +95,7 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
       const firstOwner = owners[0];
 
       return firstOwner
-        .replace(/@.*/, "")
+        .replace(/@.*\..*/, "")
         .split("-")
         .map(s => capitalize(s))
         .join(" ");
