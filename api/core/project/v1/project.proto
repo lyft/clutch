@@ -3,7 +3,7 @@ syntax = "proto3";
 package clutch.core.project.v1;
 
 import "google/protobuf/struct.proto";
-
+import "validate/validate.proto";
 option go_package = "github.com/lyft/clutch/backend/api/core/project/v1;projectv1";
 
 // A project is the logical abstraction for a service, library, mobile app, etc.
@@ -51,7 +51,7 @@ message Link {
 }
 
 message LinkGroup {
-  string name = 1;
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   repeated Link links = 2;
   string image_path = 3; // Can be an s3 location, path on the server, etc.
 }
