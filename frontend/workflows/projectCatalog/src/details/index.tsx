@@ -10,7 +10,7 @@ import { capitalize } from "lodash";
 import type { DetailWorkflowProps } from "..";
 
 import type { DetailsCard } from "./card";
-import { DynamicCard, MetaCard } from "./card";
+import { CardType, DynamicCard, MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
 import ProjectHeader from "./header";
 import ProjectInfoCard from "./info";
@@ -57,10 +57,10 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
           const { type } = child?.props;
 
           switch (type) {
-            case "Metadata":
+            case CardType.METADATA:
               tempMetaCards.push(child);
               break;
-            case "Dynamic":
+            case CardType.DYNAMIC:
               tempDynamicCards.push(child);
               break;
             default: // Do nothing, invalid card

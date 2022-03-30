@@ -52,17 +52,17 @@ const setMilliseconds = (timestamp?: number | Long | null): number => {
 
 const LastEvent = ({ time }: { time: number }) => {
   return time ? (
-      <>
-        <Grid item>
-          <FontAwesomeIcon icon={faClock} />
-        </Grid>
-        <Grid item>
-          <Typography variant="body4">
-            <EventTime date={setMilliseconds(time)} /> ago
-          </Typography>
-        </Grid>
-      </>
-) : null
+    <>
+      <Grid item>
+        <FontAwesomeIcon icon={faClock} />
+      </Grid>
+      <Grid item>
+        <Typography variant="body4">
+          <EventTime date={setMilliseconds(time)} /> ago
+        </Typography>
+      </Grid>
+    </>
+  ) : null;
 };
 
 export { LastEvent, LinkText };
