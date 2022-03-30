@@ -5,7 +5,7 @@ import { LinearProgress } from "@material-ui/core";
 export type CardType = "Dynamic" | "Metadata";
 
 export interface DetailsCard {
-  type: CardTypes;
+  type: CardType;
 }
 
 interface CardTitleProps {

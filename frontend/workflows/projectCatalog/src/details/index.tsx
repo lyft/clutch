@@ -10,13 +10,13 @@ import { capitalize } from "lodash";
 import type { DetailWorkflowProps } from "..";
 
 import type { DetailsCard } from "./card";
-import { MetaCard } from "./card";
+import { DynamicCard, MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
 import ProjectHeader from "./header";
 import ProjectInfoCard from "./info";
 import QuickLinksCard from "./quick-links";
 
-type CardTyping = React.ReactNode | DetailsCard;
+type CardTyping = React.ReactElement<DetailsCard | typeof DynamicCard | typeof MetaCard>;
 
 const StyledContainer = styled(Grid)({
   padding: "20px",
