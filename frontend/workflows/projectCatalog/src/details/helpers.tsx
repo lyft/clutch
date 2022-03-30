@@ -26,7 +26,7 @@ interface EventTimeProps extends Pick<TimeAgoProps, "date"> {
 const EventTime = ({ onClick, ...props }: EventTimeProps) => (
   <TimeAgo
     {...props}
-    formatter={(value, unit) => `${value}${unitformatter(unit)}`}
+    formatter={(value, unit) => `${value}${unitFormatter(unit)}`}
     onClick={onClick}
   />
 );
@@ -67,4 +67,4 @@ const LastEvent = ({ time }: { time: number }) => (
   </>
 );
 
-export { LastEvent, LinkText, EventTime, unitformatter, setMilliseconds };
+export { LastEvent, LinkText };
