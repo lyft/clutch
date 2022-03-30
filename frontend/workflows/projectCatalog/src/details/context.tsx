@@ -1,9 +1,8 @@
 import React from "react";
-
-import type { ProjectInfo } from "./info/types";
+import type { clutch as IClutch } from "@clutch-sh/api";
 
 interface ContextProps {
-  projectInfo: ProjectInfo | null;
+  projectInfo: IClutch.core.project.v1.IProject | null;
 }
 
 const ProjectDetailsContext = React.createContext<ContextProps | undefined>(undefined);

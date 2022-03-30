@@ -1,7 +1,7 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
 import type { DetailsCard } from "./details/card";
-import type { ProjectInfoChip } from "./details/info/types";
+import type { ProjectInfoChip } from "./details/info/chipsRow";
 import Catalog from "./catalog";
 import Details from "./details";
 

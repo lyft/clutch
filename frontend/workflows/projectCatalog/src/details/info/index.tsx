@@ -1,14 +1,15 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, styled } from "@clutch-sh/core";
 
+import type { ProjectInfoChip } from "./chipsRow";
 import ChipsRow from "./chipsRow";
 import LanguageRow from "./languageRow";
 import MessengerRow from "./messengerRow";
 import RepositoryRow from "./repositoryRow";
-import type { ProjectInfo, ProjectInfoChip } from "./types";
 
 interface ProjectInfoProps {
-  data: ProjectInfo;
+  projectData: IClutch.core.project.v1.IProject;
   addtlChips?: ProjectInfoChip[];
 }
 
@@ -18,28 +19,42 @@ const StyledRow = styled(Grid)({
   width: "100%",
 });
 
-const ProjectInfoCard = ({ data, addtlChips }: ProjectInfoProps) => {
+const ProjectInfoCard = ({ projectData, addtlChips }: ProjectInfoProps) => {
   const [chips, setChips] = React.useState<ProjectInfoChip[]>([]);
 
   React.useEffect(() => {
-    setChips((data?.chips || []).concat(addtlChips ?? []));
-  }, [data, addtlChips]);
+    let tempChips: ProjectInfoChip[] = [];
+
+    const { tier } = projectData;
+    if (tier) {
+      tempChips.push({
+        text: `T${tier}`,
+        title: `Tier ${tier} Service`,
+      });
+    }
+
+    if (addtlChips) {
+      tempChips = tempChips.concat(addtlChips);
+    }
+
+    setChips(tempChips);
+  }, [projectData, addtlChips]);
 
   return (
     <>
-      {data?.messenger && (
+      {projectData?.data && (
         <StyledRow container spacing={1}>
-          <MessengerRow {...data.messenger} />
+          <MessengerRow projectData={projectData} />
         </StyledRow>
       )}
-      {data?.repository && (
+      {projectData?.data?.repository && (
         <StyledRow container spacing={1} justify="flex-start" alignItems="center">
-          <RepositoryRow {...data.repository} />
+          <RepositoryRow repo={projectData.data.repository as string} />
         </StyledRow>
       )}
-      {data?.languages?.length ? (
+      {projectData?.languages?.length ? (
         <StyledRow container spacing={1} justify="flex-start" alignItems="flex-end">
-          <LanguageRow languages={data.languages} />
+          <LanguageRow languages={projectData.languages} />
         </StyledRow>
       ) : null}
       {chips.length > 0 && (

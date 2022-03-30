@@ -1,7 +1,14 @@
 import React from "react";
+import type { CHIP_VARIANTS } from "@clutch-sh/core";
 import { Chip, Grid, Link, Tooltip } from "@clutch-sh/core";
 
-import type { ProjectInfoChip } from "./types";
+export interface ProjectInfoChip {
+  text: string;
+  title?: string;
+  icon?: React.ReactElement;
+  url?: string;
+  variant?: typeof CHIP_VARIANTS[number];
+}
 
 const ChipsRow = ({ chips = [] }: { chips: ProjectInfoChip[] }) => (
   <>

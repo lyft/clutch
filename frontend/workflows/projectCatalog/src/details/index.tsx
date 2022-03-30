@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Grid, styled, Tooltip } from "@clutch-sh/core";
+import type { clutch as IClutch } from "@clutch-sh/api";
+import { client, Grid, styled, Tooltip } from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@material-ui/icons/Group";
@@ -8,8 +9,6 @@ import { capitalize } from "lodash";
 
 import type { DetailWorkflowProps } from "..";
 
-import fetchProject from "./info/resolver";
-import type { ProjectInfo } from "./info/types";
 import type { DetailsCard } from "./card";
 import { MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
@@ -31,9 +30,20 @@ const DisabledItem = ({ name }: { name: string }) => (
   </Grid>
 );
 
+const fetchProject = (project: string): Promise<IClutch.core.project.v1.IProject> =>
+  client
+    .post("/v1/project/getProjects", { projects: [project], excludeDependencies: true })
+    .then(resp => {
+      const { results = {} } = resp.data as IClutch.project.v1.GetProjectsResponse;
+
+      return results[project] ? results[project].project ?? {} : {};
+    });
+
 const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
   const { projectId } = useParams();
-  const [projectInfo, setProjectInfo] = React.useState<ProjectInfo | null>(null);
+  const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
+    null
+  );
   const [metaCards, setMetaCards] = React.useState<CardTyping[]>([]);
   const [dynamicCards, setDynamicCards] = React.useState<CardTyping[]>([]);
 
@@ -70,25 +80,26 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
         <Grid container item direction="column">
           <Grid item style={{ marginBottom: "22px" }}>
             {/* Static Header */}
-            {projectInfo && (
-              <ProjectHeader name={projectInfo.name} description={projectInfo.description} />
-            )}
+            <ProjectHeader
+              name={projectId}
+              description={projectInfo?.data?.description as string}
+            />
           </Grid>
           <Grid container spacing={3}>
             <Grid container item direction="row" xs={4} spacing={2}>
               <Grid item xs={12}>
                 {/* Static Info Card */}
                 <MetaCard
-                  title={capitalize(projectInfo?.name)}
+                  title={capitalize(projectId)}
                   titleIcon={<GroupIcon />}
                   fetchDataFn={() => fetchProject(projectId)}
                   onSuccess={setProjectInfo}
                   autoReload
                   endAdornment={
-                    projectInfo?.disabled ? <DisabledItem name={projectInfo?.name} /> : null
+                    projectInfo?.data?.disabled ? <DisabledItem name={projectId} /> : null
                   }
                 >
-                  {projectInfo && <ProjectInfoCard data={projectInfo} addtlChips={chips} />}
+                  {projectInfo && <ProjectInfoCard projectData={projectInfo} addtlChips={chips} />}
                 </MetaCard>
               </Grid>
               {/* Custom Meta Cards */}
