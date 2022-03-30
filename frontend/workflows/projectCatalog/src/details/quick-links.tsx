@@ -25,8 +25,13 @@ const QuickLink = ({ link, linkGroupName, linkGroupImage }) => (
   </Grid>
 );
 
+interface QuickLinkGroupProps {
+  linkGroupName: string;
+  linkGroupImage: string;
+  links: IClutch.core.project.v1.ILink[];
+}
 // Have a popper in the case of multiple links per group
-const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
+const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroupProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
 
@@ -35,12 +40,13 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
       <Tooltip title={linkGroupName}>
         <TooltipContainer>
           <button
-            style={{ background: `url${linkGroupImage}` }}
+            type="button"
+            style={{ padding: 0, background: "transparent", border: "0", cursor: "pointer" }}
             ref={anchorRef}
             onClick={() => setOpen(true)}
-            type="button"
-            aria-label="expand link group"
-          />
+          >
+            <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
+          </button>
           <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)}>
             {links.map(link => (
               <PopperItem key={link.name}>
