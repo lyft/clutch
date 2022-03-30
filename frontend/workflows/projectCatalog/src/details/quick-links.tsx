@@ -20,7 +20,7 @@ interface QuickLinkProps extends LinkGroupProps {
   link: IClutch.core.project.v1.ILink;
 }
 
-interface QuickLinkTooltip {
+interface QuickLinkTooltipProps {
   key: string;
   name: string;
   children: React.ReactNode;
@@ -28,7 +28,7 @@ interface QuickLinkTooltip {
 
 const ICON_SIZE = "32px";
 
-const QuickLinkTooltipContainer = ({ key, name, children }: QuickLinkTooltip) => (
+const QuickLinkTooltip = ({ key, name, children }: QuickLinkTooltipProps) => (
   <Grid item key={key}>
     <Tooltip title={name}>
       <TooltipContainer>{children}</TooltipContainer>
@@ -49,9 +49,9 @@ const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) => {
     </Link>
   );
   return linkGroupName ? (
-    <QuickLinkTooltipContainer key={link.name ?? ""} name={linkGroupName}>
+    <QuickLinkTooltip key={link.name ?? ""} name={linkGroupName}>
       {container}
-    </QuickLinkTooltipContainer>
+    </QuickLinkTooltip>
   ) : (
     container
   );
@@ -90,9 +90,9 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   );
 
   return linkGroupName ? (
-    <QuickLinkTooltipContainer key={linkGroupName} name={linkGroupName}>
+    <QuickLinkTooltip key={linkGroupName} name={linkGroupName}>
       {container}
-    </QuickLinkTooltipContainer>
+    </QuickLinkTooltip>
   ) : (
     container
   );
