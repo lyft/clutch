@@ -50,9 +50,8 @@ const setMilliseconds = (timestamp?: number | Long | null): number => {
   return ts.setUTCMilliseconds(parseTimestamp(timestamp));
 };
 
-const LastEvent = ({ time }: { time: number }) => (
-  <>
-    {time && (
+const LastEvent = ({ time }: { time: number }) => {
+  return time ? (
       <>
         <Grid item>
           <FontAwesomeIcon icon={faClock} />
@@ -63,8 +62,7 @@ const LastEvent = ({ time }: { time: number }) => (
           </Typography>
         </Grid>
       </>
-    )}
-  </>
-);
+) : null
+};
 
 export { LastEvent, LinkText };
