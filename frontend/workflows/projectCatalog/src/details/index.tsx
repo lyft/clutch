@@ -8,16 +8,13 @@ import Hidden from "@material-ui/core/Hidden";
 import GroupIcon from "@material-ui/icons/Group";
 import { capitalize } from "lodash";
 
-import type { DetailWorkflowProps } from "..";
+import type { DetailWorkflowProps, ProjectCatalogDetailsChild } from "..";
 
-import type { DetailsCard } from "./card";
 import { CardType, DynamicCard, MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
 import ProjectHeader from "./header";
 import ProjectInfoCard from "./info";
 import QuickLinksCard from "./quick-links";
-
-type CardTyping = React.ReactElement<DetailsCard | typeof DynamicCard | typeof MetaCard>;
 
 const StyledContainer = styled(Grid)({
   padding: "32px",
@@ -53,13 +50,13 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
   const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
     null
   );
-  const [metaCards, setMetaCards] = React.useState<CardTyping[]>([]);
-  const [dynamicCards, setDynamicCards] = React.useState<CardTyping[]>([]);
+  const [metaCards, setMetaCards] = React.useState<ProjectCatalogDetailsChild[]>([]);
+  const [dynamicCards, setDynamicCards] = React.useState<ProjectCatalogDetailsChild[]>([]);
 
   React.useEffect(() => {
     if (children) {
-      const tempMetaCards: CardTyping[] = [];
-      const tempDynamicCards: CardTyping[] = [];
+      const tempMetaCards: ProjectCatalogDetailsChild[] = [];
+      const tempDynamicCards: ProjectCatalogDetailsChild[] = [];
 
       React.Children.forEach(children, child => {
         if (React.isValidElement(child)) {

@@ -1,13 +1,18 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
-import type { DetailsCard } from "./details/card";
+import type { ProjectCatalogDetailsCard } from "./details/card";
+import { DynamicCard, MetaCard } from "./details/card";
 import type { ProjectInfoChip } from "./details/info/chipsRow";
 import Catalog from "./catalog";
 import Details from "./details";
 
+type DetailCard = ProjectCatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
+
+type ProjectCatalogDetailsChild = React.ReactElement<DetailCard>;
+
 export interface WorkflowProps extends BaseWorkflowProps {}
 export interface DetailWorkflowProps {
-  children?: React.ReactElement<DetailsCard>[] | React.ReactElement<DetailsCard>;
+  children?: ProjectCatalogDetailsChild | ProjectCatalogDetailsChild[];
   chips?: ProjectInfoChip[];
 }
 
@@ -38,10 +43,10 @@ const register = (): WorkflowConfiguration => {
   };
 };
 
-export { DynamicCard, MetaCard } from "./details/card";
+export { DynamicCard, MetaCard };
 export { LastEvent } from "./details/helpers";
 export { useProjectDetailsContext } from "./details/context";
 export { Details as ProjectDetails };
-export type { DetailsCard, ProjectInfoChip };
+export type { ProjectCatalogDetailsCard, ProjectCatalogDetailsChild, ProjectInfoChip };
 
 export default register;

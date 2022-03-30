@@ -7,7 +7,7 @@ export enum CardType {
   METADATA = "Metadata",
 }
 
-export interface DetailsCard {
+export interface ProjectCatalogDetailsCard {
   type: CardType;
 }
 
@@ -36,7 +36,7 @@ interface BaseCardProps extends CardTitleProps, CardBodyProps {
   onError?: (error: ClutchError | undefined) => void;
 }
 
-interface CardProps extends DetailsCard, BaseCardProps {}
+interface CardProps extends ProjectCatalogDetailsCard, BaseCardProps {}
 
 const StyledCard = styled(Card)({
   width: "100%",
