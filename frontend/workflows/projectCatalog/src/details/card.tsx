@@ -21,10 +21,15 @@ interface CardBodyProps {
 }
 
 interface BaseCardProps extends CardTitleProps, CardBodyProps {
+  /** Number in ms to refresh the data from fetchDataFn */
   reloadInterval?: number;
+  /** Boolean representing whether the component should reload via the fetchDataFn */
   autoReload?: boolean;
+  /** Given promise which will be used to initially fetch data and optionally reload on intervals */
   fetchDataFn?: () => Promise<unknown>;
+  /** Function called when fetchDataFn returns successfully, returning the data */
   onSuccess?: (data: any) => void;
+  /** Function called when fetchDataFn returns unsuccessfully, returning an error */
   onError?: (error: ClutchError | undefined) => void;
 }
 
