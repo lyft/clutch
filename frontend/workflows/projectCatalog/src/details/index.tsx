@@ -120,8 +120,8 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
               <QuickLinksCard />
             </StyledQLContainer>
           </Hidden>
-          <Grid container spacing={2}>
-            <Grid container item direction="row" xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
+          <Grid container direction="row" spacing={2}>
+            <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
               <Grid item xs={12}>
                 {/* Static Info Card */}
                 <MetaCard
@@ -145,7 +145,7 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
                   </Grid>
                 ))}
             </Grid>
-            <Grid container item direction="row" xs={12} sm={12} md={7} lg={8} xl={9} spacing={2}>
+            <Grid container item xs={12} sm={12} md={7} lg={8} xl={9} spacing={2}>
               {/* Custom Dynamic Cards */}
               {dynamicCards.length > 0 &&
                 dynamicCards.map(card => (
