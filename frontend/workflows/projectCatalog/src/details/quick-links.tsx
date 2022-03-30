@@ -20,25 +20,31 @@ interface QuickLinkProps extends LinkGroupProps {
   link: IClutch.core.project.v1.ILink;
 }
 
-interface QuickLinkTooltipProps {
-  key: string;
+interface QuickLinkContainerProps {
+  key: string | null | undefined;
   name: string;
   children: React.ReactNode;
 }
 
 const ICON_SIZE = "32px";
 
-const QuickLinkTooltip = ({ key, name, children }: QuickLinkTooltipProps) => (
-  <Grid item key={key}>
+const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) => {
+  const container = (
     <Tooltip title={name}>
       <TooltipContainer>{children}</TooltipContainer>
     </Tooltip>
-  </Grid>
-);
+  );
+
+  return (
+    <Grid item key={key ?? ""}>
+      {name ? container : children}
+    </Grid>
+  );
+};
 
 // If only a single link, then no popper is necessary
-const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) => {
-  const container = (
+const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) => (
+  <QuickLinkContainer key={link.name} name={linkGroupName}>
     <Link href={link.url ?? undefined}>
       <img
         width={ICON_SIZE}
@@ -47,15 +53,8 @@ const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) => {
         alt={link.name ?? "Quick Link"}
       />
     </Link>
-  );
-  return linkGroupName ? (
-    <QuickLinkTooltip key={link.name ?? ""} name={linkGroupName}>
-      {container}
-    </QuickLinkTooltip>
-  ) : (
-    container
-  );
-};
+  </QuickLinkContainer>
+);
 
 interface QuickLinkGroupProps extends LinkGroupProps {
   links: IClutch.core.project.v1.ILink[];
@@ -65,8 +64,8 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
 
-  const container = (
-    <>
+  return (
+    <QuickLinkContainer key={linkGroupName} name={linkGroupName}>
       <button
         type="button"
         style={{ padding: 0, background: "transparent", border: "0", cursor: "pointer" }}
@@ -86,15 +85,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
           </PopperItem>
         ))}
       </Popper>
-    </>
-  );
-
-  return linkGroupName ? (
-    <QuickLinkTooltip key={linkGroupName} name={linkGroupName}>
-      {container}
-    </QuickLinkTooltip>
-  ) : (
-    container
+    </QuickLinkContainer>
   );
 };
 export interface QuickLinksProps {
