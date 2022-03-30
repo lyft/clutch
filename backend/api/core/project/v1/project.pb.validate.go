@@ -918,7 +918,16 @@ func (m *LinkGroup) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Name
+	if len(m.GetName()) < 1 {
+		err := LinkGroupValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	for idx, item := range m.GetLinks() {
 		_, _ = idx, item
