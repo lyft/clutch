@@ -20,9 +20,7 @@ const ProjectHeader = ({
   <>
     <Grid container direction="column" style={{ width: "100%", height: "100%" }}>
       <Grid container item direction="row" alignItems="flex-end">
-        <Typography variant="body4">
-          <Typography variant="body2">{routeTitle}</Typography>&nbsp;/&nbsp;
-        </Typography>
+        <Typography variant="body4">{routeTitle}</Typography>&nbsp;/&nbsp;
         <Typography variant="caption2">{name}</Typography>
       </Grid>
       <StyledHeading>
