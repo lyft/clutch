@@ -64,6 +64,13 @@ interface QuickLinkGroupProps extends LinkGroupProps {
 const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroupProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
+  const [validLinks, setValidLinks] = React.useState<IClutch.core.project.v1.ILink[]>([]);
+
+  React.useEffect(() => {
+    if (links) {
+      setValidLinks(links.filter(link => link?.url && link.url.length > 0));
+    }
+  }, [links]);
 
   return (
     <QuickLinkContainer key={linkGroupName} name={linkGroupName}>
@@ -76,17 +83,17 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
         <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
       </button>
       <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)}>
-        {links.map(link =>
-          link.url ? (
-            <PopperItem key={link.name}>
-              <Link href={link.url ?? undefined}>
+        {validLinks.map(link => (
+          <PopperItem key={link.name}>
+            {link?.url && (
+              <Link href={link.url}>
                 <Typography color="inherit" variant="body4">
                   {link.name}
                 </Typography>
               </Link>
-            </PopperItem>
-          ) : null
-        )}
+            )}
+          </PopperItem>
+        ))}
       </Popper>
     </QuickLinkContainer>
   );
