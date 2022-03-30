@@ -9,7 +9,7 @@ const StyledLink = styled(Link)({
   whiteSpace: "nowrap",
 });
 
-const unitformatter = (unit: string): string => {
+const unitFormatter = (unit: string): string => {
   switch (unit) {
     case "month":
       // month -> mo
