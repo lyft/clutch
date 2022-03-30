@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { LinkText } from "../helpers";
 
-interface ProjectRequests {
+interface ProjectPullRequests {
   number: number;
   url?: string;
 }
@@ -18,7 +18,7 @@ const RepositoryRow = ({ repo }: { repo: string }) => {
   const [icon, setIcon] = React.useState<IconProp>(faCode);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [requests, setRequests] = React.useState<ProjectRequests>();
+  const [requests, setRequests] = React.useState<ProjectPullRequests>();
 
   React.useEffect(() => {
     if (repo) {

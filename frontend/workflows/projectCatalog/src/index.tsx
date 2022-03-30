@@ -11,7 +11,7 @@ type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 type CatalogDetailsChild = React.ReactElement<DetailCard>;
 
 export interface WorkflowProps extends BaseWorkflowProps {}
-export interface DetailWorkflowProps {
+export interface ProjectDetailsWorkflowProps {
   children?: CatalogDetailsChild | CatalogDetailsChild[];
   chips?: ProjectInfoChip[];
 }

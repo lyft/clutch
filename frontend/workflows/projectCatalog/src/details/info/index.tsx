@@ -57,11 +57,11 @@ const ProjectInfoCard = ({ projectData, addtlChips }: ProjectInfoProps) => {
           <LanguageRow languages={projectData.languages} />
         </StyledRow>
       ) : null}
-      {chips.length > 0 && (
+      {chips.length ? (
         <Grid container spacing={2}>
           <ChipsRow chips={chips} />
         </Grid>
-      )}
+      ) : null}
     </>
   );
 };

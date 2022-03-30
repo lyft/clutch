@@ -8,7 +8,7 @@ import Hidden from "@material-ui/core/Hidden";
 import GroupIcon from "@material-ui/icons/Group";
 import { capitalize } from "lodash";
 
-import type { CatalogDetailsChild, DetailWorkflowProps } from "..";
+import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "..";
 
 import { CardType, DynamicCard, MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
@@ -45,7 +45,7 @@ const fetchProject = (project: string): Promise<IClutch.core.project.v1.IProject
       return results[project] ? results[project].project ?? {} : {};
     });
 
-const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
+const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => {
   const { projectId } = useParams();
   const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
     null
@@ -97,7 +97,6 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
       return firstOwner
         .replace(/@.*\..*/, "")
         .split("-")
-        .map(s => capitalize(s))
         .join(" ");
     }
 
@@ -126,10 +125,12 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
               <Grid item xs={12}>
                 {/* Static Info Card */}
                 <MetaCard
-                  title={getOwner(projectInfo?.owners ?? []) || capitalize(projectId)}
+                  title={getOwner(projectInfo?.owners ?? []) || projectId}
                   titleIcon={<GroupIcon />}
                   fetchDataFn={() => fetchProject(projectId)}
-                  onSuccess={setProjectInfo}
+                  onSuccess={(data: unknown) =>
+                    setProjectInfo(data as IClutch.core.project.v1.IProject)
+                  }
                   autoReload
                   endAdornment={
                     projectInfo?.data?.disabled ? <DisabledItem name={projectId} /> : null

@@ -31,7 +31,7 @@ interface BaseCardProps extends CardTitleProps, CardBodyProps {
   /** Given promise which will be used to initially fetch data and optionally reload on intervals */
   fetchDataFn?: () => Promise<unknown>;
   /** Function called when fetchDataFn returns successfully, returning the data */
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: unknown) => void;
   /** Function called when fetchDataFn returns unsuccessfully, returning an error */
   onError?: (error: ClutchError | undefined) => void;
 }
@@ -57,6 +57,10 @@ const StyledProgressContainer = styled("div")({
 });
 
 const StyledTitle = styled(Grid)({
+  textTransform: "capitalize",
+});
+
+const StyledTitleContainer = styled(Grid)({
   marginBottom: "8px",
 });
 
@@ -66,12 +70,12 @@ const BodyContainer = styled("div")({
 
 const CardTitle = ({ title, titleIcon, endAdornment }: CardTitleProps) => (
   <>
-    <StyledTitle container item xs={endAdornment ? 9 : 12} spacing={1}>
+    <StyledTitleContainer container item xs={endAdornment ? 9 : 12} spacing={1}>
       {titleIcon && <Grid item>{titleIcon}</Grid>}
-      <Grid item>
+      <StyledTitle item>
         <Typography variant="h4">{title}</Typography>
-      </Grid>
-    </StyledTitle>
+      </StyledTitle>
+    </StyledTitleContainer>
     {endAdornment && (
       <Grid
         container

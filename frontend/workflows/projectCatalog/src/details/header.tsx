@@ -10,6 +10,7 @@ interface ProjectHeaderProps {
 
 const StyledHeading = styled("div")({
   padding: "8px 0px 8px 0px",
+  textTransform: "capitalize",
 });
 
 const StyledContainer = styled(Grid)({
@@ -28,7 +29,7 @@ const ProjectHeader = ({
       <Typography variant="caption2">{name}</Typography>
     </Grid>
     <StyledHeading>
-      <Typography variant="h2">{capitalize(name)}</Typography>
+      <Typography variant="h2">{name}</Typography>
     </StyledHeading>
     {description.length && <Typography variant="body2">{description}</Typography>}
   </StyledContainer>
