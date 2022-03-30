@@ -94,10 +94,17 @@ const CardBody = ({ loading, error, children }: CardBodyProps) => (
   </>
 );
 
-const BaseCard = (props: CardProps) => {
+const BaseCard = ({
+  children,
+  title,
+  titleIcon,
+  endAdornment,
+  loading,
+  error,
+  ...props
+}: CardProps) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [cardError, setCardError] = React.useState<ClutchError | undefined>(undefined);
-  const { children, title, titleIcon, endAdornment, loading, error } = props;
 
   const fetchData = () => {
     const { fetchDataFn, onSuccess, onError } = props;
