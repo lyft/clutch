@@ -8,7 +8,7 @@ import Hidden from "@material-ui/core/Hidden";
 import GroupIcon from "@material-ui/icons/Group";
 import { capitalize } from "lodash";
 
-import type { DetailWorkflowProps, ProjectCatalogDetailsChild } from "..";
+import type { CatalogDetailsChild, DetailWorkflowProps } from "..";
 
 import { CardType, DynamicCard, MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
@@ -50,13 +50,13 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
   const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
     null
   );
-  const [metaCards, setMetaCards] = React.useState<ProjectCatalogDetailsChild[]>([]);
-  const [dynamicCards, setDynamicCards] = React.useState<ProjectCatalogDetailsChild[]>([]);
+  const [metaCards, setMetaCards] = React.useState<CatalogDetailsChild[]>([]);
+  const [dynamicCards, setDynamicCards] = React.useState<CatalogDetailsChild[]>([]);
 
   React.useEffect(() => {
     if (children) {
-      const tempMetaCards: ProjectCatalogDetailsChild[] = [];
-      const tempDynamicCards: ProjectCatalogDetailsChild[] = [];
+      const tempMetaCards: CatalogDetailsChild[] = [];
+      const tempDynamicCards: CatalogDetailsChild[] = [];
 
       React.Children.forEach(children, child => {
         if (React.isValidElement(child)) {
