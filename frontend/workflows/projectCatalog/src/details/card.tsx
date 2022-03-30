@@ -158,4 +158,4 @@ const DynamicCard = (props: BaseCardProps) => <BaseCard type="Dynamic" {...props
 
 const MetaCard = (props: BaseCardProps) => <BaseCard type="Metadata" {...props} />;
 
-export { DynamicCard, MetaCard, StyledCard };
+export { DynamicCard, MetaCard };
