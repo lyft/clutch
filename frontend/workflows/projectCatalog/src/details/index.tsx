@@ -117,7 +117,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
           </StyledHeadingContainer>
           <Hidden mdUp>
             <StyledQLContainer item direction="row" xs={12} sm={12}>
-              <QuickLinksCard />
+              {projectInfo && <QuickLinksCard linkGroups={projectInfo?.linkGroups ?? []} />}
             </StyledQLContainer>
           </Hidden>
           <Grid container direction="row" spacing={2}>
@@ -161,7 +161,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
         {/* Column for project quick links */}
         <Hidden smDown>
           <Grid item direction="column" lg={1} xl={1}>
-            <QuickLinksCard />
+            {projectInfo && <QuickLinksCard linkGroups={projectInfo?.linkGroups ?? []} />}
           </Grid>
         </Hidden>
       </StyledContainer>
