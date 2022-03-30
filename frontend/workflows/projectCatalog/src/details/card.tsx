@@ -2,7 +2,7 @@ import React from "react";
 import { Card, ClutchError, Error, Grid, styled, Typography } from "@clutch-sh/core";
 import { LinearProgress } from "@material-ui/core";
 
-export type CardTypes = "Dynamic" | "Metadata";
+export type CardType = "Dynamic" | "Metadata";
 
 export interface DetailsCard {
   type: CardTypes;
