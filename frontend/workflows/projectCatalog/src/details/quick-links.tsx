@@ -43,18 +43,19 @@ const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) =>
 };
 
 // If only a single link, then no popper is necessary
-const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) => (
-  <QuickLinkContainer key={link.name} name={linkGroupName}>
-    <Link href={link.url ?? undefined}>
-      <img
-        width={ICON_SIZE}
-        height={ICON_SIZE}
-        src={linkGroupImage}
-        alt={link.name ?? `Quick Link to ${link.url}`}
-      />
-    </Link>
-  </QuickLinkContainer>
-);
+const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
+  link?.url ? (
+    <QuickLinkContainer key={link.name} name={linkGroupName}>
+      <Link href={link.url}>
+        <img
+          width={ICON_SIZE}
+          height={ICON_SIZE}
+          src={linkGroupImage}
+          alt={link.name ?? `Quick Link to ${link.url}`}
+        />
+      </Link>
+    </QuickLinkContainer>
+  ) : null;
 
 interface QuickLinkGroupProps extends LinkGroupProps {
   links: IClutch.core.project.v1.ILink[];
@@ -75,15 +76,17 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
         <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
       </button>
       <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)}>
-        {links.map(link => (
-          <PopperItem key={link.name}>
-            <Link href={link.url ?? undefined}>
-              <Typography color="inherit" variant="body4">
-                {link.name}
-              </Typography>
-            </Link>
-          </PopperItem>
-        ))}
+        {links.map(link =>
+          link.url ? (
+            <PopperItem key={link.name}>
+              <Link href={link.url ?? undefined}>
+                <Typography color="inherit" variant="body4">
+                  {link.name}
+                </Typography>
+              </Link>
+            </PopperItem>
+          ) : null
+        )}
       </Popper>
     </QuickLinkContainer>
   );
