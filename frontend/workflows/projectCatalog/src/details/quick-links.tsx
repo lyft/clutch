@@ -50,7 +50,7 @@ const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) => (
         width={ICON_SIZE}
         height={ICON_SIZE}
         src={linkGroupImage}
-        alt={link.name ?? "Quick Link"}
+        alt={link.name ?? `Quick Link to ${link.url}`}
       />
     </Link>
   </QuickLinkContainer>
