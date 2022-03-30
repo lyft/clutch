@@ -34,22 +34,12 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }) => {
     <Grid item key={linkGroupName}>
       <Tooltip title={linkGroupName}>
         <TooltipContainer>
-          {/* 
-            We are disabling lint here until we come up with a better solution than putting the onClic() inside the <img> 
-
-            error  Visible, non-interactive elements with click handlers must have at least one keyboard listener  jsx-a11y/click-events-have-key-events
-            error  Non-interactive elements should not be assigned mouse or keyboard event listeners               jsx-a11y/no-noninteractive-element-interactions
-
-            TODO: don't disable it.
-          */}
-          {/* eslint-disable */}
-          <img
-            width={ICON_SIZE}
-            height={ICON_SIZE}
-            src={linkGroupImage}
-            alt={linkGroupName}
-            onClick={() => setOpen(true)}
+          <button
+            style={{ background: `url${linkGroupImage}` }}
             ref={anchorRef}
+            onClick={() => setOpen(true)}
+            type="button"
+            aria-label="expand link group"
           />
           <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)}>
             {links.map(link => (
@@ -79,7 +69,7 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => (
       direction="column"
       alignItems="center"
       spacing={1}
-      style={{ padding: "10px 0" }}
+      style={{ padding: "8px" }}
     >
       {linkGroups?.map(linkGroup => {
         if (linkGroup.links?.length === 1) {
