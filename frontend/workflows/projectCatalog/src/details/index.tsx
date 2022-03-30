@@ -6,6 +6,7 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@material-ui/icons/Group";
 import { capitalize } from "lodash";
+import Hidden from "@material-ui/core/Hidden";
 
 import type { DetailWorkflowProps } from "..";
 
@@ -19,7 +20,15 @@ import QuickLinksCard from "./quick-links";
 type CardTyping = React.ReactElement<DetailsCard | typeof DynamicCard | typeof MetaCard>;
 
 const StyledContainer = styled(Grid)({
-  padding: "20px",
+  padding: "32px",
+});
+
+const StyledHeadingContainer = styled(Grid)({
+  marginBottom: "24px",
+});
+
+const StyledQLContainer = styled(Grid)({
+  margin: "-8px 16px 16px 0px",
 });
 
 const DisabledItem = ({ name }: { name: string }) => (
@@ -73,24 +82,43 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
     }
   }, [children]);
 
+  const getOwner = (owners: string[]): string => {
+    if (owners && owners.length) {
+      const firstOwner = owners[0];
+
+      return firstOwner
+        .replace(/\@.*/, "")
+        .split("-")
+        .map(s => capitalize(s))
+        .join(" ");
+    }
+
+    return "";
+  };
+
   return (
     <ProjectDetailsContext.Provider value={{ projectInfo }}>
       <StyledContainer container direction="row" wrap="nowrap">
         {/* Column for project details and header */}
-        <Grid container item direction="column">
-          <Grid item style={{ marginBottom: "22px" }}>
+        <Grid item direction="column" xs={12} sm={12} md={12} lg={11} xl={11}>
+          <StyledHeadingContainer item>
             {/* Static Header */}
             <ProjectHeader
               name={projectId}
               description={projectInfo?.data?.description as string}
             />
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid container item direction="row" xs={4} spacing={2}>
+          </StyledHeadingContainer>
+          <Hidden mdUp>
+            <StyledQLContainer item direction="row" xs={12} sm={12}>
+              <QuickLinksCard />
+            </StyledQLContainer>
+          </Hidden>
+          <Grid container spacing={2}>
+            <Grid container item direction="row" xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
               <Grid item xs={12}>
                 {/* Static Info Card */}
                 <MetaCard
-                  title={capitalize(projectId)}
+                  title={getOwner(projectInfo?.owners ?? []) || capitalize(projectId)}
                   titleIcon={<GroupIcon />}
                   fetchDataFn={() => fetchProject(projectId)}
                   onSuccess={setProjectInfo}
@@ -110,7 +138,7 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
                   </Grid>
                 ))}
             </Grid>
-            <Grid container item direction="row" xs={8}>
+            <Grid container item direction="row" xs={12} sm={12} md={7} lg={8} xl={9} spacing={2}>
               {/* Custom Dynamic Cards */}
               {dynamicCards.length > 0 &&
                 dynamicCards.map(card => (
@@ -122,9 +150,11 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
           </Grid>
         </Grid>
         {/* Column for project quick links */}
-        <Grid container item direction="column" xs={1}>
-          <QuickLinksCard />
-        </Grid>
+        <Hidden smDown>
+          <Grid item direction="column" lg={1} xl={1}>
+            <QuickLinksCard />
+          </Grid>
+        </Hidden>
       </StyledContainer>
     </ProjectDetailsContext.Provider>
   );

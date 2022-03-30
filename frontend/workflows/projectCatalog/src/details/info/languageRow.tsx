@@ -6,7 +6,7 @@ import LanguageIcon from "../../helpers/language-icon";
 const LanguageRow = ({ languages }: { languages: string[] }) => (
   <>
     <Grid item>
-      <Typography variant="body2">Languages</Typography>
+      <Typography variant="body2">Language</Typography>
     </Grid>
     {languages.map(language => (
       <Grid item>

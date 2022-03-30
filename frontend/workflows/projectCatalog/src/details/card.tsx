@@ -41,10 +41,12 @@ interface CardProps extends DetailsCard, BaseCardProps {}
 const StyledCard = styled(Card)({
   width: "100%",
   height: "fit-content",
-  padding: "15px",
+  padding: "16px",
 });
 
 const StyledProgressContainer = styled("div")({
+  marginBottom: "8px",
+  marginTop: "-12px",
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: "rgb(194, 200, 242)",
@@ -54,20 +56,22 @@ const StyledProgressContainer = styled("div")({
   },
 });
 
-const StyledRow = styled(Grid)({
-  marginBottom: "15px",
+const StyledTitle = styled(Grid)({
+  marginBottom: "8px",
+});
+
+const BodyContainer = styled("div")({
+  paddingLeft: "4px",
 });
 
 const CardTitle = ({ title, titleIcon, endAdornment }: CardTitleProps) => (
   <>
-    {titleIcon && (
-      <Grid item xs={1}>
-        {titleIcon}
+    <StyledTitle container item xs={endAdornment ? 9 : 12} spacing={1}>
+      {titleIcon && <Grid item>{titleIcon}</Grid>}
+      <Grid item>
+        <Typography variant="h4">{title}</Typography>
       </Grid>
-    )}
-    <Grid item xs={8}>
-      <Typography variant="h4">{title}</Typography>
-    </Grid>
+    </StyledTitle>
     {endAdornment && (
       <Grid
         container
@@ -87,13 +91,11 @@ const CardTitle = ({ title, titleIcon, endAdornment }: CardTitleProps) => (
 const CardBody = ({ loading, error, children }: CardBodyProps) => (
   <>
     {loading && (
-      <StyledRow>
-        <StyledProgressContainer>
-          <LinearProgress color="secondary" />
-        </StyledProgressContainer>
-      </StyledRow>
+      <StyledProgressContainer>
+        <LinearProgress color="secondary" />
+      </StyledProgressContainer>
     )}
-    {error ? <Error subject={error} /> : children}
+    <BodyContainer>{error ? <Error subject={error} /> : children}</BodyContainer>
   </>
 );
 

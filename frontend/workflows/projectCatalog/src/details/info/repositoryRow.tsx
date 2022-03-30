@@ -10,7 +10,6 @@ import { LinkText } from "../helpers";
 interface ProjectRequests {
   number: number;
   url?: string;
-  type: string;
 }
 
 const RepositoryRow = ({ repo }: { repo: string }) => {
@@ -43,28 +42,37 @@ const RepositoryRow = ({ repo }: { repo: string }) => {
           default:
             setIcon(faCode);
         }
-      }
 
-      // TODO (jslaughter): fetch open PR's
-      // setRequests();
+        // TODO (jslaughter): fetch open PR's count
+        // setRequests({
+        //   number: 0,
+        //   url: `https://${manager}/${project}/pulls`,
+        // });
+      }
     }
   }, [repo]);
 
   return (
     <>
-      <Grid item>{icon && <FontAwesomeIcon icon={icon} size="lg" />}</Grid>
       <Grid item>
-        <LinkText text={name} link={url} />
+        <Grid container spacing={1}>
+          <Grid item>{icon && <FontAwesomeIcon icon={icon} size="lg" />}</Grid>
+          <Grid item>
+            <LinkText text={name} link={url} />
+          </Grid>
+        </Grid>
       </Grid>
       {requests && (
-        <>
-          <Grid item>
-            <FontAwesomeIcon icon={faCodeBranch} size="1x" />
+        <Grid item>
+          <Grid container spacing={1}>
+            <Grid item>
+              <FontAwesomeIcon icon={faCodeBranch} size="1x" />
+            </Grid>
+            <Grid item>
+              <LinkText text={`${requests.number} open`} link={requests.url} />
+            </Grid>
           </Grid>
-          <Grid item>
-            <LinkText text={`${requests.number} ${requests.type}`} link={requests.url} />
-          </Grid>
-        </>
+        </Grid>
       )}
     </>
   );
