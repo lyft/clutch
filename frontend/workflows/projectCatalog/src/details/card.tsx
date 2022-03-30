@@ -86,13 +86,13 @@ const CardTitle = ({ title, titleIcon, endAdornment }: CardTitleProps) => (
 
 const CardBody = ({ loading, error, children }: CardBodyProps) => (
   <>
-    <StyledRow>
-      {loading && (
+    {loading && (
+      <StyledRow>
         <StyledProgressContainer>
           <LinearProgress color="secondary" />
         </StyledProgressContainer>
-      )}
-    </StyledRow>
+      </StyledRow>
+    )}
     {error ? <Error subject={error} /> : children}
   </>
 );
