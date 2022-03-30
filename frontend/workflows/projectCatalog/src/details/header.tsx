@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid, styled, Typography } from "@clutch-sh/core";
-import { capitalize } from "lodash";
 
 interface ProjectHeaderProps {
   name: string;
