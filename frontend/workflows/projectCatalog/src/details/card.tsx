@@ -23,7 +23,7 @@ interface CardBodyProps {
 interface BaseCardProps extends CardTitleProps, CardBodyProps {
   reloadInterval?: number;
   autoReload?: boolean;
-  fetchDataFn?: () => Promise<any>;
+  fetchDataFn?: () => Promise<unknown>;
   onSuccess?: (data: any) => void;
   onError?: (error: ClutchError | undefined) => void;
 }
