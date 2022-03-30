@@ -4,19 +4,16 @@ import { capitalize } from "lodash";
 
 interface ProjectHeaderProps {
   name: string;
-  route?: string;
   routeTitle?: string;
   description?: string;
 }
 
-const TextLink = styled("a")({
-  textDecoration: "none",
-  color: "unset",
+const StyledHeading = styled("div")({
+  padding: "8px 0px 8px 0px",
 });
 
 const ProjectHeader = ({
   name,
-  route = "/catalog",
   routeTitle = "Project Catalog",
   description = "",
 }: ProjectHeaderProps) => (
@@ -24,13 +21,13 @@ const ProjectHeader = ({
     <Grid container direction="column" style={{ width: "100%", height: "100%" }}>
       <Grid container item direction="row" alignItems="flex-end">
         <Typography variant="body4">
-          <TextLink href={route}>{routeTitle}</TextLink>&nbsp;/&nbsp;
+          <Typography variant="body2">{routeTitle}</Typography>&nbsp;/&nbsp;
         </Typography>
         <Typography variant="caption2">{name}</Typography>
       </Grid>
-      <div style={{ padding: "8px 0px 8px 0px" }}>
+      <StyledHeading>
         <Typography variant="h2">{capitalize(name)}</Typography>
-      </div>
+      </StyledHeading>
       {description.length && <Typography variant="body2">{description}</Typography>}
     </Grid>
   </>
