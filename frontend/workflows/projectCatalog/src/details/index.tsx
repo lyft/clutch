@@ -4,9 +4,9 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { client, Grid, styled, Tooltip } from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Hidden from "@material-ui/core/Hidden";
 import GroupIcon from "@material-ui/icons/Group";
 import { capitalize } from "lodash";
-import Hidden from "@material-ui/core/Hidden";
 
 import type { DetailWorkflowProps } from "..";
 
@@ -89,12 +89,16 @@ const Details: React.FC<DetailWorkflowProps> = ({ children, chips }) => {
     }
   }, [children]);
 
+  /**
+   * Takes an array of owner emails and returns the first one capitalized
+   * (ex: ["clutch-team@lyft.com"] -> "Clutch Team")
+   */
   const getOwner = (owners: string[]): string => {
     if (owners && owners.length) {
       const firstOwner = owners[0];
 
       return firstOwner
-        .replace(/\@.*/, "")
+        .replace(/@.*/, "")
         .split("-")
         .map(s => capitalize(s))
         .join(" ");
