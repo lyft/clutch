@@ -1,54 +1,69 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
+import { Grid } from "@material-ui/core";
 
-import { useNavigate } from "../navigation";
-import { client } from "../Network";
-import type { ClutchError } from "../Network/errors";
+import { WorkflowStorageContext } from "../Contexts/workflow-storage-context";
+import { retrieveData } from "../Contexts/workflow-storage-context/helpers";
+import workflowStorageContextReducer from "../Contexts/workflow-storage-context/reducer";
+import type { WorkflowStorageContextProps } from "../Contexts/workflow-storage-context/types";
+import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
+import { Alert } from "../Feedback";
+import styled from "../styled";
 
 interface ShortLinkHydratorProps {
-  hydrate: (data: IClutch.shortlink.v1.IShareableState[], route: string) => void;
+  hydrate: () => IClutch.shortlink.v1.IShareableState[] | null;
+  onClear: () => void;
+  children: React.ReactElement;
 }
 
+const StyledAlertContainer = styled(Grid)({
+  marginTop: "16px",
+});
+
 /**
- * Component that will be present for a route which will look for a short link hash
- * - If found
- * - It will call down to the API with the hash and ask for any data pertaining to it
- * - If the API call is successful
- *   - It will use the given hydrate function to send the returned state off to the StorageContext
- *   - It will navigate to the route given in the returned state
- * - If the API call is not successful
- *   - It will leave a warning message in the console
- *   - Then navigate back to the home page
+ * Hydrator which is a wrapper for workflows
+ * Will check on load if there exists any hydrated data for the current workflow
+ * If there is it will populate the state and provide an alert above the workflow
  */
-const ShortLinkHydrator = ({ hydrate }: ShortLinkHydratorProps) => {
-  const { hash } = useParams();
-  const navigate = useNavigate();
+const ShortLinkHydrator = ({
+  hydrate,
+  onClear,
+  children,
+}: ShortLinkHydratorProps): React.ReactElement => {
+  const [workflowStorageState, dispatch] = React.useReducer(
+    workflowStorageContextReducer,
+    defaultWorkflowStorageState
+  );
 
   React.useEffect(() => {
-    if (hash) {
-      const requestData: IClutch.shortlink.v1.IGetRequest = { hash };
+    const data = hydrate();
 
-      client
-        .post("/v1/shortlink/get", requestData)
-        .then(response => {
-          const { path = "/", state } = response.data as IClutch.shortlink.v1.IGetResponse;
-
-          // we only want the pathname to match against so we pull off any search params for storage
-          hydrate(state, path.split("?")[0]);
-          navigate(path);
-        })
-        .catch((error: ClutchError) => {
-          // eslint-disable-next-line no-console
-          console.warn(`Shortlink ${hash} errored, redirecting home`, error?.message);
-          navigate("/");
-        });
+    if (data) {
+      dispatch({ type: "HYDRATE", payload: { data } });
+      onClear();
     }
-  }, [hash]);
+  }, []);
 
-  // currently return null so that nothing is rendered
-  // TODO: either make a loading spinner or something to go here if the API calls are not responsive enough
-  return null;
+  const workflowStorageProviderProps: WorkflowStorageContextProps = {
+    shortLinked: workflowStorageState.shortLinked,
+    storeData: (componentName: string, key: string, data: any, localStorage?: boolean) =>
+      dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
+    removeData: (componentName: string, key: string, localStorage?: boolean) =>
+      dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
+    retrieveData: (componentName: string, key: string, defaultData?: any) =>
+      retrieveData(workflowStorageState.store, componentName, key, defaultData),
+  };
+
+  return (
+    <WorkflowStorageContext.Provider value={workflowStorageProviderProps}>
+      {workflowStorageState.shortLinked && (
+        <StyledAlertContainer container direction="column" alignItems="center">
+          <Alert title="Short Link">Local Workflow Data will not be saved until reload</Alert>
+        </StyledAlertContainer>
+      )}
+      {children}
+    </WorkflowStorageContext.Provider>
+  );
 };
 
 export default ShortLinkHydrator;

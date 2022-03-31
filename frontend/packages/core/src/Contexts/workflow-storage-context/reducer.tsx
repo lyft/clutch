@@ -1,13 +1,16 @@
 import { removeLocalData, rotateDataFromAPI, storeLocalData } from "./helpers";
-import type { Action, BackgroundPayload, StorageState, UserPayload } from "./types";
+import type { Action, BackgroundPayload, UserPayload, WorkflowStorageState } from "./types";
 
 /**
- * Reducer for the StorageContext
- * This will act on the StorageState and add / remove items from the temporary storage
- * as well as localStorage, this will keep all storage actions in one location for all
- * components and allow for easier state hydration across the entire application
+ * Reducer for the WorkflowStorageContext
+ * This will act on the WorkflowStorageState and add / remove items from the temporary storage
+ * as well as localStorage, this will (optionally) keep all storage actions in one location for all
+ * workflows and allow for easier state hydration
  */
-const storageContextReducer = (state: StorageState, action: Action): StorageState => {
+const workflowStorageContextReducer = (
+  state: WorkflowStorageState,
+  action: Action
+): WorkflowStorageState => {
   switch (action.type) {
     // Will add data to our temporary storage as well as the local storage
     case "STORE_DATA": {
@@ -49,38 +52,23 @@ const storageContextReducer = (state: StorageState, action: Action): StorageStat
 
       return newState;
     }
-    // Will take an input route and check to see if we're already shortlinked and if we are, will only clear if the route is different
-    case "CLEAR_SHORT_LINK": {
-      const { route = "" } = action.payload as BackgroundPayload;
-
-      if (state.shortLinked && state.shortLinkedRoute !== route) {
-        return { ...state, store: {}, shortLinked: false, shortLinkedRoute: undefined };
-      }
-
-      return state;
-    }
-    // Will clear out the temporary storage
-    case "EMPTY_TEMP_DATA": {
-      return { ...state, tempStore: {} };
-    }
     // Will take a given input of data from an API and add it to the state as 'store', the only time this portion of the state should ever be modified
     case "HYDRATE": {
-      const { data, route } = action.payload as BackgroundPayload;
+      const { data } = action.payload as BackgroundPayload;
 
-      if (data && route) {
+      if (data) {
         return {
           ...state,
           store: rotateDataFromAPI(data),
           shortLinked: true,
-          shortLinkedRoute: route,
         };
       }
 
       return state;
     }
     default:
-      throw new Error("Unknown storage reducer action");
+      throw new Error("Unknown workflow storage reducer action");
   }
 };
 
-export default storageContextReducer;
+export default workflowStorageContextReducer;
