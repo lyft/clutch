@@ -16,7 +16,7 @@ const workflowStorageContextReducer = (
     case "STORE_DATA": {
       const { componentName, key, data, localStorage = true } = action.payload as UserPayload;
       const newState = { ...state };
-      const { tempStore } = newState;
+      const { shortLinked, tempStore } = newState;
 
       if (!tempStore[componentName]) {
         tempStore[componentName] = {};
@@ -28,7 +28,7 @@ const workflowStorageContextReducer = (
         tempStore[componentName] = { ...tempStore[componentName], ...data };
       }
 
-      if (localStorage) {
+      if (localStorage && !shortLinked) {
         storeLocalData(key ?? componentName, data);
       }
 
@@ -38,7 +38,7 @@ const workflowStorageContextReducer = (
     case "REMOVE_DATA": {
       const { componentName, key, localStorage = true } = action.payload as UserPayload;
       const newState = { ...state };
-      const { tempStore } = newState;
+      const { shortLinked, tempStore } = newState;
 
       if (componentName && key) {
         delete tempStore[componentName][key];
@@ -46,7 +46,7 @@ const workflowStorageContextReducer = (
         delete tempStore[componentName];
       }
 
-      if (localStorage) {
+      if (localStorage && !shortLinked) {
         removeLocalData(key ?? componentName);
       }
 

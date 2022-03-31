@@ -11,13 +11,15 @@ import { Alert } from "../Feedback";
 import styled from "../styled";
 
 interface WorkflowHydratorProps {
+  children: React.ReactElement;
   hydrateData: IClutch.shortlink.v1.IShareableState[];
   onClear: () => void;
-  children: React.ReactElement;
 }
 
-const StyledAlertContainer = styled(Grid)({
-  marginTop: "16px",
+const StyledAlert = styled(Alert)({
+  zIndex: 10000,
+  position: "absolute",
+  padding: "6px 8px",
 });
 
 /**
@@ -55,9 +57,11 @@ const WorkflowHydrator = ({
   return (
     <WorkflowStorageContext.Provider value={storageProviderProps}>
       {state.shortLinked && (
-        <StyledAlertContainer container direction="column" alignItems="center">
-          <Alert title="Short Link">Local Workflow Data will not be saved until reload</Alert>
-        </StyledAlertContainer>
+        <Grid container direction="column" alignItems="flex-end">
+          <StyledAlert severity="warning">
+            Local Workflow Data will not be saved until reload
+          </StyledAlert>
+        </Grid>
       )}
       {children}
     </WorkflowStorageContext.Provider>
