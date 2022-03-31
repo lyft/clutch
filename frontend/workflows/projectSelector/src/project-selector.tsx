@@ -137,7 +137,7 @@ const allPresent = (state: State, dispatch: React.Dispatch<Action>): boolean => 
   return true;
 };
 
-const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>, shortLinked = false) => {
+const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>, shortLinked: boolean) => {
   // Determine if any hydration is required.
   // - Are any services missing from state.projectdata?
   // - Are projects empty (first load)?

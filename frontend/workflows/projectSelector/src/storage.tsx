@@ -1,3 +1,4 @@
+import type { WorkflowRemoveDataFn, WorkflowRetrieveDataFn } from "@clutch-sh/core";
 import _ from "lodash";
 
 import type { GlobalProjectState, State } from "./types";
@@ -14,20 +15,23 @@ export const COMPONENT_NAME = "ProjectSelector";
  *   * the stored state does not have the correct type
  *   * the stored state is not valid JSON
  */
-const loadStoredState = (state: State, retrieveData, removeData): State => {
+const loadStoredState = (
+  state: State,
+  retrieveData: WorkflowRetrieveDataFn,
+  removeData: WorkflowRemoveDataFn
+): State => {
   // Grab stored state from local storage
-  const storedState = retrieveData(COMPONENT_NAME, STORAGE_STATE_KEY, true);
+  const storedState = retrieveData(COMPONENT_NAME, STORAGE_STATE_KEY) as GlobalProjectState;
   // If stored state does not exist return state unmodified
   if (!storedState) {
     return state;
   }
 
   try {
-    const storedStateObject = JSON.parse(storedState);
     // If stored state is in the proper format merge it with existing state
-    if (isGlobalProjectState(storedStateObject)) {
+    if (isGlobalProjectState(storedState)) {
       // Merge will overwrite existing values in state with any found in the stored state
-      return _.merge(state, storedStateObject);
+      return _.merge(state, storedState);
     }
     // If stored state is not in the correct format purge it and return state unmodified
     removeData(COMPONENT_NAME, STORAGE_STATE_KEY, true);
