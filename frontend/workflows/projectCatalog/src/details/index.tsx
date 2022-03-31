@@ -107,7 +107,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
     <ProjectDetailsContext.Provider value={{ projectInfo }}>
       <StyledContainer container direction="row" wrap="nowrap">
         {/* Column for project details and header */}
-        <Grid item direction="column" xs={12} sm={12} md={12} lg={11} xl={11}>
+        <Grid item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
           <StyledHeadingContainer item>
             {/* Static Header */}
             <ProjectHeader
@@ -160,7 +160,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
         </Grid>
         {/* Column for project quick links */}
         <Hidden smDown>
-          <Grid item direction="column" lg={1} xl={1}>
+          <Grid item direction="column">
             {projectInfo && <QuickLinksCard linkGroups={projectInfo?.linkGroups ?? []} />}
           </Grid>
         </Hidden>
