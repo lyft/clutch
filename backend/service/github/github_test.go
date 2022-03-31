@@ -2,6 +2,10 @@ package github
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -10,12 +14,17 @@ import (
 	"testing"
 	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	githubv3 "github.com/google/go-github/v37/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
 
+	githubconfigv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
 	githubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 const problem = "we've had a problem"
@@ -788,4 +797,68 @@ func TestListPullRequestsWithCommit(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestNewService(t *testing.T) {
+	cfg := &githubconfigv1.Config{}
+	_, err := newService(cfg, tally.NoopScope, zap.NewNop())
+	assert.Error(t, err)
+
+	cfg.Auth = &githubconfigv1.Config_AccessToken{AccessToken: "aaa"}
+	s, err := newService(cfg, tally.NoopScope, zap.NewNop())
+	assert.NoError(t, err)
+	assert.NotNil(t, s)
+
+	assert.Nil(t, s.(*svc).appTransport)
+	assert.Equal(t, s.(*svc).personalAccessToken, "aaa")
+
+	pk, err := rsa.GenerateKey(rand.Reader, 2048)
+	assert.NoError(t, err)
+
+	kk, _ := x509.MarshalPKCS8PrivateKey(pk)
+
+	cfg.Auth = &githubconfigv1.Config_AppConfig{
+		AppConfig: &githubconfigv1.AppConfig{
+			AppId:          123456,
+			InstallationId: 789,
+			Pem: &githubconfigv1.AppConfig_KeyPem{
+				KeyPem: string(pem.EncodeToMemory(&pem.Block{Type: "RSA_PRIVATE_KEY", Bytes: kk})),
+			},
+		},
+	}
+	s, err = newService(cfg, tally.NoopScope, zap.NewNop())
+	assert.NoError(t, err)
+	assert.NotNil(t, s)
+
+	assert.Empty(t, s.(*svc).personalAccessToken)
+	assert.NotNil(t, s.(*svc).appTransport)
+}
+
+func TestCommitAuthorFromContext(t *testing.T) {
+	ctx := context.Background()
+	ctx = authn.ContextWithAnonymousClaims(ctx)
+
+	result := commitOptionsFromClaims(ctx)
+	assert.Equal(t, "Anonymous User via Clutch", result.Author.Name)
+	assert.Equal(t, "<>", result.Author.Email)
+
+	ctx = authn.ContextWithClaims(ctx, &authn.Claims{
+		StandardClaims: &jwt.StandardClaims{
+			Subject: "daniel@example.com",
+		},
+	})
+
+	result = commitOptionsFromClaims(ctx)
+	assert.Equal(t, "daniel@example.com via Clutch", result.Author.Name)
+	assert.Equal(t, "<daniel@example.com>", result.Author.Email)
+
+	ctx = authn.ContextWithClaims(ctx, &authn.Claims{
+		StandardClaims: &jwt.StandardClaims{
+			Subject: "daniel123",
+		},
+	})
+
+	result = commitOptionsFromClaims(ctx)
+	assert.Equal(t, "daniel123 via Clutch", result.Author.Name)
+	assert.Equal(t, "<>", result.Author.Email)
 }

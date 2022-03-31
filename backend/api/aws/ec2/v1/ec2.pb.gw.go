@@ -179,12 +179,13 @@ func RegisterEC2APIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/GetInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/getInstance"))
+		var err error
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/GetInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/getInstance"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_EC2API_GetInstance_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_EC2API_GetInstance_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -202,12 +203,13 @@ func RegisterEC2APIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/TerminateInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/terminateInstance"))
+		var err error
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/TerminateInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/terminateInstance"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_EC2API_TerminateInstance_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_EC2API_TerminateInstance_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -225,12 +227,13 @@ func RegisterEC2APIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/ResizeAutoscalingGroup", runtime.WithHTTPPathPattern("/v1/aws/ec2/resizeAutoscalingGroup"))
+		var err error
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/ResizeAutoscalingGroup", runtime.WithHTTPPathPattern("/v1/aws/ec2/resizeAutoscalingGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_EC2API_ResizeAutoscalingGroup_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_EC2API_ResizeAutoscalingGroup_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -248,12 +251,13 @@ func RegisterEC2APIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/RebootInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/rebootInstance"))
+		var err error
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/RebootInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/rebootInstance"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_EC2API_RebootInstance_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_EC2API_RebootInstance_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -310,12 +314,13 @@ func RegisterEC2APIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/GetInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/getInstance"))
+		var err error
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/GetInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/getInstance"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_EC2API_GetInstance_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_EC2API_GetInstance_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -330,12 +335,13 @@ func RegisterEC2APIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/TerminateInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/terminateInstance"))
+		var err error
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/TerminateInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/terminateInstance"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_EC2API_TerminateInstance_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_EC2API_TerminateInstance_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -350,12 +356,13 @@ func RegisterEC2APIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/ResizeAutoscalingGroup", runtime.WithHTTPPathPattern("/v1/aws/ec2/resizeAutoscalingGroup"))
+		var err error
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/ResizeAutoscalingGroup", runtime.WithHTTPPathPattern("/v1/aws/ec2/resizeAutoscalingGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_EC2API_ResizeAutoscalingGroup_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_EC2API_ResizeAutoscalingGroup_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -370,12 +377,13 @@ func RegisterEC2APIHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/RebootInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/rebootInstance"))
+		var err error
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/clutch.aws.ec2.v1.EC2API/RebootInstance", runtime.WithHTTPPathPattern("/v1/aws/ec2/rebootInstance"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_EC2API_RebootInstance_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_EC2API_RebootInstance_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
