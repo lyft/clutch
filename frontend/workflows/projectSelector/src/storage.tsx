@@ -31,7 +31,7 @@ const loadStoredState = (
     // If stored state is in the proper format merge it with existing state
     if (isGlobalProjectState(storedState)) {
       // Merge will overwrite existing values in state with any found in the stored state
-      return _.merge(state, storedState);
+      return _.merge({}, state, storedState);
     }
     // If stored state is not in the correct format purge it and return state unmodified
     removeData(COMPONENT_NAME, STORAGE_STATE_KEY, true);
