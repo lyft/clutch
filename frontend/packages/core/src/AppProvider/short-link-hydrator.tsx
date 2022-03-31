@@ -2,14 +2,13 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid } from "@material-ui/core";
 
-import { useShortLinkContext } from "../Contexts/shortlink-context";
 import { WorkflowStorageContext } from "../Contexts/workflow-storage-context";
 import { retrieveData } from "../Contexts/workflow-storage-context/helpers";
 import workflowStorageContextReducer from "../Contexts/workflow-storage-context/reducer";
 import type { WorkflowStorageContextProps } from "../Contexts/workflow-storage-context/types";
 import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
 import { Alert } from "../Feedback";
-import { styled } from "../styled";
+import styled from "../styled";
 
 interface ShortLinkHydratorProps {
   hydrate: () => IClutch.shortlink.v1.IShareableState[] | null;
@@ -31,7 +30,6 @@ const ShortLinkHydrator = ({
   onClear,
   children,
 }: ShortLinkHydratorProps): React.ReactElement => {
-  const { storeData } = useShortLinkContext();
   const [workflowStorageState, dispatch] = React.useReducer(
     workflowStorageContextReducer,
     defaultWorkflowStorageState
@@ -45,12 +43,6 @@ const ShortLinkHydrator = ({
       onClear();
     }
   }, []);
-
-  React.useEffect(() => {
-    if (workflowStorageState.tempStore) {
-      storeData(workflowStorageState.tempStore);
-    }
-  }, [workflowStorageState]);
 
   const workflowStorageProviderProps: WorkflowStorageContextProps = {
     shortLinked: workflowStorageState.shortLinked,
