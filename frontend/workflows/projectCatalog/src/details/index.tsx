@@ -6,7 +6,7 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Hidden from "@material-ui/core/Hidden";
 import GroupIcon from "@material-ui/icons/Group";
-import { capitalize } from "lodash";
+import { capitalize, isEmpty } from "lodash";
 
 import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "..";
 
@@ -161,7 +161,9 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
         {/* Column for project quick links */}
         <Hidden smDown>
           <Grid item direction="column">
-            {projectInfo && <QuickLinksCard linkGroups={projectInfo?.linkGroups ?? []} />}
+            {projectInfo && !isEmpty(projectInfo?.linkGroups) && (
+              <QuickLinksCard linkGroups={projectInfo.linkGroups!} />
+            )}
           </Grid>
         </Hidden>
       </StyledContainer>
