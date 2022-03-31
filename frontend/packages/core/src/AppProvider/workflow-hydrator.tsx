@@ -38,7 +38,7 @@ const WorkflowHydrator = ({
   );
 
   React.useEffect(() => {
-    if (hydrateData) {
+    if (hydrateData && hydrateData.length) {
       dispatch({ type: "HYDRATE", payload: { data: hydrateData } });
       onClear();
     }
