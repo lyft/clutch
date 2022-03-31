@@ -10,7 +10,7 @@ message Config {
   // The default project service that clutch ships with is `clutch.service.project`
   // The purpose of the open source project service is for the mock server and to serve
   // as an boilerplate for private gateways to implement.
-  // Once your organization is ready to make use of the project API's in your private gateway,
+  // Once your organization is ready to make use of the project APIs in your private gateway,
   // override the backend service here.
   string project_service_override = 1;
 }
