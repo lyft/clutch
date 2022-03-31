@@ -2,12 +2,13 @@ package project
 
 import (
 	"context"
-	"errors"
+	"fmt"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 
+	projectv1cfg "github.com/lyft/clutch/backend/api/config/module/project/v1"
 	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
@@ -15,18 +16,30 @@ import (
 )
 
 const (
-	Name = "clutch.module.project"
+	Name                  = "clutch.module.project"
+	defaultProjectService = "clutch.service.project"
 )
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
-	client, ok := service.Registry["clutch.service.project"]
+	config := &projectv1cfg.Config{}
+	err := cfg.UnmarshalTo(config)
+	if err != nil {
+		return nil, err
+	}
+
+	projectSvc := defaultProjectService
+	if len(config.ProjectServiceOverride) > 0 {
+		projectSvc = config.ProjectServiceOverride
+	}
+
+	client, ok := service.Registry[projectSvc]
 	if !ok {
-		return nil, errors.New("could not find project service")
+		return nil, fmt.Errorf("could not find project service [%s]", projectSvc)
 	}
 
 	svc, ok := client.(projectservice.Service)
 	if !ok {
-		return nil, errors.New("service was no the correct type")
+		return nil, fmt.Errorf("service [%s] was not the correct type ", projectSvc)
 	}
 
 	return &mod{

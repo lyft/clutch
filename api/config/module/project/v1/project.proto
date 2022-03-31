@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package clutch.config.module.project.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/module/project/v1;projectv1";
+
+import "validate/validate.proto";
+
+message Config {
+  // The default project service that clutch ships with is `clutch.service.project`
+  // The purpose of the open source project service is for the mock server and to serve
+  // as an boilerplate for private gateways to implement.
+  // Once your organization is ready to make use of the project API's in your private gateway,
+  // override the backend service here.
+  string project_service_override = 1;
+}
