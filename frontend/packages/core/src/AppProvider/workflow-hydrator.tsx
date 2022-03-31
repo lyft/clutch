@@ -13,7 +13,7 @@ import styled from "../styled";
 
 interface WorkflowHydratorProps {
   children: React.ReactElement;
-  hydrateData: () => IClutch.shortlink.v1.IShareableState[];
+  hydrateData: IClutch.shortlink.v1.IShareableState[];
   onClear: () => void;
 }
 
@@ -40,12 +40,11 @@ const WorkflowHydrator = ({
   );
 
   React.useEffect(() => {
-    const hydratedData = hydrateData();
-    if (hydratedData) {
-      dispatch({ type: "HYDRATE", payload: { data: hydratedData } });
+    if (hydrateData && hydrateData.length) {
+      dispatch({ type: "HYDRATE", payload: { data: hydrateData } });
       onClear();
     }
-  }, []);
+  }, [hydrateData]);
 
   React.useEffect(() => {
     if (state.tempStore) {

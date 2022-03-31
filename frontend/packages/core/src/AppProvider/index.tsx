@@ -125,7 +125,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                         element={
                           <ErrorBoundary workflow={workflow}>
                             <WorkflowHydrator
-                              hydrateData={() => hydrateState}
+                              hydrateData={hydrateState}
                               onClear={() => setHydrateState(null)}
                             >
                               {!shortLinkLoading && <Outlet />}

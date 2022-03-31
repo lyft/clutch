@@ -41,7 +41,7 @@ const retrieveData = (
   componentName: string,
   key: string,
   defaultData?: unknown
-): any => {
+): unknown => {
   if (store && store[componentName]) {
     return key.length ? store[componentName][key] : store[componentName];
   }
