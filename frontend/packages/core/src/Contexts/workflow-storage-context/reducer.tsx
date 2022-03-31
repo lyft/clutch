@@ -16,34 +16,37 @@ const workflowStorageContextReducer = (
     case "STORE_DATA": {
       const { componentName, key, data, localStorage = true } = action.payload as UserPayload;
       const newState = { ...state };
-      const { shortLinked, tempStore } = newState;
+      const { shortLinked, workflowSessionStore } = newState;
 
-      if (!tempStore[componentName]) {
-        tempStore[componentName] = {};
+      if (!workflowSessionStore[componentName]) {
+        workflowSessionStore[componentName] = {};
       }
 
       if (key.length) {
-        tempStore[componentName][key] = data;
+        workflowSessionStore[componentName][key] = data;
       } else {
-        tempStore[componentName] = { ...tempStore[componentName], ...(data as any) };
+        workflowSessionStore[componentName] = {
+          ...workflowSessionStore[componentName],
+          ...(data as any),
+        };
       }
 
       if (localStorage && !shortLinked) {
         storeLocalData(key ?? componentName, data);
       }
 
-      return { ...newState, ...tempStore };
+      return { ...newState, workflowSessionStore };
     }
     // Will remove data from our temporary storage as well as the local storage
     case "REMOVE_DATA": {
       const { componentName, key, localStorage = true } = action.payload as UserPayload;
       const newState = { ...state };
-      const { shortLinked, tempStore } = newState;
+      const { shortLinked, workflowSessionStore } = newState;
 
       if (componentName && key) {
-        delete tempStore[componentName][key];
+        delete workflowSessionStore[componentName][key];
       } else if (componentName) {
-        delete tempStore[componentName];
+        delete workflowSessionStore[componentName];
       }
 
       if (localStorage && !shortLinked) {
@@ -59,8 +62,8 @@ const workflowStorageContextReducer = (
       if (data) {
         return {
           ...state,
-          store: rotateDataFromAPI(data),
           shortLinked: true,
+          workflowStore: rotateDataFromAPI(data),
         };
       }
 
