@@ -2,11 +2,12 @@ package project
 
 import (
 	"context"
-	"errors"
 
+	"github.com/gogo/status"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
 
 	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -33,5 +34,5 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 }
 
 func (c *client) GetProjects(ctx context.Context, req *projectv1.GetProjectsRequest) (*projectv1.GetProjectsResponse, error) {
-	return nil, errors.New("not implemented")
+	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
