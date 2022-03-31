@@ -33,7 +33,7 @@ const WorkflowHydrator = ({
   onClear,
   children,
 }: WorkflowHydratorProps): React.ReactElement => {
-  const { storeData } = useShortLinkContext();
+  const { storeWorkflowSession } = useShortLinkContext();
   const [state, dispatch] = React.useReducer(
     workflowStorageContextReducer,
     defaultWorkflowStorageState
@@ -47,8 +47,8 @@ const WorkflowHydrator = ({
   }, [hydrateData]);
 
   React.useEffect(() => {
-    if (state.tempStore) {
-      storeData(state.tempStore);
+    if (state.workflowSessionStore) {
+      storeWorkflowSession(state.workflowSessionStore);
     }
   }, [state]);
 

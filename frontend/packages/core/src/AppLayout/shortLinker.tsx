@@ -13,6 +13,7 @@ import LinkIcon from "@material-ui/icons/Link";
 
 import { Button, ClipboardButton, IconButton } from "../button";
 import { useAppContext, useShortLinkContext } from "../Contexts";
+import type { HydratedData } from "../Contexts/workflow-storage-context/types";
 import { Toast } from "../Feedback";
 import { TextField } from "../Input";
 import { client } from "../Network";
@@ -70,7 +71,7 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
  */
 const ShortLinker = () => {
   const { workflows } = useAppContext();
-  const { removeData, retrieveData } = useShortLinkContext();
+  const { removeWorkflowSession, retrieveWorkflowSession } = useShortLinkContext();
   const [open, setOpen] = React.useState(false);
   const [shortLink, setShortLink] = React.useState<string | null>(null);
   const [validWorkflow, setValidWorkflow] = React.useState<boolean>(false);
@@ -90,7 +91,7 @@ const ShortLinker = () => {
       checkValidWorkflow();
     }
 
-    removeData();
+    removeWorkflowSession();
   }, [location]);
 
   // Used for initial load to verify that once our workflows have loaded we are on a valid workflow
@@ -113,13 +114,13 @@ const ShortLinker = () => {
   };
 
   // Will rotate our object into an array of type IShareableState to send in the API request
-  const rotateStore = (tempStore): IClutch.shortlink.v1.IShareableState[] =>
-    Object.keys(tempStore).map(key => ({ key, state: tempStore[key] }));
+  const rotateStore = (sessionStore: HydratedData): IClutch.shortlink.v1.IShareableState[] =>
+    Object.keys(sessionStore).map(key => ({ key, state: sessionStore[key] }));
 
   const generateShortLink = () => {
     const requestData: IClutch.shortlink.v1.ICreateRequest = {
       path: `${location.pathname}${location.search}`,
-      state: rotateStore(retrieveData()),
+      state: rotateStore(retrieveWorkflowSession()),
     };
 
     client

@@ -58,7 +58,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [tempShortLinkStore, setTempShortLinkStore] = React.useState<HydratedData>();
+  const [workflowSessionStore, setWorkflowSessionStore] = React.useState<HydratedData>();
   const [hydrateState, setHydrateState] = React.useState<
     IClutch.shortlink.v1.IShareableState[] | null
   >(null);
@@ -100,9 +100,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   }, [workflows]);
 
   const shortLinkProviderProps: ShortLinkContextProps = {
-    removeData: () => setTempShortLinkStore(null),
-    retrieveData: () => tempShortLinkStore,
-    storeData: setTempShortLinkStore,
+    removeWorkflowSession: () => setWorkflowSessionStore(null),
+    retrieveWorkflowSession: () => workflowSessionStore,
+    storeWorkflowSession: setWorkflowSessionStore,
   };
 
   return (
