@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
+	temporalclient "go.temporal.io/sdk/client"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 
@@ -20,11 +21,10 @@ func TestNew(t *testing.T) {
 
 	c, err := New(anycfg, zap.NewNop(), tally.NoopScope)
 	assert.NoError(t, err)
-	impl := c.(*clientImpl)
+	impl := c.(*clientManagerImpl)
 	assert.NotNil(t, impl.logger)
 	assert.NotNil(t, impl.metricsHandler)
 	assert.Nil(t, impl.copts.TLS)
-	assert.True(t, impl.copts.DisableHealthCheck)
 	assert.Equal(t, impl.hostPort, "dns:///example.com:9233")
 }
 
@@ -32,14 +32,17 @@ func TestNewClientWithConnectionOptions(t *testing.T) {
 	cfg := &temporalv1.Config{
 		Host:              "dns:///example.com",
 		Port:              9233,
-		ConnectionOptions: &temporalv1.ConnectionOptions{UseSystemCaBundle: true, EnableHealthCheck: true},
+		ConnectionOptions: &temporalv1.ConnectionOptions{UseSystemCaBundle: true},
 	}
 	c, err := newClient(cfg, zap.NewNop(), tally.NoopScope)
 	assert.NoError(t, err)
 
-	impl := c.(*clientImpl)
+	impl := c.(*clientManagerImpl)
 	assert.NotNil(t, impl.copts.TLS.RootCAs)
-	assert.False(t, impl.copts.DisableHealthCheck)
+}
+
+type mockClient struct {
+	temporalclient.Client
 }
 
 func TestGetNamespaceClient(t *testing.T) {
@@ -48,4 +51,14 @@ func TestGetNamespaceClient(t *testing.T) {
 	client, err := c.GetNamespaceClient("foo-namespace")
 	assert.NoError(t, err)
 	assert.NotNil(t, client)
+
+	impl := client.(*lazyClientImpl)
+	assert.Nil(t, impl.cachedClient)
+
+	mc := &mockClient{}
+
+	impl.cachedClient = mc
+	ret, err := client.GetConnection()
+	assert.NoError(t, err)
+	assert.Equal(t, mc, ret)
 }

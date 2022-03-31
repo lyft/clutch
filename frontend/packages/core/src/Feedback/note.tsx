@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import { Grid, Paper } from "@material-ui/core";
 import type { Color } from "@material-ui/lab/Alert";
 
+import { Link } from "../link";
+
 import { Alert } from "./alert";
 
 const NotePanelContainer = styled(Grid)({
@@ -13,10 +15,19 @@ const NotePanelContainer = styled(Grid)({
 
 export interface NoteProps {
   severity?: Color;
+  // Use this if you want to add a link after your text blob (useful for
+  // linking to docs or a resource described in the text blob)
+  link?: string;
 }
 
 export interface NoteConfig extends NoteProps {
   text: string;
+  // Use this to specify the location in regards to a wizard for the note.
+  // For example, you can specify it to be in the "intro" step, then in the
+  // intro you iterate through your notes, selectively showing the ones that are
+  // specified for that step. This allows users to have different notes
+  // for different stages of a workflow.
+  location?: string;
 }
 
 export interface NotePanelProps {
@@ -24,13 +35,14 @@ export interface NotePanelProps {
   notes?: NoteConfig[];
 }
 
-const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
+const Note: React.FC<NoteProps> = ({ severity = "info", link = "", children }) => {
   return (
     <Paper elevation={0}>
       <Alert severity={severity}>
         <Grid container justify="flex-start" alignItems="center">
           {children}
         </Grid>
+        {link && <Link href={link}>{link}</Link>}
       </Alert>
     </Paper>
   );
@@ -45,7 +57,7 @@ const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, chil
     wrap="nowrap"
   >
     {notes?.map((note: NoteConfig) => (
-      <Note key={note.text} severity={note.severity}>
+      <Note key={note.text} severity={note.severity} link={note.link}>
         {note.text}
       </Note>
     ))}

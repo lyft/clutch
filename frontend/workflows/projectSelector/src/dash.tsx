@@ -76,7 +76,6 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
 
 const timelineReducer = (state: TimelineState, action: TimelineAction): TimelineState => {
   switch (action.type) {
-    // TODO: Add more actions like slicing by time
     case "UPDATE": {
       // for now, clobber any existing data
       const newState = { ...state };
@@ -91,7 +90,7 @@ const timelineReducer = (state: TimelineState, action: TimelineAction): Timeline
 const timeRangeReducer = (state: TimeRangeState, action: TimeRangeAction): TimeRangeState => {
   switch (action.type) {
     case "UPDATE": {
-      // TODO: when adding more complexity to the time range state - i.e. filters of event types - add logic here to handle if both start and end times are equal
+      // If start times do not match, or end times do not match, then return the update, else return the original state
       if (
         !_.isEqual(state.startTimeMs, action.payload.startTimeMs) ||
         !_.isEqual(state.endTimeMs, action.payload.endTimeMs)
@@ -134,7 +133,8 @@ const Dash = ({ children, onError }: DashProps) => {
 
   return (
     <Box display="flex" flex={1} minHeight="100%" maxHeight="100%">
-      {/* TODO: Maybe in the future invert proj selector and timeline contexts */}
+      {/* In an alternative design where the timeline drives the project selection, we could invert proj selector
+       and timeline contexts. Right now the proj selector is the driver. */}
       <ProjectSelectorDispatchContext.Provider value={dispatch}>
         <ProjectSelectorStateContext.Provider value={state}>
           <TimeRangeDispatchContext.Provider value={timeRangeDispatch}>

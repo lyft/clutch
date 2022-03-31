@@ -8,6 +8,7 @@ import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@materia
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
+import { Tooltip } from "./Feedback/tooltip";
 import styled from "./styled";
 
 interface ButtonPalette {
@@ -243,6 +244,7 @@ const StyledClipboardIconButton = styled(MuiIconButton)({
 export interface ClipboardButtonProps {
   /** Case-sensitive text to be copied. */
   text: string;
+  tooltip?: string;
 }
 
 /**
@@ -250,7 +252,7 @@ export interface ClipboardButtonProps {
  *
  * When clicked a checkmark is briefly displayed.
  */
-const ClipboardButton = ({ text }: ClipboardButtonProps) => {
+const ClipboardButton = ({ text, tooltip = "" }: ClipboardButtonProps) => {
   const [clicked, setClicked] = React.useState(false);
   React.useEffect(() => {
     if (clicked) {
@@ -264,14 +266,16 @@ const ClipboardButton = ({ text }: ClipboardButtonProps) => {
   }, [clicked]);
 
   return (
-    <StyledClipboardIconButton
-      onClick={() => {
-        setClicked(true);
-        navigator.clipboard.writeText(text);
-      }}
-    >
-      {clicked ? <CheckCircleOutlinedIcon /> : <FileCopyOutlinedIcon />}
-    </StyledClipboardIconButton>
+    <Tooltip title={tooltip}>
+      <StyledClipboardIconButton
+        onClick={() => {
+          setClicked(true);
+          navigator.clipboard.writeText(text);
+        }}
+      >
+        {clicked ? <CheckCircleOutlinedIcon /> : <FileCopyOutlinedIcon />}
+      </StyledClipboardIconButton>
+    </Tooltip>
   );
 };
 

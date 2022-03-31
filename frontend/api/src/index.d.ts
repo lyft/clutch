@@ -10226,9 +10226,6 @@ export namespace clutch {
 
                         /** ConnectionOptions useSystemCaBundle */
                         useSystemCaBundle?: (boolean|null);
-
-                        /** ConnectionOptions enableHealthCheck */
-                        enableHealthCheck?: (boolean|null);
                     }
 
                     /** Represents a ConnectionOptions. */
@@ -10242,9 +10239,6 @@ export namespace clutch {
 
                         /** ConnectionOptions useSystemCaBundle. */
                         public useSystemCaBundle: boolean;
-
-                        /** ConnectionOptions enableHealthCheck. */
-                        public enableHealthCheck: boolean;
 
                         /**
                          * Verifies a ConnectionOptions message.
@@ -11661,6 +11655,9 @@ export namespace clutch {
 
                     /** Project oncall */
                     oncall?: (clutch.core.project.v1.IOnCall|null);
+
+                    /** Project linkGroups */
+                    linkGroups?: (clutch.core.project.v1.ILinkGroup[]|null);
                 }
 
                 /** Represents a Project. */
@@ -11692,6 +11689,9 @@ export namespace clutch {
 
                     /** Project oncall. */
                     public oncall?: (clutch.core.project.v1.IOnCall|null);
+
+                    /** Project linkGroups. */
+                    public linkGroups: clutch.core.project.v1.ILinkGroup[];
 
                     /**
                      * Verifies a Project message.
@@ -11915,6 +11915,120 @@ export namespace clutch {
 
                     /**
                      * Converts this PagerDuty to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Link. */
+                interface ILink {
+
+                    /** Link name */
+                    name?: (string|null);
+
+                    /** Link url */
+                    url?: (string|null);
+                }
+
+                /** Represents a Link. */
+                class Link implements ILink {
+
+                    /**
+                     * Constructs a new Link.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.ILink);
+
+                    /** Link name. */
+                    public name: string;
+
+                    /** Link url. */
+                    public url: string;
+
+                    /**
+                     * Verifies a Link message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Link message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Link
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.Link;
+
+                    /**
+                     * Creates a plain object from a Link message. Also converts values to other types if specified.
+                     * @param message Link
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.Link, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Link to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LinkGroup. */
+                interface ILinkGroup {
+
+                    /** LinkGroup name */
+                    name?: (string|null);
+
+                    /** LinkGroup links */
+                    links?: (clutch.core.project.v1.ILink[]|null);
+
+                    /** LinkGroup imagePath */
+                    imagePath?: (string|null);
+                }
+
+                /** Represents a LinkGroup. */
+                class LinkGroup implements ILinkGroup {
+
+                    /**
+                     * Constructs a new LinkGroup.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.project.v1.ILinkGroup);
+
+                    /** LinkGroup name. */
+                    public name: string;
+
+                    /** LinkGroup links. */
+                    public links: clutch.core.project.v1.ILink[];
+
+                    /** LinkGroup imagePath. */
+                    public imagePath: string;
+
+                    /**
+                     * Verifies a LinkGroup message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LinkGroup message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LinkGroup
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.project.v1.LinkGroup;
+
+                    /**
+                     * Creates a plain object from a LinkGroup message. Also converts values to other types if specified.
+                     * @param message LinkGroup
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.project.v1.LinkGroup, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LinkGroup to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -19740,6 +19854,9 @@ export namespace clutch {
 
                 /** GetProjectsRequest users */
                 users?: (string[]|null);
+
+                /** GetProjectsRequest excludeDependencies */
+                excludeDependencies?: (boolean|null);
             }
 
             /** Represents a GetProjectsRequest. */
@@ -19756,6 +19873,9 @@ export namespace clutch {
 
                 /** GetProjectsRequest users. */
                 public users: string[];
+
+                /** GetProjectsRequest excludeDependencies. */
+                public excludeDependencies: boolean;
 
                 /**
                  * Verifies a GetProjectsRequest message.
