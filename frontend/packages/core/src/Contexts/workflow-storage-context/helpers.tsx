@@ -7,13 +7,13 @@ const rotateDataFromAPI = (data: IClutch.shortlink.v1.IShareableState[]): Hydrat
   const hydrated: HydratedData = {};
 
   data.forEach(({ key, state = {} }) => {
-    hydrated[key] = state;
+    hydrated[key] = state as any;
   });
 
   return hydrated;
 };
 
-const storeLocalData = (key: string, data: any) => {
+const storeLocalData = (key: string, data: unknown) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(data));
   } catch (e) {
@@ -40,7 +40,7 @@ const retrieveData = (
   store: HydratedData,
   componentName: string,
   key: string,
-  defaultData?: any
+  defaultData?: unknown
 ): any => {
   if (store && store[componentName]) {
     return key.length ? store[componentName][key] : store[componentName];

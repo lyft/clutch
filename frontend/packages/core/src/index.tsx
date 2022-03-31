@@ -47,6 +47,7 @@ export * from "./chip";
 export { default as ClutchApp } from "./AppProvider";
 
 export { useWorkflowStorageContext, useWizardContext, WizardContext } from "./Contexts";
+export type { WorkflowRemoveDataFn, WorkflowRetrieveDataFn, WorkflowStoreDataFn } from "./Contexts";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";

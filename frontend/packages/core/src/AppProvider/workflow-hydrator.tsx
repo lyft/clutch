@@ -2,6 +2,7 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid } from "@material-ui/core";
 
+import { useShortLinkContext } from "../Contexts";
 import { WorkflowStorageContext } from "../Contexts/workflow-storage-context";
 import { retrieveData } from "../Contexts/workflow-storage-context/helpers";
 import workflowStorageContextReducer from "../Contexts/workflow-storage-context/reducer";
@@ -12,7 +13,7 @@ import styled from "../styled";
 
 interface WorkflowHydratorProps {
   children: React.ReactElement;
-  hydrateData: IClutch.shortlink.v1.IShareableState[];
+  hydrateData: () => IClutch.shortlink.v1.IShareableState[];
   onClear: () => void;
 }
 
@@ -32,25 +33,33 @@ const WorkflowHydrator = ({
   onClear,
   children,
 }: WorkflowHydratorProps): React.ReactElement => {
+  const { storeData } = useShortLinkContext();
   const [state, dispatch] = React.useReducer(
     workflowStorageContextReducer,
     defaultWorkflowStorageState
   );
 
   React.useEffect(() => {
-    if (hydrateData && hydrateData.length) {
-      dispatch({ type: "HYDRATE", payload: { data: hydrateData } });
+    const hydratedData = hydrateData();
+    if (hydratedData) {
+      dispatch({ type: "HYDRATE", payload: { data: hydratedData } });
       onClear();
     }
-  }, [hydrateData]);
+  }, []);
+
+  React.useEffect(() => {
+    if (state.tempStore) {
+      storeData(state.tempStore);
+    }
+  }, [state]);
 
   const storageProviderProps: WorkflowStorageContextProps = {
     shortLinked: state.shortLinked,
-    storeData: (componentName: string, key: string, data: any, localStorage?: boolean) =>
+    storeData: (componentName: string, key: string, data: unknown, localStorage?: boolean) =>
       dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
     removeData: (componentName: string, key: string, localStorage?: boolean) =>
       dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
-    retrieveData: (componentName: string, key: string, defaultData?: any) =>
+    retrieveData: (componentName: string, key: string, defaultData?: unknown) =>
       retrieveData(state.store, componentName, key, defaultData),
   };
 

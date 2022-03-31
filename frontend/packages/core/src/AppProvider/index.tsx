@@ -64,6 +64,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   >(null);
   const [hydrateError, setHydrateError] = React.useState<string | null>(null);
 
+  /** Used to control a race condition from displaying the workflow and the state being updated with the hydrated data */
+  const [shortLinkLoading, setShortLinkLoading] = React.useState<boolean>(false);
+
   const loadWorkflows = () => {
     registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
       setWorkflows(w);
@@ -122,10 +125,10 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                         element={
                           <ErrorBoundary workflow={workflow}>
                             <WorkflowHydrator
-                              hydrateData={hydrateState ?? []}
+                              hydrateData={() => hydrateState}
                               onClear={() => setHydrateState(null)}
                             >
-                              <Outlet />
+                              {!shortLinkLoading && <Outlet />}
                             </WorkflowHydrator>
                           </ErrorBoundary>
                         }
@@ -151,8 +154,14 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                   })}
                   <Route
                     key="short-links"
-                    path="/sl/*"
-                    element={<ShortLink hydrate={setHydrateState} onError={setHydrateError} />}
+                    path="/sl/:hash"
+                    element={
+                      <ShortLink
+                        setLoading={setShortLinkLoading}
+                        hydrate={setHydrateState}
+                        onError={setHydrateError}
+                      />
+                    }
                   />
                   <Route key="notFound" path="*" element={<NotFound />} />
                 </Route>
