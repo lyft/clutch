@@ -20,7 +20,7 @@ export interface HydrateData {
  */
 export interface HydratedData {
   [key: string]: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -35,7 +35,7 @@ export interface BackgroundPayload {
 export interface UserPayload {
   componentName?: string;
   key?: string;
-  data?: any;
+  data?: unknown;
   localStorage?: boolean;
 }
 
@@ -57,11 +57,20 @@ export interface WorkflowStorageState {
   tempStore: HydratedData;
 }
 
+export type RemoveDataFn = (componentName: string, key: string, localStorage?: boolean) => void;
+export type RetrieveDataFn = (componentName: string, key: string, defaultData?: unknown) => unknown;
+export type StoreDataFn = (
+  componentName: string,
+  key: string,
+  data: unknown,
+  localStorage?: boolean
+) => void;
+
 export interface WorkflowStorageContextProps {
   shortLinked: boolean;
-  removeData: (componentName: string, key: string, localStorage?: boolean) => void;
-  retrieveData: (componentName: string, key: string, defaultData?: any) => any;
-  storeData: (componentName: string, key: string, data: any, localStorage?: boolean) => void;
+  removeData: RemoveDataFn;
+  retrieveData: RetrieveDataFn;
+  storeData: StoreDataFn;
 }
 
 const defaultWorkflowStorageState: WorkflowStorageState = {

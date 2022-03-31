@@ -46,11 +46,11 @@ const WorkflowHydrator = ({
 
   const storageProviderProps: WorkflowStorageContextProps = {
     shortLinked: state.shortLinked,
-    storeData: (componentName: string, key: string, data: any, localStorage?: boolean) =>
+    storeData: (componentName: string, key: string, data: unknown, localStorage?: boolean) =>
       dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
     removeData: (componentName: string, key: string, localStorage?: boolean) =>
       dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
-    retrieveData: (componentName: string, key: string, defaultData?: any) =>
+    retrieveData: (componentName: string, key: string, defaultData?: unknown) =>
       retrieveData(state.store, componentName, key, defaultData),
   };
 
