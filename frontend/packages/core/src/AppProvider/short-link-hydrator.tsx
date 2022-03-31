@@ -1,5 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
+import { Grid } from "@material-ui/core";
 
 import { useShortLinkContext } from "../Contexts/shortlink-context";
 import { WorkflowStorageContext } from "../Contexts/workflow-storage-context";
@@ -7,7 +8,8 @@ import { retrieveData } from "../Contexts/workflow-storage-context/helpers";
 import workflowStorageContextReducer from "../Contexts/workflow-storage-context/reducer";
 import type { WorkflowStorageContextProps } from "../Contexts/workflow-storage-context/types";
 import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
-import { Toast } from "../Feedback";
+import { Alert } from "../Feedback";
+import { styled } from "../styled";
 
 interface ShortLinkHydratorProps {
   hydrate: () => IClutch.shortlink.v1.IShareableState[] | null;
@@ -15,10 +17,14 @@ interface ShortLinkHydratorProps {
   children: React.ReactElement;
 }
 
+const StyledAlertContainer = styled(Grid)({
+  marginTop: "16px",
+});
+
 /**
  * Hydrator which is a wrapper for workflows
  * Will check on load if there exists any hydrated data for the current workflow
- * If there is it will populate the state and provide a toast
+ * If there is it will populate the state and provide an alert above the workflow
  */
 const ShortLinkHydrator = ({
   hydrate,
@@ -59,7 +65,9 @@ const ShortLinkHydrator = ({
   return (
     <WorkflowStorageContext.Provider value={workflowStorageProviderProps}>
       {workflowStorageState.shortLinked && (
-        <Toast title="Visited Short Link">Local Workflow Data will not be saved until reload</Toast>
+        <StyledAlertContainer container direction="column" alignItems="center">
+          <Alert title="Short Link">Local Workflow Data will not be saved until reload</Alert>
+        </StyledAlertContainer>
       )}
       {children}
     </WorkflowStorageContext.Provider>
