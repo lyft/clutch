@@ -4,8 +4,6 @@ package clutch.config.module.project.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/config/module/project/v1;projectv1";
 
-import "validate/validate.proto";
-
 message Config {
   // The default project service that clutch ships with is `clutch.service.project`
   // The purpose of the open source project service is for the mock server and to serve
