@@ -25,7 +25,7 @@ const workflowStorageContextReducer = (
       if (key.length) {
         tempStore[componentName][key] = data;
       } else {
-        tempStore[componentName] = { ...tempStore[componentName], ...data };
+        tempStore[componentName] = { ...tempStore[componentName], ...(data as any) };
       }
 
       if (localStorage && !shortLinked) {
