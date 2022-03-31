@@ -192,7 +192,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   const [state, dispatch] = React.useReducer(
     selectorReducer,
-    loadStoredState(initialState, retrieveData, removeData, shortLinked)
+    loadStoredState(initialState, retrieveData, removeData)
   );
 
   React.useEffect(() => {
@@ -246,7 +246,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     });
 
     // Update!
-    storeData(COMPONENT_NAME, STORAGE_STATE_KEY, getLocalState(state), !shortLinked);
+    storeData(COMPONENT_NAME, STORAGE_STATE_KEY, getLocalState(state), true);
     updateSelected(dashState);
   }, [state]);
 
