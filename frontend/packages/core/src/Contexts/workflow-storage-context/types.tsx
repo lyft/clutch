@@ -53,8 +53,8 @@ export type Action = StorageAction | BackgroundAction;
 
 export interface WorkflowStorageState {
   shortLinked: boolean;
-  store: HydratedData;
-  tempStore: HydratedData;
+  workflowStore: HydratedData;
+  workflowSessionStore: HydratedData;
 }
 
 export type RemoveDataFn = (componentName: string, key: string, localStorage?: boolean) => void;
@@ -75,8 +75,8 @@ export interface WorkflowStorageContextProps {
 
 const defaultWorkflowStorageState: WorkflowStorageState = {
   shortLinked: false,
-  store: {},
-  tempStore: {},
+  workflowStore: {},
+  workflowSessionStore: {},
 };
 
 export { defaultWorkflowStorageState };

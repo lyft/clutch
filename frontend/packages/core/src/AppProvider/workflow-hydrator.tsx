@@ -51,7 +51,7 @@ const WorkflowHydrator = ({
     removeData: (componentName: string, key: string, localStorage?: boolean) =>
       dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
     retrieveData: (componentName: string, key: string, defaultData?: unknown) =>
-      retrieveData(state.store, componentName, key, defaultData),
+      retrieveData(state.workflowStore, componentName, key, defaultData),
   };
 
   return (
