@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 
-import { useStorageContext } from "../Contexts";
-import { Alert } from "../Feedback";
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
 import { NPSHeader } from "../NPS";
 
@@ -36,7 +34,6 @@ const Title = styled(Typography)({
 
 const Header: React.FC = () => {
   const showNotifications = false;
-  const { shortLinked } = useStorageContext();
 
   return (
     <>
@@ -47,12 +44,6 @@ const Header: React.FC = () => {
           </Link>
           <Title>clutch</Title>
           <Grid container alignItems="center" justify="flex-end">
-            {shortLinked && (
-              <Alert severity="warning" collapsible hover>
-                You have visited this page from a ShortLink, your local changes will not be saved
-                while here. Please reload to continue as normal.
-              </Alert>
-            )}
             <Box>
               <SearchField />
             </Box>

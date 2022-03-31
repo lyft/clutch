@@ -12,7 +12,7 @@ import {
 import LinkIcon from "@material-ui/icons/Link";
 
 import { Button, ClipboardButton, IconButton } from "../button";
-import { useAppContext, useStorageContext } from "../Contexts";
+import { useAppContext, useShortLinkContext } from "../Contexts";
 import { Toast } from "../Feedback";
 import { TextField } from "../Input";
 import { client } from "../Network";
@@ -59,7 +59,7 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
 /**
  * Component that will display a Button to generate a short link
  * On click the component will do the following:
- * - Read in the data from the temporary storage in the StorageContext
+ * - Read in the data from the temporary storage in the WorkflowStorageContext
  * - Rotate it into a readable format for the API
  * - Send an API request asking for it to be stored
  * - If successful,
@@ -70,13 +70,13 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
  */
 const ShortLinker = () => {
   const { workflows } = useAppContext();
-  const { shortLinked, clearShortLink, clearTempData, tempData } = useStorageContext();
-  const anchorRef = React.useRef(null);
-  const location = useLocation();
+  const { removeData, retrieveData } = useShortLinkContext();
   const [open, setOpen] = React.useState(false);
   const [shortLink, setShortLink] = React.useState<string | null>(null);
   const [validWorkflow, setValidWorkflow] = React.useState<boolean>(false);
   const [error, setError] = React.useState<ClutchError | null>(null);
+  const anchorRef = React.useRef(null);
+  const location = useLocation();
 
   const checkValidWorkflow = () => {
     const workflow = workflowByRoute(workflows, location.pathname);
@@ -85,17 +85,12 @@ const ShortLinker = () => {
   };
 
   // will trigger on a location change, emptying out our temporary storage and rechecking the workflow
-  // will also check if we're currently shortlinked and will call on change to possibly clear the state
   React.useEffect(() => {
     if (workflows.length) {
       checkValidWorkflow();
     }
 
-    if (shortLinked) {
-      clearShortLink(location.pathname);
-    } else {
-      clearTempData();
-    }
+    removeData();
   }, [location]);
 
   // Used for initial load to verify that once our workflows have loaded we are on a valid workflow
@@ -124,7 +119,7 @@ const ShortLinker = () => {
   const generateShortLink = () => {
     const requestData: IClutch.shortlink.v1.ICreateRequest = {
       path: `${location.pathname}${location.search}`,
-      state: rotateStore(tempData()),
+      state: rotateStore(retrieveData()),
     };
 
     client
@@ -147,7 +142,7 @@ const ShortLinker = () => {
     <>
       {error && (
         <Toast severity="error" onClose={() => setError(null)}>
-          Unable to generate shortlink
+          Unable to generate short link
         </Toast>
       )}
       <StyledLinkIcon
