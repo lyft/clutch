@@ -314,7 +314,7 @@ func commitOptionsFromClaims(ctx context.Context) *git.CommitOptions {
 	if strings.Contains(subject, "@") {
 		email = subject
 	}
-	ret.Author.Email = fmt.Sprintf("<%s>", email)
+	ret.Author.Email = email
 
 	return ret
 }
