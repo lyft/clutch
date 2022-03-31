@@ -8,7 +8,7 @@ import {
   TooltipContainer,
   Typography,
   userId,
-  useStorageContext,
+  useWorkflowStorageContext,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
@@ -188,7 +188,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
 
-  const { shortLinked, storeData, retrieveData, removeData } = useStorageContext();
+  const { removeData, retrieveData, shortLinked, storeData } = useWorkflowStorageContext();
 
   const [state, dispatch] = React.useReducer(
     selectorReducer,
