@@ -6,7 +6,7 @@ import type { ErrorProps } from "../index";
 import Error from "../index";
 
 export default {
-  title: "Core/Error",
+  title: "Core/Feedback/Error",
   component: Error,
 } as Meta;
 

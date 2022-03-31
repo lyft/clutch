@@ -192,6 +192,7 @@ const TextField = ({
   endAdornment,
   autocompleteCallback,
   defaultValue,
+  value,
   fullWidth = true,
   ...props
 }: TextFieldProps) => {
@@ -237,9 +238,9 @@ const TextField = ({
     []
   );
   const autoCompleteDebounce = React.useRef(
-    _.debounce(value => {
+    _.debounce(val => {
       if (autocompleteCallback !== undefined) {
-        autocompleteCallback(value)
+        autocompleteCallback(val)
           .then(data => {
             setAutoCompleteOptions(data.results);
           })
@@ -265,10 +266,13 @@ const TextField = ({
         renderOption={(option: AutocompleteResultProps) => (
           <AutocompleteResult id={option.id} label={option.label} />
         )}
-        onSelectCapture={e =>
-          onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
-        }
+        onSelectCapture={e => {
+          if (onChange) {
+            onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+          }
+        }}
         defaultValue={{ id: defaultVal, label: defaultVal }}
+        value={value}
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
@@ -288,6 +292,7 @@ const TextField = ({
     <StyledTextField
       {...textFieldProps}
       defaultValue={defaultValue}
+      value={value}
       onChange={onChange}
       {...props}
     />

@@ -20,6 +20,7 @@ import (
 	"github.com/go-git/go-billy/v5/memfs"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/object"
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/golang/protobuf/ptypes/any"
@@ -34,6 +35,7 @@ import (
 	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 const Name = "clutch.service.github"
@@ -62,7 +64,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
-	return newService(config, scope)
+	return newService(config, scope, logger)
 }
 
 // Remote ref points to a git reference using a combination of the repository and the reference itself.
@@ -124,9 +126,33 @@ type PullRequestInfo struct {
 }
 
 type svc struct {
+	scope  tally.Scope
+	logger *zap.Logger
+
 	graphQL v4client
 	rest    v3client
-	rawAuth *gittransport.BasicAuth
+
+	appTransport        *ghinstallation.Transport
+	personalAccessToken string
+}
+
+func (s *svc) basicAuth(ctx context.Context) *gittransport.BasicAuth {
+	ret := &gittransport.BasicAuth{
+		Username: "token",
+	}
+
+	if s.appTransport != nil {
+		password, err := s.appTransport.Token(ctx)
+		ret.Password = password
+
+		if err != nil {
+			s.logger.Error("could not refresh token from transport", zap.Error(err))
+		}
+	} else {
+		ret.Password = s.personalAccessToken
+	}
+
+	return ret
 }
 
 func (s *svc) GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error) {
@@ -268,15 +294,39 @@ type CreateBranchRequest struct {
 
 	// The commit message for files added.
 	CommitMessage string
+
+	// Fetch only ReferenceName specified branch.
+	SingleBranch bool
+}
+
+func commitOptionsFromClaims(ctx context.Context) *git.CommitOptions {
+	ret := &git.CommitOptions{Author: &object.Signature{}}
+
+	subject := "Anonymous User" // Used if auth is disabled or it's the actual anonymous user.
+	if claims, err := authn.ClaimsFromContext(ctx); err == nil && claims.Subject != authn.AnonymousSubject {
+		subject = claims.Subject
+	}
+	ret.Author.Name = fmt.Sprintf("%s via Clutch", subject)
+
+	// If it looks like an email, make it the email, otherwise the email will be left blank. This could be enhanced
+	// via a default email from config if needed for other use cases.
+	email := ""
+	if strings.Contains(subject, "@") {
+		email = subject
+	}
+	ret.Author.Email = fmt.Sprintf("<%s>", email)
+
+	return ret
 }
 
 // Creates a new branch with a commit containing files and pushes it to the remote.
 func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error {
 	cloneOpts := &git.CloneOptions{
+		SingleBranch:  req.SingleBranch,
 		Depth:         1,
 		URL:           fmt.Sprintf("https://github.com/%s/%s", req.Ref.RepoOwner, req.Ref.RepoName),
 		ReferenceName: plumbing.NewBranchReferenceName(req.Ref.Ref),
-		Auth:          s.rawAuth,
+		Auth:          s.basicAuth(ctx),
 	}
 
 	repo, err := git.CloneContext(ctx, memory.NewStorage(), memfs.New(), cloneOpts)
@@ -307,15 +357,12 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 		}
 	}
 
-	if err := wt.AddGlob("."); err != nil {
+	opts := commitOptionsFromClaims(ctx)
+	if _, err := wt.Commit(req.CommitMessage, opts); err != nil {
 		return err
 	}
 
-	if _, err := wt.Commit(req.CommitMessage, &git.CommitOptions{}); err != nil {
-		return err
-	}
-
-	pushOpts := &git.PushOptions{Auth: s.rawAuth}
+	pushOpts := &git.PushOptions{Auth: s.basicAuth(ctx)}
 	if err := repo.PushContext(ctx, pushOpts); err != nil {
 		return err
 	}
@@ -323,14 +370,19 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 	return nil
 }
 
-func newService(config *githubv1.Config, scope tally.Scope) (Client, error) {
-	auth := config.GetAuth()
-	var token string
+func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) (Client, error) {
+	ret := &svc{
+		scope:  scope,
+		logger: logger,
+	}
+
 	var httpClient *http.Client
 
-	switch auth.(type) {
+	switch auth := config.GetAuth().(type) {
 	case *githubv1.Config_AccessToken:
-		token = config.GetAccessToken()
+		token := config.GetAccessToken()
+		ret.personalAccessToken = token
+
 		tokenSource := oauth2.StaticTokenSource(
 			&oauth2.Token{AccessToken: token},
 		)
@@ -353,31 +405,26 @@ func newService(config *githubv1.Config, scope tally.Scope) (Client, error) {
 		if err != nil {
 			return nil, err
 		}
+		ret.appTransport = itr
 
 		httpClient = &http.Client{Transport: itr}
-		t, err := itr.Token(context.Background())
-		if err != nil {
-			return nil, err
-		}
-		token = t
+	default:
+		return nil, fmt.Errorf("did not recognize auth config type '%T'", auth)
 	}
 	httpClient.Transport = &StatsRoundTripper{Wrapped: httpClient.Transport, scope: scope}
-	restClient := githubv3.NewClient(httpClient)
 
-	return &svc{
-		graphQL: githubv4.NewClient(httpClient),
-		rest: v3client{
-			Repositories:  restClient.Repositories,
-			PullRequests:  restClient.PullRequests,
-			Issues:        restClient.Issues,
-			Users:         restClient.Users,
-			Organizations: restClient.Organizations,
-		},
-		rawAuth: &gittransport.BasicAuth{
-			Username: "token",
-			Password: token,
-		},
-	}, nil
+	restClient := githubv3.NewClient(httpClient)
+	ret.rest = v3client{
+		Repositories:  restClient.Repositories,
+		PullRequests:  restClient.PullRequests,
+		Issues:        restClient.Issues,
+		Users:         restClient.Users,
+		Organizations: restClient.Organizations,
+	}
+
+	ret.graphQL = githubv4.NewClient(httpClient)
+
+	return ret, nil
 }
 
 func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, error) {
@@ -473,7 +520,7 @@ func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, 
 	r := &Repository{
 		Name:          repo.RepoName,
 		Owner:         repo.RepoOwner,
-		DefaultBranch: string(q.Repository.DefaultBranchRef.Name),
+		DefaultBranch: q.Repository.DefaultBranchRef.Name,
 	}
 
 	return r, nil

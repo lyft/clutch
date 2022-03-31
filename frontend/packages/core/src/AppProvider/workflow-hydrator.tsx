@@ -17,7 +17,7 @@ interface WorkflowHydratorProps {
 }
 
 const StyledAlert = styled(Alert)({
-  zIndex: 10000,
+  zIndex: 1200,
   position: "absolute",
   padding: "6px 8px",
 });

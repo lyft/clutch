@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
@@ -430,4 +431,37 @@ oidc:
 			}
 		})
 	}
+}
+
+func TestGantTypeSupportedFallback(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	c := cfg.GetOidc()
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	defer mockprovider.Close()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+	provider, err := oidc.NewProvider(ctx, c.Issuer)
+	assert.NoError(t, err)
+	assert.NotNil(t, provider)
+
+	claims := &oidcProviderClaims{}
+	err = provider.Claims(claims)
+	assert.NoError(t, err)
+
+	err = claims.Check("authorization_code")
+	assert.NoError(t, err)
 }

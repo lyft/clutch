@@ -14,7 +14,7 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
-import type { WorkflowProps } from "../index";
+import type { TriageChild, WorkflowProps } from "../index";
 
 import Clusters from "./clusters";
 import Dashboard from "./dashboard";
@@ -32,9 +32,17 @@ const INCLUDE_OPTIONS = {
   serverInfo: true,
 };
 
-const TriageIdentifier: React.FC<WizardChild> = () => {
+const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
   const { onSubmit } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
+
+  React.useEffect(() => {
+    if (host) {
+      resourceData.value.host = host;
+      onSubmit();
+    }
+    return () => {};
+  }, [host]);
 
   return (
     <>
@@ -122,6 +130,9 @@ const TriageDetails: React.FC<WizardChild> = () => {
 };
 
 const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const hostParam = urlParams.get("_q");
+
   const dataLayout = {
     resourceData: {},
     remoteData: {
@@ -145,7 +156,7 @@ const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <TriageIdentifier name="Lookup" />
+      <TriageIdentifier name="Lookup" host={hostParam} />
       <TriageDetails name="Details" />
     </Wizard>
   );
