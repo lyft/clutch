@@ -26,9 +26,9 @@ export interface HydratedData {
 
 type StorageActionKind = "STORE_DATA" | "REMOVE_DATA";
 
-type BackgroundStorageActionKind = "EMPTY_TEMP_DATA" | "HYDRATE";
+type BackgroundStorageActionKind = "HYDRATE";
 
-interface BackgroundPayload {
+export interface BackgroundPayload {
   data?: IClutch.shortlink.v1.IShareableState[];
 }
 
@@ -51,37 +51,23 @@ interface BackgroundAction {
 
 export type Action = StorageAction | BackgroundAction;
 
-export interface StorageState {
+export interface WorkflowStorageState {
   shortLinked: boolean;
   store: HydratedData;
   tempStore: HydratedData;
 }
 
-type StoreDataFn = (componentName: string, key: string, data: any, localStorage?: boolean) => void;
-type StoreLocalDataFn = (key: string, data: any) => void;
-type RemoveDataFn = (componentName: string, key: string, localStorage?: boolean) => void;
-type RemoveLocalDataFn = (key: string) => void;
-type RetrieveDataFn = (componentName: string, key: string, defaultData?: any) => any;
-type RetrieveLocalDataFn = (key: string, defaultData?: any) => any;
-type ClearTempDataFn = () => void;
-type TempDataFn = () => HydratedData;
-
-export interface StorageContextProps {
+export interface WorkflowStorageContextProps {
   shortLinked: boolean;
-  storeData: StoreDataFn;
-  storeLocalData: StoreLocalDataFn;
-  removeData: RemoveDataFn;
-  removeLocalData: RemoveLocalDataFn;
-  retrieveData: RetrieveDataFn;
-  retrieveLocalData: RetrieveLocalDataFn;
-  clearTempData: ClearTempDataFn;
-  tempData: TempDataFn;
+  removeData: (componentName: string, key: string, localStorage?: boolean) => void;
+  retrieveData: (componentName: string, key: string, defaultData?: any) => any;
+  storeData: (componentName: string, key: string, data: any, localStorage?: boolean) => void;
 }
 
-const defaultStorageState: StorageState = {
+const defaultWorkflowStorageState: WorkflowStorageState = {
   shortLinked: false,
   store: {},
   tempStore: {},
 };
 
-export { defaultStorageState };
+export { defaultWorkflowStorageState };

@@ -46,7 +46,7 @@ export * from "./NPS";
 
 export { default as ClutchApp } from "./AppProvider";
 
-export { useStorageContext, useWizardContext, WizardContext } from "./Contexts";
+export { useWorkflowStorageContext, useWizardContext, WizardContext } from "./Contexts";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";

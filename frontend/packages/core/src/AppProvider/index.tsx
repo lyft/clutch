@@ -1,24 +1,16 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
 import AppLayout from "../AppLayout";
-import { StorageContext } from "../Contexts";
 import { ApplicationContext } from "../Contexts/app-context";
-import {
-  removeLocalData,
-  retrieveData,
-  retrieveLocalData,
-  storeLocalData,
-} from "../Contexts/storage-context/helpers";
-import storageContextReducer from "../Contexts/storage-context/reducer";
-import type { StorageContextProps } from "../Contexts/storage-context/types";
-import { defaultStorageState } from "../Contexts/storage-context/types";
 import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
 import NotFound from "../not-found";
 
 import { registeredWorkflows } from "./registrar";
+import ShortLinkHydrator from "./short-link-hydrator";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
@@ -62,22 +54,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
-  const [storageState, dispatch] = React.useReducer(storageContextReducer, defaultStorageState);
-
-  const storageProviderProps: StorageContextProps = {
-    shortLinked: storageState.shortLinked,
-    storeData: (componentName: string, key: string, data: any, localStorage?: boolean) =>
-      dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
-    storeLocalData,
-    removeData: (componentName: string, key: string, localStorage?: boolean) =>
-      dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
-    removeLocalData,
-    retrieveData: (...args) => retrieveData(storageState, ...args),
-    retrieveLocalData,
-    clearTempData: () => dispatch({ type: "EMPTY_TEMP_DATA" }),
-    tempData: () => defaultStorageState.tempStore,
-  };
+  const [hydrateState, setHydrateState] = React.useState<
+    IClutch.shortlink.v1.IShareableState[] | null
+  >(null);
 
   const loadWorkflows = () => {
     registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
@@ -116,46 +95,49 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       <Theme variant="light">
         <div id="App">
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
-            <StorageContext.Provider value={storageProviderProps}>
-              <Routes>
-                <Route path="/" element={<AppLayout isLoading={isLoading} />}>
-                  <Route key="landing" path="" element={<Landing />} />
-                  {workflows.map((workflow: Workflow) => {
-                    const workflowPath = workflow.path.replace(/^\/+/, "").replace(/\/+$/, "");
-                    const workflowKey = workflow.path.split("/")[0];
-                    return (
-                      <Route
-                        path={`${workflowPath}/`}
-                        key={workflowKey}
-                        element={
-                          <ErrorBoundary workflow={workflow}>
+            <Routes>
+              <Route path="/" element={<AppLayout isLoading={isLoading} />}>
+                <Route key="landing" path="" element={<Landing />} />
+                {workflows.map((workflow: Workflow) => {
+                  const workflowPath = workflow.path.replace(/^\/+/, "").replace(/\/+$/, "");
+                  const workflowKey = workflow.path.split("/")[0];
+                  return (
+                    <Route
+                      path={`${workflowPath}/`}
+                      key={workflowKey}
+                      element={
+                        <ErrorBoundary workflow={workflow}>
+                          <ShortLinkHydrator
+                            hydrate={() => hydrateState}
+                            onClear={() => setHydrateState(null)}
+                          >
                             <Outlet />
-                          </ErrorBoundary>
-                        }
-                      >
-                        {workflow.routes.map(route => {
-                          const heading = route.displayName
-                            ? `${workflow.displayName}: ${route.displayName}`
-                            : workflow.displayName;
-                          return (
-                            <Route
-                              key={workflow.path}
-                              path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
-                              element={React.cloneElement(<route.component />, {
-                                ...route.componentProps,
-                                heading,
-                              })}
-                            />
-                          );
-                        })}
-                        <Route key={`${workflow.path}/notFound`} path="*" element={<NotFound />} />
-                      </Route>
-                    );
-                  })}
-                  <Route key="notFound" path="*" element={<NotFound />} />
-                </Route>
-              </Routes>
-            </StorageContext.Provider>
+                          </ShortLinkHydrator>
+                        </ErrorBoundary>
+                      }
+                    >
+                      {workflow.routes.map(route => {
+                        const heading = route.displayName
+                          ? `${workflow.displayName}: ${route.displayName}`
+                          : workflow.displayName;
+                        return (
+                          <Route
+                            key={workflow.path}
+                            path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
+                            element={React.cloneElement(<route.component />, {
+                              ...route.componentProps,
+                              heading,
+                            })}
+                          />
+                        );
+                      })}
+                      <Route key={`${workflow.path}/notFound`} path="*" element={<NotFound />} />
+                    </Route>
+                  );
+                })}
+                <Route key="notFound" path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
           </ApplicationContext.Provider>
         </div>
       </Theme>
