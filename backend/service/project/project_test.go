@@ -14,5 +14,5 @@ func TestNew(t *testing.T) {
 	scope := tally.NewTestScope("", nil)
 
 	_, err := New(&anypb.Any{}, log, scope)
-	assert.Error(t, err)
+	assert.NoError(t, err)
 }
