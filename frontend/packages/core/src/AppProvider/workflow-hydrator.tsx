@@ -10,8 +10,8 @@ import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-contex
 import { Alert } from "../Feedback";
 import styled from "../styled";
 
-interface ShortLinkHydratorProps {
-  hydrate: () => IClutch.shortlink.v1.IShareableState[] | null;
+interface WorkflowHydratorProps {
+  hydrateData: IClutch.shortlink.v1.IShareableState[];
   onClear: () => void;
   children: React.ReactElement;
 }
@@ -25,38 +25,36 @@ const StyledAlertContainer = styled(Grid)({
  * Will check on load if there exists any hydrated data for the current workflow
  * If there is it will populate the state and provide an alert above the workflow
  */
-const ShortLinkHydrator = ({
-  hydrate,
+const WorkflowHydrator = ({
+  hydrateData,
   onClear,
   children,
-}: ShortLinkHydratorProps): React.ReactElement => {
-  const [workflowStorageState, dispatch] = React.useReducer(
+}: WorkflowHydratorProps): React.ReactElement => {
+  const [state, dispatch] = React.useReducer(
     workflowStorageContextReducer,
     defaultWorkflowStorageState
   );
 
   React.useEffect(() => {
-    const data = hydrate();
-
-    if (data) {
-      dispatch({ type: "HYDRATE", payload: { data } });
+    if (hydrateData) {
+      dispatch({ type: "HYDRATE", payload: { data: hydrateData } });
       onClear();
     }
-  }, []);
+  }, [hydrateData]);
 
-  const workflowStorageProviderProps: WorkflowStorageContextProps = {
-    shortLinked: workflowStorageState.shortLinked,
+  const storageProviderProps: WorkflowStorageContextProps = {
+    shortLinked: state.shortLinked,
     storeData: (componentName: string, key: string, data: any, localStorage?: boolean) =>
       dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
     removeData: (componentName: string, key: string, localStorage?: boolean) =>
       dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
     retrieveData: (componentName: string, key: string, defaultData?: any) =>
-      retrieveData(workflowStorageState.store, componentName, key, defaultData),
+      retrieveData(state.store, componentName, key, defaultData),
   };
 
   return (
-    <WorkflowStorageContext.Provider value={workflowStorageProviderProps}>
-      {workflowStorageState.shortLinked && (
+    <WorkflowStorageContext.Provider value={storageProviderProps}>
+      {state.shortLinked && (
         <StyledAlertContainer container direction="column" alignItems="center">
           <Alert title="Short Link">Local Workflow Data will not be saved until reload</Alert>
         </StyledAlertContainer>
@@ -66,4 +64,4 @@ const ShortLinkHydrator = ({
   );
 };
 
-export default ShortLinkHydrator;
+export default WorkflowHydrator;

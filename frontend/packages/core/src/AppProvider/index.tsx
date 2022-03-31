@@ -10,10 +10,10 @@ import Landing from "../landing";
 import NotFound from "../not-found";
 
 import { registeredWorkflows } from "./registrar";
-import ShortLinkHydrator from "./short-link-hydrator";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
+import WorkflowHydrator from "./workflow-hydrator";
 
 export interface UserConfiguration {
   [packageName: string]: {
@@ -107,12 +107,12 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                       key={workflowKey}
                       element={
                         <ErrorBoundary workflow={workflow}>
-                          <ShortLinkHydrator
-                            hydrate={() => hydrateState}
+                          <WorkflowHydrator
+                            hydrateData={hydrateState ?? []}
                             onClear={() => setHydrateState(null)}
                           >
                             <Outlet />
-                          </ShortLinkHydrator>
+                          </WorkflowHydrator>
                         </ErrorBoundary>
                       }
                     >
