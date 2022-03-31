@@ -299,8 +299,8 @@ type CreateBranchRequest struct {
 	SingleBranch bool
 }
 
-func commitOptionsFromClaims(ctx context.Context) *git.CommitOptions {
-	ret := &git.CommitOptions{Author: &object.Signature{}}
+func commitOptionsFromClaims(ctx context.Context, commitTime time.Time) *git.CommitOptions {
+	ret := &git.CommitOptions{Author: &object.Signature{When: commitTime}, All: true}
 
 	subject := "Anonymous User" // Used if auth is disabled or it's the actual anonymous user.
 	if claims, err := authn.ClaimsFromContext(ctx); err == nil && claims.Subject != authn.AnonymousSubject {
@@ -357,7 +357,7 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 		}
 	}
 
-	opts := commitOptionsFromClaims(ctx)
+	opts := commitOptionsFromClaims(ctx, time.Now())
 	if _, err := wt.Commit(req.CommitMessage, opts); err != nil {
 		return err
 	}
