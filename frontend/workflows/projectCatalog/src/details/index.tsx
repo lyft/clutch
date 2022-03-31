@@ -161,7 +161,9 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
         {/* Column for project quick links */}
         <Hidden smDown>
           <Grid item direction="column">
-            {projectInfo && <QuickLinksCard linkGroups={projectInfo?.linkGroups ?? []} />}
+            {projectInfo && (projectInfo.linkGroups ?? []).length > 0 && (
+              <QuickLinksCard linkGroups={projectInfo?.linkGroups ?? []} />
+            )}
           </Grid>
         </Hidden>
       </StyledContainer>
