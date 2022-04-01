@@ -30,7 +30,7 @@ interface BaseCardProps extends CardTitleProps, CardBodyProps {
   reloadInterval?: number;
   /** Boolean representing whether the component should reload via the fetchDataFn */
   autoReload?: boolean;
-  /** Optionally disable loading indicator */
+  /** Option to hide the loading indicator */
   loadingIndicator?: boolean;
   /** Given promise which will be used to initially fetch data and optionally reload on intervals */
   fetchDataFn?: () => Promise<unknown>;
