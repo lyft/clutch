@@ -132,6 +132,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
                     setProjectInfo(data as IClutch.core.project.v1.IProject)
                   }
                   autoReload
+                  loadingIndicator={false}
                   endAdornment={
                     projectInfo?.data?.disabled ? <DisabledItem name={projectId} /> : null
                   }
