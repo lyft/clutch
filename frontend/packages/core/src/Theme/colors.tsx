@@ -1,7 +1,6 @@
 import type { ClutchColors, ComponentState, ThemeVariant } from "./types";
 
-// Note that exports are currently missing because this area is under construction
-const LIGHT_COLORS: ClutchColors = {
+export const LIGHT_COLORS: ClutchColors = {
   neutral: {
     50: "#F8F8F9",
     100: "#F0F1F3",
@@ -84,7 +83,7 @@ const LIGHT_COLORS: ClutchColors = {
   },
 };
 
-const DARK_COLORS: ClutchColors = {
+export const DARK_COLORS: ClutchColors = {
   neutral: {
     50: "#232542",
     100: "#30324E",
@@ -167,14 +166,13 @@ const DARK_COLORS: ClutchColors = {
   },
 };
 
-const STATE_OPACITY: { [key in ComponentState]: number} = {
-  hover: .5,
-  focused: .1,
-  pressed: .15,
-  selected: .12,
-  disabled: .5,
+export const STATE_OPACITY: { [key in ComponentState]: number } = {
+  hover: 0.5,
+  focused: 0.1,
+  pressed: 0.15,
+  selected: 0.12,
+  disabled: 0.5,
 };
-
 
 const clutchColors = (variant: ThemeVariant) => {
   const colors = variant === "light" ? LIGHT_COLORS : DARK_COLORS;
@@ -183,7 +181,7 @@ const clutchColors = (variant: ThemeVariant) => {
     stroke: {},
     background: {},
     ...colors,
-  }
-}
+  };
+};
 
-// export { clutchColors };
+export { clutchColors };

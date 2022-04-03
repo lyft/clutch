@@ -1,17 +1,18 @@
 import React from "react";
 import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
-import { createMuiTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@material-ui/core";
-import { StylesProvider } from "@material-ui/styles";
 import type { Theme as MuiTheme } from "@material-ui/core";
-import type { ThemeVariant } from "./types";
-import palette from "./palette";
-import Typography from "./typography";
-import { clutchColors } from "./colors";
+import { createMuiTheme, CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import { StylesProvider } from "@material-ui/styles";
 
-// Create a Material UI theme is propegated to all children. 
+import { clutchColors } from "./colors";
+import palette from "./palette";
+import type { ThemeVariant } from "./types";
+import Typography from "./typography";
+
+// Create a Material UI theme is propagated to all children.
 const createTheme = (variant: ThemeVariant): MuiTheme => {
   return createMuiTheme({
-    //inject in custom colors
+    // inject in custom colors
     ...clutchColors(variant),
     palette: palette(variant),
     typography: Typography,
@@ -52,4 +53,5 @@ const ThemeProvider = ({ children, variant = "light" }: ThemeProps) => (
   </MuiThemeProvider>
 );
 
+// Note that ThemeProvider can't be used until the Theme component can be replaced.
 export default ThemeProvider;
