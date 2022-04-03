@@ -40,7 +40,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false }) => {
           </>
         )}
       </ContentGrid>
-      <FeedbackButton />
     </AppGrid>
   );
 };
