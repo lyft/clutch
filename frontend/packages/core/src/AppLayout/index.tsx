@@ -6,7 +6,6 @@ import { Grid as MuiGrid } from "@material-ui/core";
 import Loadable from "../loading";
 
 import Drawer from "./drawer";
-import FeedbackButton from "./feedback";
 import Header, { APP_BAR_HEIGHT } from "./header";
 
 const AppGrid = styled(MuiGrid)({
