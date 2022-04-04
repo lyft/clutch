@@ -4,8 +4,6 @@ import { Card, Grid, IconButton, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import CloseIcon from "@material-ui/icons/Close";
 
-import LanguageIcon from "../helpers/language-icon";
-
 const StyledCard = styled(Card)({
   width: "384px",
   height: "214px",
