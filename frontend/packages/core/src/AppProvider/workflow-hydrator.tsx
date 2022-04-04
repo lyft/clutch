@@ -59,7 +59,7 @@ const WorkflowHydrator = ({
       {state.shortLinked && (
         <Grid container direction="column" alignItems="flex-end">
           <StyledAlert severity="warning">
-            Local Workflow Data will not be saved until reload
+            Loaded shared state. Any local changes will not be preserved.
           </StyledAlert>
         </Grid>
       )}
