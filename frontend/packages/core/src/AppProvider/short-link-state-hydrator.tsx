@@ -15,7 +15,7 @@ interface ShortLinkStateHydratorProps {
   /** Data from ShortLink API to be hydrated into the  */
   sharedState: IClutch.shortlink.v1.IShareableState[];
   /** Used to clear temporary storage variable in the AppProvider */
-  onClear: () => void;
+  clearTemporaryState: () => void;
 }
 
 /** Allows the alert to float on top of all other components on the page */
@@ -31,9 +31,9 @@ const StyledAlert = styled(Alert)({
  * If there is it will populate the state and provide an alert above the workflow
  */
 const ShortLinkStateHydrator = ({
-  sharedState,
-  onClear,
   children,
+  clearTemporaryState,
+  sharedState,
 }: ShortLinkStateHydratorProps): React.ReactElement => {
   const [state, dispatch] = React.useReducer(
     workflowStorageContextReducer,
@@ -43,7 +43,7 @@ const ShortLinkStateHydrator = ({
   React.useEffect(() => {
     if (sharedState && sharedState.length) {
       dispatch({ type: "HYDRATE", payload: { data: sharedState } });
-      onClear();
+      clearTemporaryState();
     }
   }, [sharedState]);
 

@@ -109,7 +109,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                         <ErrorBoundary workflow={workflow}>
                           <ShortLinkStateHydrator
                             sharedState={hydrateState}
-                            onClear={() => setHydrateState(null)}
+                            clearTemporaryState={() => setHydrateState(null)}
                           >
                             <Outlet />
                           </ShortLinkStateHydrator>
