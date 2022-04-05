@@ -1,4 +1,4 @@
-import { removeLocalData, rotateDataFromAPI, storeLocalData } from "./helpers";
+import { removeLocalData, storeLocalData, transformAPISharedState } from "./helpers";
 import type { Action, ComponentPayload, HydratePayload, WorkflowStorageState } from "./types";
 
 /**
@@ -71,7 +71,7 @@ const workflowStorageContextReducer = (
         return {
           ...state,
           fromShortLink: true,
-          workflowStore: rotateDataFromAPI(data),
+          workflowStore: transformAPISharedState(data),
         };
       }
 
