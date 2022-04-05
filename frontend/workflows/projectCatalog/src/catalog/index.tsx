@@ -100,6 +100,8 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
                 <SearchIcon onClick={triggerProjectAdd} />
               )
             }
+            error={state.error !== undefined}
+            helperText={state?.error}
           />
         </div>
       </Paper>
@@ -113,11 +115,6 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
           </Grid>
         ))}
       </Grid>
-      {state.error && (
-        <Toast severity="error" onClose={() => dispatch({ type: "CLEAR_ERROR" })}>
-          {state.error}
-        </Toast>
-      )}
     </Box>
   );
 };
