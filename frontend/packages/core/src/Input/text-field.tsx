@@ -235,7 +235,11 @@ const TextField = ({
     helperText: helpText,
     InputProps: {
       readOnly,
-      endAdornment: endAdornment && <IconButton type="submit" disabled={isEmpty}>{endAdornment}</IconButton>,
+      endAdornment: endAdornment && (
+        <IconButton type="submit" disabled={isEmpty}>
+          {endAdornment}
+        </IconButton>
+      ),
     },
   };
 
