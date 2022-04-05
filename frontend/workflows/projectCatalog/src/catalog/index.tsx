@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Paper, TextField, Toast, Typography, useNavigate } from "@clutch-sh/core";
+import { client, Grid, Paper, TextField, Toast, Typography, useNavigate } from "@clutch-sh/core";
 import { Box, CircularProgress } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
@@ -60,6 +60,21 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
     );
   };
 
+  const autoComplete = async (search: string): Promise<any> => {
+    // Check the length of the search query as the user might empty out the search
+    // which will still trigger the on change handler
+    if (search.length === 0) {
+      return { results: [] };
+    }
+
+    const response = await client.post("/v1/resolver/autocomplete", {
+      want: `type.googleapis.com/clutch.core.project.v1.Project`,
+      search,
+    });
+
+    return { results: response?.data?.results || [] };
+  };
+
   return (
     <Box style={{ padding: "32px" }}>
       <div style={{ marginBottom: "8px" }}>
@@ -75,6 +90,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
             value={state.search}
             onChange={e => dispatch({ type: "SEARCH", payload: { search: e.target.value } })}
             onKeyDown={e => e.key === "Enter" && triggerProjectAdd()}
+            autocompleteCallback={v => autoComplete(v)}
             endAdornment={
               state.isSearching ? (
                 <CircularProgress size="24px" />
