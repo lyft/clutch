@@ -24,7 +24,9 @@ const ProjectHeader = ({
 }: ProjectHeaderProps) => (
   <StyledContainer container direction="column">
     <Grid container item direction="row" alignItems="flex-end">
-      <Typography variant="caption2" color="rgb(13, 16, 48, .48)">{routeTitle}&nbsp;/&nbsp;Details</Typography>
+      <Typography variant="caption2" color="rgb(13, 16, 48, .48)">
+        {routeTitle}&nbsp;/&nbsp;Details
+      </Typography>
     </Grid>
     <StyledHeading>
       <Typography variant="h2">{name}</Typography>

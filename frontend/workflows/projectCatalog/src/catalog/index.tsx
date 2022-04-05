@@ -78,7 +78,9 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
   return (
     <Box style={{ padding: "32px" }}>
       <div style={{ marginBottom: "8px" }}>
-        <Typography variant="caption2" color="rgb(13, 16, 48, .48)">Project Catalog&nbsp;/&nbsp;Index</Typography>
+        <Typography variant="caption2" color="rgb(13, 16, 48, .48)">
+          Project Catalog&nbsp;/&nbsp;Index
+        </Typography>
       </div>
       <div style={{ marginBottom: "32px" }}>
         <Typography variant="h2">Project Catalog</Typography>
