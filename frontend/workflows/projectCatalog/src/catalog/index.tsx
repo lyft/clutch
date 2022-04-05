@@ -1,5 +1,5 @@
 import React from "react";
-import { client, Grid, Paper, TextField, Toast, Typography, useNavigate } from "@clutch-sh/core";
+import { client, Grid, Paper, TextField, Typography, useNavigate } from "@clutch-sh/core";
 import { Box, CircularProgress } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
