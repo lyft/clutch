@@ -1,5 +1,5 @@
 import { removeLocalData, rotateDataFromAPI, storeLocalData } from "./helpers";
-import type { Action, BackgroundPayload, UserPayload, WorkflowStorageState } from "./types";
+import type { Action, ComponentPayload, HydratePayload, WorkflowStorageState } from "./types";
 
 /**
  * Reducer for the WorkflowStorageContext
@@ -14,7 +14,7 @@ const workflowStorageContextReducer = (
   switch (action.type) {
     // Will add data to our temporary storage as well as the local storage
     case "STORE_DATA": {
-      const { componentName, key, data, localStorage = true } = action.payload as UserPayload;
+      const { componentName, key, data, localStorage = true } = action.payload as ComponentPayload;
       const newState = { ...state };
       const { shortLinked, workflowSessionStore } = newState;
 
@@ -39,7 +39,7 @@ const workflowStorageContextReducer = (
     }
     // Will remove data from our temporary storage as well as the local storage
     case "REMOVE_DATA": {
-      const { componentName, key, localStorage = true } = action.payload as UserPayload;
+      const { componentName, key, localStorage = true } = action.payload as ComponentPayload;
       const newState = { ...state };
       const { shortLinked, workflowSessionStore } = newState;
 
@@ -57,7 +57,7 @@ const workflowStorageContextReducer = (
     }
     // Will take a given input of data from an API and add it to the state as 'store', the only time this portion of the state should ever be modified
     case "HYDRATE": {
-      const { data } = action.payload as BackgroundPayload;
+      const { data } = action.payload as HydratePayload;
 
       if (data) {
         return {
