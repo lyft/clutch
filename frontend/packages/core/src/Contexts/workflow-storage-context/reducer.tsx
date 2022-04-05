@@ -18,6 +18,10 @@ const workflowStorageContextReducer = (
       const newState = { ...state };
       const { shortLinked, workflowSessionStore } = newState;
 
+      if (!componentName || !componentName.length) {
+        return state;
+      }
+
       if (!workflowSessionStore[componentName]) {
         workflowSessionStore[componentName] = {};
       }
@@ -42,6 +46,10 @@ const workflowStorageContextReducer = (
       const { componentName, key, localStorage = true } = action.payload as ComponentPayload;
       const newState = { ...state };
       const { shortLinked, workflowSessionStore } = newState;
+
+      if (!componentName || !componentName.length) {
+        return state;
+      }
 
       if (componentName && key) {
         delete workflowSessionStore[componentName][key];
