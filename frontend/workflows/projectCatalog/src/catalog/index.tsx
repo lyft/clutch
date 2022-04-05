@@ -40,7 +40,6 @@ const Form = styled.form({});
 const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
   const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(catalogReducer, initialState);
-  const [customProject, setCustomProject] = React.useState("");
 
   const navigateToProject = project => {
     navigate(`/catalog/${project.name}`);
@@ -87,8 +86,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
   });
 
   const handleChanges = event => {
-    setCustomProject(event.target.value);
-    dispatch({ type: "SEARCH", payload: { search: customProject } });
+    dispatch({ type: "SEARCH", payload: { search: event.target.value } });
   };
 
   return (
@@ -104,7 +102,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
           <Form noValidate onSubmit={handleSubmit(triggerProjectAdd)}>
             <TextField
               placeholder="Search"
-              value={customProject}
+              value={state.search}
               onChange={handleChanges}
               autocompleteCallback={v => autoComplete(v)}
               endAdornment={
