@@ -84,6 +84,11 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
       </div>
       <div style={{ marginBottom: "32px" }}>
         <Typography variant="h2">Project Catalog</Typography>
+        <div style={{ marginTop: "8px" }}>
+          <Typography variant="subtitle3" color="rgb(13, 16, 48, .48)">
+            A catalog of all projects.
+          </Typography>
+        </div>
       </div>
       <Paper>
         <div style={{ margin: "16px" }}>
