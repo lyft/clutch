@@ -1,5 +1,7 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 import { client, Grid, Paper, TextField, Toast, Typography, useNavigate } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import { Box, CircularProgress } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
@@ -18,9 +20,27 @@ const initialState: CatalogState = {
   error: undefined,
 };
 
+const autoComplete = async (search: string): Promise<any> => {
+  // Check the length of the search query as the user might empty out the search
+  // which will still trigger the on change handler
+  if (search.length === 0) {
+    return { results: [] };
+  }
+
+  const response = await client.post("/v1/resolver/autocomplete", {
+    want: `type.googleapis.com/clutch.core.project.v1.Project`,
+    search,
+  });
+
+  return { results: response?.data?.results || [] };
+};
+
+const Form = styled.form({});
+
 const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
   const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(catalogReducer, initialState);
+  const [customProject, setCustomProject] = React.useState("");
 
   const navigateToProject = project => {
     navigate(`/catalog/${project.name}`);
@@ -60,19 +80,15 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
     );
   };
 
-  const autoComplete = async (search: string): Promise<any> => {
-    // Check the length of the search query as the user might empty out the search
-    // which will still trigger the on change handler
-    if (search.length === 0) {
-      return { results: [] };
-    }
+  const { handleSubmit } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+  });
 
-    const response = await client.post("/v1/resolver/autocomplete", {
-      want: `type.googleapis.com/clutch.core.project.v1.Project`,
-      search,
-    });
-
-    return { results: response?.data?.results || [] };
+  const handleChanges = event => {
+    setCustomProject(event.target.value);
+    dispatch({ type: "SEARCH", payload: { search: customProject } });
   };
 
   return (
@@ -85,20 +101,21 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
       </div>
       <Paper>
         <div style={{ margin: "16px" }}>
-          <TextField
-            placeholder="Search"
-            value={state.search}
-            onChange={e => dispatch({ type: "SEARCH", payload: { search: e.target.value } })}
-            onKeyDown={e => e.key === "Enter" && triggerProjectAdd()}
-            autocompleteCallback={v => autoComplete(v)}
-            endAdornment={
-              state.isSearching ? (
-                <CircularProgress size="24px" />
-              ) : (
-                <SearchIcon onClick={triggerProjectAdd} />
-              )
-            }
-          />
+          <Form noValidate onSubmit={handleSubmit(triggerProjectAdd)}>
+            <TextField
+              placeholder="Search"
+              value={customProject}
+              onChange={handleChanges}
+              autocompleteCallback={v => autoComplete(v)}
+              endAdornment={
+                state.isSearching ? (
+                  <CircularProgress size="24px" />
+                ) : (
+                  <SearchIcon onClick={triggerProjectAdd} />
+                )
+              }
+            />
+          </Form>
         </div>
       </Paper>
       <div style={{ marginBottom: "16px", marginTop: "32px" }}>
