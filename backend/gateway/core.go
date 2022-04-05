@@ -25,6 +25,7 @@ import (
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
 	kinesismod "github.com/lyft/clutch/backend/module/kinesis"
+	projectmod "github.com/lyft/clutch/backend/module/project"
 	proxymod "github.com/lyft/clutch/backend/module/proxy"
 	resolvermod "github.com/lyft/clutch/backend/module/resolver"
 	shortlinkmod "github.com/lyft/clutch/backend/module/shortlink"
@@ -49,6 +50,7 @@ import (
 	feedbackservice "github.com/lyft/clutch/backend/service/feedback"
 	"github.com/lyft/clutch/backend/service/github"
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
+	"github.com/lyft/clutch/backend/service/project"
 	shortlinkservice "github.com/lyft/clutch/backend/service/shortlink"
 	sourcegraphservice "github.com/lyft/clutch/backend/service/sourcegraph"
 	"github.com/lyft/clutch/backend/service/temporal"
@@ -77,6 +79,7 @@ var Modules = module.Factory{
 	healthcheck.Name:           healthcheck.New,
 	k8smod.Name:                k8smod.New,
 	kinesismod.Name:            kinesismod.New,
+	projectmod.Name:            projectmod.New,
 	proxymod.Name:              proxymod.New,
 	redisexperimentation.Name:  redisexperimentation.New,
 	resolvermod.Name:           resolvermod.New,
@@ -102,6 +105,7 @@ var Services = service.Factory{
 	k8sservice.Name:          k8sservice.New,
 	loggingsink.Name:         loggingsink.New,
 	pgservice.Name:           pgservice.New,
+	project.Name:             project.New,
 	shortlinkservice.Name:    shortlinkservice.New,
 	slack.Name:               slack.New,
 	sourcegraphservice.Name:  sourcegraphservice.New,

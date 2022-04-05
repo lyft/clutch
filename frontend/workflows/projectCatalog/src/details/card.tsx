@@ -2,7 +2,7 @@ import React from "react";
 import { Card, ClutchError, Error, Grid, styled, Typography } from "@clutch-sh/core";
 import { LinearProgress } from "@material-ui/core";
 
-export enum CardType {
+enum CardType {
   DYNAMIC = "Dynamic",
   METADATA = "Metadata",
 }
@@ -12,14 +12,16 @@ export interface CatalogDetailsCard {
 }
 
 interface CardTitleProps {
-  title: string;
+  title?: string;
   titleIcon?: React.ReactNode;
   endAdornment?: React.ReactNode;
 }
 
 interface CardBodyProps {
   children?: React.ReactNode;
+  /** Manual Control of loading state */
   loading?: boolean;
+  /** Manual control of error state */
   error?: ClutchError;
 }
 
@@ -28,6 +30,8 @@ interface BaseCardProps extends CardTitleProps, CardBodyProps {
   reloadInterval?: number;
   /** Boolean representing whether the component should reload via the fetchDataFn */
   autoReload?: boolean;
+  /** Option to hide the loading indicator */
+  loadingIndicator?: boolean;
   /** Given promise which will be used to initially fetch data and optionally reload on intervals */
   fetchDataFn?: () => Promise<unknown>;
   /** Function called when fetchDataFn returns successfully, returning the data */
@@ -70,12 +74,14 @@ const BodyContainer = styled("div")({
 
 const CardTitle = ({ title, titleIcon, endAdornment }: CardTitleProps) => (
   <>
-    <StyledTitleContainer container item xs={endAdornment ? 9 : 12} spacing={1}>
-      {titleIcon && <Grid item>{titleIcon}</Grid>}
-      <StyledTitle item>
-        <Typography variant="h4">{title}</Typography>
-      </StyledTitle>
-    </StyledTitleContainer>
+    {title && (
+      <StyledTitleContainer container item xs={endAdornment ? 9 : 12} spacing={1}>
+        {titleIcon && <Grid item>{titleIcon}</Grid>}
+        <StyledTitle item>
+          <Typography variant="h4">{title}</Typography>
+        </StyledTitle>
+      </StyledTitleContainer>
+    )}
     {endAdornment && (
       <Grid
         container
@@ -109,6 +115,7 @@ const BaseCard = ({
   titleIcon,
   endAdornment,
   loading,
+  loadingIndicator = true,
   error,
   ...props
 }: CardProps) => {
@@ -156,7 +163,7 @@ const BaseCard = ({
       <Grid container item direction="row" alignItems="flex-start">
         <CardTitle title={title} titleIcon={titleIcon} endAdornment={endAdornment} />
       </Grid>
-      <CardBody loading={loading || isLoading} error={error || cardError}>
+      <CardBody loading={loadingIndicator && (loading || isLoading)} error={error || cardError}>
         {children}
       </CardBody>
     </StyledCard>
@@ -167,4 +174,4 @@ const DynamicCard = (props: BaseCardProps) => <BaseCard type={CardType.DYNAMIC} 
 
 const MetaCard = (props: BaseCardProps) => <BaseCard type={CardType.METADATA} {...props} />;
 
-export { DynamicCard, MetaCard };
+export { CardType, DynamicCard, MetaCard };

@@ -1,7 +1,7 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
 import type { CatalogDetailsCard } from "./details/card";
-import { DynamicCard, MetaCard } from "./details/card";
+import { CardType, DynamicCard, MetaCard } from "./details/card";
 import type { ProjectInfoChip } from "./details/info/chipsRow";
 import Catalog from "./catalog";
 import Details from "./details";
@@ -43,7 +43,7 @@ const register = (): WorkflowConfiguration => {
   };
 };
 
-export { DynamicCard, MetaCard };
+export { CardType, DynamicCard, MetaCard };
 export { LastEvent } from "./details/helpers";
 export { useProjectDetailsContext } from "./details/context";
 export { Details as ProjectDetails };
