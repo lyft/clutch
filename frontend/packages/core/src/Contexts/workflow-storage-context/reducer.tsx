@@ -16,7 +16,7 @@ const workflowStorageContextReducer = (
     case "STORE_DATA": {
       const { componentName, key, data, localStorage = true } = action.payload as ComponentPayload;
       const newState = { ...state };
-      const { shortLinked, workflowSessionStore } = newState;
+      const { fromShortLink, workflowSessionStore } = newState;
 
       if (!componentName || !componentName.length) {
         return state;
@@ -35,7 +35,7 @@ const workflowStorageContextReducer = (
         };
       }
 
-      if (localStorage && !shortLinked) {
+      if (localStorage && !fromShortLink) {
         storeLocalData(key ?? componentName, data);
       }
 
@@ -45,7 +45,7 @@ const workflowStorageContextReducer = (
     case "REMOVE_DATA": {
       const { componentName, key, localStorage = true } = action.payload as ComponentPayload;
       const newState = { ...state };
-      const { shortLinked, workflowSessionStore } = newState;
+      const { fromShortLink, workflowSessionStore } = newState;
 
       if (!componentName || !componentName.length) {
         return state;
@@ -57,7 +57,7 @@ const workflowStorageContextReducer = (
         delete workflowSessionStore[componentName];
       }
 
-      if (localStorage && !shortLinked) {
+      if (localStorage && !fromShortLink) {
         removeLocalData(key ?? componentName);
       }
 
@@ -70,7 +70,7 @@ const workflowStorageContextReducer = (
       if (data) {
         return {
           ...state,
-          shortLinked: true,
+          fromShortLink: true,
           workflowStore: rotateDataFromAPI(data),
         };
       }

@@ -52,7 +52,7 @@ interface HydrateStorageAction {
 export type Action = ComponentStorageAction | HydrateStorageAction;
 
 export interface WorkflowStorageState {
-  shortLinked: boolean;
+  fromShortLink: boolean;
   workflowStore: HydratedData;
   workflowSessionStore: HydratedData;
 }
@@ -67,14 +67,14 @@ export type StoreDataFn = (
 ) => void;
 
 export interface WorkflowStorageContextProps {
-  shortLinked: boolean;
+  fromShortLink: boolean;
   removeData: RemoveDataFn;
   retrieveData: RetrieveDataFn;
   storeData: StoreDataFn;
 }
 
 const defaultWorkflowStorageState: WorkflowStorageState = {
-  shortLinked: false,
+  fromShortLink: false,
   workflowStore: {},
   workflowSessionStore: {},
 };
