@@ -60,7 +60,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
         zeroMinWidth
       >
         <Typography variant="body2" color="rgba(13, 16, 48, 0.65)">
-          Lorem ipsum baba chacha. Foo bar baz qux. Lorem ipsum bingo.
+          {project.data?.description}
         </Typography>
       </Grid>
       <Grid container justify="flex-end">
