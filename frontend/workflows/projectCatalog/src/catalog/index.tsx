@@ -108,7 +108,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
       <div style={{ marginBottom: "16px", marginTop: "32px" }}>
         <Typography variant="h3">My Projects</Typography>
       </div>
-      <Grid container direction="row" spacing={5}>
+      <Grid container direction="row" spacing={3}>
         {state.projects.map(p => (
           <Grid item onClick={() => navigateToProject(p)}>
             <ProjectCard project={p} onRemove={() => triggerProjectRemove(p)} />

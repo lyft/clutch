@@ -5,15 +5,13 @@ import styled from "@emotion/styled";
 import CloseIcon from "@material-ui/icons/Close";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 
-import LanguageIcon from "../helpers/language-icon";
-
 const StyledCard = styled(Card)({
   display: "flex",
   flexDirection: "column",
-  width: "384px",
-  height: "214px",
+  width: "350px",
+  height: "216px",
   overflow: "hidden",
-  padding: "13px 17px 13px 36px",
+  padding: "20px 18px 16px 26px",
   ":hover": {
     cursor: "pointer",
     backgroundColor: "#F5F6FD",
@@ -42,33 +40,30 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
 
   return (
     <StyledCard>
-      <Grid container justify="flex-end">
-        <Grid item className="showOnHover">
-          <IconButton size="small" variant="neutral" onClick={remove}>
-            <CloseIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
       <Grid container wrap="nowrap">
-        <Grid container item direction="row" alignItems="flex-end">
-          <Grid item xs={1}>
-            <LanguageIcon language={(project?.languages || [])[0]} />
+        <Grid container item direction="row" alignItems="center">
+          <Grid item xs={10}>
+            <Typography variant="h6" color="secondary">
+              {project?.name?.toUpperCase()}
+            </Typography>
           </Grid>
-          <Grid item xs={11}>
-            <Typography variant="caption2">{project?.name}</Typography>
+          <Grid container item className="showOnHover" justify="flex-end" xs={2}>
+            <IconButton size="small" variant="neutral" onClick={remove}>
+              <CloseIcon color="secondary" />
+            </IconButton>
           </Grid>
         </Grid>
       </Grid>
       <Grid
         container
-        style={{ marginTop: "16px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
+        style={{ marginTop: "10px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
         zeroMinWidth
       >
-        <Typography variant="body2">{project.data?.description}</Typography>
+        <Typography variant="body2" color="rgba(13, 16, 48, 0.65)">Lorem ipsum baba chacha. Foo bar baz qux. Lorem ipsum bingo.</Typography>
       </Grid>
       <Grid container justify="flex-end">
-        <Grid item className="showOnHover">
-          <KeyboardArrowRightIcon />
+        <Grid item>
+          <KeyboardArrowRightIcon color="secondary" />
         </Grid>
       </Grid>
     </StyledCard>
