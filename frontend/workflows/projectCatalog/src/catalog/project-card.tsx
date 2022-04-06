@@ -11,7 +11,7 @@ const StyledCard = styled(Card)({
   width: "350px",
   height: "216px",
   overflow: "hidden",
-  padding: "20px 18px 16px 26px",
+  padding: "22px 19px 27px 29px",
   ":hover": {
     cursor: "pointer",
     backgroundColor: "#F5F6FD",
@@ -56,17 +56,15 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
       </Grid>
       <Grid
         container
-        style={{ marginTop: "10px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
+        style={{ marginTop: "8px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
         zeroMinWidth
       >
         <Typography variant="body2" color="rgba(13, 16, 48, 0.65)">
           {project.data?.description}
         </Typography>
       </Grid>
-      <Grid container justify="flex-end">
-        <Grid item>
-          <KeyboardArrowRightIcon color="secondary" />
-        </Grid>
+      <Grid container item justify="flex-end" alignItems="center">
+        <KeyboardArrowRightIcon color="secondary" />
       </Grid>
     </StyledCard>
   );
