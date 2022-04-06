@@ -60,11 +60,11 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
         zeroMinWidth
       >
         <Typography variant="body2" color="rgba(13, 16, 48, 0.65)">
-          {project?.data?.description}
+          {project?.data?.description}  
         </Typography>
       </Grid>
       <Grid container item justify="flex-end" alignItems="center">
-        <KeyboardArrowRightIcon color="secondary" />
+        <KeyboardArrowRightIcon color="disabled" />
       </Grid>
     </StyledCard>
   );
