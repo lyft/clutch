@@ -59,7 +59,9 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
         style={{ marginTop: "10px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
         zeroMinWidth
       >
-        <Typography variant="body2" color="rgba(13, 16, 48, 0.65)">Lorem ipsum baba chacha. Foo bar baz qux. Lorem ipsum bingo.</Typography>
+        <Typography variant="body2" color="rgba(13, 16, 48, 0.65)">
+          Lorem ipsum baba chacha. Foo bar baz qux. Lorem ipsum bingo.
+        </Typography>
       </Grid>
       <Grid container justify="flex-end">
         <Grid item>
