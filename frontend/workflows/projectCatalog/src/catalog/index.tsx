@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { client, Grid, Paper, TextField, Toast, Typography, useNavigate } from "@clutch-sh/core";
+import { client, Grid, Paper, TextField, Typography, useNavigate } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Box, CircularProgress } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
@@ -92,7 +92,9 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
   return (
     <Box style={{ padding: "32px" }}>
       <div style={{ marginBottom: "8px" }}>
-        <Typography variant="caption2">{heading} /</Typography>
+        <Typography variant="caption2" color="rgb(13, 16, 48, .48)">
+          Project Catalog&nbsp;/&nbsp;Index
+        </Typography>
       </div>
       <div style={{ marginBottom: "32px" }}>
         <Typography variant="h2">Project Catalog</Typography>
@@ -112,6 +114,8 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
                   <SearchIcon onClick={triggerProjectAdd} />
                 )
               }
+              error={state.error !== undefined}
+              helperText={state?.error}
             />
           </Form>
         </div>
@@ -126,11 +130,6 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
           </Grid>
         ))}
       </Grid>
-      {state.error && (
-        <Toast severity="error" onClose={() => dispatch({ type: "CLEAR_ERROR" })}>
-          {state.error}
-        </Toast>
-      )}
     </Box>
   );
 };

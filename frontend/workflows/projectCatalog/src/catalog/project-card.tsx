@@ -3,24 +3,28 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { Card, Grid, IconButton, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import CloseIcon from "@material-ui/icons/Close";
+import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 
 import LanguageIcon from "../helpers/language-icon";
 
 const StyledCard = styled(Card)({
+  display: "flex",
+  flexDirection: "column",
   width: "384px",
   height: "214px",
   overflow: "hidden",
-  padding: "13px 17px 64px 36px",
+  padding: "13px 17px 13px 36px",
   ":hover": {
+    cursor: "pointer",
     backgroundColor: "#F5F6FD",
-    ".remove": {
+    ".showOnHover": {
       visibility: "visible",
     },
   },
   ":active": {
     backgroundColor: "#D7DAF6",
   },
-  ".remove": {
+  ".showOnHover": {
     visibility: "hidden",
   },
 });
@@ -39,7 +43,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
   return (
     <StyledCard>
       <Grid container justify="flex-end">
-        <Grid item className="remove">
+        <Grid item className="showOnHover">
           <IconButton size="small" variant="neutral" onClick={remove}>
             <CloseIcon />
           </IconButton>
@@ -57,10 +61,15 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
       </Grid>
       <Grid
         container
-        style={{ marginTop: "16px", paddingRight: "16px", height: "100%", overflow: "hidden" }}
+        style={{ marginTop: "16px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
         zeroMinWidth
       >
         <Typography variant="body2">{project.data?.description}</Typography>
+      </Grid>
+      <Grid container justify="flex-end">
+        <Grid item className="showOnHover">
+          <KeyboardArrowRightIcon />
+        </Grid>
       </Grid>
     </StyledCard>
   );
