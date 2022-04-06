@@ -50,6 +50,12 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
         setError(e);
       }
     );
+    const projectMatches = state.projects.filter(
+      p => state?.search && state.search !== "" && p?.name === state.search
+    );
+    if (projectMatches.length === 1) {
+      navigateToProject(projectMatches[0]);
+    }
   };
 
   const triggerProjectRemove = project => {
