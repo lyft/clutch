@@ -128,4 +128,8 @@ const removeProject = (
   getProjects(onSuccess, onError);
 };
 
-export { addProject, getProjects, removeProject };
+const clearProjects = () => {
+  writeProjects({});
+};
+
+export { addProject, clearProjects, getProjects, removeProject };

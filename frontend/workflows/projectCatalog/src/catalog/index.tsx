@@ -1,13 +1,23 @@
 import React from "react";
-import { client, Grid, Paper, TextField, Toast, Typography, useNavigate } from "@clutch-sh/core";
+import {
+  client,
+  Grid,
+  IconButton,
+  Paper,
+  TextField,
+  Toast,
+  Typography,
+  useNavigate,
+} from "@clutch-sh/core";
 import { Box, CircularProgress } from "@material-ui/core";
+import RestoreIcon from "@material-ui/icons/Restore";
 import SearchIcon from "@material-ui/icons/Search";
 
 import type { WorkflowProps } from "..";
 
 import catalogReducer from "./catalog-reducer";
 import ProjectCard from "./project-card";
-import { addProject, getProjects, removeProject } from "./storage";
+import { addProject, clearProjects, getProjects, removeProject } from "./storage";
 import type { CatalogState } from "./types";
 
 const initialState: CatalogState = {
@@ -103,13 +113,36 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
           />
         </div>
       </Paper>
-      <div style={{ marginBottom: "16px", marginTop: "32px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "16px",
+          marginTop: "32px",
+        }}
+      >
         <Typography variant="h3">My Projects</Typography>
+        <IconButton
+          variant="neutral"
+          onClick={() => {
+            clearProjects();
+            dispatch({ type: "HYDRATE_START" });
+            getProjects(
+              projects => dispatch({ type: "HYDRATE_END", payload: { result: projects } }),
+              setError
+            );
+          }}
+        >
+          <RestoreIcon />
+        </IconButton>
       </div>
       <Grid container direction="row" spacing={5}>
         {state.projects.map(p => (
           <Grid item onClick={() => navigateToProject(p)}>
-            <ProjectCard project={p} onRemove={() => triggerProjectRemove(p)} />
+            <ProjectCard
+              project={p}
+              onRemove={state.projects.length !== 1 ? () => triggerProjectRemove(p) : undefined}
+            />
           </Grid>
         ))}
       </Grid>
