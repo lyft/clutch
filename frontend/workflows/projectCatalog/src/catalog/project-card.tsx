@@ -1,10 +1,11 @@
 import React from "react";
-import type { clutch as IClutch } from "@clutch-sh/api";
 import { Card, Grid, IconButton, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import CloseIcon from "@material-ui/icons/Close";
 
 import LanguageIcon from "../helpers/language-icon";
+
+import type { CatalogProject } from "./types";
 
 const StyledCard = styled(Card)({
   width: "384px",
@@ -26,7 +27,7 @@ const StyledCard = styled(Card)({
 });
 
 interface ProjectCardProps {
-  project: IClutch.core.project.v1.IProject;
+  project: CatalogProject;
   onRemove: () => void;
 }
 
@@ -40,9 +41,11 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
     <StyledCard>
       <Grid container justify="flex-end">
         <Grid item className="remove">
-          <IconButton size="small" variant="neutral" onClick={remove}>
-            <CloseIcon />
-          </IconButton>
+          {project.removable && (
+            <IconButton size="small" variant="neutral" onClick={remove}>
+              <CloseIcon />
+            </IconButton>
+          )}
         </Grid>
       </Grid>
       <Grid container wrap="nowrap">

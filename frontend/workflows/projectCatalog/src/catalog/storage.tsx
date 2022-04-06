@@ -3,6 +3,8 @@ import type { ClutchError } from "@clutch-sh/core";
 import { client, userId } from "@clutch-sh/core";
 import _ from "lodash";
 
+import type { CatalogProject } from "./types";
+
 const LOCAL_STORAGE_STATE_KEY = "catalogState";
 
 /** Attempts to load projects stored in local storage. */
@@ -26,17 +28,15 @@ const writeProjects = (projects: { [key: string]: string }) => {
 
 const projectRequest = () => {
   const projects = loadProjects();
-  const requestData = { excludeDependencies: true } as IClutch.project.v1.GetProjectsRequest;
-  if (!Object.keys(projects).length) {
-    requestData.users = [userId()];
-  } else {
-    requestData.projects = Object.keys(projects);
-  }
-  return requestData;
+  return {
+    excludeDependencies: true,
+    users: [userId()],
+    projects: Object.keys(projects),
+  } as IClutch.project.v1.GetProjectsRequest;
 };
 
 const fetchProjects = (
-  onSuccess: (pjts: IClutch.core.project.v1.IProject[]) => void,
+  onSuccess: (pjts: CatalogProject[]) => void,
   onError: (e: ClutchError) => void,
   retry: number
 ) => {
@@ -46,7 +46,13 @@ const fetchProjects = (
       const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
       const selectedProjects = Object.values(results)
         .filter(r => r?.from?.selected)
-        .map(r => r.project);
+        .map(
+          r =>
+            ({
+              ...r.project,
+              removable: (r.from?.users?.indexOf(userId()) || 0) < 0,
+            } as CatalogProject)
+        );
 
       let projectStorage = {};
       if (!Object.keys(loadProjects()).length) {
@@ -88,7 +94,7 @@ const fetchProjects = (
 };
 
 const getProjects = (
-  onSuccess: (pjts: IClutch.core.project.v1.IProject[]) => void,
+  onSuccess: (pjts: CatalogProject[]) => void,
   onError: (e: ClutchError) => void
 ) => {
   // retry count is set to the number of projects in storage since potentially

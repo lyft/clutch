@@ -1,6 +1,10 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 
+export interface CatalogProject extends IClutch.core.project.v1.IProject {
+  removable?: boolean;
+}
+
 type UserActionKind = "ADD_PROJECT" | "CLEAR_ERROR" | "REMOVE_PROJECT" | "SEARCH";
 
 interface UserPayload {
@@ -31,7 +35,7 @@ interface BackgroundAction {
 
 export type Action = UserAction | BackgroundAction;
 export interface CatalogState {
-  projects: IClutch.core.project.v1.IProject[];
+  projects: CatalogProject[];
   search?: string;
   isLoading: boolean;
   isSearching: boolean;
