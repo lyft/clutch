@@ -1,8 +1,6 @@
 import { Grid } from "@material-ui/core";
 
 import { userId } from "./AppLayout/user";
-import LinearTimeline from "./Charts/linearTimeline";
-import TimeseriesChart from "./Charts/timeseries";
 import {
   Accordion,
   AccordionActions,
