@@ -46,21 +46,10 @@ export * from "./Feedback";
 export * from "./Assets/emojis";
 export * from "./NPS";
 export * from "./chip";
+export * from "./Charts"
 
 export { default as ClutchApp } from "./AppProvider";
 
-export type {
-  TimeseriesStylingProps,
-  LineProps,
-  TimeseriesReferenceLineProps,
-  CustomTooltipProps,
-  LinearTimelineStylingProps,
-  LinearTimelineData,
-  LinearTimelineDataPoints,
-  PresetShape,
-  LinearTimelineDataPoint,
-  ReferenceLineAxis,
-} from "./Charts/types";
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
 export type { ClutchError } from "./Network/errors";
@@ -120,6 +109,4 @@ export {
   useSearchParams,
   useWizardContext,
   WizardContext,
-  LinearTimeline,
-  TimeseriesChart,
 };
