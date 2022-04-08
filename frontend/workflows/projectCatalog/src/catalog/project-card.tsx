@@ -23,28 +23,23 @@ const StyledCard = styled(Card)({
   ".remove": {
     visibility: "hidden",
   },
-  ".hidden": {
-    visibility: "hidden",
-  },
 });
 
 interface ProjectCardProps {
   project: IClutch.core.project.v1.IProject;
-  onRemove?: () => void;
+  onRemove: () => void;
 }
 
 const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
   const remove = event => {
     event.stopPropagation();
-    if (onRemove) {
-      onRemove();
-    }
+    onRemove();
   };
 
   return (
     <StyledCard>
       <Grid container justify="flex-end">
-        <Grid item className={!onRemove ? "hidden" : "remove"}>
+        <Grid item className="remove">
           <IconButton size="small" variant="neutral" onClick={remove}>
             <CloseIcon />
           </IconButton>

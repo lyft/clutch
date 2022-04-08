@@ -6,6 +6,7 @@ import {
   Paper,
   TextField,
   Toast,
+  Tooltip,
   Typography,
   useNavigate,
 } from "@clutch-sh/core";
@@ -17,7 +18,7 @@ import type { WorkflowProps } from "..";
 
 import catalogReducer from "./catalog-reducer";
 import ProjectCard from "./project-card";
-import { addProject, clearProjects, getProjects, removeProject } from "./storage";
+import { addProject, clearProjects, getProjects, hasState, removeProject } from "./storage";
 import type { CatalogState } from "./types";
 
 const initialState: CatalogState = {
@@ -27,6 +28,15 @@ const initialState: CatalogState = {
   isSearching: false,
   error: undefined,
 };
+
+const Placeholder = () => (
+  <Paper>
+    <div style={{ margin: "32px", textAlign: "center" }}>
+      <Typography variant="h5">There is nothing to display here</Typography>
+      <Typography variant="body3">Please enter a namespace and clientset to proceed.</Typography>
+    </div>
+  </Paper>
+);
 
 const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
   const navigate = useNavigate();
@@ -42,7 +52,8 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
     dispatch({ type: "HYDRATE_START" });
     getProjects(
       projects => dispatch({ type: "HYDRATE_END", payload: { result: projects } }),
-      setError
+      setError,
+      !hasState()
     );
   }, []);
 
@@ -122,30 +133,36 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
         }}
       >
         <Typography variant="h3">My Projects</Typography>
-        <IconButton
-          variant="neutral"
-          onClick={() => {
-            clearProjects();
-            dispatch({ type: "HYDRATE_START" });
-            getProjects(
-              projects => dispatch({ type: "HYDRATE_END", payload: { result: projects } }),
-              setError
-            );
-          }}
-        >
-          <RestoreIcon />
-        </IconButton>
+        <Tooltip title="Restore to owned projects only">
+          <IconButton
+            variant="neutral"
+            onClick={() => {
+              clearProjects();
+              dispatch({ type: "HYDRATE_START" });
+              getProjects(
+                projects => dispatch({ type: "HYDRATE_END", payload: { result: projects } }),
+                setError,
+                true
+              );
+            }}
+          >
+            <RestoreIcon />
+          </IconButton>
+        </Tooltip>
       </div>
-      <Grid container direction="row" spacing={5}>
-        {state.projects.map(p => (
-          <Grid item onClick={() => navigateToProject(p)}>
-            <ProjectCard
-              project={p}
-              onRemove={state.projects.length !== 1 ? () => triggerProjectRemove(p) : undefined}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      {state.projects.length ? (
+        <Grid container direction="row" spacing={5}>
+          {state.projects.map(p => (
+            <Grid item onClick={() => navigateToProject(p)}>
+              <ProjectCard project={p} onRemove={() => triggerProjectRemove(p)} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Grid container justify="center" style={{ paddingTop: "35px" }}>
+          <Placeholder />
+        </Grid>
+      )}
       {state.error && (
         <Toast severity="error" onClose={() => dispatch({ type: "CLEAR_ERROR" })}>
           {state.error}
