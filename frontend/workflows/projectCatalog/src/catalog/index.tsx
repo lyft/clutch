@@ -83,18 +83,18 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
       projects => {
         dispatch({ type: "ADD_PROJECT", payload: { projects } });
         dispatch({ type: "SEARCH_END" });
+        const projectMatches = projects.filter(
+          p => state?.search && state.search !== "" && p?.name === state.search
+        );
+        if (projectMatches.length === 1) {
+          navigateToProject(projectMatches[0]);
+        }
       },
       e => {
         dispatch({ type: "SEARCH_END" });
         setError(e);
       }
     );
-    const projectMatches = state.projects.filter(
-      p => state?.search && state.search !== "" && p?.name === state.search
-    );
-    if (projectMatches.length === 1) {
-      navigateToProject(projectMatches[0]);
-    }
   };
 
   const triggerProjectRemove = project => {
