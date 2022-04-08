@@ -34,7 +34,7 @@ const Placeholder = () => (
   <Paper>
     <div style={{ margin: "32px", textAlign: "center" }}>
       <Typography variant="h5">There is nothing to display here</Typography>
-      <Typography variant="body3">Please enter a namespace and clientset to proceed.</Typography>
+      <Typography variant="body3">Please enter a project to proceed.</Typography>
     </div>
   </Paper>
 );
