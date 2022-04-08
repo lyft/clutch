@@ -1,15 +1,16 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 import {
   client,
   Grid,
   IconButton,
   Paper,
   TextField,
-  Toast,
   Tooltip,
   Typography,
   useNavigate,
 } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import { Box, CircularProgress } from "@material-ui/core";
 import RestoreIcon from "@material-ui/icons/Restore";
 import SearchIcon from "@material-ui/icons/Search";
@@ -37,6 +38,23 @@ const Placeholder = () => (
     </div>
   </Paper>
 );
+
+const autoComplete = async (search: string): Promise<any> => {
+  // Check the length of the search query as the user might empty out the search
+  // which will still trigger the on change handler
+  if (search.length === 0) {
+    return { results: [] };
+  }
+
+  const response = await client.post("/v1/resolver/autocomplete", {
+    want: `type.googleapis.com/clutch.core.project.v1.Project`,
+    search,
+  });
+
+  return { results: response?.data?.results || [] };
+};
+
+const Form = styled.form({});
 
 const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
   const navigate = useNavigate();
@@ -71,6 +89,12 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
         setError(e);
       }
     );
+    const projectMatches = state.projects.filter(
+      p => state?.search && state.search !== "" && p?.name === state.search
+    );
+    if (projectMatches.length === 1) {
+      navigateToProject(projectMatches[0]);
+    }
   };
 
   const triggerProjectRemove = project => {
@@ -81,19 +105,14 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
     );
   };
 
-  const autoComplete = async (search: string): Promise<any> => {
-    // Check the length of the search query as the user might empty out the search
-    // which will still trigger the on change handler
-    if (search.length === 0) {
-      return { results: [] };
-    }
+  const { handleSubmit } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+  });
 
-    const response = await client.post("/v1/resolver/autocomplete", {
-      want: `type.googleapis.com/clutch.core.project.v1.Project`,
-      search,
-    });
-
-    return { results: response?.data?.results || [] };
+  const handleChanges = event => {
+    dispatch({ type: "SEARCH", payload: { search: event.target.value } });
   };
 
   return (
@@ -105,23 +124,31 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
       </div>
       <div style={{ marginBottom: "32px" }}>
         <Typography variant="h2">Project Catalog</Typography>
+        <div style={{ marginTop: "8px" }}>
+          <Typography variant="subtitle3" color="rgb(13, 16, 48, .48)">
+            A catalog of all projects.
+          </Typography>
+        </div>
       </div>
       <Paper>
         <div style={{ margin: "16px" }}>
-          <TextField
-            placeholder="Search"
-            value={state.search}
-            onChange={e => dispatch({ type: "SEARCH", payload: { search: e.target.value } })}
-            onKeyDown={e => e.key === "Enter" && triggerProjectAdd()}
-            autocompleteCallback={v => autoComplete(v)}
-            endAdornment={
-              state.isSearching ? (
-                <CircularProgress size="24px" />
-              ) : (
-                <SearchIcon onClick={triggerProjectAdd} />
-              )
-            }
-          />
+          <Form noValidate onSubmit={handleSubmit(triggerProjectAdd)}>
+            <TextField
+              placeholder="Search"
+              value={state.search}
+              onChange={handleChanges}
+              autocompleteCallback={v => autoComplete(v)}
+              endAdornment={
+                state.isSearching ? (
+                  <CircularProgress size="24px" />
+                ) : (
+                  <SearchIcon onClick={triggerProjectAdd} />
+                )
+              }
+              error={state.error !== undefined}
+              helperText={state?.error}
+            />
+          </Form>
         </div>
       </Paper>
       <div
@@ -151,7 +178,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
         </Tooltip>
       </div>
       {state.projects.length ? (
-        <Grid container direction="row" spacing={5}>
+        <Grid container direction="row" spacing={3}>
           {state.projects.map(p => (
             <Grid item onClick={() => navigateToProject(p)}>
               <ProjectCard project={p} onRemove={() => triggerProjectRemove(p)} />
@@ -162,11 +189,6 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
         <Grid container justify="center" style={{ paddingTop: "35px" }}>
           <Placeholder />
         </Grid>
-      )}
-      {state.error && (
-        <Toast severity="error" onClose={() => dispatch({ type: "CLEAR_ERROR" })}>
-          {state.error}
-        </Toast>
       )}
     </Box>
   );

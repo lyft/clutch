@@ -3,24 +3,26 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { Card, Grid, IconButton, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import CloseIcon from "@material-ui/icons/Close";
-
-import LanguageIcon from "../helpers/language-icon";
+import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 
 const StyledCard = styled(Card)({
-  width: "384px",
-  height: "214px",
+  display: "flex",
+  flexDirection: "column",
+  width: "350px",
+  height: "216px",
   overflow: "hidden",
-  padding: "13px 17px 64px 36px",
+  padding: "22px 19px 27px 29px",
   ":hover": {
+    cursor: "pointer",
     backgroundColor: "#F5F6FD",
-    ".remove": {
+    ".showOnHover": {
       visibility: "visible",
     },
   },
   ":active": {
     backgroundColor: "#D7DAF6",
   },
-  ".remove": {
+  ".showOnHover": {
     visibility: "hidden",
   },
 });
@@ -38,29 +40,31 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
 
   return (
     <StyledCard>
-      <Grid container justify="flex-end">
-        <Grid item className="remove">
-          <IconButton size="small" variant="neutral" onClick={remove}>
-            <CloseIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
       <Grid container wrap="nowrap">
-        <Grid container item direction="row" alignItems="flex-end">
-          <Grid item xs={1}>
-            <LanguageIcon language={(project?.languages || [])[0]} />
+        <Grid container item direction="row" alignItems="center">
+          <Grid item xs={10}>
+            <Typography variant="h6" color="secondary">
+              {project?.name?.toUpperCase()}
+            </Typography>
           </Grid>
-          <Grid item xs={11}>
-            <Typography variant="caption2">{project?.name}</Typography>
+          <Grid container item className="showOnHover" justify="flex-end" xs={2}>
+            <IconButton size="small" variant="neutral" onClick={remove}>
+              <CloseIcon color="secondary" />
+            </IconButton>
           </Grid>
         </Grid>
       </Grid>
       <Grid
         container
-        style={{ marginTop: "16px", paddingRight: "16px", height: "100%", overflow: "hidden" }}
+        style={{ marginTop: "8px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
         zeroMinWidth
       >
-        <Typography variant="body2">{project.data?.description}</Typography>
+        <Typography variant="body2" color="rgba(13, 16, 48, 0.65)">
+          {project?.data?.description}
+        </Typography>
+      </Grid>
+      <Grid container item justify="flex-end" alignItems="center">
+        <KeyboardArrowRightIcon color="disabled" />
       </Grid>
     </StyledCard>
   );
