@@ -31,7 +31,7 @@ const ProjectHeader = ({
     <StyledHeading>
       <Typography variant="h2">{name}</Typography>
     </StyledHeading>
-    {description.length && <Typography variant="body2">{description}</Typography>}
+    {description.length > 0 && <Typography variant="body2">{description}</Typography>}
   </StyledContainer>
 );
 
