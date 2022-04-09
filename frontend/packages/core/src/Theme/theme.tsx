@@ -7,7 +7,6 @@ import { StylesProvider } from "@material-ui/styles";
 import { clutchColors } from "./colors";
 import palette from "./palette";
 import type { ThemeVariant } from "./types";
-import Typography from "./typography";
 
 // Create a Material UI theme is propagated to all children.
 const createTheme = (variant: ThemeVariant): MuiTheme => {
@@ -15,7 +14,6 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
     // inject in custom colors
     ...clutchColors(variant),
     palette: palette(variant),
-    typography: Typography,
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
       create: () => "none",
