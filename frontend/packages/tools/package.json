@@ -10,9 +10,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
-    "registerWorkflows": "node workflow-registrar.js",
-    "test": "jest --passWithNoTests",
-    "test:coverage": "yarn run test --collect-coverage"
+    "registerWorkflows": "node workflow-registrar.js"
   },
   "dependencies": {
     "@babel/cli": "^7.6.0",
@@ -49,7 +47,7 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.1.2",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "jest": "^24.9.0",
+    "jest": "^27.0.0",
     "prettier": "^2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
