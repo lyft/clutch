@@ -8,12 +8,12 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.16.2
 	github.com/aws/aws-sdk-go-v2/config v1.15.3
 	github.com/aws/aws-sdk-go-v2/credentials v1.11.2
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.22.3
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.2
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.33.0
-	github.com/aws/aws-sdk-go-v2/service/iam v1.18.2
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.2
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.26.2
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.22.4
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.3
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.34.0
+	github.com/aws/aws-sdk-go-v2/service/iam v1.18.3
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.3
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.26.4
 	github.com/aws/aws-sdk-go-v2/service/sts v1.16.3
 	github.com/aws/smithy-go v1.11.2
 	github.com/bradleyfalzon/ghinstallation v1.1.1
@@ -71,11 +71,12 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.9 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.3 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.10 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.9.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.7.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.7.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.3 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.11.3 // indirect
 	github.com/benbjohnson/clock v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
