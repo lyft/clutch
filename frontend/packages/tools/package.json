@@ -11,7 +11,6 @@
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
     "registerWorkflows": "node workflow-registrar.js",
-    "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage"
   },
   "dependencies": {
