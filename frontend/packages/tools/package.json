@@ -10,8 +10,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
-    "registerWorkflows": "node workflow-registrar.js",
-    "test:coverage": "yarn run test --collect-coverage"
+    "registerWorkflows": "node workflow-registrar.js"
   },
   "dependencies": {
     "@babel/cli": "^7.6.0",
