@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"testing"
 	"time"
 
@@ -625,4 +626,12 @@ func (ma mockAutoscaling) UpdateAutoScalingGroup(ctx context.Context, params *au
 	}
 
 	return &autoscaling.UpdateAutoScalingGroupOutput{}, nil
+}
+
+func TestRegionalClient(t *testing.T) {
+	c := &s3.Client{}
+
+	r := &regionalClient{s3: c}
+
+	assert.Equal(t, c, r.S3())
 }
