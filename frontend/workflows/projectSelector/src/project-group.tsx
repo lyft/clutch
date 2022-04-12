@@ -7,6 +7,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
+import { ProjectLinks } from "./project-links";
 import type { Group } from "./types";
 
 const StyledGroup = styled.div({
@@ -87,7 +88,7 @@ const StyledMenuItemName = styled.span({
 });
 
 const StyledClearIcon = styled.span({
-  width: "24px",
+  width: "36px",
   ".MuiIconButton-root": {
     padding: "6px",
     color: "rgba(13, 16, 48, 0.38)",
@@ -218,6 +219,9 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                     </IconButton>
                   )}
                 </StyledClearIcon>
+                {state?.projectData?.key?.linkGroups && (
+                  <ProjectLinks linkGroups={state?.projectData?.key?.linkGroups} />
+                )}
               </StyledHoverOptions>
             </StyledMenuItem>
           ))}
