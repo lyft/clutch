@@ -7,7 +7,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
-import { ProjectLinks } from "./project-links";
+import ProjectLinks from "./project-links";
 import type { Group } from "./types";
 
 const StyledGroup = styled.div({
