@@ -25,6 +25,10 @@ import (
 
 type svc struct{}
 
+func (s *svc) GetDirectClient(account string, region string) (clutchawsclient.DirectClient, error) {
+	panic("implement me")
+}
+
 func (s *svc) DescribeKinesisStream(ctx context.Context, account, region, streamName string) (*kinesisv1.Stream, error) {
 	ret := &kinesisv1.Stream{
 		StreamName:        streamName,
