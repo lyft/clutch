@@ -193,6 +193,11 @@ type Client interface {
 	GetDirectClient(account string, region string) (DirectClient, error)
 }
 
+// DirectClient gives access to the underlying AWS clients from the Golang SDK.
+// This allows arbitrary feature development on top of AWS from other services and modules without having to
+// contribute to the upstream interface. Using these clients will make mocking extremely difficult since it returns the
+// AWS SDK's struct types and not an interface that can be substituted for. It is recommended following initial
+// development of a feature that you add the calls to a service interface so they can be tested more easily.
 type DirectClient interface {
 	Autoscaling() *autoscaling.Client
 	DynamoDB() *dynamodb.Client
