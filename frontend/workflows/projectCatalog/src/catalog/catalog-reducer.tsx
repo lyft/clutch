@@ -13,13 +13,10 @@ const catalogReducer = (state: CatalogState, action: Action): CatalogState => {
       return { ...state, search: action?.payload?.search };
     }
     case "SEARCH_START": {
-      return { ...state, isSearching: true };
+      return { ...state, error: undefined, isSearching: true };
     }
     case "SEARCH_END": {
       return { ...state, search: "", isSearching: false };
-    }
-    case "CLEAR_ERROR": {
-      return { ...state, error: undefined };
     }
     case "HYDRATE_START": {
       return { ...state, isLoading: true };
