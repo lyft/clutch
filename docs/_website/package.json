@@ -33,7 +33,7 @@
     "@docusaurus/module-type-aliases": "^2.0.0-beta",
     "@tsconfig/docusaurus": "^1.0.4",
     "@types/node": "^16.0.0",
-    "@types/react": "^17.0.0",
+    "@types/react": "^18.0.0",
     "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.1.7",
     "chokidar": "^3.5.1",
