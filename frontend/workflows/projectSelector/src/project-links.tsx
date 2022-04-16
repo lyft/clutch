@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Grid, Link, Popper, Tooltip, TooltipContainer, Typography } from "@clutch-sh/core";
+import { Link, Popper, Tooltip, TooltipContainer, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -20,7 +20,15 @@ interface QuickLinkContainerProps {
   children: React.ReactNode;
 }
 
-const ICON_SIZE = "22px";
+const ICON_SIZE = "16px";
+
+const StyledMenuItem = styled.div({
+  display: "flex",
+  alignItems: "center",
+  "&:hover": {
+    backgroundColor: "rgba(13, 16, 48, 0.05)",
+  },
+});
 
 const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) => {
   const container = (
@@ -29,11 +37,7 @@ const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) =>
     </Tooltip>
   );
 
-  return (
-    <Grid item key={key ?? ""}>
-      {name ? container : children}
-    </Grid>
-  );
+  return <div key={key}>{name ? container : children}</div>;
 };
 
 const StyledMoreVertIcon = styled.span({
@@ -50,25 +54,32 @@ const StyledMoreVertIcon = styled.span({
   },
 });
 
+const StyledLinkTitle = styled.span({
+  padding: "8px",
+  fontWeight: "bold",
+});
+
 const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
   link?.url ? (
-    <QuickLinkContainer key={link.name} name={linkGroupName}>
+    <StyledMenuItem style={{ padding: "8px" }}>
       <Link href={link.url}>
-        <img
-          width={ICON_SIZE}
-          height={ICON_SIZE}
-          src={linkGroupImage}
-          alt={link.name ?? `Quick Link to ${link.url}`}
-        />
-        <span style={{ padding: "8px" }}>{linkGroupName}</span>
+        <QuickLinkContainer key={link.name} name={linkGroupName}>
+          <img
+            width={ICON_SIZE}
+            height={ICON_SIZE}
+            src={linkGroupImage}
+            alt={link.name ?? `Quick Link to ${link.url}`}
+          />
+          <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
+        </QuickLinkContainer>
       </Link>
-    </QuickLinkContainer>
+    </StyledMenuItem>
   ) : null;
 
 interface QuickLinkGroupProps extends LinkGroupProps {
   links: IClutch.core.project.v1.ILink[];
 }
-// Have a popper in the case of multiple links per group
+
 const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroupProps) => {
   const [validLinks, setValidLinks] = React.useState<IClutch.core.project.v1.ILink[]>([]);
 
@@ -80,17 +91,21 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
 
   return (
     <QuickLinkContainer key={linkGroupName} name={linkGroupName}>
-      <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
-      <span style={{ padding: "8px" }}>{linkGroupName}</span>
+      <StyledLinkTitle>
+        <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
+      </StyledLinkTitle>
+      <StyledLinkTitle style={{ padding: "0px" }}>{linkGroupName}</StyledLinkTitle>
       <div>
         {validLinks.map(link => {
           return (
             link?.url && (
-              <Link href={link.url}>
-                <Typography color="inherit" variant="body4">
-                  {link.name}
-                </Typography>
-              </Link>
+              <StyledMenuItem style={{ padding: "8px", paddingLeft: "40px" }}>
+                <Link href={link.url}>
+                  <Typography color="inherit" variant="body4">
+                    {link.name}
+                  </Typography>
+                </Link>
+              </StyledMenuItem>
             )
           );
         })}
@@ -100,14 +115,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
 };
 
 const ExpandedLinks = ({ linkGroups }) => (
-  <Grid
-    container
-    item
-    direction="column"
-    alignItems="center"
-    spacing={1}
-    style={{ padding: "8px" }}
-  >
+  <div>
     {(linkGroups || []).map(linkGroup => {
       if (linkGroup.links?.length === 1) {
         return (
@@ -126,7 +134,7 @@ const ExpandedLinks = ({ linkGroups }) => (
         />
       );
     })}
-  </Grid>
+  </div>
 );
 
 const ProjectLinks = ({ linkGroups }) => {
