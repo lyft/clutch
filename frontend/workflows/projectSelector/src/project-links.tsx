@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Link, Popper, Tooltip, TooltipContainer, Typography } from "@clutch-sh/core";
+import { Link, Popper, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -14,13 +14,7 @@ interface QuickLinkProps extends LinkGroupProps {
   link: IClutch.core.project.v1.ILink;
 }
 
-interface QuickLinkContainerProps {
-  key: string | null | undefined;
-  name: string;
-  children: React.ReactNode;
-}
-
-const ICON_SIZE = "16px";
+const ICON_SIZE = "22px";
 
 const StyledMenuItem = styled.div({
   display: "flex",
@@ -29,16 +23,6 @@ const StyledMenuItem = styled.div({
     backgroundColor: "rgba(13, 16, 48, 0.05)",
   },
 });
-
-const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) => {
-  const container = (
-    <Tooltip title={name}>
-      <TooltipContainer>{children}</TooltipContainer>
-    </Tooltip>
-  );
-
-  return <div key={key}>{name ? container : children}</div>;
-};
 
 const StyledMoreVertIcon = styled.span({
   width: "12px",
@@ -55,23 +39,20 @@ const StyledMoreVertIcon = styled.span({
 });
 
 const StyledLinkTitle = styled.span({
-  padding: "8px",
   fontWeight: "bold",
 });
 
 const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
   link?.url ? (
-    <StyledMenuItem style={{ padding: "8px" }}>
+    <StyledMenuItem style={{ padding: "8px" }} key={link.url}>
       <Link href={link.url}>
-        <QuickLinkContainer key={link.name} name={linkGroupName}>
-          <img
-            width={ICON_SIZE}
-            height={ICON_SIZE}
-            src={linkGroupImage}
-            alt={link.name ?? `Quick Link to ${link.url}`}
-          />
-          <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
-        </QuickLinkContainer>
+        <img
+          width={ICON_SIZE}
+          height={ICON_SIZE}
+          src={linkGroupImage}
+          alt={link.name ?? `Quick Link to ${link.url}`}
+        />
+        <StyledLinkTitle style={{ paddingLeft: "6px" }}>{linkGroupName}</StyledLinkTitle>
       </Link>
     </StyledMenuItem>
   ) : null;
@@ -88,34 +69,37 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
       setValidLinks(links.filter(link => link?.url && link.url.length > 0));
     }
   }, [links]);
-
   return (
-    <QuickLinkContainer key={linkGroupName} name={linkGroupName}>
-      <StyledLinkTitle>
-        <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
-      </StyledLinkTitle>
-      <StyledLinkTitle style={{ padding: "0px" }}>{linkGroupName}</StyledLinkTitle>
+    <div key={linkGroupName}>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ padding: "6px" }}>
+          <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
+        </div>
+        <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
+      </div>
       <div>
         {validLinks.map(link => {
           return (
             link?.url && (
-              <StyledMenuItem style={{ padding: "8px", paddingLeft: "40px" }}>
-                <Link href={link.url}>
-                  <Typography color="inherit" variant="body4">
-                    {link.name}
-                  </Typography>
-                </Link>
-              </StyledMenuItem>
+              <React.Fragment key={link.url}>
+                <StyledMenuItem style={{ padding: "6px", paddingLeft: "46px" }}>
+                  <Link href={link.url}>
+                    <Typography color="inherit" variant="body4">
+                      {link.name}
+                    </Typography>
+                  </Link>
+                </StyledMenuItem>
+              </React.Fragment>
             )
           );
         })}
       </div>
-    </QuickLinkContainer>
+    </div>
   );
 };
 
 const ExpandedLinks = ({ linkGroups }) => (
-  <div>
+  <div style={{ borderRadius: "4px" }}>
     {(linkGroups || []).map(linkGroup => {
       if (linkGroup.links?.length === 1) {
         return (
