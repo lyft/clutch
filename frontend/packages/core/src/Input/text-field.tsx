@@ -290,6 +290,11 @@ const TextField = ({
             {...props}
           />
         )}
+        onChange={(_, v) => {
+          if (v && onReturn) {
+            onReturn();
+          }
+        }}
       />
     );
   }
