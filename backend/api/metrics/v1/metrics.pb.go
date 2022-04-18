@@ -179,6 +179,7 @@ type GetMetricsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// This map would contain a mapping of individual queries to their respective results.
 	QuerystringToMetrics map[string]*Metrics `protobuf:"bytes,1,rep,name=querystring_to_metrics,json=querystringToMetrics,proto3" json:"querystring_to_metrics,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
