@@ -158,8 +158,6 @@ github.com/aws/aws-sdk-go-v2/service/autoscaling v1.22.4 h1:5idZ9wTGvXKApIm7MtcJ
 github.com/aws/aws-sdk-go-v2/service/autoscaling v1.22.4/go.mod h1:mXzRCMCqLSHkUbw6vW4xHFSbSPFvD28OpeRQsNohImo=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.3 h1:b5+OInu1LyoF4uhFT453MOhbXXaM0YmQsqkxMjFl1dc=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.3/go.mod h1:SvbsOiwp0L3NvC+XjgS1CU6NQ3TmArV1bNBlugz2hVc=
-github.com/aws/aws-sdk-go-v2/service/ec2 v1.34.0 h1:dfWleW7/a3+TR6qJynYZsaovCEStQOep5x+BxkiBDhc=
-github.com/aws/aws-sdk-go-v2/service/ec2 v1.34.0/go.mod h1:37MWOQMGyj8lcranOwo716OHvJgeFJUOaWu6vk1pWNE=
 github.com/aws/aws-sdk-go-v2/service/ec2 v1.35.1 h1:YEVMI1T5zFgQD9kojI1zr1BZQaLoaxRZKTCqqxDVwu0=
 github.com/aws/aws-sdk-go-v2/service/ec2 v1.35.1/go.mod h1:37MWOQMGyj8lcranOwo716OHvJgeFJUOaWu6vk1pWNE=
 github.com/aws/aws-sdk-go-v2/service/iam v1.18.3 h1:wllKL2fLtvfaNAVbXKMRmM/mD1oDNw0hXmDn8mE/6Us=
@@ -180,8 +178,6 @@ github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.5.2/go.mod h1:QuL2Ym8B
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.7.2/go.mod h1:np7TMuJNT83O0oDOSF8i4dF3dvGqA6hPYYo6YYkzgRA=
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.3 h1:BKjwCJPnANbkwQ8vzSbaZDKawwagDubrH/z/c0X+kbQ=
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.3/go.mod h1:Bm/v2IaN6rZ+Op7zX+bOUMdL4fsrYZiD0dsjLhNKwZc=
-github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.3 h1:ZbNE0HOpVfiNdOpRQ/EqKlZ9Qb6WAFg+2bsM6gH8C6Q=
-github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.3/go.mod h1:uG1zYsJGLNm6/gsNAAtxlF9YkD2nBVlMdYsjHYxMomE=
 github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.4 h1:sFoontFrQQ6NPdGq2S62Y06l4oxZyRsODfA6Zid6S74=
 github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.4/go.mod h1:uG1zYsJGLNm6/gsNAAtxlF9YkD2nBVlMdYsjHYxMomE=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.12.0/go.mod h1:6J++A5xpo7QDsIeSqPK4UHqMSyPOCopa+zKtqAMhqVQ=
