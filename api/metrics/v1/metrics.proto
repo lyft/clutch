@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package clutch.metrics.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/metric/v1;metricsv1";
+
+import "api/v1/annotations.proto";
+import "google/api/annotations.proto";
+import "google/rpc/status.proto";
+
+service MetricsAPI {
+  rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
+    option (google.api.http) = {
+      post : "/v1/project/getMetrics"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message GetMetricsRequest {
+  // Could be PromQL, etc.
+  repeated string metric_queries = 1;
+}
+
+message Metric {
+  int64 value = 1;
+  int64 timestamp_ms = 2;
+}
+
+// Could also reuse timeseries proto
+message Metrics {
+  repeated Metric metrics = 1;
+}
+
+message GetMetricsResponse {
+  map<string, Metrics> querystring_to_metrics = 1;
+}
