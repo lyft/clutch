@@ -34,5 +34,6 @@ message Metrics {
 }
 
 message GetMetricsResponse {
+  // This map would contain a mapping of individual queries to their respective results.
   map<string, Metrics> querystring_to_metrics = 1;
 }
