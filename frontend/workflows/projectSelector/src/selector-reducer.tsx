@@ -171,9 +171,37 @@ const selectorReducer = (state: State, action: Action): State => {
     }
     case "HYDRATE_END": {
       let newState = { ...state, loading: false, error: undefined } as State;
+      const {
+        result: { results, partialFailures },
+      } = action?.payload || { result: { results: {} } };
+      const failed: string[] = [];
+      const failedCheck = id => _.indexOf(failed, id) > -1;
+
+      // Will handle given partial failures
+      if (partialFailures && partialFailures.length) {
+        newState.projectErrors = [];
+        partialFailures.forEach(failure => {
+          if (failure.details && failure.details.length) {
+            const { name } = failure.details[0] || { name: "" };
+            failed.push(name);
+
+            // only want to propagate the error if it's a main-level project, else we'll just silently remove it
+            if (_.has(newState[Group.PROJECTS], name)) {
+              newState.projectErrors.push({
+                message: failure.message || "",
+                details: failure.details[0] || {},
+              });
+            }
+          }
+        });
+
+        if (failed.length) {
+          newState = removeMissingProjects(newState, failed);
+        }
+      }
 
       _.forIn(
-        action?.payload?.result as { [k: string]: IClutch.project.v1.IProjectResult } | null,
+        results as { [k: string]: IClutch.project.v1.IProjectResult } | null,
         (v: IClutch.project.v1.IProjectResult, k: string) => {
           // user owned project vs custom project
           if (v?.from?.users && v.from.users.length > 0) {
@@ -189,6 +217,10 @@ const selectorReducer = (state: State, action: Action): State => {
           if ((v?.from?.users && v.from.users.length > 0) || v?.from?.selected) {
             const dependencies = v?.project?.dependencies || { upstreams: {}, downstreams: {} };
             const { upstreams, downstreams } = dependencies;
+
+            _.remove(upstreams?.[PROJECT_TYPE_URL]?.ids || [], failedCheck);
+            _.remove(downstreams?.[PROJECT_TYPE_URL]?.ids || [], failedCheck);
+
             upstreams?.[PROJECT_TYPE_URL]?.ids?.forEach(upstreamDep => {
               newState = updateGroupstate(newState, Group.UPSTREAM, upstreamDep, {
                 checked: false,
@@ -218,24 +250,6 @@ const selectorReducer = (state: State, action: Action): State => {
 
       const { result } = action?.payload || { result: {} };
       const validState = { ...state };
-
-      // Will handle given partial failures
-      if (result?.partialFailures) {
-        validState.projectErrors = [];
-        result.partialFailures.forEach(failure => {
-          if (failure.details && failure.details.length) {
-            validState.projectErrors.push({
-              message: failure.message || "",
-              details: failure.details[0] || {},
-            });
-          }
-        });
-
-        return removeMissingProjects(
-          validState,
-          validState.projectErrors.map((e: any) => e.details?.name || "")
-        );
-      }
 
       if (result?.missing && result?.missing.length) {
         return removeMissingProjects(state, result?.missing || []);
