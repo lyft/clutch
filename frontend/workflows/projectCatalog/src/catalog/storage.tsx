@@ -20,17 +20,23 @@ const loadProjects = (): { [key: string]: string } => {
   }
 };
 
+const hasState = (): boolean => {
+  const storedProjects = window.localStorage.getItem(LOCAL_STORAGE_STATE_KEY);
+  return !(storedProjects === null || storedProjects === undefined);
+};
+
 const writeProjects = (projects: { [key: string]: string }) => {
   window.localStorage.setItem(LOCAL_STORAGE_STATE_KEY, JSON.stringify(projects));
 };
 
-const projectRequest = () => {
+const projectRequest = (includeOwned: boolean) => {
   const projects = loadProjects();
-  const requestData = { excludeDependencies: true } as IClutch.project.v1.GetProjectsRequest;
-  if (!Object.keys(projects).length) {
+  const requestData = {
+    excludeDependencies: true,
+    projects: Object.keys(projects),
+  } as IClutch.project.v1.GetProjectsRequest;
+  if (includeOwned) {
     requestData.users = [userId()];
-  } else {
-    requestData.projects = Object.keys(projects);
   }
   return requestData;
 };
@@ -38,10 +44,11 @@ const projectRequest = () => {
 const fetchProjects = (
   onSuccess: (pjts: IClutch.core.project.v1.IProject[]) => void,
   onError: (e: ClutchError) => void,
-  retry: number
+  retry: number,
+  includeOwned: boolean = true
 ) => {
   client
-    .post("/v1/project/getProjects", projectRequest())
+    .post("/v1/project/getProjects", projectRequest(includeOwned))
     .then(resp => {
       const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
       const selectedProjects = Object.values(results)
@@ -89,12 +96,13 @@ const fetchProjects = (
 
 const getProjects = (
   onSuccess: (pjts: IClutch.core.project.v1.IProject[]) => void,
-  onError: (e: ClutchError) => void
+  onError: (e: ClutchError) => void,
+  includeOwned: boolean = false
 ) => {
   // retry count is set to the number of projects in storage since potentially
   // all projects are invalid.
   const retryCount = Object.keys(loadProjects()).length;
-  fetchProjects(onSuccess, onError, retryCount);
+  fetchProjects(onSuccess, onError, retryCount, includeOwned);
 };
 
 /** Add a project to local storage. */
@@ -125,7 +133,11 @@ const removeProject = (
     delete storedProjects[project];
     writeProjects(storedProjects);
   }
-  getProjects(onSuccess, onError);
+  getProjects(onSuccess, onError, false);
 };
 
-export { addProject, getProjects, removeProject };
+const clearProjects = () => {
+  writeProjects({});
+};
+
+export { addProject, clearProjects, getProjects, hasState, removeProject };

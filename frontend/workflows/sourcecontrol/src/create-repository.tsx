@@ -41,7 +41,11 @@ const visibilityOptions = {
 };
 
 const RepositoryDetails: React.FC<WizardChild> = () => {
-  const { register, errors, handleSubmit } = useForm({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
@@ -66,17 +70,17 @@ const RepositoryDetails: React.FC<WizardChild> = () => {
           label="Name"
           name="name"
           onChange={e => repositoryData.updateData("name", e.target.value)}
-          inputRef={register}
           helperText={errors.name ? errors.name.message : ""}
           error={!!errors.name}
+          formRegistration={register}
         />
         <TextField
           label="Description"
           name="description"
           onChange={e => repositoryData.updateData("description", e.target.value)}
-          inputRef={register}
           error={!!errors.description}
           helperText={errors.description ? errors.description.message : ""}
+          formRegistration={register}
         />
         <Select
           name="visibility"
