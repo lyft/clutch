@@ -1,8 +1,9 @@
 import React from "react";
+import type { TypographyProps } from "@clutch-sh/core";
 import { Card, ClutchError, Error, Grid, styled, Typography } from "@clutch-sh/core";
 import { LinearProgress } from "@material-ui/core";
 
-export enum CardType {
+enum CardType {
   DYNAMIC = "Dynamic",
   METADATA = "Metadata",
 }
@@ -12,14 +13,19 @@ export interface CatalogDetailsCard {
 }
 
 interface CardTitleProps {
-  title: string;
+  title?: string;
+  titleVariant?: TypographyProps["variant"];
   titleIcon?: React.ReactNode;
   endAdornment?: React.ReactNode;
 }
 
 interface CardBodyProps {
   children?: React.ReactNode;
+  /** Manual Control of loading state */
   loading?: boolean;
+  /** Option to hide the loading indicator */
+  loadingIndicator?: boolean;
+  /** Manual control of error state */
   error?: ClutchError;
 }
 
@@ -68,14 +74,16 @@ const BodyContainer = styled("div")({
   paddingLeft: "4px",
 });
 
-const CardTitle = ({ title, titleIcon, endAdornment }: CardTitleProps) => (
-  <>
-    <StyledTitleContainer container item xs={endAdornment ? 9 : 12} spacing={1}>
-      {titleIcon && <Grid item>{titleIcon}</Grid>}
-      <StyledTitle item>
-        <Typography variant="h4">{title}</Typography>
-      </StyledTitle>
-    </StyledTitleContainer>
+const CardTitle = ({ title, titleVariant = "h4", titleIcon, endAdornment }: CardTitleProps) => (
+  <Grid container item direction="row" alignItems="flex-start" wrap="nowrap">
+    {title && (
+      <StyledTitleContainer container item xs={endAdornment ? 9 : 12} spacing={1}>
+        {titleIcon && <Grid item>{titleIcon}</Grid>}
+        <StyledTitle item>
+          <Typography variant={titleVariant}>{title}</Typography>
+        </StyledTitle>
+      </StyledTitleContainer>
+    )}
     {endAdornment && (
       <Grid
         container
@@ -89,12 +97,12 @@ const CardTitle = ({ title, titleIcon, endAdornment }: CardTitleProps) => (
         {endAdornment}
       </Grid>
     )}
-  </>
+  </Grid>
 );
 
-const CardBody = ({ loading, error, children }: CardBodyProps) => (
+const CardBody = ({ loading, loadingIndicator = true, error, children }: CardBodyProps) => (
   <>
-    {loading && (
+    {loadingIndicator && loading && (
       <StyledProgressContainer>
         <LinearProgress color="secondary" />
       </StyledProgressContainer>
@@ -103,23 +111,15 @@ const CardBody = ({ loading, error, children }: CardBodyProps) => (
   </>
 );
 
-const BaseCard = ({
-  children,
-  title,
-  titleIcon,
-  endAdornment,
-  loading,
-  error,
-  ...props
-}: CardProps) => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+const BaseCard = ({ loading, error, ...props }: CardProps) => {
+  const [cardLoading, setCardLoading] = React.useState<boolean>(false);
   const [cardError, setCardError] = React.useState<ClutchError | undefined>(undefined);
 
   const fetchData = () => {
     const { fetchDataFn, onSuccess, onError } = props;
 
     if (fetchDataFn) {
-      setIsLoading(true);
+      setCardLoading(true);
 
       fetchDataFn()
         .then(data => {
@@ -134,7 +134,7 @@ const BaseCard = ({
           }
           setCardError(err);
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setCardLoading(false));
     }
   };
 
@@ -153,12 +153,8 @@ const BaseCard = ({
 
   return (
     <StyledCard container direction="row">
-      <Grid container item direction="row" alignItems="flex-start">
-        <CardTitle title={title} titleIcon={titleIcon} endAdornment={endAdornment} />
-      </Grid>
-      <CardBody loading={loading || isLoading} error={error || cardError}>
-        {children}
-      </CardBody>
+      <CardTitle {...props} />
+      <CardBody loading={loading || cardLoading} error={error || cardError} {...props} />
     </StyledCard>
   );
 };
@@ -167,4 +163,4 @@ const DynamicCard = (props: BaseCardProps) => <BaseCard type={CardType.DYNAMIC} 
 
 const MetaCard = (props: BaseCardProps) => <BaseCard type={CardType.METADATA} {...props} />;
 
-export { DynamicCard, MetaCard };
+export { CardType, DynamicCard, MetaCard };

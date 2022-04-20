@@ -9,6 +9,5 @@ exports[`AppLayout component renders correctly 1`] = `
       <Outlet />
     </Styled(div)>
   </Styled(WithStyles(ForwardRef(Grid)))>
-  <FeedbackButton />
 </Styled(WithStyles(ForwardRef(Grid)))>"
 `;

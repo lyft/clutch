@@ -12,6 +12,7 @@ import (
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/smithy-go"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
@@ -625,4 +626,12 @@ func (ma mockAutoscaling) UpdateAutoScalingGroup(ctx context.Context, params *au
 	}
 
 	return &autoscaling.UpdateAutoScalingGroupOutput{}, nil
+}
+
+func TestRegionalClient(t *testing.T) {
+	c := &s3.Client{}
+
+	r := &regionalClient{s3: c}
+
+	assert.Equal(t, c, r.S3())
 }

@@ -24,35 +24,35 @@ export interface HydratedData {
   };
 }
 
-type StorageActionKind = "STORE_DATA" | "REMOVE_DATA";
+type ComponentStorageActionKind = "STORE_DATA" | "REMOVE_DATA";
 
-type BackgroundStorageActionKind = "HYDRATE";
+type HydrateStorageActionKind = "HYDRATE";
 
-export interface BackgroundPayload {
+export interface HydratePayload {
   data?: IClutch.shortlink.v1.IShareableState[];
 }
 
-export interface UserPayload {
+export interface ComponentPayload {
   componentName?: string;
   key?: string;
   data?: unknown;
   localStorage?: boolean;
 }
 
-interface StorageAction {
-  type: StorageActionKind;
-  payload: UserPayload;
+interface ComponentStorageAction {
+  type: ComponentStorageActionKind;
+  payload: ComponentPayload;
 }
 
-interface BackgroundAction {
-  type: BackgroundStorageActionKind;
-  payload?: BackgroundPayload;
+interface HydrateStorageAction {
+  type: HydrateStorageActionKind;
+  payload?: HydratePayload;
 }
 
-export type Action = StorageAction | BackgroundAction;
+export type Action = ComponentStorageAction | HydrateStorageAction;
 
 export interface WorkflowStorageState {
-  shortLinked: boolean;
+  fromShortLink: boolean;
   workflowStore: HydratedData;
   workflowSessionStore: HydratedData;
 }
@@ -67,14 +67,14 @@ export type StoreDataFn = (
 ) => void;
 
 export interface WorkflowStorageContextProps {
-  shortLinked: boolean;
+  fromShortLink: boolean;
   removeData: RemoveDataFn;
   retrieveData: RetrieveDataFn;
   storeData: StoreDataFn;
 }
 
 const defaultWorkflowStorageState: WorkflowStorageState = {
-  shortLinked: false,
+  fromShortLink: false,
   workflowStore: {},
   workflowSessionStore: {},
 };

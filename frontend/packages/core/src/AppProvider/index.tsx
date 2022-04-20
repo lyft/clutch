@@ -10,10 +10,10 @@ import Landing from "../landing";
 import NotFound from "../not-found";
 
 import { registeredWorkflows } from "./registrar";
+import ShortLinkStateHydrator from "./short-link-state-hydrator";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
-import WorkflowHydrator from "./workflow-hydrator";
 
 export interface UserConfiguration {
   [packageName: string]: {
@@ -92,6 +92,8 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 
   return (
     <Router>
+      {/* TODO: use the ThemeProvider for proper theming in the future 
+        See https://github.com/lyft/clutch/commit/f6c6706b9ba29c4d4c3e5d0ac0c5d0f038203937 */}
       <Theme variant="light">
         <div id="App">
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
@@ -107,12 +109,12 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                       key={workflowKey}
                       element={
                         <ErrorBoundary workflow={workflow}>
-                          <WorkflowHydrator
-                            hydrateData={hydrateState}
-                            onClear={() => setHydrateState(null)}
+                          <ShortLinkStateHydrator
+                            sharedState={hydrateState}
+                            clearTemporaryState={() => setHydrateState(null)}
                           >
                             <Outlet />
-                          </WorkflowHydrator>
+                          </ShortLinkStateHydrator>
                         </ErrorBoundary>
                       }
                     >

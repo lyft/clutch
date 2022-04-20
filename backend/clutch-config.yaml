@@ -35,7 +35,12 @@ modules:
   - name: clutch.module.envoytriage
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
+  - name: clutch.module.project
+    typed_config:
+      "@type": types.google.com/clutch.config.module.project.v1.Config
+      project_service_override: clutch.service.project
 services:
+  - name: clutch.service.project
   - name: clutch.service.aws
     typed_config:
       "@type": types.google.com/clutch.config.service.aws.v1.Config

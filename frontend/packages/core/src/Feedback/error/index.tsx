@@ -59,7 +59,7 @@ const Error = ({ subject: error, onRetry }: ErrorProps) => {
 
   if (error?.details === undefined) {
     return (
-      <Alert severity="error" title={error.status.text} action={action}>
+      <Alert severity="error" title={error.status?.text} action={action}>
         {error.message}
       </Alert>
     );
@@ -67,7 +67,7 @@ const Error = ({ subject: error, onRetry }: ErrorProps) => {
 
   let links = [];
   const hasDetails =
-    error.details.filter(detail => {
+    error.details?.filter(detail => {
       if (isHelpDetails(detail)) {
         links = detail?.links || [];
         return false;
@@ -79,7 +79,7 @@ const Error = ({ subject: error, onRetry }: ErrorProps) => {
     <div>
       <ErrorAlert
         severity="error"
-        title={error.status.text}
+        title={error.status?.text}
         data-detailed={hasDetails}
         action={action}
       >
