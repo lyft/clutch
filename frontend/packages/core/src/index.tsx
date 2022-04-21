@@ -11,7 +11,6 @@ import {
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
 import { Card, CardContent, CardHeader } from "./card";
 import Confirmation from "./confirmation";
-import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
 import { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
 import { AvatarIcon, StatusIcon } from "./icon";
@@ -47,6 +46,9 @@ export * from "./chip";
 export * from "./Charts";
 
 export { default as ClutchApp } from "./AppProvider";
+
+export { useWorkflowStorageContext, useWizardContext, WizardContext } from "./Contexts";
+export type { WorkflowRemoveDataFn, WorkflowRetrieveDataFn, WorkflowStoreDataFn } from "./Contexts";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
@@ -105,6 +107,4 @@ export {
   useParams,
   userId,
   useSearchParams,
-  useWizardContext,
-  WizardContext,
 };
