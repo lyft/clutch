@@ -2,7 +2,7 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid } from "@material-ui/core";
 
-import { WorkflowStorageContext } from "../Contexts/workflow-storage-context";
+import { useShortLinkContext, WorkflowStorageContext } from "../Contexts";
 import { retrieveData as retrieveDataHelper } from "../Contexts/workflow-storage-context/helpers";
 import workflowStorageContextReducer from "../Contexts/workflow-storage-context/reducer";
 import type { WorkflowStorageContextProps } from "../Contexts/workflow-storage-context/types";
@@ -35,6 +35,7 @@ const ShortLinkStateHydrator = ({
   clearTemporaryState,
   sharedState,
 }: ShortLinkStateHydratorProps): React.ReactElement => {
+  const { storeWorkflowSession } = useShortLinkContext();
   const [state, dispatch] = React.useReducer(
     workflowStorageContextReducer,
     defaultWorkflowStorageState
@@ -46,6 +47,12 @@ const ShortLinkStateHydrator = ({
       clearTemporaryState();
     }
   }, [sharedState]);
+
+  React.useEffect(() => {
+    if (state.workflowSessionStore) {
+      storeWorkflowSession(state.workflowSessionStore);
+    }
+  }, [state]);
 
   function retrieveData<T>(componentName: string, key: string, defaultData: T): T {
     return retrieveDataHelper(state.workflowStore, componentName, key, defaultData);
