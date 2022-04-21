@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
+import { DevTool } from "@hookform/devtools";
 import SearchIcon from "@material-ui/icons/Search";
 
 import {
@@ -76,9 +77,10 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
     schemas.filter(schema => schema?.metadata?.search?.autocompleteEnabled === true).length >= 1 &&
     enableAutocomplete;
 
-  const error = validation.errors?.query;
+  const error = validation.formState.errors?.query;
   return (
     <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
+      {process.env.REACT_APP_DEBUG_FORMS && <DevTool control={validation.control} />}
       <TextField
         label={typeLabel}
         name="query"
@@ -87,11 +89,11 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
         onChange={handleChanges}
         onKeyDown={handleChanges}
         onFocus={handleChanges}
-        inputRef={validation.register({ required: true })}
         error={!!error}
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
         autocompleteCallback={isAutoCompleteEnabled ? v => autoComplete(inputType, v) : undefined}
+        formRegistration={validation.register}
       />
     </Form>
   );
@@ -126,6 +128,7 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
 
   return (
     <Form noValidate onSubmit={schemaValidation.handleSubmit(() => submitHandler(data))}>
+      {/* {process.env.REACT_APP_DEBUG_FORMS && <DevTool control={schemaValidation.control} />} */}
       <Accordion
         title={`Search by ${schema.metadata.displayName}`}
         expanded={expanded}

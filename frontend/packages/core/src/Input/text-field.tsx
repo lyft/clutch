@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { FieldValues, UseFormRegister } from "react-hook-form";
 import styled from "@emotion/styled";
 import type {
   InputProps as MuiInputProps,
@@ -181,6 +182,7 @@ export interface TextFieldProps
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
   autocompleteCallback?: (v: string) => Promise<{ results: { id?: string; label: string }[] }>;
+  formRegistration?: UseFormRegister<FieldValues>;
 }
 
 const TextField = ({
@@ -194,15 +196,23 @@ const TextField = ({
   defaultValue,
   value,
   fullWidth = true,
+  name,
+  required,
+  formRegistration,
+  inputRef,
   ...props
 }: TextFieldProps) => {
+  const formValidation =
+    formRegistration !== undefined ? formRegistration(name, { required }) : undefined;
+  const changeCallback = onChange !== undefined ? onChange : e => {};
   const onKeyDown = (
     e: React.KeyboardEvent<HTMLDivElement | HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    if (onChange !== undefined) {
-      onChange(e as React.ChangeEvent<any>);
+    if (formValidation !== undefined) {
+      formValidation.onChange(e);
     }
-    if (e.keyCode === KEY_ENTER && onReturn) {
+    changeCallback(e as React.ChangeEvent<any>);
+    if (e.keyCode === KEY_ENTER && onReturn && !error) {
       onReturn();
     }
   };
@@ -228,12 +238,29 @@ const TextField = ({
 
   const isEmpty = (defaultValue === undefined || defaultValue === "") && value === "";
   const textFieldProps = {
-    onKeyDown,
-    onFocus: onChange,
-    onBlur: onChange,
+    name,
+    onFocus: e => {
+      if (formValidation !== undefined) {
+        formValidation.onChange(e);
+      }
+      changeCallback(e);
+    },
+    onBlur: e => {
+      if (formValidation !== undefined) {
+        formValidation.onBlur(e);
+      }
+      changeCallback(e);
+    },
     error,
     helperText: helpText,
     InputProps: {
+      onChange: e => {
+        if (formValidation !== undefined) {
+          formValidation.onChange(e);
+        }
+        changeCallback(e);
+      },
+      onKeyDown,
       readOnly,
       endAdornment: endAdornment && (
         <IconButton type="submit" disabled={isEmpty}>
@@ -241,6 +268,7 @@ const TextField = ({
         </IconButton>
       ),
     },
+    inputRef: formValidation !== undefined ? formValidation.ref : inputRef,
   };
 
   const autoCompleteDebounce = React.useRef(
@@ -273,9 +301,10 @@ const TextField = ({
           <AutocompleteResult id={option.id} label={option.label} />
         )}
         onSelectCapture={e => {
-          if (onChange) {
-            onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+          if (formValidation !== undefined) {
+            formValidation.onChange(e);
           }
+          changeCallback(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
         }}
         defaultValue={{ id: defaultVal, label: defaultVal }}
         value={value}

@@ -30,7 +30,11 @@ const Content = styled.div({
 });
 
 const K8sDashSearch = ({ onSubmit }) => {
-  const { errors, handleSubmit, register } = useForm({
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
@@ -75,7 +79,7 @@ const K8sDashSearch = ({ onSubmit }) => {
               name="namespace"
               error={!!errors?.namespace}
               helperText={errors?.namespace?.message}
-              inputRef={register}
+              formRegistration={register}
             />
             <TextField
               defaultValue={inputData.displayValue()?.clientset}
@@ -83,7 +87,7 @@ const K8sDashSearch = ({ onSubmit }) => {
               name="clientset"
               error={!!errors?.clientset}
               helperText={errors?.clientset?.message}
-              inputRef={register}
+              formRegistration={register}
             />
             <IconButton type="submit">
               <SearchIcon />
