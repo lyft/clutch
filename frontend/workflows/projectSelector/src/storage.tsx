@@ -21,7 +21,7 @@ const loadStoredState = (
   removeData: WorkflowRemoveDataFn
 ): State => {
   // Grab stored state from local storage
-  const storedState = retrieveData(COMPONENT_NAME, STORAGE_STATE_KEY) as GlobalProjectState;
+  const storedState = retrieveData(COMPONENT_NAME, STORAGE_STATE_KEY, state);
   // If stored state does not exist return state unmodified
   if (!storedState) {
     return state;

@@ -3,7 +3,7 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import type { HydratedData } from "./types";
 
 // API data comes in as an array, this will rotate it into an object usable by the StorageContext
-const rotateDataFromAPI = (data: IClutch.shortlink.v1.IShareableState[]): HydratedData => {
+const transformAPISharedState = (data: IClutch.shortlink.v1.IShareableState[]): HydratedData => {
   const hydrated: HydratedData = {};
 
   data.forEach(({ key, state = {} }) => {
@@ -36,12 +36,19 @@ const retrieveLocalData = (key: string) => {
   }
 };
 
-const retrieveData = (
+type GenericRetrieve = <T>(
   store: HydratedData,
   componentName: string,
   key: string,
-  defaultData?: unknown
-): unknown => {
+  defaultData: T
+) => T;
+
+const retrieveData: GenericRetrieve = (
+  store: HydratedData,
+  componentName: string,
+  key: string,
+  defaultData?
+) => {
   if (store && store[componentName]) {
     return key.length ? store[componentName][key] : store[componentName];
   }
@@ -53,4 +60,4 @@ const retrieveData = (
   return defaultData;
 };
 
-export { rotateDataFromAPI, removeLocalData, retrieveData, storeLocalData };
+export { removeLocalData, retrieveData, storeLocalData, transformAPISharedState };

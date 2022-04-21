@@ -837,10 +837,13 @@ func TestNewService(t *testing.T) {
 func TestCommitAuthorFromContext(t *testing.T) {
 	ctx := context.Background()
 	ctx = authn.ContextWithAnonymousClaims(ctx)
+	commitTime := time.Now()
 
-	result := commitOptionsFromClaims(ctx)
+	result := commitOptionsFromClaims(ctx, commitTime)
 	assert.Equal(t, "Anonymous User via Clutch", result.Author.Name)
-	assert.Equal(t, "<>", result.Author.Email)
+	assert.Equal(t, "", result.Author.Email)
+	assert.Equal(t, commitTime, result.Author.When)
+	assert.Equal(t, true, result.All)
 
 	ctx = authn.ContextWithClaims(ctx, &authn.Claims{
 		StandardClaims: &jwt.StandardClaims{
@@ -848,9 +851,12 @@ func TestCommitAuthorFromContext(t *testing.T) {
 		},
 	})
 
-	result = commitOptionsFromClaims(ctx)
+	commitTime = time.Now()
+	result = commitOptionsFromClaims(ctx, commitTime)
 	assert.Equal(t, "daniel@example.com via Clutch", result.Author.Name)
-	assert.Equal(t, "<daniel@example.com>", result.Author.Email)
+	assert.Equal(t, "daniel@example.com", result.Author.Email)
+	assert.Equal(t, commitTime, result.Author.When)
+	assert.Equal(t, true, result.All)
 
 	ctx = authn.ContextWithClaims(ctx, &authn.Claims{
 		StandardClaims: &jwt.StandardClaims{
@@ -858,7 +864,10 @@ func TestCommitAuthorFromContext(t *testing.T) {
 		},
 	})
 
-	result = commitOptionsFromClaims(ctx)
+	commitTime = time.Now()
+	result = commitOptionsFromClaims(ctx, commitTime)
 	assert.Equal(t, "daniel123 via Clutch", result.Author.Name)
-	assert.Equal(t, "<>", result.Author.Email)
+	assert.Equal(t, "", result.Author.Email)
+	assert.Equal(t, commitTime, result.Author.When)
+	assert.Equal(t, true, result.All)
 }

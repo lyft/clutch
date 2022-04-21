@@ -122,9 +122,16 @@ interface JwtToken {
 }
 
 const userId = (): string => {
+  if (process.env.NODE_ENV === "development") {
+    if (process.env.REACT_APP_USER_ID) {
+      return process.env.REACT_APP_USER_ID;
+    }
+  }
   // Check JWT token for subject and display if available.
   const token = Cookies.get("token");
   if (!token) {
+    // eslint-disable-next-line
+    console.warn("No user token set in development - returning Anonymous");
     return "Anonymous";
   }
   let subject = "Unknown user";

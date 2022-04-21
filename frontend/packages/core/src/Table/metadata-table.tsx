@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -136,11 +137,11 @@ const ImmutableRow: React.FC<ImmutableRowProps> = ({ data }) => {
 interface MutableRowProps extends ImmutableRowProps {
   onUpdate: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   onReturn: () => void;
-  validation: any;
+  validation: UseFormReturn<FieldValues, object>;
 }
 
 const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
-  const error = validation.errors?.[data.name];
+  const error = validation?.formState?.errors?.[data.name];
 
   // intercept the update callback to prevent updates if there are form errors present
   // based on the validation.
@@ -164,9 +165,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
             onChange={updateCallback}
             onReturn={onReturn}
             onFocus={updateCallback}
-            inputRef={validation.register}
             helperText={error?.message || ""}
             error={!!error || false}
+            formRegistration={validation.register}
           />
         </Grid>
       </TableCell>
@@ -222,7 +223,9 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
             return row.input !== undefined && onUpdate ? (
               <MutableRow
                 data={row}
-                onUpdate={e => onUpdate(e.target.id, e.target.value)}
+                onUpdate={e => {
+                  onUpdate(e.target.id, e.target.value);
+                }}
                 onReturn={onSubmit}
                 key={row.id}
                 validation={validation}

@@ -1,5 +1,5 @@
 # Frontend build.
-FROM node:16.14.0-buster as nodebuild
+FROM node:16.14.2-buster as nodebuild
 COPY ./frontend ./frontend
 COPY ./tools/install-yarn.sh ./tools/install-yarn.sh
 COPY ./tools/preflight-checks.sh ./tools/preflight-checks.sh

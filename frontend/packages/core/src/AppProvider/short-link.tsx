@@ -33,7 +33,7 @@ const fetchData = async (hash, hydrate, onError) => {
 
 /**
  * Component that will be present for a route which will look for a short link hash
- * - If found
+ * If found
  * - It will set a loading state
  * - Then it will call down to the API with the hash and ask for any data pertaining to it
  * - If the API call is successful
@@ -61,7 +61,6 @@ const ShortLink = ({ hydrate, onError, setLoading }: ShortLinkProps) => {
   }, [hash]);
 
   // currently return null so that nothing is rendered
-  // TODO: either make a loading spinner or something to go here if the API calls are not responsive enough
   return null;
 };
 

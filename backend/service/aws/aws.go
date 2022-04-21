@@ -189,6 +189,23 @@ type Client interface {
 	GetAccountsInRegion(region string) []string
 	GetPrimaryAccountAlias() string
 	Regions() []string
+
+	GetDirectClient(account string, region string) (DirectClient, error)
+}
+
+// DirectClient gives access to the underlying AWS clients from the Golang SDK.
+// This allows arbitrary feature development on top of AWS from other services and modules without having to
+// contribute to the upstream interface. Using these clients will make mocking extremely difficult since it returns the
+// AWS SDK's struct types and not an interface that can be substituted for. It is recommended following initial
+// development of a feature that you add the calls to a service interface so they can be tested more easily.
+type DirectClient interface {
+	Autoscaling() *autoscaling.Client
+	DynamoDB() *dynamodb.Client
+	EC2() *ec2.Client
+	IAM() *iam.Client
+	Kinesis() *kinesis.Client
+	S3() *s3.Client
+	STS() *sts.Client
 }
 
 type client struct {
@@ -205,13 +222,41 @@ type regionalClient struct {
 
 	dynamodbCfg *awsv1.DynamodbConfig
 
-	s3          s3Client
-	kinesis     kinesisClient
-	ec2         ec2Client
 	autoscaling autoscalingClient
 	dynamodb    dynamodbClient
-	sts         stsClient
+	ec2         ec2Client
 	iam         iamClient
+	kinesis     kinesisClient
+	s3          s3Client
+	sts         stsClient
+}
+
+func (r *regionalClient) Autoscaling() *autoscaling.Client {
+	return r.autoscaling.(*autoscaling.Client)
+}
+
+func (r *regionalClient) DynamoDB() *dynamodb.Client {
+	return r.dynamodb.(*dynamodb.Client)
+}
+
+func (r *regionalClient) EC2() *ec2.Client {
+	return r.ec2.(*ec2.Client)
+}
+
+func (r *regionalClient) IAM() *iam.Client {
+	return r.iam.(*iam.Client)
+}
+
+func (r *regionalClient) Kinesis() *kinesis.Client {
+	return r.kinesis.(*kinesis.Client)
+}
+
+func (r *regionalClient) S3() *s3.Client {
+	return r.s3.(*s3.Client)
+}
+
+func (r *regionalClient) STS() *sts.Client {
+	return r.sts.(*sts.Client)
 }
 
 type accountClients struct {
@@ -219,6 +264,10 @@ type accountClients struct {
 	regions []string
 
 	clients map[string]*regionalClient
+}
+
+func (c *client) GetDirectClient(account string, region string) (DirectClient, error) {
+	return c.getAccountRegionClient(account, region)
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.

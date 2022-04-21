@@ -137,7 +137,11 @@ const allPresent = (state: State, dispatch: React.Dispatch<Action>): boolean => 
   return true;
 };
 
-const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>, shortLinked: boolean) => {
+const hydrateProjects = (
+  state: State,
+  dispatch: React.Dispatch<Action>,
+  fromShortLink: boolean
+) => {
   // Determine if any hydration is required.
   // - Are any services missing from state.projectdata?
   // - Are projects empty (first load)?
@@ -156,7 +160,7 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>, shortLi
 
     // will only push the userId onto the request if we're not currently under a shortLink
     // this is so that the API will not return the users default projects
-    if (!shortLinked) {
+    if (!fromShortLink) {
       requestParams.users.push(userId());
     }
 
@@ -207,7 +211,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
 
-  const { removeData, retrieveData, shortLinked, storeData } = useWorkflowStorageContext();
+  const { removeData, retrieveData, fromShortLink, storeData } = useWorkflowStorageContext();
 
   const [state, dispatch] = React.useReducer(
     selectorReducer,
@@ -215,12 +219,12 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   );
 
   React.useEffect(() => {
-    const interval = setInterval(() => hydrateProjects(state, dispatch, shortLinked), 30000);
+    const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
     return () => clearInterval(interval);
   }, [state]);
 
   React.useEffect(() => {
-    hydrateProjects(state, dispatch, shortLinked);
+    hydrateProjects(state, dispatch, fromShortLink);
   }, [state[Group.PROJECTS]]);
 
   // computes the final state for rendering across other components

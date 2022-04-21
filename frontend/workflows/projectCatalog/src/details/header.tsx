@@ -24,13 +24,14 @@ const ProjectHeader = ({
 }: ProjectHeaderProps) => (
   <StyledContainer container direction="column">
     <Grid container item direction="row" alignItems="flex-end">
-      <Typography variant="body4">{routeTitle}</Typography>&nbsp;/&nbsp;
-      <Typography variant="caption2">{name}</Typography>
+      <Typography variant="caption2" color="rgb(13, 16, 48, .48)">
+        {routeTitle}&nbsp;/&nbsp;Details
+      </Typography>
     </Grid>
     <StyledHeading>
       <Typography variant="h2">{name}</Typography>
     </StyledHeading>
-    {description.length && <Typography variant="body2">{description}</Typography>}
+    {description.length > 0 && <Typography variant="body2">{description}</Typography>}
   </StyledContainer>
 );
 
