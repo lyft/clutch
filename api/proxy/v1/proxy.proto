@@ -19,6 +19,16 @@ service ProxyAPI {
     };
     option (clutch.api.v1.action).type = CREATE;
   }
+
+  // RequestProxyGet is a clone of the request proxy, but only permits requests with the http_method set to GET.
+  // This is useful for RBAC purposes since the action type is READ.
+  rpc RequestProxyGet(RequestProxyGetRequest) returns (RequestProxyGetResponse) {
+    option (google.api.http) = {
+      post : "/v1/proxy/request/get"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message RequestProxyRequest {
@@ -40,5 +50,27 @@ message RequestProxyResponse {
   // https://datatracker.ietf.org/doc/html/rfc2616#section-4.2
   map<string, google.protobuf.ListValue> headers = 2;
   // The full response body
+  google.protobuf.Value response = 3 [ (clutch.api.v1.log) = false ];
+}
+
+message RequestProxyGetRequest {
+  // The name of a service that is configured
+  string service = 1 [ (validate.rules).string.min_len = 1 ];
+  // The HTTP method that will be used for the request
+  string http_method = 2 [ (validate.rules).string.min_len = 1 ];
+  // The URI path to call
+  string path = 3 [ (validate.rules).string.min_len = 1 ];
+  // The request body
+  google.protobuf.Value request = 4 [ (clutch.api.v1.log) = false ];
+}
+
+message RequestProxyGetResponse {
+  // The http response code from the service response
+  int32 http_status = 1;
+  // All of the headers from the service response
+  // Header values can have multiple values for the same name
+  // https://datatracker.ietf.org/doc/html/rfc2616#section-4.2
+  map<string, google.protobuf.ListValue> headers = 2;
+  // The full response body.
   google.protobuf.Value response = 3 [ (clutch.api.v1.log) = false ];
 }

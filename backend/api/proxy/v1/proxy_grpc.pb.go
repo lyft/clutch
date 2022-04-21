@@ -23,6 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProxyAPIClient interface {
 	RequestProxy(ctx context.Context, in *RequestProxyRequest, opts ...grpc.CallOption) (*RequestProxyResponse, error)
+	// RequestProxyGet is a clone of the request proxy, but only permits requests with the http_method set to GET.
+	// This is useful for RBAC purposes since the action type is READ.
+	RequestProxyGet(ctx context.Context, in *RequestProxyGetRequest, opts ...grpc.CallOption) (*RequestProxyGetResponse, error)
 }
 
 type proxyAPIClient struct {
@@ -42,11 +45,23 @@ func (c *proxyAPIClient) RequestProxy(ctx context.Context, in *RequestProxyReque
 	return out, nil
 }
 
+func (c *proxyAPIClient) RequestProxyGet(ctx context.Context, in *RequestProxyGetRequest, opts ...grpc.CallOption) (*RequestProxyGetResponse, error) {
+	out := new(RequestProxyGetResponse)
+	err := c.cc.Invoke(ctx, "/clutch.proxy.v1.ProxyAPI/RequestProxyGet", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProxyAPIServer is the server API for ProxyAPI service.
 // All implementations should embed UnimplementedProxyAPIServer
 // for forward compatibility
 type ProxyAPIServer interface {
 	RequestProxy(context.Context, *RequestProxyRequest) (*RequestProxyResponse, error)
+	// RequestProxyGet is a clone of the request proxy, but only permits requests with the http_method set to GET.
+	// This is useful for RBAC purposes since the action type is READ.
+	RequestProxyGet(context.Context, *RequestProxyGetRequest) (*RequestProxyGetResponse, error)
 }
 
 // UnimplementedProxyAPIServer should be embedded to have forward compatible implementations.
@@ -55,6 +70,9 @@ type UnimplementedProxyAPIServer struct {
 
 func (UnimplementedProxyAPIServer) RequestProxy(context.Context, *RequestProxyRequest) (*RequestProxyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestProxy not implemented")
+}
+func (UnimplementedProxyAPIServer) RequestProxyGet(context.Context, *RequestProxyGetRequest) (*RequestProxyGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequestProxyGet not implemented")
 }
 
 // UnsafeProxyAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -86,6 +104,24 @@ func _ProxyAPI_RequestProxy_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProxyAPI_RequestProxyGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RequestProxyGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProxyAPIServer).RequestProxyGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.proxy.v1.ProxyAPI/RequestProxyGet",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProxyAPIServer).RequestProxyGet(ctx, req.(*RequestProxyGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProxyAPI_ServiceDesc is the grpc.ServiceDesc for ProxyAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -96,6 +132,10 @@ var ProxyAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RequestProxy",
 			Handler:    _ProxyAPI_RequestProxy_Handler,
+		},
+		{
+			MethodName: "RequestProxyGet",
+			Handler:    _ProxyAPI_RequestProxyGet_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

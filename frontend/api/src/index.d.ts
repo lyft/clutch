@@ -20159,6 +20159,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public requestProxy(request: clutch.proxy.v1.IRequestProxyRequest): Promise<clutch.proxy.v1.RequestProxyResponse>;
+
+                /**
+                 * Calls RequestProxyGet.
+                 * @param request RequestProxyGetRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and RequestProxyGetResponse
+                 */
+                public requestProxyGet(request: clutch.proxy.v1.IRequestProxyGetRequest, callback: clutch.proxy.v1.ProxyAPI.RequestProxyGetCallback): void;
+
+                /**
+                 * Calls RequestProxyGet.
+                 * @param request RequestProxyGetRequest message or plain object
+                 * @returns Promise
+                 */
+                public requestProxyGet(request: clutch.proxy.v1.IRequestProxyGetRequest): Promise<clutch.proxy.v1.RequestProxyGetResponse>;
             }
 
             namespace ProxyAPI {
@@ -20169,6 +20183,13 @@ export namespace clutch {
                  * @param [response] RequestProxyResponse
                  */
                 type RequestProxyCallback = (error: (Error|null), response?: clutch.proxy.v1.RequestProxyResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.proxy.v1.ProxyAPI#requestProxyGet}.
+                 * @param error Error, if any
+                 * @param [response] RequestProxyGetResponse
+                 */
+                type RequestProxyGetCallback = (error: (Error|null), response?: clutch.proxy.v1.RequestProxyGetResponse) => void;
             }
 
             /** Properties of a RequestProxyRequest. */
@@ -20292,6 +20313,132 @@ export namespace clutch {
 
                 /**
                  * Converts this RequestProxyResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a RequestProxyGetRequest. */
+            interface IRequestProxyGetRequest {
+
+                /** RequestProxyGetRequest service */
+                service?: (string|null);
+
+                /** RequestProxyGetRequest httpMethod */
+                httpMethod?: (string|null);
+
+                /** RequestProxyGetRequest path */
+                path?: (string|null);
+
+                /** RequestProxyGetRequest request */
+                request?: (google.protobuf.IValue|null);
+            }
+
+            /** Represents a RequestProxyGetRequest. */
+            class RequestProxyGetRequest implements IRequestProxyGetRequest {
+
+                /**
+                 * Constructs a new RequestProxyGetRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.proxy.v1.IRequestProxyGetRequest);
+
+                /** RequestProxyGetRequest service. */
+                public service: string;
+
+                /** RequestProxyGetRequest httpMethod. */
+                public httpMethod: string;
+
+                /** RequestProxyGetRequest path. */
+                public path: string;
+
+                /** RequestProxyGetRequest request. */
+                public request?: (google.protobuf.IValue|null);
+
+                /**
+                 * Verifies a RequestProxyGetRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RequestProxyGetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RequestProxyGetRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.proxy.v1.RequestProxyGetRequest;
+
+                /**
+                 * Creates a plain object from a RequestProxyGetRequest message. Also converts values to other types if specified.
+                 * @param message RequestProxyGetRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.proxy.v1.RequestProxyGetRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RequestProxyGetRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a RequestProxyGetResponse. */
+            interface IRequestProxyGetResponse {
+
+                /** RequestProxyGetResponse httpStatus */
+                httpStatus?: (number|null);
+
+                /** RequestProxyGetResponse headers */
+                headers?: ({ [k: string]: google.protobuf.IListValue }|null);
+
+                /** RequestProxyGetResponse response */
+                response?: (google.protobuf.IValue|null);
+            }
+
+            /** Represents a RequestProxyGetResponse. */
+            class RequestProxyGetResponse implements IRequestProxyGetResponse {
+
+                /**
+                 * Constructs a new RequestProxyGetResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.proxy.v1.IRequestProxyGetResponse);
+
+                /** RequestProxyGetResponse httpStatus. */
+                public httpStatus: number;
+
+                /** RequestProxyGetResponse headers. */
+                public headers: { [k: string]: google.protobuf.IListValue };
+
+                /** RequestProxyGetResponse response. */
+                public response?: (google.protobuf.IValue|null);
+
+                /**
+                 * Verifies a RequestProxyGetResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RequestProxyGetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RequestProxyGetResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.proxy.v1.RequestProxyGetResponse;
+
+                /**
+                 * Creates a plain object from a RequestProxyGetResponse message. Also converts values to other types if specified.
+                 * @param message RequestProxyGetResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.proxy.v1.RequestProxyGetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RequestProxyGetResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
