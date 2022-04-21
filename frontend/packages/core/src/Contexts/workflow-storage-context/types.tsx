@@ -58,7 +58,7 @@ export interface WorkflowStorageState {
 }
 
 export type RemoveDataFn = (componentName: string, key: string, localStorage?: boolean) => void;
-export type RetrieveDataFn = (componentName: string, key: string, defaultData?: unknown) => unknown;
+export type RetrieveDataFn = <T>(componentName: string, key: string, defaultData?: T) => T;
 export type StoreDataFn = (
   componentName: string,
   key: string,

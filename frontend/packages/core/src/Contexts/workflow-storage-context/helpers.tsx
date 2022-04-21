@@ -36,12 +36,19 @@ const retrieveLocalData = (key: string) => {
   }
 };
 
-const retrieveData = (
+type GenericRetrieve = <T>(
   store: HydratedData,
   componentName: string,
   key: string,
-  defaultData?: unknown
-): unknown => {
+  defaultData: T
+) => T;
+
+const retrieveData: GenericRetrieve = (
+  store: HydratedData,
+  componentName: string,
+  key: string,
+  defaultData?
+) => {
   if (store && store[componentName]) {
     return key.length ? store[componentName][key] : store[componentName];
   }

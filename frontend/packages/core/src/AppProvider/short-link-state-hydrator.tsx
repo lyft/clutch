@@ -3,7 +3,7 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid } from "@material-ui/core";
 
 import { WorkflowStorageContext } from "../Contexts/workflow-storage-context";
-import { retrieveData } from "../Contexts/workflow-storage-context/helpers";
+import { retrieveData as retrieveDataHelper } from "../Contexts/workflow-storage-context/helpers";
 import workflowStorageContextReducer from "../Contexts/workflow-storage-context/reducer";
 import type { WorkflowStorageContextProps } from "../Contexts/workflow-storage-context/types";
 import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
@@ -47,6 +47,10 @@ const ShortLinkStateHydrator = ({
     }
   }, [sharedState]);
 
+  function retrieveData<T>(componentName: string, key: string, defaultData: T): T {
+    return retrieveDataHelper(state.workflowStore, componentName, key, defaultData);
+  }
+
   const storageProviderProps: WorkflowStorageContextProps = {
     /**
      * Boolean representing whether the state has been hydrated
@@ -81,8 +85,7 @@ const ShortLinkStateHydrator = ({
      * @param defaultData Optional set of data returned if nothing is found in the hydrator or localStorage
      * @returns
      */
-    retrieveData: (componentName: string, key: string, defaultData?: unknown) =>
-      retrieveData(state.workflowStore, componentName, key, defaultData),
+    retrieveData,
   };
 
   return (
