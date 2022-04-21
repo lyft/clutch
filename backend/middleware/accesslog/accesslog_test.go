@@ -25,7 +25,7 @@ func TestNew(t *testing.T) {
 		{config: nil},
 		{config: &accesslogv1.Config{
 			StatusCodeFilters: []*accesslogv1.Config_StatusCodeFilter{
-				&accesslogv1.Config_StatusCodeFilter{
+				{
 					FilterType: &accesslogv1.Config_StatusCodeFilter_Equals{
 						Equals: 1,
 					},

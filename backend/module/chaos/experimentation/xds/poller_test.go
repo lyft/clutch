@@ -165,8 +165,8 @@ func TestECDSResourcesRefresh(t *testing.T) {
 	ecdsConfig := ECDSConfig{
 		ecdsResourceMap: &SafeEcdsResourceMap{},
 		enabledClusters: map[string]struct{}{
-			"foo": struct{}{},
-			"bar": struct{}{},
+			"foo": {},
+			"bar": {},
 		},
 	}
 

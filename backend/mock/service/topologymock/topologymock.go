@@ -34,7 +34,7 @@ func (s *svc) Search(context.Context, *topologyv1.SearchRequest) ([]*topologyv1.
 			Id: "pod-123",
 			Pb: &any.Any{},
 			Metadata: map[string]*structpb.Value{
-				"label": &structpb.Value{},
+				"label": {},
 			},
 		},
 	}, "1", nil
@@ -46,7 +46,7 @@ func (s *svc) Autocomplete(ctx context.Context, typeURL, search string, limit ui
 			Id: "autocomplete-result",
 			Pb: &any.Any{},
 			Metadata: map[string]*structpb.Value{
-				"label": &structpb.Value{},
+				"label": {},
 			},
 		},
 	}, nil
