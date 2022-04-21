@@ -36,8 +36,9 @@ const StyledCount = styled.span({
   display: "inline-block",
 });
 
+// This div used to have `padding: "0 25px 0 8px"` but that made it look weird when we implemented quicklinks
+// because the "only" and "x" buttons are hidden when the popper is expanded and mouse is no longer hovering.
 const StyledMenuItem = styled.div({
-  padding: "0 25px 0 8px",
   height: "48px",
   display: "flex",
   alignItems: "center",
@@ -123,6 +124,10 @@ const StyledHoverOptions = styled.div({
   alignItems: "center",
 });
 
+const StyledFlexEnd = styled.div({
+  justifyContent: "right",
+  flexDirection: "row-reverse",
+});
 interface ProjectGroupProps {
   title: string;
   group: Group;
@@ -134,6 +139,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   const state = useReducerState();
 
   const [collapsed, setCollapsed] = React.useState(false);
+  const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
 
   const groupKeys = Object.keys(state?.[group] ?? {});
   const numProjects = groupKeys.length;
@@ -219,10 +225,16 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                     </IconButton>
                   )}
                 </StyledClearIcon>
-                {state?.projectData?.key?.linkGroups && (
-                  <ProjectLinks linkGroups={state?.projectData?.key?.linkGroups} />
-                )}
               </StyledHoverOptions>
+              <StyledFlexEnd hidden={key !== keyWithQLinksOpen}>
+                {state?.projectData?.key?.linkGroups && (
+                  <ProjectLinks
+                    linkGroups={state?.projectData?.key?.linkGroups}
+                    name={key}
+                    setVisibleFn={setKeyWithQLinksOpen}
+                  />
+                )}
+              </StyledFlexEnd>
             </StyledMenuItem>
           ))}
         </div>

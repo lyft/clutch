@@ -25,7 +25,6 @@ const StyledMenuItem = styled.div({
 });
 
 const StyledMoreVertIcon = styled.span({
-  width: "12px",
   ".MuiIconButton-root": {
     padding: "6px",
     color: "rgba(13, 16, 48, 0.38)",
@@ -70,7 +69,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
     }
   }, [links]);
   return (
-    <div key={linkGroupName}>
+    <div>
       <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ padding: "6px" }}>
           <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
@@ -121,21 +120,46 @@ const ExpandedLinks = ({ linkGroups }) => (
   </div>
 );
 
-const ProjectLinks = ({ linkGroups }) => {
+interface ProjectLinksProps {
+  linkGroups: IClutch.core.project.v1.ILinkGroup[];
+  name: string;
+  setVisibleFn: (visible: string) => void;
+}
+
+const QuickLinksPopper = ({ linkGroups, anchorRef, open, setOpen, setVisibleFn }) => (
+  <Popper
+    open={open}
+    anchorRef={anchorRef}
+    onClickAway={() => {
+      setOpen(false);
+      setVisibleFn("");
+    }}
+  >
+    <ExpandedLinks linkGroups={linkGroups} />
+  </Popper>
+);
+
+const ProjectLinks = ({ linkGroups, name, setVisibleFn }: ProjectLinksProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
 
-  if (!linkGroups) {
-    return null;
-  }
-
   return (
     <StyledMoreVertIcon>
-      <IconButton ref={anchorRef} onClick={() => setOpen(true)}>
+      <IconButton
+        ref={anchorRef}
+        onClick={() => {
+          setOpen(true);
+          setVisibleFn(name);
+        }}
+      >
         <MoreVertIcon />
-        <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)}>
-          <ExpandedLinks linkGroups={linkGroups} />
-        </Popper>
+        <QuickLinksPopper
+          linkGroups={linkGroups}
+          anchorRef={anchorRef}
+          open={open}
+          setOpen={setOpen}
+          setVisibleFn={setVisibleFn}
+        />
       </IconButton>
     </StyledMoreVertIcon>
   );
