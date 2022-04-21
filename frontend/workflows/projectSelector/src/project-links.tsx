@@ -10,10 +10,6 @@ interface LinkGroupProps {
   linkGroupImage: string;
 }
 
-interface QuickLinkProps extends LinkGroupProps {
-  link: IClutch.core.project.v1.ILink;
-}
-
 const ICON_SIZE = "22px";
 
 const StyledMenuItem = styled.div({
@@ -41,21 +37,6 @@ const StyledLinkTitle = styled.span({
   fontWeight: "bold",
 });
 
-const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
-  link?.url ? (
-    <StyledMenuItem style={{ padding: "8px" }} key={link.url}>
-      <Link href={link.url}>
-        <img
-          width={ICON_SIZE}
-          height={ICON_SIZE}
-          src={linkGroupImage}
-          alt={link.name ?? `Quick Link to ${link.url}`}
-        />
-        <StyledLinkTitle style={{ paddingLeft: "6px" }}>{linkGroupName}</StyledLinkTitle>
-      </Link>
-    </StyledMenuItem>
-  ) : null;
-
 interface QuickLinkGroupProps extends LinkGroupProps {
   links: IClutch.core.project.v1.ILink[];
 }
@@ -68,7 +49,11 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
       setValidLinks(links.filter(link => link?.url && link.url.length > 0));
     }
   }, [links]);
-  return (
+  // In the case where there is only a singe link in the group, we make the title clickable.
+  // In the case where there are multiple links, the title is not clickable and has different styling.
+  return links.length === 1 ? (
+    <StyledMenuItem style={{ padding: "8px" }} key={links[0].url} />
+  ) : (
     <div>
       <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ padding: "6px" }}>
@@ -100,15 +85,6 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
 const ExpandedLinks = ({ linkGroups }) => (
   <div style={{ borderRadius: "4px" }}>
     {(linkGroups || []).map(linkGroup => {
-      if (linkGroup.links?.length === 1) {
-        return (
-          <QuickLink
-            link={linkGroup.links[0]}
-            linkGroupName={linkGroup.name ?? ""}
-            linkGroupImage={linkGroup.imagePath ?? ""}
-          />
-        );
-      }
       return (
         <QuickLinkGroup
           linkGroupName={linkGroup.name ?? ""}
@@ -120,48 +96,52 @@ const ExpandedLinks = ({ linkGroups }) => (
   </div>
 );
 
-interface ProjectLinksProps {
-  linkGroups: IClutch.core.project.v1.ILinkGroup[];
-  name: string;
-  setVisibleFn: (visible: string) => void;
-}
+const StyledFlexEnd = styled.div({
+  justifyContent: "right",
+  flexDirection: "row-reverse",
+});
 
-const QuickLinksPopper = ({ linkGroups, anchorRef, open, setOpen, setVisibleFn }) => (
-  <Popper
-    open={open}
-    anchorRef={anchorRef}
-    onClickAway={() => {
-      setOpen(false);
-      setVisibleFn("");
-    }}
-  >
-    <ExpandedLinks linkGroups={linkGroups} />
-  </Popper>
-);
+const QuickLinksPopper = ({ linkGroups, anchorRef, open, setOpen, setKeyWithQLinksOpen }) => {
+  return (
+    <Popper
+      open={open}
+      anchorRef={anchorRef}
+      onClickAway={() => {
+        setOpen(false);
+        setKeyWithQLinksOpen("");
+      }}
+    >
+      <ExpandedLinks linkGroups={linkGroups} />
+    </Popper>
+  );
+};
 
-const ProjectLinks = ({ linkGroups, name, setVisibleFn }: ProjectLinksProps) => {
+const ProjectLinks = ({ linkGroups, name }) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
+  const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
 
   return (
-    <StyledMoreVertIcon>
-      <IconButton
-        ref={anchorRef}
-        onClick={() => {
-          setOpen(true);
-          setVisibleFn(name);
-        }}
-      >
-        <MoreVertIcon />
-        <QuickLinksPopper
-          linkGroups={linkGroups}
-          anchorRef={anchorRef}
-          open={open}
-          setOpen={setOpen}
-          setVisibleFn={setVisibleFn}
-        />
-      </IconButton>
-    </StyledMoreVertIcon>
+    <StyledFlexEnd hidden={name !== keyWithQLinksOpen}>
+      <StyledMoreVertIcon>
+        <IconButton
+          ref={anchorRef}
+          onClick={() => {
+            setOpen(true);
+            setKeyWithQLinksOpen(name);
+          }}
+        >
+          <MoreVertIcon />
+          <QuickLinksPopper
+            linkGroups={linkGroups}
+            anchorRef={anchorRef}
+            open={open}
+            setOpen={setOpen}
+            setKeyWithQLinksOpen={setKeyWithQLinksOpen}
+          />
+        </IconButton>
+      </StyledMoreVertIcon>
+    </StyledFlexEnd>
   );
 };
 

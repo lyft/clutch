@@ -124,10 +124,6 @@ const StyledHoverOptions = styled.div({
   alignItems: "center",
 });
 
-const StyledFlexEnd = styled.div({
-  justifyContent: "right",
-  flexDirection: "row-reverse",
-});
 interface ProjectGroupProps {
   title: string;
   group: Group;
@@ -139,7 +135,6 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   const state = useReducerState();
 
   const [collapsed, setCollapsed] = React.useState(false);
-  const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
 
   const groupKeys = Object.keys(state?.[group] ?? {});
   const numProjects = groupKeys.length;
@@ -226,15 +221,9 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                   )}
                 </StyledClearIcon>
               </StyledHoverOptions>
-              <StyledFlexEnd hidden={key !== keyWithQLinksOpen}>
-                {state?.projectData?.key?.linkGroups && (
-                  <ProjectLinks
-                    linkGroups={state?.projectData?.key?.linkGroups}
-                    name={key}
-                    setVisibleFn={setKeyWithQLinksOpen}
-                  />
-                )}
-              </StyledFlexEnd>
+              {state?.projectData?.[key]?.linkGroups && (
+                <ProjectLinks linkGroups={state?.projectData?.[key]?.linkGroups} name={[key]} />
+              )}
             </StyledMenuItem>
           ))}
         </div>
