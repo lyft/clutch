@@ -27,7 +27,7 @@ func TestDescribeNamespace(t *testing.T) {
 	cs := testNamespaceClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "testing-namespace",
 				cluster:   "core-testing",

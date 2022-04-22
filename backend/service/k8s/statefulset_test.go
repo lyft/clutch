@@ -36,7 +36,7 @@ func TestListStatefulSets(t *testing.T) {
 	cs := testStatefulSetClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",
@@ -60,7 +60,7 @@ func TestUpdateStatefulSet(t *testing.T) {
 	cs := testStatefulSetClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",
@@ -213,7 +213,7 @@ func TestDeleteStatefulSet(t *testing.T) {
 	cs := testStatefulSetClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",

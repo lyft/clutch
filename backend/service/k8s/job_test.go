@@ -61,7 +61,7 @@ func TestListJobs(t *testing.T) {
 
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
 				Interface: cs,
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",
@@ -110,7 +110,7 @@ func TestDeleteJob(t *testing.T) {
 
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
 				Interface: cs,
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",
@@ -131,7 +131,7 @@ func TestCreateJob(t *testing.T) {
 
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
 				Interface: cs,
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",

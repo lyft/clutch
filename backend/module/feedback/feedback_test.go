@@ -70,13 +70,13 @@ func TestGetConfigSurveys(t *testing.T) {
 		},
 		{
 			surveyMap: surveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
-				"FOO": &feedbackv1cfg.SurveyOrigin{},
+				"FOO": {},
 			}},
 			expectedOk: false,
 		},
 		{
 			surveyMap: surveyLookup{surveys: map[string]*feedbackv1cfg.SurveyOrigin{
-				"WIZARD": &feedbackv1cfg.SurveyOrigin{Survey: &feedbackv1cfg.Survey{Prompt: "bar"}},
+				"WIZARD": {Survey: &feedbackv1cfg.Survey{Prompt: "bar"}},
 			}},
 			expectedOk: true,
 		},

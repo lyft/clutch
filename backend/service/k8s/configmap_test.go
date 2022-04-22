@@ -61,7 +61,7 @@ func TestListConfigMaps(t *testing.T) {
 
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
 				Interface: cs,
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",
@@ -110,7 +110,7 @@ func TestDescribeConfigMap(t *testing.T) {
 
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
 				Interface: cs,
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",
@@ -135,7 +135,7 @@ func TestDeleteConfigMap(t *testing.T) {
 
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
 				Interface: cs,
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",

@@ -164,7 +164,7 @@ func TestDeletePod(t *testing.T) {
 	cs := testPodClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",
@@ -195,7 +195,7 @@ func TestListPods(t *testing.T) {
 	cs := testPodClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
 				Interface: cs,
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",
@@ -246,7 +246,7 @@ func TestPodDescription(t *testing.T) {
 					},
 					Reason: "Evicted",
 					Conditions: []corev1.PodCondition{
-						corev1.PodCondition{
+						{
 							Type:   corev1.ContainersReady,
 							Status: corev1.ConditionTrue,
 						},
@@ -276,7 +276,7 @@ func TestPodDescription(t *testing.T) {
 					},
 					Reason: "Evicted",
 					Conditions: []corev1.PodCondition{
-						corev1.PodCondition{
+						{
 							Type:   corev1.ContainersReady,
 							Status: corev1.ConditionTrue,
 						},
@@ -336,7 +336,7 @@ func TestUpdatePod(t *testing.T) {
 	s := &svc{
 		manager: &managerImpl{
 			clientsets: map[string]*ctxClientsetImpl{
-				"testing-clientset": &ctxClientsetImpl{
+				"testing-clientset": {
 					Interface: &fakeClient,
 					namespace: "testing-namespace",
 					cluster:   "testing-cluster",
@@ -362,7 +362,7 @@ func TestUpdatePod(t *testing.T) {
 		"testing-cluster",
 		"testing-namespace",
 		"testing-pod-name",
-		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"foo": &k8sv1.NullableString{Kind: &k8sv1.NullableString_Value{Value: "non-matching-value"}}}},
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"foo": {Kind: &k8sv1.NullableString_Value{Value: "non-matching-value"}}}},
 		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"new-annotation": "foo"}},
 		&k8sv1.RemoveObjectMetaFields{},
 	)
@@ -374,7 +374,7 @@ func TestUpdatePod(t *testing.T) {
 		"testing-cluster",
 		"testing-namespace",
 		"testing-pod-name",
-		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": &k8sv1.NullableString{Kind: &k8sv1.NullableString_Value{Value: "quuz"}}}},
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": {Kind: &k8sv1.NullableString_Value{Value: "quuz"}}}},
 		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"baz": "new-value"}},
 		&k8sv1.RemoveObjectMetaFields{},
 	)
@@ -386,7 +386,7 @@ func TestUpdatePod(t *testing.T) {
 		"testing-cluster",
 		"testing-namespace",
 		"testing-pod-name",
-		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": &k8sv1.NullableString{Kind: &k8sv1.NullableString_Value{Value: "new-value"}}}},
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": {Kind: &k8sv1.NullableString_Value{Value: "new-value"}}}},
 		&k8sv1.ObjectMetaFields{},
 		&k8sv1.RemoveObjectMetaFields{Annotations: []string{"baz"}},
 	)
@@ -409,7 +409,7 @@ func TestUpdatePod(t *testing.T) {
 		"testing-cluster",
 		"testing-namespace",
 		"testing-pod-name",
-		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": &k8sv1.NullableString{Kind: &k8sv1.NullableString_Null{}}}},
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": {Kind: &k8sv1.NullableString_Null{}}}},
 		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"baz": "new-value"}},
 		&k8sv1.RemoveObjectMetaFields{},
 	)
@@ -537,7 +537,7 @@ func TestPodStatus(t *testing.T) {
 				},
 				Status: corev1.PodStatus{
 					ContainerStatuses: []corev1.ContainerStatus{
-						corev1.ContainerStatus{
+						{
 							Name:         "container1",
 							Ready:        false,
 							RestartCount: 0,
@@ -560,7 +560,7 @@ func TestPodStatus(t *testing.T) {
 				},
 				Status: corev1.PodStatus{
 					ContainerStatuses: []corev1.ContainerStatus{
-						corev1.ContainerStatus{
+						{
 							Name:         "container1",
 							Ready:        false,
 							RestartCount: 50,
@@ -584,7 +584,7 @@ func TestPodStatus(t *testing.T) {
 				Status: corev1.PodStatus{
 					Phase: "Running",
 					ContainerStatuses: []corev1.ContainerStatus{
-						corev1.ContainerStatus{
+						{
 							Name:         "container1",
 							Ready:        true,
 							RestartCount: 0,
@@ -616,7 +616,7 @@ func TestPodStatus(t *testing.T) {
 				},
 				Status: corev1.PodStatus{
 					InitContainerStatuses: []corev1.ContainerStatus{
-						corev1.ContainerStatus{
+						{
 							Name:         "container1",
 							Ready:        true,
 							RestartCount: 0,
@@ -639,7 +639,7 @@ func TestPodStatus(t *testing.T) {
 				},
 				Status: corev1.PodStatus{
 					ContainerStatuses: []corev1.ContainerStatus{
-						corev1.ContainerStatus{
+						{
 							Name:         "container1",
 							Ready:        true,
 							RestartCount: 0,
