@@ -1,4 +1,8 @@
-import { ApplicationContext, useAppContext } from "./app-context";
-import { useWizardContext, WizardContext } from "./wizard-context";
-
-export { ApplicationContext, useAppContext, WizardContext, useWizardContext };
+export { ApplicationContext, useAppContext } from "./app-context";
+export { WizardContext, useWizardContext } from "./wizard-context";
+export { WorkflowStorageContext, useWorkflowStorageContext } from "./workflow-storage-context";
+export type {
+  WorkflowRemoveDataFn,
+  WorkflowRetrieveDataFn,
+  WorkflowStoreDataFn,
+} from "./workflow-storage-context";

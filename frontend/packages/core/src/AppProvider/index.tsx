@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
 import AppLayout from "../AppLayout";
@@ -9,6 +10,7 @@ import Landing from "../landing";
 import NotFound from "../not-found";
 
 import { registeredWorkflows } from "./registrar";
+import ShortLinkStateHydrator from "./short-link-state-hydrator";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
@@ -52,6 +54,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [hydrateState, setHydrateState] = React.useState<
+    IClutch.shortlink.v1.IShareableState[] | null
+  >(null);
 
   const loadWorkflows = () => {
     registeredWorkflows(availableWorkflows, userConfiguration, [featureFlagFilter]).then(w => {
@@ -104,7 +109,12 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                       key={workflowKey}
                       element={
                         <ErrorBoundary workflow={workflow}>
-                          <Outlet />
+                          <ShortLinkStateHydrator
+                            sharedState={hydrateState}
+                            clearTemporaryState={() => setHydrateState(null)}
+                          >
+                            <Outlet />
+                          </ShortLinkStateHydrator>
                         </ErrorBoundary>
                       }
                     >
