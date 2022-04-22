@@ -2,7 +2,15 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import type { clutch as IClutch, google as IGoogle } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
-import { client, TextField, Tooltip, TooltipContainer, Typography, userId } from "@clutch-sh/core";
+import {
+  client,
+  TextField,
+  Tooltip,
+  TooltipContainer,
+  Typography,
+  userId,
+  useWorkflowStorageContext,
+} from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -19,7 +27,7 @@ import {
 } from "./helpers";
 import ProjectGroup from "./project-group";
 import selectorReducer from "./selector-reducer";
-import { loadStoredState, storeState } from "./storage";
+import { COMPONENT_NAME, getLocalState, loadStoredState, STORAGE_STATE_KEY } from "./storage";
 import type { Action, DashState, State } from "./types";
 import { Group } from "./types";
 
@@ -129,7 +137,11 @@ const allPresent = (state: State, dispatch: React.Dispatch<Action>): boolean => 
   return true;
 };
 
-const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
+const hydrateProjects = (
+  state: State,
+  dispatch: React.Dispatch<Action>,
+  fromShortLink: boolean
+) => {
   // Determine if any hydration is required.
   // - Are any services missing from state.projectdata?
   // - Are projects empty (first load)?
@@ -141,10 +153,16 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
     dispatch({ type: "HYDRATE_START" });
 
     // TODO: have userId check be server driven
-    const requestParams = { users: [userId()], projects: [] } as {
+    const requestParams = { users: [], projects: [] } as {
       users: string[];
       projects: string[];
     };
+
+    // will only push the userId onto the request if we're not currently under a shortLink
+    // this is so that the API will not return the users default projects
+    if (!fromShortLink) {
+      requestParams.users.push(userId());
+    }
 
     // since default projects are always included in the response, no reason to only filter on custom projects
     requestParams.projects = Object.keys(state[Group.PROJECTS]);
@@ -189,15 +207,21 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
-  const [state, dispatch] = React.useReducer(selectorReducer, loadStoredState(initialState));
+
+  const { removeData, retrieveData, fromShortLink, storeData } = useWorkflowStorageContext();
+
+  const [state, dispatch] = React.useReducer(
+    selectorReducer,
+    loadStoredState(initialState, retrieveData, removeData)
+  );
 
   React.useEffect(() => {
-    const interval = setInterval(() => hydrateProjects(state, dispatch), 30000);
+    const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
     return () => clearInterval(interval);
   }, [state]);
 
   React.useEffect(() => {
-    hydrateProjects(state, dispatch);
+    hydrateProjects(state, dispatch, fromShortLink);
   }, [state[Group.PROJECTS]]);
 
   // computes the final state for rendering across other components
@@ -242,7 +266,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     });
 
     // Update!
-    storeState(state);
+    storeData(COMPONENT_NAME, STORAGE_STATE_KEY, getLocalState(state), true);
     updateSelected(dashState);
   }, [state]);
 
