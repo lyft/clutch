@@ -154,13 +154,10 @@ const hydrateProjects = (state: State, dispatch: React.Dispatch<Action>) => {
       .then(resp => {
         const { results, partialFailures } = resp.data as IClutch.project.v1.GetProjectsResponse;
 
-        if (partialFailures && partialFailures.length) {
-          dispatch({
-            type: "HYDRATE_ERROR",
-            payload: { result: { partialFailures } },
-          });
-        }
-        dispatch({ type: "HYDRATE_END", payload: { result: results || {} } });
+        dispatch({
+          type: "HYDRATE_END",
+          payload: { result: { results: results || {}, partialFailures } },
+        });
       })
       .catch((err: ClutchError) => {
         dispatch({ type: "HYDRATE_ERROR", payload: { result: err } });
