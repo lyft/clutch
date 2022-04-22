@@ -12,6 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
 
@@ -167,6 +169,54 @@ func TestRequestProxy(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestRequestProxyGetRejectsPost(t *testing.T) {
+	m := &mod{}
+	req := &proxyv1.RequestProxyGetRequest{HttpMethod: http.MethodPost}
+	resp, err := m.RequestProxyGet(context.Background(), req)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	s, _ := status.FromError(err)
+	assert.Equal(t, s.Code(), codes.InvalidArgument)
+}
+
+func TestGetObjectsHaveSameFields(t *testing.T) {
+	g := proxyv1.RequestProxyGetRequest{}
+	gf := g.ProtoReflect().Descriptor().Fields()
+	r := proxyv1.RequestProxyRequest{}
+	rf := r.ProtoReflect().Descriptor().Fields()
+
+	assert.Equal(t, gf.Len(), rf.Len())
+	for i := 0; i < gf.Len(); i++ {
+		assert.Equal(t, gf.Get(i).Name(), rf.Get(i).Name())
+	}
+
+	gr := proxyv1.RequestProxyGetResponse{}
+	grf := gr.ProtoReflect().Descriptor().Fields()
+	rr := proxyv1.RequestProxyResponse{}
+	rrf := rr.ProtoReflect().Descriptor().Fields()
+	assert.Equal(t, grf.Len(), rrf.Len())
+	for i := 0; i < grf.Len(); i++ {
+		assert.Equal(t, grf.Get(i).Name(), rrf.Get(i).Name())
+	}
+}
+
+func TestGetObjectConversion(t *testing.T) {
+	req := &proxyv1.RequestProxyGetRequest{
+		Service:    "foo",
+		HttpMethod: http.MethodHead,
+		Path:       "/bar",
+		Request:    structpb.NewStringValue("ping"),
+	}
+	assert.EqualValues(t, req, getRequestToRequest(req))
+
+	resp := &proxyv1.RequestProxyResponse{
+		HttpStatus: http.StatusBadRequest,
+		Headers:    map[string]*structpb.ListValue{"key": {Values: []*structpb.Value{structpb.NewStringValue("val")}}},
+		Response:   structpb.NewStringValue("pong"),
+	}
+	assert.EqualValues(t, resp, responseToGetResponse(resp))
 }
 
 func TestIsAllowedRequest(t *testing.T) {
