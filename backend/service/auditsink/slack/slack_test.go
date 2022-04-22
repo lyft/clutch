@@ -81,7 +81,7 @@ func TestAuditEventToMessage(t *testing.T) {
 		{
 			svc: &svc{logger: log, overrides: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
-					"foo": &configv1.CustomMessage{FullMethod: "foo", Message: "{{.Request.name}}"},
+					"foo": {FullMethod: "foo", Message: "{{.Request.name}}"},
 				},
 			}},
 			user:     userName,
@@ -92,7 +92,7 @@ func TestAuditEventToMessage(t *testing.T) {
 		{
 			svc: &svc{logger: log, overrides: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
-					"/clutch.aws.v1.Instance/GetInstance": &configv1.CustomMessage{
+					"/clutch.aws.v1.Instance/GetInstance": {
 						FullMethod: "/clutch.aws.v1.Instance/GetInstance",
 						Message:    "Instance `{{.Request.instanceId}}` region is `{{.Response.instance.region}}`",
 					}},
@@ -106,7 +106,7 @@ func TestAuditEventToMessage(t *testing.T) {
 		{
 			svc: &svc{logger: log, overrides: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
-					"/clutch.aws.v1.Instance/GetInstance": &configv1.CustomMessage{
+					"/clutch.aws.v1.Instance/GetInstance": {
 						FullMethod: "/clutch.aws.v1.Instance/GetInstance",
 						Message:    "{{Foo}}",
 					}},
@@ -153,8 +153,8 @@ func TestFormatCustomText(t *testing.T) {
 	k8sUpdateReq := &k8sapiv1.UpdatePodRequest{
 		ExpectedObjectMetaFields: &k8sapiv1.ExpectedObjectMetaFields{
 			Annotations: map[string]*k8sapiv1.NullableString{
-				"baz": &k8sapiv1.NullableString{Kind: &k8sapiv1.NullableString_Null{}},
-				"foo": &k8sapiv1.NullableString{Kind: &k8sapiv1.NullableString_Value{Value: "new-value"}},
+				"baz": {Kind: &k8sapiv1.NullableString_Null{}},
+				"foo": {Kind: &k8sapiv1.NullableString_Value{Value: "new-value"}},
 			},
 		},
 		ObjectMetaFields:       &k8sapiv1.ObjectMetaFields{Labels: map[string]string{"foo": "new-value"}},

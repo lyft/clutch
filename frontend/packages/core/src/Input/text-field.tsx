@@ -319,6 +319,17 @@ const TextField = ({
             {...props}
           />
         )}
+        // This func is here for autocomplete. When the user clicks a choice in the dropdown
+        // or presses enter, onChange is called, which will allow the user to submit their choice.
+        // Without this, the user has to click their choice or press enter, then submit again once
+        // the choice has updated. Note that this does not work if the `value` prop is being set
+        // manually (as is the case in proj selector and proj catalog)
+        // TODO: Make it work for all cases, not just the resolver and k8s dash.
+        onChange={(_e, v) => {
+          if (v && onReturn) {
+            onReturn();
+          }
+        }}
       />
     );
   }

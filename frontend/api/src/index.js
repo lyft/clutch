@@ -48326,6 +48326,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.proxy.v1.ProxyAPI#requestProxyGet}.
+                 * @memberof clutch.proxy.v1.ProxyAPI
+                 * @typedef RequestProxyGetCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.proxy.v1.RequestProxyGetResponse} [response] RequestProxyGetResponse
+                 */
+
+                /**
+                 * Calls RequestProxyGet.
+                 * @function requestProxyGet
+                 * @memberof clutch.proxy.v1.ProxyAPI
+                 * @instance
+                 * @param {clutch.proxy.v1.IRequestProxyGetRequest} request RequestProxyGetRequest message or plain object
+                 * @param {clutch.proxy.v1.ProxyAPI.RequestProxyGetCallback} callback Node-style callback called with the error, if any, and RequestProxyGetResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(ProxyAPI.prototype.requestProxyGet = function requestProxyGet(request, callback) {
+                    return this.rpcCall(requestProxyGet, $root.clutch.proxy.v1.RequestProxyGetRequest, $root.clutch.proxy.v1.RequestProxyGetResponse, request, callback);
+                }, "name", { value: "RequestProxyGet" });
+
+                /**
+                 * Calls RequestProxyGet.
+                 * @function requestProxyGet
+                 * @memberof clutch.proxy.v1.ProxyAPI
+                 * @instance
+                 * @param {clutch.proxy.v1.IRequestProxyGetRequest} request RequestProxyGetRequest message or plain object
+                 * @returns {Promise<clutch.proxy.v1.RequestProxyGetResponse>} Promise
+                 * @variation 2
+                 */
+
                 return ProxyAPI;
             })();
 
@@ -48645,6 +48678,324 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return RequestProxyResponse;
+            })();
+
+            v1.RequestProxyGetRequest = (function() {
+
+                /**
+                 * Properties of a RequestProxyGetRequest.
+                 * @memberof clutch.proxy.v1
+                 * @interface IRequestProxyGetRequest
+                 * @property {string|null} [service] RequestProxyGetRequest service
+                 * @property {string|null} [httpMethod] RequestProxyGetRequest httpMethod
+                 * @property {string|null} [path] RequestProxyGetRequest path
+                 * @property {google.protobuf.IValue|null} [request] RequestProxyGetRequest request
+                 */
+
+                /**
+                 * Constructs a new RequestProxyGetRequest.
+                 * @memberof clutch.proxy.v1
+                 * @classdesc Represents a RequestProxyGetRequest.
+                 * @implements IRequestProxyGetRequest
+                 * @constructor
+                 * @param {clutch.proxy.v1.IRequestProxyGetRequest=} [properties] Properties to set
+                 */
+                function RequestProxyGetRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * RequestProxyGetRequest service.
+                 * @member {string} service
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @instance
+                 */
+                RequestProxyGetRequest.prototype.service = "";
+
+                /**
+                 * RequestProxyGetRequest httpMethod.
+                 * @member {string} httpMethod
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @instance
+                 */
+                RequestProxyGetRequest.prototype.httpMethod = "";
+
+                /**
+                 * RequestProxyGetRequest path.
+                 * @member {string} path
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @instance
+                 */
+                RequestProxyGetRequest.prototype.path = "";
+
+                /**
+                 * RequestProxyGetRequest request.
+                 * @member {google.protobuf.IValue|null|undefined} request
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @instance
+                 */
+                RequestProxyGetRequest.prototype.request = null;
+
+                /**
+                 * Verifies a RequestProxyGetRequest message.
+                 * @function verify
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                RequestProxyGetRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.service != null && message.hasOwnProperty("service"))
+                        if (!$util.isString(message.service))
+                            return "service: string expected";
+                    if (message.httpMethod != null && message.hasOwnProperty("httpMethod"))
+                        if (!$util.isString(message.httpMethod))
+                            return "httpMethod: string expected";
+                    if (message.path != null && message.hasOwnProperty("path"))
+                        if (!$util.isString(message.path))
+                            return "path: string expected";
+                    if (message.request != null && message.hasOwnProperty("request")) {
+                        let error = $root.google.protobuf.Value.verify(message.request);
+                        if (error)
+                            return "request." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a RequestProxyGetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.proxy.v1.RequestProxyGetRequest} RequestProxyGetRequest
+                 */
+                RequestProxyGetRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.proxy.v1.RequestProxyGetRequest)
+                        return object;
+                    let message = new $root.clutch.proxy.v1.RequestProxyGetRequest();
+                    if (object.service != null)
+                        message.service = String(object.service);
+                    if (object.httpMethod != null)
+                        message.httpMethod = String(object.httpMethod);
+                    if (object.path != null)
+                        message.path = String(object.path);
+                    if (object.request != null) {
+                        if (typeof object.request !== "object")
+                            throw TypeError(".clutch.proxy.v1.RequestProxyGetRequest.request: object expected");
+                        message.request = $root.google.protobuf.Value.fromObject(object.request);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a RequestProxyGetRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @static
+                 * @param {clutch.proxy.v1.RequestProxyGetRequest} message RequestProxyGetRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                RequestProxyGetRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.service = "";
+                        object.httpMethod = "";
+                        object.path = "";
+                        object.request = null;
+                    }
+                    if (message.service != null && message.hasOwnProperty("service"))
+                        object.service = message.service;
+                    if (message.httpMethod != null && message.hasOwnProperty("httpMethod"))
+                        object.httpMethod = message.httpMethod;
+                    if (message.path != null && message.hasOwnProperty("path"))
+                        object.path = message.path;
+                    if (message.request != null && message.hasOwnProperty("request"))
+                        object.request = $root.google.protobuf.Value.toObject(message.request, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this RequestProxyGetRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                RequestProxyGetRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return RequestProxyGetRequest;
+            })();
+
+            v1.RequestProxyGetResponse = (function() {
+
+                /**
+                 * Properties of a RequestProxyGetResponse.
+                 * @memberof clutch.proxy.v1
+                 * @interface IRequestProxyGetResponse
+                 * @property {number|null} [httpStatus] RequestProxyGetResponse httpStatus
+                 * @property {Object.<string,google.protobuf.IListValue>|null} [headers] RequestProxyGetResponse headers
+                 * @property {google.protobuf.IValue|null} [response] RequestProxyGetResponse response
+                 */
+
+                /**
+                 * Constructs a new RequestProxyGetResponse.
+                 * @memberof clutch.proxy.v1
+                 * @classdesc Represents a RequestProxyGetResponse.
+                 * @implements IRequestProxyGetResponse
+                 * @constructor
+                 * @param {clutch.proxy.v1.IRequestProxyGetResponse=} [properties] Properties to set
+                 */
+                function RequestProxyGetResponse(properties) {
+                    this.headers = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * RequestProxyGetResponse httpStatus.
+                 * @member {number} httpStatus
+                 * @memberof clutch.proxy.v1.RequestProxyGetResponse
+                 * @instance
+                 */
+                RequestProxyGetResponse.prototype.httpStatus = 0;
+
+                /**
+                 * RequestProxyGetResponse headers.
+                 * @member {Object.<string,google.protobuf.IListValue>} headers
+                 * @memberof clutch.proxy.v1.RequestProxyGetResponse
+                 * @instance
+                 */
+                RequestProxyGetResponse.prototype.headers = $util.emptyObject;
+
+                /**
+                 * RequestProxyGetResponse response.
+                 * @member {google.protobuf.IValue|null|undefined} response
+                 * @memberof clutch.proxy.v1.RequestProxyGetResponse
+                 * @instance
+                 */
+                RequestProxyGetResponse.prototype.response = null;
+
+                /**
+                 * Verifies a RequestProxyGetResponse message.
+                 * @function verify
+                 * @memberof clutch.proxy.v1.RequestProxyGetResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                RequestProxyGetResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.httpStatus != null && message.hasOwnProperty("httpStatus"))
+                        if (!$util.isInteger(message.httpStatus))
+                            return "httpStatus: integer expected";
+                    if (message.headers != null && message.hasOwnProperty("headers")) {
+                        if (!$util.isObject(message.headers))
+                            return "headers: object expected";
+                        let key = Object.keys(message.headers);
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.google.protobuf.ListValue.verify(message.headers[key[i]]);
+                            if (error)
+                                return "headers." + error;
+                        }
+                    }
+                    if (message.response != null && message.hasOwnProperty("response")) {
+                        let error = $root.google.protobuf.Value.verify(message.response);
+                        if (error)
+                            return "response." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a RequestProxyGetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.proxy.v1.RequestProxyGetResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.proxy.v1.RequestProxyGetResponse} RequestProxyGetResponse
+                 */
+                RequestProxyGetResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.proxy.v1.RequestProxyGetResponse)
+                        return object;
+                    let message = new $root.clutch.proxy.v1.RequestProxyGetResponse();
+                    if (object.httpStatus != null)
+                        message.httpStatus = object.httpStatus | 0;
+                    if (object.headers) {
+                        if (typeof object.headers !== "object")
+                            throw TypeError(".clutch.proxy.v1.RequestProxyGetResponse.headers: object expected");
+                        message.headers = {};
+                        for (let keys = Object.keys(object.headers), i = 0; i < keys.length; ++i) {
+                            if (typeof object.headers[keys[i]] !== "object")
+                                throw TypeError(".clutch.proxy.v1.RequestProxyGetResponse.headers: object expected");
+                            message.headers[keys[i]] = $root.google.protobuf.ListValue.fromObject(object.headers[keys[i]]);
+                        }
+                    }
+                    if (object.response != null) {
+                        if (typeof object.response !== "object")
+                            throw TypeError(".clutch.proxy.v1.RequestProxyGetResponse.response: object expected");
+                        message.response = $root.google.protobuf.Value.fromObject(object.response);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a RequestProxyGetResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.proxy.v1.RequestProxyGetResponse
+                 * @static
+                 * @param {clutch.proxy.v1.RequestProxyGetResponse} message RequestProxyGetResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                RequestProxyGetResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.headers = {};
+                    if (options.defaults) {
+                        object.httpStatus = 0;
+                        object.response = null;
+                    }
+                    if (message.httpStatus != null && message.hasOwnProperty("httpStatus"))
+                        object.httpStatus = message.httpStatus;
+                    let keys2;
+                    if (message.headers && (keys2 = Object.keys(message.headers)).length) {
+                        object.headers = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.headers[keys2[j]] = $root.google.protobuf.ListValue.toObject(message.headers[keys2[j]], options);
+                    }
+                    if (message.response != null && message.hasOwnProperty("response"))
+                        object.response = $root.google.protobuf.Value.toObject(message.response, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this RequestProxyGetResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.proxy.v1.RequestProxyGetResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                RequestProxyGetResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return RequestProxyGetResponse;
             })();
 
             return v1;

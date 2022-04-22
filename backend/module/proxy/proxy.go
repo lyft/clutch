@@ -171,6 +171,37 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	return proxyResponse, nil
 }
 
+func (m *mod) RequestProxyGet(ctx context.Context, req *proxyv1.RequestProxyGetRequest) (*proxyv1.RequestProxyGetResponse, error) {
+	// Validate that it's a GET.
+	if req.HttpMethod != http.MethodGet {
+		return nil, status.Errorf(codes.InvalidArgument, "non-GET request passed to GET specific endpoint")
+	}
+
+	// Proxy the call to the original proxy method and return the response.
+	resp, err := m.RequestProxy(ctx, getRequestToRequest(req))
+	if err != nil {
+		return nil, err
+	}
+	return responseToGetResponse(resp), nil
+}
+
+func responseToGetResponse(resp *proxyv1.RequestProxyResponse) *proxyv1.RequestProxyGetResponse {
+	return &proxyv1.RequestProxyGetResponse{
+		HttpStatus: resp.HttpStatus,
+		Headers:    resp.Headers,
+		Response:   resp.Response,
+	}
+}
+
+func getRequestToRequest(req *proxyv1.RequestProxyGetRequest) *proxyv1.RequestProxyRequest {
+	return &proxyv1.RequestProxyRequest{
+		Service:    req.Service,
+		HttpMethod: req.HttpMethod,
+		Path:       req.Path,
+		Request:    req.Request,
+	}
+}
+
 func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method string) (bool, error) {
 	for _, s := range services {
 		if s.Name == service {

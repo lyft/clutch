@@ -24,7 +24,7 @@ func TestNewOverrideLookup(t *testing.T) {
 			override: []*configv1.CustomMessage{{FullMethod: "foo", Message: "bar"}},
 			output: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
-					"foo": &configv1.CustomMessage{FullMethod: "foo", Message: "bar"},
+					"foo": {FullMethod: "foo", Message: "bar"},
 				},
 			},
 		},
@@ -69,7 +69,7 @@ func TestGetOverrideMessage(t *testing.T) {
 		{
 			input: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
-					"/clutch.k8s.v1.K8sAPI/DescribePod": &configv1.CustomMessage{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"},
+					"/clutch.k8s.v1.K8sAPI/DescribePod": {FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"},
 				},
 			},
 			service:    "clutch.k8s.v1.K8sAPI",
@@ -80,8 +80,8 @@ func TestGetOverrideMessage(t *testing.T) {
 		{
 			input: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
-					"/clutch.k8s.v1.K8sAPI/DescribePod": &configv1.CustomMessage{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"},
-					"foo":                               &configv1.CustomMessage{FullMethod: "foo", Message: "foo"},
+					"/clutch.k8s.v1.K8sAPI/DescribePod": {FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"},
+					"foo":                               {FullMethod: "foo", Message: "foo"},
 				},
 			},
 			service:      "clutch.k8s.v1.K8sAPI",

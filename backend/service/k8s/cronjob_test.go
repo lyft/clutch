@@ -27,7 +27,7 @@ func testCronService() *svc {
 	cs := fake.NewSimpleClientset(cron)
 	return &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",

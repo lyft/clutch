@@ -59,8 +59,8 @@ func (g RTDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experi
 	}
 
 	return xds.NewRTDSResource(cluster, []*xds.RuntimeKeyValue{
-		&xds.RuntimeKeyValue{Key: percentageKey, Value: percentageValue},
-		&xds.RuntimeKeyValue{Key: faultKey, Value: faultValue},
+		{Key: percentageKey, Value: percentageValue},
+		{Key: faultKey, Value: faultValue},
 	})
 }
 

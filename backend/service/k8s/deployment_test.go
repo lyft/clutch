@@ -37,7 +37,7 @@ func TestDescribeDeployment(t *testing.T) {
 	cs := testDeploymentClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",
@@ -58,7 +58,7 @@ func TestListDeployments(t *testing.T) {
 	cs := testDeploymentClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",
@@ -81,7 +81,7 @@ func TestUpdateDeployment(t *testing.T) {
 	cs := testDeploymentClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",
@@ -101,7 +101,7 @@ func TestDeleteDeployment(t *testing.T) {
 	cs := testDeploymentClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",

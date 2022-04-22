@@ -105,7 +105,7 @@ func TestResizeHPA(t *testing.T) {
 	cs := testHPAClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",
@@ -175,7 +175,7 @@ func TestDeleteHPA(t *testing.T) {
 	cs := testHPAClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
 				namespace: "default",
 				cluster:   "core-testing",
