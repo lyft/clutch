@@ -57,6 +57,17 @@ func (m *GetMetricsRequest) validate(all bool) error {
 
 	var errors []error
 
+	if len(m.GetMetricQueries()) < 1 {
+		err := GetMetricsRequestValidationError{
+			field:  "MetricQueries",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return GetMetricsRequestMultiError(errors)
 	}

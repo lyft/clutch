@@ -4,9 +4,9 @@ package clutch.metrics.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/metric/v1;metricsv1";
 
+import "validate/validate.proto";
 import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
-import "google/rpc/status.proto";
 
 service MetricsAPI {
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
@@ -20,7 +20,7 @@ service MetricsAPI {
 
 message GetMetricsRequest {
   // Could be PromQL, etc.
-  repeated string metric_queries = 1;
+  repeated string metric_queries = 1 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
 message Metric {
@@ -28,7 +28,6 @@ message Metric {
   int64 timestamp_ms = 2;
 }
 
-// Could also reuse timeseries proto
 message Metrics {
   repeated Metric metrics = 1;
 }
