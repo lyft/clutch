@@ -221,7 +221,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                   )}
                 </StyledClearIcon>
               </StyledHoverOptions>
-              {state?.projectData?.[key]?.linkGroups && (
+              {!state?.loading && state?.projectData?.[key]?.linkGroups && (
                 <ProjectLinks linkGroups={state?.projectData?.[key]?.linkGroups} name={[key]} />
               )}
             </StyledMenuItem>
