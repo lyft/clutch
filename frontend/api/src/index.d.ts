@@ -19902,11 +19902,77 @@ export namespace clutch {
                 type GetMetricsCallback = (error: (Error|null), response?: clutch.metrics.v1.GetMetricsResponse) => void;
             }
 
+            /** Properties of a Query. */
+            interface IQuery {
+
+                /** Query query */
+                query?: (string|null);
+
+                /** Query startTimeMs */
+                startTimeMs?: (number|Long|null);
+
+                /** Query endTimeMs */
+                endTimeMs?: (number|Long|null);
+
+                /** Query stepMs */
+                stepMs?: (number|Long|null);
+            }
+
+            /** Represents a Query. */
+            class Query implements IQuery {
+
+                /**
+                 * Constructs a new Query.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.metrics.v1.IQuery);
+
+                /** Query query. */
+                public query: string;
+
+                /** Query startTimeMs. */
+                public startTimeMs: (number|Long);
+
+                /** Query endTimeMs. */
+                public endTimeMs: (number|Long);
+
+                /** Query stepMs. */
+                public stepMs: (number|Long);
+
+                /**
+                 * Verifies a Query message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Query message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Query
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.metrics.v1.Query;
+
+                /**
+                 * Creates a plain object from a Query message. Also converts values to other types if specified.
+                 * @param message Query
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.metrics.v1.Query, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Query to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a GetMetricsRequest. */
             interface IGetMetricsRequest {
 
                 /** GetMetricsRequest metricQueries */
-                metricQueries?: (string[]|null);
+                metricQueries?: (clutch.metrics.v1.IQuery[]|null);
             }
 
             /** Represents a GetMetricsRequest. */
@@ -19919,7 +19985,7 @@ export namespace clutch {
                 constructor(properties?: clutch.metrics.v1.IGetMetricsRequest);
 
                 /** GetMetricsRequest metricQueries. */
-                public metricQueries: string[];
+                public metricQueries: clutch.metrics.v1.IQuery[];
 
                 /**
                  * Verifies a GetMetricsRequest message.

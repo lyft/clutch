@@ -47674,13 +47674,207 @@ export const clutch = $root.clutch = (() => {
                 return MetricsAPI;
             })();
 
+            v1.Query = (function() {
+
+                /**
+                 * Properties of a Query.
+                 * @memberof clutch.metrics.v1
+                 * @interface IQuery
+                 * @property {string|null} [query] Query query
+                 * @property {number|Long|null} [startTimeMs] Query startTimeMs
+                 * @property {number|Long|null} [endTimeMs] Query endTimeMs
+                 * @property {number|Long|null} [stepMs] Query stepMs
+                 */
+
+                /**
+                 * Constructs a new Query.
+                 * @memberof clutch.metrics.v1
+                 * @classdesc Represents a Query.
+                 * @implements IQuery
+                 * @constructor
+                 * @param {clutch.metrics.v1.IQuery=} [properties] Properties to set
+                 */
+                function Query(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Query query.
+                 * @member {string} query
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 */
+                Query.prototype.query = "";
+
+                /**
+                 * Query startTimeMs.
+                 * @member {number|Long} startTimeMs
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 */
+                Query.prototype.startTimeMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Query endTimeMs.
+                 * @member {number|Long} endTimeMs
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 */
+                Query.prototype.endTimeMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Query stepMs.
+                 * @member {number|Long} stepMs
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 */
+                Query.prototype.stepMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Verifies a Query message.
+                 * @function verify
+                 * @memberof clutch.metrics.v1.Query
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Query.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.query != null && message.hasOwnProperty("query"))
+                        if (!$util.isString(message.query))
+                            return "query: string expected";
+                    if (message.startTimeMs != null && message.hasOwnProperty("startTimeMs"))
+                        if (!$util.isInteger(message.startTimeMs) && !(message.startTimeMs && $util.isInteger(message.startTimeMs.low) && $util.isInteger(message.startTimeMs.high)))
+                            return "startTimeMs: integer|Long expected";
+                    if (message.endTimeMs != null && message.hasOwnProperty("endTimeMs"))
+                        if (!$util.isInteger(message.endTimeMs) && !(message.endTimeMs && $util.isInteger(message.endTimeMs.low) && $util.isInteger(message.endTimeMs.high)))
+                            return "endTimeMs: integer|Long expected";
+                    if (message.stepMs != null && message.hasOwnProperty("stepMs"))
+                        if (!$util.isInteger(message.stepMs) && !(message.stepMs && $util.isInteger(message.stepMs.low) && $util.isInteger(message.stepMs.high)))
+                            return "stepMs: integer|Long expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Query message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.metrics.v1.Query
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.metrics.v1.Query} Query
+                 */
+                Query.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.metrics.v1.Query)
+                        return object;
+                    let message = new $root.clutch.metrics.v1.Query();
+                    if (object.query != null)
+                        message.query = String(object.query);
+                    if (object.startTimeMs != null)
+                        if ($util.Long)
+                            (message.startTimeMs = $util.Long.fromValue(object.startTimeMs)).unsigned = false;
+                        else if (typeof object.startTimeMs === "string")
+                            message.startTimeMs = parseInt(object.startTimeMs, 10);
+                        else if (typeof object.startTimeMs === "number")
+                            message.startTimeMs = object.startTimeMs;
+                        else if (typeof object.startTimeMs === "object")
+                            message.startTimeMs = new $util.LongBits(object.startTimeMs.low >>> 0, object.startTimeMs.high >>> 0).toNumber();
+                    if (object.endTimeMs != null)
+                        if ($util.Long)
+                            (message.endTimeMs = $util.Long.fromValue(object.endTimeMs)).unsigned = false;
+                        else if (typeof object.endTimeMs === "string")
+                            message.endTimeMs = parseInt(object.endTimeMs, 10);
+                        else if (typeof object.endTimeMs === "number")
+                            message.endTimeMs = object.endTimeMs;
+                        else if (typeof object.endTimeMs === "object")
+                            message.endTimeMs = new $util.LongBits(object.endTimeMs.low >>> 0, object.endTimeMs.high >>> 0).toNumber();
+                    if (object.stepMs != null)
+                        if ($util.Long)
+                            (message.stepMs = $util.Long.fromValue(object.stepMs)).unsigned = false;
+                        else if (typeof object.stepMs === "string")
+                            message.stepMs = parseInt(object.stepMs, 10);
+                        else if (typeof object.stepMs === "number")
+                            message.stepMs = object.stepMs;
+                        else if (typeof object.stepMs === "object")
+                            message.stepMs = new $util.LongBits(object.stepMs.low >>> 0, object.stepMs.high >>> 0).toNumber();
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Query message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.metrics.v1.Query
+                 * @static
+                 * @param {clutch.metrics.v1.Query} message Query
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Query.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.query = "";
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.startTimeMs = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.startTimeMs = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.endTimeMs = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.endTimeMs = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.stepMs = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.stepMs = options.longs === String ? "0" : 0;
+                    }
+                    if (message.query != null && message.hasOwnProperty("query"))
+                        object.query = message.query;
+                    if (message.startTimeMs != null && message.hasOwnProperty("startTimeMs"))
+                        if (typeof message.startTimeMs === "number")
+                            object.startTimeMs = options.longs === String ? String(message.startTimeMs) : message.startTimeMs;
+                        else
+                            object.startTimeMs = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeMs) : options.longs === Number ? new $util.LongBits(message.startTimeMs.low >>> 0, message.startTimeMs.high >>> 0).toNumber() : message.startTimeMs;
+                    if (message.endTimeMs != null && message.hasOwnProperty("endTimeMs"))
+                        if (typeof message.endTimeMs === "number")
+                            object.endTimeMs = options.longs === String ? String(message.endTimeMs) : message.endTimeMs;
+                        else
+                            object.endTimeMs = options.longs === String ? $util.Long.prototype.toString.call(message.endTimeMs) : options.longs === Number ? new $util.LongBits(message.endTimeMs.low >>> 0, message.endTimeMs.high >>> 0).toNumber() : message.endTimeMs;
+                    if (message.stepMs != null && message.hasOwnProperty("stepMs"))
+                        if (typeof message.stepMs === "number")
+                            object.stepMs = options.longs === String ? String(message.stepMs) : message.stepMs;
+                        else
+                            object.stepMs = options.longs === String ? $util.Long.prototype.toString.call(message.stepMs) : options.longs === Number ? new $util.LongBits(message.stepMs.low >>> 0, message.stepMs.high >>> 0).toNumber() : message.stepMs;
+                    return object;
+                };
+
+                /**
+                 * Converts this Query to JSON.
+                 * @function toJSON
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Query.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Query;
+            })();
+
             v1.GetMetricsRequest = (function() {
 
                 /**
                  * Properties of a GetMetricsRequest.
                  * @memberof clutch.metrics.v1
                  * @interface IGetMetricsRequest
-                 * @property {Array.<string>|null} [metricQueries] GetMetricsRequest metricQueries
+                 * @property {Array.<clutch.metrics.v1.IQuery>|null} [metricQueries] GetMetricsRequest metricQueries
                  */
 
                 /**
@@ -47701,7 +47895,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * GetMetricsRequest metricQueries.
-                 * @member {Array.<string>} metricQueries
+                 * @member {Array.<clutch.metrics.v1.IQuery>} metricQueries
                  * @memberof clutch.metrics.v1.GetMetricsRequest
                  * @instance
                  */
@@ -47721,9 +47915,11 @@ export const clutch = $root.clutch = (() => {
                     if (message.metricQueries != null && message.hasOwnProperty("metricQueries")) {
                         if (!Array.isArray(message.metricQueries))
                             return "metricQueries: array expected";
-                        for (let i = 0; i < message.metricQueries.length; ++i)
-                            if (!$util.isString(message.metricQueries[i]))
-                                return "metricQueries: string[] expected";
+                        for (let i = 0; i < message.metricQueries.length; ++i) {
+                            let error = $root.clutch.metrics.v1.Query.verify(message.metricQueries[i]);
+                            if (error)
+                                return "metricQueries." + error;
+                        }
                     }
                     return null;
                 };
@@ -47744,8 +47940,11 @@ export const clutch = $root.clutch = (() => {
                         if (!Array.isArray(object.metricQueries))
                             throw TypeError(".clutch.metrics.v1.GetMetricsRequest.metricQueries: array expected");
                         message.metricQueries = [];
-                        for (let i = 0; i < object.metricQueries.length; ++i)
-                            message.metricQueries[i] = String(object.metricQueries[i]);
+                        for (let i = 0; i < object.metricQueries.length; ++i) {
+                            if (typeof object.metricQueries[i] !== "object")
+                                throw TypeError(".clutch.metrics.v1.GetMetricsRequest.metricQueries: object expected");
+                            message.metricQueries[i] = $root.clutch.metrics.v1.Query.fromObject(object.metricQueries[i]);
+                        }
                     }
                     return message;
                 };
@@ -47768,7 +47967,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.metricQueries && message.metricQueries.length) {
                         object.metricQueries = [];
                         for (let j = 0; j < message.metricQueries.length; ++j)
-                            object.metricQueries[j] = message.metricQueries[j];
+                            object.metricQueries[j] = $root.clutch.metrics.v1.Query.toObject(message.metricQueries[j], options);
                     }
                     return object;
                 };

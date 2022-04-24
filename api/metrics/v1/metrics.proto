@@ -18,9 +18,19 @@ service MetricsAPI {
   }
 }
 
+message Query {
+  // Prometheus expression query string
+  string query = 1 [ (validate.rules).string.min_len = 1 ];
+  // inclusive
+  int64 start_time_ms = 2;
+  // inclusive
+  int64 end_time_ms = 3;
+  // time step that starts from, a nice default is 1 minute (60000)
+  int64 step_ms = 4;
+}
+
 message GetMetricsRequest {
-  // Could be PromQL, etc.
-  repeated string metric_queries = 1 [ (validate.rules).repeated = {min_items : 1} ];
+  repeated Query metric_queries = 1 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
 message Metric {
