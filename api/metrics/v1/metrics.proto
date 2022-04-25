@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.metrics.v1;
 
-option go_package = "github.com/lyft/clutch/backend/api/metric/v1;metricsv1";
+option go_package = "github.com/lyft/clutch/backend/api/metrics/v1;metricsv1";
 
 import "validate/validate.proto";
 import "api/v1/annotations.proto";
@@ -11,7 +11,7 @@ import "google/api/annotations.proto";
 service MetricsAPI {
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
     option (google.api.http) = {
-      post : "/v1/project/getMetrics"
+      post : "/v1/metrics/getMetrics"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
@@ -43,6 +43,6 @@ message Metrics {
 }
 
 message GetMetricsResponse {
-  // This map would contain a mapping of individual queries to their respective results.
+  // Contains a mapping of individual queries to their respective results.
   map<string, Metrics> querystring_to_metrics = 1;
 }
