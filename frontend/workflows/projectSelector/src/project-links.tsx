@@ -10,7 +10,7 @@ interface LinkGroupProps {
   linkGroupImage: string;
 }
 
-const ICON_SIZE = "22px";
+const ICON_SIZE = "16px";
 
 const StyledMenuItem = styled.div({
   display: "flex",
@@ -52,11 +52,21 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   // In the case where there is only a singe link in the group, we make the title clickable.
   // In the case where there are multiple links, the title is not clickable and has different styling.
   return links.length === 1 ? (
-    <StyledMenuItem style={{ padding: "8px" }} key={links[0].url} />
+    <StyledMenuItem style={{ padding: "8px" }} key={links[0].url}>
+      <Link href={links[0]?.url ?? ""}>
+        <img
+          width={ICON_SIZE}
+          height={ICON_SIZE}
+          src={linkGroupImage}
+          alt={links[0].name ?? `Quick Link to ${links[0].url}`}
+        />
+        <StyledLinkTitle style={{ paddingLeft: "6px" }}>{linkGroupName}</StyledLinkTitle>
+      </Link>
+    </StyledMenuItem>
   ) : (
     <div>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <div style={{ padding: "6px" }}>
+        <div style={{ paddingLeft: "6px", paddingRight: "6px", paddingTop: "6px" }}>
           <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
         </div>
         <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
