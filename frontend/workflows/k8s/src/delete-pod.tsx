@@ -30,9 +30,7 @@ const PodIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) =>
     onSubmit();
   };
 
-  return (
-    <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={notes} />
-  );
+  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={notes} />;
 };
 
 const PodDetails: React.FC<VerifyChild> = ({ notes = [] }) => {
