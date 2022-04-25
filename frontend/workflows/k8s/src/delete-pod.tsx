@@ -23,7 +23,6 @@ const PodIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) =>
   const { onSubmit } = useWizardContext();
   const resolvedResourceData = useDataLayout("resourceData");
   const resolverInput = useDataLayout("resolverInput");
-  const resolverNotes = notes.filter(note => note.location === "resolver");
   const onResolve = ({ results, input }) => {
     // Decide how to process results.
     resolvedResourceData.assign(results[0]);
@@ -32,7 +31,7 @@ const PodIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) =>
   };
 
   return (
-    <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={resolverNotes} />
+    <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={notes} />
   );
 };
 
