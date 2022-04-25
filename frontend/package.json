@@ -72,7 +72,7 @@
     "@storybook/theming": "^6.3.0-alpha.45",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
-    "babel-loader": "8.1.0",
+    "babel-loader": "8.2.5",
     "eslint": "^7.24.0",
     "lerna": "^4.0.0",
     "license-checker": "^25.0.1",
