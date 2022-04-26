@@ -23,12 +23,21 @@ interface BaseWorkflowConfiguration {
   routes: unknown;
 }
 
-export interface Workflow extends BaseWorkflowConfiguration {
+interface WorkflowShortlinkConfiguration {
+  /**
+   * (Optional) property to enable a workflow to utilize short linking of its state.
+   * This property is required to show the short link generator in the header
+   */
   shortLink?: boolean;
+}
+
+export interface Workflow extends BaseWorkflowConfiguration, WorkflowShortlinkConfiguration {
   routes: ConfiguredRoute[];
 }
 
-export interface WorkflowConfiguration extends BaseWorkflowConfiguration {
+export interface WorkflowConfiguration
+  extends BaseWorkflowConfiguration,
+    WorkflowShortlinkConfiguration {
   shortLink?: boolean;
   routes: {
     [key: string]: Route;

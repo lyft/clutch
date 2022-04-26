@@ -6,9 +6,23 @@ import { useNavigate } from "../navigation";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
 
+/**
+ * The base for a short link route
+ */
+export const ShortLinkBaseRoute = "sl";
+
+/**
+ * Will return a ShortLink route
+ * @param origin the windows origin
+ * @param hash the hash to use for the short link
+ * @returns string
+ */
+export const generateShortLinkRoute = (origin: string, hash: string) =>
+  `${origin}/${ShortLinkBaseRoute}/${hash}`;
+
 interface ShortLinkProps {
   hydrate: (data: IClutch.shortlink.v1.IShareableState[]) => void;
-  onError: (error: string) => void;
+  onError: (error: ClutchError) => void;
   setLoading: (loading: boolean) => void;
 }
 
@@ -24,9 +38,7 @@ const fetchData = async (hash, hydrate, onError) => {
       return path;
     })
     .catch((error: ClutchError) => {
-      // eslint-disable-next-line no-console
-      console.error(error?.status?.text);
-      onError(`Unable to retrieve Shortlink '${hash}'`);
+      onError(error);
       return "/";
     });
 };

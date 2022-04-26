@@ -10,10 +10,11 @@ import type { HydratedData } from "../Contexts/workflow-storage-context/types";
 import { Toast } from "../Feedback";
 import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
+import type { ClutchError } from "../Network/errors";
 import NotFound from "../not-found";
 
 import { registeredWorkflows } from "./registrar";
-import ShortLink from "./short-link";
+import ShortLink, { ShortLinkBaseRoute } from "./short-link";
 import ShortLinkStateHydrator from "./short-link-state-hydrator";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
@@ -62,7 +63,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [hydrateState, setHydrateState] = React.useState<
     IClutch.shortlink.v1.IShareableState[] | null
   >(null);
-  const [hydrateError, setHydrateError] = React.useState<string | null>(null);
+  const [hydrateError, setHydrateError] = React.useState<ClutchError | null>(null);
 
   /** Used to control a race condition from displaying the workflow and the state being updated with the hydrated data */
   const [shortLinkLoading, setShortLinkLoading] = React.useState<boolean>(false);
@@ -113,7 +114,11 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
         <div id="App">
           <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
             <ShortLinkContext.Provider value={shortLinkProviderProps}>
-              {hydrateError && <Toast onClose={() => setHydrateError(null)}>{hydrateError}</Toast>}
+              {hydrateError && (
+                <Toast onClose={() => setHydrateError(null)}>
+                  Unable to retrieve short link: {hydrateError?.status?.text}
+                </Toast>
+              )}
               <Routes>
                 <Route path="/" element={<AppLayout isLoading={isLoading} />}>
                   <Route key="landing" path="" element={<Landing />} />
@@ -156,7 +161,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                   })}
                   <Route
                     key="short-links"
-                    path="/sl/:hash"
+                    path={`/${ShortLinkBaseRoute}/:hash`}
                     element={
                       <ShortLink
                         setLoading={setShortLinkLoading}

@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import LinkIcon from "@material-ui/icons/Link";
 
+import { generateShortLinkRoute } from "../AppProvider/short-link";
 import { Button, ClipboardButton, IconButton } from "../button";
 import { useAppContext, useShortLinkContext } from "../Contexts";
 import type { HydratedData } from "../Contexts/workflow-storage-context/types";
@@ -59,12 +60,15 @@ const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
 
 /**
  * Component that will display a Button to generate a short link
- * On click the component will do the following:
- * - Read in the data from the temporary storage in the WorkflowStorageContext
+ * - Will only be displayed if the given workflow has defined the `shortLink` property
+ * On click, the component will open a popper window with a Generate ShortLink button
+ * On clicking the Generate ShortLink button, the component will do the following:
+ * - Read in the data from the temporary storage in the ShortLinkContext
  * - Rotate it into a readable format for the API
  * - Send an API request asking for it to be stored
  * - If successful,
- * -     Will switch to a readable only input field with a clipboard button to copy the short link
+ * -     Will switch to a readable only input field with a clipboard button
+ *        to copy the short link with generated hash
  *       (this is the only time it is ever displayed)
  * - If not successful,
  * -     Will display a toast error message for the user
@@ -79,6 +83,11 @@ const ShortLinker = () => {
   const anchorRef = React.useRef(null);
   const location = useLocation();
 
+  /**
+   * Will fetch the the workflow based on the current route
+   * Then checks to see if the shortLink property of the workflow has been set.
+   *  - If it has, we will set the validWorkflow state which will allow the component to render
+   */
   const checkValidWorkflow = () => {
     const workflow = workflowByRoute(workflows, location.pathname);
 
@@ -127,12 +136,9 @@ const ShortLinker = () => {
       .post("/v1/shortlink/create", requestData)
       .then(response => {
         const { hash } = response.data as IClutch.shortlink.v1.ICreateResponse;
-        setShortLink(`${window.location.origin}/sl/${hash}`);
+        setShortLink(generateShortLinkRoute(window.location.origin, hash));
       })
-      .catch((err: ClutchError) => {
-        console.warn("failed to generate short link", err); // eslint-disable-line
-        setError(err);
-      });
+      .catch((err: ClutchError) => setError(err));
   };
 
   if (!validWorkflow) {
@@ -143,18 +149,18 @@ const ShortLinker = () => {
     <>
       {error && (
         <Toast severity="error" onClose={() => setError(null)}>
-          Unable to generate short link
+          Unable to generate short link, please try again later
         </Toast>
       )}
       <StyledLinkIcon
         variant="neutral"
         ref={anchorRef}
-        aria-controls={open ? "header-feedback" : undefined}
+        aria-controls={open ? "header-shortlink" : undefined}
         $open={open}
         aria-haspopup="true"
         onClick={handleToggle}
         edge="end"
-        id="headerFeedbackIcon"
+        id="headerShortLinkIcon"
       >
         <LinkIcon />
       </StyledLinkIcon>
