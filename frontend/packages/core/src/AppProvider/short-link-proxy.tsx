@@ -9,7 +9,7 @@ import type { ClutchError } from "../Network/errors";
 /**
  * The base for a short link route
  */
-export const ShortLinkBaseRoute = "sl";
+export const ShortLinkBaseRoute = "goto";
 
 /**
  * Will return a ShortLink route
@@ -56,7 +56,7 @@ const fetchData = async (hash, hydrate, onError) => {
  *   - Then navigate back to the home page
  * - Then it will remove the loading state
  */
-const ShortLink = ({ hydrate, onError, setLoading }: ShortLinkProps) => {
+const ShortLinkProxy = ({ hydrate, onError, setLoading }: ShortLinkProps) => {
   const { hash } = useParams();
   const navigate = useNavigate();
 
@@ -76,4 +76,4 @@ const ShortLink = ({ hydrate, onError, setLoading }: ShortLinkProps) => {
   return null;
 };
 
-export default ShortLink;
+export default ShortLinkProxy;

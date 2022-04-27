@@ -14,7 +14,7 @@ import type { ClutchError } from "../Network/errors";
 import NotFound from "../not-found";
 
 import { registeredWorkflows } from "./registrar";
-import ShortLink, { ShortLinkBaseRoute } from "./short-link";
+import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";
 import ShortLinkStateHydrator from "./short-link-state-hydrator";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
@@ -163,7 +163,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                     key="short-links"
                     path={`/${ShortLinkBaseRoute}/:hash`}
                     element={
-                      <ShortLink
+                      <ShortLinkProxy
                         setLoading={setShortLinkLoading}
                         hydrate={setHydrateState}
                         onError={setHydrateError}

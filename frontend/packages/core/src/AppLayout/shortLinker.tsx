@@ -11,11 +11,11 @@ import {
 } from "@material-ui/core";
 import LinkIcon from "@material-ui/icons/Link";
 
-import { generateShortLinkRoute } from "../AppProvider/short-link";
+import { generateShortLinkRoute } from "../AppProvider/short-link-proxy";
 import { Button, ClipboardButton, IconButton } from "../button";
 import { useAppContext, useShortLinkContext } from "../Contexts";
 import type { HydratedData } from "../Contexts/workflow-storage-context/types";
-import { Toast } from "../Feedback";
+import { Error } from "../Feedback";
 import { TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
@@ -39,6 +39,12 @@ const Paper = styled(MuiPaper)({
   padding: "15px",
   boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
   borderRadius: "8px",
+});
+
+const ErrorContainer = styled("div")({
+  marginTop: "145px",
+  position: "fixed",
+  zIndex: 1200,
 });
 
 const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
@@ -111,7 +117,7 @@ const ShortLinker = () => {
   }, [workflows]);
 
   const handleToggle = () => {
-    setOpen(!open);
+    setOpen(o => !o);
     setShortLink(null);
   };
 
@@ -127,6 +133,10 @@ const ShortLinker = () => {
     Object.keys(sessionStore).map(key => ({ key, state: sessionStore[key] }));
 
   const generateShortLink = () => {
+    if (error) {
+      setError(null);
+    }
+
     const requestData: IClutch.shortlink.v1.ICreateRequest = {
       path: `${location.pathname}${location.search}`,
       state: rotateStore(retrieveWorkflowSession()),
@@ -138,7 +148,10 @@ const ShortLinker = () => {
         const { hash } = response.data as IClutch.shortlink.v1.ICreateResponse;
         setShortLink(generateShortLinkRoute(window.location.origin, hash));
       })
-      .catch((err: ClutchError) => setError(err));
+      .catch((err: ClutchError) => {
+        setError(err);
+        setOpen(false);
+      });
   };
 
   if (!validWorkflow) {
@@ -148,9 +161,9 @@ const ShortLinker = () => {
   return (
     <>
       {error && (
-        <Toast severity="error" onClose={() => setError(null)}>
-          Unable to generate short link, please try again later
-        </Toast>
+        <ErrorContainer>
+          <Error subject={error} onRetry={generateShortLink} onClose={() => setError(null)} />
+        </ErrorContainer>
       )}
       <StyledLinkIcon
         variant="neutral"
