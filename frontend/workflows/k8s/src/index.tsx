@@ -17,6 +17,7 @@ interface ConfirmConfigProps {
 
 export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, ConfirmConfigProps {}
 export interface ResolverChild extends WizardChild, ResolverConfigProps {}
+export interface VerifyChild extends WizardChild, ConfirmConfigProps {}
 export interface ConfirmChild extends WizardChild, ConfirmConfigProps {}
 
 const register = (): WorkflowConfiguration => {
