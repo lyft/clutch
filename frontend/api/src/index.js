@@ -47994,7 +47994,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IMetric
                  * @property {number|null} [value] Metric value
                  * @property {number|Long|null} [timestampMs] Metric timestampMs
-                 * @property {Array.<string>|null} [metricTags] Metric metricTags
+                 * @property {Object.<string,string>|null} [labels] metric labels (tags) have a key and a value, https://prometheus.io/docs/concepts/data_model/#notation
                  */
 
                 /**
@@ -48006,7 +48006,7 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.metrics.v1.IMetric=} [properties] Properties to set
                  */
                 function Metric(properties) {
-                    this.metricTags = [];
+                    this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -48030,12 +48030,12 @@ export const clutch = $root.clutch = (() => {
                 Metric.prototype.timestampMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * Metric metricTags.
-                 * @member {Array.<string>} metricTags
+                 * metric labels (tags) have a key and a value, https://prometheus.io/docs/concepts/data_model/#notation
+                 * @member {Object.<string,string>} labels
                  * @memberof clutch.metrics.v1.Metric
                  * @instance
                  */
-                Metric.prototype.metricTags = $util.emptyArray;
+                Metric.prototype.labels = $util.emptyObject;
 
                 /**
                  * Verifies a Metric message.
@@ -48054,12 +48054,13 @@ export const clutch = $root.clutch = (() => {
                     if (message.timestampMs != null && message.hasOwnProperty("timestampMs"))
                         if (!$util.isInteger(message.timestampMs) && !(message.timestampMs && $util.isInteger(message.timestampMs.low) && $util.isInteger(message.timestampMs.high)))
                             return "timestampMs: integer|Long expected";
-                    if (message.metricTags != null && message.hasOwnProperty("metricTags")) {
-                        if (!Array.isArray(message.metricTags))
-                            return "metricTags: array expected";
-                        for (let i = 0; i < message.metricTags.length; ++i)
-                            if (!$util.isString(message.metricTags[i]))
-                                return "metricTags: string[] expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
                     }
                     return null;
                 };
@@ -48087,12 +48088,12 @@ export const clutch = $root.clutch = (() => {
                             message.timestampMs = object.timestampMs;
                         else if (typeof object.timestampMs === "object")
                             message.timestampMs = new $util.LongBits(object.timestampMs.low >>> 0, object.timestampMs.high >>> 0).toNumber();
-                    if (object.metricTags) {
-                        if (!Array.isArray(object.metricTags))
-                            throw TypeError(".clutch.metrics.v1.Metric.metricTags: array expected");
-                        message.metricTags = [];
-                        for (let i = 0; i < object.metricTags.length; ++i)
-                            message.metricTags[i] = String(object.metricTags[i]);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.metrics.v1.Metric.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
                     }
                     return message;
                 };
@@ -48110,8 +48111,8 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.arrays || options.defaults)
-                        object.metricTags = [];
+                    if (options.objects || options.defaults)
+                        object.labels = {};
                     if (options.defaults) {
                         object.value = 0;
                         if ($util.Long) {
@@ -48127,10 +48128,11 @@ export const clutch = $root.clutch = (() => {
                             object.timestampMs = options.longs === String ? String(message.timestampMs) : message.timestampMs;
                         else
                             object.timestampMs = options.longs === String ? $util.Long.prototype.toString.call(message.timestampMs) : options.longs === Number ? new $util.LongBits(message.timestampMs.low >>> 0, message.timestampMs.high >>> 0).toNumber() : message.timestampMs;
-                    if (message.metricTags && message.metricTags.length) {
-                        object.metricTags = [];
-                        for (let j = 0; j < message.metricTags.length; ++j)
-                            object.metricTags[j] = message.metricTags[j];
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
                     }
                     return object;
                 };
