@@ -47602,6 +47602,797 @@ export const clutch = $root.clutch = (() => {
         return k8s;
     })();
 
+    clutch.metrics = (function() {
+
+        /**
+         * Namespace metrics.
+         * @memberof clutch
+         * @namespace
+         */
+        const metrics = {};
+
+        metrics.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.metrics
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.MetricsAPI = (function() {
+
+                /**
+                 * Constructs a new MetricsAPI service.
+                 * @memberof clutch.metrics.v1
+                 * @classdesc Represents a MetricsAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function MetricsAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (MetricsAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = MetricsAPI;
+
+                /**
+                 * Callback as used by {@link clutch.metrics.v1.MetricsAPI#getMetrics}.
+                 * @memberof clutch.metrics.v1.MetricsAPI
+                 * @typedef GetMetricsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.metrics.v1.GetMetricsResponse} [response] GetMetricsResponse
+                 */
+
+                /**
+                 * Calls GetMetrics.
+                 * @function getMetrics
+                 * @memberof clutch.metrics.v1.MetricsAPI
+                 * @instance
+                 * @param {clutch.metrics.v1.IGetMetricsRequest} request GetMetricsRequest message or plain object
+                 * @param {clutch.metrics.v1.MetricsAPI.GetMetricsCallback} callback Node-style callback called with the error, if any, and GetMetricsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(MetricsAPI.prototype.getMetrics = function getMetrics(request, callback) {
+                    return this.rpcCall(getMetrics, $root.clutch.metrics.v1.GetMetricsRequest, $root.clutch.metrics.v1.GetMetricsResponse, request, callback);
+                }, "name", { value: "GetMetrics" });
+
+                /**
+                 * Calls GetMetrics.
+                 * @function getMetrics
+                 * @memberof clutch.metrics.v1.MetricsAPI
+                 * @instance
+                 * @param {clutch.metrics.v1.IGetMetricsRequest} request GetMetricsRequest message or plain object
+                 * @returns {Promise<clutch.metrics.v1.GetMetricsResponse>} Promise
+                 * @variation 2
+                 */
+
+                return MetricsAPI;
+            })();
+
+            v1.Query = (function() {
+
+                /**
+                 * Properties of a Query.
+                 * @memberof clutch.metrics.v1
+                 * @interface IQuery
+                 * @property {string|null} [expression] prometheus expression query string
+                 * @property {number|Long|null} [startTimeMs] inclusive
+                 * @property {number|Long|null} [endTimeMs] inclusive
+                 * @property {number|Long|null} [stepMs] default is 1 minute (60000)
+                 */
+
+                /**
+                 * Constructs a new Query.
+                 * @memberof clutch.metrics.v1
+                 * @classdesc Represents a Query.
+                 * @implements IQuery
+                 * @constructor
+                 * @param {clutch.metrics.v1.IQuery=} [properties] Properties to set
+                 */
+                function Query(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * prometheus expression query string
+                 * @member {string} expression
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 */
+                Query.prototype.expression = "";
+
+                /**
+                 * inclusive
+                 * @member {number|Long} startTimeMs
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 */
+                Query.prototype.startTimeMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * inclusive
+                 * @member {number|Long} endTimeMs
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 */
+                Query.prototype.endTimeMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * default is 1 minute (60000)
+                 * @member {number|Long} stepMs
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 */
+                Query.prototype.stepMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Verifies a Query message.
+                 * @function verify
+                 * @memberof clutch.metrics.v1.Query
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Query.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.expression != null && message.hasOwnProperty("expression"))
+                        if (!$util.isString(message.expression))
+                            return "expression: string expected";
+                    if (message.startTimeMs != null && message.hasOwnProperty("startTimeMs"))
+                        if (!$util.isInteger(message.startTimeMs) && !(message.startTimeMs && $util.isInteger(message.startTimeMs.low) && $util.isInteger(message.startTimeMs.high)))
+                            return "startTimeMs: integer|Long expected";
+                    if (message.endTimeMs != null && message.hasOwnProperty("endTimeMs"))
+                        if (!$util.isInteger(message.endTimeMs) && !(message.endTimeMs && $util.isInteger(message.endTimeMs.low) && $util.isInteger(message.endTimeMs.high)))
+                            return "endTimeMs: integer|Long expected";
+                    if (message.stepMs != null && message.hasOwnProperty("stepMs"))
+                        if (!$util.isInteger(message.stepMs) && !(message.stepMs && $util.isInteger(message.stepMs.low) && $util.isInteger(message.stepMs.high)))
+                            return "stepMs: integer|Long expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Query message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.metrics.v1.Query
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.metrics.v1.Query} Query
+                 */
+                Query.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.metrics.v1.Query)
+                        return object;
+                    let message = new $root.clutch.metrics.v1.Query();
+                    if (object.expression != null)
+                        message.expression = String(object.expression);
+                    if (object.startTimeMs != null)
+                        if ($util.Long)
+                            (message.startTimeMs = $util.Long.fromValue(object.startTimeMs)).unsigned = false;
+                        else if (typeof object.startTimeMs === "string")
+                            message.startTimeMs = parseInt(object.startTimeMs, 10);
+                        else if (typeof object.startTimeMs === "number")
+                            message.startTimeMs = object.startTimeMs;
+                        else if (typeof object.startTimeMs === "object")
+                            message.startTimeMs = new $util.LongBits(object.startTimeMs.low >>> 0, object.startTimeMs.high >>> 0).toNumber();
+                    if (object.endTimeMs != null)
+                        if ($util.Long)
+                            (message.endTimeMs = $util.Long.fromValue(object.endTimeMs)).unsigned = false;
+                        else if (typeof object.endTimeMs === "string")
+                            message.endTimeMs = parseInt(object.endTimeMs, 10);
+                        else if (typeof object.endTimeMs === "number")
+                            message.endTimeMs = object.endTimeMs;
+                        else if (typeof object.endTimeMs === "object")
+                            message.endTimeMs = new $util.LongBits(object.endTimeMs.low >>> 0, object.endTimeMs.high >>> 0).toNumber();
+                    if (object.stepMs != null)
+                        if ($util.Long)
+                            (message.stepMs = $util.Long.fromValue(object.stepMs)).unsigned = false;
+                        else if (typeof object.stepMs === "string")
+                            message.stepMs = parseInt(object.stepMs, 10);
+                        else if (typeof object.stepMs === "number")
+                            message.stepMs = object.stepMs;
+                        else if (typeof object.stepMs === "object")
+                            message.stepMs = new $util.LongBits(object.stepMs.low >>> 0, object.stepMs.high >>> 0).toNumber();
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Query message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.metrics.v1.Query
+                 * @static
+                 * @param {clutch.metrics.v1.Query} message Query
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Query.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.expression = "";
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.startTimeMs = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.startTimeMs = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.endTimeMs = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.endTimeMs = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.stepMs = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.stepMs = options.longs === String ? "0" : 0;
+                    }
+                    if (message.expression != null && message.hasOwnProperty("expression"))
+                        object.expression = message.expression;
+                    if (message.startTimeMs != null && message.hasOwnProperty("startTimeMs"))
+                        if (typeof message.startTimeMs === "number")
+                            object.startTimeMs = options.longs === String ? String(message.startTimeMs) : message.startTimeMs;
+                        else
+                            object.startTimeMs = options.longs === String ? $util.Long.prototype.toString.call(message.startTimeMs) : options.longs === Number ? new $util.LongBits(message.startTimeMs.low >>> 0, message.startTimeMs.high >>> 0).toNumber() : message.startTimeMs;
+                    if (message.endTimeMs != null && message.hasOwnProperty("endTimeMs"))
+                        if (typeof message.endTimeMs === "number")
+                            object.endTimeMs = options.longs === String ? String(message.endTimeMs) : message.endTimeMs;
+                        else
+                            object.endTimeMs = options.longs === String ? $util.Long.prototype.toString.call(message.endTimeMs) : options.longs === Number ? new $util.LongBits(message.endTimeMs.low >>> 0, message.endTimeMs.high >>> 0).toNumber() : message.endTimeMs;
+                    if (message.stepMs != null && message.hasOwnProperty("stepMs"))
+                        if (typeof message.stepMs === "number")
+                            object.stepMs = options.longs === String ? String(message.stepMs) : message.stepMs;
+                        else
+                            object.stepMs = options.longs === String ? $util.Long.prototype.toString.call(message.stepMs) : options.longs === Number ? new $util.LongBits(message.stepMs.low >>> 0, message.stepMs.high >>> 0).toNumber() : message.stepMs;
+                    return object;
+                };
+
+                /**
+                 * Converts this Query to JSON.
+                 * @function toJSON
+                 * @memberof clutch.metrics.v1.Query
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Query.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Query;
+            })();
+
+            v1.GetMetricsRequest = (function() {
+
+                /**
+                 * Properties of a GetMetricsRequest.
+                 * @memberof clutch.metrics.v1
+                 * @interface IGetMetricsRequest
+                 * @property {Array.<clutch.metrics.v1.IQuery>|null} [metricQueries] GetMetricsRequest metricQueries
+                 */
+
+                /**
+                 * Constructs a new GetMetricsRequest.
+                 * @memberof clutch.metrics.v1
+                 * @classdesc Represents a GetMetricsRequest.
+                 * @implements IGetMetricsRequest
+                 * @constructor
+                 * @param {clutch.metrics.v1.IGetMetricsRequest=} [properties] Properties to set
+                 */
+                function GetMetricsRequest(properties) {
+                    this.metricQueries = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetMetricsRequest metricQueries.
+                 * @member {Array.<clutch.metrics.v1.IQuery>} metricQueries
+                 * @memberof clutch.metrics.v1.GetMetricsRequest
+                 * @instance
+                 */
+                GetMetricsRequest.prototype.metricQueries = $util.emptyArray;
+
+                /**
+                 * Verifies a GetMetricsRequest message.
+                 * @function verify
+                 * @memberof clutch.metrics.v1.GetMetricsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetMetricsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.metricQueries != null && message.hasOwnProperty("metricQueries")) {
+                        if (!Array.isArray(message.metricQueries))
+                            return "metricQueries: array expected";
+                        for (let i = 0; i < message.metricQueries.length; ++i) {
+                            let error = $root.clutch.metrics.v1.Query.verify(message.metricQueries[i]);
+                            if (error)
+                                return "metricQueries." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetMetricsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.metrics.v1.GetMetricsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.metrics.v1.GetMetricsRequest} GetMetricsRequest
+                 */
+                GetMetricsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.metrics.v1.GetMetricsRequest)
+                        return object;
+                    let message = new $root.clutch.metrics.v1.GetMetricsRequest();
+                    if (object.metricQueries) {
+                        if (!Array.isArray(object.metricQueries))
+                            throw TypeError(".clutch.metrics.v1.GetMetricsRequest.metricQueries: array expected");
+                        message.metricQueries = [];
+                        for (let i = 0; i < object.metricQueries.length; ++i) {
+                            if (typeof object.metricQueries[i] !== "object")
+                                throw TypeError(".clutch.metrics.v1.GetMetricsRequest.metricQueries: object expected");
+                            message.metricQueries[i] = $root.clutch.metrics.v1.Query.fromObject(object.metricQueries[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetMetricsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.metrics.v1.GetMetricsRequest
+                 * @static
+                 * @param {clutch.metrics.v1.GetMetricsRequest} message GetMetricsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetMetricsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.metricQueries = [];
+                    if (message.metricQueries && message.metricQueries.length) {
+                        object.metricQueries = [];
+                        for (let j = 0; j < message.metricQueries.length; ++j)
+                            object.metricQueries[j] = $root.clutch.metrics.v1.Query.toObject(message.metricQueries[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetMetricsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.metrics.v1.GetMetricsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetMetricsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetMetricsRequest;
+            })();
+
+            v1.Metric = (function() {
+
+                /**
+                 * Properties of a Metric.
+                 * @memberof clutch.metrics.v1
+                 * @interface IMetric
+                 * @property {number|null} [value] Metric value
+                 * @property {number|Long|null} [timestampMs] Metric timestampMs
+                 * @property {Array.<string>|null} [metricTags] Metric metricTags
+                 */
+
+                /**
+                 * Constructs a new Metric.
+                 * @memberof clutch.metrics.v1
+                 * @classdesc Represents a Metric.
+                 * @implements IMetric
+                 * @constructor
+                 * @param {clutch.metrics.v1.IMetric=} [properties] Properties to set
+                 */
+                function Metric(properties) {
+                    this.metricTags = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Metric value.
+                 * @member {number} value
+                 * @memberof clutch.metrics.v1.Metric
+                 * @instance
+                 */
+                Metric.prototype.value = 0;
+
+                /**
+                 * Metric timestampMs.
+                 * @member {number|Long} timestampMs
+                 * @memberof clutch.metrics.v1.Metric
+                 * @instance
+                 */
+                Metric.prototype.timestampMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Metric metricTags.
+                 * @member {Array.<string>} metricTags
+                 * @memberof clutch.metrics.v1.Metric
+                 * @instance
+                 */
+                Metric.prototype.metricTags = $util.emptyArray;
+
+                /**
+                 * Verifies a Metric message.
+                 * @function verify
+                 * @memberof clutch.metrics.v1.Metric
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Metric.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (typeof message.value !== "number")
+                            return "value: number expected";
+                    if (message.timestampMs != null && message.hasOwnProperty("timestampMs"))
+                        if (!$util.isInteger(message.timestampMs) && !(message.timestampMs && $util.isInteger(message.timestampMs.low) && $util.isInteger(message.timestampMs.high)))
+                            return "timestampMs: integer|Long expected";
+                    if (message.metricTags != null && message.hasOwnProperty("metricTags")) {
+                        if (!Array.isArray(message.metricTags))
+                            return "metricTags: array expected";
+                        for (let i = 0; i < message.metricTags.length; ++i)
+                            if (!$util.isString(message.metricTags[i]))
+                                return "metricTags: string[] expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Metric message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.metrics.v1.Metric
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.metrics.v1.Metric} Metric
+                 */
+                Metric.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.metrics.v1.Metric)
+                        return object;
+                    let message = new $root.clutch.metrics.v1.Metric();
+                    if (object.value != null)
+                        message.value = Number(object.value);
+                    if (object.timestampMs != null)
+                        if ($util.Long)
+                            (message.timestampMs = $util.Long.fromValue(object.timestampMs)).unsigned = false;
+                        else if (typeof object.timestampMs === "string")
+                            message.timestampMs = parseInt(object.timestampMs, 10);
+                        else if (typeof object.timestampMs === "number")
+                            message.timestampMs = object.timestampMs;
+                        else if (typeof object.timestampMs === "object")
+                            message.timestampMs = new $util.LongBits(object.timestampMs.low >>> 0, object.timestampMs.high >>> 0).toNumber();
+                    if (object.metricTags) {
+                        if (!Array.isArray(object.metricTags))
+                            throw TypeError(".clutch.metrics.v1.Metric.metricTags: array expected");
+                        message.metricTags = [];
+                        for (let i = 0; i < object.metricTags.length; ++i)
+                            message.metricTags[i] = String(object.metricTags[i]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Metric message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.metrics.v1.Metric
+                 * @static
+                 * @param {clutch.metrics.v1.Metric} message Metric
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Metric.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.metricTags = [];
+                    if (options.defaults) {
+                        object.value = 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.timestampMs = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.timestampMs = options.longs === String ? "0" : 0;
+                    }
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = options.json && !isFinite(message.value) ? String(message.value) : message.value;
+                    if (message.timestampMs != null && message.hasOwnProperty("timestampMs"))
+                        if (typeof message.timestampMs === "number")
+                            object.timestampMs = options.longs === String ? String(message.timestampMs) : message.timestampMs;
+                        else
+                            object.timestampMs = options.longs === String ? $util.Long.prototype.toString.call(message.timestampMs) : options.longs === Number ? new $util.LongBits(message.timestampMs.low >>> 0, message.timestampMs.high >>> 0).toNumber() : message.timestampMs;
+                    if (message.metricTags && message.metricTags.length) {
+                        object.metricTags = [];
+                        for (let j = 0; j < message.metricTags.length; ++j)
+                            object.metricTags[j] = message.metricTags[j];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Metric to JSON.
+                 * @function toJSON
+                 * @memberof clutch.metrics.v1.Metric
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Metric.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Metric;
+            })();
+
+            v1.Metrics = (function() {
+
+                /**
+                 * Properties of a Metrics.
+                 * @memberof clutch.metrics.v1
+                 * @interface IMetrics
+                 * @property {Array.<clutch.metrics.v1.IMetric>|null} [metrics] Metrics metrics
+                 */
+
+                /**
+                 * Constructs a new Metrics.
+                 * @memberof clutch.metrics.v1
+                 * @classdesc Represents a Metrics.
+                 * @implements IMetrics
+                 * @constructor
+                 * @param {clutch.metrics.v1.IMetrics=} [properties] Properties to set
+                 */
+                function Metrics(properties) {
+                    this.metrics = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Metrics metrics.
+                 * @member {Array.<clutch.metrics.v1.IMetric>} metrics
+                 * @memberof clutch.metrics.v1.Metrics
+                 * @instance
+                 */
+                Metrics.prototype.metrics = $util.emptyArray;
+
+                /**
+                 * Verifies a Metrics message.
+                 * @function verify
+                 * @memberof clutch.metrics.v1.Metrics
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Metrics.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.metrics != null && message.hasOwnProperty("metrics")) {
+                        if (!Array.isArray(message.metrics))
+                            return "metrics: array expected";
+                        for (let i = 0; i < message.metrics.length; ++i) {
+                            let error = $root.clutch.metrics.v1.Metric.verify(message.metrics[i]);
+                            if (error)
+                                return "metrics." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Metrics message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.metrics.v1.Metrics
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.metrics.v1.Metrics} Metrics
+                 */
+                Metrics.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.metrics.v1.Metrics)
+                        return object;
+                    let message = new $root.clutch.metrics.v1.Metrics();
+                    if (object.metrics) {
+                        if (!Array.isArray(object.metrics))
+                            throw TypeError(".clutch.metrics.v1.Metrics.metrics: array expected");
+                        message.metrics = [];
+                        for (let i = 0; i < object.metrics.length; ++i) {
+                            if (typeof object.metrics[i] !== "object")
+                                throw TypeError(".clutch.metrics.v1.Metrics.metrics: object expected");
+                            message.metrics[i] = $root.clutch.metrics.v1.Metric.fromObject(object.metrics[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Metrics message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.metrics.v1.Metrics
+                 * @static
+                 * @param {clutch.metrics.v1.Metrics} message Metrics
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Metrics.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.metrics = [];
+                    if (message.metrics && message.metrics.length) {
+                        object.metrics = [];
+                        for (let j = 0; j < message.metrics.length; ++j)
+                            object.metrics[j] = $root.clutch.metrics.v1.Metric.toObject(message.metrics[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Metrics to JSON.
+                 * @function toJSON
+                 * @memberof clutch.metrics.v1.Metrics
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Metrics.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Metrics;
+            })();
+
+            v1.GetMetricsResponse = (function() {
+
+                /**
+                 * Properties of a GetMetricsResponse.
+                 * @memberof clutch.metrics.v1
+                 * @interface IGetMetricsResponse
+                 * @property {Object.<string,clutch.metrics.v1.IMetrics>|null} [queryResults] A mapping of individual queries to their respective results
+                 */
+
+                /**
+                 * Constructs a new GetMetricsResponse.
+                 * @memberof clutch.metrics.v1
+                 * @classdesc Represents a GetMetricsResponse.
+                 * @implements IGetMetricsResponse
+                 * @constructor
+                 * @param {clutch.metrics.v1.IGetMetricsResponse=} [properties] Properties to set
+                 */
+                function GetMetricsResponse(properties) {
+                    this.queryResults = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * A mapping of individual queries to their respective results
+                 * @member {Object.<string,clutch.metrics.v1.IMetrics>} queryResults
+                 * @memberof clutch.metrics.v1.GetMetricsResponse
+                 * @instance
+                 */
+                GetMetricsResponse.prototype.queryResults = $util.emptyObject;
+
+                /**
+                 * Verifies a GetMetricsResponse message.
+                 * @function verify
+                 * @memberof clutch.metrics.v1.GetMetricsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetMetricsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.queryResults != null && message.hasOwnProperty("queryResults")) {
+                        if (!$util.isObject(message.queryResults))
+                            return "queryResults: object expected";
+                        let key = Object.keys(message.queryResults);
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.clutch.metrics.v1.Metrics.verify(message.queryResults[key[i]]);
+                            if (error)
+                                return "queryResults." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetMetricsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.metrics.v1.GetMetricsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.metrics.v1.GetMetricsResponse} GetMetricsResponse
+                 */
+                GetMetricsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.metrics.v1.GetMetricsResponse)
+                        return object;
+                    let message = new $root.clutch.metrics.v1.GetMetricsResponse();
+                    if (object.queryResults) {
+                        if (typeof object.queryResults !== "object")
+                            throw TypeError(".clutch.metrics.v1.GetMetricsResponse.queryResults: object expected");
+                        message.queryResults = {};
+                        for (let keys = Object.keys(object.queryResults), i = 0; i < keys.length; ++i) {
+                            if (typeof object.queryResults[keys[i]] !== "object")
+                                throw TypeError(".clutch.metrics.v1.GetMetricsResponse.queryResults: object expected");
+                            message.queryResults[keys[i]] = $root.clutch.metrics.v1.Metrics.fromObject(object.queryResults[keys[i]]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetMetricsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.metrics.v1.GetMetricsResponse
+                 * @static
+                 * @param {clutch.metrics.v1.GetMetricsResponse} message GetMetricsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetMetricsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.queryResults = {};
+                    let keys2;
+                    if (message.queryResults && (keys2 = Object.keys(message.queryResults)).length) {
+                        object.queryResults = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.queryResults[keys2[j]] = $root.clutch.metrics.v1.Metrics.toObject(message.queryResults[keys2[j]], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetMetricsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.metrics.v1.GetMetricsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetMetricsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetMetricsResponse;
+            })();
+
+            return v1;
+        })();
+
+        return metrics;
+    })();
+
     clutch.project = (function() {
 
         /**

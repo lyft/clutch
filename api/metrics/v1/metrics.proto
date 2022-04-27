@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package clutch.metrics.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/metrics/v1;metricsv1";
+
+import "validate/validate.proto";
+import "api/v1/annotations.proto";
+import "google/api/annotations.proto";
+
+service MetricsAPI {
+  rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
+    option (google.api.http) = {
+      post : "/v1/metrics/query"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message Query {
+  /** prometheus expression query string */
+  string expression = 1 [ (validate.rules).string.min_len = 1 ];
+  /** inclusive */
+  int64 start_time_ms = 2 [ (validate.rules).int64.gte = 0 ];
+  /** inclusive */
+  int64 end_time_ms = 3 [ (validate.rules).int64.gte = 0 ];
+  /** default is 1 minute (60000) */
+  int64 step_ms = 4;
+}
+
+message GetMetricsRequest {
+  repeated Query metric_queries = 1 [ (validate.rules).repeated = {min_items : 1} ];
+}
+
+message Metric {
+  double value = 1;
+  int64 timestamp_ms = 2;
+  repeated string metric_tags = 3;
+}
+
+message Metrics {
+  repeated Metric metrics = 1;
+}
+
+message GetMetricsResponse {
+  /** A mapping of individual queries to their respective results */
+  map<string, Metrics> query_results = 1;
+}
