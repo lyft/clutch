@@ -19905,8 +19905,8 @@ export namespace clutch {
             /** Properties of a Query. */
             interface IQuery {
 
-                /** Query query */
-                query?: (string|null);
+                /** Query expression */
+                expression?: (string|null);
 
                 /** Query startTimeMs */
                 startTimeMs?: (number|Long|null);
@@ -19927,8 +19927,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.metrics.v1.IQuery);
 
-                /** Query query. */
-                public query: string;
+                /** Query expression. */
+                public expression: string;
 
                 /** Query startTimeMs. */
                 public startTimeMs: (number|Long);
@@ -20020,10 +20020,13 @@ export namespace clutch {
             interface IMetric {
 
                 /** Metric value */
-                value?: (number|Long|null);
+                value?: (number|null);
 
                 /** Metric timestampMs */
                 timestampMs?: (number|Long|null);
+
+                /** Metric metricTags */
+                metricTags?: (string[]|null);
             }
 
             /** Represents a Metric. */
@@ -20036,10 +20039,13 @@ export namespace clutch {
                 constructor(properties?: clutch.metrics.v1.IMetric);
 
                 /** Metric value. */
-                public value: (number|Long);
+                public value: number;
 
                 /** Metric timestampMs. */
                 public timestampMs: (number|Long);
+
+                /** Metric metricTags. */
+                public metricTags: string[];
 
                 /**
                  * Verifies a Metric message.
@@ -20121,8 +20127,8 @@ export namespace clutch {
             /** Properties of a GetMetricsResponse. */
             interface IGetMetricsResponse {
 
-                /** GetMetricsResponse querystringToMetrics */
-                querystringToMetrics?: ({ [k: string]: clutch.metrics.v1.IMetrics }|null);
+                /** GetMetricsResponse queryResults */
+                queryResults?: ({ [k: string]: clutch.metrics.v1.IMetrics }|null);
             }
 
             /** Represents a GetMetricsResponse. */
@@ -20134,8 +20140,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.metrics.v1.IGetMetricsResponse);
 
-                /** GetMetricsResponse querystringToMetrics. */
-                public querystringToMetrics: { [k: string]: clutch.metrics.v1.IMetrics };
+                /** GetMetricsResponse queryResults. */
+                public queryResults: { [k: string]: clutch.metrics.v1.IMetrics };
 
                 /**
                  * Verifies a GetMetricsResponse message.

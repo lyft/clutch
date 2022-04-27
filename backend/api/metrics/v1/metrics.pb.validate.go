@@ -56,9 +56,9 @@ func (m *Query) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetQuery()) < 1 {
+	if utf8.RuneCountInString(m.GetExpression()) < 1 {
 		err := QueryValidationError{
-			field:  "Query",
+			field:  "Expression",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -67,9 +67,27 @@ func (m *Query) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for StartTimeMs
+	if m.GetStartTimeMs() < 0 {
+		err := QueryValidationError{
+			field:  "StartTimeMs",
+			reason: "value must be greater than or equal to 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for EndTimeMs
+	if m.GetEndTimeMs() < 0 {
+		err := QueryValidationError{
+			field:  "EndTimeMs",
+			reason: "value must be greater than or equal to 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for StepMs
 
@@ -554,25 +572,25 @@ func (m *GetMetricsResponse) validate(all bool) error {
 	var errors []error
 
 	{
-		sorted_keys := make([]string, len(m.GetQuerystringToMetrics()))
+		sorted_keys := make([]string, len(m.GetQueryResults()))
 		i := 0
-		for key := range m.GetQuerystringToMetrics() {
+		for key := range m.GetQueryResults() {
 			sorted_keys[i] = key
 			i++
 		}
 		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
 		for _, key := range sorted_keys {
-			val := m.GetQuerystringToMetrics()[key]
+			val := m.GetQueryResults()[key]
 			_ = val
 
-			// no validation rules for QuerystringToMetrics[key]
+			// no validation rules for QueryResults[key]
 
 			if all {
 				switch v := interface{}(val).(type) {
 				case interface{ ValidateAll() error }:
 					if err := v.ValidateAll(); err != nil {
 						errors = append(errors, GetMetricsResponseValidationError{
-							field:  fmt.Sprintf("QuerystringToMetrics[%v]", key),
+							field:  fmt.Sprintf("QueryResults[%v]", key),
 							reason: "embedded message failed validation",
 							cause:  err,
 						})
@@ -580,7 +598,7 @@ func (m *GetMetricsResponse) validate(all bool) error {
 				case interface{ Validate() error }:
 					if err := v.Validate(); err != nil {
 						errors = append(errors, GetMetricsResponseValidationError{
-							field:  fmt.Sprintf("QuerystringToMetrics[%v]", key),
+							field:  fmt.Sprintf("QueryResults[%v]", key),
 							reason: "embedded message failed validation",
 							cause:  err,
 						})
@@ -589,7 +607,7 @@ func (m *GetMetricsResponse) validate(all bool) error {
 			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
 				if err := v.Validate(); err != nil {
 					return GetMetricsResponseValidationError{
-						field:  fmt.Sprintf("QuerystringToMetrics[%v]", key),
+						field:  fmt.Sprintf("QueryResults[%v]", key),
 						reason: "embedded message failed validation",
 						cause:  err,
 					}

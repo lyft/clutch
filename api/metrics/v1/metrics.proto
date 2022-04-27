@@ -11,7 +11,7 @@ import "google/api/annotations.proto";
 service MetricsAPI {
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
     option (google.api.http) = {
-      post : "/v1/metrics/getMetrics"
+      post : "/v1/metrics/query"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
@@ -20,11 +20,11 @@ service MetricsAPI {
 
 message Query {
   // Prometheus expression query string
-  string query = 1 [ (validate.rules).string.min_len = 1 ];
+  string expression = 1 [ (validate.rules).string.min_len = 1 ];
   // inclusive
-  int64 start_time_ms = 2;
+  int64 start_time_ms = 2 [ (validate.rules).int64.gte = 0 ];
   // inclusive
-  int64 end_time_ms = 3;
+  int64 end_time_ms = 3 [ (validate.rules).int64.gte = 0 ];
   // time step that starts from, a nice default is 1 minute (60000)
   int64 step_ms = 4;
 }
@@ -34,8 +34,9 @@ message GetMetricsRequest {
 }
 
 message Metric {
-  int64 value = 1;
+  double value = 1;
   int64 timestamp_ms = 2;
+  repeated string metric_tags = 3;
 }
 
 message Metrics {
@@ -44,5 +45,5 @@ message Metrics {
 
 message GetMetricsResponse {
   // Contains a mapping of individual queries to their respective results.
-  map<string, Metrics> querystring_to_metrics = 1;
+  map<string, Metrics> query_results = 1;
 }
