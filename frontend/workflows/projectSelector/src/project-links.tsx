@@ -76,7 +76,9 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
           return (
             link?.url && (
               <React.Fragment key={link.url}>
-                <StyledMenuItem style={{ paddingBottom: "4px", paddingRight: "4px", paddingLeft: "46px" }}>
+                <StyledMenuItem
+                  style={{ paddingBottom: "4px", paddingRight: "4px", paddingLeft: "46px" }}
+                >
                   <Link href={link.url}>
                     <Typography color="inherit" variant="body4">
                       {link.name}
