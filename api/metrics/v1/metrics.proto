@@ -36,7 +36,7 @@ message GetMetricsRequest {
 message Metric {
   double value = 1;
   int64 timestamp_ms = 2;
-  /** metric labels (tags) have a key and a value, https://prometheus.io/docs/concepts/data_model/#notation */
+  /** metric labels (tags) have a key and a value */
   map<string, string> labels = 3;
 }
 

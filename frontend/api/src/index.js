@@ -47994,7 +47994,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IMetric
                  * @property {number|null} [value] Metric value
                  * @property {number|Long|null} [timestampMs] Metric timestampMs
-                 * @property {Object.<string,string>|null} [labels] metric labels (tags) have a key and a value, https://prometheus.io/docs/concepts/data_model/#notation
+                 * @property {Object.<string,string>|null} [labels] metric labels (tags) have a key and a value
                  */
 
                 /**
@@ -48030,7 +48030,7 @@ export const clutch = $root.clutch = (() => {
                 Metric.prototype.timestampMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * metric labels (tags) have a key and a value, https://prometheus.io/docs/concepts/data_model/#notation
+                 * metric labels (tags) have a key and a value
                  * @member {Object.<string,string>} labels
                  * @memberof clutch.metrics.v1.Metric
                  * @instance

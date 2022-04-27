@@ -20025,7 +20025,7 @@ export namespace clutch {
                 /** Metric timestampMs */
                 timestampMs?: (number|Long|null);
 
-                /** metric labels (tags) have a key and a value, https://prometheus.io/docs/concepts/data_model/#notation */
+                /** metric labels (tags) have a key and a value */
                 labels?: ({ [k: string]: string }|null);
             }
 
@@ -20044,7 +20044,7 @@ export namespace clutch {
                 /** Metric timestampMs. */
                 public timestampMs: (number|Long);
 
-                /** metric labels (tags) have a key and a value, https://prometheus.io/docs/concepts/data_model/#notation */
+                /** metric labels (tags) have a key and a value */
                 public labels: { [k: string]: string };
 
                 /**
