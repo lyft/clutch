@@ -19905,16 +19905,16 @@ export namespace clutch {
             /** Properties of a Query. */
             interface IQuery {
 
-                /** Query expression */
+                /** prometheus expression query string */
                 expression?: (string|null);
 
-                /** Query startTimeMs */
+                /** inclusive */
                 startTimeMs?: (number|Long|null);
 
-                /** Query endTimeMs */
+                /** inclusive */
                 endTimeMs?: (number|Long|null);
 
-                /** Query stepMs */
+                /** default is 1 minute (60000) */
                 stepMs?: (number|Long|null);
             }
 
@@ -19927,16 +19927,16 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.metrics.v1.IQuery);
 
-                /** Query expression. */
+                /** prometheus expression query string */
                 public expression: string;
 
-                /** Query startTimeMs. */
+                /** inclusive */
                 public startTimeMs: (number|Long);
 
-                /** Query endTimeMs. */
+                /** inclusive */
                 public endTimeMs: (number|Long);
 
-                /** Query stepMs. */
+                /** default is 1 minute (60000) */
                 public stepMs: (number|Long);
 
                 /**
@@ -20127,7 +20127,7 @@ export namespace clutch {
             /** Properties of a GetMetricsResponse. */
             interface IGetMetricsResponse {
 
-                /** GetMetricsResponse queryResults */
+                /** A mapping of individual queries to their respective results */
                 queryResults?: ({ [k: string]: clutch.metrics.v1.IMetrics }|null);
             }
 
@@ -20140,7 +20140,7 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.metrics.v1.IGetMetricsResponse);
 
-                /** GetMetricsResponse queryResults. */
+                /** A mapping of individual queries to their respective results */
                 public queryResults: { [k: string]: clutch.metrics.v1.IMetrics };
 
                 /**

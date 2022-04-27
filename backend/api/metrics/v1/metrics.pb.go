@@ -28,13 +28,13 @@ type Query struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Prometheus expression query string
+	//* prometheus expression query string
 	Expression string `protobuf:"bytes,1,opt,name=expression,proto3" json:"expression,omitempty"`
-	// inclusive
+	//* inclusive
 	StartTimeMs int64 `protobuf:"varint,2,opt,name=start_time_ms,json=startTimeMs,proto3" json:"start_time_ms,omitempty"`
-	// inclusive
+	//* inclusive
 	EndTimeMs int64 `protobuf:"varint,3,opt,name=end_time_ms,json=endTimeMs,proto3" json:"end_time_ms,omitempty"`
-	// time step that starts from, a nice default is 1 minute (60000)
+	//* default is 1 minute (60000)
 	StepMs int64 `protobuf:"varint,4,opt,name=step_ms,json=stepMs,proto3" json:"step_ms,omitempty"`
 }
 
@@ -260,7 +260,7 @@ type GetMetricsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Contains a mapping of individual queries to their respective results.
+	//* A mapping of individual queries to their respective results
 	QueryResults map[string]*Metrics `protobuf:"bytes,1,rep,name=query_results,json=queryResults,proto3" json:"query_results,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 

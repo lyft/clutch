@@ -47680,10 +47680,10 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a Query.
                  * @memberof clutch.metrics.v1
                  * @interface IQuery
-                 * @property {string|null} [expression] Query expression
-                 * @property {number|Long|null} [startTimeMs] Query startTimeMs
-                 * @property {number|Long|null} [endTimeMs] Query endTimeMs
-                 * @property {number|Long|null} [stepMs] Query stepMs
+                 * @property {string|null} [expression] prometheus expression query string
+                 * @property {number|Long|null} [startTimeMs] inclusive
+                 * @property {number|Long|null} [endTimeMs] inclusive
+                 * @property {number|Long|null} [stepMs] default is 1 minute (60000)
                  */
 
                 /**
@@ -47702,7 +47702,7 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * Query expression.
+                 * prometheus expression query string
                  * @member {string} expression
                  * @memberof clutch.metrics.v1.Query
                  * @instance
@@ -47710,7 +47710,7 @@ export const clutch = $root.clutch = (() => {
                 Query.prototype.expression = "";
 
                 /**
-                 * Query startTimeMs.
+                 * inclusive
                  * @member {number|Long} startTimeMs
                  * @memberof clutch.metrics.v1.Query
                  * @instance
@@ -47718,7 +47718,7 @@ export const clutch = $root.clutch = (() => {
                 Query.prototype.startTimeMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * Query endTimeMs.
+                 * inclusive
                  * @member {number|Long} endTimeMs
                  * @memberof clutch.metrics.v1.Query
                  * @instance
@@ -47726,7 +47726,7 @@ export const clutch = $root.clutch = (() => {
                 Query.prototype.endTimeMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * Query stepMs.
+                 * default is 1 minute (60000)
                  * @member {number|Long} stepMs
                  * @memberof clutch.metrics.v1.Query
                  * @instance
@@ -48273,7 +48273,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a GetMetricsResponse.
                  * @memberof clutch.metrics.v1
                  * @interface IGetMetricsResponse
-                 * @property {Object.<string,clutch.metrics.v1.IMetrics>|null} [queryResults] GetMetricsResponse queryResults
+                 * @property {Object.<string,clutch.metrics.v1.IMetrics>|null} [queryResults] A mapping of individual queries to their respective results
                  */
 
                 /**
@@ -48293,7 +48293,7 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetMetricsResponse queryResults.
+                 * A mapping of individual queries to their respective results
                  * @member {Object.<string,clutch.metrics.v1.IMetrics>} queryResults
                  * @memberof clutch.metrics.v1.GetMetricsResponse
                  * @instance
