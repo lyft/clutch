@@ -131,8 +131,8 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
             </StyledHeadingContainer>
             {projectInfo && !isEmpty(projectInfo?.linkGroups) && (
               <Grid item xs={12} sm={12} md={4} lg={3} xl={2}>
-              <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups} />
-            </Grid>
+                <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups} />
+              </Grid>
             )}
           </Grid>
           <Grid container direction="row" spacing={2}>
