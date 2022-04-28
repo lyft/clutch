@@ -9,6 +9,7 @@ import { NPSHeader } from "../NPS";
 import Logo from "./logo";
 import Notifications from "./notifications";
 import SearchField from "./search";
+import ShortLinker from "./shortLinker";
 import { UserInformation } from "./user";
 
 export const APP_BAR_HEIGHT = "64px";
@@ -46,6 +47,11 @@ const Header: React.FC = () => {
             <Box>
               <SearchField />
             </Box>
+            <SimpleFeatureFlag feature="shortLinks">
+              <FeatureOn>
+                <ShortLinker />
+              </FeatureOn>
+            </SimpleFeatureFlag>
             {showNotifications && <Notifications />}
             <SimpleFeatureFlag feature="npsHeader">
               <FeatureOn>
