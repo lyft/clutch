@@ -3,6 +3,7 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   Card,
   Grid,
+  IconButton,
   Link,
   Popper,
   PopperItem,
@@ -10,6 +11,7 @@ import {
   TooltipContainer,
   Typography,
 } from "@clutch-sh/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 interface LinkGroupProps {
   linkGroupName: string;
@@ -102,17 +104,16 @@ export interface QuickLinksProps {
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
 }
 
-const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => (
-  <Card>
-    <Grid
-      container
-      item
-      direction="column"
-      alignItems="center"
-      spacing={1}
-      style={{ padding: "8px" }}
-    >
-      {(linkGroups || []).map(linkGroup => {
+// TODO(smonero): Wasn't sure if I should make an interface for this or just reuse
+// or not make one at all since its so simple
+interface SlicedLinkGroupProps {
+  slicedLinkGroups: IClutch.core.project.v1.ILinkGroup[];
+}
+
+const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
+  return (
+    <>
+      {(slicedLinkGroups || []).map(linkGroup => {
         if (linkGroup.links?.length === 1) {
           return (
             <QuickLink
@@ -130,8 +131,48 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => (
           />
         );
       })}
-    </Grid>
-  </Card>
-);
+    </>
+  );
+};
 
+const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
+  const anchorRef = React.useRef(null);
+  const [open, setOpen] = React.useState(false);
+  // Show only the first five quick links, and put the rest in
+  // an overflow popper
+  const firstFive = linkGroups.slice(0, 5);
+  const overflow = linkGroups.slice(5);
+
+  return (
+    <Card>
+      <Grid
+        container
+        item
+        direction="row"
+        alignItems="center"
+        spacing={1}
+        style={{ padding: "10px" }}
+      >
+        <SlicedLinkGroup slicedLinkGroups={firstFive} />
+        {overflow.length > 0 && (
+          <>
+            <IconButton size="small" ref={anchorRef} onClick={() => setOpen(true)}>
+              <ExpandMoreIcon />
+            </IconButton>
+            <Popper
+              open={open}
+              anchorRef={anchorRef}
+              onClickAway={() => setOpen(false)}
+              placement="bottom"
+            >
+              <Grid style={{ padding: "8px" }}>
+                <SlicedLinkGroup slicedLinkGroups={overflow} />
+              </Grid>
+            </Popper>
+          </>
+        )}
+      </Grid>
+    </Card>
+  );
+};
 export default QuickLinksCard;
