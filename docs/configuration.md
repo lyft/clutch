@@ -117,7 +117,6 @@ It's important to note that only packages which are installed will be included, 
 Note that Clutch uses the following architecture with component props:
 <img alt="Clutch component props architecture" src={require('@docusaurus/useBaseUrl').default('img/docs/component-props-diagram.png')} />
 It is convenient for specific routes to be able to specify their own props without having to worry about storing workflow props in a central location. Component props can be used for transforming string inputs, specifying options, or anything that is route specific. 
-For more context, 
 
-[see the code here](https://github.com/lyft/clutch/blob/ed465964896b25f467fffb30f1cbbf5313e4fa6b/frontend/packages/core/src/AppProvider/index.tsx#L99-L142).
+For more context, [see the code here](https://github.com/lyft/clutch/blob/ed465964896b25f467fffb30f1cbbf5313e4fa6b/frontend/packages/core/src/AppProvider/index.tsx#L99-L142).
 :::
