@@ -114,9 +114,9 @@ If a config is invalid a warning will be emitted in the console denoting which w
 It's important to note that only packages which are installed will be included, even if they are listed in the config file.
 
 :::tip
-Note that Clutch has the following architecture when using component props:
-<image> https://user-images.githubusercontent.com/66325812/165631965-6761d10c-3a3b-47ae-9f61-be4059c6215b.png
-An alternative design choice was to move the component props up a level to allow for reuse of props between routes. However, the choice of keeping the component props route-specific allows for maximum flexibility. It is convenient for specific routes to be able to specify their own props without having to worry about storing workflow props in a central location.
+Note that Clutch uses the following architecture with component props:
+<img alt="Clutch component props architecture" src={require('@docusaurus/useBaseUrl').default('img/docs/component-props-diagram.png')} />
+It is convenient for specific routes to be able to specify their own props without having to worry about storing workflow props in a central location. Component props can be used for transforming string inputs, specifying options, or anything that is route specific. 
   
 For more context, see the following:  
 https://github.com/lyft/clutch/blob/ed465964896b25f467fffb30f1cbbf5313e4fa6b/frontend/packages/core/src/AppProvider/index.tsx#L99-L142
