@@ -15,7 +15,7 @@ import { generateShortLinkRoute } from "../AppProvider/short-link-proxy";
 import { Button, ClipboardButton, IconButton } from "../button";
 import { useAppContext, useShortLinkContext } from "../Contexts";
 import type { HydratedData } from "../Contexts/workflow-storage-context/types";
-import { Error } from "../Feedback";
+import { Toast } from "../Feedback";
 import { TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
@@ -39,12 +39,6 @@ const Paper = styled(MuiPaper)({
   padding: "15px",
   boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
   borderRadius: "8px",
-});
-
-const ErrorContainer = styled("div")({
-  marginTop: "145px",
-  position: "fixed",
-  zIndex: 1200,
 });
 
 const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
@@ -161,9 +155,9 @@ const ShortLinker = () => {
   return (
     <>
       {error && (
-        <ErrorContainer>
-          <Error subject={error} onRetry={generateShortLink} onClose={() => setError(null)} />
-        </ErrorContainer>
+        <Toast title="Generating Short Link" severity="error" onClose={() => setError(null)}>
+          {error?.message}
+        </Toast>
       )}
       <StyledLinkIcon
         variant="neutral"

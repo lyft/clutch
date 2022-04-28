@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { IconButton } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 import MuiOpenInNewIcon from "@material-ui/icons/OpenInNew";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
@@ -9,7 +8,6 @@ import { Link } from "../../link";
 import type { ClutchError } from "../../Network/errors";
 import { isHelpDetails } from "../../Network/errors";
 import { Alert } from "../alert";
-import { Tooltip } from "../tooltip";
 
 import ErrorDetails from "./details";
 
@@ -49,33 +47,19 @@ const OpenInNewIcon = styled(MuiOpenInNewIcon)({
 export interface ErrorProps {
   subject: ClutchError;
   onRetry?: () => void;
-  onClose?: () => void;
 }
 
-const Error = ({ subject: error, onRetry, onClose }: ErrorProps) => {
+const Error = ({ subject: error, onRetry }: ErrorProps) => {
   const action =
-    onRetry || onClose ? (
-      <>
-        {onRetry !== undefined && (
-          <Tooltip title="Retry">
-            <IconButton aria-label="retry" color="inherit" size="small" onClick={() => onRetry()}>
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-        {onClose !== undefined && (
-          <Tooltip title="Close">
-            <IconButton aria-label="close" color="inherit" size="small" onClick={() => onClose()}>
-              <CloseIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </>
+    onRetry !== undefined ? (
+      <IconButton aria-label="retry" color="inherit" size="small" onClick={() => onRetry()}>
+        <RefreshIcon />
+      </IconButton>
     ) : null;
 
   if (error?.details === undefined) {
     return (
-      <Alert severity="error" title={error.status?.text} action={action} onClose={onClose}>
+      <Alert severity="error" title={error.status?.text} action={action}>
         {error.message}
       </Alert>
     );
