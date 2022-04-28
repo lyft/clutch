@@ -340,6 +340,8 @@ func (m *Metric) validate(all bool) error {
 
 	// no validation rules for TimestampMs
 
+	// no validation rules for Labels
+
 	if len(errors) > 0 {
 		return MetricMultiError(errors)
 	}

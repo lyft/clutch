@@ -36,7 +36,8 @@ message GetMetricsRequest {
 message Metric {
   double value = 1;
   int64 timestamp_ms = 2;
-  repeated string metric_tags = 3;
+  /** metric labels (tags) have a key and a value */
+  map<string, string> labels = 3;
 }
 
 message Metrics {

@@ -20025,8 +20025,8 @@ export namespace clutch {
                 /** Metric timestampMs */
                 timestampMs?: (number|Long|null);
 
-                /** Metric metricTags */
-                metricTags?: (string[]|null);
+                /** metric labels (tags) have a key and a value */
+                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a Metric. */
@@ -20044,8 +20044,8 @@ export namespace clutch {
                 /** Metric timestampMs. */
                 public timestampMs: (number|Long);
 
-                /** Metric metricTags. */
-                public metricTags: string[];
+                /** metric labels (tags) have a key and a value */
+                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a Metric message.
