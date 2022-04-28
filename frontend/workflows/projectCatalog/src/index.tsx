@@ -5,15 +5,22 @@ import { CardType, DynamicCard, MetaCard } from "./details/card";
 import type { ProjectInfoChip } from "./details/info/chipsRow";
 import Catalog from "./catalog";
 import Details from "./details";
+import Config from "./config";
 
 type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 
 type CatalogDetailsChild = React.ReactElement<DetailCard>;
 
 export interface WorkflowProps extends BaseWorkflowProps {}
-export interface ProjectDetailsWorkflowProps {
+
+export interface ProjectDetailsWorkflowProps extends WorkflowProps {
   children?: CatalogDetailsChild | CatalogDetailsChild[];
   chips?: ProjectInfoChip[];
+}
+
+export interface ProjectDetailsConfigWorkflowProps extends WorkflowProps {
+  children?: any;
+  defaultRoute?: string;
 }
 
 const register = (): WorkflowConfiguration => {
@@ -37,6 +44,12 @@ const register = (): WorkflowConfiguration => {
         path: "/:projectId",
         description: "Service Detail View",
         component: Details,
+        featureFlag: "projectCatalog",
+      },
+      config: {
+        path: "/:projectId/config/:configType?",
+        description: "Service Detail Configuration",
+        component: Config,
         featureFlag: "projectCatalog",
       },
     },

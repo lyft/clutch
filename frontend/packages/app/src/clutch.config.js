@@ -75,5 +75,11 @@ module.exports = {
     details: {
       hideNav: true,
     },
+    config: {
+      hideNav: true,
+      componentProps: {
+        defaultRoute: "info",
+      },
+    },
   },
 };
