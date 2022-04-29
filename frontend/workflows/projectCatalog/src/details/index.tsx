@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, IconButton, styled, Tooltip } from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +34,8 @@ const DisabledItem = ({ name }: { name: string }) => (
 );
 
 const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Grid container direction="row" style={{ padding: "8px", justifyContent: "flex-end" }}>
@@ -41,7 +43,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
           <QuickLinksCard linkGroups={linkGroups} />
         </Grid>
         <Grid item style={{ padding: "10px" }}>
-          <IconButton onClick={() => {}}>
+          <IconButton onClick={() => navigate("config/info")}>
             <SettingsIcon />
           </IconButton>
         </Grid>
