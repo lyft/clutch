@@ -38,7 +38,7 @@ const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) =>
   );
 
   return (
-    <Grid item key={key ?? ""}>
+    <Grid item key={key ?? ""} style={{padding: "8px"}}>
       {name ? container : children}
     </Grid>
   );
@@ -84,7 +84,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
       >
         <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
       </button>
-      <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)}>
+      <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)} placement={"bottom"}>
         {validLinks.map(link => (
           <PopperItem key={link.name}>
             {link?.url && (
@@ -156,16 +156,16 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
         <SlicedLinkGroup slicedLinkGroups={firstFive} />
         {overflow.length > 0 && (
           <>
-            <IconButton size="small" ref={anchorRef} onClick={() => setOpen(true)}>
+            <IconButton size="small" variant={"neutral"} ref={anchorRef} onClick={() => setOpen(true)}>
               <ExpandMoreIcon />
             </IconButton>
             <Popper
               open={open}
               anchorRef={anchorRef}
               onClickAway={() => setOpen(false)}
-              placement="bottom"
+              placement="bottom-end"
             >
-              <Grid style={{ padding: "8px" }}>
+              <Grid style={{ padding: "8px" }} direction="row" container>
                 <SlicedLinkGroup slicedLinkGroups={overflow} />
               </Grid>
             </Popper>

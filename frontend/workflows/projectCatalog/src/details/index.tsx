@@ -17,7 +17,8 @@ import ProjectInfoCard from "./info";
 import QuickLinksCard from "./quick-links";
 
 const StyledContainer = styled(Grid)({
-  padding: "32px",
+  padding: "16px",
+
 });
 
 const StyledHeadingContainer = styled(Grid)({
@@ -35,7 +36,7 @@ const DisabledItem = ({ name }: { name: string }) => (
 const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
   return (
     <>
-      <Grid container direction="row" style={{ padding: "8px " }}>
+      <Grid container direction="row" style={{ padding: "8px", justifyContent: "flex-end" }}>
         <Grid item>
           <QuickLinksCard linkGroups={linkGroups} />
         </Grid>
@@ -122,7 +123,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
         {/* Column for project details and header */}
         <Grid item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container>
-            <StyledHeadingContainer item xs={12} sm={12} md={8} lg={9} xl={10}>
+            <StyledHeadingContainer item xs={6} sm={7} md={8} lg={9} xl={10}>
               {/* Static Header */}
               <ProjectHeader
                 name={projectId}
