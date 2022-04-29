@@ -1,15 +1,23 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, ClutchError, WorkflowConfiguration } from "@clutch-sh/core";
 
 import type { CatalogDetailsCard } from "./details/card";
 import { CardType, DynamicCard, MetaCard } from "./details/card";
 import type { ProjectInfoChip } from "./details/info/chipsRow";
 import Catalog from "./catalog";
-import Details from "./details";
 import Config from "./config";
+import Details from "./details";
 
 type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 
+export interface ProjectConfig {
+  title: string;
+  path: string;
+  onError: (error: ClutchError) => void;
+}
+
 type CatalogDetailsChild = React.ReactElement<DetailCard>;
+
+export type ProjectConfigPage = React.ReactElement<ProjectConfig>;
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
@@ -19,8 +27,8 @@ export interface ProjectDetailsWorkflowProps extends WorkflowProps {
 }
 
 export interface ProjectDetailsConfigWorkflowProps extends WorkflowProps {
-  children?: any;
-  defaultRoute?: string;
+  children?: ProjectConfigPage | ProjectConfigPage[];
+  defaultRoute: string;
 }
 
 const register = (): WorkflowConfiguration => {
@@ -47,7 +55,7 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
       },
       config: {
-        path: "/:projectId/config/:configType?",
+        path: "/:projectId/config/:configType",
         description: "Service Detail Configuration",
         component: Config,
         featureFlag: "projectCatalog",
