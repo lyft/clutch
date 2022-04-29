@@ -18,7 +18,6 @@ import QuickLinksCard from "./quick-links";
 
 const StyledContainer = styled(Grid)({
   padding: "16px",
-
 });
 
 const StyledHeadingContainer = styled(Grid)({
