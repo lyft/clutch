@@ -186,6 +186,10 @@ const ProjectLinks = ({ linkGroups, name }: ProjectLinksProps) => {
   const [open, setOpen] = React.useState(false);
   const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
 
+  if (linkGroups.length === 0) {
+    return null;
+  }
+
   return (
     <StyledFlexEnd hidden={name?.[0] !== keyWithQLinksOpen}>
       <StyledMoreVertIcon>
