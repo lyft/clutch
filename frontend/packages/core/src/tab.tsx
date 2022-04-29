@@ -79,11 +79,11 @@ const TabPanel = styled(MuiTabPanel)({
   maxWidth: "100%",
 });
 
-export interface TabsProps extends Pick<MuiTabsProps, "value" | "variant"> {
+export interface TabsProps extends Pick<MuiTabsProps, "value" | "variant" | "centered"> {
   children: React.ReactElement<TabProps> | React.ReactElement<TabProps>[];
 }
 
-export const Tabs = ({ children, value, variant }: TabsProps) => {
+export const Tabs = ({ children, value, variant, ...props }: TabsProps) => {
   const [selectedIndex, setSelectedIndex] = React.useState((value || 0).toString());
   const onChangeMiddleware = (_, v: string) => {
     setSelectedIndex(v);
@@ -92,7 +92,7 @@ export const Tabs = ({ children, value, variant }: TabsProps) => {
   return (
     <div style={{ width: "100%" }}>
       <TabContext value={selectedIndex}>
-        <StyledTabs variant={variant} onChange={onChangeMiddleware}>
+        <StyledTabs variant={variant} onChange={onChangeMiddleware} {...props}>
           {React.Children.map(children, (child, index) =>
             React.cloneElement(child, { value: index.toString() })
           )}

@@ -9,7 +9,7 @@ import Details from "./details";
 
 type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 
-export interface ProjectConfig {
+export interface ProjectConfigProps {
   title: string;
   path: string;
   onError: (error: ClutchError) => void;
@@ -17,7 +17,7 @@ export interface ProjectConfig {
 
 type CatalogDetailsChild = React.ReactElement<DetailCard>;
 
-export type ProjectConfigPage = React.ReactElement<ProjectConfig>;
+export type ProjectConfigPage = React.ReactElement<ProjectConfigProps>;
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
@@ -67,7 +67,7 @@ const register = (): WorkflowConfiguration => {
 export { CardType, DynamicCard, MetaCard };
 export { LastEvent } from "./details/helpers";
 export { useProjectDetailsContext } from "./details/context";
-export { Details as ProjectDetails };
+export { Details as ProjectDetails, Config as ProjectConfig };
 export type { CatalogDetailsCard, CatalogDetailsChild, ProjectInfoChip };
 
 export default register;

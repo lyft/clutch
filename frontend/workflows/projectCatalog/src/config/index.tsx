@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import { Error, Grid, styled, Tab, Tabs } from "@clutch-sh/core";
@@ -15,6 +15,8 @@ const StyledContainer = styled(Grid)({
 
 const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, defaultRoute }) => {
   const { projectId, configType = defaultRoute } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
     null
   );
@@ -25,6 +27,14 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
   React.useEffect(() => {
     fetchProjectInfo(projectId).then(setProjectInfo).catch(setError);
   }, []);
+
+  React.useEffect(() => {
+    if (configPages && configPages.length) {
+      const splitLoc = location.pathname.split("/");
+      splitLoc.splice(splitLoc.length - 1, 1, configPages[selectedPage]?.props?.path);
+      navigate(splitLoc.join("/"));
+    }
+  }, [configPages, selectedPage]);
 
   React.useEffect(() => {
     if (children) {
@@ -62,9 +72,9 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
             description="Edit your projects' settings. Changes will immediately take effect on save. Some changes may require additional approval from another owner of the project"
           />
         </Grid>
-        {configPages && configPages.length > 0 ? (
+        {configPages && configPages.length > 1 ? (
           <Grid item xs={12}>
-            <Tabs>
+            <Tabs value={selectedPage} centered>
               {configPages.map((page, i) => (
                 <Tab label={page.props.title} onClick={_ => setSelectedPage(i)} />
               ))}
