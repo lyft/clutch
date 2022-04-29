@@ -1,11 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { client, Grid, styled, Tooltip } from "@clutch-sh/core";
+import { client, Grid, IconButton, styled, Tooltip } from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Hidden from "@material-ui/core/Hidden";
 import GroupIcon from "@material-ui/icons/Group";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { capitalize, isEmpty } from "lodash";
 
 import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "..";
@@ -17,15 +17,11 @@ import ProjectInfoCard from "./info";
 import QuickLinksCard from "./quick-links";
 
 const StyledContainer = styled(Grid)({
-  padding: "32px",
+  padding: "16px",
 });
 
 const StyledHeadingContainer = styled(Grid)({
   marginBottom: "24px",
-});
-
-const StyledQLContainer = styled(Grid)({
-  margin: "-8px 16px 16px 0px",
 });
 
 const DisabledItem = ({ name }: { name: string }) => (
@@ -35,6 +31,23 @@ const DisabledItem = ({ name }: { name: string }) => (
     </Tooltip>
   </Grid>
 );
+
+const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
+  return (
+    <>
+      <Grid container direction="row" style={{ padding: "8px", justifyContent: "flex-end" }}>
+        <Grid item>
+          <QuickLinksCard linkGroups={linkGroups} />
+        </Grid>
+        <Grid item style={{ padding: "10px" }}>
+          <IconButton onClick={() => {}}>
+            <SettingsIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+    </>
+  );
+};
 
 const fetchProject = (project: string): Promise<IClutch.core.project.v1.IProject> =>
   client
@@ -108,18 +121,20 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
       <StyledContainer container direction="row" wrap="nowrap">
         {/* Column for project details and header */}
         <Grid item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
-          <StyledHeadingContainer item>
-            {/* Static Header */}
-            <ProjectHeader
-              name={projectId}
-              description={projectInfo?.data?.description as string}
-            />
-          </StyledHeadingContainer>
-          <Hidden mdUp>
-            <StyledQLContainer item direction="row" xs={12} sm={12}>
-              {projectInfo && <QuickLinksCard linkGroups={projectInfo?.linkGroups ?? []} />}
-            </StyledQLContainer>
-          </Hidden>
+          <Grid container>
+            <StyledHeadingContainer item xs={6} sm={7} md={8} lg={9} xl={10}>
+              {/* Static Header */}
+              <ProjectHeader
+                name={projectId}
+                description={projectInfo?.data?.description as string}
+              />
+            </StyledHeadingContainer>
+            {projectInfo && !isEmpty(projectInfo?.linkGroups) && (
+              <Grid item xs={12} sm={12} md={4} lg={3} xl={2}>
+                <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups} />
+              </Grid>
+            )}
+          </Grid>
           <Grid container direction="row" spacing={2}>
             <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
               <Grid item xs={12}>
@@ -159,14 +174,6 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
             </Grid>
           </Grid>
         </Grid>
-        {/* Column for project quick links */}
-        <Hidden smDown>
-          <Grid item direction="column">
-            {projectInfo && !isEmpty(projectInfo?.linkGroups) && (
-              <QuickLinksCard linkGroups={projectInfo.linkGroups!} />
-            )}
-          </Grid>
-        </Hidden>
       </StyledContainer>
     </ProjectDetailsContext.Provider>
   );
