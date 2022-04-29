@@ -187,13 +187,13 @@ const ProjectLinks = ({ linkGroups, name }: ProjectLinksProps) => {
   const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
 
   return (
-    <StyledFlexEnd hidden={name[0] !== keyWithQLinksOpen}>
+    <StyledFlexEnd hidden={name?.[0] !== keyWithQLinksOpen}>
       <StyledMoreVertIcon>
         <IconButton
           ref={anchorRef}
           onClick={() => {
             setOpen(true);
-            setKeyWithQLinksOpen(name[0]);
+            setKeyWithQLinksOpen(name?.[0]);
           }}
         >
           <MoreVertIcon />
