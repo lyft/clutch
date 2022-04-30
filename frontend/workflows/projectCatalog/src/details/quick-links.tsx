@@ -78,7 +78,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
     <QuickLinkContainer key={linkGroupName} name={linkGroupName}>
       <button
         type="button"
-        style={{ padding: 0, background: "transparent", border: "0", cursor: "pointer" }}
+        style={{ padding: 0, background: "transparent", border: "0", cursor: "pointer", display: "flex" }}
         ref={anchorRef}
         onClick={() => setOpen(true)}
       >
