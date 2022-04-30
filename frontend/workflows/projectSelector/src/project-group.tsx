@@ -7,6 +7,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
+import ProjectLinks from "./project-links";
 import type { Group } from "./types";
 
 const StyledGroup = styled.div({
@@ -35,8 +36,9 @@ const StyledCount = styled.span({
   display: "inline-block",
 });
 
+// This div used to have `padding: "0 25px 0 8px"` but that made it look weird when we implemented quicklinks
+// because the "only" and "x" buttons are hidden when the popper is expanded and mouse is no longer hovering.
 const StyledMenuItem = styled.div({
-  padding: "0 25px 0 8px",
   height: "48px",
   display: "flex",
   alignItems: "center",
@@ -87,7 +89,7 @@ const StyledMenuItemName = styled.span({
 });
 
 const StyledClearIcon = styled.span({
-  width: "24px",
+  width: "36px",
   ".MuiIconButton-root": {
     padding: "6px",
     color: "rgba(13, 16, 48, 0.38)",
@@ -219,6 +221,12 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                   )}
                 </StyledClearIcon>
               </StyledHoverOptions>
+              {!state?.loading && state?.projectData?.[key]?.linkGroups && (
+                <ProjectLinks
+                  linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
+                  name={[key]}
+                />
+              )}
             </StyledMenuItem>
           ))}
         </div>
