@@ -1,12 +1,7 @@
 import React from "react";
-import { matchers } from "@emotion/jest";
 import { shallow } from "enzyme";
 
 import { TimeseriesChart } from "..";
-
-// Add the custom matchers provided by '@emotion/jest'
-expect.extend(matchers);
-
 describe("<TimeseriesChart />", () => {
   describe("basic rendering", () => {
     const mockDataSingleLine = [
