@@ -2,6 +2,7 @@ import React from "react";
 import { shallow } from "enzyme";
 
 import { TimeseriesChart } from "..";
+
 describe("<TimeseriesChart />", () => {
   describe("basic rendering", () => {
     const mockDataSingleLine = [
