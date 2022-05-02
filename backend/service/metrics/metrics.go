@@ -67,6 +67,10 @@ func NewWithHTTPClient(cfg *any.Any, logger *zap.Logger, scope tally.Scope, prom
 		return nil, err
 	}
 
+	if config.PrometheusApiEndpoint == "" {
+		return nil, fmt.Errorf("prometheus api endpoint is required")
+	}
+
 	return &client{
 		prometheusAPI:         prometheusAPI,
 		prometheusAPIEndpoint: config.PrometheusApiEndpoint,
