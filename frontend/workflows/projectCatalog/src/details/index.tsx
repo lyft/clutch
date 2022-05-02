@@ -48,7 +48,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
         <Grid item>
           <QuickLinksCard linkGroups={linkGroups} />
         </Grid>
-        <SimpleFeatureFlag feature="projectSettings">
+        <SimpleFeatureFlag feature="projectCatalogSettings">
           <Grid item>
             <IconButton onClick={() => {}}>
               <SettingsIcon />
