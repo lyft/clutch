@@ -222,7 +222,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 </StyledClearIcon>
               </StyledHoverOptions>
               {!state?.loading && state?.projectData?.[key]?.linkGroups && (
-                <span style={{ justifyContent: "flex-end" }}>
+                <span style={{ justifyContent: "flex-end", display: "flex" }}>
                   <ProjectLinks
                     linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
                     name={[key]}
