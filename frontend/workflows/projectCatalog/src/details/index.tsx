@@ -35,12 +35,21 @@ const DisabledItem = ({ name }: { name: string }) => (
 const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
   return (
     <>
-      <Grid container direction="row" style={{ padding: "8px", justifyContent: "flex-end" }}>
+      <Grid
+        container
+        direction="row"
+        style={{
+          padding: "8px",
+          justifyContent: "flex-end",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <Grid item>
           <QuickLinksCard linkGroups={linkGroups} />
         </Grid>
         <SimpleFeatureFlag feature="projectSettings">
-          <Grid item style={{ padding: "10px" }}>
+          <Grid item>
             <IconButton onClick={() => {}}>
               <SettingsIcon />
             </IconButton>
