@@ -7,14 +7,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
+	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
-
-	"net/http"
-	"net/url"
 
 	metricsv1cfg "github.com/lyft/clutch/backend/api/config/service/metrics/v1"
 	metricsv1 "github.com/lyft/clutch/backend/api/metrics/v1"
@@ -177,10 +176,8 @@ func (v *PrometheusValue) UnmarshalJSON(data []byte) error {
  * 3. Parse the response
  */
 func (c *client) GetMetrics(ctx context.Context, req *metricsv1.GetMetricsRequest) (*metricsv1.GetMetricsResponse, error) {
-
 	queryResults := make(map[string]*metricsv1.MetricsResult)
 	for _, q := range req.MetricQueries {
-
 		req, err := constructRequest(q.Expression, c.prometheusAPIEndpoint, q.StartTimeMs, q.EndTimeMs, q.StepMs)
 		if err != nil {
 			return nil, err
