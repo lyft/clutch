@@ -69,7 +69,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
               { title: "Project Configuration" },
               { title: configType || defaultRoute },
             ]}
-            description="Edit your projects' settings. Changes will immediately take effect on save. Some changes may require additional approval from another owner of the project"
+            description="Edit your projects' settings."
           />
         </Grid>
         {configPages && configPages.length > 1 ? (
