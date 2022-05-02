@@ -37,7 +37,7 @@ const BreadCrumbs = ({ routes = [] }: BreadCrumbProps) => {
   let builtRoute = routes[0].path;
 
   const buildCrumb = route => {
-    if (route.path && route.path !== builtRoute) {
+    if (route?.path && route?.path !== builtRoute) {
       builtRoute += `/${route.path}`;
     }
 
