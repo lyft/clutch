@@ -76,7 +76,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
           <Grid item xs={12}>
             <Tabs value={selectedPage} centered>
               {configPages.map((page, i) => (
-                <Tab label={page.props.title} onClick={_ => setSelectedPage(i)} />
+                <Tab label={page.props.title} onClick={() => setSelectedPage(i)} />
               ))}
             </Tabs>
           </Grid>
