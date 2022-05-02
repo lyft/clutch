@@ -1,10 +1,12 @@
 package metrics
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"strconv"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -19,13 +21,35 @@ import (
 	"github.com/lyft/clutch/backend/service"
 )
 
-const Name = "clutch.service.metrics"
+const (
+	Name           = "clutch.service.metrics"
+	QueryRangePath = "/api/v1/query_range"
+	QueryScheme    = "http"
+	StepDefaultMs  = 60000
+)
 
 type Service interface {
 	GetMetrics(context.Context, *metricsv1.GetMetricsRequest) (*metricsv1.GetMetricsResponse, error)
 }
+type PrometheusResponse struct {
+	Status string
+	Data   PrometheusResponseData
+}
 
-const ()
+type PrometheusResponseData struct {
+	ResultType string
+	Result     []PrometheusResult
+}
+
+type PrometheusResult struct {
+	Metric map[string]string
+	Values []PrometheusValue
+}
+
+type PrometheusValue struct {
+	timestamp int64
+	value     string
+}
 
 type client struct {
 	prometheusAPI         *http.Client
@@ -52,13 +76,19 @@ func NewWithHTTPClient(cfg *any.Any, logger *zap.Logger, scope tally.Scope, prom
 	}, nil
 }
 
-func (c *client) constructRequest(query string, start, end int64, step int64) (*http.Request, error) {
-	baseURL := url.URL{Scheme: "http", Host: c.prometheusAPIEndpoint, Path: "/api/v1/query_range"}
+func constructRequest(query, host string, start, end int64, step int64) (*http.Request, error) {
+	baseURL := url.URL{Scheme: QueryScheme, Host: host, Path: QueryRangePath}
 	params := url.Values{}
 
 	params.Add("query", query)
+	// We are given timestamps in milliseconds, but Prometheus expects seconds.
 	params.Add("start", strconv.FormatInt(start/1000, 10))
 	params.Add("end", strconv.FormatInt(end/1000, 10))
+
+	// If step is 0, update it to be 1 minute
+	if step == 0 {
+		step = StepDefaultMs
+	}
 	params.Add("step", strconv.FormatInt(step/1000, 10))
 
 	baseURL.RawQuery = params.Encode()
@@ -70,31 +100,71 @@ func (c *client) constructRequest(query string, start, end int64, step int64) (*
 	}
 
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-
 	// TODO(smonero): Do we need these?
-	//	req.Header.Set("M3-Host", string(m3.m3Host))
 	//	req.Header.Set("User-Agent", userAgent)
 
 	return req, nil
 }
 
-type PrometheusResponse struct {
-	Status string
-	Data   PrometheusResponseData
+func (c *client) formatPrometheusResponseData(response PrometheusResponseData) ([]*metricsv1.Metrics, error) {
+	metricsList := make([]*metricsv1.Metrics, 0)
+
+	for _, r := range response.Result {
+		var timeSeries metricsv1.Metrics
+
+		for k, v := range r.Metric {
+			if k == "__name__" {
+				timeSeries.Label = v
+			} else {
+				timeSeries.Tags[k] = v
+			}
+		}
+
+		for _, s := range r.Values {
+			var datapoint metricsv1.MetricDataPoint
+
+			datapoint.Timestamp = s.timestamp
+
+			v, err := strconv.ParseFloat(s.value, 32)
+			if err != nil {
+				return nil, err
+			}
+			if math.IsInf(v, 0) || math.IsNaN(v) {
+				// While +/-Inf and NaN are valid floating point values, they are
+				// not useful to our alerting system.
+				continue
+			}
+			datapoint.Value = float64(v)
+
+			timeSeries.DataPoints = append(timeSeries.DataPoints, &datapoint)
+		}
+
+		metricsList = append(metricsList, &timeSeries)
+	}
+
+	return metricsList, nil
 }
 
-type PrometheusResponseData struct {
-	ResultType string
-	Result     []PrometheusResult
-}
+// The expected data from the Prometheus api is
+// [ [ <unix_time>, "<sample_value>" ], ... ] where sample_value is numeric. Go doesn't support
+// slices of mixed type, so we do the un-marshaling ourselves.
+func (v *PrometheusValue) UnmarshalJSON(data []byte) error {
+	if string(data) == "null" {
+		return nil
+	}
 
-type PrometheusResult struct {
-	Metric map[string]string
-	Values []PrometheusDataPoint `json:"values"`
-}
-type PrometheusDataPoint struct {
-	timestamp int64
-	value     string
+	data = bytes.Trim(data, "[]")
+	parts := bytes.Split(data, []byte(","))
+
+	// Check for two parts.
+	if err := json.Unmarshal(parts[0], &v.timestamp); err != nil {
+		return err
+	}
+	if err := json.Unmarshal(parts[1], &v.value); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 /**
@@ -108,10 +178,10 @@ type PrometheusDataPoint struct {
  */
 func (c *client) GetMetrics(ctx context.Context, req *metricsv1.GetMetricsRequest) (*metricsv1.GetMetricsResponse, error) {
 
-	queryResults := make(map[string]*metricsv1.Metrics)
+	queryResults := make(map[string]*metricsv1.MetricsResult)
 	for _, q := range req.MetricQueries {
 
-		req, err := c.constructRequest(q.Expression, q.StartTimeMs, q.EndTimeMs, q.StepMs)
+		req, err := constructRequest(q.Expression, c.prometheusAPIEndpoint, q.StartTimeMs, q.EndTimeMs, q.StepMs)
 		if err != nil {
 			return nil, err
 		}
@@ -132,11 +202,21 @@ func (c *client) GetMetrics(ctx context.Context, req *metricsv1.GetMetricsReques
 			return nil, fmt.Errorf(resp.Status)
 		}
 
+		var queryResponse PrometheusResponse
 		err = json.Unmarshal(bodyBytes, &queryResponse)
+		if err != nil {
+			return nil, err
+		}
 
-		resStr := nil
+		//TODO: check status?
 
-		queryResults[q.Expression] = resStr
+		qResult, err := c.formatPrometheusResponseData(queryResponse.Data)
+		if err != nil {
+			return nil, err
+		}
+		queryResults[q.Expression] = &metricsv1.MetricsResult{
+			Metrics: qResult,
+		}
 	}
 
 	return &metricsv1.GetMetricsResponse{

@@ -33,18 +33,22 @@ message GetMetricsRequest {
   repeated Query metric_queries = 1 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
-message Metric {
+message MetricDataPoint {
   double value = 1;
-  int64 timestamp_ms = 2;
-  /** metric labels (tags) have a key and a value */
-  map<string, string> labels = 3;
+  int64 timestamp = 2;
 }
 
 message Metrics {
-  repeated Metric metrics = 1;
+  repeated MetricDataPoint data_points = 1;
+  string label = 2;
+  map<string, string> tags = 3;
+}
+
+message MetricsResult {
+  repeated Metrics metrics = 1;
 }
 
 message GetMetricsResponse {
   /** A mapping of individual queries to their respective results */
-  map<string, Metrics> query_results = 1;
+  map<string, MetricsResult> query_results = 1;
 }
