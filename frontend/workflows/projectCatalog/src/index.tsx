@@ -12,7 +12,7 @@ type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 export interface ProjectConfigProps {
   title: string;
   path: string;
-  onError: (error: ClutchError) => void;
+  onError?: (error: ClutchError) => void;
 }
 
 type CatalogDetailsChild = React.ReactElement<DetailCard>;
