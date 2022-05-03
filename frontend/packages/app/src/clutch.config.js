@@ -81,5 +81,11 @@ module.exports = {
         defaultRoute: "/",
       },
     },
+    configType: {
+      hideNav: true,
+      componentProps: {
+        defaultRoute: "/",
+      },
+    },
   },
 };

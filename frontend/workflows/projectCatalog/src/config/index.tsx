@@ -31,11 +31,14 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
   React.useEffect(() => {
     if (configPages && configPages.length) {
       const splitLoc = location.pathname.split("/");
+      const selectedPath = configPages[selectedPage]?.props?.path;
+
       if (splitLoc[splitLoc.length - 1] !== "config") {
-        splitLoc.splice(splitLoc.length - 1, 1, configPages[selectedPage]?.props?.path);
+        splitLoc.splice(splitLoc.length - 1, 1, selectedPath);
       } else {
-        splitLoc.push(configPages[selectedPage]?.props?.path);
+        splitLoc.push(selectedPath);
       }
+
       navigate(splitLoc.join("/"));
     }
   }, [configPages, selectedPage]);
