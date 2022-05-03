@@ -81,6 +81,8 @@ const TabPanel = styled(MuiTabPanel)({
 
 export interface TabsProps extends Pick<MuiTabsProps, "value" | "variant"> {
   children: React.ReactElement<TabProps> | React.ReactElement<TabProps>[];
+  // To allow for callback functionality, use `onChange`
+  // Note the value is referring to the index, like "0", "1", "2", etc.
   onChange?: (value: string) => void;
 }
 
