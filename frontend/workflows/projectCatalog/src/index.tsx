@@ -1,19 +1,34 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, ClutchError, WorkflowConfiguration } from "@clutch-sh/core";
 
 import type { CatalogDetailsCard } from "./details/card";
 import { CardType, DynamicCard, MetaCard } from "./details/card";
 import type { ProjectInfoChip } from "./details/info/chipsRow";
 import Catalog from "./catalog";
+import Config from "./config";
 import Details from "./details";
 
 type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 
+export interface ProjectConfigProps {
+  title: string;
+  path: string;
+  onError: (error: ClutchError) => void;
+}
+
 type CatalogDetailsChild = React.ReactElement<DetailCard>;
 
+export type ProjectConfigPage = React.ReactElement<ProjectConfigProps>;
+
 export interface WorkflowProps extends BaseWorkflowProps {}
-export interface ProjectDetailsWorkflowProps {
+
+export interface ProjectDetailsWorkflowProps extends WorkflowProps {
   children?: CatalogDetailsChild | CatalogDetailsChild[];
   chips?: ProjectInfoChip[];
+}
+
+export interface ProjectDetailsConfigWorkflowProps extends WorkflowProps {
+  children?: ProjectConfigPage | ProjectConfigPage[];
+  defaultRoute: string;
 }
 
 const register = (): WorkflowConfiguration => {
@@ -39,6 +54,18 @@ const register = (): WorkflowConfiguration => {
         component: Details,
         featureFlag: "projectCatalog",
       },
+      configLanding: {
+        path: "/:projectId/config",
+        description: "Project Configuration Landing",
+        component: Config,
+        featureFlag: "projectCatalog",
+      },
+      configPage: {
+        path: "/:projectId/config/:configType",
+        description: "Project Configuration Page",
+        component: Config,
+        featureFlag: "projectCatalog",
+      },
     },
   };
 };
@@ -46,7 +73,7 @@ const register = (): WorkflowConfiguration => {
 export { CardType, DynamicCard, MetaCard };
 export { LastEvent } from "./details/helpers";
 export { useProjectDetailsContext } from "./details/context";
-export { Details as ProjectDetails };
+export { Details as ProjectDetails, Config as ProjectConfig };
 export type { CatalogDetailsCard, CatalogDetailsChild, ProjectInfoChip };
 
 export default register;
