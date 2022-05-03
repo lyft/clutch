@@ -46,11 +46,10 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
       <Grid
         container
         direction="row"
+        alignItems="center"
+        spacing={2}
         style={{
           padding: "8px",
-          justifyContent: "flex-end",
-          display: "flex",
-          alignItems: "center",
         }}
       >
         <Grid item>
