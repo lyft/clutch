@@ -6,7 +6,7 @@ import { client, Grid, Link, styled, Typography } from "@clutch-sh/core";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const StyledLink = styled(Link)({
+const StyledLink: React.ElementType = styled(Link)({
   whiteSpace: "nowrap",
 });
 
