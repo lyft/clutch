@@ -56,7 +56,7 @@ const register = (): WorkflowConfiguration => {
       },
       config: {
         path: "/:projectId/config",
-        description: "Service Detail Configuration",
+        description: "Project Configuration Landing",
         component: Config,
         featureFlag: "projectCatalog",
       },
