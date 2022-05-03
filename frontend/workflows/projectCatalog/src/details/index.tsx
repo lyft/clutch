@@ -1,15 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import {
-  client,
-  FeatureOn,
-  Grid,
-  IconButton,
-  SimpleFeatureFlag,
-  styled,
-  Tooltip,
-} from "@clutch-sh/core";
+import { FeatureOn, Grid, IconButton, SimpleFeatureFlag, styled, Tooltip } from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@material-ui/icons/Group";
