@@ -75,13 +75,13 @@ module.exports = {
     details: {
       hideNav: true,
     },
-    config: {
+    configLanding: {
       hideNav: true,
       componentProps: {
         defaultRoute: "/",
       },
     },
-    configType: {
+    configPage: {
       hideNav: true,
       componentProps: {
         defaultRoute: "/",

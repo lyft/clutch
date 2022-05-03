@@ -54,13 +54,13 @@ const register = (): WorkflowConfiguration => {
         component: Details,
         featureFlag: "projectCatalog",
       },
-      config: {
+      configLanding: {
         path: "/:projectId/config",
         description: "Project Configuration Landing",
         component: Config,
         featureFlag: "projectCatalog",
       },
-      configType: {
+      configPage: {
         path: "/:projectId/config/:configType",
         description: "Project Configuration Page",
         component: Config,
