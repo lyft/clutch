@@ -13,7 +13,7 @@ const StyledContainer = styled(Grid)({
   padding: "32px",
 });
 
-const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, defaultRoute }) => {
+const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, defaultRoute = "/" }) => {
   const { projectId, configType = defaultRoute } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
