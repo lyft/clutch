@@ -94,15 +94,17 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
         open={open}
         anchorRef={anchorRef}
         onClickAway={() => setOpen(false)}
-        placement="bottom"
+        placement="bottom-end"
       >
         {validLinks.map(link => (
           <PopperItem key={link.name}>
             {link?.url && (
               <Link href={link.url}>
-                <Typography color="inherit" variant="body4">
-                  {link.name}
-                </Typography>
+                <span style={{ whiteSpace: "nowrap" }}>
+                  <Typography color="inherit" variant="body4">
+                    {link.name}
+                  </Typography>
+                </span>
               </Link>
             )}
           </PopperItem>

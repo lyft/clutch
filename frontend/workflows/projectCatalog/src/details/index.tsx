@@ -1,7 +1,15 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { client, Grid, IconButton, SimpleFeatureFlag, styled, Tooltip } from "@clutch-sh/core";
+import {
+  client,
+  FeatureOn,
+  Grid,
+  IconButton,
+  SimpleFeatureFlag,
+  styled,
+  Tooltip,
+} from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@material-ui/icons/Group";
@@ -49,11 +57,13 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
           <QuickLinksCard linkGroups={linkGroups} />
         </Grid>
         <SimpleFeatureFlag feature="projectCatalogSettings">
-          <Grid item>
-            <IconButton onClick={() => {}}>
-              <SettingsIcon />
-            </IconButton>
-          </Grid>
+          <FeatureOn>
+            <Grid item>
+              <IconButton onClick={() => {}}>
+                <SettingsIcon />
+              </IconButton>
+            </Grid>
+          </FeatureOn>
         </SimpleFeatureFlag>
       </Grid>
     </>
