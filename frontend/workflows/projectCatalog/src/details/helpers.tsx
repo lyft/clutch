@@ -75,4 +75,4 @@ const LastEvent = ({ time, ...props }: { time: number }) => {
   ) : null;
 };
 
-export { fetchProjectInfo, LastEvent, LinkText, StyledLink };
+export { fetchProjectInfo, LastEvent, LinkText };
