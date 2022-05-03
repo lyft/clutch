@@ -54,11 +54,11 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
           if (title) {
             validPages.push(
               React.cloneElement(child, {
-                onError: (error: ClutchError) => {
+                onError: (e: ClutchError) => {
                   if (onError) {
-                    onError(error);
+                    onError(e);
                   }
-                  setError(error);
+                  setError(e);
                 },
               })
             );
