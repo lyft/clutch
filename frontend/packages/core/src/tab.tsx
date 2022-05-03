@@ -81,12 +81,18 @@ const TabPanel = styled(MuiTabPanel)({
 
 export interface TabsProps extends Pick<MuiTabsProps, "value" | "variant" | "centered"> {
   children: React.ReactElement<TabProps> | React.ReactElement<TabProps>[];
+  // To allow for callback functionality, use `onChange`
+  // Note the value is referring to the index, like "0", "1", "2", etc.
+  onChange?: (value: string) => void;
 }
 
-export const Tabs = ({ children, value, variant, ...props }: TabsProps) => {
+export const Tabs = ({ children, value, variant, onChange, ...props }: TabsProps) => {
   const [selectedIndex, setSelectedIndex] = React.useState((value || 0).toString());
   const onChangeMiddleware = (_, v: string) => {
     setSelectedIndex(v);
+    if (onChange) {
+      onChange(v);
+    }
   };
 
   return (
