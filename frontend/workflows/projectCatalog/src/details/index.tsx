@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   client,
@@ -21,6 +21,7 @@ import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "..";
 import { CardType, DynamicCard, MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
 import ProjectHeader from "./header";
+import { fetchProjectInfo } from "./helpers";
 import ProjectInfoCard from "./info";
 import QuickLinksCard from "./quick-links";
 
@@ -41,6 +42,8 @@ const DisabledItem = ({ name }: { name: string }) => (
 );
 
 const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Grid
@@ -59,7 +62,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
         <SimpleFeatureFlag feature="projectCatalogSettings">
           <FeatureOn>
             <Grid item>
-              <IconButton onClick={() => {}}>
+              <IconButton onClick={() => navigate("config")}>
                 <SettingsIcon />
               </IconButton>
             </Grid>
@@ -69,15 +72,6 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
     </>
   );
 };
-
-const fetchProject = (project: string): Promise<IClutch.core.project.v1.IProject> =>
-  client
-    .post("/v1/project/getProjects", { projects: [project], excludeDependencies: true })
-    .then(resp => {
-      const { results = {} } = resp.data as IClutch.project.v1.GetProjectsResponse;
-
-      return results[project] ? results[project].project ?? {} : {};
-    });
 
 const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => {
   const { projectId } = useParams();
@@ -146,7 +140,8 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
             <StyledHeadingContainer item xs={6} sm={6} md={7} lg={8} xl={9}>
               {/* Static Header */}
               <ProjectHeader
-                name={projectId}
+                title={projectId}
+                routes={[{ title: "Details" }]}
                 description={projectInfo?.data?.description as string}
               />
             </StyledHeadingContainer>
@@ -163,7 +158,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
                 <MetaCard
                   title={getOwner(projectInfo?.owners ?? []) || projectId}
                   titleIcon={<GroupIcon />}
-                  fetchDataFn={() => fetchProject(projectId)}
+                  fetchDataFn={() => fetchProjectInfo(projectId)}
                   onSuccess={(data: unknown) =>
                     setProjectInfo(data as IClutch.core.project.v1.IProject)
                   }
