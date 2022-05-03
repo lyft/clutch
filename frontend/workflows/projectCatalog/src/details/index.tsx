@@ -47,7 +47,8 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
         container
         direction="row"
         alignItems="center"
-        spacing={2}
+        justify="flex-end"
+        spacing={1}
         style={{
           padding: "8px",
         }}
@@ -142,7 +143,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
         {/* Column for project details and header */}
         <Grid item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container>
-            <StyledHeadingContainer item xs={6} sm={7} md={8} lg={9} xl={10}>
+            <StyledHeadingContainer item xs={6} sm={6} md={7} lg={8} xl={9}>
               {/* Static Header */}
               <ProjectHeader
                 name={projectId}
@@ -150,7 +151,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               />
             </StyledHeadingContainer>
             {projectInfo && !isEmpty(projectInfo?.linkGroups) && (
-              <Grid item xs={12} sm={12} md={4} lg={3} xl={2}>
+              <Grid item xs={12} sm={12} md={5} lg={4} xl={3}>
                 <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups} />
               </Grid>
             )}
