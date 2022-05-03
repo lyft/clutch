@@ -43,7 +43,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
           <QuickLinksCard linkGroups={linkGroups} />
         </Grid>
         <Grid item style={{ padding: "10px" }}>
-          <IconButton onClick={() => navigate("config/info")}>
+          <IconButton onClick={() => navigate("config")}>
             <SettingsIcon />
           </IconButton>
         </Grid>

@@ -55,8 +55,14 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
       },
       config: {
-        path: "/:projectId/config/:configType",
+        path: "/:projectId/config",
         description: "Service Detail Configuration",
+        component: Config,
+        featureFlag: "projectCatalog",
+      },
+      configType: {
+        path: "/:projectId/config/:configType",
+        description: "Service Detail Configuration with Type",
         component: Config,
         featureFlag: "projectCatalog",
       },
