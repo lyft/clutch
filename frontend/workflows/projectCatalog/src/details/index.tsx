@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Grid, IconButton, styled, Tooltip } from "@clutch-sh/core";
+import { FeatureOn, Grid, IconButton, SimpleFeatureFlag, styled, Tooltip } from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@material-ui/icons/Group";
@@ -38,15 +38,28 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
 
   return (
     <>
-      <Grid container direction="row" style={{ padding: "8px", justifyContent: "flex-end" }}>
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        justify="flex-end"
+        spacing={1}
+        style={{
+          padding: "8px",
+        }}
+      >
         <Grid item>
           <QuickLinksCard linkGroups={linkGroups} />
         </Grid>
-        <Grid item style={{ padding: "10px" }}>
-          <IconButton onClick={() => navigate("config")}>
-            <SettingsIcon />
-          </IconButton>
-        </Grid>
+        <SimpleFeatureFlag feature="projectCatalogSettings">
+          <FeatureOn>
+            <Grid item>
+              <IconButton onClick={() => navigate("config")}>
+                <SettingsIcon />
+              </IconButton>
+            </Grid>
+          </FeatureOn>
+        </SimpleFeatureFlag>
       </Grid>
     </>
   );
@@ -116,7 +129,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
         {/* Column for project details and header */}
         <Grid item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container>
-            <StyledHeadingContainer item xs={6} sm={7} md={8} lg={9} xl={10}>
+            <StyledHeadingContainer item xs={6} sm={6} md={7} lg={8} xl={9}>
               {/* Static Header */}
               <ProjectHeader
                 title={projectId}
@@ -125,7 +138,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               />
             </StyledHeadingContainer>
             {projectInfo && !isEmpty(projectInfo?.linkGroups) && (
-              <Grid item xs={12} sm={12} md={4} lg={3} xl={2}>
+              <Grid item xs={12} sm={12} md={5} lg={4} xl={3}>
                 <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups} />
               </Grid>
             )}
