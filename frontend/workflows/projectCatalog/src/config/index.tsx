@@ -13,7 +13,7 @@ const StyledContainer = styled(Grid)({
   padding: "32px",
 });
 
-const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, defaultRoute }) => {
+const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, defaultRoute = "/" }) => {
   const { projectId, configType = defaultRoute } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -49,10 +49,19 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
 
       React.Children.forEach(children, (child, index) => {
         if (React.isValidElement(child)) {
-          const { title, path } = child?.props;
+          const { title, path, onError } = child?.props;
 
           if (title) {
-            validPages.push(child);
+            validPages.push(
+              React.cloneElement(child, {
+                onError: (e: ClutchError) => {
+                  if (onError) {
+                    onError(e);
+                  }
+                  setError(e);
+                },
+              })
+            );
 
             if (configType === path) {
               setSelectedPage(index);
@@ -94,12 +103,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
           </Grid>
         )}
         <Grid item xs={12}>
-          {configPages &&
-            configPages.length > 0 &&
-            React.cloneElement(configPages[selectedPage], {
-              ...configPages[selectedPage].props,
-              onError: setError,
-            })}
+          {configPages && configPages.length > 0 && configPages[selectedPage]}
         </Grid>
       </StyledContainer>
     </ProjectDetailsContext.Provider>

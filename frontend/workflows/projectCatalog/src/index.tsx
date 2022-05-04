@@ -12,7 +12,7 @@ type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 export interface ProjectConfigProps {
   title: string;
   path: string;
-  onError: (error: ClutchError) => void;
+  onError?: (error: ClutchError) => void;
 }
 
 type CatalogDetailsChild = React.ReactElement<DetailCard>;
@@ -28,7 +28,7 @@ export interface ProjectDetailsWorkflowProps extends WorkflowProps {
 
 export interface ProjectDetailsConfigWorkflowProps extends WorkflowProps {
   children?: ProjectConfigPage | ProjectConfigPage[];
-  defaultRoute: string;
+  defaultRoute?: string;
 }
 
 const register = (): WorkflowConfiguration => {
