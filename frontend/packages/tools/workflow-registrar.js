@@ -10,13 +10,10 @@ const rootFrontendDir = `${srcDir}/..`;
 const WORKFLOW_MODULE_PATH = `${srcDir}/workflows.jsx`;
 
 const addImport = workflow => {
-  let moduleNameParts = [workflow];
-  if (workflow.includes("/")) {
-    const packageName = workflow.split("/")[1];
-    moduleNameParts = [packageName];
-    if (packageName.includes("-")) {
-      moduleNameParts = packageName.split("-");
-    }
+  const wkflwName = workflow.replace("@", "");
+  let moduleNameParts = [wkflwName];
+  if (wkflwName.includes("/")) {
+    moduleNameParts = wkflwName.split(/[/-]+/);
   }
   const moduleName = moduleNameParts
     .map((part, idx) => {
@@ -30,7 +27,7 @@ const addImport = workflow => {
     WORKFLOW_MODULE_PATH,
     `import { default as ${moduleName}} from "${workflow}";\n`
   );
-  console.log(`Registered ${moduleName} workflow...`); // eslint-disable-line no-console
+  console.log(`Registered ${workflow} workflow...`); // eslint-disable-line no-console
   return moduleName;
 };
 
