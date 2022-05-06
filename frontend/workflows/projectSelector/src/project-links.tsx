@@ -110,9 +110,11 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
               <React.Fragment key={link.url}>
                 <StyledSubLink>
                   <Link href={link.url}>
+                    <span style={{whiteSpace: "nowrap"}}>
                     <Typography color="inherit" variant="body4">
                       {link.name}
                     </Typography>
+                    </span>
                   </Link>
                 </StyledSubLink>
               </React.Fragment>
@@ -178,26 +180,27 @@ const QuickLinksPopper = ({
 
 interface ProjectLinksProps {
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
-  name: string[];
+  setKeyWithQLinksOpen: (key: string) => void;
+  keyWithQLinksOpen: string;
+  currentKey: string[];
 }
 
-const ProjectLinks = ({ linkGroups, name }: ProjectLinksProps) => {
+const ProjectLinks = ({ linkGroups, setKeyWithQLinksOpen, keyWithQLinksOpen, currentKey }: ProjectLinksProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
-  const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
 
   if (linkGroups.length === 0) {
     return null;
   }
 
   return (
-    <StyledFlexEnd hidden={name?.[0] !== keyWithQLinksOpen}>
+    <StyledFlexEnd hidden={currentKey?.[0] !== keyWithQLinksOpen}>
       <StyledMoreVertIcon>
         <IconButton
           ref={anchorRef}
           onClick={() => {
             setOpen(true);
-            setKeyWithQLinksOpen(name?.[0]);
+            setKeyWithQLinksOpen(currentKey?.[0]);
           }}
         >
           <MoreVertIcon />

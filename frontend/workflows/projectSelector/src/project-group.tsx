@@ -140,6 +140,10 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   const numProjects = groupKeys.length;
   const checkedProjects = groupKeys.filter(k => state?.[group][k].checked);
 
+  // We need to keep track of which project has its quick links open so that we know
+  // to hide the other projects' buttons
+  const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
+
   return (
     <>
       <StyledProjectHeader>
@@ -191,7 +195,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 checked={!!state?.[group][key].checked}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledHoverOptions hidden>
+              <StyledHoverOptions hidden={keyWithQLinksOpen != key}>
                 <StyledOnlyButton
                   onClick={() =>
                     !state?.loading &&
@@ -225,7 +229,9 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 <span style={{ justifyContent: "flex-end", display: "flex" }}>
                   <ProjectLinks
                     linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
-                    name={[key]}
+                    currentKey={key}
+                    keyWithQLinksOpen={keyWithQLinksOpen}
+                    setKeyWithQLinksOpen={setKeyWithQLinksOpen}
                   />
                 </span>
               )}
