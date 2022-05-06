@@ -2,7 +2,9 @@ package metricsmock
 
 import (
 	"context"
-	"math/rand"
+	"crypto/rand"
+	"fmt"
+	"math/big"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
@@ -24,6 +26,15 @@ func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 }
 
 func (s *svc) GetMetrics(ctx context.Context, req *metricsv1.GetMetricsRequest) (*metricsv1.GetMetricsResponse, error) {
+	randNums := make([]float64, 0)
+	for i := 0; i < 5; i++ {
+		ran, err := rand.Int(rand.Reader, big.NewInt(100))
+		if err != nil {
+			return nil, fmt.Errorf("failed to generate random number: %s", err)
+		}
+		randNums = append(randNums, float64(ran.Int64()))
+	}
+
 	return &metricsv1.GetMetricsResponse{
 		QueryResults: map[string]*metricsv1.MetricsResult{
 			"req": {
@@ -55,16 +66,24 @@ func (s *svc) GetMetrics(ctx context.Context, req *metricsv1.GetMetricsRequest) 
 					{
 						DataPoints: []*metricsv1.MetricDataPoint{
 							{
-								Value:     float64(rand.Intn(100)),
+								Value:     randNums[0],
 								Timestamp: 123456789,
 							},
 							{
-								Value:     float64(rand.Intn(100)),
+								Value:     randNums[1],
 								Timestamp: 123456890,
 							},
 							{
-								Value:     float64(rand.Intn(100)),
+								Value:     randNums[2],
 								Timestamp: 123457000,
+							},
+							{
+								Value:     randNums[3],
+								Timestamp: 123457100,
+							},
+							{
+								Value:     randNums[4],
+								Timestamp: 123457200,
 							},
 						},
 						Label: "random",
