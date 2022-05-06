@@ -110,10 +110,10 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
               <React.Fragment key={link.url}>
                 <StyledSubLink>
                   <Link href={link.url}>
-                    <span style={{whiteSpace: "nowrap"}}>
-                    <Typography color="inherit" variant="body4">
-                      {link.name}
-                    </Typography>
+                    <span style={{ whiteSpace: "nowrap" }}>
+                      <Typography color="inherit" variant="body4">
+                        {link.name}
+                      </Typography>
                     </span>
                   </Link>
                 </StyledSubLink>
@@ -146,7 +146,6 @@ const ExpandedLinks = ({ linkGroups }: ExpandedLinksProps) => (
 
 const StyledFlexEnd = styled.div({
   justifyContent: "right",
-  flexDirection: "row-reverse",
 });
 
 interface QuickLinksPopperProps {
@@ -185,7 +184,12 @@ interface ProjectLinksProps {
   currentKey: string[];
 }
 
-const ProjectLinks = ({ linkGroups, setKeyWithQLinksOpen, keyWithQLinksOpen, currentKey }: ProjectLinksProps) => {
+const ProjectLinks = ({
+  linkGroups,
+  setKeyWithQLinksOpen,
+  keyWithQLinksOpen,
+  currentKey,
+}: ProjectLinksProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
 

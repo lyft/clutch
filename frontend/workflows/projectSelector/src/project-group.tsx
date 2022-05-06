@@ -45,9 +45,6 @@ const StyledMenuItem = styled.div({
   "&:hover": {
     backgroundColor: "rgba(13, 16, 48, 0.03)",
   },
-  "&:hover > div": {
-    display: "inline-flex", // Unhide hidden only button and x if necessary.
-  },
 });
 
 const StyledProjectHeader = styled.div({
@@ -88,8 +85,9 @@ const StyledMenuItemName = styled.span({
   maxWidth: "160px",
 });
 
+// Note this span used to have a `width: "36px",`, but it was removed so that
+// there was no blank space for non-removeable projects
 const StyledClearIcon = styled.span({
-  width: "36px",
   ".MuiIconButton-root": {
     padding: "6px",
     color: "rgba(13, 16, 48, 0.38)",
@@ -195,7 +193,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 checked={!!state?.[group][key].checked}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledHoverOptions hidden={keyWithQLinksOpen != key}>
+              <StyledHoverOptions hidden={keyWithQLinksOpen !== key}>
                 <StyledOnlyButton
                   onClick={() =>
                     !state?.loading &&
@@ -226,14 +224,12 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 </StyledClearIcon>
               </StyledHoverOptions>
               {!state?.loading && state?.projectData?.[key]?.linkGroups && (
-                <span style={{ justifyContent: "flex-end", display: "flex" }}>
-                  <ProjectLinks
-                    linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
-                    currentKey={key}
-                    keyWithQLinksOpen={keyWithQLinksOpen}
-                    setKeyWithQLinksOpen={setKeyWithQLinksOpen}
-                  />
-                </span>
+                <ProjectLinks
+                  linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
+                  currentKey={[key]}
+                  keyWithQLinksOpen={keyWithQLinksOpen}
+                  setKeyWithQLinksOpen={setKeyWithQLinksOpen}
+                />
               )}
             </StyledMenuItem>
           ))}
