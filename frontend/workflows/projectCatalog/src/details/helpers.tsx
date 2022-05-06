@@ -1,13 +1,23 @@
 import React from "react";
 import type { ReactTimeagoProps as TimeAgoProps } from "react-timeago";
 import TimeAgo from "react-timeago";
-import { Grid, Link, styled, Typography } from "@clutch-sh/core";
+import type { clutch as IClutch } from "@clutch-sh/api";
+import { client, Grid, Link, styled, Typography } from "@clutch-sh/core";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const StyledLink = styled(Link)({
   whiteSpace: "nowrap",
 });
+
+const fetchProjectInfo = (project: string): Promise<IClutch.core.project.v1.IProject> =>
+  client
+    .post("/v1/project/getProjects", { projects: [project], excludeDependencies: true })
+    .then(resp => {
+      const { results = {} } = resp.data as IClutch.project.v1.GetProjectsResponse;
+
+      return results[project] ? results[project].project ?? {} : {};
+    });
 
 const unitFormatter = (unit: string): string => {
   switch (unit) {
@@ -65,4 +75,4 @@ const LastEvent = ({ time, ...props }: { time: number }) => {
   ) : null;
 };
 
-export { LastEvent, LinkText };
+export { fetchProjectInfo, LastEvent, LinkText };
