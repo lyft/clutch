@@ -45,6 +45,9 @@ const StyledMenuItem = styled.div({
   "&:hover": {
     backgroundColor: "rgba(13, 16, 48, 0.03)",
   },
+  "&:hover > div": {
+    display: "inline-flex", // Unhide hidden only button and x if necessary.
+  },
 });
 
 const StyledProjectHeader = styled.div({

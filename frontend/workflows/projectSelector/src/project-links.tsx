@@ -29,7 +29,7 @@ const StyledSubLink = styled.div({
   ...itemHoverStyle,
   paddingBottom: "4px",
   paddingRight: "4px",
-  paddingLeft: "46px",
+  paddingLeft: "40px",
 });
 
 const StyledMoreVertIcon = styled.span({
@@ -51,12 +51,13 @@ const StyledLinkTitle = styled.span({
 
 const StyledLinkBox = styled.div({
   borderRadius: "4px",
+  width: "160px",
 });
 
 const StyledMultilinkImage = styled.div({
-  paddingLeft: "6px",
-  paddingRight: "6px",
-  paddingTop: "6px",
+  paddingLeft: "8px",
+  paddingRight: "8px",
+  paddingTop: "8px",
 });
 
 const StyledMultilinkTitle = styled.div({
@@ -86,13 +87,15 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   return validLinks.length === 1 ? (
     <StyledMenuItem key={validLinks[0].url}>
       <Link href={validLinks[0]?.url ?? ""}>
-        <img
-          width={ICON_SIZE}
-          height={ICON_SIZE}
-          src={linkGroupImage}
-          alt={validLinks[0].name ?? `Quick Link to ${validLinks[0].url}`}
-        />
-        <StyledLinkTitle style={{ paddingLeft: "6px" }}>{linkGroupName}</StyledLinkTitle>
+        <span style={{ display: "flex", alignItems: "center" }}>
+          <img
+            width={ICON_SIZE}
+            height={ICON_SIZE}
+            src={linkGroupImage}
+            alt={validLinks[0].name ?? `Quick Link to ${validLinks[0].url}`}
+          />
+        </span>
+        <StyledLinkTitle style={{ paddingLeft: "8px" }}>{linkGroupName}</StyledLinkTitle>
       </Link>
     </StyledMenuItem>
   ) : (
@@ -111,9 +114,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
                 <StyledSubLink>
                   <Link href={link.url}>
                     <span style={{ whiteSpace: "nowrap" }}>
-                      <Typography color="inherit" variant="body4">
-                        {link.name}
-                      </Typography>
+                      <Typography variant="body4">{link.name}</Typography>
                     </span>
                   </Link>
                 </StyledSubLink>
