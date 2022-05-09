@@ -45,4 +45,16 @@ func TestClientsetManager(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "impossible to determine")
 	assert.Nil(t, cs)
+
+	// Simple clientset is found.
+	cs, err = m.GetK8sClientsetSimple("core-0")
+	assert.NoError(t, err)
+	assert.NotNil(t, cs)
+	assert.Equal(t, "core-cluster-0", cs.Cluster())
+
+	// Simple clientset is not found error.
+	cs, err = m.GetK8sClientsetSimple("undefined")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "is not found")
+	assert.Nil(t, cs)
 }
