@@ -55,6 +55,6 @@ func TestClientsetManager(t *testing.T) {
 	// Simple clientset is not found error.
 	cs, err = m.GetK8sClientsetSimple("undefined")
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "is not found")
+	assert.Contains(t, err.Error(), "clientset [undefined] is not found")
 	assert.Nil(t, cs)
 }

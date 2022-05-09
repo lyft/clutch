@@ -132,3 +132,36 @@ func TestInterceptError(t *testing.T) {
 	assert.Equal(t, codes.Unauthenticated, s.Code())
 	assert.Equal(t, "nice try", s.Message())
 }
+
+func TestGetK8sClientset(t *testing.T) {
+	tempfile, _ := ioutil.TempFile("", "")
+	defer os.Remove(tempfile.Name())
+	_ = ioutil.WriteFile(tempfile.Name(), []byte(testConfig), 0500)
+
+	paths := []string{tempfile.Name()}
+
+	cfg, _ := anypb.New(&k8sv1.Config{
+		Kubeconfigs: paths,
+	})
+	log := zaptest.NewLogger(t)
+	scope := tally.NewTestScope("", nil)
+
+	s, err := New(cfg, log, scope)
+	assert.NoError(t, err)
+	assert.NotNil(t, s)
+
+	svc, ok := s.(Service)
+	assert.True(t, ok)
+
+	// Get valid clientset
+	cs, err := svc.GetK8sClientset("test-user@test-cluster")
+	assert.NoError(t, err)
+	assert.NotNil(t, cs)
+	assert.Equal(t, "test-cluster", cs.Cluster())
+
+	// Try to get an unknown clientset
+	cs, err = svc.GetK8sClientset("unknown")
+	assert.Error(t, err)
+	assert.Nil(t, cs)
+	assert.Contains(t, err.Error(), "clientset [unknown] is not found")
+}
