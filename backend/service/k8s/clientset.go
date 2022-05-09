@@ -22,6 +22,7 @@ const (
 type ClientsetManager interface {
 	Clientsets(ctx context.Context) (map[string]ContextClientset, error)
 	GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error)
+	GetK8sClientsetSimple(clientset string) (ContextClientset, error)
 }
 
 type ContextClientset interface {
@@ -140,6 +141,14 @@ func (m *managerImpl) Clientsets(ctx context.Context) (map[string]ContextClients
 		ret[k] = v
 	}
 	return ret, nil
+}
+
+func (m *managerImpl) GetK8sClientsetSimple(clientset string) (ContextClientset, error) {
+	cs, ok := m.clientsets[clientset]
+	if !ok {
+		return nil, fmt.Errorf("clientset [%s] is not found", clientset)
+	}
+	return cs, nil
 }
 
 func (m *managerImpl) GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error) {
