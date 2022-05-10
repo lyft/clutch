@@ -1,9 +1,11 @@
 import * as React from "react";
 
+import type { SVGProps } from "../global";
+
 import StyledSvg from "./helpers";
 
 interface PlusIconProps {
-  props?: React.SVGProps<SVGSVGElement>;
+  props?: SVGProps;
   disabled?: boolean;
 }
 

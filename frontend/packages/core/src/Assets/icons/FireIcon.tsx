@@ -1,8 +1,10 @@
 import * as React from "react";
 
+import type { SVGProps } from "../global";
+
 import StyledSvg from "./helpers";
 
-const FireIcon = (props: React.SVGProps<SVGSVGElement>) => (
+const FireIcon = (props: SVGProps) => (
   <StyledSvg
     width="24"
     height="24"
