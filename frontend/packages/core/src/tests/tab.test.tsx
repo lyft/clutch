@@ -3,8 +3,8 @@ import { shallow } from "enzyme";
 
 import { Tab, Tabs } from "../tab";
 
-describe("Tabs component aka TabGroup", () => {
-  describe("basic rendering", () => {
+describe("Tabs component", () => {
+  describe("with a value set", () => {
     let component;
     beforeEach(() => {
       component = shallow(
@@ -19,11 +19,11 @@ describe("Tabs component aka TabGroup", () => {
       expect(component.find(Tabs)).toBeDefined();
     });
 
-    it("renders 2 Tabs", () => {
+    it("renders children tabs", () => {
       expect(component.find(Tab)).toHaveLength(2);
     });
 
-    it("has the second tab selected (index 1)", () => {
+    it("displays the tab from the specified value", () => {
       expect(component.find("TabContext").prop("value")).toBe("1");
     });
   });
