@@ -65,6 +65,15 @@ const StyledMultilinkTitle = styled.div({
   alignItems: "center",
 });
 
+const StyledCenterImgSpan = styled.span({
+  display: "flex",
+  alignItems: "center",
+});
+
+const StyledSpanNoWrap = styled.span({
+  whiteSpace: "nowrap",
+});
+
 interface QuickLinkGroupProps extends LinkGroupProps {
   links: IClutch.core.project.v1.ILink[];
 }
@@ -87,14 +96,14 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   return validLinks.length === 1 ? (
     <StyledMenuItem key={validLinks[0].url}>
       <Link href={validLinks[0]?.url ?? ""}>
-        <span style={{ display: "flex", alignItems: "center" }}>
+        <StyledCenterImgSpan>
           <img
             width={ICON_SIZE}
             height={ICON_SIZE}
             src={linkGroupImage}
             alt={validLinks[0].name ?? `Quick Link to ${validLinks[0].url}`}
           />
-        </span>
+        </StyledCenterImgSpan>
         <StyledLinkTitle style={{ paddingLeft: "8px" }}>{linkGroupName}</StyledLinkTitle>
       </Link>
     </StyledMenuItem>
@@ -113,9 +122,9 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
               <React.Fragment key={link.url}>
                 <StyledSubLink>
                   <Link href={link.url}>
-                    <span style={{ whiteSpace: "nowrap" }}>
+                    <StyledSpanNoWrap>
                       <Typography variant="body4">{link.name}</Typography>
-                    </span>
+                    </StyledSpanNoWrap>
                   </Link>
                 </StyledSubLink>
               </React.Fragment>
