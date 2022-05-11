@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { TypographyProps as MuiTypographyProps } from "@material-ui/core";
 
 import styled from "./styled";
 
@@ -147,14 +148,14 @@ const StyledTypography = styled("div")<{
   ...(STYLE_MAP[props.$variant]?.props || {}),
 }));
 
-export interface TypographyProps {
+export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
   variant: TextVariant;
   children: React.ReactNode;
   color?: string;
 }
 
-const Typography = ({ variant, children, color = "#0D1030" }: TypographyProps) => (
-  <StyledTypography $variant={variant} $color={color}>
+const Typography = ({ variant, children, color = "#0D1030", ...props }: TypographyProps) => (
+  <StyledTypography $variant={variant} $color={color} {...props}>
     {children}
   </StyledTypography>
 );
