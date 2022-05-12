@@ -22,13 +22,12 @@ const itemHoverStyle = {
 
 const StyledMenuItem = styled.div({
   ...itemHoverStyle,
-  padding: "8px",
 });
 
 const StyledSubLink = styled.div({
   ...itemHoverStyle,
-  paddingBottom: "4px",
-  paddingRight: "4px",
+  paddingBottom: "8px",
+  paddingTop: "8px",
   paddingLeft: "40px",
 });
 
@@ -47,6 +46,11 @@ const StyledMoreVertIcon = styled.span({
 
 const StyledLinkTitle = styled.span({
   fontWeight: "bold",
+  padding: "7px 0px 7px 0px",
+});
+
+const StyledMultiLinkTitle = styled.span({
+  fontWeight: "bold",
 });
 
 const StyledLinkBox = styled.div({
@@ -55,12 +59,11 @@ const StyledLinkBox = styled.div({
 });
 
 const StyledMultilinkImage = styled.div({
-  paddingLeft: "8px",
-  paddingRight: "8px",
-  paddingTop: "8px",
+  display: "flex",
+  padding: "8px",
 });
 
-const StyledMultilinkTitle = styled.div({
+const StyledMultilinkHeader = styled.div({
   display: "flex",
   alignItems: "center",
 });
@@ -68,6 +71,7 @@ const StyledMultilinkTitle = styled.div({
 const StyledCenterImgSpan = styled.span({
   display: "flex",
   alignItems: "center",
+  padding: "8px",
 });
 
 const StyledSpanNoWrap = styled.span({
@@ -104,17 +108,17 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
             alt={validLinks[0].name ?? `Quick Link to ${validLinks[0].url}`}
           />
         </StyledCenterImgSpan>
-        <StyledLinkTitle style={{ paddingLeft: "8px" }}>{linkGroupName}</StyledLinkTitle>
+        <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
       </Link>
     </StyledMenuItem>
   ) : (
     <div key={validLinks[0].url}>
-      <StyledMultilinkTitle>
+      <StyledMultilinkHeader>
         <StyledMultilinkImage>
           <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
         </StyledMultilinkImage>
-        <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
-      </StyledMultilinkTitle>
+        <StyledMultiLinkTitle>{linkGroupName}</StyledMultiLinkTitle>
+      </StyledMultilinkHeader>
       <div>
         {validLinks.map(link => {
           return (
@@ -159,11 +163,25 @@ const StyledFlexEnd = styled.div({
 });
 
 interface QuickLinksPopperProps {
+  /**
+   * The linkgroups to render. They could be a mix of single
+   * and multi-link groups.
+   */
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
+  /**
+   * A reference so that the popper knows to be attached to
+   * the button.
+   */
   anchorRef: React.RefObject<HTMLElement>;
+  /** Whether the popper is open or not */
   open: boolean;
+  /** A function that closes the popper for onClickAway */
   setOpen: (open: boolean) => void;
-  setKeyWithQLinksOpen: (key: string) => void;
+  /**
+   * A callback function that will set the key value to
+   * empty string when the popper is closed (onClickAway)
+   */
+  setQuickLinkWindowKey: (key: string) => void;
 }
 
 const QuickLinksPopper = ({
@@ -171,7 +189,7 @@ const QuickLinksPopper = ({
   anchorRef,
   open,
   setOpen,
-  setKeyWithQLinksOpen,
+  setQuickLinkWindowKey,
 }: QuickLinksPopperProps) => {
   return (
     <Popper
@@ -179,7 +197,7 @@ const QuickLinksPopper = ({
       anchorRef={anchorRef}
       onClickAway={() => {
         setOpen(false);
-        setKeyWithQLinksOpen("");
+        setQuickLinkWindowKey("");
       }}
     >
       <ExpandedLinks linkGroups={linkGroups} />
@@ -188,17 +206,37 @@ const QuickLinksPopper = ({
 };
 
 interface ProjectLinksProps {
+  /**
+   * The linkgroups that will be rendered. They could be a mix
+   * of single and multi-link groups.
+   */
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
-  setKeyWithQLinksOpen: (key: string) => void;
-  keyWithQLinksOpen: string;
-  currentKey: string[];
+  /**
+   * A function that either sets the key to blank ("") for when
+   * the user wantns to close the popper, or sets it to the key
+   * name when the user opens the popper.
+   */
+  setQuickLinkWindowKey: (key: string) => void;
+  /**
+   * The key (project name) of the project that is currently
+   * being rendered. Used for the callback function above to
+   * set the key when opening the popper.
+   */
+  currentKey: string;
+  /**
+   * Denotes whether the quicklinks popper is open or not. This is
+   * determined by the logic in the parent component that checks
+   * if the key (project) with the quicklinks open is not equal to
+   * the one that is currently being iterated over.
+   */
+  isClosed: boolean;
 }
 
 const ProjectLinks = ({
   linkGroups,
-  setKeyWithQLinksOpen,
-  keyWithQLinksOpen,
+  setQuickLinkWindowKey,
   currentKey,
+  isClosed,
 }: ProjectLinksProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
@@ -208,13 +246,13 @@ const ProjectLinks = ({
   }
 
   return (
-    <StyledFlexEnd hidden={currentKey?.[0] !== keyWithQLinksOpen}>
+    <StyledFlexEnd hidden={isClosed}>
       <StyledMoreVertIcon>
         <IconButton
           ref={anchorRef}
           onClick={() => {
             setOpen(true);
-            setKeyWithQLinksOpen(currentKey?.[0]);
+            setQuickLinkWindowKey(currentKey);
           }}
         >
           <MoreVertIcon />
@@ -223,7 +261,7 @@ const ProjectLinks = ({
             anchorRef={anchorRef}
             open={open}
             setOpen={setOpen}
-            setKeyWithQLinksOpen={setKeyWithQLinksOpen}
+            setQuickLinkWindowKey={setQuickLinkWindowKey}
           />
         </IconButton>
       </StyledMoreVertIcon>

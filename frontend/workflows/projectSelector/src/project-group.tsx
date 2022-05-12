@@ -143,7 +143,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
 
   // We need to keep track of which project has its quick links open so that we know
   // to hide the other projects' buttons
-  const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
+  const [quickLinkWindowKey, setQuickLinkWindowKey] = React.useState<string>("");
 
   return (
     <>
@@ -196,7 +196,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 checked={!!state?.[group][key].checked}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledHoverOptions hidden={keyWithQLinksOpen !== key}>
+              <StyledHoverOptions hidden={quickLinkWindowKey !== key}>
                 <StyledOnlyButton
                   onClick={() =>
                     !state?.loading &&
@@ -226,12 +226,15 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                   )}
                 </StyledClearIcon>
               </StyledHoverOptions>
+              {/* If the quicklink window is closed, we want to hide the quicklink box button
+                  if it is open (aka the project's quicklinks are displayed) then the `hidden`
+                   prop on the component will be false */}
               {!state?.loading && state?.projectData?.[key]?.linkGroups && (
                 <ProjectLinks
                   linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
-                  currentKey={[key]}
-                  keyWithQLinksOpen={keyWithQLinksOpen}
-                  setKeyWithQLinksOpen={setKeyWithQLinksOpen}
+                  currentKey={key}
+                  setQuickLinkWindowKey={setQuickLinkWindowKey}
+                  isClosed={quickLinkWindowKey !== key}
                 />
               )}
             </StyledMenuItem>
