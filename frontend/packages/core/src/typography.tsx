@@ -147,11 +147,13 @@ const StyledTypography = styled("div")<{
   fontWeight: STYLE_MAP[props.$variant].weight,
   lineHeight: `${STYLE_MAP[props.$variant].lineHeight}px`,
   ...(STYLE_MAP[props.$variant]?.props || {}),
-  ...(props.noWrap ? {
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-    overflow: "hidden",
-  } : {}),
+  ...(props.noWrap
+    ? {
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+      }
+    : {}),
 }));
 
 export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
