@@ -1,5 +1,5 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 
 import { Tab, Tabs } from "../tab";
 
@@ -25,6 +25,19 @@ describe("Tabs component", () => {
 
     it("displays the tab from the specified value", () => {
       expect(component.find("TabContext").prop("value")).toBe("1");
+    });
+
+    it("has the mix tab selected", () => {
+      // use mount instead of shallow so that we get the other props like
+      // `selected`
+      const mounted = mount(
+        <Tabs value={1}>
+          <Tab label="meow" />
+          <Tab label="mix" />
+        </Tabs>
+      );
+      expect(mounted.find(Tab).at(1).prop("label")).toBe("mix");
+      expect(mounted.find(Tab).at(1).prop("selected")).toBe(true);
     });
   });
 });
