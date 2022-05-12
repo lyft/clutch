@@ -140,12 +140,18 @@ type TextVariant =
 const StyledTypography = styled("div")<{
   $variant: TypographyProps["variant"];
   $color: TypographyProps["color"];
+  noWrap: TypographyProps["noWrap"];
 }>(props => ({
   color: props.$color,
   fontSize: `${STYLE_MAP[props.$variant].size}px`,
   fontWeight: STYLE_MAP[props.$variant].weight,
   lineHeight: `${STYLE_MAP[props.$variant].lineHeight}px`,
   ...(STYLE_MAP[props.$variant]?.props || {}),
+  ...(props.noWrap ? {
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+  } : {}),
 }));
 
 export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
