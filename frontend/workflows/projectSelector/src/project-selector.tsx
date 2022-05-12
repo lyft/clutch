@@ -237,6 +237,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
     if (onError && state.projectErrors && state.projectErrors.length) {
       onError({ errors: state.projectErrors });
+      dispatch({ type: "CLEAR_ERRORS" });
     }
 
     const dashState: DashState = { projectData: {}, selected: [] };
