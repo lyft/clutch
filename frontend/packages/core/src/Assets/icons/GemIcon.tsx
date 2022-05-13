@@ -1,13 +1,11 @@
 import * as React from "react";
 
 import type { SVGProps } from "../global";
+import { StyledSVG } from "../global";
 
-import StyledSvg from "./helpers";
-
-const GemIcon = (props: SVGProps) => (
-  <StyledSvg
-    width="24"
-    height="24"
+const GemIcon = ({ size, props }: SVGProps) => (
+  <StyledSVG
+    size={size}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +39,7 @@ const GemIcon = (props: SVGProps) => (
       d="M6.61455 1.29803L5.65598 1.11412L4.87768 0.964853L7.04265 0.509777L12.8231 0.492554L15.0851 0.966002L14.5342 1.07164L13.3548 1.29803H6.61455Z"
       fill="#31D2F7"
     />
-  </StyledSvg>
+  </StyledSVG>
 );
 
 export default GemIcon;

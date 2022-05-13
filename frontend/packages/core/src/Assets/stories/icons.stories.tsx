@@ -11,13 +11,32 @@ import SlackIcon from "../icons/SlackIcon";
 
 export const AllIcons = () => (
   <div>
-    <FireIcon />
+    <FireIcon size="xsmall" />
+    <FireIcon size="small" />
+    <FireIcon size="medium" />
+    <FireIcon size="large" />
+    <PlusIcon disabled />
     <PlusIcon />
-    <ExperimentIcon />
-    <GemIcon />
-    <RocketIcon />
-    <SirenIcon />
-    <SlackIcon />
+    <ExperimentIcon size="xsmall" />
+    <ExperimentIcon size="small" />
+    <ExperimentIcon size="medium" />
+    <ExperimentIcon size="large" />
+    <RocketIcon size="xsmall" />
+    <RocketIcon size="small" />
+    <RocketIcon size="medium" />
+    <RocketIcon size="large" />
+    <SirenIcon size="xsmall" />
+    <SirenIcon size="small" />
+    <SirenIcon size="medium" />
+    <SirenIcon size="large" />
+    <GemIcon size="xsmall" />
+    <GemIcon size="small" />
+    <GemIcon size="medium" />
+    <GemIcon size="large" />
+    <SlackIcon size="xsmall" />
+    <SlackIcon size="small" />
+    <SlackIcon size="medium" />
+    <SlackIcon size="large" />
   </div>
 );
 

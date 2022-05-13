@@ -9,6 +9,8 @@ interface PlusIconProps {
   disabled?: boolean;
 }
 
+// Note PlusIcon is different from the other icons. It is desigend for a single size,
+// and to be used as a button that can be disabled.
 const PlusIcon = ({ props, disabled = false }: PlusIconProps) => (
   <StyledSvg
     width="32"

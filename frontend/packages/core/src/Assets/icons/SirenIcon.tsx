@@ -1,17 +1,14 @@
 import * as React from "react";
 
 import type { SVGProps } from "../global";
+import { StyledSVG } from "../global";
 
-import StyledSvg from "./helpers";
-
-const SirenIcon = (props: SVGProps) => (
-  <StyledSvg
-    width="24"
-    height="24"
+const SirenIcon = ({ size, ...props }: SVGProps) => (
+  <StyledSVG
+    size={size}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    hoverFill="#C94772"
     {...props}
   >
     <path
@@ -26,6 +23,6 @@ const SirenIcon = (props: SVGProps) => (
       d="M8.13735 15.9744C8.05178 15.9744 7.96882 15.9859 7.88886 16.0048V10.9602C7.88886 8.82222 9.8899 7.08301 12.3497 7.08301C14.8096 7.08301 16.8106 8.82222 16.8106 10.9602V16.0043C16.7309 15.9859 16.648 15.9744 16.5622 15.9744H8.13735ZM6.26672 18.7315C6.26672 17.6769 6.94092 16.8158 7.76974 16.8158H16.9298C17.7586 16.8158 18.4328 17.6769 18.4328 18.7315V19.7376C18.4328 19.915 18.3187 20.0601 18.1793 20.0601H6.52018C6.38078 20.0601 6.26672 19.915 6.26672 19.7376V18.7315Z"
       fill="#FB5990"
     />
-  </StyledSvg>
+  </StyledSVG>
 );
 export default SirenIcon;
