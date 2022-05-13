@@ -3,7 +3,7 @@ import * as React from "react";
 import type { SVGProps } from "../global";
 import { StyledSVG } from "../global";
 
-const GemIcon = ({ size, props }: SVGProps) => (
+const GemIcon = ({ size, ...props }: SVGProps) => (
   <StyledSVG
     size={size}
     viewBox="0 0 24 24"
