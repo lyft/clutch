@@ -279,7 +279,7 @@ const selectorReducer = (state: State, action: Action): State => {
         error: action?.payload?.result,
       };
     }
-    case "CLEAR_ERRORS": {
+    case "CLEAR_PROJECT_ERRORS": {
       return { ...state, projectErrors: [] };
     }
     default:

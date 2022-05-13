@@ -24,7 +24,11 @@ interface UserPayload {
   projects?: string[];
 }
 
-type BackgroundActionKind = "HYDRATE_START" | "HYDRATE_END" | "HYDRATE_ERROR" | "CLEAR_ERRORS";
+type BackgroundActionKind =
+  | "HYDRATE_START"
+  | "HYDRATE_END"
+  | "HYDRATE_ERROR"
+  | "CLEAR_PROJECT_ERRORS";
 
 interface BackgroundAction {
   type: BackgroundActionKind;
