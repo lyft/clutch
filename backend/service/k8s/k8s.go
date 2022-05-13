@@ -140,7 +140,7 @@ func (s *svc) Clientsets(ctx context.Context) ([]string, error) {
 }
 
 func (s *svc) GetK8sClientset(clientset string) (ContextClientset, error) {
-	return s.manager.GetK8sClientsetSimple(clientset)
+	return s.manager.GetK8sClientsetDirect(clientset)
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
