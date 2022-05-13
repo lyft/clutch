@@ -1,6 +1,8 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
+import type { SVGProps } from "../global";
+import { VARIANTS } from "../global";
 import ExperimentIcon from "../icons/ExperimentIcon";
 import FireIcon from "../icons/FireIcon";
 import GemIcon from "../icons/GemIcon";
@@ -9,38 +11,24 @@ import RocketIcon from "../icons/RocketIcon";
 import SirenIcon from "../icons/SirenIcon";
 import SlackIcon from "../icons/SlackIcon";
 
-export const AllIcons = () => (
+export const AllIcons: React.FC<SVGProps> = ({ size }) => (
   <div>
-    <FireIcon size="xsmall" />
-    <FireIcon size="small" />
-    <FireIcon size="medium" />
-    <FireIcon size="large" />
-    <PlusIcon disabled />
+    <FireIcon size={size} />
     <PlusIcon />
-    <ExperimentIcon size="xsmall" />
-    <ExperimentIcon size="small" />
-    <ExperimentIcon size="medium" />
-    <ExperimentIcon size="large" />
-    <RocketIcon size="xsmall" />
-    <RocketIcon size="small" />
-    <RocketIcon size="medium" />
-    <RocketIcon size="large" />
-    <SirenIcon size="xsmall" />
-    <SirenIcon size="small" />
-    <SirenIcon size="medium" />
-    <SirenIcon size="large" />
-    <GemIcon size="xsmall" />
-    <GemIcon size="small" />
-    <GemIcon size="medium" />
-    <GemIcon size="large" />
-    <SlackIcon size="xsmall" />
-    <SlackIcon size="small" />
-    <SlackIcon size="medium" />
-    <SlackIcon size="large" />
+    <ExperimentIcon size={size} />
+    <GemIcon size={size} />
+    <RocketIcon size={size} />
+    <SirenIcon size={size} />
+    <SlackIcon size={size} />
   </div>
 );
-
 export default {
   title: "Core/Assets/Icons",
   component: AllIcons,
+  argTypes: {
+    size: {
+      options: VARIANTS,
+      control: { type: "select" },
+    },
+  },
 } as Meta;
