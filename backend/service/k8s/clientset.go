@@ -143,6 +143,10 @@ func (m *managerImpl) Clientsets(ctx context.Context) (map[string]ContextClients
 	return ret, nil
 }
 
+// GetK8sClientsetSimple is used to expose access directly to a single clientset.
+// There is an public method on the K8s service interface that allows implementers direct access to a clientset if necessary,
+// this use case comes up with a private gateway wishes to add k8s specific features
+// that don’t make sense to upstream but would like to make use of the clientsets that we already provide.
 func (m *managerImpl) GetK8sClientsetSimple(clientset string) (ContextClientset, error) {
 	cs, ok := m.clientsets[clientset]
 	if !ok {
