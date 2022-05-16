@@ -355,6 +355,10 @@ func (*svc) Clientsets(ctx context.Context) ([]string, error) {
 	return []string{"fake-user@fake-cluster"}, nil
 }
 
+func (*svc) GetK8sClientset(clientset string) (k8sservice.ContextClientset, error) {
+	return nil, nil
+}
+
 func New() k8sservice.Service {
 	return &svc{}
 }
