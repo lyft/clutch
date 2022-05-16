@@ -8596,6 +8596,12 @@ export namespace clutch {
 
                         /** OIDC scopes */
                         scopes?: (string[]|null);
+
+                        /** OIDC subjectClaimName */
+                        subjectClaimName?: (string|null);
+
+                        /** OIDC groupsClaimName */
+                        groupsClaimName?: (string|null);
                     }
 
                     /** Represents a OIDC. */
@@ -8621,6 +8627,12 @@ export namespace clutch {
 
                         /** OIDC scopes. */
                         public scopes: string[];
+
+                        /** OIDC subjectClaimName. */
+                        public subjectClaimName: string;
+
+                        /** OIDC groupsClaimName. */
+                        public groupsClaimName: string;
 
                         /**
                          * Verifies a OIDC message.

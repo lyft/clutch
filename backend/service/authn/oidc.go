@@ -296,6 +296,64 @@ func DefaultClaimsFromOIDCToken(ctx context.Context, t *oidc.IDToken) (*Claims, 
 	}, nil
 }
 
+func NewClaimsConfig(subjectClaim, groupsClaim string) *ClaimsConfig {
+	return &ClaimsConfig{
+		subjectClaim: subjectClaim,
+		groupsClaim:  groupsClaim,
+	}
+}
+
+type ClaimsConfig struct {
+	subjectClaim string
+	groupsClaim  string
+}
+
+func (cc *ClaimsConfig) ClaimsFromOIDCToken(ctx context.Context, t *oidc.IDToken) (*Claims, error) {
+	claims := make(map[string]interface{})
+	if err := t.Claims(&claims); err != nil {
+		return nil, err
+	}
+
+	subjectInt, ok := claims[cc.subjectClaim]
+	if !ok {
+		return nil, fmt.Errorf("claims did not deserialize with %s field", cc.subjectClaim)
+	}
+	subject, ok := subjectInt.(string)
+	if !ok {
+		return nil, fmt.Errorf("claims did not deserialize with %s field", cc.subjectClaim)
+	}
+	if subject == "" {
+		return nil, errors.New("claims did not deserialize with desired fields")
+	}
+	var groups []string
+	if cc.groupsClaim != "" {
+		groupsInt, ok := claims[cc.groupsClaim]
+		if !ok {
+			return nil, fmt.Errorf("claims did not deserialize with %s field", cc.groupsClaim)
+		}
+		groupsIntSlice, ok := groupsInt.([]interface{})
+		if !ok {
+			return nil, fmt.Errorf("group claim did not deserialize with %s field, groups claim must be a list", cc.groupsClaim)
+		}
+
+		for _, v := range groupsIntSlice {
+			group, ok := v.(string)
+			if !ok {
+				return nil, fmt.Errorf("claims did not deserialize with %s field, group %v", cc.groupsClaim, v)
+			}
+
+			groups = append(groups, group)
+		}
+	}
+
+	sc := oidcTokenToStandardClaims(t)
+	sc.Subject = subject
+	return &Claims{
+		StandardClaims: sc,
+		Groups:         groups,
+	}, nil
+}
+
 func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, error) {
 	claims := &Claims{}
 	_, err := jwt.ParseWithClaims(rawToken, claims, func(token *jwt.Token) (interface{}, error) {
@@ -406,6 +464,10 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 		return nil, err
 	}
 
+	claimsFromOIDCTokenFunc := DefaultClaimsFromOIDCToken
+	if c.SubjectClaimName != "" {
+		claimsFromOIDCTokenFunc = NewClaimsConfig(c.SubjectClaimName, c.GroupsClaimName).ClaimsFromOIDCToken
+	}
 	p := &OIDCProvider{
 		providerAlias:              alias,
 		provider:                   provider,
@@ -413,7 +475,7 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 		oauth2:                     oc,
 		httpClient:                 ctx.Value(oauth2.HTTPClient).(*http.Client),
 		sessionSecret:              config.SessionSecret,
-		claimsFromOIDCToken:        DefaultClaimsFromOIDCToken,
+		claimsFromOIDCToken:        claimsFromOIDCTokenFunc,
 		tokenStorage:               tokenStorage,
 		enableServiceTokenCreation: tokenStorage != nil && config.EnableServiceTokenCreation,
 	}

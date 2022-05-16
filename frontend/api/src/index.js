@@ -20633,6 +20633,8 @@ export const clutch = $root.clutch = (() => {
                          * @property {string|null} [clientSecret] OIDC clientSecret
                          * @property {string|null} [redirectUrl] OIDC redirectUrl
                          * @property {Array.<string>|null} [scopes] OIDC scopes
+                         * @property {string|null} [subjectClaimName] OIDC subjectClaimName
+                         * @property {string|null} [groupsClaimName] OIDC groupsClaimName
                          */
 
                         /**
@@ -20692,6 +20694,22 @@ export const clutch = $root.clutch = (() => {
                         OIDC.prototype.scopes = $util.emptyArray;
 
                         /**
+                         * OIDC subjectClaimName.
+                         * @member {string} subjectClaimName
+                         * @memberof clutch.config.service.authn.v1.OIDC
+                         * @instance
+                         */
+                        OIDC.prototype.subjectClaimName = "";
+
+                        /**
+                         * OIDC groupsClaimName.
+                         * @member {string} groupsClaimName
+                         * @memberof clutch.config.service.authn.v1.OIDC
+                         * @instance
+                         */
+                        OIDC.prototype.groupsClaimName = "";
+
+                        /**
                          * Verifies a OIDC message.
                          * @function verify
                          * @memberof clutch.config.service.authn.v1.OIDC
@@ -20721,6 +20739,12 @@ export const clutch = $root.clutch = (() => {
                                     if (!$util.isString(message.scopes[i]))
                                         return "scopes: string[] expected";
                             }
+                            if (message.subjectClaimName != null && message.hasOwnProperty("subjectClaimName"))
+                                if (!$util.isString(message.subjectClaimName))
+                                    return "subjectClaimName: string expected";
+                            if (message.groupsClaimName != null && message.hasOwnProperty("groupsClaimName"))
+                                if (!$util.isString(message.groupsClaimName))
+                                    return "groupsClaimName: string expected";
                             return null;
                         };
 
@@ -20751,6 +20775,10 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < object.scopes.length; ++i)
                                     message.scopes[i] = String(object.scopes[i]);
                             }
+                            if (object.subjectClaimName != null)
+                                message.subjectClaimName = String(object.subjectClaimName);
+                            if (object.groupsClaimName != null)
+                                message.groupsClaimName = String(object.groupsClaimName);
                             return message;
                         };
 
@@ -20774,6 +20802,8 @@ export const clutch = $root.clutch = (() => {
                                 object.clientId = "";
                                 object.clientSecret = "";
                                 object.redirectUrl = "";
+                                object.subjectClaimName = "";
+                                object.groupsClaimName = "";
                             }
                             if (message.issuer != null && message.hasOwnProperty("issuer"))
                                 object.issuer = message.issuer;
@@ -20788,6 +20818,10 @@ export const clutch = $root.clutch = (() => {
                                 for (let j = 0; j < message.scopes.length; ++j)
                                     object.scopes[j] = message.scopes[j];
                             }
+                            if (message.subjectClaimName != null && message.hasOwnProperty("subjectClaimName"))
+                                object.subjectClaimName = message.subjectClaimName;
+                            if (message.groupsClaimName != null && message.hasOwnProperty("groupsClaimName"))
+                                object.groupsClaimName = message.groupsClaimName;
                             return object;
                         };
 
