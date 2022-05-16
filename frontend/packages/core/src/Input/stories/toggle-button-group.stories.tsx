@@ -9,7 +9,7 @@ export default {
 } as Meta;
 
 export const ExclusiveDemo = () => {
-  const [value, setValue] = React.useState("meow");
+  const [value, setValue] = React.useState("MEOW");
   const onChange = (_event: React.ChangeEvent<{}>, newValue: string) => {
     // Note that we check for null because we want to enforce that
     // at least value is active
@@ -20,10 +20,10 @@ export const ExclusiveDemo = () => {
 
   return (
     <ToggleButtonGroup
-      exclusive
+      multiple={false}
       currentValue={value}
       onChange={onChange}
-      toggleButtonValues={["Egress", "Ingress", "meow"]}
+      toggleButtonValues={["Egress", "Ingress", "MEOW"]}
     />
   );
 };
