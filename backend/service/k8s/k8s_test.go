@@ -154,13 +154,13 @@ func TestGetK8sClientset(t *testing.T) {
 	assert.True(t, ok)
 
 	// Get valid clientset
-	cs, err := svc.GetK8sClientset("test-user@test-cluster")
+	cs, err := svc.GetK8sClientset(context.Background(), "test-user@test-cluster")
 	assert.NoError(t, err)
 	assert.NotNil(t, cs)
 	assert.Equal(t, "test-cluster", cs.Cluster())
 
 	// Try to get an unknown clientset
-	cs, err = svc.GetK8sClientset("unknown")
+	cs, err = svc.GetK8sClientset(context.Background(), "unknown")
 	assert.Error(t, err)
 	assert.Nil(t, cs)
 	assert.Contains(t, err.Error(), "clientset 'unknown' not found")
