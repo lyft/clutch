@@ -37,7 +37,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jhump/protoreflect v1.12.0
 	github.com/joho/godotenv v1.4.0
-	github.com/lib/pq v1.10.5
+	github.com/lib/pq v1.10.6
 	github.com/mitchellh/hashstructure/v2 v2.0.2
 	github.com/shurcooL/githubv4 v0.0.0-20220115235240-a14260e6f8a2
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
