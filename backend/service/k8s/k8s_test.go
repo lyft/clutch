@@ -163,5 +163,5 @@ func TestGetK8sClientset(t *testing.T) {
 	cs, err = svc.GetK8sClientset("unknown")
 	assert.Error(t, err)
 	assert.Nil(t, cs)
-	assert.Contains(t, err.Error(), "clientset [unknown] is not found")
+	assert.Contains(t, err.Error(), "clientset 'unknown' not found")
 }
