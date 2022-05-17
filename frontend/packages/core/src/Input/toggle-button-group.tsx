@@ -1,49 +1,47 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import {
-  ToggleButton as MuiToggleButton,
   ToggleButtonGroup as MuiToggleButtonGroup,
+  ToggleButtonGroupProps as MuiToggleButtonGroupProps,
 } from "@material-ui/lab";
 
-export interface ToggleButtonGroupProps {
-  /** A boolean to decide if the user can select multiple options
-   * simultaneously. If true, users will be able to select multiple options,
-   * whereas if false, an exclusive choice will be enforced.
-   */
+export interface ToggleButtonGroupProps
+  extends Pick<
+    MuiToggleButtonGroupProps,
+    "value" | "children" | "size" | "orientation" | "onChange"
+  > {
+  /** If true, multiple children options can be selected simultaneously. */
   multiple?: boolean;
-  /** The current value that is selected in the group. Usually this will be
-   * a useState value.
-   */
-  currentValue: string;
-  /** The onChange function that gets called when a user changes selection */
-  onChange: (event: React.ChangeEvent<{}>, value: string) => void;
-  /** An array of strings where each string will be one toggle button */
-  toggleButtonValues: string[];
 }
 
 const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)({
   ".MuiToggleButton-root": {
     "&.Mui-selected": {
-      color: "#3548D4",
-      backgroundColor: "#3548D41F",
-      inset: "1px 1px 1px 1px",
+      color: "rgba(53, 72, 212, 1)",
+      backgroundColor: "rgba(53, 72, 212, 0.12)",
     },
     textTransform: "none",
   },
-  padding: "6px 16px 16px 6px",
+  padding: "6px 16px",
 });
 
 // TODO(smonero): add some tests
 const ToggleButtonGroup = ({
   multiple = false,
-  currentValue,
+  value,
+  children,
+  size = "medium",
+  orientation = "horizontal",
   onChange,
-  toggleButtonValues,
 }: ToggleButtonGroupProps) => (
-  <StyledMuiToggleButtonGroup exclusive={!multiple} value={currentValue} onChange={onChange}>
-    {toggleButtonValues.map(toggValue => (
-      <MuiToggleButton value={toggValue}>{toggValue}</MuiToggleButton>
-    ))}
+  <StyledMuiToggleButtonGroup
+    exclusive={!multiple}
+    value={value}
+    size={size}
+    orientation={orientation}
+    onChange={onChange}
+  >
+    {children}
   </StyledMuiToggleButtonGroup>
 );
 
