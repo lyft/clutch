@@ -9,19 +9,20 @@ export default {
   component: ToggleButtonGroup,
 } as Meta;
 
-export const MultipleFalseDemo = () => {
+/** Note this demo shows a usecase where an author wants to force a selection,
+ * and swallow nulls / empty arrays that get passed when the user clicks
+ * a button to deselect.
+ */
+export const EnforcedSelectionDemo = () => {
   const [value, setValue] = React.useState("MEOW");
   const onChange = (_: React.ChangeEvent<{}>, newValue: string) => {
-    // console.log(newValue);
-    // if (newValue) {
-    // console.log("newValue is not null" + newValue);
-    // }
-    setValue(newValue);
+    if (newValue) {
+      setValue(newValue);
+    }
   };
 
   return (
     <ToggleButtonGroup multiple={false} value={value} onChange={onChange}>
-      {/* console.log("value is " + value) */}
       <ToggleButton value="MEOW">MEOW</ToggleButton>
       <ToggleButton value="Ingress">Ingress</ToggleButton>
       <ToggleButton value="Egress">Egress</ToggleButton>
@@ -30,13 +31,19 @@ export const MultipleFalseDemo = () => {
 };
 
 export const MultipleTrueVerticalDemo = () => {
-  const [value, setValue] = React.useState("MEOW");
-  const onChange = (_: React.ChangeEvent<{}>, newValue: string) => {
+  const [value, setValue] = React.useState<string[]>(["MEOW", "Ingress"]);
+  const onChange = (_: React.ChangeEvent<{}>, newValue: string[]) => {
     setValue(newValue);
   };
 
   return (
-    <ToggleButtonGroup value={value} onChange={onChange} orientation="vertical" size="large">
+    <ToggleButtonGroup
+      multiple
+      value={value}
+      onChange={onChange}
+      orientation="vertical"
+      size="large"
+    >
       <ToggleButton value="MEOW">MEOW</ToggleButton>
       <ToggleButton value="Ingress">Ingress</ToggleButton>
       <ToggleButton value="Egress">Egress</ToggleButton>
@@ -45,14 +52,14 @@ export const MultipleTrueVerticalDemo = () => {
 };
 
 export const SmallWithManyItemsDemo = () => {
-  const [value, setValue] = React.useState("MEOW");
+  const [value, setValue] = React.useState("baaaaaa");
   const onChange = (_: React.ChangeEvent<{}>, newValue: string) => {
     setValue(newValue);
   };
 
   return (
     <ToggleButtonGroup value={value} onChange={onChange} size="small">
-      <ToggleButton value="MEOW">MEOW</ToggleButton>
+      <ToggleButton value="baaaaaa">baaaaaa</ToggleButton>
       <ToggleButton value="WOOF">WOOF</ToggleButton>
       <ToggleButton value="Bark">Bark</ToggleButton>
       <ToggleButton value="Chirp">Chirp</ToggleButton>

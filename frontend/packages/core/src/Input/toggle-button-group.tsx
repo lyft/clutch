@@ -26,12 +26,8 @@ const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)({
 });
 
 // TODO(smonero): add some tests
-/** Note when passing null to the `value` prop, the behavior is:
- * If `multiple` is true, allow a value of null.
- *
- * If `multiple` is false, default to the first child since at least
- * one child must be selected.
- */
+// TODO(smonero): add another component that is a parent component
+// that enforces a default selection
 const ToggleButtonGroup = ({
   multiple = false,
   value,
@@ -40,11 +36,10 @@ const ToggleButtonGroup = ({
   orientation = "horizontal",
   onChange,
 }: ToggleButtonGroupProps) => {
-  // Need to investigate why this doesn't work (circ reference object, hm????)
   return (
     <StyledMuiToggleButtonGroup
       exclusive={!multiple}
-      value={value || (multiple ? value : children?.[0]?.props.value)}
+      value={value}
       size={size}
       orientation={orientation}
       onChange={onChange}
