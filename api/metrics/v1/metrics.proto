@@ -18,10 +18,10 @@ service MetricsAPI {
   }
 }
 
-/** 
-  * For the prometheus HTTP API this is intended to be used at, see:
-  * https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries
-  */
+/**
+ * For the prometheus HTTP API this is intended to be used at, see:
+ * https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries
+ */
 message Query {
   /** prometheus expression query string */
   string expression = 1 [ (validate.rules).string.min_len = 1 ];
