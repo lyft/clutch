@@ -88,8 +88,6 @@ const StyledMenuItemName = styled.span({
   maxWidth: "160px",
 });
 
-// Note this span used to have a `width: "36px",`, but it was removed so that
-// there was no blank space for non-removeable projects
 const StyledClearIcon = styled.span({
   ".MuiIconButton-root": {
     padding: "6px",
