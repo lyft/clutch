@@ -17,7 +17,7 @@ export interface ToggleButtonGroupProps
 const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)({
   ".MuiToggleButton-root": {
     "&.Mui-selected": {
-      color: "rgba(53, 72, 212, 1)",
+      color: "#3548D4",
       backgroundColor: "rgba(53, 72, 212, 0.12)",
     },
     textTransform: "none",
