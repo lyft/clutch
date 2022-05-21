@@ -141,7 +141,21 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
 
   // We need to keep track of which project has its quick links open so that we know
   // to hide the other projects' buttons
-  const [quickLinkWindowKey, setQuickLinkWindowKey] = React.useState<string>("");
+  const [quickLinksWindowKey, setQuickLinksWindowKey] = React.useState<string>("");
+  
+  // This is named the way it is rather than something like `open` because there are
+  // multiple poppers and things to hide so it helps to be specific.
+  const [quickLinksWindowOpen, setQuickLinksWindowOpen] = React.useState<boolean>(false);
+
+  const onCloseQuickLinks = () => {
+    setQuickLinksWindowOpen(false);
+    setQuickLinksWindowKey("");
+  }
+
+  const onOpenQuickLinks = (projectName: string) => {
+    setQuickLinksWindowKey(projectName);
+    setQuickLinksWindowOpen(true);
+  }
 
   return (
     <>
@@ -194,7 +208,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 checked={!!state?.[group][key].checked}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledHoverOptions hidden={quickLinkWindowKey !== key}>
+              <StyledHoverOptions hidden={!(quickLinksWindowKey === key)}>
                 <StyledOnlyButton
                   onClick={() =>
                     !state?.loading &&
@@ -224,15 +238,15 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                   )}
                 </StyledClearIcon>
               </StyledHoverOptions>
-              {/* If the quicklink window is closed, we want to hide the quicklink box button
-                  if it is open (aka the project's quicklinks are displayed) then the `hidden`
-                   prop on the component will be false */}
               {!state?.loading && state?.projectData?.[key]?.linkGroups && (
                 <ProjectLinks
                   linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
-                  currentKey={key}
-                  setQuickLinkWindowKey={setQuickLinkWindowKey}
-                  isClosed={quickLinkWindowKey !== key}
+                  onOpen={() => {
+                    onOpenQuickLinks(key);
+                  }}
+                  onClose={onCloseQuickLinks}
+                  isQuickLinksWindowOpen={quickLinksWindowOpen}
+                  buttonIsHidden={!(quickLinksWindowKey === key)}
                 />
               )}
             </StyledMenuItem>

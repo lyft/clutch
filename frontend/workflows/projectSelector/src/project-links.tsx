@@ -170,30 +170,21 @@ interface QuickLinksPopperProps {
   anchorRef: React.RefObject<HTMLElement>;
   /** Whether the popper is open or not */
   open: boolean;
-  /** A function that closes the popper for onClickAway */
-  setOpen: (open: boolean) => void;
-  /**
-   * A callback function that will set the key value to
-   * empty string when the popper is closed (onClickAway)
-   */
-  setQuickLinkWindowKey: (key: string) => void;
+  /** A function that is called when closing / clicking away */
+  onClose: () => void
 }
 
 const QuickLinksPopper = ({
   linkGroups,
   anchorRef,
   open,
-  setOpen,
-  setQuickLinkWindowKey,
+  onClose,
 }: QuickLinksPopperProps) => {
   return (
     <Popper
       open={open}
       anchorRef={anchorRef}
-      onClickAway={() => {
-        setOpen(false);
-        setQuickLinkWindowKey("");
-      }}
+      onClickAway={onClose}
     >
       <ExpandedLinks linkGroups={linkGroups} />
     </Popper>
@@ -206,57 +197,56 @@ interface ProjectLinksProps {
    * of single and multi-link groups.
    */
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
+
   /**
-   * A function that either sets the key to blank ("") for when
-   * the user wantns to close the popper, or sets it to the key
-   * name when the user opens the popper.
+   * A function that is called when the quicklinks popper opens.
    */
-  setQuickLinkWindowKey: (key: string) => void;
+  onOpen: () => void;
+  
   /**
-   * The key (project name) of the project that is currently
-   * being rendered. Used for the callback function above to
-   * set the key when opening the popper.
+   * Denotes whether the quicklinks popper is open or not.
    */
-  currentKey: string;
+  isQuickLinksWindowOpen: boolean;
+
   /**
-   * Denotes whether the quicklinks popper is open or not. This is
-   * determined by the logic in the parent component that checks
-   * if the key (project) with the quicklinks open is not equal to
-   * the one that is currently being iterated over.
+   * A function that is called when the QuickLinksPopper 
+   * is closed.
    */
-  isClosed: boolean;
+  onClose:() => void;
+
+  /** 
+   * A boolean that denotes whether to render the button
+   * that opens the quicklinks or not.
+   */
+  buttonIsHidden: boolean;
 }
 
 const ProjectLinks = ({
   linkGroups,
-  setQuickLinkWindowKey,
-  currentKey,
-  isClosed,
+  onOpen,
+  isQuickLinksWindowOpen,
+  onClose,
+  buttonIsHidden,
 }: ProjectLinksProps) => {
   const anchorRef = React.useRef(null);
-  const [open, setOpen] = React.useState(false);
 
   if (linkGroups.length === 0) {
     return null;
   }
-
+  
   return (
-    <StyledFlexEnd hidden={isClosed}>
+    <StyledFlexEnd hidden={buttonIsHidden}>
       <StyledMoreVertIcon>
         <IconButton
           ref={anchorRef}
-          onClick={() => {
-            setOpen(true);
-            setQuickLinkWindowKey(currentKey);
-          }}
+          onClick={onOpen}
         >
           <MoreVertIcon />
           <QuickLinksPopper
             linkGroups={linkGroups}
             anchorRef={anchorRef}
-            open={open}
-            setOpen={setOpen}
-            setQuickLinkWindowKey={setQuickLinkWindowKey}
+            open={isQuickLinksWindowOpen}
+            onClose={onClose}
           />
         </IconButton>
       </StyledMoreVertIcon>
