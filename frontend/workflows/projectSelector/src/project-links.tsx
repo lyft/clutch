@@ -171,21 +171,12 @@ interface QuickLinksPopperProps {
   /** Whether the popper is open or not */
   open: boolean;
   /** A function that is called when closing / clicking away */
-  onClose: () => void
+  onClose: () => void;
 }
 
-const QuickLinksPopper = ({
-  linkGroups,
-  anchorRef,
-  open,
-  onClose,
-}: QuickLinksPopperProps) => {
+const QuickLinksPopper = ({ linkGroups, anchorRef, open, onClose }: QuickLinksPopperProps) => {
   return (
-    <Popper
-      open={open}
-      anchorRef={anchorRef}
-      onClickAway={onClose}
-    >
+    <Popper open={open} anchorRef={anchorRef} onClickAway={onClose}>
       <ExpandedLinks linkGroups={linkGroups} />
     </Popper>
   );
@@ -199,54 +190,54 @@ interface ProjectLinksProps {
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
 
   /**
-   * A function that is called when the quicklinks popper opens.
+   * A function that is called when the QuickLinksPopper opens.
    */
   onOpen: () => void;
-  
-  /**
-   * Denotes whether the quicklinks popper is open or not.
-   */
-  isQuickLinksWindowOpen: boolean;
 
   /**
-   * A function that is called when the QuickLinksPopper 
+   * A function that is called when the QuickLinksPopper
    * is closed.
    */
-  onClose:() => void;
+  onClose: () => void;
 
-  /** 
+  /**
    * A boolean that denotes whether to render the button
    * that opens the quicklinks or not.
    */
   buttonIsHidden: boolean;
 }
 
-const ProjectLinks = ({
-  linkGroups,
-  onOpen,
-  isQuickLinksWindowOpen,
-  onClose,
-  buttonIsHidden,
-}: ProjectLinksProps) => {
+const ProjectLinks = ({ linkGroups, onOpen, onClose, buttonIsHidden }: ProjectLinksProps) => {
   const anchorRef = React.useRef(null);
+  // The state is managed here for the popper because if it is hoisted up
+  // to the parent that results in all the poppers being opened or closed
+  // at the same time.
+  const [open, setOpen] = React.useState(false);
+
+  const onClosePopper = () => {
+    setOpen(false);
+    onClose();
+  };
+
+  const onOpenPopper = () => {
+    setOpen(true);
+    onOpen();
+  };
 
   if (linkGroups.length === 0) {
     return null;
   }
-  
+
   return (
     <StyledFlexEnd hidden={buttonIsHidden}>
       <StyledMoreVertIcon>
-        <IconButton
-          ref={anchorRef}
-          onClick={onOpen}
-        >
+        <IconButton ref={anchorRef} onClick={onOpenPopper}>
           <MoreVertIcon />
           <QuickLinksPopper
             linkGroups={linkGroups}
             anchorRef={anchorRef}
-            open={isQuickLinksWindowOpen}
-            onClose={onClose}
+            open={open}
+            onClose={onClosePopper}
           />
         </IconButton>
       </StyledMoreVertIcon>

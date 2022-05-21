@@ -142,20 +142,14 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   // We need to keep track of which project has its quick links open so that we know
   // to hide the other projects' buttons
   const [quickLinksWindowKey, setQuickLinksWindowKey] = React.useState<string>("");
-  
-  // This is named the way it is rather than something like `open` because there are
-  // multiple poppers and things to hide so it helps to be specific.
-  const [quickLinksWindowOpen, setQuickLinksWindowOpen] = React.useState<boolean>(false);
 
   const onCloseQuickLinks = () => {
-    setQuickLinksWindowOpen(false);
     setQuickLinksWindowKey("");
-  }
+  };
 
   const onOpenQuickLinks = (projectName: string) => {
     setQuickLinksWindowKey(projectName);
-    setQuickLinksWindowOpen(true);
-  }
+  };
 
   return (
     <>
@@ -245,7 +239,6 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                     onOpenQuickLinks(key);
                   }}
                   onClose={onCloseQuickLinks}
-                  isQuickLinksWindowOpen={quickLinksWindowOpen}
                   buttonIsHidden={!(quickLinksWindowKey === key)}
                 />
               )}
