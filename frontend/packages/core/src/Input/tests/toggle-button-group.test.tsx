@@ -32,7 +32,7 @@ describe("ToggleButtonGroup", () => {
   });
   const searchStringForComponent = "Styled(WithStyles(ForwardRef(ToggleButton)))";
 
-  describe("basic rendering", () => {
+  describe("rendering", () => {
     it("renders", () => {
       expect(multipleFalseWrapper.find(ToggleButtonGroup)).toBeDefined();
     });
