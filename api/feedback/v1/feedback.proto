@@ -30,6 +30,7 @@ enum Origin {
   ORIGIN_UNSPECIFIED = 0;
   HEADER = 1;
   WIZARD = 2;
+  EXTERNAL = 3;
 }
 
 // currently UI components and designs support a three-point emoji scale. as more use cases arise,
