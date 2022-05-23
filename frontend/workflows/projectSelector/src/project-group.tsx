@@ -202,7 +202,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 checked={!!state?.[group][key].checked}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledHoverOptions hidden={!(quickLinksWindowKey === key)}>
+              <StyledHoverOptions hidden={(quickLinksWindowKey !== key)}>
                 <StyledOnlyButton
                   onClick={() =>
                     !state?.loading &&
@@ -235,11 +235,9 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
               {!state?.loading && state?.projectData?.[key]?.linkGroups && (
                 <ProjectLinks
                   linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
-                  onOpen={() => {
-                    onOpenQuickLinks(key);
-                  }}
+                  onOpen={() => onOpenQuickLinks(key)}
                   onClose={onCloseQuickLinks}
-                  buttonIsHidden={!(quickLinksWindowKey === key)}
+                  showOpenButton={(quickLinksWindowKey !== key)}
                 />
               )}
             </StyledMenuItem>

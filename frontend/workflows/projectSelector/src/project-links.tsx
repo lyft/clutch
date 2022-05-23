@@ -46,7 +46,7 @@ const StyledMoreVertIcon = styled.span({
 
 const StyledLinkTitle = styled.span({
   fontWeight: "bold",
-  padding: "7px 0px 7px 0px",
+  padding: "7px 0px",
 });
 
 const StyledMultiLinkTitle = styled.span({
@@ -204,10 +204,10 @@ interface ProjectLinksProps {
    * A boolean that denotes whether to render the button
    * that opens the quicklinks or not.
    */
-  buttonIsHidden: boolean;
+  showOpenButton: boolean;
 }
 
-const ProjectLinks = ({ linkGroups, onOpen, onClose, buttonIsHidden }: ProjectLinksProps) => {
+const ProjectLinks = ({ linkGroups, onOpen, onClose, showOpenButton }: ProjectLinksProps) => {
   const anchorRef = React.useRef(null);
   // The state is managed here for the popper because if it is hoisted up
   // to the parent that results in all the poppers being opened or closed
@@ -229,7 +229,7 @@ const ProjectLinks = ({ linkGroups, onOpen, onClose, buttonIsHidden }: ProjectLi
   }
 
   return (
-    <StyledFlexEnd hidden={buttonIsHidden}>
+    <StyledFlexEnd hidden={showOpenButton}>
       <StyledMoreVertIcon>
         <IconButton ref={anchorRef} onClick={onOpenPopper}>
           <MoreVertIcon />
