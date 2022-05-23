@@ -58,6 +58,8 @@ message AutocompleteRequest {
   string want = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string search = 2 [ (validate.rules).string = {min_bytes : 1} ];
   uint64 limit = 3;
+  // If true, the search will be case insensitive
+  bool case_insensitive = 4;
 }
 
 message AutocompleteResponse {

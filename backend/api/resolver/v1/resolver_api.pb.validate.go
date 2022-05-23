@@ -187,6 +187,8 @@ func (m *AutocompleteRequest) validate(all bool) error {
 
 	// no validation rules for Limit
 
+	// no validation rules for CaseInsensitive
+
 	if len(errors) > 0 {
 		return AutocompleteRequestMultiError(errors)
 	}
