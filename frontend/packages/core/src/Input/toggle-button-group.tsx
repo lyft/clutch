@@ -25,9 +25,7 @@ const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)({
   padding: "6px 16px",
 });
 
-// TODO(smonero): add some tests
-// TODO(smonero): add another component that is a parent component
-// that enforces a default selection
+// TODO(smonero): add another component that is a parent component that enforces a default selection
 const ToggleButtonGroup = ({
   multiple = false,
   value,
