@@ -800,17 +800,6 @@ func (m *FeedbackMetadata) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetSurvey() == nil {
-		err := FeedbackMetadataValidationError{
-			field:  "Survey",
-			reason: "value is required",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if all {
 		switch v := interface{}(m.GetSurvey()).(type) {
 		case interface{ ValidateAll() error }:

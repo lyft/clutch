@@ -89,15 +89,6 @@ func (s *svc) processSubmission(id string, userId string, feedback *feedbackv1.F
 		return nil, status.Error(codes.FailedPrecondition, err.Error())
 	}
 
-	// the main question that was asked in the feedback component
-	if metadata.Survey.Prompt == "" {
-		return nil, status.Error(codes.InvalidArgument, "metadata survey prompt was empty")
-	}
-
-	if metadata.Survey.RatingLabels == nil {
-		return nil, status.Error(codes.InvalidArgument, "metadata rating options was nil")
-	}
-
 	return &submission{
 		id:          id,
 		submittedAt: time.Now(),

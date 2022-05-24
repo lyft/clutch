@@ -93,7 +93,7 @@ message GetSurveysResponse {
 message FeedbackMetadata {
   // extra info on the feedback (i.e. the survey question, the rating options, the feedback origin, etc.)
   Origin origin = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
-  Survey survey = 2 [ (validate.rules).message = {required : true} ];
+  Survey survey = 2 [ (validate.rules).message = {required : false} ];
   bool user_submitted = 3;
   string url_search_params = 4;
 }
