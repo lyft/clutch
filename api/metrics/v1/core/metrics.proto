@@ -18,12 +18,8 @@ service MetricsAPI {
   }
 }
 
-/**
- * For the prometheus HTTP API this is intended to be used at, see:
- * https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries
- */
 message Query {
-  /** prometheus expression query string */
+  /** query string */
   string expression = 1 [ (validate.rules).string.min_len = 1 ];
   /** inclusive */
   int64 start_time_ms = 2 [ (validate.rules).int64.gte = 0 ];
@@ -44,8 +40,6 @@ message MetricDataPoint {
 
 message Metrics {
   repeated MetricDataPoint data_points = 1;
-  string label = 2;
-  map<string, string> tags = 3;
 }
 
 message MetricsResult {

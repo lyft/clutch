@@ -56,9 +56,9 @@ func (m *Config) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetPrometheusApiEndpoint()) < 1 {
+	if len(m.GetApiEndpoint()) < 1 {
 		err := ConfigValidationError{
-			field:  "PrometheusApiEndpoint",
+			field:  "ApiEndpoint",
 			reason: "value length must be at least 1 bytes",
 		}
 		if !all {

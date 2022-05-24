@@ -7,6 +7,5 @@ option go_package = "github.com/lyft/clutch/backend/api/config/service/metrics/v
 import "validate/validate.proto";
 
 message Config {
-  // This should be an endpoint that mirrors the Prometheus API
-  string prometheus_api_endpoint = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string api_endpoint = 1 [ (validate.rules).string = {min_bytes : 1} ];
 }

@@ -10096,8 +10096,8 @@ export namespace clutch {
                     /** Properties of a Config. */
                     interface IConfig {
 
-                        /** Config prometheusApiEndpoint */
-                        prometheusApiEndpoint?: (string|null);
+                        /** Config apiEndpoint */
+                        apiEndpoint?: (string|null);
                     }
 
                     /** Represents a Config. */
@@ -10109,8 +10109,8 @@ export namespace clutch {
                          */
                         constructor(properties?: clutch.config.service.metrics.v1.IConfig);
 
-                        /** Config prometheusApiEndpoint. */
-                        public prometheusApiEndpoint: string;
+                        /** Config apiEndpoint. */
+                        public apiEndpoint: string;
 
                         /**
                          * Verifies a Config message.
@@ -19919,6 +19919,179 @@ export namespace clutch {
     /** Namespace metrics. */
     namespace metrics {
 
+        /** Namespace prometheus. */
+        namespace prometheus {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a MetricDataPoint. */
+                interface IMetricDataPoint {
+
+                    /** MetricDataPoint value */
+                    value?: (number|null);
+
+                    /** MetricDataPoint timestamp */
+                    timestamp?: (number|Long|null);
+                }
+
+                /**
+                 * For the prometheus HTTP API this is intended to be used at, see:
+                 * https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries
+                 */
+                class MetricDataPoint implements IMetricDataPoint {
+
+                    /**
+                     * Constructs a new MetricDataPoint.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.metrics.prometheus.v1.IMetricDataPoint);
+
+                    /** MetricDataPoint value. */
+                    public value: number;
+
+                    /** MetricDataPoint timestamp. */
+                    public timestamp: (number|Long);
+
+                    /**
+                     * Verifies a MetricDataPoint message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a MetricDataPoint message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns MetricDataPoint
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.metrics.prometheus.v1.MetricDataPoint;
+
+                    /**
+                     * Creates a plain object from a MetricDataPoint message. Also converts values to other types if specified.
+                     * @param message MetricDataPoint
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.metrics.prometheus.v1.MetricDataPoint, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this MetricDataPoint to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Metrics. */
+                interface IMetrics {
+
+                    /** Metrics dataPoints */
+                    dataPoints?: (clutch.metrics.prometheus.v1.IMetricDataPoint[]|null);
+
+                    /** Metrics label */
+                    label?: (string|null);
+
+                    /** Metrics tags */
+                    tags?: ({ [k: string]: string }|null);
+                }
+
+                /** Represents a Metrics. */
+                class Metrics implements IMetrics {
+
+                    /**
+                     * Constructs a new Metrics.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.metrics.prometheus.v1.IMetrics);
+
+                    /** Metrics dataPoints. */
+                    public dataPoints: clutch.metrics.prometheus.v1.IMetricDataPoint[];
+
+                    /** Metrics label. */
+                    public label: string;
+
+                    /** Metrics tags. */
+                    public tags: { [k: string]: string };
+
+                    /**
+                     * Verifies a Metrics message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Metrics message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Metrics
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.metrics.prometheus.v1.Metrics;
+
+                    /**
+                     * Creates a plain object from a Metrics message. Also converts values to other types if specified.
+                     * @param message Metrics
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.metrics.prometheus.v1.Metrics, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Metrics to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a MetricsResult. */
+                interface IMetricsResult {
+
+                    /** MetricsResult metrics */
+                    metrics?: (clutch.metrics.prometheus.v1.IMetrics[]|null);
+                }
+
+                /** Represents a MetricsResult. */
+                class MetricsResult implements IMetricsResult {
+
+                    /**
+                     * Constructs a new MetricsResult.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.metrics.prometheus.v1.IMetricsResult);
+
+                    /** MetricsResult metrics. */
+                    public metrics: clutch.metrics.prometheus.v1.IMetrics[];
+
+                    /**
+                     * Verifies a MetricsResult message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a MetricsResult message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns MetricsResult
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.metrics.prometheus.v1.MetricsResult;
+
+                    /**
+                     * Creates a plain object from a MetricsResult message. Also converts values to other types if specified.
+                     * @param message MetricsResult
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.metrics.prometheus.v1.MetricsResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this MetricsResult to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+
         /** Namespace v1. */
         namespace v1 {
 
@@ -19961,7 +20134,7 @@ export namespace clutch {
             /** Properties of a Query. */
             interface IQuery {
 
-                /** prometheus expression query string */
+                /** query string */
                 expression?: (string|null);
 
                 /** inclusive */
@@ -19974,10 +20147,7 @@ export namespace clutch {
                 stepMs?: (number|Long|null);
             }
 
-            /**
-             * For the prometheus HTTP API this is intended to be used at, see:
-             * https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries
-             */
+            /** Represents a Query. */
             class Query implements IQuery {
 
                 /**
@@ -19986,7 +20156,7 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.metrics.v1.IQuery);
 
-                /** prometheus expression query string */
+                /** query string */
                 public expression: string;
 
                 /** inclusive */
@@ -20134,12 +20304,6 @@ export namespace clutch {
 
                 /** Metrics dataPoints */
                 dataPoints?: (clutch.metrics.v1.IMetricDataPoint[]|null);
-
-                /** Metrics label */
-                label?: (string|null);
-
-                /** Metrics tags */
-                tags?: ({ [k: string]: string }|null);
             }
 
             /** Represents a Metrics. */
@@ -20153,12 +20317,6 @@ export namespace clutch {
 
                 /** Metrics dataPoints. */
                 public dataPoints: clutch.metrics.v1.IMetricDataPoint[];
-
-                /** Metrics label. */
-                public label: string;
-
-                /** Metrics tags. */
-                public tags: { [k: string]: string };
 
                 /**
                  * Verifies a Metrics message.
