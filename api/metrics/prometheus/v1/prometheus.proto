@@ -4,10 +4,6 @@ package clutch.metrics.prometheus.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/metrics/prometheus/v1;prometheusv1";
 
-import "validate/validate.proto";
-import "api/v1/annotations.proto";
-import "google/api/annotations.proto";
-
 /**
  * For the prometheus HTTP API this is intended to be used at, see:
  * https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries
