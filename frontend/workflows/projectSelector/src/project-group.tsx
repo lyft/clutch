@@ -143,21 +143,28 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   return (
     <>
       <StyledProjectHeader>
-        <StyledHeaderColumn onClick={() => setCollapsed(!collapsed)}>
-          {collapsed ? <ChevronRightIcon /> : <ExpandMoreIcon />}
+        <StyledHeaderColumn
+          aria-label={`${title} Project Group Header`}
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? (
+            <ChevronRightIcon aria-label="Expand Group" />
+          ) : (
+            <ExpandMoreIcon aria-label="Collapse Group" />
+          )}
         </StyledHeaderColumn>
         <StyledHeaderColumn grow>
           <StyledGroup>
             <StyledGroupTitle>{title}</StyledGroupTitle>
-            <StyledCount>
-              {checkedProjects.length}
-              {numProjects > 0 && ` / ${numProjects}`}
+            <StyledCount aria-label="Project Count">
+              {`${checkedProjects.length}${numProjects > 0 && ` / ${numProjects}`}`}
             </StyledCount>
           </StyledGroup>
         </StyledHeaderColumn>
         <StyledHeaderColumn>
           {displayToggleHelperText && <StyledAllText>All</StyledAllText>}
           <Switch
+            aria-label="Toggle Project Group"
             onChange={() =>
               dispatch &&
               dispatch({
@@ -178,6 +185,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
           {groupKeys.sort().map(key => (
             <StyledMenuItem key={key}>
               <Checkbox
+                aria-label={`Toggle ${key} Project`}
                 name={key}
                 size="small"
                 disabled={state?.loading}
@@ -191,8 +199,9 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 checked={!!state?.[group][key].checked}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledHoverOptions hidden>
+              <StyledHoverOptions>
                 <StyledOnlyButton
+                  aria-label={`Select Only ${key} Project`}
                   onClick={() =>
                     !state?.loading &&
                     dispatch &&
@@ -207,6 +216,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 <StyledClearIcon>
                   {state?.[group][key].custom && (
                     <IconButton
+                      aria-label={`Remove ${key} Project`}
                       onClick={() =>
                         !state?.loading &&
                         dispatch &&
@@ -223,6 +233,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
               </StyledHoverOptions>
               {!state?.loading && state?.projectData?.[key]?.linkGroups && (
                 <ProjectLinks
+                  aria-label={`Quick Links for ${key}`}
                   linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
                   name={[key]}
                 />
