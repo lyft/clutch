@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 	"github.com/uber-go/tally/v4"
 	tallyprom "github.com/uber-go/tally/v4/prometheus"
 	"go.uber.org/zap"
@@ -337,7 +338,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	srv := &http.Server{
-		Handler:      mux.InsecureHandler(rpcMux),
+		Handler:      mux.InsecureHandler(cors.Default().Handler(rpcMux)),
 		Addr:         addr,
 		ReadTimeout:  timeout,
 		WriteTimeout: timeout,
