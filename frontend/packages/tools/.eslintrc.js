@@ -30,6 +30,13 @@ module.exports = {
   },
   reportUnusedDisableDirectives: true,
   rules: {
+    "react/function-component-definition": [
+      "error",
+      {
+        namedComponents: ["function-declaration", "arrow-function"],
+        unnamedComponents: ["function-expression"],
+      },
+    ],
     "simple-import-sort/imports": [
       "error",
       {
