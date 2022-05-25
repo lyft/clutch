@@ -236,8 +236,7 @@ install_protobufjs() {
   export PROTOBUFJS_DIR="${BUILD_ROOT}/bin/protobufjs-${PROTOBUFJS_RELEASE}"
   if [[ ! -f "${PROTOBUFJS_DIR}/node_modules/.bin/pbjs" ]]; then
     echo "info: Downloading protobufjs to build environment"
-    mkdir -p "${PROTOBUFJS_DIR}"
-    cd "${PROTOBUFJS_DIR}" && "${BUILD_ROOT}/bin/yarn.sh" add --frozen-lockfile "protobufjs@${PROTOBUFJS_RELEASE}" && cd -
+    mkdir -p "${PROTOBUFJS_DIR}" && "${BUILD_ROOT}/bin/yarn.sh" --verbose --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "protobufjs@${PROTOBUFJS_RELEASE}"
   fi
 }
 
