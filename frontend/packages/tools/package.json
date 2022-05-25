@@ -36,7 +36,7 @@
     "cypress": "9.5.0",
     "enzyme": "^3.11.0",
     "esbuild": "0.12.16",
-    "eslint": "^7.24.0",
+    "eslint": "^8.0.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-cypress": "^2.10.3",
