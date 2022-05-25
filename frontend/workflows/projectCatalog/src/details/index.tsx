@@ -45,7 +45,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
         justify="flex-end"
         spacing={1}
         style={{
-          padding: "8px",
+          paddingRight: "32px",
         }}
       >
         <Grid item>
