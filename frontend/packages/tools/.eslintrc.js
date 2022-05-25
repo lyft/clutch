@@ -1,5 +1,5 @@
 module.exports = {
-  parser: "babel-eslint",
+  parser: "@babel/eslint-parser",
   ignorePatterns: ["build/", "dist/", "node_modules/"],
   extends: [
     "airbnb",
