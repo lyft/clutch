@@ -19,6 +19,7 @@ import QuickLinksCard from "./quick-links";
 
 const StyledContainer = styled(Grid)({
   padding: "16px",
+  justifyContent: "center",
 });
 
 const StyledHeadingContainer = styled(Grid)({
@@ -138,7 +139,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               />
             </StyledHeadingContainer>
             {projectInfo && !isEmpty(projectInfo?.linkGroups) && (
-              <Grid item xs={12} sm={12} md={5} lg={4} xl={3}>
+              <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
                 <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups} />
               </Grid>
             )}
