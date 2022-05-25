@@ -204,7 +204,11 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
+                <MenuList
+                  autoFocusItem={open}
+                  id="account-options"
+                  onKeyDown={e => handleListKeyDown(e)}
+                >
                   <AvatarMenuItem>
                     <AvatarListItemIcon>
                       <UserAvatar initials={userInitials} />

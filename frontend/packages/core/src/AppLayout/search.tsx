@@ -130,6 +130,7 @@ const CustomCloseIcon: React.FC = () => {
 };
 
 const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
+  const { InputProps } = params;
   const searchRef = React.useRef();
   const handleKeyPress = (event: KeyboardEvent) => {
     if (searchRef.current) {
@@ -155,14 +156,14 @@ const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
       fullWidth
       inputRef={searchRef}
       InputProps={{
-        ...params.InputProps,
+        ...InputProps,
         disableUnderline: true,
         startAdornment: (
           <>
             <StartInputAdornment position="start">
               <SearchIcon />
             </StartInputAdornment>
-            {params.InputProps.startAdornment}
+            {InputProps.startAdornment}
           </>
         ),
       }}
@@ -278,7 +279,7 @@ const SearchField: React.FC = () => {
             popupIcon={<CustomCloseIcon />}
             forcePopupIcon={!!showOptions}
             noOptionsText="No results found"
-            onKeyDown={handleListKeyDown}
+            onKeyDown={e => handleListKeyDown(e)}
           />
         </ClickAwayListener>
       ) : (

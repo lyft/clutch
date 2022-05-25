@@ -30,6 +30,7 @@ module.exports = {
   },
   reportUnusedDisableDirectives: true,
   rules: {
+    "react/jsx-no-useless-fragment": ["error", { allowExpressions: true }],
     "react/function-component-definition": [
       "error",
       {
