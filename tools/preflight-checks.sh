@@ -9,11 +9,15 @@ MIN_GO_VERSION="1.17"
 MIN_NODE_VERSION="16.0.0"
 MIN_YARN_VERSION="1.22.0"
 
+SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 REPO_ROOT="${SCRIPT_ROOT}"
 # Use alternate root if provided as command line argument.
-if [[ -n "${1-}" ]]; then
+if [[ -n "${1-}" ]] && [[ "$1" == *"/"* ]]; then
   REPO_ROOT="${1}"
+  shift
 fi
+
+echo "${REPO_ROOT}"
 
 API_ROOT="${REPO_ROOT}/api"
 BUILD_ROOT="${REPO_ROOT}/build"
@@ -90,6 +94,7 @@ frontend() {
 }
 
 main() {
+  echo "Running pre-flight checks..."
   # always check OS level requirements
   os
 
@@ -108,6 +113,7 @@ main() {
     printf "\nPlease refer to the development requirements https://clutch.sh/docs/getting-started/local-build/#requirements"
     return 1
   fi
+  echo "Pre-flight checks satisfied!"
 }
 
 main "$@"
