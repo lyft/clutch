@@ -19,7 +19,6 @@ fi
 
 echo "${REPO_ROOT}"
 
-API_ROOT="${REPO_ROOT}/api"
 BUILD_ROOT="${REPO_ROOT}/build"
 
 # param 1 - required version
