@@ -89,7 +89,6 @@ const StyledMenuItemName = styled.span({
 });
 
 const StyledClearIcon = styled.span({
-  width: "36px",
   ".MuiIconButton-root": {
     padding: "6px",
     color: "rgba(13, 16, 48, 0.38)",
@@ -139,6 +138,18 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   const groupKeys = Object.keys(state?.[group] ?? {});
   const numProjects = groupKeys.length;
   const checkedProjects = groupKeys.filter(k => state?.[group][k].checked);
+
+  // We need to keep track of which project has its quick links open so that we know
+  // to hide the other projects' buttons
+  const [quickLinksWindowKey, setQuickLinksWindowKey] = React.useState<string>("");
+
+  const onCloseQuickLinks = () => {
+    setQuickLinksWindowKey("");
+  };
+
+  const onOpenQuickLinks = (projectName: string) => {
+    setQuickLinksWindowKey(projectName);
+  };
 
   return (
     <>
@@ -191,7 +202,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
                 checked={!!state?.[group][key].checked}
               />
               <StyledMenuItemName>{key}</StyledMenuItemName>
-              <StyledHoverOptions hidden>
+              <StyledHoverOptions hidden={quickLinksWindowKey !== key}>
                 <StyledOnlyButton
                   onClick={() =>
                     !state?.loading &&
@@ -224,7 +235,9 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
               {!state?.loading && state?.projectData?.[key]?.linkGroups && (
                 <ProjectLinks
                   linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
-                  name={[key]}
+                  onOpen={() => onOpenQuickLinks(key)}
+                  onClose={onCloseQuickLinks}
+                  showOpenButton={quickLinksWindowKey !== key}
                 />
               )}
             </StyledMenuItem>
