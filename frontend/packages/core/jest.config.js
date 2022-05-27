@@ -4,5 +4,8 @@ module.exports = {
   ...baseConfig,
   coverageThreshold: {
     ...baseConfig.coverageThreshold,
+    ".": {
+      statements: "47",
+    },
   },
 };
