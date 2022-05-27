@@ -41,9 +41,10 @@ const autoComplete = async (type: string, search: string): Promise<any> => {
     return { results: [] };
   }
 
+  // We lowercase the search to make the lookup case insensitive
   const response = await client.post("/v1/resolver/autocomplete", {
     want: `type.googleapis.com/${type}`,
-    search,
+    search: search.toLowerCase(),
   });
 
   return { results: response?.data?.results || [] };

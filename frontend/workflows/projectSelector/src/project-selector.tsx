@@ -190,9 +190,10 @@ const autoComplete = async (search: string): Promise<any> => {
     return { results: [] };
   }
 
+  // We lowercase the search to make the lookup case insensitive
   const response = await client.post("/v1/resolver/autocomplete", {
     want: `type.googleapis.com/clutch.core.project.v1.Project`,
-    search,
+    search: search.toLowerCase(),
   });
 
   return { results: response?.data?.results || [] };
