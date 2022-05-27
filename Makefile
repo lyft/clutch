@@ -85,7 +85,7 @@ backend-integration-test:
 	cd backend/internal/test/integration/chaos && ./do_integration_test.sh
 
 .PHONY: frontend # Build production frontend assets.
-frontend: preflight-checks-frontend yarn-install
+frontend: yarn-ensure preflight-checks-frontend yarn-install
 	$(YARN) --cwd frontend build
 
 .PHONY: frontend-dev-build # Build development frontend assets.
