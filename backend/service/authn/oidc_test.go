@@ -465,3 +465,68 @@ oidc:
 	err = claims.Check("authorization_code")
 	assert.NoError(t, err)
 }
+
+func TestConfigureableOIDCClaims(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  override_subject_claim_name: "email"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	defer mockprovider.Close()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+	p, err := NewOIDCProvider(ctx, cfg, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	token, err := p.Exchange(context.Background(), "aaa")
+	assert.NoError(t, err)
+	assert.NotNil(t, token)
+
+	c, err := p.Verify(context.Background(), token.AccessToken)
+	assert.NoError(t, err)
+	assert.NotNil(t, c)
+	assert.Equal(t, email, c.Subject)
+}
+
+func TestConfigureableOIDCClaimsNoFieldProducesError(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  override_subject_claim_name: "field_does_not_exist"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	defer mockprovider.Close()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+	p, err := NewOIDCProvider(ctx, cfg, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	_, err = p.Exchange(context.Background(), "aaa")
+	assert.Error(t, err)
+	assert.ErrorContains(t, err, "claims did not deserialize with field_does_not_exist field")
+}

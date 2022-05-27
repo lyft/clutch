@@ -405,7 +405,10 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 	if err := pClaims.Check("authorization_code"); err != nil {
 		return nil, err
 	}
-
+	claimsFromOIDCTokenFunc := DefaultClaimsFromOIDCToken
+	if c.OverrideSubjectClaimName != "" {
+		claimsFromOIDCTokenFunc = NewClaimsConfig(c.OverrideSubjectClaimName).ClaimsFromOIDCToken
+	}
 	p := &OIDCProvider{
 		providerAlias:              alias,
 		provider:                   provider,
@@ -413,12 +416,47 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 		oauth2:                     oc,
 		httpClient:                 ctx.Value(oauth2.HTTPClient).(*http.Client),
 		sessionSecret:              config.SessionSecret,
-		claimsFromOIDCToken:        DefaultClaimsFromOIDCToken,
+		claimsFromOIDCToken:        claimsFromOIDCTokenFunc,
 		tokenStorage:               tokenStorage,
 		enableServiceTokenCreation: tokenStorage != nil && config.EnableServiceTokenCreation,
 	}
 
 	return p, nil
+}
+
+func NewClaimsConfig(subjectClaimName string) *ClaimsConfig {
+	return &ClaimsConfig{
+		subjectClaimName: subjectClaimName,
+	}
+}
+
+type ClaimsConfig struct {
+	subjectClaimName string
+}
+
+func (cc *ClaimsConfig) ClaimsFromOIDCToken(ctx context.Context, t *oidc.IDToken) (*Claims, error) {
+	claims := make(map[string]interface{})
+	if err := t.Claims(&claims); err != nil {
+		return nil, err
+	}
+
+	subjectInt, ok := claims[cc.subjectClaimName]
+	if !ok {
+		return nil, fmt.Errorf("claims did not deserialize with %s field", cc.subjectClaimName)
+	}
+	subject, ok := subjectInt.(string)
+	if !ok {
+		return nil, fmt.Errorf("claims did not deserialize with %s field", cc.subjectClaimName)
+	}
+	if subject == "" {
+		return nil, errors.New("claims did not deserialize with desired fields")
+	}
+	sc := oidcTokenToStandardClaims(t)
+	sc.Subject = subject
+	return &Claims{
+		StandardClaims: sc,
+		Groups:         []string{""},
+	}, nil
 }
 
 func oidcTokenToStandardClaims(t *oidc.IDToken) *jwt.StandardClaims {
