@@ -1,6 +1,12 @@
 module.exports = {
   parser: "@babel/eslint-parser",
   ignorePatterns: ["build/", "dist/", "node_modules/"],
+  parserOptions: {
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ["@babel/preset-react"],
+    },
+  },
   extends: [
     "airbnb",
     "prettier",
