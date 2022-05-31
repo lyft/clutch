@@ -1,10 +1,10 @@
 import * as React from "react";
-// import styled from "@emotion/styled";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type {
   TableCellProps as MuiTableCellProps,
   TableProps as MuiTableProps,
   TableRowProps as MuiTableRowProps,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   IconButton,
   Paper as MuiPaper,
@@ -15,9 +15,8 @@ import {
   TableHead as MuiTableHead,
   TableRow as MuiTableRow,
   useMediaQuery,
-} from "@material-ui/core";
-import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+} from "@mui/material";
+import type { Breakpoint } from "@mui/material/styles";
 
 import { Popper, PopperItem } from "../popper";
 import styled from "../styled";
@@ -228,6 +227,7 @@ const TableRowActions = ({ children }: TableRowActionsProps) => {
         disabled={React.Children.count(children) <= 0}
         ref={anchorRef}
         onClick={() => setOpen(true)}
+        size="large"
       >
         <MoreVertIcon />
       </IconButton>
