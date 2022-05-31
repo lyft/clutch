@@ -4,8 +4,8 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { FeatureOn, Grid, IconButton, SimpleFeatureFlag, styled, Tooltip } from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import GroupIcon from "@material-ui/icons/Group";
-import SettingsIcon from "@material-ui/icons/Settings";
+import GroupIcon from "@mui/icons-material/Group";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { capitalize, isEmpty } from "lodash";
 
 import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "..";
@@ -41,7 +41,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
       container
       direction="row"
       alignItems="center"
-      justify="flex-end"
+      justifyContent="flex-end"
       spacing={1}
       style={{
         padding: "8px 32px 0px 0px",
@@ -53,7 +53,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
       <SimpleFeatureFlag feature="projectCatalogSettings">
         <FeatureOn>
           <Grid item>
-            <IconButton onClick={() => navigate("config")}>
+            <IconButton onClick={() => navigate("config")} size="large">
               <SettingsIcon />
             </IconButton>
           </Grid>

@@ -1,7 +1,7 @@
 import React from "react";
 import type { TypographyProps } from "@clutch-sh/core";
 import { Card, ClutchError, Error, Grid, styled, Typography } from "@clutch-sh/core";
-import { LinearProgress } from "@material-ui/core";
+import { LinearProgress } from "@mui/material";
 
 enum CardType {
   DYNAMIC = "Dynamic",
@@ -92,7 +92,7 @@ const CardTitle = ({ title, titleVariant = "h4", titleIcon, endAdornment }: Card
         xs={3}
         spacing={1}
         alignItems="center"
-        justify="flex-end"
+        justifyContent="flex-end"
       >
         {endAdornment}
       </Grid>

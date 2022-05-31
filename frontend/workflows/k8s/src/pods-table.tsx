@@ -11,7 +11,7 @@ import {
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
-import DeleteIcon from "@material-ui/icons/Delete";
+import DeleteIcon from "@mui/icons-material/Delete";
 import _ from "lodash";
 
 const PodsContainer = styled.div({
