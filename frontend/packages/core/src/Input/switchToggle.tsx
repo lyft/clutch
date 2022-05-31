@@ -6,8 +6,8 @@
 
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { SwitchProps as MuiSwitchProps } from "@material-ui/core";
-import { Switch as MuiSwitch } from "@material-ui/core";
+import type { SwitchProps as MuiSwitchProps } from "@mui/material";
+import { Switch as MuiSwitch } from "@mui/material";
 
 const SwitchContainer = styled(MuiSwitch)({
   ".MuiSwitch-switchBase": {

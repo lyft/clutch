@@ -5,7 +5,7 @@ import {
   FormControlLabel,
   FormLabel as MuiFormLabel,
   RadioGroup as MuiRadioGroup,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import Radio from "./radio";
 
