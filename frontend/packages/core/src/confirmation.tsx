@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Grid } from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { Grid } from "@mui/material";
 
 const IconContainer = styled(Grid)({
   paddingTop: "20px",
@@ -37,7 +37,7 @@ const SubtitleContainer = styled.div({
 });
 
 const Confirmation: React.FC<{ action: string }> = ({ action, children }) => (
-  <Grid container direction="column" justify="center" alignItems="center">
+  <Grid container direction="column" justifyContent="center" alignItems="center">
     <IconContainer item>
       <Icon />
     </IconContainer>

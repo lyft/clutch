@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Fab, Grid } from "@material-ui/core";
+import { Fab, Grid } from "@mui/material";
 
 import { ClipboardButton } from "./button";
 
@@ -37,13 +37,13 @@ const Code = ({ children, showCopyButton = true }: CodeProps) => (
   <Pre>
     {showCopyButton && (
       // TODO: Figure out a more permanent fix for the copy button
-      <CopyButtonContainer container justify="flex-end">
-        <Fab variant="round" size="small">
+      <CopyButtonContainer container justifyContent="flex-end">
+        <Fab variant="circular" size="small">
           <ClipboardButton text={children} />
         </Fab>
       </CopyButtonContainer>
     )}
-    <ContentContainer justify="flex-start" alignItems="center">
+    <ContentContainer justifyContent="flex-start" alignItems="center">
       {children}
     </ContentContainer>
   </Pre>
