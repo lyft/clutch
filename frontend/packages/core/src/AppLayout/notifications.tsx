@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import {
   ClickAwayListener,
   Grow as MuiGrow,
@@ -9,8 +10,7 @@ import {
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+} from "@mui/material";
 
 const StyledNotificationsIcon = styled(IconButton)({
   color: "#ffffff",

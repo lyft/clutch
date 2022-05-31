@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Grid as MuiGrid } from "@material-ui/core";
+import { Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import type { UserInformationProps } from "../user";
@@ -17,7 +17,7 @@ const Grid = styled(MuiGrid)({
 });
 
 const Template = (props: UserInformationProps) => (
-  <Grid container alignItems="center" justify="center">
+  <Grid container alignItems="center" justifyContent="center">
     <UserInformation {...props} />
   </Grid>
 );

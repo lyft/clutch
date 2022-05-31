@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   ClickAwayListener,
   Grid,
@@ -9,12 +11,10 @@ import {
   Popper as MuiPopper,
   TextField,
   Typography,
-} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import SearchIcon from "@material-ui/icons/Search";
-import type { AutocompleteRenderInputParams } from "@material-ui/lab/Autocomplete";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import type { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
+} from "@mui/material";
+import type { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
+import type { FilterOptionsState } from "@mui/material/useAutocomplete";
 import _ from "lodash";
 
 import { useAppContext } from "../Contexts";
@@ -197,12 +197,16 @@ const SearchField: React.FC = () => {
   const [showOptions, setShowOptions] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
-  const renderResult = (option: SearchIndex) => {
+  const renderResult = (props, option: SearchIndex) => {
     const handleSelection = () => {
       navigate(option.path);
     };
 
-    return <Result option={option} handleSelection={handleSelection} />;
+    return (
+      <li {...props}>
+        <Result option={option} handleSelection={handleSelection} />
+      </li>
+    );
   };
 
   const onInputChange = (__: React.ChangeEvent<{}>, value: string) => {
@@ -273,7 +277,7 @@ const SearchField: React.FC = () => {
             onClose={onOptionsClose}
             options={options}
             filterOptions={filterResults}
-            getOptionLabel={x => x.label}
+            getOptionLabel={option => option.label}
             PopperComponent={renderPopper}
             popupIcon={<CustomCloseIcon />}
             forcePopupIcon={!!showOptions}

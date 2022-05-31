@@ -12,7 +12,7 @@ import {
   MenuList as MuiMenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
+} from "@mui/material";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 

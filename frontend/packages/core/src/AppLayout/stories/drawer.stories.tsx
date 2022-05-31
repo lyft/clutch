@@ -1,6 +1,6 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
