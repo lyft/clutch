@@ -4,7 +4,7 @@ import type {
   ClickAwayListenerProps,
   ListItemProps,
   PopperProps as MuiPopperProps,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   ClickAwayListener,
   Collapse,
@@ -13,7 +13,7 @@ import {
   ListItemText as MuiListItemText,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const StyledPopper = styled(MuiPopper)({
   zIndex: 1201,

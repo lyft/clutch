@@ -1,14 +1,14 @@
 import * as React from "react";
+import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import type {
   ButtonProps as MuiButtonProps,
-  GridJustification,
   IconButtonProps as MuiIconButtonProps,
-} from "@material-ui/core";
-import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@material-ui/core";
-import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+} from "@mui/material";
+import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@mui/material";
 
 import { Tooltip } from "./Feedback/tooltip";
+import type { GridJustification } from "./grid";
 import styled from "./styled";
 
 interface ButtonPalette {
@@ -229,7 +229,7 @@ export interface ButtonGroupProps {
 
 /** A set of buttons to group together. */
 const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonGroupProps) => (
-  <ButtonGroupContainer container justify={justify} data-border={border}>
+  <ButtonGroupContainer container justifyContent={justify} data-border={border}>
     {children}
   </ButtonGroupContainer>
 );

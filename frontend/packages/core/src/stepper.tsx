@@ -1,13 +1,13 @@
 import * as React from "react";
 import styled from "@emotion/styled";
+import MuiCheckIcon from "@mui/icons-material/Check";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import {
   Step as MuiStep,
   StepConnector as MuiStepConnector,
   StepLabel as MuiStepLabel,
   Stepper as MuiStepper,
-} from "@material-ui/core";
-import MuiCheckIcon from "@material-ui/icons/Check";
-import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
+} from "@mui/material";
 
 const StepContainer = styled.div({
   margin: "0px 2px 30px 2px",
