@@ -1,7 +1,7 @@
 import React from "react";
 import type { ClutchError } from "@clutch-sh/core";
 import { Error, Loadable, styled, useWizardContext } from "@clutch-sh/core";
-import { Grid as MuiGrid } from "@material-ui/core";
+import { Grid as MuiGrid } from "@mui/material";
 
 const Grid = styled(MuiGrid)({
   width: "100%",
@@ -29,7 +29,7 @@ const WizardStep: React.FC<WizardStepProps> = ({ isLoading, error, children }) =
     return <Loadable isLoading={isLoading}>{children}</Loadable>;
   }
   return (
-    <Grid container justify="center" direction="column" alignItems="stretch">
+    <Grid container justifyContent="center" direction="column" alignItems="stretch">
       {hasError ? <Error subject={error} /> : children}
     </Grid>
   );
