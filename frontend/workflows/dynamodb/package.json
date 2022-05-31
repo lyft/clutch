@@ -7,7 +7,7 @@
   "author": "clutch@lyft.com",
   "main": "dist/index.js",
   "files": [
-    "dist" 
+    "dist"
   ],
   "scripts": {
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
@@ -26,8 +26,9 @@
     "@clutch-sh/data-layout": "^1.0.0-beta",
     "@clutch-sh/wizard": "^1.0.0-beta",
     "@emotion/styled": "^11.1.5",
-    "lodash": "4.17.21",
     "@material-ui/core": "^4.11.4",
+    "@mui/material": "^5.8.2",
+    "lodash": "4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "yup": "^0.32.8"
