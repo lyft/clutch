@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
-import { Grid as MuiGrid } from "@material-ui/core";
-import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
+import MuiSuccessIcon from "@mui/icons-material/CheckCircle";
+import { Grid as MuiGrid } from "@mui/material";
 import { debounce } from "lodash";
 import { v4 as uuid } from "uuid";
 

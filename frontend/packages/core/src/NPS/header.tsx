@@ -1,12 +1,12 @@
 import React from "react";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
   ClickAwayListener,
   Grow as MuiGrow,
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
-import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+} from "@mui/material";
 import { sortBy } from "lodash";
 
 import type { Workflow } from "../AppProvider/workflow";
