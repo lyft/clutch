@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
-import SearchIcon from "@material-ui/icons/Search";
+import SearchIcon from "@mui/icons-material/Search";
 
 import {
   Accordion,
