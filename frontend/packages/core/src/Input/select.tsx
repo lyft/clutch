@@ -1,6 +1,8 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { SelectProps as MuiSelectProps } from "@material-ui/core";
+import ErrorIcon from "@mui/icons-material/Error";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import type { SelectProps as MuiSelectProps } from "@mui/material";
 import {
   FormControl as MuiFormControl,
   FormHelperText as MuiFormHelperText,
@@ -8,9 +10,7 @@ import {
   ListSubheader,
   MenuItem,
   Select as MuiSelect,
-} from "@material-ui/core";
-import ErrorIcon from "@material-ui/icons/Error";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+} from "@mui/material";
 import { flatten } from "lodash";
 
 const StyledFormControl = styled(MuiFormControl)({
@@ -73,7 +73,6 @@ const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
       },
       anchorOrigin: { vertical: "bottom", horizontal: "left" },
       transformOrigin: { vertical: "top", horizontal: "left" },
-      getContentAnchorEl: null,
     }}
     {...props}
   />
@@ -230,7 +229,7 @@ const Select = ({
     }
   }, []);
 
-  const updateSelectedOption = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
+  const updateSelectedOption = event => {
     const { value } = event.target;
     // handle if selecting a header option
     if (!value) {

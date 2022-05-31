@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { RadioProps as MuiRadioProps } from "@material-ui/core";
-import { Radio as MuiRadio } from "@material-ui/core";
+import type { RadioProps as MuiRadioProps } from "@mui/material";
+import { Radio as MuiRadio } from "@mui/material";
 
 import styled from "../styled";
 

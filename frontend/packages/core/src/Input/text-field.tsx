@@ -1,19 +1,19 @@
 import * as React from "react";
 import type { FieldValues, UseFormRegister } from "react-hook-form";
 import styled from "@emotion/styled";
+import ErrorIcon from "@mui/icons-material/Error";
 import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   Grid,
   IconButton as MuiIconButton,
   Popper as MuiPopper,
   TextField as MuiTextField,
   Typography,
-} from "@material-ui/core";
-import ErrorIcon from "@material-ui/icons/Error";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+} from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import _ from "lodash";
 
 const KEY_ENTER = 13;
@@ -263,7 +263,7 @@ const TextField = ({
       onKeyDown,
       readOnly,
       endAdornment: endAdornment && (
-        <IconButton type="submit" disabled={isEmpty}>
+        <IconButton type="submit" disabled={isEmpty} size="large">
           {endAdornment}
         </IconButton>
       ),
