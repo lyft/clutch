@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 
 import { useShortLinkContext, WorkflowStorageContext } from "../Contexts";
 import { retrieveData as retrieveDataHelper } from "../Contexts/workflow-storage-context/helpers";
