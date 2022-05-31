@@ -2,8 +2,8 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Card, Grid, IconButton, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import CloseIcon from "@material-ui/icons/Close";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
+import CloseIcon from "@mui/icons-material/Close";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const StyledCard = styled(Card)({
   display: "flex",
@@ -47,7 +47,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
               {project?.name?.toUpperCase()}
             </Typography>
           </Grid>
-          <Grid container item className="showOnHover" justify="flex-end" xs={2}>
+          <Grid container item className="showOnHover" justifyContent="flex-end" xs={2}>
             <IconButton size="small" variant="neutral" onClick={remove}>
               <CloseIcon color="secondary" />
             </IconButton>
@@ -63,7 +63,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
           {project?.data?.description}
         </Typography>
       </Grid>
-      <Grid container item justify="flex-end" alignItems="center">
+      <Grid container item justifyContent="flex-end" alignItems="center">
         <KeyboardArrowRightIcon color="disabled" />
       </Grid>
     </StyledCard>

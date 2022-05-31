@@ -12,10 +12,10 @@ import {
   useWorkflowStorageContext,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import { Divider, LinearProgress } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
+import { Divider, LinearProgress } from "@mui/material";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
@@ -330,7 +330,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                   ))}
                 </>
               }
-              interactive
               maxWidth="400px"
               placement="right-start"
             >

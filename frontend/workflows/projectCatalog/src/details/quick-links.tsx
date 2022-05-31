@@ -11,7 +11,7 @@ import {
   TooltipContainer,
   Typography,
 } from "@clutch-sh/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 interface LinkGroupProps {
   linkGroupName: string;

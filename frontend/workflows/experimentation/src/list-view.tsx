@@ -10,9 +10,9 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
-} from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import Paper from "@mui/material/Paper";
+import makeStyles from "@mui/styles/makeStyles";
 
 import { compareProperties, propertyToString } from "./property-helpers";
 
@@ -191,8 +191,8 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
           count={items?.length ?? 0}
           rowsPerPage={rowsPerPage}
           page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
     </div>

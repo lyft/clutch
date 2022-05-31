@@ -3,10 +3,10 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { client, ClutchError, Error, Paper, Tab, Tabs } from "@clutch-sh/core";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
-import AppsIcon from "@material-ui/icons/Apps";
-import CropFreeIcon from "@material-ui/icons/CropFree";
-import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined";
-import LoopOutlinedIcon from "@material-ui/icons/LoopOutlined";
+import AppsIcon from "@mui/icons-material/Apps";
+import CropFreeIcon from "@mui/icons-material/CropFree";
+import DnsOutlinedIcon from "@mui/icons-material/DnsOutlined";
+import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
 
 import type { WorkflowProps } from ".";
 import CronTable from "./crons-table";

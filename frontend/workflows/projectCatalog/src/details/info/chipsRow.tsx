@@ -1,7 +1,7 @@
 import React from "react";
 import type { CHIP_VARIANTS } from "@clutch-sh/core";
 import { Chip, Grid, Link, Tooltip } from "@clutch-sh/core";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 export interface ProjectInfoChip {
   text: string;

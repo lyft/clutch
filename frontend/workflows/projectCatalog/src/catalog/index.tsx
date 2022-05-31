@@ -11,9 +11,9 @@ import {
   useNavigate,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import { Box, CircularProgress } from "@material-ui/core";
-import RestoreIcon from "@material-ui/icons/Restore";
-import SearchIcon from "@material-ui/icons/Search";
+import RestoreIcon from "@mui/icons-material/Restore";
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, CircularProgress } from "@mui/material";
 
 import type { WorkflowProps } from "..";
 
@@ -172,6 +172,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
                 true
               );
             }}
+            size="large"
           >
             <RestoreIcon />
           </IconButton>
@@ -186,7 +187,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
           ))}
         </Grid>
       ) : (
-        <Grid container justify="center" style={{ paddingTop: "35px" }}>
+        <Grid container justifyContent="center" style={{ paddingTop: "35px" }}>
           <Placeholder />
         </Grid>
       )}
