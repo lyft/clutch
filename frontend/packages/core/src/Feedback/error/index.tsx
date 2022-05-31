@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { IconButton } from "@material-ui/core";
-import MuiOpenInNewIcon from "@material-ui/icons/OpenInNew";
-import RefreshIcon from "@material-ui/icons/Refresh";
+import MuiOpenInNewIcon from "@mui/icons-material/OpenInNew";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { IconButton } from "@mui/material";
 
 import { Link } from "../../link";
 import type { ClutchError } from "../../Network/errors";
