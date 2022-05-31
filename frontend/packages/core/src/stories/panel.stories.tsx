@@ -1,18 +1,18 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 
-import type { ExpansionPanelProps } from "../panel";
-import ExpansionPanel from "../panel";
+import type { AccordionProps } from "../panel";
+import Accordion from "../panel";
 
 export default {
-  title: "Core/ExpansionPanel",
-  component: ExpansionPanel,
+  title: "Core/Accordion",
+  component: Accordion,
 } as Meta;
 
-const Template = (props: ExpansionPanelProps) => (
-  <ExpansionPanel {...props}>
+const Template = (props: AccordionProps) => (
+  <Accordion {...props}>
     <img alt="clutch logo" src="https://clutch.sh/img/navigation/logo.svg" height="100px" />
-  </ExpansionPanel>
+  </Accordion>
 );
 
 export const Primary = Template.bind({});

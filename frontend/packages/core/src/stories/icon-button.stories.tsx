@@ -1,5 +1,5 @@
 import * as React from "react";
-import SearchIcon from "@material-ui/icons/Search";
+import SearchIcon from "@mui/icons-material/Search";
 import type { Meta } from "@storybook/react";
 
 import type { IconButtonProps } from "../button";
@@ -18,7 +18,7 @@ export default {
 } as Meta;
 
 const Template = (props: IconButtonProps) => (
-  <IconButton {...props}>
+  <IconButton {...props} size="large">
     <SearchIcon />
   </IconButton>
 );
