@@ -1,9 +1,20 @@
 import React from "react";
 import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
-import { createMuiTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@material-ui/core";
-import { useTheme as useMuiTheme } from "@material-ui/core/styles";
-import type { PaletteOptions } from "@material-ui/core/styles/createPalette";
-import { StylesProvider } from "@material-ui/styles";
+import type { Theme as MuiTheme } from "@mui/material";
+import {
+  adaptV4Theme,
+  createTheme as createMuiTheme,
+  CssBaseline,
+  DeprecatedThemeOptions,
+  StyledEngineProvider,
+  ThemeProvider as MuiThemeProvider,
+} from "@mui/material";
+import { PaletteOptions, useTheme as useMuiTheme } from "@mui/material/styles";
+import { StylesProvider } from "@mui/styles";
+
+declare module "@mui/styles/defaultTheme" {
+  interface DefaultTheme extends MuiTheme {}
+}
 
 interface ClutchPalette extends PaletteOptions {
   accent: {
@@ -14,7 +25,7 @@ interface ClutchPalette extends PaletteOptions {
   };
 }
 
-interface ClutchTheme extends ThemeOptions {
+interface ClutchTheme extends DeprecatedThemeOptions {
   palette: ClutchPalette;
 }
 
@@ -50,37 +61,40 @@ const lightPalette = (): ClutchPalette => {
 };
 
 const lightTheme = () => {
-  return createMuiTheme({
-    palette: lightPalette(),
-    transitions: {
-      // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
-      create: () => "none",
-    },
-    props: {
-      MuiButtonBase: {
-        // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
-        disableRipple: true,
+  return createMuiTheme(
+    adaptV4Theme({
+      palette: lightPalette(),
+      transitions: {
+        // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
+        create: () => "none",
       },
-    },
-    overrides: {
-      MuiAccordion: {
-        root: {
-          "&$expanded": {
-            // remove the additional margin rule when expanded so the original margin is used.
-            margin: null,
+      props: {
+        MuiButtonBase: {
+          // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
+          disableRipple: true,
+        },
+      },
+      overrides: {
+        MuiAccordion: {
+          root: {
+            "&$expanded": {
+              // remove the additional margin rule when expanded so the original margin is used.
+              margin: null,
+            },
           },
         },
+        // TODO: Figure out if this needs to be adjusted
+        // MuiTypography: {
+        //   colorPrimary: {
+        //     color: NAVY,
+        //   },
+        //   colorSecondary: {
+        //     color: GRAY,
+        //   },
+        // },
       },
-      MuiTypography: {
-        colorPrimary: {
-          color: NAVY,
-        },
-        colorSecondary: {
-          color: GRAY,
-        },
-      },
-    },
-  });
+    })
+  );
 };
 
 const useTheme = () => {
@@ -96,12 +110,14 @@ interface ThemeProps {
 const Theme: React.FC<ThemeProps> = ({ children }) => {
   const theme = lightTheme;
   return (
-    <MuiThemeProvider theme={theme()}>
-      <EmotionThemeProvider theme={theme()}>
-        <CssBaseline />
-        <StylesProvider injectFirst>{children}</StylesProvider>
-      </EmotionThemeProvider>
-    </MuiThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <MuiThemeProvider theme={theme()}>
+        <EmotionThemeProvider theme={theme()}>
+          <CssBaseline />
+          <StylesProvider injectFirst>{children}</StylesProvider>
+        </EmotionThemeProvider>
+      </MuiThemeProvider>
+    </StyledEngineProvider>
   );
 };
 
