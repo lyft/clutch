@@ -1,5 +1,5 @@
 import * as React from "react";
-import ErrorIcon from "@material-ui/icons/Error";
+import ErrorIcon from "@mui/icons-material/Error";
 import type { Meta } from "@storybook/react";
 
 import type { HorizontalRuleProps } from "../horizontal-rule";

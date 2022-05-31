@@ -1,6 +1,6 @@
 import React from "react";
-import { IconButton } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { IconButton } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import type { PopperProps } from "../popper";
@@ -22,6 +22,7 @@ const Template = ({ children, ...props }: PopperProps) => {
         disabled={React.Children.count(children) <= 0}
         ref={anchorRef}
         onClick={() => setOpen(true)}
+        size="large"
       >
         <MoreVertIcon />
       </IconButton>
