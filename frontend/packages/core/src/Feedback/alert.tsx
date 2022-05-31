@@ -1,11 +1,10 @@
 import * as React from "react";
-import { Grid } from "@material-ui/core";
-import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
-import MuiErrorIcon from "@material-ui/icons/Error";
-import MuiInfoIcon from "@material-ui/icons/Info";
-import MuiWarningIcon from "@material-ui/icons/Warning";
-import type { AlertProps as MuiAlertProps } from "@material-ui/lab";
-import { Alert as MuiAlert, AlertTitle as MuiAlertTitle } from "@material-ui/lab";
+import MuiSuccessIcon from "@mui/icons-material/CheckCircle";
+import MuiErrorIcon from "@mui/icons-material/Error";
+import MuiInfoIcon from "@mui/icons-material/Info";
+import MuiWarningIcon from "@mui/icons-material/Warning";
+import type { AlertProps as MuiAlertProps } from "@mui/lab";
+import { Alert as MuiAlert, AlertTitle as MuiAlertTitle, Grid } from "@mui/material";
 
 import styled from "../styled";
 
@@ -91,7 +90,13 @@ export interface AlertPanelProps {
 }
 
 export const AlertPanel = ({ direction = "column", children }: AlertPanelProps) => (
-  <Grid container direction={direction} justify="center" alignContent="space-between" wrap="nowrap">
+  <Grid
+    container
+    direction={direction}
+    justifyContent="center"
+    alignContent="space-between"
+    wrap="nowrap"
+  >
     {children}
   </Grid>
 );

@@ -1,4 +1,6 @@
 import React from "react";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import {
   Accordion as MuiAccordion,
   AccordionDetails as MuiAccordionDetails,
@@ -6,9 +8,7 @@ import {
   Button,
   Grid,
   useControlled,
-} from "@material-ui/core";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+} from "@mui/material";
 
 import type { ClutchError } from "../../Network/errors";
 import { isClutchErrorDetails } from "../../Network/errors";
@@ -175,7 +175,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                 </ul>
               </div>
             )}
-            <Grid container justify="flex-end">
+            <Grid container justifyContent="flex-end">
               <DialogButton onClick={() => setDetailsOpen(true)}>More Details</DialogButton>
             </Grid>
           </ErrorDetailContainer>
