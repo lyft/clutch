@@ -12,11 +12,11 @@ import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
 import type { ClutchError } from "../Network/errors";
 import NotFound from "../not-found";
-import { Theme } from "../Theme";
 
 import { registeredWorkflows } from "./registrar";
 import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";
 import ShortLinkStateHydrator from "./short-link-state-hydrator";
+import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
 

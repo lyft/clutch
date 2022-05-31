@@ -278,7 +278,7 @@ const SearchField: React.FC = () => {
             onClose={onOptionsClose}
             options={options}
             filterOptions={filterResults}
-            getOptionLabel={option => option.label}
+            getOptionLabel={x => (typeof x === "object" ? x.label : x)}
             PopperComponent={renderPopper}
             popupIcon={<CustomCloseIcon />}
             forcePopupIcon={!!showOptions}
