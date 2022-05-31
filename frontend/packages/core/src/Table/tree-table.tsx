@@ -1,11 +1,11 @@
 import React, { forwardRef } from "react";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Search from "@material-ui/icons/Search";
+import ArrowUpward from "@mui/icons-material/ArrowUpward";
+import ChevronLeft from "@mui/icons-material/ChevronLeft";
+import ChevronRight from "@mui/icons-material/ChevronRight";
+import Clear from "@mui/icons-material/Clear";
+import FirstPage from "@mui/icons-material/FirstPage";
+import LastPage from "@mui/icons-material/LastPage";
+import Search from "@mui/icons-material/Search";
 import MaterialTable from "material-table";
 
 // n.b. this exists to bridge incompatibilities between the
