@@ -21,7 +21,7 @@ require (
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.2.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/envoyproxy/go-control-plane v0.10.1
+	github.com/envoyproxy/go-control-plane v0.10.2-0.20220325020618-49ff273808a1
 	github.com/envoyproxy/protoc-gen-validate v0.6.7
 	github.com/fullstorydev/grpcurl v1.8.6
 	github.com/go-git/go-billy/v5 v5.3.1
@@ -33,7 +33,7 @@ require (
 	github.com/google/go-github/v37 v37.0.0
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.3
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jhump/protoreflect v1.12.0
 	github.com/joho/godotenv v1.4.0
@@ -49,14 +49,14 @@ require (
 	go.temporal.io/sdk/contrib/tally v0.1.0
 	go.uber.org/zap v1.21.0
 	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b
-	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
+	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20220401170504-314d38edb7de
-	google.golang.org/grpc v1.45.0
+	google.golang.org/genproto v0.0.0-20220519153652-3a47de7e79bd
+	google.golang.org/grpc v1.46.2
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
 	google.golang.org/protobuf v1.28.0
 	gopkg.in/square/go-jose.v2 v2.6.0
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/api v0.23.6
 	k8s.io/apimachinery v0.23.6
 	k8s.io/client-go v0.23.6
@@ -95,7 +95,7 @@ require (
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/mock v1.6.0 // indirect
-	github.com/google/go-cmp v0.5.7 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/google/go-github/v29 v29.0.3 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
