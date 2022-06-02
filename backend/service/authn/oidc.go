@@ -406,8 +406,8 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 		return nil, err
 	}
 	claimsFromOIDCTokenFunc := DefaultClaimsFromOIDCToken
-	if c.OverrideSubjectClaimName != "" {
-		claimsFromOIDCTokenFunc = NewClaimsConfig(c.OverrideSubjectClaimName).ClaimsFromOIDCToken
+	if c.SubjectClaimNameOverride != "" {
+		claimsFromOIDCTokenFunc = NewClaimsConfig(c.SubjectClaimNameOverride).ClaimsFromOIDCToken
 	}
 	p := &OIDCProvider{
 		providerAlias:              alias,
@@ -442,14 +442,14 @@ func (cc *ClaimsConfig) ClaimsFromOIDCToken(ctx context.Context, t *oidc.IDToken
 
 	subjectInt, ok := claims[cc.subjectClaimName]
 	if !ok {
-		return nil, fmt.Errorf("claims did not deserialize with %s field", cc.subjectClaimName)
+		return nil, fmt.Errorf("claims do not contain %s field", cc.subjectClaimName)
 	}
 	subject, ok := subjectInt.(string)
 	if !ok {
-		return nil, fmt.Errorf("claims did not deserialize with %s field", cc.subjectClaimName)
+		return nil, fmt.Errorf("claims field %s does not contain string value", cc.subjectClaimName)
 	}
 	if subject == "" {
-		return nil, errors.New("claims did not deserialize with desired fields")
+		return nil, errors.New("claims field %s is empty")
 	}
 	sc := oidcTokenToStandardClaims(t)
 	sc.Subject = subject

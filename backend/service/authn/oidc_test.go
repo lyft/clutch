@@ -475,7 +475,7 @@ oidc:
   client_id: my_client_id
   client_secret: my_client_secret
   redirect_url: "http://localhost:12000/v1/authn/callback"
-  override_subject_claim_name: "email"
+  subject_claim_name_override: "email"
   scopes:
   - openid
   - email
@@ -510,7 +510,7 @@ oidc:
   client_id: my_client_id
   client_secret: my_client_secret
   redirect_url: "http://localhost:12000/v1/authn/callback"
-  override_subject_claim_name: "field_does_not_exist"
+  subject_claim_name_override: "field_does_not_exist"
   scopes:
   - openid
   - email
@@ -528,5 +528,5 @@ oidc:
 
 	_, err = p.Exchange(context.Background(), "aaa")
 	assert.Error(t, err)
-	assert.ErrorContains(t, err, "claims did not deserialize with field_does_not_exist field")
+	assert.ErrorContains(t, err, "claims do not contain field_does_not_exist field")
 }

@@ -20633,7 +20633,7 @@ export const clutch = $root.clutch = (() => {
                          * @property {string|null} [clientSecret] OIDC clientSecret
                          * @property {string|null} [redirectUrl] OIDC redirectUrl
                          * @property {Array.<string>|null} [scopes] OIDC scopes
-                         * @property {string|null} [overrideSubjectClaimName] OIDC overrideSubjectClaimName
+                         * @property {string|null} [subjectClaimNameOverride] OIDC subjectClaimNameOverride
                          */
 
                         /**
@@ -20693,12 +20693,12 @@ export const clutch = $root.clutch = (() => {
                         OIDC.prototype.scopes = $util.emptyArray;
 
                         /**
-                         * OIDC overrideSubjectClaimName.
-                         * @member {string} overrideSubjectClaimName
+                         * OIDC subjectClaimNameOverride.
+                         * @member {string} subjectClaimNameOverride
                          * @memberof clutch.config.service.authn.v1.OIDC
                          * @instance
                          */
-                        OIDC.prototype.overrideSubjectClaimName = "";
+                        OIDC.prototype.subjectClaimNameOverride = "";
 
                         /**
                          * Verifies a OIDC message.
@@ -20730,9 +20730,9 @@ export const clutch = $root.clutch = (() => {
                                     if (!$util.isString(message.scopes[i]))
                                         return "scopes: string[] expected";
                             }
-                            if (message.overrideSubjectClaimName != null && message.hasOwnProperty("overrideSubjectClaimName"))
-                                if (!$util.isString(message.overrideSubjectClaimName))
-                                    return "overrideSubjectClaimName: string expected";
+                            if (message.subjectClaimNameOverride != null && message.hasOwnProperty("subjectClaimNameOverride"))
+                                if (!$util.isString(message.subjectClaimNameOverride))
+                                    return "subjectClaimNameOverride: string expected";
                             return null;
                         };
 
@@ -20763,8 +20763,8 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < object.scopes.length; ++i)
                                     message.scopes[i] = String(object.scopes[i]);
                             }
-                            if (object.overrideSubjectClaimName != null)
-                                message.overrideSubjectClaimName = String(object.overrideSubjectClaimName);
+                            if (object.subjectClaimNameOverride != null)
+                                message.subjectClaimNameOverride = String(object.subjectClaimNameOverride);
                             return message;
                         };
 
@@ -20788,7 +20788,7 @@ export const clutch = $root.clutch = (() => {
                                 object.clientId = "";
                                 object.clientSecret = "";
                                 object.redirectUrl = "";
-                                object.overrideSubjectClaimName = "";
+                                object.subjectClaimNameOverride = "";
                             }
                             if (message.issuer != null && message.hasOwnProperty("issuer"))
                                 object.issuer = message.issuer;
@@ -20803,8 +20803,8 @@ export const clutch = $root.clutch = (() => {
                                 for (let j = 0; j < message.scopes.length; ++j)
                                     object.scopes[j] = message.scopes[j];
                             }
-                            if (message.overrideSubjectClaimName != null && message.hasOwnProperty("overrideSubjectClaimName"))
-                                object.overrideSubjectClaimName = message.overrideSubjectClaimName;
+                            if (message.subjectClaimNameOverride != null && message.hasOwnProperty("subjectClaimNameOverride"))
+                                object.subjectClaimNameOverride = message.subjectClaimNameOverride;
                             return object;
                         };
 

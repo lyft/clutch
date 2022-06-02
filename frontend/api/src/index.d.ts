@@ -8597,8 +8597,8 @@ export namespace clutch {
                         /** OIDC scopes */
                         scopes?: (string[]|null);
 
-                        /** OIDC overrideSubjectClaimName */
-                        overrideSubjectClaimName?: (string|null);
+                        /** OIDC subjectClaimNameOverride */
+                        subjectClaimNameOverride?: (string|null);
                     }
 
                     /** Represents a OIDC. */
@@ -8625,8 +8625,8 @@ export namespace clutch {
                         /** OIDC scopes. */
                         public scopes: string[];
 
-                        /** OIDC overrideSubjectClaimName. */
-                        public overrideSubjectClaimName: string;
+                        /** OIDC subjectClaimNameOverride. */
+                        public subjectClaimNameOverride: string;
 
                         /**
                          * Verifies a OIDC message.

@@ -15,7 +15,7 @@ message OIDC {
 
   repeated string scopes = 5;
 
-  string override_subject_claim_name= 6;
+  string subject_claim_name_override = 6;
 }
 
 message Config {
