@@ -82,12 +82,12 @@ const Notifications: React.FC<NotificationsProp> = ({ data }) => {
     setOpen(false);
   };
 
-  function handleListKeyDown(event) {
+  const handleListKeyDown = event => {
     if (event.key === "Tab") {
       event.preventDefault();
       setOpen(false);
     }
-  }
+  };
 
   return (
     <>
@@ -111,7 +111,7 @@ const Notifications: React.FC<NotificationsProp> = ({ data }) => {
                 <MenuList
                   autoFocusItem={open}
                   id="notification-options"
-                  onKeyDown={e => handleListKeyDown(e)}
+                  onKeyDown={handleListKeyDown}
                 >
                   {data?.map(d => {
                     return (

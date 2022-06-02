@@ -250,12 +250,12 @@ const SearchField: React.FC = () => {
 
   // If workflow selected by pressing enter/return,
   // update the open state to collapse search bar to search icon
-  function handleListKeyDown(event) {
+  const handleListKeyDown = event => {
     if (event.key === "Enter") {
       event.preventDefault();
       setOpen(false);
     }
-  }
+  };
 
   return (
     <Grid container alignItems="center">
@@ -279,7 +279,7 @@ const SearchField: React.FC = () => {
             popupIcon={<CustomCloseIcon />}
             forcePopupIcon={!!showOptions}
             noOptionsText="No results found"
-            onKeyDown={e => handleListKeyDown(e)}
+            onKeyDown={handleListKeyDown}
           />
         </ClickAwayListener>
       ) : (

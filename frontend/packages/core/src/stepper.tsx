@@ -150,6 +150,7 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
   );
 };
 
+/* Because these props are just used on the children of Step, they are throwing an error as unused */
 /* eslint-disable react/no-unused-prop-types */
 export interface StepProps {
   label: string;

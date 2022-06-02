@@ -178,12 +178,12 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
     setOpen(false);
   };
 
-  function handleListKeyDown(event) {
+  const handleListKeyDown = event => {
     if (event.key === "Tab") {
       event.preventDefault();
       setOpen(false);
     }
-  }
+  };
 
   return (
     <>
@@ -204,11 +204,7 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList
-                  autoFocusItem={open}
-                  id="account-options"
-                  onKeyDown={e => handleListKeyDown(e)}
-                >
+                <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
                   <AvatarMenuItem>
                     <AvatarListItemIcon>
                       <UserAvatar initials={userInitials} />
