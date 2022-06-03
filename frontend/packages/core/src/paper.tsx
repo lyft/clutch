@@ -10,6 +10,8 @@ const StyledPaper = styled(MuiPaper)({
   border: "1px solid rgba(13, 16, 48, 0.1)",
   background: "#FFFFFF",
   padding: "16px",
+  minWidth: "inherit",
+  minHeight: "inherit",
 });
 
 const Paper = ({ children }: PaperProps) => <StyledPaper>{children}</StyledPaper>;
