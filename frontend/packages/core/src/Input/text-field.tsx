@@ -29,27 +29,29 @@ const BaseTextField = ({ InputProps, InputLabelProps, ...props }: MuiStandardTex
 
 const StyledTextField = styled(BaseTextField)({
   ".MuiInputLabel-root": {
-    fontSize: "14px",
-    fontWeight: 500,
-    transform: "scale(1)",
-    marginLeft: "2px",
-  },
-
-  ".MuiInputLabel-root, .MuiInputLabel-root.Mui-focused": {
     color: "rgba(13, 16, 48, 0.6)",
   },
 
-  ".MuiInputLabel-root.Mui-disabled": {
-    color: "rgba(13, 16, 48, 0.38)",
+  "& label.Mui-focused": {
+    color: "rgba(13, 16, 48, 0.6)",
   },
-
-  ".MuiInputLabel-root.Mui-error": {
-    color: "#db3615",
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "rgba(13, 16, 48, 0.38)",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#3548d4",
+      borderWidth: "1px",
+    },
+    "&.Mui-error fieldset": {
+      borderColor: "#db3615",
+      borderWidth: "1px",
+    },
   },
 
   ".MuiInputBase-root": {
-    border: "1px solid rgba(13, 16, 48, 0.38)",
     borderRadius: "4px",
+    paddingRight: "0px",
     fontSize: "16px",
     color: "#0D1030",
     backgroundColor: "#FFFFFF",
@@ -67,7 +69,7 @@ const StyledTextField = styled(BaseTextField)({
     backgroundColor: "rgba(13, 16, 48, 0.12)",
   },
 
-  ".MuiInput-input": {
+  ".MuiInputBase-input": {
     padding: "14px 16px",
     height: "20px",
   },
@@ -84,6 +86,7 @@ const StyledTextField = styled(BaseTextField)({
     fontSize: "12px",
     marginTop: "7px",
     lineHeight: "16px",
+    marginLeft: "0px",
   },
 
   ".MuiFormHelperText-root.Mui-error": {
@@ -337,6 +340,7 @@ const TextField = ({
   return (
     <StyledTextField
       {...textFieldProps}
+      size="small"
       defaultValue={defaultValue}
       value={value}
       onChange={onChange}
