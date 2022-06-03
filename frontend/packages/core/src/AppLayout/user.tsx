@@ -211,11 +211,13 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
                     </AvatarListItemIcon>
                     <AvatarListItemText>{user}</AvatarListItemText>
                   </AvatarMenuItem>
-                  {data?.length === 0 ? null : <Divider />}
-                  {data?.map(d => (
-                    <MenuItem>
-                      <ListItemText>{d.value}</ListItemText>
-                    </MenuItem>
+                  {data?.map((d, i) => (
+                    <>
+                      <MenuItem>
+                        <ListItemText>{d.value}</ListItemText>
+                      </MenuItem>
+                      {i > 0 && i < data.length && <Divider />}
+                    </>
                   ))}
                 </MenuList>
               </ClickAwayListener>

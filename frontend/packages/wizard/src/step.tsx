@@ -1,9 +1,8 @@
 import React from "react";
 import type { ClutchError } from "@clutch-sh/core";
-import { Error, Loadable, styled, useWizardContext } from "@clutch-sh/core";
-import { Grid as MuiGrid } from "@mui/material";
+import { Error, Grid as ClutchGrid, Loadable, styled, useWizardContext } from "@clutch-sh/core";
 
-const Grid = styled(MuiGrid)({
+const Grid = styled(ClutchGrid)({
   width: "100%",
   "> *": {
     margin: "8px 0",

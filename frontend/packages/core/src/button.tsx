@@ -104,6 +104,7 @@ const StyledButton = styled(MuiButton)<{ palette: ButtonPalette }>(
     textTransform: "none",
     height: "48px",
     padding: "14px 32px",
+    margin: "12px 8px",
   },
   props => colorCss(props.palette)
 );
@@ -174,12 +175,11 @@ const StyledIconButton = styled(MuiIconButton)<{
   ...colorCss(props.$palette),
 }));
 
-// TODO: (jslaughter) Update when large sizing is available with material-ui@5
-export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick"> {
+export interface IconButtonProps
+  extends Pick<MuiIconButtonProps, "disabled" | "type" | "onClick" | "size"> {
   /** The button variantion. Defaults to primary. */
   variant?: ButtonVariant;
   children: React.ReactElement;
-  size?: IconButtonSize;
 }
 
 /**

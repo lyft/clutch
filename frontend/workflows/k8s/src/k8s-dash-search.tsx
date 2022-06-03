@@ -76,6 +76,7 @@ const K8sDashSearch = ({ onSubmit }) => {
             <TextField
               defaultValue={inputData.displayValue()?.namespace}
               placeholder="Namespace"
+              label="Namespace"
               name="namespace"
               error={!!errors?.namespace}
               helperText={errors?.namespace?.message}
@@ -84,12 +85,13 @@ const K8sDashSearch = ({ onSubmit }) => {
             <TextField
               defaultValue={inputData.displayValue()?.clientset}
               placeholder="Clientset"
+              label="Clientset"
               name="clientset"
               error={!!errors?.clientset}
               helperText={errors?.clientset?.message}
               formRegistration={register}
             />
-            <IconButton type="submit" size="large">
+            <IconButton type="submit">
               <SearchIcon />
             </IconButton>
           </FormRow>
