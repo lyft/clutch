@@ -449,7 +449,7 @@ func (cc *ClaimsConfig) ClaimsFromOIDCToken(ctx context.Context, t *oidc.IDToken
 		return nil, fmt.Errorf("claims field %s does not contain string value", cc.subjectClaimName)
 	}
 	if subject == "" {
-		return nil, errors.New("claims field %s is empty")
+		return nil, fmt.Errorf("claims field %s is empty", cc.subjectClaimName)
 	}
 	sc := oidcTokenToStandardClaims(t)
 	sc.Subject = subject

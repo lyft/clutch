@@ -530,3 +530,65 @@ oidc:
 	assert.Error(t, err)
 	assert.ErrorContains(t, err, "claims do not contain field_does_not_exist field")
 }
+
+func TestConfigureableOIDCClaimsWrongFieldTypeProducesError(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  subject_claim_name_override: "groups"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider.SetGroupClaim([]string{"group1", "group2"})
+	defer mockprovider.Close()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+	p, err := NewOIDCProvider(ctx, cfg, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	_, err = p.Exchange(context.Background(), "aaa")
+	assert.Error(t, err)
+	assert.ErrorContains(t, err, "claims field groups does not contain string value")
+}
+
+func TestConfigureableOIDCClaimsEmptyFieldProducesError(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  subject_claim_name_override: "custom_claim"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider.SetCustomClaim("")
+	defer mockprovider.Close()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+	p, err := NewOIDCProvider(ctx, cfg, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	_, err = p.Exchange(context.Background(), "aaa")
+	assert.Error(t, err)
+	assert.ErrorContains(t, err, "claims field custom_claim is empty")
+}
