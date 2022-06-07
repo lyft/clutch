@@ -42,14 +42,26 @@ type MockOIDCProviderServer struct {
 	srv    *httptest.Server
 	client *http.Client
 
-	email string
+	email       string
+	groups      []string
+	customClaim string
 
 	TokenCount int
 }
 
 type testIdTokenClaims struct {
 	*jwt.StandardClaims
-	Email string `json:"email"`
+	Email       string   `json:"email"`
+	Groups      []string `json:"groups"`
+	CustomClaim string   `json:"custom_claim"`
+}
+
+func (m *MockOIDCProviderServer) SetGroupClaim(groups []string) {
+	m.groups = groups
+}
+
+func (m *MockOIDCProviderServer) SetCustomClaim(customClaim string) {
+	m.customClaim = customClaim
 }
 
 func (m *MockOIDCProviderServer) Close() {
@@ -73,7 +85,9 @@ func (m *MockOIDCProviderServer) handle(w http.ResponseWriter, r *http.Request) 
 				Audience:  "my_client_id",
 				ExpiresAt: math.MaxInt32,
 			},
-			Email: m.email,
+			Email:       m.email,
+			Groups:      m.groups,
+			CustomClaim: m.customClaim,
 		}
 
 		tok, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(m.Key)
