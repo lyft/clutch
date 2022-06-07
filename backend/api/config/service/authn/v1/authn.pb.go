@@ -26,12 +26,14 @@ type OIDC struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Issuer                   string   `protobuf:"bytes,1,opt,name=issuer,proto3" json:"issuer,omitempty"`
-	ClientId                 string   `protobuf:"bytes,2,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
-	ClientSecret             string   `protobuf:"bytes,3,opt,name=client_secret,json=clientSecret,proto3" json:"client_secret,omitempty"`
-	RedirectUrl              string   `protobuf:"bytes,4,opt,name=redirect_url,json=redirectUrl,proto3" json:"redirect_url,omitempty"`
-	Scopes                   []string `protobuf:"bytes,5,rep,name=scopes,proto3" json:"scopes,omitempty"`
-	SubjectClaimNameOverride string   `protobuf:"bytes,6,opt,name=subject_claim_name_override,json=subjectClaimNameOverride,proto3" json:"subject_claim_name_override,omitempty"`
+	Issuer       string   `protobuf:"bytes,1,opt,name=issuer,proto3" json:"issuer,omitempty"`
+	ClientId     string   `protobuf:"bytes,2,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	ClientSecret string   `protobuf:"bytes,3,opt,name=client_secret,json=clientSecret,proto3" json:"client_secret,omitempty"`
+	RedirectUrl  string   `protobuf:"bytes,4,opt,name=redirect_url,json=redirectUrl,proto3" json:"redirect_url,omitempty"`
+	Scopes       []string `protobuf:"bytes,5,rep,name=scopes,proto3" json:"scopes,omitempty"`
+	// The subject is mapped from the JWT token's email claim by default.
+	// Set this field to the JWT token's claim name to override the subject.
+	SubjectClaimNameOverride string `protobuf:"bytes,6,opt,name=subject_claim_name_override,json=subjectClaimNameOverride,proto3" json:"subject_claim_name_override,omitempty"`
 }
 
 func (x *OIDC) Reset() {
