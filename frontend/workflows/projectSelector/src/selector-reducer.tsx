@@ -165,7 +165,6 @@ const selectorReducer = (state: State, action: Action): State => {
       };
     }
     // Background actions.
-
     case "HYDRATE_START": {
       return { ...state, loading: true };
     }
@@ -279,6 +278,9 @@ const selectorReducer = (state: State, action: Action): State => {
         loading: false,
         error: action?.payload?.result,
       };
+    }
+    case "CLEAR_PROJECT_ERRORS": {
+      return { ...state, projectErrors: [] };
     }
     default:
       throw new Error(`unknown resolver action`);

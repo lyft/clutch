@@ -44,6 +44,7 @@ export * from "./Assets/emojis";
 export * from "./NPS";
 export * from "./chip";
 export * from "./Charts";
+export * from "./Assets/icons";
 
 export { default as ClutchApp } from "./AppProvider";
 

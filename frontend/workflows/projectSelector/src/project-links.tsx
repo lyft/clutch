@@ -22,14 +22,13 @@ const itemHoverStyle = {
 
 const StyledMenuItem = styled.div({
   ...itemHoverStyle,
-  padding: "8px",
 });
 
 const StyledSubLink = styled.div({
   ...itemHoverStyle,
-  paddingBottom: "4px",
-  paddingRight: "4px",
-  paddingLeft: "46px",
+  paddingBottom: "8px",
+  paddingTop: "8px",
+  paddingLeft: "40px",
 });
 
 const StyledMoreVertIcon = styled.span({
@@ -47,23 +46,33 @@ const StyledMoreVertIcon = styled.span({
 
 const StyledLinkTitle = styled.span({
   fontWeight: "bold",
+  padding: "7px 0px",
+});
+
+const StyledMultiLinkTitle = styled.span({
+  fontWeight: "bold",
 });
 
 const StyledLinkBox = styled.div({
   borderRadius: "4px",
+  width: "160px",
 });
 
 const StyledMultilinkImage = styled.div({
-  paddingLeft: "6px",
-  paddingRight: "6px",
-  paddingTop: "6px",
+  display: "flex",
+  padding: "8px",
 });
 
-const StyledMultilinkTitle = styled.div({
+const StyledMultilinkHeader = styled.div({
   display: "flex",
   alignItems: "center",
 });
 
+const StyledCenterImgSpan = styled.span({
+  display: "flex",
+  alignItems: "center",
+  padding: "8px",
+});
 interface QuickLinkGroupProps extends LinkGroupProps {
   links: IClutch.core.project.v1.ILink[];
 }
@@ -86,23 +95,25 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   return validLinks.length === 1 ? (
     <StyledMenuItem key={validLinks[0].url}>
       <Link href={validLinks[0]?.url ?? ""}>
-        <img
-          width={ICON_SIZE}
-          height={ICON_SIZE}
-          src={linkGroupImage}
-          alt={validLinks[0].name ?? `Quick Link to ${validLinks[0].url}`}
-        />
-        <StyledLinkTitle style={{ paddingLeft: "6px" }}>{linkGroupName}</StyledLinkTitle>
+        <StyledCenterImgSpan>
+          <img
+            width={ICON_SIZE}
+            height={ICON_SIZE}
+            src={linkGroupImage}
+            alt={validLinks[0].name ?? `Quick Link to ${validLinks[0].url}`}
+          />
+        </StyledCenterImgSpan>
+        <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
       </Link>
     </StyledMenuItem>
   ) : (
     <div key={validLinks[0].url}>
-      <StyledMultilinkTitle>
+      <StyledMultilinkHeader>
         <StyledMultilinkImage>
           <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
         </StyledMultilinkImage>
-        <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
-      </StyledMultilinkTitle>
+        <StyledMultiLinkTitle>{linkGroupName}</StyledMultiLinkTitle>
+      </StyledMultilinkHeader>
       <div>
         {validLinks.map(link => {
           return (
@@ -110,7 +121,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
               <React.Fragment key={link.url}>
                 <StyledSubLink>
                   <Link href={link.url}>
-                    <Typography color="inherit" variant="body4">
+                    <Typography noWrap variant="body4">
                       {link.name}
                     </Typography>
                   </Link>
@@ -144,69 +155,89 @@ const ExpandedLinks = ({ linkGroups }: ExpandedLinksProps) => (
 
 const StyledFlexEnd = styled.div({
   justifyContent: "right",
-  flexDirection: "row-reverse",
 });
 
 interface QuickLinksPopperProps {
+  /**
+   * The linkgroups to render. They could be a mix of single
+   * and multi-link groups.
+   */
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
+  /**
+   * A reference so that the popper knows to be attached to
+   * the button.
+   */
   anchorRef: React.RefObject<HTMLElement>;
+  /** Whether the popper is open or not */
   open: boolean;
-  setOpen: (open: boolean) => void;
-  setKeyWithQLinksOpen: (key: string) => void;
+  /** A function that is called when closing / clicking away */
+  onClose: () => void;
 }
 
-const QuickLinksPopper = ({
-  linkGroups,
-  anchorRef,
-  open,
-  setOpen,
-  setKeyWithQLinksOpen,
-}: QuickLinksPopperProps) => {
+const QuickLinksPopper = ({ linkGroups, anchorRef, open, onClose }: QuickLinksPopperProps) => {
   return (
-    <Popper
-      open={open}
-      anchorRef={anchorRef}
-      onClickAway={() => {
-        setOpen(false);
-        setKeyWithQLinksOpen("");
-      }}
-    >
+    <Popper open={open} anchorRef={anchorRef} onClickAway={onClose}>
       <ExpandedLinks linkGroups={linkGroups} />
     </Popper>
   );
 };
 
 interface ProjectLinksProps {
+  /**
+   * The linkgroups that will be rendered. They could be a mix
+   * of single and multi-link groups.
+   */
   linkGroups: IClutch.core.project.v1.ILinkGroup[];
-  name: string[];
+
+  /**
+   * A function that is called when the QuickLinksPopper opens.
+   */
+  onOpen: () => void;
+
+  /**
+   * A function that is called when the QuickLinksPopper
+   * is closed.
+   */
+  onClose: () => void;
+
+  /**
+   * A boolean that denotes whether to render the button
+   * that opens the quicklinks or not.
+   */
+  showOpenButton: boolean;
 }
 
-const ProjectLinks = ({ linkGroups, name }: ProjectLinksProps) => {
+const ProjectLinks = ({ linkGroups, onOpen, onClose, showOpenButton }: ProjectLinksProps) => {
   const anchorRef = React.useRef(null);
+  // The state is managed here for the popper because if it is hoisted up
+  // to the parent that results in all the poppers being opened or closed
+  // at the same time.
   const [open, setOpen] = React.useState(false);
-  const [keyWithQLinksOpen, setKeyWithQLinksOpen] = React.useState("");
+
+  const onClosePopper = () => {
+    setOpen(false);
+    onClose();
+  };
+
+  const onOpenPopper = () => {
+    setOpen(true);
+    onOpen();
+  };
 
   if (linkGroups.length === 0) {
     return null;
   }
 
   return (
-    <StyledFlexEnd hidden={name?.[0] !== keyWithQLinksOpen}>
+    <StyledFlexEnd hidden={showOpenButton}>
       <StyledMoreVertIcon>
-        <IconButton
-          ref={anchorRef}
-          onClick={() => {
-            setOpen(true);
-            setKeyWithQLinksOpen(name?.[0]);
-          }}
-        >
+        <IconButton ref={anchorRef} onClick={onOpenPopper}>
           <MoreVertIcon />
           <QuickLinksPopper
             linkGroups={linkGroups}
             anchorRef={anchorRef}
             open={open}
-            setOpen={setOpen}
-            setKeyWithQLinksOpen={setKeyWithQLinksOpen}
+            onClose={onClosePopper}
           />
         </IconButton>
       </StyledMoreVertIcon>

@@ -40,7 +40,7 @@ func paginatedQueryBuilder(
 ) (sq.SelectBuilder, uint64, error) {
 	queryLimit := queryDefaultLimit
 	if limit > maxResultLimit {
-		return sq.SelectBuilder{}, 0, status.Error(codes.InvalidArgument, "maximum query limit is 1000")
+		return sq.SelectBuilder{}, 0, status.Error(codes.InvalidArgument, fmt.Sprintf("maximum query limit is %d", maxResultLimit))
 	} else if limit > 0 {
 		queryLimit = limit
 	}

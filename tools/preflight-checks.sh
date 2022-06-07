@@ -9,6 +9,18 @@ MIN_GO_VERSION="1.17"
 MIN_NODE_VERSION="16.0.0"
 MIN_YARN_VERSION="1.22.0"
 
+SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
+REPO_ROOT="${SCRIPT_ROOT}"
+# Use alternate root if provided as command line argument.
+if [[ -n "${1-}" ]] && [[ "$1" == *"/"* ]]; then
+  REPO_ROOT="${1}"
+  shift
+fi
+
+echo "${REPO_ROOT}"
+
+BUILD_ROOT="${REPO_ROOT}/build"
+
 # param 1 - required version
 # param 2 - current version
 # returns true or false if the version is ok
@@ -68,11 +80,11 @@ frontend() {
     fi
   fi
 
-  if ! command -v yarn &> /dev/null; then
+  if ! command -v "${BUILD_ROOT}/bin/yarn.sh" &> /dev/null; then
     echo "yarn is not installed or cannot be found in the current PATH, this is a required dependency."
     did_checks_pass=false
   else
-    current_version=$(yarn --version)
+    current_version=$("${BUILD_ROOT}/bin/yarn.sh" --version)
     if ! is_version_ok $MIN_YARN_VERSION "$current_version"; then
       echo "yarn version must be >= $MIN_YARN_VERSION, current version $current_version"
       did_checks_pass=false
@@ -81,6 +93,7 @@ frontend() {
 }
 
 main() {
+  echo "Running pre-flight checks..."
   # always check OS level requirements
   os
 
@@ -99,6 +112,7 @@ main() {
     printf "\nPlease refer to the development requirements https://clutch.sh/docs/getting-started/local-build/#requirements"
     return 1
   fi
+  echo "Pre-flight checks satisfied!"
 }
 
 main "$@"

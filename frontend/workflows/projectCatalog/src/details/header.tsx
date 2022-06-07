@@ -42,7 +42,7 @@ const BreadCrumbs = ({ routes = [] }: BreadCrumbProps) => {
     }
 
     return (
-      <StyledCrumb variant="caption2" color="rgb(13, 16, 48, .48)">
+      <StyledCrumb variant="caption2" color="rgb(13, 16, 48, .48)" key={route.title}>
         {route.path ? (
           <Link color="inherit" href={builtRoute}>
             {route.title}

@@ -52,6 +52,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 type Service interface {
 	// All names of clientsets.
 	Clientsets(ctx context.Context) ([]string, error)
+	GetK8sClientset(ctx context.Context, clientset string) (ContextClientset, error)
 
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
@@ -136,6 +137,11 @@ func (s *svc) Clientsets(ctx context.Context) ([]string, error) {
 		ret = append(ret, name)
 	}
 	return ret, nil
+}
+
+func (s *svc) GetK8sClientset(ctx context.Context, clientset string) (ContextClientset, error) {
+	// Dont specify cluster or namespace, were simply looking for the clientset.
+	return s.manager.GetK8sClientset(ctx, clientset, "", "")
 }
 
 // Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
