@@ -21658,6 +21658,9 @@ export namespace clutch {
 
                 /** AutocompleteRequest limit */
                 limit?: (number|Long|null);
+
+                /** AutocompleteRequest caseInsensitive */
+                caseInsensitive?: (boolean|null);
             }
 
             /** Represents an AutocompleteRequest. */
@@ -21677,6 +21680,9 @@ export namespace clutch {
 
                 /** AutocompleteRequest limit. */
                 public limit: (number|Long);
+
+                /** AutocompleteRequest caseInsensitive. */
+                public caseInsensitive: boolean;
 
                 /**
                  * Verifies an AutocompleteRequest message.
