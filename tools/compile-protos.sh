@@ -237,6 +237,7 @@ install_protobufjs() {
   if [[ ! -f "${PROTOBUFJS_DIR}/node_modules/.bin/pbjs" ]]; then
     echo "info: Downloading protobufjs to build environment"
     mkdir -p "${PROTOBUFJS_DIR}"
+    "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" init --yes
     "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "protobufjs@${PROTOBUFJS_RELEASE}"
   fi
 }
@@ -248,7 +249,7 @@ install_googleapis() {
     googleapis_zip_out="/tmp/googleapis-${GOOGLEAPIS_SHA}.zip"
     curl -sSL -o "${googleapis_zip_out}" \
       "https://github.com/googleapis/googleapis/archive/${GOOGLEAPIS_SHA}.zip"
-    
+
     googleapis_dir_out="/tmp/googleapis-${GOOGLEAPIS_SHA}"
     mkdir -p "${googleapis_dir_out}"
     unzip -q -o "${googleapis_zip_out}" -d "${googleapis_dir_out}"
