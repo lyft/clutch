@@ -194,7 +194,7 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
             <StyledNoProjectsText>No projects in this group yet.</StyledNoProjectsText>
           )}
           {groupKeys.sort().map(key => (
-            <StyledMenuItem key={key}>
+            <StyledMenuItem aria-label={`${key}-row`} key={key}>
               <Checkbox
                 aria-label={`Toggle ${key} Project`}
                 name={key}
