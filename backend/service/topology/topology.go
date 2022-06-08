@@ -189,7 +189,6 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 }
 
 func (c *client) Autocomplete(ctx context.Context, typeURL, search string, limit uint64, caseInsensitive bool) ([]*topologyv1.Resource, error) {
-
 	if caseInsensitive {
 		search = strings.ToLower(search)
 	}
