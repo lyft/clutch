@@ -8596,6 +8596,9 @@ export namespace clutch {
 
                         /** OIDC scopes */
                         scopes?: (string[]|null);
+
+                        /** OIDC subjectClaimNameOverride */
+                        subjectClaimNameOverride?: (string|null);
                     }
 
                     /** Represents a OIDC. */
@@ -8621,6 +8624,9 @@ export namespace clutch {
 
                         /** OIDC scopes. */
                         public scopes: string[];
+
+                        /** OIDC subjectClaimNameOverride. */
+                        public subjectClaimNameOverride: string;
 
                         /**
                          * Verifies a OIDC message.
@@ -21652,6 +21658,9 @@ export namespace clutch {
 
                 /** AutocompleteRequest limit */
                 limit?: (number|Long|null);
+
+                /** AutocompleteRequest caseInsensitive */
+                caseInsensitive?: (boolean|null);
             }
 
             /** Represents an AutocompleteRequest. */
@@ -21671,6 +21680,9 @@ export namespace clutch {
 
                 /** AutocompleteRequest limit. */
                 public limit: (number|Long);
+
+                /** AutocompleteRequest caseInsensitive. */
+                public caseInsensitive: boolean;
 
                 /**
                  * Verifies an AutocompleteRequest message.

@@ -20633,6 +20633,7 @@ export const clutch = $root.clutch = (() => {
                          * @property {string|null} [clientSecret] OIDC clientSecret
                          * @property {string|null} [redirectUrl] OIDC redirectUrl
                          * @property {Array.<string>|null} [scopes] OIDC scopes
+                         * @property {string|null} [subjectClaimNameOverride] OIDC subjectClaimNameOverride
                          */
 
                         /**
@@ -20692,6 +20693,14 @@ export const clutch = $root.clutch = (() => {
                         OIDC.prototype.scopes = $util.emptyArray;
 
                         /**
+                         * OIDC subjectClaimNameOverride.
+                         * @member {string} subjectClaimNameOverride
+                         * @memberof clutch.config.service.authn.v1.OIDC
+                         * @instance
+                         */
+                        OIDC.prototype.subjectClaimNameOverride = "";
+
+                        /**
                          * Verifies a OIDC message.
                          * @function verify
                          * @memberof clutch.config.service.authn.v1.OIDC
@@ -20721,6 +20730,9 @@ export const clutch = $root.clutch = (() => {
                                     if (!$util.isString(message.scopes[i]))
                                         return "scopes: string[] expected";
                             }
+                            if (message.subjectClaimNameOverride != null && message.hasOwnProperty("subjectClaimNameOverride"))
+                                if (!$util.isString(message.subjectClaimNameOverride))
+                                    return "subjectClaimNameOverride: string expected";
                             return null;
                         };
 
@@ -20751,6 +20763,8 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < object.scopes.length; ++i)
                                     message.scopes[i] = String(object.scopes[i]);
                             }
+                            if (object.subjectClaimNameOverride != null)
+                                message.subjectClaimNameOverride = String(object.subjectClaimNameOverride);
                             return message;
                         };
 
@@ -20774,6 +20788,7 @@ export const clutch = $root.clutch = (() => {
                                 object.clientId = "";
                                 object.clientSecret = "";
                                 object.redirectUrl = "";
+                                object.subjectClaimNameOverride = "";
                             }
                             if (message.issuer != null && message.hasOwnProperty("issuer"))
                                 object.issuer = message.issuer;
@@ -20788,6 +20803,8 @@ export const clutch = $root.clutch = (() => {
                                 for (let j = 0; j < message.scopes.length; ++j)
                                     object.scopes[j] = message.scopes[j];
                             }
+                            if (message.subjectClaimNameOverride != null && message.hasOwnProperty("subjectClaimNameOverride"))
+                                object.subjectClaimNameOverride = message.subjectClaimNameOverride;
                             return object;
                         };
 
@@ -51831,6 +51848,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [want] AutocompleteRequest want
                  * @property {string|null} [search] AutocompleteRequest search
                  * @property {number|Long|null} [limit] AutocompleteRequest limit
+                 * @property {boolean|null} [caseInsensitive] AutocompleteRequest caseInsensitive
                  */
 
                 /**
@@ -51873,6 +51891,14 @@ export const clutch = $root.clutch = (() => {
                 AutocompleteRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                 /**
+                 * AutocompleteRequest caseInsensitive.
+                 * @member {boolean} caseInsensitive
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @instance
+                 */
+                AutocompleteRequest.prototype.caseInsensitive = false;
+
+                /**
                  * Verifies an AutocompleteRequest message.
                  * @function verify
                  * @memberof clutch.resolver.v1.AutocompleteRequest
@@ -51892,6 +51918,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
                             return "limit: integer|Long expected";
+                    if (message.caseInsensitive != null && message.hasOwnProperty("caseInsensitive"))
+                        if (typeof message.caseInsensitive !== "boolean")
+                            return "caseInsensitive: boolean expected";
                     return null;
                 };
 
@@ -51920,6 +51949,8 @@ export const clutch = $root.clutch = (() => {
                             message.limit = object.limit;
                         else if (typeof object.limit === "object")
                             message.limit = new $util.LongBits(object.limit.low >>> 0, object.limit.high >>> 0).toNumber(true);
+                    if (object.caseInsensitive != null)
+                        message.caseInsensitive = Boolean(object.caseInsensitive);
                     return message;
                 };
 
@@ -51944,6 +51975,7 @@ export const clutch = $root.clutch = (() => {
                             object.limit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.limit = options.longs === String ? "0" : 0;
+                        object.caseInsensitive = false;
                     }
                     if (message.want != null && message.hasOwnProperty("want"))
                         object.want = message.want;
@@ -51954,6 +51986,8 @@ export const clutch = $root.clutch = (() => {
                             object.limit = options.longs === String ? String(message.limit) : message.limit;
                         else
                             object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber(true) : message.limit;
+                    if (message.caseInsensitive != null && message.hasOwnProperty("caseInsensitive"))
+                        object.caseInsensitive = message.caseInsensitive;
                     return object;
                 };
 
