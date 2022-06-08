@@ -303,7 +303,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	return handler.Results(limit)
 }
 
-func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
+func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64, caseInsensitive bool) ([]*resolverv1.AutocompleteResult, error) {
 	if r.topology == nil {
 		return nil, status.Error(codes.FailedPrecondition, "topology service must be enabled to use the K8s autocomplete API")
 	}
