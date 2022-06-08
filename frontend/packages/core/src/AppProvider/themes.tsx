@@ -7,7 +7,7 @@ import {
   StyledEngineProvider,
   ThemeProvider,
 } from "@mui/material";
-import { PaletteOptions, createTheme, useTheme as useMuiTheme } from "@mui/material/styles";
+import { createTheme, PaletteOptions, useTheme as useMuiTheme } from "@mui/material/styles";
 import { StylesProvider } from "@mui/styles";
 
 declare module "@mui/styles/defaultTheme" {

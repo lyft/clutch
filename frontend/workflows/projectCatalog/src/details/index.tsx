@@ -164,8 +164,8 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               </Grid>
               {/* Custom Meta Cards */}
               {metaCards.length > 0 &&
-                metaCards.map((card, index) => (
-                  <Grid item xs={12} key={`meta-${index}`}>
+                metaCards.map(card => (
+                  <Grid item xs={12} key={`meta-${card.key}`}>
                     {card}
                   </Grid>
                 ))}
@@ -173,8 +173,8 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
             <Grid container item xs={12} sm={12} md={7} lg={8} xl={9} spacing={2}>
               {/* Custom Dynamic Cards */}
               {dynamicCards.length > 0 &&
-                dynamicCards.map((card, index) => (
-                  <Grid item xs={12} key={`dynamic-${index}`}>
+                dynamicCards.map(card => (
+                  <Grid item xs={12} key={`dynamic-${card.key}`}>
                     {card}
                   </Grid>
                 ))}

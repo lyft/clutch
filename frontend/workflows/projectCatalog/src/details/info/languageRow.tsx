@@ -8,8 +8,8 @@ const LanguageRow = ({ languages }: { languages: string[] }) => (
     <Grid item>
       <Typography variant="body2">Language{languages.length > 1 && "s"}</Typography>
     </Grid>
-    {languages.map((language, index) => (
-      <Grid item key={`language-${index}`}>
+    {languages.map(language => (
+      <Grid item key={`language-${language}`}>
         <LanguageIcon language={language} />
       </Grid>
     ))}
