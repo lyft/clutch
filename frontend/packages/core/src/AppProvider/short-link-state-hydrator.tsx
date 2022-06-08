@@ -58,42 +58,45 @@ const ShortLinkStateHydrator = ({
     return retrieveDataHelper(state.workflowStore, componentName, key, defaultData);
   }
 
-  const storageProviderProps: WorkflowStorageContextProps = {
-    /**
-     * Boolean representing whether the state has been hydrated
-     */
-    fromShortLink: state.fromShortLink,
-    /**
-     * StoreData context function which will allow a component to write data for use in shortlinks as well as
-     * store locally
-     * @param componentName Name of the component that data is being stored under
-     * @param key A lookup key used to reference the specific data set being stored
-     * @param data The data being stored
-     * @param localStorage Optional boolean on whether to write data to the localStorage as well
-     * @returns void
-     */
-    storeData: (componentName: string, key: string, data: unknown, localStorage?: boolean) =>
-      dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
-    /**
-     * RemoveData context function which will allow a component to remove data from use in shortlinks as well
-     * locally if preferred
-     * @param componentName Name of the component that data is being removed under
-     * @param key A lookup key used to reference the specific data set being removed
-     * @param localStorage Optional boolean on whether to remove data from localStorage as well
-     * @returns
-     */
-    removeData: (componentName: string, key: string, localStorage?: boolean) =>
-      dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
-    /**
-     * RetrieveData context function which will allow a component to retrieve data from a hydrated short link and
-     * barring that will return data from local storage if available
-     * @param componentName Name of the component that data is being retrieved under
-     * @param key A lookup key used to reference the specific data set being retrieved
-     * @param defaultData Optional set of data returned if nothing is found in the hydrator or localStorage
-     * @returns
-     */
-    retrieveData,
-  };
+  const storageProviderProps: WorkflowStorageContextProps = React.useMemo(
+    () => ({
+      /**
+       * Boolean representing whether the state has been hydrated
+       */
+      fromShortLink: state.fromShortLink,
+      /**
+       * StoreData context function which will allow a component to write data for use in shortlinks as well as
+       * store locally
+       * @param componentName Name of the component that data is being stored under
+       * @param key A lookup key used to reference the specific data set being stored
+       * @param data The data being stored
+       * @param localStorage Optional boolean on whether to write data to the localStorage as well
+       * @returns void
+       */
+      storeData: (componentName: string, key: string, data: unknown, localStorage?: boolean) =>
+        dispatch({ type: "STORE_DATA", payload: { componentName, key, data, localStorage } }),
+      /**
+       * RemoveData context function which will allow a component to remove data from use in shortlinks as well
+       * locally if preferred
+       * @param componentName Name of the component that data is being removed under
+       * @param key A lookup key used to reference the specific data set being removed
+       * @param localStorage Optional boolean on whether to remove data from localStorage as well
+       * @returns
+       */
+      removeData: (componentName: string, key: string, localStorage?: boolean) =>
+        dispatch({ type: "REMOVE_DATA", payload: { componentName, key, localStorage } }),
+      /**
+       * RetrieveData context function which will allow a component to retrieve data from a hydrated short link and
+       * barring that will return data from local storage if available
+       * @param componentName Name of the component that data is being retrieved under
+       * @param key A lookup key used to reference the specific data set being retrieved
+       * @param defaultData Optional set of data returned if nothing is found in the hydrator or localStorage
+       * @returns
+       */
+      retrieveData,
+    }),
+    [state]
+  );
 
   return (
     <WorkflowStorageContext.Provider value={storageProviderProps}>

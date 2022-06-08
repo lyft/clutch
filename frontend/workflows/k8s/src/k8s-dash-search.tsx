@@ -97,7 +97,7 @@ const K8sDashSearch = ({ onSubmit }) => {
           </FormRow>
         </Form>
       </Paper>
-      <Content>{error !== undefined ? <Error subject={error} /> : <></>}</Content>
+      <Content>{error !== undefined && <Error subject={error} />}</Content>
     </Container>
   );
 };

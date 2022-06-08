@@ -10,7 +10,7 @@ describe("Select", () => {
         <Select name="foobar" defaultOption={-1} options={[{ label: "foo" }, { label: "bar" }]} />
       );
       expect(component.find("#foobar")).toHaveLength(1);
-      expect(component.find("#foobar-select").props().value).toEqual("foo");
+      expect(component.find("#foobar-select").props().value).toBe("foo");
     });
 
     it("has upper bound", () => {
@@ -18,7 +18,7 @@ describe("Select", () => {
         <Select name="foobar" defaultOption={2} options={[{ label: "foo" }]} />
       );
       expect(component.find("#foobar")).toHaveLength(1);
-      expect(component.find("#foobar-select").props().value).toEqual("foo");
+      expect(component.find("#foobar-select").props().value).toBe("foo");
     });
   });
 });

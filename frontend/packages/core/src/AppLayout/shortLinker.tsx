@@ -177,25 +177,23 @@ const ShortLinker = () => {
             {...TransitionProps}
             placement={placement === "bottom" ? "center top" : "center bottom"}
           >
-            <>
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList autoFocusItem={open} id="options">
-                    <Grid style={{ display: "flex", justifyContent: "center" }}>
-                      {!shortLink && (
-                        <Button onClick={generateShortLink} text="Generate Short Link" />
-                      )}
-                      {shortLink && (
-                        <>
-                          <TextField disabled readOnly value={shortLink} />
-                          <ClipboardButton text={shortLink} tooltip="Copy Short Link" />
-                        </>
-                      )}
-                    </Grid>
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </>
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList autoFocusItem={open} id="options">
+                  <Grid style={{ display: "flex", justifyContent: "center" }}>
+                    {!shortLink && (
+                      <Button onClick={generateShortLink} text="Generate Short Link" />
+                    )}
+                    {shortLink && (
+                      <>
+                        <TextField disabled readOnly value={shortLink} />
+                        <ClipboardButton text={shortLink} tooltip="Copy Short Link" />
+                      </>
+                    )}
+                  </Grid>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
           </Grow>
         )}
       </Popper>

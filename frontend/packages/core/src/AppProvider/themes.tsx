@@ -118,6 +118,8 @@ const useTheme = () => {
 };
 
 interface ThemeProps {
+  // disabling temporarily as we figure out theming
+  // eslint-disable-next-line react/no-unused-prop-types
   variant?: "light";
 }
 

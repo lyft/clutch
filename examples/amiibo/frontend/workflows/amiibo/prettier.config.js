@@ -1,1 +1,1 @@
-module.exports = require("@clutch/tools/prettier.config.js");
+module.exports = require("@clutch/tools/prettier.config");

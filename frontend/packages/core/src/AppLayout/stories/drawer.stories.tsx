@@ -19,6 +19,7 @@ export default {
     StoryFn => {
       return (
         <ApplicationContext.Provider
+          // eslint-disable-next-line react/jsx-no-constructed-context-values
           value={{
             workflows: [
               {
@@ -28,7 +29,7 @@ export default {
                 path: "ec2",
                 routes: [
                   {
-                    component: () => <></>,
+                    component: () => null,
                     componentProps: { resolverType: "clutch.aws.ec2.v1.Instance" },
                     description: "Terminate an EC2 instance.",
                     displayName: "Terminate Instance",
@@ -37,7 +38,7 @@ export default {
                     trending: true,
                   },
                   {
-                    component: () => <></>,
+                    component: () => null,
                     componentProps: { resolverType: "clutch.aws.ec2.v1.AutoscalingGroup" },
                     description: "Resize an autoscaling group.",
                     displayName: "Resize Autoscaling Group",

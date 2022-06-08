@@ -129,6 +129,7 @@ const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProp
     return (
       <>
         <DataLayoutContext.Provider value={dataLayoutManager}>
+          {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
           <WizardContext.Provider value={() => context(child)}>
             <Grid container direction="column" justifyContent="center" alignItems="center">
               {child}
