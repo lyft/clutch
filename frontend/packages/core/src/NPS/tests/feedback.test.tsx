@@ -77,7 +77,7 @@ describe("<NPSFeedback />", () => {
       });
       it("renders text placeholder", () => {
         clickEmoji(wrapper);
-        expect(wrapper.find("Styled(TextField)").prop("placeholder")).toEqual(
+        expect(wrapper.find("Styled(Component)").prop("placeholder")).toEqual(
           defaultResult.freeformPrompt
         );
       });
@@ -129,7 +129,7 @@ describe("<NPSFeedback />", () => {
       });
       it("renders default text placeholder", () => {
         clickEmoji(wrapper);
-        expect(wrapper.find("Styled(TextField)").prop("placeholder")).toEqual(
+        expect(wrapper.find("Styled(Component)").prop("placeholder")).toEqual(
           defaults.freeformPrompt
         );
       });
@@ -176,7 +176,7 @@ describe("<NPSFeedback />", () => {
     it("will not display feedback form or submit unless emoji is selected", () => {
       expect(wrapper.find({ item: true })).toHaveLength(2);
       expect(wrapper.find("Button")).toHaveLength(0);
-      expect(wrapper.find("Styled(TextField)")).toHaveLength(0);
+      expect(wrapper.find("Styled(Component)")).toHaveLength(0);
     });
 
     it("will display text prompt at top", () => {
@@ -193,7 +193,7 @@ describe("<NPSFeedback />", () => {
       clickEmoji(wrapper);
 
       expect(wrapper.find({ item: true })).toHaveLength(4);
-      expect(wrapper.find("Styled(TextField)")).toBeDefined();
+      expect(wrapper.find("Styled(Component)")).toBeDefined();
       expect(wrapper.find("Styled(Button)")).toBeDefined();
     });
 
@@ -202,7 +202,7 @@ describe("<NPSFeedback />", () => {
 
       const testValue = "Some Feedback Text";
 
-      let textField = wrapper.find("Styled(TextField)");
+      let textField = wrapper.find("Styled(Component)");
 
       expect(textField.prop("helperText")).toBe(`0 / ${maxLength}`);
 
@@ -210,7 +210,7 @@ describe("<NPSFeedback />", () => {
 
       wrapper.update();
 
-      textField = wrapper.find("Styled(TextField)");
+      textField = wrapper.find("Styled(Component)");
 
       expect(textField.prop("helperText")).toBe(`${testValue.trim().length} / ${maxLength}`);
       expect(textField.prop("value")).toEqual(testValue);
@@ -221,7 +221,7 @@ describe("<NPSFeedback />", () => {
 
       const testValue = generateRandomString(FEEDBACK_MAX_LENGTH * 2);
 
-      let textField = wrapper.find("Styled(TextField)");
+      let textField = wrapper.find("Styled(Component)");
 
       expect(textField.prop("helperText")).toBe(`0 / ${maxLength}`);
 
@@ -229,7 +229,7 @@ describe("<NPSFeedback />", () => {
 
       wrapper.update();
 
-      textField = wrapper.find("Styled(TextField)");
+      textField = wrapper.find("Styled(Component)");
 
       expect(textField.prop("helperText")).toBe(`${testValue.trim().length} / ${maxLength}`);
       expect(textField.prop("value")).toEqual(testValue);
@@ -243,7 +243,7 @@ describe("<NPSFeedback />", () => {
 
       expect(submitButton.prop("disabled")).toBeFalsy();
 
-      wrapper.find("Styled(TextField)").prop("onChange")({
+      wrapper.find("Styled(Component)").prop("onChange")({
         target: { value: generateRandomString(FEEDBACK_MAX_LENGTH + 1) },
       });
 
