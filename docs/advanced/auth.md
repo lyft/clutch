@@ -53,9 +53,28 @@ services:
 
 #### Customization
 
-Clutch currently supports OIDC, for example with Okta. It is possible to support other authentication providers by extending or swapping out the authn service.
+Clutch currently supports OIDC, for example, with Okta. It is possible to support other authentication providers by remapping the subject claim or swapping out the authn service with a custom build one.
 
-Furthermore, Clutch has support for a `groups` field in the claims. By default, no groups are appended to the claim. The authn service's `Provider` interface has a `WithClaimsFromOIDCTokenFunc` function that can be used to override claims derivation from the provider. At Lyft, we use this to call an internal service that provides the group IDs for a user.
+By default, Clutch maps the OIDC JWT token's email claim to the `subject` field. You can use a different claim using `subject_claim_name_override` configuration. The following example maps the `id` claim to the `subject` field.
+
+```yaml title="clutch-config.yaml"
+services:
+  ...
+  - name: clutch.service.authn
+    typed_config:
+      "@type": types.google.com/clutch.config.service.authn.v1.Config
+      oidc:
+        issuer: https://provider.example.com
+        client_id: ${CREDENTIALS_OIDC_CLIENT_ID}
+        client_secret: ${CREDENTIALS_OIDC_CLIENT_SECRET}
+        redirect_url: "${BASE_URL}/v1/authn/callback"
+        // highlight-next-line
+        subject_claim_name_override: "id"
+      session_secret: ${CREDENTIALS_SESSION_SECRET}
+```
+
+Furthermore, Clutch supports a `groups` field in the claims. By default, no groups are appended to the claim. The authn service's `Provider` interface has a `WithClaimsFromOIDCTokenFunc` function that can be used to override claims derivation from the provider. At Lyft, we use this to call an internal service that provides the group IDs for a user.
+
 
 ### Authorization
 
