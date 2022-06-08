@@ -313,7 +313,7 @@ func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit ui
 		resultLimit = limit
 	}
 
-	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit)
+	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit, caseInsensitive)
 	if err != nil {
 		return nil, err
 	}
