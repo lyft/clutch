@@ -5,14 +5,14 @@ exports[`Start Experiment workflow renders correctly 1`] = `
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <h3 style={{...}}>
     Faults
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
 </Styled(div)>"
 `;
 
@@ -21,15 +21,15 @@ exports[`Start Experiment workflow renders correctly with environments 1`] = `
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <h3 style={{...}}>
     Faults
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
 </Styled(div)>"
 `;
 
@@ -38,14 +38,14 @@ exports[`Start Experiment workflow renders correctly with upstream cluster type 
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <RadioGroup name=\\"upstreamClusterType\\" label=\\"Upstream Cluster Type\\" disabled={[undefined]} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <h3 style={{...}}>
     Faults
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
+  <ForwardRef(TextFieldRef) name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
 </Styled(div)>"
 `;
