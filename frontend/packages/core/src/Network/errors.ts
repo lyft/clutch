@@ -257,7 +257,7 @@ export interface ClutchError extends Error {
  * @param clientError A client error object.
  */
 const grpcResponseToError = (clientError: AxiosError): ClutchError => {
-  const { data } = clientError?.response;
+  const { data } = clientError?.response || {};
 
   const error = {
     code: data.code,

@@ -33,5 +33,5 @@ const register = (): WorkflowConfiguration => {
 };
 
 export default register;
-
+export type { FormItem } from "./core/form-fields";
 export { PageLayout, FormFields };

@@ -9,7 +9,7 @@ describe("Landing component", () => {
   let component;
 
   beforeAll(() => {
-    appContext.useAppContext = jest.fn().mockReturnValue({ workflows: [] });
+    jest.spyOn(appContext, "useAppContext").mockReturnValue({ workflows: [] });
     component = shallow(
       <MemoryRouter>
         <Landing />

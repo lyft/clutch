@@ -16,7 +16,9 @@ const featureFlags = (): Promise<FeatureFlags> => {
   if (cachedFlags) {
     const elapsedTime = new Date(new Date().getTime() - cachedFlags.timestamp).getTime();
     if (elapsedTime < FF_CACHE_TTL) {
-      return new Promise(resolve => resolve(cachedFlags.flags));
+      return new Promise(resolve => {
+        resolve(cachedFlags.flags);
+      });
     }
   }
   return client

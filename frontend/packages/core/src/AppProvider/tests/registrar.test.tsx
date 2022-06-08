@@ -1,5 +1,3 @@
-import React from "react";
-
 import { workflowRoutes } from "../registrar";
 
 const WORKFLOW_ID = "@clutch-sh/ec2";
@@ -17,28 +15,28 @@ const WORKFLOW_CONFIG = {
       displayName: "Terminate Instance",
       description: "Terminate an EC2 instance.",
       requiredConfigProps: ["resolverType"],
-      component: () => <></>,
+      component: () => null,
     },
     rebootInstance: {
       path: "instance/reboot",
       displayName: "Reboot Instance",
       description: "Reboot an EC2 Instance",
       requiredConfigProps: ["resolverType"],
-      component: () => <></>,
+      component: () => null,
     },
     resizeAutoscalingGroup: {
       path: "asg/resize",
       displayName: "Resize Autoscaling Group",
       description: "Resize an autoscaling group.",
       requiredConfigProps: ["resolverType"],
-      component: () => <></>,
+      component: () => null,
     },
   },
 };
 const USER_CONFIGURATION = {
   "@clutch-sh/ec2": {
     terminateInstance: {
-      component: () => <></>,
+      component: () => null,
       path: "instance/terminate",
       description: "Terminate an EC2 instance.",
       trending: true,

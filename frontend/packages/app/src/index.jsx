@@ -6,7 +6,7 @@ import registeredWorkflows from "./workflows";
 
 import "./index.css";
 
-const config = require("./clutch.config.js");
+const config = require("./clutch.config");
 
 ReactDOM.render(
   <ClutchApp availableWorkflows={registeredWorkflows} configuration={config} />,

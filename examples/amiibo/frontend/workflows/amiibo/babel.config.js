@@ -1,1 +1,1 @@
-module.exports = require("@clutch/tools/babel.config.js");
+module.exports = require("@clutch/tools/babel.config");
