@@ -126,11 +126,11 @@ interface SlicedLinkGroupProps {
 const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
   return (
     <>
-      {(slicedLinkGroups || []).map((linkGroup, index) => {
+      {(slicedLinkGroups || []).map(linkGroup => {
         if (linkGroup.links?.length === 1) {
           return (
             <QuickLink
-              key={`quicklink-${index}`}
+              key={`quicklink-${linkGroup.name}`}
               link={linkGroup.links[0]}
               linkGroupName={linkGroup.name ?? ""}
               linkGroupImage={linkGroup.imagePath ?? ""}
@@ -139,7 +139,7 @@ const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
         }
         return (
           <QuickLinkGroup
-            key={`quicklink-${index}`}
+            key={`quicklink-${linkGroup.name}`}
             linkGroupName={linkGroup.name ?? ""}
             linkGroupImage={linkGroup.imagePath ?? ""}
             links={linkGroup?.links ?? []}
