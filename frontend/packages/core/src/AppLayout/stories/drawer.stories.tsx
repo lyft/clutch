@@ -62,7 +62,7 @@ export default {
 export const Primary = () => <Drawer />;
 
 export const WithHeader = () => (
-  <Grid direction="column">
+  <Grid container direction="column">
     <Header />
     <Drawer />
   </Grid>

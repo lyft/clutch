@@ -18,65 +18,82 @@ import _ from "lodash";
 
 const KEY_ENTER = 13;
 
-const BaseTextField = ({ InputProps, InputLabelProps, ...props }: MuiStandardTextFieldProps) => (
-  <MuiTextField
-    InputLabelProps={{ ...InputLabelProps, shrink: true }}
-    InputProps={{ ...InputProps, disableUnderline: true }}
-    fullWidth
-    {...props}
-  />
+const BaseTextField = React.forwardRef<HTMLInputElement, MuiStandardTextFieldProps>(
+  ({ InputProps, InputLabelProps, ...props }: MuiStandardTextFieldProps, ref) => (
+    <MuiTextField
+      InputLabelProps={{ ...InputLabelProps, shrink: true }}
+      InputProps={{ ...InputProps }}
+      fullWidth
+      {...props}
+      {...{ ref }}
+    />
+  )
 );
 
-const StyledTextField = styled(BaseTextField)({
-  ".MuiInputLabel-root": {
-    color: "rgba(13, 16, 48, 0.6)",
+const StyledAutocomplete = styled(Autocomplete)({
+  ".MuiOutlinedInput-root.MuiInputBase-sizeSmall": {
+    padding: "unset",
   },
+});
 
-  "& label.Mui-focused": {
-    color: "rgba(13, 16, 48, 0.6)",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "rgba(13, 16, 48, 0.38)",
+const StyledTextField = styled(BaseTextField)({
+  "--error-color": "#DB3615",
+  margin: "8px 0px",
+
+  ".MuiInputLabel-root": {
+    "--label-color": "rgba(13, 16, 48, 0.6)",
+
+    color: "var(--label-color)",
+
+    "&.Mui-focused": {
+      color: "var(--label-color)",
     },
-    "&.Mui-focused fieldset": {
-      borderColor: "#3548d4",
-      borderWidth: "1px",
-    },
-    "&.Mui-error fieldset": {
-      borderColor: "#db3615",
-      borderWidth: "1px",
+    "&.Mui-error": {
+      color: "var(--error-color)",
     },
   },
 
   ".MuiInputBase-root": {
+    "--input-border-width": "1px",
+    "--input-default-color": "rgba(13, 16, 48, 0.38)",
     borderRadius: "4px",
-    paddingRight: "0px",
     fontSize: "16px",
-    color: "#0D1030",
+    color: "var(--input-default-color)",
     backgroundColor: "#FFFFFF",
+    // paddingRight: "unset",
+
+    "& fieldset": {
+      borderColor: "var(--input-default-color)",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#3548d4",
+      borderWidth: "var(--input-border-width)",
+    },
+    "&.Mui-error fieldset": {
+      borderColor: "var(--error-color)",
+      borderWidth: "var(--input-border-width)",
+    },
+    "&.Mui-disabled fieldset": {
+      backgroundColor: "rgba(13, 16, 48, 0.12)",
+    },
+    "> .MuiInputBase-input": {
+      "--input-padding": "14px 16px",
+      padding: "var(--input-padding)",
+      height: "20px",
+
+      "&.MuiAutocomplete-input": {
+        padding: "var(--input-padding)",
+      },
+
+      "::placeholder": {
+        color: "var(--input-default-color)",
+        opacity: 1,
+      },
+    },
   },
 
-  "label + .MuiInput-formControl": {
-    marginTop: "20px",
-  },
-
-  ".MuiInputBase-root.Mui-focused": {
-    borderColor: "#3548d4",
-  },
-
-  ".MuiInputBase-root.Mui-disabled": {
-    backgroundColor: "rgba(13, 16, 48, 0.12)",
-  },
-
-  ".MuiInputBase-input": {
-    padding: "14px 16px",
-    height: "20px",
-  },
-
-  ".MuiInput-input::placeholder": {
-    color: "rgba(13, 16, 48, 0.38)",
-    opacity: 1,
+  ".MuiInputBase-adornedEnd": {
+    paddingRight: "unset",
   },
 
   ".MuiFormHelperText-root": {
@@ -87,20 +104,16 @@ const StyledTextField = styled(BaseTextField)({
     marginTop: "7px",
     lineHeight: "16px",
     marginLeft: "0px",
-  },
 
-  ".MuiFormHelperText-root.Mui-error": {
-    color: "#db3615",
-  },
+    "&.Mui-error": {
+      color: "var(--error-color)",
+    },
 
-  ".MuiInputBase-root.Mui-error": {
-    borderColor: "#db3615",
-  },
-
-  ".MuiFormHelperText-root > svg": {
-    height: "16px",
-    width: "16px",
-    marginRight: "4px",
+    "> svg": {
+      height: "16px",
+      width: "16px",
+      marginRight: "4px",
+    },
   },
 });
 
@@ -188,23 +201,26 @@ export interface TextFieldProps
   formRegistration?: UseFormRegister<FieldValues>;
 }
 
-const TextField = ({
-  onChange,
-  onReturn,
-  error,
-  helperText,
-  readOnly,
-  endAdornment,
-  autocompleteCallback,
-  defaultValue,
-  value,
-  fullWidth = true,
-  name,
-  required,
-  formRegistration,
-  inputRef,
-  ...props
-}: TextFieldProps) => {
+const TextFieldRef = (
+  {
+    onChange,
+    onReturn,
+    error,
+    helperText,
+    readOnly,
+    endAdornment,
+    autocompleteCallback,
+    defaultValue,
+    value,
+    fullWidth = true,
+    name,
+    required,
+    formRegistration,
+    inputRef,
+    ...props
+  }: TextFieldProps,
+  ref
+) => {
   const formValidation =
     formRegistration !== undefined ? formRegistration(name, { required }) : undefined;
   const changeCallback = onChange !== undefined ? onChange : e => {};
@@ -265,11 +281,11 @@ const TextField = ({
       },
       onKeyDown,
       readOnly,
-      endAdornment: endAdornment && (
+      endAdornment: endAdornment ? (
         <IconButton type="submit" disabled={isEmpty} size="large">
           {endAdornment}
         </IconButton>
-      ),
+      ) : null,
     },
     inputRef: formValidation !== undefined ? formValidation.ref : inputRef,
   };
@@ -290,7 +306,7 @@ const TextField = ({
   if (autocompleteCallback !== undefined) {
     // TODO (mcutalo): support option.label in the renderOption
     return (
-      <Autocomplete
+      <StyledAutocomplete
         freeSolo
         size="small"
         fullWidth={fullWidth}
@@ -301,7 +317,7 @@ const TextField = ({
         }
         onInputChange={(__, v) => autoCompleteDebounce(v)}
         renderOption={(option: AutocompleteResultProps) => (
-          <AutocompleteResult id={option.id} label={option.label} />
+          <AutocompleteResult key={option.id} id={option.id} label={option.label} />
         )}
         onSelectCapture={e => {
           if (formValidation !== undefined) {
@@ -320,6 +336,7 @@ const TextField = ({
               ref: inputProps.InputProps.ref,
             }}
             {...props}
+            {...{ ref }}
           />
         )}
         // This func is here for autocomplete. When the user clicks a choice in the dropdown
@@ -339,14 +356,17 @@ const TextField = ({
 
   return (
     <StyledTextField
-      {...textFieldProps}
       size="small"
+      {...textFieldProps}
       defaultValue={defaultValue}
       value={value}
       onChange={onChange}
       {...props}
+      {...{ ref }}
     />
   );
 };
+
+const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(TextFieldRef);
 
 export default TextField;

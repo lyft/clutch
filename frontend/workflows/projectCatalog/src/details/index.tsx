@@ -54,7 +54,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
         <SimpleFeatureFlag feature="projectCatalogSettings">
           <FeatureOn>
             <Grid item>
-              <IconButton onClick={() => navigate("config")} size="large">
+              <IconButton onClick={() => navigate("config")} size="medium">
                 <SettingsIcon />
               </IconButton>
             </Grid>
@@ -127,7 +127,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
     <ProjectDetailsContext.Provider value={{ projectInfo }}>
       <StyledContainer container direction="row" wrap="nowrap">
         {/* Column for project details and header */}
-        <Grid item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid container item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container>
             <StyledHeadingContainer item xs={6} sm={6} md={7} lg={8} xl={9}>
               {/* Static Header */}
@@ -165,8 +165,8 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               </Grid>
               {/* Custom Meta Cards */}
               {metaCards.length > 0 &&
-                metaCards.map(card => (
-                  <Grid item xs={12}>
+                metaCards.map((card, index) => (
+                  <Grid item xs={12} key={`meta-${index}`}>
                     {card}
                   </Grid>
                 ))}
@@ -174,8 +174,8 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
             <Grid container item xs={12} sm={12} md={7} lg={8} xl={9} spacing={2}>
               {/* Custom Dynamic Cards */}
               {dynamicCards.length > 0 &&
-                dynamicCards.map(card => (
-                  <Grid item xs={12}>
+                dynamicCards.map((card, index) => (
+                  <Grid item xs={12} key={`dynamic-${index}`}>
                     {card}
                   </Grid>
                 ))}

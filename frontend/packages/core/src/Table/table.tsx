@@ -58,12 +58,12 @@ const StyledTableRow = styled(MuiTableRow)<{
   $responsive?: TableRowProps["responsive"];
 }>(
   {
-    ":nth-of-type(even)": {
-      background: "#F8F8F9",
-    },
-    ":hover": {
-      background: "#EBEDFB",
-    },
+    // ":nth-of-type(even)": {
+    //   background: "#F8F8F9",
+    // },
+    // ":hover": {
+    //   background: "#EBEDFB",
+    // },
   },
   props => ({
     display: props.$responsive ? "contents" : "",
@@ -187,13 +187,21 @@ export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
    * should set the responsive prop on the table.
    */
   responsive?: boolean;
+
+  colSpan?: number;
 }
 
-const TableRow = ({ children = [], onClick, cellDefault, responsive = false }: TableRowProps) => (
+const TableRow = ({
+  children = [],
+  onClick,
+  cellDefault,
+  responsive = false,
+  colSpan,
+}: TableRowProps) => (
   <StyledTableRow onClick={onClick} $responsive={responsive}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
-      <StyledTableCell key={index} $responsive={responsive}>
+      <StyledTableCell key={index} $responsive={responsive} colSpan={colSpan}>
         {value === null && cellDefault !== undefined ? cellDefault : value}
       </StyledTableCell>
     ))}

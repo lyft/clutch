@@ -26,7 +26,7 @@ const StyledTooltip = styled(BaseTooltip)((props: { maxwidth?: string }) => ({
   },
 }));
 
-export interface TooltipProps extends Pick<MuiTooltipProps, "placement"> {
+export interface TooltipProps extends Pick<MuiTooltipProps, "placement" | "arrow"> {
   // tooltip reference element (i.e. icon)
   children: React.ReactElement;
   // material ui default is 300px

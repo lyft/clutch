@@ -13,7 +13,7 @@ export interface ProjectInfoChip {
 
 const ChipsRow = ({ chips = [] }: { chips: ProjectInfoChip[] }) => (
   <>
-    {chips.map(({ variant = "neutral", text, icon, title, url }) => {
+    {chips.map(({ variant = "neutral", text, icon, title, url }, index) => {
       const chipText = (
         <Grid container direction="row" wrap="nowrap">
           {text}
@@ -22,7 +22,7 @@ const ChipsRow = ({ chips = [] }: { chips: ProjectInfoChip[] }) => (
       );
       const chipElem = <Chip variant={variant} label={chipText} size="small" icon={icon} />;
       return (
-        <Tooltip title={title ?? text}>
+        <Tooltip title={title ?? text} key={`chip-${index}`}>
           <Grid item>{url ? <Link href={url}>{chipElem}</Link> : chipElem}</Grid>
         </Tooltip>
       );

@@ -9,6 +9,7 @@ const Form = styled.form({
 
 const FormRow = styled.div({
   display: "flex",
+  alignItems: "center",
   "> *": {
     margin: "0 8px",
   },

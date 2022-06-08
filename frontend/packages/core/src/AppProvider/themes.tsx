@@ -2,14 +2,12 @@ import React from "react";
 import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
 import type { Theme as MuiTheme } from "@mui/material";
 import {
-  adaptV4Theme,
-  createTheme as createMuiTheme,
   CssBaseline,
   DeprecatedThemeOptions,
   StyledEngineProvider,
-  ThemeProvider as MuiThemeProvider,
+  ThemeProvider,
 } from "@mui/material";
-import { PaletteOptions, useTheme as useMuiTheme } from "@mui/material/styles";
+import { PaletteOptions, createTheme, useTheme as useMuiTheme } from "@mui/material/styles";
 import { StylesProvider } from "@mui/styles";
 
 declare module "@mui/styles/defaultTheme" {
@@ -60,42 +58,60 @@ const lightPalette = (): ClutchPalette => {
   };
 };
 
-const lightTheme = () => {
-  return createMuiTheme(
-    adaptV4Theme({
-      palette: lightPalette(),
-      transitions: {
-        // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
-        create: () => "none",
+const lightTheme = createTheme({
+  // adaptV4Theme({
+  palette: lightPalette(),
+  transitions: {
+    // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
+    create: () => "none",
+  },
+  components: {
+    MuiButtonBase: {
+      // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
+      defaultProps: {
+        disableRipple: true,
       },
-      props: {
-        MuiButtonBase: {
-          // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
-          disableRipple: true,
+    },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          // Default as MUI changed fontSize to 1rem
+          fontSize: "0.875rem",
         },
       },
-      overrides: {
-        MuiAccordion: {
-          root: {
-            "&$expanded": {
-              // remove the additional margin rule when expanded so the original margin is used.
-              margin: null,
-            },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          fontSize: "0.875rem",
+          height: "20px",
+        },
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          "&$expanded": {
+            // remove the additional margin rule when expanded so the original margin is used.
+            margin: null,
           },
         },
-        // TODO: Figure out if this needs to be adjusted
-        // MuiTypography: {
-        //   colorPrimary: {
-        //     color: NAVY,
-        //   },
-        //   colorSecondary: {
-        //     color: GRAY,
-        //   },
-        // },
       },
-    })
-  );
-};
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          colorPrimary: {
+            color: NAVY,
+          },
+          colorSecondary: {
+            color: GRAY,
+          },
+        },
+      },
+    },
+  },
+});
 
 const useTheme = () => {
   return useMuiTheme() as ClutchTheme;
@@ -109,12 +125,12 @@ const Theme: React.FC<ThemeProps> = ({ children }) => {
   const theme = lightTheme;
   return (
     <StyledEngineProvider injectFirst>
-      <MuiThemeProvider theme={theme()}>
-        <EmotionThemeProvider theme={theme()}>
+      <ThemeProvider theme={theme}>
+        <EmotionThemeProvider theme={theme}>
           <CssBaseline />
           <StylesProvider injectFirst>{children}</StylesProvider>
         </EmotionThemeProvider>
-      </MuiThemeProvider>
+      </ThemeProvider>
     </StyledEngineProvider>
   );
 };

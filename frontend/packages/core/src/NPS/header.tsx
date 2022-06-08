@@ -23,7 +23,7 @@ const Grow = styled(MuiGrow)((props: { placement: string }) => ({
 
 const Popper = styled(MuiPopper)({
   padding: "0 12px",
-  marginLeft: "12px",
+  offset: "12px",
   zIndex: 1201,
 });
 
@@ -119,16 +119,13 @@ const HeaderFeedback = () => {
             {...TransitionProps}
             placement={placement === "bottom" ? "center top" : "center bottom"}
           >
-            {/* Get an error about a failed prop type without the fragment, needs further investigation */}
-            <>
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList autoFocusItem={open} id="options">
-                    <NPSFeedback origin="HEADER" feedbackTypes={generateFeedbackTypes(workflows)} />
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </>
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList autoFocusItem={open} id="options">
+                  <NPSFeedback origin="HEADER" feedbackTypes={generateFeedbackTypes(workflows)} />
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
           </Grow>
         )}
       </Popper>

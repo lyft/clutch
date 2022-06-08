@@ -152,7 +152,7 @@ const BaseCard = ({ loading, error, ...props }: CardProps) => {
   }, []);
 
   return (
-    <StyledCard container direction="row">
+    <StyledCard>
       <CardTitle {...props} />
       <CardBody loading={loading || cardLoading} error={error || cardError} {...props} />
     </StyledCard>
