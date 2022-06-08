@@ -57,7 +57,7 @@ const autoComplete = async (search: string): Promise<any> => {
 
 const Form = styled.form({});
 
-const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
+const Catalog: React.FC<WorkflowProps> = () => {
   const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(catalogReducer, initialState);
 
@@ -135,17 +135,12 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
         <div style={{ margin: "16px" }}>
           <Form noValidate onSubmit={handleSubmit(triggerProjectAdd)}>
             <TextField
-              placeholder="Search"
+              label="Search"
+              placeholder="Project Name"
               value={state.search}
               onChange={handleChanges}
               autocompleteCallback={v => autoComplete(v)}
-              endAdornment={
-                state.isSearching ? (
-                  <CircularProgress size="24px" />
-                ) : (
-                  <SearchIcon onClick={triggerProjectAdd} />
-                )
-              }
+              endAdornment={state.isSearching ? <CircularProgress size="24px" /> : <SearchIcon />}
               error={state.error !== undefined}
               helperText={state?.error}
             />
@@ -173,7 +168,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
                 true
               );
             }}
-            size="large"
+            size="medium"
           >
             <RestoreIcon />
           </IconButton>
@@ -182,7 +177,7 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
       {state.projects.length ? (
         <Grid container direction="row" spacing={3}>
           {state.projects.map(p => (
-            <Grid item onClick={() => navigateToProject(p)}>
+            <Grid item key={`${p.name}-key`} onClick={() => navigateToProject(p)}>
               <ProjectCard project={p} onRemove={() => triggerProjectRemove(p)} />
             </Grid>
           ))}

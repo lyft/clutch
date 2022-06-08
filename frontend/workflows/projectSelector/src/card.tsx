@@ -1,10 +1,17 @@
 import * as React from "react";
 import type { CardHeaderSummaryProps, ClutchError } from "@clutch-sh/core";
-import { Card as ClutchCard, CardContent, CardHeader, Error, IconButton } from "@clutch-sh/core";
+import {
+  Grid,
+  Card as ClutchCard,
+  CardContent,
+  CardHeader,
+  Error,
+  IconButton,
+} from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Grid, LinearProgress } from "@mui/material";
+import { LinearProgress } from "@mui/material";
 
 const StyledProgressContainer = styled.div({
   height: "4px",

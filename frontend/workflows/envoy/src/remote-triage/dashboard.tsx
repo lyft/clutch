@@ -121,7 +121,13 @@ const Dashboard = ({ serverInfo, featuredSummary, summaries }: DashboardProps) =
     <div>
       <Grid container direction="row" justifyContent="space-evenly" wrap="nowrap" spacing={1}>
         <FeaturedSummary summary={featuredSummary} />
-        <SummariesContainer item container direction="column" justify="space-evenly" spacing={1}>
+        <SummariesContainer
+          item
+          container
+          direction="column"
+          justifyContent="space-evenly"
+          spacing={1}
+        >
           {summaries.map(summary => (
             <Grid item key={summary.name}>
               <Paper>

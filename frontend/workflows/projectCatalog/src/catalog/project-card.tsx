@@ -56,6 +56,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
       </Grid>
       <Grid
         container
+        item
         style={{ marginTop: "8px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
         zeroMinWidth
       >

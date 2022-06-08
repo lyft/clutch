@@ -23,7 +23,7 @@ const Grow = styled(MuiGrow)((props: { placement: string }) => ({
 
 const Popper = styled(MuiPopper)({
   padding: "0 12px",
-  marginLeft: "12px",
+  offset: "12px",
   zIndex: 1201,
 });
 

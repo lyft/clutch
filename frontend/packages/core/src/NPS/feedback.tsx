@@ -115,7 +115,6 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
     fullWidth: true,
     InputProps: {
       rows: 3,
-      rowsMax: 3,
     },
   };
 
