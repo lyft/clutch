@@ -105,7 +105,7 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 			searchIdentiferExpr = sq.Expr(mdQuery)
 		}
 
-		query = query.Where(sq.Expr("? LIKE ?", searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))
+		query = query.Where(sq.Expr("? ILIKE ?", searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))
 	}
 
 	if len(f.TypeUrl) > 0 {
