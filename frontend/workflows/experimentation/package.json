@@ -22,7 +22,7 @@
     "@clutch-sh/api": "^1.0.0-beta",
     "@clutch-sh/core": "^1.0.0-beta",
     "@clutch-sh/data-layout": "^1.0.0-beta",
-    "@emotion/styled": "^11.8.1",
+    "@emotion/styled": "11.6.0",
     "@mui/material": "^5.8.2",
     "@mui/styles": "^5.8.0",
     "history": "^5.0.0",
