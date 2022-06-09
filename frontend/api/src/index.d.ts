@@ -23558,9 +23558,6 @@ export namespace clutch {
 
                 /** SearchRequest filter */
                 filter?: (clutch.topology.v1.SearchRequest.IFilter|null);
-
-                /** SearchRequest caseInsensitive */
-                caseInsensitive?: (boolean|null);
             }
 
             /** Represents a SearchRequest. */
@@ -23583,9 +23580,6 @@ export namespace clutch {
 
                 /** SearchRequest filter. */
                 public filter?: (clutch.topology.v1.SearchRequest.IFilter|null);
-
-                /** SearchRequest caseInsensitive. */
-                public caseInsensitive: boolean;
 
                 /**
                  * Verifies a SearchRequest message.
@@ -23693,6 +23687,9 @@ export namespace clutch {
 
                     /** Filter metadata */
                     metadata?: ({ [k: string]: string }|null);
+
+                    /** Filter caseInsensitive */
+                    caseInsensitive?: (boolean|null);
                 }
 
                 /** Represents a Filter. */
@@ -23712,6 +23709,9 @@ export namespace clutch {
 
                     /** Filter metadata. */
                     public metadata: { [k: string]: string };
+
+                    /** Filter caseInsensitive. */
+                    public caseInsensitive: boolean;
 
                     /**
                      * Verifies a Filter message.

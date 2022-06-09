@@ -70,6 +70,13 @@ message SearchRequest {
     string type_url = 2;
     // Any valid metadata on the cache Resource object
     map<string, string> metadata = 3;
+
+    // If case-insensitive, will use `ILIKE`. Else, will use `LIKE`
+    // Notes about ILIKE from postgres docs:
+    // The key word ILIKE can be used instead of LIKE to make the match case-insensitive
+    // according to the active locale. This is not in the SQL standard but is a
+    // PostgreSQL extension.
+    bool case_insensitive = 5;
   }
 
   Sort sort = 1;
@@ -80,12 +87,6 @@ message SearchRequest {
   string page_token = 2;
   uint64 limit = 3;
   Filter filter = 4;
-  // If case-insensitive, will use `ILIKE`. Else, will use `LIKE`
-  // Notes about ILIKE from postgres docs:
-  // The key word ILIKE can be used instead of LIKE to make the match case-insensitive
-  // according to the active locale. This is not in the SQL standard but is a
-  // PostgreSQL extension.
-  bool case_insensitive = 5;
 }
 
 message SearchResponse {

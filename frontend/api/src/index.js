@@ -56276,7 +56276,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [pageToken] SearchRequest pageToken
                  * @property {number|Long|null} [limit] SearchRequest limit
                  * @property {clutch.topology.v1.SearchRequest.IFilter|null} [filter] SearchRequest filter
-                 * @property {boolean|null} [caseInsensitive] SearchRequest caseInsensitive
                  */
 
                 /**
@@ -56327,14 +56326,6 @@ export const clutch = $root.clutch = (() => {
                 SearchRequest.prototype.filter = null;
 
                 /**
-                 * SearchRequest caseInsensitive.
-                 * @member {boolean} caseInsensitive
-                 * @memberof clutch.topology.v1.SearchRequest
-                 * @instance
-                 */
-                SearchRequest.prototype.caseInsensitive = false;
-
-                /**
                  * Verifies a SearchRequest message.
                  * @function verify
                  * @memberof clutch.topology.v1.SearchRequest
@@ -56361,9 +56352,6 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "filter." + error;
                     }
-                    if (message.caseInsensitive != null && message.hasOwnProperty("caseInsensitive"))
-                        if (typeof message.caseInsensitive !== "boolean")
-                            return "caseInsensitive: boolean expected";
                     return null;
                 };
 
@@ -56400,8 +56388,6 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.topology.v1.SearchRequest.filter: object expected");
                         message.filter = $root.clutch.topology.v1.SearchRequest.Filter.fromObject(object.filter);
                     }
-                    if (object.caseInsensitive != null)
-                        message.caseInsensitive = Boolean(object.caseInsensitive);
                     return message;
                 };
 
@@ -56427,7 +56413,6 @@ export const clutch = $root.clutch = (() => {
                         } else
                             object.limit = options.longs === String ? "0" : 0;
                         object.filter = null;
-                        object.caseInsensitive = false;
                     }
                     if (message.sort != null && message.hasOwnProperty("sort"))
                         object.sort = $root.clutch.topology.v1.SearchRequest.Sort.toObject(message.sort, options);
@@ -56440,8 +56425,6 @@ export const clutch = $root.clutch = (() => {
                             object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber(true) : message.limit;
                     if (message.filter != null && message.hasOwnProperty("filter"))
                         object.filter = $root.clutch.topology.v1.SearchRequest.Filter.toObject(message.filter, options);
-                    if (message.caseInsensitive != null && message.hasOwnProperty("caseInsensitive"))
-                        object.caseInsensitive = message.caseInsensitive;
                     return object;
                 };
 
@@ -56617,6 +56600,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.topology.v1.SearchRequest.Filter.ISearch|null} [search] Filter search
                      * @property {string|null} [typeUrl] Filter typeUrl
                      * @property {Object.<string,string>|null} [metadata] Filter metadata
+                     * @property {boolean|null} [caseInsensitive] Filter caseInsensitive
                      */
 
                     /**
@@ -56660,6 +56644,14 @@ export const clutch = $root.clutch = (() => {
                     Filter.prototype.metadata = $util.emptyObject;
 
                     /**
+                     * Filter caseInsensitive.
+                     * @member {boolean} caseInsensitive
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
+                     * @instance
+                     */
+                    Filter.prototype.caseInsensitive = false;
+
+                    /**
                      * Verifies a Filter message.
                      * @function verify
                      * @memberof clutch.topology.v1.SearchRequest.Filter
@@ -56686,6 +56678,9 @@ export const clutch = $root.clutch = (() => {
                                 if (!$util.isString(message.metadata[key[i]]))
                                     return "metadata: string{k:string} expected";
                         }
+                        if (message.caseInsensitive != null && message.hasOwnProperty("caseInsensitive"))
+                            if (typeof message.caseInsensitive !== "boolean")
+                                return "caseInsensitive: boolean expected";
                         return null;
                     };
 
@@ -56715,6 +56710,8 @@ export const clutch = $root.clutch = (() => {
                             for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
                                 message.metadata[keys[i]] = String(object.metadata[keys[i]]);
                         }
+                        if (object.caseInsensitive != null)
+                            message.caseInsensitive = Boolean(object.caseInsensitive);
                         return message;
                     };
 
@@ -56736,6 +56733,7 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.search = null;
                             object.typeUrl = "";
+                            object.caseInsensitive = false;
                         }
                         if (message.search != null && message.hasOwnProperty("search"))
                             object.search = $root.clutch.topology.v1.SearchRequest.Filter.Search.toObject(message.search, options);
@@ -56747,6 +56745,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < keys2.length; ++j)
                                 object.metadata[keys2[j]] = message.metadata[keys2[j]];
                         }
+                        if (message.caseInsensitive != null && message.hasOwnProperty("caseInsensitive"))
+                            object.caseInsensitive = message.caseInsensitive;
                         return object;
                     };
 

@@ -37,7 +37,6 @@ func paginatedQueryBuilder(
 	sort *topologyv1.SearchRequest_Sort,
 	pageToken string,
 	limit uint64,
-	caseInsensitive bool,
 ) (sq.SelectBuilder, uint64, error) {
 	queryLimit := queryDefaultLimit
 	if limit > maxResultLimit {
@@ -65,7 +64,7 @@ func paginatedQueryBuilder(
 		Offset(queryOffset)
 
 	if filter != nil {
-		query, err = filterQueryBuilder(query, filter, caseInsensitive)
+		query, err = filterQueryBuilder(query, filter)
 		if err != nil {
 			return sq.SelectBuilder{}, 0, err
 		}
@@ -84,7 +83,7 @@ func paginatedQueryBuilder(
 
 // Filter query builder handles only the filter portion of the query all filters are AND together.
 // There are no defaults for the filter builder, if no inputs are supplied this is essentially a no-op.
-func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter, caseInsensitive bool) (sq.SelectBuilder, error) {
+func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) (sq.SelectBuilder, error) {
 	if f.Search != nil && len(f.Search.Field) > 0 {
 		if err := validateFilterSortField(f.Search.Field); err != nil {
 			return sq.SelectBuilder{}, err
@@ -111,7 +110,7 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 		 * https://www.postgresql.org/docs/current/indexes-expressional.html
 		 */
 		sqlExprLike := "? LIKE ?"
-		if caseInsensitive {
+		if f.CaseInsensitive {
 			sqlExprLike = "? ILIKE ?"
 		}
 		query = query.Where(sq.Expr(sqlExprLike, searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))

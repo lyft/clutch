@@ -33,7 +33,7 @@ func TestMaxQueryLimit(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		_, _, err := paginatedQueryBuilder(&topologyv1.SearchRequest_Filter{}, &topologyv1.SearchRequest_Sort{}, "0", test.input, false)
+		_, _, err := paginatedQueryBuilder(&topologyv1.SearchRequest_Filter{}, &topologyv1.SearchRequest_Sort{}, "0", test.input)
 		if test.shouldError {
 			assert.Error(t, err)
 		} else {
@@ -105,7 +105,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 		},
 	}
 	for _, test := range testCases {
-		output, _, err := paginatedQueryBuilder(test.filter, test.sort, test.pageToken, test.limit, false)
+		output, _, err := paginatedQueryBuilder(test.filter, test.sort, test.pageToken, test.limit)
 		assert.NoError(t, err)
 
 		sql, _, err := output.ToSql()
@@ -176,6 +176,47 @@ func TestFilterQueryBuilder(t *testing.T) {
 			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
 			shouldError: false,
 		},
+		{
+			id: "Search all options",
+			input: &topologyv1.SearchRequest_Filter{
+				Search: &topologyv1.SearchRequest_Filter_Search{
+					Field: "metadata.label",
+					Text:  "cat",
+				},
+				TypeUrl: "type.googleapis.com/clutch.aws.ec2.v1.AutoscalingGroup",
+				Metadata: map[string]string{
+					"label":  "value",
+					"label2": "value2",
+				},
+				CaseInsensitive: true,
+			},
+			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' ILIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
+			shouldError: false,
+		},
+		{
+			id: "Search by column",
+			input: &topologyv1.SearchRequest_Filter{
+				Search: &topologyv1.SearchRequest_Filter_Search{
+					Field: "column.id",
+					Text:  "cat",
+				},
+				CaseInsensitive: true,
+			},
+			expect:      "SELECT * FROM topology_cache WHERE id ILIKE $1",
+			shouldError: false,
+		},
+		{
+			id: "Search by Metadata",
+			input: &topologyv1.SearchRequest_Filter{
+				Search: &topologyv1.SearchRequest_Filter_Search{
+					Field: "metadata.label",
+					Text:  "cat",
+				},
+				CaseInsensitive: true,
+			},
+			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' ILIKE $1",
+			shouldError: false,
+		},
 	}
 
 	for _, test := range testCases {
@@ -183,7 +224,7 @@ func TestFilterQueryBuilder(t *testing.T) {
 			Select("*").
 			From("topology_cache")
 
-		output, err := filterQueryBuilder(selectBuilder, test.input, false)
+		output, err := filterQueryBuilder(selectBuilder, test.input)
 		if test.shouldError {
 			assert.Error(t, err)
 		} else {

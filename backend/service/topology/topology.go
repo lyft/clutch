@@ -131,7 +131,6 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 		req.Sort,
 		req.PageToken,
 		req.Limit,
-		req.CaseInsensitive,
 	)
 	if err != nil {
 		return nil, "", err
@@ -203,6 +202,7 @@ func (c *client) Autocomplete(ctx context.Context, typeURL, search string, limit
 				Field: "column.id",
 				Text:  search,
 			},
+			CaseInsensitive: caseInsensitive,
 		},
 	}
 

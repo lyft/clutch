@@ -391,8 +391,6 @@ func (m *SearchRequest) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for CaseInsensitive
-
 	if len(errors) > 0 {
 		return SearchRequestMultiError(errors)
 	}
@@ -2234,6 +2232,8 @@ func (m *SearchRequest_Filter) validate(all bool) error {
 	// no validation rules for TypeUrl
 
 	// no validation rules for Metadata
+
+	// no validation rules for CaseInsensitive
 
 	if len(errors) > 0 {
 		return SearchRequest_FilterMultiError(errors)
