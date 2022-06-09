@@ -86,7 +86,7 @@ describe("<NPSFeedback />", () => {
         wrapper.update();
         const alert = wrapper.find("FeedbackAlert");
         expect(alert).toBeDefined();
-        expect(alert.dive().find("Typography").childAt(0).text()).toEqual(
+        expect(alert.dive().find("Typography").childAt(0).text()).toBe(
           "Thank you for your feedback!"
         );
       });
@@ -204,7 +204,7 @@ describe("<NPSFeedback />", () => {
 
       let textField = wrapper.find("Styled(TextField)");
 
-      expect(textField.prop("helperText")).toEqual(`0 / ${maxLength}`);
+      expect(textField.prop("helperText")).toBe(`0 / ${maxLength}`);
 
       textField.prop("onChange")({ target: { value: testValue } });
 
@@ -212,7 +212,7 @@ describe("<NPSFeedback />", () => {
 
       textField = wrapper.find("Styled(TextField)");
 
-      expect(textField.prop("helperText")).toEqual(`${testValue.trim().length} / ${maxLength}`);
+      expect(textField.prop("helperText")).toBe(`${testValue.trim().length} / ${maxLength}`);
       expect(textField.prop("value")).toEqual(testValue);
     });
 
@@ -223,7 +223,7 @@ describe("<NPSFeedback />", () => {
 
       let textField = wrapper.find("Styled(TextField)");
 
-      expect(textField.prop("helperText")).toEqual(`0 / ${maxLength}`);
+      expect(textField.prop("helperText")).toBe(`0 / ${maxLength}`);
 
       textField.prop("onChange")({ target: { value: testValue } });
 
@@ -231,7 +231,7 @@ describe("<NPSFeedback />", () => {
 
       textField = wrapper.find("Styled(TextField)");
 
-      expect(textField.prop("helperText")).toEqual(`${testValue.trim().length} / ${maxLength}`);
+      expect(textField.prop("helperText")).toBe(`${testValue.trim().length} / ${maxLength}`);
       expect(textField.prop("value")).toEqual(testValue);
       expect(textField.prop("error")).toBeTruthy();
     });
@@ -294,7 +294,7 @@ describe("<NPSFeedback />", () => {
 
       wrapper.update();
 
-      expect(wrapper.find("Styled(Button)").prop("variant")).toEqual("secondary");
+      expect(wrapper.find("Styled(Button)").prop("variant")).toBe("secondary");
     });
   });
 
@@ -334,7 +334,7 @@ describe("<NPSFeedback />", () => {
     it("styles the submit button correctly", () => {
       clickEmoji(wrapper);
 
-      expect(wrapper.find("Styled(Button)").prop("variant")).toEqual("primary");
+      expect(wrapper.find("Styled(Button)").prop("variant")).toBe("primary");
     });
   });
 });

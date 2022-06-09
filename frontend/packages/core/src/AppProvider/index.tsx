@@ -100,11 +100,18 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     setDiscoverableWorkflows(pw);
   }, [workflows]);
 
-  const shortLinkProviderProps: ShortLinkContextProps = {
-    removeWorkflowSession: () => setWorkflowSessionStore(null),
-    retrieveWorkflowSession: () => workflowSessionStore,
-    storeWorkflowSession: setWorkflowSessionStore,
-  };
+  const shortLinkProviderProps: ShortLinkContextProps = React.useMemo(
+    () => ({
+      removeWorkflowSession: () => setWorkflowSessionStore(null),
+      retrieveWorkflowSession: () => workflowSessionStore,
+      storeWorkflowSession: setWorkflowSessionStore,
+    }),
+    []
+  );
+
+  const appContextValue = React.useMemo(() => ({ workflows: discoverableWorkflows }), [
+    discoverableWorkflows,
+  ]);
 
   return (
     <Router>
@@ -112,7 +119,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
         See https://github.com/lyft/clutch/commit/f6c6706b9ba29c4d4c3e5d0ac0c5d0f038203937 */}
       <Theme variant="light">
         <div id="App">
-          <ApplicationContext.Provider value={{ workflows: discoverableWorkflows }}>
+          <ApplicationContext.Provider value={appContextValue}>
             <ShortLinkContext.Provider value={shortLinkProviderProps}>
               {hydrateError && (
                 <Toast onClose={() => setHydrateError(null)}>

@@ -37,31 +37,29 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
   const navigate = useNavigate();
 
   return (
-    <>
-      <Grid
-        container
-        direction="row"
-        alignItems="center"
-        justify="flex-end"
-        spacing={1}
-        style={{
-          padding: "8px 32px 0px 0px",
-        }}
-      >
-        <Grid item>
-          <QuickLinksCard linkGroups={linkGroups} />
-        </Grid>
-        <SimpleFeatureFlag feature="projectCatalogSettings">
-          <FeatureOn>
-            <Grid item>
-              <IconButton onClick={() => navigate("config")}>
-                <SettingsIcon />
-              </IconButton>
-            </Grid>
-          </FeatureOn>
-        </SimpleFeatureFlag>
+    <Grid
+      container
+      direction="row"
+      alignItems="center"
+      justify="flex-end"
+      spacing={1}
+      style={{
+        padding: "8px 32px 0px 0px",
+      }}
+    >
+      <Grid item>
+        <QuickLinksCard linkGroups={linkGroups} />
       </Grid>
-    </>
+      <SimpleFeatureFlag feature="projectCatalogSettings">
+        <FeatureOn>
+          <Grid item>
+            <IconButton onClick={() => navigate("config")}>
+              <SettingsIcon />
+            </IconButton>
+          </Grid>
+        </FeatureOn>
+      </SimpleFeatureFlag>
+    </Grid>
   );
 };
 
@@ -72,6 +70,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
   );
   const [metaCards, setMetaCards] = React.useState<CatalogDetailsChild[]>([]);
   const [dynamicCards, setDynamicCards] = React.useState<CatalogDetailsChild[]>([]);
+  const projInfo = React.useMemo(() => ({ projectInfo }), [projectInfo]);
 
   React.useEffect(() => {
     if (children) {
@@ -80,7 +79,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
 
       React.Children.forEach(children, child => {
         if (React.isValidElement(child)) {
-          const { type } = child?.props;
+          const { type } = child?.props || {};
 
           switch (type) {
             case CardType.METADATA:
@@ -124,7 +123,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
   };
 
   return (
-    <ProjectDetailsContext.Provider value={{ projectInfo }}>
+    <ProjectDetailsContext.Provider value={projInfo}>
       <StyledContainer container direction="row" wrap="nowrap">
         {/* Column for project details and header */}
         <Grid item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>

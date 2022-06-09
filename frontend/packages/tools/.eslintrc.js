@@ -1,6 +1,12 @@
 module.exports = {
-  parser: "babel-eslint",
+  parser: "@babel/eslint-parser",
   ignorePatterns: ["build/", "dist/", "node_modules/"],
+  parserOptions: {
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ["@babel/preset-react"],
+    },
+  },
   extends: [
     "airbnb",
     "prettier",
@@ -30,6 +36,14 @@ module.exports = {
   },
   reportUnusedDisableDirectives: true,
   rules: {
+    "react/jsx-no-useless-fragment": ["error", { allowExpressions: true }],
+    "react/function-component-definition": [
+      "error",
+      {
+        namedComponents: ["function-declaration", "arrow-function"],
+        unnamedComponents: ["function-expression"],
+      },
+    ],
     "simple-import-sort/imports": [
       "error",
       {

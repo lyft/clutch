@@ -68,7 +68,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
   const failingClusterCount = clusters?.clusterStatuses.filter(
     cluster => cluster.hostStatuses.filter(host => !host.healthy).length > 0
   ).length;
-  const healthyClusterCount = clusters?.clusterStatuses.length - failingClusterCount;
+  const healthyClusterCount = (clusters?.clusterStatuses || []).length - failingClusterCount;
 
   const data = [
     {

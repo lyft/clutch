@@ -12,7 +12,7 @@
     "lint": "yarn register-workflows && eslint --ext .js,.jsx .",
     "lint:fix": "yarn run lint --fix",
     "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $PWD/src",
-    "start": "yarn register-workflows && react-app-rewired start",
+    "start": "yarn register-workflows && GENERATE_SOURCEMAP=false react-app-rewired start",
     "test": "yarn register-workflows && jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:e2e": "cypress run"

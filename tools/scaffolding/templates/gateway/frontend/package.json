@@ -8,7 +8,7 @@
     "compile": "lerna run compile --parallel",
     "compile:watch": "lerna run compile:watch --parallel",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .js,.jsx .",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "register-workflows": "npm explore @clutch-sh/tools -- yarn registerWorkflows $PWD/src",
     "start": "yarn clean && yarn compile:watch & yarn register-workflows && FORCE_COLOR=true react-scripts start | cat",
@@ -18,7 +18,7 @@
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
-    "protobufjs": "6.11.2"
+    "protobufjs": "6.11.3"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
@@ -55,4 +55,3 @@
     "yarn": "^1.22.11"
   }
 }
-

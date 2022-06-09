@@ -14,4 +14,5 @@ module.exports = {
   },
   setupFilesAfterEnv: ["@clutch-sh/tools/jest.setup.js"],
   verbose: true,
+  testEnvironment: "jsdom",
 };

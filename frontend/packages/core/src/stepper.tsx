@@ -150,10 +150,13 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
   );
 };
 
+/* Because these props are just used on the children of Step, they are throwing an error as unused */
+/* eslint-disable react/no-unused-prop-types */
 export interface StepProps {
   label: string;
   error?: boolean;
 }
+/* eslint-enable react/no-unused-prop-types */
 
 const Step: React.FC<StepProps> = ({ children }) => <>{children}</>;
 
@@ -178,6 +181,7 @@ const Stepper = ({ activeStep, children }: StepperProps) => (
 
         return (
           <MuiStep key={step.props.label}>
+            {/* eslint-disable-next-line react/no-unstable-nested-components */}
             <MuiStepLabel StepIconComponent={() => <StepIcon {...stepProps} />}>
               {step.props.label ?? `Step ${idx + 1}`}
             </MuiStepLabel>

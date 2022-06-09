@@ -43,7 +43,7 @@ const discoverWorkflows = () => {
       ` * Run the @clutch-sh/tools registerWorkflows target instead\n*/\n`
     );
     const packagePattern = Object.keys(config).join("|");
-    return childProcess.exec(
+    childProcess.exec(
       `yarn list --json --depth=0 --pattern '${packagePattern}'`,
       {
         cwd: rootFrontendDir,
@@ -66,12 +66,15 @@ const discoverWorkflows = () => {
 try {
   fs.unlinkSync(WORKFLOW_MODULE_PATH);
 } catch (err) {}
-return discoverWorkflows().then(modules => {
-  fs.appendFileSync(WORKFLOW_MODULE_PATH, `\nconst registeredWorkflows = {\n`);
-  Object.keys(modules).forEach(moduleKey => {
-    const value = modules[moduleKey];
-    fs.appendFileSync(WORKFLOW_MODULE_PATH, `  "${moduleKey}": ${value},\n`);
+
+(() => {
+  return discoverWorkflows().then(modules => {
+    fs.appendFileSync(WORKFLOW_MODULE_PATH, `\nconst registeredWorkflows = {\n`);
+    Object.keys(modules).forEach(moduleKey => {
+      const value = modules[moduleKey];
+      fs.appendFileSync(WORKFLOW_MODULE_PATH, `  "${moduleKey}": ${value},\n`);
+    });
+    fs.appendFileSync(WORKFLOW_MODULE_PATH, `};\nexport default registeredWorkflows;`);
+    console.log("Generated Workflow imports!"); // eslint-disable-line no-console
   });
-  fs.appendFileSync(WORKFLOW_MODULE_PATH, `};\nexport default registeredWorkflows;`);
-  console.log("Generated Workflow imports!"); // eslint-disable-line no-console
-});
+})();

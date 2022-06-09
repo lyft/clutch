@@ -9,7 +9,7 @@
     "compile": "esbuild --target=es2019 --outdir=dist src/*.jsx",
     "compile:dev": "yarn compile --sourcemap",
     "compile:watch": "yarn run compile:dev --watch",
-    "lint": "eslint --ext .js,.jsx .",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",

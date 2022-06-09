@@ -23,6 +23,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
   const [error, setError] = React.useState<ClutchError | null>(null);
   const [configPages, setConfigPages] = React.useState<ProjectConfigPage[]>([]);
   const [selectedPage, setSelectedPage] = React.useState<number>(0);
+  const projInfo = React.useMemo(() => ({ projectInfo }), [projectInfo]);
 
   React.useEffect(() => {
     fetchProjectInfo(projectId).then(setProjectInfo).catch(setError);
@@ -49,7 +50,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
 
       React.Children.forEach(children, (child, index) => {
         if (React.isValidElement(child)) {
-          const { title, path, onError } = child?.props;
+          const { title, path, onError } = child?.props || {};
 
           if (title) {
             validPages.push(
@@ -75,7 +76,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
   }, [children]);
 
   return (
-    <ProjectDetailsContext.Provider value={{ projectInfo }}>
+    <ProjectDetailsContext.Provider value={projInfo}>
       <StyledContainer container spacing={2}>
         <Grid item xs={12}>
           <ProjectHeader
