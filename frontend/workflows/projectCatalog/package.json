@@ -26,7 +26,7 @@
     "@clutch-sh/data-layout": "^1.0.0-beta",
     "@clutch-sh/project-selector": "^0.1.0-beta",
     "@clutch-sh/wizard": "^1.0.0-beta",
-    "@emotion/styled": "^11.5.0",
+    "@emotion/styled": "^11.8.1",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
