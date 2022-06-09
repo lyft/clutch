@@ -23558,6 +23558,9 @@ export namespace clutch {
 
                 /** SearchRequest filter */
                 filter?: (clutch.topology.v1.SearchRequest.IFilter|null);
+
+                /** SearchRequest caseInsensitive */
+                caseInsensitive?: (boolean|null);
             }
 
             /** Represents a SearchRequest. */
@@ -23580,6 +23583,9 @@ export namespace clutch {
 
                 /** SearchRequest filter. */
                 public filter?: (clutch.topology.v1.SearchRequest.IFilter|null);
+
+                /** SearchRequest caseInsensitive. */
+                public caseInsensitive: boolean;
 
                 /**
                  * Verifies a SearchRequest message.

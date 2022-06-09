@@ -33,7 +33,7 @@ func TestMaxQueryLimit(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		_, _, err := paginatedQueryBuilder(&topologyv1.SearchRequest_Filter{}, &topologyv1.SearchRequest_Sort{}, "0", test.input)
+		_, _, err := paginatedQueryBuilder(&topologyv1.SearchRequest_Filter{}, &topologyv1.SearchRequest_Sort{}, "0", test.input, false)
 		if test.shouldError {
 			assert.Error(t, err)
 		} else {
@@ -105,7 +105,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 		},
 	}
 	for _, test := range testCases {
-		output, _, err := paginatedQueryBuilder(test.filter, test.sort, test.pageToken, test.limit)
+		output, _, err := paginatedQueryBuilder(test.filter, test.sort, test.pageToken, test.limit, false)
 		assert.NoError(t, err)
 
 		sql, _, err := output.ToSql()
@@ -183,7 +183,7 @@ func TestFilterQueryBuilder(t *testing.T) {
 			Select("*").
 			From("topology_cache")
 
-		output, err := filterQueryBuilder(selectBuilder, test.input)
+		output, err := filterQueryBuilder(selectBuilder, test.input, false)
 		if test.shouldError {
 			assert.Error(t, err)
 		} else {

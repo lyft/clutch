@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
-	"strings"
 	"syscall"
 	"time"
 
@@ -132,6 +131,7 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 		req.Sort,
 		req.PageToken,
 		req.Limit,
+		req.CaseInsensitive,
 	)
 	if err != nil {
 		return nil, "", err
@@ -189,9 +189,6 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 }
 
 func (c *client) Autocomplete(ctx context.Context, typeURL, search string, limit uint64, caseInsensitive bool) ([]*topologyv1.Resource, error) {
-	if caseInsensitive {
-		search = strings.ToLower(search)
-	}
 
 	searchRequest := &topologyv1.SearchRequest{
 		PageToken: "0",
