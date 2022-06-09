@@ -83,7 +83,7 @@ message SearchRequest {
   // If case-insensitive, will use `ILIKE`. Else, will use `LIKE`
   // Notes about ILIKE from postgres docs:
   // The key word ILIKE can be used instead of LIKE to make the match case-insensitive
-  // according to the active locale. This is not in the SQL standard but is a 
+  // according to the active locale. This is not in the SQL standard but is a
   // PostgreSQL extension.
   bool case_insensitive = 5;
 }
