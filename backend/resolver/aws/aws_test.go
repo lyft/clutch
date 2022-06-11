@@ -152,7 +152,7 @@ type mockTopologySearch struct {
 	autoCompleteResults []*topologyv1.Resource
 }
 
-func (m *mockTopologySearch) Autocomplete(ctx context.Context, typeURL, search string, limit uint64, caseInsensitive bool) ([]*topologyv1.Resource, error) {
+func (m *mockTopologySearch) Autocomplete(ctx context.Context, typeURL, search string, limit uint64, caseSensitive bool) ([]*topologyv1.Resource, error) {
 	if m.autoCompleteError != nil {
 		return nil, m.autoCompleteError
 	}

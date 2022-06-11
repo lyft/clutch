@@ -110,7 +110,7 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 		 * https://www.postgresql.org/docs/current/indexes-expressional.html
 		 */
 		sqlExprLike := "? LIKE ?"
-		if f.CaseInsensitive {
+		if !f.CaseSensitive {
 			sqlExprLike = "? ILIKE ?"
 		}
 		query = query.Where(sq.Expr(sqlExprLike, searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))

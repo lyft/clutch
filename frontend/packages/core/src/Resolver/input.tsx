@@ -44,7 +44,7 @@ const autoComplete = async (type: string, search: string): Promise<any> => {
   const response = await client.post("/v1/resolver/autocomplete", {
     want: `type.googleapis.com/${type}`,
     search,
-    caseInsensitive: true,
+    caseSensitive: false,
   });
 
   return { results: response?.data?.results || [] };
