@@ -94,7 +94,6 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 				Metadata: map[string]string{
 					"label": "value",
 				},
-				CaseSensitive: true,
 			},
 			sort: &topologyv1.SearchRequest_Sort{
 				Field:     "metadata.meow.iam.a.cat",
@@ -135,7 +134,6 @@ func TestFilterQueryBuilder(t *testing.T) {
 					Field: "column.id NOT NULL;--",
 					Text:  "cat",
 				},
-				CaseSensitive: true,
 			},
 			expect:      "",
 			shouldError: true,
@@ -147,7 +145,6 @@ func TestFilterQueryBuilder(t *testing.T) {
 					Field: "column.id",
 					Text:  "cat",
 				},
-				CaseSensitive: true,
 			},
 			expect:      "SELECT * FROM topology_cache WHERE id LIKE $1",
 			shouldError: false,
@@ -159,7 +156,6 @@ func TestFilterQueryBuilder(t *testing.T) {
 					Field: "metadata.label",
 					Text:  "cat",
 				},
-				CaseSensitive: true,
 			},
 			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1",
 			shouldError: false,
@@ -176,50 +172,8 @@ func TestFilterQueryBuilder(t *testing.T) {
 					"label":  "value",
 					"label2": "value2",
 				},
-				CaseSensitive: true,
 			},
 			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
-			shouldError: false,
-		},
-		{
-			id: "Search all options",
-			input: &topologyv1.SearchRequest_Filter{
-				Search: &topologyv1.SearchRequest_Filter_Search{
-					Field: "metadata.label",
-					Text:  "cat",
-				},
-				TypeUrl: "type.googleapis.com/clutch.aws.ec2.v1.AutoscalingGroup",
-				Metadata: map[string]string{
-					"label":  "value",
-					"label2": "value2",
-				},
-				CaseSensitive: false,
-			},
-			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' ILIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
-			shouldError: false,
-		},
-		{
-			id: "Search by column",
-			input: &topologyv1.SearchRequest_Filter{
-				Search: &topologyv1.SearchRequest_Filter_Search{
-					Field: "column.id",
-					Text:  "cat",
-				},
-				CaseSensitive: false,
-			},
-			expect:      "SELECT * FROM topology_cache WHERE id ILIKE $1",
-			shouldError: false,
-		},
-		{
-			id: "Search by Metadata",
-			input: &topologyv1.SearchRequest_Filter{
-				Search: &topologyv1.SearchRequest_Filter_Search{
-					Field: "metadata.label",
-					Text:  "cat",
-				},
-				CaseSensitive: false,
-			},
-			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' ILIKE $1",
 			shouldError: false,
 		},
 	}

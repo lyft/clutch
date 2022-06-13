@@ -2233,8 +2233,6 @@ func (m *SearchRequest_Filter) validate(all bool) error {
 
 	// no validation rules for Metadata
 
-	// no validation rules for CaseSensitive
-
 	if len(errors) > 0 {
 		return SearchRequest_FilterMultiError(errors)
 	}

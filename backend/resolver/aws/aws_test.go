@@ -46,7 +46,7 @@ func TestAutoCompleteErrorHandling(t *testing.T) {
 	assert.NotNil(t, aws)
 
 	// Test error handling for topology service not found
-	_, err2 := aws.Autocomplete(context.Background(), "type_url", "search", 0, false)
+	_, err2 := aws.Autocomplete(context.Background(), "type_url", "search", 0)
 	assert.Error(t, err2)
 
 	// Test error handling for a topology search failure
@@ -55,7 +55,7 @@ func TestAutoCompleteErrorHandling(t *testing.T) {
 			autoCompleteError: fmt.Errorf("error"),
 		},
 	}
-	_, err3 := awsResolver.Autocomplete(context.Background(), "type_url", "search", 0, false)
+	_, err3 := awsResolver.Autocomplete(context.Background(), "type_url", "search", 0)
 	assert.Error(t, err3)
 }
 
@@ -88,7 +88,7 @@ func TestAutoCompleteResults(t *testing.T) {
 		},
 	}
 
-	results, err := awsResolver.Autocomplete(context.Background(), "type_url", "search", 0, false)
+	results, err := awsResolver.Autocomplete(context.Background(), "type_url", "search", 0)
 	assert.NoError(t, err)
 	assert.Equal(t, expect, results)
 }
@@ -152,7 +152,7 @@ type mockTopologySearch struct {
 	autoCompleteResults []*topologyv1.Resource
 }
 
-func (m *mockTopologySearch) Autocomplete(ctx context.Context, typeURL, search string, limit uint64, caseSensitive bool) ([]*topologyv1.Resource, error) {
+func (m *mockTopologySearch) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*topologyv1.Resource, error) {
 	if m.autoCompleteError != nil {
 		return nil, m.autoCompleteError
 	}

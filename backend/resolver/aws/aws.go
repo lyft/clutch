@@ -215,7 +215,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	}
 }
 
-func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64, caseSensitive bool) ([]*resolverv1.AutocompleteResult, error) {
+func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
 	if r.topology == nil {
 		return nil, status.Error(codes.FailedPrecondition, "topology service must be enabled to use the AWS autocomplete API")
 	}
@@ -225,7 +225,7 @@ func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit ui
 		resultLimit = limit
 	}
 
-	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit, caseSensitive)
+	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit)
 	if err != nil {
 		return nil, err
 	}

@@ -70,13 +70,6 @@ message SearchRequest {
     string type_url = 2;
     // Any valid metadata on the cache Resource object
     map<string, string> metadata = 3;
-
-    // If case-sensitive, will use `LIKE`. Else, will use `ILIKE`
-    // Notes about ILIKE from postgres docs:
-    // The key word ILIKE can be used instead of LIKE to make the match case-insensitive
-    // according to the active locale. This is not in the SQL standard but is a
-    // PostgreSQL extension.
-    bool case_sensitive = 5;
   }
 
   Sort sort = 1;
