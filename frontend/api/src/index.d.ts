@@ -21659,8 +21659,8 @@ export namespace clutch {
                 /** AutocompleteRequest limit */
                 limit?: (number|Long|null);
 
-                /** AutocompleteRequest caseInsensitive */
-                caseInsensitive?: (boolean|null);
+                /** AutocompleteRequest caseSensitive */
+                caseSensitive?: (boolean|null);
             }
 
             /** Represents an AutocompleteRequest. */
@@ -21681,8 +21681,8 @@ export namespace clutch {
                 /** AutocompleteRequest limit. */
                 public limit: (number|Long);
 
-                /** AutocompleteRequest caseInsensitive. */
-                public caseInsensitive: boolean;
+                /** AutocompleteRequest caseSensitive. */
+                public caseSensitive: boolean;
 
                 /**
                  * Verifies an AutocompleteRequest message.
@@ -23687,6 +23687,9 @@ export namespace clutch {
 
                     /** Filter metadata */
                     metadata?: ({ [k: string]: string }|null);
+
+                    /** Filter caseSensitive */
+                    caseSensitive?: (boolean|null);
                 }
 
                 /** Represents a Filter. */
@@ -23706,6 +23709,9 @@ export namespace clutch {
 
                     /** Filter metadata. */
                     public metadata: { [k: string]: string };
+
+                    /** Filter caseSensitive. */
+                    public caseSensitive: boolean;
 
                     /**
                      * Verifies a Filter message.
