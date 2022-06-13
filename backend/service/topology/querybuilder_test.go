@@ -94,6 +94,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 				Metadata: map[string]string{
 					"label": "value",
 				},
+				CaseSensitive: true,
 			},
 			sort: &topologyv1.SearchRequest_Sort{
 				Field:     "metadata.meow.iam.a.cat",
