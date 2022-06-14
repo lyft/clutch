@@ -104,8 +104,16 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 			}
 			searchIdentiferExpr = sq.Expr(mdQuery)
 		}
-
-		query = query.Where(sq.Expr("? LIKE ?", searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))
+		/*
+		 * if running into performance issues around ILIKE, the postgres
+		 * docs suggest just using lower() in the query
+		 * https://www.postgresql.org/docs/current/indexes-expressional.html
+		 */
+		sqlExprLike := "? LIKE ?"
+		if !f.CaseSensitive {
+			sqlExprLike = "? ILIKE ?"
+		}
+		query = query.Where(sq.Expr(sqlExprLike, searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))
 	}
 
 	if len(f.TypeUrl) > 0 {

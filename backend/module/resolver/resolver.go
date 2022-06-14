@@ -198,7 +198,7 @@ func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.Autocomp
 	for _, res := range resolver.Registry {
 		resSchema := res.Schemas()
 		if _, ok := resSchema[req.Want]; ok {
-			resolverResults, err := res.Autocomplete(ctx, req.Want, req.Search, req.Limit)
+			resolverResults, err := res.Autocomplete(ctx, req.Want, req.Search, req.Limit, req.CaseSensitive)
 			if err != nil {
 				return nil, err
 			}
