@@ -20,7 +20,6 @@ const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)({
     },
     textTransform: "none",
   },
-  padding: "6px 16px",
 });
 
 // TODO(smonero): add some tests

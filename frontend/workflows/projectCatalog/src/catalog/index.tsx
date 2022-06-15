@@ -49,6 +49,7 @@ const autoComplete = async (search: string): Promise<any> => {
   const response = await client.post("/v1/resolver/autocomplete", {
     want: `type.googleapis.com/clutch.core.project.v1.Project`,
     search,
+    caseSensitive: false,
   });
 
   return { results: response?.data?.results || [] };
