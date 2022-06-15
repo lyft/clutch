@@ -177,8 +177,16 @@ func (s *svc) GetProjects(ctx context.Context, req *projectv1.GetProjectsRequest
 				Project: &projectv1core.Project{
 					Name: "clutch",
 					Dependencies: &projectv1core.ProjectDependencies{
-						Upstreams:   map[string]*projectv1core.Dependency{},
-						Downstreams: map[string]*projectv1core.Dependency{},
+						Upstreams: map[string]*projectv1core.Dependency{
+							"type.googleapis.com/clutch.core.project.v1.Project": {
+								Ids: []string{"users"},
+							},
+						},
+						Downstreams: map[string]*projectv1core.Dependency{
+							"type.googleapis.com/clutch.core.project.v1.Project": {
+								Ids: []string{"acl"},
+							},
+						},
 					},
 				},
 			},
