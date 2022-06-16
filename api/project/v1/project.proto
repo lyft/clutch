@@ -38,6 +38,6 @@ message ProjectResult {
 }
 
 message GetProjectsResponse {
-  map<string, ProjectResult> results = 1;
+  map<string, ProjectResult> results = 1 [ (clutch.api.v1.log) = false ];
   repeated google.rpc.Status partial_failures = 2;
 }
