@@ -11,8 +11,6 @@ LINKED_PACKAGES=(
   "react-router-dom"
   "@emotion/react"
   "@emotion/styled"
-  "@material-ui/styles"
-  "@material-ui/core"
   "@mui/styles"
   "@mui/material"
   "@types/enzyme"
