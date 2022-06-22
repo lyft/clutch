@@ -13,6 +13,8 @@ LINKED_PACKAGES=(
   "@emotion/styled"
   "@material-ui/styles"
   "@material-ui/core"
+  "@mui/styles"
+  "@mui/material"
   "@types/enzyme"
   "@types/jest"
   "@types/mocha"
