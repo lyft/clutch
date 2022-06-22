@@ -10,28 +10,23 @@ exports[`Not Found component renders correctly 1`] = `
             <CssBaseline>
               <GlobalStyles styles={[Function: styles]}>
                 <GlobalStyles styles={[Function: styles]} defaultTheme={{...}}>
-                  <EmotionGlobal styles={[Function (anonymous)]} />
+                  <ForwardRef styles={[Function (anonymous)]} />
                 </GlobalStyles>
               </GlobalStyles>
             </CssBaseline>
             <StylesProvider injectFirst={true}>
               <NotFound>
                 <Styled(Component) container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}}>
-                  <Insertion cache={{...}} serialized={{...}} isStringTag={false} />
                   <ForwardRef(Grid) container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}} className=\\"css-1rc10fs\\">
                     <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1rc10fs\\" as=\\"div\\" style={{...}} sx={{...}}>
-                      <Insertion cache={{...}} serialized={{...}} isStringTag={true} />
                       <div className=\\"MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-zxxfrz-MuiGrid-root\\" style={{...}}>
                         <Styled(Component) item={true}>
-                          <Insertion cache={{...}} serialized={{...}} isStringTag={false} />
                           <ForwardRef(Grid) item={true} className=\\"css-sm4uoy\\">
                             <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-item css-sm4uoy\\" as=\\"div\\" sx={{...}}>
-                              <Insertion cache={{...}} serialized={{...}} isStringTag={true} />
                               <div className=\\"MuiGrid-root MuiGrid-item css-15yh1qb-MuiGrid-root\\">
                                 <ForwardRef(ThumbDownIcon) fontSize=\\"inherit\\">
                                   <ForwardRef(SvgIcon) data-testid=\\"ThumbDownIcon\\" fontSize=\\"inherit\\">
                                     <MuiSvgIconRoot as=\\"svg\\" className=\\"MuiSvgIcon-root MuiSvgIcon-fontSizeInherit\\" ownerState={{...}} focusable=\\"false\\" color={[undefined]} aria-hidden={true} role={[undefined]} viewBox=\\"0 0 24 24\\" data-testid=\\"ThumbDownIcon\\">
-                                      <Insertion cache={{...}} serialized={{...}} isStringTag={true} />
                                       <svg className=\\"MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1yk9s9q-MuiSvgIcon-root\\" focusable=\\"false\\" color={[undefined]} aria-hidden={true} role={[undefined]} viewBox=\\"0 0 24 24\\" data-testid=\\"ThumbDownIcon\\">
                                         <path d=\\"M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z\\" />
                                       </svg>
@@ -44,15 +39,12 @@ exports[`Not Found component renders correctly 1`] = `
                         </Styled(Component)>
                         <ForwardRef(Grid) item={true}>
                           <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-item\\" as=\\"div\\" sx={{...}}>
-                            <Insertion cache={{...}} serialized={{...}} isStringTag={true} />
                             <div className=\\"MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root\\">
                               <ForwardRef(Typography) align=\\"center\\" color=\\"textPrimary\\" variant=\\"h3\\">
                                 <MuiTypographyRoot as=\\"h3\\" ownerState={{...}} className=\\"MuiTypography-root MuiTypography-h3 MuiTypography-alignCenter\\" sx={{...}}>
-                                  <Insertion cache={{...}} serialized={{...}} isStringTag={true} />
                                   <h3 className=\\"MuiTypography-root MuiTypography-h3 MuiTypography-alignCenter css-x6fgw-MuiTypography-root\\">
                                     <ForwardRef(Grid) item={true}>
                                       <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-item\\" as=\\"div\\" sx={{...}}>
-                                        <Insertion cache={{...}} serialized={{...}} isStringTag={true} />
                                         <div className=\\"MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root\\">
                                           Whoops...
                                         </div>
@@ -60,7 +52,6 @@ exports[`Not Found component renders correctly 1`] = `
                                     </ForwardRef(Grid)>
                                     <ForwardRef(Grid) item={true}>
                                       <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-item\\" as=\\"div\\" sx={{...}}>
-                                        <Insertion cache={{...}} serialized={{...}} isStringTag={true} />
                                         <div className=\\"MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root\\">
                                           Looks like you took a wrong turn
                                         </div>
@@ -71,7 +62,6 @@ exports[`Not Found component renders correctly 1`] = `
                               </ForwardRef(Typography)>
                               <ForwardRef(Typography) align=\\"center\\" color=\\"textPrimary\\" variant=\\"h6\\">
                                 <MuiTypographyRoot as=\\"h6\\" ownerState={{...}} className=\\"MuiTypography-root MuiTypography-h6 MuiTypography-alignCenter\\" sx={{...}}>
-                                  <Insertion cache={{...}} serialized={{...}} isStringTag={true} />
                                   <h6 className=\\"MuiTypography-root MuiTypography-h6 MuiTypography-alignCenter css-1n1umxm-MuiTypography-root\\">
                                     &lt; 404 Not Found &gt;
                                   </h6>
