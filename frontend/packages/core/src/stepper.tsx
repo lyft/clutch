@@ -16,8 +16,11 @@ const StepContainer = styled.div({
     fontSize: "14px",
     color: "rgba(13, 16, 48, 0.38)",
   },
-  ".MuiStepLabel-label.MuiStepLabel-active": {
+  ".MuiStepLabel-label.Mui-active": {
     color: "#0d1030",
+  },
+  ".MuiStepLabel-label.Mui-completed": {
+    color: "rgba(13, 16, 48, 0.38)",
   },
   ".MuiStepper-root": {
     background: "transparent",
@@ -68,11 +71,11 @@ const StepContainer = styled.div({
     borderRadius: "4px",
   },
 
-  ".MuiStepConnector-active .MuiStepConnector-line": {
+  ".Mui-active .MuiStepConnector-line": {
     backgroundColor: "#3548D4",
   },
 
-  ".MuiStepConnector-completed .MuiStepConnector-line": {
+  ".Mui-completed .MuiStepConnector-line": {
     backgroundColor: "#3548D4",
   },
 });

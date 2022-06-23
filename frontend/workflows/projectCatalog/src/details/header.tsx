@@ -44,7 +44,7 @@ const BreadCrumbs = ({ routes = [] }: BreadCrumbProps) => {
     return (
       <StyledCrumb variant="caption2" color="rgb(13, 16, 48, .48)" key={route.title}>
         {route.path ? (
-          <Link color="inherit" href={builtRoute} underline="none">
+          <Link color="inherit" href={builtRoute} underline="hover">
             {route.title}
           </Link>
         ) : (

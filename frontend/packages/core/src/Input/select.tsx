@@ -14,7 +14,7 @@ import {
 import { flatten } from "lodash";
 
 const StyledFormControl = styled(MuiFormControl)({
-  margin: "8px 0px",
+  margin: "8px",
 });
 
 const StyledFormHelperText = styled(MuiFormHelperText)({

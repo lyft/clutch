@@ -72,7 +72,7 @@ export interface DialogProps extends Pick<MuiDialogProps, "open"> {
 }
 
 const Dialog = ({ title, children, open, onClose }: DialogProps) => (
-  <MuiDialog PaperComponent={DialogPaper} open={open} onClose={onClose}>
+  <MuiDialog PaperComponent={DialogPaper} open={open} onClose={onClose} maxWidth={false}>
     <DialogTitle>
       <DialogTitleText>{title}</DialogTitleText>
       <IconButton onClick={e => onClose(e, "closeButtonClick")} size="large">

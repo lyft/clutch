@@ -26,6 +26,9 @@ const ErrorDetailDivider = styled("div")({
 });
 
 const Accordion = styled(MuiAccordion)({
+  "&.MuiAccordion-root.Mui-expanded": {
+    margin: "0px",
+  },
   ":before": {
     height: "0",
   },

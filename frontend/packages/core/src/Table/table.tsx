@@ -58,12 +58,12 @@ const StyledTableRow = styled(MuiTableRow)<{
   $responsive?: TableRowProps["responsive"];
 }>(
   {
-    // ":nth-of-type(even)": {
-    //   background: "#F8F8F9",
-    // },
-    // ":hover": {
-    //   background: "#EBEDFB",
-    // },
+    ":nth-of-type(even)": {
+      background: "#F8F8F9",
+    },
+    ":hover": {
+      background: "#EBEDFB",
+    },
   },
   props => ({
     display: props.$responsive ? "contents" : "",

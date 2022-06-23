@@ -7,13 +7,13 @@ import type {
   StandardTextFieldProps as MuiStandardTextFieldProps,
 } from "@mui/material";
 import {
+  Autocomplete,
   Grid,
   IconButton as MuiIconButton,
   Popper as MuiPopper,
   TextField as MuiTextField,
   Typography,
 } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
 import _ from "lodash";
 
 const KEY_ENTER = 13;
@@ -58,9 +58,7 @@ const StyledTextField = styled(BaseTextField)({
     "--input-default-color": "rgba(13, 16, 48, 0.38)",
     borderRadius: "4px",
     fontSize: "16px",
-    color: "var(--input-default-color)",
     backgroundColor: "#FFFFFF",
-    // paddingRight: "unset",
 
     "& fieldset": {
       borderColor: "var(--input-default-color)",
@@ -169,7 +167,7 @@ interface AutocompleteResultProps {
 const AutocompleteResult: React.FC<AutocompleteResultProps> = ({ id, label }) => (
   <ResultGrid container alignItems="center">
     <Grid item xs>
-      <ResultLabel>{id}</ResultLabel>
+      <ResultLabel>{label || id}</ResultLabel>
     </Grid>
   </ResultGrid>
 );
@@ -316,7 +314,7 @@ const TextFieldRef = (
           typeof option === "string" ? option : option?.id || option.label
         }
         onInputChange={(__, v) => autoCompleteDebounce(v)}
-        renderOption={(option: AutocompleteResultProps) => (
+        renderOption={(_unusedProps, option: AutocompleteResultProps) => (
           <AutocompleteResult key={option.id} id={option.id} label={option.label} />
         )}
         onSelectCapture={e => {
