@@ -260,7 +260,6 @@ const Select = ({
           id={`${name}-select`}
           value={flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label}
           onChange={updateSelectedOption}
-          className="tester"
           label={label}
         >
           {options?.map(option => renderSelectItems(option))}
