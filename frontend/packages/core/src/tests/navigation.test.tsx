@@ -66,7 +66,7 @@ describe("useNavigate", () => {
     });
 
     it("preserves only UTM params from existing search", () => {
-      nav("/foo");
+      nav("/foo", { utm: true });
       expect(mockNav).toHaveBeenCalledWith(
         { pathname: "/foo", search: "?utm_source=test&utm_medium=run" },
         {}
@@ -74,33 +74,49 @@ describe("useNavigate", () => {
     });
 
     it("merges UTM params with new search", () => {
-      nav({
-        pathname: "/foo",
-        search: {
-          new: "value",
+      nav(
+        {
+          pathname: "/foo",
+          search: {
+            new: "value",
+          },
         },
-      });
+        { utm: true }
+      );
       expect(mockNav).toHaveBeenCalledWith(
-        { pathname: "/foo", search: "?new=value&utm_source=test&utm_medium=run" },
+        {
+          pathname: "/foo",
+          search: "?new=value&utm_source=test&utm_medium=run",
+        },
         {}
       );
     });
 
     it("can bypass UTM tracking", () => {
-      nav("/foo", { utm: false });
+      nav("/foo");
       expect(mockNav).toHaveBeenCalledWith({ pathname: "/foo", search: "" }, {});
     });
 
     it("overwrites existing UTM params", () => {
-      nav({
-        pathname: "/foo",
-        search: {
-          utm_source: "newsource",
-          utm_medium: "newmedium",
+      nav(
+        {
+          pathname: "/foo",
+          search: {
+            utm_source: "newsource",
+            utm_medium: "newmedium",
+            utm_campaign: "newcampaign",
+            utm_term: "newterm",
+            utm_content: "newcontent",
+          },
         },
-      });
+        { utm: true }
+      );
       expect(mockNav).toHaveBeenCalledWith(
-        { pathname: "/foo", search: "?utm_source=newsource&utm_medium=newmedium" },
+        {
+          pathname: "/foo",
+          search:
+            "?utm_source=newsource&utm_medium=newmedium&utm_campaign=newcampaign&utm_term=newterm&utm_content=newcontent",
+        },
         {}
       );
     });
@@ -223,7 +239,7 @@ describe("useSearchParams", () => {
     });
 
     it("preserves only UTM params from existing search", () => {
-      setSearchParams({});
+      setSearchParams({}, { utm: true });
       expect(mockSetSearchParams).toHaveBeenCalledWith(
         { utm_source: "test", utm_medium: "run" },
         {}
@@ -231,7 +247,7 @@ describe("useSearchParams", () => {
     });
 
     it("merges UTM params with new search", () => {
-      setSearchParams({ new: "value" });
+      setSearchParams({ new: "value" }, { utm: true });
       expect(mockSetSearchParams).toHaveBeenCalledWith(
         { utm_source: "test", utm_medium: "run", new: "value" },
         {}
@@ -239,7 +255,7 @@ describe("useSearchParams", () => {
     });
 
     it("can bypass UTM tracking", () => {
-      setSearchParams({ foo: "bar" }, { utm: false });
+      setSearchParams({ foo: "bar" });
       expect(mockSetSearchParams).toHaveBeenCalledWith({ foo: "bar" }, {});
     });
 
@@ -247,11 +263,17 @@ describe("useSearchParams", () => {
       setSearchParams({
         utm_source: "newsource",
         utm_medium: "newmedium",
+        utm_campaign: "newcampaign",
+        utm_term: "newterm",
+        utm_content: "newcontent",
       });
       expect(mockSetSearchParams).toHaveBeenCalledWith(
         {
           utm_source: "newsource",
           utm_medium: "newmedium",
+          utm_campaign: "newcampaign",
+          utm_term: "newterm",
+          utm_content: "newcontent",
         },
         {}
       );
