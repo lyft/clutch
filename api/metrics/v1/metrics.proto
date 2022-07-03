@@ -8,6 +8,11 @@ import "validate/validate.proto";
 import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
 
+/**
+ * For the prometheus HTTP API see:
+ * https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries
+ */
+
 service MetricsAPI {
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
     option (google.api.http) = {
@@ -40,6 +45,8 @@ message MetricDataPoint {
 
 message Metrics {
   repeated MetricDataPoint data_points = 1;
+  string label = 2;
+  map<string, string> tags = 3;
 }
 
 message MetricsResult {

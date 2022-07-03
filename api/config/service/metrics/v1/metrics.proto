@@ -6,6 +6,11 @@ option go_package = "github.com/lyft/clutch/backend/api/config/service/metrics/v
 
 import "validate/validate.proto";
 
-message Config {
+message MetricsProvider {
   string api_endpoint = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  int32 request_timeout = 2;
+}
+
+message Config {
+  repeated MetricsProvider metrics_providers = 1 [ (validate.rules).repeated = {min_items : 1} ];
 }
