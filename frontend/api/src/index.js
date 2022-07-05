@@ -24546,7 +24546,6 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.metrics.v1
                          * @interface IMetricsProvider
                          * @property {string|null} [apiEndpoint] MetricsProvider apiEndpoint
-                         * @property {number|null} [requestTimeout] MetricsProvider requestTimeout
                          */
 
                         /**
@@ -24573,14 +24572,6 @@ export const clutch = $root.clutch = (() => {
                         MetricsProvider.prototype.apiEndpoint = "";
 
                         /**
-                         * MetricsProvider requestTimeout.
-                         * @member {number} requestTimeout
-                         * @memberof clutch.config.service.metrics.v1.MetricsProvider
-                         * @instance
-                         */
-                        MetricsProvider.prototype.requestTimeout = 0;
-
-                        /**
                          * Verifies a MetricsProvider message.
                          * @function verify
                          * @memberof clutch.config.service.metrics.v1.MetricsProvider
@@ -24594,9 +24585,6 @@ export const clutch = $root.clutch = (() => {
                             if (message.apiEndpoint != null && message.hasOwnProperty("apiEndpoint"))
                                 if (!$util.isString(message.apiEndpoint))
                                     return "apiEndpoint: string expected";
-                            if (message.requestTimeout != null && message.hasOwnProperty("requestTimeout"))
-                                if (!$util.isInteger(message.requestTimeout))
-                                    return "requestTimeout: integer expected";
                             return null;
                         };
 
@@ -24614,8 +24602,6 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.service.metrics.v1.MetricsProvider();
                             if (object.apiEndpoint != null)
                                 message.apiEndpoint = String(object.apiEndpoint);
-                            if (object.requestTimeout != null)
-                                message.requestTimeout = object.requestTimeout | 0;
                             return message;
                         };
 
@@ -24632,14 +24618,10 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults) {
+                            if (options.defaults)
                                 object.apiEndpoint = "";
-                                object.requestTimeout = 0;
-                            }
                             if (message.apiEndpoint != null && message.hasOwnProperty("apiEndpoint"))
                                 object.apiEndpoint = message.apiEndpoint;
-                            if (message.requestTimeout != null && message.hasOwnProperty("requestTimeout"))
-                                object.requestTimeout = message.requestTimeout;
                             return object;
                         };
 
@@ -48246,25 +48228,25 @@ export const clutch = $root.clutch = (() => {
                 return GetMetricsRequest;
             })();
 
-            v1.MetricDataPoint = (function() {
+            v1.DataPoint = (function() {
 
                 /**
-                 * Properties of a MetricDataPoint.
+                 * Properties of a DataPoint.
                  * @memberof clutch.metrics.v1
-                 * @interface IMetricDataPoint
-                 * @property {number|null} [value] MetricDataPoint value
-                 * @property {number|Long|null} [timestamp] MetricDataPoint timestamp
+                 * @interface IDataPoint
+                 * @property {number|null} [value] DataPoint value
+                 * @property {number|Long|null} [timestamp] DataPoint timestamp
                  */
 
                 /**
-                 * Constructs a new MetricDataPoint.
+                 * Constructs a new DataPoint.
                  * @memberof clutch.metrics.v1
-                 * @classdesc Represents a MetricDataPoint.
-                 * @implements IMetricDataPoint
+                 * @classdesc Represents a DataPoint.
+                 * @implements IDataPoint
                  * @constructor
-                 * @param {clutch.metrics.v1.IMetricDataPoint=} [properties] Properties to set
+                 * @param {clutch.metrics.v1.IDataPoint=} [properties] Properties to set
                  */
-                function MetricDataPoint(properties) {
+                function DataPoint(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -48272,30 +48254,30 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * MetricDataPoint value.
+                 * DataPoint value.
                  * @member {number} value
-                 * @memberof clutch.metrics.v1.MetricDataPoint
+                 * @memberof clutch.metrics.v1.DataPoint
                  * @instance
                  */
-                MetricDataPoint.prototype.value = 0;
+                DataPoint.prototype.value = 0;
 
                 /**
-                 * MetricDataPoint timestamp.
+                 * DataPoint timestamp.
                  * @member {number|Long} timestamp
-                 * @memberof clutch.metrics.v1.MetricDataPoint
+                 * @memberof clutch.metrics.v1.DataPoint
                  * @instance
                  */
-                MetricDataPoint.prototype.timestamp = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                DataPoint.prototype.timestamp = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * Verifies a MetricDataPoint message.
+                 * Verifies a DataPoint message.
                  * @function verify
-                 * @memberof clutch.metrics.v1.MetricDataPoint
+                 * @memberof clutch.metrics.v1.DataPoint
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                MetricDataPoint.verify = function verify(message) {
+                DataPoint.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.value != null && message.hasOwnProperty("value"))
@@ -48308,17 +48290,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a MetricDataPoint message from a plain object. Also converts values to their respective internal types.
+                 * Creates a DataPoint message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.metrics.v1.MetricDataPoint
+                 * @memberof clutch.metrics.v1.DataPoint
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.metrics.v1.MetricDataPoint} MetricDataPoint
+                 * @returns {clutch.metrics.v1.DataPoint} DataPoint
                  */
-                MetricDataPoint.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.metrics.v1.MetricDataPoint)
+                DataPoint.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.metrics.v1.DataPoint)
                         return object;
-                    let message = new $root.clutch.metrics.v1.MetricDataPoint();
+                    let message = new $root.clutch.metrics.v1.DataPoint();
                     if (object.value != null)
                         message.value = Number(object.value);
                     if (object.timestamp != null)
@@ -48334,15 +48316,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a MetricDataPoint message. Also converts values to other types if specified.
+                 * Creates a plain object from a DataPoint message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.metrics.v1.MetricDataPoint
+                 * @memberof clutch.metrics.v1.DataPoint
                  * @static
-                 * @param {clutch.metrics.v1.MetricDataPoint} message MetricDataPoint
+                 * @param {clutch.metrics.v1.DataPoint} message DataPoint
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                MetricDataPoint.toObject = function toObject(message, options) {
+                DataPoint.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -48365,17 +48347,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this MetricDataPoint to JSON.
+                 * Converts this DataPoint to JSON.
                  * @function toJSON
-                 * @memberof clutch.metrics.v1.MetricDataPoint
+                 * @memberof clutch.metrics.v1.DataPoint
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                MetricDataPoint.prototype.toJSON = function toJSON() {
+                DataPoint.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return MetricDataPoint;
+                return DataPoint;
             })();
 
             v1.Metrics = (function() {
@@ -48384,7 +48366,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a Metrics.
                  * @memberof clutch.metrics.v1
                  * @interface IMetrics
-                 * @property {Array.<clutch.metrics.v1.IMetricDataPoint>|null} [dataPoints] Metrics dataPoints
+                 * @property {Array.<clutch.metrics.v1.IDataPoint>|null} [dataPoints] Metrics dataPoints
                  * @property {string|null} [label] Metrics label
                  * @property {Object.<string,string>|null} [tags] Metrics tags
                  */
@@ -48408,7 +48390,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Metrics dataPoints.
-                 * @member {Array.<clutch.metrics.v1.IMetricDataPoint>} dataPoints
+                 * @member {Array.<clutch.metrics.v1.IDataPoint>} dataPoints
                  * @memberof clutch.metrics.v1.Metrics
                  * @instance
                  */
@@ -48445,7 +48427,7 @@ export const clutch = $root.clutch = (() => {
                         if (!Array.isArray(message.dataPoints))
                             return "dataPoints: array expected";
                         for (let i = 0; i < message.dataPoints.length; ++i) {
-                            let error = $root.clutch.metrics.v1.MetricDataPoint.verify(message.dataPoints[i]);
+                            let error = $root.clutch.metrics.v1.DataPoint.verify(message.dataPoints[i]);
                             if (error)
                                 return "dataPoints." + error;
                         }
@@ -48483,7 +48465,7 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < object.dataPoints.length; ++i) {
                             if (typeof object.dataPoints[i] !== "object")
                                 throw TypeError(".clutch.metrics.v1.Metrics.dataPoints: object expected");
-                            message.dataPoints[i] = $root.clutch.metrics.v1.MetricDataPoint.fromObject(object.dataPoints[i]);
+                            message.dataPoints[i] = $root.clutch.metrics.v1.DataPoint.fromObject(object.dataPoints[i]);
                         }
                     }
                     if (object.label != null)
@@ -48520,7 +48502,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.dataPoints && message.dataPoints.length) {
                         object.dataPoints = [];
                         for (let j = 0; j < message.dataPoints.length; ++j)
-                            object.dataPoints[j] = $root.clutch.metrics.v1.MetricDataPoint.toObject(message.dataPoints[j], options);
+                            object.dataPoints[j] = $root.clutch.metrics.v1.DataPoint.toObject(message.dataPoints[j], options);
                     }
                     if (message.label != null && message.hasOwnProperty("label"))
                         object.label = message.label;
@@ -48547,24 +48529,24 @@ export const clutch = $root.clutch = (() => {
                 return Metrics;
             })();
 
-            v1.MetricsResult = (function() {
+            v1.Result = (function() {
 
                 /**
-                 * Properties of a MetricsResult.
+                 * Properties of a Result.
                  * @memberof clutch.metrics.v1
-                 * @interface IMetricsResult
-                 * @property {Array.<clutch.metrics.v1.IMetrics>|null} [metrics] MetricsResult metrics
+                 * @interface IResult
+                 * @property {Array.<clutch.metrics.v1.IMetrics>|null} [metrics] Result metrics
                  */
 
                 /**
-                 * Constructs a new MetricsResult.
+                 * Constructs a new Result.
                  * @memberof clutch.metrics.v1
-                 * @classdesc Represents a MetricsResult.
-                 * @implements IMetricsResult
+                 * @classdesc Represents a Result.
+                 * @implements IResult
                  * @constructor
-                 * @param {clutch.metrics.v1.IMetricsResult=} [properties] Properties to set
+                 * @param {clutch.metrics.v1.IResult=} [properties] Properties to set
                  */
-                function MetricsResult(properties) {
+                function Result(properties) {
                     this.metrics = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -48573,22 +48555,22 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * MetricsResult metrics.
+                 * Result metrics.
                  * @member {Array.<clutch.metrics.v1.IMetrics>} metrics
-                 * @memberof clutch.metrics.v1.MetricsResult
+                 * @memberof clutch.metrics.v1.Result
                  * @instance
                  */
-                MetricsResult.prototype.metrics = $util.emptyArray;
+                Result.prototype.metrics = $util.emptyArray;
 
                 /**
-                 * Verifies a MetricsResult message.
+                 * Verifies a Result message.
                  * @function verify
-                 * @memberof clutch.metrics.v1.MetricsResult
+                 * @memberof clutch.metrics.v1.Result
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                MetricsResult.verify = function verify(message) {
+                Result.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.metrics != null && message.hasOwnProperty("metrics")) {
@@ -48604,24 +48586,24 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a MetricsResult message from a plain object. Also converts values to their respective internal types.
+                 * Creates a Result message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.metrics.v1.MetricsResult
+                 * @memberof clutch.metrics.v1.Result
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.metrics.v1.MetricsResult} MetricsResult
+                 * @returns {clutch.metrics.v1.Result} Result
                  */
-                MetricsResult.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.metrics.v1.MetricsResult)
+                Result.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.metrics.v1.Result)
                         return object;
-                    let message = new $root.clutch.metrics.v1.MetricsResult();
+                    let message = new $root.clutch.metrics.v1.Result();
                     if (object.metrics) {
                         if (!Array.isArray(object.metrics))
-                            throw TypeError(".clutch.metrics.v1.MetricsResult.metrics: array expected");
+                            throw TypeError(".clutch.metrics.v1.Result.metrics: array expected");
                         message.metrics = [];
                         for (let i = 0; i < object.metrics.length; ++i) {
                             if (typeof object.metrics[i] !== "object")
-                                throw TypeError(".clutch.metrics.v1.MetricsResult.metrics: object expected");
+                                throw TypeError(".clutch.metrics.v1.Result.metrics: object expected");
                             message.metrics[i] = $root.clutch.metrics.v1.Metrics.fromObject(object.metrics[i]);
                         }
                     }
@@ -48629,15 +48611,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a MetricsResult message. Also converts values to other types if specified.
+                 * Creates a plain object from a Result message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.metrics.v1.MetricsResult
+                 * @memberof clutch.metrics.v1.Result
                  * @static
-                 * @param {clutch.metrics.v1.MetricsResult} message MetricsResult
+                 * @param {clutch.metrics.v1.Result} message Result
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                MetricsResult.toObject = function toObject(message, options) {
+                Result.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -48652,17 +48634,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this MetricsResult to JSON.
+                 * Converts this Result to JSON.
                  * @function toJSON
-                 * @memberof clutch.metrics.v1.MetricsResult
+                 * @memberof clutch.metrics.v1.Result
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                MetricsResult.prototype.toJSON = function toJSON() {
+                Result.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return MetricsResult;
+                return Result;
             })();
 
             v1.GetMetricsResponse = (function() {
@@ -48671,7 +48653,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a GetMetricsResponse.
                  * @memberof clutch.metrics.v1
                  * @interface IGetMetricsResponse
-                 * @property {Object.<string,clutch.metrics.v1.IMetricsResult>|null} [queryResults] A mapping of individual queries to their respective results
+                 * @property {Object.<string,clutch.metrics.v1.IResult>|null} [queryResults] A mapping of individual queries to their respective results
                  */
 
                 /**
@@ -48692,7 +48674,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * A mapping of individual queries to their respective results
-                 * @member {Object.<string,clutch.metrics.v1.IMetricsResult>} queryResults
+                 * @member {Object.<string,clutch.metrics.v1.IResult>} queryResults
                  * @memberof clutch.metrics.v1.GetMetricsResponse
                  * @instance
                  */
@@ -48714,7 +48696,7 @@ export const clutch = $root.clutch = (() => {
                             return "queryResults: object expected";
                         let key = Object.keys(message.queryResults);
                         for (let i = 0; i < key.length; ++i) {
-                            let error = $root.clutch.metrics.v1.MetricsResult.verify(message.queryResults[key[i]]);
+                            let error = $root.clutch.metrics.v1.Result.verify(message.queryResults[key[i]]);
                             if (error)
                                 return "queryResults." + error;
                         }
@@ -48741,7 +48723,7 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.queryResults), i = 0; i < keys.length; ++i) {
                             if (typeof object.queryResults[keys[i]] !== "object")
                                 throw TypeError(".clutch.metrics.v1.GetMetricsResponse.queryResults: object expected");
-                            message.queryResults[keys[i]] = $root.clutch.metrics.v1.MetricsResult.fromObject(object.queryResults[keys[i]]);
+                            message.queryResults[keys[i]] = $root.clutch.metrics.v1.Result.fromObject(object.queryResults[keys[i]]);
                         }
                     }
                     return message;
@@ -48766,7 +48748,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.queryResults && (keys2 = Object.keys(message.queryResults)).length) {
                         object.queryResults = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.queryResults[keys2[j]] = $root.clutch.metrics.v1.MetricsResult.toObject(message.queryResults[keys2[j]], options);
+                            object.queryResults[keys2[j]] = $root.clutch.metrics.v1.Result.toObject(message.queryResults[keys2[j]], options);
                     }
                     return object;
                 };

@@ -8,7 +8,6 @@ import "validate/validate.proto";
 
 message MetricsProvider {
   string api_endpoint = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  int32 request_timeout = 2;
 }
 
 message Config {
