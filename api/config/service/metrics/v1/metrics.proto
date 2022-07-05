@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package clutch.config.service.metrics.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/service/metrics/v1;metricsv1";
+
+import "validate/validate.proto";
+
+message MetricsProvider {
+  string api_endpoint = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message Config {
+  repeated MetricsProvider metrics_providers = 1 [ (validate.rules).repeated = {min_items : 1} ];
+}

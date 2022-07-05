@@ -315,21 +315,22 @@ var _ interface {
 	ErrorName() string
 } = GetMetricsRequestValidationError{}
 
-// Validate checks the field values on Metric with the rules defined in the
+// Validate checks the field values on DataPoint with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *Metric) Validate() error {
+func (m *DataPoint) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Metric with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in MetricMultiError, or nil if none found.
-func (m *Metric) ValidateAll() error {
+// ValidateAll checks the field values on DataPoint with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DataPointMultiError, or nil
+// if none found.
+func (m *DataPoint) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Metric) validate(all bool) error {
+func (m *DataPoint) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -338,23 +339,21 @@ func (m *Metric) validate(all bool) error {
 
 	// no validation rules for Value
 
-	// no validation rules for TimestampMs
-
-	// no validation rules for Labels
+	// no validation rules for Timestamp
 
 	if len(errors) > 0 {
-		return MetricMultiError(errors)
+		return DataPointMultiError(errors)
 	}
 
 	return nil
 }
 
-// MetricMultiError is an error wrapping multiple validation errors returned by
-// Metric.ValidateAll() if the designated constraints aren't met.
-type MetricMultiError []error
+// DataPointMultiError is an error wrapping multiple validation errors returned
+// by DataPoint.ValidateAll() if the designated constraints aren't met.
+type DataPointMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m MetricMultiError) Error() string {
+func (m DataPointMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -363,11 +362,11 @@ func (m MetricMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m MetricMultiError) AllErrors() []error { return m }
+func (m DataPointMultiError) AllErrors() []error { return m }
 
-// MetricValidationError is the validation error returned by Metric.Validate if
-// the designated constraints aren't met.
-type MetricValidationError struct {
+// DataPointValidationError is the validation error returned by
+// DataPoint.Validate if the designated constraints aren't met.
+type DataPointValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -375,22 +374,22 @@ type MetricValidationError struct {
 }
 
 // Field function returns field value.
-func (e MetricValidationError) Field() string { return e.field }
+func (e DataPointValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e MetricValidationError) Reason() string { return e.reason }
+func (e DataPointValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e MetricValidationError) Cause() error { return e.cause }
+func (e DataPointValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e MetricValidationError) Key() bool { return e.key }
+func (e DataPointValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e MetricValidationError) ErrorName() string { return "MetricValidationError" }
+func (e DataPointValidationError) ErrorName() string { return "DataPointValidationError" }
 
 // Error satisfies the builtin error interface
-func (e MetricValidationError) Error() string {
+func (e DataPointValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -402,14 +401,14 @@ func (e MetricValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sMetric.%s: %s%s",
+		"invalid %sDataPoint.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = MetricValidationError{}
+var _ error = DataPointValidationError{}
 
 var _ interface {
 	Field() string
@@ -417,7 +416,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = MetricValidationError{}
+} = DataPointValidationError{}
 
 // Validate checks the field values on Metrics with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
@@ -440,7 +439,7 @@ func (m *Metrics) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetMetrics() {
+	for idx, item := range m.GetDataPoints() {
 		_, _ = idx, item
 
 		if all {
@@ -448,7 +447,7 @@ func (m *Metrics) validate(all bool) error {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, MetricsValidationError{
-						field:  fmt.Sprintf("Metrics[%v]", idx),
+						field:  fmt.Sprintf("DataPoints[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -456,7 +455,7 @@ func (m *Metrics) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, MetricsValidationError{
-						field:  fmt.Sprintf("Metrics[%v]", idx),
+						field:  fmt.Sprintf("DataPoints[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -465,7 +464,7 @@ func (m *Metrics) validate(all bool) error {
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MetricsValidationError{
-					field:  fmt.Sprintf("Metrics[%v]", idx),
+					field:  fmt.Sprintf("DataPoints[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -473,6 +472,10 @@ func (m *Metrics) validate(all bool) error {
 		}
 
 	}
+
+	// no validation rules for Label
+
+	// no validation rules for Tags
 
 	if len(errors) > 0 {
 		return MetricsMultiError(errors)
@@ -550,6 +553,138 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = MetricsValidationError{}
+
+// Validate checks the field values on Result with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Result) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Result with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ResultMultiError, or nil if none found.
+func (m *Result) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Result) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetMetrics() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ResultValidationError{
+						field:  fmt.Sprintf("Metrics[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ResultValidationError{
+						field:  fmt.Sprintf("Metrics[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ResultValidationError{
+					field:  fmt.Sprintf("Metrics[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// ResultMultiError is an error wrapping multiple validation errors returned by
+// Result.ValidateAll() if the designated constraints aren't met.
+type ResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResultMultiError) AllErrors() []error { return m }
+
+// ResultValidationError is the validation error returned by Result.Validate if
+// the designated constraints aren't met.
+type ResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ResultValidationError) ErrorName() string { return "ResultValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sResult.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ResultValidationError{}
 
 // Validate checks the field values on GetMetricsResponse with the rules
 // defined in the proto definition for this message. If any rules are
