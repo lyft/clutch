@@ -106,7 +106,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       retrieveWorkflowSession: () => workflowSessionStore,
       storeWorkflowSession: setWorkflowSessionStore,
     }),
-    []
+    [workflowSessionStore]
   );
 
   const appContextValue = React.useMemo(() => ({ workflows: discoverableWorkflows }), [
