@@ -10,7 +10,10 @@ import type {
 } from "../Contexts/workflow-storage-context/types";
 import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
 import { Alert } from "../Feedback";
+import { Link } from "../link";
 import styled from "../styled";
+
+import { generateShortLinkRoute } from "./short-link-proxy";
 
 interface ShortLinkStateHydratorProps {
   children: React.ReactElement;
@@ -105,7 +108,13 @@ const ShortLinkStateHydrator = ({
       {state.fromShortLink && (
         <Grid container direction="column" alignItems="flex-end">
           <StyledAlert severity="warning">
-            Loaded shared state &quot;{state.hash}&quot;. Any local changes will not be preserved.
+            <div style={{ display: "flex" }}>
+              Loaded shared state &quot;
+              <Link href={generateShortLinkRoute(window.location.origin, state.hash)}>
+                {state.hash}
+              </Link>
+              &quot;. Any local changes will not be preserved.
+            </div>
           </StyledAlert>
         </Grid>
       )}
