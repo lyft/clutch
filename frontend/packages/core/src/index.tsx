@@ -45,6 +45,7 @@ export * from "./NPS";
 export * from "./chip";
 export * from "./Charts";
 export * from "./Assets/icons";
+export * from "./MarkdownPane";
 
 export { default as ClutchApp } from "./AppProvider";
 

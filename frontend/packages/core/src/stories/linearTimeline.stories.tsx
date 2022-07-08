@@ -4,7 +4,6 @@ import type { Meta } from "@storybook/react";
 
 import LinearTimeline from "../Charts/linearTimeline";
 import type { LinearTimelineData } from "../Charts/types";
-
 export default {
   title: "Core/Charts/LinearTimeline",
   component: LinearTimeline,
