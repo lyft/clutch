@@ -154,12 +154,16 @@ const StyledTypography = styled("div")<{
         overflow: "hidden",
       }
     : {}),
+  ...(props.capitalize ? { textTransform: "capitalize" } : {}),
+  ...(props.uppercase ? { textTransform: "uppercase" } : {}),
 }));
 
 export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
   variant: TextVariant;
   children: React.ReactNode;
   color?: string;
+  uppercase?: boolean;
+  capitalize?: boolean;
 }
 
 const Typography = ({ variant, children, color = "#0D1030", ...props }: TypographyProps) => (
