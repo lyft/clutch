@@ -154,8 +154,7 @@ const StyledTypography = styled("div")<{
         overflow: "hidden",
       }
     : {}),
-  ...(props.capitalize ? { textTransform: "capitalize" } : {}),
-  ...(props.uppercase ? { textTransform: "uppercase" } : {}),
+  ...(props.$textTransform ? { textTransform: props.$textTransform } : {}),
 }));
 
 export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
@@ -164,10 +163,17 @@ export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
   color?: string;
   uppercase?: boolean;
   capitalize?: boolean;
+  textTransform?: string;
 }
 
-const Typography = ({ variant, children, color = "#0D1030", ...props }: TypographyProps) => (
-  <StyledTypography $variant={variant} $color={color} {...props}>
+const Typography = ({
+  variant,
+  children,
+  color = "#0D1030",
+  textTransform,
+  ...props
+}: TypographyProps) => (
+  <StyledTypography $variant={variant} $color={color} $textTransform={textTransform} {...props}>
     {children}
   </StyledTypography>
 );
