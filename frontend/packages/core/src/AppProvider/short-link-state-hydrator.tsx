@@ -110,7 +110,7 @@ const ShortLinkStateHydrator = ({
           <StyledAlert severity="warning">
             <div style={{ display: "flex" }}>
               Loaded shared state
-              {state.hash && state.hash.length < 0 && (
+              {state.hash && state.hash.length > 0 && (
                 <>
                   &quot;
                   <Link href={generateShortLinkRoute(window.location.origin, state.hash)}>
