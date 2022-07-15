@@ -109,11 +109,17 @@ const ShortLinkStateHydrator = ({
         <Grid container direction="column" alignItems="flex-end">
           <StyledAlert severity="warning">
             <div style={{ display: "flex" }}>
-              Loaded shared state &quot;
-              <Link href={generateShortLinkRoute(window.location.origin, state.hash)}>
-                {state.hash}
-              </Link>
-              &quot;. Any local changes will not be preserved.
+              Loaded shared state
+              {state.hash && state.hash.length < 0 && (
+                <>
+                  &quot;
+                  <Link href={generateShortLinkRoute(window.location.origin, state.hash)}>
+                    {state.hash}
+                  </Link>
+                  &quot;
+                </>
+              )}
+              . Any local changes will not be preserved.
             </div>
           </StyledAlert>
         </Grid>
