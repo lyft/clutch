@@ -10093,6 +10093,110 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace metrics. */
+            namespace metrics {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a MetricsProvider. */
+                    interface IMetricsProvider {
+
+                        /** MetricsProvider apiEndpoint */
+                        apiEndpoint?: (string|null);
+                    }
+
+                    /** Represents a MetricsProvider. */
+                    class MetricsProvider implements IMetricsProvider {
+
+                        /**
+                         * Constructs a new MetricsProvider.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.metrics.v1.IMetricsProvider);
+
+                        /** MetricsProvider apiEndpoint. */
+                        public apiEndpoint: string;
+
+                        /**
+                         * Verifies a MetricsProvider message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a MetricsProvider message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns MetricsProvider
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.metrics.v1.MetricsProvider;
+
+                        /**
+                         * Creates a plain object from a MetricsProvider message. Also converts values to other types if specified.
+                         * @param message MetricsProvider
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.metrics.v1.MetricsProvider, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this MetricsProvider to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config metricsProviders */
+                        metricsProviders?: (clutch.config.service.metrics.v1.IMetricsProvider[]|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.metrics.v1.IConfig);
+
+                        /** Config metricsProviders. */
+                        public metricsProviders: clutch.config.service.metrics.v1.IMetricsProvider[];
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.metrics.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.metrics.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace shortlink. */
             namespace shortlink {
 
@@ -19911,7 +20015,7 @@ export namespace clutch {
             /** Properties of a Query. */
             interface IQuery {
 
-                /** prometheus expression query string */
+                /** query string */
                 expression?: (string|null);
 
                 /** inclusive */
@@ -19933,7 +20037,7 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.metrics.v1.IQuery);
 
-                /** prometheus expression query string */
+                /** query string */
                 public expression: string;
 
                 /** inclusive */
@@ -20022,61 +20126,55 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a Metric. */
-            interface IMetric {
+            /** Properties of a DataPoint. */
+            interface IDataPoint {
 
-                /** Metric value */
+                /** DataPoint value */
                 value?: (number|null);
 
-                /** Metric timestampMs */
-                timestampMs?: (number|Long|null);
-
-                /** metric labels (tags) have a key and a value */
-                labels?: ({ [k: string]: string }|null);
+                /** DataPoint timestamp */
+                timestamp?: (number|Long|null);
             }
 
-            /** Represents a Metric. */
-            class Metric implements IMetric {
+            /** Represents a DataPoint. */
+            class DataPoint implements IDataPoint {
 
                 /**
-                 * Constructs a new Metric.
+                 * Constructs a new DataPoint.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.metrics.v1.IMetric);
+                constructor(properties?: clutch.metrics.v1.IDataPoint);
 
-                /** Metric value. */
+                /** DataPoint value. */
                 public value: number;
 
-                /** Metric timestampMs. */
-                public timestampMs: (number|Long);
-
-                /** metric labels (tags) have a key and a value */
-                public labels: { [k: string]: string };
+                /** DataPoint timestamp. */
+                public timestamp: (number|Long);
 
                 /**
-                 * Verifies a Metric message.
+                 * Verifies a DataPoint message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a Metric message from a plain object. Also converts values to their respective internal types.
+                 * Creates a DataPoint message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns Metric
+                 * @returns DataPoint
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.metrics.v1.Metric;
+                public static fromObject(object: { [k: string]: any }): clutch.metrics.v1.DataPoint;
 
                 /**
-                 * Creates a plain object from a Metric message. Also converts values to other types if specified.
-                 * @param message Metric
+                 * Creates a plain object from a DataPoint message. Also converts values to other types if specified.
+                 * @param message DataPoint
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.metrics.v1.Metric, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.metrics.v1.DataPoint, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this Metric to JSON.
+                 * Converts this DataPoint to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -20085,8 +20183,14 @@ export namespace clutch {
             /** Properties of a Metrics. */
             interface IMetrics {
 
-                /** Metrics metrics */
-                metrics?: (clutch.metrics.v1.IMetric[]|null);
+                /** Metrics dataPoints */
+                dataPoints?: (clutch.metrics.v1.IDataPoint[]|null);
+
+                /** Metrics label */
+                label?: (string|null);
+
+                /** Metrics tags */
+                tags?: ({ [k: string]: string }|null);
             }
 
             /** Represents a Metrics. */
@@ -20098,8 +20202,14 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.metrics.v1.IMetrics);
 
-                /** Metrics metrics. */
-                public metrics: clutch.metrics.v1.IMetric[];
+                /** Metrics dataPoints. */
+                public dataPoints: clutch.metrics.v1.IDataPoint[];
+
+                /** Metrics label. */
+                public label: string;
+
+                /** Metrics tags. */
+                public tags: { [k: string]: string };
 
                 /**
                  * Verifies a Metrics message.
@@ -20130,11 +20240,59 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a Result. */
+            interface IResult {
+
+                /** Result metrics */
+                metrics?: (clutch.metrics.v1.IMetrics[]|null);
+            }
+
+            /** Represents a Result. */
+            class Result implements IResult {
+
+                /**
+                 * Constructs a new Result.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.metrics.v1.IResult);
+
+                /** Result metrics. */
+                public metrics: clutch.metrics.v1.IMetrics[];
+
+                /**
+                 * Verifies a Result message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Result message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Result
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.metrics.v1.Result;
+
+                /**
+                 * Creates a plain object from a Result message. Also converts values to other types if specified.
+                 * @param message Result
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.metrics.v1.Result, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Result to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a GetMetricsResponse. */
             interface IGetMetricsResponse {
 
                 /** A mapping of individual queries to their respective results */
-                queryResults?: ({ [k: string]: clutch.metrics.v1.IMetrics }|null);
+                queryResults?: ({ [k: string]: clutch.metrics.v1.IResult }|null);
             }
 
             /** Represents a GetMetricsResponse. */
@@ -20147,7 +20305,7 @@ export namespace clutch {
                 constructor(properties?: clutch.metrics.v1.IGetMetricsResponse);
 
                 /** A mapping of individual queries to their respective results */
-                public queryResults: { [k: string]: clutch.metrics.v1.IMetrics };
+                public queryResults: { [k: string]: clutch.metrics.v1.IResult };
 
                 /**
                  * Verifies a GetMetricsResponse message.
