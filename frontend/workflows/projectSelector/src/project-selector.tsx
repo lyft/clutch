@@ -4,6 +4,7 @@ import type { clutch as IClutch, google as IGoogle } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import {
   client,
+  Select,
   TextField,
   Tooltip,
   TooltipContainer,
@@ -96,6 +97,23 @@ const StyledProgressContainer = styled.div({
   ".MuiLinearProgress-bar": {
     backgroundColor: "#3548D4",
   },
+});
+
+const RefreshContainer = styled.div({
+  margin: "0 0 0 auto",
+  width: "100px",
+});
+
+const autoRefreshChoices = {
+  none: null,
+  "5s": 5000,
+  "30s": 30000,
+  "1m": 60000,
+  "5m": 300000,
+};
+
+const refreshWindowChoices = Object.keys(autoRefreshChoices).map(c => {
+  return { label: c, value: c };
 });
 
 // Determines if every project has projectData (i.e. the effect has finished fetching the data)
@@ -217,11 +235,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   );
 
   React.useEffect(() => {
-    const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
-    return () => clearInterval(interval);
-  }, [state]);
-
-  React.useEffect(() => {
     hydrateProjects(state, dispatch, fromShortLink);
   }, [state[Group.PROJECTS]]);
 
@@ -295,6 +308,30 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     setCustomProject(event.target.value);
   };
 
+  const [refreshRate, setRefreshRate] = React.useState<number | null>(30000);
+  const convertRefreshRate = refreshRateString => {
+    // To disable refresh, pass in null
+    const s = autoRefreshChoices[refreshRateString];
+    if (s !== null) {
+      setRefreshRate(s);
+    } else {
+      setRefreshRate(null);
+    }
+  };
+
+  // useEffect that handles auto-refreshing / reloading
+  React.useEffect(() => {
+    if (refreshRate !== null) {
+      const interval = setInterval(
+        () => hydrateProjects(state, dispatch, fromShortLink),
+        refreshRate
+      );
+      return () => clearInterval(interval);
+    }
+    // if refreshrate is null then refresh will be disalbed
+    return () => {};
+  }, [hasError, state, refreshRate]);
+
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={derivedState}>
@@ -354,6 +391,17 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
               endAdornment={<AddIcon />}
             />
           </Form>
+          <Divider />
+          <RefreshContainer>
+            <Select
+              label="refresh rate"
+              name="refreshRate"
+              onChange={v => convertRefreshRate(v)}
+              defaultOption={2}
+              options={refreshWindowChoices}
+            />
+          </RefreshContainer>
+          <Divider />
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
