@@ -49,6 +49,10 @@ interface ProjectSelectorProps {
    * onError: (optional) error handle which will accept a ProjectSelectorError as input
    */
   onError?: (ProjectSelectorError) => void;
+  /**
+   * reloadInterval: (optional) interval in milliseconds to reload the project data (defaults to 30 seconds)
+   */
+  reloadInterval?: number;
 }
 
 const initialState: State = {
@@ -201,7 +205,7 @@ const autoComplete = async (search: string): Promise<any> => {
 
 const Form = styled.form({});
 
-const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
+const ProjectSelector = ({ onError, reloadInterval = 30000 }: ProjectSelectorProps) => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
@@ -217,7 +221,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   );
 
   React.useEffect(() => {
-    const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
+    const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), reloadInterval);
     return () => clearInterval(interval);
   }, [state]);
 
