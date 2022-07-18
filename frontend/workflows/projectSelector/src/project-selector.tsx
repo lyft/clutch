@@ -99,8 +99,9 @@ const StyledProgressContainer = styled.div({
   },
 });
 
+// TODO(smonero): decide on styling for this
 const RefreshContainer = styled.div({
-
+  padding: "16px 16px 8px",
 });
 
 const autoRefreshChoices = {
