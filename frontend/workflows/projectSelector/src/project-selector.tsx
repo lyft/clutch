@@ -100,8 +100,7 @@ const StyledProgressContainer = styled.div({
 });
 
 const RefreshContainer = styled.div({
-  margin: "0 0 0 auto",
-  width: "100px",
+
 });
 
 const autoRefreshChoices = {
