@@ -1,10 +1,12 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import type { clutch as IClutch, google as IGoogle } from "@clutch-sh/api";
-import type { ClutchError } from "@clutch-sh/core";
 import {
   client,
+  ClutchError,
+  FeatureOn,
   Select,
+  SimpleFeatureFlag,
   TextField,
   Tooltip,
   TooltipContainer,
@@ -391,17 +393,21 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
               endAdornment={<AddIcon />}
             />
           </Form>
-          <Divider />
-          <RefreshContainer>
-            <Select
-              label="refresh rate"
-              name="refreshRate"
-              onChange={v => convertRefreshRate(v)}
-              defaultOption={2}
-              options={refreshWindowChoices}
-            />
-          </RefreshContainer>
-          <Divider />
+          <SimpleFeatureFlag feature="dashRefreshSelect">
+            <FeatureOn>
+              <Divider />
+              <RefreshContainer>
+                <Select
+                  label="refresh rate"
+                  name="refreshRate"
+                  onChange={v => convertRefreshRate(v)}
+                  defaultOption={2}
+                  options={refreshWindowChoices}
+                />
+              </RefreshContainer>
+              <Divider />
+            </FeatureOn>
+          </SimpleFeatureFlag>
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
