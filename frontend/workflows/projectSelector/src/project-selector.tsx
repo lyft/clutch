@@ -5,8 +5,8 @@ import {
   client,
   ClutchError,
   FeatureOn,
-  Select,
   SimpleFeatureFlag,
+  Switch,
   TextField,
   Tooltip,
   TooltipContainer,
@@ -18,7 +18,6 @@ import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
@@ -104,18 +103,6 @@ const StyledProgressContainer = styled.div({
 // TODO(smonero): decide on styling for this
 const RefreshContainer = styled.div({
   padding: "16px 16px 8px",
-});
-
-const autoRefreshChoices = {
-  none: null,
-  "5s": 5000,
-  "30s": 30000,
-  "1m": 60000,
-  "5m": 300000,
-};
-
-const refreshWindowChoices = Object.keys(autoRefreshChoices).map(c => {
-  return { label: c, value: c };
 });
 
 // Determines if every project has projectData (i.e. the effect has finished fetching the data)
@@ -310,36 +297,28 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     setCustomProject(event.target.value);
   };
 
-  const [refreshRate, setRefreshRate] = React.useState<number | null>(30000);
-  const convertRefreshRate = refreshRateString => {
-    // To disable refresh, pass in null
-    const s = autoRefreshChoices[refreshRateString];
-    if (s !== null) {
-      setRefreshRate(s);
-    } else {
-      setRefreshRate(null);
-    }
+  const [autoRefresh, setAutoRefresh] = React.useState<boolean>(true);
+
+  const updateRefreshToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAutoRefresh(event.target.checked);
   };
 
   // useEffect that handles auto-refreshing / reloading
   React.useEffect(() => {
-    if (refreshRate !== null) {
-      const interval = setInterval(
-        () => hydrateProjects(state, dispatch, fromShortLink),
-        refreshRate
-      );
+    if (autoRefresh) {
+      // hardcode to 30 seconds
+      const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
       return () => clearInterval(interval);
     }
     // if refreshrate is null then refresh will be disalbed
     return () => {};
-  }, [hasError, state, refreshRate]);
+  }, [hasError, state, autoRefresh]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
-            <LayersOutlinedIcon fontSize="small" />
             <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
             <Tooltip
               title={
@@ -376,6 +355,14 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
             >
               <InfoOutlinedIcon fontSize="small" />
             </Tooltip>
+            <SimpleFeatureFlag feature="dashRefreshSelect">
+              <FeatureOn>
+                <RefreshContainer>
+                  <span style={{ paddingLeft: "10px" }}>Autorefresh</span>
+                  <Switch checked={autoRefresh} onChange={updateRefreshToggle} />
+                </RefreshContainer>
+              </FeatureOn>
+            </SimpleFeatureFlag>
           </StyledWorkflowHeader>
           <StyledProgressContainer>
             {state.loading && <LinearProgress color="secondary" />}
@@ -393,21 +380,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
               endAdornment={<AddIcon />}
             />
           </Form>
-          <SimpleFeatureFlag feature="dashRefreshSelect">
-            <FeatureOn>
-              <Divider />
-              <RefreshContainer>
-                <Select
-                  label="refresh rate"
-                  name="refreshRate"
-                  onChange={v => convertRefreshRate(v)}
-                  defaultOption={2}
-                  options={refreshWindowChoices}
-                />
-              </RefreshContainer>
-              <Divider />
-            </FeatureOn>
-          </SimpleFeatureFlag>
           <ProjectGroup title="Projects" group={Group.PROJECTS} displayToggleHelperText />
           <Divider />
           <ProjectGroup title="Upstreams" group={Group.UPSTREAM} />
