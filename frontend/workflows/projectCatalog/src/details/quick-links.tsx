@@ -11,7 +11,7 @@ import {
   TooltipContainer,
   Typography,
 } from "@clutch-sh/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 interface LinkGroupProps {
   linkGroupName: string;
@@ -23,14 +23,14 @@ interface QuickLinkProps extends LinkGroupProps {
 }
 
 interface QuickLinkContainerProps {
-  key: string | null | undefined;
+  $key: string | null | undefined;
   name: string;
   children: React.ReactNode;
 }
 
 const ICON_SIZE = "32px";
 
-const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) => {
+const QuickLinkContainer = ({ $key, name, children }: QuickLinkContainerProps) => {
   const container = (
     <Tooltip title={name}>
       <TooltipContainer>{children}</TooltipContainer>
@@ -38,7 +38,7 @@ const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) =>
   );
 
   return (
-    <Grid item key={key ?? ""} style={{ padding: "8px" }}>
+    <Grid item key={$key ?? ""} style={{ padding: "8px" }}>
       {name ? container : children}
     </Grid>
   );
@@ -47,7 +47,7 @@ const QuickLinkContainer = ({ key, name, children }: QuickLinkContainerProps) =>
 // If only a single link, then no popper is necessary
 const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
   link?.url ? (
-    <QuickLinkContainer key={link.name} name={linkGroupName}>
+    <QuickLinkContainer $key={link.name} name={linkGroupName}>
       <Link href={link.url}>
         <img
           width={ICON_SIZE}
@@ -75,7 +75,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   }, [links]);
 
   return (
-    <QuickLinkContainer key={linkGroupName} name={linkGroupName}>
+    <QuickLinkContainer $key={linkGroupName} name={linkGroupName}>
       <button
         type="button"
         style={{
@@ -130,6 +130,7 @@ const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
         if (linkGroup.links?.length === 1) {
           return (
             <QuickLink
+              key={`quicklink-${linkGroup.name}`}
               link={linkGroup.links[0]}
               linkGroupName={linkGroup.name ?? ""}
               linkGroupImage={linkGroup.imagePath ?? ""}
@@ -138,6 +139,7 @@ const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
         }
         return (
           <QuickLinkGroup
+            key={`quicklink-${linkGroup.name}`}
             linkGroupName={linkGroup.name ?? ""}
             linkGroupImage={linkGroup.imagePath ?? ""}
             links={linkGroup?.links ?? []}
@@ -164,7 +166,7 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
         direction="row"
         alignItems="center"
         spacing={1}
-        style={{ padding: "10px" }}
+        style={{ padding: "10px 10px 0px 10px" }}
       >
         <SlicedLinkGroup slicedLinkGroups={firstFive} />
         {overflow.length > 0 && (

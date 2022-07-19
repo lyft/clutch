@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, styled, Typography } from "@clutch-sh/core";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Link from "@mui/material/Link";
 
 interface Route {
   title: string;
@@ -44,7 +44,7 @@ const BreadCrumbs = ({ routes = [] }: BreadCrumbProps) => {
     return (
       <StyledCrumb variant="caption2" color="rgb(13, 16, 48, .48)" key={route.title}>
         {route.path ? (
-          <Link color="inherit" href={builtRoute}>
+          <Link color="inherit" href={builtRoute} underline="hover">
             {route.title}
           </Link>
         ) : (
