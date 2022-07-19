@@ -2,6 +2,7 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import {
+  convertSearchParam,
   Error,
   Grid,
   styled,
@@ -10,7 +11,6 @@ import {
   useLocation,
   useNavigate,
   useParams,
-  convertSearchParam,
   useSearchParams,
 } from "@clutch-sh/core";
 
@@ -105,7 +105,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
             <Tabs value={selectedPage} centered>
               {configPages.map((page, i) => (
                 <Tab
-                  key={`${i}-${page.props.title}`}
+                  key={page.props.title}
                   label={page.props.title}
                   onClick={() => setSelectedPage(i)}
                 />

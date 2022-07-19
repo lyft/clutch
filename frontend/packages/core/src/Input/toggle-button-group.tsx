@@ -14,7 +14,6 @@ export interface ToggleButtonGroupProps
   > {
   /** If true, multiple children options can be selected simultaneously. */
   multiple?: boolean;
-  label?: any;
 }
 
 const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)({
@@ -39,17 +38,15 @@ const ToggleButtonGroup = ({
   onChange,
 }: ToggleButtonGroupProps) => {
   return (
-    <>
-      <StyledMuiToggleButtonGroup
-        exclusive={!multiple}
-        value={value}
-        size={size}
-        orientation={orientation}
-        onChange={onChange}
-      >
-        {children}
-      </StyledMuiToggleButtonGroup>
-    </>
+    <StyledMuiToggleButtonGroup
+      exclusive={!multiple}
+      value={value}
+      size={size}
+      orientation={orientation}
+      onChange={onChange}
+    >
+      {children}
+    </StyledMuiToggleButtonGroup>
   );
 };
 

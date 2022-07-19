@@ -60,7 +60,6 @@ const Error = ({ subject: error, onRetry, fullWidth = false }: ErrorProps) => {
     ) : null;
 
   if (error?.details === undefined) {
-    console.log("RETURNING??");
     return (
       <Alert severity="error" title={error.status?.text} action={action} fullWidth={fullWidth}>
         {error.message}
