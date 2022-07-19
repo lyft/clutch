@@ -1,4 +1,4 @@
-import type { Color } from "@material-ui/core";
+import type { Color } from "@mui/material";
 
 export type ThemeVariant = "light" | "dark";
 

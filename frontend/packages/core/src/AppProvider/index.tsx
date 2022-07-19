@@ -1,11 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext, ShortLinkContext } from "../Contexts";
 import type { ShortLinkContextProps } from "../Contexts/short-link-context";
-import type { HydratedData, HydrateState } from "../Contexts/workflow-storage-context/types";
+import type { HydratedData } from "../Contexts/workflow-storage-context/types";
 import { Toast } from "../Feedback";
 import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
@@ -59,7 +60,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [workflowSessionStore, setWorkflowSessionStore] = React.useState<HydratedData>();
-  const [hydrateState, setHydrateState] = React.useState<HydrateState | null>(null);
+  const [hydrateState, setHydrateState] = React.useState<
+    IClutch.shortlink.v1.IShareableState[] | null
+  >(null);
   const [hydrateError, setHydrateError] = React.useState<ClutchError | null>(null);
 
   /** Used to control a race condition from displaying the workflow and the state being updated with the hydrated data */
@@ -103,7 +106,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       retrieveWorkflowSession: () => workflowSessionStore,
       storeWorkflowSession: setWorkflowSessionStore,
     }),
-    [workflowSessionStore]
+    []
   );
 
   const appContextValue = React.useMemo(() => ({ workflows: discoverableWorkflows }), [

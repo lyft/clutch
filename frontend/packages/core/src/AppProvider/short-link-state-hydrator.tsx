@@ -1,24 +1,19 @@
 import React from "react";
-import { Grid } from "@material-ui/core";
+import type { clutch as IClutch } from "@clutch-sh/api";
+import { Grid } from "@mui/material";
 
 import { useShortLinkContext, WorkflowStorageContext } from "../Contexts";
 import { retrieveData as retrieveDataHelper } from "../Contexts/workflow-storage-context/helpers";
 import workflowStorageContextReducer from "../Contexts/workflow-storage-context/reducer";
-import type {
-  HydrateState,
-  WorkflowStorageContextProps,
-} from "../Contexts/workflow-storage-context/types";
+import type { WorkflowStorageContextProps } from "../Contexts/workflow-storage-context/types";
 import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
 import { Alert } from "../Feedback";
-import { Link } from "../link";
 import styled from "../styled";
-
-import { generateShortLinkRoute } from "./short-link-proxy";
 
 interface ShortLinkStateHydratorProps {
   children: React.ReactElement;
   /** Data from ShortLink API to be hydrated into the  */
-  sharedState: HydrateState;
+  sharedState: IClutch.shortlink.v1.IShareableState[];
   /** Used to clear temporary storage variable in the AppProvider */
   clearTemporaryState: () => void;
 }
@@ -47,7 +42,7 @@ const ShortLinkStateHydrator = ({
   );
 
   React.useEffect(() => {
-    if (sharedState?.state?.length) {
+    if (sharedState && sharedState.length) {
       dispatch({ type: "HYDRATE", payload: { data: sharedState } });
       clearTemporaryState();
     }
@@ -108,19 +103,7 @@ const ShortLinkStateHydrator = ({
       {state.fromShortLink && (
         <Grid container direction="column" alignItems="flex-end">
           <StyledAlert severity="warning">
-            <div style={{ display: "flex" }}>
-              Loaded shared state
-              {state.hash && state.hash.length > 0 && (
-                <>
-                  &quot;
-                  <Link href={generateShortLinkRoute(window.location.origin, state.hash)}>
-                    {state.hash}
-                  </Link>
-                  &quot;
-                </>
-              )}
-              . Any local changes will not be preserved.
-            </div>
+            Loaded shared state. Any local changes will not be preserved.
           </StyledAlert>
         </Grid>
       )}
