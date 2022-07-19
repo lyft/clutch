@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { ChipProps as MuiChipProps } from "@material-ui/core";
-import { Chip as MuiChip } from "@material-ui/core";
+import type { ChipProps as MuiChipProps } from "@mui/material";
+import { Chip as MuiChip } from "@mui/material";
 
 import styled from "./styled";
 

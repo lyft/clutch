@@ -3,6 +3,7 @@ import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   Grid as MuiGrid,
   Table as MuiTable,
@@ -10,8 +11,7 @@ import {
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableRow,
-} from "@material-ui/core";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+} from "@mui/material";
 import _ from "lodash";
 import type { BaseSchema } from "yup";
 import { object } from "yup";

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Grid } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
+import { Grid } from "@mui/material";
+import Typography from "@mui/material/Typography";
 
 import { userId } from "./AppLayout/user";
 import { workflowsByTrending } from "./AppLayout/utils";

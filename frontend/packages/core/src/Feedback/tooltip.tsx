@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { TooltipProps as MuiTooltipProps } from "@material-ui/core";
-import { Tooltip as MuiTooltip } from "@material-ui/core";
+import type { TooltipProps as MuiTooltipProps } from "@mui/material";
+import { Tooltip as MuiTooltip } from "@mui/material";
 
 const BaseTooltip = ({ className, ...props }: MuiTooltipProps) => (
   <MuiTooltip classes={{ tooltip: className }} {...props} />
@@ -26,7 +26,7 @@ const StyledTooltip = styled(BaseTooltip)((props: { maxwidth?: string }) => ({
   },
 }));
 
-export interface TooltipProps extends Pick<MuiTooltipProps, "interactive" | "placement"> {
+export interface TooltipProps extends Pick<MuiTooltipProps, "placement" | "arrow"> {
   // tooltip reference element (i.e. icon)
   children: React.ReactElement;
   // material ui default is 300px

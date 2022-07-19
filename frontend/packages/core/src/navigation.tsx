@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import type { PartialPath, State } from "history";
 
-const UTM_PARAMS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+const UTM_PARAMS = ["utm_source", "utm_medium"];
 
 /**
  * A custom partial Path object that may be missing some properties.
@@ -88,7 +88,7 @@ const useNavigate = () => {
       newSearchParams = (to?.search || {}) as URLSearchParamsInit;
     }
     const searchParams = createSearchParams(newSearchParams);
-    if (options?.utm) {
+    if (options?.utm || options?.utm === undefined) {
       UTM_PARAMS.forEach(p => {
         const param = currentSearchParams.get(p);
         if (param && !searchParams.get(p)) {
@@ -135,7 +135,7 @@ interface SearchParamOptions extends ReactRouterNavigateOptions {
 }
 
 /**
- * A convenience wrapper for reading and writing search parameters via the
+ * A convienence wrapper for reading and writing search parameters via the
  * URLSearchParams interface. This custom hook wraps react-routers implementation
  * but changes the function to write search parameters to preserve UTM parameters
  * by default.
@@ -159,7 +159,7 @@ const useSearchParams = (): readonly [
       reactRouterOptions.state = options.state;
     }
 
-    if (options?.utm) {
+    if (options?.utm || options?.utm === undefined) {
       UTM_PARAMS.forEach(p => {
         const param = searchParams.get(p);
         if (param && !newSearchParams[p]) {

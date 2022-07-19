@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Grid, Paper } from "@material-ui/core";
-import type { Color } from "@material-ui/lab/Alert";
+import { Grid, Paper } from "@mui/material";
+import type { AlertColor as Color } from "@mui/material/Alert";
 
 import { Link } from "../link";
 
@@ -39,7 +39,7 @@ const Note: React.FC<NoteProps> = ({ severity = "info", link = "", children }) =
   return (
     <Paper elevation={0}>
       <Alert severity={severity}>
-        <Grid container justify="flex-start" alignItems="center">
+        <Grid container justifyContent="flex-start" alignItems="center">
           {children}
         </Grid>
         {link && <Link href={link}>{link}</Link>}
@@ -52,7 +52,7 @@ const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, chil
   <NotePanelContainer
     container
     direction={direction}
-    justify="center"
+    justifyContent="center"
     alignContent="space-between"
     wrap="nowrap"
   >

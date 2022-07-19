@@ -1,12 +1,12 @@
 import React from "react";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
   ClickAwayListener,
   Grow as MuiGrow,
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
-import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+} from "@mui/material";
 import { sortBy } from "lodash";
 
 import type { Workflow } from "../AppProvider/workflow";
@@ -23,7 +23,7 @@ const Grow = styled(MuiGrow)((props: { placement: string }) => ({
 
 const Popper = styled(MuiPopper)({
   padding: "0 12px",
-  marginLeft: "12px",
+  offset: "12px",
   zIndex: 1201,
 });
 

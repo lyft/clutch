@@ -1,5 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {
   Avatar,
   Card as MuiCard,
@@ -7,11 +9,9 @@ import {
   CardActionAreaProps,
   Divider,
   Grid,
-} from "@material-ui/core";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import type { SpacingProps as MuiSpacingProps } from "@material-ui/system";
-import { spacing } from "@material-ui/system";
+} from "@mui/material";
+import type { SpacingProps as MuiSpacingProps } from "@mui/system";
+import { spacing } from "@mui/system";
 
 import { IconButton } from "./button";
 import { Typography, TypographyProps } from "./typography";
@@ -221,7 +221,7 @@ const CardContent = ({
       </StyledCardContentContainer>
       {collapsible && showExpand && (
         <StyledCardActionArea padding={0} onClick={() => setExpanded(!expanded)}>
-          <Grid container alignItems="center" justify="center">
+          <Grid container alignItems="center" justifyContent="center">
             <Grid item>
               <Typography variant="body4" color="#3548D4">
                 {expanded ? collapseAction?.open.title : collapseAction?.closed.title}
