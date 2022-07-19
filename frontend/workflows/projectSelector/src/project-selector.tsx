@@ -77,6 +77,7 @@ const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
 });
 
 const StyledWorkflowTitle = styled.span({
@@ -102,7 +103,8 @@ const StyledProgressContainer = styled.div({
 
 // TODO(smonero): decide on styling for this
 const RefreshContainer = styled.div({
-  padding: "16px 16px 8px",
+  display: "flex",
+  alignItems: "center",
 });
 
 // Determines if every project has projectData (i.e. the effect has finished fetching the data)
