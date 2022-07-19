@@ -161,8 +161,6 @@ export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
   variant: TextVariant;
   children: React.ReactNode;
   color?: string;
-  uppercase?: boolean;
-  capitalize?: boolean;
   textTransform?: string;
 }
 
