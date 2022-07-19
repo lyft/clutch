@@ -24,17 +24,12 @@ export interface HydratedData {
   };
 }
 
-export interface HydrateState {
-  hash: string;
-  state: IClutch.shortlink.v1.IShareableState[];
-}
-
 type ComponentStorageActionKind = "STORE_DATA" | "REMOVE_DATA";
 
 type HydrateStorageActionKind = "HYDRATE";
 
 export interface HydratePayload {
-  data?: HydrateState;
+  data?: IClutch.shortlink.v1.IShareableState[];
 }
 
 export interface ComponentPayload {
@@ -57,7 +52,6 @@ interface HydrateStorageAction {
 export type Action = ComponentStorageAction | HydrateStorageAction;
 
 export interface WorkflowStorageState {
-  hash: string;
   fromShortLink: boolean;
   workflowStore: HydratedData;
   workflowSessionStore: HydratedData;
@@ -80,7 +74,6 @@ export interface WorkflowStorageContextProps {
 }
 
 const defaultWorkflowStorageState: WorkflowStorageState = {
-  hash: "",
   fromShortLink: false,
   workflowStore: {},
   workflowSessionStore: {},
