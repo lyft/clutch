@@ -364,15 +364,10 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
             <FlexCenterAlignContainer>
               <SimpleFeatureFlag feature="dashRefreshSelect">
                 <FeatureOn>
-                  <Tooltip
-                    title="Toggle Refresh"
-                    interactive
-                    maxWidth="400px"
-                    placement="bottom"
-                  >
+                  <Tooltip title="Toggle Refresh" interactive maxWidth="400px" placement="bottom">
                     <UpdateIcon fontSize="small" />
                   </Tooltip>
-                    <Switch checked={autoRefresh} onChange={updateRefreshToggle} />
+                  <Switch checked={autoRefresh} onChange={updateRefreshToggle} />
                 </FeatureOn>
               </SimpleFeatureFlag>
             </FlexCenterAlignContainer>
