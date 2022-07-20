@@ -103,7 +103,7 @@ const StyledProgressContainer = styled.div({
 });
 
 // TODO(smonero): decide on styling for this
-const RefreshContainer = styled.div({
+const FlexCenterAlignContainer = styled.div({
   display: "flex",
   alignItems: "center",
 });
@@ -322,7 +322,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
       <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
-            <div>
+            <FlexCenterAlignContainer>
               <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
               <Tooltip
                 title={
@@ -360,8 +360,8 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
               >
                 <InfoOutlinedIcon fontSize="small" />
               </Tooltip>
-            </div>
-            <div>
+            </FlexCenterAlignContainer>
+            <FlexCenterAlignContainer>
               <SimpleFeatureFlag feature="dashRefreshSelect">
                 <FeatureOn>
                   <Tooltip
@@ -372,12 +372,10 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                   >
                     <UpdateIcon fontSize="small" />
                   </Tooltip>
-                  <RefreshContainer>
                     <Switch checked={autoRefresh} onChange={updateRefreshToggle} />
-                  </RefreshContainer>
                 </FeatureOn>
               </SimpleFeatureFlag>
-            </div>
+            </FlexCenterAlignContainer>
           </StyledWorkflowHeader>
           <StyledProgressContainer>
             {state.loading && <LinearProgress color="secondary" />}
