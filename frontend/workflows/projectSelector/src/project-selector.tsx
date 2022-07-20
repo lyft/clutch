@@ -78,7 +78,7 @@ const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
+  justifyContent: "space-between",
 });
 
 const StyledWorkflowTitle = styled.span({
@@ -322,57 +322,62 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
       <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
-            <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
-            <Tooltip
-              title={
-                <>
-                  {[
-                    {
-                      title: "Projects",
-                      description:
-                        "Service, mobile app, etc. Unchecking a project hides its upstream and downstream dependencies.",
-                    },
-                    {
-                      title: "Upstreams",
-                      description: "Receive requests and send responses to the selected project.",
-                    },
-                    {
-                      title: "Downstreams",
-                      description: "Send requests and receive responses from the selected project.",
-                    },
-                  ].map(item => (
-                    <TooltipContainer key={item.title}>
-                      <Typography variant="subtitle3" color="#FFFFFF">
-                        {item.title}
-                      </Typography>
-                      <Typography variant="body4" color="#E7E7EA">
-                        {item.description}
-                      </Typography>
-                    </TooltipContainer>
-                  ))}
-                </>
-              }
-              interactive
-              maxWidth="400px"
-              placement="right-start"
-            >
-              <InfoOutlinedIcon fontSize="small" />
-            </Tooltip>
-            <SimpleFeatureFlag feature="dashRefreshSelect">
-              <FeatureOn>
-                <Tooltip
-                  title="Toggle Refresh"
-                  interactive
-                  maxWidth="400px"
-                  placement="right-start"
-                >
-                  <UpdateIcon fontSize="small" />
-                </Tooltip>
-                <RefreshContainer>
-                  <Switch checked={autoRefresh} onChange={updateRefreshToggle} />
-                </RefreshContainer>
-              </FeatureOn>
-            </SimpleFeatureFlag>
+            <div>
+              <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
+              <Tooltip
+                title={
+                  <>
+                    {[
+                      {
+                        title: "Projects",
+                        description:
+                          "Service, mobile app, etc. Unchecking a project hides its upstream and downstream dependencies.",
+                      },
+                      {
+                        title: "Upstreams",
+                        description: "Receive requests and send responses to the selected project.",
+                      },
+                      {
+                        title: "Downstreams",
+                        description:
+                          "Send requests and receive responses from the selected project.",
+                      },
+                    ].map(item => (
+                      <TooltipContainer key={item.title}>
+                        <Typography variant="subtitle3" color="#FFFFFF">
+                          {item.title}
+                        </Typography>
+                        <Typography variant="body4" color="#E7E7EA">
+                          {item.description}
+                        </Typography>
+                      </TooltipContainer>
+                    ))}
+                  </>
+                }
+                interactive
+                maxWidth="400px"
+                placement="right-start"
+              >
+                <InfoOutlinedIcon fontSize="small" />
+              </Tooltip>
+            </div>
+            <div>
+              <SimpleFeatureFlag feature="dashRefreshSelect">
+                <FeatureOn>
+                  <Tooltip
+                    title="Toggle Refresh"
+                    interactive
+                    maxWidth="400px"
+                    placement="bottom"
+                  >
+                    <UpdateIcon fontSize="small" />
+                  </Tooltip>
+                  <RefreshContainer>
+                    <Switch checked={autoRefresh} onChange={updateRefreshToggle} />
+                  </RefreshContainer>
+                </FeatureOn>
+              </SimpleFeatureFlag>
+            </div>
           </StyledWorkflowHeader>
           <StyledProgressContainer>
             {state.loading && <LinearProgress color="secondary" />}
