@@ -79,6 +79,7 @@ const StyledWorkflowHeader = styled.div({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  height: "24px",
 });
 
 const StyledWorkflowTitle = styled.span({
