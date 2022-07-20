@@ -18,6 +18,7 @@ import styled from "@emotion/styled";
 import { Divider, LinearProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import UpdateIcon from "@material-ui/icons/Update";
 import _ from "lodash";
 
 import { useDashUpdater } from "./dash-hooks";
@@ -305,14 +306,14 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     setAutoRefresh(event.target.checked);
   };
 
-  // useEffect that handles auto-refreshing / reloading
+  // useEffect that handles auto-refreshing / reloading.
   React.useEffect(() => {
+    // This way of autorefreshing is also used in other places.
     if (autoRefresh) {
       // hardcode to 30 seconds
       const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
       return () => clearInterval(interval);
     }
-    // if refreshrate is null then refresh will be disalbed
     return () => {};
   }, [hasError, state, autoRefresh]);
 
@@ -359,8 +360,15 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
             </Tooltip>
             <SimpleFeatureFlag feature="dashRefreshSelect">
               <FeatureOn>
+                <Tooltip
+                  title="Toggle Refresh"
+                  interactive
+                  maxWidth="400px"
+                  placement="right-start"
+                >
+                  <UpdateIcon fontSize="small" />
+                </Tooltip>
                 <RefreshContainer>
-                  <span style={{ paddingLeft: "10px" }}>Autorefresh</span>
                   <Switch checked={autoRefresh} onChange={updateRefreshToggle} />
                 </RefreshContainer>
               </FeatureOn>
