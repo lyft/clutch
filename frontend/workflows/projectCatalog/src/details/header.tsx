@@ -1,7 +1,6 @@
 import React from "react";
 import { Grid, styled, Typography } from "@clutch-sh/core";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
+import { Breadcrumbs, Link } from "@mui/material";
 
 interface Route {
   title: string;
