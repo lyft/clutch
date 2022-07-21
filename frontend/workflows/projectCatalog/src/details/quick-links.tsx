@@ -166,7 +166,7 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
         direction="row"
         alignItems="center"
         spacing={1}
-        style={{ padding: "10px 10px 0px 10px" }}
+        style={{ padding: "10px", margin: "-4px" }}
       >
         <SlicedLinkGroup slicedLinkGroups={firstFive} />
         {overflow.length > 0 && (
