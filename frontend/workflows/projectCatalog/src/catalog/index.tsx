@@ -177,7 +177,7 @@ const Catalog: React.FC<WorkflowProps> = () => {
       {state.projects.length ? (
         <Grid container direction="row" spacing={3}>
           {state.projects.map(p => (
-            <Grid item key={`${p.name}-key`} onClick={() => navigateToProject(p)}>
+            <Grid item key={p.name} onClick={() => navigateToProject(p)}>
               <ProjectCard project={p} onRemove={() => triggerProjectRemove(p)} />
             </Grid>
           ))}
