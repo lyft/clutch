@@ -4,6 +4,8 @@ import Card from "./card";
 import Dash from "./dash";
 import {
   useDashState,
+  useRefreshRateState,
+  useRefreshUpdater,
   useTimelineState,
   useTimelineUpdater,
   useTimeRangeState,
@@ -47,6 +49,8 @@ export {
   Card,
   Dash,
   useDashState,
+  useRefreshRateState,
+  useRefreshUpdater,
   useTimelineState,
   useTimelineUpdater,
   useTimeRangeState,

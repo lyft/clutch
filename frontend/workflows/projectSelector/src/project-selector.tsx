@@ -18,7 +18,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import LayersOutlinedIcon from "@material-ui/icons/LayersOutlined";
 import _ from "lodash";
 
-import { useDashUpdater } from "./dash-hooks";
+import { useDashUpdater, useRefreshUpdater } from "./dash-hooks";
 import {
   deriveStateData,
   DispatchContext,
@@ -49,10 +49,6 @@ interface ProjectSelectorProps {
    * onError: (optional) error handle which will accept a ProjectSelectorError as input
    */
   onError?: (ProjectSelectorError) => void;
-  /**
-   * reloadInterval: (optional) interval in milliseconds to reload the project data (defaults to 30 seconds)
-   */
-  reloadInterval?: number;
 }
 
 const initialState: State = {
@@ -205,7 +201,7 @@ const autoComplete = async (search: string): Promise<any> => {
 
 const Form = styled.form({});
 
-const ProjectSelector = ({ onError, reloadInterval = 30000 }: ProjectSelectorProps) => {
+const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
@@ -221,7 +217,7 @@ const ProjectSelector = ({ onError, reloadInterval = 30000 }: ProjectSelectorPro
   );
 
   React.useEffect(() => {
-    const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), reloadInterval);
+    const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
     return () => clearInterval(interval);
   }, [state]);
 
@@ -298,6 +294,10 @@ const ProjectSelector = ({ onError, reloadInterval = 30000 }: ProjectSelectorPro
   const handleChanges = event => {
     setCustomProject(event.target.value);
   };
+
+  const { updateRefreshRate } = useRefreshUpdater();
+  // TODO: once merged,
+  // updateRefreshRate(reloadInterval);
 
   return (
     <DispatchContext.Provider value={dispatch}>
