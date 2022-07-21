@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     width: "100%",
-    marginBottom: "8px",
+    marginBottom: theme.spacing(2),
   },
   table: {
     minWidth: 750,
