@@ -23,14 +23,14 @@ interface QuickLinkProps extends LinkGroupProps {
 }
 
 interface QuickLinkContainerProps {
-  $key: string | null | undefined;
+  keyProp: string | null | undefined;
   name: string;
   children: React.ReactNode;
 }
 
 const ICON_SIZE = "32px";
 
-const QuickLinkContainer = ({ $key, name, children }: QuickLinkContainerProps) => {
+const QuickLinkContainer = ({ keyProp, name, children }: QuickLinkContainerProps) => {
   const container = (
     <Tooltip title={name}>
       <TooltipContainer>{children}</TooltipContainer>
@@ -38,7 +38,7 @@ const QuickLinkContainer = ({ $key, name, children }: QuickLinkContainerProps) =
   );
 
   return (
-    <Grid item key={$key ?? ""} style={{ padding: "8px" }}>
+    <Grid item key={keyProp ?? ""} style={{ padding: "8px" }}>
       {name ? container : children}
     </Grid>
   );
@@ -47,7 +47,7 @@ const QuickLinkContainer = ({ $key, name, children }: QuickLinkContainerProps) =
 // If only a single link, then no popper is necessary
 const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
   link?.url ? (
-    <QuickLinkContainer $key={link.name} name={linkGroupName}>
+    <QuickLinkContainer keyProp={link.name} name={linkGroupName}>
       <Link href={link.url}>
         <img
           width={ICON_SIZE}
@@ -75,7 +75,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   }, [links]);
 
   return (
-    <QuickLinkContainer $key={linkGroupName} name={linkGroupName}>
+    <QuickLinkContainer keyProp={linkGroupName} name={linkGroupName}>
       <button
         type="button"
         style={{
