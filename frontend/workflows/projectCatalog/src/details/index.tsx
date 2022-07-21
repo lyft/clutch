@@ -142,7 +142,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               </Grid>
             )}
           </Grid>
-          <Grid container item direction="row" spacing={1}>
+          <Grid container item direction="row" spacing={2}>
             <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
               <Grid item xs={12}>
                 {/* Static Info Card */}
