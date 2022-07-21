@@ -127,7 +127,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
       <StyledContainer container direction="row" wrap="nowrap">
         {/* Column for project details and header */}
         <Grid container item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Grid container>
+          <Grid container item>
             <StyledHeadingContainer item xs={6} sm={6} md={7} lg={8} xl={9}>
               {/* Static Header */}
               <ProjectHeader
@@ -142,7 +142,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               </Grid>
             )}
           </Grid>
-          <Grid container direction="row" spacing={1}>
+          <Grid container item direction="row" spacing={1}>
             <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
               <Grid item xs={12}>
                 {/* Static Info Card */}
@@ -165,7 +165,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               {/* Custom Meta Cards */}
               {metaCards.length > 0 &&
                 metaCards.map(card => (
-                  <Grid item xs={12} key={`meta-${card.key}`}>
+                  <Grid item xs={12}>
                     {card}
                   </Grid>
                 ))}
