@@ -43,22 +43,22 @@ const ProjectInfoCard = ({ projectData, addtlChips }: ProjectInfoProps) => {
   return (
     <>
       {projectData?.data && (
-        <StyledRow container spacing={1}>
+        <StyledRow container spacing={2}>
           <MessengerRow projectData={projectData} />
         </StyledRow>
       )}
       {projectData?.data?.repository && (
-        <StyledRow container spacing={1} justifyContent="flex-start" alignItems="center">
+        <StyledRow container spacing={2} justifyContent="flex-start" alignItems="center">
           <RepositoryRow repo={projectData.data.repository as string} />
         </StyledRow>
       )}
       {projectData?.languages?.length ? (
-        <StyledRow container spacing={1} justifyContent="flex-start" alignItems="flex-end">
+        <StyledRow container spacing={2} justifyContent="flex-start" alignItems="flex-end">
           <LanguageRow languages={projectData.languages} />
         </StyledRow>
       ) : null}
       {chips.length ? (
-        <Grid container spacing={1}>
+        <Grid container spacing={2}>
           <ChipsRow chips={chips} />
         </Grid>
       ) : null}
