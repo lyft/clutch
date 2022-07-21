@@ -2,6 +2,7 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -11,7 +12,6 @@ import {
   TableRow,
   TableSortLabel,
 } from "@mui/material";
-import Paper from "@mui/material/Paper";
 import makeStyles from "@mui/styles/makeStyles";
 
 import { compareProperties, propertyToString } from "./property-helpers";
