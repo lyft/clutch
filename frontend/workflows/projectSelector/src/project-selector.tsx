@@ -312,7 +312,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
       return () => clearInterval(interval);
     }
     return () => {};
-  }, [hasError, state, autoRefresh]);
+  }, [state, autoRefresh]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
