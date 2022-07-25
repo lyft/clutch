@@ -6,7 +6,6 @@ import {
   ClutchError,
   FeatureOn,
   SimpleFeatureFlag,
-  Switch,
   TextField,
   Tooltip,
   TooltipContainer,
@@ -303,10 +302,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   const [autoRefresh, setAutoRefresh] = React.useState<boolean>(true);
 
-  const updateRefreshToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAutoRefresh(event.target.checked);
-  };
-
   // useEffect that handles auto-refreshing / reloading.
   React.useEffect(() => {
     // This way of autorefreshing is also used in other places.
@@ -365,10 +360,15 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
             <FlexCenterAlignContainer>
               <SimpleFeatureFlag feature="dashRefreshSelect">
                 <FeatureOn>
-                  <Tooltip title="Toggle Refresh" interactive maxWidth="400px" placement="bottom">
-                    <UpdateIcon fontSize="small" />
+                  <Tooltip title="Toggle data refresh" interactive placement="bottom">
+                    <UpdateIcon
+                      fontSize="small"
+                      onClick={() => {
+                        setAutoRefresh(!autoRefresh);
+                      }}
+                      color={autoRefresh ? "primary" : "disabled"}
+                    />
                   </Tooltip>
-                  <Switch checked={autoRefresh} onChange={updateRefreshToggle} />
                 </FeatureOn>
               </SimpleFeatureFlag>
             </FlexCenterAlignContainer>
