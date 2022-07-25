@@ -361,7 +361,11 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
             <FlexCenterAlignContainer>
               <SimpleFeatureFlag feature="dashRefreshSelect">
                 <FeatureOn>
-                  <Tooltip title="Toggle data refresh" interactive placement="bottom">
+                  <Tooltip
+                    title={autoRefresh ? "Disable data refresh" : "Data refresh every 30 seconds"}
+                    interactive
+                    placement="bottom"
+                  >
                     <UpdateIcon
                       style={{ color: autoRefresh ? "#3548D4" : "rgba(0, 0, 0, 0.26)" }}
                       fontSize="small"
