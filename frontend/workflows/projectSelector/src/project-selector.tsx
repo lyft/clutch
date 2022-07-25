@@ -300,6 +300,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     setCustomProject(event.target.value);
   };
 
+  // Autorefresh will eventually be passed via hooks to the cards to enforce their update intervals
   const [autoRefresh, setAutoRefresh] = React.useState<boolean>(true);
 
   // useEffect that handles auto-refreshing / reloading.
