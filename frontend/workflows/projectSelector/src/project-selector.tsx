@@ -367,7 +367,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                       onClick={() => {
                         setAutoRefresh(!autoRefresh);
                       }}
-                      color={autoRefresh ? "primary" : "disabled"}
+                      color={autoRefresh ? "secondary" : "disabled"}
                     />
                   </Tooltip>
                 </FeatureOn>
