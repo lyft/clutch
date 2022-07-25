@@ -363,11 +363,11 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                 <FeatureOn>
                   <Tooltip title="Toggle data refresh" interactive placement="bottom">
                     <UpdateIcon
+                      style={{ color: autoRefresh ? "#3548D4" : "rgba(0, 0, 0, 0.26)" }}
                       fontSize="small"
                       onClick={() => {
                         setAutoRefresh(!autoRefresh);
                       }}
-                      color={autoRefresh ? "secondary" : "disabled"}
                     />
                   </Tooltip>
                 </FeatureOn>
