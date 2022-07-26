@@ -301,8 +301,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   };
 
   const { updateRefreshRate } = useRefreshUpdater();
-  // TODO: once merged,
-  // updateRefreshRate(reloadInterval);
 
   // Autorefresh will eventually be passed via hooks to the cards to enforce their update intervals
   const [autoRefresh, setAutoRefresh] = React.useState<boolean>(true);
