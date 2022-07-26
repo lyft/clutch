@@ -306,20 +306,23 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   // Autorefresh will eventually be passed via hooks to the cards to enforce their update intervals
   const [autoRefresh, setAutoRefresh] = React.useState<boolean>(true);
-  const REFRESH_RATE_MS = 30000
+  const REFRESH_RATE_MS = 30000;
   // useEffect that handles auto-refreshing / reloading.
   React.useEffect(() => {
     // This way of autorefreshing is also used in other places.
     if (autoRefresh) {
       // hardcode to 30 seconds
-      const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), REFRESH_RATE_MS);
-      updateRefreshRate({refreshRate: REFRESH_RATE_MS})
+      const interval = setInterval(
+        () => hydrateProjects(state, dispatch, fromShortLink),
+        REFRESH_RATE_MS
+      );
+      updateRefreshRate({ refreshRate: REFRESH_RATE_MS });
       return () => clearInterval(interval);
     }
-    updateRefreshRate({refreshRate: null})
+    updateRefreshRate({ refreshRate: null });
     return () => {};
   }, [state, autoRefresh]);
-  
+
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={derivedState}>
