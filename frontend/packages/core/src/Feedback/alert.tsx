@@ -16,7 +16,7 @@ const backgroundColors = {
   warning: "linear-gradient(to right, #FFCC80 8px, #FFFDE6 0%)",
 };
 
-const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"]; $fullWidth: boolean }>(
+const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
   {
     borderRadius: "8px",
     padding: "16px",
@@ -41,7 +41,6 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"]; $ful
   },
   props => ({
     background: backgroundColors[props.severity],
-    ...(props.$fullWidth ? { width: "100%" } : {}),
   })
 );
 

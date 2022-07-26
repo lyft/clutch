@@ -31,14 +31,13 @@ const ErrorSummaryLink = styled(Link)({
   alignItems: "center",
 });
 
-const ErrorAlert = styled(Alert)<{ $fullWidth: boolean }>(props => ({
+const ErrorAlert = styled(Alert)(props => ({
   ...(props["data-detailed"]
     ? {
         borderBottomLeftRadius: "unset",
         borderBottomRightRadius: "unset",
       }
     : {}),
-  ...(props.$fullWidth ? { width: "100%" } : {}),
 }));
 
 const OpenInNewIcon = styled(MuiOpenInNewIcon)({
@@ -48,10 +47,9 @@ const OpenInNewIcon = styled(MuiOpenInNewIcon)({
 export interface ErrorProps {
   subject: ClutchError;
   onRetry?: () => void;
-  fullWidth?: boolean;
 }
 
-const Error = ({ subject: error, onRetry, fullWidth = false }: ErrorProps) => {
+const Error = ({ subject: error, onRetry }: ErrorProps) => {
   const action =
     onRetry !== undefined ? (
       <IconButton aria-label="retry" color="inherit" size="small" onClick={() => onRetry()}>
@@ -61,7 +59,7 @@ const Error = ({ subject: error, onRetry, fullWidth = false }: ErrorProps) => {
 
   if (error?.details === undefined) {
     return (
-      <Alert severity="error" title={error.status?.text} action={action} fullWidth={fullWidth}>
+      <Alert severity="error" title={error.status?.text} action={action}>
         {error.message}
       </Alert>
     );
@@ -84,7 +82,6 @@ const Error = ({ subject: error, onRetry, fullWidth = false }: ErrorProps) => {
         title={error.status?.text}
         data-detailed={hasDetails}
         action={action}
-        $fullWidth={fullWidth}
       >
         <ErrorSummaryContainer>
           <ErrorSummaryMessage>{error.message}</ErrorSummaryMessage>
