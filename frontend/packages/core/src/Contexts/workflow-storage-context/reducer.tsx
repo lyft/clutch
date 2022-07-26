@@ -70,8 +70,9 @@ const workflowStorageContextReducer = (
       if (data) {
         return {
           ...state,
+          hash: data.hash,
           fromShortLink: true,
-          workflowStore: transformAPISharedState(data),
+          workflowStore: transformAPISharedState(data.state),
         };
       }
 
