@@ -31,14 +31,14 @@ const ErrorSummaryLink = styled(Link)({
   alignItems: "center",
 });
 
-const ErrorAlert = styled(Alert)(props => ({
-  ...(props["data-detailed"]
+const ErrorAlert = styled(Alert)(props =>
+  props["data-detailed"]
     ? {
         borderBottomLeftRadius: "unset",
         borderBottomRightRadius: "unset",
       }
-    : {}),
-}));
+    : {}
+);
 
 const OpenInNewIcon = styled(MuiOpenInNewIcon)({
   margin: "3px 8px 3px 0",
