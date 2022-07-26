@@ -49,6 +49,7 @@ const initialState: DashState = {
 };
 
 const initialRefreshState: RefreshRateState = {
+  // Default is 30 seconds (30000 ms)
   refreshRate: 30000,
 };
 
