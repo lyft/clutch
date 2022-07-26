@@ -76,17 +76,10 @@ const iconMappings = {
 export interface AlertProps
   extends Pick<MuiAlertProps, "severity" | "action" | "onClose" | "elevation" | "variant"> {
   title?: React.ReactNode;
-  fullWidth?: boolean;
 }
 
-export const Alert: React.FC<AlertProps> = ({
-  severity = "info",
-  title,
-  children,
-  fullWidth = false,
-  ...props
-}) => (
-  <StyledAlert severity={severity} iconMapping={iconMappings} $fullWidth={fullWidth} {...props}>
+export const Alert: React.FC<AlertProps> = ({ severity = "info", title, children, ...props }) => (
+  <StyledAlert severity={severity} iconMapping={iconMappings} {...props}>
     {title && <AlertTitle>{title}</AlertTitle>}
     {children}
   </StyledAlert>
