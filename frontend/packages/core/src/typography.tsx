@@ -154,16 +154,24 @@ const StyledTypography = styled("div")<{
         overflow: "hidden",
       }
     : {}),
+  ...(props.$textTransform ? { textTransform: props.$textTransform } : {}),
 }));
 
 export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
   variant: TextVariant;
   children: React.ReactNode;
   color?: string;
+  textTransform?: string;
 }
 
-const Typography = ({ variant, children, color = "#0D1030", ...props }: TypographyProps) => (
-  <StyledTypography $variant={variant} $color={color} {...props}>
+const Typography = ({
+  variant,
+  children,
+  color = "#0D1030",
+  textTransform,
+  ...props
+}: TypographyProps) => (
+  <StyledTypography $variant={variant} $color={color} $textTransform={textTransform} {...props}>
     {children}
   </StyledTypography>
 );

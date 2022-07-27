@@ -5,6 +5,6 @@ export { default as RadioGroup } from "./radio-group";
 export { default as Select } from "./select";
 export { default as Switch } from "./switchToggle";
 export { default as TextField } from "./text-field";
-export { default as ToggleButtonGroup } from "./toggle-button-group";
+export { default as ToggleButtonGroup, ToggleButton } from "./toggle-button-group";
 export type { ToggleButtonGroupProps } from "./toggle-button-group";
 export type { SelectOption } from "./select";
