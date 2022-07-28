@@ -86,7 +86,11 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
 const refreshReducer = (state: RefreshRateState, action: RefreshRateAction): RefreshRateState => {
   switch (action.type) {
     case "UPDATE": {
-      return action.payload;
+      // Don't allow negative or 0 values. However, do allow null because null means turn off refresh.
+      if (action.payload.refreshRate === null || action.payload.refreshRate > 0) {
+        return action.payload;
+      }
+      return state;
     }
     default:
       throw new Error("not implemented (should be unreachable)");

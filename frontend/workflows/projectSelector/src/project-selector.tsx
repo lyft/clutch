@@ -20,7 +20,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import UpdateIcon from "@material-ui/icons/Update";
 import _ from "lodash";
 
-import { useDashUpdater, useRefreshUpdater } from "./dash-hooks";
+import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
 import {
   deriveStateData,
   DispatchContext,
@@ -304,17 +304,18 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   // Autorefresh will eventually be passed via hooks to the cards to enforce their update intervals
   const [autoRefresh, setAutoRefresh] = React.useState<boolean>(true);
-  const REFRESH_RATE_MS = 30000;
+  const initialRefreshRateState = useRefreshRateState();
+  const refreshRate = initialRefreshRateState?.refreshRate || 30000;
+
   // useEffect that handles auto-refreshing / reloading.
   React.useEffect(() => {
     // This way of autorefreshing is also used in other places.
     if (autoRefresh) {
-      // hardcode to 30 seconds
       const interval = setInterval(
         () => hydrateProjects(state, dispatch, fromShortLink),
-        REFRESH_RATE_MS
+        refreshRate
       );
-      updateRefreshRate({ refreshRate: REFRESH_RATE_MS });
+      updateRefreshRate({ refreshRate });
       return () => clearInterval(interval);
     }
     updateRefreshRate({ refreshRate: null });
