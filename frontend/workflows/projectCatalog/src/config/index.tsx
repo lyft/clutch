@@ -1,8 +1,18 @@
 import React from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
-import { Error, Grid, styled, Tab, Tabs } from "@clutch-sh/core";
+import {
+  convertSearchParam,
+  Error,
+  Grid,
+  styled,
+  Tab,
+  Tabs,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "@clutch-sh/core";
 
 import type { ProjectConfigPage, ProjectDetailsConfigWorkflowProps } from "..";
 import { ProjectDetailsContext } from "../details/context";
@@ -17,6 +27,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
   const { projectId, configType = defaultRoute } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
     null
   );
@@ -40,7 +51,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
         splitLoc.push(selectedPath);
       }
 
-      navigate(splitLoc.join("/"));
+      navigate(`${splitLoc.join("/")}${convertSearchParam(searchParams)}`);
     }
   }, [configPages, selectedPage]);
 
@@ -80,20 +91,24 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
       <StyledContainer container spacing={2}>
         <Grid item xs={12}>
           <ProjectHeader
-            title="Project Configuration"
+            title={`${projectInfo?.name ?? projectId} Configuration`}
             routes={[
               { title: "Details", path: `${projectId}` },
-              { title: "Project Configuration" },
+              { title: "Configuration" },
               { title: configType || defaultRoute },
             ]}
-            description="Edit your projects' settings."
+            description="Edit your projects' settings. Some changes may require additional approval from another owner of the project."
           />
         </Grid>
         {configPages && configPages.length > 1 ? (
           <Grid item xs={12}>
             <Tabs value={selectedPage} centered>
               {configPages.map((page, i) => (
-                <Tab label={page.props.title} onClick={() => setSelectedPage(i)} />
+                <Tab
+                  key={page.props.title}
+                  label={page.props.title}
+                  onClick={() => setSelectedPage(i)}
+                />
               ))}
             </Tabs>
           </Grid>

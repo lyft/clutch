@@ -5,17 +5,17 @@ go 1.17
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.3
-	github.com/aws/aws-sdk-go-v2 v1.16.4
-	github.com/aws/aws-sdk-go-v2/config v1.15.9
-	github.com/aws/aws-sdk-go-v2/credentials v1.12.4
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.23.2
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.5
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.45.0
-	github.com/aws/aws-sdk-go-v2/service/iam v1.18.5
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.6
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.26.10
-	github.com/aws/aws-sdk-go-v2/service/sts v1.16.6
-	github.com/aws/smithy-go v1.11.2
+	github.com/aws/aws-sdk-go-v2 v1.16.6
+	github.com/aws/aws-sdk-go-v2/config v1.15.12
+	github.com/aws/aws-sdk-go-v2/credentials v1.12.7
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.23.4
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.8
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.47.1
+	github.com/aws/aws-sdk-go-v2/service/iam v1.18.8
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.15.8
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.16.8
+	github.com/aws/smithy-go v1.12.0
 	github.com/bradleyfalzon/ghinstallation v1.1.1
 	github.com/bufbuild/buf v0.56.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
@@ -27,7 +27,7 @@ require (
 	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/gobwas/glob v0.2.3
-	github.com/gogo/status v1.1.0
+	github.com/gogo/status v1.1.1
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-github/v37 v37.0.0
@@ -42,13 +42,13 @@ require (
 	github.com/shurcooL/githubv4 v0.0.0-20220520033151-0b4e3294ff00
 	github.com/shurcooL/graphql v0.0.0-20220606043923-3cf50f8a0a29
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
-	github.com/slack-go/slack v0.11.0
-	github.com/stretchr/testify v1.7.2
-	github.com/uber-go/tally/v4 v4.1.1
+	github.com/slack-go/slack v0.11.2
+	github.com/stretchr/testify v1.8.0
+	github.com/uber-go/tally/v4 v4.1.2
 	go.temporal.io/sdk v1.14.0
 	go.temporal.io/sdk/contrib/tally v0.1.0
 	go.uber.org/zap v1.21.0
-	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/genproto v0.0.0-20220401170504-314d38edb7de
@@ -66,18 +66,18 @@ require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20210428141323-04723f9f07d7 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.1 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.5 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.11 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.5 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.12 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.9.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.7.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.11.7 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.3 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.7 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.13 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.7 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.14 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.9.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.8 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.7.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.11.10 // indirect
 	github.com/benbjohnson/clock v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/census-instrumentation/opencensus-proto v0.3.0 // indirect
@@ -95,7 +95,7 @@ require (
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/mock v1.6.0 // indirect
-	github.com/google/go-cmp v0.5.7 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/google/go-github/v29 v29.0.3 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
@@ -127,7 +127,7 @@ require (
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/spf13/afero v1.8.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/objx v0.3.0 // indirect
+	github.com/stretchr/objx v0.4.0 // indirect
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
@@ -137,7 +137,7 @@ require (
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.5.1 // indirect
-	golang.org/x/sys v0.0.0-20220317061510-51cd9980dadf // indirect
+	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65 // indirect

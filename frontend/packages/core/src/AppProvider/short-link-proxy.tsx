@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 
+import type { HydrateState } from "../Contexts/workflow-storage-context/types";
 import { useNavigate } from "../navigation";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
@@ -21,7 +22,7 @@ export const generateShortLinkRoute = (origin: string, hash: string) =>
   `${origin}/${ShortLinkBaseRoute}/${hash}`;
 
 interface ShortLinkProps {
-  hydrate: (data: IClutch.shortlink.v1.IShareableState[]) => void;
+  hydrate: (data: HydrateState) => void;
   onError: (error: ClutchError) => void;
   setLoading: (loading: boolean) => void;
 }
@@ -34,7 +35,7 @@ const fetchData = async (hash, hydrate, onError) => {
     .then(response => {
       const { path, state } = response.data as IClutch.shortlink.v1.IGetResponse;
 
-      hydrate(state);
+      hydrate({ hash, state });
       return path;
     })
     .catch((error: ClutchError) => {

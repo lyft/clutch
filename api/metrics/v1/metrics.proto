@@ -8,6 +8,11 @@ import "validate/validate.proto";
 import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
 
+/**
+ * For the prometheus HTTP API see:
+ * https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries
+ */
+
 service MetricsAPI {
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
     option (google.api.http) = {
@@ -19,7 +24,7 @@ service MetricsAPI {
 }
 
 message Query {
-  /** prometheus expression query string */
+  /** query string */
   string expression = 1 [ (validate.rules).string.min_len = 1 ];
   /** inclusive */
   int64 start_time_ms = 2 [ (validate.rules).int64.gte = 0 ];
@@ -33,18 +38,22 @@ message GetMetricsRequest {
   repeated Query metric_queries = 1 [ (validate.rules).repeated = {min_items : 1} ];
 }
 
-message Metric {
+message DataPoint {
   double value = 1;
-  int64 timestamp_ms = 2;
-  /** metric labels (tags) have a key and a value */
-  map<string, string> labels = 3;
+  int64 timestamp = 2;
 }
 
 message Metrics {
-  repeated Metric metrics = 1;
+  repeated DataPoint data_points = 1;
+  string label = 2;
+  map<string, string> tags = 3;
+}
+
+message Result {
+  repeated Metrics metrics = 1;
 }
 
 message GetMetricsResponse {
   /** A mapping of individual queries to their respective results */
-  map<string, Metrics> query_results = 1;
+  map<string, Result> query_results = 1;
 }
