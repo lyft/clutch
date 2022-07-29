@@ -305,22 +305,31 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   // Autorefresh will eventually be passed via hooks to the cards to enforce their update intervals
   const initialRefreshRateState = useRefreshRateState();
   const { refreshRate } = initialRefreshRateState;
+  // if refreshRate is null, that means autoRefresh is disabled
+  // else if its a number, it will be used as the value for setInterval
   const [autoRefresh, setAutoRefresh] = React.useState<boolean>(!!refreshRate);
+
+  const handleRefreshRateChange = () => {
+    if (autoRefresh) {
+      updateRefreshRate({ refreshRate: 30000 });
+    } else {
+      updateRefreshRate({ refreshRate: null })
+    }
+    setAutoRefresh(!autoRefresh);
+  };
 
   // useEffect that handles auto-refreshing / reloading.
   React.useEffect(() => {
     // This way of autorefreshing is also used in other places.
-    if (autoRefresh) {
+    if (refreshRate) {
       const interval = setInterval(
         () => hydrateProjects(state, dispatch, fromShortLink),
-        refreshRate ?? 30000
+        refreshRate
       );
-      updateRefreshRate({ refreshRate });
       return () => clearInterval(interval);
-    }
-    updateRefreshRate({ refreshRate: null });
+    };
     return () => {};
-  }, [state, autoRefresh]);
+  }, [state, refreshRate]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
@@ -378,7 +387,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                       style={{ color: autoRefresh ? "#3548D4" : "rgba(0, 0, 0, 0.26)" }}
                       fontSize="small"
                       onClick={() => {
-                        setAutoRefresh(!autoRefresh);
+                        handleRefreshRateChange();
                       }}
                     />
                   </Tooltip>
