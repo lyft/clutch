@@ -305,11 +305,13 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   // Autorefresh will eventually be passed via hooks to the cards to enforce their update intervals
   const initialRefreshRateState = useRefreshRateState();
   const { refreshRate } = initialRefreshRateState;
+  console.log("pulling refresh rate, it is " + refreshRate)
   // if refreshRate is null, that means autoRefresh is disabled
   // else if its a number, it will be used as the value for setInterval
   const [autoRefresh, setAutoRefresh] = React.useState<boolean>(!!refreshRate);
 
   const handleRefreshRateChange = () => {
+    console.log("handle refresh rate change, autorefresh is " + autoRefresh);
     if (autoRefresh) {
       updateRefreshRate({ refreshRate: 30000 });
     } else {
