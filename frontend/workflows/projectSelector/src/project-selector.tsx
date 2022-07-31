@@ -312,7 +312,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   const handleRefreshRateChange = () => {
     console.log("handle refresh rate change, autorefresh is " + autoRefresh);
-    if (autoRefresh) {
+    if (!autoRefresh) {
       updateRefreshRate({ refreshRate: 30000 });
     } else {
       updateRefreshRate({ refreshRate: null })
