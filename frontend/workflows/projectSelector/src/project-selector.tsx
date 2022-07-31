@@ -302,7 +302,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
 
   const { updateRefreshRate } = useRefreshUpdater();
 
-  // Autorefresh will eventually be passed via hooks to the cards to enforce their update intervals
   const initialRefreshRateState = useRefreshRateState();
   const { refreshRate } = initialRefreshRateState;
   // if refreshRate is null, that means autoRefresh is disabled
