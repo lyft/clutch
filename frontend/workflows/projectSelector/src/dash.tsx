@@ -88,10 +88,8 @@ const refreshReducer = (state: RefreshRateState, action: RefreshRateAction): Ref
     case "UPDATE": {
       // Don't allow negative or 0 values. However, do allow null because null means turn off refresh.
       if (action.payload.refreshRate === null || action.payload.refreshRate > 0) {
-        console.log("refresh rate updated to " + action.payload.refreshRate);
         return action.payload;
       }
-      console.log("inside reducer, but refresh rate was not updated");
       return state;
     }
     default:
