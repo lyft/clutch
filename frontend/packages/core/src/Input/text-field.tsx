@@ -40,6 +40,7 @@ const StyledAutocomplete = styled(Autocomplete)({
 const StyledTextField = styled(BaseTextField)({
   "--error-color": "#DB3615",
   margin: "8px 0px",
+  height: "unset",
 
   ".MuiInputLabel-root": {
     "--label-color": "rgba(13, 16, 48, 0.6)",
@@ -118,15 +119,19 @@ const StyledTextField = styled(BaseTextField)({
 
 // popper containing the search result options
 const Popper = styled(MuiPopper)({
-  ".MuiAutocomplete-paper": {
+  ".MuiPaper-root": {
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
-  },
-  ".MuiAutocomplete-option": {
-    height: "48px",
-    padding: "0px",
-  },
-  ".MuiAutocomplete-option[data-focus='true']": {
-    background: "#ebedfb",
+
+    "> .MuiAutocomplete-listbox": {
+      "> .MuiAutocomplete-option": {
+        height: "48px",
+        padding: "0px",
+
+        "&.Mui-focused": {
+          background: "#ebedfb",
+        },
+      },
+    },
   },
   ".MuiAutocomplete-noOptions": {
     fontSize: "14px",
@@ -205,7 +210,7 @@ const TextFieldRef = (
     onChange,
     onReturn,
     error,
-    helperText,
+    helperText = " ",
     readOnly,
     endAdornment,
     autocompleteCallback,
@@ -315,8 +320,10 @@ const TextFieldRef = (
           typeof option === "string" ? option : option?.id || option.label
         }
         onInputChange={(__, v) => autoCompleteDebounce(v)}
-        renderOption={(_unusedProps, option: AutocompleteResultProps) => (
-          <AutocompleteResult key={option.id} id={option.id} label={option.label} />
+        renderOption={(props, option: AutocompleteResultProps) => (
+          <li className="MuiAutocomplete-option" {...props}>
+            <AutocompleteResult key={option.id} id={option.id} label={option.label} />
+          </li>
         )}
         onSelectCapture={e => {
           if (formValidation !== undefined) {

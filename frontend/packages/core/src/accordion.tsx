@@ -36,6 +36,10 @@ const StyledAccordion = styled(MuiAccordion)({
   ".MuiAccordionDetails-root": {
     padding: "8px",
     fontSize: "16px",
+
+    "> *": {
+      margin: "8px",
+    },
   },
 
   "&:before": {
