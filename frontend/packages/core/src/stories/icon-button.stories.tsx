@@ -18,7 +18,7 @@ export default {
 } as Meta;
 
 const Template = (props: IconButtonProps) => (
-  <IconButton {...props} size="large">
+  <IconButton {...props}>
     <SearchIcon />
   </IconButton>
 );
