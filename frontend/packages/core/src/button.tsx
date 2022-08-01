@@ -165,7 +165,7 @@ const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
 
 const StyledIconButton = styled(MuiIconButton)<{
   $palette: ButtonPalette;
-  $size?: IconButtonSize;
+  $size?: MuiIconButtonProps["size"];
 }>({}, props => ({
   width: `${ICON_BUTTON_STYLE_MAP[props.$size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
   height: `${ICON_BUTTON_STYLE_MAP[props.$size]?.size || ICON_BUTTON_STYLE_MAP.small.size}px`,
