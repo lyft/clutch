@@ -14,11 +14,11 @@ import {
 import { flatten } from "lodash";
 
 const StyledFormControl = styled(MuiFormControl)({
-  margin: "8px",
+  margin: "8px 8px 8px 0px",
 });
 
 const StyledFormHelperText = styled(MuiFormHelperText)({
-  verticalAlign: "middle",
+  alignItems: "center",
   display: "flex",
   position: "relative",
   fontSize: "12px",
@@ -26,9 +26,11 @@ const StyledFormHelperText = styled(MuiFormHelperText)({
   marginTop: "7px",
   marginLeft: "0px",
   color: "grey",
+
   "&.Mui-error": {
     color: "#db3615",
   },
+
   svg: {
     height: "16px",
     width: "16px",
@@ -76,6 +78,7 @@ const StyledSelect = styled(BaseSelect)({
   "--notched-border-width": "1px",
   padding: "0",
   backgroundColor: "#FFFFFF",
+  height: "unset",
 
   ".MuiOutlinedInput-notchedOutline": {
     borderColor: "rgba(13, 16, 48, 0.38)",
@@ -97,6 +100,8 @@ const StyledSelect = styled(BaseSelect)({
   },
 
   ".MuiSelect-select": {
+    height: "20px",
+    display: "flex",
     padding: "15px 60px 13px 16px",
 
     ":focus": {

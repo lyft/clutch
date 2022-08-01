@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import type { ToggleButtonGroupProps as MuiToggleButtonGroupProps } from "@mui/lab";
 import { ToggleButtonGroup as MuiToggleButtonGroup } from "@mui/material";
 
+export { ToggleButton } from "@mui/material";
+
 export interface ToggleButtonGroupProps
   extends Pick<
     MuiToggleButtonGroupProps,
