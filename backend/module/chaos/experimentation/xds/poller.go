@@ -273,7 +273,7 @@ func (p *Poller) setSnapshot(ctx context.Context, resourceMap map[gcpTypes.Respo
 			return err
 		}
 
-		if newComputedVersion != currentSnapshot.GetVersion(typeURL) {
+		if currentSnapshot == nil || newComputedVersion != currentSnapshot.GetVersion(typeURL) {
 			isNewSnapshotSame = false
 		}
 
