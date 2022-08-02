@@ -1,10 +1,10 @@
 import * as React from "react";
-// import styled from "@emotion/styled";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type {
   TableCellProps as MuiTableCellProps,
   TableProps as MuiTableProps,
   TableRowProps as MuiTableRowProps,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   IconButton,
   Paper as MuiPaper,
@@ -15,9 +15,8 @@ import {
   TableHead as MuiTableHead,
   TableRow as MuiTableRow,
   useMediaQuery,
-} from "@material-ui/core";
-import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+} from "@mui/material";
+import type { Breakpoint } from "@mui/material/styles";
 
 import { Popper, PopperItem } from "../popper";
 import styled from "../styled";
@@ -188,13 +187,21 @@ export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
    * should set the responsive prop on the table.
    */
   responsive?: boolean;
+
+  colSpan?: number;
 }
 
-const TableRow = ({ children = [], onClick, cellDefault, responsive = false }: TableRowProps) => (
+const TableRow = ({
+  children = [],
+  onClick,
+  cellDefault,
+  responsive = false,
+  colSpan,
+}: TableRowProps) => (
   <StyledTableRow onClick={onClick} $responsive={responsive}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
-      <StyledTableCell key={index} $responsive={responsive}>
+      <StyledTableCell key={index} $responsive={responsive} colSpan={colSpan}>
         {value === null && cellDefault !== undefined ? cellDefault : value}
       </StyledTableCell>
     ))}
@@ -228,6 +235,7 @@ const TableRowActions = ({ children }: TableRowActionsProps) => {
         disabled={React.Children.count(children) <= 0}
         ref={anchorRef}
         onClick={() => setOpen(true)}
+        size="large"
       >
         <MoreVertIcon />
       </IconButton>

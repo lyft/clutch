@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { DialogProps as MuiDialogProps } from "@material-ui/core";
+import CloseIcon from "@mui/icons-material/Close";
+import type { DialogProps as MuiDialogProps } from "@mui/material";
 import {
   Dialog as MuiDialog,
   DialogActions as MuiDialogActions,
@@ -8,8 +9,7 @@ import {
   DialogTitle as MuiDialogTitle,
   IconButton as MuiIconButton,
   Paper,
-} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+} from "@mui/material";
 
 const DialogPaper = styled(Paper)({
   border: "1px solid rgba(13, 16, 48, 0.1)",
@@ -72,10 +72,10 @@ export interface DialogProps extends Pick<MuiDialogProps, "open"> {
 }
 
 const Dialog = ({ title, children, open, onClose }: DialogProps) => (
-  <MuiDialog PaperComponent={DialogPaper} open={open} onClose={onClose}>
-    <DialogTitle disableTypography>
+  <MuiDialog PaperComponent={DialogPaper} open={open} onClose={onClose} maxWidth={false}>
+    <DialogTitle>
       <DialogTitleText>{title}</DialogTitleText>
-      <IconButton onClick={e => onClose(e, "closeButtonClick")}>
+      <IconButton onClick={e => onClose(e, "closeButtonClick")} size="large">
         <CloseIcon />
       </IconButton>
     </DialogTitle>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Grid as MuiGrid } from "@material-ui/core";
+import { Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import type { NotificationsProp } from "../notifications";
@@ -17,7 +17,7 @@ const Grid = styled(MuiGrid)({
 });
 
 const Template = (props: NotificationsProp) => (
-  <Grid container alignItems="center" justify="center">
+  <Grid container alignItems="center" justifyContent="center">
     <Notifications {...props} />
   </Grid>
 );

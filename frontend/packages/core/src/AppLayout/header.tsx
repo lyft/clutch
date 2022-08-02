@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
-import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
+import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
 import { NPSHeader } from "../NPS";
@@ -43,7 +43,7 @@ const Header: React.FC = () => {
             <Logo />
           </Link>
           <Title>clutch</Title>
-          <Grid container alignItems="center" justify="flex-end">
+          <Grid container alignItems="center" justifyContent="flex-end">
             <Box>
               <SearchField />
             </Box>

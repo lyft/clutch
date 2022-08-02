@@ -1,7 +1,7 @@
 import * as React from "react";
-import { IconButton as MuiIconButton, TableRow } from "@material-ui/core";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { IconButton as MuiIconButton, TableRow } from "@mui/material";
 
 import styled from "../styled";
 
@@ -36,7 +36,7 @@ export const AccordionRow = ({ columns, children }: AccordionRowProps) => {
       <TableRow>
         {columns.map((heading: any, index: number) => {
           const icon = (
-            <IconButton onClick={onClick}>
+            <IconButton onClick={onClick} size="large">
               {open ? <KeyboardArrowDownIcon /> : <ChevronRight $disabled={!hasChildren} />}
             </IconButton>
           );

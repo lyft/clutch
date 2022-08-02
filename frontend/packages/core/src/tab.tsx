@@ -1,8 +1,8 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps } from "@material-ui/core";
-import { Tab as MuiTab } from "@material-ui/core";
-import { TabContext, TabList, TabPanel as MuiTabPanel } from "@material-ui/lab";
+import { TabContext, TabList, TabPanel as MuiTabPanel } from "@mui/lab";
+import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps } from "@mui/material";
+import { Tab as MuiTab } from "@mui/material";
 
 const StyledTab = styled(MuiTab)({
   minWidth: "111px",
@@ -48,14 +48,15 @@ const StyledTabs = styled(TabList)({
   },
 });
 
-export interface TabProps extends Pick<MuiTabProps, "label" | "selected" | "value" | "onClick"> {
+export interface TabProps extends Pick<MuiTabProps, "label" | "value" | "onClick"> {
   children?: React.ReactNode;
   startAdornment?: React.ReactNode;
+  selected?: boolean;
 }
 
-export const Tab = ({ onClick, label, startAdornment, ...props }: TabProps) => {
+export const Tab = ({ children, onClick, label, startAdornment, ...props }: TabProps) => {
   const tabProps = { ...props };
-  delete tabProps.children;
+
   const onClickMiddleware = (e: any) => {
     e.currentTarget.blur();
     if (onClick) {

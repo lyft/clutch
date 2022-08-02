@@ -1,5 +1,5 @@
 import * as React from "react";
-import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
+import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
