@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Grid, Typography } from "@material-ui/core";
-import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import { Grid, Typography } from "@mui/material";
 
 const Container = styled(Grid)`
   minheight: 80vh;
@@ -16,7 +16,7 @@ const NotFound: React.FC<{}> = () => (
   <Container
     container
     direction="column"
-    justify="center"
+    justifyContent="center"
     alignItems="center"
     style={{ minHeight: "80vh" }}
   >
