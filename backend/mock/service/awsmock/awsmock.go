@@ -3,6 +3,8 @@ package awsmock
 import (
 	"context"
 	"fmt"
+	externalddb "github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"io"
 	"math/rand"
 
@@ -172,6 +174,15 @@ func (s *svc) UpdateCapacity(ctx context.Context, account, region, tableName str
 		GlobalSecondaryIndexes: gsis,
 	}
 	return ret, nil
+}
+
+func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *externalddb.BatchGetItemInput) (*externalddb.BatchGetItemOutput, error) {
+	return &externalddb.BatchGetItemOutput{
+		ConsumedCapacity: []ddbtypes.ConsumedCapacity{},
+		Responses:        map[string][]map[string]ddbtypes.AttributeValue{},
+		UnprocessedKeys:  map[string]ddbtypes.KeysAndAttributes{},
+		ResultMetadata:   middleware.Metadata{},
+	}, nil
 }
 
 var accountsAndRegions = map[string][]string{
