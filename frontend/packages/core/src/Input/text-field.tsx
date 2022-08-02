@@ -34,7 +34,15 @@ const StyledAutocomplete = styled(Autocomplete)({
   ".MuiOutlinedInput-root.MuiInputBase-sizeSmall": {
     padding: "unset",
   },
-  marginLeft: "0px",
+  margin: "8px",
+  height: "unset",
+  ".MuiTextField-root > .MuiInputBase-root > .MuiInputBase-input": {
+    height: "20px",
+
+    "&.MuiAutocomplete-input": {
+      padding: "14px 16px",
+    },
+  },
 });
 
 const StyledTextField = styled(BaseTextField)({
@@ -320,8 +328,8 @@ const TextFieldRef = (
           typeof option === "string" ? option : option?.id || option.label
         }
         onInputChange={(__, v) => autoCompleteDebounce(v)}
-        renderOption={(props, option: AutocompleteResultProps) => (
-          <li className="MuiAutocomplete-option" {...props}>
+        renderOption={(otherProps, option: AutocompleteResultProps) => (
+          <li className="MuiAutocomplete-option" {...otherProps}>
             <AutocompleteResult key={option.id} id={option.id} label={option.label} />
           </li>
         )}
