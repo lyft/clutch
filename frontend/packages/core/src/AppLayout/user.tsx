@@ -12,7 +12,7 @@ import {
   MenuList as MuiMenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
+} from "@mui/material";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
@@ -48,7 +48,7 @@ const Paper = styled(MuiPaper)({
 
 const Popper = styled(MuiPopper)({
   padding: "0 12px",
-  marginLeft: "12px",
+  offset: "12px",
   zIndex: 1201,
 });
 
@@ -131,7 +131,7 @@ const userId = (): string => {
   const token = Cookies.get("token");
   if (!token) {
     // eslint-disable-next-line
-    console.warn("No user token set in development - returning Anonymous");
+    console.info("No user token set in development - returning Anonymous");
     return "Anonymous";
   }
   let subject = "Unknown user";
@@ -211,11 +211,13 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
                     </AvatarListItemIcon>
                     <AvatarListItemText>{user}</AvatarListItemText>
                   </AvatarMenuItem>
-                  {data?.length === 0 ? null : <Divider />}
-                  {data?.map(d => (
-                    <MenuItem>
-                      <ListItemText>{d.value}</ListItemText>
-                    </MenuItem>
+                  {data?.map((d, i) => (
+                    <>
+                      <MenuItem>
+                        <ListItemText>{d.value}</ListItemText>
+                      </MenuItem>
+                      {i > 0 && i < data.length && <Divider />}
+                    </>
                   ))}
                 </MenuList>
               </ClickAwayListener>

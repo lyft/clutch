@@ -1,6 +1,6 @@
 import React from "react";
 import { matchers } from "@emotion/jest";
-import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { shallow } from "enzyme";
 
 import * as ApplicationContext from "../../Contexts/app-context";

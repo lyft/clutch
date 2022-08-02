@@ -1,5 +1,5 @@
 import * as React from "react";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import type { Meta } from "@storybook/react";
 
 import { Typography } from "../../typography";

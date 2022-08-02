@@ -1,7 +1,6 @@
 import React from "react";
-import { Grid, IconButton } from "@material-ui/core";
-import LaunchIcon from "@material-ui/icons/Launch";
-import { Alert } from "@material-ui/lab";
+import LaunchIcon from "@mui/icons-material/Launch";
+import { Alert, Grid, IconButton } from "@mui/material";
 
 import { Dialog, DialogContent } from "../dialog";
 import Code from "../text";
@@ -124,7 +123,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       }
 
       return (
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid container direction="column" justifyContent="center" alignItems="center">
           <Dialog onClose={this.onDetailsClose} open={showDetails} title="Stack Trace">
             <DialogContent>
               <Code>{errorInfo?.componentStack || "Could not determine stack trace"}</Code>

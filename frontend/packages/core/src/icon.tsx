@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Grid, GridJustification } from "@material-ui/core";
-import FiberManualRecordTwoToneIcon from "@material-ui/icons/FiberManualRecordTwoTone";
+import FiberManualRecordTwoToneIcon from "@mui/icons-material/FiberManualRecordTwoTone";
+import { Grid } from "@mui/material";
+
+import type { GridJustification } from "./grid";
 
 const StyledStatusIcon = styled(FiberManualRecordTwoToneIcon)`
   ${({ ...props }) => `
@@ -33,7 +35,7 @@ export const StatusIcon: React.FC<StatusProps> = ({
     justifyContent = "center";
   }
   return (
-    <Grid container alignItems="center" justify={justifyContent} {...props}>
+    <Grid container alignItems="center" justifyContent={justifyContent} {...props}>
       {variant === "neutral" && (
         <>
           <StyledStatusIcon data-color="#C2C8F2" /> {children}

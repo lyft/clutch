@@ -4,7 +4,7 @@ import type {
   ClickAwayListenerProps,
   ListItemProps,
   PopperProps as MuiPopperProps,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   ClickAwayListener,
   Collapse,
@@ -13,7 +13,7 @@ import {
   ListItemText as MuiListItemText,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const StyledPopper = styled(MuiPopper)({
   zIndex: 1201,
@@ -102,7 +102,7 @@ const Popper = ({
   id,
 }: PopperProps) => (
   <Collapse in={open} timeout="auto" unmountOnExit>
-    <StyledPopper open={open} anchorEl={anchorRef?.current} transition placement={placement}>
+    <StyledPopper open={open} anchorEl={anchorRef?.current} placement={placement}>
       <Paper>
         <ClickAwayListener onClickAway={onClickAway}>
           <List component="div" disablePadding id={id}>

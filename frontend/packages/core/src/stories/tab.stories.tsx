@@ -1,5 +1,5 @@
 import * as React from "react";
-import EmojiPeopleOutlinedIcon from "@material-ui/icons/EmojiPeopleOutlined";
+import EmojiPeopleOutlinedIcon from "@mui/icons-material/EmojiPeopleOutlined";
 import type { Meta } from "@storybook/react";
 
 import type { TabProps } from "../tab";
