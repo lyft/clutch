@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
@@ -334,7 +335,6 @@ func generateIndexUpdates(cl *regionalClient, t *dynamodb.DescribeTableOutput, i
 }
 
 func (c *client) BatchGetItem(ctx context.Context, account string, region string, input *dynamodb.BatchGetItemInput) (*dynamodb.BatchGetItemOutput, error) {
-
 	client, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return nil, err
