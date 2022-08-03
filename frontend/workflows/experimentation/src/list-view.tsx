@@ -16,13 +16,13 @@ import makeStyles from "@mui/styles/makeStyles";
 
 import { compareProperties, propertyToString } from "./property-helpers";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: "100%",
   },
   paper: {
     width: "100%",
-    marginBottom: theme.spacing(2),
+    marginBottom: "8px",
   },
   table: {
     minWidth: 750,

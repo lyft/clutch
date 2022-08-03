@@ -58,7 +58,6 @@ const SelectIcon = (props: any) => (
 
 const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
   <MuiSelect
-    // disableUnderline
     fullWidth
     IconComponent={SelectIcon}
     className={className}
