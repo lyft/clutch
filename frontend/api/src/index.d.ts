@@ -1737,8 +1737,8 @@ export namespace clutch {
                     /** Table account */
                     account?: (string|null);
 
-                    /** Table keySchema */
-                    keySchema?: (clutch.aws.dynamodb.v1.IKeySchema[]|null);
+                    /** Table keySchemas */
+                    keySchemas?: (clutch.aws.dynamodb.v1.IKeySchema[]|null);
 
                     /** Table attributeDefinitions */
                     attributeDefinitions?: (clutch.aws.dynamodb.v1.IAttributeDefinition[]|null);
@@ -1774,8 +1774,8 @@ export namespace clutch {
                     /** Table account. */
                     public account: string;
 
-                    /** Table keySchema. */
-                    public keySchema: clutch.aws.dynamodb.v1.IKeySchema[];
+                    /** Table keySchemas. */
+                    public keySchemas: clutch.aws.dynamodb.v1.IKeySchema[];
 
                     /** Table attributeDefinitions. */
                     public attributeDefinitions: clutch.aws.dynamodb.v1.IAttributeDefinition[];

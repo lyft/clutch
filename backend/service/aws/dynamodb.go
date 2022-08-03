@@ -72,7 +72,7 @@ func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) 
 	return gsis
 }
 
-func newProtoForKeySchema(inputSchema []types.KeySchemaElement) []*dynamodbv1.KeySchema {
+func newProtoForKeySchemas(inputSchema []types.KeySchemaElement) []*dynamodbv1.KeySchema {
 	schemaCollection := make([]*dynamodbv1.KeySchema, len(inputSchema))
 	for idx, schema := range inputSchema {
 		schemaCollection[idx] = &dynamodbv1.KeySchema{
@@ -122,7 +122,7 @@ func newProtoForTable(t *types.TableDescription, account, region string) *dynamo
 	tableStatus := newProtoForTableStatus(t.TableStatus)
 
 	billingMode := newProtoForBillingMode(t)
-	keySchema := newProtoForKeySchema(t.KeySchema)
+	keySchemas := newProtoForKeySchemas(t.KeySchema)
 	attributeDefinitions := newProtoForAttributeDefinitions(t.AttributeDefinitions)
 
 	ret := &dynamodbv1.Table{
@@ -133,7 +133,7 @@ func newProtoForTable(t *types.TableDescription, account, region string) *dynamo
 		ProvisionedThroughput:  currentCapacity,
 		Status:                 tableStatus,
 		BillingMode:            billingMode,
-		KeySchema:              keySchema,
+		KeySchemas:             keySchemas,
 		AttributeDefinitions:   attributeDefinitions,
 	}
 
@@ -346,10 +346,5 @@ func (c *client) BatchGetItem(ctx context.Context, account string, region string
 	if err != nil {
 		return nil, err
 	}
-	result, err := client.dynamodb.BatchGetItem(ctx, input)
-
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
+	return client.dynamodb.BatchGetItem(ctx, input)
 }

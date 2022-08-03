@@ -67,7 +67,7 @@ var testTableOutput = &dynamodbv1.Table{
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
 	Status:                 dynamodbv1.Table_Status(5),
 	BillingMode:            dynamodbv1.Table_BillingMode(2),
-	KeySchema: []*dynamodbv1.KeySchema{
+	KeySchemas: []*dynamodbv1.KeySchema{
 		{AttributeName: "ID",
 			Type: dynamodbv1.KeySchema_HASH,
 		},
@@ -195,7 +195,7 @@ var testTableWithGSIOutput = &dynamodbv1.Table{
 	},
 	Status:               dynamodbv1.Table_Status(5),
 	BillingMode:          dynamodbv1.Table_BillingMode(2),
-	KeySchema:            []*dynamodbv1.KeySchema{},
+	KeySchemas:           []*dynamodbv1.KeySchema{},
 	AttributeDefinitions: []*dynamodbv1.AttributeDefinition{},
 }
 

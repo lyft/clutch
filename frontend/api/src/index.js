@@ -3926,7 +3926,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.aws.dynamodb.v1.Table.Status|null} [status] Table status
                      * @property {clutch.aws.dynamodb.v1.Table.BillingMode|null} [billingMode] Table billingMode
                      * @property {string|null} [account] Table account
-                     * @property {Array.<clutch.aws.dynamodb.v1.IKeySchema>|null} [keySchema] Table keySchema
+                     * @property {Array.<clutch.aws.dynamodb.v1.IKeySchema>|null} [keySchemas] Table keySchemas
                      * @property {Array.<clutch.aws.dynamodb.v1.IAttributeDefinition>|null} [attributeDefinitions] Table attributeDefinitions
                      */
 
@@ -3940,7 +3940,7 @@ export const clutch = $root.clutch = (() => {
                      */
                     function Table(properties) {
                         this.globalSecondaryIndexes = [];
-                        this.keySchema = [];
+                        this.keySchemas = [];
                         this.attributeDefinitions = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -4005,12 +4005,12 @@ export const clutch = $root.clutch = (() => {
                     Table.prototype.account = "";
 
                     /**
-                     * Table keySchema.
-                     * @member {Array.<clutch.aws.dynamodb.v1.IKeySchema>} keySchema
+                     * Table keySchemas.
+                     * @member {Array.<clutch.aws.dynamodb.v1.IKeySchema>} keySchemas
                      * @memberof clutch.aws.dynamodb.v1.Table
                      * @instance
                      */
-                    Table.prototype.keySchema = $util.emptyArray;
+                    Table.prototype.keySchemas = $util.emptyArray;
 
                     /**
                      * Table attributeDefinitions.
@@ -4079,13 +4079,13 @@ export const clutch = $root.clutch = (() => {
                         if (message.account != null && message.hasOwnProperty("account"))
                             if (!$util.isString(message.account))
                                 return "account: string expected";
-                        if (message.keySchema != null && message.hasOwnProperty("keySchema")) {
-                            if (!Array.isArray(message.keySchema))
-                                return "keySchema: array expected";
-                            for (let i = 0; i < message.keySchema.length; ++i) {
-                                let error = $root.clutch.aws.dynamodb.v1.KeySchema.verify(message.keySchema[i]);
+                        if (message.keySchemas != null && message.hasOwnProperty("keySchemas")) {
+                            if (!Array.isArray(message.keySchemas))
+                                return "keySchemas: array expected";
+                            for (let i = 0; i < message.keySchemas.length; ++i) {
+                                let error = $root.clutch.aws.dynamodb.v1.KeySchema.verify(message.keySchemas[i]);
                                 if (error)
-                                    return "keySchema." + error;
+                                    return "keySchemas." + error;
                             }
                         }
                         if (message.attributeDefinitions != null && message.hasOwnProperty("attributeDefinitions")) {
@@ -4189,14 +4189,14 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.account != null)
                             message.account = String(object.account);
-                        if (object.keySchema) {
-                            if (!Array.isArray(object.keySchema))
-                                throw TypeError(".clutch.aws.dynamodb.v1.Table.keySchema: array expected");
-                            message.keySchema = [];
-                            for (let i = 0; i < object.keySchema.length; ++i) {
-                                if (typeof object.keySchema[i] !== "object")
-                                    throw TypeError(".clutch.aws.dynamodb.v1.Table.keySchema: object expected");
-                                message.keySchema[i] = $root.clutch.aws.dynamodb.v1.KeySchema.fromObject(object.keySchema[i]);
+                        if (object.keySchemas) {
+                            if (!Array.isArray(object.keySchemas))
+                                throw TypeError(".clutch.aws.dynamodb.v1.Table.keySchemas: array expected");
+                            message.keySchemas = [];
+                            for (let i = 0; i < object.keySchemas.length; ++i) {
+                                if (typeof object.keySchemas[i] !== "object")
+                                    throw TypeError(".clutch.aws.dynamodb.v1.Table.keySchemas: object expected");
+                                message.keySchemas[i] = $root.clutch.aws.dynamodb.v1.KeySchema.fromObject(object.keySchemas[i]);
                             }
                         }
                         if (object.attributeDefinitions) {
@@ -4227,7 +4227,7 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.arrays || options.defaults) {
                             object.globalSecondaryIndexes = [];
-                            object.keySchema = [];
+                            object.keySchemas = [];
                             object.attributeDefinitions = [];
                         }
                         if (options.defaults) {
@@ -4255,10 +4255,10 @@ export const clutch = $root.clutch = (() => {
                             object.billingMode = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.BillingMode[message.billingMode] : message.billingMode;
                         if (message.account != null && message.hasOwnProperty("account"))
                             object.account = message.account;
-                        if (message.keySchema && message.keySchema.length) {
-                            object.keySchema = [];
-                            for (let j = 0; j < message.keySchema.length; ++j)
-                                object.keySchema[j] = $root.clutch.aws.dynamodb.v1.KeySchema.toObject(message.keySchema[j], options);
+                        if (message.keySchemas && message.keySchemas.length) {
+                            object.keySchemas = [];
+                            for (let j = 0; j < message.keySchemas.length; ++j)
+                                object.keySchemas[j] = $root.clutch.aws.dynamodb.v1.KeySchema.toObject(message.keySchemas[j], options);
                         }
                         if (message.attributeDefinitions && message.attributeDefinitions.length) {
                             object.attributeDefinitions = [];

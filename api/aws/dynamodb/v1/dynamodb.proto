@@ -106,7 +106,7 @@ message Table {
   string account = 7;
 
   // Key schema details for the table
-  repeated KeySchema key_schema = 8;
+  repeated KeySchema key_schemas = 8;
 
   // Collection of all the attributes for a table
   repeated AttributeDefinition attribute_definitions = 9;
