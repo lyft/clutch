@@ -3,14 +3,14 @@ package awsmock
 import (
 	"context"
 	"fmt"
-	externalddb "github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"io"
 	"math/rand"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
-	"github.com/aws/aws-sdk-go-v2/service/iam/types"
+	iamtypes "github.com/aws/aws-sdk-go-v2/service/iam/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go/middleware"
@@ -176,8 +176,8 @@ func (s *svc) UpdateCapacity(ctx context.Context, account, region, tableName str
 	return ret, nil
 }
 
-func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *externalddb.BatchGetItemInput) (*externalddb.BatchGetItemOutput, error) {
-	return &externalddb.BatchGetItemOutput{
+func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *dynamodb.BatchGetItemInput) (*dynamodb.BatchGetItemOutput, error) {
+	return &dynamodb.BatchGetItemOutput{
 		ConsumedCapacity: []ddbtypes.ConsumedCapacity{},
 		Responses:        map[string][]map[string]ddbtypes.AttributeValue{},
 		UnprocessedKeys:  map[string]ddbtypes.KeysAndAttributes{},
@@ -249,12 +249,12 @@ func (s *svc) GetCallerIdentity(ctx context.Context, account, region string) (*s
 
 func (s *svc) SimulateCustomPolicy(ctx context.Context, account, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error) {
 	return &iam.SimulateCustomPolicyOutput{
-		EvaluationResults: []types.EvaluationResult{
+		EvaluationResults: []iamtypes.EvaluationResult{
 			{EvalActionName: aws.String("s3:GetBucketPolicy"),
-				EvalDecision:         types.PolicyEvaluationDecisionTypeImplicitDeny,
+				EvalDecision:         iamtypes.PolicyEvaluationDecisionTypeImplicitDeny,
 				EvalResourceName:     aws.String("arn:aws:s3:::a/*"),
 				MissingContextValues: []string{},
-				MatchedStatements:    []types.Statement{},
+				MatchedStatements:    []iamtypes.Statement{},
 			},
 		},
 	}, nil

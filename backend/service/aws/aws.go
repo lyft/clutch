@@ -8,14 +8,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
+	"strings"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	externalddb "github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	dynamodb "github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
@@ -29,9 +32,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
-	"io"
-	"net/http"
-	"strings"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
@@ -179,7 +179,7 @@ type Client interface {
 
 	DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error)
 	UpdateCapacity(ctx context.Context, account, region, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error)
-	BatchGetItem(ctx context.Context, account, region string, params *externalddb.BatchGetItemInput) (*externalddb.BatchGetItemOutput, error)
+	BatchGetItem(ctx context.Context, account, region string, params *dynamodb.BatchGetItemInput) (*dynamodb.BatchGetItemOutput, error)
 
 	GetCallerIdentity(ctx context.Context, account, region string) (*sts.GetCallerIdentityOutput, error)
 
