@@ -86,7 +86,7 @@ func newProtoForKeySchemas(inputSchema []types.KeySchemaElement) []*dynamodbv1.K
 func newProtoForKeySchemaType(keyType types.KeyType) dynamodbv1.KeySchema_Type {
 	value, ok := dynamodbv1.KeySchema_Type_value[string(keyType)]
 	if !ok {
-		return dynamodbv1.KeySchema_UNSPECIFIED
+		return dynamodbv1.KeySchema_UNKNOWN
 	}
 	return dynamodbv1.KeySchema_Type(value)
 }

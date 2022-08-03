@@ -2073,8 +2073,9 @@ export namespace clutch {
                     /** Type enum. */
                     enum Type {
                         UNSPECIFIED = 0,
-                        HASH = 1,
-                        RANGE = 2
+                        UNKNOWN = 1,
+                        HASH = 2,
+                        RANGE = 3
                     }
                 }
 

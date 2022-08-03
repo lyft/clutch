@@ -163,11 +163,14 @@ message KeySchema {
     // Undetermined value
     UNSPECIFIED = 0;
 
+    // AWS returns a type that isn't recognized
+    UNKNOWN = 1;
+
     // Partition Key
-    HASH = 1;
+    HASH = 2;
 
     // Sort Key
-    RANGE = 2;
+    RANGE = 3;
   }
   string attribute_name = 1;
   Type type = 2;

@@ -4854,6 +4854,7 @@ export const clutch = $root.clutch = (() => {
                             case 0:
                             case 1:
                             case 2:
+                            case 3:
                                 break;
                             }
                         return null;
@@ -4878,13 +4879,17 @@ export const clutch = $root.clutch = (() => {
                         case 0:
                             message.type = 0;
                             break;
-                        case "HASH":
+                        case "UNKNOWN":
                         case 1:
                             message.type = 1;
                             break;
-                        case "RANGE":
+                        case "HASH":
                         case 2:
                             message.type = 2;
+                            break;
+                        case "RANGE":
+                        case 3:
+                            message.type = 3;
                             break;
                         }
                         return message;
@@ -4930,14 +4935,16 @@ export const clutch = $root.clutch = (() => {
                      * @name clutch.aws.dynamodb.v1.KeySchema.Type
                      * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                     * @property {number} HASH=1 HASH value
-                     * @property {number} RANGE=2 RANGE value
+                     * @property {number} UNKNOWN=1 UNKNOWN value
+                     * @property {number} HASH=2 HASH value
+                     * @property {number} RANGE=3 RANGE value
                      */
                     KeySchema.Type = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
                         values[valuesById[0] = "UNSPECIFIED"] = 0;
-                        values[valuesById[1] = "HASH"] = 1;
-                        values[valuesById[2] = "RANGE"] = 2;
+                        values[valuesById[1] = "UNKNOWN"] = 1;
+                        values[valuesById[2] = "HASH"] = 2;
+                        values[valuesById[3] = "RANGE"] = 3;
                         return values;
                     })();
 
