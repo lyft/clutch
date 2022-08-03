@@ -77,12 +77,19 @@ func newProtoForKeySchema(inputSchema []types.KeySchemaElement) []*dynamodbv1.Ke
 	for idx, schema := range inputSchema {
 		schemaCollection[idx] = &dynamodbv1.KeySchema{
 			AttributeName: *schema.AttributeName,
-			Type:          dynamodbv1.KeySchema_Type(dynamodbv1.KeySchema_Type_value[string(schema.KeyType)]),
+			Type:          newProtoForKeySchemaType(schema.KeyType),
 		}
 	}
 	return schemaCollection
 }
 
+func newProtoForKeySchemaType(keyType types.KeyType) dynamodbv1.KeySchema_Type {
+	value, ok := dynamodbv1.KeySchema_Type_value[string(keyType)]
+	if !ok {
+		return dynamodbv1.KeySchema_UNSPECIFIED
+	}
+	return dynamodbv1.KeySchema_Type(value)
+}
 func newProtoForAttributeDefinitions(inputAttributes []types.AttributeDefinition) []*dynamodbv1.AttributeDefinition {
 	attributeDefs := make([]*dynamodbv1.AttributeDefinition, len(inputAttributes))
 	for idx, attribute := range inputAttributes {

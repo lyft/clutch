@@ -160,11 +160,14 @@ message Throughput {
 // Represents the Key structure for the table
 message KeySchema {
   enum Type {
+    // Undetermined value
+    UNSPECIFIED = 0;
+
     // Partition Key
-    HASH = 0;
+    HASH = 1;
 
     // Sort Key
-    RANGE = 1;
+    RANGE = 2;
   }
   string attribute_name = 1;
   Type type = 2;

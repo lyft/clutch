@@ -4853,6 +4853,7 @@ export const clutch = $root.clutch = (() => {
                                 return "type: enum value expected";
                             case 0:
                             case 1:
+                            case 2:
                                 break;
                             }
                         return null;
@@ -4873,13 +4874,17 @@ export const clutch = $root.clutch = (() => {
                         if (object.attributeName != null)
                             message.attributeName = String(object.attributeName);
                         switch (object.type) {
-                        case "HASH":
+                        case "UNSPECIFIED":
                         case 0:
                             message.type = 0;
                             break;
-                        case "RANGE":
+                        case "HASH":
                         case 1:
                             message.type = 1;
+                            break;
+                        case "RANGE":
+                        case 2:
+                            message.type = 2;
                             break;
                         }
                         return message;
@@ -4900,7 +4905,7 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.defaults) {
                             object.attributeName = "";
-                            object.type = options.enums === String ? "HASH" : 0;
+                            object.type = options.enums === String ? "UNSPECIFIED" : 0;
                         }
                         if (message.attributeName != null && message.hasOwnProperty("attributeName"))
                             object.attributeName = message.attributeName;
@@ -4924,13 +4929,15 @@ export const clutch = $root.clutch = (() => {
                      * Type enum.
                      * @name clutch.aws.dynamodb.v1.KeySchema.Type
                      * @enum {number}
-                     * @property {number} HASH=0 HASH value
-                     * @property {number} RANGE=1 RANGE value
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} HASH=1 HASH value
+                     * @property {number} RANGE=2 RANGE value
                      */
                     KeySchema.Type = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "HASH"] = 0;
-                        values[valuesById[1] = "RANGE"] = 1;
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "HASH"] = 1;
+                        values[valuesById[2] = "RANGE"] = 2;
                         return values;
                     })();
 
