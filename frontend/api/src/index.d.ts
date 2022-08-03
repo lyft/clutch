@@ -1736,6 +1736,12 @@ export namespace clutch {
 
                     /** Table account */
                     account?: (string|null);
+
+                    /** Table keySchema */
+                    keySchema?: (clutch.aws.dynamodb.v1.IKeySchema[]|null);
+
+                    /** Table attributeDefinitions */
+                    attributeDefinitions?: (clutch.aws.dynamodb.v1.IAttributeDefinition[]|null);
                 }
 
                 /** Represents a Table. */
@@ -1767,6 +1773,12 @@ export namespace clutch {
 
                     /** Table account. */
                     public account: string;
+
+                    /** Table keySchema. */
+                    public keySchema: clutch.aws.dynamodb.v1.IKeySchema[];
+
+                    /** Table attributeDefinitions. */
+                    public attributeDefinitions: clutch.aws.dynamodb.v1.IAttributeDefinition[];
 
                     /**
                      * Verifies a Table message.
@@ -1997,6 +2009,123 @@ export namespace clutch {
 
                     /**
                      * Converts this Throughput to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a KeySchema. */
+                interface IKeySchema {
+
+                    /** KeySchema attributeName */
+                    attributeName?: (string|null);
+
+                    /** KeySchema type */
+                    type?: (clutch.aws.dynamodb.v1.KeySchema.Type|null);
+                }
+
+                /** Represents a KeySchema. */
+                class KeySchema implements IKeySchema {
+
+                    /**
+                     * Constructs a new KeySchema.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.dynamodb.v1.IKeySchema);
+
+                    /** KeySchema attributeName. */
+                    public attributeName: string;
+
+                    /** KeySchema type. */
+                    public type: clutch.aws.dynamodb.v1.KeySchema.Type;
+
+                    /**
+                     * Verifies a KeySchema message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a KeySchema message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns KeySchema
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.KeySchema;
+
+                    /**
+                     * Creates a plain object from a KeySchema message. Also converts values to other types if specified.
+                     * @param message KeySchema
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.dynamodb.v1.KeySchema, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this KeySchema to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace KeySchema {
+
+                    /** Type enum. */
+                    enum Type {
+                        HASH = 0,
+                        RANGE = 1
+                    }
+                }
+
+                /** Properties of an AttributeDefinition. */
+                interface IAttributeDefinition {
+
+                    /** AttributeDefinition attributeName */
+                    attributeName?: (string|null);
+
+                    /** AttributeDefinition attributeType */
+                    attributeType?: (string|null);
+                }
+
+                /** Represents an AttributeDefinition. */
+                class AttributeDefinition implements IAttributeDefinition {
+
+                    /**
+                     * Constructs a new AttributeDefinition.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.dynamodb.v1.IAttributeDefinition);
+
+                    /** AttributeDefinition attributeName. */
+                    public attributeName: string;
+
+                    /** AttributeDefinition attributeType. */
+                    public attributeType: string;
+
+                    /**
+                     * Verifies an AttributeDefinition message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an AttributeDefinition message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns AttributeDefinition
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.AttributeDefinition;
+
+                    /**
+                     * Creates a plain object from an AttributeDefinition message. Also converts values to other types if specified.
+                     * @param message AttributeDefinition
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.dynamodb.v1.AttributeDefinition, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this AttributeDefinition to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

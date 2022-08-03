@@ -71,6 +71,28 @@ func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) 
 	return gsis
 }
 
+func newProtoForKeySchema(inputSchema []types.KeySchemaElement) []*dynamodbv1.KeySchema {
+	schemaCollection := make([]*dynamodbv1.KeySchema, len(inputSchema))
+	for idx, schema := range inputSchema {
+		schemaCollection[idx] = &dynamodbv1.KeySchema{
+			AttributeName: *schema.AttributeName,
+			Type:          dynamodbv1.KeySchema_Type(dynamodbv1.KeySchema_Type_value[string(schema.KeyType)]),
+		}
+	}
+	return schemaCollection
+}
+
+func newProtoForAttributeDefinitions(inputAttributes []types.AttributeDefinition) []*dynamodbv1.AttributeDefinition {
+	attributeDefs := make([]*dynamodbv1.AttributeDefinition, len(inputAttributes))
+	for idx, attribute := range inputAttributes {
+		attributeDefs[idx] = &dynamodbv1.AttributeDefinition{
+			AttributeName: *attribute.AttributeName,
+			AttributeType: string(attribute.AttributeType),
+		}
+	}
+	return attributeDefs
+}
+
 // retrieve one GSI from table description
 func getGlobalSecondaryIndex(indexes []types.GlobalSecondaryIndexDescription, targetIndexName string) (*types.GlobalSecondaryIndexDescription, error) {
 	for _, i := range indexes {
@@ -92,6 +114,8 @@ func newProtoForTable(t *types.TableDescription, account, region string) *dynamo
 	tableStatus := newProtoForTableStatus(t.TableStatus)
 
 	billingMode := newProtoForBillingMode(t)
+	keySchema := newProtoForKeySchema(t.KeySchema)
+	attributeDefinitions := newProtoForAttributeDefinitions(t.AttributeDefinitions)
 
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(t.TableName),
@@ -101,6 +125,8 @@ func newProtoForTable(t *types.TableDescription, account, region string) *dynamo
 		ProvisionedThroughput:  currentCapacity,
 		Status:                 tableStatus,
 		BillingMode:            billingMode,
+		KeySchema:              keySchema,
+		AttributeDefinitions:   attributeDefinitions,
 	}
 
 	return ret

@@ -36,6 +36,24 @@ var testDynamodbTable = &types.TableDescription{
 	BillingModeSummary: &types.BillingModeSummary{
 		BillingMode: "PROVISIONED",
 	},
+	KeySchema: []types.KeySchemaElement{{
+		AttributeName: aws.String("ID"),
+		KeyType:       types.KeyTypeHash,
+	},
+		{
+			AttributeName: aws.String("Status"),
+			KeyType:       types.KeyTypeRange,
+		},
+	},
+	AttributeDefinitions: []types.AttributeDefinition{{
+		AttributeName: aws.String("OrderName"),
+		AttributeType: types.ScalarAttributeTypeS,
+	},
+		{
+			AttributeName: aws.String("OrderWeight"),
+			AttributeType: types.ScalarAttributeTypeN,
+		},
+	},
 }
 
 var testTableOutput = &dynamodbv1.Table{
@@ -49,6 +67,24 @@ var testTableOutput = &dynamodbv1.Table{
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
 	Status:                 dynamodbv1.Table_Status(5),
 	BillingMode:            dynamodbv1.Table_BillingMode(2),
+	KeySchema: []*dynamodbv1.KeySchema{
+		{AttributeName: "ID",
+			Type: dynamodbv1.KeySchema_HASH,
+		},
+		{AttributeName: "Status",
+			Type: dynamodbv1.KeySchema_RANGE,
+		},
+	},
+	AttributeDefinitions: []*dynamodbv1.AttributeDefinition{
+		{
+			AttributeName: "OrderName",
+			AttributeType: "S",
+		},
+		{
+			AttributeName: "OrderWeight",
+			AttributeType: "N",
+		},
+	},
 }
 
 var testMaxDynamodbTable = &types.TableDescription{
@@ -157,8 +193,10 @@ var testTableWithGSIOutput = &dynamodbv1.Table{
 			Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
 		},
 	},
-	Status:      dynamodbv1.Table_Status(5),
-	BillingMode: dynamodbv1.Table_BillingMode(2),
+	Status:               dynamodbv1.Table_Status(5),
+	BillingMode:          dynamodbv1.Table_BillingMode(2),
+	KeySchema:            []*dynamodbv1.KeySchema{},
+	AttributeDefinitions: []*dynamodbv1.AttributeDefinition{},
 }
 
 var testOnDemandTable = &types.TableDescription{
