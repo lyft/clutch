@@ -20,7 +20,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import UpdateIcon from "@material-ui/icons/Update";
 import _ from "lodash";
 
-import { useDashUpdater } from "./dash-hooks";
+import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
 import {
   deriveStateData,
   DispatchContext,
@@ -300,19 +300,37 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     setCustomProject(event.target.value);
   };
 
-  // Autorefresh will eventually be passed via hooks to the cards to enforce their update intervals
-  const [autoRefresh, setAutoRefresh] = React.useState<boolean>(true);
+  const { updateRefreshRate } = useRefreshUpdater();
+
+  const initialRefreshRateState = useRefreshRateState();
+  const { refreshRate } = initialRefreshRateState;
+  // if refreshRate is null, that means autoRefresh is disabled
+  // else if its a number, it will be used as the value for setInterval
+  const [autoRefresh, setAutoRefresh] = React.useState<boolean>(!!refreshRate);
+
+  const handleRefreshRateChange = () => {
+    // if autorefresh was false, it is now true, so set it to the value
+    if (!autoRefresh) {
+      updateRefreshRate({ refreshRate: 30000 });
+    } else {
+      // else, it was true, so now it is false, and we should turn it off
+      updateRefreshRate({ refreshRate: null });
+    }
+    setAutoRefresh(!autoRefresh);
+  };
 
   // useEffect that handles auto-refreshing / reloading.
   React.useEffect(() => {
     // This way of autorefreshing is also used in other places.
-    if (autoRefresh) {
-      // hardcode to 30 seconds
-      const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
+    if (refreshRate) {
+      const interval = setInterval(
+        () => hydrateProjects(state, dispatch, fromShortLink),
+        refreshRate
+      );
       return () => clearInterval(interval);
     }
     return () => {};
-  }, [state, autoRefresh]);
+  }, [state, refreshRate]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
@@ -370,7 +388,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                       style={{ color: autoRefresh ? "#3548D4" : "rgba(0, 0, 0, 0.26)" }}
                       fontSize="small"
                       onClick={() => {
-                        setAutoRefresh(!autoRefresh);
+                        handleRefreshRateChange();
                       }}
                     />
                   </Tooltip>

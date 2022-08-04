@@ -3,6 +3,8 @@ import * as React from "react";
 import type {
   DashAction,
   DashState,
+  RefreshRateAction,
+  RefreshRateState,
   TimeDataUpdate,
   TimelineAction,
   TimelineState,
@@ -14,6 +16,12 @@ import type {
 export const ProjectSelectorStateContext = React.createContext<DashState | undefined>(undefined);
 export const ProjectSelectorDispatchContext = React.createContext<
   ((action: DashAction) => void) | undefined
+>(undefined);
+
+// Contexts for refresh rate
+export const RefreshRateStateContext = React.createContext<RefreshRateState | undefined>(undefined);
+export const RefreshRateDispatchContext = React.createContext<
+  ((action: RefreshRateAction) => void) | undefined
 >(undefined);
 
 // Contexts for timeline
@@ -48,6 +56,30 @@ export const useDashState = (): DashState => {
   if (!value) {
     throw new Error(
       "useDashState was invoked outside of a valid context, check that it is a child of the Dash component"
+    );
+  }
+  return value;
+};
+
+type useRefreshUpdaterReturn = {
+  updateRefreshRate: (refreshRate: RefreshRateState) => void;
+};
+
+export const useRefreshUpdater = (): useRefreshUpdaterReturn => {
+  const dispatch = React.useContext(RefreshRateDispatchContext);
+
+  return {
+    updateRefreshRate: refreshRate => {
+      dispatch && dispatch({ type: "UPDATE", payload: refreshRate });
+    },
+  };
+};
+
+export const useRefreshRateState = (): RefreshRateState => {
+  const value = React.useContext<RefreshRateState | undefined>(RefreshRateStateContext);
+  if (!value) {
+    throw new Error(
+      "useRefreshRateState was invoked outside of a valid context, check that it is a child of the Dash component"
     );
   }
   return value;
