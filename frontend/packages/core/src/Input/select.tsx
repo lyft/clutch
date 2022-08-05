@@ -77,7 +77,6 @@ const StyledSelect = styled(BaseSelect)({
   "--notched-border-width": "1px",
   padding: "0",
   backgroundColor: "#FFFFFF",
-  height: "unset",
 
   ".MuiOutlinedInput-notchedOutline": {
     borderColor: "rgba(13, 16, 48, 0.38)",
@@ -240,7 +239,12 @@ const Select = ({
     <MenuItem key={option.label} value={option?.value || option.label}>
       {option?.startAdornment &&
         React.cloneElement(option.startAdornment, {
-          style: { height: "100%", marginRight: "8px", ...option.startAdornment.props.style },
+          style: {
+            height: "100%",
+            maxHeight: "20px",
+            marginRight: "8px",
+            ...option.startAdornment.props.style,
+          },
         })}
       {option.label}
     </MenuItem>
