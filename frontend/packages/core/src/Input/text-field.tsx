@@ -34,7 +34,6 @@ const StyledAutocomplete = styled(Autocomplete)({
   ".MuiOutlinedInput-root.MuiInputBase-sizeSmall": {
     padding: "unset",
   },
-  margin: "8px",
   height: "unset",
   ".MuiTextField-root > .MuiInputBase-root > .MuiInputBase-input": {
     height: "20px",
