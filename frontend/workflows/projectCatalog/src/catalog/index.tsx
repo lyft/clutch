@@ -168,7 +168,6 @@ const Catalog: React.FC<WorkflowProps> = () => {
                 true
               );
             }}
-            size="medium"
           >
             <RestoreIcon />
           </IconButton>
