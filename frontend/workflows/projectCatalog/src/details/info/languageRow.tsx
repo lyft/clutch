@@ -9,7 +9,7 @@ const LanguageRow = ({ languages }: { languages: string[] }) => (
       <Typography variant="body2">Language{languages.length > 1 && "s"}</Typography>
     </Grid>
     {languages.map(language => (
-      <Grid item>
+      <Grid item key={`language-${language}`}>
         <LanguageIcon language={language} />
       </Grid>
     ))}

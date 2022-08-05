@@ -2,8 +2,8 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Link, Popper, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import IconButton from "@material-ui/core/IconButton";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import IconButton from "@mui/material/IconButton";
 
 interface LinkGroupProps {
   linkGroupName: string;
@@ -231,7 +231,7 @@ const ProjectLinks = ({ linkGroups, onOpen, onClose, showOpenButton }: ProjectLi
   return (
     <StyledFlexEnd hidden={showOpenButton}>
       <StyledMoreVertIcon>
-        <IconButton ref={anchorRef} onClick={onOpenPopper}>
+        <IconButton ref={anchorRef} onClick={onOpenPopper} size="large">
           <MoreVertIcon />
           <QuickLinksPopper
             linkGroups={linkGroups}

@@ -11,9 +11,9 @@ import {
   useNavigate,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import { Box, CircularProgress } from "@material-ui/core";
-import RestoreIcon from "@material-ui/icons/Restore";
-import SearchIcon from "@material-ui/icons/Search";
+import RestoreIcon from "@mui/icons-material/Restore";
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, CircularProgress } from "@mui/material";
 
 import type { WorkflowProps } from "..";
 
@@ -57,7 +57,7 @@ const autoComplete = async (search: string): Promise<any> => {
 
 const Form = styled.form({});
 
-const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
+const Catalog: React.FC<WorkflowProps> = () => {
   const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(catalogReducer, initialState);
 
@@ -135,17 +135,12 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
         <div style={{ margin: "16px" }}>
           <Form noValidate onSubmit={handleSubmit(triggerProjectAdd)}>
             <TextField
-              placeholder="Search"
+              label="Search"
+              placeholder="Project Name"
               value={state.search}
               onChange={handleChanges}
               autocompleteCallback={v => autoComplete(v)}
-              endAdornment={
-                state.isSearching ? (
-                  <CircularProgress size="24px" />
-                ) : (
-                  <SearchIcon onClick={triggerProjectAdd} />
-                )
-              }
+              endAdornment={state.isSearching ? <CircularProgress size="24px" /> : <SearchIcon />}
               error={state.error !== undefined}
               helperText={state?.error}
             />
@@ -181,13 +176,13 @@ const Catalog: React.FC<WorkflowProps> = ({ heading }) => {
       {state.projects.length ? (
         <Grid container direction="row" spacing={3}>
           {state.projects.map(p => (
-            <Grid item onClick={() => navigateToProject(p)}>
+            <Grid item key={p.name} onClick={() => navigateToProject(p)}>
               <ProjectCard project={p} onRemove={() => triggerProjectRemove(p)} />
             </Grid>
           ))}
         </Grid>
       ) : (
-        <Grid container justify="center" style={{ paddingTop: "35px" }}>
+        <Grid container justifyContent="center" style={{ paddingTop: "35px" }}>
           <Placeholder />
         </Grid>
       )}

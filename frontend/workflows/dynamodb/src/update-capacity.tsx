@@ -16,7 +16,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { Box } from "@material-ui/core";
+import { Box } from "@mui/material";
 import _ from "lodash";
 import { number } from "yup";
 
