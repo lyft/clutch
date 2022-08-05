@@ -47,7 +47,6 @@ const StyledAutocomplete = styled(Autocomplete)({
 
 const StyledTextField = styled(BaseTextField)({
   "--error-color": "#DB3615",
-  margin: "8px 0px",
   height: "unset",
 
   ".MuiInputLabel-root": {
