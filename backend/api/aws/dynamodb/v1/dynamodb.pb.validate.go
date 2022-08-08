@@ -129,6 +129,74 @@ func (m *Table) validate(all bool) error {
 
 	// no validation rules for Account
 
+	for idx, item := range m.GetKeySchemas() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, TableValidationError{
+						field:  fmt.Sprintf("KeySchemas[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, TableValidationError{
+						field:  fmt.Sprintf("KeySchemas[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return TableValidationError{
+					field:  fmt.Sprintf("KeySchemas[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetAttributeDefinitions() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, TableValidationError{
+						field:  fmt.Sprintf("AttributeDefinitions[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, TableValidationError{
+						field:  fmt.Sprintf("AttributeDefinitions[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return TableValidationError{
+					field:  fmt.Sprintf("AttributeDefinitions[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
 		return TableMultiError(errors)
 	}
@@ -576,6 +644,215 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ThroughputValidationError{}
+
+// Validate checks the field values on KeySchema with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *KeySchema) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on KeySchema with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in KeySchemaMultiError, or nil
+// if none found.
+func (m *KeySchema) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *KeySchema) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for AttributeName
+
+	// no validation rules for Type
+
+	if len(errors) > 0 {
+		return KeySchemaMultiError(errors)
+	}
+
+	return nil
+}
+
+// KeySchemaMultiError is an error wrapping multiple validation errors returned
+// by KeySchema.ValidateAll() if the designated constraints aren't met.
+type KeySchemaMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m KeySchemaMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m KeySchemaMultiError) AllErrors() []error { return m }
+
+// KeySchemaValidationError is the validation error returned by
+// KeySchema.Validate if the designated constraints aren't met.
+type KeySchemaValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e KeySchemaValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e KeySchemaValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e KeySchemaValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e KeySchemaValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e KeySchemaValidationError) ErrorName() string { return "KeySchemaValidationError" }
+
+// Error satisfies the builtin error interface
+func (e KeySchemaValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sKeySchema.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = KeySchemaValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = KeySchemaValidationError{}
+
+// Validate checks the field values on AttributeDefinition with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *AttributeDefinition) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AttributeDefinition with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AttributeDefinitionMultiError, or nil if none found.
+func (m *AttributeDefinition) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AttributeDefinition) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for AttributeName
+
+	// no validation rules for AttributeType
+
+	if len(errors) > 0 {
+		return AttributeDefinitionMultiError(errors)
+	}
+
+	return nil
+}
+
+// AttributeDefinitionMultiError is an error wrapping multiple validation
+// errors returned by AttributeDefinition.ValidateAll() if the designated
+// constraints aren't met.
+type AttributeDefinitionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AttributeDefinitionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AttributeDefinitionMultiError) AllErrors() []error { return m }
+
+// AttributeDefinitionValidationError is the validation error returned by
+// AttributeDefinition.Validate if the designated constraints aren't met.
+type AttributeDefinitionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AttributeDefinitionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AttributeDefinitionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AttributeDefinitionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AttributeDefinitionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AttributeDefinitionValidationError) ErrorName() string {
+	return "AttributeDefinitionValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AttributeDefinitionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAttributeDefinition.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AttributeDefinitionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AttributeDefinitionValidationError{}
 
 // Validate checks the field values on DescribeTableRequest with the rules
 // defined in the proto definition for this message. If any rules are

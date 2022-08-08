@@ -47,9 +47,11 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
         padding: "8px 32px 0px 0px",
       }}
     >
-      <Grid item>
-        <QuickLinksCard linkGroups={linkGroups} />
-      </Grid>
+      {!isEmpty(linkGroups) && (
+        <Grid item>
+          <QuickLinksCard linkGroups={linkGroups} />
+        </Grid>
+      )}
       <SimpleFeatureFlag feature="projectCatalogSettings">
         <FeatureOn>
           <Grid item>
@@ -136,9 +138,9 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
                 description={projectInfo?.data?.description as string}
               />
             </StyledHeadingContainer>
-            {projectInfo && !isEmpty(projectInfo?.linkGroups) && (
+            {projectInfo && (
               <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
-                <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups} />
+                <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups || []} />
               </Grid>
             )}
           </Grid>

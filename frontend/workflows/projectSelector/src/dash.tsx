@@ -7,6 +7,8 @@ import _ from "lodash";
 import {
   ProjectSelectorDispatchContext,
   ProjectSelectorStateContext,
+  RefreshRateDispatchContext,
+  RefreshRateStateContext,
   TimelineDispatchContext,
   TimelineStateContext,
   TimeRangeDispatchContext,
@@ -19,6 +21,8 @@ import type {
   DashAction,
   DashError,
   DashState,
+  RefreshRateAction,
+  RefreshRateState,
   TimelineAction,
   TimelineState,
   TimeRangeAction,
@@ -44,6 +48,11 @@ const initialState: DashState = {
   projectData: {},
 };
 
+const initialRefreshState: RefreshRateState = {
+  // Default is 30 seconds (30000 ms)
+  refreshRate: 30000,
+};
+
 const initialTimelineState: TimelineState = {
   timeData: {},
 };
@@ -65,6 +74,20 @@ const dashReducer = (state: DashState, action: DashAction): DashState => {
   switch (action.type) {
     case "UPDATE_SELECTED": {
       if (!_.isEqual(state.selected, action.payload.selected)) {
+        return action.payload;
+      }
+      return state;
+    }
+    default:
+      throw new Error("not implemented (should be unreachable)");
+  }
+};
+
+const refreshReducer = (state: RefreshRateState, action: RefreshRateAction): RefreshRateState => {
+  switch (action.type) {
+    case "UPDATE": {
+      // Don't allow negative or 0 values. However, do allow null because null means turn off refresh.
+      if (action.payload.refreshRate === null || action.payload.refreshRate > 0) {
         return action.payload;
       }
       return state;
@@ -111,6 +134,10 @@ const Dash = ({ children, onError }: DashProps) => {
     timeRangeReducer,
     initialTimeRangeState
   );
+  const [refreshRateState, refreshRateDispatch] = React.useReducer(
+    refreshReducer,
+    initialRefreshState
+  );
 
   // Will take a returned ProjectSelectorError and generate a rendered component of the error messages
   // and return it to the parent component
@@ -141,8 +168,12 @@ const Dash = ({ children, onError }: DashProps) => {
             <TimeRangeStateContext.Provider value={timeRangeState}>
               <TimelineDispatchContext.Provider value={timelineDispatch}>
                 <TimelineStateContext.Provider value={timelineState}>
-                  <ProjectSelector onError={returnDashError} />
-                  <CardContainer>{children}</CardContainer>
+                  <RefreshRateDispatchContext.Provider value={refreshRateDispatch}>
+                    <RefreshRateStateContext.Provider value={refreshRateState}>
+                      <ProjectSelector onError={returnDashError} />
+                      <CardContainer>{children}</CardContainer>
+                    </RefreshRateStateContext.Provider>
+                  </RefreshRateDispatchContext.Provider>
                 </TimelineStateContext.Provider>
               </TimelineDispatchContext.Provider>
             </TimeRangeStateContext.Provider>

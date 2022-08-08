@@ -1,9 +1,11 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import type { clutch as IClutch, google as IGoogle } from "@clutch-sh/api";
-import type { ClutchError } from "@clutch-sh/core";
 import {
   client,
+  ClutchError,
+  FeatureOn,
+  SimpleFeatureFlag,
   TextField,
   Tooltip,
   TooltipContainer,
@@ -14,11 +16,11 @@ import {
 import styled from "@emotion/styled";
 import AddIcon from "@mui/icons-material/Add";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
+import UpdateIcon from "@mui/icons-material/Update";
 import { Divider, LinearProgress } from "@mui/material";
 import _ from "lodash";
 
-import { useDashUpdater } from "./dash-hooks";
+import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
 import {
   deriveStateData,
   DispatchContext,
@@ -75,6 +77,8 @@ const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
   display: "flex",
   alignItems: "center",
+  justifyContent: "space-between",
+  height: "24px",
 });
 
 const StyledWorkflowTitle = styled.span({
@@ -96,6 +100,12 @@ const StyledProgressContainer = styled.div({
   ".MuiLinearProgress-bar": {
     backgroundColor: "#3548D4",
   },
+});
+
+// TODO(smonero): decide on styling for this
+const FlexCenterAlignContainer = styled.div({
+  display: "flex",
+  alignItems: "center",
 });
 
 // Determines if every project has projectData (i.e. the effect has finished fetching the data)
@@ -217,11 +227,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   );
 
   React.useEffect(() => {
-    const interval = setInterval(() => hydrateProjects(state, dispatch, fromShortLink), 30000);
-    return () => clearInterval(interval);
-  }, [state]);
-
-  React.useEffect(() => {
     hydrateProjects(state, dispatch, fromShortLink);
   }, [state[Group.PROJECTS]]);
 
@@ -295,47 +300,99 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     setCustomProject(event.target.value);
   };
 
+  const { updateRefreshRate } = useRefreshUpdater();
+
+  const initialRefreshRateState = useRefreshRateState();
+  const { refreshRate } = initialRefreshRateState;
+  // if refreshRate is null, that means autoRefresh is disabled
+  // else if its a number, it will be used as the value for setInterval
+  const [autoRefresh, setAutoRefresh] = React.useState<boolean>(!!refreshRate);
+
+  const handleRefreshRateChange = () => {
+    // if autorefresh was false, it is now true, so set it to the value
+    if (!autoRefresh) {
+      updateRefreshRate({ refreshRate: 30000 });
+    } else {
+      // else, it was true, so now it is false, and we should turn it off
+      updateRefreshRate({ refreshRate: null });
+    }
+    setAutoRefresh(!autoRefresh);
+  };
+
+  // useEffect that handles auto-refreshing / reloading.
+  React.useEffect(() => {
+    // This way of autorefreshing is also used in other places.
+    if (refreshRate) {
+      const interval = setInterval(
+        () => hydrateProjects(state, dispatch, fromShortLink),
+        refreshRate
+      );
+      return () => clearInterval(interval);
+    }
+    return () => {};
+  }, [state, refreshRate]);
+
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={derivedState}>
         <StyledSelectorContainer>
           <StyledWorkflowHeader>
-            <LayersOutlinedIcon fontSize="small" />
-            <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
-            <Tooltip
-              title={
-                <>
-                  {[
-                    {
-                      title: "Projects",
-                      description:
-                        "Service, mobile app, etc. Unchecking a project hides its upstream and downstream dependencies.",
-                    },
-                    {
-                      title: "Upstreams",
-                      description: "Receive requests and send responses to the selected project.",
-                    },
-                    {
-                      title: "Downstreams",
-                      description: "Send requests and receive responses from the selected project.",
-                    },
-                  ].map(item => (
-                    <TooltipContainer key={item.title}>
-                      <Typography variant="subtitle3" color="#FFFFFF">
-                        {item.title}
-                      </Typography>
-                      <Typography variant="body4" color="#E7E7EA">
-                        {item.description}
-                      </Typography>
-                    </TooltipContainer>
-                  ))}
-                </>
-              }
-              maxWidth="400px"
-              placement="right-start"
-            >
-              <InfoOutlinedIcon fontSize="small" />
-            </Tooltip>
+            <FlexCenterAlignContainer>
+              <StyledWorkflowTitle>Dash</StyledWorkflowTitle>
+              <Tooltip
+                title={
+                  <>
+                    {[
+                      {
+                        title: "Projects",
+                        description:
+                          "Service, mobile app, etc. Unchecking a project hides its upstream and downstream dependencies.",
+                      },
+                      {
+                        title: "Upstreams",
+                        description: "Receive requests and send responses to the selected project.",
+                      },
+                      {
+                        title: "Downstreams",
+                        description:
+                          "Send requests and receive responses from the selected project.",
+                      },
+                    ].map(item => (
+                      <TooltipContainer key={item.title}>
+                        <Typography variant="subtitle3" color="#FFFFFF">
+                          {item.title}
+                        </Typography>
+                        <Typography variant="body4" color="#E7E7EA">
+                          {item.description}
+                        </Typography>
+                      </TooltipContainer>
+                    ))}
+                  </>
+                }
+                maxWidth="400px"
+                placement="right-start"
+              >
+                <InfoOutlinedIcon fontSize="small" />
+              </Tooltip>
+            </FlexCenterAlignContainer>
+            <FlexCenterAlignContainer>
+              <SimpleFeatureFlag feature="dashRefreshSelect">
+                <FeatureOn>
+                  <Tooltip
+                    title={autoRefresh ? "Disable data refresh" : "Data refresh every 30 seconds"}
+                    placement="bottom"
+                  >
+                    <UpdateIcon
+                      style={{ color: autoRefresh ? "#3548D4" : "rgba(0, 0, 0, 0.26)" }}
+                      fontSize="small"
+                      onClick={() => {
+                        handleRefreshRateChange();
+                      }}
+                    />
+                  </Tooltip>
+                </FeatureOn>
+              </SimpleFeatureFlag>
+            </FlexCenterAlignContainer>
           </StyledWorkflowHeader>
           <StyledProgressContainer>
             {state.loading && <LinearProgress color="secondary" />}

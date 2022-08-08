@@ -3926,6 +3926,8 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.aws.dynamodb.v1.Table.Status|null} [status] Table status
                      * @property {clutch.aws.dynamodb.v1.Table.BillingMode|null} [billingMode] Table billingMode
                      * @property {string|null} [account] Table account
+                     * @property {Array.<clutch.aws.dynamodb.v1.IKeySchema>|null} [keySchemas] Table keySchemas
+                     * @property {Array.<clutch.aws.dynamodb.v1.IAttributeDefinition>|null} [attributeDefinitions] Table attributeDefinitions
                      */
 
                     /**
@@ -3938,6 +3940,8 @@ export const clutch = $root.clutch = (() => {
                      */
                     function Table(properties) {
                         this.globalSecondaryIndexes = [];
+                        this.keySchemas = [];
+                        this.attributeDefinitions = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -4001,6 +4005,22 @@ export const clutch = $root.clutch = (() => {
                     Table.prototype.account = "";
 
                     /**
+                     * Table keySchemas.
+                     * @member {Array.<clutch.aws.dynamodb.v1.IKeySchema>} keySchemas
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.keySchemas = $util.emptyArray;
+
+                    /**
+                     * Table attributeDefinitions.
+                     * @member {Array.<clutch.aws.dynamodb.v1.IAttributeDefinition>} attributeDefinitions
+                     * @memberof clutch.aws.dynamodb.v1.Table
+                     * @instance
+                     */
+                    Table.prototype.attributeDefinitions = $util.emptyArray;
+
+                    /**
                      * Verifies a Table message.
                      * @function verify
                      * @memberof clutch.aws.dynamodb.v1.Table
@@ -4059,6 +4079,24 @@ export const clutch = $root.clutch = (() => {
                         if (message.account != null && message.hasOwnProperty("account"))
                             if (!$util.isString(message.account))
                                 return "account: string expected";
+                        if (message.keySchemas != null && message.hasOwnProperty("keySchemas")) {
+                            if (!Array.isArray(message.keySchemas))
+                                return "keySchemas: array expected";
+                            for (let i = 0; i < message.keySchemas.length; ++i) {
+                                let error = $root.clutch.aws.dynamodb.v1.KeySchema.verify(message.keySchemas[i]);
+                                if (error)
+                                    return "keySchemas." + error;
+                            }
+                        }
+                        if (message.attributeDefinitions != null && message.hasOwnProperty("attributeDefinitions")) {
+                            if (!Array.isArray(message.attributeDefinitions))
+                                return "attributeDefinitions: array expected";
+                            for (let i = 0; i < message.attributeDefinitions.length; ++i) {
+                                let error = $root.clutch.aws.dynamodb.v1.AttributeDefinition.verify(message.attributeDefinitions[i]);
+                                if (error)
+                                    return "attributeDefinitions." + error;
+                            }
+                        }
                         return null;
                     };
 
@@ -4151,6 +4189,26 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.account != null)
                             message.account = String(object.account);
+                        if (object.keySchemas) {
+                            if (!Array.isArray(object.keySchemas))
+                                throw TypeError(".clutch.aws.dynamodb.v1.Table.keySchemas: array expected");
+                            message.keySchemas = [];
+                            for (let i = 0; i < object.keySchemas.length; ++i) {
+                                if (typeof object.keySchemas[i] !== "object")
+                                    throw TypeError(".clutch.aws.dynamodb.v1.Table.keySchemas: object expected");
+                                message.keySchemas[i] = $root.clutch.aws.dynamodb.v1.KeySchema.fromObject(object.keySchemas[i]);
+                            }
+                        }
+                        if (object.attributeDefinitions) {
+                            if (!Array.isArray(object.attributeDefinitions))
+                                throw TypeError(".clutch.aws.dynamodb.v1.Table.attributeDefinitions: array expected");
+                            message.attributeDefinitions = [];
+                            for (let i = 0; i < object.attributeDefinitions.length; ++i) {
+                                if (typeof object.attributeDefinitions[i] !== "object")
+                                    throw TypeError(".clutch.aws.dynamodb.v1.Table.attributeDefinitions: object expected");
+                                message.attributeDefinitions[i] = $root.clutch.aws.dynamodb.v1.AttributeDefinition.fromObject(object.attributeDefinitions[i]);
+                            }
+                        }
                         return message;
                     };
 
@@ -4167,8 +4225,11 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults)
+                        if (options.arrays || options.defaults) {
                             object.globalSecondaryIndexes = [];
+                            object.keySchemas = [];
+                            object.attributeDefinitions = [];
+                        }
                         if (options.defaults) {
                             object.name = "";
                             object.region = "";
@@ -4194,6 +4255,16 @@ export const clutch = $root.clutch = (() => {
                             object.billingMode = options.enums === String ? $root.clutch.aws.dynamodb.v1.Table.BillingMode[message.billingMode] : message.billingMode;
                         if (message.account != null && message.hasOwnProperty("account"))
                             object.account = message.account;
+                        if (message.keySchemas && message.keySchemas.length) {
+                            object.keySchemas = [];
+                            for (let j = 0; j < message.keySchemas.length; ++j)
+                                object.keySchemas[j] = $root.clutch.aws.dynamodb.v1.KeySchema.toObject(message.keySchemas[j], options);
+                        }
+                        if (message.attributeDefinitions && message.attributeDefinitions.length) {
+                            object.attributeDefinitions = [];
+                            for (let j = 0; j < message.attributeDefinitions.length; ++j)
+                                object.attributeDefinitions[j] = $root.clutch.aws.dynamodb.v1.AttributeDefinition.toObject(message.attributeDefinitions[j], options);
+                        }
                         return object;
                     };
 
@@ -4719,6 +4790,283 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return Throughput;
+                })();
+
+                v1.KeySchema = (function() {
+
+                    /**
+                     * Properties of a KeySchema.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IKeySchema
+                     * @property {string|null} [attributeName] KeySchema attributeName
+                     * @property {clutch.aws.dynamodb.v1.KeySchema.Type|null} [type] KeySchema type
+                     */
+
+                    /**
+                     * Constructs a new KeySchema.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a KeySchema.
+                     * @implements IKeySchema
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IKeySchema=} [properties] Properties to set
+                     */
+                    function KeySchema(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * KeySchema attributeName.
+                     * @member {string} attributeName
+                     * @memberof clutch.aws.dynamodb.v1.KeySchema
+                     * @instance
+                     */
+                    KeySchema.prototype.attributeName = "";
+
+                    /**
+                     * KeySchema type.
+                     * @member {clutch.aws.dynamodb.v1.KeySchema.Type} type
+                     * @memberof clutch.aws.dynamodb.v1.KeySchema
+                     * @instance
+                     */
+                    KeySchema.prototype.type = 0;
+
+                    /**
+                     * Verifies a KeySchema message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.KeySchema
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    KeySchema.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.attributeName != null && message.hasOwnProperty("attributeName"))
+                            if (!$util.isString(message.attributeName))
+                                return "attributeName: string expected";
+                        if (message.type != null && message.hasOwnProperty("type"))
+                            switch (message.type) {
+                            default:
+                                return "type: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break;
+                            }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a KeySchema message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.KeySchema
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.KeySchema} KeySchema
+                     */
+                    KeySchema.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.KeySchema)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.KeySchema();
+                        if (object.attributeName != null)
+                            message.attributeName = String(object.attributeName);
+                        switch (object.type) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.type = 0;
+                            break;
+                        case "UNKNOWN":
+                        case 1:
+                            message.type = 1;
+                            break;
+                        case "HASH":
+                        case 2:
+                            message.type = 2;
+                            break;
+                        case "RANGE":
+                        case 3:
+                            message.type = 3;
+                            break;
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a KeySchema message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.KeySchema
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.KeySchema} message KeySchema
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    KeySchema.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.attributeName = "";
+                            object.type = options.enums === String ? "UNSPECIFIED" : 0;
+                        }
+                        if (message.attributeName != null && message.hasOwnProperty("attributeName"))
+                            object.attributeName = message.attributeName;
+                        if (message.type != null && message.hasOwnProperty("type"))
+                            object.type = options.enums === String ? $root.clutch.aws.dynamodb.v1.KeySchema.Type[message.type] : message.type;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this KeySchema to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.KeySchema
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    KeySchema.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Type enum.
+                     * @name clutch.aws.dynamodb.v1.KeySchema.Type
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} UNKNOWN=1 UNKNOWN value
+                     * @property {number} HASH=2 HASH value
+                     * @property {number} RANGE=3 RANGE value
+                     */
+                    KeySchema.Type = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "UNKNOWN"] = 1;
+                        values[valuesById[2] = "HASH"] = 2;
+                        values[valuesById[3] = "RANGE"] = 3;
+                        return values;
+                    })();
+
+                    return KeySchema;
+                })();
+
+                v1.AttributeDefinition = (function() {
+
+                    /**
+                     * Properties of an AttributeDefinition.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IAttributeDefinition
+                     * @property {string|null} [attributeName] AttributeDefinition attributeName
+                     * @property {string|null} [attributeType] AttributeDefinition attributeType
+                     */
+
+                    /**
+                     * Constructs a new AttributeDefinition.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents an AttributeDefinition.
+                     * @implements IAttributeDefinition
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IAttributeDefinition=} [properties] Properties to set
+                     */
+                    function AttributeDefinition(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * AttributeDefinition attributeName.
+                     * @member {string} attributeName
+                     * @memberof clutch.aws.dynamodb.v1.AttributeDefinition
+                     * @instance
+                     */
+                    AttributeDefinition.prototype.attributeName = "";
+
+                    /**
+                     * AttributeDefinition attributeType.
+                     * @member {string} attributeType
+                     * @memberof clutch.aws.dynamodb.v1.AttributeDefinition
+                     * @instance
+                     */
+                    AttributeDefinition.prototype.attributeType = "";
+
+                    /**
+                     * Verifies an AttributeDefinition message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.AttributeDefinition
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    AttributeDefinition.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.attributeName != null && message.hasOwnProperty("attributeName"))
+                            if (!$util.isString(message.attributeName))
+                                return "attributeName: string expected";
+                        if (message.attributeType != null && message.hasOwnProperty("attributeType"))
+                            if (!$util.isString(message.attributeType))
+                                return "attributeType: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an AttributeDefinition message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.AttributeDefinition
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.AttributeDefinition} AttributeDefinition
+                     */
+                    AttributeDefinition.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.AttributeDefinition)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.AttributeDefinition();
+                        if (object.attributeName != null)
+                            message.attributeName = String(object.attributeName);
+                        if (object.attributeType != null)
+                            message.attributeType = String(object.attributeType);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an AttributeDefinition message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.AttributeDefinition
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.AttributeDefinition} message AttributeDefinition
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    AttributeDefinition.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.attributeName = "";
+                            object.attributeType = "";
+                        }
+                        if (message.attributeName != null && message.hasOwnProperty("attributeName"))
+                            object.attributeName = message.attributeName;
+                        if (message.attributeType != null && message.hasOwnProperty("attributeType"))
+                            object.attributeType = message.attributeType;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this AttributeDefinition to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.AttributeDefinition
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    AttributeDefinition.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return AttributeDefinition;
                 })();
 
                 v1.DescribeTableRequest = (function() {
