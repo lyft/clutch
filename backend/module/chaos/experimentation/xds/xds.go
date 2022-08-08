@@ -191,7 +191,7 @@ func (c *callbacksBase) OnStreamDeltaResponse(i int64, request *gcpDiscoveryV3.D
 	panic("delta callbacks not implemented, use 'GRPC' api_type")
 }
 
-func (c *callbacksBase) OnDeltaStreamClosed(streamID int64) {
+func (c *callbacksBase) OnDeltaStreamClosed(streamID int64, node *gcpCoreV3.Node) {
 	panic("delta callbacks not implemented, use 'GRPC' api_type")
 }
 
@@ -205,8 +205,8 @@ func (c *rtdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeUR
 	return c.onStreamOpen(ctx)
 }
 
-func (c *rtdsCallbacks) OnStreamClosed(streamID int64) {
-	c.logger.Debugw("RTDS onStreamClosed", "streamID", streamID)
+func (c *rtdsCallbacks) OnStreamClosed(streamID int64, node *gcpCoreV3.Node) {
+	c.logger.Debugw("RTDS onStreamClosed", "streamID", streamID, "cluster", node.Cluster)
 	c.onStreamClosed(streamID)
 }
 
@@ -247,8 +247,8 @@ func (c *ecdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeUR
 	return c.onStreamOpen(ctx)
 }
 
-func (c *ecdsCallbacks) OnStreamClosed(streamID int64) {
-	c.logger.Debugw("ECDS onStreamClosed", "streamID", streamID)
+func (c *ecdsCallbacks) OnStreamClosed(streamID int64, node *gcpCoreV3.Node) {
+	c.logger.Debugw("ECDS onStreamClosed", "streamID", streamID, "cluster", node.Cluster)
 	c.onStreamClosed(streamID)
 }
 

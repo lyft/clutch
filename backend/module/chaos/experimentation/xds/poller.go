@@ -259,20 +259,25 @@ func (p *Poller) createResourceWithTTLForECDSResource(resource *ECDSResource, tt
 func (p *Poller) setSnapshot(ctx context.Context, resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTTL, cluster string) error {
 	currentSnapshot, _ := p.cache.GetSnapshot(cluster)
 
-	snapshot := gcpCacheV3.Snapshot{}
+	snapshot := &gcpCacheV3.Snapshot{}
 	isNewSnapshotSame := true
-	for resourceType, resources := range resourceMap {
+	for responseType, resources := range resourceMap {
 		newComputedVersion, err := computeChecksum(resources)
 		if err != nil {
-			p.logger.Errorw("Unable to compute checksum", "cluster", cluster, "resourceType", resourceType, "resources", resources)
+			p.logger.Errorw("Unable to compute checksum", "cluster", cluster, "responseType", responseType, "resources", resources)
 			return nil
 		}
 
-		if newComputedVersion != currentSnapshot.Resources[resourceType].Version {
+		typeURL, err := gcpCacheV3.GetResponseTypeURL(responseType)
+		if err != nil {
+			return err
+		}
+
+		if currentSnapshot == nil || newComputedVersion != currentSnapshot.GetVersion(typeURL) {
 			isNewSnapshotSame = false
 		}
 
-		snapshot.Resources[resourceType] = gcpCacheV3.NewResourcesWithTTL(newComputedVersion, resources)
+		snapshot.Resources[responseType] = gcpCacheV3.NewResourcesWithTTL(newComputedVersion, resources)
 	}
 
 	if isNewSnapshotSame {
