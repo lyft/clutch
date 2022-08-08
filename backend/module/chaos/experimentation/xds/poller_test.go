@@ -288,12 +288,13 @@ func TestECDSResourcesRefresh(t *testing.T) {
 	awaitGaugeEquals(t, scope, "active_faults+", 2)
 
 	snapshotClusterFoo, err := cache.GetSnapshot("foo")
+
 	assert.NoError(t, err)
-	assert.NotNil(t, snapshotClusterFoo.Resources[gcpTypes.ExtensionConfig].Items["filter1"].Resource.(*gcpCoreV3.TypedExtensionConfig))
+	assert.NotNil(t, snapshotClusterFoo.GetResources(gcpResourceV3.ExtensionConfigType)["filter1"].(*gcpCoreV3.TypedExtensionConfig))
 
 	snapshotClusterBar, err := cache.GetSnapshot("bar")
 	assert.NoError(t, err)
-	serializedFilterResource := snapshotClusterBar.Resources[gcpTypes.ExtensionConfig].Items["filter2"].Resource.(*gcpCoreV3.TypedExtensionConfig)
+	serializedFilterResource := snapshotClusterBar.GetResources(gcpResourceV3.ExtensionConfigType)["filter2"].(*gcpCoreV3.TypedExtensionConfig)
 	unserializedResourceFilter := &wrapperspb.StringValue{}
 	err = serializedFilterResource.TypedConfig.UnmarshalTo(unserializedResourceFilter)
 	assert.NoError(t, err)
