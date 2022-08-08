@@ -1,6 +1,8 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { SelectProps as MuiSelectProps } from "@material-ui/core";
+import ErrorIcon from "@mui/icons-material/Error";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import type { SelectProps as MuiSelectProps } from "@mui/material";
 import {
   FormControl as MuiFormControl,
   FormHelperText as MuiFormHelperText,
@@ -8,24 +10,21 @@ import {
   ListSubheader,
   MenuItem,
   Select as MuiSelect,
-} from "@material-ui/core";
-import ErrorIcon from "@material-ui/icons/Error";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+} from "@mui/material";
 import { flatten } from "lodash";
 
 const StyledFormControl = styled(MuiFormControl)({
-  "label + .MuiInput-formControl": {
-    marginTop: "20px",
-  },
+  margin: "8px 8px 8px 0px",
 });
 
 const StyledFormHelperText = styled(MuiFormHelperText)({
-  verticalAlign: "middle",
+  alignItems: "center",
   display: "flex",
   position: "relative",
   fontSize: "12px",
   lineHeight: "16px",
   marginTop: "7px",
+  marginLeft: "0px",
   color: "grey",
 
   "&.Mui-error": {
@@ -40,14 +39,11 @@ const StyledFormHelperText = styled(MuiFormHelperText)({
 });
 
 const StyledInputLabel = styled(MuiInputLabel)({
-  marginLeft: "2px",
-  fontWeight: 500,
-  fontSize: "14px",
-  transform: "scale(1)",
-  marginBottom: "10px",
-  color: "rgba(13, 16, 48, 0.6)",
+  "--label-default-color": "rgba(13, 16, 48, 0.6)",
+
+  color: "var(--label-default-color)",
   "&.Mui-focused": {
-    color: "rgba(13, 16, 48, 0.6)",
+    color: "var(--label-default-color)",
   },
   "&.Mui-error": {
     color: "#db3615",
@@ -62,7 +58,6 @@ const SelectIcon = (props: any) => (
 
 const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
   <MuiSelect
-    disableUnderline
     fullWidth
     IconComponent={SelectIcon}
     className={className}
@@ -73,24 +68,47 @@ const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
       },
       anchorOrigin: { vertical: "bottom", horizontal: "left" },
       transformOrigin: { vertical: "top", horizontal: "left" },
-      getContentAnchorEl: null,
     }}
     {...props}
   />
 );
 
 const StyledSelect = styled(BaseSelect)({
+  "--notched-border-width": "1px",
   padding: "0",
   backgroundColor: "#FFFFFF",
 
-  ".MuiSelect-root": {
-    padding: "15px 60px 13px 16px",
-    borderRadius: "4px",
-    borderStyle: "solid",
-    borderWidth: "1px",
+  ".MuiOutlinedInput-notchedOutline": {
     borderColor: "rgba(13, 16, 48, 0.38)",
+    borderWidth: "var(--notched-border-width)",
+  },
+
+  "&.Mui-focused": {
+    "> .MuiSelect-icon > svg": {
+      color: "#0d1030",
+    },
+    "> .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#3458d4",
+      borderWidth: "var(--notched-border-width)",
+    },
+  },
+  "&.Mui-error > .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#db3615",
+    borderWidth: "var(--notched-border-width)",
+  },
+
+  ".MuiSelect-select": {
     height: "20px",
     display: "flex",
+    padding: "15px 60px 13px 16px",
+
+    ":focus": {
+      backgroundColor: "inherit",
+    },
+
+    "&.Mui-disabled": {
+      backgroundColor: "rgba(13, 16, 48, 0.12)",
+    },
   },
 
   ul: {
@@ -98,33 +116,26 @@ const StyledSelect = styled(BaseSelect)({
     border: "1px solid rgba(13, 16, 48, 0.1)",
   },
 
-  ".MuiListItem-root": {
+  ".MuiMenuItem-root": {
     color: "#0d1030",
     height: "48px",
-  },
 
-  ".MuiListItem-root:first-of-type": {
-    borderRadius: "4px 4px 0 0",
-  },
-
-  ".MuiListItem-root:last-child": {
-    borderRadius: "0 0 4px 4px",
-  },
-
-  ".MuiListItem-root.Mui-selected": {
-    backgroundColor: "rgba(53, 72, 212, 0.1)",
-  },
-
-  ".MuiListItem-root.Mui-selected:hover": {
-    backgroundColor: "rgba(53, 72, 212, 0.1)",
-  },
-
-  ".MuiListItem-root:hover": {
-    backgroundColor: "#e7e7ea",
-  },
-
-  ".MuiListItem-root:active": {
-    backgroundColor: "#dbdbe0",
+    ":first-of-type": {
+      borderRadius: "4px 4px 0 0",
+    },
+    ":last-child": {},
+    ":hover": {
+      backgroundColor: "#e7e7ea",
+    },
+    ":active": {
+      backgroundColor: "#dbdbe0",
+    },
+    "&.Mui-selected": {
+      backgroundColor: "rgba(53, 72, 212, 0.1)",
+      ":hover": {
+        backgroundColor: "rgba(53, 72, 212, 0.1)",
+      },
+    },
   },
 
   "&.MuiMenu-paper": {
@@ -132,18 +143,6 @@ const StyledSelect = styled(BaseSelect)({
     border: "none",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
     maxHeight: "50vh",
-  },
-
-  "&.Mui-focused > .MuiSelect-root": {
-    borderColor: "#3548d4",
-  },
-
-  "&.Mui-error > .MuiSelect-root": {
-    borderColor: "#db3615",
-  },
-
-  ".MuiSelect-root.Mui-disabled": {
-    backgroundColor: "rgba(13, 16, 48, 0.12)",
   },
 
   ".MuiSelect-icon": {
@@ -155,27 +154,19 @@ const StyledSelect = styled(BaseSelect)({
     justifyContent: "center",
     alignItems: "center",
     boxSizing: "border-box",
-  },
 
-  ".MuiSelect-icon.Mui-disabled > svg": {
-    color: "rgba(13, 16, 48, 0.6)",
-  },
+    "> svg": {
+      color: "rgba(13, 16, 48, 0.6)",
+      position: "absolute",
+    },
 
-  ".MuiSelect-icon > svg": {
-    color: "rgba(13, 16, 48, 0.6)",
-    position: "absolute",
-  },
+    "&.MuiSelect-iconOpen > svg": {
+      transform: "rotate(180deg)",
+    },
 
-  "&.Mui-focused > .MuiSelect-icon > svg": {
-    color: "#0d1030",
-  },
-
-  ".MuiSelect-icon.MuiSelect-iconOpen > svg": {
-    transform: "rotate(180deg)",
-  },
-
-  ".MuiSelect-select:focus": {
-    backgroundColor: "inherit",
+    "&.Mui-disabled > svg": {
+      color: "rgba(13, 16, 48, 0.6)",
+    },
   },
 
   ".MuiListSubheader-root": {
@@ -230,7 +221,7 @@ const Select = ({
     }
   }, []);
 
-  const updateSelectedOption = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
+  const updateSelectedOption = event => {
     const { value } = event.target;
     // handle if selecting a header option
     if (!value) {
@@ -248,7 +239,12 @@ const Select = ({
     <MenuItem key={option.label} value={option?.value || option.label}>
       {option?.startAdornment &&
         React.cloneElement(option.startAdornment, {
-          style: { height: "100%", marginRight: "8px", ...option.startAdornment.props.style },
+          style: {
+            height: "100%",
+            maxHeight: "20px",
+            marginRight: "8px",
+            ...option.startAdornment.props.style,
+          },
         })}
       {option.label}
     </MenuItem>
@@ -272,6 +268,7 @@ const Select = ({
           id={`${name}-select`}
           value={flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label}
           onChange={updateSelectedOption}
+          label={label}
         >
           {options?.map(option => renderSelectItems(option))}
         </StyledSelect>
