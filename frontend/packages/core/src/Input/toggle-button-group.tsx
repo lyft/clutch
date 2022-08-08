@@ -5,8 +5,6 @@ import { ToggleButtonGroup as MuiToggleButtonGroup } from "@mui/material";
 
 export { ToggleButton } from "@mui/material";
 
-export { ToggleButton } from "@material-ui/lab";
-
 export interface ToggleButtonGroupProps
   extends Pick<
     MuiToggleButtonGroupProps,
