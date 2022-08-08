@@ -13,10 +13,6 @@ import {
 } from "@mui/material";
 import { flatten } from "lodash";
 
-const StyledFormControl = styled(MuiFormControl)({
-  margin: "8px 8px 8px 0px",
-});
-
 const StyledFormHelperText = styled(MuiFormHelperText)({
   alignItems: "center",
   display: "flex",
@@ -261,7 +257,7 @@ const Select = ({
   };
 
   return (
-    <StyledFormControl id={name} key={name} fullWidth disabled={disabled} error={error}>
+    <MuiFormControl id={name} key={name} fullWidth disabled={disabled} error={error}>
       {label && <StyledInputLabel>{label}</StyledInputLabel>}
       {flatOptions.length && (
         <StyledSelect
@@ -279,7 +275,7 @@ const Select = ({
           {helperText}
         </StyledFormHelperText>
       )}
-    </StyledFormControl>
+    </MuiFormControl>
   );
 };
 
