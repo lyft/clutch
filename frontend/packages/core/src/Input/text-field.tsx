@@ -216,7 +216,7 @@ const TextFieldRef = (
     onChange,
     onReturn,
     error,
-    helperText = " ",
+    helperText,
     readOnly,
     endAdornment,
     autocompleteCallback,
