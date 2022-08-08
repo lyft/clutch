@@ -47,7 +47,7 @@ require (
 	github.com/uber-go/tally/v4 v4.1.2
 	go.temporal.io/sdk v1.14.0
 	go.temporal.io/sdk/contrib/tally v0.1.0
-	go.uber.org/zap v1.21.0
+	go.uber.org/zap v1.22.0
 	golang.org/x/net v0.0.0-20220728211354-c7608f3a8462
 	golang.org/x/oauth2 v0.0.0-20220722155238-128564f6959c
 	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f
