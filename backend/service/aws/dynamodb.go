@@ -72,6 +72,35 @@ func getGlobalSecondaryIndexes(indexes []types.GlobalSecondaryIndexDescription) 
 	return gsis
 }
 
+func newProtoForKeySchemas(inputSchema []types.KeySchemaElement) []*dynamodbv1.KeySchema {
+	schemaCollection := make([]*dynamodbv1.KeySchema, len(inputSchema))
+	for idx, schema := range inputSchema {
+		schemaCollection[idx] = &dynamodbv1.KeySchema{
+			AttributeName: *schema.AttributeName,
+			Type:          newProtoForKeySchemaType(schema.KeyType),
+		}
+	}
+	return schemaCollection
+}
+
+func newProtoForKeySchemaType(keyType types.KeyType) dynamodbv1.KeySchema_Type {
+	value, ok := dynamodbv1.KeySchema_Type_value[string(keyType)]
+	if !ok {
+		return dynamodbv1.KeySchema_UNKNOWN
+	}
+	return dynamodbv1.KeySchema_Type(value)
+}
+func newProtoForAttributeDefinitions(inputAttributes []types.AttributeDefinition) []*dynamodbv1.AttributeDefinition {
+	attributeDefs := make([]*dynamodbv1.AttributeDefinition, len(inputAttributes))
+	for idx, attribute := range inputAttributes {
+		attributeDefs[idx] = &dynamodbv1.AttributeDefinition{
+			AttributeName: *attribute.AttributeName,
+			AttributeType: string(attribute.AttributeType),
+		}
+	}
+	return attributeDefs
+}
+
 // retrieve one GSI from table description
 func getGlobalSecondaryIndex(indexes []types.GlobalSecondaryIndexDescription, targetIndexName string) (*types.GlobalSecondaryIndexDescription, error) {
 	for _, i := range indexes {
@@ -93,6 +122,8 @@ func newProtoForTable(t *types.TableDescription, account, region string) *dynamo
 	tableStatus := newProtoForTableStatus(t.TableStatus)
 
 	billingMode := newProtoForBillingMode(t)
+	keySchemas := newProtoForKeySchemas(t.KeySchema)
+	attributeDefinitions := newProtoForAttributeDefinitions(t.AttributeDefinitions)
 
 	ret := &dynamodbv1.Table{
 		Name:                   aws.ToString(t.TableName),
@@ -102,6 +133,8 @@ func newProtoForTable(t *types.TableDescription, account, region string) *dynamo
 		ProvisionedThroughput:  currentCapacity,
 		Status:                 tableStatus,
 		BillingMode:            billingMode,
+		KeySchemas:             keySchemas,
+		AttributeDefinitions:   attributeDefinitions,
 	}
 
 	return ret
@@ -306,4 +339,12 @@ func generateIndexUpdates(cl *regionalClient, t *dynamodb.DescribeTableOutput, i
 	}
 
 	return updates, nil
+}
+
+func (c *client) BatchGetItem(ctx context.Context, account string, region string, input *dynamodb.BatchGetItemInput) (*dynamodb.BatchGetItemOutput, error) {
+	client, err := c.getAccountRegionClient(account, region)
+	if err != nil {
+		return nil, err
+	}
+	return client.dynamodb.BatchGetItem(ctx, input)
 }

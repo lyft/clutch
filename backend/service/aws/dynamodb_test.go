@@ -36,6 +36,24 @@ var testDynamodbTable = &types.TableDescription{
 	BillingModeSummary: &types.BillingModeSummary{
 		BillingMode: "PROVISIONED",
 	},
+	KeySchema: []types.KeySchemaElement{{
+		AttributeName: aws.String("ID"),
+		KeyType:       types.KeyTypeHash,
+	},
+		{
+			AttributeName: aws.String("Status"),
+			KeyType:       types.KeyTypeRange,
+		},
+	},
+	AttributeDefinitions: []types.AttributeDefinition{{
+		AttributeName: aws.String("OrderName"),
+		AttributeType: types.ScalarAttributeTypeS,
+	},
+		{
+			AttributeName: aws.String("OrderWeight"),
+			AttributeType: types.ScalarAttributeTypeN,
+		},
+	},
 }
 
 var testTableOutput = &dynamodbv1.Table{
@@ -49,6 +67,24 @@ var testTableOutput = &dynamodbv1.Table{
 	GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{},
 	Status:                 dynamodbv1.Table_Status(5),
 	BillingMode:            dynamodbv1.Table_BillingMode(2),
+	KeySchemas: []*dynamodbv1.KeySchema{
+		{AttributeName: "ID",
+			Type: dynamodbv1.KeySchema_HASH,
+		},
+		{AttributeName: "Status",
+			Type: dynamodbv1.KeySchema_RANGE,
+		},
+	},
+	AttributeDefinitions: []*dynamodbv1.AttributeDefinition{
+		{
+			AttributeName: "OrderName",
+			AttributeType: "S",
+		},
+		{
+			AttributeName: "OrderWeight",
+			AttributeType: "N",
+		},
+	},
 }
 
 var testMaxDynamodbTable = &types.TableDescription{
@@ -157,8 +193,10 @@ var testTableWithGSIOutput = &dynamodbv1.Table{
 			Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
 		},
 	},
-	Status:      dynamodbv1.Table_Status(5),
-	BillingMode: dynamodbv1.Table_BillingMode(2),
+	Status:               dynamodbv1.Table_Status(5),
+	BillingMode:          dynamodbv1.Table_BillingMode(2),
+	KeySchemas:           []*dynamodbv1.KeySchema{},
+	AttributeDefinitions: []*dynamodbv1.AttributeDefinition{},
 }
 
 var testOnDemandTable = &types.TableDescription{
@@ -1003,6 +1041,104 @@ func TestNoBillingMode(t *testing.T) {
 	assert.Equal(t, got.Status, dynamodbv1.Table_Status(3))
 }
 
+func CreateBatchGetInput(tableName string) dynamodb.BatchGetItemInput {
+	return dynamodb.BatchGetItemInput{
+		RequestItems: map[string]types.KeysAndAttributes{
+			tableName: {
+				Keys: []map[string]types.AttributeValue{
+					{
+						"Artist": &types.AttributeValueMemberS{
+							Value: "No One You Know",
+						},
+						"SongTitle": &types.AttributeValueMemberS{
+							Value: "Call Me Today",
+						},
+					},
+					{
+						"Artist": &types.AttributeValueMemberS{
+							Value: "Acme Band",
+						},
+						"SongTitle": &types.AttributeValueMemberS{
+							Value: "Happy Day",
+						},
+					},
+				},
+				ConsistentRead:       aws.Bool(false),
+				ProjectionExpression: aws.String("AlbumTitle,SongTitle"),
+			},
+		},
+	}
+}
+
+func TestBatchGetItemsValid(t *testing.T) {
+	testTableName := "MusicTable"
+	mockDDB := &mockDynamodb{
+		batchGetOutput: dynamodb.BatchGetItemOutput{
+			ConsumedCapacity: nil,
+			Responses: map[string][]map[string]types.AttributeValue{
+				testTableName: {
+					{
+						"AlbumTitle": &types.AttributeValueMemberS{
+							Value: "AlbumOne",
+						},
+						"SongTitle": &types.AttributeValueMemberS{
+							Value: "Call Me Today",
+						},
+					},
+					{
+						"AlbumTitle": &types.AttributeValueMemberS{
+							Value: "AlbumTwo",
+						},
+						"SongTitle": &types.AttributeValueMemberS{
+							Value: "Happy Day",
+						},
+					},
+				},
+			},
+			UnprocessedKeys: nil,
+		},
+	}
+
+	client := &client{
+		log:                 zaptest.NewLogger(t),
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodb: mockDDB},
+				},
+			},
+		},
+	}
+
+	input := CreateBatchGetInput(testTableName)
+	result, err := client.BatchGetItem(context.Background(), "default", "us-east-1", &input)
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(result.Responses[testTableName]))
+}
+
+func TestBatchGetItemsError(t *testing.T) {
+	mockDDB := &mockDynamodb{
+		batchGetOutput: dynamodb.BatchGetItemOutput{},
+		batchGetErr:    fmt.Errorf("test batch get items error"),
+	}
+	client := &client{
+		log:                 zaptest.NewLogger(t),
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodb: mockDDB},
+				},
+			},
+		},
+	}
+
+	input := CreateBatchGetInput("MusicTable")
+	_, err := client.BatchGetItem(context.Background(), "default", "us-east-1", &input)
+	assert.Error(t, err)
+}
+
 type mockDynamodb struct {
 	dynamodbClient
 
@@ -1011,6 +1147,9 @@ type mockDynamodb struct {
 
 	updateErr error
 	update    *types.TableDescription
+
+	batchGetErr    error
+	batchGetOutput dynamodb.BatchGetItemOutput
 }
 
 func (m *mockDynamodb) DescribeTable(ctx context.Context, params *dynamodb.DescribeTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeTableOutput, error) {
@@ -1035,4 +1174,12 @@ func (m *mockDynamodb) UpdateTable(ctx context.Context, params *dynamodb.UpdateT
 	}
 
 	return ret, nil
+}
+
+func (m *mockDynamodb) BatchGetItem(ctx context.Context, params *dynamodb.BatchGetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.BatchGetItemOutput, error) {
+	if m.batchGetErr != nil {
+		return nil, m.batchGetErr
+	}
+
+	return &m.batchGetOutput, nil
 }
