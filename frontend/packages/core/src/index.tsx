@@ -22,7 +22,13 @@ export { AvatarIcon, StatusIcon } from "./icon";
 export * from "./Input";
 export { Link } from "./link";
 export { default as Loadable } from "./loading";
-export { useLocation, useNavigate, useParams, useSearchParams } from "./navigation";
+export {
+  convertSearchParam,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "./navigation";
 export { client } from "./Network";
 export * from "./NPS";
 export { default as ExpansionPanel } from "./panel";
