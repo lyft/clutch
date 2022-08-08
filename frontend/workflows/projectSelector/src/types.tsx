@@ -131,6 +131,16 @@ export interface DashAction {
   payload: DashState;
 }
 
+export interface RefreshRateState {
+  /** refreshRate is the reload interval. null means auto-refreshing is disabled */
+  refreshRate: number | null;
+}
+
+export interface RefreshRateAction {
+  type: "UPDATE";
+  payload: RefreshRateState;
+}
+
 export interface TimeData {
   /** eventsKey corresponds to entity owning the data - i.e. card name */
   [eventsKey: string]: EventData;
