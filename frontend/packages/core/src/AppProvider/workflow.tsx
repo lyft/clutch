@@ -16,8 +16,8 @@ interface Developer {
 }
 
 interface BaseWorkflowConfiguration {
-  /** 
-   * Team name and contact url, which will be displayed in the case of errors to 
+  /**
+   * Team name and contact url, which will be displayed in the case of errors to
    * allow contact of the owning developer.
    */
   developer: Developer;
