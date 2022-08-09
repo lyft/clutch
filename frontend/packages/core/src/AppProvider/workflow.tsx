@@ -16,10 +16,27 @@ interface Developer {
 }
 
 interface BaseWorkflowConfiguration {
+  /** 
+   * Team name and contact url, which will be displayed in the case of errors to 
+   * allow contact of the owning developer.
+   */
   developer: Developer;
+  /**
+   * The name of the workflow which will be displayed in the UI.
+   */
   displayName: string;
+  /**
+   * The sidebar menu has groups of workflows. This is the name of the group.
+   */
   group: string;
+  /**
+   * The path (subordinate to the group) where the workflow will exist.
+   */
   path: string;
+  /**
+   * The routes correspond to different tasks in a workflow (i.e. for AWS EC2,
+   * users could `reboot instance` or `terminate instance`).
+   */
   routes: unknown;
 }
 
@@ -32,6 +49,11 @@ interface WorkflowShortlinkConfiguration {
 }
 
 export interface Workflow extends BaseWorkflowConfiguration, WorkflowShortlinkConfiguration {
+  /**
+   * Configured routes allow for the optional properties of `trending` (whether to display
+   * on homepage) and `componentProps` which allow the passing of workflow/route
+   * specific props.
+   */
   routes: ConfiguredRoute[];
 }
 
