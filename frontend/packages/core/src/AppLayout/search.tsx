@@ -100,16 +100,20 @@ const StyledCloseIcon = styled(Icon)({
 
 // popper containing the search result options
 const Popper = styled(MuiPopper)({
-  ".MuiAutocomplete-paper": {
+  ".MuiPaper-root": {
     border: "1px solid #e7e7ea",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
-  },
-  ".MuiAutocomplete-option": {
-    height: "48px",
-    padding: "0px",
-  },
-  ".MuiAutocomplete-option[data-focus='true']": {
-    background: "#ebedfb",
+
+    "> .MuiAutocomplete-listbox": {
+      "> .MuiAutocomplete-option": {
+        height: "48px",
+        padding: "0px",
+
+        "&.Mui-focused": {
+          background: "#ebedfb",
+        },
+      },
+    },
   },
   ".MuiAutocomplete-noOptions": {
     fontSize: "14px",
