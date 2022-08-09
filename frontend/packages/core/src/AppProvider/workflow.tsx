@@ -26,7 +26,7 @@ interface BaseWorkflowConfiguration {
    */
   displayName: string;
   /**
-   * The sidebar menu has groups of workflows. This is the name of the group.
+   * The name of the group which will display in the sidebar.
    */
   group: string;
   /**
