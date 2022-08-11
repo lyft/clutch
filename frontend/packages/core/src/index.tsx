@@ -56,7 +56,7 @@ export type { ButtonProps } from "./button";
 export type { ClutchError } from "./Network/errors";
 export type { CardHeaderSummaryProps } from "./card";
 export type { TypographyProps } from "./typography";
-
+export type { StyledComponent } from "@emotion/styled";
 export {
   Accordion,
   AccordionActions,
