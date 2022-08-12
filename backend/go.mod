@@ -23,7 +23,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/go-control-plane v0.10.3-0.20220808135628-785751892618
 	github.com/envoyproxy/protoc-gen-validate v0.6.7
-	github.com/fullstorydev/grpcurl v1.8.6
+	github.com/fullstorydev/grpcurl v1.8.7
 	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/gobwas/glob v0.2.3
