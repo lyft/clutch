@@ -130,7 +130,7 @@ const Theme: React.FC<ThemeProps> = ({ children }) => {
       <ThemeProvider theme={theme}>
         <EmotionThemeProvider theme={theme}>
           <CssBaseline />
-          <StylesProvider injectFirst>{children}</StylesProvider>
+          <StylesProvider>{children}</StylesProvider>
         </EmotionThemeProvider>
       </ThemeProvider>
     </StyledEngineProvider>
