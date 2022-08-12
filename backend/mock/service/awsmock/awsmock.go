@@ -191,6 +191,8 @@ func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *d
 				},
 			},
 		},
+		UnprocessedKeys: map[string]ddbtypes.KeysAndAttributes{},
+		ResultMetadata:  middleware.Metadata{},
 	}, nil
 }
 
