@@ -18677,10 +18677,10 @@ react-hook-form@^7.25.3:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.25.3.tgz#1475fd52398e905e1f6d88835f96aaa1144635c3"
   integrity sha512-jL4SByMaC8U3Vhu9s7CwgJBP4M6I3Kpwxib9LrCwWSRPnXDrNQL4uihSTqLLoDICqSUhwwvian9uVYfv+ITtGg==
 
-react-hook-thunk-reducer@^0.2.1:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/react-hook-thunk-reducer/-/react-hook-thunk-reducer-0.2.4.tgz#b10bc27157836750e5cbf513bcaf0be02412406c"
-  integrity sha512-cuK5GkdhDjSaBrDZMP17bp8YVClrxHf8U39j1OOjCQksi6LgN+M5cRuNfGsEqqn1lvkhl48p2O5X35+BIrf47Q==
+react-hook-thunk-reducer@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-hook-thunk-reducer/-/react-hook-thunk-reducer-0.3.0.tgz#5f62f9517150a56cb6711a8949d1b3ed00261d21"
+  integrity sha512-iOFJW0lHIc7Xsa8nyvbLpaVKPNfAZpriFOpe7HUX+phGH+/1Ci5TA5psfy9LYeQkWgVhmAHXIBOfian7SglMgA==
 
 react-inspector@^5.1.0:
   version "5.1.1"
