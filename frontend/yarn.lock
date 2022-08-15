@@ -20912,10 +20912,10 @@ stylis@^4.0.3:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.0.3.tgz#0d714765f3f694a685550f0c45411ebf90a9bded"
   integrity sha512-iAxdFyR9cHKp4H5M2dJlDnvcb/3TvPprzlKjvYVbH7Sh+y8hjY/mUu/ssdcvVz6Z4lKI3vsoS0jAkMYmX7ozfA==
 
-superstruct@~0.15.0:
-  version "0.15.1"
-  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.15.1.tgz#8a8c5175941debe08baa2abd6541784e46870333"
-  integrity sha512-amjQaSpO94o3DTcNgeuYhGYGbji6JLLnySbxyolXO+WtV+bwwK1IzKAet/jYcpltGg2nnX8CBnHpueYNyx2Cgw==
+superstruct@~0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.16.0.tgz#9af5e059acd08e774789ad8880962427ef68dace"
+  integrity sha512-IDQtwnnlaan1NhuHqyD/U11lROYvCQ79JyfwlFU9xEVHzqV/Ys/RrwmHPCG0CVH/1g0BuodEjH1msxK2UHxehA==
 
 supports-color@^5.3.0:
   version "5.5.0"
