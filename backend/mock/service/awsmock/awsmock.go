@@ -153,12 +153,20 @@ func (s *svc) DescribeTable(ctx context.Context, account, region, tableName stri
 		},
 		AttributeDefinitions: []*dynamodbv1.AttributeDefinition{
 			{
-				AttributeName: "OrderID",
+				AttributeName: "ID",
 				AttributeType: "S",
 			},
 			{
-				AttributeName: "OrderStatus",
+				AttributeName: "Status",
 				AttributeType: "S",
+			},
+			{
+				AttributeName: "Weight",
+				AttributeType: "N",
+			},
+			{
+				AttributeName: "Active",
+				AttributeType: "B",
 			},
 		},
 	}
