@@ -14,7 +14,7 @@ exports[`Not Found component renders correctly 1`] = `
                 </GlobalStyles>
               </GlobalStyles>
             </CssBaseline>
-            <StylesProvider injectFirst={true}>
+            <StylesProvider>
               <NotFound>
                 <Styled(Component) container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}}>
                   <ForwardRef(Grid) container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}} className=\\"css-1rc10fs\\">
