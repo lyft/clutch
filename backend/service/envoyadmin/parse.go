@@ -30,10 +30,15 @@ func nodeMetadataFromResponse(resp []byte) (*envoytriagev1.NodeMetadata, error) 
 		return nil, err
 	}
 
+	cliOptions := pb.CommandLineOptions
+	if cliOptions == nil {
+		return &envoytriagev1.NodeMetadata{}, nil
+	}
+
 	return &envoytriagev1.NodeMetadata{
-		ServiceNode:    pb.CommandLineOptions.ServiceNode,
-		ServiceCluster: pb.CommandLineOptions.ServiceCluster,
-		ServiceZone:    pb.CommandLineOptions.ServiceZone,
+		ServiceNode:    cliOptions.ServiceNode,
+		ServiceCluster: cliOptions.ServiceCluster,
+		ServiceZone:    cliOptions.ServiceZone,
 		Version:        pb.Version,
 	}, nil
 }
