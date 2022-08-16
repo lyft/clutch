@@ -125,27 +125,42 @@ func (s *svc) S3GetBucketPolicy(ctx context.Context, account, region, bucket, ac
 }
 
 func (s *svc) DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error) {
-	currentThroughput := &dynamodbv1.Throughput{
-		ReadCapacityUnits:  100,
-		WriteCapacityUnits: 200,
-	}
-	gsis := []*dynamodbv1.GlobalSecondaryIndex{
-		{
-			Name: "test-gsi",
-			ProvisionedThroughput: &dynamodbv1.Throughput{
-				ReadCapacityUnits:  10,
-				WriteCapacityUnits: 20,
-			},
-			Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
-		},
-	}
-
 	ret := &dynamodbv1.Table{
-		Name:                   tableName,
-		Region:                 region,
-		ProvisionedThroughput:  currentThroughput,
-		Status:                 dynamodbv1.Table_Status(5),
-		GlobalSecondaryIndexes: gsis,
+		Name:   tableName,
+		Region: region,
+		ProvisionedThroughput: &dynamodbv1.Throughput{
+			ReadCapacityUnits:  100,
+			WriteCapacityUnits: 200,
+		},
+		Status: dynamodbv1.Table_Status(5),
+		GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{
+			{
+				Name: "test-gsi",
+				ProvisionedThroughput: &dynamodbv1.Throughput{
+					ReadCapacityUnits:  10,
+					WriteCapacityUnits: 20,
+				},
+				Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
+			},
+		},
+		KeySchemas: []*dynamodbv1.KeySchema{
+			{AttributeName: "ID",
+				Type: dynamodbv1.KeySchema_HASH,
+			},
+			{AttributeName: "Status",
+				Type: dynamodbv1.KeySchema_RANGE,
+			},
+		},
+		AttributeDefinitions: []*dynamodbv1.AttributeDefinition{
+			{
+				AttributeName: "OrderID",
+				AttributeType: "S",
+			},
+			{
+				AttributeName: "OrderStatus",
+				AttributeType: "S",
+			},
+		},
 	}
 	return ret, nil
 }
