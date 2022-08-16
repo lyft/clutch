@@ -179,9 +179,20 @@ func (s *svc) UpdateCapacity(ctx context.Context, account, region, tableName str
 func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *dynamodb.BatchGetItemInput) (*dynamodb.BatchGetItemOutput, error) {
 	return &dynamodb.BatchGetItemOutput{
 		ConsumedCapacity: []ddbtypes.ConsumedCapacity{},
-		Responses:        map[string][]map[string]ddbtypes.AttributeValue{},
-		UnprocessedKeys:  map[string]ddbtypes.KeysAndAttributes{},
-		ResultMetadata:   middleware.Metadata{},
+		Responses: map[string][]map[string]ddbtypes.AttributeValue{
+			"InventoryTable": {
+				{
+					"Model":     &ddbtypes.AttributeValueMemberS{Value: "Buick"},
+					"Inventory": &ddbtypes.AttributeValueMemberN{Value: "10"},
+				},
+				{
+					"Model":     &ddbtypes.AttributeValueMemberS{Value: "Camry"},
+					"Inventory": &ddbtypes.AttributeValueMemberN{Value: "3"},
+				},
+			},
+		},
+		UnprocessedKeys: map[string]ddbtypes.KeysAndAttributes{},
+		ResultMetadata:  middleware.Metadata{},
 	}, nil
 }
 

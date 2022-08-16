@@ -59,3 +59,4 @@ export type { GridJustification } from "./grid";
 export type { WorkflowRemoveDataFn, WorkflowRetrieveDataFn, WorkflowStoreDataFn } from "./Contexts";
 export type { ClutchError } from "./Network/errors";
 export type { TypographyProps } from "./typography";
+export type { StyledComponent } from "@emotion/styled";
