@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/k8s",
-  "version": "1.0.0-beta",
+  "version": "2.0.0-beta",
   "description": "Clutch K8s Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -22,10 +22,10 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@clutch-sh/api": "^1.0.0-beta",
-    "@clutch-sh/core": "^1.0.0-beta",
-    "@clutch-sh/data-layout": "^1.0.0-beta",
-    "@clutch-sh/wizard": "^1.0.0-beta",
+    "@clutch-sh/api": "^2.0.0-beta",
+    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^2.0.0-beta",
+    "@clutch-sh/wizard": "^2.0.0-beta",
     "@emotion/styled": "^11.1.5",
     "@hookform/resolvers": "2.8.8",
     "@mui/icons-material": "^5.8.4",
@@ -37,7 +37,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^1.0.0-beta"
+    "@clutch-sh/tools": "^2.0.0-beta"
   },
   "engines": {
     "node": ">=16.0.0 <17"
