@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
+import LinkIcon from "@mui/icons-material/Link";
 import {
   ClickAwayListener,
   Grid,
@@ -8,8 +9,7 @@ import {
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-} from "@material-ui/core";
-import LinkIcon from "@material-ui/icons/Link";
+} from "@mui/material";
 
 import { generateShortLinkRoute } from "../AppProvider/short-link-proxy";
 import { Button, ClipboardButton, IconButton } from "../button";

@@ -1,5 +1,6 @@
 import * as React from "react";
-import type { CheckboxProps as MuiCheckboxProps } from "@material-ui/core";
+import CheckIcon from "@mui/icons-material/Check";
+import type { CheckboxProps as MuiCheckboxProps } from "@mui/material";
 import {
   Checkbox as MuiCheckbox,
   FormControl as MuiFormControl,
@@ -7,8 +8,7 @@ import {
   FormGroup,
   FormLabel,
   Grid,
-} from "@material-ui/core";
-import CheckIcon from "@material-ui/icons/Check";
+} from "@mui/material";
 
 import styled from "../styled";
 

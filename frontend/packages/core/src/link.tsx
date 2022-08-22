@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { LinkProps as MuiLinkProps } from "@material-ui/core";
-import { Link as MuiLink } from "@material-ui/core";
+import type { LinkProps as MuiLinkProps } from "@mui/material";
+import { Link as MuiLink } from "@mui/material";
 
 import styled from "./styled";
 

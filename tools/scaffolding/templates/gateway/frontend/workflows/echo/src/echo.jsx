@@ -2,7 +2,7 @@ import React from "react";
 import { Button, client, TextField, useWizardContext } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 
 const EchoInput = () => {
   const { onSubmit } = useWizardContext();

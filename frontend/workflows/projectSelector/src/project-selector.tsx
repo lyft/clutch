@@ -14,10 +14,10 @@ import {
   useWorkflowStorageContext,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import { Divider, LinearProgress } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import UpdateIcon from "@material-ui/icons/Update";
+import AddIcon from "@mui/icons-material/Add";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import UpdateIcon from "@mui/icons-material/Update";
+import { Divider, LinearProgress } from "@mui/material";
 import _ from "lodash";
 
 import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
@@ -369,7 +369,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                     ))}
                   </>
                 }
-                interactive
                 maxWidth="400px"
                 placement="right-start"
               >
@@ -381,7 +380,6 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                 <FeatureOn>
                   <Tooltip
                     title={autoRefresh ? "Disable data refresh" : "Data refresh every 30 seconds"}
-                    interactive
                     placement="bottom"
                   >
                     <UpdateIcon

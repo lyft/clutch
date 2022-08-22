@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/project-catalog",
-  "version": "1.0.0-beta",
+  "version": "2.0.0-beta",
   "description": "Clutch Project Catalog",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -21,19 +21,19 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/api": "^1.0.0-beta",
-    "@clutch-sh/core": "^1.0.0-beta",
-    "@clutch-sh/data-layout": "^1.0.0-beta",
-    "@clutch-sh/project-selector": "^0.1.0-beta",
-    "@clutch-sh/wizard": "^1.0.0-beta",
+    "@clutch-sh/api": "^2.0.0-beta",
+    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^2.0.0-beta",
+    "@clutch-sh/project-selector": "^2.0.0-beta",
+    "@clutch-sh/wizard": "^2.0.0-beta",
     "@emotion/styled": "^11.3.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "@material-ui/core": "^4.11.4",
-    "@material-ui/icons": "^4.11.2",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.5",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -42,7 +42,7 @@
     "react-timeago": "^6.0.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^1.0.0-beta"
+    "@clutch-sh/tools": "^2.0.0-beta"
   },
   "engines": {
     "node": ">=16.0.0 <17",

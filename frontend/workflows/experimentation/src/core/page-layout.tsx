@@ -2,7 +2,7 @@ import React from "react";
 import type { ClutchError } from "@clutch-sh/core";
 import { Error } from "@clutch-sh/core";
 import styled from "@emotion/styled";
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@mui/material";
 
 const PageContainer = styled.div({
   display: "flex",

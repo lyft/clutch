@@ -2,6 +2,7 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -10,19 +11,18 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
-} from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 
 import { compareProperties, propertyToString } from "./property-helpers";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: "100%",
   },
   paper: {
     width: "100%",
-    marginBottom: theme.spacing(2),
+    marginBottom: "8px",
   },
   table: {
     minWidth: 750,
@@ -191,8 +191,8 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
           count={items?.length ?? 0}
           rowsPerPage={rowsPerPage}
           page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
     </div>

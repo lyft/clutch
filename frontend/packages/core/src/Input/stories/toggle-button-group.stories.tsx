@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ToggleButton } from "@material-ui/lab";
+import { ToggleButton } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import ToggleButtonGroup from "../toggle-button-group";

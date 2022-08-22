@@ -1,6 +1,8 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { AccordionProps as MuiAccordionProps } from "@material-ui/core";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import type { AccordionProps as MuiAccordionProps } from "@mui/material";
 import {
   Accordion as MuiAccordion,
   AccordionActions as MuiAccordionActions,
@@ -8,9 +10,7 @@ import {
   AccordionSummary as MuiAccordionSummary,
   Divider as MuiDivider,
   useControlled,
-} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
+} from "@mui/material";
 
 const StyledAccordion = styled(MuiAccordion)({
   borderRadius: "4px",
@@ -36,6 +36,10 @@ const StyledAccordion = styled(MuiAccordion)({
   ".MuiAccordionDetails-root": {
     padding: "8px",
     fontSize: "16px",
+
+    "> *": {
+      margin: "8px",
+    },
   },
 
   "&:before": {

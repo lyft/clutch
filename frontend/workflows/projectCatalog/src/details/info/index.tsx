@@ -14,7 +14,7 @@ interface ProjectInfoProps {
 }
 
 const StyledRow = styled(Grid)({
-  marginBottom: "8px",
+  marginBottom: "16px",
   whiteSpace: "nowrap",
   width: "100%",
 });
@@ -48,12 +48,12 @@ const ProjectInfoCard = ({ projectData, addtlChips }: ProjectInfoProps) => {
         </StyledRow>
       )}
       {projectData?.data?.repository && (
-        <StyledRow container spacing={2} justify="flex-start" alignItems="center">
+        <StyledRow container spacing={2} justifyContent="flex-start" alignItems="center">
           <RepositoryRow repo={projectData.data.repository as string} />
         </StyledRow>
       )}
       {projectData?.languages?.length ? (
-        <StyledRow container spacing={2} justify="flex-start" alignItems="flex-end">
+        <StyledRow container spacing={2} justifyContent="flex-start" alignItems="flex-end">
           <LanguageRow languages={projectData.languages} />
         </StyledRow>
       ) : null}

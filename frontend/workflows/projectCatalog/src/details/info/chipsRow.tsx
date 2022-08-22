@@ -1,7 +1,7 @@
 import React from "react";
 import type { CHIP_VARIANTS } from "@clutch-sh/core";
 import { Chip, Grid, Link, Tooltip } from "@clutch-sh/core";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 export interface ProjectInfoChip {
   text: string;
@@ -22,7 +22,7 @@ const ChipsRow = ({ chips = [] }: { chips: ProjectInfoChip[] }) => (
       );
       const chipElem = <Chip variant={variant} label={chipText} size="small" icon={icon} />;
       return (
-        <Tooltip title={title ?? text}>
+        <Tooltip title={title ?? text} key={`chip-${title}`}>
           <Grid item>{url ? <Link href={url}>{chipElem}</Link> : chipElem}</Grid>
         </Tooltip>
       );

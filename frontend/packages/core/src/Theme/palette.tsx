@@ -1,20 +1,23 @@
-// TODO: update to alpha when moved to v5 material ui
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import type { PaletteOptions, TypeText } from "@material-ui/core/styles/createPalette";
+import type { PaletteOptions as MuiPaletteOptions } from "@mui/material/styles";
+import { alpha, TypeText } from "@mui/material/styles";
 
 import { DARK_COLORS, LIGHT_COLORS, STATE_OPACITY } from "./colors";
 import type { ClutchColors, ThemeVariant } from "./types";
 
+interface PaletteOptions extends MuiPaletteOptions {
+  type: ThemeVariant;
+}
+
 const lightText: Partial<TypeText> = {
   primary: LIGHT_COLORS.neutral[900],
-  secondary: fade(LIGHT_COLORS.neutral[900], 0.65),
+  secondary: alpha(LIGHT_COLORS.neutral[900], 0.65),
   // tertiary
   // inverse
 };
 
 const darkText: Partial<TypeText> = {
-  primary: fade(DARK_COLORS.neutral[900], 0.9),
-  secondary: fade(DARK_COLORS.neutral[900], 0.75),
+  primary: alpha(DARK_COLORS.neutral[900], 0.9),
+  secondary: alpha(DARK_COLORS.neutral[900], 0.75),
   // tertiary
   // inverse
 };

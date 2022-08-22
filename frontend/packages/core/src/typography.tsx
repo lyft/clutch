@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { TypographyProps as MuiTypographyProps } from "@material-ui/core";
+import type { TypographyProps as MuiTypographyProps } from "@mui/material";
 
 import styled from "./styled";
 

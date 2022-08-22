@@ -4,8 +4,8 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { FeatureOn, Grid, IconButton, SimpleFeatureFlag, styled, Tooltip } from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import GroupIcon from "@material-ui/icons/Group";
-import SettingsIcon from "@material-ui/icons/Settings";
+import GroupIcon from "@mui/icons-material/Group";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { capitalize, isEmpty } from "lodash";
 
 import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "..";
@@ -41,7 +41,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
       container
       direction="row"
       alignItems="center"
-      justify="flex-end"
+      justifyContent="flex-end"
       spacing={1}
       style={{
         padding: "8px 32px 0px 0px",
@@ -55,7 +55,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
       <SimpleFeatureFlag feature="projectCatalogSettings">
         <FeatureOn>
           <Grid item>
-            <IconButton onClick={() => navigate("config")}>
+            <IconButton onClick={() => navigate("config")} size="medium">
               <SettingsIcon />
             </IconButton>
           </Grid>
@@ -128,8 +128,8 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
     <ProjectDetailsContext.Provider value={projInfo}>
       <StyledContainer container direction="row" wrap="nowrap">
         {/* Column for project details and header */}
-        <Grid item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Grid container>
+        <Grid container item direction="column" xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Grid container item>
             <StyledHeadingContainer item xs={6} sm={6} md={7} lg={8} xl={9}>
               {/* Static Header */}
               <ProjectHeader
@@ -144,7 +144,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               </Grid>
             )}
           </Grid>
-          <Grid container direction="row" spacing={2}>
+          <Grid container item direction="row" spacing={2}>
             <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
               <Grid item xs={12}>
                 {/* Static Info Card */}
@@ -172,11 +172,11 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
                   </Grid>
                 ))}
             </Grid>
-            <Grid container item xs={12} sm={12} md={7} lg={8} xl={9} spacing={2}>
+            <Grid container item xs={12} sm={12} md={7} lg={8} xl={9} spacing={1}>
               {/* Custom Dynamic Cards */}
               {dynamicCards.length > 0 &&
                 dynamicCards.map(card => (
-                  <Grid item xs={12}>
+                  <Grid item xs={12} key={`dynamic-${card.key}`}>
                     {card}
                   </Grid>
                 ))}

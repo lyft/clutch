@@ -1,6 +1,6 @@
 import React from "react";
-import type { SnackbarCloseReason, SnackbarProps } from "@material-ui/core";
-import { Snackbar } from "@material-ui/core";
+import type { SnackbarCloseReason, SnackbarProps } from "@mui/material";
+import { Snackbar } from "@mui/material";
 
 import type { AlertProps } from "./alert";
 import { Alert } from "./alert";

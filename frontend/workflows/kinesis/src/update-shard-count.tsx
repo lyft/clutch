@@ -17,7 +17,7 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import styled from "@emotion/styled";
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
@@ -70,7 +70,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <TextField readOnly label="StreamName" name="streamName" value={stream.streamName} />
+        <TextField readOnly label="Stream Name" name="streamName" value={stream.streamName} />
         <TextField readOnly label="Region" name="region" value={stream.region} />
         <Grid container alignItems="stretch" wrap="nowrap">
           <Grid item style={{ flexBasis: "50%", paddingRight: "8px" }}>
@@ -84,7 +84,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
           </Grid>
           <Grid item style={{ flexBasis: "50%", paddingLeft: "8px" }}>
             <Select
-              label="TargetShardCount"
+              label="Target Shard Count"
               name="targetShardCount"
               onChange={handleTargetShardCountChange}
               options={options}

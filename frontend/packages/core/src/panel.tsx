@@ -1,29 +1,25 @@
 import React from "react";
 import styled from "@emotion/styled";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion as MuiExpansionPanel,
   AccordionDetails,
   AccordionSummary,
   Typography,
-} from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+} from "@mui/material";
 
 const FullWidthExpansionPanel = styled(MuiExpansionPanel)`
   width: 100%;
 `;
 
-export interface ExpansionPanelProps {
+export interface AccordionProps {
   heading: string;
   summary: string;
   expanded?: boolean;
 }
 
-const ExpansionPanel: React.FC<ExpansionPanelProps> = ({
-  heading,
-  summary,
-  expanded,
-  children,
-}) => {
+/** TODO: Combine with accordion */
+const Accordion: React.FC<AccordionProps> = ({ heading, summary, expanded, children }) => {
   return (
     <FullWidthExpansionPanel defaultExpanded={expanded}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -36,4 +32,4 @@ const ExpansionPanel: React.FC<ExpansionPanelProps> = ({
   );
 };
 
-export default ExpansionPanel;
+export default Accordion;
