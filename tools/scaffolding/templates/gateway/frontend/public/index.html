@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/icon.svg" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
-            name="description"
-            content="Clutch will assist you in safely modifying resources."
+      name="description"
+      content="Clutch will assist you in safely modifying resources."
     />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" crossorigin="use-credentials"/>
     <!--
@@ -28,8 +28,8 @@
           dataLayer.push(arguments);
         }
         gtag('js', new Date());
-        gtag('config', '%REACT_APP_GA_TRACKING_ID%');
-        let additionalGATags = '%REACT_APP_GA_ADDL_TRACKING_IDS%'.split(',');
+        gtag('config', '%REACT_APP_GOOGLE_ANALYTICS_DEFAULT_TAG%');
+        let additionalGATags = '%REACT_APP_GOOGLE_ANALYTICS_SUPPL_TAGS%'.split(',');
         additionalGATags.forEach(tag => gtag('config', tag));
       }
     </script>

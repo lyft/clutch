@@ -16,7 +16,6 @@ import { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
 import { AvatarIcon, StatusIcon } from "./icon";
 import { Link } from "./link";
 import Loadable from "./loading";
-import { useLocation, useNavigate, useParams, useSearchParams } from "./navigation";
 import { client } from "./Network";
 import ExpansionPanel from "./panel";
 import Paper from "./paper";
@@ -41,6 +40,7 @@ import { Typography } from "./typography";
 export * from "./Input";
 export * from "./Feedback";
 export * from "./Assets/emojis";
+export * from "./navigation";
 export * from "./NPS";
 export * from "./chip";
 export * from "./Charts";
@@ -56,7 +56,7 @@ export type { ButtonProps } from "./button";
 export type { ClutchError } from "./Network/errors";
 export type { CardHeaderSummaryProps } from "./card";
 export type { TypographyProps } from "./typography";
-
+export type { StyledComponent } from "@emotion/styled";
 export {
   Accordion,
   AccordionActions,
@@ -103,9 +103,5 @@ export {
   Tabs,
   TreeTable,
   Typography,
-  useLocation,
-  useNavigate,
-  useParams,
   userId,
-  useSearchParams,
 };

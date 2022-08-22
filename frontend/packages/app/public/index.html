@@ -28,8 +28,8 @@
           dataLayer.push(arguments);
         }
         gtag('js', new Date());
-        gtag('config', '%REACT_APP_GA_TRACKING_ID%');
-        let additionalGATags = '%REACT_APP_GA_ADDL_TRACKING_IDS%'.split(',');
+        gtag('config', '%REACT_APP_GOOGLE_ANALYTICS_DEFAULT_TAG%');
+        let additionalGATags = '%REACT_APP_GOOGLE_ANALYTICS_SUPPL_TAGS%'.split(',');
         additionalGATags.forEach(tag => gtag('config', tag));
       }
     </script>

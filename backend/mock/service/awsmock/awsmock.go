@@ -7,8 +7,10 @@ import (
 	"math/rand"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
-	"github.com/aws/aws-sdk-go-v2/service/iam/types"
+	iamtypes "github.com/aws/aws-sdk-go-v2/service/iam/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go/middleware"
@@ -123,27 +125,50 @@ func (s *svc) S3GetBucketPolicy(ctx context.Context, account, region, bucket, ac
 }
 
 func (s *svc) DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error) {
-	currentThroughput := &dynamodbv1.Throughput{
-		ReadCapacityUnits:  100,
-		WriteCapacityUnits: 200,
-	}
-	gsis := []*dynamodbv1.GlobalSecondaryIndex{
-		{
-			Name: "test-gsi",
-			ProvisionedThroughput: &dynamodbv1.Throughput{
-				ReadCapacityUnits:  10,
-				WriteCapacityUnits: 20,
-			},
-			Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
-		},
-	}
-
 	ret := &dynamodbv1.Table{
-		Name:                   tableName,
-		Region:                 region,
-		ProvisionedThroughput:  currentThroughput,
-		Status:                 dynamodbv1.Table_Status(5),
-		GlobalSecondaryIndexes: gsis,
+		Name:   tableName,
+		Region: region,
+		ProvisionedThroughput: &dynamodbv1.Throughput{
+			ReadCapacityUnits:  100,
+			WriteCapacityUnits: 200,
+		},
+		Status: dynamodbv1.Table_Status(5),
+		GlobalSecondaryIndexes: []*dynamodbv1.GlobalSecondaryIndex{
+			{
+				Name: "test-gsi",
+				ProvisionedThroughput: &dynamodbv1.Throughput{
+					ReadCapacityUnits:  10,
+					WriteCapacityUnits: 20,
+				},
+				Status: dynamodbv1.GlobalSecondaryIndex_Status(5),
+			},
+		},
+		KeySchemas: []*dynamodbv1.KeySchema{
+			{AttributeName: "ID",
+				Type: dynamodbv1.KeySchema_HASH,
+			},
+			{AttributeName: "Status",
+				Type: dynamodbv1.KeySchema_RANGE,
+			},
+		},
+		AttributeDefinitions: []*dynamodbv1.AttributeDefinition{
+			{
+				AttributeName: "ID",
+				AttributeType: "S",
+			},
+			{
+				AttributeName: "Status",
+				AttributeType: "S",
+			},
+			{
+				AttributeName: "Weight",
+				AttributeType: "N",
+			},
+			{
+				AttributeName: "Active",
+				AttributeType: "B",
+			},
+		},
 	}
 	return ret, nil
 }
@@ -172,6 +197,26 @@ func (s *svc) UpdateCapacity(ctx context.Context, account, region, tableName str
 		GlobalSecondaryIndexes: gsis,
 	}
 	return ret, nil
+}
+
+func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *dynamodb.BatchGetItemInput) (*dynamodb.BatchGetItemOutput, error) {
+	return &dynamodb.BatchGetItemOutput{
+		ConsumedCapacity: []ddbtypes.ConsumedCapacity{},
+		Responses: map[string][]map[string]ddbtypes.AttributeValue{
+			"InventoryTable": {
+				{
+					"Model":     &ddbtypes.AttributeValueMemberS{Value: "Buick"},
+					"Inventory": &ddbtypes.AttributeValueMemberN{Value: "10"},
+				},
+				{
+					"Model":     &ddbtypes.AttributeValueMemberS{Value: "Camry"},
+					"Inventory": &ddbtypes.AttributeValueMemberN{Value: "3"},
+				},
+			},
+		},
+		UnprocessedKeys: map[string]ddbtypes.KeysAndAttributes{},
+		ResultMetadata:  middleware.Metadata{},
+	}, nil
 }
 
 var accountsAndRegions = map[string][]string{
@@ -238,12 +283,12 @@ func (s *svc) GetCallerIdentity(ctx context.Context, account, region string) (*s
 
 func (s *svc) SimulateCustomPolicy(ctx context.Context, account, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error) {
 	return &iam.SimulateCustomPolicyOutput{
-		EvaluationResults: []types.EvaluationResult{
+		EvaluationResults: []iamtypes.EvaluationResult{
 			{EvalActionName: aws.String("s3:GetBucketPolicy"),
-				EvalDecision:         types.PolicyEvaluationDecisionTypeImplicitDeny,
+				EvalDecision:         iamtypes.PolicyEvaluationDecisionTypeImplicitDeny,
 				EvalResourceName:     aws.String("arn:aws:s3:::a/*"),
 				MissingContextValues: []string{},
-				MatchedStatements:    []types.Statement{},
+				MatchedStatements:    []iamtypes.Statement{},
 			},
 		},
 	}, nil
