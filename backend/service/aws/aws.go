@@ -201,8 +201,8 @@ type Client interface {
 // AWS SDK's struct types and not an interface that can be substituted for. It is recommended following initial
 // development of a feature that you add the calls to a service interface so they can be tested more easily.
 type DirectClient interface {
-	Config() *aws.Config
 	Autoscaling() *autoscaling.Client
+	Config() *aws.Config
 	DynamoDB() *dynamodb.Client
 	EC2() *ec2.Client
 	IAM() *iam.Client
