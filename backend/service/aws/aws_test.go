@@ -635,3 +635,11 @@ func TestRegionalClient(t *testing.T) {
 
 	assert.Equal(t, c, r.S3())
 }
+
+func TestRegionalClientConfig(t *testing.T) {
+	c := &aws.Config{Region: "us-west-1"}
+
+	r := &regionalClient{regionCfg: c}
+
+	assert.Equal(t, c, r.Config())
+}

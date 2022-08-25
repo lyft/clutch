@@ -143,7 +143,8 @@ func (c *client) createRegionalClients(accountAlias, region string, regions []st
 	}
 
 	c.accounts[accountAlias].clients[region] = &regionalClient{
-		region: region,
+		region:    region,
+		regionCfg: &regionCfg,
 		dynamodbCfg: &awsv1.DynamodbConfig{
 			ScalingLimits: &awsv1.ScalingLimits{
 				MaxReadCapacityUnits:  ds.MaxReadCapacityUnits,
@@ -201,6 +202,7 @@ type Client interface {
 // development of a feature that you add the calls to a service interface so they can be tested more easily.
 type DirectClient interface {
 	Autoscaling() *autoscaling.Client
+	Config() *aws.Config
 	DynamoDB() *dynamodb.Client
 	EC2() *ec2.Client
 	IAM() *iam.Client
@@ -219,8 +221,8 @@ type client struct {
 }
 
 type regionalClient struct {
-	region string
-
+	region      string
+	regionCfg   *aws.Config
 	dynamodbCfg *awsv1.DynamodbConfig
 
 	autoscaling autoscalingClient
@@ -230,6 +232,10 @@ type regionalClient struct {
 	kinesis     kinesisClient
 	s3          s3Client
 	sts         stsClient
+}
+
+func (r *regionalClient) Config() *aws.Config {
+	return r.regionCfg
 }
 
 func (r *regionalClient) Autoscaling() *autoscaling.Client {
