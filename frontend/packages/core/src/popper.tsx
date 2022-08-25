@@ -70,7 +70,7 @@ const ListItemText = styled(MuiListItemText)({
   },
 });
 
-export interface PopperItemProps extends Pick<ListItemProps, "selected"> {
+export interface PopperItemProps extends Pick<ListItemProps, "selected" | "disabled"> {
   children: React.ReactNode;
   component?: React.ElementType;
   componentProps?: any;
