@@ -52,6 +52,8 @@ export { default as Code } from "./text";
 export { Typography } from "./typography";
 export { default as ClutchApp } from "./AppProvider";
 
+export { css, keyframes } from "@emotion/react";
+
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
 export type { CardHeaderSummaryProps } from "./card";
