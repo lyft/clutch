@@ -54,6 +54,24 @@ func testJobClientset() k8s.Interface {
 	return fake.NewSimpleClientset(job)
 }
 
+func TestDescribeJob(t *testing.T) {
+	cs := testJobClientset()
+
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
+				Interface: cs,
+				namespace: "testing-namespace",
+				cluster:   "testing-cluster",
+			}},
+		},
+	}
+
+	cron, err := s.DescribeJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-job-name")
+	assert.NoError(t, err)
+	assert.NotNil(t, cron)
+}
+
 func TestListJobs(t *testing.T) {
 	t.Parallel()
 

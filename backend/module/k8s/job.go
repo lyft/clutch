@@ -11,6 +11,14 @@ import (
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
+func (a *k8sAPI) DescribeJob(ctx context.Context, req *k8sapiv1.DescribeJobRequest) (*k8sapiv1.DescribeJobResponse, error) {
+	job, err := a.k8s.DescribeJob(ctx, req.Clientset, req.Cluster, req.Namespace, req.Name)
+	if err != nil {
+		return nil, err
+	}
+	return &k8sapiv1.DescribeJobResponse{Job: job}, nil
+}
+
 func (a *k8sAPI) DeleteJob(ctx context.Context, req *k8sapiv1.DeleteJobRequest) (*k8sapiv1.DeleteJobResponse, error) {
 	err := a.k8s.DeleteJob(ctx, req.Clientset, req.Cluster, req.Namespace, req.Name)
 	if err != nil {

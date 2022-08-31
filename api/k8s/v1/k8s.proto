@@ -196,6 +196,14 @@ service K8sAPI {
     option (clutch.api.v1.action).type = DELETE;
   }
 
+  rpc DescribeJob(DescribeJobRequest) returns (DescribeJobResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeJob"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
   rpc ListJobs(ListJobsRequest) returns (ListJobsResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/listJobs"
@@ -993,6 +1001,24 @@ message Job {
 
   map<string, string> annotations = 4;
   map<string, string> labels = 5;
+}
+
+message DescribeJobRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Job",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DescribeJobResponse {
+  option (clutch.api.v1.reference).fields = "job";
+
+  Job job = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message ListJobsRequest {
