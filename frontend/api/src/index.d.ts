@@ -12334,6 +12334,301 @@ export namespace clutch {
         }
     }
 
+    /** Namespace deploys. */
+    namespace deploys {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a DeploysAPI */
+            class DeploysAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new DeploysAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls TriggerManualDeploy.
+                 * @param request TriggerManualDeployRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and TriggerManualDeployResponse
+                 */
+                public triggerManualDeploy(request: clutch.deploys.v1.ITriggerManualDeployRequest, callback: clutch.deploys.v1.DeploysAPI.TriggerManualDeployCallback): void;
+
+                /**
+                 * Calls TriggerManualDeploy.
+                 * @param request TriggerManualDeployRequest message or plain object
+                 * @returns Promise
+                 */
+                public triggerManualDeploy(request: clutch.deploys.v1.ITriggerManualDeployRequest): Promise<clutch.deploys.v1.TriggerManualDeployResponse>;
+            }
+
+            namespace DeploysAPI {
+
+                /**
+                 * Callback as used by {@link clutch.deploys.v1.DeploysAPI#triggerManualDeploy}.
+                 * @param error Error, if any
+                 * @param [response] TriggerManualDeployResponse
+                 */
+                type TriggerManualDeployCallback = (error: (Error|null), response?: clutch.deploys.v1.TriggerManualDeployResponse) => void;
+            }
+
+            /** Environment enum. */
+            enum Environment {
+                ENVIRONMENT_UNSPECIFIED = 0,
+                DEVELOPMENT = 1,
+                STAGING = 2,
+                PRODUCTION = 3
+            }
+
+            /** Properties of a DeploymentOptions. */
+            interface IDeploymentOptions {
+
+                /** DeploymentOptions emergencyRollout */
+                emergencyRollout?: (boolean|null);
+
+                /** DeploymentOptions skipDeployChecks */
+                skipDeployChecks?: (boolean|null);
+
+                /** DeploymentOptions initiatingUser */
+                initiatingUser?: (string|null);
+            }
+
+            /** Represents a DeploymentOptions. */
+            class DeploymentOptions implements IDeploymentOptions {
+
+                /**
+                 * Constructs a new DeploymentOptions.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.deploys.v1.IDeploymentOptions);
+
+                /** DeploymentOptions emergencyRollout. */
+                public emergencyRollout: boolean;
+
+                /** DeploymentOptions skipDeployChecks. */
+                public skipDeployChecks: boolean;
+
+                /** DeploymentOptions initiatingUser. */
+                public initiatingUser: string;
+
+                /**
+                 * Verifies a DeploymentOptions message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeploymentOptions message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeploymentOptions
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.deploys.v1.DeploymentOptions;
+
+                /**
+                 * Creates a plain object from a DeploymentOptions message. Also converts values to other types if specified.
+                 * @param message DeploymentOptions
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.deploys.v1.DeploymentOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeploymentOptions to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Deploy. */
+            interface IDeploy {
+
+                /** Deploy environments */
+                environments?: (clutch.deploys.v1.Environment[]|null);
+
+                /** Deploy projectName */
+                projectName?: (string|null);
+
+                /** Deploy message */
+                message?: (string|null);
+
+                /** Deploy revisionSha */
+                revisionSha?: (string|null);
+
+                /** Deploy target */
+                target?: (string|null);
+
+                /** Deploy customOptions */
+                customOptions?: (google.protobuf.IAny|null);
+
+                /** Deploy deployOptions */
+                deployOptions?: (clutch.deploys.v1.IDeploymentOptions|null);
+            }
+
+            /** Represents a Deploy. */
+            class Deploy implements IDeploy {
+
+                /**
+                 * Constructs a new Deploy.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.deploys.v1.IDeploy);
+
+                /** Deploy environments. */
+                public environments: clutch.deploys.v1.Environment[];
+
+                /** Deploy projectName. */
+                public projectName: string;
+
+                /** Deploy message. */
+                public message: string;
+
+                /** Deploy revisionSha. */
+                public revisionSha: string;
+
+                /** Deploy target. */
+                public target: string;
+
+                /** Deploy customOptions. */
+                public customOptions?: (google.protobuf.IAny|null);
+
+                /** Deploy deployOptions. */
+                public deployOptions?: (clutch.deploys.v1.IDeploymentOptions|null);
+
+                /** Deploy options. */
+                public options?: ("customOptions"|"deployOptions");
+
+                /**
+                 * Verifies a Deploy message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Deploy message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Deploy
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.deploys.v1.Deploy;
+
+                /**
+                 * Creates a plain object from a Deploy message. Also converts values to other types if specified.
+                 * @param message Deploy
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.deploys.v1.Deploy, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Deploy to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a TriggerManualDeployRequest. */
+            interface ITriggerManualDeployRequest {
+
+                /** TriggerManualDeployRequest deployIntent */
+                deployIntent?: (clutch.deploys.v1.IDeploy|null);
+            }
+
+            /** Represents a TriggerManualDeployRequest. */
+            class TriggerManualDeployRequest implements ITriggerManualDeployRequest {
+
+                /**
+                 * Constructs a new TriggerManualDeployRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.deploys.v1.ITriggerManualDeployRequest);
+
+                /** TriggerManualDeployRequest deployIntent. */
+                public deployIntent?: (clutch.deploys.v1.IDeploy|null);
+
+                /**
+                 * Verifies a TriggerManualDeployRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a TriggerManualDeployRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns TriggerManualDeployRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.deploys.v1.TriggerManualDeployRequest;
+
+                /**
+                 * Creates a plain object from a TriggerManualDeployRequest message. Also converts values to other types if specified.
+                 * @param message TriggerManualDeployRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.deploys.v1.TriggerManualDeployRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this TriggerManualDeployRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a TriggerManualDeployResponse. */
+            interface ITriggerManualDeployResponse {
+
+                /** TriggerManualDeployResponse deployJobId */
+                deployJobId?: (number|Long|null);
+            }
+
+            /** Represents a TriggerManualDeployResponse. */
+            class TriggerManualDeployResponse implements ITriggerManualDeployResponse {
+
+                /**
+                 * Constructs a new TriggerManualDeployResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.deploys.v1.ITriggerManualDeployResponse);
+
+                /** TriggerManualDeployResponse deployJobId. */
+                public deployJobId: (number|Long);
+
+                /**
+                 * Verifies a TriggerManualDeployResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a TriggerManualDeployResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns TriggerManualDeployResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.deploys.v1.TriggerManualDeployResponse;
+
+                /**
+                 * Creates a plain object from a TriggerManualDeployResponse message. Also converts values to other types if specified.
+                 * @param message TriggerManualDeployResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.deploys.v1.TriggerManualDeployResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this TriggerManualDeployResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
     /** Namespace envoytriage. */
     namespace envoytriage {
 

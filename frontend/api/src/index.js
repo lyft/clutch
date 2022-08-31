@@ -30028,6 +30028,735 @@ export const clutch = $root.clutch = (() => {
         return core;
     })();
 
+    clutch.deploys = (function() {
+
+        /**
+         * Namespace deploys.
+         * @memberof clutch
+         * @namespace
+         */
+        const deploys = {};
+
+        deploys.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.deploys
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.DeploysAPI = (function() {
+
+                /**
+                 * Constructs a new DeploysAPI service.
+                 * @memberof clutch.deploys.v1
+                 * @classdesc Represents a DeploysAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function DeploysAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (DeploysAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = DeploysAPI;
+
+                /**
+                 * Callback as used by {@link clutch.deploys.v1.DeploysAPI#triggerManualDeploy}.
+                 * @memberof clutch.deploys.v1.DeploysAPI
+                 * @typedef TriggerManualDeployCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.deploys.v1.TriggerManualDeployResponse} [response] TriggerManualDeployResponse
+                 */
+
+                /**
+                 * Calls TriggerManualDeploy.
+                 * @function triggerManualDeploy
+                 * @memberof clutch.deploys.v1.DeploysAPI
+                 * @instance
+                 * @param {clutch.deploys.v1.ITriggerManualDeployRequest} request TriggerManualDeployRequest message or plain object
+                 * @param {clutch.deploys.v1.DeploysAPI.TriggerManualDeployCallback} callback Node-style callback called with the error, if any, and TriggerManualDeployResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(DeploysAPI.prototype.triggerManualDeploy = function triggerManualDeploy(request, callback) {
+                    return this.rpcCall(triggerManualDeploy, $root.clutch.deploys.v1.TriggerManualDeployRequest, $root.clutch.deploys.v1.TriggerManualDeployResponse, request, callback);
+                }, "name", { value: "TriggerManualDeploy" });
+
+                /**
+                 * Calls TriggerManualDeploy.
+                 * @function triggerManualDeploy
+                 * @memberof clutch.deploys.v1.DeploysAPI
+                 * @instance
+                 * @param {clutch.deploys.v1.ITriggerManualDeployRequest} request TriggerManualDeployRequest message or plain object
+                 * @returns {Promise<clutch.deploys.v1.TriggerManualDeployResponse>} Promise
+                 * @variation 2
+                 */
+
+                return DeploysAPI;
+            })();
+
+            /**
+             * Environment enum.
+             * @name clutch.deploys.v1.Environment
+             * @enum {number}
+             * @property {number} ENVIRONMENT_UNSPECIFIED=0 ENVIRONMENT_UNSPECIFIED value
+             * @property {number} DEVELOPMENT=1 DEVELOPMENT value
+             * @property {number} STAGING=2 STAGING value
+             * @property {number} PRODUCTION=3 PRODUCTION value
+             */
+            v1.Environment = (function() {
+                const valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "ENVIRONMENT_UNSPECIFIED"] = 0;
+                values[valuesById[1] = "DEVELOPMENT"] = 1;
+                values[valuesById[2] = "STAGING"] = 2;
+                values[valuesById[3] = "PRODUCTION"] = 3;
+                return values;
+            })();
+
+            v1.DeploymentOptions = (function() {
+
+                /**
+                 * Properties of a DeploymentOptions.
+                 * @memberof clutch.deploys.v1
+                 * @interface IDeploymentOptions
+                 * @property {boolean|null} [emergencyRollout] DeploymentOptions emergencyRollout
+                 * @property {boolean|null} [skipDeployChecks] DeploymentOptions skipDeployChecks
+                 * @property {string|null} [initiatingUser] DeploymentOptions initiatingUser
+                 */
+
+                /**
+                 * Constructs a new DeploymentOptions.
+                 * @memberof clutch.deploys.v1
+                 * @classdesc Represents a DeploymentOptions.
+                 * @implements IDeploymentOptions
+                 * @constructor
+                 * @param {clutch.deploys.v1.IDeploymentOptions=} [properties] Properties to set
+                 */
+                function DeploymentOptions(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeploymentOptions emergencyRollout.
+                 * @member {boolean} emergencyRollout
+                 * @memberof clutch.deploys.v1.DeploymentOptions
+                 * @instance
+                 */
+                DeploymentOptions.prototype.emergencyRollout = false;
+
+                /**
+                 * DeploymentOptions skipDeployChecks.
+                 * @member {boolean} skipDeployChecks
+                 * @memberof clutch.deploys.v1.DeploymentOptions
+                 * @instance
+                 */
+                DeploymentOptions.prototype.skipDeployChecks = false;
+
+                /**
+                 * DeploymentOptions initiatingUser.
+                 * @member {string} initiatingUser
+                 * @memberof clutch.deploys.v1.DeploymentOptions
+                 * @instance
+                 */
+                DeploymentOptions.prototype.initiatingUser = "";
+
+                /**
+                 * Verifies a DeploymentOptions message.
+                 * @function verify
+                 * @memberof clutch.deploys.v1.DeploymentOptions
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeploymentOptions.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.emergencyRollout != null && message.hasOwnProperty("emergencyRollout"))
+                        if (typeof message.emergencyRollout !== "boolean")
+                            return "emergencyRollout: boolean expected";
+                    if (message.skipDeployChecks != null && message.hasOwnProperty("skipDeployChecks"))
+                        if (typeof message.skipDeployChecks !== "boolean")
+                            return "skipDeployChecks: boolean expected";
+                    if (message.initiatingUser != null && message.hasOwnProperty("initiatingUser"))
+                        if (!$util.isString(message.initiatingUser))
+                            return "initiatingUser: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeploymentOptions message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.deploys.v1.DeploymentOptions
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.deploys.v1.DeploymentOptions} DeploymentOptions
+                 */
+                DeploymentOptions.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.deploys.v1.DeploymentOptions)
+                        return object;
+                    let message = new $root.clutch.deploys.v1.DeploymentOptions();
+                    if (object.emergencyRollout != null)
+                        message.emergencyRollout = Boolean(object.emergencyRollout);
+                    if (object.skipDeployChecks != null)
+                        message.skipDeployChecks = Boolean(object.skipDeployChecks);
+                    if (object.initiatingUser != null)
+                        message.initiatingUser = String(object.initiatingUser);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeploymentOptions message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.deploys.v1.DeploymentOptions
+                 * @static
+                 * @param {clutch.deploys.v1.DeploymentOptions} message DeploymentOptions
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeploymentOptions.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.emergencyRollout = false;
+                        object.skipDeployChecks = false;
+                        object.initiatingUser = "";
+                    }
+                    if (message.emergencyRollout != null && message.hasOwnProperty("emergencyRollout"))
+                        object.emergencyRollout = message.emergencyRollout;
+                    if (message.skipDeployChecks != null && message.hasOwnProperty("skipDeployChecks"))
+                        object.skipDeployChecks = message.skipDeployChecks;
+                    if (message.initiatingUser != null && message.hasOwnProperty("initiatingUser"))
+                        object.initiatingUser = message.initiatingUser;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeploymentOptions to JSON.
+                 * @function toJSON
+                 * @memberof clutch.deploys.v1.DeploymentOptions
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeploymentOptions.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeploymentOptions;
+            })();
+
+            v1.Deploy = (function() {
+
+                /**
+                 * Properties of a Deploy.
+                 * @memberof clutch.deploys.v1
+                 * @interface IDeploy
+                 * @property {Array.<clutch.deploys.v1.Environment>|null} [environments] Deploy environments
+                 * @property {string|null} [projectName] Deploy projectName
+                 * @property {string|null} [message] Deploy message
+                 * @property {string|null} [revisionSha] Deploy revisionSha
+                 * @property {string|null} [target] Deploy target
+                 * @property {google.protobuf.IAny|null} [customOptions] Deploy customOptions
+                 * @property {clutch.deploys.v1.IDeploymentOptions|null} [deployOptions] Deploy deployOptions
+                 */
+
+                /**
+                 * Constructs a new Deploy.
+                 * @memberof clutch.deploys.v1
+                 * @classdesc Represents a Deploy.
+                 * @implements IDeploy
+                 * @constructor
+                 * @param {clutch.deploys.v1.IDeploy=} [properties] Properties to set
+                 */
+                function Deploy(properties) {
+                    this.environments = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Deploy environments.
+                 * @member {Array.<clutch.deploys.v1.Environment>} environments
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 */
+                Deploy.prototype.environments = $util.emptyArray;
+
+                /**
+                 * Deploy projectName.
+                 * @member {string} projectName
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 */
+                Deploy.prototype.projectName = "";
+
+                /**
+                 * Deploy message.
+                 * @member {string} message
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 */
+                Deploy.prototype.message = "";
+
+                /**
+                 * Deploy revisionSha.
+                 * @member {string} revisionSha
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 */
+                Deploy.prototype.revisionSha = "";
+
+                /**
+                 * Deploy target.
+                 * @member {string} target
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 */
+                Deploy.prototype.target = "";
+
+                /**
+                 * Deploy customOptions.
+                 * @member {google.protobuf.IAny|null|undefined} customOptions
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 */
+                Deploy.prototype.customOptions = null;
+
+                /**
+                 * Deploy deployOptions.
+                 * @member {clutch.deploys.v1.IDeploymentOptions|null|undefined} deployOptions
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 */
+                Deploy.prototype.deployOptions = null;
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * Deploy options.
+                 * @member {"customOptions"|"deployOptions"|undefined} options
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 */
+                Object.defineProperty(Deploy.prototype, "options", {
+                    get: $util.oneOfGetter($oneOfFields = ["customOptions", "deployOptions"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Verifies a Deploy message.
+                 * @function verify
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Deploy.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    let properties = {};
+                    if (message.environments != null && message.hasOwnProperty("environments")) {
+                        if (!Array.isArray(message.environments))
+                            return "environments: array expected";
+                        for (let i = 0; i < message.environments.length; ++i)
+                            switch (message.environments[i]) {
+                            default:
+                                return "environments: enum value[] expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break;
+                            }
+                    }
+                    if (message.projectName != null && message.hasOwnProperty("projectName"))
+                        if (!$util.isString(message.projectName))
+                            return "projectName: string expected";
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        if (!$util.isString(message.message))
+                            return "message: string expected";
+                    if (message.revisionSha != null && message.hasOwnProperty("revisionSha"))
+                        if (!$util.isString(message.revisionSha))
+                            return "revisionSha: string expected";
+                    if (message.target != null && message.hasOwnProperty("target"))
+                        if (!$util.isString(message.target))
+                            return "target: string expected";
+                    if (message.customOptions != null && message.hasOwnProperty("customOptions")) {
+                        properties.options = 1;
+                        {
+                            let error = $root.google.protobuf.Any.verify(message.customOptions);
+                            if (error)
+                                return "customOptions." + error;
+                        }
+                    }
+                    if (message.deployOptions != null && message.hasOwnProperty("deployOptions")) {
+                        if (properties.options === 1)
+                            return "options: multiple values";
+                        properties.options = 1;
+                        {
+                            let error = $root.clutch.deploys.v1.DeploymentOptions.verify(message.deployOptions);
+                            if (error)
+                                return "deployOptions." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Deploy message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.deploys.v1.Deploy} Deploy
+                 */
+                Deploy.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.deploys.v1.Deploy)
+                        return object;
+                    let message = new $root.clutch.deploys.v1.Deploy();
+                    if (object.environments) {
+                        if (!Array.isArray(object.environments))
+                            throw TypeError(".clutch.deploys.v1.Deploy.environments: array expected");
+                        message.environments = [];
+                        for (let i = 0; i < object.environments.length; ++i)
+                            switch (object.environments[i]) {
+                            default:
+                            case "ENVIRONMENT_UNSPECIFIED":
+                            case 0:
+                                message.environments[i] = 0;
+                                break;
+                            case "DEVELOPMENT":
+                            case 1:
+                                message.environments[i] = 1;
+                                break;
+                            case "STAGING":
+                            case 2:
+                                message.environments[i] = 2;
+                                break;
+                            case "PRODUCTION":
+                            case 3:
+                                message.environments[i] = 3;
+                                break;
+                            }
+                    }
+                    if (object.projectName != null)
+                        message.projectName = String(object.projectName);
+                    if (object.message != null)
+                        message.message = String(object.message);
+                    if (object.revisionSha != null)
+                        message.revisionSha = String(object.revisionSha);
+                    if (object.target != null)
+                        message.target = String(object.target);
+                    if (object.customOptions != null) {
+                        if (typeof object.customOptions !== "object")
+                            throw TypeError(".clutch.deploys.v1.Deploy.customOptions: object expected");
+                        message.customOptions = $root.google.protobuf.Any.fromObject(object.customOptions);
+                    }
+                    if (object.deployOptions != null) {
+                        if (typeof object.deployOptions !== "object")
+                            throw TypeError(".clutch.deploys.v1.Deploy.deployOptions: object expected");
+                        message.deployOptions = $root.clutch.deploys.v1.DeploymentOptions.fromObject(object.deployOptions);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Deploy message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @static
+                 * @param {clutch.deploys.v1.Deploy} message Deploy
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Deploy.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.environments = [];
+                    if (options.defaults) {
+                        object.projectName = "";
+                        object.message = "";
+                        object.revisionSha = "";
+                        object.target = "";
+                    }
+                    if (message.environments && message.environments.length) {
+                        object.environments = [];
+                        for (let j = 0; j < message.environments.length; ++j)
+                            object.environments[j] = options.enums === String ? $root.clutch.deploys.v1.Environment[message.environments[j]] : message.environments[j];
+                    }
+                    if (message.projectName != null && message.hasOwnProperty("projectName"))
+                        object.projectName = message.projectName;
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        object.message = message.message;
+                    if (message.revisionSha != null && message.hasOwnProperty("revisionSha"))
+                        object.revisionSha = message.revisionSha;
+                    if (message.target != null && message.hasOwnProperty("target"))
+                        object.target = message.target;
+                    if (message.customOptions != null && message.hasOwnProperty("customOptions")) {
+                        object.customOptions = $root.google.protobuf.Any.toObject(message.customOptions, options);
+                        if (options.oneofs)
+                            object.options = "customOptions";
+                    }
+                    if (message.deployOptions != null && message.hasOwnProperty("deployOptions")) {
+                        object.deployOptions = $root.clutch.deploys.v1.DeploymentOptions.toObject(message.deployOptions, options);
+                        if (options.oneofs)
+                            object.options = "deployOptions";
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Deploy to JSON.
+                 * @function toJSON
+                 * @memberof clutch.deploys.v1.Deploy
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Deploy.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Deploy;
+            })();
+
+            v1.TriggerManualDeployRequest = (function() {
+
+                /**
+                 * Properties of a TriggerManualDeployRequest.
+                 * @memberof clutch.deploys.v1
+                 * @interface ITriggerManualDeployRequest
+                 * @property {clutch.deploys.v1.IDeploy|null} [deployIntent] TriggerManualDeployRequest deployIntent
+                 */
+
+                /**
+                 * Constructs a new TriggerManualDeployRequest.
+                 * @memberof clutch.deploys.v1
+                 * @classdesc Represents a TriggerManualDeployRequest.
+                 * @implements ITriggerManualDeployRequest
+                 * @constructor
+                 * @param {clutch.deploys.v1.ITriggerManualDeployRequest=} [properties] Properties to set
+                 */
+                function TriggerManualDeployRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * TriggerManualDeployRequest deployIntent.
+                 * @member {clutch.deploys.v1.IDeploy|null|undefined} deployIntent
+                 * @memberof clutch.deploys.v1.TriggerManualDeployRequest
+                 * @instance
+                 */
+                TriggerManualDeployRequest.prototype.deployIntent = null;
+
+                /**
+                 * Verifies a TriggerManualDeployRequest message.
+                 * @function verify
+                 * @memberof clutch.deploys.v1.TriggerManualDeployRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                TriggerManualDeployRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.deployIntent != null && message.hasOwnProperty("deployIntent")) {
+                        let error = $root.clutch.deploys.v1.Deploy.verify(message.deployIntent);
+                        if (error)
+                            return "deployIntent." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a TriggerManualDeployRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.deploys.v1.TriggerManualDeployRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.deploys.v1.TriggerManualDeployRequest} TriggerManualDeployRequest
+                 */
+                TriggerManualDeployRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.deploys.v1.TriggerManualDeployRequest)
+                        return object;
+                    let message = new $root.clutch.deploys.v1.TriggerManualDeployRequest();
+                    if (object.deployIntent != null) {
+                        if (typeof object.deployIntent !== "object")
+                            throw TypeError(".clutch.deploys.v1.TriggerManualDeployRequest.deployIntent: object expected");
+                        message.deployIntent = $root.clutch.deploys.v1.Deploy.fromObject(object.deployIntent);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a TriggerManualDeployRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.deploys.v1.TriggerManualDeployRequest
+                 * @static
+                 * @param {clutch.deploys.v1.TriggerManualDeployRequest} message TriggerManualDeployRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                TriggerManualDeployRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.deployIntent = null;
+                    if (message.deployIntent != null && message.hasOwnProperty("deployIntent"))
+                        object.deployIntent = $root.clutch.deploys.v1.Deploy.toObject(message.deployIntent, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this TriggerManualDeployRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.deploys.v1.TriggerManualDeployRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                TriggerManualDeployRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return TriggerManualDeployRequest;
+            })();
+
+            v1.TriggerManualDeployResponse = (function() {
+
+                /**
+                 * Properties of a TriggerManualDeployResponse.
+                 * @memberof clutch.deploys.v1
+                 * @interface ITriggerManualDeployResponse
+                 * @property {number|Long|null} [deployJobId] TriggerManualDeployResponse deployJobId
+                 */
+
+                /**
+                 * Constructs a new TriggerManualDeployResponse.
+                 * @memberof clutch.deploys.v1
+                 * @classdesc Represents a TriggerManualDeployResponse.
+                 * @implements ITriggerManualDeployResponse
+                 * @constructor
+                 * @param {clutch.deploys.v1.ITriggerManualDeployResponse=} [properties] Properties to set
+                 */
+                function TriggerManualDeployResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * TriggerManualDeployResponse deployJobId.
+                 * @member {number|Long} deployJobId
+                 * @memberof clutch.deploys.v1.TriggerManualDeployResponse
+                 * @instance
+                 */
+                TriggerManualDeployResponse.prototype.deployJobId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Verifies a TriggerManualDeployResponse message.
+                 * @function verify
+                 * @memberof clutch.deploys.v1.TriggerManualDeployResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                TriggerManualDeployResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.deployJobId != null && message.hasOwnProperty("deployJobId"))
+                        if (!$util.isInteger(message.deployJobId) && !(message.deployJobId && $util.isInteger(message.deployJobId.low) && $util.isInteger(message.deployJobId.high)))
+                            return "deployJobId: integer|Long expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a TriggerManualDeployResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.deploys.v1.TriggerManualDeployResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.deploys.v1.TriggerManualDeployResponse} TriggerManualDeployResponse
+                 */
+                TriggerManualDeployResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.deploys.v1.TriggerManualDeployResponse)
+                        return object;
+                    let message = new $root.clutch.deploys.v1.TriggerManualDeployResponse();
+                    if (object.deployJobId != null)
+                        if ($util.Long)
+                            (message.deployJobId = $util.Long.fromValue(object.deployJobId)).unsigned = false;
+                        else if (typeof object.deployJobId === "string")
+                            message.deployJobId = parseInt(object.deployJobId, 10);
+                        else if (typeof object.deployJobId === "number")
+                            message.deployJobId = object.deployJobId;
+                        else if (typeof object.deployJobId === "object")
+                            message.deployJobId = new $util.LongBits(object.deployJobId.low >>> 0, object.deployJobId.high >>> 0).toNumber();
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a TriggerManualDeployResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.deploys.v1.TriggerManualDeployResponse
+                 * @static
+                 * @param {clutch.deploys.v1.TriggerManualDeployResponse} message TriggerManualDeployResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                TriggerManualDeployResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.deployJobId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.deployJobId = options.longs === String ? "0" : 0;
+                    if (message.deployJobId != null && message.hasOwnProperty("deployJobId"))
+                        if (typeof message.deployJobId === "number")
+                            object.deployJobId = options.longs === String ? String(message.deployJobId) : message.deployJobId;
+                        else
+                            object.deployJobId = options.longs === String ? $util.Long.prototype.toString.call(message.deployJobId) : options.longs === Number ? new $util.LongBits(message.deployJobId.low >>> 0, message.deployJobId.high >>> 0).toNumber() : message.deployJobId;
+                    return object;
+                };
+
+                /**
+                 * Converts this TriggerManualDeployResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.deploys.v1.TriggerManualDeployResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                TriggerManualDeployResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return TriggerManualDeployResponse;
+            })();
+
+            return v1;
+        })();
+
+        return deploys;
+    })();
+
     clutch.envoytriage = (function() {
 
         /**
