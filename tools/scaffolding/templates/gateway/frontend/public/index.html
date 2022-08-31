@@ -18,6 +18,22 @@
       Only files inside the `public` folder can be referenced from the HTML.
     -->
     <title>clutch</title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_GA_TRACKING_ID%"></script>
+    <script>
+      if ('%NODE_ENV%' !== 'development') {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', '%REACT_APP_GOOGLE_ANALYTICS_DEFAULT_TAG%');
+        let additionalGATags = '%REACT_APP_GOOGLE_ANALYTICS_SUPPL_TAGS%'.split(',');
+        additionalGATags.forEach(tag => gtag('config', tag));
+      }
+    </script>
+    <!-- End Google Analytics -->
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
