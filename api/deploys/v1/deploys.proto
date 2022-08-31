@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package clutch.deploys.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/deploys/v1;deploysv1";
+
+import "google/api/annotations.proto";
+import "api/v1/annotations.proto";
+import "google/protobuf/any.proto";
+import "validate/validate.proto";
+import "google/rpc/status.proto";
+
+service DeploysAPI {
+  rpc TriggerManualDeploy(TriggerManualDeployRequest) returns (TriggerManualDeployResponse) {
+    option (google.api.http) = {
+      post : "/v1/deploys/triggerManual"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+}
+
+enum Environment {
+  ENVIRONMENT_UNSPECIFIED = 0;
+  DEVELOPMENT = 1;
+  STAGING = 2;
+  PRODUCTION = 3;
+}
+
+message DeploymentOptions {
+  bool emergency_rollout = 1;
+  bool skip_deploy_checks = 2;
+  string initiating_user = 3;
+}
+
+message Deploy {
+  repeated Environment environments = 1 [ (validate.rules).repeated = {min_items : 1} ];
+  string project_name = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string message = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string revision_sha = 4 [ (validate.rules).string.pattern = "[0-9a-f]{40}" ];
+
+  // Target could also be called Job or job name.
+  string target = 5 [ (validate.rules).string = {min_bytes : 1} ];
+
+  oneof options {
+    google.protobuf.Any custom_options = 6;
+    DeploymentOptions deploy_options = 7;
+  }
+}
+
+message TriggerManualDeployRequest {
+  Deploy deploy_intent = 1;
+}
+
+message TriggerManualDeployResponse {
+  int64 deploy_job_id = 1;
+}
