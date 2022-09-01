@@ -8,7 +8,6 @@ import (
 	v1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -42,7 +41,7 @@ func testListJobClientset() *fake.Clientset {
 	return fake.NewSimpleClientset(testJobs...)
 }
 
-func testJobClientset() k8s.Interface {
+func testJobService() *svc {
 	job := &v1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "testing-job-name",
@@ -51,25 +50,29 @@ func testJobClientset() k8s.Interface {
 		},
 	}
 
-	return fake.NewSimpleClientset(job)
-}
-
-func TestDescribeJob(t *testing.T) {
-	cs := testJobClientset()
-
-	s := &svc{
+	return &svc{
 		manager: &managerImpl{
 			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
-				Interface: cs,
+				Interface: fake.NewSimpleClientset(job),
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",
 			}},
 		},
 	}
+}
 
-	cron, err := s.DescribeJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-job-name")
+func TestDescribeJob(t *testing.T) {
+	s := testJobService()
+
+	// Existing job
+	job, err := s.DescribeJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-job-name")
 	assert.NoError(t, err)
-	assert.NotNil(t, cron)
+	assert.NotNil(t, job)
+
+	// Not exsting job
+	job, err = s.DescribeJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "unknown-job-name")
+	assert.Error(t, err)
+	assert.Nil(t, job)
 }
 
 func TestListJobs(t *testing.T) {
@@ -124,17 +127,7 @@ func TestListJobs(t *testing.T) {
 func TestDeleteJob(t *testing.T) {
 	t.Parallel()
 
-	cs := testJobClientset()
-
-	s := &svc{
-		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
-				Interface: cs,
-				namespace: "testing-namespace",
-				cluster:   "testing-cluster",
-			}},
-		},
-	}
+	s := testJobService()
 
 	// Not found
 	err := s.DeleteJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "abc")
@@ -145,17 +138,7 @@ func TestDeleteJob(t *testing.T) {
 }
 
 func TestCreateJob(t *testing.T) {
-	cs := testJobClientset()
-
-	s := &svc{
-		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
-				Interface: cs,
-				namespace: "testing-namespace",
-				cluster:   "testing-cluster",
-			}},
-		},
-	}
+	s := testJobService()
 
 	jobConfig := &v1.Job{
 		ObjectMeta: metav1.ObjectMeta{
