@@ -3,6 +3,8 @@ package k8s
 import (
 	"context"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	v1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -15,12 +17,19 @@ func (s *svc) DescribeJob(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
-	job, err := cs.BatchV1().Jobs(cs.Namespace()).Get(ctx, name, metav1.GetOptions{})
+	jobs, err := cs.BatchV1().Jobs(cs.Namespace()).List(ctx, metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	return protoForJob(cs.Cluster(), job), nil
+	if len(jobs.Items) == 1 {
+		return protoForJob(cs.Cluster(), &jobs.Items[0]), nil
+	} else if len(jobs.Items) > 1 {
+		return nil, status.Error(codes.FailedPrecondition, "located multiple jobs")
+	}
+	return nil, status.Error(codes.NotFound, "unable to locate specified job")
 }
 
 func (s *svc) DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error {

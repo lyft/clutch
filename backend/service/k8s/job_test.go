@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -41,19 +42,23 @@ func testListJobClientset() *fake.Clientset {
 	return fake.NewSimpleClientset(testJobs...)
 }
 
-func testJobService() *svc {
-	job := &v1.Job{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      "testing-job-name",
-			Namespace: "testing-namespace",
-			Labels:    map[string]string{"foo": "bar"},
-		},
+func testJobService(n int) *svc {
+	jobs := make([]runtime.Object, n)
+	for i := 0; i < n; i++ {
+		job := &v1.Job{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      fmt.Sprintf("testing-job-name-%b", i),
+				Namespace: "testing-namespace",
+				Labels:    map[string]string{"foo": "bar"},
+			},
+		}
+		jobs[i] = job
 	}
 
 	return &svc{
 		manager: &managerImpl{
 			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": {
-				Interface: fake.NewSimpleClientset(job),
+				Interface: fake.NewSimpleClientset(jobs...),
 				namespace: "testing-namespace",
 				cluster:   "testing-cluster",
 			}},
@@ -62,15 +67,21 @@ func testJobService() *svc {
 }
 
 func TestDescribeJob(t *testing.T) {
-	s := testJobService()
-
-	// Existing job
+	// 1 existing job
+	s := testJobService(1)
 	job, err := s.DescribeJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-job-name")
 	assert.NoError(t, err)
 	assert.NotNil(t, job)
 
-	// Not exsting job
-	job, err = s.DescribeJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "unknown-job-name")
+	// No existing job
+	s = testJobService(0)
+	job, err = s.DescribeJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-job-name")
+	assert.Error(t, err)
+	assert.Nil(t, job)
+
+	// 2 existing jobs
+	s = testJobService(2)
+	job, err = s.DescribeJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-job-name")
 	assert.Error(t, err)
 	assert.Nil(t, job)
 }
@@ -127,18 +138,18 @@ func TestListJobs(t *testing.T) {
 func TestDeleteJob(t *testing.T) {
 	t.Parallel()
 
-	s := testJobService()
+	s := testJobService(1)
 
 	// Not found
 	err := s.DeleteJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "abc")
 	assert.Error(t, err)
 
-	err = s.DeleteJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-job-name")
+	err = s.DeleteJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-job-name-0")
 	assert.NoError(t, err)
 }
 
 func TestCreateJob(t *testing.T) {
-	s := testJobService()
+	s := testJobService(1)
 
 	jobConfig := &v1.Job{
 		ObjectMeta: metav1.ObjectMeta{
