@@ -90,6 +90,35 @@ func (m *CompareCommitsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if all {
+		switch v := interface{}(m.GetContextTimeoutMillis()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CompareCommitsRequestValidationError{
+					field:  "ContextTimeoutMillis",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CompareCommitsRequestValidationError{
+					field:  "ContextTimeoutMillis",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetContextTimeoutMillis()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CompareCommitsRequestValidationError{
+				field:  "ContextTimeoutMillis",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return CompareCommitsRequestMultiError(errors)
 	}

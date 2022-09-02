@@ -23372,6 +23372,9 @@ export namespace clutch {
 
                 /** CompareCommitsRequest head */
                 head?: (string|null);
+
+                /** CompareCommitsRequest contextTimeoutMillis */
+                contextTimeoutMillis?: (google.protobuf.IUInt32Value|null);
             }
 
             /** Represents a CompareCommitsRequest. */
@@ -23391,6 +23394,9 @@ export namespace clutch {
 
                 /** CompareCommitsRequest head. */
                 public head: string;
+
+                /** CompareCommitsRequest contextTimeoutMillis. */
+                public contextTimeoutMillis?: (google.protobuf.IUInt32Value|null);
 
                 /**
                  * Verifies a CompareCommitsRequest message.

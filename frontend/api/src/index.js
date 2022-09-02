@@ -55864,6 +55864,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [repository] CompareCommitsRequest repository
                  * @property {string|null} [base] CompareCommitsRequest base
                  * @property {string|null} [head] CompareCommitsRequest head
+                 * @property {google.protobuf.IUInt32Value|null} [contextTimeoutMillis] CompareCommitsRequest contextTimeoutMillis
                  */
 
                 /**
@@ -55906,6 +55907,14 @@ export const clutch = $root.clutch = (() => {
                 CompareCommitsRequest.prototype.head = "";
 
                 /**
+                 * CompareCommitsRequest contextTimeoutMillis.
+                 * @member {google.protobuf.IUInt32Value|null|undefined} contextTimeoutMillis
+                 * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
+                 * @instance
+                 */
+                CompareCommitsRequest.prototype.contextTimeoutMillis = null;
+
+                /**
                  * Verifies a CompareCommitsRequest message.
                  * @function verify
                  * @memberof clutch.sourcegraph.v1.CompareCommitsRequest
@@ -55925,6 +55934,11 @@ export const clutch = $root.clutch = (() => {
                     if (message.head != null && message.hasOwnProperty("head"))
                         if (!$util.isString(message.head))
                             return "head: string expected";
+                    if (message.contextTimeoutMillis != null && message.hasOwnProperty("contextTimeoutMillis")) {
+                        let error = $root.google.protobuf.UInt32Value.verify(message.contextTimeoutMillis);
+                        if (error)
+                            return "contextTimeoutMillis." + error;
+                    }
                     return null;
                 };
 
@@ -55946,6 +55960,11 @@ export const clutch = $root.clutch = (() => {
                         message.base = String(object.base);
                     if (object.head != null)
                         message.head = String(object.head);
+                    if (object.contextTimeoutMillis != null) {
+                        if (typeof object.contextTimeoutMillis !== "object")
+                            throw TypeError(".clutch.sourcegraph.v1.CompareCommitsRequest.contextTimeoutMillis: object expected");
+                        message.contextTimeoutMillis = $root.google.protobuf.UInt32Value.fromObject(object.contextTimeoutMillis);
+                    }
                     return message;
                 };
 
@@ -55966,6 +55985,7 @@ export const clutch = $root.clutch = (() => {
                         object.repository = "";
                         object.base = "";
                         object.head = "";
+                        object.contextTimeoutMillis = null;
                     }
                     if (message.repository != null && message.hasOwnProperty("repository"))
                         object.repository = message.repository;
@@ -55973,6 +55993,8 @@ export const clutch = $root.clutch = (() => {
                         object.base = message.base;
                     if (message.head != null && message.hasOwnProperty("head"))
                         object.head = message.head;
+                    if (message.contextTimeoutMillis != null && message.hasOwnProperty("contextTimeoutMillis"))
+                        object.contextTimeoutMillis = $root.google.protobuf.UInt32Value.toObject(message.contextTimeoutMillis, options);
                     return object;
                 };
 

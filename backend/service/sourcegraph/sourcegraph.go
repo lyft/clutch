@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/shurcooL/graphql"
@@ -82,6 +83,14 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, err
 }
 
 func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareCommitsRequest) (resp *sourcegraphv1.CompareCommitsResponse, err error) {
+
+	var timeOutCtx context.Context
+	var cancelFunc context.CancelFunc
+	if req.ContextTimeoutMillis != nil {
+		timeOutCtx, cancelFunc = context.WithTimeout(ctx, time.Duration(req.ContextTimeoutMillis.GetValue())*time.Millisecond)
+		defer cancelFunc()
+	}
+
 	// TODO: Remove this when a fix has been landed to the upstream to fix the panic from index out of bounds
 	defer func() {
 		if r := recover(); r != nil {
@@ -98,13 +107,17 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 	}
 
 	query := &compareCommitsQuery
-	e := c.gqlClient.Query(ctx, query, variables)
-	if e != nil {
+	if req.ContextTimeoutMillis != nil {
+		err = c.gqlClient.Query(timeOutCtx, query, variables)
+	} else {
+		err = c.gqlClient.Query(ctx, query, variables)
+	}
+	if err != nil {
 		c.log.Error("unsuccessful response from sourcegraph",
 			zap.String("repo", req.Repository),
 			zap.String("base", req.Base),
 			zap.String("head", req.Head),
-			zap.Error(e))
+			zap.Error(err))
 
 		return nil, errors.New("unsuccessful response from sourcegraph")
 	}
