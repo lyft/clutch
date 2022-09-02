@@ -83,7 +83,6 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, err
 }
 
 func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareCommitsRequest) (resp *sourcegraphv1.CompareCommitsResponse, err error) {
-
 	var timeOutCtx context.Context
 	var cancelFunc context.CancelFunc
 	if req.ContextTimeoutMillis != nil {
