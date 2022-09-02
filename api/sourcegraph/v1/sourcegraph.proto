@@ -11,7 +11,7 @@ message CompareCommitsRequest {
   string repository = 1 [ (validate.rules).string.min_len = 1 ];
   string base = 2 [ (validate.rules).string.min_len = 1 ];
   string head = 3 [ (validate.rules).string.min_len = 1 ];
-  google.protobuf.UInt32Value context_timeout_millis = 4; 
+  google.protobuf.UInt32Value context_timeout_millis = 4;
 }
 
 message CompareCommitsResponse {
