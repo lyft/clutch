@@ -14090,6 +14090,20 @@ export namespace clutch {
                 public deleteConfigMap(request: clutch.k8s.v1.IDeleteConfigMapRequest): Promise<clutch.k8s.v1.DeleteConfigMapResponse>;
 
                 /**
+                 * Calls DescribeJob.
+                 * @param request DescribeJobRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeJobResponse
+                 */
+                public describeJob(request: clutch.k8s.v1.IDescribeJobRequest, callback: clutch.k8s.v1.K8sAPI.DescribeJobCallback): void;
+
+                /**
+                 * Calls DescribeJob.
+                 * @param request DescribeJobRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeJob(request: clutch.k8s.v1.IDescribeJobRequest): Promise<clutch.k8s.v1.DescribeJobResponse>;
+
+                /**
                  * Calls ListJobs.
                  * @param request ListJobsRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and ListJobsResponse
@@ -14350,6 +14364,13 @@ export namespace clutch {
                  * @param [response] DeleteConfigMapResponse
                  */
                 type DeleteConfigMapCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteConfigMapResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeJob}.
+                 * @param error Error, if any
+                 * @param [response] DescribeJobResponse
+                 */
+                type DescribeJobCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeJobResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#listJobs}.
@@ -18620,6 +18641,120 @@ export namespace clutch {
 
                 /**
                  * Converts this Job to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeJobRequest. */
+            interface IDescribeJobRequest {
+
+                /** DescribeJobRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeJobRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeJobRequest namespace */
+                namespace?: (string|null);
+
+                /** DescribeJobRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DescribeJobRequest. */
+            class DescribeJobRequest implements IDescribeJobRequest {
+
+                /**
+                 * Constructs a new DescribeJobRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeJobRequest);
+
+                /** DescribeJobRequest clientset. */
+                public clientset: string;
+
+                /** DescribeJobRequest cluster. */
+                public cluster: string;
+
+                /** DescribeJobRequest namespace. */
+                public namespace: string;
+
+                /** DescribeJobRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DescribeJobRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeJobRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeJobRequest;
+
+                /**
+                 * Creates a plain object from a DescribeJobRequest message. Also converts values to other types if specified.
+                 * @param message DescribeJobRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeJobRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeJobRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeJobResponse. */
+            interface IDescribeJobResponse {
+
+                /** DescribeJobResponse job */
+                job?: (clutch.k8s.v1.IJob|null);
+            }
+
+            /** Represents a DescribeJobResponse. */
+            class DescribeJobResponse implements IDescribeJobResponse {
+
+                /**
+                 * Constructs a new DescribeJobResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeJobResponse);
+
+                /** DescribeJobResponse job. */
+                public job?: (clutch.k8s.v1.IJob|null);
+
+                /**
+                 * Verifies a DescribeJobResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeJobResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeJobResponse;
+
+                /**
+                 * Creates a plain object from a DescribeJobResponse message. Also converts values to other types if specified.
+                 * @param message DescribeJobResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeJobResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

@@ -286,6 +286,16 @@ func (s *svc) ListConfigMaps(_ context.Context, clientset, cluster, namespace st
 	return configMaps, nil
 }
 
+func (s *svc) DescribeJob(_ context.Context, clientset, cluster, namespace, name string) (*k8sv1.Job, error) {
+	return &k8sv1.Job{
+		Cluster:     "fake-cluster-name",
+		Namespace:   namespace,
+		Name:        name,
+		Labels:      map[string]string{"Key": "value"},
+		Annotations: map[string]string{"Key": "value"},
+	}, nil
+}
+
 func (s *svc) ListJobs(_ context.Context, clientset, cluster, namespace string, listOptions *k8sv1.ListOptions) ([]*k8sv1.Job, error) {
 	jobs := []*k8sv1.Job{
 		{

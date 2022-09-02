@@ -93,6 +93,7 @@ type Service interface {
 	ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error)
 
 	// Job management functions.
+	DescribeJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Job, error)
 	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
 	CreateJob(ctx context.Context, clientset, cluster, namespace string, job *batchv1.Job) (*k8sapiv1.Job, error)

@@ -34038,6 +34038,39 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeJob}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeJobCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeJobResponse} [response] DescribeJobResponse
+                 */
+
+                /**
+                 * Calls DescribeJob.
+                 * @function describeJob
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeJobRequest} request DescribeJobRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeJobCallback} callback Node-style callback called with the error, if any, and DescribeJobResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeJob = function describeJob(request, callback) {
+                    return this.rpcCall(describeJob, $root.clutch.k8s.v1.DescribeJobRequest, $root.clutch.k8s.v1.DescribeJobResponse, request, callback);
+                }, "name", { value: "DescribeJob" });
+
+                /**
+                 * Calls DescribeJob.
+                 * @function describeJob
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeJobRequest} request DescribeJobRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeJobResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#listJobs}.
                  * @memberof clutch.k8s.v1.K8sAPI
                  * @typedef ListJobsCallback
@@ -44634,6 +44667,263 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return Job;
+            })();
+
+            v1.DescribeJobRequest = (function() {
+
+                /**
+                 * Properties of a DescribeJobRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeJobRequest
+                 * @property {string|null} [clientset] DescribeJobRequest clientset
+                 * @property {string|null} [cluster] DescribeJobRequest cluster
+                 * @property {string|null} [namespace] DescribeJobRequest namespace
+                 * @property {string|null} [name] DescribeJobRequest name
+                 */
+
+                /**
+                 * Constructs a new DescribeJobRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeJobRequest.
+                 * @implements IDescribeJobRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeJobRequest=} [properties] Properties to set
+                 */
+                function DescribeJobRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeJobRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeJobRequest
+                 * @instance
+                 */
+                DescribeJobRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeJobRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeJobRequest
+                 * @instance
+                 */
+                DescribeJobRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeJobRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DescribeJobRequest
+                 * @instance
+                 */
+                DescribeJobRequest.prototype.namespace = "";
+
+                /**
+                 * DescribeJobRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeJobRequest
+                 * @instance
+                 */
+                DescribeJobRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DescribeJobRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeJobRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeJobRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeJobRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeJobRequest} DescribeJobRequest
+                 */
+                DescribeJobRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeJobRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeJobRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeJobRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeJobRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeJobRequest} message DescribeJobRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeJobRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeJobRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeJobRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeJobRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeJobRequest;
+            })();
+
+            v1.DescribeJobResponse = (function() {
+
+                /**
+                 * Properties of a DescribeJobResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeJobResponse
+                 * @property {clutch.k8s.v1.IJob|null} [job] DescribeJobResponse job
+                 */
+
+                /**
+                 * Constructs a new DescribeJobResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeJobResponse.
+                 * @implements IDescribeJobResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeJobResponse=} [properties] Properties to set
+                 */
+                function DescribeJobResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeJobResponse job.
+                 * @member {clutch.k8s.v1.IJob|null|undefined} job
+                 * @memberof clutch.k8s.v1.DescribeJobResponse
+                 * @instance
+                 */
+                DescribeJobResponse.prototype.job = null;
+
+                /**
+                 * Verifies a DescribeJobResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeJobResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeJobResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.job != null && message.hasOwnProperty("job")) {
+                        let error = $root.clutch.k8s.v1.Job.verify(message.job);
+                        if (error)
+                            return "job." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeJobResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeJobResponse} DescribeJobResponse
+                 */
+                DescribeJobResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeJobResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeJobResponse();
+                    if (object.job != null) {
+                        if (typeof object.job !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeJobResponse.job: object expected");
+                        message.job = $root.clutch.k8s.v1.Job.fromObject(object.job);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeJobResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeJobResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeJobResponse} message DescribeJobResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeJobResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.job = null;
+                    if (message.job != null && message.hasOwnProperty("job"))
+                        object.job = $root.clutch.k8s.v1.Job.toObject(message.job, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeJobResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeJobResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeJobResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeJobResponse;
             })();
 
             v1.ListJobsRequest = (function() {

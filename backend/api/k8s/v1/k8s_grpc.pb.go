@@ -45,6 +45,7 @@ type K8SAPIClient interface {
 	ListConfigMaps(ctx context.Context, in *ListConfigMapsRequest, opts ...grpc.CallOption) (*ListConfigMapsResponse, error)
 	DescribeConfigMap(ctx context.Context, in *DescribeConfigMapRequest, opts ...grpc.CallOption) (*DescribeConfigMapResponse, error)
 	DeleteConfigMap(ctx context.Context, in *DeleteConfigMapRequest, opts ...grpc.CallOption) (*DeleteConfigMapResponse, error)
+	DescribeJob(ctx context.Context, in *DescribeJobRequest, opts ...grpc.CallOption) (*DescribeJobResponse, error)
 	ListJobs(ctx context.Context, in *ListJobsRequest, opts ...grpc.CallOption) (*ListJobsResponse, error)
 	DeleteJob(ctx context.Context, in *DeleteJobRequest, opts ...grpc.CallOption) (*DeleteJobResponse, error)
 	CreateJob(ctx context.Context, in *CreateJobRequest, opts ...grpc.CallOption) (*CreateJobResponse, error)
@@ -269,6 +270,15 @@ func (c *k8SAPIClient) DeleteConfigMap(ctx context.Context, in *DeleteConfigMapR
 	return out, nil
 }
 
+func (c *k8SAPIClient) DescribeJob(ctx context.Context, in *DescribeJobRequest, opts ...grpc.CallOption) (*DescribeJobResponse, error) {
+	out := new(DescribeJobResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DescribeJob", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *k8SAPIClient) ListJobs(ctx context.Context, in *ListJobsRequest, opts ...grpc.CallOption) (*ListJobsResponse, error) {
 	out := new(ListJobsResponse)
 	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/ListJobs", in, out, opts...)
@@ -359,6 +369,7 @@ type K8SAPIServer interface {
 	ListConfigMaps(context.Context, *ListConfigMapsRequest) (*ListConfigMapsResponse, error)
 	DescribeConfigMap(context.Context, *DescribeConfigMapRequest) (*DescribeConfigMapResponse, error)
 	DeleteConfigMap(context.Context, *DeleteConfigMapRequest) (*DeleteConfigMapResponse, error)
+	DescribeJob(context.Context, *DescribeJobRequest) (*DescribeJobResponse, error)
 	ListJobs(context.Context, *ListJobsRequest) (*ListJobsResponse, error)
 	DeleteJob(context.Context, *DeleteJobRequest) (*DeleteJobResponse, error)
 	CreateJob(context.Context, *CreateJobRequest) (*CreateJobResponse, error)
@@ -440,6 +451,9 @@ func (UnimplementedK8SAPIServer) DescribeConfigMap(context.Context, *DescribeCon
 }
 func (UnimplementedK8SAPIServer) DeleteConfigMap(context.Context, *DeleteConfigMapRequest) (*DeleteConfigMapResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteConfigMap not implemented")
+}
+func (UnimplementedK8SAPIServer) DescribeJob(context.Context, *DescribeJobRequest) (*DescribeJobResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DescribeJob not implemented")
 }
 func (UnimplementedK8SAPIServer) ListJobs(context.Context, *ListJobsRequest) (*ListJobsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListJobs not implemented")
@@ -888,6 +902,24 @@ func _K8SAPI_DeleteConfigMap_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_DescribeJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeJobRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DescribeJob(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DescribeJob",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DescribeJob(ctx, req.(*DescribeJobRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _K8SAPI_ListJobs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListJobsRequest)
 	if err := dec(in); err != nil {
@@ -1112,6 +1144,10 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteConfigMap",
 			Handler:    _K8SAPI_DeleteConfigMap_Handler,
+		},
+		{
+			MethodName: "DescribeJob",
+			Handler:    _K8SAPI_DescribeJob_Handler,
 		},
 		{
 			MethodName: "ListJobs",
