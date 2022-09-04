@@ -25310,6 +25310,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface IConfig
                          * @property {string|null} [host] Config host
                          * @property {string|null} [token] Config token
+                         * @property {number|Long|null} [timeoutMs] Config timeoutMs
                          */
 
                         /**
@@ -25344,6 +25345,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.token = "";
 
                         /**
+                         * Config timeoutMs.
+                         * @member {number|Long} timeoutMs
+                         * @memberof clutch.config.service.sourcegraph.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.timeoutMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
                          * Verifies a Config message.
                          * @function verify
                          * @memberof clutch.config.service.sourcegraph.v1.Config
@@ -25360,6 +25369,9 @@ export const clutch = $root.clutch = (() => {
                             if (message.token != null && message.hasOwnProperty("token"))
                                 if (!$util.isString(message.token))
                                     return "token: string expected";
+                            if (message.timeoutMs != null && message.hasOwnProperty("timeoutMs"))
+                                if (!$util.isInteger(message.timeoutMs) && !(message.timeoutMs && $util.isInteger(message.timeoutMs.low) && $util.isInteger(message.timeoutMs.high)))
+                                    return "timeoutMs: integer|Long expected";
                             return null;
                         };
 
@@ -25379,6 +25391,15 @@ export const clutch = $root.clutch = (() => {
                                 message.host = String(object.host);
                             if (object.token != null)
                                 message.token = String(object.token);
+                            if (object.timeoutMs != null)
+                                if ($util.Long)
+                                    (message.timeoutMs = $util.Long.fromValue(object.timeoutMs)).unsigned = false;
+                                else if (typeof object.timeoutMs === "string")
+                                    message.timeoutMs = parseInt(object.timeoutMs, 10);
+                                else if (typeof object.timeoutMs === "number")
+                                    message.timeoutMs = object.timeoutMs;
+                                else if (typeof object.timeoutMs === "object")
+                                    message.timeoutMs = new $util.LongBits(object.timeoutMs.low >>> 0, object.timeoutMs.high >>> 0).toNumber();
                             return message;
                         };
 
@@ -25398,11 +25419,21 @@ export const clutch = $root.clutch = (() => {
                             if (options.defaults) {
                                 object.host = "";
                                 object.token = "";
+                                if ($util.Long) {
+                                    let long = new $util.Long(0, 0, false);
+                                    object.timeoutMs = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.timeoutMs = options.longs === String ? "0" : 0;
                             }
                             if (message.host != null && message.hasOwnProperty("host"))
                                 object.host = message.host;
                             if (message.token != null && message.hasOwnProperty("token"))
                                 object.token = message.token;
+                            if (message.timeoutMs != null && message.hasOwnProperty("timeoutMs"))
+                                if (typeof message.timeoutMs === "number")
+                                    object.timeoutMs = options.longs === String ? String(message.timeoutMs) : message.timeoutMs;
+                                else
+                                    object.timeoutMs = options.longs === String ? $util.Long.prototype.toString.call(message.timeoutMs) : options.longs === Number ? new $util.LongBits(message.timeoutMs.low >>> 0, message.timeoutMs.high >>> 0).toNumber() : message.timeoutMs;
                             return object;
                         };
 

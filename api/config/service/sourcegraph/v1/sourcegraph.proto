@@ -9,4 +9,5 @@ import "validate/validate.proto";
 message Config {
   string host = 1 [ (validate.rules).string.min_len = 1 ];
   string token = 2 [ (validate.rules).string.min_len = 1 ];
+  int64 timeout_ms = 3;
 }
