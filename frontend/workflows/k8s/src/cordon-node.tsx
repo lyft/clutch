@@ -6,7 +6,6 @@ import {
   client,
   Confirmation,
   MetadataTable,
-  NoteConfig,
   Resolver,
   Switch,
   useWizardContext,
@@ -29,9 +28,7 @@ const NodeIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) =
     onSubmit();
   };
 
-  return (
-    <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={notes} />
-  );
+  return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={notes} />;
 };
 
 const NodeDetails: React.FC<WizardChild> = () => {
