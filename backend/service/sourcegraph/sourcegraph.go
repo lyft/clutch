@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/shurcooL/graphql"
@@ -69,6 +70,10 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, err
 		AccessToken: sgConfig.Token,
 		TokenType:   "token",
 	}))
+
+	if sgConfig.TimeoutMs != 0 {
+		oauthClient.Timeout = time.Duration(sgConfig.TimeoutMs) * time.Millisecond
+	}
 
 	gqlClient := graphql.NewClient(sgURL.String(), oauthClient)
 

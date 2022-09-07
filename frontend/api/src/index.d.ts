@@ -10404,6 +10404,9 @@ export namespace clutch {
 
                         /** Config token */
                         token?: (string|null);
+
+                        /** Config timeoutMs */
+                        timeoutMs?: (number|Long|null);
                     }
 
                     /** Represents a Config. */
@@ -10420,6 +10423,9 @@ export namespace clutch {
 
                         /** Config token. */
                         public token: string;
+
+                        /** Config timeoutMs. */
+                        public timeoutMs: (number|Long);
 
                         /**
                          * Verifies a Config message.

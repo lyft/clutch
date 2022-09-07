@@ -78,6 +78,8 @@ func (m *Config) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for TimeoutMs
+
 	if len(errors) > 0 {
 		return ConfigMultiError(errors)
 	}
