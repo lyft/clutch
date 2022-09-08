@@ -61,10 +61,10 @@ const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
 };
 
 // This function is here for downloading the envoy config dump.
-const download = data => {
+const download = (data, host) => {
   const output = new Blob([JSON.stringify(data, null, "\t")]);
   const timestamp = Date.now();
-  FileSaver.saveAs(output, `envoy_config_dump_${timestamp}.json`);
+  FileSaver.saveAs(output, `envoy_config_dump_${host}_${timestamp}.json`);
 };
 
 const TriageDetails: React.FC<WizardChild> = () => {
@@ -113,7 +113,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
       <Button
         text="Download Config Dump"
         onClick={() => {
-          download(configDump?.value);
+          download(configDump?.value, remoteData.value.address?.host);
         }}
       />
       <Tabs>
