@@ -59,10 +59,20 @@ const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
   );
 };
 
+const downloadFile = (filename: string, blob: Blob) => {
+  const element = document.createElement("a");
+  element.href = URL.createObjectURL(blob);
+  element.setAttribute("download", filename);
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+};
+
 const TriageDetails: React.FC<WizardChild> = () => {
   const remoteData = useDataLayout("remoteData");
   const metadata = remoteData.value.nodeMetadata as IClutch.envoytriage.v1.NodeMetadata;
-  const { clusters, listeners, runtime, stats, serverInfo } =
+  const { clusters, configDump, listeners, runtime, stats, serverInfo } =
     (remoteData.value?.output as IClutch.envoytriage.v1.Result.Output) || {};
 
   const failingClusterCount = clusters?.clusterStatuses.filter(
@@ -88,6 +98,14 @@ const TriageDetails: React.FC<WizardChild> = () => {
     { name: "Runtime Keys", value: runtime?.entries?.length || 0 },
     { name: "Stats", value: stats?.stats?.length || 0 },
   ];
+
+  const timestamp = Date.now();
+  const fileName = `envoy_config_dump_${timestamp}.json`;
+  const tabifiedJson = JSON.stringify(configDump?.value, null, "\t");
+  const outFile = new Blob([tabifiedJson], {
+    type: "application/json",
+  });
+
   return (
     <WizardStep error={remoteData.error} isLoading={remoteData.isLoading}>
       <MetadataTable
@@ -101,6 +119,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
           { name: "Service Cluster", value: metadata?.serviceCluster },
         ]}
       />
+      <Button text="Download Config Dump" onClick={downloadFile(fileName, outFile)} />
       <Tabs>
         <Tab label="Dashboard">
           <Dashboard
