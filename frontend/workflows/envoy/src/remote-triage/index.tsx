@@ -13,6 +13,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import FileSaver from "file-saver";
 
 import type { TriageChild, WorkflowProps } from "../index";
 
@@ -59,14 +60,10 @@ const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
   );
 };
 
-const downloadFile = (filename: string, blob: Blob) => {
-  const element = document.createElement("a");
-  element.href = URL.createObjectURL(blob);
-  element.setAttribute("download", filename);
-  element.style.display = "none";
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
+const download = data => {
+  const logFile = new Blob([JSON.stringify(data, null, "\t")]);
+  const timestamp = Date.now();
+  FileSaver.saveAs(logFile, `envoy_config_dump_${timestamp}.json`);
 };
 
 const TriageDetails: React.FC<WizardChild> = () => {
@@ -99,13 +96,6 @@ const TriageDetails: React.FC<WizardChild> = () => {
     { name: "Stats", value: stats?.stats?.length || 0 },
   ];
 
-  const timestamp = Date.now();
-  const fileName = `envoy_config_dump_${timestamp}.json`;
-  const tabifiedJson = JSON.stringify(configDump?.value, null, "\t");
-  const outFile = new Blob([tabifiedJson], {
-    type: "application/json",
-  });
-
   return (
     <WizardStep error={remoteData.error} isLoading={remoteData.isLoading}>
       <MetadataTable
@@ -122,7 +112,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
       <Button
         text="Download Config Dump"
         onClick={() => {
-          downloadFile(fileName, outFile);
+          download(configDump?.value);
         }}
       />
       <Tabs>
