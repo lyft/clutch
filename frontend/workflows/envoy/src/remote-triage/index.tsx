@@ -119,7 +119,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
           { name: "Service Cluster", value: metadata?.serviceCluster },
         ]}
       />
-      <Button text="Download Config Dump" onClick={downloadFile(fileName, outFile)} />
+      <Button text="Download Config Dump" onClick={() => {downloadFile(fileName, outFile)}} />
       <Tabs>
         <Tab label="Dashboard">
           <Dashboard
