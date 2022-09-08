@@ -60,6 +60,7 @@ const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
   );
 };
 
+// This function is here for downloading the envoy config dump.
 const download = data => {
   const output = new Blob([JSON.stringify(data, null, "\t")]);
   const timestamp = Date.now();
