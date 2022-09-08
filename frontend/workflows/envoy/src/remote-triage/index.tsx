@@ -61,9 +61,9 @@ const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
 };
 
 const download = data => {
-  const logFile = new Blob([JSON.stringify(data, null, "\t")]);
+  const output = new Blob([JSON.stringify(data, null, "\t")]);
   const timestamp = Date.now();
-  FileSaver.saveAs(logFile, `envoy_config_dump_${timestamp}.json`);
+  FileSaver.saveAs(output, `envoy_config_dump_${timestamp}.json`);
 };
 
 const TriageDetails: React.FC<WizardChild> = () => {
