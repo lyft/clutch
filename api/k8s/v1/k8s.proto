@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
+import "google/rpc/status.proto";
 import "validate/validate.proto";
 
 import "api/v1/annotations.proto";
@@ -423,6 +424,7 @@ message ListPodsResponse {
   option (clutch.api.v1.reference).fields = "pods";
 
   repeated Pod pods = 1 [ (clutch.api.v1.log) = false ];
+  repeated google.rpc.Status partial_failures = 2;
 }
 
 message DeletePodRequest {

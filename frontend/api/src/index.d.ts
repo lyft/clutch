@@ -15159,6 +15159,9 @@ export namespace clutch {
 
                 /** ListPodsResponse pods */
                 pods?: (clutch.k8s.v1.IPod[]|null);
+
+                /** ListPodsResponse partialFailures */
+                partialFailures?: (google.rpc.IStatus[]|null);
             }
 
             /** Represents a ListPodsResponse. */
@@ -15172,6 +15175,9 @@ export namespace clutch {
 
                 /** ListPodsResponse pods. */
                 public pods: clutch.k8s.v1.IPod[];
+
+                /** ListPodsResponse partialFailures. */
+                public partialFailures: google.rpc.IStatus[];
 
                 /**
                  * Verifies a ListPodsResponse message.
