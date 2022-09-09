@@ -399,12 +399,14 @@ The frontend consists of a few pieces that work together to display your workflo
 To simplify the creation of workflows you can run a scaffolding tool. It will prompt you for some information and produce a new workflow with some templates.
 
 To get started run the generator within Clutch and provide the details about our Amiibo workflow.
-```
+
+```bash
 > make scaffold-workflow
 *** Is the destination okay:
 > clutch/frontend/workflows
 Is this okay? [Y/n]: n
 Enter the destination folder [clutch/frontend/workflows]: {path_to_gateway}/frontend/workflows
+Is this a wizard workflow? [Y/n]: Y
 Enter the name of this workflow [Hello World]: Amiibo
 Enter a description of the workflow [Greet the world]: Lookup all Amiibo by name
 Enter the developer's name [dschaller]: Lyft
@@ -423,7 +425,7 @@ Let's update the component.
 
 Define a functional component for the amiibo lookup by adding the highlighted lines.
 
-```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
+```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-wizard.tsx"
 //highlight-next-line
 import type { ChangeEvent } from "react";
 import React from "react";
@@ -533,7 +535,7 @@ This will present a text field which updates a data layout called `userInput` on
 
 Now let's build a way to display the details panel.
 
-```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
+```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-wizard.tsx"
 import type { ChangeEvent } from "react";
 import React from "react";
 // highlight-next-line
@@ -652,7 +654,7 @@ Once the `amiiboData` data layout has been hydrated a table will be displayed wi
 
 Let's tie these two components together.
 
-```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
+```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-wizard.tsx"
 import type { ChangeEvent } from "react";
 import React from "react";
 import {
