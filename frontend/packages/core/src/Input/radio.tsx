@@ -4,7 +4,7 @@ import { Radio as MuiRadio } from "@mui/material";
 
 import styled from "../styled";
 
-const StyledRadio = styled(MuiRadio)<{ $checked: RadioProps["selected"] }>(
+const StyledRadio = styled(MuiRadio)<{ checked: RadioProps["selected"] }>(
   {
     ".MuiIconButton-label": {
       height: "24px",
@@ -15,7 +15,7 @@ const StyledRadio = styled(MuiRadio)<{ $checked: RadioProps["selected"] }>(
   },
   props => ({
     "&:hover > .MuiIconButton-label > div": {
-      border: props.$checked ? "1px solid #283CD2" : "1px solid #2E45DC",
+      border: props.checked ? "1px solid #283CD2" : "1px solid #fff",
     },
   })
 );
@@ -66,7 +66,7 @@ const Radio: React.FC<RadioProps> = ({
 }) => {
   return (
     <StyledRadio
-      $checked={selected}
+      checked={selected}
       checkedIcon={
         <SelectedIcon>
           <SelectedCenter />
