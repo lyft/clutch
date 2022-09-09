@@ -1,6 +1,6 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
-import HelloWorld from "./{{ .HelloWorldModule }}";
+import HelloWorld from "./hello-world";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 

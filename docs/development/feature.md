@@ -425,7 +425,7 @@ Let's update the component.
 
 Define a functional component for the amiibo lookup by adding the highlighted lines.
 
-```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-wizard.tsx"
+```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
 //highlight-next-line
 import type { ChangeEvent } from "react";
 import React from "react";
@@ -535,7 +535,7 @@ This will present a text field which updates a data layout called `userInput` on
 
 Now let's build a way to display the details panel.
 
-```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-wizard.tsx"
+```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
 import type { ChangeEvent } from "react";
 import React from "react";
 // highlight-next-line
@@ -654,7 +654,7 @@ Once the `amiiboData` data layout has been hydrated a table will be displayed wi
 
 Let's tie these two components together.
 
-```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-wizard.tsx"
+```tsx title="{path_to_gateway}/frontend/workflows/amiibo/src/hello-world.tsx"
 import type { ChangeEvent } from "react";
 import React from "react";
 import {
