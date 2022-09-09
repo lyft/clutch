@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"os/user"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"text/template"
 )
@@ -27,13 +28,14 @@ var sanitizeProto3Identifier = strings.NewReplacer(
 )
 
 type workflowTemplateValues struct {
-	Name           string
-	PackageName    string
-	Description    string
-	DeveloperName  string
-	DeveloperEmail string
-	URLRoot        string
-	URLPath        string
+	Name             string
+	PackageName      string
+	Description      string
+	DeveloperName    string
+	DeveloperEmail   string
+	URLRoot          string
+	URLPath          string
+	HelloWorldModule string
 }
 
 type gatewayTemplateValues struct {
@@ -110,7 +112,16 @@ func getFrontendPluginTemplateValues() (*workflowTemplateValues, string) {
 	if !strings.HasPrefix(strings.ToLower(okay), "y") {
 		dest = promptOrDefault("Enter the destination folder", dest)
 	}
+
 	data := &workflowTemplateValues{}
+
+	data.HelloWorldModule = "hello-wizard"
+
+	wizard := promptOrDefault("Is this a wizard workflow?", "Y/n")
+	if !strings.HasPrefix(strings.ToLower(wizard), "y") {
+		data.HelloWorldModule = "hello-world"
+	}
+
 	data.Name = strings.Title(promptOrDefault("Enter the name of this workflow", "Hello World"))
 	description := promptOrDefault("Enter a description of the workflow", "Greet the world")
 	data.Description = strings.ToUpper(description[:1]) + description[1:]
@@ -295,6 +306,8 @@ func main() {
 	defer os.RemoveAll(tmpout)
 	log.Println("Using tmpdir", tmpout)
 
+	helloWorldModule := string(reflect.Indirect(reflect.ValueOf(data)).FieldByName("HelloWorldModule").String())
+
 	// Walk files and template them.
 	err = filepath.Walk(templateRoot, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -311,6 +324,14 @@ func main() {
 			}
 			return nil
 		}
+
+		if relpath == "src/hello-wizard.tsx" && helloWorldModule == "hello-world" {
+			return nil
+		}
+		if relpath == "src/hello-world.tsx" && helloWorldModule == "hello-wizard" {
+			return nil
+		}
+
 		log.Println(relpath)
 
 		t, err := template.ParseFiles(path)
