@@ -15,7 +15,7 @@ const StyledRadio = styled(MuiRadio)<{ checked: RadioProps["selected"] }>(
   },
   props => ({
     "&:hover > .MuiIconButton-label > div": {
-      border: props.checked ? "1px solid #283CD2" : "1px solid #fff",
+      border: props.checked ? "1px solid #283CD2" : "1px solid #2E45DC",
     },
   })
 );
