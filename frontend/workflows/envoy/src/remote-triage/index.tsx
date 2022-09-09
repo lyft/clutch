@@ -13,6 +13,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import FileSaver from "file-saver";
 
 import type { TriageChild, WorkflowProps } from "../index";
 
@@ -59,10 +60,17 @@ const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
   );
 };
 
+// This function is here for downloading the envoy config dump.
+const download = (data, host) => {
+  const output = new Blob([JSON.stringify(data, null, "\t")]);
+  const timestamp = Date.now();
+  FileSaver.saveAs(output, `envoy_config_dump_${host}_${timestamp}.json`);
+};
+
 const TriageDetails: React.FC<WizardChild> = () => {
   const remoteData = useDataLayout("remoteData");
   const metadata = remoteData.value.nodeMetadata as IClutch.envoytriage.v1.NodeMetadata;
-  const { clusters, listeners, runtime, stats, serverInfo } =
+  const { clusters, configDump, listeners, runtime, stats, serverInfo } =
     (remoteData.value?.output as IClutch.envoytriage.v1.Result.Output) || {};
 
   const failingClusterCount = clusters?.clusterStatuses.filter(
@@ -88,6 +96,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
     { name: "Runtime Keys", value: runtime?.entries?.length || 0 },
     { name: "Stats", value: stats?.stats?.length || 0 },
   ];
+
   return (
     <WizardStep error={remoteData.error} isLoading={remoteData.isLoading}>
       <MetadataTable
@@ -100,6 +109,12 @@ const TriageDetails: React.FC<WizardChild> = () => {
           { name: "Service Zone", value: metadata?.serviceZone },
           { name: "Service Cluster", value: metadata?.serviceCluster },
         ]}
+      />
+      <Button
+        text="Download Config Dump"
+        onClick={() => {
+          download(configDump?.value, remoteData.value.address?.host);
+        }}
       />
       <Tabs>
         <Tab label="Dashboard">
