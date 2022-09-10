@@ -174,12 +174,19 @@ const IconButton = styled(MuiIconButton)({
 interface AutocompleteResultProps {
   id?: string;
   label: string;
+  stateUpdater?: (string) => void;
+  onReturn?: () => void;
 }
 
-const AutocompleteResult: React.FC<AutocompleteResultProps> = ({ id, label }) => (
+const AutocompleteResult: React.FC<AutocompleteResultProps> = ({ id, label, stateUpdater, onReturn }) => (
   <ResultGrid container alignItems="center">
     <Grid item xs>
-      <ResultLabel>{label || id}</ResultLabel>
+      <ResultLabel onClick={() => {
+        stateUpdater(id);
+        onReturn();
+      }}>
+        {label || id}
+        </ResultLabel>
     </Grid>
   </ResultGrid>
 );
@@ -206,7 +213,8 @@ export interface TextFieldProps
       | "value"
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
-  onReturn?: () => void;
+//  onReturn?: (v: string) => void;
+      onReturn?: () => void;
   autocompleteCallback?: (v: string) => Promise<{ results: { id?: string; label: string }[] }>;
   formRegistration?: UseFormRegister<FieldValues>;
 }
@@ -231,6 +239,7 @@ const TextFieldRef = (
   }: TextFieldProps,
   ref
 ) => {
+  const [currentTextValue, setCurrentTextValue] = React.useState<string>("");
   const formValidation =
     formRegistration !== undefined ? formRegistration(name, { required }) : undefined;
   const changeCallback = onChange !== undefined ? onChange : e => {};
@@ -238,6 +247,7 @@ const TextFieldRef = (
     e: React.KeyboardEvent<HTMLDivElement | HTMLTextAreaElement | HTMLInputElement>
   ) => {
     if (formValidation !== undefined) {
+      console.log("inside formValidation")
       formValidation.onChange(e);
     }
     changeCallback(e as React.ChangeEvent<any>);
@@ -328,7 +338,8 @@ const TextFieldRef = (
         onInputChange={(__, v) => autoCompleteDebounce(v)}
         renderOption={(otherProps, option: AutocompleteResultProps) => (
           <li className="MuiAutocomplete-option" {...otherProps}>
-            <AutocompleteResult key={option.id} id={option.id} label={option.label} />
+            {/*<AutocompleteResult key={option.id} id={option.id} label={option.label} func={onReturn} />*/}
+            <AutocompleteResult key={option.id} id={option.id} label={option.label} stateUpdater={setCurrentTextValue} onReturn={onReturn}/>
           </li>
         )}
         onSelectCapture={e => {
@@ -338,7 +349,7 @@ const TextFieldRef = (
           changeCallback(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
         }}
         defaultValue={{ id: defaultVal, label: defaultVal }}
-        value={value}
+        value={currentTextValue}
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
