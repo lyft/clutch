@@ -169,6 +169,11 @@ const Drawer: React.FC = () => {
     setActiveWorkflow(workflowByRoute(workflows, location.pathname));
   }, [location]);
 
+  // Will hide the drawer if there are no visible workflows
+  if (!workflows.length) {
+    return null;
+  }
+
   return (
     <DrawerPanel data-qa="drawer" variant="permanent">
       {sortedGroupings(workflows).map(grouping => {
