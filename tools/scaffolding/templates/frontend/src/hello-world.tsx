@@ -1,13 +1,13 @@
 import React from "react";
 
-{{- if .WizardTemplate}}
+{{- if .IsWizardTemplate}}
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 {{- end}}
 
 import type { WorkflowProps } from ".";
 
-{{- if .WizardTemplate}}
+{{- if .IsWizardTemplate}}
 
 const WelcomeStep: React.FC<WizardChild> = () => (
   <WizardStep isLoading={false} error={undefined}>
