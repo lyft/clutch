@@ -27,13 +27,14 @@ var sanitizeProto3Identifier = strings.NewReplacer(
 )
 
 type workflowTemplateValues struct {
-	Name           string
-	PackageName    string
-	Description    string
-	DeveloperName  string
-	DeveloperEmail string
-	URLRoot        string
-	URLPath        string
+	Name             string
+	PackageName      string
+	Description      string
+	DeveloperName    string
+	DeveloperEmail   string
+	URLRoot          string
+	URLPath          string
+	IsWizardTemplate bool
 }
 
 type gatewayTemplateValues struct {
@@ -110,7 +111,16 @@ func getFrontendPluginTemplateValues() (*workflowTemplateValues, string) {
 	if !strings.HasPrefix(strings.ToLower(okay), "y") {
 		dest = promptOrDefault("Enter the destination folder", dest)
 	}
+
 	data := &workflowTemplateValues{}
+
+	data.IsWizardTemplate = true
+
+	wizard := promptOrDefault("Is this a wizard workflow?", "Y/n")
+	if !strings.HasPrefix(strings.ToLower(wizard), "y") {
+		data.IsWizardTemplate = false
+	}
+
 	data.Name = strings.Title(promptOrDefault("Enter the name of this workflow", "Hello World"))
 	description := promptOrDefault("Enter a description of the workflow", "Greet the world")
 	data.Description = strings.ToUpper(description[:1]) + description[1:]
@@ -311,6 +321,7 @@ func main() {
 			}
 			return nil
 		}
+
 		log.Println(relpath)
 
 		t, err := template.ParseFiles(path)
