@@ -61,6 +61,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [workflowSessionStore, setWorkflowSessionStore] = React.useState<HydratedData>();
   const [hydrateState, setHydrateState] = React.useState<HydrateState | null>(null);
   const [hydrateError, setHydrateError] = React.useState<ClutchError | null>(null);
+  const [hasCustomLanding, setHasCustomLanding] = React.useState<boolean>(false);
 
   /** Used to control a race condition from displaying the workflow and the state being updated with the hydrated data */
   const [shortLinkLoading, setShortLinkLoading] = React.useState<boolean>(false);
@@ -88,6 +89,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
      * by manually providing the full path in the URI.
      */
     const pw = _.cloneDeep(workflows).filter(workflow => {
+      if (workflow.path === "") {
+        setHasCustomLanding(true);
+      }
       const publicRoutes = workflow.routes.filter(route => {
         return !(route?.hideNav !== undefined ? route.hideNav : false);
       });
@@ -125,7 +129,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
               )}
               <Routes>
                 <Route path="/" element={<AppLayout isLoading={isLoading} />}>
-                  <Route key="landing" path="" element={<Landing />} />
+                  {!hasCustomLanding && <Route key="landing" path="" element={<Landing />} />}
                   {workflows.map((workflow: Workflow) => {
                     const workflowPath = workflow.path.replace(/^\/+/, "").replace(/\/+$/, "");
                     const workflowKey = workflow.path.split("/")[0];
