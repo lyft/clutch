@@ -89,6 +89,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
      * by manually providing the full path in the URI.
      */
     const pw = _.cloneDeep(workflows).filter(workflow => {
+      /** Used to control a custom landing page */
       if (workflow.path === "") {
         setHasCustomLanding(true);
       }

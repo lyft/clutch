@@ -30,6 +30,7 @@ interface BaseWorkflowConfiguration {
   group: string;
   /**
    * The path (subordinate to the group) where the workflow will exist.
+   * (optionally) use "" to override the landing page
    */
   path: string;
   /**
