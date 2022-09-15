@@ -30,6 +30,7 @@ interface BaseWorkflowConfiguration {
   group: string;
   /**
    * The path (subordinate to the group) where the workflow will exist.
+   * (optionally) use "" to override the landing page, will need to also update the route path
    */
   path: string;
   /**
@@ -69,6 +70,7 @@ export interface Route {
   component: React.FC<any>;
   description: string;
   displayName?: string;
+  /** (optionally) use "" to override the landing page */
   path: string;
   /** Properties required by the Component that are set only via the config. */
   requiredConfigProps?: string[];
