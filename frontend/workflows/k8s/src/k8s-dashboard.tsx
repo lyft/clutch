@@ -63,7 +63,7 @@ const defaultRequestData = inputData => {
 };
 
 const KubeDashboard: React.FC<WorkflowProps> = () => {
-  const [errors, setErrors] = React.useState<ClutchError[] | undefined>(undefined);
+  const [error, setError] = React.useState<ClutchError | undefined>(undefined);
 
   const dataLayout = {
     inputData: {},
@@ -78,26 +78,14 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
             },
           } as IClutch.k8s.v1.IListPodsRequest)
           .then(response => {
-            const { pods, partialFailures } = response?.data as IClutch.k8s.v1.ListPodsResponse;
-            setErrors(
-              partialFailures.map(failure => {
-                const { code, message, details } = failure;
-                return {
-                  name: message,
-                  status: { code, text: message },
-                  message,
-                  details,
-                };
-              })
-            );
-            return pods;
+            return response?.data;
           })
           .catch((err: ClutchError) => {
-            setErrors(existingErrors => {
-              if (existingErrors === undefined) {
-                return [err];
+            setError(existingError => {
+              if (existingError === undefined) {
+                return err;
               }
-              return existingErrors;
+              return existingError;
             });
           });
       },
@@ -116,11 +104,11 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
             return response?.data;
           })
           .catch((err: ClutchError) => {
-            setErrors(existingErrors => {
-              if (existingErrors === undefined) {
-                return [err];
+            setError(existingError => {
+              if (existingError === undefined) {
+                return err;
               }
-              return existingErrors;
+              return existingError;
             });
           });
       },
@@ -139,11 +127,11 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
             return response?.data;
           })
           .catch((err: ClutchError) => {
-            setErrors(existingErrors => {
-              if (existingErrors === undefined) {
-                return [err];
+            setError(existingError => {
+              if (existingError === undefined) {
+                return err;
               }
-              return existingErrors;
+              return existingError;
             });
           });
       },
@@ -162,11 +150,11 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
             return response?.data;
           })
           .catch((err: ClutchError) => {
-            setErrors(existingErrors => {
-              if (existingErrors === undefined) {
-                return [err];
+            setError(existingError => {
+              if (existingError === undefined) {
+                return err;
               }
-              return existingErrors;
+              return existingError;
             });
           });
       },
@@ -180,7 +168,7 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
     dataLayoutManager.hydrate("deploymentListData");
     dataLayoutManager.hydrate("cronListData");
     dataLayoutManager.hydrate("statefulSetListData");
-    setErrors(undefined);
+    setError(undefined);
   };
 
   const state = dataLayoutManager.state as any;
@@ -192,8 +180,9 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
         <K8sDashHeader />
         <K8sDashSearch onSubmit={(namespace, clientset) => handleSubmit(namespace, clientset)} />
         <Content>
-          {errors && errors.map(error => <Error subject={error} />)}
-          {!hasData ? (
+          {error !== undefined ? (
+            <Error subject={error} />
+          ) : !hasData ? (
             <Placeholder />
           ) : (
             <Paper>
