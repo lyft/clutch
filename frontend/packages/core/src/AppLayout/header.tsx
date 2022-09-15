@@ -14,6 +14,11 @@ import { UserInformation } from "./user";
 
 export const APP_BAR_HEIGHT = "64px";
 
+export interface HeaderProps {
+  title?: string;
+  logo?: React.ReactNode;
+}
+
 const AppBar = styled(MuiAppBar)({
   minWidth: "fit-content",
   background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
@@ -32,17 +37,15 @@ const Title = styled(Typography)({
   color: "rgba(255, 255, 255, 0.87)",
 });
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({ title = "clutch", logo = <Logo /> }) => {
   const showNotifications = false;
 
   return (
     <>
       <AppBar position="fixed" elevation={0}>
         <Toolbar>
-          <Link to="/">
-            <Logo />
-          </Link>
-          <Title>clutch</Title>
+          <Link to="/">{logo}</Link>
+          <Title>{title}</Title>
           <Grid container alignItems="center" justifyContent="flex-end">
             <Box>
               <SearchField />
