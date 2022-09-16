@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
+import type { AppConfiguration } from "../AppProvider";
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
 import { NPSHeader } from "../NPS";
 
@@ -11,7 +12,6 @@ import Notifications from "./notifications";
 import SearchField from "./search";
 import ShortLinker from "./shortLinker";
 import { UserInformation } from "./user";
-import type { AppConfiguration } from "../AppProvider";
 
 export const APP_BAR_HEIGHT = "64px";
 
