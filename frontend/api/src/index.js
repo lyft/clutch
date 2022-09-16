@@ -36288,6 +36288,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.k8s.v1
                  * @interface IListPodsResponse
                  * @property {Array.<clutch.k8s.v1.IPod>|null} [pods] ListPodsResponse pods
+                 * @property {Array.<google.rpc.IStatus>|null} [partialFailures] ListPodsResponse partialFailures
                  */
 
                 /**
@@ -36300,6 +36301,7 @@ export const clutch = $root.clutch = (() => {
                  */
                 function ListPodsResponse(properties) {
                     this.pods = [];
+                    this.partialFailures = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -36313,6 +36315,14 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 ListPodsResponse.prototype.pods = $util.emptyArray;
+
+                /**
+                 * ListPodsResponse partialFailures.
+                 * @member {Array.<google.rpc.IStatus>} partialFailures
+                 * @memberof clutch.k8s.v1.ListPodsResponse
+                 * @instance
+                 */
+                ListPodsResponse.prototype.partialFailures = $util.emptyArray;
 
                 /**
                  * Verifies a ListPodsResponse message.
@@ -36332,6 +36342,15 @@ export const clutch = $root.clutch = (() => {
                             let error = $root.clutch.k8s.v1.Pod.verify(message.pods[i]);
                             if (error)
                                 return "pods." + error;
+                        }
+                    }
+                    if (message.partialFailures != null && message.hasOwnProperty("partialFailures")) {
+                        if (!Array.isArray(message.partialFailures))
+                            return "partialFailures: array expected";
+                        for (let i = 0; i < message.partialFailures.length; ++i) {
+                            let error = $root.google.rpc.Status.verify(message.partialFailures[i]);
+                            if (error)
+                                return "partialFailures." + error;
                         }
                     }
                     return null;
@@ -36359,6 +36378,16 @@ export const clutch = $root.clutch = (() => {
                             message.pods[i] = $root.clutch.k8s.v1.Pod.fromObject(object.pods[i]);
                         }
                     }
+                    if (object.partialFailures) {
+                        if (!Array.isArray(object.partialFailures))
+                            throw TypeError(".clutch.k8s.v1.ListPodsResponse.partialFailures: array expected");
+                        message.partialFailures = [];
+                        for (let i = 0; i < object.partialFailures.length; ++i) {
+                            if (typeof object.partialFailures[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListPodsResponse.partialFailures: object expected");
+                            message.partialFailures[i] = $root.google.rpc.Status.fromObject(object.partialFailures[i]);
+                        }
+                    }
                     return message;
                 };
 
@@ -36375,12 +36404,19 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.arrays || options.defaults)
+                    if (options.arrays || options.defaults) {
                         object.pods = [];
+                        object.partialFailures = [];
+                    }
                     if (message.pods && message.pods.length) {
                         object.pods = [];
                         for (let j = 0; j < message.pods.length; ++j)
                             object.pods[j] = $root.clutch.k8s.v1.Pod.toObject(message.pods[j], options);
+                    }
+                    if (message.partialFailures && message.partialFailures.length) {
+                        object.partialFailures = [];
+                        for (let j = 0; j < message.partialFailures.length; ++j)
+                            object.partialFailures[j] = $root.google.rpc.Status.toObject(message.partialFailures[j], options);
                     }
                     return object;
                 };
