@@ -25,10 +25,10 @@ interface AppLayoutProps {
   configuration?: AppConfiguration;
 }
 
-const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false, configuration }) => {
+const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false, configuration = {} }) => {
   return (
     <AppGrid container direction="column">
-      <Header title={configuration.title} logo={configuration.logo} />
+      <Header {...configuration} />
       <ContentGrid container wrap="nowrap">
         {isLoading ? (
           <Loadable isLoading={isLoading} variant="overlay" />
