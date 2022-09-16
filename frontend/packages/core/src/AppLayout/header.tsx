@@ -11,13 +11,9 @@ import Notifications from "./notifications";
 import SearchField from "./search";
 import ShortLinker from "./shortLinker";
 import { UserInformation } from "./user";
+import type { AppConfiguration } from "../AppProvider";
 
 export const APP_BAR_HEIGHT = "64px";
-
-export interface HeaderProps {
-  title?: string;
-  logo?: React.ReactNode;
-}
 
 const AppBar = styled(MuiAppBar)({
   minWidth: "fit-content",
@@ -37,7 +33,7 @@ const Title = styled(Typography)({
   color: "rgba(255, 255, 255, 0.87)",
 });
 
-const Header: React.FC<HeaderProps> = ({ title = "clutch", logo = <Logo /> }) => {
+const Header: React.FC<AppConfiguration> = ({ title = "clutch", logo = <Logo /> }) => {
   const showNotifications = false;
 
   return (
