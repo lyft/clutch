@@ -33,6 +33,13 @@ const Title = styled(Typography)({
   color: "rgba(255, 255, 255, 0.87)",
 });
 
+const StyledLogo = styled("img")({
+  width: "48px",
+  height: "48px",
+  padding: "1px",
+  verticalAlign: "middle",
+});
+
 const Header: React.FC<AppConfiguration> = ({ title = "clutch", logo = <Logo /> }) => {
   const showNotifications = false;
 
@@ -40,7 +47,7 @@ const Header: React.FC<AppConfiguration> = ({ title = "clutch", logo = <Logo /> 
     <>
       <AppBar position="fixed" elevation={0}>
         <Toolbar>
-          <Link to="/">{logo}</Link>
+          <Link to="/">{typeof logo === "string" ? <StyledLogo src={logo} /> : logo}</Link>
           <Title>{title}</Title>
           <Grid container alignItems="center" justifyContent="flex-end">
             <Box>
