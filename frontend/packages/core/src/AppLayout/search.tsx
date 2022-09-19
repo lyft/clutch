@@ -265,6 +265,11 @@ const SearchField: React.FC = () => {
     }
   };
 
+  // Will hide the search field if there are no visible workflows
+  if (!workflows.length) {
+    return null;
+  }
+
   return (
     <Grid container alignItems="center">
       {open ? (
