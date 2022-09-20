@@ -25,6 +25,13 @@ export interface UserConfiguration {
   };
 }
 
+export interface AppConfiguration {
+  /** Will override the title of the given application */
+  title?: string;
+  /** Supports a react node or a string representing a public assets path */
+  logo?: React.ReactNode | string;
+}
+
 /**
  * Filter workflow routes using available feature flags.
  * @param workflows a list of valid Workflow objects.
@@ -50,11 +57,13 @@ interface ClutchAppProps {
     [key: string]: () => WorkflowConfiguration;
   };
   configuration: UserConfiguration;
+  appConfiguration: AppConfiguration;
 }
 
 const ClutchApp: React.FC<ClutchAppProps> = ({
   availableWorkflows,
   configuration: userConfiguration,
+  appConfiguration,
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -129,7 +138,10 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
                 </Toast>
               )}
               <Routes>
-                <Route path="/" element={<AppLayout isLoading={isLoading} />}>
+                <Route
+                  path="/"
+                  element={<AppLayout isLoading={isLoading} configuration={appConfiguration} />}
+                >
                   {!hasCustomLanding && <Route key="landing" path="" element={<Landing />} />}
                   {workflows.map((workflow: Workflow) => {
                     const workflowPath = workflow.path.replace(/^\/+/, "").replace(/\/+$/, "");
