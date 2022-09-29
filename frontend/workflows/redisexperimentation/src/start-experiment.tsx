@@ -12,7 +12,7 @@ import {
   Form,
   useNavigate,
 } from "@clutch-sh/core";
-import { FormFields, PageLayout } from "@clutch-sh/experimentation";
+import { FormFields, FormItem, PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -101,7 +101,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({ environments, onS
         defaultValue: initialExperimentData.faultType,
       },
     },
-  ];
+  ] as FormItem[];
 
   const schema: { [name: string]: yup.StringSchema | yup.NumberSchema } = {};
   fields
