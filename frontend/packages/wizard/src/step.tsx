@@ -11,7 +11,7 @@ const Grid = styled(ClutchGrid)({
 
 export interface WizardStepProps {
   isLoading: boolean;
-  error: ClutchError;
+  error?: ClutchError;
 }
 
 const WizardStep: React.FC<WizardStepProps> = ({ isLoading, error, children }) => {
