@@ -35,7 +35,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.2
 	github.com/iancoleman/strcase v0.2.0
-	github.com/jhump/protoreflect v1.12.0
+	github.com/jhump/protoreflect v1.13.0
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.7
 	github.com/mitchellh/hashstructure/v2 v2.0.2
