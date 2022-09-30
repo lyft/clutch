@@ -5,7 +5,7 @@ module.exports = {
   coverageThreshold: {
     ...baseConfig.coverageThreshold,
     ".": {
-      statements: "47",
+      statements: "33",
     },
   },
 };
