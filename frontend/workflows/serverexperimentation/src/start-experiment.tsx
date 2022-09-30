@@ -92,7 +92,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
     {
       name: "upstreamClusterType",
       label: "Upstream Cluster Type",
-      type: "radio-group",
+      type: "select",
       visible: upstreamClusterTypeSelectionEnabled,
       inputProps: {
         options: [

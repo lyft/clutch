@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Start Experiment workflow renders correctly 1`] = `
-"<Styled(div)>
+"<Fragment>
   <h3 style={{...}}>
     Cluster Pair
   </h3>
@@ -13,11 +13,11 @@ exports[`Start Experiment workflow renders correctly 1`] = `
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <ForwardRef(TextFieldRef) name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
-</Styled(div)>"
+</Fragment>"
 `;
 
 exports[`Start Experiment workflow renders correctly with environments 1`] = `
-"<Styled(div)>
+"<Fragment>
   <h3 style={{...}}>
     Cluster Pair
   </h3>
@@ -30,22 +30,22 @@ exports[`Start Experiment workflow renders correctly with environments 1`] = `
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <ForwardRef(TextFieldRef) name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
-</Styled(div)>"
+</Fragment>"
 `;
 
 exports[`Start Experiment workflow renders correctly with upstream cluster type selection enabled 1`] = `
-"<Styled(div)>
+"<Fragment>
   <h3 style={{...}}>
     Cluster Pair
   </h3>
   <ForwardRef(TextFieldRef) name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <ForwardRef(TextFieldRef) name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
-  <RadioGroup name=\\"upstreamClusterType\\" label=\\"Upstream Cluster Type\\" disabled={[undefined]} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+  <Select name=\\"upstreamClusterType\\" label=\\"Upstream Cluster Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <ForwardRef(TextFieldRef) name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <h3 style={{...}}>
     Faults
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <ForwardRef(TextFieldRef) name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
-</Styled(div)>"
+</Fragment>"
 `;

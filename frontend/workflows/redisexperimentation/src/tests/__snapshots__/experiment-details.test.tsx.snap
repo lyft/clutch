@@ -1,31 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Start Experiment workflow renders correctly 1`] = `
-"<Styled(div)>
+"<Fragment>
   <ForwardRef(TextFieldRef) name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <ForwardRef(TextFieldRef) name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={-1} onChange={[Function: onChange]} />
   <ForwardRef(TextFieldRef) name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-</Styled(div)>"
+</Fragment>"
 `;
 
 exports[`Start Experiment workflow renders correctly with environments selection enabled 1`] = `
-"<Styled(div)>
+"<Fragment>
   <ForwardRef(TextFieldRef) name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <ForwardRef(TextFieldRef) name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <ForwardRef(TextFieldRef) name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-</Styled(div)>"
+</Fragment>"
 `;
 
 exports[`Start Experiment workflow renders correctly with upstream cluster type selection enabled 1`] = `
-"<Styled(div)>
+"<Fragment>
   <ForwardRef(TextFieldRef) name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <ForwardRef(TextFieldRef) name=\\"upstreamRedisCluster\\" label=\\"Upstream Redis Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <Select name=\\"environmentValue\\" label=\\"Environment\\" options={{...}} defaultOption={-1} onChange={[Function: onChange]} />
   <ForwardRef(TextFieldRef) name=\\"percentage\\" label=\\"Percent\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} error={false} helperText=\\"\\" formRegistration={[Function: ee]} />
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-</Styled(div)>"
+</Fragment>"
 `;
