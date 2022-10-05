@@ -249,7 +249,7 @@ const TextFieldRef = (
   let helpText = helperText;
 
   // Prepend a '!' icon to helperText displayed below the form if the form is in an error state.
-  if (error) {
+  if (error && helpText) {
     helpText = (
       <>
         <ErrorIcon />
