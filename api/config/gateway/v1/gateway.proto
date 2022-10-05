@@ -72,6 +72,9 @@ message Stats {
 
   // Collect go runtime stats, this is disabled by default.
   GoRuntimeStats go_runtime_stats = 4;
+
+  // the prefix for the stats. If none specified, the default is "clutch"
+  string prefix = 6;
 }
 
 message Timeouts {

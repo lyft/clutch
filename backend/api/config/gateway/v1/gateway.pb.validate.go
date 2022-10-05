@@ -622,6 +622,8 @@ func (m *Stats) validate(all bool) error {
 		}
 	}
 
+	// no validation rules for Prefix
+
 	switch m.Reporter.(type) {
 
 	case *Stats_LogReporter_:

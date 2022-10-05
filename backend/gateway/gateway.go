@@ -88,6 +88,10 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	// Init stats.
 	var metricsHandler http.Handler
 	var scopeOpts tally.ScopeOptions
+	statsPrefix := "clutch"
+	if cfg.Gateway.Stats.Prefix != "" {
+		statsPrefix = cfg.Gateway.Stats.Prefix
+	}
 	switch t := cfg.Gateway.Stats.Reporter.(type) {
 	case nil:
 		scopeOpts = tally.ScopeOptions{
@@ -96,7 +100,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	case *gatewayv1.Stats_LogReporter_:
 		scopeOpts = tally.ScopeOptions{
 			Reporter: stats.NewDebugReporter(logger),
-			Prefix:   "clutch",
+			Prefix:   statsPrefix,
 		}
 	case *gatewayv1.Stats_StatsdReporter_:
 		reporter, err := stats.NewStatsdReporter(cfg.Gateway.Stats.GetStatsdReporter())
@@ -105,7 +109,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 		scopeOpts = tally.ScopeOptions{
 			Reporter: reporter,
-			Prefix:   "clutch",
+			Prefix:   statsPrefix,
 		}
 	case *gatewayv1.Stats_PrometheusReporter_:
 		reporter, err := stats.NewPrometheusReporter(cfg.Gateway.Stats.GetPrometheusReporter())
@@ -114,7 +118,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 		scopeOpts = tally.ScopeOptions{
 			CachedReporter:  reporter,
-			Prefix:          "clutch",
+			Prefix:          statsPrefix,
 			SanitizeOptions: &tallyprom.DefaultSanitizerOpts,
 		}
 		metricsHandler = reporter.HTTPHandler()
