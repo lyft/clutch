@@ -55,7 +55,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 	}
 
 	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(ctx, opts)
-	if err != nil {
+	if len(podList.Items) == 0 && err != nil {
 		return nil, err
 	}
 
@@ -65,7 +65,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 		pods = append(pods, podDescription(&pod, cs.Cluster()))
 	}
 
-	return pods, nil
+	return pods, err
 }
 
 // Update pod fields if the current field values match with that's described by expectedObjectMetaFields
