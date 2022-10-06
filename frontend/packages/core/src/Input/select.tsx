@@ -201,15 +201,15 @@ const Select = ({
   options,
   onChange,
 }: SelectProps) => {
-  const defaultIdx = defaultOption < options.length && defaultOption > 0 ? defaultOption : 0;
-  const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
-
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flatten(
     options.map((option: SelectOption) =>
       option.group ? option.group.map(groupOption => groupOption) : option
     )
   );
+
+  const defaultIdx = defaultOption < flatOptions.length && defaultOption > 0 ? defaultOption : 0;
+  const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
 
   React.useEffect(() => {
     if (flatOptions.length !== 0) {
