@@ -337,10 +337,11 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	srv := &http.Server{
-		Handler:      mux.InsecureHandler(rpcMux),
-		Addr:         addr,
-		ReadTimeout:  timeout,
-		WriteTimeout: timeout,
+		Handler:           mux.InsecureHandler(rpcMux),
+		Addr:              addr,
+		ReadTimeout:       timeout,
+		WriteTimeout:      timeout,
+		ReadHeaderTimeout: timeout,
 	}
 
 	sc := make(chan os.Signal, 1)
