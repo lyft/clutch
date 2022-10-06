@@ -83,14 +83,14 @@ jobs:
           key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
-      - name: go lint cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/.cache/golangci-lint
-          key: ${{ runner.os }}-go-lint-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-lint-
+      # - name: go lint cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.cache/go-build
+      #       ~/.cache/golangci-lint
+      #     key: ${{ runner.os }}-go-lint-${{ hashFiles('**/go.sum') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-go-lint-
       - run: make backend-lint
       - run: make backend-verify
