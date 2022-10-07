@@ -9,14 +9,13 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"golang.org/x/net/context"
-
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"golang.org/x/net/context"
 )
 
 const (

@@ -8,10 +8,9 @@ import (
 	"strings"
 
 	sq "github.com/Masterminds/squirrel"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 const (
@@ -190,8 +189,9 @@ func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 
 // Transformation from a field identifier to a valid json sql query.
 // Example:
-//  input: "metadata.fieldone.fieldtwo.id"
-//  output: "metadata->fieldone->fieldtwo->>id"
+//
+//	input: "metadata.fieldone.fieldtwo.id"
+//	output: "metadata->fieldone->fieldtwo->>id"
 func convertMetadataToQuery(input string) (string, error) {
 	splitMetadata := strings.Split(strings.TrimPrefix(input, metadataIdentifer), ".")
 

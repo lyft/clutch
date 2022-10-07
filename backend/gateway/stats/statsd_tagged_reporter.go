@@ -6,10 +6,9 @@ import (
 	"time"
 
 	"github.com/cactus/go-statsd-client/statsd"
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/uber-go/tally/v4"
 	tallystatsd "github.com/uber-go/tally/v4/statsd"
-
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )
 
 func NewStatsdReporter(cfg *gatewayv1.Stats_StatsdReporter) (tally.StatsReporter, error) {

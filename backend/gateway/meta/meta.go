@@ -8,15 +8,14 @@ import (
 
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/grpcreflect"
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
+	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
-
-	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 )
 
 var (
@@ -188,19 +187,21 @@ func HydratedPatternForProto(pb proto.Message) (string, error) {
 // this is utilized by the resolver search api
 //
 // For example given the following proto pattern
-// option (clutch.api.v1.id).patterns = {
-//  pattern : "{cluster}/{namespace}/{name}"
-// };
+//
+//	option (clutch.api.v1.id).patterns = {
+//	 pattern : "{cluster}/{namespace}/{name}"
+//	};
 //
 // And the value of "mycluster/mynamespace/nameofresource"
 // we transform the pattern into a regex and map the values to the pattern names
 //
 // The output for this example is:
-// map[string]string{
-//  cluster: mycluster
-//  namespace: mynamespace
-//  name: nameofresource
-// }
+//
+//	map[string]string{
+//	 cluster: mycluster
+//	 namespace: mynamespace
+//	 name: nameofresource
+//	}
 func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]string, bool, error) {
 	m := pb.ProtoReflect()
 	opts := m.Descriptor().Options().ProtoReflect()
@@ -320,7 +321,9 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 	return anypb.New(ClearLogDisabledFields(m))
 }
 
-/* ToValue converts custom types to a structpb.Value. This helper was added
+/*
+	ToValue converts custom types to a structpb.Value. This helper was added
+
 since structpb.NewValue has a limited set of types that it supports.
 More details here: https://github.com/golang/protobuf/issues/1302#issuecomment-805453221
 */

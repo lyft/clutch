@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 	"github.com/lyft/clutch/backend/mock/service/topologymock"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUpdateSchemaError(t *testing.T) {

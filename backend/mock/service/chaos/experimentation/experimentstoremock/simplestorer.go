@@ -5,11 +5,10 @@ import (
 	"strconv"
 	"sync"
 
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 type SimpleStorer struct {

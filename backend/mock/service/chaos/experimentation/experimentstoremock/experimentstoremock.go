@@ -5,12 +5,11 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
 )
 
 func NewMock(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {

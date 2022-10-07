@@ -15,14 +15,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/smithy-go"
 	"github.com/golang/protobuf/ptypes/any"
+	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
+	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
-	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 )
 
 func TestNew(t *testing.T) {

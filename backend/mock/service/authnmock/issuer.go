@@ -5,9 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"golang.org/x/oauth2"
-
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
+	"golang.org/x/oauth2"
 )
 
 type MockIssuer struct {

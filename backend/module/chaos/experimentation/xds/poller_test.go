@@ -14,6 +14,9 @@ import (
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes/any"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
@@ -21,10 +24,6 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
-
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestRTDSResourcesRefresh(t *testing.T) {

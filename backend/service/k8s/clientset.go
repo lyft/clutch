@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -11,8 +12,6 @@ import (
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-
-	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 )
 
 const (

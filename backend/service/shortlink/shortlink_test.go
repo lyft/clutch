@@ -5,16 +5,15 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	shortlinkv1cfg "github.com/lyft/clutch/backend/api/config/service/shortlink/v1"
+	shortlinkv1 "github.com/lyft/clutch/backend/api/shortlink/v1"
+	"github.com/lyft/clutch/backend/mock/service/dbmock"
+	"github.com/lyft/clutch/backend/service"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
-
-	shortlinkv1cfg "github.com/lyft/clutch/backend/api/config/service/shortlink/v1"
-	shortlinkv1 "github.com/lyft/clutch/backend/api/shortlink/v1"
-	"github.com/lyft/clutch/backend/mock/service/dbmock"
-	"github.com/lyft/clutch/backend/service"
 )
 
 func TestNewDefaults(t *testing.T) {

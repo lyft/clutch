@@ -3,9 +3,8 @@ package envoyadmin
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	envoytriagev1 "github.com/lyft/clutch/backend/api/envoytriage/v1"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNodeMetadataFromResponse(t *testing.T) {

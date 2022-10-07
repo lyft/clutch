@@ -4,12 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/health/grpc_health_v1"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
@@ -20,6 +14,11 @@ import (
 	modulemock "github.com/lyft/clutch/backend/mock/module"
 	"github.com/lyft/clutch/backend/module/assets"
 	"github.com/lyft/clutch/backend/module/healthcheck"
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 func TestGetAction(t *testing.T) {

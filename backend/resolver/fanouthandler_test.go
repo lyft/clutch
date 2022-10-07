@@ -5,10 +5,9 @@ import (
 	"errors"
 	"testing"
 
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
-
-	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
 
 type basicValue struct {

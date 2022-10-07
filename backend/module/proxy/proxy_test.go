@@ -9,6 +9,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
+	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
+	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
@@ -16,10 +19,6 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
-
-	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
-	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
-	"github.com/lyft/clutch/backend/module/moduletest"
 )
 
 func generateServicesConfig(host string) []*proxyv1cfg.Service {

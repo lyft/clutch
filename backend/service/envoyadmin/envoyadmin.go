@@ -11,13 +11,12 @@ import (
 	"net/http"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
-
 	envoyadminv1 "github.com/lyft/clutch/backend/api/config/service/envoyadmin/v1"
 	envoytriagev1 "github.com/lyft/clutch/backend/api/envoytriage/v1"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"golang.org/x/sync/errgroup"
 )
 
 const Name = "clutch.service.envoyadmin"

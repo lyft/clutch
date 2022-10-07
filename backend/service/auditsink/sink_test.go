@@ -3,11 +3,10 @@ package auditsink
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	configv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
+	"github.com/stretchr/testify/assert"
 )
 
 var filterTests = []struct {

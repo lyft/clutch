@@ -3,12 +3,11 @@ package core
 import (
 	"testing"
 
+	"github.com/lyft/clutch/backend/mock/service/topologymock"
+	"github.com/lyft/clutch/backend/service"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
-
-	"github.com/lyft/clutch/backend/mock/service/topologymock"
-	"github.com/lyft/clutch/backend/service"
 )
 
 func TestNewCoreResolver(t *testing.T) {

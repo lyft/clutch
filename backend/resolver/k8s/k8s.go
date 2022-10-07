@@ -12,12 +12,6 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	k8sv1api "github.com/lyft/clutch/backend/api/k8s/v1"
 	k8sv1resolver "github.com/lyft/clutch/backend/api/resolver/k8s/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
@@ -26,6 +20,11 @@ import (
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/k8s"
 	"github.com/lyft/clutch/backend/service/topology"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const Name = "clutch.resolver.k8s"

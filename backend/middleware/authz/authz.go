@@ -8,6 +8,12 @@ import (
 	"context"
 	"errors"
 
+	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
+	"github.com/lyft/clutch/backend/middleware"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/authn"
+	"github.com/lyft/clutch/backend/service/authz"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -15,13 +21,6 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
-	"github.com/lyft/clutch/backend/gateway/meta"
-	"github.com/lyft/clutch/backend/middleware"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/authn"
-	"github.com/lyft/clutch/backend/service/authz"
 )
 
 const Name = "clutch.middleware.authz"

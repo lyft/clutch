@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	appsv1 "k8s.io/api/apps/v1"
@@ -12,8 +13,6 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/retry"
-
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error) {

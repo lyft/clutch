@@ -9,11 +9,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"github.com/stretchr/testify/assert"
-	"go.uber.org/zap/zaptest"
-
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
+	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap/zaptest"
 )
 
 var regions = []string{"us-east-1", "us-west-2"}

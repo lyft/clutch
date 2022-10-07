@@ -13,17 +13,16 @@ import (
 	"text/template"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/slack-go/slack"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/protobuf/encoding/protojson"
-
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	configv1 "github.com/lyft/clutch/backend/api/config/service/auditsink/slack/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/auditsink"
+	"github.com/slack-go/slack"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 const (

@@ -5,10 +5,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -17,6 +13,9 @@ import (
 	modulemock "github.com/lyft/clutch/backend/mock/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	"github.com/lyft/clutch/backend/service/audit"
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 func TestEventFromResponse(t *testing.T) {

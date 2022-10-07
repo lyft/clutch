@@ -11,16 +11,15 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
+	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/service"
+	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/structpb"
-
-	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
-	"github.com/lyft/clutch/backend/service"
-	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 )
 
 const Name = "clutch.service.topology"

@@ -7,13 +7,12 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/protobuf/types/known/timestamppb"
-
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	"github.com/lyft/clutch/backend/service/audit/storage"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // TODO(maybe): There are more performant ways to do this that are more

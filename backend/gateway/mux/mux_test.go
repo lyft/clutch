@@ -10,13 +10,12 @@ import (
 	"testing"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
-	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
 
 func TestCopyHTTPResponse(t *testing.T) {

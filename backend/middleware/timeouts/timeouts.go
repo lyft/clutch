@@ -9,15 +9,14 @@ import (
 	"fmt"
 	"time"
 
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	"github.com/lyft/clutch/backend/middleware"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/durationpb"
-
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
-	"github.com/lyft/clutch/backend/middleware"
 )
 
 const (

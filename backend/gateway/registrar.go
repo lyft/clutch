@@ -4,9 +4,8 @@ import (
 	"context"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"google.golang.org/grpc"
-
 	"github.com/lyft/clutch/backend/module"
+	"google.golang.org/grpc"
 )
 
 func newRegistrar(ctx context.Context, m *runtime.ServeMux, s *grpc.Server, c *grpc.ClientConn) module.Registrar {

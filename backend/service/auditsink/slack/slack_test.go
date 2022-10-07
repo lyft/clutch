@@ -4,17 +4,16 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap/zaptest"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	configv1 "github.com/lyft/clutch/backend/api/config/service/auditsink/slack/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service/auditsink"
+	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 func TestNew(t *testing.T) {

@@ -6,14 +6,13 @@ import (
 	"reflect"
 
 	protodeprecated "github.com/golang/protobuf/proto"
+	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
-	"github.com/lyft/clutch/backend/gateway/meta"
 )
 
 const (

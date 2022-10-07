@@ -6,12 +6,11 @@ import (
 	"testing"
 	"time"
 
+	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
-
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
-	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 )
 
 func TestLocalstorage(t *testing.T) {

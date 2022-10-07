@@ -5,9 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExperimentRunStatus(t *testing.T) {

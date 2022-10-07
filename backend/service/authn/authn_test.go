@@ -3,9 +3,8 @@ package authn
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	apimock "github.com/lyft/clutch/backend/mock/api"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNotImpl(t *testing.T) {

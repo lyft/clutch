@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	gcpType "github.com/envoyproxy/go-control-plane/envoy/type/v3"
-
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 

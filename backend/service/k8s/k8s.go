@@ -8,17 +8,16 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes/any"
+	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/service"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/sync/semaphore"
 	batchv1 "k8s.io/api/batch/v1"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/tools/clientcmd"
-
-	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
-	"github.com/lyft/clutch/backend/service"
 )
 
 const Name = "clutch.service.k8s"

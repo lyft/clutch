@@ -6,9 +6,8 @@ import (
 
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
 	"github.com/aws/smithy-go"
-	"google.golang.org/grpc/status"
-
 	"github.com/lyft/clutch/backend/service"
+	"google.golang.org/grpc/status"
 )
 
 // Use error handling techniques outlined in https://aws.github.io/aws-sdk-go-v2/docs/handling-errors/

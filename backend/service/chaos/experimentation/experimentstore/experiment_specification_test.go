@@ -7,12 +7,11 @@ import (
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/timestamp"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
-
-	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 func TestExperimentSpecificationInitialization(t *testing.T) {

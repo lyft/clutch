@@ -13,13 +13,12 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	postgresv1 "github.com/lyft/clutch/backend/api/config/service/db/postgres/v1"
 	"github.com/lyft/clutch/backend/gateway"
 	clutchpg "github.com/lyft/clutch/backend/service/db/postgres"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
 )
 
 type MigrateFlags struct {

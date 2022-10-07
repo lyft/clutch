@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
+	"github.com/lyft/clutch/backend/gateway/statuserr"
+	"github.com/lyft/clutch/backend/resolver"
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
-	"github.com/lyft/clutch/backend/gateway/statuserr"
-	"github.com/lyft/clutch/backend/resolver"
 )
 
 func newResponse() *response {

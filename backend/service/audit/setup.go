@@ -15,10 +15,6 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/protobuf/encoding/protojson"
-
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
@@ -27,6 +23,9 @@ import (
 	"github.com/lyft/clutch/backend/service/audit/storage/local"
 	"github.com/lyft/clutch/backend/service/audit/storage/sql"
 	"github.com/lyft/clutch/backend/service/auditsink"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 const (

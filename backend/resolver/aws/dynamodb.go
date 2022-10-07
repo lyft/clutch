@@ -4,11 +4,10 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/proto"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	awsv1 "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	"github.com/lyft/clutch/backend/resolver"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (r *res) resolveDynamodbTableForInput(ctx context.Context, input proto.Message) (*resolver.Results, error) {

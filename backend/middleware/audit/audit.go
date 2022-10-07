@@ -9,14 +9,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/gateway/meta"
@@ -24,6 +16,13 @@ import (
 	"github.com/lyft/clutch/backend/service"
 	auditservice "github.com/lyft/clutch/backend/service/audit"
 	"github.com/lyft/clutch/backend/service/authn"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 const Name = "clutch.middleware.audit"
