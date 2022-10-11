@@ -59,7 +59,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/api v0.23.6
 	k8s.io/apimachinery v0.23.6
-	k8s.io/client-go v0.23.6
+	k8s.io/client-go/v5 v5.0.1+incompatible
 )
 
 require (
