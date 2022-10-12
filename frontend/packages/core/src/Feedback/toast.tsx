@@ -40,15 +40,17 @@ const Toast: React.FC<ToastProps> = ({
         }
       }}
     >
-      <Alert
-        elevation={6}
-        variant="filled"
-        onClose={onClose ? onDismiss : null}
-        severity={severity}
-        title={title}
-      >
-        {children}
-      </Alert>
+      <div>
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={onClose ? onDismiss : null}
+          severity={severity}
+          title={title}
+        >
+          {children}
+        </Alert>
+      </div>
     </Snackbar>
   );
 };
