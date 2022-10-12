@@ -85,6 +85,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 
 	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
+	// Init stats.
 	scopeOpts, metricsHandler := getStatsReporterConfiguration(cfg, logger)
 
 	scope, scopeCloser := tally.NewRootScope(
