@@ -168,7 +168,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
           <Alert severity="warning">
             Warning: to override the DynamoDB scaling limits, check the box below. This will bypass
             the maximum limits placed on all throughput updates. Only override limits if safe to do
-            so. Picchu is the cutest!
+            so.
           </Alert>
           <CheckboxPanel
             onChange={state =>
