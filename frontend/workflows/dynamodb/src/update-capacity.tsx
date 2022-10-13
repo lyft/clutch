@@ -22,10 +22,7 @@ import { number } from "yup";
 
 import type { ResolverChild, TableDetailsChild, WorkflowProps } from ".";
 
-const TableIdentifier: React.FC<ResolverChild> = ({
-  resolverType,
-  notes = []
-}) => {
+const TableIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) => {
   const { onSubmit } = useWizardContext();
   const resolvedResourceData = useDataLayout("resourceData");
   const capacityUpdates = useDataLayout("capacityUpdates");
@@ -45,12 +42,7 @@ const TableIdentifier: React.FC<ResolverChild> = ({
   const resolverNotes = notes.filter(note => note.location === "resolver");
 
   return (
-    <Resolver
-      type={resolverType}
-      searchLimit={1}
-      onResolve={onResolve}
-      notes={resolverNotes}
-    />
+    <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} notes={resolverNotes} />
   );
 };
 
@@ -213,7 +205,12 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType, notes = [], enableOverride, heading}) => {
+const UpdateCapacity: React.FC<WorkflowProps> = ({
+  resolverType,
+  notes = [],
+  enableOverride,
+  heading,
+}) => {
   const dataLayout = {
     resourceData: {},
     capacityUpdates: {},
@@ -261,7 +258,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({ resolverType, notes = [], ena
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}> 
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <TableIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
       <TableDetails name="Modify" enableOverride={enableOverride} />
       <Confirm name="Results" />
