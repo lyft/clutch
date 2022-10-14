@@ -78,6 +78,92 @@ func (g *getfileMock) Query(ctx context.Context, query interface{}, variables ma
 	return nil
 }
 
+type mockRoundTripper struct {
+	http.RoundTripper
+	resp *http.Response
+	err  error
+}
+
+func (m *mockRoundTripper) RoundTrip(*http.Request) (*http.Response, error) {
+	if m.err != nil {
+		return m.resp, m.err
+	}
+	return m.resp, nil
+}
+
+func TestRoundTrip(t *testing.T) {
+	tests := []struct {
+		name          string
+		headerName    string
+		headerValue   string
+		nilResp       bool
+		respErr       error
+		expectedGauge float64
+	}{
+		{
+			name:          "gauges rate limit remaining",
+			headerName:    "X-RateLimit-Remaining",
+			headerValue:   "10",
+			expectedGauge: 10,
+		},
+		{
+			name:        "only updates gauge when header present",
+			headerName:  "x-unrelated-header",
+			headerValue: "foobar",
+		},
+		{
+			name:        "only updates gauge when header value valid type",
+			headerName:  "X-RateLimit-Remaining",
+			headerValue: "non-int",
+		},
+		{
+			name:    "round trip missing response update gauge",
+			respErr: errors.New("upstream error"),
+		},
+		{
+			name:          "round trip error with response updates gauge",
+			respErr:       errors.New("upstream error"),
+			headerName:    "X-RateLimit-Remaining",
+			headerValue:   "10",
+			expectedGauge: 10,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			scope := tally.NewTestScope("", nil)
+			h := http.Header{}
+			h.Set(tt.headerName, tt.headerValue)
+			r := &http.Response{Header: h}
+			if tt.nilResp {
+				r = nil
+			}
+			mockRT := &mockRoundTripper{resp: r, err: tt.respErr}
+			st := &StatsRoundTripper{
+				Wrapped: mockRT,
+				scope:   scope,
+			}
+
+			resp, err := st.RoundTrip(&http.Request{})
+
+			assert.Equal(t, r, resp)
+			if tt.respErr == nil {
+				assert.Nil(t, err)
+			}
+
+			g := scope.Snapshot().Gauges()["rate_limit_remaining+"]
+			if tt.expectedGauge != 0 {
+				assert.NotNil(t, g)
+				assert.Equal(t, tt.expectedGauge, g.Value())
+			} else {
+				assert.Nil(t, g)
+			}
+		})
+	}
+}
+
 var getFileTests = []struct {
 	name    string
 	v4      getfileMock
