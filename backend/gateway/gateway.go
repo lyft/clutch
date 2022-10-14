@@ -86,41 +86,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
 	// Init stats.
-	var metricsHandler http.Handler
-	var scopeOpts tally.ScopeOptions
-	switch t := cfg.Gateway.Stats.Reporter.(type) {
-	case nil:
-		scopeOpts = tally.ScopeOptions{
-			Reporter: tally.NullStatsReporter,
-		}
-	case *gatewayv1.Stats_LogReporter_:
-		scopeOpts = tally.ScopeOptions{
-			Reporter: stats.NewDebugReporter(logger),
-			Prefix:   "clutch",
-		}
-	case *gatewayv1.Stats_StatsdReporter_:
-		reporter, err := stats.NewStatsdReporter(cfg.Gateway.Stats.GetStatsdReporter())
-		if err != nil {
-			logger.Fatal("error creating statsd reporter", zap.Error(err))
-		}
-		scopeOpts = tally.ScopeOptions{
-			Reporter: reporter,
-			Prefix:   "clutch",
-		}
-	case *gatewayv1.Stats_PrometheusReporter_:
-		reporter, err := stats.NewPrometheusReporter(cfg.Gateway.Stats.GetPrometheusReporter())
-		if err != nil {
-			logger.Fatal("error creating prometheus reporter", zap.Error(err))
-		}
-		scopeOpts = tally.ScopeOptions{
-			CachedReporter:  reporter,
-			Prefix:          "clutch",
-			SanitizeOptions: &tallyprom.DefaultSanitizerOpts,
-		}
-		metricsHandler = reporter.HTTPHandler()
-	default:
-		logger.Fatal("unsupported reporter", zap.Reflect("type", t))
-	}
+	scopeOpts, metricsHandler := getStatsReporterConfiguration(cfg, logger)
 
 	scope, scopeCloser := tally.NewRootScope(
 		scopeOpts,
@@ -372,4 +338,53 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	logger.Debug("server shutdown gracefully")
+}
+
+func getStatsReporterConfiguration(cfg *gatewayv1.Config, logger *zap.Logger) (tally.ScopeOptions, http.Handler) {
+	var metricsHandler http.Handler
+	var scopeOpts tally.ScopeOptions
+
+	statsPrefix := "clutch"
+	if cfg.Gateway.Stats.Prefix != "" {
+		statsPrefix = cfg.Gateway.Stats.Prefix
+	}
+
+	switch t := cfg.Gateway.Stats.Reporter.(type) {
+	case nil:
+		scopeOpts = tally.ScopeOptions{
+			Reporter: tally.NullStatsReporter,
+		}
+		return scopeOpts, nil
+	case *gatewayv1.Stats_LogReporter_:
+		scopeOpts = tally.ScopeOptions{
+			Reporter: stats.NewDebugReporter(logger),
+			Prefix:   statsPrefix,
+		}
+		return scopeOpts, nil
+	case *gatewayv1.Stats_StatsdReporter_:
+		reporter, err := stats.NewStatsdReporter(cfg.Gateway.Stats.GetStatsdReporter())
+		if err != nil {
+			logger.Fatal("error creating statsd reporter", zap.Error(err))
+		}
+		scopeOpts = tally.ScopeOptions{
+			Reporter: reporter,
+			Prefix:   statsPrefix,
+		}
+		return scopeOpts, nil
+	case *gatewayv1.Stats_PrometheusReporter_:
+		reporter, err := stats.NewPrometheusReporter(cfg.Gateway.Stats.GetPrometheusReporter())
+		if err != nil {
+			logger.Fatal("error creating prometheus reporter", zap.Error(err))
+		}
+		scopeOpts = tally.ScopeOptions{
+			CachedReporter:  reporter,
+			Prefix:          statsPrefix,
+			SanitizeOptions: &tallyprom.DefaultSanitizerOpts,
+		}
+		metricsHandler = reporter.HTTPHandler()
+		return scopeOpts, metricsHandler
+	default:
+		logger.Fatal("unsupported reporter", zap.Reflect("type", t))
+		return tally.ScopeOptions{}, nil
+	}
 }

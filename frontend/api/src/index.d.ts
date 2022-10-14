@@ -6363,6 +6363,9 @@ export namespace clutch {
 
                     /** Stats goRuntimeStats */
                     goRuntimeStats?: (clutch.config.gateway.v1.Stats.IGoRuntimeStats|null);
+
+                    /** Stats prefix */
+                    prefix?: (string|null);
                 }
 
                 /** Represents a Stats. */
@@ -6388,6 +6391,9 @@ export namespace clutch {
 
                     /** Stats goRuntimeStats. */
                     public goRuntimeStats?: (clutch.config.gateway.v1.Stats.IGoRuntimeStats|null);
+
+                    /** Stats prefix. */
+                    public prefix: string;
 
                     /** Stats reporter. */
                     public reporter?: ("logReporter"|"statsdReporter"|"prometheusReporter");

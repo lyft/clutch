@@ -15120,6 +15120,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.Stats.IStatsdReporter|null} [statsdReporter] Stats statsdReporter
                      * @property {clutch.config.gateway.v1.Stats.IPrometheusReporter|null} [prometheusReporter] Stats prometheusReporter
                      * @property {clutch.config.gateway.v1.Stats.IGoRuntimeStats|null} [goRuntimeStats] Stats goRuntimeStats
+                     * @property {string|null} [prefix] Stats prefix
                      */
 
                     /**
@@ -15176,6 +15177,14 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     Stats.prototype.goRuntimeStats = null;
+
+                    /**
+                     * Stats prefix.
+                     * @member {string} prefix
+                     * @memberof clutch.config.gateway.v1.Stats
+                     * @instance
+                     */
+                    Stats.prototype.prefix = "";
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -15241,6 +15250,9 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "goRuntimeStats." + error;
                         }
+                        if (message.prefix != null && message.hasOwnProperty("prefix"))
+                            if (!$util.isString(message.prefix))
+                                return "prefix: string expected";
                         return null;
                     };
 
@@ -15281,6 +15293,8 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.config.gateway.v1.Stats.goRuntimeStats: object expected");
                             message.goRuntimeStats = $root.clutch.config.gateway.v1.Stats.GoRuntimeStats.fromObject(object.goRuntimeStats);
                         }
+                        if (object.prefix != null)
+                            message.prefix = String(object.prefix);
                         return message;
                     };
 
@@ -15300,6 +15314,7 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.flushInterval = null;
                             object.goRuntimeStats = null;
+                            object.prefix = "";
                         }
                         if (message.flushInterval != null && message.hasOwnProperty("flushInterval"))
                             object.flushInterval = $root.google.protobuf.Duration.toObject(message.flushInterval, options);
@@ -15320,6 +15335,8 @@ export const clutch = $root.clutch = (() => {
                             if (options.oneofs)
                                 object.reporter = "prometheusReporter";
                         }
+                        if (message.prefix != null && message.hasOwnProperty("prefix"))
+                            object.prefix = message.prefix;
                         return object;
                     };
 
