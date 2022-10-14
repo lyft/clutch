@@ -1,10 +1,11 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clutch-sh/core";
 import type { WizardChild } from "@clutch-sh/wizard";
 
 import UpdateCapacity from "./update-capacity";
 
 interface ResolverConfigProps {
   resolverType: string;
+  notes?: NoteConfig[];
 }
 
 interface TableDetailsProps {
