@@ -62,12 +62,16 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
       typeMap[group] = [];
     }
 
-    typeMap[group].push(
-      ...routes.map(route => ({
+    routes.forEach(route => {
+      typeMap[group].push({
         label: route.displayName || displayName,
         value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
-      }))
-    );
+      });
+
+      if (route?.componentProps?.["customNPS"]) {
+        typeMap[group].push(...route.componentProps["customNPS"]);
+      }
+    });
   });
 
   feedbackTypes.push(
