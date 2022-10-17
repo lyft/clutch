@@ -51,7 +51,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
         splitLoc.push(selectedPath);
       }
 
-      navigate(`${splitLoc.join("/")}${convertSearchParam(searchParams)}`);
+      navigate(`${splitLoc.join("/")}${convertSearchParam(searchParams)}`, { replace: true });
     }
   }, [configPages, selectedPage]);
 
