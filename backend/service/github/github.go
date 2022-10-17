@@ -51,9 +51,11 @@ type StatsRoundTripper struct {
 func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	resp, err := st.Wrapped.RoundTrip(req)
 
-	if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
-		if v, err := strconv.Atoi(hdr); err == nil {
-			st.scope.Gauge("rate_limit_remaining").Update(float64(v))
+	if resp != nil {
+		if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
+			if v, err := strconv.Atoi(hdr); err == nil {
+				st.scope.Gauge("rate_limit_remaining").Update(float64(v))
+			}
 		}
 	}
 	return resp, err
