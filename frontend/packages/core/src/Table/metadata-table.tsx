@@ -92,9 +92,6 @@ const Grid = styled(MuiGrid)({
   ".MuiFormControl-root .MuiFormHelperText-root.Mui-error": {
     flex: 1,
   },
-  ".textfield-disabled .MuiFormControl-root .MuiInputBase-root": {
-    width: "41px",
-  },
   ".textfield-disabled .MuiInput-input": {
     padding: "0px",
     textAlign: "center",
