@@ -110,7 +110,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
 	// We utilize a map here to deduplicate entries coming off the object channel
 	// It is not possible for postgres to insert or update the same item more than once in the same query
-	var batchInsert = make(map[string]*topologyv1.Resource)
+	batchInsert := make(map[string]*topologyv1.Resource)
 	queueDepth := c.scope.Tagged(map[string]string{
 		"service": service,
 	}).SubScope("cache").Gauge("object_channel.queue_depth")
@@ -198,6 +198,7 @@ func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface
 
 func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error {
 	args, queryParams := c.prepareBulkCacheInsert(obj)
+	//nolint:gosec // This is a false positive, upsertQuery is treated as a prepared statement
 	upsertQuery := fmt.Sprintf(`INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES %s
 		ON CONFLICT (id, resolver_type_url) DO UPDATE SET
