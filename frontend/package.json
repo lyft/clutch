@@ -59,9 +59,6 @@
       "last 1 safari version"
     ]
   },
-  "resolutions": {
-    "minimist": "^1.2.6"
-  },
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@mui/material": "^5.8.5",
