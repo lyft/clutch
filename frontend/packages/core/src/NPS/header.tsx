@@ -68,8 +68,9 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
         value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
       });
 
-      if (get("route.componentProps.customNPS", [])) {
-        typeMap[group].push(...get("route.componentProps.customNPS", []));
+      const customNPS = get("route.componentProps.customNPS", []);
+      if (customNPS) {
+        typeMap[group].push(...customNPS);
       }
     });
   });
