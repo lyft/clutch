@@ -3,7 +3,7 @@ package aws
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"strings"
 	"testing"
 
@@ -16,7 +16,7 @@ import (
 func TestS3StreamGet(t *testing.T) {
 	s3Client := &mockS3{
 		getObjectOutput: &s3.GetObjectOutput{
-			Body: ioutil.NopCloser(strings.NewReader("choice")),
+			Body: io.NopCloser(strings.NewReader("choice")),
 		},
 	}
 	c := &client{
@@ -32,7 +32,7 @@ func TestS3StreamGet(t *testing.T) {
 
 	output, err := c.S3StreamingGet(context.Background(), "default", "us-east-1", "clutch", "key")
 	assert.NoError(t, err)
-	assert.Equal(t, output, ioutil.NopCloser(strings.NewReader("choice")))
+	assert.Equal(t, output, io.NopCloser(strings.NewReader("choice")))
 }
 
 func TestS3StreamGetErrorHandling(t *testing.T) {

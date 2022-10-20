@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"context"
-	"io/ioutil"
 	"os"
 	"testing"
 	"time"
@@ -39,9 +38,9 @@ users:
 `
 
 func TestNew(t *testing.T) {
-	tempfile, _ := ioutil.TempFile("", "")
+	tempfile, _ := os.CreateTemp("", "")
 	defer os.Remove(tempfile.Name())
-	_ = ioutil.WriteFile(tempfile.Name(), []byte(testConfig), 0500)
+	_ = os.WriteFile(tempfile.Name(), []byte(testConfig), 0o500)
 
 	paths := []string{tempfile.Name()}
 
@@ -77,7 +76,7 @@ func TestNewWithWrongConfig(t *testing.T) {
 
 func TestApplyRestClientConfig(t *testing.T) {
 	t.Parallel()
-	var testCases = []struct {
+	testCases := []struct {
 		id                 string
 		restConfig         *restclient.Config
 		expectedRestConfig restclient.Config
@@ -133,9 +132,9 @@ func TestInterceptError(t *testing.T) {
 }
 
 func TestGetK8sClientset(t *testing.T) {
-	tempfile, _ := ioutil.TempFile("", "")
+	tempfile, _ := os.CreateTemp("", "")
 	defer os.Remove(tempfile.Name())
-	_ = ioutil.WriteFile(tempfile.Name(), []byte(testConfig), 0500)
+	_ = os.WriteFile(tempfile.Name(), []byte(testConfig), 0o500)
 
 	paths := []string{tempfile.Name()}
 

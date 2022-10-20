@@ -2,7 +2,7 @@ package mux
 
 import (
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -27,7 +27,7 @@ func TestCopyHTTPResponse(t *testing.T) {
 		Status:     http.StatusText(status),
 		StatusCode: status,
 		Header:     headers,
-		Body:       ioutil.NopCloser(strings.NewReader(body)),
+		Body:       io.NopCloser(strings.NewReader(body)),
 	}
 
 	rec := httptest.NewRecorder()

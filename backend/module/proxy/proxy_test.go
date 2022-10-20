@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -129,7 +129,7 @@ func TestRequestProxy(t *testing.T) {
 			},
 			handler: func(w http.ResponseWriter, r *http.Request) {
 				// assert that the requesting body data was sent
-				bodyData, err := ioutil.ReadAll(r.Body)
+				bodyData, err := io.ReadAll(r.Body)
 				assert.NoError(t, err)
 				assert.NotEmpty(t, bodyData)
 

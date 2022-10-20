@@ -2,7 +2,7 @@ package envoytest
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"strings"
@@ -17,8 +17,10 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 )
 
-const EcdsStatPrefix = "http.ingress_http.extension_config_discovery.envoy.extension_config"
-const RuntimeStatPrefix = "runtime"
+const (
+	EcdsStatPrefix    = "http.ingress_http.extension_config_discovery.envoy.extension_config"
+	RuntimeStatPrefix = "runtime"
+)
 
 const baseConfig = `
 node:
@@ -138,7 +140,7 @@ func (e *EnvoyHandle) EnsureControlPlaneConnectivity(prefix string) error {
 			if err != nil {
 				continue
 			}
-			allStatsString, _ := ioutil.ReadAll(resp.Body)
+			allStatsString, _ := io.ReadAll(resp.Body)
 			resp.Body.Close()
 			splitStats := strings.Split(string(allStatsString), "\n")
 
