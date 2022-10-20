@@ -86,6 +86,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
+        id: setup-go
         with:
           go-version: ${{ matrix.go-version }}
       - uses: actions/setup-node@v3
@@ -114,7 +115,7 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-${{ steps.setup-go.outputs.go-version }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go build cache
@@ -122,7 +123,7 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-          key: ${{ runner.os }}-go-mock-build-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-${{ steps.setup-go.outputs.go-version }}-go-mock-build-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mock-build-
             ${{ runner.os }}-go-build-
