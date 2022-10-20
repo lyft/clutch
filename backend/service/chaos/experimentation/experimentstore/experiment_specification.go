@@ -4,11 +4,10 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/id"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ExperimentSpecification struct {

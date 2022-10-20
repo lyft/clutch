@@ -1,9 +1,8 @@
 package modulemock
 
 import (
-	"google.golang.org/grpc"
-
 	mod "github.com/lyft/clutch/backend/module"
+	"google.golang.org/grpc"
 )
 
 type MockRegistrar struct {

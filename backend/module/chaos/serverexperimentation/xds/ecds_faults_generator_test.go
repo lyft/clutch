@@ -9,12 +9,11 @@ import (
 	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	gcpType "github.com/envoyproxy/go-control-plane/envoy/type/v3"
 	"github.com/golang/protobuf/ptypes/duration"
+	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestECDSFaultsGeneration(t *testing.T) {

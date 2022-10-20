@@ -8,12 +8,11 @@ import (
 	"context"
 	"fmt"
 
+	botv1 "github.com/lyft/clutch/backend/api/config/service/bot/v1"
+	"github.com/lyft/clutch/backend/service"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	botv1 "github.com/lyft/clutch/backend/api/config/service/bot/v1"
-	"github.com/lyft/clutch/backend/service"
 )
 
 const (

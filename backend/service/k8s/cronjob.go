@@ -5,12 +5,11 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/ptypes/wrappers"
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	v1beta1 "k8s.io/api/batch/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func (s *svc) DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error) {

@@ -7,11 +7,10 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/stretchr/testify/assert"
-	"golang.org/x/oauth2"
-
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	"github.com/lyft/clutch/backend/mock/service/dbmock"
+	"github.com/stretchr/testify/assert"
+	"golang.org/x/oauth2"
 )
 
 type notEmptyBytes struct{}

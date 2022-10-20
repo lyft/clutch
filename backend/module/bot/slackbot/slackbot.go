@@ -9,6 +9,12 @@ import (
 	"errors"
 	"fmt"
 
+	slackbotv1 "github.com/lyft/clutch/backend/api/bot/slackbot/v1"
+	slackbotconfigv1 "github.com/lyft/clutch/backend/api/config/module/bot/slackbot/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
+	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/bot"
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 	"github.com/uber-go/tally/v4"
@@ -16,13 +22,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	slackbotv1 "github.com/lyft/clutch/backend/api/bot/slackbot/v1"
-	slackbotconfigv1 "github.com/lyft/clutch/backend/api/config/module/bot/slackbot/v1"
-	"github.com/lyft/clutch/backend/gateway/log"
-	"github.com/lyft/clutch/backend/module"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/bot"
 )
 
 const (

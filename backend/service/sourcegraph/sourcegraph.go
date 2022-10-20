@@ -8,14 +8,13 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
+	sourcegraphv1cfg "github.com/lyft/clutch/backend/api/config/service/sourcegraph/v1"
+	sourcegraphv1 "github.com/lyft/clutch/backend/api/sourcegraph/v1"
+	"github.com/lyft/clutch/backend/service"
 	"github.com/shurcooL/graphql"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
-
-	sourcegraphv1cfg "github.com/lyft/clutch/backend/api/config/service/sourcegraph/v1"
-	sourcegraphv1 "github.com/lyft/clutch/backend/api/sourcegraph/v1"
-	"github.com/lyft/clutch/backend/service"
 )
 
 const Name = "clutch.service.sourcegraph"

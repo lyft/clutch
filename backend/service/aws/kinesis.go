@@ -7,10 +7,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
+	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 )
 
 func (c *client) DescribeKinesisStream(ctx context.Context, account, region, streamName string) (*kinesisv1.Stream, error) {

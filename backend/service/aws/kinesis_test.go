@@ -9,9 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
-	"github.com/stretchr/testify/assert"
-
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
+	"github.com/stretchr/testify/assert"
 )
 
 var testAwsStream = &types.StreamDescriptionSummary{

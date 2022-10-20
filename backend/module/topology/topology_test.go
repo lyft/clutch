@@ -3,13 +3,12 @@ package topology
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap/zaptest"
-
 	"github.com/lyft/clutch/backend/mock/service/topologymock"
 	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap/zaptest"
 )
 
 func TestModule(t *testing.T) {

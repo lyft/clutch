@@ -4,9 +4,8 @@ import (
 	"testing"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/stretchr/testify/assert"
-
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMaxQueryLimit(t *testing.T) {

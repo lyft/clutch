@@ -5,7 +5,6 @@ import (
 	"database/sql/driver"
 
 	"github.com/DATA-DOG/go-sqlmock"
-
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/db/postgres"
 )

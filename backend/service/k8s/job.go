@@ -3,12 +3,11 @@ package k8s
 import (
 	"context"
 
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	v1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func (s *svc) DescribeJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Job, error) {

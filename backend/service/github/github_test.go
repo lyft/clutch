@@ -16,15 +16,14 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	githubv3 "github.com/google/go-github/v37/github"
-	"github.com/shurcooL/githubv4"
-	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-
 	githubconfigv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
 	githubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service/authn"
+	"github.com/shurcooL/githubv4"
+	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
 )
 
 const problem = "we've had a problem"

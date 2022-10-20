@@ -3,16 +3,15 @@ package feedback
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap/zaptest"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	feedbackv1cfg "github.com/lyft/clutch/backend/api/config/module/feedback/v1"
 	feedbackv1 "github.com/lyft/clutch/backend/api/feedback/v1"
 	"github.com/lyft/clutch/backend/mock/service/feedbackmock"
 	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 func TestModule(t *testing.T) {

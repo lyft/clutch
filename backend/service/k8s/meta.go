@@ -1,12 +1,11 @@
 package k8s
 
 import (
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
-
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 // TODO (mcutalo): make this generic when adding additional `List` functionality

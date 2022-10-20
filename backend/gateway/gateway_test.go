@@ -7,10 +7,9 @@ import (
 	"os"
 	"testing"
 
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
-
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )
 
 func TestLoadEnv(t *testing.T) {

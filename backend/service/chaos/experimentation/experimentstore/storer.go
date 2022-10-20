@@ -11,15 +11,14 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/service"
+	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
-
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	"github.com/lyft/clutch/backend/service"
-	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 )
 
 const Name = "clutch.service.chaos.experimentation.store"

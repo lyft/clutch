@@ -8,11 +8,10 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
 )
 
 const (

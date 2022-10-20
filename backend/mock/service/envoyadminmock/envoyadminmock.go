@@ -6,13 +6,12 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	envoyadminv1 "github.com/lyft/clutch/backend/api/config/service/envoyadmin/v1"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/envoyadmin"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 type mockTransport struct{}

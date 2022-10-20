@@ -6,14 +6,13 @@ package logger
 
 import (
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	configv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/auditsink"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
 )
 
 const Name = "clutch.service.audit.sink.logger"

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"time"
 
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 	appsv1 "k8s.io/api/apps/v1"
@@ -14,9 +16,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/client-go/tools/cache"
-
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
-	"github.com/lyft/clutch/backend/gateway/meta"
 )
 
 // Setting a large channel buffer mostly for first boot and the  resync timer,

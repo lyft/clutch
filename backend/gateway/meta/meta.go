@@ -8,15 +8,14 @@ import (
 
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/grpcreflect"
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
+	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
-
-	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 )
 
 var (

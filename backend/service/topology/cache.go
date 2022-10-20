@@ -11,11 +11,10 @@ import (
 	"strings"
 	"time"
 
-	"go.uber.org/zap"
-	"google.golang.org/protobuf/encoding/protojson"
-
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 const topologyCacheLockId = "topology:cache"

@@ -6,9 +6,8 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/stretchr/testify/assert"
-
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExperimentRunConfigToExperiment(t *testing.T) {

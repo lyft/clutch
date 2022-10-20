@@ -12,16 +12,15 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/ptypes/any"
+	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
+	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
+	"github.com/lyft/clutch/backend/module"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/structpb"
-
-	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
-	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
-	"github.com/lyft/clutch/backend/module"
 )
 
 const (

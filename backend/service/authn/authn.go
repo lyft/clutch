@@ -10,14 +10,13 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
+	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
+	"github.com/lyft/clutch/backend/service"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
-	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
-	"github.com/lyft/clutch/backend/service"
 )
 
 const Name = "clutch.service.authn"

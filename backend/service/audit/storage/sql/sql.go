@@ -8,13 +8,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
-	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/types/known/anypb"
-	"google.golang.org/protobuf/types/known/timestamppb"
-
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
@@ -22,6 +15,12 @@ import (
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/audit/storage"
 	"github.com/lyft/clutch/backend/service/db/postgres"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type client struct {

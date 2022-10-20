@@ -10,11 +10,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
-	"go.uber.org/zap"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 const topologyObjectChanBufferSize = 5000

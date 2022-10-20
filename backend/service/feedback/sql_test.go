@@ -6,10 +6,9 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	feedbackv1 "github.com/lyft/clutch/backend/api/feedback/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/encoding/protojson"
-
-	feedbackv1 "github.com/lyft/clutch/backend/api/feedback/v1"
 )
 
 func TestCreateOrUpdateSubmission(t *testing.T) {

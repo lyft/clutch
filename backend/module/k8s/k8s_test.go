@@ -4,15 +4,14 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap/zaptest"
-	"google.golang.org/protobuf/types/known/structpb"
-
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/mock/service/k8smock"
 	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 func TestModule(t *testing.T) {

@@ -4,12 +4,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/mock/service/dbmock"
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 func TestConvertAPIBody(t *testing.T) {

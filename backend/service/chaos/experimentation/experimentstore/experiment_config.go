@@ -2,11 +2,10 @@ package experimentstore
 
 import (
 	"github.com/golang/protobuf/ptypes/any"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
-
-	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type ExperimentConfig struct {
