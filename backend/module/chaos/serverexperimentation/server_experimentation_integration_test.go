@@ -1,4 +1,4 @@
-// +build integration_only
+//go:build integration_only
 
 package serverexperimentation
 

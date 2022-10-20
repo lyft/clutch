@@ -190,8 +190,9 @@ func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 
 // Transformation from a field identifier to a valid json sql query.
 // Example:
-//  input: "metadata.fieldone.fieldtwo.id"
-//  output: "metadata->fieldone->fieldtwo->>id"
+//
+//	input: "metadata.fieldone.fieldtwo.id"
+//	output: "metadata->fieldone->fieldtwo->>id"
 func convertMetadataToQuery(input string) (string, error) {
 	splitMetadata := strings.Split(strings.TrimPrefix(input, metadataIdentifer), ".")
 

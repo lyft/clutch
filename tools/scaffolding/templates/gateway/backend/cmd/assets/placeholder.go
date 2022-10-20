@@ -1,4 +1,4 @@
-// +build !withAssets
+//go:build !withAssets
 
 package assets
 

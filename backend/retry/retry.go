@@ -34,12 +34,13 @@ Do retries a given function with delays between each attempts as defined by the 
 or their corresponding defaults.
 
 err := retry.Do(
-			ctx,
-			logger,
-			scope,
-			func() error { return nil },
-			Backoff(ExponentialBackoff),
-		)
+
+		ctx,
+		logger,
+		scope,
+		func() error { return nil },
+		Backoff(ExponentialBackoff),
+	)
 */
 func Do(ctx context.Context, logger *zap.Logger, scope tally.Scope, fn RetryableFunc, opts ...Option) error {
 	if err := ctx.Err(); err != nil {
