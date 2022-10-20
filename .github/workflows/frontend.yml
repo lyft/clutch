@@ -75,13 +75,19 @@ jobs:
       - run: make frontend-verify
       - run: yarn --cwd frontend test:licenses
   test-e2e:
+    strategy:
+      matrix:
+        go-version:
+          - 1.17.x
+          - 1.19.x
+
     name: test e2e
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: 1.17.0
+          go-version: ${{ matrix.go-version }}
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
@@ -108,7 +114,7 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go build cache
