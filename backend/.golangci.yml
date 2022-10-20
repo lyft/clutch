@@ -2,22 +2,18 @@
 linters:
   disable-all: true
   enable:
-  - deadcode
   - errcheck
   - exportloopref
   - gci
   - gocritic
   - gofmt
-  - goimports
   - gosec
   - gosimple
   - govet
   - ineffassign
   - staticcheck
-  - structcheck
   - typecheck
   - unused
-  - varcheck
   - whitespace
 linters-settings:
   gocritic:
