@@ -10,6 +10,7 @@ interface ResolverConfigProps {
 
 interface TableDetailsProps {
   enableOverride?: boolean;
+  notes?: NoteConfig[];
 }
 
 export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, TableDetailsProps {}
