@@ -17,18 +17,12 @@ on:
       - Makefile
 jobs:
   build:
-    strategy:
-      matrix:
-        go-version:
-          - 1.17.x
-          - 1.19.x
-
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: 1.19.x
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
