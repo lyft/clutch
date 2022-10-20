@@ -66,8 +66,8 @@ export const Tab = ({ children, onClick, label, startAdornment, ...props }: TabP
   let finalLabel = label;
   if (startAdornment !== undefined) {
     finalLabel = (
-      <div style={{ display: "flex" }}>
-        <span style={{ marginRight: "7px" }}>{startAdornment}</span>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <span style={{ display: "inherit", marginRight: "7px" }}>{startAdornment}</span>
         {label}
       </div>
     );
