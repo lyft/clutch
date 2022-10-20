@@ -118,6 +118,7 @@ type Config struct {
 	// Used to sign the nonce or any other JWT secrets.
 	SessionSecret string `protobuf:"bytes,1,opt,name=session_secret,json=sessionSecret,proto3" json:"session_secret,omitempty"`
 	// Types that are assignable to Type:
+	//
 	//	*Config_Oidc
 	Type isConfig_Type `protobuf_oneof:"type"`
 	// Whether to permit service tokens to be issued. In addition to setting this flag

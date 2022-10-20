@@ -88,6 +88,7 @@ type GetEventsRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Window:
+	//
 	//	*GetEventsRequest_Range
 	//	*GetEventsRequest_Since
 	Window isGetEventsRequest_Window `protobuf_oneof:"window"`
@@ -450,6 +451,7 @@ type Event struct {
 	// When the event happened.
 	OccurredAt *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
 	// Types that are assignable to EventType:
+	//
 	//	*Event_Event
 	EventType isEvent_EventType `protobuf_oneof:"event_type"`
 	// The event id.
