@@ -8,6 +8,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NotePanel,
   Resolver,
   Table,
   TableRow,
@@ -46,11 +47,14 @@ const TableIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) 
   );
 };
 
-const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
+const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] }) => {
   const { onSubmit, onBack } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
   const capacityUpdates = useDataLayout("capacityUpdates");
   const table = resourceData.displayValue() as IClutch.aws.dynamodb.v1.Table;
+
+  const tableDetailsNotes = notes.filter(note => note.location === "table-details");
+  const limitsNotes = notes.filter(note => note.location === "scaling-limits");
 
   const handleTableCapacityChange = (key: string, value: number) => {
     const newTableThroughput = { ...capacityUpdates.displayValue().table_throughput, [key]: value };
@@ -80,88 +84,95 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
-      <Box>
-        <Table columns={["Name", "Type", "Status", "Provisioned Capacities"]}>
-          <TableRow key={table.name}>
-            {table.name}
-            Table
-            {table.status}
-            <MetadataTable
-              onUpdate={handleTableCapacityChange}
-              data={[
-                {
-                  name: "read",
-                  value: table.provisionedThroughput.readCapacityUnits,
-                  input: {
-                    type: "number",
-                    key: "read",
-                    validation: number()
-                      .integer()
-                      .transform(value => (Number.isNaN(value) ? 0 : value))
-                      .min(Number(table.provisionedThroughput.readCapacityUnits)),
-                  },
-                },
-                {
-                  name: "write",
-                  value: table.provisionedThroughput.writeCapacityUnits,
-                  input: {
-                    type: "number",
-                    key: "write",
-                    validation: number()
-                      .integer()
-                      .transform(value => (Number.isNaN(value) ? 0 : value))
-                      .min(Number(table.provisionedThroughput.writeCapacityUnits)),
-                  },
-                },
-              ]}
-            />
-          </TableRow>
-          {table.globalSecondaryIndexes.map(gsi => (
-            <TableRow key={gsi.name}>
-              {gsi.name}
-              Index
-              {gsi.status}
+      <NotePanel notes={tableDetailsNotes} />
+        <Box>
+          <Table columns={["Name", "Type", "Status", "Provisioned Capacities"]}>
+            <TableRow key={table.name}>
+              {table.name}
+              Table
+              {table.status}
               <MetadataTable
-                onUpdate={handleGsiCapacityChange}
+                onUpdate={handleTableCapacityChange}
                 data={[
                   {
                     name: "read",
-                    value: gsi.provisionedThroughput.readCapacityUnits,
+                    value: table.provisionedThroughput.readCapacityUnits,
                     input: {
                       type: "number",
-                      key: `readCapacityUnits,${gsi.name}`,
+                      key: "read",
                       validation: number()
                         .integer()
                         .transform(value => (Number.isNaN(value) ? 0 : value))
-                        .min(Number(gsi.provisionedThroughput.readCapacityUnits)),
+                        .min(Number(table.provisionedThroughput.readCapacityUnits)),
                     },
                   },
                   {
                     name: "write",
-                    value: gsi.provisionedThroughput.writeCapacityUnits,
+                    value: table.provisionedThroughput.writeCapacityUnits,
                     input: {
                       type: "number",
-                      key: `writeCapacityUnits,${gsi.name}`,
+                      key: "write",
                       validation: number()
                         .integer()
                         .transform(value => (Number.isNaN(value) ? 0 : value))
-                        .min(Number(gsi.provisionedThroughput.writeCapacityUnits)),
+                        .min(Number(table.provisionedThroughput.writeCapacityUnits)),
                     },
                   },
                 ]}
               />
             </TableRow>
-          ))}
-        </Table>
-      </Box>
+            {table.globalSecondaryIndexes.map(gsi => (
+              <TableRow key={gsi.name}>
+                {gsi.name}
+                Index
+                {gsi.status}
+                <MetadataTable
+                  onUpdate={handleGsiCapacityChange}
+                  data={[
+                    {
+                      name: "read",
+                      value: gsi.provisionedThroughput.readCapacityUnits,
+                      input: {
+                        type: "number",
+                        key: `readCapacityUnits,${gsi.name}`,
+                        validation: number()
+                          .integer()
+                          .transform(value => (Number.isNaN(value) ? 0 : value))
+                          .min(Number(gsi.provisionedThroughput.readCapacityUnits)),
+                      },
+                    },
+                    {
+                      name: "write",
+                      value: gsi.provisionedThroughput.writeCapacityUnits,
+                      input: {
+                        type: "number",
+                        key: `writeCapacityUnits,${gsi.name}`,
+                        validation: number()
+                          .integer()
+                          .transform(value => (Number.isNaN(value) ? 0 : value))
+                          .min(Number(gsi.provisionedThroughput.writeCapacityUnits)),
+                      },
+                    },
+                  ]}
+                />
+              </TableRow>
+            ))}
+          </Table>
+        </Box>
 
       {enableOverride && (
         <Box>
-          <Alert severity="warning">
+
+          {!!limitsNotes && (
+            <Alert severity="warning">
             Warning: to override the DynamoDB scaling limits, check the box below. This will bypass
             the maximum limits placed on all throughput updates. Only override limits if safe to do
             so.
           </Alert>
+          )}
+
+          <NotePanel notes={limitsNotes} />
+
           <CheckboxPanel
             onChange={state =>
               capacityUpdates.updateData("ignore_maximums", state["Override limits"])
@@ -260,7 +271,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <TableIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
-      <TableDetails name="Modify" enableOverride={enableOverride} />
+      <TableDetails name="Modify" enableOverride={enableOverride} notes={notes} />
       <Confirm name="Results" />
     </Wizard>
   );
