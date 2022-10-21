@@ -75,12 +75,6 @@ jobs:
       - run: make frontend-verify
       - run: yarn --cwd frontend test:licenses
   test-e2e:
-    strategy:
-      matrix:
-        go-version:
-          - 1.17.x
-          - 1.19.x
-
     name: test e2e
     runs-on: ubuntu-latest
     steps:
@@ -88,7 +82,7 @@ jobs:
       - uses: actions/setup-go@v3
         id: setup-go
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: 1.19.x
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'

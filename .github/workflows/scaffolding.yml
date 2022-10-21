@@ -11,12 +11,6 @@ env:
   PACKAGEPATH: ${{ github.workspace }}/go/src/github.com/${{ github.repository }}
 jobs:
   build:
-    strategy:
-      matrix:
-        go-version:
-          - 1.17.x
-          - 1.19.x
-
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +18,7 @@ jobs:
           path: ${{ env.PACKAGEPATH }}
       - uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: 1.19.x
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
