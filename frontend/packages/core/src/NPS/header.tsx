@@ -7,7 +7,7 @@ import {
   Paper as MuiPaper,
   Popper as MuiPopper,
 } from "@mui/material";
-import { sortBy } from "lodash";
+import { get, sortBy } from "lodash";
 
 import type { Workflow } from "../AppProvider/workflow";
 import { IconButton } from "../button";
@@ -62,12 +62,17 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
       typeMap[group] = [];
     }
 
-    typeMap[group].push(
-      ...routes.map(route => ({
+    routes.forEach(route => {
+      typeMap[group].push({
         label: route.displayName || displayName,
         value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
-      }))
-    );
+      });
+
+      const additionalNPS = get("route.componentProps.additionalNPS", []);
+      if (additionalNPS) {
+        typeMap[group].push(...additionalNPS);
+      }
+    });
   });
 
   feedbackTypes.push(
