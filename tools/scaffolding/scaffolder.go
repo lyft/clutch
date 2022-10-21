@@ -79,6 +79,23 @@ func determineGoPath() string {
 	return strings.TrimSpace(string(goPathOut))
 }
 
+func determineYarnPath() string {
+	path, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	yarnScript := filepath.Join(path, "..", "..", "build", "bin", "yarn.sh")
+	scriptPath, err := exec.LookPath(yarnScript)
+	if err != nil {
+		path, err := exec.LookPath("yarn")
+		if err != nil {
+			log.Fatal("could not find yarn executable to use")
+		}
+		return strings.TrimSpace(path)
+	}
+	return strings.TrimSpace(scriptPath)
+}
+
 func determineUsername() string {
 	u, err := user.Current()
 	if err != nil {
@@ -209,24 +226,25 @@ func generateAPI(args *args, tmpFolder, dest string) {
 func generateFrontend(args *args, tmpFolder, dest string) {
 	// Update clutch.config.js for new workflow
 	log.Println("Compiling workflow, this may take a few minutes...")
-	log.Println("cd", tmpFolder, "&& yarn --frozen-lockfile && yarn tsc && yarn compile")
+	yarn := determineYarnPath()
+	log.Println("cd", tmpFolder, "&&", yarn, "--frozen-lockfile &&", yarn, "tsc && ", yarn, "compile")
 	if err := os.Chdir(tmpFolder); err != nil {
 		log.Fatal(err)
 	}
 
-	installCmd := exec.Command("yarn", "--frozen-lockfile")
+	installCmd := exec.Command(yarn, "--frozen-lockfile")
 	if out, err := installCmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`yarn --frozen-lockfile` returned the above error")
 	}
 
-	compileTypesCmd := exec.Command("yarn", "tsc")
+	compileTypesCmd := exec.Command(yarn, "tsc")
 	if out, err := compileTypesCmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`yarn tsc` returned the above error")
 	}
 
-	compileDevCmd := exec.Command("yarn", "compile")
+	compileDevCmd := exec.Command(yarn, "compile")
 	if out, err := compileDevCmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`yarn compile` returned the above error")
