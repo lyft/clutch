@@ -85,90 +85,89 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <NotePanel notes={tableDetailsNotes} />
-        <Box>
-          <Table columns={["Name", "Type", "Status", "Provisioned Capacities"]}>
-            <TableRow key={table.name}>
-              {table.name}
-              Table
-              {table.status}
+      <Box>
+        <Table columns={["Name", "Type", "Status", "Provisioned Capacities"]}>
+          <TableRow key={table.name}>
+            {table.name}
+            Table
+            {table.status}
+            <MetadataTable
+              onUpdate={handleTableCapacityChange}
+              data={[
+                {
+                  name: "read",
+                  value: table.provisionedThroughput.readCapacityUnits,
+                  input: {
+                    type: "number",
+                    key: "read",
+                    validation: number()
+                      .integer()
+                      .transform(value => (Number.isNaN(value) ? 0 : value))
+                      .min(Number(table.provisionedThroughput.readCapacityUnits)),
+                  },
+                },
+                {
+                  name: "write",
+                  value: table.provisionedThroughput.writeCapacityUnits,
+                  input: {
+                    type: "number",
+                    key: "write",
+                    validation: number()
+                      .integer()
+                      .transform(value => (Number.isNaN(value) ? 0 : value))
+                      .min(Number(table.provisionedThroughput.writeCapacityUnits)),
+                  },
+                },
+              ]}
+            />
+          </TableRow>
+          {table.globalSecondaryIndexes.map(gsi => (
+            <TableRow key={gsi.name}>
+              {gsi.name}
+              Index
+              {gsi.status}
               <MetadataTable
-                onUpdate={handleTableCapacityChange}
+                onUpdate={handleGsiCapacityChange}
                 data={[
                   {
                     name: "read",
-                    value: table.provisionedThroughput.readCapacityUnits,
+                    value: gsi.provisionedThroughput.readCapacityUnits,
                     input: {
                       type: "number",
-                      key: "read",
+                      key: `readCapacityUnits,${gsi.name}`,
                       validation: number()
                         .integer()
                         .transform(value => (Number.isNaN(value) ? 0 : value))
-                        .min(Number(table.provisionedThroughput.readCapacityUnits)),
+                        .min(Number(gsi.provisionedThroughput.readCapacityUnits)),
                     },
                   },
                   {
                     name: "write",
-                    value: table.provisionedThroughput.writeCapacityUnits,
+                    value: gsi.provisionedThroughput.writeCapacityUnits,
                     input: {
                       type: "number",
-                      key: "write",
+                      key: `writeCapacityUnits,${gsi.name}`,
                       validation: number()
                         .integer()
                         .transform(value => (Number.isNaN(value) ? 0 : value))
-                        .min(Number(table.provisionedThroughput.writeCapacityUnits)),
+                        .min(Number(gsi.provisionedThroughput.writeCapacityUnits)),
                     },
                   },
                 ]}
               />
             </TableRow>
-            {table.globalSecondaryIndexes.map(gsi => (
-              <TableRow key={gsi.name}>
-                {gsi.name}
-                Index
-                {gsi.status}
-                <MetadataTable
-                  onUpdate={handleGsiCapacityChange}
-                  data={[
-                    {
-                      name: "read",
-                      value: gsi.provisionedThroughput.readCapacityUnits,
-                      input: {
-                        type: "number",
-                        key: `readCapacityUnits,${gsi.name}`,
-                        validation: number()
-                          .integer()
-                          .transform(value => (Number.isNaN(value) ? 0 : value))
-                          .min(Number(gsi.provisionedThroughput.readCapacityUnits)),
-                      },
-                    },
-                    {
-                      name: "write",
-                      value: gsi.provisionedThroughput.writeCapacityUnits,
-                      input: {
-                        type: "number",
-                        key: `writeCapacityUnits,${gsi.name}`,
-                        validation: number()
-                          .integer()
-                          .transform(value => (Number.isNaN(value) ? 0 : value))
-                          .min(Number(gsi.provisionedThroughput.writeCapacityUnits)),
-                      },
-                    },
-                  ]}
-                />
-              </TableRow>
-            ))}
-          </Table>
-        </Box>
+          ))}
+        </Table>
+      </Box>
 
       {enableOverride && (
         <Box>
-
           {!!limitsNotes && (
             <Alert severity="warning">
-            Warning: to override the DynamoDB scaling limits, check the box below. This will bypass
-            the maximum limits placed on all throughput updates. Only override limits if safe to do
-            so.
-          </Alert>
+              Warning: to override the DynamoDB scaling limits, check the box below. This will
+              bypass the maximum limits placed on all throughput updates. Only override limits if
+              safe to do so.
+            </Alert>
           )}
 
           <NotePanel notes={limitsNotes} />
