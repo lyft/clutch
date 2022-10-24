@@ -145,6 +145,7 @@ func (c *client) readAndFanout(ctx context.Context) {
 	c.sinkWriterScope.Counter("events_fetch").Inc(1)
 	events, err := c.storage.UnsentEvents(ctx)
 	if err != nil {
+		c.sinkWriterScope.Counter("events_fetch_error").Inc(1)
 		return
 	}
 
