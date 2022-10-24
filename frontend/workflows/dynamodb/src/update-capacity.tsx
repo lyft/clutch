@@ -170,7 +170,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
             </Alert>
           )}
 
-          <NotePanel notes={limitsNotes} />
+          {limitsNotes.length > 0 && <NotePanel notes={limitsNotes} />}
 
           <CheckboxPanel
             onChange={state =>
