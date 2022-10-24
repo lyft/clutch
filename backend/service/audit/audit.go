@@ -46,8 +46,9 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	c := &client{
-		logger: logger,
-		scope:  scope,
+		logger:          logger,
+		scope:           scope,
+		sinkWriterScope: scope.SubScope("sink_writer"),
 
 		storage: storageProvider,
 		marshaler: &protojson.MarshalOptions{
@@ -101,8 +102,9 @@ type registeredSink struct {
 }
 
 type client struct {
-	logger *zap.Logger
-	scope  tally.Scope
+	logger          *zap.Logger
+	scope           tally.Scope
+	sinkWriterScope tally.Scope
 
 	storage storage.Storage
 	filter  *auditconfigv1.Filter
@@ -137,29 +139,42 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 	return c.storage.ReadEvents(ctx, start, end)
 }
 
-// This should be called via `go` in order to avoid blocking main exectuion.
-func (c *client) poll() {
-	readAndFanout := func(ctx context.Context) {
-		// TODO(maybe): Backpressure on continued failure.
-		events, err := c.storage.UnsentEvents(ctx)
-		if err != nil {
-			return
-		}
+func (c *client) readAndFanout(ctx context.Context) {
+	// TODO(maybe): Backpressure on continued failure.
 
-		for _, event := range events {
-			for _, s := range c.sinks {
-				if err := s.Write(event); err != nil {
-					c.logger.Error(
-						"error writing audit event to sink",
-						zap.String("sink", s.name),
-						log.ProtoField("event", event),
-						zap.Error(err),
-					)
-				}
+	c.sinkWriterScope.Counter("unsent_events_fetch").Inc(1)
+	events, err := c.storage.UnsentEvents(ctx)
+	if err != nil {
+		return
+	}
+
+	numEvents := len(events)
+	c.sinkWriterScope.Gauge("unsent_events_received").Update(float64(numEvents))
+	c.sinkWriterScope.Counter("unsent_events_total").Inc(int64(numEvents))
+
+	t := c.sinkWriterScope.Timer("unsent_events_write_all").Start()
+	for _, event := range events {
+		for _, s := range c.sinks {
+			c.sinkWriterScope.Counter("event_write.attempt")
+			if err := s.Write(event); err == nil {
+				c.sinkWriterScope.Counter("event_write.success")
+			} else {
+				c.sinkWriterScope.Counter("event_write.fail")
+				c.logger.Error(
+					"error writing audit event to sink",
+					zap.String("sink", s.name),
+					log.ProtoField("event", event),
+					zap.Error(err),
+				)
 			}
 		}
 	}
+	t.Stop()
 
+}
+
+// This should be called via `go` in order to avoid blocking main exectuion.
+func (c *client) poll() {
 	lockID := convertLockToUint32(auditEventSinkLockId)
 
 	// Generate random int with the floor of 10, to jitter this ticker.
@@ -171,6 +186,9 @@ func (c *client) poll() {
 	ticker := time.NewTicker(time.Second * time.Duration(ran.Int64()+minTime))
 	for {
 		<-ticker.C
+
+		c.scope.Counter("tick").Inc(1)
+
 		ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(30*time.Second))
 
 		isLocked, err := c.storage.AttemptLock(ctx, lockID)
@@ -179,11 +197,15 @@ func (c *client) poll() {
 		}
 
 		if isLocked {
+			c.scope.Counter("lock_acquired").Inc(1)
+
 			_, err := c.storage.ReleaseLock(ctx, lockID)
 			if err != nil {
 				c.logger.Error("Error trying to release lock", zap.Error(err))
 			}
-			readAndFanout(ctx)
+			c.readAndFanout(ctx)
+		} else {
+			c.scope.Counter("lock_not_acquired").Inc(1)
 		}
 
 		cancel()
