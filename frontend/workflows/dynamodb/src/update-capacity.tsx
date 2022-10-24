@@ -8,6 +8,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NotePanel,
   Resolver,
   Table,
   TableRow,
@@ -46,11 +47,14 @@ const TableIdentifier: React.FC<ResolverChild> = ({ resolverType, notes = [] }) 
   );
 };
 
-const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
+const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] }) => {
   const { onSubmit, onBack } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
   const capacityUpdates = useDataLayout("capacityUpdates");
   const table = resourceData.displayValue() as IClutch.aws.dynamodb.v1.Table;
+
+  const tableDetailsNotes = notes.filter(note => note.location === "table-details");
+  const limitsNotes = notes.filter(note => note.location === "scaling-limits");
 
   const handleTableCapacityChange = (key: string, value: number) => {
     const newTableThroughput = { ...capacityUpdates.displayValue().table_throughput, [key]: value };
@@ -80,6 +84,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
+      <NotePanel notes={tableDetailsNotes} />
       <Box>
         <Table columns={["Name", "Type", "Status", "Provisioned Capacities"]}>
           <TableRow key={table.name}>
@@ -157,11 +162,16 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride }) => {
 
       {enableOverride && (
         <Box>
-          <Alert severity="warning">
-            Warning: to override the DynamoDB scaling limits, check the box below. This will bypass
-            the maximum limits placed on all throughput updates. Only override limits if safe to do
-            so.
-          </Alert>
+          {limitsNotes.length === 0 && (
+            <Alert severity="warning">
+              Warning: to override the DynamoDB scaling limits, check the box below. This will
+              bypass the maximum limits placed on all throughput updates. Only override limits if
+              safe to do so.
+            </Alert>
+          )}
+
+          {limitsNotes.length > 0 && <NotePanel notes={limitsNotes} />}
+
           <CheckboxPanel
             onChange={state =>
               capacityUpdates.updateData("ignore_maximums", state["Override limits"])
@@ -260,7 +270,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <TableIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
-      <TableDetails name="Modify" enableOverride={enableOverride} />
+      <TableDetails name="Modify" enableOverride={enableOverride} notes={notes} />
       <Confirm name="Results" />
     </Wizard>
   );
