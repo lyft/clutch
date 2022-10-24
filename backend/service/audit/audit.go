@@ -142,18 +142,21 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 func (c *client) readAndFanout(ctx context.Context) {
 	// TODO(maybe): Backpressure on continued failure.
 
-	c.sinkWriterScope.Counter("unsent_events_fetch").Inc(1)
+	c.sinkWriterScope.Counter("events_fetch").Inc(1)
 	events, err := c.storage.UnsentEvents(ctx)
 	if err != nil {
 		return
 	}
 
 	numEvents := len(events)
-	c.sinkWriterScope.Gauge("unsent_events_received").Update(float64(numEvents))
-	c.sinkWriterScope.Counter("unsent_events_total").Inc(int64(numEvents))
+	c.sinkWriterScope.Gauge("events_received").Update(float64(numEvents))
+	c.sinkWriterScope.Counter("events_total").Inc(int64(numEvents))
 
-	t := c.sinkWriterScope.Timer("unsent_events_write_all").Start()
+	flushTimer := c.sinkWriterScope.Timer("unsent_events_write_all").Start()
 	for _, event := range events {
+		lag := time.Since(event.OccurredAt.AsTime())
+		c.sinkWriterScope.Timer("event_lag").Record(lag)
+
 		for _, s := range c.sinks {
 			c.sinkWriterScope.Counter("event_write.attempt")
 			if err := s.Write(event); err == nil {
@@ -169,8 +172,7 @@ func (c *client) readAndFanout(ctx context.Context) {
 			}
 		}
 	}
-	t.Stop()
-
+	flushTimer.Stop()
 }
 
 // This should be called via `go` in order to avoid blocking main exectuion.
