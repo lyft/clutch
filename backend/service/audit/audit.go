@@ -158,7 +158,6 @@ func (c *client) readAndFanout(ctx context.Context) {
 		c.sinkWriterScope.Timer("event_lag").Record(lag)
 
 		for _, s := range c.sinks {
-			c.sinkWriterScope.Counter("event_write.attempt")
 			if err := s.Write(event); err == nil {
 				c.sinkWriterScope.Counter("event_write.success")
 			} else {
