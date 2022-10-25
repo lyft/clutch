@@ -9,6 +9,7 @@ import (
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	"github.com/lyft/clutch/backend/mock/service/dbmock"
 )
 
 func TestConvertAPIBody(t *testing.T) {
@@ -63,4 +64,16 @@ func TestAPIBodyProto(t *testing.T) {
 		}
 		assert.NoError(t, err)
 	}
+}
+
+func TestGetAdvisoryConn(t *testing.T) {
+	dbm := dbmock.NewMockDB()
+	c := &client{
+		db: dbm.DB(),
+	}
+
+	conn, err := c.getAdvisoryConn()
+	assert.NoError(t, err)
+	assert.NotNil(t, conn)
+	assert.NotNil(t, c.advisoryLockConn)
 }
