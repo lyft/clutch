@@ -231,11 +231,6 @@ func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
 		return false, err
 	}
 
-	// conn should never be nil but this guards against a panic in the event that it is
-	if conn != nil {
-		conn.Close()
-	}
-
 	return unlock, nil
 }
 
