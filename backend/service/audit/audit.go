@@ -201,11 +201,12 @@ func (c *client) poll() {
 		if isLocked {
 			c.scope.Counter("lock_acquired").Inc(1)
 
+			c.readAndFanout(ctx)
+
 			_, err := c.storage.ReleaseLock(ctx, lockID)
 			if err != nil {
 				c.logger.Error("Error trying to release lock", zap.Error(err))
 			}
-			c.readAndFanout(ctx)
 		} else {
 			c.scope.Counter("lock_not_acquired").Inc(1)
 		}
