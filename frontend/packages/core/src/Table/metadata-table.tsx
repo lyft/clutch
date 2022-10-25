@@ -19,6 +19,7 @@ import { object } from "yup";
 import { useWizardContext } from "../Contexts";
 import TextField from "../Input/text-field";
 import styled from "../styled";
+import { Typography } from "../typography";
 
 interface RowData {
   input?: {
@@ -28,6 +29,7 @@ interface RowData {
   };
   name: string;
   value: unknown;
+  disabledFieldlabel?: string;
 }
 
 interface IdentifiableRowData extends RowData {
@@ -137,6 +139,9 @@ interface MutableRowProps extends ImmutableRowProps {
   validation: UseFormReturn<FieldValues, object>;
 }
 
+// TODO: fix Grid styling to account for labels over the text field or revisit implementation
+// (ex. instead of a disabled text field and editable text field, remove disabled field and have a reset icon next to text field
+// to reset field to the default value
 const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
   const error = validation?.formState?.errors?.[data.name];
 
@@ -149,6 +154,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
+        {data.disabledFieldlabel && (
+          <Typography variant="body4">{data.disabledFieldlabel}</Typography>
+        )}
         <Grid>
           <div className="textfield-disabled">
             <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
