@@ -26,6 +26,10 @@ interface RowData {
     type?: string;
     validation?: BaseSchema<unknown>;
   };
+  textFieldLabels?: {
+    disabledField: string;
+    updatedField: string;
+  };
   name: string;
   value: unknown;
   disabledFieldlabel?: string;
@@ -159,13 +163,14 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
               id={data.id}
               name={data.name}
               defaultValue={data.value}
-              label={data.disabledFieldlabel ?? data.disabledFieldlabel}
+              label={data.textFieldLabels?.disabledField ?? data.textFieldLabels?.disabledField}
             />
           </div>
           <ChevronRightIcon />
           <TextField
             id={data.id}
             name={data.name}
+            label={data.textFieldLabels?.updatedField ?? data.textFieldLabels?.updatedField}
             defaultValue={data.value}
             type={data?.input?.type}
             onChange={updateCallback}
