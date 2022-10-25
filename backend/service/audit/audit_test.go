@@ -15,6 +15,7 @@ import (
 func TestNew(t *testing.T) {
 	cfg, _ := anypb.New(&auditconfigv1.Config{
 		StorageProvider: &auditconfigv1.Config_InMemory{InMemory: true},
+		Filter:          &auditconfigv1.Filter{Denylist: true},
 	})
 	log := zaptest.NewLogger(t)
 	scope := tally.NewTestScope("", nil)
@@ -24,6 +25,9 @@ func TestNew(t *testing.T) {
 	// Assert conformance to public interface.
 	_, ok := svc.(Auditor)
 	assert.True(t, ok)
+
+	as := svc.(*client)
+	assert.True(t, as.filter.Denylist)
 }
 
 func TestFilter(t *testing.T) {

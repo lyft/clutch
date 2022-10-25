@@ -57,6 +57,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 			// Render zero values (useful for successful status).
 			EmitUnpopulated: true,
 		},
+
+		filter: config.Filter,
 	}
 
 	for _, sinkName := range config.Sinks {
