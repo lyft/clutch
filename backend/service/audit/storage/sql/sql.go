@@ -196,7 +196,7 @@ func (c *client) getAdvisoryConn() (*sql.Conn, error) {
 		return c.advisoryLockConn, nil
 	}
 
-	advisoryLockConn, err := c.db.Conn(context.TODO())
+	advisoryLockConn, err := c.db.Conn(context.Background())
 	if err != nil {
 		return nil, err
 	}
