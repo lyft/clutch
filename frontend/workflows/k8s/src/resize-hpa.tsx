@@ -74,6 +74,10 @@ const HPADetails: React.FC<WizardChild> = () => {
           {
             name: "Min Size",
             value: hpa.sizing.minReplicas,
+            textFieldLabels: {
+              disabledField: "Current min",
+              updatedField: "New min",
+            },
             input: {
               type: "number",
               key: "sizing.minReplicas",
@@ -86,6 +90,10 @@ const HPADetails: React.FC<WizardChild> = () => {
           {
             name: "Max Size",
             value: hpa.sizing.maxReplicas,
+            textFieldLabels: {
+              disabledField: "Current max",
+              updatedField: "New max",
+            },
             input: {
               type: "number",
               key: "sizing.maxReplicas",

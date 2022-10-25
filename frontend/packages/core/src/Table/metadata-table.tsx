@@ -26,8 +26,13 @@ interface RowData {
     type?: string;
     validation?: BaseSchema<unknown>;
   };
+  textFieldLabels?: {
+    disabledField: string;
+    updatedField: string;
+  };
   name: string;
   value: unknown;
+  disabledFieldlabel?: string;
 }
 
 interface IdentifiableRowData extends RowData {
@@ -75,7 +80,7 @@ const TableCell = styled(MuiTableCell)({
   fontSize: "14px",
   fontWeight: "normal",
   height: "48px",
-  padding: "0 16px",
+  padding: "8px 16px",
 });
 
 const Grid = styled(MuiGrid)({
@@ -137,6 +142,8 @@ interface MutableRowProps extends ImmutableRowProps {
   validation: UseFormReturn<FieldValues, object>;
 }
 
+// TODO (maybe): instead of a disabled text field and editable text field, remove disabled field and have a reset icon next to text field
+// to reset field to the default value
 const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
   const error = validation?.formState?.errors?.[data.name];
 
@@ -151,12 +158,19 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
       <TableCell>
         <Grid>
           <div className="textfield-disabled">
-            <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
+            <TextField
+              disabled
+              id={data.id}
+              name={data.name}
+              defaultValue={data.value}
+              label={data.textFieldLabels?.disabledField ?? data.textFieldLabels?.disabledField}
+            />
           </div>
           <ChevronRightIcon />
           <TextField
             id={data.id}
             name={data.name}
+            label={data.textFieldLabels?.updatedField ?? data.textFieldLabels?.updatedField}
             defaultValue={data.value}
             type={data?.input?.type}
             onChange={updateCallback}
