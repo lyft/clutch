@@ -214,6 +214,7 @@ func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {
 	var lock bool
 	if err := conn.QueryRowContext(ctx, "SELECT pg_try_advisory_lock($1);", lockID).Scan(&lock); err != nil {
 		c.logger.Error("Unable to query for a advisory lock", zap.Error(err))
+		c.advisoryLockConn = nil
 		return false, err
 	}
 	return lock, nil
@@ -228,7 +229,13 @@ func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
 	var unlock bool
 	if err := conn.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockID).Scan(&unlock); err != nil {
 		c.logger.Error("Unable to perform an advisory unlock", zap.Error(err))
+		c.advisoryLockConn = nil
 		return false, err
+	}
+
+	if conn != nil {
+		conn.Close()
+		c.advisoryLockConn = nil
 	}
 
 	return unlock, nil
