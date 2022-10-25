@@ -231,6 +231,11 @@ func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
 		return false, err
 	}
 
+	if conn != nil {
+		conn.Close()
+		c.advisoryLockConn = nil
+	}
+
 	return unlock, nil
 }
 
