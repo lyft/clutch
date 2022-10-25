@@ -147,7 +147,7 @@ const StyledSelect = styled(BaseSelect)({
     top: "unset",
     transform: "unset",
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
     boxSizing: "border-box",
 
