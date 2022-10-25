@@ -73,6 +73,7 @@ const StyledSelect = styled(BaseSelect)({
   "--notched-border-width": "1px",
   padding: "0",
   backgroundColor: "#FFFFFF",
+  minWidth: "fit-content",
 
   ".MuiOutlinedInput-notchedOutline": {
     borderColor: "rgba(13, 16, 48, 0.38)",
