@@ -19,7 +19,6 @@ import { object } from "yup";
 import { useWizardContext } from "../Contexts";
 import TextField from "../Input/text-field";
 import styled from "../styled";
-import { Typography } from "../typography";
 
 interface RowData {
   input?: {
@@ -155,7 +154,13 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
       <TableCell>
         <Grid>
           <div className="textfield-disabled">
-            <TextField disabled id={data.id} name={data.name} defaultValue={data.value} label={data.disabledFieldlabel ?? data.disabledFieldlabel}/>
+            <TextField
+              disabled
+              id={data.id}
+              name={data.name}
+              defaultValue={data.value}
+              label={data.disabledFieldlabel ?? data.disabledFieldlabel}
+            />
           </div>
           <ChevronRightIcon />
           <TextField
