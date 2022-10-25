@@ -77,7 +77,7 @@ const TableCell = styled(MuiTableCell)({
   fontSize: "14px",
   fontWeight: "normal",
   height: "48px",
-  padding: "0 16px",
+  padding: "8px 16px",
 });
 
 const Grid = styled(MuiGrid)({
@@ -139,8 +139,7 @@ interface MutableRowProps extends ImmutableRowProps {
   validation: UseFormReturn<FieldValues, object>;
 }
 
-// TODO: fix Grid styling to account for labels over the text field or revisit implementation
-// (ex. instead of a disabled text field and editable text field, remove disabled field and have a reset icon next to text field
+// TODO (maybe): instead of a disabled text field and editable text field, remove disabled field and have a reset icon next to text field
 // to reset field to the default value
 const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
   const error = validation?.formState?.errors?.[data.name];
@@ -154,12 +153,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
-        {data.disabledFieldlabel && (
-          <Typography variant="body4">{data.disabledFieldlabel}</Typography>
-        )}
         <Grid>
           <div className="textfield-disabled">
-            <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
+            <TextField disabled id={data.id} name={data.name} defaultValue={data.value} label={data.disabledFieldlabel ?? data.disabledFieldlabel}/>
           </div>
           <ChevronRightIcon />
           <TextField
