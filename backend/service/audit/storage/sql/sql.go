@@ -25,10 +25,10 @@ import (
 )
 
 type client struct {
-	logger *zap.Logger
-	scope  tally.Scope
-
-	db *sql.DB
+	logger           *zap.Logger
+	scope            tally.Scope
+	db               *sql.DB
+	advisoryLockConn *sql.Conn
 }
 
 func New(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (storage.Storage, error) {
@@ -187,9 +187,32 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 	return events, nil
 }
 
+// We create our own connection to use for acquiring the advisory lock.
+// For advisory locks you must use the same session to issue the unlock
+// If not the lock will stay locked until that connection is severed or
+// the unlock request uses the same session in which the lock was created.
+func (c *client) getAdvisoryConn() (*sql.Conn, error) {
+	if c.advisoryLockConn != nil {
+		return c.advisoryLockConn, nil
+	}
+
+	advisoryLockConn, err := c.db.Conn(context.TODO())
+	if err != nil {
+		return nil, err
+	}
+
+	c.advisoryLockConn = advisoryLockConn
+	return advisoryLockConn, nil
+}
+
 func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {
+	conn, err := c.getAdvisoryConn()
+	if err != nil {
+		return false, err
+	}
+
 	var lock bool
-	if err := c.db.QueryRowContext(ctx, "SELECT pg_try_advisory_lock($1);", lockID).Scan(&lock); err != nil {
+	if err := conn.QueryRowContext(ctx, "SELECT pg_try_advisory_lock($1);", lockID).Scan(&lock); err != nil {
 		c.logger.Error("Unable to query for a advisory lock", zap.Error(err))
 		return false, err
 	}
@@ -197,8 +220,13 @@ func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {
 }
 
 func (c *client) ReleaseLock(ctx context.Context, lockID uint32) (bool, error) {
+	conn, err := c.getAdvisoryConn()
+	if err != nil {
+		return false, err
+	}
+
 	var unlock bool
-	if err := c.db.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockID).Scan(&unlock); err != nil {
+	if err := conn.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockID).Scan(&unlock); err != nil {
 		c.logger.Error("Unable to perform an advisory unlock", zap.Error(err))
 		return false, err
 	}
