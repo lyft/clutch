@@ -379,6 +379,6 @@ const TextFieldRef = (
   );
 };
 
-const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(TextFieldRef);
+const TextField = React.forwardRef<HTMLDivElement, TextFieldProps>(TextFieldRef);
 
 export default TextField;
