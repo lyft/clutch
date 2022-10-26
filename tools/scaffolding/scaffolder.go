@@ -91,9 +91,9 @@ func determineYarnPath() string {
 		if err != nil {
 			log.Fatal("could not find yarn executable to use")
 		}
-		return strings.TrimSpace(path)
+		return path
 	}
-	return strings.TrimSpace(scriptPath)
+	return scriptPath
 }
 
 func determineUsername() string {
