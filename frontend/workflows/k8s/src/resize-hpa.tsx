@@ -13,13 +13,12 @@ import {
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
-import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import _ from "lodash";
 import { number, ref } from "yup";
 import type Reference from "yup/lib/Reference";
 
-import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
+import type { ConfirmChild, ResolverChild, VerifyChild, WorkflowProps } from ".";
 
 const HPAIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
@@ -36,13 +35,15 @@ const HPAIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
 
-const HPADetails: React.FC<WizardChild> = () => {
+const HPADetails: React.FC<VerifyChild> = ({ notes = [] }) => {
   const { onSubmit, onBack } = useWizardContext();
   const hpaData = useDataLayout("hpaData");
   const hpa = hpaData.displayValue() as IClutch.k8s.v1.HPA;
   const update = (key: string, value: any) => {
     hpaData.updateData(key, value);
   };
+
+  const modifyNotes = notes.filter(note => note.location === "modify");
 
   const metadataAnnotations = [];
   const metadataLabels = [];
@@ -64,6 +65,7 @@ const HPADetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={hpaData.error} isLoading={hpaData.isLoading}>
       <strong>HPA Details</strong>
+      <NotePanel notes={modifyNotes} />
       <MetadataTable
         onUpdate={update}
         data={[
@@ -178,7 +180,7 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <HPAIdentifier name="Lookup" resolverType={resolverType} />
-      <HPADetails name="Modify" />
+      <HPADetails name="Modify" notes={notes} />
       <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );
