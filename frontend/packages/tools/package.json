@@ -23,7 +23,7 @@
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
     "@types/enzyme": "^3.10.8",
-    "@types/jest": "^26.0.22",
+    "@types/jest": "^29.0.0",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.0.0",
     "@types/react": "^17.0.5",
