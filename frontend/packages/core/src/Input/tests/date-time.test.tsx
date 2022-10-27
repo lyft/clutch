@@ -5,8 +5,12 @@ import DateTimePicker from "../date-time";
 
 describe("DateTimePicker", () => {
   describe("TextField", () => {
+    let component;
+    beforeAll(() => {
+      component = mount(<DateTimePicker value={new Date()} onChange={() => {}} />);
+    });
+
     it("has padding", () => {
-      const component = mount(<DateTimePicker value={new Date()} onChange={() => {}} />);
       const adornedInput = component.find("div.MuiInputBase-adornedEnd");
       expect(adornedInput).toHaveLength(1);
       expect(getComputedStyle(adornedInput.getDOMNode()).getPropertyValue("padding-right")).toBe(
@@ -22,7 +26,9 @@ describe("DateTimePicker", () => {
     beforeAll(() => {
       date = new Date();
       onChange = () => {};
-      component = mount(<DateTimePicker value={date} onChange={onChange} label="testing" />);
+      component = mount(
+        <DateTimePicker value={date} onChange={onChange} label="testing" disabled={false} />
+      );
     });
 
     it("value", () => {
@@ -39,6 +45,11 @@ describe("DateTimePicker", () => {
     it("label", () => {
       const outline = component.find("ForwardRef(DateTimePicker)");
       expect(outline.props().label).toBe("testing");
+    });
+
+    it("disabled", () => {
+      const outline = component.find("ForwardRef(DateTimePicker)");
+      expect(outline.props().disabled).toBe(false);
     });
   });
 });
