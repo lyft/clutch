@@ -17,8 +17,8 @@ const PaddedTextField = styled(TextField)({
   },
 });
 
-interface DateTimePickerProps
-  extends Pick<MuiDateTimePickerProps, "value" | "onChange" | "label"> {}
+export interface DateTimePickerProps
+  extends Pick<MuiDateTimePickerProps, "disabled" | "value" | "onChange" | "label"> {}
 
 const DateTimePicker = ({ ...props }: DateTimePickerProps) => {
   return (
