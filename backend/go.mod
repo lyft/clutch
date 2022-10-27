@@ -43,7 +43,7 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20220606043923-3cf50f8a0a29
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
 	github.com/slack-go/slack v0.11.3
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 	github.com/uber-go/tally/v4 v4.1.2
 	go.temporal.io/sdk v1.14.0
 	go.temporal.io/sdk/contrib/tally v0.2.0
@@ -128,7 +128,7 @@ require (
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/objx v0.4.0 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
