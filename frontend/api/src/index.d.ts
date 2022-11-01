@@ -13836,6 +13836,20 @@ export namespace clutch {
                 public updatePod(request: clutch.k8s.v1.IUpdatePodRequest): Promise<clutch.k8s.v1.UpdatePodResponse>;
 
                 /**
+                 * Calls GetLogs.
+                 * @param request GetLogsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetLogsResponse
+                 */
+                public getLogs(request: clutch.k8s.v1.IGetLogsRequest, callback: clutch.k8s.v1.K8sAPI.GetLogsCallback): void;
+
+                /**
+                 * Calls GetLogs.
+                 * @param request GetLogsRequest message or plain object
+                 * @returns Promise
+                 */
+                public getLogs(request: clutch.k8s.v1.IGetLogsRequest): Promise<clutch.k8s.v1.GetLogsResponse>;
+
+                /**
                  * Calls ResizeHPA.
                  * @param request ResizeHPARequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and ResizeHPAResponse
@@ -14243,6 +14257,13 @@ export namespace clutch {
                  * @param [response] UpdatePodResponse
                  */
                 type UpdatePodCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdatePodResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#getLogs}.
+                 * @param error Error, if any
+                 * @param [response] GetLogsResponse
+                 */
+                type GetLogsCallback = (error: (Error|null), response?: clutch.k8s.v1.GetLogsResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#resizeHPA}.
@@ -15443,6 +15464,114 @@ export namespace clutch {
 
                 /**
                  * Converts this UpdatePodResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetLogsRequest. */
+            interface IGetLogsRequest {
+
+                /** GetLogsRequest clientset */
+                clientset?: (string|null);
+
+                /** GetLogsRequest cluster */
+                cluster?: (string|null);
+
+                /** GetLogsRequest namespace */
+                namespace?: (string|null);
+
+                /** GetLogsRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a GetLogsRequest. */
+            class GetLogsRequest implements IGetLogsRequest {
+
+                /**
+                 * Constructs a new GetLogsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IGetLogsRequest);
+
+                /** GetLogsRequest clientset. */
+                public clientset: string;
+
+                /** GetLogsRequest cluster. */
+                public cluster: string;
+
+                /** GetLogsRequest namespace. */
+                public namespace: string;
+
+                /** GetLogsRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a GetLogsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetLogsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetLogsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GetLogsRequest;
+
+                /**
+                 * Creates a plain object from a GetLogsRequest message. Also converts values to other types if specified.
+                 * @param message GetLogsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.GetLogsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetLogsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetLogsResponse. */
+            interface IGetLogsResponse {
+            }
+
+            /** Represents a GetLogsResponse. */
+            class GetLogsResponse implements IGetLogsResponse {
+
+                /**
+                 * Constructs a new GetLogsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IGetLogsResponse);
+
+                /**
+                 * Verifies a GetLogsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetLogsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetLogsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GetLogsResponse;
+
+                /**
+                 * Creates a plain object from a GetLogsResponse message. Also converts values to other types if specified.
+                 * @param message GetLogsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.GetLogsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetLogsResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

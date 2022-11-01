@@ -26,6 +26,7 @@ type K8SAPIClient interface {
 	ListPods(ctx context.Context, in *ListPodsRequest, opts ...grpc.CallOption) (*ListPodsResponse, error)
 	DeletePod(ctx context.Context, in *DeletePodRequest, opts ...grpc.CallOption) (*DeletePodResponse, error)
 	UpdatePod(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error)
+	GetLogs(ctx context.Context, in *GetLogsRequest, opts ...grpc.CallOption) (*GetLogsResponse, error)
 	ResizeHPA(ctx context.Context, in *ResizeHPARequest, opts ...grpc.CallOption) (*ResizeHPAResponse, error)
 	DeleteHPA(ctx context.Context, in *DeleteHPARequest, opts ...grpc.CallOption) (*DeleteHPAResponse, error)
 	DescribeDeployment(ctx context.Context, in *DescribeDeploymentRequest, opts ...grpc.CallOption) (*DescribeDeploymentResponse, error)
@@ -93,6 +94,15 @@ func (c *k8SAPIClient) DeletePod(ctx context.Context, in *DeletePodRequest, opts
 func (c *k8SAPIClient) UpdatePod(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error) {
 	out := new(UpdatePodResponse)
 	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/UpdatePod", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SAPIClient) GetLogs(ctx context.Context, in *GetLogsRequest, opts ...grpc.CallOption) (*GetLogsResponse, error) {
+	out := new(GetLogsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/GetLogs", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -350,6 +360,7 @@ type K8SAPIServer interface {
 	ListPods(context.Context, *ListPodsRequest) (*ListPodsResponse, error)
 	DeletePod(context.Context, *DeletePodRequest) (*DeletePodResponse, error)
 	UpdatePod(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error)
+	GetLogs(context.Context, *GetLogsRequest) (*GetLogsResponse, error)
 	ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error)
 	DeleteHPA(context.Context, *DeleteHPARequest) (*DeleteHPAResponse, error)
 	DescribeDeployment(context.Context, *DescribeDeploymentRequest) (*DescribeDeploymentResponse, error)
@@ -394,6 +405,9 @@ func (UnimplementedK8SAPIServer) DeletePod(context.Context, *DeletePodRequest) (
 }
 func (UnimplementedK8SAPIServer) UpdatePod(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePod not implemented")
+}
+func (UnimplementedK8SAPIServer) GetLogs(context.Context, *GetLogsRequest) (*GetLogsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLogs not implemented")
 }
 func (UnimplementedK8SAPIServer) ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResizeHPA not implemented")
@@ -556,6 +570,24 @@ func _K8SAPI_UpdatePod_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(K8SAPIServer).UpdatePod(ctx, req.(*UpdatePodRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SAPI_GetLogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLogsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).GetLogs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/GetLogs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).GetLogs(ctx, req.(*GetLogsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1068,6 +1100,10 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePod",
 			Handler:    _K8SAPI_UpdatePod_Handler,
+		},
+		{
+			MethodName: "GetLogs",
+			Handler:    _K8SAPI_GetLogs_Handler,
 		},
 		{
 			MethodName: "ResizeHPA",

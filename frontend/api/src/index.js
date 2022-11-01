@@ -33459,6 +33459,39 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#getLogs}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef GetLogsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.GetLogsResponse} [response] GetLogsResponse
+                 */
+
+                /**
+                 * Calls GetLogs.
+                 * @function getLogs
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IGetLogsRequest} request GetLogsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.GetLogsCallback} callback Node-style callback called with the error, if any, and GetLogsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.getLogs = function getLogs(request, callback) {
+                    return this.rpcCall(getLogs, $root.clutch.k8s.v1.GetLogsRequest, $root.clutch.k8s.v1.GetLogsResponse, request, callback);
+                }, "name", { value: "GetLogs" });
+
+                /**
+                 * Calls GetLogs.
+                 * @function getLogs
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IGetLogsRequest} request GetLogsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.GetLogsResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#resizeHPA}.
                  * @memberof clutch.k8s.v1.K8sAPI
                  * @typedef ResizeHPACallback
@@ -36976,6 +37009,236 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return UpdatePodResponse;
+            })();
+
+            v1.GetLogsRequest = (function() {
+
+                /**
+                 * Properties of a GetLogsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IGetLogsRequest
+                 * @property {string|null} [clientset] GetLogsRequest clientset
+                 * @property {string|null} [cluster] GetLogsRequest cluster
+                 * @property {string|null} [namespace] GetLogsRequest namespace
+                 * @property {string|null} [name] GetLogsRequest name
+                 */
+
+                /**
+                 * Constructs a new GetLogsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a GetLogsRequest.
+                 * @implements IGetLogsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IGetLogsRequest=} [properties] Properties to set
+                 */
+                function GetLogsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetLogsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.GetLogsRequest
+                 * @instance
+                 */
+                GetLogsRequest.prototype.clientset = "";
+
+                /**
+                 * GetLogsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.GetLogsRequest
+                 * @instance
+                 */
+                GetLogsRequest.prototype.cluster = "";
+
+                /**
+                 * GetLogsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.GetLogsRequest
+                 * @instance
+                 */
+                GetLogsRequest.prototype.namespace = "";
+
+                /**
+                 * GetLogsRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.GetLogsRequest
+                 * @instance
+                 */
+                GetLogsRequest.prototype.name = "";
+
+                /**
+                 * Verifies a GetLogsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.GetLogsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetLogsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetLogsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.GetLogsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.GetLogsRequest} GetLogsRequest
+                 */
+                GetLogsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.GetLogsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.GetLogsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetLogsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.GetLogsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.GetLogsRequest} message GetLogsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetLogsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this GetLogsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.GetLogsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetLogsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetLogsRequest;
+            })();
+
+            v1.GetLogsResponse = (function() {
+
+                /**
+                 * Properties of a GetLogsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IGetLogsResponse
+                 */
+
+                /**
+                 * Constructs a new GetLogsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a GetLogsResponse.
+                 * @implements IGetLogsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IGetLogsResponse=} [properties] Properties to set
+                 */
+                function GetLogsResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a GetLogsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.GetLogsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetLogsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetLogsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.GetLogsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.GetLogsResponse} GetLogsResponse
+                 */
+                GetLogsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.GetLogsResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.GetLogsResponse();
+                };
+
+                /**
+                 * Creates a plain object from a GetLogsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.GetLogsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.GetLogsResponse} message GetLogsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetLogsResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this GetLogsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.GetLogsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetLogsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetLogsResponse;
             })();
 
             v1.HPA = (function() {

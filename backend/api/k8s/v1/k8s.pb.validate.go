@@ -2238,6 +2238,250 @@ var _ interface {
 	ErrorName() string
 } = UpdatePodResponseValidationError{}
 
+// Validate checks the field values on GetLogsRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetLogsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetLogsRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetLogsRequestMultiError,
+// or nil if none found.
+func (m *GetLogsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetLogsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetClientset()) < 1 {
+		err := GetLogsRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetCluster()) < 1 {
+		err := GetLogsRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		err := GetLogsRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetName()) < 1 {
+		err := GetLogsRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return GetLogsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetLogsRequestMultiError is an error wrapping multiple validation errors
+// returned by GetLogsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetLogsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetLogsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetLogsRequestMultiError) AllErrors() []error { return m }
+
+// GetLogsRequestValidationError is the validation error returned by
+// GetLogsRequest.Validate if the designated constraints aren't met.
+type GetLogsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetLogsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetLogsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetLogsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetLogsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetLogsRequestValidationError) ErrorName() string { return "GetLogsRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetLogsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetLogsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetLogsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetLogsRequestValidationError{}
+
+// Validate checks the field values on GetLogsResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *GetLogsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetLogsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetLogsResponseMultiError, or nil if none found.
+func (m *GetLogsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetLogsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return GetLogsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetLogsResponseMultiError is an error wrapping multiple validation errors
+// returned by GetLogsResponse.ValidateAll() if the designated constraints
+// aren't met.
+type GetLogsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetLogsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetLogsResponseMultiError) AllErrors() []error { return m }
+
+// GetLogsResponseValidationError is the validation error returned by
+// GetLogsResponse.Validate if the designated constraints aren't met.
+type GetLogsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetLogsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetLogsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetLogsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetLogsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetLogsResponseValidationError) ErrorName() string { return "GetLogsResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetLogsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetLogsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetLogsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetLogsResponseValidationError{}
+
 // Validate checks the field values on HPA with the rules defined in the proto
 // definition for this message. If any rules are violated, the first error
 // encountered is returned, or nil if there are no violations.

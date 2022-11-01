@@ -104,6 +104,9 @@ type Service interface {
 	// Event management functions.
 	ListEvents(ctx context.Context, clientset, cluster, namespace, object string, kind k8sapiv1.ObjectKind) ([]*k8sapiv1.Event, error)
 
+	// Log functions.
+	GetLogs(ctx context.Context, clientset, cluster, namespace, name string) error
+
 	// Node management functions.
 	DescribeNode(ctx context.Context, clientset, cluster, name string) (*k8sapiv1.Node, error)
 	UpdateNode(ctx context.Context, clientset, cluster, name string, unschedulable bool) error

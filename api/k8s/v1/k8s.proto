@@ -46,6 +46,16 @@ service K8sAPI {
     option (clutch.api.v1.action).type = UPDATE;
   }
 
+  rpc GetLogs(GetLogsRequest) returns (GetLogsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/getLogs"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+
+
   rpc ResizeHPA(ResizeHPARequest) returns (ResizeHPAResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/resizeHPA"
@@ -467,6 +477,21 @@ message UpdatePodRequest {
 
 message UpdatePodResponse {
 }
+
+message GetLogsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Pod",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+}
+
+message GetLogsResponse {}
 
 message HPA {
   option (clutch.api.v1.id).patterns = {
