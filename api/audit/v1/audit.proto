@@ -22,6 +22,14 @@ service AuditAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse) {
+    option (google.api.http) = {
+      post: "/v1/audit/getEvent",
+      body: "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message TimeRange {
@@ -34,6 +42,12 @@ message GetEventsRequest {
     TimeRange range = 1;
     google.protobuf.Duration since = 2;
   }
+  // Currently page_token specifies the page number you wish to request.
+  // The rationale behind the naming is we might changes this to a cursor implentation
+  // in the future and did not want to break existing implementations of the API.
+  // https://cloud.google.com/apis/design/design_patterns#list_pagination
+  string page_token = 3;
+  uint64 limit = 4;
 }
 
 message Resource {
@@ -89,8 +103,20 @@ message Event {
   oneof event_type {
     RequestEvent event = 2;
   }
+
+  // The event id.
+  int64 id = 3;
 }
 
 message GetEventsResponse {
   repeated Event events = 1;
+  string next_page_token = 2;
+}
+
+message GetEventRequest {
+  int64 event_id = 1;
+}
+
+message GetEventResponse {
+  Event event = 1;
 }
