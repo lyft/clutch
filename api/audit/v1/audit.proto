@@ -25,8 +25,8 @@ service AuditAPI {
 
   rpc GetEvent(GetEventRequest) returns (GetEventResponse) {
     option (google.api.http) = {
-      post: "/v1/audit/getEvent",
-      body: "*"
+      post : "/v1/audit/getEvent",
+      body : "*"
     };
     option (clutch.api.v1.action).type = READ;
   }
