@@ -60,7 +60,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
     switch (true) {
       case status.toString() == "ACTIVE":
         return "active";
-      case status.toString() == "UPDATING" || status.toString() == "CREATING" :
+      case status.toString() == "UPDATING" || status.toString() == "CREATING":
         return "pending";
       case status.toString() == "DELETING":
         return "warn";
