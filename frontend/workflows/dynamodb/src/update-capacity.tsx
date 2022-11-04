@@ -5,6 +5,7 @@ import {
   Button,
   ButtonGroup,
   CheckboxPanel,
+  Chip,
   client,
   Confirmation,
   MetadataTable,
@@ -55,6 +56,18 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
 
   const tableDetailsNotes = notes.filter(note => note.location === "table-details");
   const limitsNotes = notes.filter(note => note.location === "scaling-limits");
+  const getChipStatus = (status: IClutch.aws.dynamodb.v1.Table.Status) => {
+    switch (true) {
+      case status.toString() == "ACTIVE":
+        return "active";
+      case status.toString() == "UPDATING" || status.toString() == "CREATING" :
+        return "pending";
+      case status.toString() == "DELETING":
+        return "warn";
+      default:
+        return "neutral";
+    }
+  };
 
   const handleTableCapacityChange = (key: string, value: number) => {
     const newTableThroughput = { ...capacityUpdates.displayValue().table_throughput, [key]: value };
@@ -90,7 +103,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
           <TableRow key={table.name}>
             {table.name}
             Table
-            {table.status}
+            <Chip variant={getChipStatus(table.status)} label={table.status} />
             <MetadataTable
               onUpdate={handleTableCapacityChange}
               data={[
@@ -125,7 +138,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
             <TableRow key={gsi.name}>
               {gsi.name}
               Index
-              {gsi.status}
+              <Chip variant={getChipStatus(gsi.status)} label={gsi.status} />
               <MetadataTable
                 onUpdate={handleGsiCapacityChange}
                 data={[
