@@ -118,6 +118,9 @@ func protoOptsToK8sOpts(in *k8sapiv1.GetPodLogsOptions) (*v1.PodLogOptions, erro
 		}
 		ret.SinceTime = &metav1.Time{Time: ts}
 	}
+	if in.ContainerName != "" {
+		ret.Container = in.ContainerName
+	}
 	return ret, nil
 }
 
