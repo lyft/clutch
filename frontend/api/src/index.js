@@ -1060,6 +1060,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.audit.v1.AuditAPI#getEvent}.
+                 * @memberof clutch.audit.v1.AuditAPI
+                 * @typedef GetEventCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.audit.v1.GetEventResponse} [response] GetEventResponse
+                 */
+
+                /**
+                 * Calls GetEvent.
+                 * @function getEvent
+                 * @memberof clutch.audit.v1.AuditAPI
+                 * @instance
+                 * @param {clutch.audit.v1.IGetEventRequest} request GetEventRequest message or plain object
+                 * @param {clutch.audit.v1.AuditAPI.GetEventCallback} callback Node-style callback called with the error, if any, and GetEventResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(AuditAPI.prototype.getEvent = function getEvent(request, callback) {
+                    return this.rpcCall(getEvent, $root.clutch.audit.v1.GetEventRequest, $root.clutch.audit.v1.GetEventResponse, request, callback);
+                }, "name", { value: "GetEvent" });
+
+                /**
+                 * Calls GetEvent.
+                 * @function getEvent
+                 * @memberof clutch.audit.v1.AuditAPI
+                 * @instance
+                 * @param {clutch.audit.v1.IGetEventRequest} request GetEventRequest message or plain object
+                 * @returns {Promise<clutch.audit.v1.GetEventResponse>} Promise
+                 * @variation 2
+                 */
+
                 return AuditAPI;
             })();
 
@@ -1199,6 +1232,8 @@ export const clutch = $root.clutch = (() => {
                  * @interface IGetEventsRequest
                  * @property {clutch.audit.v1.ITimeRange|null} [range] GetEventsRequest range
                  * @property {google.protobuf.IDuration|null} [since] GetEventsRequest since
+                 * @property {string|null} [pageToken] GetEventsRequest pageToken
+                 * @property {number|Long|null} [limit] GetEventsRequest limit
                  */
 
                 /**
@@ -1231,6 +1266,22 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 GetEventsRequest.prototype.since = null;
+
+                /**
+                 * GetEventsRequest pageToken.
+                 * @member {string} pageToken
+                 * @memberof clutch.audit.v1.GetEventsRequest
+                 * @instance
+                 */
+                GetEventsRequest.prototype.pageToken = "";
+
+                /**
+                 * GetEventsRequest limit.
+                 * @member {number|Long} limit
+                 * @memberof clutch.audit.v1.GetEventsRequest
+                 * @instance
+                 */
+                GetEventsRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -1276,6 +1327,12 @@ export const clutch = $root.clutch = (() => {
                                 return "since." + error;
                         }
                     }
+                    if (message.pageToken != null && message.hasOwnProperty("pageToken"))
+                        if (!$util.isString(message.pageToken))
+                            return "pageToken: string expected";
+                    if (message.limit != null && message.hasOwnProperty("limit"))
+                        if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
+                            return "limit: integer|Long expected";
                     return null;
                 };
 
@@ -1301,6 +1358,17 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.audit.v1.GetEventsRequest.since: object expected");
                         message.since = $root.google.protobuf.Duration.fromObject(object.since);
                     }
+                    if (object.pageToken != null)
+                        message.pageToken = String(object.pageToken);
+                    if (object.limit != null)
+                        if ($util.Long)
+                            (message.limit = $util.Long.fromValue(object.limit)).unsigned = true;
+                        else if (typeof object.limit === "string")
+                            message.limit = parseInt(object.limit, 10);
+                        else if (typeof object.limit === "number")
+                            message.limit = object.limit;
+                        else if (typeof object.limit === "object")
+                            message.limit = new $util.LongBits(object.limit.low >>> 0, object.limit.high >>> 0).toNumber(true);
                     return message;
                 };
 
@@ -1317,6 +1385,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
+                    if (options.defaults) {
+                        object.pageToken = "";
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, true);
+                            object.limit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.limit = options.longs === String ? "0" : 0;
+                    }
                     if (message.range != null && message.hasOwnProperty("range")) {
                         object.range = $root.clutch.audit.v1.TimeRange.toObject(message.range, options);
                         if (options.oneofs)
@@ -1327,6 +1403,13 @@ export const clutch = $root.clutch = (() => {
                         if (options.oneofs)
                             object.window = "since";
                     }
+                    if (message.pageToken != null && message.hasOwnProperty("pageToken"))
+                        object.pageToken = message.pageToken;
+                    if (message.limit != null && message.hasOwnProperty("limit"))
+                        if (typeof message.limit === "number")
+                            object.limit = options.longs === String ? String(message.limit) : message.limit;
+                        else
+                            object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber(true) : message.limit;
                     return object;
                 };
 
@@ -1962,6 +2045,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IEvent
                  * @property {google.protobuf.ITimestamp|null} [occurredAt] Event occurredAt
                  * @property {clutch.audit.v1.IRequestEvent|null} [event] Event event
+                 * @property {number|Long|null} [id] Event id
                  */
 
                 /**
@@ -1994,6 +2078,14 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 Event.prototype.event = null;
+
+                /**
+                 * Event id.
+                 * @member {number|Long} id
+                 * @memberof clutch.audit.v1.Event
+                 * @instance
+                 */
+                Event.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -2034,6 +2126,9 @@ export const clutch = $root.clutch = (() => {
                                 return "event." + error;
                         }
                     }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                            return "id: integer|Long expected";
                     return null;
                 };
 
@@ -2059,6 +2154,15 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.audit.v1.Event.event: object expected");
                         message.event = $root.clutch.audit.v1.RequestEvent.fromObject(object.event);
                     }
+                    if (object.id != null)
+                        if ($util.Long)
+                            (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                        else if (typeof object.id === "string")
+                            message.id = parseInt(object.id, 10);
+                        else if (typeof object.id === "number")
+                            message.id = object.id;
+                        else if (typeof object.id === "object")
+                            message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -2075,8 +2179,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.defaults)
+                    if (options.defaults) {
                         object.occurredAt = null;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.id = options.longs === String ? "0" : 0;
+                    }
                     if (message.occurredAt != null && message.hasOwnProperty("occurredAt"))
                         object.occurredAt = $root.google.protobuf.Timestamp.toObject(message.occurredAt, options);
                     if (message.event != null && message.hasOwnProperty("event")) {
@@ -2084,6 +2194,11 @@ export const clutch = $root.clutch = (() => {
                         if (options.oneofs)
                             object.eventType = "event";
                     }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (typeof message.id === "number")
+                            object.id = options.longs === String ? String(message.id) : message.id;
+                        else
+                            object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
                     return object;
                 };
 
@@ -2108,6 +2223,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.audit.v1
                  * @interface IGetEventsResponse
                  * @property {Array.<clutch.audit.v1.IEvent>|null} [events] GetEventsResponse events
+                 * @property {string|null} [nextPageToken] GetEventsResponse nextPageToken
                  */
 
                 /**
@@ -2135,6 +2251,14 @@ export const clutch = $root.clutch = (() => {
                 GetEventsResponse.prototype.events = $util.emptyArray;
 
                 /**
+                 * GetEventsResponse nextPageToken.
+                 * @member {string} nextPageToken
+                 * @memberof clutch.audit.v1.GetEventsResponse
+                 * @instance
+                 */
+                GetEventsResponse.prototype.nextPageToken = "";
+
+                /**
                  * Verifies a GetEventsResponse message.
                  * @function verify
                  * @memberof clutch.audit.v1.GetEventsResponse
@@ -2154,6 +2278,9 @@ export const clutch = $root.clutch = (() => {
                                 return "events." + error;
                         }
                     }
+                    if (message.nextPageToken != null && message.hasOwnProperty("nextPageToken"))
+                        if (!$util.isString(message.nextPageToken))
+                            return "nextPageToken: string expected";
                     return null;
                 };
 
@@ -2179,6 +2306,8 @@ export const clutch = $root.clutch = (() => {
                             message.events[i] = $root.clutch.audit.v1.Event.fromObject(object.events[i]);
                         }
                     }
+                    if (object.nextPageToken != null)
+                        message.nextPageToken = String(object.nextPageToken);
                     return message;
                 };
 
@@ -2197,11 +2326,15 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.arrays || options.defaults)
                         object.events = [];
+                    if (options.defaults)
+                        object.nextPageToken = "";
                     if (message.events && message.events.length) {
                         object.events = [];
                         for (let j = 0; j < message.events.length; ++j)
                             object.events[j] = $root.clutch.audit.v1.Event.toObject(message.events[j], options);
                     }
+                    if (message.nextPageToken != null && message.hasOwnProperty("nextPageToken"))
+                        object.nextPageToken = message.nextPageToken;
                     return object;
                 };
 
@@ -2217,6 +2350,225 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return GetEventsResponse;
+            })();
+
+            v1.GetEventRequest = (function() {
+
+                /**
+                 * Properties of a GetEventRequest.
+                 * @memberof clutch.audit.v1
+                 * @interface IGetEventRequest
+                 * @property {number|Long|null} [eventId] GetEventRequest eventId
+                 */
+
+                /**
+                 * Constructs a new GetEventRequest.
+                 * @memberof clutch.audit.v1
+                 * @classdesc Represents a GetEventRequest.
+                 * @implements IGetEventRequest
+                 * @constructor
+                 * @param {clutch.audit.v1.IGetEventRequest=} [properties] Properties to set
+                 */
+                function GetEventRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetEventRequest eventId.
+                 * @member {number|Long} eventId
+                 * @memberof clutch.audit.v1.GetEventRequest
+                 * @instance
+                 */
+                GetEventRequest.prototype.eventId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Verifies a GetEventRequest message.
+                 * @function verify
+                 * @memberof clutch.audit.v1.GetEventRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetEventRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.eventId != null && message.hasOwnProperty("eventId"))
+                        if (!$util.isInteger(message.eventId) && !(message.eventId && $util.isInteger(message.eventId.low) && $util.isInteger(message.eventId.high)))
+                            return "eventId: integer|Long expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetEventRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.audit.v1.GetEventRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.audit.v1.GetEventRequest} GetEventRequest
+                 */
+                GetEventRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.audit.v1.GetEventRequest)
+                        return object;
+                    let message = new $root.clutch.audit.v1.GetEventRequest();
+                    if (object.eventId != null)
+                        if ($util.Long)
+                            (message.eventId = $util.Long.fromValue(object.eventId)).unsigned = false;
+                        else if (typeof object.eventId === "string")
+                            message.eventId = parseInt(object.eventId, 10);
+                        else if (typeof object.eventId === "number")
+                            message.eventId = object.eventId;
+                        else if (typeof object.eventId === "object")
+                            message.eventId = new $util.LongBits(object.eventId.low >>> 0, object.eventId.high >>> 0).toNumber();
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetEventRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.audit.v1.GetEventRequest
+                 * @static
+                 * @param {clutch.audit.v1.GetEventRequest} message GetEventRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetEventRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.eventId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.eventId = options.longs === String ? "0" : 0;
+                    if (message.eventId != null && message.hasOwnProperty("eventId"))
+                        if (typeof message.eventId === "number")
+                            object.eventId = options.longs === String ? String(message.eventId) : message.eventId;
+                        else
+                            object.eventId = options.longs === String ? $util.Long.prototype.toString.call(message.eventId) : options.longs === Number ? new $util.LongBits(message.eventId.low >>> 0, message.eventId.high >>> 0).toNumber() : message.eventId;
+                    return object;
+                };
+
+                /**
+                 * Converts this GetEventRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.audit.v1.GetEventRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetEventRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetEventRequest;
+            })();
+
+            v1.GetEventResponse = (function() {
+
+                /**
+                 * Properties of a GetEventResponse.
+                 * @memberof clutch.audit.v1
+                 * @interface IGetEventResponse
+                 * @property {clutch.audit.v1.IEvent|null} [event] GetEventResponse event
+                 */
+
+                /**
+                 * Constructs a new GetEventResponse.
+                 * @memberof clutch.audit.v1
+                 * @classdesc Represents a GetEventResponse.
+                 * @implements IGetEventResponse
+                 * @constructor
+                 * @param {clutch.audit.v1.IGetEventResponse=} [properties] Properties to set
+                 */
+                function GetEventResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetEventResponse event.
+                 * @member {clutch.audit.v1.IEvent|null|undefined} event
+                 * @memberof clutch.audit.v1.GetEventResponse
+                 * @instance
+                 */
+                GetEventResponse.prototype.event = null;
+
+                /**
+                 * Verifies a GetEventResponse message.
+                 * @function verify
+                 * @memberof clutch.audit.v1.GetEventResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetEventResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.event != null && message.hasOwnProperty("event")) {
+                        let error = $root.clutch.audit.v1.Event.verify(message.event);
+                        if (error)
+                            return "event." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetEventResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.audit.v1.GetEventResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.audit.v1.GetEventResponse} GetEventResponse
+                 */
+                GetEventResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.audit.v1.GetEventResponse)
+                        return object;
+                    let message = new $root.clutch.audit.v1.GetEventResponse();
+                    if (object.event != null) {
+                        if (typeof object.event !== "object")
+                            throw TypeError(".clutch.audit.v1.GetEventResponse.event: object expected");
+                        message.event = $root.clutch.audit.v1.Event.fromObject(object.event);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetEventResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.audit.v1.GetEventResponse
+                 * @static
+                 * @param {clutch.audit.v1.GetEventResponse} message GetEventResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetEventResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.event = null;
+                    if (message.event != null && message.hasOwnProperty("event"))
+                        object.event = $root.clutch.audit.v1.Event.toObject(message.event, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this GetEventResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.audit.v1.GetEventResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetEventResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetEventResponse;
             })();
 
             return v1;

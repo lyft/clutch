@@ -10,9 +10,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/gogo/status"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -77,4 +79,8 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 	default:
 		return nil, errors.New("no time window requested")
 	}
+}
+
+func (m *mod) GetEvent(ctx context.Context, req *auditv1.GetEventRequest) (*auditv1.GetEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "not implemented")
 }

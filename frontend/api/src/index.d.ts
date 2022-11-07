@@ -473,6 +473,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public getEvents(request: clutch.audit.v1.IGetEventsRequest): Promise<clutch.audit.v1.GetEventsResponse>;
+
+                /**
+                 * Calls GetEvent.
+                 * @param request GetEventRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetEventResponse
+                 */
+                public getEvent(request: clutch.audit.v1.IGetEventRequest, callback: clutch.audit.v1.AuditAPI.GetEventCallback): void;
+
+                /**
+                 * Calls GetEvent.
+                 * @param request GetEventRequest message or plain object
+                 * @returns Promise
+                 */
+                public getEvent(request: clutch.audit.v1.IGetEventRequest): Promise<clutch.audit.v1.GetEventResponse>;
             }
 
             namespace AuditAPI {
@@ -483,6 +497,13 @@ export namespace clutch {
                  * @param [response] GetEventsResponse
                  */
                 type GetEventsCallback = (error: (Error|null), response?: clutch.audit.v1.GetEventsResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.audit.v1.AuditAPI#getEvent}.
+                 * @param error Error, if any
+                 * @param [response] GetEventResponse
+                 */
+                type GetEventCallback = (error: (Error|null), response?: clutch.audit.v1.GetEventResponse) => void;
             }
 
             /** Properties of a TimeRange. */
@@ -547,6 +568,12 @@ export namespace clutch {
 
                 /** GetEventsRequest since */
                 since?: (google.protobuf.IDuration|null);
+
+                /** GetEventsRequest pageToken */
+                pageToken?: (string|null);
+
+                /** GetEventsRequest limit */
+                limit?: (number|Long|null);
             }
 
             /** Represents a GetEventsRequest. */
@@ -563,6 +590,12 @@ export namespace clutch {
 
                 /** GetEventsRequest since. */
                 public since?: (google.protobuf.IDuration|null);
+
+                /** GetEventsRequest pageToken. */
+                public pageToken: string;
+
+                /** GetEventsRequest limit. */
+                public limit: (number|Long);
 
                 /** GetEventsRequest window. */
                 public window?: ("range"|"since");
@@ -844,6 +877,9 @@ export namespace clutch {
 
                 /** Event event */
                 event?: (clutch.audit.v1.IRequestEvent|null);
+
+                /** Event id */
+                id?: (number|Long|null);
             }
 
             /** Represents an Event. */
@@ -860,6 +896,9 @@ export namespace clutch {
 
                 /** Event event. */
                 public event?: (clutch.audit.v1.IRequestEvent|null);
+
+                /** Event id. */
+                public id: (number|Long);
 
                 /** Event eventType. */
                 public eventType?: "event";
@@ -898,6 +937,9 @@ export namespace clutch {
 
                 /** GetEventsResponse events */
                 events?: (clutch.audit.v1.IEvent[]|null);
+
+                /** GetEventsResponse nextPageToken */
+                nextPageToken?: (string|null);
             }
 
             /** Represents a GetEventsResponse. */
@@ -911,6 +953,9 @@ export namespace clutch {
 
                 /** GetEventsResponse events. */
                 public events: clutch.audit.v1.IEvent[];
+
+                /** GetEventsResponse nextPageToken. */
+                public nextPageToken: string;
 
                 /**
                  * Verifies a GetEventsResponse message.
@@ -936,6 +981,102 @@ export namespace clutch {
 
                 /**
                  * Converts this GetEventsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetEventRequest. */
+            interface IGetEventRequest {
+
+                /** GetEventRequest eventId */
+                eventId?: (number|Long|null);
+            }
+
+            /** Represents a GetEventRequest. */
+            class GetEventRequest implements IGetEventRequest {
+
+                /**
+                 * Constructs a new GetEventRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.audit.v1.IGetEventRequest);
+
+                /** GetEventRequest eventId. */
+                public eventId: (number|Long);
+
+                /**
+                 * Verifies a GetEventRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetEventRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetEventRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.audit.v1.GetEventRequest;
+
+                /**
+                 * Creates a plain object from a GetEventRequest message. Also converts values to other types if specified.
+                 * @param message GetEventRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.audit.v1.GetEventRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetEventRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetEventResponse. */
+            interface IGetEventResponse {
+
+                /** GetEventResponse event */
+                event?: (clutch.audit.v1.IEvent|null);
+            }
+
+            /** Represents a GetEventResponse. */
+            class GetEventResponse implements IGetEventResponse {
+
+                /**
+                 * Constructs a new GetEventResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.audit.v1.IGetEventResponse);
+
+                /** GetEventResponse event. */
+                public event?: (clutch.audit.v1.IEvent|null);
+
+                /**
+                 * Verifies a GetEventResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetEventResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetEventResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.audit.v1.GetEventResponse;
+
+                /**
+                 * Creates a plain object from a GetEventResponse message. Also converts values to other types if specified.
+                 * @param message GetEventResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.audit.v1.GetEventResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetEventResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

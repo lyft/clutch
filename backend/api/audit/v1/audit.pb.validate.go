@@ -200,6 +200,10 @@ func (m *GetEventsRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for PageToken
+
+	// no validation rules for Limit
+
 	switch m.Window.(type) {
 
 	case *GetEventsRequest_Range:
@@ -1019,6 +1023,8 @@ func (m *Event) validate(all bool) error {
 		}
 	}
 
+	// no validation rules for Id
+
 	switch m.EventType.(type) {
 
 	case *Event_Event:
@@ -1187,6 +1193,8 @@ func (m *GetEventsResponse) validate(all bool) error {
 
 	}
 
+	// no validation rules for NextPageToken
+
 	if len(errors) > 0 {
 		return GetEventsResponseMultiError(errors)
 	}
@@ -1266,3 +1274,234 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetEventsResponseValidationError{}
+
+// Validate checks the field values on GetEventRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *GetEventRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetEventRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetEventRequestMultiError, or nil if none found.
+func (m *GetEventRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetEventRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for EventId
+
+	if len(errors) > 0 {
+		return GetEventRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetEventRequestMultiError is an error wrapping multiple validation errors
+// returned by GetEventRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetEventRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetEventRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetEventRequestMultiError) AllErrors() []error { return m }
+
+// GetEventRequestValidationError is the validation error returned by
+// GetEventRequest.Validate if the designated constraints aren't met.
+type GetEventRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetEventRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetEventRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetEventRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetEventRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetEventRequestValidationError) ErrorName() string { return "GetEventRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetEventRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetEventRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetEventRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetEventRequestValidationError{}
+
+// Validate checks the field values on GetEventResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *GetEventResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetEventResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetEventResponseMultiError, or nil if none found.
+func (m *GetEventResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetEventResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetEvent()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetEventResponseValidationError{
+					field:  "Event",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetEventResponseValidationError{
+					field:  "Event",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetEvent()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetEventResponseValidationError{
+				field:  "Event",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetEventResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetEventResponseMultiError is an error wrapping multiple validation errors
+// returned by GetEventResponse.ValidateAll() if the designated constraints
+// aren't met.
+type GetEventResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetEventResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetEventResponseMultiError) AllErrors() []error { return m }
+
+// GetEventResponseValidationError is the validation error returned by
+// GetEventResponse.Validate if the designated constraints aren't met.
+type GetEventResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetEventResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetEventResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetEventResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetEventResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetEventResponseValidationError) ErrorName() string { return "GetEventResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetEventResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetEventResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetEventResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetEventResponseValidationError{}
