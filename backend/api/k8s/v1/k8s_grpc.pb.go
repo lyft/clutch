@@ -26,7 +26,7 @@ type K8SAPIClient interface {
 	ListPods(ctx context.Context, in *ListPodsRequest, opts ...grpc.CallOption) (*ListPodsResponse, error)
 	DeletePod(ctx context.Context, in *DeletePodRequest, opts ...grpc.CallOption) (*DeletePodResponse, error)
 	UpdatePod(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error)
-	GetLogs(ctx context.Context, in *GetLogsRequest, opts ...grpc.CallOption) (*GetLogsResponse, error)
+	GetPodLogs(ctx context.Context, in *GetPodLogsRequest, opts ...grpc.CallOption) (*GetPodLogsResponse, error)
 	ResizeHPA(ctx context.Context, in *ResizeHPARequest, opts ...grpc.CallOption) (*ResizeHPAResponse, error)
 	DeleteHPA(ctx context.Context, in *DeleteHPARequest, opts ...grpc.CallOption) (*DeleteHPAResponse, error)
 	DescribeDeployment(ctx context.Context, in *DescribeDeploymentRequest, opts ...grpc.CallOption) (*DescribeDeploymentResponse, error)
@@ -100,9 +100,9 @@ func (c *k8SAPIClient) UpdatePod(ctx context.Context, in *UpdatePodRequest, opts
 	return out, nil
 }
 
-func (c *k8SAPIClient) GetLogs(ctx context.Context, in *GetLogsRequest, opts ...grpc.CallOption) (*GetLogsResponse, error) {
-	out := new(GetLogsResponse)
-	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/GetLogs", in, out, opts...)
+func (c *k8SAPIClient) GetPodLogs(ctx context.Context, in *GetPodLogsRequest, opts ...grpc.CallOption) (*GetPodLogsResponse, error) {
+	out := new(GetPodLogsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/GetPodLogs", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -360,7 +360,7 @@ type K8SAPIServer interface {
 	ListPods(context.Context, *ListPodsRequest) (*ListPodsResponse, error)
 	DeletePod(context.Context, *DeletePodRequest) (*DeletePodResponse, error)
 	UpdatePod(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error)
-	GetLogs(context.Context, *GetLogsRequest) (*GetLogsResponse, error)
+	GetPodLogs(context.Context, *GetPodLogsRequest) (*GetPodLogsResponse, error)
 	ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error)
 	DeleteHPA(context.Context, *DeleteHPARequest) (*DeleteHPAResponse, error)
 	DescribeDeployment(context.Context, *DescribeDeploymentRequest) (*DescribeDeploymentResponse, error)
@@ -406,8 +406,8 @@ func (UnimplementedK8SAPIServer) DeletePod(context.Context, *DeletePodRequest) (
 func (UnimplementedK8SAPIServer) UpdatePod(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePod not implemented")
 }
-func (UnimplementedK8SAPIServer) GetLogs(context.Context, *GetLogsRequest) (*GetLogsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLogs not implemented")
+func (UnimplementedK8SAPIServer) GetPodLogs(context.Context, *GetPodLogsRequest) (*GetPodLogsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPodLogs not implemented")
 }
 func (UnimplementedK8SAPIServer) ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResizeHPA not implemented")
@@ -574,20 +574,20 @@ func _K8SAPI_UpdatePod_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _K8SAPI_GetLogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLogsRequest)
+func _K8SAPI_GetPodLogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPodLogsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(K8SAPIServer).GetLogs(ctx, in)
+		return srv.(K8SAPIServer).GetPodLogs(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/clutch.k8s.v1.K8sAPI/GetLogs",
+		FullMethod: "/clutch.k8s.v1.K8sAPI/GetPodLogs",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(K8SAPIServer).GetLogs(ctx, req.(*GetLogsRequest))
+		return srv.(K8SAPIServer).GetPodLogs(ctx, req.(*GetPodLogsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1102,8 +1102,8 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _K8SAPI_UpdatePod_Handler,
 		},
 		{
-			MethodName: "GetLogs",
-			Handler:    _K8SAPI_GetLogs_Handler,
+			MethodName: "GetPodLogs",
+			Handler:    _K8SAPI_GetPodLogs_Handler,
 		},
 		{
 			MethodName: "ResizeHPA",

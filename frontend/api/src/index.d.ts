@@ -13836,18 +13836,18 @@ export namespace clutch {
                 public updatePod(request: clutch.k8s.v1.IUpdatePodRequest): Promise<clutch.k8s.v1.UpdatePodResponse>;
 
                 /**
-                 * Calls GetLogs.
-                 * @param request GetLogsRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and GetLogsResponse
+                 * Calls GetPodLogs.
+                 * @param request GetPodLogsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetPodLogsResponse
                  */
-                public getLogs(request: clutch.k8s.v1.IGetLogsRequest, callback: clutch.k8s.v1.K8sAPI.GetLogsCallback): void;
+                public getPodLogs(request: clutch.k8s.v1.IGetPodLogsRequest, callback: clutch.k8s.v1.K8sAPI.GetPodLogsCallback): void;
 
                 /**
-                 * Calls GetLogs.
-                 * @param request GetLogsRequest message or plain object
+                 * Calls GetPodLogs.
+                 * @param request GetPodLogsRequest message or plain object
                  * @returns Promise
                  */
-                public getLogs(request: clutch.k8s.v1.IGetLogsRequest): Promise<clutch.k8s.v1.GetLogsResponse>;
+                public getPodLogs(request: clutch.k8s.v1.IGetPodLogsRequest): Promise<clutch.k8s.v1.GetPodLogsResponse>;
 
                 /**
                  * Calls ResizeHPA.
@@ -14259,11 +14259,11 @@ export namespace clutch {
                 type UpdatePodCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdatePodResponse) => void;
 
                 /**
-                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#getLogs}.
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#getPodLogs}.
                  * @param error Error, if any
-                 * @param [response] GetLogsResponse
+                 * @param [response] GetPodLogsResponse
                  */
-                type GetLogsCallback = (error: (Error|null), response?: clutch.k8s.v1.GetLogsResponse) => void;
+                type GetPodLogsCallback = (error: (Error|null), response?: clutch.k8s.v1.GetPodLogsResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#resizeHPA}.
@@ -15469,109 +15469,247 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a GetLogsRequest. */
-            interface IGetLogsRequest {
+            /** Properties of a GetPodLogsRequest. */
+            interface IGetPodLogsRequest {
 
-                /** GetLogsRequest clientset */
+                /** GetPodLogsRequest clientset */
                 clientset?: (string|null);
 
-                /** GetLogsRequest cluster */
+                /** GetPodLogsRequest cluster */
                 cluster?: (string|null);
 
-                /** GetLogsRequest namespace */
+                /** GetPodLogsRequest namespace */
                 namespace?: (string|null);
 
-                /** GetLogsRequest name */
+                /** GetPodLogsRequest name */
                 name?: (string|null);
+
+                /** GetPodLogsRequest options */
+                options?: (clutch.k8s.v1.IGetPodLogsOptions|null);
             }
 
-            /** Represents a GetLogsRequest. */
-            class GetLogsRequest implements IGetLogsRequest {
+            /** Represents a GetPodLogsRequest. */
+            class GetPodLogsRequest implements IGetPodLogsRequest {
 
                 /**
-                 * Constructs a new GetLogsRequest.
+                 * Constructs a new GetPodLogsRequest.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.k8s.v1.IGetLogsRequest);
+                constructor(properties?: clutch.k8s.v1.IGetPodLogsRequest);
 
-                /** GetLogsRequest clientset. */
+                /** GetPodLogsRequest clientset. */
                 public clientset: string;
 
-                /** GetLogsRequest cluster. */
+                /** GetPodLogsRequest cluster. */
                 public cluster: string;
 
-                /** GetLogsRequest namespace. */
+                /** GetPodLogsRequest namespace. */
                 public namespace: string;
 
-                /** GetLogsRequest name. */
+                /** GetPodLogsRequest name. */
                 public name: string;
 
+                /** GetPodLogsRequest options. */
+                public options?: (clutch.k8s.v1.IGetPodLogsOptions|null);
+
                 /**
-                 * Verifies a GetLogsRequest message.
+                 * Verifies a GetPodLogsRequest message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a GetLogsRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a GetPodLogsRequest message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns GetLogsRequest
+                 * @returns GetPodLogsRequest
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GetLogsRequest;
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GetPodLogsRequest;
 
                 /**
-                 * Creates a plain object from a GetLogsRequest message. Also converts values to other types if specified.
-                 * @param message GetLogsRequest
+                 * Creates a plain object from a GetPodLogsRequest message. Also converts values to other types if specified.
+                 * @param message GetPodLogsRequest
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.k8s.v1.GetLogsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.k8s.v1.GetPodLogsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this GetLogsRequest to JSON.
+                 * Converts this GetPodLogsRequest to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a GetLogsResponse. */
-            interface IGetLogsResponse {
+            /** Properties of a GetPodLogsOptions. */
+            interface IGetPodLogsOptions {
+
+                /** GetPodLogsOptions containerName */
+                containerName?: (string|null);
+
+                /** GetPodLogsOptions previous */
+                previous?: (boolean|null);
+
+                /** GetPodLogsOptions sinceTs */
+                sinceTs?: (string|null);
+
+                /** GetPodLogsOptions tailNumLines */
+                tailNumLines?: (number|Long|null);
             }
 
-            /** Represents a GetLogsResponse. */
-            class GetLogsResponse implements IGetLogsResponse {
+            /** Represents a GetPodLogsOptions. */
+            class GetPodLogsOptions implements IGetPodLogsOptions {
 
                 /**
-                 * Constructs a new GetLogsResponse.
+                 * Constructs a new GetPodLogsOptions.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.k8s.v1.IGetLogsResponse);
+                constructor(properties?: clutch.k8s.v1.IGetPodLogsOptions);
+
+                /** GetPodLogsOptions containerName. */
+                public containerName: string;
+
+                /** GetPodLogsOptions previous. */
+                public previous: boolean;
+
+                /** GetPodLogsOptions sinceTs. */
+                public sinceTs: string;
+
+                /** GetPodLogsOptions tailNumLines. */
+                public tailNumLines: (number|Long);
 
                 /**
-                 * Verifies a GetLogsResponse message.
+                 * Verifies a GetPodLogsOptions message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a GetLogsResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a GetPodLogsOptions message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns GetLogsResponse
+                 * @returns GetPodLogsOptions
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GetLogsResponse;
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GetPodLogsOptions;
 
                 /**
-                 * Creates a plain object from a GetLogsResponse message. Also converts values to other types if specified.
-                 * @param message GetLogsResponse
+                 * Creates a plain object from a GetPodLogsOptions message. Also converts values to other types if specified.
+                 * @param message GetPodLogsOptions
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.k8s.v1.GetLogsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.k8s.v1.GetPodLogsOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this GetLogsResponse to JSON.
+                 * Converts this GetPodLogsOptions to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetPodLogsResponse. */
+            interface IGetPodLogsResponse {
+
+                /** GetPodLogsResponse latestTs */
+                latestTs?: (string|null);
+
+                /** GetPodLogsResponse logs */
+                logs?: (clutch.k8s.v1.IPodLogLine[]|null);
+            }
+
+            /** Represents a GetPodLogsResponse. */
+            class GetPodLogsResponse implements IGetPodLogsResponse {
+
+                /**
+                 * Constructs a new GetPodLogsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IGetPodLogsResponse);
+
+                /** GetPodLogsResponse latestTs. */
+                public latestTs: string;
+
+                /** GetPodLogsResponse logs. */
+                public logs: clutch.k8s.v1.IPodLogLine[];
+
+                /**
+                 * Verifies a GetPodLogsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetPodLogsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetPodLogsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GetPodLogsResponse;
+
+                /**
+                 * Creates a plain object from a GetPodLogsResponse message. Also converts values to other types if specified.
+                 * @param message GetPodLogsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.GetPodLogsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetPodLogsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a PodLogLine. */
+            interface IPodLogLine {
+
+                /** PodLogLine ts */
+                ts?: (string|null);
+
+                /** PodLogLine s */
+                s?: (string|null);
+            }
+
+            /** Represents a PodLogLine. */
+            class PodLogLine implements IPodLogLine {
+
+                /**
+                 * Constructs a new PodLogLine.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IPodLogLine);
+
+                /** PodLogLine ts. */
+                public ts: string;
+
+                /** PodLogLine s. */
+                public s: string;
+
+                /**
+                 * Verifies a PodLogLine message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a PodLogLine message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns PodLogLine
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.PodLogLine;
+
+                /**
+                 * Creates a plain object from a PodLogLine message. Also converts values to other types if specified.
+                 * @param message PodLogLine
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.PodLogLine, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this PodLogLine to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
