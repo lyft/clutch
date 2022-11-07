@@ -40,7 +40,7 @@ users:
 func TestNew(t *testing.T) {
 	tempfile, _ := os.CreateTemp("", "")
 	defer os.Remove(tempfile.Name())
-	_ = os.WriteFile(tempfile.Name(), []byte(testConfig), 0o500)
+	_ = os.WriteFile(tempfile.Name(), []byte(testConfig), 0500)
 
 	paths := []string{tempfile.Name()}
 
@@ -134,7 +134,7 @@ func TestInterceptError(t *testing.T) {
 func TestGetK8sClientset(t *testing.T) {
 	tempfile, _ := os.CreateTemp("", "")
 	defer os.Remove(tempfile.Name())
-	_ = os.WriteFile(tempfile.Name(), []byte(testConfig), 0o500)
+	_ = os.WriteFile(tempfile.Name(), []byte(testConfig), 0500)
 
 	paths := []string{tempfile.Name()}
 

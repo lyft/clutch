@@ -74,7 +74,7 @@ func tmpFile(filename, content string) *os.File {
 	if err != nil {
 		log.Panic(err)
 	}
-	_ = os.WriteFile(f.Name(), []byte(content), 0o644)
+	_ = os.WriteFile(f.Name(), []byte(content), 0644)
 	return f
 }
 
@@ -168,7 +168,7 @@ gateway:
     pretty: true
     level: DEBUG
 `, cc.Name(), bc.Name())
-	_ = os.WriteFile(bc.Name(), []byte(baseConfig), 0o644)
+	_ = os.WriteFile(bc.Name(), []byte(baseConfig), 0644)
 
 	config := fmt.Sprintf(`
 extends:
@@ -178,7 +178,7 @@ gateway:
     pretty: true
     level: WARN
 `, bc.Name())
-	_ = os.WriteFile(cc.Name(), []byte(config), 0o644)
+	_ = os.WriteFile(cc.Name(), []byte(config), 0644)
 
 	var cfg gatewayv1.Config
 	var seenCfgs []string
