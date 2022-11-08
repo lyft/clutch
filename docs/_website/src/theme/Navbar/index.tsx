@@ -4,15 +4,20 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
+import ColorModeToggle from '@theme/ColorModeToggle';
 import SearchBar from '@theme/SearchBar';
-import Toggle from '@theme/Toggle';
-import useThemeContext from '@theme/hooks/useThemeContext';
-import useHideableNavbar from '@theme/hooks/useHideableNavbar';
-import useLockBodyScroll from '@theme/hooks/useLockBodyScroll';
-import useWindowSize from '@theme/hooks/useWindowSize';
+import { useColorMode, useWindowSize } from '@docusaurus/theme-common';
+import type { NavLinkProps as BaseNavLinkProps } from '@docusaurus/Link';
+import {
+  useHideableNavbar,
+  useLockBodyScroll,
+  // @ts-ignore
+} from '@docusaurus/theme-common/internal';
+
 import Logo from '@theme/Logo';
 
 import styles from './styles.module.css';
+import { ThemeConfig } from '../types';
 
 // retrocompatible with v1
 const DefaultNavItemPosition = 'right';
@@ -50,13 +55,13 @@ var items = [
     icon: "fe fe-github",
     label: 'GitHub',
   },
-];
+] as ItemProps[];
 
-interface NavLinkProps {
+interface NavLinkProps extends BaseNavLinkProps {
   to: string;
-  href?: string;
   label: string;
   activeClassName?: string;
+  className?: string;
   prependBaseUrlToHref?: boolean;
   icon: string;
 }
@@ -69,7 +74,7 @@ function NavLink({
   prependBaseUrlToHref = false,
   icon,
   ...props
-}) {
+}: NavLinkProps) {
   const toUrl = useBaseUrl(to);
   const normalizedHref = useBaseUrl(href, { forcePrependBaseUrl: true });
 
@@ -129,7 +134,7 @@ function NavItem({
         onClick={(e) => e.preventDefault()}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            e.target.parentNode.classList.toggle('dropdown--show');
+            e.currentTarget.parentElement.classList.toggle('dropdown--show');
           }
         }}>
         {props.label}
@@ -209,20 +214,13 @@ function splitLinks(links) {
 }
 
 function Navbar() {
-  const {
-    siteConfig: {
-      themeConfig: {
-        navbar: { hideOnScroll = false } = {},
-        colorMode: {disableSwitch: disableColorModeSwitch = false} = {},
-      },
-    },
-    isClient,
-  } = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = {...siteConfig.themeConfig} as ThemeConfig;
+  const hideOnScroll = themeConfig.navbar.hideOnScroll || false;
+  const disableColorModeSwitch = themeConfig.colorMode.disableSwitch || false;
   const [sidebarShown, setSidebarShown] = useState(false);
-  const [isSearchBarExpanded, setIsSearchBarExpanded] = useState(false);
 
-  const { isDarkTheme, setLightTheme, setDarkTheme } = useThemeContext();
-  const { navbarRef, isNavbarVisible } = useHideableNavbar(hideOnScroll);
+  const { colorMode, setLightTheme, setDarkTheme } = useColorMode();
 
   useLockBodyScroll(sidebarShown);
 
@@ -250,11 +248,9 @@ function Navbar() {
 
   return (
     <nav
-      ref={navbarRef}
-      className={clsx('navbar', 'navbar--light', 'navbar--fixed-top', styles.navbarCustom, {
+      className={clsx('navbar', colorMode === "light" ? 'navbar--light' : 'navbar--dark', 'navbar--fixed-top', styles.navbarCustom, {
         'navbar-sidebar--show': sidebarShown,
         [styles.navbarHideable]: hideOnScroll,
-        [styles.navbarHidden]: !isNavbarVisible,
       })}>
       <div className="navbar__inner">
         <div className="navbar__items">
@@ -286,25 +282,21 @@ function Navbar() {
           )}
           <div className={clsx("navbar__brand", styles.navbarLogoCustom)}>
             <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
-            <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
+            <img className={clsx('navbar__title', styles.navbarLogoTextCustom)} src={useBaseUrl("img/navigation/logoText.svg")} />
           </div>
           {leftLinks.map((linkItem, i) => (
             <NavItem {...linkItem} key={i} />
           ))}
         </div>
         <div className="navbar__items navbar__items--right">
-          <SearchBar
-            handleSearchBarToggle={setIsSearchBarExpanded}
-            isSearchBarExpanded={isSearchBarExpanded}
-          />
+          <SearchBar />
           {rightLinks.map((linkItem, i) => (
             <NavItem {...linkItem} key={i} />
           ))}
           {!disableColorModeSwitch && (
-            <Toggle
+            <ColorModeToggle
+              value={colorMode}
               className={styles.displayOnlyInLargeViewport}
-              aria-label="Dark mode toggle"
-              checked={isDarkTheme}
               onChange={onToggleChange}
             />
           )}
@@ -319,14 +311,10 @@ function Navbar() {
         <div className="navbar-sidebar__brand">
           <div className={clsx("navbar__brand", styles.navbarLogoCustom)} onClick={hideSidebar}>
             <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
-            <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
+            <img className={clsx('navbar__title', styles.navbarLogoTextCustom)} src={useBaseUrl("img/navigation/logoText.svg")} />
           </div>
           {!disableColorModeSwitch && sidebarShown && (
-            <Toggle
-              aria-label="Dark mode toggle in sidebar"
-              checked={isDarkTheme}
-              onChange={onToggleChange}
-            />
+            <ColorModeToggle value={colorMode} onChange={onToggleChange} />
           )}
         </div>
         <div className="navbar-sidebar__items">
