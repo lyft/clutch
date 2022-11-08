@@ -56,17 +56,20 @@ func (s *svc) GetPodLogs(ctx context.Context, clientset, cluster, namespace, nam
 	}
 	defer readCloser.Close()
 
-	var logs []*k8sapiv1.PodLogLine
+	return bufferToResponse(readCloser)
+}
 
-	r := bufio.NewReader(readCloser)
+func bufferToResponse(r io.Reader) (*k8sapiv1.GetPodLogsResponse, error) {
+	var logs []*k8sapiv1.PodLogLine
 	var nbytes int
+
+	buf := bufio.NewReader(r)
 	for {
-		b, err := r.ReadBytes('\n')
+		b, err := buf.ReadBytes('\n')
 		if err != nil && err != io.EOF {
 			return nil, err
 		}
 
-		// Keep track of the total number of bytes.
 		nbytes += len(b)
 
 		if len(b) > 0 {
@@ -124,17 +127,23 @@ func protoOptsToK8sOpts(in *k8sapiv1.GetPodLogsOptions) (*v1.PodLogOptions, erro
 	return ret, nil
 }
 
+func byteToStringTrimmed(b []byte) string {
+	return strings.TrimSuffix(string(b), "\n")
+}
+
 func bytesToLogLine(b []byte) *k8sapiv1.PodLogLine {
 	idx := bytes.Index(b, tsDelimiter)
+	if idx < 0 {
+		return &k8sapiv1.PodLogLine{S: byteToStringTrimmed(b)}
+	}
+
 	ts := string(b[:idx])
 	if _, err := time.Parse(rfc3339NanoFixed, ts); err != nil {
-		return &k8sapiv1.PodLogLine{
-			S: strings.TrimSuffix(string(b), "\n"),
-		}
+		return &k8sapiv1.PodLogLine{S: byteToStringTrimmed(b)}
 	}
 
 	return &k8sapiv1.PodLogLine{
 		Ts: ts,
-		S:  strings.TrimSuffix(string(b[idx+1:]), "\n"),
+		S:  byteToStringTrimmed(b[idx+1:]),
 	}
 }
