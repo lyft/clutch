@@ -1697,10 +1697,16 @@ type GetPodLogsOptions struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// The container for which to stream logs. Defaults to only container if there is one container in the pod.
 	ContainerName string `protobuf:"bytes,1,opt,name=container_name,json=containerName,proto3" json:"container_name,omitempty"`
-	Previous      bool   `protobuf:"varint,2,opt,name=previous,proto3" json:"previous,omitempty"`
-	SinceTs       string `protobuf:"bytes,3,opt,name=since_ts,json=sinceTs,proto3" json:"since_ts,omitempty"`
-	TailNumLines  int64  `protobuf:"varint,4,opt,name=tail_num_lines,json=tailNumLines,proto3" json:"tail_num_lines,omitempty"`
+	// Return previous terminated container logs if true.
+	Previous bool `protobuf:"varint,2,opt,name=previous,proto3" json:"previous,omitempty"`
+	// An RFC3339 timestamp from which to show logs, e.g. 2022-11-07T19:30:38.974187286Z. This can be retrieved directly
+	// from a previous API call.
+	SinceTs string `protobuf:"bytes,3,opt,name=since_ts,json=sinceTs,proto3" json:"since_ts,omitempty"`
+	// If set, the number of lines from the end of the logs to show. If not specified, logs are shown from the creation of
+	// the container or sinceSeconds or sinceTime.
+	TailNumLines int64 `protobuf:"varint,4,opt,name=tail_num_lines,json=tailNumLines,proto3" json:"tail_num_lines,omitempty"`
 }
 
 func (x *GetPodLogsOptions) Reset() {
