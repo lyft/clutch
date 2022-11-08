@@ -8,12 +8,14 @@
 }
 
 .noGradient {
-  border-top: 1px solid var(--ifm-hr-border-color);
+  border-top: 1px solid #bec3c9;
 }
 
 .footerAdditional {
   white-space: nowrap;
   font-size: .9rem;
+  list-style: none;
+  padding: 0;
 }
 
 .navbarLogo {

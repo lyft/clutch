@@ -1,7 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import { MDXProvider } from '@mdx-js/react';
-import Seo from '@theme/Seo';
+import { PageMetadata } from '@docusaurus/theme-common';
+// @ts-ignore
+import { useBlogPost } from '@docusaurus/theme-common/internal';
 import Link from '@docusaurus/Link';
 import MDXComponents from '@theme/MDXComponents';
 import Share from '@site/src/components/Share';
@@ -23,15 +25,11 @@ const MONTHS = [
 ];
 
 function BlogPostItem(props) {
-  const {
-    children,
-    frontMatter,
-    metadata,
-    truncated,
-    isBlogPostPage = false,
-  } = props;
-  const { date, permalink, tags, readingTime } = metadata;
-  const { authors, title, image, keywords } = frontMatter;
+  const { children } = props;
+  const post = useBlogPost()
+  const isBlogPostPage = post.isBlogPostPage;
+  const { date, permalink, tags, readingTime, hasTruncateMarker } = post.metadata;
+  const { authors, title, image, keywords } = post.frontMatter;
 
   const renderPostHeader = () => {
     const TitleHeading = isBlogPostPage ? 'h1' : 'h2';
@@ -51,7 +49,7 @@ function BlogPostItem(props) {
             {month} {day}, {year}{' '}
             {readingTime && <> · {Math.ceil(readingTime)} min read</>}
           </time>
-          {!truncated && <>&nbsp;·&nbsp;<Share title={title} authors={authors} style={{margin: "0 7px"}} /></>}
+          {!hasTruncateMarker && <>&nbsp;·&nbsp;<Share title={title} authors={authors} style={{margin: "0 7px"}} /></>}
         </div>
 
 
@@ -83,14 +81,14 @@ function BlogPostItem(props) {
 
   return (
     <MDXProvider components={{ ...MDXComponents, img: Image }}>
-      <Seo {...{keywords, image}} />
+      <PageMetadata {...{keywords, image}} />
 
       <article className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
         {renderPostHeader()}
         <section className="markdown">
           {children}
         </section>
-        {(tags.length > 0 || truncated) && (
+        {(tags.length > 0 || hasTruncateMarker) && (
           <footer className="row margin-vert--md">
             {tags.length > 0 && (
               <div className="col">
@@ -104,10 +102,10 @@ function BlogPostItem(props) {
                 ))}
               </div>
             )}
-            {truncated && (
+            {hasTruncateMarker && (
               <div className="col text--right">
                 <Link
-                  to={metadata.permalink}
+                  to={permalink}
                   aria-label={`Read more about ${title}`}>
                   <strong>Read More</strong>
                 </Link>

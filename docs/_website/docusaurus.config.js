@@ -109,14 +109,11 @@ module.exports = {
     colorMode: {
       disableSwitch: true,
     },
-    googleAnalytics: {
-      trackingID: 'UA-170615678-4',
-      anonymizeIP: true,
-    },
     algolia : {
       // This is a read-only, search-only key served directly by the front-end, managed by Algolia via their
       // free DocSearch program. The key is not sensitive. See https://docsearch.algolia.com/ for more details.
-      apiKey: '32f1f7956b3d2c3c90fbe259c7901d94',
+      apiKey: 'e9fd4dc1b48bb4b9e8763d3adc9df6d1',
+      appId: 'XFPMTG0051',
       indexName: 'lyft_clutch',
     },
     prism : {
@@ -220,6 +217,10 @@ module.exports = {
         docs: {
           path: "generated/docs",
           sidebarPath: require.resolve('../sidebars.json'),
+        },
+        googleAnalytics: {
+          trackingID: 'UA-170615678-4',
+          anonymizeIP: true,
         },
         blog: {
           path: "generated/blog",

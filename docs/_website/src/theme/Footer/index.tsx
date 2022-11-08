@@ -7,6 +7,7 @@ import type { NavbarLogo } from '@docusaurus/theme-common'
 import { useThemeConfig } from '@docusaurus/theme-common';
 
 import styles from './styles.module.css';
+import { ThemeConfig } from '../types';
 
 var socialLinks = [
   {
@@ -139,9 +140,8 @@ function Links({ links }) {
 };
 
 function Footer() {
-  const context = useDocusaurusContext();
-  const {siteConfig = {}} = context;
-  const {themeConfig = {}} = siteConfig;
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = {...siteConfig.themeConfig} as ThemeConfig;
   const {footer} = themeConfig;
 
   const {copyright, links = []} = footer || {};

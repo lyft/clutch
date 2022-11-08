@@ -45,9 +45,10 @@ interface ShareProps {
     url: string;
     twitter_username?: string;
   }[];
+  style: {[key: string]: unknown}
 }
 
-const Share = ({title, authors}: ShareProps) => {
+const Share = ({ title, authors, style }: ShareProps) => {
   const [open, setOpen] = React.useState(false);
 
   return (
