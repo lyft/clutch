@@ -19,7 +19,6 @@ export default {
     StoryFn => {
       return (
         <ApplicationContext.Provider
-          // eslint-disable-next-line react/jsx-no-constructed-context-values
           value={{
             workflows: [
               {

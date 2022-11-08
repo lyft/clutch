@@ -31,9 +31,8 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
     };
     const goBackButton = <Button key="back" text="Back" variant="neutral" onClick={goBack} />;
 
-    const statusValue = IClutch.chaos.experimentation.v1.Experiment.Status[
-      experiment.status
-    ].toString();
+    const statusValue =
+      IClutch.chaos.experimentation.v1.Experiment.Status[experiment.status].toString();
     const completedStatuses = [
       IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_RUNNING.toString(),
       IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_SCHEDULED.toString(),

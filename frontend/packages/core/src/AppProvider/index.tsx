@@ -120,9 +120,10 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     [workflowSessionStore]
   );
 
-  const appContextValue = React.useMemo(() => ({ workflows: discoverableWorkflows }), [
-    discoverableWorkflows,
-  ]);
+  const appContextValue = React.useMemo(
+    () => ({ workflows: discoverableWorkflows }),
+    [discoverableWorkflows]
+  );
 
   return (
     <Router>
