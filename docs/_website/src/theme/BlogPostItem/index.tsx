@@ -49,7 +49,7 @@ function BlogPostItem(props) {
             {month} {day}, {year}{' '}
             {readingTime && <> · {Math.ceil(readingTime)} min read</>}
           </time>
-          {!hasTruncateMarker && <>&nbsp;·&nbsp;<Share title={title} authors={authors} style={{margin: "0 7px"}} /></>}
+          {isBlogPostPage && <>&nbsp;·&nbsp;<Share title={title} authors={authors} style={{margin: "0 7px"}} /></>}
         </div>
 
 
