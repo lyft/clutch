@@ -6,7 +6,7 @@
     "start": "node watcher.ts & docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "lint": "eslint src",
+    "lint": "eslint src *.js .*.js",
     "lint:fix": "yarn run lint --fix"
   },
   "dependencies": {
