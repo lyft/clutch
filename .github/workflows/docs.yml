@@ -1,4 +1,4 @@
-name: frontend
+name: docs
 on:
   push:
     branches:
