@@ -8,6 +8,7 @@
     "swizzle": "docusaurus swizzle"
   },
   "dependencies": {
+    "@algolia/client-search": "^4.14.2",
     "@docusaurus/core": "^2.0.0-beta",
     "@docusaurus/plugin-debug": "^2.0.0-beta",
     "@docusaurus/preset-classic": "^2.0.0-beta",
@@ -15,6 +16,7 @@
     "prismjs": "^1.21.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
+    "react-loadable": "^5.5.0",
     "remark-toc": "^8.0.0"
   },
   "browserslist": {
