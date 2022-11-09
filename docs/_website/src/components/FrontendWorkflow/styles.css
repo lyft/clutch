@@ -1,25 +1,24 @@
-
 .fw-container {
-    border: 1px solid var(--ifm-color-emphasis-300);
-    border-radius: var(--ifm-global-radius);
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    display: block;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .fw-container:hover {
-    border-color: var(--ifm-color-primary);
-    text-decoration: none;
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
 }
 
 .fw-workflow-list {
-    margin: 0.5em 1em;
-    color: var(--ifm-font-color-secondary);
-    font-size: 0.875rem;
+  margin: 0.5em 1em;
+  color: var(--ifm-font-color-secondary);
+  font-size: 0.875rem;
 }
 
 .fw-title {
-    font-family: monospace;
-    font-weight: 600;
+  font-family: monospace;
+  font-weight: 600;
 }

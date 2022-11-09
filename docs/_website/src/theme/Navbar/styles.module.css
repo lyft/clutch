@@ -17,7 +17,7 @@
 
 /* Customization */
 .navbarItemIcon {
-  margin-right: .33rem;
+  margin-right: 0.33rem;
 }
 
 .navbarItemLabel {
@@ -37,5 +37,5 @@
 
 .navbarLogoTextCustom {
   height: 1.5rem;
-  margin-left: .33rem;
+  margin-left: 0.33rem;
 }

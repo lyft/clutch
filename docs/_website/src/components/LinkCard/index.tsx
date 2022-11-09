@@ -1,15 +1,19 @@
-import React from 'react';
-import Link from '@docusaurus/Link';
+import React from "react";
+import Link from "@docusaurus/Link";
+import type { Props as LinkProps } from "@docusaurus/Link";
 
-import './styles.css';
+import "./styles.css";
 
-const LinkCard = (props) => <Link className="lc-container" to={props.to}>
-    <div className="lc-title">
-        {props.title}
-    </div>
-    <div className="lc-description">
-        {props.description}
-    </div>
-</Link>
+interface LinkCardProps extends Pick<LinkProps, "to"> {
+  title: string;
+  description: string;
+}
+
+const LinkCard = ({ to, title, description }: LinkCardProps): JSX.Element => (
+  <Link className="lc-container" to={to}>
+    <div className="lc-title">{title}</div>
+    <div className="lc-description">{description}</div>
+  </Link>
+);
 
 export default LinkCard;

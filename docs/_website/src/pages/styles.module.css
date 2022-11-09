@@ -25,7 +25,7 @@
 }
 
 .button:hover {
-  color: #2D3F50;
+  color: #2d3f50;
 }
 
 .container {
@@ -42,11 +42,11 @@
 }
 
 .sectionHeadingDark {
-  color: #2D3F50;
+  color: #2d3f50;
 }
 
 .darkBackground {
-  background: linear-gradient(90deg,#2D3F50 17.71%,black 65%);
+  background: linear-gradient(90deg, #2d3f50 17.71%, black 65%);
 }
 
 .textContainer {
@@ -67,13 +67,13 @@
   position: relative;
   overflow: hidden;
   background-color: #ffffff;
-  background: linear-gradient(3deg,#dceff5 12%,#ffffff 13%);
+  background: linear-gradient(3deg, #dceff5 12%, #ffffff 13%);
   color: #02acbe;
   /* max-width: 1200px; */
 }
 
 .heroDescription {
-  color: #2D3F50;
+  color: #2d3f50;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
 }
@@ -102,7 +102,7 @@
 .features {
   padding: 2rem 0 0 0;
   width: 100%;
-  background: linear-gradient(180deg,#dceff5 1%,#ffffff 20%);
+  background: linear-gradient(180deg, #dceff5 1%, #ffffff 20%);
 }
 
 .featureIcon {
@@ -130,7 +130,7 @@
 
 /* Demo Styling */
 .demoSection {
-  background: linear-gradient(4deg,transparent 15%,white 16%);
+  background: linear-gradient(4deg, transparent 15%, white 16%);
   padding-top: 0;
 }
 
@@ -151,14 +151,14 @@
 
   .darkBackground {
     margin-bottom: -2px;
-    background: linear-gradient(90deg,#2D3F50 17.71%,black 65%);
-  }  
-  
+    background: linear-gradient(90deg, #2d3f50 17.71%, black 65%);
+  }
+
   .container {
     margin: 0%;
-    max-width: 100%
+    max-width: 100%;
   }
-  
+
   /* Hero Styling */
   .heroContainer {
     width: 100%;
@@ -173,7 +173,7 @@
 
   /* Demo Styling */
   .demoSection {
-    background: linear-gradient(2.25deg,transparent 5%,white 6%);
+    background: linear-gradient(2.25deg, transparent 5%, white 6%);
   }
 
   .textContainer {

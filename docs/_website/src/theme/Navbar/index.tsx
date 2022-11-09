@@ -1,26 +1,25 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import React, { useCallback, useState, useEffect } from "react";
+import clsx from "clsx";
+import Link from "@docusaurus/Link";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
-import ColorModeToggle from '@theme/ColorModeToggle';
-import SearchBar from '@theme/SearchBar';
-import { useColorMode, useWindowSize } from '@docusaurus/theme-common';
-import type { NavLinkProps as BaseNavLinkProps } from '@docusaurus/Link';
+import ColorModeToggle from "@theme/ColorModeToggle";
+import SearchBar from "@theme/SearchBar";
+import { useColorMode, useWindowSize } from "@docusaurus/theme-common";
+import type { NavLinkProps as BaseNavLinkProps } from "@docusaurus/Link";
 import {
-  useHideableNavbar,
   useLockBodyScroll,
-  // @ts-ignore
-} from '@docusaurus/theme-common/internal';
+  // @ts-expect-error
+} from "@docusaurus/theme-common/internal";
 
-import Logo from '@theme/Logo';
+import Logo from "@theme/Logo";
 
-import styles from './styles.module.css';
-import { ThemeConfig } from '../types';
+import styles from "./styles.module.css";
+import { ThemeConfig } from "../types";
 
 // retrocompatible with v1
-const DefaultNavItemPosition = 'right';
+const DefaultNavItemPosition = "right";
 
 interface ItemProps {
   to: string;
@@ -31,29 +30,29 @@ interface ItemProps {
 }
 
 // items defined here instead of config so they can have an associated icon
-var items = [
+const items = [
   {
-    to: 'docs/about/what-is-clutch',
-    activeBasePath: 'docs',
+    to: "docs/about/what-is-clutch",
+    activeBasePath: "docs",
     icon: "fe fe-book",
-    label: 'Docs',
+    label: "Docs",
   },
   {
-    to: 'blog',
-    activeBasePath: 'blog',
+    to: "blog",
+    activeBasePath: "blog",
     icon: "fe fe-rss",
-    label: 'Blog',
+    label: "Blog",
   },
   {
-    to: 'docs/community',
-    activeBasePath: 'docs',
+    to: "docs/community",
+    activeBasePath: "docs",
     icon: "fe fe-message-square",
-    label: 'Community',
+    label: "Community",
   },
   {
-    href: 'https://github.com/lyft/clutch',
+    href: "https://github.com/lyft/clutch",
     icon: "fe fe-github",
-    label: 'GitHub',
+    label: "GitHub",
   },
 ] as ItemProps[];
 
@@ -70,27 +69,28 @@ function NavLink({
   to,
   href = "",
   label,
-  activeClassName = 'navbar__link--active',
+  activeClassName = "navbar__link--active",
   prependBaseUrlToHref = false,
   icon,
   ...props
-}: NavLinkProps) {
+}: NavLinkProps): JSX.Element {
   const toUrl = useBaseUrl(to);
   const normalizedHref = useBaseUrl(href, { forcePrependBaseUrl: true });
 
   return (
     <Link
-      {...(href
+      {...(href !== ""
         ? {
-          target: '_blank',
-          rel: 'noopener noreferrer',
-          href: prependBaseUrlToHref ? normalizedHref : href,
-        }
+            target: "_blank",
+            rel: "noopener noreferrer",
+            href: prependBaseUrlToHref ? normalizedHref : href,
+          }
         : {
-          isNavLink: true,
-          to: toUrl,
-        })}
-      {...props}>
+            isNavLink: true,
+            to: toUrl,
+          })}
+      {...props}
+    >
       <span className={clsx(styles.navbarItemIcon, icon)} />
       <span className={styles.navbarItemLabel}>{label}</span>
     </Link>
@@ -99,7 +99,7 @@ function NavLink({
 
 interface NavItemProps extends NavLinkProps {
   items?: ItemProps[];
-  position?: 'right' | 'left';
+  position?: "right" | "left";
   className?: string;
 }
 
@@ -108,47 +108,51 @@ function NavItem({
   position = DefaultNavItemPosition,
   className,
   ...props
-}: NavItemProps) {
-  const navLinkClassNames = (extraClassName, isDropdownItem = false) =>
+}: NavItemProps): JSX.Element {
+  const navLinkClassNames = (extraClassName, isDropdownItem = false): string =>
     clsx(
       {
-        'navbar__item navbar__link': !isDropdownItem,
+        "navbar__item navbar__link": !isDropdownItem,
         dropdown__link: isDropdownItem,
       },
-      extraClassName,
+      extraClassName
     );
 
-  if (!items) {
+  if (items == null) {
     return <NavLink className={navLinkClassNames(className)} {...props} />;
   }
 
   return (
     <div
-      className={clsx('navbar__item', 'dropdown', 'dropdown--hoverable', {
-        'dropdown--left': position === 'left',
-        'dropdown--right': position === 'right',
-      })}>
+      className={clsx("navbar__item", "dropdown", "dropdown--hoverable", {
+        "dropdown--left": position === "left",
+        "dropdown--right": position === "right",
+      })}
+    >
       <NavLink
         className={navLinkClassNames(className)}
         {...props}
         onClick={(e) => e.preventDefault()}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.currentTarget.parentElement.classList.toggle('dropdown--show');
+          if (e.key === "Enter") {
+            e?.currentTarget?.parentElement?.classList.toggle("dropdown--show");
           }
-        }}>
+        }}
+      >
         {props.label}
       </NavLink>
       <ul className="dropdown__menu">
-        {items.map(({ className: childItemClassName, ...childItemProps }, i) => (
-          <li key={i}>
-            <NavLink
-              activeClassName="dropdown__link--active"
-              className={navLinkClassNames(childItemClassName, true)}
-              {...childItemProps}
-            />
-          </li>
-        ))}
+        {items.map(
+          ({ className: childItemClassName, ...childItemProps }, i) => (
+            <li key={i}>
+              <NavLink
+                activeClassName="dropdown__link--active"
+                className={navLinkClassNames(childItemClassName, true)}
+                {...childItemProps}
+              />
+            </li>
+          )
+        )}
       </ul>
     </div>
   );
@@ -158,18 +162,22 @@ interface MobileNavItemProps extends NavItemProps {
   onClick: any;
 }
 
-function MobileNavItem({ items, className, ...props }: MobileNavItemProps) {
+function MobileNavItem({
+  items,
+  className,
+  ...props
+}: MobileNavItemProps): JSX.Element {
   // Need to destructure position from props so that it doesn't get passed on.
-  const navLinkClassNames = (extraClassName, isSubList = false) =>
+  const navLinkClassNames = (extraClassName, isSubList = false): string =>
     clsx(
-      'menu__link',
+      "menu__link",
       {
-        'menu__link--sublist': isSubList,
+        "menu__link--sublist": isSubList,
       },
-      extraClassName,
+      extraClassName
     );
 
-  if (!items) {
+  if (items == null) {
     return (
       <li className="menu__list-item">
         <NavLink className={navLinkClassNames(className)} {...props} />
@@ -183,16 +191,18 @@ function MobileNavItem({ items, className, ...props }: MobileNavItemProps) {
         {props.label}
       </NavLink>
       <ul className="menu__list">
-        {items.map(({ className: childItemClassName, ...childItemProps }, i) => (
-          <li className="menu__list-item" key={i}>
-            <NavLink
-              activeClassName="menu__link--active"
-              className={navLinkClassNames(childItemClassName)}
-              {...childItemProps}
-              onClick={props.onClick}
-            />
-          </li>
-        ))}
+        {items.map(
+          ({ className: childItemClassName, ...childItemProps }, i) => (
+            <li className="menu__list-item" key={i}>
+              <NavLink
+                activeClassName="menu__link--active"
+                className={navLinkClassNames(childItemClassName)}
+                {...childItemProps}
+                onClick={props.onClick}
+              />
+            </li>
+          )
+        )}
       </ul>
     </li>
   );
@@ -200,12 +210,12 @@ function MobileNavItem({ items, className, ...props }: MobileNavItemProps) {
 
 // If split links by left/right
 // if position is unspecified, fallback to right (as v1)
-function splitLinks(links) {
+function splitLinks(links): { leftLinks: any; rightLinks: any } {
   const leftLinks = links.filter(
-    (linkItem) => (linkItem.position ?? DefaultNavItemPosition) === 'left',
+    (linkItem) => (linkItem.position ?? DefaultNavItemPosition) === "left"
   );
   const rightLinks = links.filter(
-    (linkItem) => (linkItem.position ?? DefaultNavItemPosition) === 'right',
+    (linkItem) => (linkItem.position ?? DefaultNavItemPosition) === "right"
   );
   return {
     leftLinks,
@@ -213,11 +223,11 @@ function splitLinks(links) {
   };
 }
 
-function Navbar() {
+function Navbar(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
-  const themeConfig = {...siteConfig.themeConfig} as ThemeConfig;
-  const hideOnScroll = themeConfig.navbar.hideOnScroll || false;
-  const disableColorModeSwitch = themeConfig.colorMode.disableSwitch || false;
+  const themeConfig = { ...siteConfig.themeConfig } as ThemeConfig;
+  const hideOnScroll = themeConfig?.navbar?.hideOnScroll ?? false;
+  const disableColorModeSwitch = themeConfig?.colorMode?.disableSwitch ?? false;
   const [sidebarShown, setSidebarShown] = useState(false);
 
   const { colorMode, setLightTheme, setDarkTheme } = useColorMode();
@@ -232,14 +242,14 @@ function Navbar() {
   }, [setSidebarShown]);
 
   const onToggleChange = useCallback(
-    (e) => (e.target.checked ? setDarkTheme() : setLightTheme()),
-    [setLightTheme, setDarkTheme],
+    (e) => ((e.target.checked as boolean) ? setDarkTheme() : setLightTheme()),
+    [setLightTheme, setDarkTheme]
   );
 
   const windowSize = useWindowSize();
 
   useEffect(() => {
-    if (windowSize === 'desktop') {
+    if (windowSize === "desktop") {
       setSidebarShown(false);
     }
   }, [windowSize]);
@@ -248,10 +258,17 @@ function Navbar() {
 
   return (
     <nav
-      className={clsx('navbar', colorMode === "light" ? 'navbar--light' : 'navbar--dark', 'navbar--fixed-top', styles.navbarCustom, {
-        'navbar-sidebar--show': sidebarShown,
-        [styles.navbarHideable]: hideOnScroll,
-      })}>
+      className={clsx(
+        "navbar",
+        colorMode === "light" ? "navbar--light" : "navbar--dark",
+        "navbar--fixed-top",
+        styles.navbarCustom,
+        {
+          "navbar-sidebar--show": sidebarShown,
+          [styles.navbarHideable]: hideOnScroll,
+        }
+      )}
+    >
       <div className="navbar__inner">
         <div className="navbar__items">
           {items != null && items.length !== 0 && (
@@ -261,14 +278,16 @@ function Navbar() {
               role="button"
               tabIndex={0}
               onClick={showSidebar}
-              onKeyDown={showSidebar}>
+              onKeyDown={showSidebar}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
                 height="30"
                 viewBox="0 0 30 30"
                 role="img"
-                focusable="false">
+                focusable="false"
+              >
                 <title>Menu</title>
                 <path
                   stroke="currentColor"
@@ -281,8 +300,13 @@ function Navbar() {
             </div>
           )}
           <div className={clsx("navbar__brand", styles.navbarLogoCustom)}>
-            <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
-            <img className={clsx('navbar__title', styles.navbarLogoTextCustom)} src={useBaseUrl("img/navigation/logoText.svg")} />
+            <Logo
+              imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)}
+            />
+            <img
+              className={clsx("navbar__title", styles.navbarLogoTextCustom)}
+              src={useBaseUrl("img/navigation/logoText.svg")}
+            />
           </div>
           {leftLinks.map((linkItem, i) => (
             <NavItem {...linkItem} key={i} />
@@ -309,9 +333,17 @@ function Navbar() {
       />
       <div className="navbar-sidebar">
         <div className="navbar-sidebar__brand">
-          <div className={clsx("navbar__brand", styles.navbarLogoCustom)} onClick={hideSidebar}>
-            <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
-            <img className={clsx('navbar__title', styles.navbarLogoTextCustom)} src={useBaseUrl("img/navigation/logoText.svg")} />
+          <div
+            className={clsx("navbar__brand", styles.navbarLogoCustom)}
+            onClick={hideSidebar}
+          >
+            <Logo
+              imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)}
+            />
+            <img
+              className={clsx("navbar__title", styles.navbarLogoTextCustom)}
+              src={useBaseUrl("img/navigation/logoText.svg")}
+            />
           </div>
           {!disableColorModeSwitch && sidebarShown && (
             <ColorModeToggle value={colorMode} onChange={onToggleChange} />

@@ -1,9 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import './styles.css';
+import "./styles.css";
 
-const Image = ({variant, ...props}) => <div className={variant}>
+interface ImageProps {
+  variant: string;
+}
+
+const Image = ({ variant, ...props }: ImageProps): JSX.Element => (
+  <div className={variant}>
     <img {...props} />
-</div>
+  </div>
+);
 
 export default Image;

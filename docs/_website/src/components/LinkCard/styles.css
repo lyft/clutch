@@ -1,24 +1,24 @@
 .lc-container {
-    border: 1px solid var(--ifm-color-emphasis-300);
-    border-radius: var(--ifm-global-radius);
-    padding: 0.75rem;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    max-width: 45em;
-    display: block;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  padding: 0.75rem;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  max-width: 45em;
+  display: block;
 }
 
 .lc-container:hover {
-    border-color: var(--ifm-color-primary);
-    text-decoration: none;
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
 }
 
 .lc-title {
-    font-weight: 600;
-    margin-right: 0.5em;
+  font-weight: 600;
+  margin-right: 0.5em;
 }
 
 .lc-description {
-    font-size: 0.875rem;
-    color: var(--ifm-font-color-secondary);
+  font-size: 0.875rem;
+  color: var(--ifm-font-color-secondary);
 }

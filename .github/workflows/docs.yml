@@ -1,0 +1,35 @@
+name: frontend
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+    paths:
+    - 'docs/**'
+    - .github/workflows/docs.yml
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          check-latest: true
+      - name: Enforce consistent Yarn version
+        run: ./tools/install-yarn.sh
+      - name: node_modules cache
+        id: node-modules-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: yarn --cwd docs/_website install
+      - name: lint
+        run: yarn --cwd docs/_website lint

@@ -9,7 +9,7 @@
 :root {
   --ifm-color-primary: #02acbe;
   --ifm-color-secondary: #ffffff;
-  --ifm-color-primary-dark: #2D3F50;
+  --ifm-color-primary-dark: #2d3f50;
   /* --ifm-color-primary-darker: rgb(31, 165, 136);
   --ifm-color-primary-darkest: rgb(26, 136, 112);
   --ifm-color-primary-light: rgb(70, 203, 174);
@@ -18,7 +18,7 @@
   --ifm-code-font-size: 95%;
   --ifm-alert-color: #0d3c61;
 
-  --ifm-navbar-background-color: #ffffff; 
+  --ifm-navbar-background-color: #ffffff;
 
   --ifm-font-family-base: "Roboto", sans-serif;
 
@@ -27,7 +27,6 @@
 
 .admonition a {
   color: inherit;
-
 }
 
 .admonition {
@@ -108,7 +107,7 @@
 /* Edit button customization. If DocItem is swizzled this can be done with a class.*/
 article + div.margin-vert--xl {
   margin: 3rem 0 0 0 !important;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 article + div.margin-vert--xl a {
@@ -121,5 +120,3 @@ article + div.margin-vert--xl a:hover {
   border-color: var(--ifm-color-primary);
   text-decoration: none;
 }
-
-
