@@ -41,6 +41,7 @@
     "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "chokidar": "^3.5.1",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.5.0",
