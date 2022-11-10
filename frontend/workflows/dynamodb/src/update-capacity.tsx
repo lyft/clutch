@@ -103,7 +103,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
           <TableRow key={table.name}>
             {table.name}
             Table
-            <Chip variant={getChipStatus(table.status)} label={table.status} />
+            <Chip variant={getChipStatus(table.status)} label={table.status} size="small" />
             <MetadataTable
               onUpdate={handleTableCapacityChange}
               data={[
