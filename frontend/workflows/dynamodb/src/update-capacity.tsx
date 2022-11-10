@@ -57,12 +57,13 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
   const tableDetailsNotes = notes.filter(note => note.location === "table-details");
   const limitsNotes = notes.filter(note => note.location === "scaling-limits");
   const getChipStatus = (status: IClutch.aws.dynamodb.v1.Table.Status) => {
-    switch (true) {
-      case status.toString() === "ACTIVE":
+    switch (status.toString()) {
+      case "ACTIVE":
         return "active";
-      case status.toString() === "UPDATING" || status.toString() === "CREATING":
+      case "UPDATING":
+      case "CREATING":
         return "pending";
-      case status.toString() === "DELETING":
+      case "DELETING":
         return "warn";
       default:
         return "neutral";
