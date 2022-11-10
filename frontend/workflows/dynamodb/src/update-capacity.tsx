@@ -139,7 +139,7 @@ const TableDetails: React.FC<TableDetailsChild> = ({ enableOverride, notes = [] 
             <TableRow key={gsi.name}>
               {gsi.name}
               Index
-              <Chip variant={getChipStatus(gsi.status)} label={gsi.status} />
+              <Chip variant={getChipStatus(gsi.status)} label={gsi.status} size="small" />
               <MetadataTable
                 onUpdate={handleGsiCapacityChange}
                 data={[
