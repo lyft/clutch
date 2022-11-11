@@ -37021,7 +37021,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] GetPodLogsRequest cluster
                  * @property {string|null} [namespace] GetPodLogsRequest namespace
                  * @property {string|null} [name] GetPodLogsRequest name
-                 * @property {clutch.k8s.v1.IGetPodLogsOptions|null} [options] GetPodLogsRequest options
+                 * @property {clutch.k8s.v1.IPodLogsOptions|null} [options] GetPodLogsRequest options
                  */
 
                 /**
@@ -37073,7 +37073,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * GetPodLogsRequest options.
-                 * @member {clutch.k8s.v1.IGetPodLogsOptions|null|undefined} options
+                 * @member {clutch.k8s.v1.IPodLogsOptions|null|undefined} options
                  * @memberof clutch.k8s.v1.GetPodLogsRequest
                  * @instance
                  */
@@ -37103,7 +37103,7 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isString(message.name))
                             return "name: string expected";
                     if (message.options != null && message.hasOwnProperty("options")) {
-                        let error = $root.clutch.k8s.v1.GetPodLogsOptions.verify(message.options);
+                        let error = $root.clutch.k8s.v1.PodLogsOptions.verify(message.options);
                         if (error)
                             return "options." + error;
                     }
@@ -37133,7 +37133,7 @@ export const clutch = $root.clutch = (() => {
                     if (object.options != null) {
                         if (typeof object.options !== "object")
                             throw TypeError(".clutch.k8s.v1.GetPodLogsRequest.options: object expected");
-                        message.options = $root.clutch.k8s.v1.GetPodLogsOptions.fromObject(object.options);
+                        message.options = $root.clutch.k8s.v1.PodLogsOptions.fromObject(object.options);
                     }
                     return message;
                 };
@@ -37167,7 +37167,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
                     if (message.options != null && message.hasOwnProperty("options"))
-                        object.options = $root.clutch.k8s.v1.GetPodLogsOptions.toObject(message.options, options);
+                        object.options = $root.clutch.k8s.v1.PodLogsOptions.toObject(message.options, options);
                     return object;
                 };
 
@@ -37185,27 +37185,27 @@ export const clutch = $root.clutch = (() => {
                 return GetPodLogsRequest;
             })();
 
-            v1.GetPodLogsOptions = (function() {
+            v1.PodLogsOptions = (function() {
 
                 /**
-                 * Properties of a GetPodLogsOptions.
+                 * Properties of a PodLogsOptions.
                  * @memberof clutch.k8s.v1
-                 * @interface IGetPodLogsOptions
-                 * @property {string|null} [containerName] GetPodLogsOptions containerName
-                 * @property {boolean|null} [previous] GetPodLogsOptions previous
-                 * @property {string|null} [sinceTs] GetPodLogsOptions sinceTs
-                 * @property {number|Long|null} [tailNumLines] GetPodLogsOptions tailNumLines
+                 * @interface IPodLogsOptions
+                 * @property {string|null} [containerName] PodLogsOptions containerName
+                 * @property {boolean|null} [previous] PodLogsOptions previous
+                 * @property {string|null} [sinceTs] PodLogsOptions sinceTs
+                 * @property {number|Long|null} [tailNumLines] PodLogsOptions tailNumLines
                  */
 
                 /**
-                 * Constructs a new GetPodLogsOptions.
+                 * Constructs a new PodLogsOptions.
                  * @memberof clutch.k8s.v1
-                 * @classdesc Represents a GetPodLogsOptions.
-                 * @implements IGetPodLogsOptions
+                 * @classdesc Represents a PodLogsOptions.
+                 * @implements IPodLogsOptions
                  * @constructor
-                 * @param {clutch.k8s.v1.IGetPodLogsOptions=} [properties] Properties to set
+                 * @param {clutch.k8s.v1.IPodLogsOptions=} [properties] Properties to set
                  */
-                function GetPodLogsOptions(properties) {
+                function PodLogsOptions(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -37213,46 +37213,46 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * GetPodLogsOptions containerName.
+                 * PodLogsOptions containerName.
                  * @member {string} containerName
-                 * @memberof clutch.k8s.v1.GetPodLogsOptions
+                 * @memberof clutch.k8s.v1.PodLogsOptions
                  * @instance
                  */
-                GetPodLogsOptions.prototype.containerName = "";
+                PodLogsOptions.prototype.containerName = "";
 
                 /**
-                 * GetPodLogsOptions previous.
+                 * PodLogsOptions previous.
                  * @member {boolean} previous
-                 * @memberof clutch.k8s.v1.GetPodLogsOptions
+                 * @memberof clutch.k8s.v1.PodLogsOptions
                  * @instance
                  */
-                GetPodLogsOptions.prototype.previous = false;
+                PodLogsOptions.prototype.previous = false;
 
                 /**
-                 * GetPodLogsOptions sinceTs.
+                 * PodLogsOptions sinceTs.
                  * @member {string} sinceTs
-                 * @memberof clutch.k8s.v1.GetPodLogsOptions
+                 * @memberof clutch.k8s.v1.PodLogsOptions
                  * @instance
                  */
-                GetPodLogsOptions.prototype.sinceTs = "";
+                PodLogsOptions.prototype.sinceTs = "";
 
                 /**
-                 * GetPodLogsOptions tailNumLines.
+                 * PodLogsOptions tailNumLines.
                  * @member {number|Long} tailNumLines
-                 * @memberof clutch.k8s.v1.GetPodLogsOptions
+                 * @memberof clutch.k8s.v1.PodLogsOptions
                  * @instance
                  */
-                GetPodLogsOptions.prototype.tailNumLines = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                PodLogsOptions.prototype.tailNumLines = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * Verifies a GetPodLogsOptions message.
+                 * Verifies a PodLogsOptions message.
                  * @function verify
-                 * @memberof clutch.k8s.v1.GetPodLogsOptions
+                 * @memberof clutch.k8s.v1.PodLogsOptions
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                GetPodLogsOptions.verify = function verify(message) {
+                PodLogsOptions.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.containerName != null && message.hasOwnProperty("containerName"))
@@ -37271,17 +37271,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a GetPodLogsOptions message from a plain object. Also converts values to their respective internal types.
+                 * Creates a PodLogsOptions message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.k8s.v1.GetPodLogsOptions
+                 * @memberof clutch.k8s.v1.PodLogsOptions
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.GetPodLogsOptions} GetPodLogsOptions
+                 * @returns {clutch.k8s.v1.PodLogsOptions} PodLogsOptions
                  */
-                GetPodLogsOptions.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.GetPodLogsOptions)
+                PodLogsOptions.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.PodLogsOptions)
                         return object;
-                    let message = new $root.clutch.k8s.v1.GetPodLogsOptions();
+                    let message = new $root.clutch.k8s.v1.PodLogsOptions();
                     if (object.containerName != null)
                         message.containerName = String(object.containerName);
                     if (object.previous != null)
@@ -37301,15 +37301,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a GetPodLogsOptions message. Also converts values to other types if specified.
+                 * Creates a plain object from a PodLogsOptions message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.k8s.v1.GetPodLogsOptions
+                 * @memberof clutch.k8s.v1.PodLogsOptions
                  * @static
-                 * @param {clutch.k8s.v1.GetPodLogsOptions} message GetPodLogsOptions
+                 * @param {clutch.k8s.v1.PodLogsOptions} message PodLogsOptions
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                GetPodLogsOptions.toObject = function toObject(message, options) {
+                PodLogsOptions.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -37338,17 +37338,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this GetPodLogsOptions to JSON.
+                 * Converts this PodLogsOptions to JSON.
                  * @function toJSON
-                 * @memberof clutch.k8s.v1.GetPodLogsOptions
+                 * @memberof clutch.k8s.v1.PodLogsOptions
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                GetPodLogsOptions.prototype.toJSON = function toJSON() {
+                PodLogsOptions.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return GetPodLogsOptions;
+                return PodLogsOptions;
             })();
 
             v1.GetPodLogsResponse = (function() {

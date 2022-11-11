@@ -487,10 +487,10 @@ message GetPodLogsRequest {
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
 
-  GetPodLogsOptions options = 5;
+  PodLogsOptions options = 5;
 }
 
-message GetPodLogsOptions {
+message PodLogsOptions {
   // The container for which to stream logs. Defaults to only container if there is one container in the pod.
   string container_name = 1;
   // Return previous terminated container logs if true.
@@ -499,7 +499,7 @@ message GetPodLogsOptions {
   // from a previous API call.
   string since_ts = 3;
   // If set, the number of lines from the end of the logs to show. If not specified, logs are shown from the creation of
-  // the container or sinceSeconds or sinceTime.
+  // the container or sinceTime.
   int64 tail_num_lines = 4;
 }
 

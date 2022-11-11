@@ -2413,22 +2413,22 @@ var _ interface {
 	ErrorName() string
 } = GetPodLogsRequestValidationError{}
 
-// Validate checks the field values on GetPodLogsOptions with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *GetPodLogsOptions) Validate() error {
+// Validate checks the field values on PodLogsOptions with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PodLogsOptions) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetPodLogsOptions with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetPodLogsOptionsMultiError, or nil if none found.
-func (m *GetPodLogsOptions) ValidateAll() error {
+// ValidateAll checks the field values on PodLogsOptions with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PodLogsOptionsMultiError,
+// or nil if none found.
+func (m *PodLogsOptions) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetPodLogsOptions) validate(all bool) error {
+func (m *PodLogsOptions) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -2444,19 +2444,19 @@ func (m *GetPodLogsOptions) validate(all bool) error {
 	// no validation rules for TailNumLines
 
 	if len(errors) > 0 {
-		return GetPodLogsOptionsMultiError(errors)
+		return PodLogsOptionsMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetPodLogsOptionsMultiError is an error wrapping multiple validation errors
-// returned by GetPodLogsOptions.ValidateAll() if the designated constraints
+// PodLogsOptionsMultiError is an error wrapping multiple validation errors
+// returned by PodLogsOptions.ValidateAll() if the designated constraints
 // aren't met.
-type GetPodLogsOptionsMultiError []error
+type PodLogsOptionsMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetPodLogsOptionsMultiError) Error() string {
+func (m PodLogsOptionsMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -2465,11 +2465,11 @@ func (m GetPodLogsOptionsMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetPodLogsOptionsMultiError) AllErrors() []error { return m }
+func (m PodLogsOptionsMultiError) AllErrors() []error { return m }
 
-// GetPodLogsOptionsValidationError is the validation error returned by
-// GetPodLogsOptions.Validate if the designated constraints aren't met.
-type GetPodLogsOptionsValidationError struct {
+// PodLogsOptionsValidationError is the validation error returned by
+// PodLogsOptions.Validate if the designated constraints aren't met.
+type PodLogsOptionsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2477,24 +2477,22 @@ type GetPodLogsOptionsValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetPodLogsOptionsValidationError) Field() string { return e.field }
+func (e PodLogsOptionsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetPodLogsOptionsValidationError) Reason() string { return e.reason }
+func (e PodLogsOptionsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetPodLogsOptionsValidationError) Cause() error { return e.cause }
+func (e PodLogsOptionsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetPodLogsOptionsValidationError) Key() bool { return e.key }
+func (e PodLogsOptionsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetPodLogsOptionsValidationError) ErrorName() string {
-	return "GetPodLogsOptionsValidationError"
-}
+func (e PodLogsOptionsValidationError) ErrorName() string { return "PodLogsOptionsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetPodLogsOptionsValidationError) Error() string {
+func (e PodLogsOptionsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2506,14 +2504,14 @@ func (e GetPodLogsOptionsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetPodLogsOptions.%s: %s%s",
+		"invalid %sPodLogsOptions.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetPodLogsOptionsValidationError{}
+var _ error = PodLogsOptionsValidationError{}
 
 var _ interface {
 	Field() string
@@ -2521,7 +2519,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetPodLogsOptionsValidationError{}
+} = PodLogsOptionsValidationError{}
 
 // Validate checks the field values on GetPodLogsResponse with the rules
 // defined in the proto definition for this message. If any rules are

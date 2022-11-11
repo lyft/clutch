@@ -98,7 +98,7 @@ func TestOptsConversion(t *testing.T) {
 		assert.True(t, o.Timestamps)
 	}
 	{
-		o, err := protoOptsToK8sOpts(&k8sv1.GetPodLogsOptions{
+		o, err := protoOptsToK8sOpts(&k8sv1.PodLogsOptions{
 			ContainerName: "foo",
 			Previous:      true,
 			SinceTs:       "2022-11-07T19:30:38.974187286Z",
@@ -111,7 +111,7 @@ func TestOptsConversion(t *testing.T) {
 		assert.Equal(t, "2022-11-07T19:30:38.974187286Z", o.SinceTime.Format(rfc3339NanoFixed))
 	}
 	{
-		o, err := protoOptsToK8sOpts(&k8sv1.GetPodLogsOptions{})
+		o, err := protoOptsToK8sOpts(&k8sv1.PodLogsOptions{})
 
 		assert.NoError(t, err)
 		assert.Equal(t, "", o.Container)

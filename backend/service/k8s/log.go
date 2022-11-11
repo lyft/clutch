@@ -25,7 +25,7 @@ const (
 	rfc3339NanoFixed = "2006-01-02T15:04:05.000000000Z07:00"
 )
 
-func (s *svc) GetPodLogs(ctx context.Context, clientset, cluster, namespace, name string, opts *k8sapiv1.GetPodLogsOptions) (*k8sapiv1.GetPodLogsResponse, error) {
+func (s *svc) GetPodLogs(ctx context.Context, clientset, cluster, namespace, name string, opts *k8sapiv1.PodLogsOptions) (*k8sapiv1.GetPodLogsResponse, error) {
 	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
@@ -101,7 +101,7 @@ func bufferToResponse(r io.Reader) (*k8sapiv1.GetPodLogsResponse, error) {
 	return ret, nil
 }
 
-func protoOptsToK8sOpts(in *k8sapiv1.GetPodLogsOptions) (*v1.PodLogOptions, error) {
+func protoOptsToK8sOpts(in *k8sapiv1.PodLogsOptions) (*v1.PodLogOptions, error) {
 	ret := &v1.PodLogOptions{
 		Timestamps: true,
 	}

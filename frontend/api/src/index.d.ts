@@ -15485,7 +15485,7 @@ export namespace clutch {
                 name?: (string|null);
 
                 /** GetPodLogsRequest options */
-                options?: (clutch.k8s.v1.IGetPodLogsOptions|null);
+                options?: (clutch.k8s.v1.IPodLogsOptions|null);
             }
 
             /** Represents a GetPodLogsRequest. */
@@ -15510,7 +15510,7 @@ export namespace clutch {
                 public name: string;
 
                 /** GetPodLogsRequest options. */
-                public options?: (clutch.k8s.v1.IGetPodLogsOptions|null);
+                public options?: (clutch.k8s.v1.IPodLogsOptions|null);
 
                 /**
                  * Verifies a GetPodLogsRequest message.
@@ -15541,67 +15541,67 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a GetPodLogsOptions. */
-            interface IGetPodLogsOptions {
+            /** Properties of a PodLogsOptions. */
+            interface IPodLogsOptions {
 
-                /** GetPodLogsOptions containerName */
+                /** PodLogsOptions containerName */
                 containerName?: (string|null);
 
-                /** GetPodLogsOptions previous */
+                /** PodLogsOptions previous */
                 previous?: (boolean|null);
 
-                /** GetPodLogsOptions sinceTs */
+                /** PodLogsOptions sinceTs */
                 sinceTs?: (string|null);
 
-                /** GetPodLogsOptions tailNumLines */
+                /** PodLogsOptions tailNumLines */
                 tailNumLines?: (number|Long|null);
             }
 
-            /** Represents a GetPodLogsOptions. */
-            class GetPodLogsOptions implements IGetPodLogsOptions {
+            /** Represents a PodLogsOptions. */
+            class PodLogsOptions implements IPodLogsOptions {
 
                 /**
-                 * Constructs a new GetPodLogsOptions.
+                 * Constructs a new PodLogsOptions.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.k8s.v1.IGetPodLogsOptions);
+                constructor(properties?: clutch.k8s.v1.IPodLogsOptions);
 
-                /** GetPodLogsOptions containerName. */
+                /** PodLogsOptions containerName. */
                 public containerName: string;
 
-                /** GetPodLogsOptions previous. */
+                /** PodLogsOptions previous. */
                 public previous: boolean;
 
-                /** GetPodLogsOptions sinceTs. */
+                /** PodLogsOptions sinceTs. */
                 public sinceTs: string;
 
-                /** GetPodLogsOptions tailNumLines. */
+                /** PodLogsOptions tailNumLines. */
                 public tailNumLines: (number|Long);
 
                 /**
-                 * Verifies a GetPodLogsOptions message.
+                 * Verifies a PodLogsOptions message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a GetPodLogsOptions message from a plain object. Also converts values to their respective internal types.
+                 * Creates a PodLogsOptions message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns GetPodLogsOptions
+                 * @returns PodLogsOptions
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GetPodLogsOptions;
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.PodLogsOptions;
 
                 /**
-                 * Creates a plain object from a GetPodLogsOptions message. Also converts values to other types if specified.
-                 * @param message GetPodLogsOptions
+                 * Creates a plain object from a PodLogsOptions message. Also converts values to other types if specified.
+                 * @param message PodLogsOptions
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.k8s.v1.GetPodLogsOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.k8s.v1.PodLogsOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this GetPodLogsOptions to JSON.
+                 * Converts this PodLogsOptions to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
