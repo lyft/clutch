@@ -38,7 +38,7 @@ or their corresponding defaults.
 		logger,
 		scope,
 		func() error { return nil },
-		Backoff(ExponentialBackoff)
+		Backoff(ExponentialBackoff),
 	)
 */
 func Do(ctx context.Context, logger *zap.Logger, scope tally.Scope, fn RetryableFunc, opts ...Option) error {
