@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -115,7 +114,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 			return nil, err
 		}
 		buff := bytes.NewBuffer(requestJSON)
-		request.Body = ioutil.NopCloser(buff)
+		request.Body = io.NopCloser(buff)
 	}
 
 	response, err := m.client.Do(request)
