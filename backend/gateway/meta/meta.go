@@ -187,10 +187,10 @@ func HydratedPatternForProto(pb proto.Message) (string, error) {
 // ExtractPatternValuesFromString takes a string value and maps the patterns from a proto pattern
 // this is utilized by the resolver search api
 //
-// For example given the following proto pattern
+// For example given the following proto pattern:
 //
 //	option (clutch.api.v1.id).patterns = {
-//	 pattern : "{cluster}/{namespace}/{name}"
+//		pattern : "{cluster}/{namespace}/{name}"
 //	};
 //
 // And the value of "mycluster/mynamespace/nameofresource"
@@ -322,12 +322,9 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 	return anypb.New(ClearLogDisabledFields(m))
 }
 
-/*
-	ToValue converts custom types to a structpb.Value. This helper was added
-
-since structpb.NewValue has a limited set of types that it supports.
-More details here: https://github.com/golang/protobuf/issues/1302#issuecomment-805453221
-*/
+// ToValue converts custom types to a structpb.Value. This helper was added since structpb.NewValue has
+// a limited set of types that it supports.
+// More details here: https://github.com/golang/protobuf/issues/1302#issuecomment-805453221
 func ToValue(data interface{}) (*structpb.Value, error) {
 	b, err := json.Marshal(data)
 	if err != nil {
