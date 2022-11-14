@@ -6,11 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
-	"github.com/lyft/clutch/backend/gateway/meta"
-	"github.com/lyft/clutch/backend/mock/grpcmock"
-	"github.com/lyft/clutch/backend/mock/service/authnmock"
-	"github.com/lyft/clutch/backend/service/authn"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest"
@@ -19,6 +14,12 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/durationpb"
+
+	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
+	"github.com/lyft/clutch/backend/mock/grpcmock"
+	"github.com/lyft/clutch/backend/mock/service/authnmock"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 func TestAllRequestResponseAreRedacted(t *testing.T) {

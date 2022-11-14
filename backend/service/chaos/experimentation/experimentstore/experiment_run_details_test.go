@@ -6,9 +6,10 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
+
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 func TestExperimentRunDetailsStatus(t *testing.T) {

@@ -6,14 +6,15 @@ import (
 	"testing"
 	"time"
 
-	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
-	"github.com/lyft/clutch/backend/mock/service/dbmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
+
+	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/mock/service/dbmock"
 )
 
 func TestConvertLockIdToAdvisoryLockId(t *testing.T) {

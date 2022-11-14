@@ -3,11 +3,12 @@ package k8s
 import (
 	"context"
 
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func (s *svc) DescribeNamespace(ctx context.Context, clientset, cluster, name string) (*k8sapiv1.Namespace, error) {

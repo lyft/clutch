@@ -9,13 +9,14 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/lib/pq"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
+
 	shortlinkv1cfg "github.com/lyft/clutch/backend/api/config/service/shortlink/v1"
 	shortlinkv1 "github.com/lyft/clutch/backend/api/shortlink/v1"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
 const (

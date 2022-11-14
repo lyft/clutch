@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"testing"
 
-	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -16,6 +15,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
 
 func TestProtoField(t *testing.T) {

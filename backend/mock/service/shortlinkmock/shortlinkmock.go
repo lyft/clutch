@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes/any"
-	shortlinkv1 "github.com/lyft/clutch/backend/api/shortlink/v1"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/shortlink"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/structpb"
+
+	shortlinkv1 "github.com/lyft/clutch/backend/api/shortlink/v1"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/shortlink"
 )
 
 type svc struct{}

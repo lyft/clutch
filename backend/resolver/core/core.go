@@ -6,6 +6,11 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	envoyv1 "github.com/lyft/clutch/backend/api/core/envoy/v1"
 	projectv1 "github.com/lyft/clutch/backend/api/core/project/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
@@ -13,10 +18,6 @@ import (
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/topology"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 var Name = "clutch.resolver.core"

@@ -9,11 +9,12 @@ import (
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/mitchellh/hashstructure/v2"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 type RTDSConfig struct {

@@ -3,8 +3,9 @@ package experimentstore
 import (
 	"time"
 
-	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
+
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type ExperimentRun struct {

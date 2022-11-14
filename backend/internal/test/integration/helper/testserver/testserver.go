@@ -4,12 +4,13 @@ import (
 	"net"
 	"strings"
 
-	"github.com/lyft/clutch/backend/module"
-	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/module/moduletest"
 )
 
 type TestServer struct {

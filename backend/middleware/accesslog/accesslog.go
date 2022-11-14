@@ -8,15 +8,16 @@ import (
 	"context"
 	"fmt"
 
-	accesslogv1 "github.com/lyft/clutch/backend/api/config/middleware/accesslog/v1"
-	"github.com/lyft/clutch/backend/gateway/log"
-	"github.com/lyft/clutch/backend/gateway/meta"
-	"github.com/lyft/clutch/backend/middleware"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	accesslogv1 "github.com/lyft/clutch/backend/api/config/middleware/accesslog/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
+	"github.com/lyft/clutch/backend/gateway/meta"
+	"github.com/lyft/clutch/backend/middleware"
 )
 
 const Name = "clutch.middleware.accesslog"

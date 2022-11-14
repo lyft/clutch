@@ -3,15 +3,16 @@ package resolver
 import (
 	"testing"
 
-	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
-	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
-	"github.com/lyft/clutch/backend/resolver"
 	"github.com/stretchr/testify/assert"
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
+	"github.com/lyft/clutch/backend/resolver"
 )
 
 // Simple truncate tests with 0 or 1 or 2 objects.

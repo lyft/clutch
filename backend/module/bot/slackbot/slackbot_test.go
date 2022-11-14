@@ -4,11 +4,6 @@ import (
 	"context"
 	"testing"
 
-	slackbotv1 "github.com/lyft/clutch/backend/api/bot/slackbot/v1"
-	slackbotconfigv1 "github.com/lyft/clutch/backend/api/config/module/bot/slackbot/v1"
-	"github.com/lyft/clutch/backend/mock/service/botmock"
-	"github.com/lyft/clutch/backend/module/moduletest"
-	"github.com/lyft/clutch/backend/service"
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slacktest"
 	"github.com/stretchr/testify/assert"
@@ -18,6 +13,12 @@ import (
 	"go.uber.org/zap/zaptest"
 	"go.uber.org/zap/zaptest/observer"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	slackbotv1 "github.com/lyft/clutch/backend/api/bot/slackbot/v1"
+	slackbotconfigv1 "github.com/lyft/clutch/backend/api/config/module/bot/slackbot/v1"
+	"github.com/lyft/clutch/backend/mock/service/botmock"
+	"github.com/lyft/clutch/backend/module/moduletest"
+	"github.com/lyft/clutch/backend/service"
 )
 
 func TestModule(t *testing.T) {

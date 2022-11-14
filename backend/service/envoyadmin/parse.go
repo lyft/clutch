@@ -13,9 +13,10 @@ import (
 	envoy_admin_v3 "github.com/envoyproxy/go-control-plane/envoy/admin/v3"
 	envoy_config_core_v3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	structpb "github.com/golang/protobuf/ptypes/struct"
-	envoytriagev1 "github.com/lyft/clutch/backend/api/envoytriage/v1"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+
+	envoytriagev1 "github.com/lyft/clutch/backend/api/envoytriage/v1"
 )
 
 func unmarshal(v []byte, pb proto.Message) error {

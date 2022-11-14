@@ -3,12 +3,13 @@ package k8s
 import (
 	"context"
 
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/util/retry"
+
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.HPA, error) {

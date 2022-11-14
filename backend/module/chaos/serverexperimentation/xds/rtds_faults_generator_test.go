@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestRTDSFaultsGeneration(t *testing.T) {

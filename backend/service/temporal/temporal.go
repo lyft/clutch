@@ -10,14 +10,15 @@ import (
 	"fmt"
 	"sync"
 
-	temporalv1 "github.com/lyft/clutch/backend/api/config/service/temporal/v1"
-	"github.com/lyft/clutch/backend/service"
 	"github.com/uber-go/tally/v4"
 	temporalclient "go.temporal.io/sdk/client"
 	temporaltally "go.temporal.io/sdk/contrib/tally"
 	"go.temporal.io/sdk/log"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	temporalv1 "github.com/lyft/clutch/backend/api/config/service/temporal/v1"
+	"github.com/lyft/clutch/backend/service"
 )
 
 const Name = "clutch.service.temporal"

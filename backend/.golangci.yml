@@ -21,6 +21,11 @@ linters-settings:
       - singleCaseSwitch
   goimports:
     local-prefixes: github.com/lyft/clutch/backend
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/lyft/clutch/backend)
 issues:
   max-per-linter: 0
   max-same-issues: 0

@@ -8,11 +8,12 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/lyft/clutch/backend/middleware"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
+
+	"github.com/lyft/clutch/backend/middleware"
 )
 
 const Name = "clutch.middleware.stats"

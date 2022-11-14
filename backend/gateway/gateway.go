@@ -12,6 +12,12 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/uber-go/tally/v4"
+	tallyprom "github.com/uber-go/tally/v4/prometheus"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/gateway/mux"
@@ -23,11 +29,6 @@ import (
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
-	"github.com/uber-go/tally/v4"
-	tallyprom "github.com/uber-go/tally/v4/prometheus"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 // The purpose of this identifier is to trim the prefix off clutch component names,

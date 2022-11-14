@@ -3,13 +3,14 @@ package k8s
 import (
 	"testing"
 
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/types/known/anypb"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 func TestProcessInformerEvent(t *testing.T) {

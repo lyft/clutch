@@ -11,13 +11,14 @@ import (
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/stretchr/testify/assert"
+	"golang.org/x/oauth2"
+	"gopkg.in/square/go-jose.v2"
+
 	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	apimock "github.com/lyft/clutch/backend/mock/api"
 	"github.com/lyft/clutch/backend/mock/service/authnmock"
-	"github.com/stretchr/testify/assert"
-	"golang.org/x/oauth2"
-	"gopkg.in/square/go-jose.v2"
 )
 
 func TestStateNonceRoundTrip(t *testing.T) {

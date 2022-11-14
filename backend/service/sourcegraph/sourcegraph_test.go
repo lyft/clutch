@@ -7,13 +7,14 @@ import (
 	"net/url"
 	"testing"
 
-	sourcegraphv1cfg "github.com/lyft/clutch/backend/api/config/service/sourcegraph/v1"
-	sourcegraphv1 "github.com/lyft/clutch/backend/api/sourcegraph/v1"
 	"github.com/shurcooL/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	sourcegraphv1cfg "github.com/lyft/clutch/backend/api/config/service/sourcegraph/v1"
+	sourcegraphv1 "github.com/lyft/clutch/backend/api/sourcegraph/v1"
 )
 
 func TestNew(t *testing.T) {

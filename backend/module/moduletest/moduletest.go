@@ -5,8 +5,9 @@ import (
 	"fmt"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/lyft/clutch/backend/module"
 	"google.golang.org/grpc"
+
+	"github.com/lyft/clutch/backend/module"
 )
 
 // Similar to httptest, this is a helper package to allow module authors to verify modules register correctly.

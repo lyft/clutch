@@ -3,8 +3,9 @@ package slack
 import (
 	"testing"
 
-	configv1 "github.com/lyft/clutch/backend/api/config/service/auditsink/slack/v1"
 	"github.com/stretchr/testify/assert"
+
+	configv1 "github.com/lyft/clutch/backend/api/config/service/auditsink/slack/v1"
 )
 
 func TestNewOverrideLookup(t *testing.T) {

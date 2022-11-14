@@ -24,16 +24,17 @@ import (
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/golang/protobuf/ptypes/any"
 	githubv3 "github.com/google/go-github/v37/github"
-	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
-	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/authn"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
+	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 const (

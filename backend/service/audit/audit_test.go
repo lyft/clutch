@@ -3,12 +3,13 @@ package audit
 import (
 	"testing"
 
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
-	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 )
 
 func TestNew(t *testing.T) {

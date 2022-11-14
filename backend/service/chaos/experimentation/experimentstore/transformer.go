@@ -1,8 +1,9 @@
 package experimentstore
 
 import (
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"go.uber.org/zap"
+
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type Transformation struct {

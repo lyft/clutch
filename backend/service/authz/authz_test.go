@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
 	authzcfgv1 "github.com/lyft/clutch/backend/api/config/service/authz/v1"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestAssertPolicy(t *testing.T) {

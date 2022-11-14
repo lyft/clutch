@@ -3,11 +3,12 @@ package topology
 import (
 	"testing"
 
-	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 )
 
 func TestNew(t *testing.T) {

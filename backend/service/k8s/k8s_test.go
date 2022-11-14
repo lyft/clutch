@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
@@ -17,6 +16,8 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	restclient "k8s.io/client-go/rest"
+
+	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 )
 
 var testConfig = `

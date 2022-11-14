@@ -10,6 +10,11 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	dynamodbv1api "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1api "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
@@ -20,10 +25,6 @@ import (
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/aws"
 	"github.com/lyft/clutch/backend/service/topology"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 const Name = "clutch.resolver.aws"

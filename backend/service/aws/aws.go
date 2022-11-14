@@ -26,18 +26,19 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/iancoleman/strcase"
-	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
-	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
-	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
-	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
-	"github.com/lyft/clutch/backend/service"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/sync/semaphore"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
+	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
+	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
+	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/service"
 )
 
 const (

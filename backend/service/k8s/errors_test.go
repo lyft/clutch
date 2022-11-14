@@ -5,13 +5,14 @@ import (
 	"net/http"
 	"testing"
 
-	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-	"github.com/lyft/clutch/backend/middleware/errorintercept"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	"github.com/lyft/clutch/backend/middleware/errorintercept"
 )
 
 func TestImplementsInterceptorInterface(t *testing.T) {

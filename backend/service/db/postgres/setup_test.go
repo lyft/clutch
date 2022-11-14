@@ -4,11 +4,12 @@ import (
 	"testing"
 
 	"github.com/golang/protobuf/ptypes/any"
-	postgresv1 "github.com/lyft/clutch/backend/api/config/service/db/postgres/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	postgresv1 "github.com/lyft/clutch/backend/api/config/service/db/postgres/v1"
 )
 
 func TestNew(t *testing.T) {

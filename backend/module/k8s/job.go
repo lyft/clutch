@@ -3,11 +3,12 @@ package k8s
 import (
 	"context"
 
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	batchv1 "k8s.io/api/batch/v1"
 	"k8s.io/client-go/kubernetes/scheme"
+
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func (a *k8sAPI) DescribeJob(ctx context.Context, req *k8sapiv1.DescribeJobRequest) (*k8sapiv1.DescribeJobResponse, error) {

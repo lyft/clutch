@@ -12,11 +12,12 @@ import (
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
-	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
-	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
+	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 )
 
 // Default scopes, used if no scopes are provided in the configuration.

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	botv1 "github.com/lyft/clutch/backend/api/config/service/bot/v1"
 	"github.com/stretchr/testify/assert"
+
+	botv1 "github.com/lyft/clutch/backend/api/config/service/bot/v1"
 )
 
 func TestSanitize(t *testing.T) {

@@ -5,9 +5,10 @@ import (
 	"path"
 	"testing"
 
-	"github.com/lyft/clutch/backend/gateway"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
+
+	"github.com/lyft/clutch/backend/gateway"
 )
 
 func TestSetupSqlClient(t *testing.T) {

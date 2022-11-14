@@ -5,10 +5,11 @@ import (
 	"testing"
 	"time"
 
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
 	"golang.org/x/sync/semaphore"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 func TestStartTopologyCache(t *testing.T) {

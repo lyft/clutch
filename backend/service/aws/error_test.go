@@ -8,10 +8,11 @@ import (
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
 	"github.com/aws/smithy-go"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
-	"github.com/lyft/clutch/backend/middleware/errorintercept"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/lyft/clutch/backend/middleware/errorintercept"
 )
 
 func TestImplementsInterceptorInterface(t *testing.T) {

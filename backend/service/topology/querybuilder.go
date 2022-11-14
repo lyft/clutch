@@ -8,9 +8,10 @@ import (
 	"strings"
 
 	sq "github.com/Masterminds/squirrel"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 const (

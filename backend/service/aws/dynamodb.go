@@ -6,11 +6,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
-	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
+	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 )
 
 // defaults for the dynamodb settings config as set by AWS

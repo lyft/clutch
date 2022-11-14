@@ -7,8 +7,6 @@ import (
 	"testing"
 	"time"
 
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
-	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -17,6 +15,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/durationpb"
+
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
 
 func TestNew(t *testing.T) {

@@ -3,8 +3,9 @@ package experimentstore
 import (
 	"time"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
+
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 func TimeToPropertyDateValue(t *time.Time) (*experimentation.Property_DateValue, error) {

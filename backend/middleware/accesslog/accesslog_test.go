@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	accesslogv1 "github.com/lyft/clutch/backend/api/config/middleware/accesslog/v1"
-	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -15,6 +13,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	accesslogv1 "github.com/lyft/clutch/backend/api/config/middleware/accesslog/v1"
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
 
 func TestNew(t *testing.T) {

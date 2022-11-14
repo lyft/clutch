@@ -9,12 +9,13 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+
 	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
 	authzcfgv1 "github.com/lyft/clutch/backend/api/config/service/authz/v1"
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/service"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
 )
 
 const Name = "clutch.service.authz"

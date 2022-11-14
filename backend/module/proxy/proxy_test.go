@@ -4,14 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
-	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
-	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
@@ -19,6 +16,10 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
+
+	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
+	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
+	"github.com/lyft/clutch/backend/module/moduletest"
 )
 
 func generateServicesConfig(host string) []*proxyv1cfg.Service {
@@ -129,7 +130,7 @@ func TestRequestProxy(t *testing.T) {
 			},
 			handler: func(w http.ResponseWriter, r *http.Request) {
 				// assert that the requesting body data was sent
-				bodyData, err := io.ReadAll(r.Body)
+				bodyData, err := ioutil.ReadAll(r.Body)
 				assert.NoError(t, err)
 				assert.NotEmpty(t, bodyData)
 

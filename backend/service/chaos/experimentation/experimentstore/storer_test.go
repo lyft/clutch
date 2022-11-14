@@ -11,14 +11,15 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/golang/protobuf/ptypes/any"
-	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
 type experimentConfigTestData struct {

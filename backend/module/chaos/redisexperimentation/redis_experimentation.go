@@ -9,6 +9,9 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	redisexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
 	configv1 "github.com/lyft/clutch/backend/api/config/module/chaos/redisexperimentation/v1"
@@ -17,8 +20,6 @@ import (
 	redisexperimentationxds "github.com/lyft/clutch/backend/module/chaos/redisexperimentation/xds"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
 )
 
 const (

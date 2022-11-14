@@ -4,12 +4,13 @@ import (
 	"errors"
 
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/aws"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
 )
 
 const (

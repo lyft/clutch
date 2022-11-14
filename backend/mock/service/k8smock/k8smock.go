@@ -5,12 +5,13 @@ import (
 	"math/rand"
 
 	"github.com/golang/protobuf/ptypes/any"
-	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-	"github.com/lyft/clutch/backend/service"
-	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	batchv1 "k8s.io/api/batch/v1"
+
+	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	"github.com/lyft/clutch/backend/service"
+	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 )
 
 type svc struct{}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
+
 	testenvoy "github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 )
 

@@ -3,12 +3,13 @@ package temporal
 import (
 	"testing"
 
-	temporalv1 "github.com/lyft/clutch/backend/api/config/service/temporal/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	temporalclient "go.temporal.io/sdk/client"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	temporalv1 "github.com/lyft/clutch/backend/api/config/service/temporal/v1"
 )
 
 func TestNew(t *testing.T) {

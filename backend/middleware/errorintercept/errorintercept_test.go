@@ -5,9 +5,10 @@ import (
 	"errors"
 	"testing"
 
-	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
+
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
 
 func TestNew(t *testing.T) {

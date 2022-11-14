@@ -5,12 +5,13 @@ import (
 	"errors"
 
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	topologyservice "github.com/lyft/clutch/backend/service/topology"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
 )
 
 const (

@@ -12,14 +12,15 @@ import (
 	"text/template"
 	"time"
 
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
-	"github.com/lyft/clutch/backend/middleware/timeouts"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"gopkg.in/yaml.v3"
+
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
 
 type envFiles []string

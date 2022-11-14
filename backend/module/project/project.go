@@ -5,13 +5,14 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally/v4"
+	"go.uber.org/zap"
+
 	projectv1cfg "github.com/lyft/clutch/backend/api/config/module/project/v1"
 	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	projectservice "github.com/lyft/clutch/backend/service/project"
-	"github.com/uber-go/tally/v4"
-	"go.uber.org/zap"
 )
 
 const (

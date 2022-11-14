@@ -6,20 +6,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 
 	"github.com/golang/protobuf/ptypes/any"
-	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
-	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
-	"github.com/lyft/clutch/backend/module"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/structpb"
+
+	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
+	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
+	"github.com/lyft/clutch/backend/module"
 )
 
 const (
@@ -113,7 +115,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 			return nil, err
 		}
 		buff := bytes.NewBuffer(requestJSON)
-		request.Body = io.NopCloser(buff)
+		request.Body = ioutil.NopCloser(buff)
 	}
 
 	response, err := m.client.Do(request)

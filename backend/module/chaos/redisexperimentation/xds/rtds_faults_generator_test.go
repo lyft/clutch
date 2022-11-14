@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"testing"
 
-	redisexperimentation "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
-	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	redisexperimentation "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
+	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestRTDSFaultsGeneration(t *testing.T) {
