@@ -2,7 +2,7 @@ package envoyadminmock
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -40,7 +40,7 @@ func (m *mockTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		Status:     "OK",
 		StatusCode: 200,
 		Request:    req,
-		Body:       ioutil.NopCloser(strings.NewReader(resp)),
+		Body:       io.NopCloser(strings.NewReader(resp)),
 	}, nil
 }
 

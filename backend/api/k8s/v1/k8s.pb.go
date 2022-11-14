@@ -655,6 +655,7 @@ type Container struct {
 	// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerState
 	//
 	// Types that are assignable to StateDetails:
+	//
 	//	*Container_StateWaiting
 	//	*Container_StateRunning
 	//	*Container_StateTerminated
@@ -5419,6 +5420,7 @@ type NullableString struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Kind:
+	//
 	//	*NullableString_Null
 	//	*NullableString_Value
 	Kind isNullableString_Kind `protobuf_oneof:"kind"`

@@ -132,6 +132,7 @@ type RatingLabel struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Type:
+	//
 	//	*RatingLabel_Emoji
 	Type isRatingLabel_Type `protobuf_oneof:"type"`
 	// the corresponding text to show to the user (i.e bad/ok/great)
@@ -208,6 +209,7 @@ type RatingScale struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Type:
+	//
 	//	*RatingScale_Emoji
 	Type isRatingScale_Type `protobuf_oneof:"type"`
 }

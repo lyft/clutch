@@ -29,6 +29,7 @@ type AppConfig struct {
 	AppId          int64 `protobuf:"varint,1,opt,name=app_id,json=appId,proto3" json:"app_id,omitempty"`
 	InstallationId int64 `protobuf:"varint,2,opt,name=installation_id,json=installationId,proto3" json:"installation_id,omitempty"`
 	// Types that are assignable to Pem:
+	//
 	//	*AppConfig_KeyPem
 	//	*AppConfig_Base64Pem
 	Pem isAppConfig_Pem `protobuf_oneof:"pem"`
@@ -125,6 +126,7 @@ type Config struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Auth:
+	//
 	//	*Config_AccessToken
 	//	*Config_AppConfig
 	Auth isConfig_Auth `protobuf_oneof:"auth"`

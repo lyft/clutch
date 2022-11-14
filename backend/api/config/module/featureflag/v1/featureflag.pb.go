@@ -73,6 +73,7 @@ type Config struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Type:
+	//
 	//	*Config_Simple
 	Type isConfig_Type `protobuf_oneof:"type"`
 }

@@ -232,6 +232,7 @@ type CreateRepositoryRequest struct {
 	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
 	// Types that are assignable to Options:
+	//
 	//	*CreateRepositoryRequest_CustomOptions
 	//	*CreateRepositoryRequest_GithubOptions
 	Options isCreateRepositoryRequest_Options `protobuf_oneof:"options"`

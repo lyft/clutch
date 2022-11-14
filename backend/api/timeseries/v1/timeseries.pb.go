@@ -86,6 +86,7 @@ type Point struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Timestamp:
+	//
 	//	*Point_Range
 	//	*Point_Millis
 	Timestamp   isPoint_Timestamp `protobuf_oneof:"timestamp"`

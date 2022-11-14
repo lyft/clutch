@@ -28,6 +28,7 @@ type Principal struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Type:
+	//
 	//	*Principal_User
 	//	*Principal_Group
 	Type isPrincipal_Type `protobuf_oneof:"type"`

@@ -30,6 +30,7 @@ type FaultConfig struct {
 	// The targeting of the fault describing what redis requests are being considered for faults.
 	FaultTargeting *FaultTargeting `protobuf:"bytes,1,opt,name=fault_targeting,json=faultTargeting,proto3" json:"fault_targeting,omitempty"`
 	// Types that are assignable to Fault:
+	//
 	//	*FaultConfig_ErrorFault
 	//	*FaultConfig_LatencyFault
 	Fault isFaultConfig_Fault `protobuf_oneof:"fault"`

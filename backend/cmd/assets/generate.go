@@ -1,4 +1,4 @@
-// +build ignore
+//go:build ignore
 
 package main
 
@@ -18,12 +18,11 @@ func packageAssets() {
 	dir := os.Args[1]
 	assets := http.Dir(dir)
 	err := vfsgen.Generate(assets, vfsgen.Options{
-		Filename:        "cmd/assets/generated_assets.go",
-		PackageName:     "assets",
-		VariableName: 	 "VirtualFS",
-		BuildTags:       "withAssets",
+		Filename:     "cmd/assets/generated_assets.go",
+		PackageName:  "assets",
+		VariableName: "VirtualFS",
+		BuildTags:    "withAssets",
 	})
-
 	if err != nil {
 		log.Fatal(err)
 	}

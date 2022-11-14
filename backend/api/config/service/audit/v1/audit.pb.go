@@ -85,6 +85,7 @@ type EventFilter struct {
 
 	Field EventFilter_FilterType `protobuf:"varint,1,opt,name=field,proto3,enum=clutch.config.service.audit.v1.EventFilter_FilterType" json:"field,omitempty"`
 	// Types that are assignable to Value:
+	//
 	//	*EventFilter_Text
 	Value isEventFilter_Value `protobuf_oneof:"value"`
 }
@@ -264,6 +265,7 @@ type Config struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to StorageProvider:
+	//
 	//	*Config_DbProvider
 	//	*Config_InMemory
 	StorageProvider isConfig_StorageProvider `protobuf_oneof:"storage_provider"`

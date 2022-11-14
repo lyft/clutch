@@ -95,6 +95,7 @@ type Connection struct {
 	// TODO: GSSAPI, SSPI, Kerberos
 	//
 	// Types that are assignable to Authn:
+	//
 	//	*Connection_Password
 	Authn isConnection_Authn `protobuf_oneof:"authn"`
 }

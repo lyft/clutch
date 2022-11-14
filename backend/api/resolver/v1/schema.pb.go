@@ -83,6 +83,7 @@ type Option struct {
 
 	DisplayName string `protobuf:"bytes,1,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
 	// Types that are assignable to Value:
+	//
 	//	*Option_StringValue
 	Value isOption_Value `protobuf_oneof:"value"`
 }
@@ -276,6 +277,7 @@ type FieldMetadata struct {
 	DisplayName string `protobuf:"bytes,1,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
 	Required    bool   `protobuf:"varint,2,opt,name=required,proto3" json:"required,omitempty"`
 	// Types that are assignable to Type:
+	//
 	//	*FieldMetadata_StringField
 	//	*FieldMetadata_OptionField
 	Type isFieldMetadata_Type `protobuf_oneof:"type"`
