@@ -1,69 +1,80 @@
-import React from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import type { NavbarLogo } from '@docusaurus/theme-common'
-import { useThemeConfig } from '@docusaurus/theme-common';
+import React from "react";
+import clsx from "clsx";
+import Link from "@docusaurus/Link";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import type { NavbarLogo } from "@docusaurus/theme-common";
+import { useThemeConfig } from "@docusaurus/theme-common";
 
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
+import {
+  FooterLink,
+  FooterLinkItem as IFoorterLinkitem,
+  ThemeConfig,
+} from "../types";
 
-var socialLinks = [
+interface SocialLink {
+  icon: string;
+  href: string;
+}
+
+const socialLinks = [
   {
-    icon: 'fe fe-github',
-    href: 'https://github.com/lyft/clutch',
+    icon: "fe fe-github",
+    href: "https://github.com/lyft/clutch",
   },
   {
-    icon: 'fe fe-twitter',
-    href: 'https://twitter.com/clutchdotsh',
+    icon: "fe fe-twitter",
+    href: "https://twitter.com/clutchdotsh",
   },
   {
-    icon: 'fe fe-slack',
-    href: 'https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA',
+    icon: "fe fe-slack",
+    href: "https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA",
   },
-];
+] as SocialLink[];
 
-function FooterLink({to, href, label, prependBaseUrlToHref, ...props}) {
+function FooterLinkItem({
+  to,
+  href,
+  label,
+  prependBaseUrlToHref = false,
+  ...props
+}: IFoorterLinkitem): JSX.Element {
   const toUrl = useBaseUrl(to);
   const normalizedHref = useBaseUrl(href);
 
   return (
     <Link
       className="footer__link-item"
-      {...(href
+      {...(href !== undefined
         ? {
-            target: '_blank',
-            rel: 'noopener noreferrer',
+            target: "_blank",
+            rel: "noopener noreferrer",
             href: prependBaseUrlToHref ? normalizedHref : href,
           }
         : {
             to: toUrl,
           })}
-      {...props}>
+      {...props}
+    >
       {label}
     </Link>
   );
 }
 
-function Logo({...props}) {
+function Logo({ ...props }): JSX.Element {
   const {
-    navbar: {logo = {} as NavbarLogo},
+    navbar: { logo = {} as NavbarLogo },
   } = useThemeConfig();
-  const lyftLogoUrl = useBaseUrl('img/navigation/lyft-logo.svg');
-  const logoImageUrl = useBaseUrl('img/navigation/logo.svg');
+  const lyftLogoUrl = useBaseUrl("img/navigation/lyft-logo.svg");
+  const logoImageUrl = useBaseUrl("img/navigation/logo.svg");
 
   return (
     <div className={clsx("navbar__brand", styles.navbarLogo)} {...props}>
       {logoImageUrl != null && (
         <>
-          <img
-            className="navbar__logo"
-            src={logoImageUrl}
-            alt={logo.alt}
-          />
-          <div className={clsx(styles.logoSubtext)}>
-            by
-          </div>
+          <img className="navbar__logo" src={logoImageUrl} alt={logo.alt} />
+          <div className={clsx(styles.logoSubtext)}>by</div>
           <img
             className={clsx(styles.lyftLogo)}
             src={lyftLogoUrl}
@@ -73,37 +84,33 @@ function Logo({...props}) {
       )}
     </div>
   );
-};
+}
 
-function SocialMedia({ config }) {
+function SocialMedia({ links }: { links: SocialLink[] }): JSX.Element {
   return (
-    <div style={{paddingTop: "2.5%"}}>
-      {config.map((media, idx) => (
+    <div style={{ paddingTop: "2.5%" }}>
+      {links.map((media, idx) => (
         <Link
           key={idx}
-          style={{textDecoration: "none"}}
-          {...(media.href
-            ? {
-                target: '_blank',
-                rel: 'noopener noreferrer',
-                href: media.href,
-              }
-            : {
-                to: media.to,
-              }
+          style={{ textDecoration: "none" }}
+          target="_blank"
+          rel="noopener noreferrer"
+          href={media.href}
+        >
+          {media.icon !== undefined && (
+            <i className={clsx(styles.icon, media.icon)} />
           )}
-      >
-        {media.icon !== undefined && <i className={clsx(styles.icon, media.icon)} />}
-      </Link>
+        </Link>
       ))}
     </div>
   );
-};
+}
 
-function Links({ links }) {
-  if (!links || links.length <= 0) {
-    return null
+function Links({ links }: { links: FooterLink[] }): JSX.Element {
+  if (links === undefined || links.length <= 0) {
+    return <></>;
   }
+
   return (
     <div className="row footer__links">
       {links.map((linkItem, i) => (
@@ -116,7 +123,7 @@ function Links({ links }) {
           linkItem.items.length > 0 ? (
             <ul className={clsx("footer__items", styles.footerAdditional)}>
               {linkItem.items.map((item, key) =>
-                item.html ? (
+                item.html !== undefined ? (
                   <li
                     key={key}
                     className={clsx("footer__item")}
@@ -125,10 +132,10 @@ function Links({ links }) {
                     }}
                   />
                 ) : (
-                  <li key={item.href || item.to} className="footer__item">
-                    <FooterLink {...item} />
+                  <li key={item.to} className="footer__item">
+                    <FooterLinkItem {...item} />
                   </li>
-                ),
+                )
               )}
             </ul>
           ) : null}
@@ -136,21 +143,20 @@ function Links({ links }) {
       ))}
     </div>
   );
-};
+}
 
-function Footer() {
-  const context = useDocusaurusContext();
-  const {siteConfig = {}} = context;
-  const {themeConfig = {}} = siteConfig;
-  const {footer} = themeConfig;
+function Footer(): JSX.Element {
+  const { siteConfig } = useDocusaurusContext();
+  const themeConfig = { ...siteConfig.themeConfig } as ThemeConfig;
+  const { footer } = themeConfig;
 
-  const {copyright, links = []} = footer || {};
-
-  if (!footer) {
-    return null;
+  if (footer === undefined) {
+    return <></>;
   }
 
-  const classNames = ['footer'];
+  const { copyright, links = [] } = footer ?? {};
+
+  const classNames = ["footer"];
   if (typeof window !== "undefined" && window.location.pathname === "/") {
     if (footer.style === "dark") {
       classNames.push(styles.gradientDark);
@@ -164,26 +170,33 @@ function Footer() {
   return (
     <footer
       className={clsx(...classNames, {
-        'footer--dark': footer.style === 'dark',
-      })}>
+        "footer--dark": footer.style === "dark",
+      })}
+    >
       <div className={clsx("container", styles.container)}>
         <div className="container">
           <Logo />
-          <SocialMedia config={socialLinks}/>
+          <SocialMedia links={socialLinks} />
         </div>
         <div className={clsx("container", styles.container)}>
-          <Links links={links}/>
+          <Links links={links} />
         </div>
       </div>
       <div className={clsx(styles.section)}>
-        {copyright && (
+        {copyright !== undefined && (
           <div className={clsx("text--center", styles.copyright)}>
             <div
               dangerouslySetInnerHTML={{
                 __html: copyright,
               }}
             />
-            <div style={{fontSize: ".875rem"}}>This site is powered by <a href="https://www.netlify.com/" target="blank">Netlify</a>.</div>
+            <div style={{ fontSize: ".875rem" }}>
+              This site is powered by{" "}
+              <a href="https://www.netlify.com/" target="blank">
+                Netlify
+              </a>
+              .
+            </div>
           </div>
         )}
       </div>

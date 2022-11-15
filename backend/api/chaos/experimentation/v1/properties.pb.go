@@ -133,6 +133,7 @@ type Property struct {
 	// The value of the property.
 	//
 	// Types that are assignable to Value:
+	//
 	//	*Property_DateValue
 	//	*Property_StringValue
 	//	*Property_IntValue

@@ -27,7 +27,7 @@ jobs:
           VERSION=latest
           TAGS="${DOCKER_IMAGE}:${VERSION}"
           TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::7}"
-          echo ::set-output name=tags::${TAGS}
+          echo "tags=${TAGS}" >>${GITHUB_OUTPUT}
       - name: build and push
         if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v3.2.0

@@ -2,29 +2,28 @@
 linters:
   disable-all: true
   enable:
-  - deadcode
   - errcheck
   - exportloopref
   - gci
   - gocritic
   - gofmt
-  - goimports
   - gosec
   - gosimple
   - govet
   - ineffassign
   - staticcheck
-  - structcheck
   - typecheck
   - unused
-  - varcheck
   - whitespace
 linters-settings:
   gocritic:
     disabled-checks:
       - singleCaseSwitch
-  goimports:
-    local-prefixes: github.com/lyft/clutch/backend
+  gci:
+    sections:
+    - standard
+    - default
+    - prefix(github.com/lyft/clutch/backend)
 issues:
   max-per-linter: 0
   max-same-issues: 0

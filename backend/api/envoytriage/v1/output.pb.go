@@ -476,6 +476,7 @@ type Runtime_Entry struct {
 
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	// Types that are assignable to Type:
+	//
 	//	*Runtime_Entry_Value
 	Type isRuntime_Entry_Type `protobuf_oneof:"type"`
 }

@@ -66,6 +66,7 @@ type Flag struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Type:
+	//
 	//	*Flag_BooleanValue
 	Type isFlag_Type `protobuf_oneof:"type"`
 }

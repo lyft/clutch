@@ -1,19 +1,21 @@
 .gradient {
-  background: linear-gradient(360deg,#ffffff 88%, #2D3F50 110%);
+  background: linear-gradient(360deg, #ffffff 88%, #2d3f50 110%);
   padding: 3% 6%;
 }
 
 .gradientDark {
-  background: linear-gradient(0deg,#2D3F50 88%, #202c38 110%);
+  background: linear-gradient(0deg, #2d3f50 88%, #202c38 110%);
 }
 
 .noGradient {
-  border-top: 1px solid var(--ifm-hr-border-color);
+  border-top: 1px solid #bec3c9;
 }
 
 .footerAdditional {
   white-space: nowrap;
-  font-size: .9rem;
+  font-size: 0.9rem;
+  list-style: none;
+  padding: 0;
 }
 
 .navbarLogo {
@@ -30,7 +32,7 @@
   margin-left: -2px;
   max-height: 0%;
   font-size: x-small;
-  color: #2D3F50;
+  color: #2d3f50;
 }
 
 .lyftLogo {
@@ -41,7 +43,7 @@
 
 .navbarLink {
   font-weight: bold;
-  color: #2D3F50;
+  color: #2d3f50;
 }
 
 .navbarHidden {
@@ -66,7 +68,7 @@
 
 .icon {
   margin: 0 1.5%;
-  color: #2D3F50;
+  color: #2d3f50;
   font-size: 23px;
 }
 
@@ -75,7 +77,7 @@
 }
 
 .copyright {
-  color: #2D3F50
+  color: #2d3f50;
 }
 
 /* Responsive */

@@ -2,7 +2,6 @@ package gateway
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"testing"
@@ -18,7 +17,7 @@ func TestLoadEnv(t *testing.T) {
 		name  string
 		value string
 	}
-	var testCases = []struct {
+	testCases := []struct {
 		files         []File
 		envVar        string
 		expectedValue string
@@ -59,12 +58,12 @@ func TestLoadEnv(t *testing.T) {
 			tmpVar := os.Getenv(tc.envVar)
 			fileNames := []string{}
 			for _, f := range tc.files {
-				envFile, err := ioutil.TempFile(".", f.name)
+				envFile, err := os.CreateTemp(".", f.name)
 				if err != nil {
 					log.Fatal(err)
 				}
 				defer os.Remove(envFile.Name())
-				_ = ioutil.WriteFile(envFile.Name(), []byte(f.value), 0644)
+				_ = os.WriteFile(envFile.Name(), []byte(f.value), 0644)
 				fileNames = append(fileNames, envFile.Name())
 			}
 

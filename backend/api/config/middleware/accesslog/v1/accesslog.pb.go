@@ -80,6 +80,7 @@ type Config_StatusCodeFilter struct {
 	// expand this to include a range filter type if need be.
 	//
 	// Types that are assignable to FilterType:
+	//
 	//	*Config_StatusCodeFilter_Equals
 	FilterType isConfig_StatusCodeFilter_FilterType `protobuf_oneof:"filter_type"`
 }

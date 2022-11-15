@@ -10,7 +10,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
@@ -38,8 +37,10 @@ import (
 	"github.com/lyft/clutch/backend/service/authn"
 )
 
-const Name = "clutch.service.github"
-const CurrentUser = ""
+const (
+	Name        = "clutch.service.github"
+	CurrentUser = ""
+)
 
 type FileMap map[string]io.ReadCloser
 
@@ -457,7 +458,7 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 
 	f := &File{
 		Path:     path,
-		Contents: ioutil.NopCloser(strings.NewReader(string(q.Repository.Object.Blob.Text))),
+		Contents: io.NopCloser(strings.NewReader(string(q.Repository.Object.Blob.Text))),
 		SHA:      string(q.Repository.Object.Blob.OID),
 	}
 	if len(q.Repository.Ref.Commit.History.Nodes) > 0 {

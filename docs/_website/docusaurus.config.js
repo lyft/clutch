@@ -1,20 +1,21 @@
 module.exports = {
-  title: 'Clutch · An extensible platform for infrastructure management.',
-  tagline: 'Shifting infrastructure management to a friendlier place.',
-  url: 'https://clutch.sh',
-  baseUrl: '/',
-  favicon: 'img/favicon.ico',
-  organizationName: 'lyft', // Usually your GitHub org/user name.
-  projectName: 'clutch', // Usually your repo name.
+  title: "Clutch · An extensible platform for infrastructure management.",
+  tagline: "Shifting infrastructure management to a friendlier place.",
+  url: "https://clutch.sh",
+  baseUrl: "/",
+  favicon: "img/favicon.ico",
+  organizationName: "lyft", // Usually your GitHub org/user name.
+  projectName: "clutch", // Usually your repo name.
   stylesheets: [
-    'https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&display=swap',
-    'https://cdn.rawgit.com/luizbills/feather-icon-font/v4.7.0/dist/feather.css',
+    "https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&display=swap",
+    "https://cdn.rawgit.com/luizbills/feather-icon-font/v4.7.0/dist/feather.css",
   ],
   plugins: [],
   customFields: {
-    tagDescription: 'An extensible platform for infrastructure management.',
+    tagDescription: "An extensible platform for infrastructure management.",
     hero: {
-      description: "Clutch provides everything you need to improve your developers' experience and operational capabilities. It comes with several out-of-the-box features for managing cloud-native infrastructure, but is easily configured or extended to interact with whatever you run, wherever you run it.",
+      description:
+        "Clutch provides everything you need to improve your developers' experience and operational capabilities. It comes with several out-of-the-box features for managing cloud-native infrastructure, but is easily configured or extended to interact with whatever you run, wherever you run it.",
       buttons: {
         first: {
           url: "docs/about/what-is-clutch",
@@ -31,8 +32,8 @@ module.exports = {
         title: "Why Clutch?",
         featureList: [
           {
-            title: 'Secure',
-            imageUrl: 'img/microsite/reasons/secure.svg',
+            title: "Secure",
+            imageUrl: "img/microsite/reasons/secure.svg",
             description: `
                 Clutch has first-class support for role based access control down to the
                 individual resource level. In addition, it ships with rich auditing so you
@@ -40,12 +41,12 @@ module.exports = {
             `,
           },
           {
-            title: '',
-            imageUrl: 'img/microsite/logo.svg',
+            title: "",
+            imageUrl: "img/microsite/logo.svg",
           },
           {
-            title: 'Extensible. Really.',
-            imageUrl: 'img/microsite/reasons/extensible.svg',
+            title: "Extensible. Really.",
+            imageUrl: "img/microsite/reasons/extensible.svg",
             description: `
                 Highly configurable. No forks. Private extensions. Clutch's abstractions
                 make it work for your environment without messy hacks or rewrites.
@@ -53,8 +54,8 @@ module.exports = {
             `,
           },
           {
-            title: 'One Entrypoint',
-            imageUrl: 'img/microsite/reasons/single-entrypoint.svg',
+            title: "One Entrypoint",
+            imageUrl: "img/microsite/reasons/single-entrypoint.svg",
             description: `
                 Access your company's tech stack through a single pane of glass. But
                 don't worry, it's not too fragile or breakable. Clutch is easy to maintain
@@ -62,8 +63,8 @@ module.exports = {
             `,
           },
           {
-            title: 'Straightforward',
-            imageUrl: 'img/microsite/reasons/user-experience.svg',
+            title: "Straightforward",
+            imageUrl: "img/microsite/reasons/user-experience.svg",
             description: `
                 Consistent and clear design with built-in safegaurds throughout to
                 turn your complex processes into simple and safe operations that anyone
@@ -71,8 +72,8 @@ module.exports = {
             `,
           },
           {
-            title: 'The Long Tail',
-            imageUrl: 'img/microsite/reasons/file.svg',
+            title: "The Long Tail",
+            imageUrl: "img/microsite/reasons/file.svg",
             description: `
                 Infrastructure as code is great, we love it too, but there's a lot
                 of your infrastructure not covered by it.
@@ -81,10 +82,7 @@ module.exports = {
         ],
       },
       demo: {
-        lines: [
-          "Don't take our word for it.",
-          "See what Clutch has to offer.",
-        ],
+        lines: ["Don't take our word for it.", "See what Clutch has to offer."],
         cta: {
           text: "Workflows & Components",
           link: "docs/components",
@@ -100,112 +98,109 @@ module.exports = {
             We grow with you. Clutches extensible platform means you can integrate as many tools as
             you need, even if they are specific to you.
           `,
-        ]
-      }
+        ],
+      },
     },
   },
   themeConfig: {
-    image: 'img/docs/landing-page.png', // SEO image for Twitter card, etc.
+    image: "img/docs/landing-page.png", // SEO image for Twitter card, etc.
     colorMode: {
       disableSwitch: true,
     },
-    googleAnalytics: {
-      trackingID: 'UA-170615678-4',
-      anonymizeIP: true,
-    },
-    algolia : {
+    algolia: {
       // This is a read-only, search-only key served directly by the front-end, managed by Algolia via their
       // free DocSearch program. The key is not sensitive. See https://docsearch.algolia.com/ for more details.
-      apiKey: '32f1f7956b3d2c3c90fbe259c7901d94',
-      indexName: 'lyft_clutch',
+      apiKey: "e9fd4dc1b48bb4b9e8763d3adc9df6d1",
+      appId: "XFPMTG0051",
+      indexName: "lyft_clutch",
     },
-    prism : {
-      additionalLanguages: ['protobuf', 'typescript'],
-      theme: require('prism-react-renderer/themes/vsDark'),
+    prism: {
+      additionalLanguages: ["protobuf", "typescript"],
+      theme: require("prism-react-renderer/themes/vsDark"),
     },
     navbar: {
       logo: {
-        alt: 'Clutch Logo',
-        src: 'img/navigation/logoMark.svg',
+        alt: "Clutch Logo",
+        src: "img/navigation/logoMark.svg",
       },
       items: [], // items are defined directly in the swizzled component so they can have an icon attr.
     },
     footer: {
-      style: 'light',
+      style: "light",
       logo: {
-        src: "img/navigation/logo.svg"
+        src: "img/navigation/logo.svg",
       },
       links: [
         {
-          title: 'About',
+          title: "About",
           items: [
             {
-              label: 'What is Clutch?',
-              to: 'docs/about/what-is-clutch',
+              label: "What is Clutch?",
+              to: "docs/about/what-is-clutch",
             },
             {
-              label: 'Roadmap',
-              to: 'docs/about/roadmap',
+              label: "Roadmap",
+              to: "docs/about/roadmap",
             },
             {
-              label: 'Architecture',
-              to: 'docs/about/architecture',
+              label: "Architecture",
+              to: "docs/about/architecture",
             },
           ],
         },
         {
-          title: 'Docs',
+          title: "Docs",
           items: [
             {
-              label: 'Getting Started',
-              to: 'docs/getting-started/build-guides',
+              label: "Getting Started",
+              to: "docs/getting-started/build-guides",
             },
             {
-              label: 'Development',
-              to: 'docs/development/guide',
+              label: "Development",
+              to: "docs/development/guide",
             },
             {
-              label: 'Configuration',
-              to: 'docs/configuration',
+              label: "Configuration",
+              to: "docs/configuration",
             },
           ],
         },
         {
-          title: 'Components',
+          title: "Components",
           items: [
             {
-              label: 'Frontend',
-              to: 'docs/components#frontend',
+              label: "Frontend",
+              to: "docs/components#frontend",
             },
             {
-              label: 'Backend',
-              to: 'docs/components#backend',
+              label: "Backend",
+              to: "docs/components#backend",
             },
             {
-              label: 'Storybook',
-              to: 'https://storybook.clutch.sh',
+              label: "Storybook",
+              to: "https://storybook.clutch.sh",
             },
           ],
         },
         {
-          title: 'Community',
+          title: "Community",
           items: [
             {
-              label: 'GitHub',
-              to: 'https://github.com/lyft/clutch',
+              label: "GitHub",
+              to: "https://github.com/lyft/clutch",
             },
             {
-              label: 'Slack',
-              to: 'https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA',
+              label: "Slack",
+              to: "https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA",
             },
             {
-              label: 'Twitter',
-              to: 'https://twitter.com/clutchdotsh',
+              label: "Twitter",
+              to: "https://twitter.com/clutchdotsh",
             },
-            {label: 'Blog', to: 'blog'},
+            { label: "Blog", to: "blog" },
             {
-              label: 'More',
-              to: 'docs/community',
+              label: "More",
+              to: "docs/community",
             },
           ],
         },
@@ -215,23 +210,28 @@ module.exports = {
   },
   presets: [
     [
-      '@docusaurus/preset-classic',
+      "@docusaurus/preset-classic",
       {
         docs: {
           path: "generated/docs",
-          sidebarPath: require.resolve('../sidebars.json'),
+          sidebarPath: require.resolve("../sidebars.json"),
+        },
+        googleAnalytics: {
+          trackingID: "UA-170615678-4",
+          anonymizeIP: true,
         },
         blog: {
           path: "generated/blog",
-          blogTitle: 'Clutch Open-source Developer Blog',
-          blogDescription: 'Where Clutch open-source maintainers and contributors share their work and thoughts on development.',
+          blogTitle: "Clutch Open-source Developer Blog",
+          blogDescription:
+            "Where Clutch open-source maintainers and contributors share their work and thoughts on development.",
           feedOptions: {
-            type: 'all',
+            type: "all",
             copyright: `Copyright © ${new Date().getFullYear()} <a href="https://lyft.com" target="blank">Lyft, Inc.</a>`,
           },
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve("./src/css/custom.css"),
         },
       },
     ],

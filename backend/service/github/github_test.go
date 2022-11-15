@@ -8,7 +8,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"testing"
@@ -29,9 +29,7 @@ import (
 
 const problem = "we've had a problem"
 
-var (
-	timestamp = time.Unix(1569010072, 0)
-)
+var timestamp = time.Unix(1569010072, 0)
 
 func intPtr(i int) *int {
 	return &i
@@ -227,7 +225,7 @@ func TestGetFile(t *testing.T) {
 				return
 			}
 
-			contents, _ := ioutil.ReadAll(f.Contents)
+			contents, _ := io.ReadAll(f.Contents)
 			a.Equal("text", string(contents))
 			a.Equal("data/foo", f.Path)
 			a.Equal("abcdef12345", f.SHA)
@@ -272,10 +270,12 @@ func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base
 	}
 	returnstr := "behind"
 	shaStr := "astdfsaohecra"
-	return &githubv3.CommitsComparison{Status: &returnstr,
+	return &githubv3.CommitsComparison{
+		Status: &returnstr,
 		Commits: []*githubv3.RepositoryCommit{
 			{SHA: &shaStr},
-		}}, nil, nil
+		},
+	}, nil, nil
 }
 
 func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha string) (*githubv3.RepositoryCommit, *githubv3.Response, error) {
@@ -759,7 +759,6 @@ func TestGetRepository(t *testing.T) {
 					RepoName:  "myRepo",
 				},
 			)
-
 			if err != nil {
 				a.FailNowf("unexpected error: %s", err.Error())
 				return

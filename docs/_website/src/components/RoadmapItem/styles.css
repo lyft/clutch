@@ -1,66 +1,62 @@
 .ri-container {
-    border: 1px solid var(--ifm-color-emphasis-300);
-    border-radius: var(--ifm-global-radius);
-    display: block;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  display: block;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .ri-description-short {
-    display: flex;
-
+  display: flex;
 }
 
 .ri-detail {
-    display: block;
+  display: block;
 }
 
 .ri-icon {
-    color: var(--ifm-color-primary);
-    font-size: 2rem;
-    line-height: 2rem;
-    margin: 0.25rem 0.75rem auto 0;
+  color: var(--ifm-color-primary);
+  font-size: 2rem;
+  line-height: 2rem;
+  margin: 0.25rem 0.75rem auto 0;
 }
 
 .ri-title {
-    font-weight: 600;
-    font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .ri-description {
-    font-size: 0.8rem;    
-    color: var(--ifm-font-color-secondary);
+  font-size: 0.8rem;
+  color: var(--ifm-font-color-secondary);
 }
 
 .ri-description-long {
-    margin-top: 1em;
-    padding: 0.75em 1em;
-    font-size: 0.8rem;
-    color: var(--ifm-font-color-primary);
-    border: 1px solid var(--ifm-color-emphasis-200);
-    border-radius: var(--ifm-global-radius);
+  margin-top: 1em;
+  padding: 0.75em 1em;
+  font-size: 0.8rem;
+  color: var(--ifm-font-color-primary);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-global-radius);
 }
 
 .ri-description-long p:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .ri-more {
-    font-size: 1em;
-    margin-left: 0.5rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: var(--ifm-global-radius);
-    background-color: var(--ifm-color-secondary-light);
+  font-size: 1em;
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-color-secondary-light);
 }
 
 .ri-more:hover {
-    background-color: var(--ifm-color-secondary-dark);
+  background-color: var(--ifm-color-secondary-dark);
 }
 
 .ri-more:active {
-    background-color: var(--ifm-color-primary);
-    color: #fff;
+  background-color: var(--ifm-color-primary);
+  color: #fff;
 }
-
-
-  

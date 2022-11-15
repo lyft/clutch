@@ -93,6 +93,7 @@ type HTTPFaultConfig struct {
 	// The targeting of the fault describing what requests are being considered for faults.
 	FaultTargeting *FaultTargeting `protobuf:"bytes,1,opt,name=fault_targeting,json=faultTargeting,proto3" json:"fault_targeting,omitempty"`
 	// Types that are assignable to Fault:
+	//
 	//	*HTTPFaultConfig_AbortFault
 	//	*HTTPFaultConfig_LatencyFault
 	Fault isHTTPFaultConfig_Fault `protobuf_oneof:"fault"`
@@ -304,6 +305,7 @@ type FaultTargeting struct {
 	// A fault enforcer.
 	//
 	// Types that are assignable to Enforcer:
+	//
 	//	*FaultTargeting_UpstreamEnforcing
 	//	*FaultTargeting_DownstreamEnforcing
 	Enforcer isFaultTargeting_Enforcer `protobuf_oneof:"enforcer"`
@@ -390,12 +392,14 @@ type UpstreamEnforcing struct {
 	// by the specified upstream are considered for the fault injection.
 	//
 	// Types that are assignable to UpstreamType:
+	//
 	//	*UpstreamEnforcing_UpstreamCluster
 	UpstreamType isUpstreamEnforcing_UpstreamType `protobuf_oneof:"upstream_type"`
 	// A downstream responsible for enforcing a fault. Only requests that are started
 	// by the specified downstream are considered for the fault injection.
 	//
 	// Types that are assignable to DownstreamType:
+	//
 	//	*UpstreamEnforcing_DownstreamCluster
 	DownstreamType isUpstreamEnforcing_DownstreamType `protobuf_oneof:"downstream_type"`
 }
@@ -492,12 +496,14 @@ type DownstreamEnforcing struct {
 	// by the specified upstream are considered for the fault injection.
 	//
 	// Types that are assignable to UpstreamType:
+	//
 	//	*DownstreamEnforcing_UpstreamCluster
 	UpstreamType isDownstreamEnforcing_UpstreamType `protobuf_oneof:"upstream_type"`
 	// A downstream responsible for enforcing a fault. Only requests that are started
 	// by the specified downstream are considered for a fault injection.
 	//
 	// Types that are assignable to DownstreamType:
+	//
 	//	*DownstreamEnforcing_DownstreamCluster
 	DownstreamType isDownstreamEnforcing_DownstreamType `protobuf_oneof:"downstream_type"`
 }

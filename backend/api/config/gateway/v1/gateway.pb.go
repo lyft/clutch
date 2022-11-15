@@ -235,6 +235,7 @@ type Listener struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Socket:
+	//
 	//	*Listener_Tcp
 	Socket isListener_Socket `protobuf_oneof:"socket"`
 }
@@ -305,6 +306,7 @@ type Stats struct {
 	// The reporter to emit stats. If none specified, then stats will not be reported.
 	//
 	// Types that are assignable to Reporter:
+	//
 	//	*Stats_LogReporter_
 	//	*Stats_StatsdReporter_
 	//	*Stats_PrometheusReporter_
@@ -611,6 +613,7 @@ type Assets struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Provider:
+	//
 	//	*Assets_S3
 	Provider isAssets_Provider `protobuf_oneof:"provider"`
 }
@@ -678,6 +681,7 @@ type Logger struct {
 
 	Level Logger_Level `protobuf:"varint,1,opt,name=level,proto3,enum=clutch.config.gateway.v1.Logger_Level" json:"level,omitempty"`
 	// Types that are assignable to Format:
+	//
 	//	*Logger_Pretty
 	Format isLogger_Format `protobuf_oneof:"format"`
 	// Namespace will set a zap.Namespace for your logging fields to be nested in.
@@ -1020,6 +1024,7 @@ type Stats_StatsdReporter struct {
 
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Types that are assignable to TagMode:
+	//
 	//	*Stats_StatsdReporter_PointTags_
 	TagMode isStats_StatsdReporter_TagMode `protobuf_oneof:"tag_mode"`
 }

@@ -17,14 +17,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
+        id: setup-go
         with:
-          go-version: 1.17.0
+          go-version: 1.19.x
       - name: go mod cache
         uses: actions/cache@v3
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-${{ steps.setup-go.outputs.go-version }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go build cache
@@ -32,7 +33,7 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-${{ steps.setup-go.outputs.go-version }}-go-build-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-build-
       - run: make backend
@@ -41,14 +42,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
+        id: setup-go
         with:
-          go-version: 1.17.0
+          go-version: 1.19.x
       - name: go mod cache
         uses: actions/cache@v3
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-${{ steps.setup-go.outputs.go-version }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go test cache
@@ -56,7 +58,7 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-          key: ${{ runner.os }}-go-test-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-${{ steps.setup-go.outputs.go-version }}-go-test-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-test-
       - run: make backend-test
@@ -73,14 +75,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
+        id: setup-go
         with:
-          go-version: 1.17.0
+          go-version: 1.19.x
       - name: go mod cache
         uses: actions/cache@v3
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-${{ steps.setup-go.outputs.go-version }}-go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go lint cache
@@ -89,7 +92,7 @@ jobs:
           path: |
             ~/.cache/go-build
             ~/.cache/golangci-lint
-          key: ${{ runner.os }}-go-lint-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-${{ steps.setup-go.outputs.go-version }}-go-lint-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-lint-
       - run: make backend-lint

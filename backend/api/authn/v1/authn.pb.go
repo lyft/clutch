@@ -127,6 +127,7 @@ type LoginResponse struct {
 	// they will be redirected through the authentication flow.
 	//
 	// Types that are assignable to Return:
+	//
 	//	*LoginResponse_AuthUrl
 	//	*LoginResponse_Token_
 	Return isLoginResponse_Return `protobuf_oneof:"return"`

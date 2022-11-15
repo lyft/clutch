@@ -1,26 +1,24 @@
-
-
 .bc-container {
-    border: 1px solid var(--ifm-color-emphasis-300);
-    border-radius: var(--ifm-global-radius);
-    padding: 0.5rem;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-    display: block;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .bc-container:hover {
-    border-color: var(--ifm-color-primary);
-    text-decoration: none;
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
 }
 
 .bc-title {
-    font-family: monospace;
-    font-weight: 600;
-    margin-right: 0.5em;
+  font-family: monospace;
+  font-weight: 600;
+  margin-right: 0.5em;
 }
 
 .bc-description {
-    color: var(--ifm-font-color-secondary);
-    font-size: 0.8rem;
+  color: var(--ifm-font-color-secondary);
+  font-size: 0.8rem;
 }
