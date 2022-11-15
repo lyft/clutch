@@ -29,7 +29,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: build cache
         if: |
           steps.node-modules-cache.outputs.cache-hit == 'true' &&
@@ -65,7 +65,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
@@ -103,7 +103,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: go mod cache
         uses: actions/cache@v3
         with:
@@ -153,7 +153,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
@@ -181,7 +181,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
