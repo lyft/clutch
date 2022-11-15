@@ -2,6 +2,7 @@
   "extends": "@tsconfig/docusaurus/tsconfig.json",
   "include": ["src/"],
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    "strictNullChecks": true
   }
 }
