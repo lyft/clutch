@@ -59,6 +59,7 @@ type Service interface {
 	DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListPods(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error)
 	UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expected_object_meta_fields *k8sapiv1.ExpectedObjectMetaFields, object_meta_fields *k8sapiv1.ObjectMetaFields, remove_object_meta_fields *k8sapiv1.RemoveObjectMetaFields) error
+	GetPodLogs(ctx context.Context, clientset, cluster, namespace, name string, opts *k8sapiv1.PodLogsOptions) (*k8sapiv1.GetPodLogsResponse, error)
 
 	// HPA management functions.
 	DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.HPA, error)

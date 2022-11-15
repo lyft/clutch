@@ -16,6 +16,15 @@ import (
 
 type svc struct{}
 
+func (s *svc) GetPodLogs(ctx context.Context, clientset, cluster, namespace, name string, opts *k8sv1.PodLogsOptions) (*k8sv1.GetPodLogsResponse, error) {
+	return &k8sv1.GetPodLogsResponse{Logs: []*k8sv1.PodLogLine{
+		{Ts: "1", S: "Hello"},
+		{Ts: "2", S: "world"},
+		{Ts: "3", S: "Fizz"},
+		{Ts: "4", S: "Buzz"},
+	}}, nil
+}
+
 func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sv1.HPA, error) {
 	hpa := &k8sv1.HPA{
 		Cluster:   "fake-cluster-name",
