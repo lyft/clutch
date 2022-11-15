@@ -98,7 +98,7 @@ func (l *lazyClientImpl) GetConnection() (temporalclient.Client, error) {
 	defer l.mu.Unlock()
 
 	if l.cachedClient == nil {
-		c, err := temporalclient.NewClient(*l.opts)
+		c, err := temporalclient.Dial(*l.opts)
 		if err != nil {
 			return nil, err
 		}
