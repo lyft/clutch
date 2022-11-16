@@ -97,9 +97,20 @@ func (m *FaultConfig) validate(all bool) error {
 		}
 	}
 
-	switch m.Fault.(type) {
-
+	oneofFaultPresent := false
+	switch v := m.Fault.(type) {
 	case *FaultConfig_ErrorFault:
+		if v == nil {
+			err := FaultConfigValidationError{
+				field:  "Fault",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofFaultPresent = true
 
 		if all {
 			switch v := interface{}(m.GetErrorFault()).(type) {
@@ -131,6 +142,17 @@ func (m *FaultConfig) validate(all bool) error {
 		}
 
 	case *FaultConfig_LatencyFault:
+		if v == nil {
+			err := FaultConfigValidationError{
+				field:  "Fault",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofFaultPresent = true
 
 		if all {
 			switch v := interface{}(m.GetLatencyFault()).(type) {
@@ -162,6 +184,9 @@ func (m *FaultConfig) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofFaultPresent {
 		err := FaultConfigValidationError{
 			field:  "Fault",
 			reason: "value is required",
@@ -170,7 +195,6 @@ func (m *FaultConfig) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {

@@ -370,9 +370,18 @@ func (m *Property) validate(all bool) error {
 		}
 	}
 
-	switch m.Value.(type) {
-
+	switch v := m.Value.(type) {
 	case *Property_DateValue:
+		if v == nil {
+			err := PropertyValidationError{
+				field:  "Value",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetDateValue()).(type) {
@@ -404,14 +413,43 @@ func (m *Property) validate(all bool) error {
 		}
 
 	case *Property_StringValue:
+		if v == nil {
+			err := PropertyValidationError{
+				field:  "Value",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for StringValue
-
 	case *Property_IntValue:
+		if v == nil {
+			err := PropertyValidationError{
+				field:  "Value",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for IntValue
-
 	case *Property_UrlValue:
+		if v == nil {
+			err := PropertyValidationError{
+				field:  "Value",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for UrlValue
-
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
