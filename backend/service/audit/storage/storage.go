@@ -19,6 +19,8 @@ type Storage interface {
 	// If end is nil, should search until the current time.
 	ReadEvents(ctx context.Context, start time.Time, end *time.Time) ([]*auditv1.Event, error)
 
+	ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error)
+
 	// Basic Locking functions to provide concurrency control.
 	AttemptLock(ctx context.Context, lockID uint32) (bool, error)
 	ReleaseLock(ctx context.Context, lockID uint32) (bool, error)

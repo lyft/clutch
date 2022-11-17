@@ -22,4 +22,7 @@ type Auditor interface {
 	// Used for services and modules to read past events within a timerange.
 	// If end is nil, should search until the current time.
 	ReadEvents(ctx context.Context, start time.Time, end *time.Time) ([]*auditv1.Event, error)
+
+	// Used for services and modules to read a specific event.
+	ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error)
 }

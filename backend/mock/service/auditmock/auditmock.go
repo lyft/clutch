@@ -2,6 +2,7 @@ package auditmock
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
@@ -26,14 +27,16 @@ func (s *svc) WriteRequestEvent(_ context.Context, req *auditv1.RequestEvent) (i
 	s.Lock()
 	defer s.Unlock()
 
+	i := int64(len(s.events))
 	event := &auditv1.Event{
+		Id:         i,
 		OccurredAt: timestamppb.Now(),
 		EventType: &auditv1.Event_Event{
 			Event: req,
 		},
 	}
 	s.events = append(s.events, event)
-	return int64(len(s.events) - 1), nil
+	return i, nil
 }
 
 func (s *svc) UpdateRequestEvent(_ context.Context, id int64, event *auditv1.RequestEvent) error {
@@ -68,6 +71,17 @@ func (s *svc) ReadEvents(_ context.Context, start time.Time, end *time.Time) ([]
 		events = append(events, event)
 	}
 	return events, nil
+}
+
+func (s *svc) ReadEvent(_ context.Context, id int64) (*auditv1.Event, error) {
+	s.RLock()
+	defer s.RUnlock()
+
+	if id >= int64(len(s.events)) || id < 0 {
+		return nil, fmt.Errorf("event with id %d not found", id)
+	}
+
+	return s.events[id], nil
 }
 
 func (s *svc) UnsentEvents(_ context.Context) ([]*auditv1.Event, error) {

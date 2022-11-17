@@ -145,6 +145,22 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 	return c.query(ctx, readEventsRangeStatement, start, *end)
 }
 
+func (c *client) ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error) {
+	const readEventsRangeStatement = `
+		SELECT id, occurred_at, details FROM audit_events
+		WHERE id = $1
+	`
+
+	events, err := c.query(ctx, readEventsRangeStatement, id)
+	if err != nil {
+		return nil, err
+	}
+	if len(events) == 0 {
+		return nil, fmt.Errorf("cannot find event by id: %d", id)
+	}
+	return events[0], nil
+}
+
 func (c *client) query(ctx context.Context, query string, args ...interface{}) ([]*auditv1.Event, error) {
 	rows, err := c.db.QueryContext(ctx, query, args...)
 	if err != nil {
@@ -176,6 +192,8 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 		}
 
 		proto := &auditv1.Event{
+			// n.b. this is a safe casting since BIGSERIAL can only reach the max value for signed int64.
+			Id:         int64(row.Id),
 			OccurredAt: occurred,
 			EventType: &auditv1.Event_Event{
 				Event: requestEventProto(c.logger, row),

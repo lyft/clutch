@@ -57,6 +57,7 @@ func (c *client) WriteRequestEvent(ctx context.Context, req *auditv1.RequestEven
 	i := int64(len(c.events))
 	c.events = append(c.events,
 		&auditv1.Event{
+			Id:         i,
 			OccurredAt: timestamppb.Now(),
 			EventType:  &auditv1.Event_Event{Event: req},
 		})
@@ -97,6 +98,17 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 	}
 
 	return events, nil
+}
+
+func (c *client) ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error) {
+	c.RLock()
+	defer c.RUnlock()
+
+	if id >= int64(len(c.events)) || id < 0 {
+		return nil, fmt.Errorf("cannot find event by id: %d", id)
+	}
+
+	return c.events[id], nil
 }
 
 func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {

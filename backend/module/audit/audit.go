@@ -8,13 +8,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
-	"github.com/gogo/status"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
-	"google.golang.org/grpc/codes"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -52,6 +51,7 @@ func (m *mod) Register(r module.Registrar) error {
 }
 
 func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*auditv1.GetEventsResponse, error) {
+	resp := &auditv1.GetEventsResponse{}
 	switch req.GetWindow().(type) {
 	case *auditv1.GetEventsRequest_Range:
 		timerange := req.GetRange()
@@ -62,7 +62,8 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 		if err != nil {
 			return nil, err
 		}
-		return &auditv1.GetEventsResponse{Events: events}, nil
+
+		resp.Events = events
 	case *auditv1.GetEventsRequest_Since:
 		if err := req.GetSince().CheckValid(); err != nil {
 			return nil, fmt.Errorf("problem parsing duration: %w", err)
@@ -75,12 +76,49 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 		if err != nil {
 			return nil, err
 		}
-		return &auditv1.GetEventsResponse{Events: events}, nil
+
+		resp.Events = events
 	default:
 		return nil, errors.New("no time window requested")
 	}
+
+	if req.PageToken != "" {
+		page, err := strconv.Atoi(req.PageToken)
+		if err != nil {
+			return nil, fmt.Errorf("invalid page token: %s", req.PageToken)
+		}
+		limit := int(req.Limit)
+		if req.Limit == 0 {
+			limit = 10
+		}
+		offset := page * limit
+		if offset > len(resp.Events) {
+			offset = 0
+		}
+
+		end := offset + limit
+		if end < len(resp.Events) {
+			resp.NextPageToken = strconv.FormatInt(int64(page+1), 10)
+		}
+
+		if end > len(resp.Events) {
+			end = len(resp.Events)
+		}
+
+		resp.Events = resp.Events[offset:end]
+	}
+
+	return resp, nil
 }
 
 func (m *mod) GetEvent(ctx context.Context, req *auditv1.GetEventRequest) (*auditv1.GetEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "not implemented")
+	event, err := m.client.ReadEvent(ctx, req.EventId)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &auditv1.GetEventResponse{
+		Event: event,
+	}
+	return resp, nil
 }

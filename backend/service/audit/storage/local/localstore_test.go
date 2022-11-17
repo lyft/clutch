@@ -48,6 +48,10 @@ func TestLocalstorage(t *testing.T) {
 	assert.Equal(t, 2, len(events))
 	assert.Equal(t, diff, events[0].GetEvent())
 
+	event, err := storage.ReadEvent(context.Background(), 0)
+	assert.NoError(t, err)
+	assert.Equal(t, diff, event.GetEvent())
+
 	// Assert the expected events are unsent.
 	unsent, err = storage.UnsentEvents(context.Background())
 	assert.NoError(t, err)
