@@ -43,7 +43,7 @@ func TestLocalstorage(t *testing.T) {
 	err = storage.UpdateRequestEvent(context.Background(), first, diff)
 	assert.NoError(t, err)
 
-	events, err := storage.ReadEvents(context.Background(), time.Time{}, nil)
+	events, err := storage.ReadEvents(context.Background(), time.Time{}, nil, nil)
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(events))
 	assert.Equal(t, diff, events[0].GetEvent())

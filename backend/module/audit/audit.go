@@ -52,37 +52,35 @@ func (m *mod) Register(r module.Registrar) error {
 
 func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*auditv1.GetEventsResponse, error) {
 	resp := &auditv1.GetEventsResponse{}
+
+	var start time.Time
+	var end *time.Time
+
 	switch req.GetWindow().(type) {
 	case *auditv1.GetEventsRequest_Range:
 		timerange := req.GetRange()
-		start := timerange.StartTime.AsTime()
-		end := timerange.EndTime.AsTime()
-
-		events, err := m.client.ReadEvents(ctx, start, &end)
-		if err != nil {
-			return nil, err
-		}
-
-		resp.Events = events
+		start = timerange.StartTime.AsTime()
+		endTime := timerange.EndTime.AsTime()
+		end = &endTime
 	case *auditv1.GetEventsRequest_Since:
 		if err := req.GetSince().CheckValid(); err != nil {
 			return nil, fmt.Errorf("problem parsing duration: %w", err)
 		}
 
 		window := req.GetSince().AsDuration()
-		start := time.Now().Add(-window)
-
-		events, err := m.client.ReadEvents(ctx, start, nil)
-		if err != nil {
-			return nil, err
-		}
-
-		resp.Events = events
+		start = time.Now().Add(-window)
 	default:
 		return nil, errors.New("no time window requested")
 	}
 
+	eventCount, err := m.client.CountEvents(ctx, start, end)
+	if err != nil {
+		return nil, err
+	}
+
+	var options *audit.ReadOptions
 	if req.PageToken != "" {
+		startIdx := 0
 		page, err := strconv.Atoi(req.PageToken)
 		if err != nil {
 			return nil, fmt.Errorf("invalid page token: %s", req.PageToken)
@@ -91,22 +89,26 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 		if req.Limit == 0 {
 			limit = 10
 		}
-		offset := page * limit
-		if offset > len(resp.Events) {
-			offset = 0
+
+		startIdx = page * limit
+		if startIdx > int(eventCount) {
+			startIdx = 0
 		}
 
-		end := offset + limit
-		if end < len(resp.Events) {
+		endIdx := startIdx + limit
+		if endIdx < int(eventCount) {
 			resp.NextPageToken = strconv.FormatInt(int64(page+1), 10)
 		}
 
-		if end > len(resp.Events) {
-			end = len(resp.Events)
-		}
-
-		resp.Events = resp.Events[offset:end]
+		options = &audit.ReadOptions{Offset: int64(startIdx), Limit: int64(limit)}
 	}
+
+	events, err := m.client.ReadEvents(ctx, start, end, options)
+	if err != nil {
+		return nil, err
+	}
+
+	resp.Events = events
 
 	return resp, nil
 }
