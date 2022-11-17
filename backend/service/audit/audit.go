@@ -141,6 +141,10 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 	return c.storage.ReadEvents(ctx, start, end)
 }
 
+func (c *client) ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error) {
+	return c.storage.ReadEvent(ctx, id)
+}
+
 func (c *client) readAndFanout(ctx context.Context) {
 	// TODO(maybe): Backpressure on continued failure.
 

@@ -134,7 +134,10 @@ func TestGetEvents(t *testing.T) {
 				client: auditmock.New(),
 			}
 			for i := 0; i < test.eventCount; i++ {
-				m.client.WriteRequestEvent(context.Background(), &auditv1.RequestEvent{})
+				_, err := m.client.WriteRequestEvent(context.Background(), &auditv1.RequestEvent{})
+				if err != nil {
+					assert.Fail(t, err.Error())
+				}
 			}
 			time.Sleep(1 * time.Second)
 			resp, err := m.GetEvents(context.Background(), test.req)
@@ -177,7 +180,10 @@ func TestGetEvent(t *testing.T) {
 			m := &mod{
 				client: auditmock.New(),
 			}
-			m.client.WriteRequestEvent(context.Background(), &auditv1.RequestEvent{})
+			_, err := m.client.WriteRequestEvent(context.Background(), &auditv1.RequestEvent{})
+			if err != nil {
+				assert.Fail(t, err.Error())
+			}
 			resp, err := m.GetEvent(context.Background(), test.req)
 			if test.expectedErr != nil {
 				assert.Nil(t, resp)
