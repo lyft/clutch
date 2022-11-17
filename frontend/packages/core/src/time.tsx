@@ -1,5 +1,5 @@
-import type { ReactTimeagoProps as TimeAgoProps } from "react-timeago";
 import React from "react";
+import type { ReactTimeagoProps as TimeAgoProps } from "react-timeago";
 import TimeAgo from "react-timeago";
 
 interface EventTimeProps extends Pick<TimeAgoProps, "date"> {
@@ -38,4 +38,4 @@ const EventTime = ({ short = true, onClick, ...props }: EventTimeProps) => (
   />
 );
 
-export { EventTime };
+export default EventTime;
