@@ -19,7 +19,6 @@ func TestGetEvents(t *testing.T) {
 	testCases := []struct {
 		eventCount         int
 		req                *auditv1.GetEventsRequest
-		resp               *auditv1.GetEventsResponse
 		expectedEventCount int
 		expectedNextToken  string
 		expectedErr        error
