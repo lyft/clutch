@@ -1,10 +1,5 @@
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { rest } from "msw";
-import { setupServer } from "msw/node";
-
-import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
 
 import TimeAgo from "../timeago";
 

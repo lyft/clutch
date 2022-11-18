@@ -8,11 +8,12 @@ export default {
   component: TimeAgo,
 } as Meta;
 
-const Template = ({ date, short }) => <TimeAgo date={date} short={short} />;
+const Template = ({ date, live, short }) => <TimeAgo date={date} live={live} short={short} />;
 
 export const Default = Template.bind({});
 
 Default.args = {
   date: 1668788531 * 1000,
   short: false,
+  live: false,
 };
