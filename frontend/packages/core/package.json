@@ -39,6 +39,9 @@
     "@mui/system": "^5.8.5",
     "@mui/x-date-pickers": "^5.0.5",
     "@testing-library/react": "^12.0.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.4.3",
     "axios": "^0.21.1",
     "dayjs": "^1.11.6",
     "history": "^5.0.0",
@@ -60,10 +63,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^2.0.0-beta",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react-hooks": "^8.0.1",
-    "@testing-library/user-event": "^14.4.3"
+    "@clutch-sh/tools": "^2.0.0-beta"
   },
   "engines": {
     "node": ">=16.0.0 <17"

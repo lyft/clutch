@@ -1,6 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 
+import "@testing-library/jest-dom";
+
 import TimeAgo from "../timeago";
 
 const getTimestamp = (days, date = new Date()) => {
