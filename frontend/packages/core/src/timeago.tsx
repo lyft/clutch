@@ -1,6 +1,6 @@
 import React from "react";
 import type { ReactTimeagoProps as TimeAgoProps } from "react-timeago";
-import TimeAgo from "react-timeago";
+import ReactTimeago from "react-timeago";
 
 interface EventTimeProps extends Pick<TimeAgoProps, "date"> {
   onClick?: () => void;
@@ -26,8 +26,13 @@ const setMilliseconds = (timestamp?: number | Long | null): number => {
   return ts.setUTCMilliseconds(parseTimestamp(timestamp));
 };
 
-const EventTime = ({ short = true, onClick, ...props }: EventTimeProps) => (
-  <TimeAgo
+/**
+ * Will take a millsecond timestamp in and calculate the timeago for it
+ * @param date the millisecond timestamp
+ * @returns react component representing the timeago
+ */
+const TimeAgo = ({ short = true, onClick, ...props }: EventTimeProps) => (
+  <ReactTimeago
     {...props}
     formatter={(value, unit) =>
       `${setMilliseconds(value)}${
@@ -38,4 +43,4 @@ const EventTime = ({ short = true, onClick, ...props }: EventTimeProps) => (
   />
 );
 
-export default EventTime;
+export default TimeAgo;

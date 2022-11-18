@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { client, EventTime, Grid, Link, styled, Typography } from "@clutch-sh/core";
+import { client, Grid, Link, styled, TimeAgo as EventTime, Typography } from "@clutch-sh/core";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

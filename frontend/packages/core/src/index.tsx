@@ -49,7 +49,7 @@ export {
   TreeTable,
 } from "./Table";
 export { default as Code } from "./text";
-export { default as EventTime } from "./time";
+export { default as TimeAgo } from "./timeago";
 export { Typography } from "./typography";
 export { default as ClutchApp } from "./AppProvider";
 
