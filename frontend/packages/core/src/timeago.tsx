@@ -2,7 +2,7 @@ import React from "react";
 import type { ReactTimeagoProps as TimeAgoProps } from "react-timeago";
 import ReactTimeago from "react-timeago";
 
-interface EventTimeProps extends Pick<TimeAgoProps, "date"> {
+interface EventTimeProps extends Pick<TimeAgoProps, "date" | "live"> {
   onClick?: () => void;
   short?: boolean;
 }
