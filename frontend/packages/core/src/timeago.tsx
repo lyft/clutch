@@ -29,7 +29,7 @@ const setMilliseconds = (timestamp?: number | Long | null): number => {
 
 /**
  * Will take a millsecond timestamp in and calculate the timeago for it
- * @param date the millisecond timestamp
+ * @param date the date
  * @param short (default) will shorten the unit string (day -> d)
  * @param live (default) will auto increment based on a given time
  * @returns react component representing the timeago
