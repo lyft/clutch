@@ -30,9 +30,9 @@ const setMilliseconds = (timestamp?: number | Long | null): number => {
 
 /**
  * Will take a millsecond timestamp in and calculate the timeago for it
- * @param date the date
+ * @param date Date is a date in the past or the future. This can be a Date Object, A UTC date-string or number of milliseconds since epoch time.
+ * @param live (default) TimeAgo is live by default and will auto update it's value. However, if you don't want this behaviour, you can set live:false.
  * @param short (default) will shorten the unit string (day -> d)
- * @param live (default) will auto increment based on a given time
  * @returns react component representing the timeago
  */
 const TimeAgo = ({ short = true, onClick, formatter, ...props }: EventTimeProps) => (
