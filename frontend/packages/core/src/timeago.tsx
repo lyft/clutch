@@ -6,6 +6,7 @@ interface EventTimeProps extends Pick<TimeAgoProps, "date"> {
   onClick?: () => void;
   short?: boolean;
   live?: boolean;
+  formatter?: (value, unit, suffix) => string;
 }
 
 const unitFormatter = (unit: string): string => {
@@ -34,13 +35,16 @@ const setMilliseconds = (timestamp?: number | Long | null): number => {
  * @param live (default) will auto increment based on a given time
  * @returns react component representing the timeago
  */
-const TimeAgo = ({ short = true, onClick, ...props }: EventTimeProps) => (
+const TimeAgo = ({ short = true, onClick, formatter, ...props }: EventTimeProps) => (
   <ReactTimeago
     {...props}
-    formatter={(value, unit) =>
-      `${setMilliseconds(value)}${
-        short ? unitFormatter(unit) : value > 1 ? ` ${unit}s` : ` ${unit}`
-      }`
+    formatter={
+      formatter
+        ? formatter
+        : (value, unit) =>
+            `${setMilliseconds(value)}${
+              short ? unitFormatter(unit) : value > 1 ? ` ${unit}s` : ` ${unit}`
+            }`
     }
     onClick={onClick}
   />
