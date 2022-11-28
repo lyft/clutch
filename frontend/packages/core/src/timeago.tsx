@@ -39,12 +39,11 @@ const TimeAgo = ({ short = true, onClick, formatter, ...props }: EventTimeProps)
   <ReactTimeago
     {...props}
     formatter={
-      formatter
-        ? formatter
-        : (value, unit) =>
-            `${setMilliseconds(value)}${
-              short ? unitFormatter(unit) : value > 1 ? ` ${unit}s` : ` ${unit}`
-            }`
+      formatter ??
+      ((value, unit) =>
+        `${setMilliseconds(value)}${
+          short ? unitFormatter(unit) : value > 1 ? ` ${unit}s` : ` ${unit}`
+        }`)
     }
     onClick={onClick}
   />
