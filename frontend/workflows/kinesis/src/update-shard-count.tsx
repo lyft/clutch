@@ -55,17 +55,20 @@ const StreamDetails: React.FC<WizardChild> = () => {
     resourceData.updateData("targetShardCount", value);
   };
 
-  const values = [
-    Math.ceil(stream.currentShardCount * 0.5),
-    Math.ceil(stream.currentShardCount * 0.75),
-    Math.ceil(stream.currentShardCount * 1),
-    Math.ceil(stream.currentShardCount * 1.25),
-    Math.ceil(stream.currentShardCount * 1.5),
-    Math.ceil(stream.currentShardCount * 1.75),
-    Math.ceil(stream.currentShardCount * 2),
-  ];
-  const options = values.map(value => {
-    return { label: value.toString() };
+  // These will be used to multiply the currentShardCount, which will populate the choices
+  const multipliers = [
+    0.5,
+    0.75,
+    1,
+    1.25,
+    1.5,
+    1.75,
+    2
+  ]
+
+  const values = multipliers.map(m => Math.ceil(stream.currentShardCount) * m)
+  const options = values.map((value, index) => {
+    return { label: value.toString() + "(current * " + multipliers[index] + ")" };
   });
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
