@@ -18,6 +18,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
+import _ from "lodash";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
@@ -55,12 +56,17 @@ const StreamDetails: React.FC<WizardChild> = () => {
     resourceData.updateData("targetShardCount", value);
   };
 
-  // These will be used to multiply the currentShardCount, which will populate the choices
-  const multipliers = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
-
-  const values = multipliers.map(m => Math.ceil(stream.currentShardCount) * m);
-  const options = values.map((value, index) => {
-    return { label: `${value.toString()}(ceil of current * ${multipliers[index]})` };
+  const values = [
+    Math.ceil(stream.currentShardCount * 0.5),
+    Math.ceil(stream.currentShardCount * 0.75),
+    Math.ceil(stream.currentShardCount * 1),
+    Math.ceil(stream.currentShardCount * 1.25),
+    Math.ceil(stream.currentShardCount * 1.5),
+    Math.ceil(stream.currentShardCount * 1.75),
+    Math.ceil(stream.currentShardCount * 2),
+  ];
+  const options = _.uniq(values).map(value => {
+    return { label: value.toString() };
   });
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
