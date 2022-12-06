@@ -11,6 +11,7 @@ import {
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import _ from "lodash";
 import type { BaseSchema } from "yup";
@@ -33,6 +34,7 @@ interface RowData {
   name: string;
   value: unknown;
   disabledFieldlabel?: string;
+  disabledFieldTooltip?: string;
 }
 
 interface IdentifiableRowData extends RowData {
@@ -152,19 +154,27 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
   const updateCallback = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
     error ? () => {} : onUpdate(e);
 
+  const disabledTextFieldComponent = (
+    <TextField
+      disabled
+      id={data.id}
+      name={data.name}
+      defaultValue={data.value}
+      label={data.textFieldLabels?.disabledField ?? data.textFieldLabels?.disabledField}
+    />
+  );
+
   return (
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
         <Grid>
           <div className="textfield-disabled">
-            <TextField
-              disabled
-              id={data.id}
-              name={data.name}
-              defaultValue={data.value}
-              label={data.textFieldLabels?.disabledField ?? data.textFieldLabels?.disabledField}
-            />
+            {data.disabledFieldTooltip ? (
+              <Tooltip title={data.disabledTextFieldTooltip}>{disabledTextFieldComponent}</Tooltip>
+            ) : (
+              disabledTextFieldComponent
+            )}
           </div>
           <ChevronRightIcon />
           <TextField
