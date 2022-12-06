@@ -62,6 +62,7 @@ WithMutableRows.args = {
         type: "number",
         key: "size.min",
       },
+      disabledFieldTooltip: "A tooltip for this field",
     },
     {
       name: "Max Size",
