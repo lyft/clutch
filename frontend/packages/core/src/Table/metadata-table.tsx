@@ -11,13 +11,13 @@ import {
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableRow,
-  Tooltip,
 } from "@mui/material";
 import _ from "lodash";
 import type { BaseSchema } from "yup";
 import { object } from "yup";
 
 import { useWizardContext } from "../Contexts";
+import { Tooltip } from "../Feedback/tooltip";
 import TextField from "../Input/text-field";
 import styled from "../styled";
 
@@ -33,7 +33,6 @@ interface RowData {
   };
   name: string;
   value: unknown;
-  disabledFieldlabel?: string;
   disabledFieldTooltip?: string;
 }
 
@@ -160,7 +159,7 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
       id={data.id}
       name={data.name}
       defaultValue={data.value}
-      label={data.textFieldLabels?.disabledField ?? data.textFieldLabels?.disabledField}
+      label={data.textFieldLabels?.disabledField}
     />
   );
 
@@ -180,7 +179,7 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
           <TextField
             id={data.id}
             name={data.name}
-            label={data.textFieldLabels?.updatedField ?? data.textFieldLabels?.updatedField}
+            label={data.textFieldLabels?.updatedField}
             defaultValue={data.value}
             type={data?.input?.type}
             onChange={updateCallback}
