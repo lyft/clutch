@@ -65,6 +65,8 @@ const HPADetails: React.FC<WizardChild> = () => {
     // save the original values of min and max replicas
     if (hpa) {
       oldHpaData.assign(hpaData);
+      console.log("hpa data is")
+      console.log(hpaData)
     }
   }, []);
 
@@ -144,14 +146,14 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const oldHpaData = useDataLayout("oldHpaData").displayValue() as IClutch.k8s.v1.HPA;
 
   // if new values are either 50% bigger or smaller than old values, add a warning note
-  const maxUpperBound = 1.5 * oldHpaData.sizing.maxReplicas;
-  const maxLowerBound = 0.5 * oldHpaData.sizing.maxReplicas;
-  const minUpperBound = 1.5 * oldHpaData.sizing.minReplicas;
-  const minLowerBound = 0.5 * oldHpaData.sizing.minReplicas;
+  const maxUpperBound = 1.5 * oldHpaData?.sizing?.maxReplicas;
+  const maxLowerBound = 0.5 * oldHpaData?.sizing?.maxReplicas;
+  const minUpperBound = 1.5 * oldHpaData?.sizing?.minReplicas;
+  const minLowerBound = 0.5 * oldHpaData?.sizing?.minReplicas;
   const isMinReplicasDiffTooBig =
-    hpa.sizing.minReplicas > minUpperBound || hpa.sizing.minReplicas < minLowerBound;
+    hpa?.sizing?.minReplicas > minUpperBound || hpa?.sizing?.minReplicas < minLowerBound;
   const isMaxReplicasDiffTooBig =
-    hpa.sizing.maxReplicas > maxUpperBound || hpa.sizing.maxReplicas < maxLowerBound;
+    hpa?.sizing?.maxReplicas > maxUpperBound || hpa?.sizing?.maxReplicas < maxLowerBound;
   if (isMaxReplicasDiffTooBig || isMinReplicasDiffTooBig) {
     notes.push({
       text:
@@ -159,6 +161,8 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
       severity: "warning",
     });
   }
+  console.log(hpa)
+  console.log(oldHpaData)
   return (
     <WizardStep error={resizeData.error} isLoading={resizeData.isLoading}>
       <Confirmation action="Resize" />
@@ -169,8 +173,8 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
           { name: "Cluster", value: hpa.cluster },
           { name: "New Min Size", value: hpa.sizing.minReplicas },
           { name: "New Max Size", value: hpa.sizing.maxReplicas },
-          { name: "Old Min Size", value: oldHpaData.sizing.minReplicas },
-          { name: "Old Max Size", value: oldHpaData.sizing.maxReplicas },
+          { name: "Old Min Size", value: oldHpaData?.sizing?.minReplicas },
+          { name: "Old Max Size", value: oldHpaData?.sizing?.maxReplicas },
         ]}
       />
       <NotePanel notes={notes} />
