@@ -137,12 +137,12 @@ const HPADetails: React.FC<WizardChild> = () => {
   );
 };
 
-// TODO (sperry): possibly show the previous size values
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const hpa = useDataLayout("hpaData").displayValue() as IClutch.k8s.v1.HPA;
   const resizeData = useDataLayout("resizeData");
   const oldHpaData = useDataLayout("oldHpaData").displayValue() as IClutch.k8s.v1.HPA;
 
+  React.useEffect(() => {
   // if new values are either 50% bigger or smaller than old values, add a warning note
   const maxUpperBound = 1.5 * oldHpaData?.sizing?.maxReplicas;
   const maxLowerBound = 0.5 * oldHpaData?.sizing?.maxReplicas;
@@ -153,14 +153,14 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const isMaxReplicasDiffTooBig =
     hpa?.sizing?.maxReplicas > maxUpperBound || hpa?.sizing?.maxReplicas < maxLowerBound;
   if (isMaxReplicasDiffTooBig || isMinReplicasDiffTooBig) {
-    notes.push({
+    notes.unshift({
       text:
         "The new min or max size is more than 50% different from the old size. This may cause a large number of pods to be created or deleted.",
       severity: "warning",
     });
   }
-  console.log(hpa)
-  console.log(oldHpaData)
+  }, []);
+
   return (
     <WizardStep error={resizeData.error} isLoading={resizeData.isLoading}>
       <Confirmation action="Resize" />
