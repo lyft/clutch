@@ -169,11 +169,10 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
       <TableCell>
         <Grid>
           <div className="textfield-disabled">
-            {data.disabledFieldTooltip ? (
-              <Tooltip title={data.disabledFieldTooltip}>{disabledTextFieldComponent}</Tooltip>
-            ) : (
-              disabledTextFieldComponent
-            )}
+            {/* // In the case where a disabledFieldTooltip is not provided, the value itself will be the tooltip */}
+            <Tooltip title={data.disabledFieldTooltip ?? data.value}>
+              {disabledTextFieldComponent}
+            </Tooltip>
           </div>
           <ChevronRightIcon />
           <TextField
