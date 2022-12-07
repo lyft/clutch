@@ -182,6 +182,7 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   const dataLayout = {
     hpaData: {},
     inputData: {},
+    oldHpaData: {},
     resizeData: {
       deps: ["hpaData", "inputData"],
       hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: { clientset: string }) => {
