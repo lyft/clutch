@@ -64,9 +64,7 @@ const HPADetails: React.FC<WizardChild> = () => {
 
     // save the original values of min and max replicas
     if (hpa) {
-      oldHpaData.assign(hpaData);
-      console.log("hpa data is")
-      console.log(hpaData)
+      oldHpaData.assign(hpa);
     }
   }, []);
 
