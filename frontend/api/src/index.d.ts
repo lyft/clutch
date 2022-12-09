@@ -16020,6 +16020,12 @@ export namespace clutch {
 
                 /** ResizeHPARequest sizing */
                 sizing?: (clutch.k8s.v1.ResizeHPARequest.ISizing|null);
+
+                /** ResizeHPARequest oldSizing */
+                oldSizing?: (clutch.k8s.v1.ResizeHPARequest.ISizing|null);
+
+                /** ResizeHPARequest addWarning */
+                addWarning?: (boolean|null);
             }
 
             /** Represents a ResizeHPARequest. */
@@ -16045,6 +16051,12 @@ export namespace clutch {
 
                 /** ResizeHPARequest sizing. */
                 public sizing?: (clutch.k8s.v1.ResizeHPARequest.ISizing|null);
+
+                /** ResizeHPARequest oldSizing. */
+                public oldSizing?: (clutch.k8s.v1.ResizeHPARequest.ISizing|null);
+
+                /** ResizeHPARequest addWarning. */
+                public addWarning: boolean;
 
                 /**
                  * Verifies a ResizeHPARequest message.

@@ -3005,6 +3005,37 @@ func (m *ResizeHPARequest) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetOldSizing()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ResizeHPARequestValidationError{
+					field:  "OldSizing",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ResizeHPARequestValidationError{
+					field:  "OldSizing",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOldSizing()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ResizeHPARequestValidationError{
+				field:  "OldSizing",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for AddWarning
+
 	if len(errors) > 0 {
 		return ResizeHPARequestMultiError(errors)
 	}
