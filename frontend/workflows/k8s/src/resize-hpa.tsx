@@ -144,10 +144,13 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
 
   React.useEffect(() => {
     // if new values are either 50% bigger or smaller than old values, add a warning note
-    const maxUpperBound = 1.5 * oldHpaData.sizing.maxReplicas;
-    const maxLowerBound = 0.5 * oldHpaData.sizing.maxReplicas;
-    const minUpperBound = 1.5 * oldHpaData.sizing.minReplicas;
-    const minLowerBound = 0.5 * oldHpaData.sizing.minReplicas;
+    const alertLevel = 0.5;
+    const { maxReplicas, minReplicas } = oldHpaData.sizing;
+    const maxUpperBound = (1 + alertLevel) * maxReplicas;
+    const maxLowerBound = (1 - alertLevel) * maxReplicas;
+    const minUpperBound = (1 + alertLevel) * minReplicas;
+    const minLowerBound = (1 - alertLevel) * minReplicas;
+
     const isMinReplicasDiffTooBig =
       hpa.sizing.minReplicas > minUpperBound || hpa.sizing.minReplicas < minLowerBound;
     const isMaxReplicasDiffTooBig =
