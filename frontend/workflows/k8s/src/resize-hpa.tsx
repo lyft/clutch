@@ -157,9 +157,10 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
     hpaData: {},
     inputData: {},
     resizeData: {
-      deps: ["hpaData", "inputData"],
-      hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: { clientset: string }) => {
+      deps: ["hpaData", "inputData", "oldHpaData"],
+      hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: { clientset: string }, oldHpaData: IClutch.k8s.v1.HPA) => {
         const clientset = inputData.clientset ?? "unspecified";
+        // calculate warning here
 
         return client.post("/v1/k8s/resizeHPA", {
           clientset,
@@ -170,6 +171,10 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
             min: hpaData.sizing.minReplicas,
             max: hpaData.sizing.maxReplicas,
           },
+          oldSizing: {
+            min: oldHpaData.sizing.minReplicas,
+            max: oldHpaData.sizing.maxReplicas
+          }
         } as IClutch.k8s.v1.IResizeHPARequest);
       },
     },
