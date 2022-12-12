@@ -241,6 +241,13 @@ const CardContent = ({
 
 const StyledLandingCard = styled(Card)({
   border: "none",
+  height: "214px",
+  maxHeight: "100%",
+
+  "& .cardActionArea, & .cardActionArea > div, & .cardActionArea > div > div": {
+    height: "inherit",
+    maxHeight: "inherit",
+  },
 
   "& .header": {
     display: "inline-flex",
@@ -268,7 +275,7 @@ export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
 
 export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
   <StyledLandingCard {...props}>
-    <StyledCardActionArea onClick={onClick}>
+    <StyledCardActionArea className="cardActionArea" onClick={onClick}>
       <CardContent padding={4}>
         <div className="header">
           <div className="icon">
