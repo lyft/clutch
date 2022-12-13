@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Destructive Button component renders correctly 1`] = `
-"<Styled(Component) variant=\\"contained\\" disableElevation={true} palette={{...}}>
+"<Styled(Component) variant=\\"contained\\" disableElevation={true} palette={{...}} size=\\"medium\\">
   test
 </Styled(Component)>"
 `;
 
 exports[`Neutral Button component renders correctly 1`] = `
-"<Styled(Component) variant=\\"contained\\" disableElevation={true} palette={{...}}>
+"<Styled(Component) variant=\\"contained\\" disableElevation={true} palette={{...}} size=\\"medium\\">
   test
 </Styled(Component)>"
 `;
 
 exports[`Primary Button component renders correctly 1`] = `
-"<Styled(Component) variant=\\"contained\\" disableElevation={true} palette={{...}}>
+"<Styled(Component) variant=\\"contained\\" disableElevation={true} palette={{...}} size=\\"medium\\">
   test
 </Styled(Component)>"
 `;
