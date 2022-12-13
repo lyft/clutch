@@ -557,7 +557,7 @@ message ResizeHPARequest {
   Sizing old_sizing = 6;
 
   // A flag to add sirens to the audit message or not
-  bool add_warning = 7;
+  bool resize_warning = 7;
 }
 
 message ResizeHPAResponse {

@@ -3034,7 +3034,7 @@ func (m *ResizeHPARequest) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for AddWarning
+	// no validation rules for ResizeWarning
 
 	if len(errors) > 0 {
 		return ResizeHPARequestMultiError(errors)
