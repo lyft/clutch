@@ -176,6 +176,7 @@ interface CardContentProps extends SpacingProps {
   collapseAction?: CardContentCollapsibleProps;
   /** The max height of the card content. The default is none. */
   maxHeight?: number | "none";
+  className?: string;
 }
 
 const CardContent = ({
@@ -244,7 +245,7 @@ const StyledLandingCard = styled(Card)({
   height: "214px",
   maxHeight: "100%",
 
-  "& .cardActionArea, & .cardActionArea > div, & .cardActionArea > div > div": {
+  "& .cardActionArea": {
     height: "inherit",
     maxHeight: "inherit",
   },
@@ -296,7 +297,7 @@ export const LandingCard = ({ group, title, description, onClick, ...props }: La
           <span>{group}</span>
         </div>
         <div>
-          <Typography variant="h3">{title}</Typography>
+          <TruncatedText variant="h3">{title}</TruncatedText>
           <TruncatedText color="rgba(13, 16, 48, 0.6)" variant="body2">
             {description}
           </TruncatedText>
