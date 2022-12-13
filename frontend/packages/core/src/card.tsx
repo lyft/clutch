@@ -267,6 +267,13 @@ const StyledLandingCard = styled(Card)({
   },
 });
 
+const TruncatedText = styled(Typography)({
+  display: "-webkit-box",
+  overflow: "hidden",
+  "-webkit-box-orient": "vertical",
+  "-webkit-line-clamp": "3",
+});
+
 export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
   group: string;
   title: string;
@@ -285,9 +292,9 @@ export const LandingCard = ({ group, title, description, onClick, ...props }: La
         </div>
         <div>
           <Typography variant="h3">{title}</Typography>
-          <Typography color="rgba(13, 16, 48, 0.6)" variant="body2">
+          <TruncatedText color="rgba(13, 16, 48, 0.6)" variant="body2">
             {description}
-          </Typography>
+          </TruncatedText>
         </div>
       </CardContent>
     </StyledCardActionArea>
