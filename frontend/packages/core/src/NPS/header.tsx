@@ -51,7 +51,12 @@ const StyledFeedbackIcon = styled(IconButton)<{ $open: boolean }>(
 );
 
 export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => {
-  const feedbackTypes: SelectOption[] = [{ label: "General" }];
+  const feedbackTypes: SelectOption[] = [
+    { label: "General" },
+    { label: "Other1" },
+    { label: "Other2" },
+    { label: "Other3" },
+  ];
 
   const typeMap = {};
 
@@ -87,11 +92,19 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
 const HeaderFeedback = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const anchorRef = React.useRef(null);
-  const { workflows } = useAppContext();
+  const { workflows, headerLink, headerItems } = useAppContext();
+  const [defaultOption, setDefaultOption] = React.useState<string>();
 
   const handleToggle = () => {
     setOpen(!open);
   };
+
+  React.useEffect(() => {
+    if (headerItems && headerItems.NPS) {
+      setDefaultOption(headerItems.NPS.defaultOption ?? "");
+      setOpen(headerItems.NPS.open);
+    }
+  }, [headerItems]);
 
   const handleClose = event => {
     // handler so that it wont close when selecting an item in the select
@@ -100,6 +113,10 @@ const HeaderFeedback = () => {
     }
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
+    }
+    // handler for the NPS Banner button so that it doesn't reset the headerLink twice
+    if (event.target.id !== "npsBannerButton") {
+      headerLink("NPS");
     }
     setOpen(false);
   };
@@ -127,7 +144,11 @@ const HeaderFeedback = () => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="options">
-                  <NPSFeedback origin="HEADER" feedbackTypes={generateFeedbackTypes(workflows)} />
+                  <NPSFeedback
+                    origin="HEADER"
+                    feedbackTypes={generateFeedbackTypes(workflows)}
+                    defaultOption={defaultOption}
+                  />
                 </MenuList>
               </ClickAwayListener>
             </Paper>

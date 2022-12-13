@@ -25,6 +25,7 @@ interface FeedbackOptions {
   origin: Origin;
   feedbackTypes?: SelectOption[];
   onSubmit?: (submit: boolean) => void;
+  defaultOption?: string;
 }
 
 // Defaults in case of API failure
@@ -94,7 +95,12 @@ export const FEEDBACK_MAX_LENGTH = 280;
  * @param opts Available feedback options
  * @returns NPSFeedback component
  */
-const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOptions) => {
+const NPSFeedback = ({
+  origin = "HEADER",
+  onSubmit,
+  feedbackTypes,
+  defaultOption,
+}: FeedbackOptions) => {
   const [hasSubmit, setHasSubmit] = useState<boolean>(false);
   const [selectedRating, setSelectedRating] = useState<Rating>(null);
   const [freeformFeedback, setFreeformFeedback] = useState<string>("");
@@ -230,6 +236,9 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
                   label="Choose a type of feedback you want to submit"
                   options={feedbackTypes}
                   onChange={setFeedbackType}
+                  defaultOption={
+                    defaultOption ? feedbackTypes.findIndex(v => defaultOption === v.label) : 0
+                  }
                 />
               </MuiGrid>
             )}
