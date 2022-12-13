@@ -272,6 +272,11 @@ const TruncatedText = styled(Typography)({
   overflow: "hidden",
   "-webkit-box-orient": "vertical",
   "-webkit-line-clamp": "3",
+  [`@media screen and (max-width: 595px),
+  screen and (min-width: 900px) and (max-width: 950px),
+  screen and (min-width: 1200px) and (max-width: 1250px)`]: {
+    "-webkit-line-clamp": "2",
+  },
 });
 
 export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
