@@ -48,6 +48,10 @@ For the reasons stated above, the API defined below will largely look identical 
 
 Clutch uses protobuf for interface definitions. An empty definition is provided below.
 
+:::info
+When adding a feature directly in the clutch project, `path_to_gateway` should be `lyft/clutch`
+:::
+
 ```protobuf title="api/amiibo/v1/amiibo.proto"
 syntax = "proto3";
 
@@ -786,6 +790,10 @@ export default register;
 ```
 
 Next, open your `clutch.config.js` file and add the amiibo configuration highlighted below:
+
+:::info
+When adding a feature directly in the clutch project, the configuration file will be located in `frontend/packages/app/src/clutch.config.js`
+:::
 
 ```js title="{path_to_gateway}/frontend/src/clutch.config.js"
 module.exports = {
