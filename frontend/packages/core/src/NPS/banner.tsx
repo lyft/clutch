@@ -10,9 +10,6 @@ import Paper from "../paper";
 import styled from "../styled";
 import { Typography } from "../typography";
 
-/**
- * Testing
- */
 export interface BannerFeedbackProps {
   /**
    * Whether this component should appear integrated into the page versus in its own container
