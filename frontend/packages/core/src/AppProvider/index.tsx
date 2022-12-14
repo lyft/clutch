@@ -4,7 +4,7 @@ import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext, ShortLinkContext } from "../Contexts";
-import type { HeaderItems, HeaderLinks } from "../Contexts/app-context";
+import type { HeaderItems, TriggeredHeaderData } from "../Contexts/app-context";
 import type { ShortLinkContextProps } from "../Contexts/short-link-context";
 import type { HydratedData, HydrateState } from "../Contexts/workflow-storage-context/types";
 import { Toast } from "../Feedback";
@@ -72,7 +72,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [hydrateState, setHydrateState] = React.useState<HydrateState | null>(null);
   const [hydrateError, setHydrateError] = React.useState<ClutchError | null>(null);
   const [hasCustomLanding, setHasCustomLanding] = React.useState<boolean>(false);
-  const [headerItems, setHeaderItems] = React.useState<HeaderItems>({});
+  const [triggeredHeaderData, setTriggeredHeaderData] = React.useState<TriggeredHeaderData>({});
 
   /** Used to control a race condition from displaying the workflow and the state being updated with the hydrated data */
   const [shortLinkLoading, setShortLinkLoading] = React.useState<boolean>(false);
@@ -125,14 +125,18 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const appContextValue = React.useMemo(
     () => ({
       workflows: discoverableWorkflows,
-      headerLink: (item: HeaderLinks, data: any) =>
-        setHeaderItems({
-          ...headerItems,
-          [item]: { open: headerItems[item] ? !headerItems[item].open : true, ...data },
+      triggerHeaderItem: (item: HeaderItems, open: boolean, data: unknown) =>
+        // Will set the open status and spread any additional data onto the property named after the item
+        setTriggeredHeaderData({
+          ...triggeredHeaderData,
+          [item]: {
+            open,
+            ...(data as any),
+          },
         }),
-      headerItems,
+      triggeredHeaderData,
     }),
-    [discoverableWorkflows, headerItems]
+    [discoverableWorkflows, triggeredHeaderData]
   );
 
   return (

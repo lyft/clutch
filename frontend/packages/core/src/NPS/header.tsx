@@ -51,12 +51,7 @@ const StyledFeedbackIcon = styled(IconButton)<{ $open: boolean }>(
 );
 
 export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => {
-  const feedbackTypes: SelectOption[] = [
-    { label: "General" },
-    { label: "Other1" },
-    { label: "Other2" },
-    { label: "Other3" },
-  ];
+  const feedbackTypes: SelectOption[] = [{ label: "General" }];
 
   const typeMap = {};
 
@@ -89,10 +84,14 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
   return feedbackTypes;
 };
 
+/**
+ * An NPS Header component which will render an icon in the banner and when clicked
+ * will ask the user to provide feedback
+ */
 const HeaderFeedback = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const anchorRef = React.useRef(null);
-  const { workflows, headerLink, headerItems } = useAppContext();
+  const { workflows, triggerHeaderItem, triggeredHeaderData } = useAppContext();
   const [defaultOption, setDefaultOption] = React.useState<string>();
 
   const handleToggle = () => {
@@ -100,11 +99,11 @@ const HeaderFeedback = () => {
   };
 
   React.useEffect(() => {
-    if (headerItems && headerItems.NPS) {
-      setDefaultOption(headerItems.NPS.defaultOption ?? "");
-      setOpen(headerItems.NPS.open);
+    if (triggeredHeaderData && triggeredHeaderData.NPS) {
+      setDefaultOption((triggeredHeaderData.NPS.defaultOption as string) ?? "");
+      setOpen(triggeredHeaderData.NPS.open);
     }
-  }, [headerItems]);
+  }, [triggeredHeaderData]);
 
   const handleClose = event => {
     // handler so that it wont close when selecting an item in the select
@@ -114,11 +113,11 @@ const HeaderFeedback = () => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-    // handler for the NPS Banner button so that it doesn't reset the headerLink twice
-    if (event.target.id !== "npsBannerButton") {
-      headerLink("NPS");
+    // handler for the NPS Banner button so that it doesn't reset the headerLink
+    if (event.target.id !== "nps-banner-button") {
+      triggerHeaderItem && triggerHeaderItem("NPS", false, {});
+      setOpen(false);
     }
-    setOpen(false);
   };
 
   return (

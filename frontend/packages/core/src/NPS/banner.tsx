@@ -10,11 +10,34 @@ import Paper from "../paper";
 import styled from "../styled";
 import { Typography } from "../typography";
 
-interface BannerFeedbackProps {
+/**
+ * Testing
+ */
+export interface BannerFeedbackProps {
+  /**
+   * Whether this component should appear integrated into the page versus in its own container
+   * @defaultValue false
+   */
   integrated?: boolean;
+  /**
+   * The icon to display or null if none
+   * @defaultValue <HappyEmoji />
+   */
   icon?: EmojiType | React.ReactNode | null;
+  /**
+   * Feedback text
+   * @defaultValue "Enjoying this feature? We would like your feedback!"
+   */
   feedbackText?: string | null;
+  /**
+   * Feedback Button Text
+   * @defaultValue "Give Feedback"
+   */
   feedbackButtonText?: string;
+  /**
+   * Default option in dropdown to select
+   * @defaultValue ""
+   */
   defaultOption?: string;
 }
 
@@ -23,48 +46,56 @@ const StyledPaper = styled(Paper)({
 });
 
 /**
- * An NPS Feedback Banner which will ask the user for feedback then open up the NPSHeader
- * NOTE: requires the NPSHeader to be enabled
- *
- * @param integrated Whether this component should appear integrated into the page versus in its own container
- * @param icon The icon to display or null if none
- * @param feedbackText Feedback text, defaults to "Enjoying this feature? We would like your feedback!"
- * @param feedbackButtonText Feedback button text, defaults to "Give Feedback"
- * @returns Banner Feedback Component
+ * An NPS Feedback Banner which will open up the NPSHeader component to ask for feedback
  */
-const BannerFeedback = ({
+export const Banner = ({
   integrated = false,
   icon = <HappyEmoji />,
   feedbackText = "Enjoying this feature? We would like your feedback!",
   feedbackButtonText = "Give Feedback",
   defaultOption,
 }: BannerFeedbackProps) => {
-  const { headerLink } = useAppContext();
+  const { triggerHeaderItem } = useAppContext();
   const banner = (
     <Grid container direction="row" spacing={1} alignItems="center">
-      <Grid item sx={{ marginTop: "4px" }}>
+      <Grid item sx={{ marginTop: "4px" }} data-testid="nps-banner-icon">
         {icon}
       </Grid>
       <Grid item>
-        <Typography variant="body2">{feedbackText}</Typography>
+        <Typography data-testid="nps-banner-text" variant="body2">
+          {feedbackText}
+        </Typography>
       </Grid>
       <Grid item sx={{ marginLeft: "16px" }}>
         <Button
-          id="npsBannerButton"
+          id="nps-banner-button"
+          data-testid="nps-banner-button"
           variant="neutral"
           text={feedbackButtonText}
           size="small"
-          onClick={() => headerLink("NPS", { defaultOption })}
+          onClick={() => triggerHeaderItem("NPS", true, { defaultOption })}
         />
       </Grid>
     </Grid>
   );
 
-  return (
-    <SimpleFeatureFlag feature="npsHeader">
-      <FeatureOn>{integrated ? banner : <StyledPaper>{banner}</StyledPaper>}</FeatureOn>
-    </SimpleFeatureFlag>
+  return integrated ? (
+    banner
+  ) : (
+    <StyledPaper data-testid="nps-banner-container">{banner}</StyledPaper>
   );
 };
+
+/**
+ * An NPS Feedback Banner which will ask the user for feedback then open up the NPSHeader
+ * NOTE: requires the NPSHeader to be enabled
+ */
+const BannerFeedback = ({ ...props }: BannerFeedbackProps) => (
+  <SimpleFeatureFlag feature="npsHeader">
+    <FeatureOn>
+      <Banner {...props} />
+    </FeatureOn>
+  </SimpleFeatureFlag>
+);
 
 export default BannerFeedback;

@@ -2,20 +2,21 @@ import React from "react";
 
 import type { Workflow } from "../AppProvider/workflow";
 
-export type HeaderLinks = "NPS";
+export type HeaderItems = "NPS";
 
-export interface HeaderItems {
+export interface TriggeredHeaderData {
   [key: string]: {
     open: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
 interface ContextProps {
   workflows: Workflow[];
-  headerLink: (item: HeaderLinks, data?: any) => void;
-  headerItems: HeaderItems;
+  triggerHeaderItem?: (item: HeaderItems, open: boolean, data?: unknown) => void;
+  triggeredHeaderData?: TriggeredHeaderData;
 }
+
 const ApplicationContext = React.createContext<ContextProps>(undefined);
 
 const useAppContext = () => {

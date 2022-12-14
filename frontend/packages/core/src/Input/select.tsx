@@ -183,7 +183,7 @@ export interface SelectOption extends BaseSelectOptions {
 }
 
 export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
-  defaultOption?: number;
+  defaultOption?: number | string;
   helperText?: string;
   label?: string;
   name: string;
@@ -208,7 +208,24 @@ const Select = ({
     )
   );
 
-  const defaultIdx = defaultOption < flatOptions.length && defaultOption > 0 ? defaultOption : 0;
+  const calculateDefaultOption = () => {
+    let option = defaultOption;
+
+    // handle empty case
+    if (option === undefined || option === "") {
+      option = 0;
+    }
+
+    if (Number.isInteger(option)) {
+      return option < flatOptions.length && option > 0 ? option : 0;
+    }
+
+    // we're a string, lets look it up based on the value/label
+    return flatOptions.findIndex(opt => opt?.value === option || opt?.label === option) ?? 0;
+  };
+
+  const defaultIdx = calculateDefaultOption();
+
   const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
 
   React.useEffect(() => {

@@ -236,9 +236,7 @@ const NPSFeedback = ({
                   label="Choose a type of feedback you want to submit"
                   options={feedbackTypes}
                   onChange={setFeedbackType}
-                  defaultOption={
-                    defaultOption ? feedbackTypes.findIndex(v => defaultOption === v.label) : 0
-                  }
+                  defaultOption={defaultOption}
                 />
               </MuiGrid>
             )}
