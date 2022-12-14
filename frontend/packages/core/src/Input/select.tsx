@@ -225,9 +225,7 @@ const Select = ({
     return flatOptions.findIndex(opt => opt?.value === option || opt?.label === option) ?? 0;
   };
 
-  const defaultIdx = calculateDefaultOption();
-
-  const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
+  const [selectedIdx, setSelectedIdx] = React.useState(calculateDefaultOption());
 
   React.useEffect(() => {
     if (flatOptions.length !== 0) {
