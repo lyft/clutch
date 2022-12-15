@@ -10,6 +10,7 @@ export default {
   argTypes: {
     onChange: { action: "onChange event" },
     options: { control: { type: "object" } },
+    defaultOption: { type: "string" },
   },
 } as Meta;
 

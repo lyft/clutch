@@ -222,7 +222,9 @@ const Select = ({
     }
 
     // we're a string, lets look it up based on the value/label and default to 0 if none
-    return flatOptions.findIndex(opt => opt?.value === option || opt?.label === option) ?? 0;
+    const index = flatOptions?.findIndex(opt => opt?.value === option || opt?.label === option);
+
+    return index >= 0 ? index : 0;
   };
 
   const [selectedIdx, setSelectedIdx] = React.useState(calculateDefaultOption());
