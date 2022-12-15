@@ -3,7 +3,8 @@ import type { FieldValues, UseFormReturn } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import _ from "lodash";
 
-import { Select, TextField } from "../Input";
+import Select from "../Input/select";
+import TextField from "../Input/text-field";
 
 export interface ResolverChangeEvent {
   target: {
