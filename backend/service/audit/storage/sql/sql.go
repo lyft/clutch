@@ -165,16 +165,30 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 		endTime = *end
 	}
 
+	args := []interface{}{start, endTime}
 	if options != nil {
-		readEventsRangeStatement = fmt.Sprintf(`
-		%s
-		LIMIT $3 OFFSET $4
-		`, readEventsRangeStatement)
-
-		return c.query(ctx, readEventsRangeStatement, start, endTime, options.Limit, options.Offset)
+		if options.Limit != 0 && options.Offset != 0 {
+			readEventsRangeStatement = fmt.Sprintf(`
+			%s
+			LIMIT $3 OFFSET $4
+			`, readEventsRangeStatement)
+			args = append(args, options.Limit, options.Offset)
+		} else if options.Limit != 0 {
+			readEventsRangeStatement = fmt.Sprintf(`
+			%s
+			LIMIT $3
+			`, readEventsRangeStatement)
+			args = append(args, options.Limit)
+		} else if options.Offset != 0 {
+			readEventsRangeStatement = fmt.Sprintf(`
+			%s
+			OFFSET $4
+			`, readEventsRangeStatement)
+			args = append(args, options.Offset)
+		}
 	}
 
-	return c.query(ctx, readEventsRangeStatement, start, endTime)
+	return c.query(ctx, readEventsRangeStatement, args...)
 }
 
 func (c *client) ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error) {

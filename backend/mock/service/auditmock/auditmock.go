@@ -76,10 +76,19 @@ func (s *svc) ReadEvents(_ context.Context, start time.Time, end *time.Time, opt
 	}
 
 	if options != nil {
-		startIdx := options.Offset
-		endIdx := options.Offset + options.Limit
-		if endIdx > int64(len(s.events)) {
-			endIdx = int64(len(s.events))
+		if options.Offset > int64(len(events)) {
+			return []*auditv1.Event{}, nil
+		}
+		startIdx := int64(0)
+		endIdx := int64(len(events))
+		if options.Offset != 0 && options.Offset > 0 {
+			startIdx = options.Offset
+		}
+		if options.Limit != 0 {
+			endIdx = options.Offset + options.Limit
+			if endIdx > int64(len(events)) {
+				endIdx = int64(len(events))
+			}
 		}
 		return events[startIdx:endIdx], nil
 	}
