@@ -1,16 +1,12 @@
 package sql
 
 import (
-	"context"
 	"encoding/json"
 	"testing"
-	"time"
 
-	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/mock/service/dbmock"
@@ -80,34 +76,4 @@ func TestGetAdvisoryConn(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, conn)
 	assert.NotNil(t, c.advisoryLockConn)
-}
-
-func TestReadEvent(t *testing.T) {
-	dbm := dbmock.NewMockDB()
-	dbm.Register()
-
-	c := &client{
-		db: dbm.DB(),
-	}
-
-	dbm.Mock.ExpectExec("SELECT id, occurred_at, details FROM audit_events WHERE id = $1").WillReturnResult(
-		sqlmock.NewRows(string{"{id: 1}"}),
-	)
-
-	anyReq, _ := anypb.New(&ec2v1.ResizeAutoscalingGroupRequest{Size: &ec2v1.AutoscalingGroupSize{Min: 2, Max: 4, Desired: 3}})
-	writeEvent := &auditv1.RequestEvent{
-		RequestMetadata: &auditv1.RequestMetadata{Body: anyReq},
-	}
-	_, err := c.WriteRequestEvent(context.Background(), writeEvent)
-	assert.NoError(t, err)
-	_, err = c.WriteRequestEvent(context.Background(), writeEvent)
-	assert.NoError(t, err)
-	_, err = c.WriteRequestEvent(context.Background(), writeEvent)
-	assert.NoError(t, err)
-	time.Sleep(100 * time.Millisecond)
-
-	event, err := c.ReadEvent(context.Background(), 1)
-	assert.NoError(t, err)
-
-	assert.Equal(t, int64(1), event.Id)
 }
