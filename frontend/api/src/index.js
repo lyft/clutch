@@ -38342,8 +38342,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [namespace] ResizeHPARequest namespace
                  * @property {string|null} [name] ResizeHPARequest name
                  * @property {clutch.k8s.v1.ResizeHPARequest.ISizing|null} [sizing] ResizeHPARequest sizing
-                 * @property {clutch.k8s.v1.ResizeHPARequest.ISizing|null} [oldSizing] ResizeHPARequest oldSizing
-                 * @property {boolean|null} [resizeWarning] ResizeHPARequest resizeWarning
+                 * @property {clutch.k8s.v1.ResizeHPARequest.ISizing|null} [currentSizing] ResizeHPARequest currentSizing
                  */
 
                 /**
@@ -38402,20 +38401,12 @@ export const clutch = $root.clutch = (() => {
                 ResizeHPARequest.prototype.sizing = null;
 
                 /**
-                 * ResizeHPARequest oldSizing.
-                 * @member {clutch.k8s.v1.ResizeHPARequest.ISizing|null|undefined} oldSizing
+                 * ResizeHPARequest currentSizing.
+                 * @member {clutch.k8s.v1.ResizeHPARequest.ISizing|null|undefined} currentSizing
                  * @memberof clutch.k8s.v1.ResizeHPARequest
                  * @instance
                  */
-                ResizeHPARequest.prototype.oldSizing = null;
-
-                /**
-                 * ResizeHPARequest resizeWarning.
-                 * @member {boolean} resizeWarning
-                 * @memberof clutch.k8s.v1.ResizeHPARequest
-                 * @instance
-                 */
-                ResizeHPARequest.prototype.resizeWarning = false;
+                ResizeHPARequest.prototype.currentSizing = null;
 
                 /**
                  * Verifies a ResizeHPARequest message.
@@ -38445,14 +38436,11 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "sizing." + error;
                     }
-                    if (message.oldSizing != null && message.hasOwnProperty("oldSizing")) {
-                        let error = $root.clutch.k8s.v1.ResizeHPARequest.Sizing.verify(message.oldSizing);
+                    if (message.currentSizing != null && message.hasOwnProperty("currentSizing")) {
+                        let error = $root.clutch.k8s.v1.ResizeHPARequest.Sizing.verify(message.currentSizing);
                         if (error)
-                            return "oldSizing." + error;
+                            return "currentSizing." + error;
                     }
-                    if (message.resizeWarning != null && message.hasOwnProperty("resizeWarning"))
-                        if (typeof message.resizeWarning !== "boolean")
-                            return "resizeWarning: boolean expected";
                     return null;
                 };
 
@@ -38481,13 +38469,11 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.k8s.v1.ResizeHPARequest.sizing: object expected");
                         message.sizing = $root.clutch.k8s.v1.ResizeHPARequest.Sizing.fromObject(object.sizing);
                     }
-                    if (object.oldSizing != null) {
-                        if (typeof object.oldSizing !== "object")
-                            throw TypeError(".clutch.k8s.v1.ResizeHPARequest.oldSizing: object expected");
-                        message.oldSizing = $root.clutch.k8s.v1.ResizeHPARequest.Sizing.fromObject(object.oldSizing);
+                    if (object.currentSizing != null) {
+                        if (typeof object.currentSizing !== "object")
+                            throw TypeError(".clutch.k8s.v1.ResizeHPARequest.currentSizing: object expected");
+                        message.currentSizing = $root.clutch.k8s.v1.ResizeHPARequest.Sizing.fromObject(object.currentSizing);
                     }
-                    if (object.resizeWarning != null)
-                        message.resizeWarning = Boolean(object.resizeWarning);
                     return message;
                 };
 
@@ -38510,8 +38496,7 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = "";
                         object.name = "";
                         object.sizing = null;
-                        object.oldSizing = null;
-                        object.resizeWarning = false;
+                        object.currentSizing = null;
                     }
                     if (message.clientset != null && message.hasOwnProperty("clientset"))
                         object.clientset = message.clientset;
@@ -38523,10 +38508,8 @@ export const clutch = $root.clutch = (() => {
                         object.name = message.name;
                     if (message.sizing != null && message.hasOwnProperty("sizing"))
                         object.sizing = $root.clutch.k8s.v1.ResizeHPARequest.Sizing.toObject(message.sizing, options);
-                    if (message.oldSizing != null && message.hasOwnProperty("oldSizing"))
-                        object.oldSizing = $root.clutch.k8s.v1.ResizeHPARequest.Sizing.toObject(message.oldSizing, options);
-                    if (message.resizeWarning != null && message.hasOwnProperty("resizeWarning"))
-                        object.resizeWarning = message.resizeWarning;
+                    if (message.currentSizing != null && message.hasOwnProperty("currentSizing"))
+                        object.currentSizing = $root.clutch.k8s.v1.ResizeHPARequest.Sizing.toObject(message.currentSizing, options);
                     return object;
                 };
 

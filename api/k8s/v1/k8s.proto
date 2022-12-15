@@ -554,10 +554,7 @@ message ResizeHPARequest {
   }
   Sizing sizing = 5 [ (validate.rules).message = {required : true} ];
 
-  Sizing old_sizing = 6;
-
-  // A flag to add sirens to the audit message or not
-  bool resize_warning = 7;
+  Sizing current_sizing = 6;
 }
 
 message ResizeHPAResponse {
