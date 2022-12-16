@@ -5,10 +5,11 @@ import type {
   ButtonProps as MuiButtonProps,
   IconButtonProps as MuiIconButtonProps,
 } from "@mui/material";
-import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@mui/material";
+import { Button as MuiButton, IconButton as MuiIconButton } from "@mui/material";
 
 import { Tooltip } from "./Feedback/tooltip";
-import type { GridJustification } from "./grid";
+import type { GridJustification } from "./Layout";
+import { Grid } from "./Layout";
 import { styled } from "./Utils";
 
 interface ButtonPalette {

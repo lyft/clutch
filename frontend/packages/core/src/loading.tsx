@@ -1,6 +1,7 @@
 import React from "react";
-import { CircularProgress, Grid, Paper } from "@mui/material";
+import { CircularProgress, Paper } from "@mui/material";
 
+import { Grid } from "./Layout";
 import { styled } from "./Utils";
 
 const LoadingSpinner = styled(CircularProgress)`

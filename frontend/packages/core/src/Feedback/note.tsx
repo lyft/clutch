@@ -1,7 +1,8 @@
 import React from "react";
-import { Grid, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import type { AlertColor as Color } from "@mui/material/Alert";
 
+import { Grid } from "../Layout";
 import { Link } from "../link";
 import { styled } from "../Utils";
 

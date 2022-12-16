@@ -1,9 +1,10 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
-import { Box, Grid as MuiGrid } from "@mui/material";
+import { Box } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
+import { Grid } from "../../Layout";
 import { styled } from "../../Utils";
 import SearchField from "../search";
 
@@ -59,17 +60,17 @@ export default {
   ],
 } as Meta;
 
-const Grid = styled(MuiGrid)({
+const StyledGrid = styled(Grid)({
   height: "64px",
   backgroundColor: "#131C5F",
 });
 
 const Template = () => (
-  <Grid container alignItems="center" justifyContent="center">
+  <StyledGrid container alignItems="center" justifyContent="center">
     <Box>
       <SearchField />
     </Box>
-  </Grid>
+  </StyledGrid>
 );
 
 export const Primary = Template.bind({});

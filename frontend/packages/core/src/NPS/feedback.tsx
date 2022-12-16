@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
 import MuiSuccessIcon from "@mui/icons-material/CheckCircle";
-import { Grid as MuiGrid } from "@mui/material";
 import { debounce } from "lodash";
 import { v4 as uuid } from "uuid";
 
@@ -10,10 +9,11 @@ import { Button } from "../button";
 import { Alert } from "../Feedback";
 import type { SelectOption } from "../Input";
 import { Select, TextField } from "../Input";
+import { Grid } from "../Layout";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
-import { styled } from "../Utils";
 import { Typography } from "../typography";
+import { styled } from "../Utils";
 
 import EmojiRatings, { Rating } from "./emojiRatings";
 
@@ -198,18 +198,18 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
 
   return (
     <form onSubmit={submitFeedback}>
-      <MuiGrid
+      <Grid
         container
         direction="row"
         alignItems="center"
         style={{ padding: wizardOrigin ? "16px" : "24px" }}
       >
-        <MuiGrid item xs>
+        <Grid item xs>
           <Typography variant={wizardOrigin ? "subtitle3" : "subtitle2"}>
             {survey.prompt}
           </Typography>
-        </MuiGrid>
-        <MuiGrid
+        </Grid>
+        <Grid
           item
           xs={wizardOrigin ? 6 : 12}
           style={{ display: "flex", justifyContent: "space-around", paddingTop: "8px" }}
@@ -220,20 +220,20 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
             placement={wizardOrigin ? "top" : "bottom"}
             buttonSize={wizardOrigin ? "small" : "medium"}
           />
-        </MuiGrid>
+        </Grid>
         {selectedRating !== null && (
           <>
             {!wizardOrigin && feedbackTypes && (
-              <MuiGrid item xs={12} style={{ margin: "24px 0px 16px 0px" }}>
+              <Grid item xs={12} style={{ margin: "24px 0px 16px 0px" }}>
                 <Select
                   name="anytimeSelect"
                   label="Choose a type of feedback you want to submit"
                   options={feedbackTypes}
                   onChange={setFeedbackType}
                 />
-              </MuiGrid>
+              </Grid>
             )}
-            <MuiGrid item xs={12}>
+            <Grid item xs={12}>
               <StyledTextField
                 multiline
                 fullWidth
@@ -248,8 +248,8 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
                 }}
                 {...textFieldProps}
               />
-            </MuiGrid>
-            <MuiGrid
+            </Grid>
+            <Grid
               item
               xs={12}
               style={{
@@ -264,10 +264,10 @@ const NPSFeedback = ({ origin = "HEADER", onSubmit, feedbackTypes }: FeedbackOpt
                 variant={wizardOrigin ? "secondary" : "primary"}
                 disabled={error}
               />
-            </MuiGrid>
+            </Grid>
           </>
         )}
-      </MuiGrid>
+      </Grid>
     </form>
   );
 };

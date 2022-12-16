@@ -1,19 +1,19 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Grid as MuiGrid } from "@mui/material";
 
 import type { AppConfiguration } from "../AppProvider";
+import { Grid } from "../Layout";
 import Loadable from "../loading";
 import { styled } from "../Utils";
 
 import Drawer from "./drawer";
 import Header, { APP_BAR_HEIGHT } from "./header";
 
-const AppGrid = styled(MuiGrid)({
+const AppGrid = styled(Grid)({
   flex: 1,
 });
 
-const ContentGrid = styled(MuiGrid)({
+const ContentGrid = styled(Grid)({
   flex: 1,
   maxHeight: `calc(100vh - ${APP_BAR_HEIGHT})`,
 });

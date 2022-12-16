@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
+import { Grid } from "../../Layout";
 import { styled } from "../../Utils";
 import type { UserInformationProps } from "../user";
 import { UserInformation } from "../user";
@@ -11,15 +11,15 @@ export default {
   component: UserInformation,
 } as Meta;
 
-const Grid = styled(MuiGrid)({
+const StyledGrid = styled(Grid)({
   height: "64px",
   backgroundColor: "#131C5F",
 });
 
 const Template = (props: UserInformationProps) => (
-  <Grid container alignItems="center" justifyContent="center">
+  <StyledGrid container alignItems="center" justifyContent="center">
     <UserInformation {...props} />
-  </Grid>
+  </StyledGrid>
 );
 export const Primary = Template.bind({});
 Primary.args = {

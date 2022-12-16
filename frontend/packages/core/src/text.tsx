@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Fab, Grid } from "@mui/material";
+import { Fab } from "@mui/material";
 
 import { ClipboardButton } from "./button";
+import { Grid } from "./Layout";
 import { styled } from "./Utils";
 
 const CopyButtonContainer = styled(Grid)({

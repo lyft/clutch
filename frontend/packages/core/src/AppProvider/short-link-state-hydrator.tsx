@@ -1,5 +1,4 @@
 import React from "react";
-import { Grid } from "@mui/material";
 
 import { useShortLinkContext, WorkflowStorageContext } from "../Contexts";
 import { retrieveData as retrieveDataHelper } from "../Contexts/workflow-storage-context/helpers";
@@ -10,6 +9,7 @@ import type {
 } from "../Contexts/workflow-storage-context/types";
 import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
 import { Alert } from "../Feedback";
+import { Grid } from "../Layout";
 import { Link } from "../link";
 import { styled } from "../Utils";
 

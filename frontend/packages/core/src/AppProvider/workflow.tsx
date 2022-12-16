@@ -1,8 +1,9 @@
 import React from "react";
 import LaunchIcon from "@mui/icons-material/Launch";
-import { Alert, Grid, IconButton } from "@mui/material";
+import { Alert, IconButton } from "@mui/material";
 
 import { Dialog, DialogContent } from "../dialog";
+import { Grid } from "../Layout";
 import Code from "../text";
 
 export interface BaseWorkflowProps {

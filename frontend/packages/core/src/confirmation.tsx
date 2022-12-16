@@ -1,8 +1,8 @@
 import React from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Grid } from "@mui/material";
 
+import { Grid } from "./Layout";
 import { styled } from "./Utils";
 
 const IconContainer = styled(Grid)({

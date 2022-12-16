@@ -1,5 +1,4 @@
 import React from "react";
-import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import { userId } from "./AppLayout/user";
@@ -7,6 +6,7 @@ import { workflowsByTrending } from "./AppLayout/utils";
 import { MonsterGraphic } from "./Assets/Graphics";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
+import { Grid } from "./Layout";
 import { useNavigate } from "./navigation";
 import { styled } from "./Utils";
 

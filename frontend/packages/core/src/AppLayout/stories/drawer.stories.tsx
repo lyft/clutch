@@ -1,9 +1,9 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
-import { Grid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
+import { Grid } from "../../Layout";
 import Drawer from "../drawer";
 import Header from "../header";
 

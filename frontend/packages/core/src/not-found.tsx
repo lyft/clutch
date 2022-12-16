@@ -1,7 +1,8 @@
 import React from "react";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import { Grid, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
+import { Grid } from "./Layout";
 import { styled } from "./Utils";
 
 const Container = styled(Grid)({
