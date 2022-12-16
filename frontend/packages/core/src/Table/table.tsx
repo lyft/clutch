@@ -19,7 +19,7 @@ import {
 import type { Breakpoint } from "@mui/material/styles";
 
 import { Popper, PopperItem } from "../popper";
-import styled from "../styled";
+import { styled } from "../Utils";
 import { Typography } from "../typography";
 
 const StyledPaper = styled(MuiPaper)({

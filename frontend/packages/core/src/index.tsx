@@ -36,7 +36,7 @@ export { default as Paper } from "./paper";
 export { Popper, PopperItem } from "./popper";
 export { default as Resolver } from "./Resolver";
 export { Step, Stepper } from "./stepper";
-export { default as styled } from "./styled";
+export * from "./Utils";
 export { Tab, Tabs } from "./tab";
 export {
   AccordionRow,
@@ -53,8 +53,6 @@ export { default as TimeAgo } from "./timeago";
 export { Typography } from "./typography";
 export { default as ClutchApp } from "./AppProvider";
 
-export { css as EMOTION_CSS, keyframes as EMOTION_KEYFRAMES } from "@emotion/react";
-
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
 export type { CardHeaderSummaryProps } from "./card";
@@ -62,4 +60,3 @@ export type { GridJustification } from "./grid";
 export type { WorkflowRemoveDataFn, WorkflowRetrieveDataFn, WorkflowStoreDataFn } from "./Contexts";
 export type { ClutchError } from "./Network/errors";
 export type { TypographyProps } from "./typography";
-export type { StyledComponent } from "@emotion/styled";

@@ -2,7 +2,7 @@ import React from "react";
 import HelpIcon from "@mui/icons-material/Help";
 import { Popover, Typography } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const HelpIconContainer = styled("div")({
   display: "flex",

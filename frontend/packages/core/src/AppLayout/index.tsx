@@ -4,7 +4,7 @@ import { Grid as MuiGrid } from "@mui/material";
 
 import type { AppConfiguration } from "../AppProvider";
 import Loadable from "../loading";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import Drawer from "./drawer";
 import Header, { APP_BAR_HEIGHT } from "./header";

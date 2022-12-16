@@ -3,7 +3,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { IconButton as MuiIconButton, TableRow } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import type { TableRowProps } from "./table";
 import { TableCell } from "./table";

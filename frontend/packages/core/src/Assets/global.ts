@@ -1,4 +1,4 @@
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const XSMALL = 18;
 const SMALL = 24;

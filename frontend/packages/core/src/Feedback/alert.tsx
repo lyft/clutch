@@ -6,7 +6,7 @@ import MuiWarningIcon from "@mui/icons-material/Warning";
 import type { AlertProps as MuiAlertProps } from "@mui/lab";
 import { Alert as MuiAlert, AlertTitle as MuiAlertTitle, Grid } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const backgroundColors = {
   error: "linear-gradient(to right, #DB3615 8px, #FDE9E7 0%)",

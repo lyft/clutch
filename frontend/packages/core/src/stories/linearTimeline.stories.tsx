@@ -3,7 +3,7 @@ import type { Meta } from "@storybook/react";
 
 import LinearTimeline from "../Charts/linearTimeline";
 import type { LinearTimelineData } from "../Charts/types";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 export default {
   title: "Core/Charts/LinearTimeline",

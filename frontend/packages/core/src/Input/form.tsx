@@ -1,4 +1,4 @@
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const Form = styled("form")({
   width: "inherit",

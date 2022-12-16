@@ -3,7 +3,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { Grid } from "@mui/material";
 
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const IconContainer = styled(Grid)({
   paddingTop: "4px",

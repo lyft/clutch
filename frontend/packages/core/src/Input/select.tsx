@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { flatten } from "lodash";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const StyledFormHelperText = styled(MuiFormHelperText)({
   alignItems: "center",

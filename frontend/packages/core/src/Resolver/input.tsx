@@ -16,7 +16,7 @@ import { Alert } from "../Feedback";
 import TextField from "../Input/text-field";
 import { useSearchParams } from "../navigation";
 import { client } from "../Network";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";

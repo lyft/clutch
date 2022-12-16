@@ -19,7 +19,7 @@ import { object } from "yup";
 import { useWizardContext } from "../Contexts";
 import { Tooltip } from "../Feedback/tooltip";
 import TextField from "../Input/text-field";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 interface RowData {
   input?: {

@@ -6,7 +6,7 @@ import { IconButton } from "@mui/material";
 import { Link } from "../../link";
 import type { ClutchError } from "../../Network/errors";
 import { isHelpDetails } from "../../Network/errors";
-import styled from "../../styled";
+import { styled } from "../../Utils";
 import { Alert } from "../alert";
 
 import ErrorDetails from "./details";

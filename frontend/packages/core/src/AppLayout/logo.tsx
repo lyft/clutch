@@ -1,7 +1,7 @@
 import React from "react";
 import { keyframes } from "@emotion/react";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const rotate = keyframes`
   from {

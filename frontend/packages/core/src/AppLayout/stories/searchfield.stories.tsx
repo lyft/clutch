@@ -4,7 +4,7 @@ import { Box, Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
-import styled from "../../styled";
+import { styled } from "../../Utils";
 import SearchField from "../search";
 
 export default {

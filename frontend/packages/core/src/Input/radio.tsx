@@ -2,7 +2,7 @@ import * as React from "react";
 import type { RadioProps as MuiRadioProps } from "@mui/material";
 import { Radio as MuiRadio } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const StyledRadio = styled(MuiRadio)<{ checked: RadioProps["selected"] }>(
   {

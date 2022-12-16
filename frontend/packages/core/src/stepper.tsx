@@ -8,7 +8,7 @@ import {
   Stepper as MuiStepper,
 } from "@mui/material";
 
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const StepContainer = styled("div")({
   margin: "0px 2px 30px 2px",

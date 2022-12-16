@@ -13,7 +13,7 @@ import type { SpacingProps as MuiSpacingProps } from "@mui/system";
 import { spacing } from "@mui/system";
 
 import { IconButton } from "./button";
-import styled from "./styled";
+import { styled } from "./Utils";
 import { Typography, TypographyProps } from "./typography";
 
 // TODO: seperate out the different card parts into various files

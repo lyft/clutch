@@ -2,7 +2,7 @@ import * as React from "react";
 import { Fab, Grid } from "@mui/material";
 
 import { ClipboardButton } from "./button";
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const CopyButtonContainer = styled(Grid)({
   marginLeft: "7px",

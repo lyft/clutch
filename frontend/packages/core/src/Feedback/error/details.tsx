@@ -13,7 +13,7 @@ import {
 import type { ClutchError } from "../../Network/errors";
 import { isClutchErrorDetails } from "../../Network/errors";
 import { grpcCodeToText } from "../../Network/grpc";
-import styled from "../../styled";
+import { styled } from "../../Utils";
 
 import ErrorDetailsDialog from "./dialog";
 

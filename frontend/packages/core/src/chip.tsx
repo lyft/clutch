@@ -2,7 +2,7 @@ import * as React from "react";
 import type { ChipProps as MuiChipProps } from "@mui/material";
 import { Chip as MuiChip } from "@mui/material";
 
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const CHIP_VARIANTS = [
   "error",

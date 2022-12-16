@@ -7,7 +7,7 @@ import type { IconSizeVariant } from "../Assets/global";
 import type { IconButtonSize } from "../button";
 import { IconButton } from "../button";
 import { Tooltip } from "../Feedback";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 export type Rating = {
   emoji: string;

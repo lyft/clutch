@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import _ from "lodash";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const KEY_ENTER = 13;
 

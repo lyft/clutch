@@ -11,7 +11,7 @@ import {
   Popper as MuiPopper,
 } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const StyledNotificationsIcon = styled(IconButton)({
   color: "#ffffff",

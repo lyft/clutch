@@ -2,7 +2,7 @@ import * as React from "react";
 import type { LinkProps as MuiLinkProps } from "@mui/material";
 import { Link as MuiLink } from "@mui/material";
 
-import styled from "./styled";
+import { styled } from "./Utils";
 
 type TextTransform = "none" | "capitalize" | "uppercase" | "lowercase" | "initial" | "inherit";
 

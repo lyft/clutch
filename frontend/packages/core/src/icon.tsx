@@ -3,7 +3,7 @@ import FiberManualRecordTwoToneIcon from "@mui/icons-material/FiberManualRecordT
 import { Grid } from "@mui/material";
 
 import type { GridJustification } from "./grid";
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const StyledStatusIcon = styled(FiberManualRecordTwoToneIcon)`
   ${({ ...props }) => `

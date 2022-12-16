@@ -12,7 +12,7 @@ import type { SelectOption } from "../Input";
 import { Select, TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
-import styled from "../styled";
+import { styled } from "../Utils";
 import { Typography } from "../typography";
 
 import EmojiRatings, { Rating } from "./emojiRatings";

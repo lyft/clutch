@@ -13,7 +13,7 @@ import type { Workflow } from "../AppProvider/workflow";
 import { useAppContext } from "../Contexts";
 import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import { routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
 

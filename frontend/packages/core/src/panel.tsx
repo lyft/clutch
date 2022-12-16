@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const FullWidthExpansionPanel = styled(MuiExpansionPanel)`
   width: 100%;

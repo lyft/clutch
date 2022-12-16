@@ -19,7 +19,7 @@ import { Toast } from "../Feedback";
 import { TextField } from "../Input";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import { workflowByRoute } from "./utils";
 

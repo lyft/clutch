@@ -11,7 +11,7 @@ import type {
 import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
 import { Alert } from "../Feedback";
 import { Link } from "../link";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import { generateShortLinkRoute } from "./short-link-proxy";
 

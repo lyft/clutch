@@ -5,7 +5,7 @@ import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@mui/materi
 import type { AppConfiguration } from "../AppProvider";
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
 import { NPSHeader } from "../NPS";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import Logo from "./logo";
 import Notifications from "./notifications";

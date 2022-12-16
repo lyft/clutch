@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const HorizontalRuleBase = ({ children, ...props }: HorizontalRuleProps) => (
   <div {...props}>

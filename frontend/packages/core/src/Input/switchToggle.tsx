@@ -8,7 +8,7 @@ import * as React from "react";
 import type { SwitchProps as MuiSwitchProps } from "@mui/material";
 import { Switch as MuiSwitch } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const SwitchContainer = styled(MuiSwitch)({
   ".MuiSwitch-switchBase": {

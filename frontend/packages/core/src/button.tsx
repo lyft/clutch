@@ -9,7 +9,7 @@ import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@mui/mat
 
 import { Tooltip } from "./Feedback/tooltip";
 import type { GridJustification } from "./grid";
-import styled from "./styled";
+import { styled } from "./Utils";
 
 interface ButtonPalette {
   /** A palette of background colors used for the various button states. */

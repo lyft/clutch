@@ -1,4 +1,4 @@
-import styled from "../../styled";
+import { styled } from "../../Utils";
 
 const StyledSvg: React.ElementType = styled("svg")((props: { hoverFill: string }) => ({
   path: {

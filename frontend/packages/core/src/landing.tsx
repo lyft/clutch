@@ -8,7 +8,7 @@ import { MonsterGraphic } from "./Assets/Graphics";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const StyledLanding = styled("div")({
   backgroundColor: "#f9f9fe",

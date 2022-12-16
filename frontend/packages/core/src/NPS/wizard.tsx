@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import NPSFeedback from "./feedback";
 

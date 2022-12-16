@@ -6,7 +6,7 @@ import {
   RadioGroup as MuiRadioGroup,
 } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import Radio from "./radio";
 

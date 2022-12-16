@@ -2,7 +2,7 @@ import * as React from "react";
 import { Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
-import styled from "../../styled";
+import { styled } from "../../Utils";
 import type { UserInformationProps } from "../user";
 import { UserInformation } from "../user";
 

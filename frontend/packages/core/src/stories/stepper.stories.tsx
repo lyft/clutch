@@ -4,7 +4,7 @@ import type { Meta } from "@storybook/react";
 import { Button, ButtonGroup } from "../button";
 import type { StepperProps } from "../stepper";
 import { Step, Stepper } from "../stepper";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const Text = styled("div")({
   textAlign: "center",

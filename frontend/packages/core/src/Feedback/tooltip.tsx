@@ -2,7 +2,7 @@ import * as React from "react";
 import type { TooltipProps as MuiTooltipProps } from "@mui/material";
 import { Tooltip as MuiTooltip } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const BaseTooltip = ({ className, ...props }: MuiTooltipProps) => (
   <MuiTooltip classes={{ tooltip: className }} {...props} />

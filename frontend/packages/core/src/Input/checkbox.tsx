@@ -10,7 +10,7 @@ import {
   Grid,
 } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const FormControl = styled(MuiFormControl)({
   width: "75%",

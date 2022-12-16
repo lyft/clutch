@@ -2,7 +2,7 @@ import * as React from "react";
 import type { ToggleButtonGroupProps as MuiToggleButtonGroupProps } from "@mui/lab";
 import { ToggleButtonGroup as MuiToggleButtonGroup } from "@mui/material";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 export { ToggleButton } from "@mui/material";
 

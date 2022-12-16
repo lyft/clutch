@@ -9,7 +9,7 @@ import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 import { useSearchParams } from "../navigation";
 import type { ClutchError } from "../Network/errors";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";
 import { QueryResolver, SchemaResolver } from "./input";

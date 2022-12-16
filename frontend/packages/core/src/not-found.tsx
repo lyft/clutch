@@ -2,7 +2,7 @@ import React from "react";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { Grid, Typography } from "@mui/material";
 
-import styled from "./styled";
+import { styled } from "./Utils";
 
 const Container = styled(Grid)`
   minheight: 80vh;

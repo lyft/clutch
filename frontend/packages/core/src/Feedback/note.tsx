@@ -3,7 +3,7 @@ import { Grid, Paper } from "@mui/material";
 import type { AlertColor as Color } from "@mui/material/Alert";
 
 import { Link } from "../link";
-import styled from "../styled";
+import { styled } from "../Utils";
 
 import { Alert } from "./alert";
 

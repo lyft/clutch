@@ -15,7 +15,7 @@ import {
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
-import styled from "../styled";
+import { styled } from "../Utils";
 
 const UserPhoto = styled(IconButton)({
   padding: "12px",
