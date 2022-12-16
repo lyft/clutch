@@ -18,9 +18,8 @@ import {
 } from "@mui/material";
 import type { Breakpoint } from "@mui/material/styles";
 
-import { Popper, PopperItem } from "../popper";
-import { styled } from "../Utils";
 import { Typography } from "../typography";
+import { Popper, PopperItem, styled } from "../Utils";
 
 const StyledPaper = styled(MuiPaper)({
   border: "1px solid #E7E7EA",

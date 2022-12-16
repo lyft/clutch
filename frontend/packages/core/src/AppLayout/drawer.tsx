@@ -11,9 +11,8 @@ import _ from "lodash";
 
 import type { Workflow } from "../AppProvider/workflow";
 import { useAppContext } from "../Contexts";
-import type { PopperItemProps } from "../popper";
-import { Popper, PopperItem } from "../popper";
-import { styled } from "../Utils";
+import { Popper, PopperItem, styled } from "../Utils";
+import type { PopperItemProps } from "../Utils/popper";
 
 import { routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
 

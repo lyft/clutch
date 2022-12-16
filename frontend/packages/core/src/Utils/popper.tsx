@@ -14,7 +14,7 @@ import {
   Popper as MuiPopper,
 } from "@mui/material";
 
-import { styled } from "./Utils";
+import styled from "./styled";
 
 const StyledPopper = styled(MuiPopper)({
   zIndex: 1201,
