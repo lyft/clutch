@@ -4,9 +4,9 @@ import { Grid, Typography } from "@mui/material";
 
 import { styled } from "./Utils";
 
-const Container = styled(Grid)`
-  minheight: 80vh;
-`;
+const Container = styled(Grid)({
+  minHeight: "80vh",
+});
 
 const IconContainer = styled(Grid)({
   color: "#02acbe",
@@ -14,13 +14,7 @@ const IconContainer = styled(Grid)({
 });
 
 const NotFound: React.FC<{}> = () => (
-  <Container
-    container
-    direction="column"
-    justifyContent="center"
-    alignItems="center"
-    style={{ minHeight: "80vh" }}
-  >
+  <Container container direction="column" justifyContent="center" alignItems="center">
     <IconContainer item>
       <ThumbDownIcon fontSize="inherit" />
     </IconContainer>
