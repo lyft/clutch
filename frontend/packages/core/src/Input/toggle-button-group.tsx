@@ -34,7 +34,7 @@ const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)(({ size }) => ({
     "&.MuiToggleButton-root:active:not(.Mui-selected)": {
       background: "#0D10302E",
     },
-    "&.Mui-selected": {
+    "&.Mui-selected, &.Mui-selected:hover": {
       background: "#3548D4",
       color: "#FFFFFF",
     },
