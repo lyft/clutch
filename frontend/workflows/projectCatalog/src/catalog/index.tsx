@@ -5,12 +5,12 @@ import {
   Grid,
   IconButton,
   Paper,
+  styled,
   TextField,
   Tooltip,
   Typography,
   useNavigate,
 } from "@clutch-sh/core";
-import styled from "@emotion/styled";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, CircularProgress } from "@mui/material";
@@ -55,7 +55,7 @@ const autoComplete = async (search: string): Promise<any> => {
   return { results: response?.data?.results || [] };
 };
 
-const Form = styled.form({});
+const Form = styled("form")({});
 
 const Catalog: React.FC<WorkflowProps> = () => {
   const navigate = useNavigate();

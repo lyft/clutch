@@ -26,7 +26,6 @@
     "@clutch-sh/core": "^2.0.0-beta",
     "@clutch-sh/data-layout": "^2.0.0-beta",
     "@clutch-sh/wizard": "^2.0.0-beta",
-    "@emotion/styled": "^11.0.0",
     "@mui/material": "^5.8.5",
     "lodash": "^4.17.21",
     "react": "^17.0.2",

@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
@@ -9,8 +8,9 @@ import { MonsterGraphic } from "./Assets/Graphics";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
+import styled from "./styled";
 
-const StyledLanding = styled.div({
+const StyledLanding = styled("div")({
   backgroundColor: "#f9f9fe",
   display: "flex",
   flexDirection: "column",

@@ -1,12 +1,12 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import type { Meta } from "@storybook/react";
 
 import { Button, ButtonGroup } from "../button";
 import type { StepperProps } from "../stepper";
 import { Step, Stepper } from "../stepper";
+import styled from "../styled";
 
-const Text = styled.div({
+const Text = styled("div")({
   textAlign: "center",
 });
 

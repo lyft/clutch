@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
+import styled from "../styled";
 
-const Form = styled.form({
+const Form = styled("form")({
   width: "inherit",
   "> *": {
     margin: "8px 0",
@@ -10,7 +10,7 @@ const Form = styled.form({
   },
 });
 
-const FormRow = styled.div({
+const FormRow = styled("div")({
   display: "flex",
   "> *": {
     margin: "0 8px",

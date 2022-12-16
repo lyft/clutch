@@ -1,10 +1,10 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
-import styled from "@emotion/styled";
 import { Box, Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
+import styled from "../../styled";
 import SearchField from "../search";
 
 export default {

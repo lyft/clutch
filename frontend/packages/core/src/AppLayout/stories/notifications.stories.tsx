@@ -1,8 +1,8 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
+import styled from "../../styled";
 import type { NotificationsProp } from "../notifications";
 import Notifications from "../notifications";
 
