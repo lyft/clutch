@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   client,
   Confirmation,
+  Grid,
   MetadataTable,
   NotePanel,
   Resolver,
@@ -17,7 +18,6 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { Grid } from "@mui/material";
 import _ from "lodash";
 
 import type { ResolverChild, WorkflowProps } from "./index";
