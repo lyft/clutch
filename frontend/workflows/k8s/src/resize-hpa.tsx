@@ -172,10 +172,10 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
           { name: "Name", value: hpa.name },
           { name: "Namespace", value: hpa.namespace },
           { name: "Cluster", value: hpa.cluster },
+          { name: "Old Min Size", value: currentHpaData.sizing.minReplicas },
+          { name: "Old Max Size", value: currentHpaData.sizing.maxReplicas },
           { name: "New Min Size", value: hpa.sizing.minReplicas },
           { name: "New Max Size", value: hpa.sizing.maxReplicas },
-          { name: "Current Min Size", value: currentHpaData.sizing.minReplicas },
-          { name: "Current Max Size", value: currentHpaData.sizing.maxReplicas },
         ]}
       />
       <NotePanel notes={notes} />
