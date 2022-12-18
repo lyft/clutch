@@ -44,7 +44,7 @@ const HPADetails: React.FC<WizardChild> = () => {
     hpaData.updateData(key, value);
   };
 
-  const oldHpaData = useDataLayout("oldHpaData");
+  const currentHpaData = useDataLayout("currentHpaData");
 
   const metadataAnnotations = [];
   const metadataLabels = [];
@@ -64,7 +64,7 @@ const HPADetails: React.FC<WizardChild> = () => {
 
     // save the original values of min and max replicas
     if (hpa) {
-      oldHpaData.assign(hpa);
+      currentHpaData.assign(hpa);
     }
   }, []);
 
@@ -140,12 +140,12 @@ const HPADetails: React.FC<WizardChild> = () => {
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const hpa = useDataLayout("hpaData").displayValue() as IClutch.k8s.v1.HPA;
   const resizeData = useDataLayout("resizeData");
-  const oldHpaData = useDataLayout("oldHpaData").displayValue() as IClutch.k8s.v1.HPA;
+  const currentHpaData = useDataLayout("currentHpaData").displayValue() as IClutch.k8s.v1.HPA;
 
   React.useEffect(() => {
     // if new values are either 50% bigger or smaller than old values, add a warning note
     const alertLevel = 0.5;
-    const { maxReplicas, minReplicas } = oldHpaData.sizing;
+    const { maxReplicas, minReplicas } = currentHpaData.sizing;
     const maxUpperBound = (1 + alertLevel) * maxReplicas;
     const maxLowerBound = (1 - alertLevel) * maxReplicas;
     const minUpperBound = (1 + alertLevel) * minReplicas;
@@ -174,8 +174,8 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
           { name: "Cluster", value: hpa.cluster },
           { name: "New Min Size", value: hpa.sizing.minReplicas },
           { name: "New Max Size", value: hpa.sizing.maxReplicas },
-          { name: "Old Min Size", value: oldHpaData.sizing.minReplicas },
-          { name: "Old Max Size", value: oldHpaData.sizing.maxReplicas },
+          { name: "Current Min Size", value: currentHpaData.sizing.minReplicas },
+          { name: "Current Max Size", value: currentHpaData.sizing.maxReplicas },
         ]}
       />
       <NotePanel notes={notes} />
@@ -187,7 +187,7 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   const dataLayout = {
     hpaData: {},
     inputData: {},
-    oldHpaData: {},
+    currentHpaData: {},
     resizeData: {
       deps: ["hpaData", "inputData"],
       hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: { clientset: string }) => {
