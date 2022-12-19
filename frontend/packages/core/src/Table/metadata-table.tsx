@@ -34,6 +34,7 @@ interface RowData {
   name: string;
   value: unknown;
   disabledFieldTooltip?: string;
+  truncateWithEllipsis?: boolean;
 }
 
 interface IdentifiableRowData extends RowData {
@@ -160,6 +161,7 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
       name={data.name}
       defaultValue={data.value}
       label={data.textFieldLabels?.disabledField}
+      truncateWithEllipsis={data.truncateWithEllipsis}
     />
   );
 
@@ -187,6 +189,7 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
             helperText={error?.message || ""}
             error={!!error || false}
             formRegistration={validation.register}
+            truncateWithEllipsis={data.truncateWithEllipsis}
           />
         </Grid>
       </TableCell>

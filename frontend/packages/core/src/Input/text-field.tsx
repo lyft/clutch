@@ -44,7 +44,9 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 });
 
-const StyledTextField = styled(BaseTextField)({
+interface StyledTextFieldProps extends Pick<TextFieldProps, "truncateWithEllipsis"> {}
+
+const StyledTextField = styled(BaseTextField)(({ truncateWithEllipsis }: StyledTextFieldProps) => ({
   "--error-color": "#DB3615",
   height: "unset",
 
@@ -81,6 +83,9 @@ const StyledTextField = styled(BaseTextField)({
     },
     "&.Mui-disabled fieldset": {
       backgroundColor: "rgba(13, 16, 48, 0.12)",
+    },
+    "& .MuiInputBase-input": {
+      textOverflow: truncateWithEllipsis ? "ellipsis" : "initial",
     },
     "> .MuiInputBase-input": {
       "--input-padding": "14px 16px",
@@ -121,7 +126,7 @@ const StyledTextField = styled(BaseTextField)({
       marginRight: "4px",
     },
   },
-});
+}));
 
 // popper containing the search result options
 const Popper = styled(MuiPopper)({
@@ -209,6 +214,7 @@ export interface TextFieldProps
   onReturn?: () => void;
   autocompleteCallback?: (v: string) => Promise<{ results: { id?: string; label: string }[] }>;
   formRegistration?: UseFormRegister<FieldValues>;
+  truncateWithEllipsis?: boolean;
 }
 
 const TextFieldRef = (
@@ -227,6 +233,7 @@ const TextFieldRef = (
     required,
     formRegistration,
     inputRef,
+    truncateWithEllipsis,
     ...props
   }: TextFieldProps,
   ref
@@ -375,6 +382,7 @@ const TextFieldRef = (
       onChange={onChange}
       {...props}
       {...{ ref }}
+      truncateWithEllipsis={truncateWithEllipsis}
     />
   );
 };
