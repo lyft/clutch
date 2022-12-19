@@ -167,19 +167,20 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 
 	args := []interface{}{start, endTime}
 	if options != nil {
-		if options.Limit != 0 && options.Offset != 0 {
+		switch {
+		case options.Limit != 0 && options.Offset != 0:
 			readEventsRangeStatement = fmt.Sprintf(`
 			%s
 			LIMIT $3 OFFSET $4
 			`, readEventsRangeStatement)
 			args = append(args, options.Limit, options.Offset)
-		} else if options.Limit != 0 {
+		case options.Limit != 0:
 			readEventsRangeStatement = fmt.Sprintf(`
 			%s
 			LIMIT $3
 			`, readEventsRangeStatement)
 			args = append(args, options.Limit)
-		} else if options.Offset != 0 {
+		case options.Offset != 0:
 			readEventsRangeStatement = fmt.Sprintf(`
 			%s
 			OFFSET $4
