@@ -2,20 +2,20 @@ import * as React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { CheckboxPanelProps } from "../checkbox";
-import { CheckboxPanel } from "../checkbox";
+import { CheckboxPanel as CheckboxPanelComponent } from "../checkbox";
 
 export default {
   title: "Core/Input/CheckboxPanel",
-  component: CheckboxPanel,
+  component: CheckboxPanelComponent,
   argTypes: {
     onChange: { action: "onChange event" },
   },
 } as Meta;
 
-const Template = (props: CheckboxPanelProps) => <CheckboxPanel {...props} />;
+const Template = (props: CheckboxPanelProps) => <CheckboxPanelComponent {...props} />;
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const CheckboxPanel = Template.bind({});
+CheckboxPanel.args = {
   header: "Select all that apply:",
   options: {
     "Option 1": false,
