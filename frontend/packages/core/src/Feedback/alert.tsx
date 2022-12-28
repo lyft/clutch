@@ -8,6 +8,8 @@ import { Alert as MuiAlert, AlertTitle as MuiAlertTitle, Grid } from "@mui/mater
 
 import styled from "../styled";
 
+export const SEVERITIES = ["error", "info", "success", "warning"];
+
 const backgroundColors = {
   error: "linear-gradient(to right, #DB3615 8px, #FDE9E7 0%)",
   info: "linear-gradient(to right, #3548D4 8px, #EBEDFB 0%)",
