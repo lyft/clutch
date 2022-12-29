@@ -1,7 +1,8 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import { Alert as AlertComponent, AlertProps, SEVERITIES } from "../alert";
+import { SEVERITIES } from "../../Assets/global";
+import { Alert as AlertComponent, AlertProps } from "../alert";
 
 export default {
   title: "Core/Feedback/Alert",
