@@ -32,3 +32,5 @@ export const StyledSVG = styled.svg<{ size?: IconSizeVariant }>(props => ({
 export interface SVGProps extends React.SVGProps<SVGSVGElement> {
   size?: IconSizeVariant;
 }
+
+export const SEVERITIES = ["error", "info", "success", "warning"];

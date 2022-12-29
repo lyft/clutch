@@ -1,32 +1,26 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 
+import { SEVERITIES } from "../../Assets/global";
 import type { NoteProps } from "../note";
-import { Note } from "../note";
+import { Note as NoteComponent } from "../note";
 
 export default {
-  title: "Core/Feedback/Note",
-  component: Note,
+  title: "Core/Feedback/Single",
+  component: NoteComponent,
+  argTypes: {
+    severity: {
+      options: SEVERITIES,
+      control: {
+        type: "select",
+      },
+    },
+  },
 } as Meta;
 
-const Template = (props: NoteProps) => <Note {...props}>This is a note</Note>;
+const Template = (props: NoteProps) => <NoteComponent {...props}>This is a note</NoteComponent>;
 
-export const Success = Template.bind({});
-Success.args = {
+export const Single = Template.bind({});
+Single.args = {
   severity: "success",
-};
-
-export const Error = Template.bind({});
-Error.args = {
-  severity: "error",
-};
-
-export const Info = Template.bind({});
-Info.args = {
-  severity: "info",
-};
-
-export const Warning = Template.bind({});
-Warning.args = {
-  severity: "warning",
 };
