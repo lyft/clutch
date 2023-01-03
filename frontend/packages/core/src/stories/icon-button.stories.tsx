@@ -2,8 +2,8 @@ import * as React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import type { Meta } from "@storybook/react";
 
-import type { IconButtonProps } from "../button";
-import { ICON_BUTTON_VARIANTS, IconButton } from "../button";
+import type { IconButtonProps } from "../Input/button";
+import { ICON_BUTTON_VARIANTS, IconButton } from "../Input/button";
 
 export default {
   title: "Core/Buttons/Icon Button",

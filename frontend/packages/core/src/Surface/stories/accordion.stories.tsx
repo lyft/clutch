@@ -1,9 +1,9 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
+import { Button } from "../../Input";
 import type { AccordionProps } from "../accordion";
 import { Accordion, AccordionActions, AccordionDetails, AccordionDivider } from "../accordion";
-import { Button } from "../button";
 
 export default {
   title: "Core/Accordion/Accordion",

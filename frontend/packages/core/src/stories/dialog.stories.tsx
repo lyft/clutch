@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
-import { Button } from "../button";
 import type { DialogProps } from "../dialog";
 import { Dialog, DialogActions, DialogContent } from "../dialog";
+import { Button } from "../Input";
 import TextField from "../Input/text-field";
 
 export default {

@@ -11,7 +11,7 @@ import {
   useControlled,
 } from "@mui/material";
 
-import { styled } from "./Utils";
+import { styled } from "../Utils";
 
 const StyledAccordion = styled(MuiAccordion)({
   borderRadius: "4px",

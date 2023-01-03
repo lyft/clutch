@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 
-import { AccordionGroup } from "../accordion";
+import { AccordionGroup } from "../Surface/accordion";
 import { useWizardContext } from "../Contexts";
 import type { NoteConfig } from "../Feedback";
 import { Error, NotePanel } from "../Feedback";

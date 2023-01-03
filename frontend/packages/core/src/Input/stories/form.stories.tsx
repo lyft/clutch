@@ -2,9 +2,9 @@ import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
-import { Button } from "../../button";
 import { Form, FormRow } from "../form";
 import TextField from "../text-field";
+import { Button } from "..";
 
 export default {
   title: "Core/Input/Form",

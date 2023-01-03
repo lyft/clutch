@@ -4,9 +4,9 @@ import { capitalize, isInteger } from "lodash";
 
 import Emoji, { EmojiType } from "../Assets/emojis";
 import type { IconSizeVariant } from "../Assets/global";
-import type { IconButtonSize } from "../button";
-import { IconButton } from "../button";
 import { Tooltip } from "../Feedback";
+import { IconButton } from "../Input";
+import type { IconButtonSize } from "../Input/button";
 import { styled } from "../Utils";
 
 export type Rating = {

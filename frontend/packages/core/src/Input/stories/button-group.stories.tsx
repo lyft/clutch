@@ -3,7 +3,7 @@ import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
 import type { ButtonGroupProps, ButtonProps } from "../button";
-import { Button, ButtonGroup } from "../button";
+import { Button, ButtonGroup } from "..";
 
 export default {
   title: "Core/Buttons/Button Group",

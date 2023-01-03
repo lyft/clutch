@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import { userId } from "./AppLayout/user";
 import { workflowsByTrending } from "./AppLayout/utils";
 import { MonsterGraphic } from "./Assets/Graphics";
-import { LandingCard } from "./card";
+import { LandingCard } from "./Surface/card";
 import { useAppContext } from "./Contexts";
 import { Grid } from "./Layout";
 import { useNavigate } from "./navigation";

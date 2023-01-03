@@ -10,9 +10,9 @@ import {
 import { get, sortBy } from "lodash";
 
 import type { Workflow } from "../AppProvider/workflow";
-import { IconButton } from "../button";
 import { useAppContext } from "../Contexts";
 import type { SelectOption } from "../Input";
+import { IconButton } from "../Input";
 import { styled } from "../Utils";
 
 import NPSFeedback from "./feedback";

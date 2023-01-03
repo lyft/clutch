@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Fab } from "@mui/material";
 
-import { ClipboardButton } from "./button";
+import { ClipboardButton } from "./Input";
 import { Grid } from "./Layout";
 import { styled } from "./Utils";
 
