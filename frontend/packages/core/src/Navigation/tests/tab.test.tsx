@@ -1,7 +1,7 @@
 import React from "react";
 import { mount, shallow } from "enzyme";
 
-import { Tab, Tabs } from "../../tab";
+import { Tab, Tabs } from "../tab";
 
 describe("Tabs component", () => {
   describe("with a value set", () => {

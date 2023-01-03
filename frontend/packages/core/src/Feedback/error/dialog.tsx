@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Dialog, DialogContent } from "../dialog";
-import type { ClutchError } from "../../Network/errors";
 import Code from "../../DataDisplay/text";
+import type { ClutchError } from "../../Network/errors";
+import { Dialog, DialogContent } from "../dialog";
 
 interface ErrorDetailsDialogProps {
   error: ClutchError;
