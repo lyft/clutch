@@ -25,7 +25,6 @@
     "@clutch-sh/core": "^2.0.0-beta",
     "@clutch-sh/data-layout": "^2.0.0-beta",
     "@clutch-sh/wizard": "^2.0.0-beta",
-    "@emotion/styled": "^11.0.0",
     "@hookform/resolvers": "2.8.8",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",

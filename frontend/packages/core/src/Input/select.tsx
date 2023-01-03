@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import ErrorIcon from "@mui/icons-material/Error";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import type { SelectProps as MuiSelectProps } from "@mui/material";
@@ -12,6 +11,8 @@ import {
   Select as MuiSelect,
 } from "@mui/material";
 import { flatten } from "lodash";
+
+import styled from "../styled";
 
 const StyledFormHelperText = styled(MuiFormHelperText)({
   alignItems: "center",

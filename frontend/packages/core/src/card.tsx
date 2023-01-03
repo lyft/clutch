@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {
@@ -14,6 +13,7 @@ import type { SpacingProps as MuiSpacingProps } from "@mui/system";
 import { spacing } from "@mui/system";
 
 import { IconButton } from "./button";
+import styled from "./styled";
 import { Typography, TypographyProps } from "./typography";
 
 // TODO: seperate out the different card parts into various files
@@ -29,7 +29,7 @@ export interface CardProps {
 
 const Card = ({ children, ...props }: CardProps) => <StyledCard {...props}>{children}</StyledCard>;
 
-const StyledCardHeaderContainer = styled.div({
+const StyledCardHeaderContainer = styled("div")({
   background: "#EBEDFB",
 });
 
@@ -41,7 +41,7 @@ const StyledCardHeader = styled(Grid)({
   },
 });
 
-const StyledCardHeaderAvatarContainer = styled.div({
+const StyledCardHeaderAvatarContainer = styled("div")({
   padding: "8px",
   height: "32px",
   width: "32px",
@@ -50,7 +50,7 @@ const StyledCardHeaderAvatarContainer = styled.div({
 });
 
 // TODO: use material ui avatar component and implement figma design
-const StyledCardHeaderAvatar = styled.div({
+const StyledCardHeaderAvatar = styled("div")({
   width: "24px",
   height: "24px",
   fontSize: "18px",
@@ -116,11 +116,11 @@ const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHead
 // We can add more to this list as use cases arise
 interface SpacingProps extends Pick<MuiSpacingProps, "padding" | "p"> {}
 
-const BaseCardContent = styled.div<SpacingProps>`
+const BaseCardContent = styled("div")<SpacingProps>`
   ${spacing}
 `;
 
-const StyledCardContentContainer = styled.div((props: { maxHeight: number | "none" }) => ({
+const StyledCardContentContainer = styled("div")((props: { maxHeight: number | "none" }) => ({
   "> .MuiPaper-root": {
     border: "0",
     borderRadius: "0",

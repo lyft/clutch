@@ -1,6 +1,5 @@
 import * as React from "react";
 import type { FieldValues, UseFormRegister } from "react-hook-form";
-import styled from "@emotion/styled";
 import ErrorIcon from "@mui/icons-material/Error";
 import type {
   InputProps as MuiInputProps,
@@ -15,6 +14,8 @@ import {
   Typography,
 } from "@mui/material";
 import _ from "lodash";
+
+import styled from "../styled";
 
 const KEY_ENTER = 13;
 

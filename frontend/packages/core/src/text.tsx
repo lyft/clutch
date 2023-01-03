@@ -1,8 +1,8 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import { Fab, Grid } from "@mui/material";
 
 import { ClipboardButton } from "./button";
+import styled from "./styled";
 
 const CopyButtonContainer = styled(Grid)({
   marginLeft: "7px",
@@ -13,7 +13,7 @@ const ContentContainer = styled(Grid)({
   flex: 1,
 });
 
-const Pre = styled.pre({
+const Pre = styled("pre")({
   border: "1px solid rgba(13, 16, 48, 0.38)",
   backgroundColor: "rgba(13,16,48,0.12)",
   borderRadius: "4px",

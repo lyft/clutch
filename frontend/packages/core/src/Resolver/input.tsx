@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
-import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -17,11 +16,12 @@ import { Alert } from "../Feedback";
 import TextField from "../Input/text-field";
 import { useSearchParams } from "../navigation";
 import { client } from "../Network";
+import styled from "../styled";
 
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
 
-const Form = styled.form({});
+const Form = styled("form")({});
 
 interface QueryResolverProps {
   /**

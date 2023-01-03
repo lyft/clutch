@@ -1,6 +1,7 @@
 import React from "react";
 import { keyframes } from "@emotion/react";
-import styled from "@emotion/styled";
+
+import styled from "../styled";
 
 const rotate = keyframes`
   from {
@@ -11,7 +12,7 @@ const rotate = keyframes`
   }
 `;
 
-const StyledSvg = styled.svg({
+const StyledSvg = styled("svg")({
   height: "48px",
   width: "48px",
   padding: "1px",

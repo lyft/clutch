@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import type {
   ClickAwayListenerProps,
   ListItemProps,
@@ -14,6 +13,8 @@ import {
   Paper as MuiPaper,
   Popper as MuiPopper,
 } from "@mui/material";
+
+import styled from "./styled";
 
 const StyledPopper = styled(MuiPopper)({
   zIndex: 1201,
@@ -54,7 +55,7 @@ const ListItem = styled(MuiListItem)({
   padding: "0",
 });
 
-const PopperItemIcon = styled.div({
+const PopperItemIcon = styled("div")({
   margin: "12px 5px 12px 12px",
   height: "24px",
   width: "24px",
