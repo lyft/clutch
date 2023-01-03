@@ -44,7 +44,7 @@ require (
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
 	github.com/slack-go/slack v0.11.4
 	github.com/stretchr/testify v1.8.1
-	github.com/uber-go/tally/v4 v4.1.3
+	github.com/uber-go/tally/v4 v4.1.4
 	go.temporal.io/sdk v1.18.1
 	go.temporal.io/sdk/contrib/tally v0.2.0
 	go.uber.org/zap v1.24.0
