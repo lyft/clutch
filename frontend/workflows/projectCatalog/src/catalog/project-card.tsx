@@ -1,7 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Card, Grid, IconButton, Typography } from "@clutch-sh/core";
-import styled from "@emotion/styled";
+import { Card, Grid, IconButton, styled, Typography } from "@clutch-sh/core";
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 

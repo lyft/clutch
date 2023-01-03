@@ -1,11 +1,10 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Table, TableRow } from "@clutch-sh/core";
+import { styled, Table, TableRow } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
-import styled from "@emotion/styled";
 import _ from "lodash";
 
-const CronsContainer = styled.div({
+const CronsContainer = styled("div")({
   display: "flex",
   maxHeight: "50vh",
 });

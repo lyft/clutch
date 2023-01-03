@@ -1,10 +1,10 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@mui/material";
 
 import type { AppConfiguration } from "../AppProvider";
 import Loadable from "../loading";
+import styled from "../styled";
 
 import Drawer from "./drawer";
 import Header, { APP_BAR_HEIGHT } from "./header";
@@ -18,7 +18,7 @@ const ContentGrid = styled(MuiGrid)({
   maxHeight: `calc(100vh - ${APP_BAR_HEIGHT})`,
 });
 
-const MainContent = styled.div({ overflowY: "auto", width: "100%" });
+const MainContent = styled("div")({ overflowY: "auto", width: "100%" });
 
 interface AppLayoutProps {
   isLoading?: boolean;

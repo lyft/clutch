@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "@emotion/styled";
 import _ from "lodash";
 
 import { AccordionGroup } from "../accordion";
@@ -10,13 +9,14 @@ import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 import { useSearchParams } from "../navigation";
 import type { ClutchError } from "../Network/errors";
+import styled from "../styled";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";
 import { QueryResolver, SchemaResolver } from "./input";
 import type { DispatchAction } from "./state";
 import { ResolverAction, useResolverState } from "./state";
 
-const SchemaLabel = styled.div({
+const SchemaLabel = styled("div")({
   alignSelf: "flex-start",
   fontSize: "20px",
   fontWeight: 700,

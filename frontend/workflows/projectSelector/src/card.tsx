@@ -7,13 +7,13 @@ import {
   Error,
   Grid,
   IconButton,
+  styled,
 } from "@clutch-sh/core";
-import styled from "@emotion/styled";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { LinearProgress } from "@mui/material";
 
-const StyledProgressContainer = styled.div({
+const StyledProgressContainer = styled("div")({
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: "rgb(194, 200, 242)",

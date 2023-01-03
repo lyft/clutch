@@ -1,5 +1,6 @@
 import * as React from "react";
-import styled from "@emotion/styled";
+
+import styled from "./styled";
 
 const HorizontalRuleBase = ({ children, ...props }: HorizontalRuleProps) => (
   <div {...props}>

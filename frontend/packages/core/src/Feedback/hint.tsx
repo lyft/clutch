@@ -1,9 +1,10 @@
 import React from "react";
-import styled from "@emotion/styled";
 import HelpIcon from "@mui/icons-material/Help";
 import { Popover, Typography } from "@mui/material";
 
-const HelpIconContainer = styled.div({
+import styled from "../styled";
+
+const HelpIconContainer = styled("div")({
   display: "flex",
   color: "#D7DADB",
   padding: "5px",
