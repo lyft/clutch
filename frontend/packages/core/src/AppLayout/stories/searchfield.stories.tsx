@@ -5,11 +5,11 @@ import { Box, Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
-import SearchField from "../search";
+import SearchFieldComponent from "../search";
 
 export default {
   title: "Core/AppLayout/Search Field",
-  component: SearchField,
+  component: SearchFieldComponent,
   decorators: [
     Search => {
       return (
@@ -67,9 +67,9 @@ const Grid = styled(MuiGrid)({
 const Template = () => (
   <Grid container alignItems="center" justifyContent="center">
     <Box>
-      <SearchField />
+      <SearchFieldComponent />
     </Box>
   </Grid>
 );
 
-export const Primary = Template.bind({});
+export const SearchField = Template.bind({});
