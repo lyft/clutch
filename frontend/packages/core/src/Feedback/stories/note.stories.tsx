@@ -1,9 +1,10 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 
-import { SEVERITIES } from "../../Assets/global";
 import type { NoteProps } from "../note";
 import { Note as NoteComponent } from "../note";
+
+const SEVERITIES = ["error", "info", "success", "warning"];
 
 export default {
   title: "Core/Feedback/Single",
