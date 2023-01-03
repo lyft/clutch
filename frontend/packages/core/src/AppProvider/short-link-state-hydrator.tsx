@@ -10,7 +10,7 @@ import type {
 import { defaultWorkflowStorageState } from "../Contexts/workflow-storage-context/types";
 import { Alert } from "../Feedback";
 import { Grid } from "../Layout";
-import { Link } from "../link";
+import { Link } from "../Navigation";
 import { styled } from "../Utils";
 
 import { generateShortLinkRoute } from "./short-link-proxy";

@@ -2,7 +2,7 @@ import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
-import { WizardContext } from "../../Contexts";
+import { WizardContext } from "../../../Contexts";
 import type { MetadataTableProps } from "../metadata-table";
 import { MetadataTable } from "../metadata-table";
 

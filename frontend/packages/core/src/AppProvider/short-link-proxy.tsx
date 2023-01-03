@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 
 import type { HydrateState } from "../Contexts/workflow-storage-context/types";
-import { useNavigate } from "../navigation";
+import { useNavigate } from "../Navigation/navigation";
 import { client } from "../Network";
 import type { ClutchError } from "../Network/errors";
 

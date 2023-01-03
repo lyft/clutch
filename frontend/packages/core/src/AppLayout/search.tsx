@@ -17,7 +17,7 @@ import type { FilterOptionsState } from "@mui/material/useAutocomplete";
 import _ from "lodash";
 
 import { useAppContext } from "../Contexts";
-import { useNavigate } from "../navigation";
+import { useNavigate } from "../Navigation/navigation";
 import { styled } from "../Utils";
 
 import type { SearchIndex } from "./utils";

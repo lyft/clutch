@@ -1,8 +1,8 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 
-import { ClipboardButton } from "../Input";
-import type { ClipboardButtonProps } from "../Input/button";
+import type { ClipboardButtonProps } from "../button";
+import { ClipboardButton } from "..";
 
 export default {
   title: "Core/Buttons/Clipboard Button",

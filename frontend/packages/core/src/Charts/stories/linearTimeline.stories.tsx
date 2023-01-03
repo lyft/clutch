@@ -1,9 +1,9 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import LinearTimeline from "../Charts/linearTimeline";
-import type { LinearTimelineData } from "../Charts/types";
-import { styled } from "../Utils";
+import { styled } from "../../Utils";
+import LinearTimeline from "../linearTimeline";
+import type { LinearTimelineData } from "../types";
 
 export default {
   title: "Core/Charts/LinearTimeline",

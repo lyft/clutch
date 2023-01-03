@@ -7,10 +7,10 @@ import { ApplicationContext, ShortLinkContext } from "../Contexts";
 import type { ShortLinkContextProps } from "../Contexts/short-link-context";
 import type { HydratedData, HydrateState } from "../Contexts/workflow-storage-context/types";
 import { Toast } from "../Feedback";
-import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
+import NotFound from "../Navigation/not-found";
 import type { ClutchError } from "../Network/errors";
-import NotFound from "../not-found";
+import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../Utils/flags";
 
 import { registeredWorkflows } from "./registrar";
 import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";

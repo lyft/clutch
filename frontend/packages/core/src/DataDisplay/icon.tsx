@@ -1,9 +1,9 @@
 import React from "react";
 import FiberManualRecordTwoToneIcon from "@mui/icons-material/FiberManualRecordTwoTone";
 
-import type { GridJustification } from "./Layout";
-import { Grid } from "./Layout";
-import { styled } from "./Utils";
+import type { GridJustification } from "../Layout";
+import { Grid } from "../Layout";
+import { styled } from "../Utils";
 
 const StyledStatusIcon = styled(FiberManualRecordTwoToneIcon)`
   ${({ ...props }) => `

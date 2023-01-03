@@ -4,10 +4,10 @@ import Typography from "@mui/material/Typography";
 import { userId } from "./AppLayout/user";
 import { workflowsByTrending } from "./AppLayout/utils";
 import { MonsterGraphic } from "./Assets/Graphics";
+import { useNavigate } from "./Navigation/navigation";
 import { LandingCard } from "./Surface/card";
 import { useAppContext } from "./Contexts";
 import { Grid } from "./Layout";
-import { useNavigate } from "./navigation";
 import { styled } from "./Utils";
 
 const StyledLanding = styled("div")({

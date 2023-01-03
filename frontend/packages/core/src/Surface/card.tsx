@@ -12,8 +12,8 @@ import {
 import type { SpacingProps as MuiSpacingProps } from "@mui/system";
 import { spacing } from "@mui/system";
 
+import { Typography, TypographyProps } from "../DataDisplay/typography";
 import { IconButton } from "../Input";
-import { Typography, TypographyProps } from "../typography";
 import { styled } from "../Utils";
 
 // TODO: seperate out the different card parts into various files

@@ -2,8 +2,8 @@ import React from "react";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { Typography } from "@mui/material";
 
-import { Grid } from "./Layout";
-import { styled } from "./Utils";
+import { Grid } from "../Layout";
+import { styled } from "../Utils";
 
 const Container = styled(Grid)({
   minHeight: "80vh",

@@ -7,7 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Alert } from "../Feedback";
 import { Button } from "../Input/button";
 import TextField from "../Input/text-field";
-import { useSearchParams } from "../navigation";
+import { useSearchParams } from "../Navigation/navigation";
 import { client } from "../Network";
 import {
   Accordion,

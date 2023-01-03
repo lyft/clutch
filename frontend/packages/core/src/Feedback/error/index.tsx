@@ -3,7 +3,7 @@ import MuiOpenInNewIcon from "@mui/icons-material/OpenInNew";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { IconButton } from "@mui/material";
 
-import { Link } from "../../link";
+import { Link } from "../../Navigation";
 import type { ClutchError } from "../../Network/errors";
 import { isHelpDetails } from "../../Network/errors";
 import { styled } from "../../Utils";

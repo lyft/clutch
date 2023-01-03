@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta } from "@storybook/react";
 
 import { ClipboardButton } from "../../Input";
-import { Link } from "../../link";
+import { Link } from "../../Navigation";
 import type { NotePanelProps } from "../note";
 import { Note, NotePanel } from "../note";
 

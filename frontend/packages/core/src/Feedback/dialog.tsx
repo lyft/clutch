@@ -10,7 +10,7 @@ import {
   Paper,
 } from "@mui/material";
 
-import { styled } from "./Utils";
+import { styled } from "../Utils";
 
 const DialogPaper = styled(Paper)({
   border: "1px solid rgba(13, 16, 48, 0.1)",

@@ -2,7 +2,7 @@ import * as React from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import type { Meta } from "@storybook/react";
 
-import { Typography } from "../../typography";
+import { Typography } from "../../DataDisplay";
 import type { TooltipProps } from "../tooltip";
 import { Tooltip, TooltipContainer } from "../tooltip";
 

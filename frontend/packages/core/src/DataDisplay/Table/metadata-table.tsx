@@ -16,10 +16,10 @@ import _ from "lodash";
 import type { BaseSchema } from "yup";
 import { object } from "yup";
 
-import { useWizardContext } from "../Contexts";
-import { Tooltip } from "../Feedback/tooltip";
-import TextField from "../Input/text-field";
-import { styled } from "../Utils";
+import { useWizardContext } from "../../Contexts";
+import { Tooltip } from "../../Feedback/tooltip";
+import TextField from "../../Input/text-field";
+import { styled } from "../../Utils";
 
 interface RowData {
   input?: {

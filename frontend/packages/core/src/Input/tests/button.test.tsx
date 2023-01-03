@@ -3,7 +3,7 @@ import { render, unmountComponentAtNode } from "react-dom";
 
 import "@testing-library/jest-dom";
 
-import { Button } from "../Input";
+import { Button } from "..";
 
 let container: HTMLElement;
 beforeEach(() => {

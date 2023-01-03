@@ -1,4 +1,4 @@
-import { convertSearchParam, useNavigate, useSearchParams } from "../navigation";
+import { convertSearchParam, useNavigate, useSearchParams } from "..";
 
 const mockNav = jest.fn();
 const mockSearchParams = jest.fn();

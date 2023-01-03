@@ -1,7 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
 
-import { Theme } from "../AppProvider/themes";
+import { Theme } from "../../AppProvider/themes";
 import NotFound from "../not-found";
 
 describe("Not Found component", () => {

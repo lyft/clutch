@@ -1,14 +1,14 @@
 import React from "react";
 import _ from "lodash";
 
-import { AccordionGroup } from "../Surface/accordion";
 import { useWizardContext } from "../Contexts";
 import type { NoteConfig } from "../Feedback";
 import { Error, NotePanel } from "../Feedback";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
-import { useSearchParams } from "../navigation";
+import { useSearchParams } from "../Navigation/navigation";
 import type { ClutchError } from "../Network/errors";
+import { AccordionGroup } from "../Surface/accordion";
 import { styled } from "../Utils";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";

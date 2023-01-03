@@ -1,10 +1,10 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import { dateTimeFormatter, isoTimeFormatter } from "../Charts/helpers";
-import TimeseriesChart from "../Charts/timeseries";
-import type { TimeseriesReferenceLineProps } from "../Charts/types";
-import { styled } from "../Utils";
+import { styled } from "../../Utils";
+import { dateTimeFormatter, isoTimeFormatter } from "../helpers";
+import TimeseriesChart from "../timeseries";
+import type { TimeseriesReferenceLineProps } from "../types";
 
 export default {
   title: "Core/Charts/TimeseriesChart",

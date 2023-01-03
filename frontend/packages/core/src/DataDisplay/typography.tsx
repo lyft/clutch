@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { TypographyProps as MuiTypographyProps } from "@mui/material";
 
-import { styled } from "./Utils";
+import { styled } from "../Utils";
 
 const REGULAR = 400;
 const MEDIUM = 500;

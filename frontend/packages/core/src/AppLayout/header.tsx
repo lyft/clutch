@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
 import type { AppConfiguration } from "../AppProvider";
-import { FeatureOn, SimpleFeatureFlag } from "../flags";
+import { FeatureOn, SimpleFeatureFlag } from "../Utils/flags";
 import { NPSHeader } from "../NPS";
 import { styled } from "../Utils";
 
