@@ -348,9 +348,18 @@ func (m *Container) validate(all bool) error {
 
 	// no validation rules for RestartCount
 
-	switch m.StateDetails.(type) {
-
+	switch v := m.StateDetails.(type) {
 	case *Container_StateWaiting:
+		if v == nil {
+			err := ContainerValidationError{
+				field:  "StateDetails",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetStateWaiting()).(type) {
@@ -382,6 +391,16 @@ func (m *Container) validate(all bool) error {
 		}
 
 	case *Container_StateRunning:
+		if v == nil {
+			err := ContainerValidationError{
+				field:  "StateDetails",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetStateRunning()).(type) {
@@ -413,6 +432,16 @@ func (m *Container) validate(all bool) error {
 		}
 
 	case *Container_StateTerminated:
+		if v == nil {
+			err := ContainerValidationError{
+				field:  "StateDetails",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetStateTerminated()).(type) {
@@ -443,6 +472,8 @@ func (m *Container) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
@@ -11028,14 +11059,33 @@ func (m *NullableString) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Kind.(type) {
-
+	switch v := m.Kind.(type) {
 	case *NullableString_Null:
+		if v == nil {
+			err := NullableStringValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for Null
-
 	case *NullableString_Value:
+		if v == nil {
+			err := NullableStringValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for Value
-
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
