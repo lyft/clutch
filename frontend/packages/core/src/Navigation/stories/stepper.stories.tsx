@@ -5,6 +5,7 @@ import { Button, ButtonGroup } from "../../Input";
 import { styled } from "../../Utils";
 import type { StepperProps } from "../stepper";
 import { Step, Stepper } from "../stepper";
+import styled from "../styled";
 
 const Text = styled("div")({
   textAlign: "center",

@@ -6,11 +6,11 @@ import type { Meta } from "@storybook/react";
 import { ApplicationContext } from "../../Contexts/app-context";
 import { Grid } from "../../Layout";
 import { styled } from "../../Utils";
-import SearchField from "../search";
+import SearchFieldComponent from "../search";
 
 export default {
   title: "Core/AppLayout/Search Field",
-  component: SearchField,
+  component: SearchFieldComponent,
   decorators: [
     Search => {
       return (
@@ -68,9 +68,9 @@ const StyledGrid = styled(Grid)({
 const Template = () => (
   <StyledGrid container alignItems="center" justifyContent="center">
     <Box>
-      <SearchField />
+      <SearchFieldComponent />
     </Box>
   </StyledGrid>
 );
 
-export const Primary = Template.bind({});
+export const SearchField = Template.bind({});
