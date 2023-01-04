@@ -1,7 +1,6 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { CircularProgress, Grid, Paper } from "@mui/material";
-
-import styled from "./styled";
 
 const LoadingSpinner = styled(CircularProgress)`
   color: #3548d4;
@@ -12,7 +11,7 @@ const ContentContainer = styled(Grid)`
   position: relative;
 `;
 
-const ChildrenContainer = styled("div")({
+const ChildrenContainer = styled.div({
   width: "100%",
 });
 

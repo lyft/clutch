@@ -10,19 +10,19 @@ import {
   NotePanel,
   Resolver,
   Select,
-  styled,
   TextField,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
 import _ from "lodash";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
-const Form = styled("form")({
+const Form = styled.form({
   alignItems: "center",
   display: "flex",
   flexDirection: "column",

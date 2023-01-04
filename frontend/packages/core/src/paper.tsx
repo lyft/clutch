@@ -1,8 +1,7 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 import type { PaperProps as MuiPaperProps } from "@mui/material";
 import { Paper as MuiPaper } from "@mui/material";
-
-import styled from "./styled";
 
 export interface PaperProps extends Pick<MuiPaperProps, "children"> {}
 

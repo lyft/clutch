@@ -1,4 +1,5 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 import MuiCheckIcon from "@mui/icons-material/Check";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import {
@@ -8,9 +9,7 @@ import {
   Stepper as MuiStepper,
 } from "@mui/material";
 
-import styled from "./styled";
-
-const StepContainer = styled("div")({
+const StepContainer = styled.div({
   margin: "0px 2px 30px 2px",
   ".MuiStepLabel-label": {
     fontWeight: 500,
@@ -81,7 +80,7 @@ const StepContainer = styled("div")({
   },
 });
 
-const Circle = styled("div")((props: { background: string; border: string }) => ({
+const Circle = styled.div((props: { background: string; border: string }) => ({
   backgroundColor: props.background,
   border: props.border,
   boxSizing: "border-box",
@@ -91,7 +90,7 @@ const Circle = styled("div")((props: { background: string; border: string }) => 
   top: "24px",
 }));
 
-const DefaultIcon = styled("div")((props: { font: string }) => ({
+const DefaultIcon = styled.div((props: { font: string }) => ({
   height: "100%",
   width: "100%",
   color: props.font,

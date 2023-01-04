@@ -6,7 +6,6 @@ import {
   ClutchError,
   FeatureOn,
   SimpleFeatureFlag,
-  styled,
   TextField,
   Tooltip,
   TooltipContainer,
@@ -14,6 +13,7 @@ import {
   userId,
   useWorkflowStorageContext,
 } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import AddIcon from "@mui/icons-material/Add";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
@@ -63,7 +63,7 @@ const initialState: State = {
   error: undefined,
 };
 
-const StyledSelectorContainer = styled("div")({
+const StyledSelectorContainer = styled.div({
   backgroundColor: "#F9FAFE",
   borderRight: "1px solid rgba(13, 16, 48, 0.1)",
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
@@ -73,7 +73,7 @@ const StyledSelectorContainer = styled("div")({
   maxHeight: "100%",
 });
 
-const StyledWorkflowHeader = styled("div")({
+const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
   display: "flex",
   alignItems: "center",
@@ -81,7 +81,7 @@ const StyledWorkflowHeader = styled("div")({
   height: "24px",
 });
 
-const StyledWorkflowTitle = styled("span")({
+const StyledWorkflowTitle = styled.span({
   fontWeight: "bold",
   fontSize: "20px",
   lineHeight: "24px",
@@ -92,7 +92,7 @@ const StyledProjectTextField = styled(TextField)({
   padding: "16px 16px 8px 16px",
 });
 
-const StyledProgressContainer = styled("div")({
+const StyledProgressContainer = styled.div({
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: "rgb(194, 200, 242)",
@@ -103,7 +103,7 @@ const StyledProgressContainer = styled("div")({
 });
 
 // TODO(smonero): decide on styling for this
-const FlexCenterAlignContainer = styled("div")({
+const FlexCenterAlignContainer = styled.div({
   display: "flex",
   alignItems: "center",
 });
@@ -209,7 +209,7 @@ const autoComplete = async (search: string): Promise<any> => {
   return { results: response?.data?.results || [] };
 };
 
-const Form = styled("form")({});
+const Form = styled.form({});
 
 const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.

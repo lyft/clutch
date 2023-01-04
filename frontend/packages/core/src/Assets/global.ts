@@ -1,4 +1,4 @@
-import styled from "../styled";
+import styled from "@emotion/styled";
 
 const XSMALL = 18;
 const SMALL = 24;
@@ -24,7 +24,7 @@ export const VARIANTS = Object.keys(STYLE_MAP);
 
 export type IconSizeVariant = keyof typeof STYLE_MAP;
 
-export const StyledSVG = styled("svg")<{ size?: IconSizeVariant }>(props => ({
+export const StyledSVG = styled.svg<{ size?: IconSizeVariant }>(props => ({
   width: `${STYLE_MAP[props.size]?.size || STYLE_MAP.small.size}px`,
   height: `${STYLE_MAP[props.size]?.size || STYLE_MAP.small.size}px`,
 }));

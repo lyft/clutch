@@ -8,15 +8,15 @@ import {
   FormRow,
   IconButton,
   Paper,
-  styled,
   TextField,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
+import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SearchIcon from "@mui/icons-material/Search";
 import * as yup from "yup";
 
-const Container = styled("div")({
+const Container = styled.div({
   margin: "32px 0",
 });
 
@@ -25,7 +25,7 @@ const schema = yup.object().shape({
   clientset: yup.string().required("Clientset is required"),
 });
 
-const Content = styled("div")({
+const Content = styled.div({
   margin: "32px 0",
 });
 

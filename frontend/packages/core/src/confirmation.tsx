@@ -1,9 +1,8 @@
 import React from "react";
+import styled from "@emotion/styled";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { Grid } from "@mui/material";
-
-import styled from "./styled";
 
 const IconContainer = styled(Grid)({
   paddingTop: "4px",
@@ -32,7 +31,7 @@ const CheckmarkIcon = styled(CheckCircleIcon)({
   marginRight: "8px",
 });
 
-const SubtitleContainer = styled("div")({
+const SubtitleContainer = styled.div({
   color: "rgba(13, 16, 48, 0.6)",
   fontSize: "12px",
 });

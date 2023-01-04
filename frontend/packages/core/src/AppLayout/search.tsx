@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import {
@@ -18,7 +19,6 @@ import _ from "lodash";
 
 import { useAppContext } from "../Contexts";
 import { useNavigate } from "../navigation";
-import styled from "../styled";
 
 import type { SearchIndex } from "./utils";
 import { searchIndexes } from "./utils";

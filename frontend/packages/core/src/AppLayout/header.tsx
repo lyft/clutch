@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
 import type { AppConfiguration } from "../AppProvider";
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
 import { NPSHeader } from "../NPS";
-import styled from "../styled";
 
 import Logo from "./logo";
 import Notifications from "./notifications";
@@ -23,7 +23,7 @@ const AppBar = styled(MuiAppBar)({
 });
 
 // Since the AppBar is fixed we need a div to take up its height in order to push other content down.
-const ClearAppBar = styled("div")({ height: APP_BAR_HEIGHT });
+const ClearAppBar = styled.div({ height: APP_BAR_HEIGHT });
 
 const Title = styled(Typography)({
   margin: "12px 0px 12px 8px",

@@ -10,13 +10,13 @@ import {
   Form,
   Link,
   Select,
-  styled,
   TextField,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
@@ -24,7 +24,7 @@ import * as yup from "yup";
 
 import type { WorkflowProps } from ".";
 
-const ConfirmationMessage = styled("div")({
+const ConfirmationMessage = styled.div({
   display: "flex",
   alignItems: "center",
   fontSize: "14px",

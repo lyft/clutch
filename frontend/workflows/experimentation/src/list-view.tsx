@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { styled } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import {
   Paper,
   Table,

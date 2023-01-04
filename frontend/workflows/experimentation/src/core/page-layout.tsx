@@ -1,9 +1,10 @@
 import React from "react";
 import type { ClutchError } from "@clutch-sh/core";
-import { Error, styled } from "@clutch-sh/core";
+import { Error } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import { Container, Grid, Typography } from "@mui/material";
 
-const PageContainer = styled("div")({
+const PageContainer = styled.div({
   display: "flex",
   flex: "1 auto",
   margin: "30px",

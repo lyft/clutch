@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Checkbox, styled, Switch } from "@clutch-sh/core";
+import { Checkbox, Switch } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ClearIcon from "@mui/icons-material/Clear";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -9,19 +10,19 @@ import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
 import ProjectLinks from "./project-links";
 import type { Group } from "./types";
 
-const StyledGroup = styled("div")({
+const StyledGroup = styled.div({
   fontWeight: 500,
   marginLeft: "4px",
   marginTop: "9px",
   display: "block",
 });
 
-const StyledGroupTitle = styled("span")({
+const StyledGroupTitle = styled.span({
   marginRight: "4px",
   display: "inline-block",
 });
 
-const StyledCount = styled("span")({
+const StyledCount = styled.span({
   color: "rgba(13, 16, 48, 0.6)",
   backgroundColor: "rgba(13, 16, 48, 0.03)",
   fontVariantNumeric: "tabular-nums",
@@ -37,7 +38,7 @@ const StyledCount = styled("span")({
 
 // This div used to have `padding: "0 25px 0 8px"` but that made it look weird when we implemented quicklinks
 // because the "only" and "x" buttons are hidden when the popper is expanded and mouse is no longer hovering.
-const StyledMenuItem = styled("div")({
+const StyledMenuItem = styled.div({
   height: "48px",
   display: "flex",
   alignItems: "center",
@@ -49,7 +50,7 @@ const StyledMenuItem = styled("div")({
   },
 });
 
-const StyledProjectHeader = styled("div")({
+const StyledProjectHeader = styled.div({
   display: "flex",
   maxWidth: "100%",
   alignItems: "flex-start",
@@ -58,25 +59,25 @@ const StyledProjectHeader = styled("div")({
   padding: "0 12px",
 });
 
-const StyledHeaderColumn = styled("div")((props: { grow?: boolean }) => ({
+const StyledHeaderColumn = styled.div((props: { grow?: boolean }) => ({
   display: "flex",
   minHeight: "38px",
   alignItems: "center",
   flexGrow: props.grow ? 1 : 0,
 }));
 
-const StyledNoProjectsText = styled("div")({
+const StyledNoProjectsText = styled.div({
   color: "rgba(13, 16, 48, 0.38)",
   textAlign: "center",
   fontSize: "12px",
   marginBottom: "16px",
 });
 
-const StyledAllText = styled("div")({
+const StyledAllText = styled.div({
   color: "rgba(13, 16, 48, 0.38)",
 });
 
-const StyledMenuItemName = styled("span")({
+const StyledMenuItemName = styled.span({
   flexGrow: 1,
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
@@ -87,7 +88,7 @@ const StyledMenuItemName = styled("span")({
   maxWidth: "160px",
 });
 
-const StyledClearIcon = styled("span")({
+const StyledClearIcon = styled.span({
   ".MuiIconButton-root": {
     padding: "6px",
     color: "rgba(13, 16, 48, 0.38)",
@@ -100,7 +101,7 @@ const StyledClearIcon = styled("span")({
   },
 });
 
-const StyledOnlyButton = styled("button")({
+const StyledOnlyButton = styled.button({
   border: "none",
   cursor: "pointer",
   borderRadius: "4px",
@@ -118,7 +119,7 @@ const StyledOnlyButton = styled("button")({
   },
 });
 
-const StyledHoverOptions = styled("div")({
+const StyledHoverOptions = styled.div({
   alignItems: "center",
 });
 

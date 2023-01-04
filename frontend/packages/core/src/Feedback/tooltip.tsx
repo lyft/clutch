@@ -1,8 +1,7 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 import type { TooltipProps as MuiTooltipProps } from "@mui/material";
 import { Tooltip as MuiTooltip } from "@mui/material";
-
-import styled from "../styled";
 
 const BaseTooltip = ({ className, ...props }: MuiTooltipProps) => (
   <MuiTooltip classes={{ tooltip: className }} {...props} />
@@ -46,7 +45,7 @@ const Tooltip = ({ children, maxWidth = "300px", title, ...props }: TooltipProps
 };
 
 // sets the spacing between multiline content
-const TooltipContainer = styled("div")({
+const TooltipContainer = styled.div({
   margin: "4px 0px",
 });
 

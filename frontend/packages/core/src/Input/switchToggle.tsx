@@ -5,10 +5,9 @@
 */
 
 import * as React from "react";
+import styled from "@emotion/styled";
 import type { SwitchProps as MuiSwitchProps } from "@mui/material";
 import { Switch as MuiSwitch } from "@mui/material";
-
-import styled from "../styled";
 
 const SwitchContainer = styled(MuiSwitch)({
   ".MuiSwitch-switchBase": {

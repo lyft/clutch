@@ -3,7 +3,6 @@ import TimeAgo from "react-timeago";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   Chip,
-  styled,
   Table,
   TableRow,
   TableRowAction,
@@ -11,10 +10,11 @@ import {
   useNavigate,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
+import styled from "@emotion/styled";
 import DeleteIcon from "@mui/icons-material/Delete";
 import _ from "lodash";
 
-const PodsContainer = styled("div")({
+const PodsContainer = styled.div({
   display: "flex",
   maxHeight: "50vh",
 });
