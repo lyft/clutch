@@ -3,11 +3,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import type { Meta } from "@storybook/react";
 
 import type { IconButtonProps } from "../button";
-import { ICON_BUTTON_VARIANTS, IconButton } from "../button";
+import { ICON_BUTTON_VARIANTS, IconButton as IconButtonComponent } from "../button";
 
 export default {
   title: "Core/Buttons/Icon Button",
-  component: IconButton,
+  component: IconButtonComponent,
   argTypes: {
     onClick: { action: "onClick event" },
     size: {
@@ -18,14 +18,12 @@ export default {
 } as Meta;
 
 const Template = (props: IconButtonProps) => (
-  <IconButton {...props}>
+  <IconButtonComponent {...props}>
     <SearchIcon />
-  </IconButton>
+  </IconButtonComponent>
 );
 
-export const Primary = Template.bind({});
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  disabled: true,
+export const IconButton = Template.bind({});
+IconButton.args = {
+  disabled: false,
 };

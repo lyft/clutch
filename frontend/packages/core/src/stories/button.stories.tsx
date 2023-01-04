@@ -1,43 +1,29 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import { Button, ButtonProps } from "../button";
+import { Button as ButtonComponent, ButtonProps } from "../button";
+
+const VARIANTS = ["neutral", "primary", "danger", "destructive", "secondary"];
 
 export default {
   title: "Core/Buttons/Button",
-  component: Button,
+  component: ButtonComponent,
   argTypes: {
     onClick: { action: "onClick event" },
+    variant: {
+      options: VARIANTS,
+      control: {
+        type: "select",
+      },
+    },
   },
 } as Meta;
 
-const Template = (props: ButtonProps) => <Button {...props} />;
+const Template = (props: ButtonProps) => <ButtonComponent {...props} />;
 
-export const Primary = Template.bind({});
-Primary.args = {
-  text: "Continue",
-};
-
-export const Destructive = Template.bind({});
-Destructive.args = {
-  text: "Delete",
-  variant: "destructive",
-};
-
-export const Neutral = Template.bind({});
-Neutral.args = {
-  text: "Back",
-  variant: "neutral",
-};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  text: "Submit",
-  variant: "secondary",
-};
-
-export const Disabled = Template.bind({});
-Disabled.args = {
-  ...Primary.args,
-  disabled: true,
+export const Button = Template.bind({});
+Button.args = {
+  text: "Text",
+  variant: "primary",
+  disabled: false,
 };
