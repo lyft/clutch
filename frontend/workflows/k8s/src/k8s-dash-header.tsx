@@ -1,7 +1,7 @@
 import React from "react";
-import { styled } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 
-const Category = styled("div")({
+const Category = styled.div({
   fontWeight: 700,
   fontSize: "12px",
   lineHeight: "16px",
@@ -10,7 +10,7 @@ const Category = styled("div")({
   paddingBottom: "8px",
 });
 
-const HeaderText = styled("div")({
+const HeaderText = styled.div({
   fontWeight: 700,
   fontSize: "26px",
   lineHeight: "32px",

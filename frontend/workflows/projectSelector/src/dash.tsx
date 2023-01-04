@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { google as IGoogle } from "@clutch-sh/api";
-import { styled } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 import _ from "lodash";
 
@@ -63,7 +63,7 @@ const initialTimeRangeState: TimeRangeState = {
   endTimeMs: Date.now(),
 };
 
-const CardContainer = styled("div")({
+const CardContainer = styled.div({
   display: "flex",
   flex: 1,
   maxHeight: "100%",

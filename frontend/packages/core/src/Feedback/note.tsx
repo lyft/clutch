@@ -1,9 +1,9 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { Grid, Paper } from "@mui/material";
 import type { AlertColor as Color } from "@mui/material/Alert";
 
 import { Link } from "../link";
-import styled from "../styled";
 
 import { Alert } from "./alert";
 

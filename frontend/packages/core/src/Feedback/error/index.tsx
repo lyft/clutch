@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 import MuiOpenInNewIcon from "@mui/icons-material/OpenInNew";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { IconButton } from "@mui/material";
@@ -6,18 +7,17 @@ import { IconButton } from "@mui/material";
 import { Link } from "../../link";
 import type { ClutchError } from "../../Network/errors";
 import { isHelpDetails } from "../../Network/errors";
-import styled from "../../styled";
 import { Alert } from "../alert";
 
 import ErrorDetails from "./details";
 
-const ErrorSummaryContainer = styled("div")({
+const ErrorSummaryContainer = styled.div({
   width: "100%",
   display: "flex",
   flexDirection: "column",
 });
 
-const ErrorSummaryMessage = styled("div")({
+const ErrorSummaryMessage = styled.div({
   lineHeight: "24px",
   margin: "4px 0",
   flex: "1",

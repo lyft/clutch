@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 import {
   Avatar as MuiAvatar,
   ClickAwayListener,
@@ -14,8 +15,6 @@ import {
 } from "@mui/material";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
-
-import styled from "../styled";
 
 const UserPhoto = styled(IconButton)({
   padding: "12px",

@@ -1,9 +1,8 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 import { TabContext, TabList, TabPanel as MuiTabPanel } from "@mui/lab";
 import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps } from "@mui/material";
 import { Tab as MuiTab } from "@mui/material";
-
-import styled from "./styled";
 
 const StyledTab = styled(MuiTab)({
   minWidth: "111px",

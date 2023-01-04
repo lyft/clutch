@@ -1,9 +1,9 @@
 import React from "react";
+import styled from "@emotion/styled";
 import FiberManualRecordTwoToneIcon from "@mui/icons-material/FiberManualRecordTwoTone";
 import { Grid } from "@mui/material";
 
 import type { GridJustification } from "./grid";
-import styled from "./styled";
 
 const StyledStatusIcon = styled(FiberManualRecordTwoToneIcon)`
   ${({ ...props }) => `
@@ -11,7 +11,7 @@ const StyledStatusIcon = styled(FiberManualRecordTwoToneIcon)`
   `}
 `;
 
-export const AvatarIcon = styled("img")({
+export const AvatarIcon = styled.img({
   borderRadius: "50%",
   maxHeight: "100%",
   maxWidth: "initial",

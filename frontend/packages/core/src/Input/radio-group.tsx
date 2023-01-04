@@ -1,12 +1,11 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 import {
   FormControl as MuiFormControl,
   FormControlLabel,
   FormLabel as MuiFormLabel,
   RadioGroup as MuiRadioGroup,
 } from "@mui/material";
-
-import styled from "../styled";
 
 import Radio from "./radio";
 

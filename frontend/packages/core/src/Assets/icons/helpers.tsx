@@ -1,6 +1,6 @@
-import styled from "../../styled";
+import styled from "@emotion/styled";
 
-const StyledSvg: React.ElementType = styled("svg")((props: { hoverFill: string }) => ({
+const StyledSvg: React.ElementType = styled.svg((props: { hoverFill: string }) => ({
   path: {
     "&:hover": {
       fill: props.hoverFill,

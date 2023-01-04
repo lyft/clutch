@@ -19,6 +19,7 @@
   "dependencies": {
     "@clutch-sh/core": "^2.0.0-beta",
     "@clutch-sh/wizard": "^2.0.0-beta",
+    "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
     "lodash": "^4.17.21",

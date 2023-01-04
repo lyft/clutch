@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import styled from "@emotion/styled";
 import {
   Avatar as MuiAvatar,
   Drawer as MuiDrawer,
@@ -13,7 +14,6 @@ import type { Workflow } from "../AppProvider/workflow";
 import { useAppContext } from "../Contexts";
 import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
-import styled from "../styled";
 
 import { routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
 

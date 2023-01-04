@@ -1,4 +1,5 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import type { AccordionProps as MuiAccordionProps } from "@mui/material";
@@ -10,8 +11,6 @@ import {
   Divider as MuiDivider,
   useControlled,
 } from "@mui/material";
-
-import styled from "./styled";
 
 const StyledAccordion = styled(MuiAccordion)({
   borderRadius: "4px",
@@ -84,7 +83,7 @@ export const StyledAccordionSummary = styled(AccordionSummaryBase)({
   },
 });
 
-const StyledAccordionGroup = styled("div")({
+const StyledAccordionGroup = styled.div({
   width: "100%",
 
   ".MuiAccordion-root": {

@@ -1,6 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Link, Popper, styled, Typography } from "@clutch-sh/core";
+import { Link, Popper, Typography } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 
@@ -19,18 +20,18 @@ const itemHoverStyle = {
   },
 };
 
-const StyledMenuItem = styled("div")({
+const StyledMenuItem = styled.div({
   ...itemHoverStyle,
 });
 
-const StyledSubLink = styled("div")({
+const StyledSubLink = styled.div({
   ...itemHoverStyle,
   paddingBottom: "8px",
   paddingTop: "8px",
   paddingLeft: "40px",
 });
 
-const StyledMoreVertIcon = styled("span")({
+const StyledMoreVertIcon = styled.span({
   ".MuiIconButton-root": {
     padding: "6px",
     color: "rgba(13, 16, 48, 0.38)",
@@ -43,31 +44,31 @@ const StyledMoreVertIcon = styled("span")({
   },
 });
 
-const StyledLinkTitle = styled("span")({
+const StyledLinkTitle = styled.span({
   fontWeight: "bold",
   padding: "7px 0px",
 });
 
-const StyledMultiLinkTitle = styled("span")({
+const StyledMultiLinkTitle = styled.span({
   fontWeight: "bold",
 });
 
-const StyledLinkBox = styled("div")({
+const StyledLinkBox = styled.div({
   borderRadius: "4px",
   width: "160px",
 });
 
-const StyledMultilinkImage = styled("div")({
+const StyledMultilinkImage = styled.div({
   display: "flex",
   padding: "8px",
 });
 
-const StyledMultilinkHeader = styled("div")({
+const StyledMultilinkHeader = styled.div({
   display: "flex",
   alignItems: "center",
 });
 
-const StyledCenterImgSpan = styled("span")({
+const StyledCenterImgSpan = styled.span({
   display: "flex",
   alignItems: "center",
   padding: "8px",
@@ -152,7 +153,7 @@ const ExpandedLinks = ({ linkGroups }: ExpandedLinksProps) => (
   </StyledLinkBox>
 );
 
-const StyledFlexEnd = styled("div")({
+const StyledFlexEnd = styled.div({
   justifyContent: "right",
 });
 
