@@ -82,6 +82,9 @@ const StyledTextField = styled(BaseTextField)({
     "&.Mui-disabled fieldset": {
       backgroundColor: "rgba(13, 16, 48, 0.12)",
     },
+    "& .MuiInputBase-input": {
+      textOverflow: "ellipsis",
+    },
     "> .MuiInputBase-input": {
       "--input-padding": "14px 16px",
       padding: "var(--input-padding)",
