@@ -45,7 +45,7 @@ jobs:
           key: ${{ runner.os }}-fe-build-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: build
         run: yarn --cwd frontend build
   lint:
@@ -68,7 +68,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
       - run: make frontend-lint
@@ -123,7 +123,7 @@ jobs:
             ${{ runner.os }}-go-build-
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
       - name: Test [e2e]
@@ -156,7 +156,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
       - name: Test [unit]
@@ -184,7 +184,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: publish
         run: yarn --cwd frontend publishBeta
         env:
