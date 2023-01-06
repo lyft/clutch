@@ -74,3 +74,17 @@ WithGrouping.args = {
     },
   ],
 };
+
+export const Multiple = Template.bind({});
+Multiple.args = {
+  ...Default.args,
+  multiple: true,
+  options: [
+    {
+      label: "Option 1",
+    },
+    {
+      label: "Option 2",
+    },
+  ],
+};

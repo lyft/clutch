@@ -189,6 +189,7 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> 
   name: string;
   options: SelectOption[];
   onChange?: (value: string) => void;
+  multiple?: boolean;
 }
 
 export const Select = ({
@@ -200,6 +201,7 @@ export const Select = ({
   name,
   options,
   onChange,
+  multiple = false,
 }: SelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flatten(
@@ -218,20 +220,26 @@ export const Select = ({
     }
 
     if (Number.isInteger(option)) {
-      return option < flatOptions.length && option > 0 ? option : 0;
+      return option < flatOptions.length && option > 0 ? [option] : [0];
     }
 
     // we're a string, lets look it up based on the value/label and default to 0 if none
     const index = flatOptions?.findIndex(opt => opt?.value === option || opt?.label === option);
 
-    return index >= 0 ? index : 0;
+    return index >= 0 ? [index] : [0];
   };
 
-  const [selectedIdx, setSelectedIdx] = React.useState(calculateDefaultOption());
+  const [selectedIdxs, setSelectedIdxs] = React.useState(calculateDefaultOption());
+
+  // Returns the list of selected values
+  const selectedValues = () => {
+    return selectedIdxs.map(idx => flatOptions[idx].value || flatOptions[idx].label);
+  };
 
   React.useEffect(() => {
     if (flatOptions.length !== 0) {
-      onChange && onChange(flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label);
+      const onChangeInput: string[] = selectedValues();
+      onChange && onChange(onChangeInput.join(","));
     }
   }, []);
 
@@ -241,8 +249,18 @@ export const Select = ({
     if (!value) {
       return;
     }
-    setSelectedIdx(flatOptions.findIndex(opt => opt?.value === value || opt?.label === value));
-    onChange && onChange(value);
+
+    if (multiple) {
+      const newSelectedIdxs = value.map(val =>
+        flatOptions.findIndex(opt => opt.value === val || opt.label === val)
+      );
+      setSelectedIdxs(newSelectedIdxs);
+    } else {
+      const index = flatOptions.findIndex(opt => opt.value === value || opt.label === value);
+      setSelectedIdxs([index]);
+    }
+
+    onChange && onChange(selectedIdxs.join(","));
   };
 
   if (flatOptions.length === 0) {
@@ -279,8 +297,9 @@ export const Select = ({
       {label && <StyledInputLabel>{label}</StyledInputLabel>}
       {flatOptions.length && (
         <StyledSelect
+          multiple={multiple}
           id={`${name}-select`}
-          value={flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label}
+          value={selectedValues()}
           onChange={updateSelectedOption}
           label={label}
         >
