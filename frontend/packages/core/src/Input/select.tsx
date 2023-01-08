@@ -182,14 +182,13 @@ export interface SelectOption extends BaseSelectOptions {
   group?: BaseSelectOptions[];
 }
 
-export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
+export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error" | "multiple"> {
   defaultOption?: number | string;
   helperText?: string;
   label?: string;
   name: string;
   options: SelectOption[];
   onChange?: (value: string) => void;
-  multiple?: boolean;
 }
 
 export const Select = ({
@@ -231,15 +230,12 @@ export const Select = ({
 
   const [selectedIdxs, setSelectedIdxs] = React.useState(calculateDefaultOption());
 
-  // Returns the list of selected values
-  const selectedValues = () => {
-    return selectedIdxs.map(idx => flatOptions[idx].value || flatOptions[idx].label);
-  };
+  const selectedValues = () =>
+    selectedIdxs.map(idx => flatOptions[idx].value || flatOptions[idx].label);
 
   React.useEffect(() => {
     if (flatOptions.length !== 0) {
-      const onChangeInput: string[] = selectedValues();
-      onChange && onChange(onChangeInput.join(","));
+      onChange && onChange((selectedValues() ?? []).join(","));
     }
   }, []);
 
@@ -249,16 +245,8 @@ export const Select = ({
     if (!value) {
       return;
     }
-
-    if (multiple) {
-      const newSelectedIdxs = value.map(val =>
-        flatOptions.findIndex(opt => opt.value === val || opt.label === val)
-      );
-      setSelectedIdxs(newSelectedIdxs);
-    } else {
-      const index = flatOptions.findIndex(opt => opt.value === value || opt.label === value);
-      setSelectedIdxs([index]);
-    }
+    const findIndex = val => flatOptions.findIndex(opt => opt.value === val || opt.label === val);
+    setSelectedIdxs(multiple ? value.map(val => findIndex(val)) : [findIndex(value)]);
 
     onChange && onChange(selectedIdxs.join(","));
   };

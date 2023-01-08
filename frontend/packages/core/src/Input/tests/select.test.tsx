@@ -21,4 +21,20 @@ describe("Select", () => {
       expect(component.find("#foobar-select").props().value).toStrictEqual(["foo"]);
     });
   });
+
+  describe("multiple values", () => {
+    it("allows multiple", () => {
+      const component = shallow(
+        <Select
+          name="foobar"
+          multiple
+          defaultOption={2}
+          options={[{ label: "foo" }, { label: "bar" }]}
+        />
+      );
+      expect(component.find("#foobar")).toHaveLength(1);
+      component.find("#foobar-select").simulate("change", { target: { value: ["foo", "bar"] } });
+      expect(component.find("#foobar-select").props().value).toStrictEqual(["foo", "bar"]);
+    });
+  });
 });
