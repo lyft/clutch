@@ -79,9 +79,20 @@ func (m *AppConfig) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	switch m.Pem.(type) {
-
+	oneofPemPresent := false
+	switch v := m.Pem.(type) {
 	case *AppConfig_KeyPem:
+		if v == nil {
+			err := AppConfigValidationError{
+				field:  "Pem",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofPemPresent = true
 
 		if len(m.GetKeyPem()) < 1 {
 			err := AppConfigValidationError{
@@ -95,6 +106,17 @@ func (m *AppConfig) validate(all bool) error {
 		}
 
 	case *AppConfig_Base64Pem:
+		if v == nil {
+			err := AppConfigValidationError{
+				field:  "Pem",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofPemPresent = true
 
 		if len(m.GetBase64Pem()) < 1 {
 			err := AppConfigValidationError{
@@ -108,6 +130,9 @@ func (m *AppConfig) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofPemPresent {
 		err := AppConfigValidationError{
 			field:  "Pem",
 			reason: "value is required",
@@ -116,7 +141,6 @@ func (m *AppConfig) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {
@@ -217,9 +241,20 @@ func (m *Config) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Auth.(type) {
-
+	oneofAuthPresent := false
+	switch v := m.Auth.(type) {
 	case *Config_AccessToken:
+		if v == nil {
+			err := ConfigValidationError{
+				field:  "Auth",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofAuthPresent = true
 
 		if len(m.GetAccessToken()) < 1 {
 			err := ConfigValidationError{
@@ -233,6 +268,17 @@ func (m *Config) validate(all bool) error {
 		}
 
 	case *Config_AppConfig:
+		if v == nil {
+			err := ConfigValidationError{
+				field:  "Auth",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofAuthPresent = true
 
 		if all {
 			switch v := interface{}(m.GetAppConfig()).(type) {
@@ -264,6 +310,9 @@ func (m *Config) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofAuthPresent {
 		err := ConfigValidationError{
 			field:  "Auth",
 			reason: "value is required",
@@ -272,7 +321,6 @@ func (m *Config) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {

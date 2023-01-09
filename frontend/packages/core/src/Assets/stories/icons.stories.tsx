@@ -11,7 +11,7 @@ import RocketIcon from "../icons/RocketIcon";
 import SirenIcon from "../icons/SirenIcon";
 import SlackIcon from "../icons/SlackIcon";
 
-export const AllIcons: React.FC<SVGProps> = ({ size }) => (
+export const Icons: React.FC<SVGProps> = ({ size }) => (
   <div>
     <FireIcon size={size} />
     <PlusIcon />
@@ -24,7 +24,7 @@ export const AllIcons: React.FC<SVGProps> = ({ size }) => (
 );
 export default {
   title: "Core/Assets/Icons",
-  component: AllIcons,
+  component: Icons,
   argTypes: {
     size: {
       options: VARIANTS,

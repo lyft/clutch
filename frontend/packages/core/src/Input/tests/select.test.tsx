@@ -1,7 +1,7 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 
-import Select from "../select";
+import { Select } from "../select";
 
 describe("Select", () => {
   describe("default option", () => {

@@ -161,11 +161,21 @@ func (m *Option) validate(all bool) error {
 
 	// no validation rules for DisplayName
 
-	switch m.Value.(type) {
-
+	switch v := m.Value.(type) {
 	case *Option_StringValue:
+		if v == nil {
+			err := OptionValidationError{
+				field:  "Value",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for StringValue
-
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
@@ -535,9 +545,18 @@ func (m *FieldMetadata) validate(all bool) error {
 
 	// no validation rules for Required
 
-	switch m.Type.(type) {
-
+	switch v := m.Type.(type) {
 	case *FieldMetadata_StringField:
+		if v == nil {
+			err := FieldMetadataValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetStringField()).(type) {
@@ -569,6 +588,16 @@ func (m *FieldMetadata) validate(all bool) error {
 		}
 
 	case *FieldMetadata_OptionField:
+		if v == nil {
+			err := FieldMetadataValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetOptionField()).(type) {
@@ -599,6 +628,8 @@ func (m *FieldMetadata) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

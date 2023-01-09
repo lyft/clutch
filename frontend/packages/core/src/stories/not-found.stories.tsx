@@ -1,12 +1,12 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 
-import NotFound from "../not-found";
+import NotFoundComponent from "../not-found";
 
 export default {
   title: "Core/NotFound",
-  component: NotFound,
+  component: NotFoundComponent,
 } as Meta;
 
-const Template = () => <NotFound />;
-export const Default = Template.bind({});
+const Template = () => <NotFoundComponent />;
+export const NotFound = Template.bind({});

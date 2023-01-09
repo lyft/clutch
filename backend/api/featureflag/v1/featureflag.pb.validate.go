@@ -156,11 +156,21 @@ func (m *Flag) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Type.(type) {
-
+	switch v := m.Type.(type) {
 	case *Flag_BooleanValue:
+		if v == nil {
+			err := FlagValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for BooleanValue
-
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

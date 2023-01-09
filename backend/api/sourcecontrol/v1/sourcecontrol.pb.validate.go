@@ -423,9 +423,20 @@ func (m *CreateRepositoryRequest) validate(all bool) error {
 
 	// no validation rules for Description
 
-	switch m.Options.(type) {
-
+	oneofOptionsPresent := false
+	switch v := m.Options.(type) {
 	case *CreateRepositoryRequest_CustomOptions:
+		if v == nil {
+			err := CreateRepositoryRequestValidationError{
+				field:  "Options",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofOptionsPresent = true
 
 		if all {
 			switch v := interface{}(m.GetCustomOptions()).(type) {
@@ -457,6 +468,17 @@ func (m *CreateRepositoryRequest) validate(all bool) error {
 		}
 
 	case *CreateRepositoryRequest_GithubOptions:
+		if v == nil {
+			err := CreateRepositoryRequestValidationError{
+				field:  "Options",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofOptionsPresent = true
 
 		if all {
 			switch v := interface{}(m.GetGithubOptions()).(type) {
@@ -488,6 +510,9 @@ func (m *CreateRepositoryRequest) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofOptionsPresent {
 		err := CreateRepositoryRequestValidationError{
 			field:  "Options",
 			reason: "value is required",
@@ -496,7 +521,6 @@ func (m *CreateRepositoryRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {

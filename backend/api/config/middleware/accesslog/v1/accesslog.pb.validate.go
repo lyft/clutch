@@ -189,9 +189,18 @@ func (m *Config_StatusCodeFilter) validate(all bool) error {
 
 	var errors []error
 
-	switch m.FilterType.(type) {
-
+	switch v := m.FilterType.(type) {
 	case *Config_StatusCodeFilter_Equals:
+		if v == nil {
+			err := Config_StatusCodeFilterValidationError{
+				field:  "FilterType",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if val := m.GetEquals(); val < 0 || val > 16 {
 			err := Config_StatusCodeFilterValidationError{
@@ -204,6 +213,8 @@ func (m *Config_StatusCodeFilter) validate(all bool) error {
 			errors = append(errors, err)
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

@@ -156,9 +156,18 @@ func (m *Config) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Type.(type) {
-
+	switch v := m.Type.(type) {
 	case *Config_Simple:
+		if v == nil {
+			err := ConfigValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetSimple()).(type) {
@@ -189,6 +198,8 @@ func (m *Config) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
