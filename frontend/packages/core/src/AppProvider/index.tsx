@@ -72,7 +72,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [hydrateState, setHydrateState] = React.useState<HydrateState | null>(null);
   const [hydrateError, setHydrateError] = React.useState<ClutchError | null>(null);
   const [hasCustomLanding, setHasCustomLanding] = React.useState<boolean>(false);
-  const [triggeredHeaderData, setTriggeredHeaderData] = React.useState<TriggeredHeaderData>({});
+  const [triggeredHeaderData, setTriggeredHeaderData] = React.useState<TriggeredHeaderData>();
 
   /** Used to control a race condition from displaying the workflow and the state being updated with the hydrated data */
   const [shortLinkLoading, setShortLinkLoading] = React.useState<boolean>(false);

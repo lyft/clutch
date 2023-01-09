@@ -21,7 +21,7 @@ export default {
 } as Meta;
 
 const Template = ({ ...props }: FeedbackBannerProps) => {
-  const [triggeredHeaderData, setTriggeredHeaderData] = React.useState<TriggeredHeaderData>({});
+  const [triggeredHeaderData, setTriggeredHeaderData] = React.useState<TriggeredHeaderData>();
   return (
     <ApplicationContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
