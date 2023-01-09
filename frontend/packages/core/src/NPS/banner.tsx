@@ -32,7 +32,7 @@ export interface BannerFeedbackProps {
    */
   feedbackButtonText?: string;
   /**
-   * Default option in dropdown to select
+   * Default feedback option in dropdown to select
    * @defaultValue ""
    */
   defaultOption?: string;
