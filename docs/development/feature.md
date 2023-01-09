@@ -511,15 +511,15 @@ There are two new imports (`@clutch-sh/core` and `@clutch-sh/data-layout`) added
   },
   "dependencies": {
     // highlight-start
-    "@clutch-sh/core": "^1.0.0-beta",
-    "@clutch-sh/data-layout": "^1.0.0-beta",
+    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^2.0.0-beta",
     // highlight-end
-    "@clutch-sh/wizard": "^1.0.0-beta",
+    "@clutch-sh/wizard": "^2.0.0-beta",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^1.0.0-beta"
+    "@clutch-sh/tools": "^2.0.0-beta"
   },
   "engines": {
     "node": ">=16.0.0 <17",
@@ -629,16 +629,16 @@ There is another new import (`lodash`) added in the code above. Let's also add t
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^1.0.0-beta",
-    "@clutch-sh/data-layout": "^1.0.0-beta",
-    "@clutch-sh/wizard": "^1.0.0-beta",
+    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^2.0.0-beta",
+    "@clutch-sh/wizard": "^2.0.0-beta",
     // highlight-next-line
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^1.0.0-beta"
+    "@clutch-sh/tools": "^2.0.0-beta"
   },
   "engines": {
     "node": ">=16.0.0 <17",

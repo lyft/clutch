@@ -97,9 +97,20 @@ func (m *HTTPFaultConfig) validate(all bool) error {
 		}
 	}
 
-	switch m.Fault.(type) {
-
+	oneofFaultPresent := false
+	switch v := m.Fault.(type) {
 	case *HTTPFaultConfig_AbortFault:
+		if v == nil {
+			err := HTTPFaultConfigValidationError{
+				field:  "Fault",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofFaultPresent = true
 
 		if all {
 			switch v := interface{}(m.GetAbortFault()).(type) {
@@ -131,6 +142,17 @@ func (m *HTTPFaultConfig) validate(all bool) error {
 		}
 
 	case *HTTPFaultConfig_LatencyFault:
+		if v == nil {
+			err := HTTPFaultConfigValidationError{
+				field:  "Fault",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofFaultPresent = true
 
 		if all {
 			switch v := interface{}(m.GetLatencyFault()).(type) {
@@ -162,6 +184,9 @@ func (m *HTTPFaultConfig) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofFaultPresent {
 		err := HTTPFaultConfigValidationError{
 			field:  "Fault",
 			reason: "value is required",
@@ -170,7 +195,6 @@ func (m *HTTPFaultConfig) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {
@@ -631,9 +655,20 @@ func (m *FaultTargeting) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Enforcer.(type) {
-
+	oneofEnforcerPresent := false
+	switch v := m.Enforcer.(type) {
 	case *FaultTargeting_UpstreamEnforcing:
+		if v == nil {
+			err := FaultTargetingValidationError{
+				field:  "Enforcer",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofEnforcerPresent = true
 
 		if all {
 			switch v := interface{}(m.GetUpstreamEnforcing()).(type) {
@@ -665,6 +700,17 @@ func (m *FaultTargeting) validate(all bool) error {
 		}
 
 	case *FaultTargeting_DownstreamEnforcing:
+		if v == nil {
+			err := FaultTargetingValidationError{
+				field:  "Enforcer",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofEnforcerPresent = true
 
 		if all {
 			switch v := interface{}(m.GetDownstreamEnforcing()).(type) {
@@ -696,6 +742,9 @@ func (m *FaultTargeting) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofEnforcerPresent {
 		err := FaultTargetingValidationError{
 			field:  "Enforcer",
 			reason: "value is required",
@@ -704,7 +753,6 @@ func (m *FaultTargeting) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {
@@ -807,9 +855,20 @@ func (m *UpstreamEnforcing) validate(all bool) error {
 
 	var errors []error
 
-	switch m.UpstreamType.(type) {
-
+	oneofUpstreamTypePresent := false
+	switch v := m.UpstreamType.(type) {
 	case *UpstreamEnforcing_UpstreamCluster:
+		if v == nil {
+			err := UpstreamEnforcingValidationError{
+				field:  "UpstreamType",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofUpstreamTypePresent = true
 
 		if all {
 			switch v := interface{}(m.GetUpstreamCluster()).(type) {
@@ -841,6 +900,9 @@ func (m *UpstreamEnforcing) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofUpstreamTypePresent {
 		err := UpstreamEnforcingValidationError{
 			field:  "UpstreamType",
 			reason: "value is required",
@@ -849,12 +911,21 @@ func (m *UpstreamEnforcing) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
-
-	switch m.DownstreamType.(type) {
-
+	oneofDownstreamTypePresent := false
+	switch v := m.DownstreamType.(type) {
 	case *UpstreamEnforcing_DownstreamCluster:
+		if v == nil {
+			err := UpstreamEnforcingValidationError{
+				field:  "DownstreamType",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofDownstreamTypePresent = true
 
 		if all {
 			switch v := interface{}(m.GetDownstreamCluster()).(type) {
@@ -886,6 +957,9 @@ func (m *UpstreamEnforcing) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofDownstreamTypePresent {
 		err := UpstreamEnforcingValidationError{
 			field:  "DownstreamType",
 			reason: "value is required",
@@ -894,7 +968,6 @@ func (m *UpstreamEnforcing) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {
@@ -999,9 +1072,20 @@ func (m *DownstreamEnforcing) validate(all bool) error {
 
 	var errors []error
 
-	switch m.UpstreamType.(type) {
-
+	oneofUpstreamTypePresent := false
+	switch v := m.UpstreamType.(type) {
 	case *DownstreamEnforcing_UpstreamCluster:
+		if v == nil {
+			err := DownstreamEnforcingValidationError{
+				field:  "UpstreamType",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofUpstreamTypePresent = true
 
 		if all {
 			switch v := interface{}(m.GetUpstreamCluster()).(type) {
@@ -1033,6 +1117,9 @@ func (m *DownstreamEnforcing) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofUpstreamTypePresent {
 		err := DownstreamEnforcingValidationError{
 			field:  "UpstreamType",
 			reason: "value is required",
@@ -1041,12 +1128,21 @@ func (m *DownstreamEnforcing) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
-
-	switch m.DownstreamType.(type) {
-
+	oneofDownstreamTypePresent := false
+	switch v := m.DownstreamType.(type) {
 	case *DownstreamEnforcing_DownstreamCluster:
+		if v == nil {
+			err := DownstreamEnforcingValidationError{
+				field:  "DownstreamType",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofDownstreamTypePresent = true
 
 		if all {
 			switch v := interface{}(m.GetDownstreamCluster()).(type) {
@@ -1078,6 +1174,9 @@ func (m *DownstreamEnforcing) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofDownstreamTypePresent {
 		err := DownstreamEnforcingValidationError{
 			field:  "DownstreamType",
 			reason: "value is required",
@@ -1086,7 +1185,6 @@ func (m *DownstreamEnforcing) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {

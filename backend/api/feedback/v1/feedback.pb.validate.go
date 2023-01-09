@@ -68,9 +68,20 @@ func (m *RatingLabel) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	switch m.Type.(type) {
-
+	oneofTypePresent := false
+	switch v := m.Type.(type) {
 	case *RatingLabel_Emoji:
+		if v == nil {
+			err := RatingLabelValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofTypePresent = true
 
 		if _, ok := _RatingLabel_Emoji_NotInLookup[m.GetEmoji()]; ok {
 			err := RatingLabelValidationError{
@@ -95,6 +106,9 @@ func (m *RatingLabel) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofTypePresent {
 		err := RatingLabelValidationError{
 			field:  "Type",
 			reason: "value is required",
@@ -103,7 +117,6 @@ func (m *RatingLabel) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {
@@ -209,9 +222,20 @@ func (m *RatingScale) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Type.(type) {
-
+	oneofTypePresent := false
+	switch v := m.Type.(type) {
 	case *RatingScale_Emoji:
+		if v == nil {
+			err := RatingScaleValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofTypePresent = true
 
 		if _, ok := _RatingScale_Emoji_NotInLookup[m.GetEmoji()]; ok {
 			err := RatingScaleValidationError{
@@ -236,6 +260,9 @@ func (m *RatingScale) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofTypePresent {
 		err := RatingScaleValidationError{
 			field:  "Type",
 			reason: "value is required",
@@ -244,7 +271,6 @@ func (m *RatingScale) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {

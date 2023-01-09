@@ -5,7 +5,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { Grid } from "@mui/material";
 
 const IconContainer = styled(Grid)({
-  paddingTop: "20px",
+  paddingTop: "4px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",

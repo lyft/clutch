@@ -204,9 +204,18 @@ func (m *GetEventsRequest) validate(all bool) error {
 
 	// no validation rules for Limit
 
-	switch m.Window.(type) {
-
+	switch v := m.Window.(type) {
 	case *GetEventsRequest_Range:
+		if v == nil {
+			err := GetEventsRequestValidationError{
+				field:  "Window",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetRange()).(type) {
@@ -238,6 +247,16 @@ func (m *GetEventsRequest) validate(all bool) error {
 		}
 
 	case *GetEventsRequest_Since:
+		if v == nil {
+			err := GetEventsRequestValidationError{
+				field:  "Window",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetSince()).(type) {
@@ -268,6 +287,8 @@ func (m *GetEventsRequest) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
@@ -1025,9 +1046,18 @@ func (m *Event) validate(all bool) error {
 
 	// no validation rules for Id
 
-	switch m.EventType.(type) {
-
+	switch v := m.EventType.(type) {
 	case *Event_Event:
+		if v == nil {
+			err := EventValidationError{
+				field:  "EventType",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetEvent()).(type) {
@@ -1058,6 +1088,8 @@ func (m *Event) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

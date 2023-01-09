@@ -17,6 +17,7 @@ import type { BaseSchema } from "yup";
 import { object } from "yup";
 
 import { useWizardContext } from "../Contexts";
+import { Tooltip } from "../Feedback/tooltip";
 import TextField from "../Input/text-field";
 import styled from "../styled";
 
@@ -32,7 +33,7 @@ interface RowData {
   };
   name: string;
   value: unknown;
-  disabledFieldlabel?: string;
+  disabledFieldTooltip?: string;
 }
 
 interface IdentifiableRowData extends RowData {
@@ -152,25 +153,32 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
   const updateCallback = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
     error ? () => {} : onUpdate(e);
 
+  const disabledTextFieldComponent = (
+    <TextField
+      disabled
+      id={data.id}
+      name={data.name}
+      defaultValue={data.value}
+      label={data.textFieldLabels?.disabledField}
+    />
+  );
+
   return (
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
         <Grid>
           <div className="textfield-disabled">
-            <TextField
-              disabled
-              id={data.id}
-              name={data.name}
-              defaultValue={data.value}
-              label={data.textFieldLabels?.disabledField ?? data.textFieldLabels?.disabledField}
-            />
+            {/* // In the case where a disabledFieldTooltip is not provided, the value itself will be the tooltip */}
+            <Tooltip title={data.disabledFieldTooltip ?? data.value}>
+              {disabledTextFieldComponent}
+            </Tooltip>
           </div>
           <ChevronRightIcon />
           <TextField
             id={data.id}
             name={data.name}
-            label={data.textFieldLabels?.updatedField ?? data.textFieldLabels?.updatedField}
+            label={data.textFieldLabels?.updatedField}
             defaultValue={data.value}
             type={data?.input?.type}
             onChange={updateCallback}

@@ -420,9 +420,20 @@ func (m *Listener) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Socket.(type) {
-
+	oneofSocketPresent := false
+	switch v := m.Socket.(type) {
 	case *Listener_Tcp:
+		if v == nil {
+			err := ListenerValidationError{
+				field:  "Socket",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofSocketPresent = true
 
 		if all {
 			switch v := interface{}(m.GetTcp()).(type) {
@@ -454,6 +465,9 @@ func (m *Listener) validate(all bool) error {
 		}
 
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofSocketPresent {
 		err := ListenerValidationError{
 			field:  "Socket",
 			reason: "value is required",
@@ -462,7 +476,6 @@ func (m *Listener) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {
@@ -624,9 +637,18 @@ func (m *Stats) validate(all bool) error {
 
 	// no validation rules for Prefix
 
-	switch m.Reporter.(type) {
-
+	switch v := m.Reporter.(type) {
 	case *Stats_LogReporter_:
+		if v == nil {
+			err := StatsValidationError{
+				field:  "Reporter",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetLogReporter()).(type) {
@@ -658,6 +680,16 @@ func (m *Stats) validate(all bool) error {
 		}
 
 	case *Stats_StatsdReporter_:
+		if v == nil {
+			err := StatsValidationError{
+				field:  "Reporter",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetStatsdReporter()).(type) {
@@ -689,6 +721,16 @@ func (m *Stats) validate(all bool) error {
 		}
 
 	case *Stats_PrometheusReporter_:
+		if v == nil {
+			err := StatsValidationError{
+				field:  "Reporter",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetPrometheusReporter()).(type) {
@@ -719,6 +761,8 @@ func (m *Stats) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
@@ -1396,9 +1440,18 @@ func (m *Assets) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Provider.(type) {
-
+	switch v := m.Provider.(type) {
 	case *Assets_S3:
+		if v == nil {
+			err := AssetsValidationError{
+				field:  "Provider",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetS3()).(type) {
@@ -1429,6 +1482,8 @@ func (m *Assets) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
@@ -1533,11 +1588,21 @@ func (m *Logger) validate(all bool) error {
 
 	// no validation rules for Namespace
 
-	switch m.Format.(type) {
-
+	switch v := m.Format.(type) {
 	case *Logger_Pretty:
+		if v == nil {
+			err := LoggerValidationError{
+				field:  "Format",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for Pretty
-
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
@@ -2297,9 +2362,18 @@ func (m *Stats_StatsdReporter) validate(all bool) error {
 
 	// no validation rules for Address
 
-	switch m.TagMode.(type) {
-
+	switch v := m.TagMode.(type) {
 	case *Stats_StatsdReporter_PointTags_:
+		if v == nil {
+			err := Stats_StatsdReporterValidationError{
+				field:  "TagMode",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetPointTags()).(type) {
@@ -2330,6 +2404,8 @@ func (m *Stats_StatsdReporter) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

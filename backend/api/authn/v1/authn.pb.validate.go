@@ -158,12 +158,30 @@ func (m *LoginResponse) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Return.(type) {
-
+	switch v := m.Return.(type) {
 	case *LoginResponse_AuthUrl:
+		if v == nil {
+			err := LoginResponseValidationError{
+				field:  "Return",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for AuthUrl
-
 	case *LoginResponse_Token_:
+		if v == nil {
+			err := LoginResponseValidationError{
+				field:  "Return",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if all {
 			switch v := interface{}(m.GetToken()).(type) {
@@ -194,6 +212,8 @@ func (m *LoginResponse) validate(all bool) error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

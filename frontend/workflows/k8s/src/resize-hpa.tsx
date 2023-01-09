@@ -44,6 +44,8 @@ const HPADetails: React.FC<WizardChild> = () => {
     hpaData.updateData(key, value);
   };
 
+  const currentHpaData = useDataLayout("currentHpaData");
+
   const metadataAnnotations = [];
   const metadataLabels = [];
 
@@ -58,6 +60,11 @@ const HPADetails: React.FC<WizardChild> = () => {
       _.forEach(hpa.labels, (label, key) => {
         metadataLabels.push({ name: key, value: label });
       });
+    }
+
+    // save the original values of min and max replicas
+    if (hpa) {
+      currentHpaData.assign(hpa);
     }
   }, []);
 
@@ -130,10 +137,32 @@ const HPADetails: React.FC<WizardChild> = () => {
   );
 };
 
-// TODO (sperry): possibly show the previous size values
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const hpa = useDataLayout("hpaData").displayValue() as IClutch.k8s.v1.HPA;
   const resizeData = useDataLayout("resizeData");
+  const currentHpaData = useDataLayout("currentHpaData").displayValue() as IClutch.k8s.v1.HPA;
+
+  React.useEffect(() => {
+    // if new values are either 50% bigger or smaller than old values, add a warning note
+    const alertLevel = 0.5;
+    const { maxReplicas, minReplicas } = currentHpaData.sizing;
+    const maxUpperBound = (1 + alertLevel) * maxReplicas;
+    const maxLowerBound = (1 - alertLevel) * maxReplicas;
+    const minUpperBound = (1 + alertLevel) * minReplicas;
+    const minLowerBound = (1 - alertLevel) * minReplicas;
+
+    const isMinReplicasDiffTooBig =
+      hpa.sizing.minReplicas > minUpperBound || hpa.sizing.minReplicas < minLowerBound;
+    const isMaxReplicasDiffTooBig =
+      hpa.sizing.maxReplicas > maxUpperBound || hpa.sizing.maxReplicas < maxLowerBound;
+    if (isMaxReplicasDiffTooBig || isMinReplicasDiffTooBig) {
+      notes.unshift({
+        text:
+          "The new min or max size is more than 50% different from the old size. This may cause a large number of pods to be created or deleted.",
+        severity: "warning",
+      });
+    }
+  }, []);
 
   return (
     <WizardStep error={resizeData.error} isLoading={resizeData.isLoading}>
@@ -143,6 +172,8 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
           { name: "Name", value: hpa.name },
           { name: "Namespace", value: hpa.namespace },
           { name: "Cluster", value: hpa.cluster },
+          { name: "Old Min Size", value: currentHpaData.sizing.minReplicas },
+          { name: "Old Max Size", value: currentHpaData.sizing.maxReplicas },
           { name: "New Min Size", value: hpa.sizing.minReplicas },
           { name: "New Max Size", value: hpa.sizing.maxReplicas },
         ]}
@@ -156,9 +187,14 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   const dataLayout = {
     hpaData: {},
     inputData: {},
+    currentHpaData: {},
     resizeData: {
-      deps: ["hpaData", "inputData"],
-      hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: { clientset: string }) => {
+      deps: ["hpaData", "inputData", "currentHpaData"],
+      hydrator: (
+        hpaData: IClutch.k8s.v1.HPA,
+        inputData: { clientset: string },
+        currentHpaData: IClutch.k8s.v1.HPA
+      ) => {
         const clientset = inputData.clientset ?? "unspecified";
 
         return client.post("/v1/k8s/resizeHPA", {
@@ -169,6 +205,10 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
           sizing: {
             min: hpaData.sizing.minReplicas,
             max: hpaData.sizing.maxReplicas,
+          },
+          currentSizing: {
+            min: currentHpaData.sizing.minReplicas,
+            max: currentHpaData.sizing.maxReplicas,
           },
         } as IClutch.k8s.v1.IResizeHPARequest);
       },
