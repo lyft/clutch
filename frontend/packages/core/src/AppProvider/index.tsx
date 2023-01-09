@@ -4,7 +4,7 @@ import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext, ShortLinkContext } from "../Contexts";
-import type { HeaderItems, TriggeredHeaderData } from "../Contexts/app-context";
+import type { HeaderItem, TriggeredHeaderData } from "../Contexts/app-context";
 import type { ShortLinkContextProps } from "../Contexts/short-link-context";
 import type { HydratedData, HydrateState } from "../Contexts/workflow-storage-context/types";
 import { Toast } from "../Feedback";
@@ -125,12 +125,11 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const appContextValue = React.useMemo(
     () => ({
       workflows: discoverableWorkflows,
-      triggerHeaderItem: (item: HeaderItems, open: boolean, data: unknown) =>
+      triggerHeaderItem: (item: HeaderItem, data: unknown) =>
         // Will set the open status and spread any additional data onto the property named after the item
         setTriggeredHeaderData({
           ...triggeredHeaderData,
           [item]: {
-            open,
             ...(data as any),
           },
         }),

@@ -2,18 +2,34 @@ import React from "react";
 
 import type { Workflow } from "../AppProvider/workflow";
 
-export type HeaderItems = "NPS";
+/**
+ * Union type representing different lookup keys
+ */
+export type HeaderItem = "NPS";
 
-export interface TriggeredHeaderData {
-  [key: string]: {
-    open: boolean;
-    [key: string]: unknown;
-  };
+interface HeaderItemData {
+  /**
+   * Optional configuration data to be passed when opening a component
+   */
+  [key: string]: unknown;
 }
+
+export type TriggeredHeaderData = {
+  /**
+   * The components name, referenced from the above HeaderItems, to be used as a lookup key
+   */
+  [key in HeaderItem]: HeaderItemData;
+};
 
 interface ContextProps {
   workflows: Workflow[];
-  triggerHeaderItem?: (item: HeaderItems, open: boolean, data?: unknown) => void;
+  /**
+   * Will trigger the given header item based on the key, setting the open property as well as saving any optional data
+   */
+  triggerHeaderItem?: (item: HeaderItem, data?: unknown) => void;
+  /**
+   * Will return the triggered data, used as a lookup for listening components
+   */
   triggeredHeaderData?: TriggeredHeaderData;
 }
 

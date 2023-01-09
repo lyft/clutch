@@ -3,17 +3,24 @@ import { MemoryRouter } from "react-router";
 import type { Meta } from "@storybook/react";
 
 import Header from "../../AppLayout/header";
+import { HappyEmoji, NeutralEmoji, SadEmoji } from "../../Assets/emojis";
 import { ApplicationContext } from "../../Contexts";
-import type { HeaderItems, TriggeredHeaderData } from "../../Contexts/app-context";
-import type { BannerFeedbackProps } from "../banner";
+import type { HeaderItem, TriggeredHeaderData } from "../../Contexts/app-context";
+import type { FeedbackBannerProps } from "../banner";
 import { Banner } from "../banner";
 
 export default {
   title: "Core/NPS/Banner",
   component: Banner,
+  argTypes: {
+    icon: {
+      options: ["None", "Happy", "Neutral", "Sad"],
+      mapping: { None: null, Happy: <HappyEmoji />, Neutral: <NeutralEmoji />, Sad: <SadEmoji /> },
+    },
+  },
 } as Meta;
 
-const Template = ({ ...props }: BannerFeedbackProps) => {
+const Template = ({ ...props }: FeedbackBannerProps) => {
   const [triggeredHeaderData, setTriggeredHeaderData] = React.useState<TriggeredHeaderData>({});
   return (
     <ApplicationContext.Provider
@@ -48,11 +55,10 @@ const Template = ({ ...props }: BannerFeedbackProps) => {
             ],
           },
         ],
-        triggerHeaderItem: (item: HeaderItems, open: boolean, data: unknown) =>
+        triggerHeaderItem: (item: HeaderItem, data: unknown) =>
           setTriggeredHeaderData({
             ...triggeredHeaderData,
             [item]: {
-              open,
               ...(data as any),
             },
           }),
@@ -60,7 +66,7 @@ const Template = ({ ...props }: BannerFeedbackProps) => {
       }}
     >
       <MemoryRouter>
-        <Header showNPS />
+        <Header enableNPS />
         <Banner {...props} />
       </MemoryRouter>
     </ApplicationContext.Provider>

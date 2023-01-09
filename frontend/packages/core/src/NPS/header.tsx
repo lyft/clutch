@@ -92,7 +92,7 @@ const HeaderFeedback = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const anchorRef = React.useRef(null);
   const { workflows, triggerHeaderItem, triggeredHeaderData } = useAppContext();
-  const [defaultOption, setDefaultOption] = React.useState<string>();
+  const [defaultFeedbackOption, setDefaultFeedbackOption] = React.useState<string>();
 
   const handleToggle = () => {
     setOpen(!open);
@@ -100,8 +100,8 @@ const HeaderFeedback = () => {
 
   React.useEffect(() => {
     if (triggeredHeaderData && triggeredHeaderData.NPS) {
-      setDefaultOption((triggeredHeaderData.NPS.defaultOption as string) ?? "");
-      setOpen(triggeredHeaderData.NPS.open);
+      setDefaultFeedbackOption((triggeredHeaderData.NPS.defaultFeedbackOption as string) ?? "");
+      setOpen(true);
     }
   }, [triggeredHeaderData]);
 
@@ -115,7 +115,7 @@ const HeaderFeedback = () => {
     }
     // handler for the NPS Banner button so that it doesn't reset the headerLink
     if (event.target.id !== "nps-banner-button") {
-      triggerHeaderItem && triggerHeaderItem("NPS", false, {});
+      triggerHeaderItem && triggerHeaderItem("NPS", {});
       setOpen(false);
     }
   };
@@ -146,7 +146,7 @@ const HeaderFeedback = () => {
                   <NPSFeedback
                     origin="HEADER"
                     feedbackTypes={generateFeedbackTypes(workflows)}
-                    defaultOption={defaultOption}
+                    defaultFeedbackOption={defaultFeedbackOption}
                   />
                 </MenuList>
               </ClickAwayListener>

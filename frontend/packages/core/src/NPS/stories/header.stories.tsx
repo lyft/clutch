@@ -47,7 +47,7 @@ const Template = () => (
     }}
   >
     <MemoryRouter>
-      <Header showNPS />
+      <Header enableNPS />
     </MemoryRouter>
   </ApplicationContext.Provider>
 );

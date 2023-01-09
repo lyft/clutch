@@ -10,7 +10,7 @@ import Paper from "../paper";
 import styled from "../styled";
 import { Typography } from "../typography";
 
-export interface BannerFeedbackProps {
+export interface FeedbackBannerProps {
   /**
    * Whether this component should appear integrated into the page versus in its own container
    * @defaultValue false
@@ -35,11 +35,14 @@ export interface BannerFeedbackProps {
    * Default feedback option in dropdown to select
    * @defaultValue ""
    */
-  defaultOption?: string;
+  defaultFeedbackOption?: string;
 }
 
 const StyledPaper = styled(Paper)({
   padding: "0px 16px",
+  "@media screen and (max-width: 970px)": {
+    padding: "8px 16px",
+  },
 });
 
 /**
@@ -50,14 +53,18 @@ export const Banner = ({
   icon = <HappyEmoji />,
   feedbackText = "Enjoying this feature? We would like your feedback!",
   feedbackButtonText = "Give Feedback",
-  defaultOption,
-}: BannerFeedbackProps) => {
+  defaultFeedbackOption,
+}: FeedbackBannerProps) => {
   const { triggerHeaderItem } = useAppContext();
   const banner = (
-    <Grid container direction="row" spacing={1} alignItems="center">
-      <Grid item sx={{ marginTop: "4px" }} data-testid="nps-banner-icon">
-        {icon}
-      </Grid>
+    <Grid container direction="row" spacing={1} alignItems="center" justifyContent="center">
+      {icon && (
+        <Grid item>
+          <div data-testid="nps-banner-icon" style={{ display: "flex" }}>
+            {icon}
+          </div>
+        </Grid>
+      )}
       <Grid item>
         <Typography data-testid="nps-banner-text" variant="body2">
           {feedbackText}
@@ -70,7 +77,7 @@ export const Banner = ({
           variant="neutral"
           text={feedbackButtonText}
           size="small"
-          onClick={() => triggerHeaderItem("NPS", true, { defaultOption })}
+          onClick={() => triggerHeaderItem("NPS", { defaultFeedbackOption })}
         />
       </Grid>
     </Grid>
@@ -87,7 +94,7 @@ export const Banner = ({
  * An NPS Feedback Banner which will ask the user for feedback then open up the NPSHeader
  * NOTE: requires the NPSHeader to be enabled
  */
-const BannerFeedback = ({ ...props }: BannerFeedbackProps) => (
+const FeedbackBanner = ({ ...props }: FeedbackBannerProps) => (
   <SimpleFeatureFlag feature="npsHeader">
     <FeatureOn>
       <Banner {...props} />
@@ -95,4 +102,4 @@ const BannerFeedback = ({ ...props }: BannerFeedbackProps) => (
   </SimpleFeatureFlag>
 );
 
-export default BannerFeedback;
+export default FeedbackBanner;

@@ -19,8 +19,10 @@ export const APP_BAR_HEIGHT = "64px";
  * Properties used to allow Storybook examples to override featureflag settings
  */
 interface HeaderProps extends AppConfiguration {
-  showShortLinks?: boolean;
-  showNPS?: boolean;
+  /**
+   * Will enable the NPS feedback component in the header
+   */
+  enableNPS?: boolean;
 }
 
 const AppBar = styled(MuiAppBar)({
@@ -51,8 +53,7 @@ const StyledLogo = styled("img")({
 const Header: React.FC<HeaderProps> = ({
   title = "clutch",
   logo = <Logo />,
-  showNPS = false,
-  showShortLinks = false,
+  enableNPS = false,
 }) => {
   const showNotifications = false;
 
@@ -66,17 +67,13 @@ const Header: React.FC<HeaderProps> = ({
             <Box>
               <SearchField />
             </Box>
-            {showShortLinks ? (
-              <ShortLinker />
-            ) : (
-              <SimpleFeatureFlag feature="shortLinks">
-                <FeatureOn>
-                  <ShortLinker />
-                </FeatureOn>
-              </SimpleFeatureFlag>
-            )}
+            <SimpleFeatureFlag feature="shortLinks">
+              <FeatureOn>
+                <ShortLinker />
+              </FeatureOn>
+            </SimpleFeatureFlag>
             {showNotifications && <Notifications />}
-            {showNPS ? (
+            {enableNPS ? (
               <NPSHeader />
             ) : (
               <SimpleFeatureFlag feature="npsHeader">

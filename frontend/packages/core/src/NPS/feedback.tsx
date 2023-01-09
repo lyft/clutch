@@ -25,7 +25,7 @@ interface FeedbackOptions {
   origin: Origin;
   feedbackTypes?: SelectOption[];
   onSubmit?: (submit: boolean) => void;
-  defaultOption?: string;
+  defaultFeedbackOption?: string;
 }
 
 // Defaults in case of API failure
@@ -99,7 +99,7 @@ const NPSFeedback = ({
   origin = "HEADER",
   onSubmit,
   feedbackTypes,
-  defaultOption,
+  defaultFeedbackOption,
 }: FeedbackOptions) => {
   const [hasSubmit, setHasSubmit] = useState<boolean>(false);
   const [selectedRating, setSelectedRating] = useState<Rating>(null);
@@ -236,7 +236,7 @@ const NPSFeedback = ({
                   label="Choose a type of feedback you want to submit"
                   options={feedbackTypes}
                   onChange={setFeedbackType}
-                  defaultOption={defaultOption}
+                  defaultOption={defaultFeedbackOption}
                 />
               </MuiGrid>
             )}
