@@ -16,7 +16,7 @@ import { UserInformation } from "./user";
 export const APP_BAR_HEIGHT = "64px";
 
 /**
- * Properties used to allow stories to override featureflag settings
+ * Properties used to allow Storybook examples to override featureflag settings
  */
 interface HeaderProps extends AppConfiguration {
   showShortLinks?: boolean;
