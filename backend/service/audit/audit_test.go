@@ -102,23 +102,6 @@ func writeRequestEvents(c *client, name string, count int) error {
 	return nil
 }
 
-func TestCountEvents(t *testing.T) {
-	cfg, _ := anypb.New(&auditconfigv1.Config{
-		StorageProvider: &auditconfigv1.Config_InMemory{InMemory: true},
-		Filter:          &auditconfigv1.Filter{Denylist: true},
-	})
-	log := zaptest.NewLogger(t)
-	scope := tally.NewTestScope("", nil)
-	svc, err := New(cfg, log, scope)
-	assert.Nil(t, err)
-	as := svc.(*client)
-	err = writeRequestEvents(as, "TestCountEvents", 1)
-	assert.NoError(t, err)
-	count, err := as.CountEvents(context.Background(), time.Now().Add(-5*time.Minute), nil)
-	assert.NoError(t, err)
-	assert.Equal(t, int64(1), count)
-}
-
 func TestReadEvents(t *testing.T) {
 	testCases := []struct {
 		id            string

@@ -98,11 +98,6 @@ func (c *client) eventsInRange(ctx context.Context, start time.Time, end *time.T
 	return events
 }
 
-func (c *client) CountEvents(ctx context.Context, start time.Time, end *time.Time) (int64, error) {
-	events := c.eventsInRange(ctx, start, end)
-	return int64(len(events)), nil
-}
-
 // Does a full scan through and copies those with a timestamp that fits the bill.
 func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time, options *storage.ReadOptions) ([]*auditv1.Event, error) {
 	events := c.eventsInRange(ctx, start, end)

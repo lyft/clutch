@@ -73,39 +73,31 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 		return nil, errors.New("no time window requested")
 	}
 
-	eventCount, err := m.client.CountEvents(ctx, start, end)
-	if err != nil {
-		return nil, err
-	}
-
-	var options *audit.ReadOptions
+	var page int
 	if req.PageToken != "" {
-		startIdx := 0
-		page, err := strconv.Atoi(req.PageToken)
-		if err != nil {
+		p, err := strconv.Atoi(req.PageToken)
+		if err != nil || p < 0 {
 			return nil, fmt.Errorf("invalid page token: %s", req.PageToken)
 		}
-		limit := int(req.Limit)
-		if req.Limit == 0 {
-			limit = 10
-		}
-
-		startIdx = page * limit
-		if startIdx > int(eventCount) {
-			startIdx = 0
-		}
-
-		endIdx := startIdx + limit
-		if endIdx < int(eventCount) {
-			resp.NextPageToken = strconv.FormatInt(int64(page+1), 10)
-		}
-
-		options = &audit.ReadOptions{Offset: int64(startIdx), Limit: int64(limit)}
+		page = p
 	}
 
+	limit := int(req.Limit)
+	if req.Limit == 0 {
+		limit = 10
+	}
+
+	startIdx := page * limit
+	additionalEventsNumber := int64(limit + 1)
+	options := &audit.ReadOptions{Offset: int64(startIdx), Limit: additionalEventsNumber}
 	events, err := m.client.ReadEvents(ctx, start, end, options)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(events) != 0 && len(events) == int(additionalEventsNumber) {
+		resp.NextPageToken = strconv.FormatInt(int64(page+1), 10)
+		events = events[:len(events)-1]
 	}
 
 	resp.Events = events

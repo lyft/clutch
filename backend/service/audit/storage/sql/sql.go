@@ -132,27 +132,6 @@ func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
 	return c.query(ctx, unsentEventsQuery)
 }
 
-func (c *client) CountEvents(ctx context.Context, start time.Time, end *time.Time) (int64, error) {
-	countEventsRangeStatement := `
-		SELECT COUNT(*) FROM audit_events
-		WHERE occurred_at BETWEEN $1::timestamp AND $2::timestamp
-	`
-
-	endTime := time.Now()
-	if end != nil {
-		endTime = *end
-	}
-
-	var count int64
-	row := c.db.QueryRow(countEventsRangeStatement, start, endTime)
-	err := row.Scan(&count)
-	if err != nil {
-		return 0, err
-	}
-
-	return count, nil
-}
-
 func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time, options *storage.ReadOptions) ([]*auditv1.Event, error) {
 	readEventsRangeStatement := `
 		SELECT id, occurred_at, details FROM audit_events

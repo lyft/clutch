@@ -24,10 +24,6 @@ type Auditor interface {
 	WriteRequestEvent(ctx context.Context, req *auditv1.RequestEvent) (int64, error)
 	UpdateRequestEvent(ctx context.Context, id int64, update *auditv1.RequestEvent) error
 
-	// Used for determining the number of events a auditor has. This is useful when
-	// determining pagination / event query limits.
-	CountEvents(ctx context.Context, start time.Time, end *time.Time) (int64, error)
-
 	// Used for services and modules to read past events within a timerange.
 	// If end is nil, should search until the current time.
 	ReadEvents(ctx context.Context, start time.Time, end *time.Time, options *ReadOptions) ([]*auditv1.Event, error)
