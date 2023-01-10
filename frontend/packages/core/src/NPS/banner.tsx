@@ -76,7 +76,7 @@ export const Banner = ({
           data-testid="nps-banner-button"
           variant="neutral"
           text={feedbackButtonText}
-          size="small"
+          size="xsmall"
           onClick={() => triggerHeaderItem("NPS", { defaultFeedbackOption })}
         />
       </Grid>

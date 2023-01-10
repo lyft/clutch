@@ -25,6 +25,9 @@ interface ContextProps {
   workflows: Workflow[];
   /**
    * Will trigger the given header item based on the key, setting the open property as well as saving any optional data
+   * Example of utilizing with NPS
+   * Opening - triggerHeaderItem("NPS", { defaultOption: "Example 1" })
+   * Closing - triggerHeaderItem("NPS", null)
    */
   triggerHeaderItem?: (item: HeaderItem, data?: unknown) => void;
   /**
