@@ -84,18 +84,21 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 
 	limit := int(req.Limit)
 	if req.Limit == 0 {
-		limit = 10
+		limit = 1
 	}
 
 	startIdx := page * limit
 	additionalEventsNumber := int64(limit + 1)
-	options := &audit.ReadOptions{Offset: int64(startIdx), Limit: additionalEventsNumber}
+	options := &audit.ReadOptions{Offset: int64(startIdx)}
+	if req.Limit != 0 {
+		options.Limit = additionalEventsNumber
+	}
 	events, err := m.client.ReadEvents(ctx, start, end, options)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(events) != 0 && len(events) == int(additionalEventsNumber) {
+	if len(events) != 0 && req.Limit != 0 && len(events) == int(additionalEventsNumber) {
 		resp.NextPageToken = strconv.FormatInt(int64(page+1), 10)
 		events = events[:len(events)-1]
 	}

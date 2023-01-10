@@ -30,7 +30,7 @@ func TestGetEvents(t *testing.T) {
 			expectedErr: errors.New("no time window requested"),
 		},
 		{
-			id:         "with time window returns default count",
+			id:         "with time window and events",
 			eventCount: 11,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Range{
@@ -40,8 +40,8 @@ func TestGetEvents(t *testing.T) {
 					},
 				},
 			},
-			expectedEventCount: 10,
-			expectedNextToken:  "1",
+			expectedEventCount: 11,
+			expectedNextToken:  "",
 		},
 		{
 			id:         "with time window in future",
@@ -64,8 +64,8 @@ func TestGetEvents(t *testing.T) {
 					Since: durationpb.New(1 * time.Hour),
 				},
 			},
-			expectedEventCount: 10,
-			expectedNextToken:  "1",
+			expectedEventCount: 11,
+			expectedNextToken:  "",
 		},
 		{
 			id:         "with time since a microsecond ago",
@@ -109,8 +109,8 @@ func TestGetEvents(t *testing.T) {
 				},
 				PageToken: "0",
 			},
-			expectedEventCount: 10,
-			expectedNextToken:  "1",
+			expectedEventCount: 11,
+			expectedNextToken:  "",
 		},
 		{
 			id:         "with page token and limit",
@@ -150,9 +150,9 @@ func TestGetEvents(t *testing.T) {
 		},
 	}
 
-	for idx, test := range testCases {
+	for _, test := range testCases {
 		test := test
-		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.id), func(t *testing.T) {
 			t.Parallel()
 			m := &mod{
 				client: auditmock.New(),
