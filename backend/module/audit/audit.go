@@ -83,13 +83,19 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 	}
 
 	limit := int(req.Limit)
+	// if a request has no limit we return all found events.
 	if req.Limit == 0 {
+		// in the event there is no request limit set limit to be 1 for purposes
+		// of determining page offset later.
 		limit = 1
 	}
 
 	startIdx := page * limit
+	// n.b. the user defined limit is increased by 1 to help determine if there is
+	// a subsequent page of information that should be denoted in the response
 	additionalEventsNumber := int64(limit + 1)
 	options := &audit.ReadOptions{Offset: int64(startIdx)}
+	// if request limit is specified pass that value into the read options call
 	if req.Limit != 0 {
 		options.Limit = additionalEventsNumber
 	}
@@ -98,7 +104,12 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 		return nil, err
 	}
 
-	if len(events) != 0 && req.Limit != 0 && len(events) == int(additionalEventsNumber) {
+	// This logic is only used for purposes of pagination and should only be triggered if:
+	// 1. there are more than 0 events
+	// 2. if the request has a limit specified
+	// 3. if the number of events is equal to the request limit + 1 meaning there are
+	//    additional events to request on a subsequent page.
+	if len(events) > 0 && req.Limit != 0 && len(events) == int(additionalEventsNumber) {
 		resp.NextPageToken = strconv.FormatInt(int64(page+1), 10)
 		events = events[:len(events)-1]
 	}
