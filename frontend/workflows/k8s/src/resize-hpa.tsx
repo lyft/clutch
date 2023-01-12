@@ -44,11 +44,11 @@ const HPADetails: React.FC<WizardChild> = () => {
     hpaData.updateData(key, value);
   };
 
-  const notes = ({
+  const notes = [{
     text:
       "The HPA should take just a few minutes to scale in either direction. The HPA min/max size may fluctuate as it's scaling for a few minutes; this is normal and due to variable factors, like the Lyft Rebalancer.",
     severity: "info",
-  });
+  }];
 
   const currentHpaData = useDataLayout("currentHpaData");
 
