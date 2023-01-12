@@ -182,7 +182,7 @@ export interface SelectOption extends BaseSelectOptions {
   group?: BaseSelectOptions[];
 }
 
-export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error" | "multiple"> {
+export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
   defaultOption?: number | string;
   helperText?: string;
   label?: string;
@@ -200,7 +200,6 @@ export const Select = ({
   name,
   options,
   onChange,
-  multiple = false,
 }: SelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flatten(
@@ -219,23 +218,20 @@ export const Select = ({
     }
 
     if (Number.isInteger(option)) {
-      return option < flatOptions.length && option > 0 ? [option] : [0];
+      return option < flatOptions.length && option > 0 ? option : 0;
     }
 
     // we're a string, lets look it up based on the value/label and default to 0 if none
     const index = flatOptions?.findIndex(opt => opt?.value === option || opt?.label === option);
 
-    return index >= 0 ? [index] : [0];
+    return index >= 0 ? index : 0;
   };
 
-  const [selectedIdxs, setSelectedIdxs] = React.useState(calculateDefaultOption());
-
-  const selectedValues = () =>
-    selectedIdxs.map(idx => flatOptions[idx].value || flatOptions[idx].label);
+  const [selectedIdx, setSelectedIdx] = React.useState(calculateDefaultOption());
 
   React.useEffect(() => {
     if (flatOptions.length !== 0) {
-      onChange && onChange((selectedValues() ?? []).join(","));
+      onChange && onChange(flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label);
     }
   }, []);
 
@@ -245,10 +241,8 @@ export const Select = ({
     if (!value) {
       return;
     }
-    const findIndex = val => flatOptions.findIndex(opt => opt.value === val || opt.label === val);
-    setSelectedIdxs(multiple ? value.map(val => findIndex(val)) : [findIndex(value)]);
-
-    onChange && onChange(selectedIdxs.join(","));
+    setSelectedIdx(flatOptions.findIndex(opt => opt?.value === value || opt?.label === value));
+    onChange && onChange(value);
   };
 
   if (flatOptions.length === 0) {
@@ -285,9 +279,8 @@ export const Select = ({
       {label && <StyledInputLabel>{label}</StyledInputLabel>}
       {flatOptions.length && (
         <StyledSelect
-          multiple={multiple}
           id={`${name}-select`}
-          value={selectedValues()}
+          value={flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label}
           onChange={updateSelectedOption}
           label={label}
         >
