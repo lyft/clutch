@@ -21,6 +21,8 @@ import type Reference from "yup/lib/Reference";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
+const WARNING_THRESHOLD = 0.5;
+
 const HPAIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
   const hpaData = useDataLayout("hpaData");
@@ -54,11 +56,9 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
     minSize: NoteConfig;
     maxSize: NoteConfig;
   }>({ minSize: undefined, maxSize: undefined });
-
-  const warningThreshold = 0.5;
   const getWarning = React.useCallback((current: number, newValue: number): boolean => {
     return (
-      current * (1 / warningThreshold) < newValue || current / (1 / warningThreshold) > newValue
+      current * (1 / WARNING_THRESHOLD) < newValue || current / (1 / WARNING_THRESHOLD) > newValue
     );
   }, []);
 
@@ -183,12 +183,11 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
 
   React.useEffect(() => {
     // if new values are either 50% bigger or smaller than old values, add a warning note
-    const alertLevel = 0.5;
     const { maxReplicas, minReplicas } = currentHpaData.sizing;
-    const maxUpperBound = (1 + alertLevel) * maxReplicas;
-    const maxLowerBound = (1 - alertLevel) * maxReplicas;
-    const minUpperBound = (1 + alertLevel) * minReplicas;
-    const minLowerBound = (1 - alertLevel) * minReplicas;
+    const maxUpperBound = (1 + WARNING_THRESHOLD) * maxReplicas;
+    const maxLowerBound = (1 - WARNING_THRESHOLD) * maxReplicas;
+    const minUpperBound = (1 + WARNING_THRESHOLD) * minReplicas;
+    const minLowerBound = (1 - WARNING_THRESHOLD) * minReplicas;
 
     const isMinReplicasDiffTooBig =
       hpa.sizing.minReplicas > minUpperBound || hpa.sizing.minReplicas < minLowerBound;
