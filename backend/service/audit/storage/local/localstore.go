@@ -57,6 +57,7 @@ func (c *client) WriteRequestEvent(ctx context.Context, req *auditv1.RequestEven
 	i := int64(len(c.events))
 	c.events = append(c.events,
 		&auditv1.Event{
+			Id:         i,
 			OccurredAt: timestamppb.Now(),
 			EventType:  &auditv1.Event_Event{Event: req},
 		})
@@ -76,8 +77,7 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 	return nil
 }
 
-// Does a full scan through and copies those with a timestamp that fits the bill.
-func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time) ([]*auditv1.Event, error) {
+func (c *client) eventsInRange(ctx context.Context, start time.Time, end *time.Time) []*auditv1.Event {
 	c.RLock()
 	defer c.RUnlock()
 
@@ -95,8 +95,41 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 			events = append(events, value)
 		}
 	}
+	return events
+}
 
+// Does a full scan through and copies those with a timestamp that fits the bill.
+func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time, options *storage.ReadOptions) ([]*auditv1.Event, error) {
+	events := c.eventsInRange(ctx, start, end)
+	if options != nil {
+		if options.Offset > int64(len(events)) {
+			return []*auditv1.Event{}, nil
+		}
+		startIdx := int64(0)
+		endIdx := int64(len(events))
+		if options.Offset != 0 && options.Offset > 0 {
+			startIdx = options.Offset
+		}
+		if options.Limit != 0 {
+			endIdx = options.Offset + options.Limit
+			if endIdx > int64(len(events)) {
+				endIdx = int64(len(events))
+			}
+		}
+		return events[startIdx:endIdx], nil
+	}
 	return events, nil
+}
+
+func (c *client) ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error) {
+	c.RLock()
+	defer c.RUnlock()
+
+	if id >= int64(len(c.events)) || id < 0 {
+		return nil, fmt.Errorf("cannot find event by id: %d", id)
+	}
+
+	return c.events[id], nil
 }
 
 func (c *client) AttemptLock(ctx context.Context, lockID uint32) (bool, error) {

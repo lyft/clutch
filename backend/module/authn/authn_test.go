@@ -104,7 +104,8 @@ func TestAPICallback(t *testing.T) {
 		ErrorDescription: "description",
 	})
 	assert.Nil(t, response)
-	assert.Error(t, err, "error: description")
+	assert.Error(t, err)
+	assert.Equal(t, errors.New("error: description"), err)
 
 	transportStream := &grpcmock.MockServerTransportStream{}
 	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
@@ -130,7 +131,8 @@ func TestAPICallbackWithRefresh(t *testing.T) {
 		ErrorDescription: "description",
 	})
 	assert.Nil(t, response)
-	assert.Error(t, err, "error: description")
+	assert.Error(t, err)
+	assert.Equal(t, errors.New("error: description"), err)
 
 	transportStream := &grpcmock.MockServerTransportStream{}
 	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)

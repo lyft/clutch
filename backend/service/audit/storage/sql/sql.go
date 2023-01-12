@@ -132,17 +132,50 @@ func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
 	return c.query(ctx, unsentEventsQuery)
 }
 
-func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time) ([]*auditv1.Event, error) {
-	const readEventsRangeStatement = `
+func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time, options *storage.ReadOptions) ([]*auditv1.Event, error) {
+	readEventsRangeStatement := `
 		SELECT id, occurred_at, details FROM audit_events
 		WHERE occurred_at BETWEEN $1::timestamp AND $2::timestamp
 		ORDER BY id
 	`
 
-	if end == nil {
-		return c.query(ctx, readEventsRangeStatement, start, time.Now())
+	endTime := time.Now()
+	if end != nil {
+		endTime = *end
 	}
-	return c.query(ctx, readEventsRangeStatement, start, *end)
+
+	args := []interface{}{start, endTime}
+	if options != nil {
+		switch {
+		case options.Limit != 0 && options.Offset != 0:
+			readEventsRangeStatement = fmt.Sprintf(`%s LIMIT $3 OFFSET $4`, readEventsRangeStatement)
+			args = append(args, options.Limit, options.Offset)
+		case options.Limit != 0:
+			readEventsRangeStatement = fmt.Sprintf(`%s LIMIT $3`, readEventsRangeStatement)
+			args = append(args, options.Limit)
+		case options.Offset != 0:
+			readEventsRangeStatement = fmt.Sprintf(`%s OFFSET $4`, readEventsRangeStatement)
+			args = append(args, options.Offset)
+		}
+	}
+
+	return c.query(ctx, readEventsRangeStatement, args...)
+}
+
+func (c *client) ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error) {
+	const readEventsRangeStatement = `
+		SELECT id, occurred_at, details FROM audit_events
+		WHERE id = $1
+	`
+
+	events, err := c.query(ctx, readEventsRangeStatement, id)
+	if err != nil {
+		return nil, err
+	}
+	if len(events) == 0 {
+		return nil, fmt.Errorf("cannot find event by id: %d", id)
+	}
+	return events[0], nil
 }
 
 func (c *client) query(ctx context.Context, query string, args ...interface{}) ([]*auditv1.Event, error) {
@@ -176,6 +209,8 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 		}
 
 		proto := &auditv1.Event{
+			// n.b. this is a safe casting since BIGSERIAL can only reach the max value for signed int64.
+			Id:         int64(row.Id),
 			OccurredAt: occurred,
 			EventType: &auditv1.Event_Event{
 				Event: requestEventProto(c.logger, row),
