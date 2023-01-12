@@ -56,11 +56,11 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
     minSize: NoteConfig;
     maxSize: NoteConfig;
   }>({ minSize: undefined, maxSize: undefined });
-  const getWarning = React.useCallback((current: number, newValue: number): boolean => {
-    return (
-      current * (1 / WARNING_THRESHOLD) < newValue || current / (1 / WARNING_THRESHOLD) > newValue
-    );
-  }, []);
+  const getWarning = React.useCallback(
+    (current: number, newValue: number): boolean =>
+      current * (1 / WARNING_THRESHOLD) < newValue || current / (1 / WARNING_THRESHOLD) > newValue,
+    []
+  );
 
   React.useEffect(() => {
     if (hpa.annotations) {
@@ -91,7 +91,7 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
         minSize: getWarning(minReplicas, hpa.sizing.minReplicas)
           ? {
               severity: "warning",
-              text: `New Max Size is more than ${WARNING_THRESHOLD * 100}% different`,
+              text: `New Min Size is more than ${WARNING_THRESHOLD * 100}% different`,
             }
           : undefined,
         maxSize: getWarning(maxReplicas, hpa.sizing.maxReplicas)

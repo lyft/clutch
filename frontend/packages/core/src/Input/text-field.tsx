@@ -61,10 +61,9 @@ const StyledTextField = styled(BaseTextField)({
     "&.Mui-error": {
       color: "var(--error-color)",
     },
-  },
-
-  "&.Mui-warning .MuiInputLabel-root:not(.Mui-error), .MuiFormHelperText-root": {
-    color: "var(--warning-color)",
+    "&.MuiFormLabel-colorWarning:not(.Mui-error)": {
+      color: "var(--warning-color)",
+    },
   },
 
   ".MuiInputBase-root": {
@@ -84,6 +83,15 @@ const StyledTextField = styled(BaseTextField)({
     "&.Mui-error fieldset": {
       borderColor: "var(--error-color)",
       borderWidth: "var(--input-border-width)",
+    },
+    "&.MuiInputBase-colorWarning:not(.Mui-error)": {
+      "& + .MuiFormHelperText-root": {
+        color: "var(--warning-color)",
+      },
+      fieldset: {
+        borderColor: "var(--warning-color)",
+        borderWidth: "var(--input-border-width)",
+      },
     },
     "&.Mui-disabled fieldset": {
       backgroundColor: "rgba(13, 16, 48, 0.12)",
@@ -105,12 +113,6 @@ const StyledTextField = styled(BaseTextField)({
         opacity: 1,
       },
     },
-  },
-
-  "&.Mui-warning .MuiInputBase-root:not(.Mui-error) fieldset": {
-    "--input-border-width": "1px",
-    borderColor: "var(--warning-color)",
-    borderWidth: "var(--input-border-width)",
   },
 
   ".MuiInputBase-adornedEnd": {
@@ -395,7 +397,7 @@ const TextFieldRef = (
       defaultValue={defaultValue}
       value={value}
       onChange={onChange}
-      className={warning ? "Mui-warning" : ""}
+      color={warning ? "warning" : undefined}
       {...props}
       {...{ ref }}
     />

@@ -100,7 +100,7 @@ const Grid = styled(MuiGrid)({
   ".MuiFormControl-root .MuiFormHelperText-root.Mui-error": {
     flex: 1,
   },
-  ".MuiFormControl-root.Mui-warning .MuiFormHelperText-root": {
+  ".MuiFormControl-root .MuiInputBase-colorWarning + .MuiFormHelperText-root": {
     flex: 1,
   },
   ".textfield-disabled .MuiInput-input": {
