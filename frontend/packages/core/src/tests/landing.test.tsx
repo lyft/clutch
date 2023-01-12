@@ -7,9 +7,7 @@ import "@testing-library/jest-dom";
 import * as appContext from "../Contexts/app-context";
 import Landing from "../landing";
 
-beforeAll(() => {
-  jest.spyOn(appContext, "useAppContext").mockReturnValue({ workflows: [] });
-});
+jest.spyOn(appContext, "useAppContext").mockReturnValue({ workflows: [] });
 
 test("renders correctly", () => {
   const { asFragment } = render(

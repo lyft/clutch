@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 test("renders correctly", () => {
-  expect(screen.getByTestId("styled-tabs")).toBeInTheDocument();
+  expect(screen.getByTestId("styled-tabs")).toBeVisible();
 });
 
 test("renders children tabs", () => {
