@@ -132,27 +132,6 @@ func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
 	return c.query(ctx, unsentEventsQuery)
 }
 
-func (c *client) CountEvents(ctx context.Context, start time.Time, end *time.Time) (int64, error) {
-	countEventsRangeStatement := `
-		SELECT COUNT(*) FROM audit_events
-		WHERE occurred_at BETWEEN $1::timestamp AND $2::timestamp
-	`
-
-	endTime := time.Now()
-	if end != nil {
-		endTime = *end
-	}
-
-	var count int64
-	row := c.db.QueryRow(countEventsRangeStatement, start, endTime)
-	err := row.Scan(&count)
-	if err != nil {
-		return 0, err
-	}
-
-	return count, nil
-}
-
 func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time, options *storage.ReadOptions) ([]*auditv1.Event, error) {
 	readEventsRangeStatement := `
 		SELECT id, occurred_at, details FROM audit_events
@@ -165,16 +144,22 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 		endTime = *end
 	}
 
+	args := []interface{}{start, endTime}
 	if options != nil {
-		readEventsRangeStatement = fmt.Sprintf(`
-		%s
-		LIMIT $3 OFFSET $4
-		`, readEventsRangeStatement)
-
-		return c.query(ctx, readEventsRangeStatement, start, endTime, options.Limit, options.Offset)
+		switch {
+		case options.Limit != 0 && options.Offset != 0:
+			readEventsRangeStatement = fmt.Sprintf(`%s LIMIT $3 OFFSET $4`, readEventsRangeStatement)
+			args = append(args, options.Limit, options.Offset)
+		case options.Limit != 0:
+			readEventsRangeStatement = fmt.Sprintf(`%s LIMIT $3`, readEventsRangeStatement)
+			args = append(args, options.Limit)
+		case options.Offset != 0:
+			readEventsRangeStatement = fmt.Sprintf(`%s OFFSET $4`, readEventsRangeStatement)
+			args = append(args, options.Offset)
+		}
 	}
 
-	return c.query(ctx, readEventsRangeStatement, start, endTime)
+	return c.query(ctx, readEventsRangeStatement, args...)
 }
 
 func (c *client) ReadEvent(ctx context.Context, id int64) (*auditv1.Event, error) {

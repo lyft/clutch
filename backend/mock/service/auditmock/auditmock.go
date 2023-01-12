@@ -47,10 +47,6 @@ func (s *svc) UpdateRequestEvent(_ context.Context, id int64, event *auditv1.Req
 	return nil
 }
 
-func (s *svc) CountEvents(_ context.Context, start time.Time, end *time.Time) (int64, error) {
-	return int64(len(s.events)), nil
-}
-
 func (s *svc) ReadEvents(_ context.Context, start time.Time, end *time.Time, options *audit.ReadOptions) ([]*auditv1.Event, error) {
 	s.RLock()
 	defer s.RUnlock()
@@ -76,10 +72,19 @@ func (s *svc) ReadEvents(_ context.Context, start time.Time, end *time.Time, opt
 	}
 
 	if options != nil {
-		startIdx := options.Offset
-		endIdx := options.Offset + options.Limit
-		if endIdx > int64(len(s.events)) {
-			endIdx = int64(len(s.events))
+		if options.Offset > int64(len(events)) {
+			return []*auditv1.Event{}, nil
+		}
+		startIdx := int64(0)
+		endIdx := int64(len(events))
+		if options.Offset != 0 && options.Offset > 0 {
+			startIdx = options.Offset
+		}
+		if options.Limit != 0 {
+			endIdx = options.Offset + options.Limit
+			if endIdx > int64(len(events)) {
+				endIdx = int64(len(events))
+			}
 		}
 		return events[startIdx:endIdx], nil
 	}

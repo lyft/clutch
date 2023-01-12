@@ -73,39 +73,45 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 		return nil, errors.New("no time window requested")
 	}
 
-	eventCount, err := m.client.CountEvents(ctx, start, end)
-	if err != nil {
-		return nil, err
-	}
-
-	var options *audit.ReadOptions
+	var page int
 	if req.PageToken != "" {
-		startIdx := 0
-		page, err := strconv.Atoi(req.PageToken)
-		if err != nil {
+		p, err := strconv.Atoi(req.PageToken)
+		if err != nil || p < 0 {
 			return nil, fmt.Errorf("invalid page token: %s", req.PageToken)
 		}
-		limit := int(req.Limit)
-		if req.Limit == 0 {
-			limit = 10
-		}
-
-		startIdx = page * limit
-		if startIdx > int(eventCount) {
-			startIdx = 0
-		}
-
-		endIdx := startIdx + limit
-		if endIdx < int(eventCount) {
-			resp.NextPageToken = strconv.FormatInt(int64(page+1), 10)
-		}
-
-		options = &audit.ReadOptions{Offset: int64(startIdx), Limit: int64(limit)}
+		page = p
 	}
 
+	limit := int(req.Limit)
+	// if a request has no limit we return all found events.
+	if req.Limit == 0 {
+		// in the event there is no request limit set limit to be 1 for purposes
+		// of determining page offset later.
+		limit = 1
+	}
+
+	startIdx := page * limit
+	// n.b. the user defined limit is increased by 1 to help determine if there is
+	// a subsequent page of information that should be denoted in the response
+	additionalEventsNumber := int64(limit + 1)
+	options := &audit.ReadOptions{Offset: int64(startIdx)}
+	// if request limit is specified pass that value into the read options call
+	if req.Limit != 0 {
+		options.Limit = additionalEventsNumber
+	}
 	events, err := m.client.ReadEvents(ctx, start, end, options)
 	if err != nil {
 		return nil, err
+	}
+
+	// This logic is only used for purposes of pagination and should only be triggered if:
+	// 1. there are more than 0 events
+	// 2. if the request has a limit specified
+	// 3. if the number of events is equal to the request limit + 1 meaning there are
+	//    additional events to request on a subsequent page.
+	if len(events) > 0 && req.Limit != 0 && len(events) == int(additionalEventsNumber) {
+		resp.NextPageToken = strconv.FormatInt(int64(page+1), 10)
+		events = events[:len(events)-1]
 	}
 
 	resp.Events = events

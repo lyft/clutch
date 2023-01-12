@@ -95,18 +95,34 @@ const colorCss = (palette: ButtonPalette) => {
   };
 };
 
-const StyledButton = styled(MuiButton)<{ palette: ButtonPalette }>(
+const BUTTON_SIZE_MAP = {
+  small: {
+    height: "32px",
+    padding: "7px 32px",
+  },
+  medium: {
+    height: "48px",
+    padding: "14px 32px",
+  },
+  large: {
+    height: "64px",
+    padding: "21px 32px",
+  },
+};
+
+const StyledButton = styled(MuiButton)<{ palette: ButtonPalette; size: MuiButtonProps["size"] }>(
   {
     borderRadius: "4px",
     fontWeight: 500,
     lineHeight: "20px",
     fontSize: "16px",
     textTransform: "none",
-    height: "48px",
-    padding: "14px 32px",
     margin: "12px 8px",
   },
-  props => colorCss(props.palette)
+  props => ({
+    ...colorCss(props.palette),
+    ...BUTTON_SIZE_MAP[props.size],
+  })
 );
 
 const StyledBorderButton = styled(StyledButton)({
@@ -144,7 +160,10 @@ const variantPalette = (variant: ButtonVariant): ButtonPalette => {
 };
 
 export interface ButtonProps
-  extends Pick<MuiButtonProps, "disabled" | "endIcon" | "onClick" | "startIcon" | "type"> {
+  extends Pick<
+    MuiButtonProps,
+    "id" | "disabled" | "endIcon" | "onClick" | "startIcon" | "type" | "size"
+  > {
   /** Case-sensitive button text. */
   text: string;
   /** The button variantion. Defaults to primary. */
@@ -152,12 +171,12 @@ export interface ButtonProps
 }
 
 /** A button with default themes based on use case. */
-const Button = ({ text, variant = "primary", ...props }: ButtonProps) => {
+const Button = ({ text, variant = "primary", size = "medium", ...props }: ButtonProps) => {
   const palette = variantPalette(variant);
   const ButtonVariant = variant === "neutral" ? StyledBorderButton : StyledButton;
 
   return (
-    <ButtonVariant variant="contained" disableElevation palette={palette} {...props}>
+    <ButtonVariant variant="contained" disableElevation palette={palette} size={size} {...props}>
       {text}
     </ButtonVariant>
   );

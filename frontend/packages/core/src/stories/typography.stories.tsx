@@ -2,11 +2,11 @@ import * as React from "react";
 import type { Meta, Story } from "@storybook/react";
 
 import type { TypographyProps } from "../typography";
-import { Typography, VARIANTS } from "../typography";
+import { Typography as TypographyComponent, VARIANTS } from "../typography";
 
 export default {
   title: "Core/Typography",
-  component: Typography,
+  component: TypographyComponent,
   argTypes: {
     variant: {
       options: VARIANTS,
@@ -19,13 +19,13 @@ export default {
 } as Meta;
 
 const Template: Story<TypographyProps> = ({ variant, children, ...props }) => (
-  <Typography variant={variant} {...props}>
+  <TypographyComponent variant={variant} {...props}>
     {children}
-  </Typography>
+  </TypographyComponent>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const Typography = Template.bind({});
+Typography.args = {
   children: "Some text",
   variant: "h1",
 };

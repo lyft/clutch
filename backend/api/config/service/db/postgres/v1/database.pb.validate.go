@@ -96,9 +96,18 @@ func (m *Connection) validate(all bool) error {
 
 	// no validation rules for SslMode
 
-	switch m.Authn.(type) {
-
+	switch v := m.Authn.(type) {
 	case *Connection_Password:
+		if v == nil {
+			err := ConnectionValidationError{
+				field:  "Authn",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if utf8.RuneCountInString(m.GetPassword()) < 1 {
 			err := ConnectionValidationError{
@@ -111,6 +120,8 @@ func (m *Connection) validate(all bool) error {
 			errors = append(errors, err)
 		}
 
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

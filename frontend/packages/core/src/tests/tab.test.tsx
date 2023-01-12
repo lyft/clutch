@@ -1,43 +1,28 @@
 import React from "react";
-import { mount, shallow } from "enzyme";
+import { render, screen } from "@testing-library/react";
+
+import "@testing-library/jest-dom";
 
 import { Tab, Tabs } from "../tab";
 
-describe("Tabs component", () => {
-  describe("with a value set", () => {
-    let component;
-    beforeEach(() => {
-      component = shallow(
-        <Tabs value={1}>
-          <Tab label="meow" />
-          <Tab label="mix" />
-        </Tabs>
-      );
-    });
+beforeEach(() => {
+  render(
+    <Tabs value={1}>
+      <Tab label="meow" />
+      <Tab label="mix" />
+    </Tabs>
+  );
+});
 
-    it("renders", () => {
-      expect(component.find(Tabs)).toBeDefined();
-    });
+test("renders correctly", () => {
+  expect(screen.getByTestId("styled-tabs")).toBeVisible();
+});
 
-    it("renders children tabs", () => {
-      expect(component.find(Tab)).toHaveLength(2);
-    });
+test("renders children tabs", () => {
+  expect(screen.getAllByRole("tab")).toHaveLength(2);
+});
 
-    it("displays the tab from the specified value", () => {
-      expect(component.find("TabContext").prop("value")).toBe("1");
-    });
-
-    it("has the mix tab selected", () => {
-      // use mount instead of shallow so that we get the other props like
-      // `selected`
-      const mounted = mount(
-        <Tabs value={1}>
-          <Tab label="meow" />
-          <Tab label="mix" />
-        </Tabs>
-      );
-      expect(mounted.find(Tab).at(1).prop("label")).toBe("mix");
-      expect(mounted.find(Tab).at(1).prop("selected")).toBe(true);
-    });
-  });
+test("has the mix tab selected", () => {
+  expect(screen.getAllByRole("tab")[1]).toHaveTextContent("mix");
+  expect(screen.getAllByRole("tab")[1]).toHaveAttribute("tabindex", "0");
 });

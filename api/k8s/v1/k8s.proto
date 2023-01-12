@@ -553,6 +553,8 @@ message ResizeHPARequest {
     uint32 max = 2;
   }
   Sizing sizing = 5 [ (validate.rules).message = {required : true} ];
+
+  Sizing current_sizing = 6;
 }
 
 message ResizeHPAResponse {

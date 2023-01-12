@@ -18,6 +18,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
+import _ from "lodash";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
@@ -64,7 +65,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
     Math.ceil(stream.currentShardCount * 1.75),
     Math.ceil(stream.currentShardCount * 2),
   ];
-  const options = values.map(value => {
+  const options = _.uniq(values).map(value => {
     return { label: value.toString() };
   });
   return (

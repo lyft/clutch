@@ -176,6 +176,7 @@ interface CardContentProps extends SpacingProps {
   collapseAction?: CardContentCollapsibleProps;
   /** The max height of the card content. The default is none. */
   maxHeight?: number | "none";
+  className?: string;
 }
 
 const CardContent = ({
@@ -241,6 +242,13 @@ const CardContent = ({
 
 const StyledLandingCard = styled(Card)({
   border: "none",
+  height: "214px",
+  maxHeight: "100%",
+
+  "& .cardActionArea": {
+    height: "inherit",
+    maxHeight: "inherit",
+  },
 
   "& .header": {
     display: "inline-flex",
@@ -260,6 +268,18 @@ const StyledLandingCard = styled(Card)({
   },
 });
 
+const TruncatedText = styled(Typography)({
+  display: "-webkit-box",
+  overflow: "hidden",
+  "-webkit-box-orient": "vertical",
+  "-webkit-line-clamp": "3",
+  [`@media screen and (max-width: 595px),
+  screen and (min-width: 900px) and (max-width: 950px),
+  screen and (min-width: 1200px) and (max-width: 1250px)`]: {
+    "-webkit-line-clamp": "2",
+  },
+});
+
 export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
   group: string;
   title: string;
@@ -268,7 +288,7 @@ export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
 
 export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
   <StyledLandingCard {...props}>
-    <StyledCardActionArea onClick={onClick}>
+    <StyledCardActionArea className="cardActionArea" onClick={onClick}>
       <CardContent padding={4}>
         <div className="header">
           <div className="icon">
@@ -277,10 +297,10 @@ export const LandingCard = ({ group, title, description, onClick, ...props }: La
           <span>{group}</span>
         </div>
         <div>
-          <Typography variant="h3">{title}</Typography>
-          <Typography color="rgba(13, 16, 48, 0.6)" variant="body2">
+          <TruncatedText variant="h3">{title}</TruncatedText>
+          <TruncatedText color="rgba(13, 16, 48, 0.6)" variant="body2">
             {description}
-          </Typography>
+          </TruncatedText>
         </div>
       </CardContent>
     </StyledCardActionArea>

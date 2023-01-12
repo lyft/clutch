@@ -17,6 +17,7 @@ import (
 
 func TestGetEvents(t *testing.T) {
 	testCases := []struct {
+		id                 string
 		eventCount         int
 		req                *auditv1.GetEventsRequest
 		expectedEventCount int
@@ -24,10 +25,12 @@ func TestGetEvents(t *testing.T) {
 		expectedErr        error
 	}{
 		{
+			id:          "without time window",
 			req:         &auditv1.GetEventsRequest{},
 			expectedErr: errors.New("no time window requested"),
 		},
 		{
+			id:         "with time window and events",
 			eventCount: 11,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Range{
@@ -38,8 +41,10 @@ func TestGetEvents(t *testing.T) {
 				},
 			},
 			expectedEventCount: 11,
+			expectedNextToken:  "",
 		},
 		{
+			id:         "with time window in future",
 			eventCount: 11,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Range{
@@ -52,6 +57,7 @@ func TestGetEvents(t *testing.T) {
 			expectedEventCount: 0,
 		},
 		{
+			id:         "with time since an hour ago",
 			eventCount: 11,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Since{
@@ -59,8 +65,10 @@ func TestGetEvents(t *testing.T) {
 				},
 			},
 			expectedEventCount: 11,
+			expectedNextToken:  "",
 		},
 		{
+			id:         "with time since a microsecond ago",
 			eventCount: 11,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Since{
@@ -71,6 +79,7 @@ func TestGetEvents(t *testing.T) {
 		},
 		// invalid page token should return error on conversion
 		{
+			id:         "with invalid page token",
 			eventCount: 11,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Since{
@@ -81,6 +90,18 @@ func TestGetEvents(t *testing.T) {
 			expectedErr: errors.New("invalid page token: invalid"),
 		},
 		{
+			id:         "with negative page token",
+			eventCount: 11,
+			req: &auditv1.GetEventsRequest{
+				Window: &auditv1.GetEventsRequest_Since{
+					Since: durationpb.New(1 * time.Hour),
+				},
+				PageToken: "-1",
+			},
+			expectedErr: errors.New("invalid page token: -1"),
+		},
+		{
+			id:         "with page token",
 			eventCount: 11,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Since{
@@ -88,10 +109,11 @@ func TestGetEvents(t *testing.T) {
 				},
 				PageToken: "0",
 			},
-			expectedEventCount: 10,
-			expectedNextToken:  "1",
+			expectedEventCount: 11,
+			expectedNextToken:  "",
 		},
 		{
+			id:         "with page token and limit",
 			eventCount: 11,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Since{
@@ -104,6 +126,7 @@ func TestGetEvents(t *testing.T) {
 			expectedNextToken:  "1",
 		},
 		{
+			id:         "with page token and no next page",
 			eventCount: 10,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Since{
@@ -112,8 +135,10 @@ func TestGetEvents(t *testing.T) {
 				PageToken: "0",
 			},
 			expectedEventCount: 10,
+			expectedNextToken:  "",
 		},
 		{
+			id:         "with too large of page token",
 			eventCount: 1,
 			req: &auditv1.GetEventsRequest{
 				Window: &auditv1.GetEventsRequest_Since{
@@ -121,13 +146,13 @@ func TestGetEvents(t *testing.T) {
 				},
 				PageToken: "5",
 			},
-			expectedEventCount: 1,
+			expectedEventCount: 0,
 		},
 	}
 
-	for idx, test := range testCases {
+	for _, test := range testCases {
 		test := test
-		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+		t.Run(fmt.Sprintf(test.id), func(t *testing.T) {
 			t.Parallel()
 			m := &mod{
 				client: auditmock.New(),

@@ -1,15 +1,15 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import Paper from "../paper";
+import PaperComponent from "../paper";
 
 export default {
   title: "Core/Paper",
-  component: Paper,
+  component: PaperComponent,
 } as Meta;
 
-export const Primary = () => (
-  <Paper>
+export const Paper = () => (
+  <PaperComponent>
     <div>Some text in paper</div>
-  </Paper>
+  </PaperComponent>
 );

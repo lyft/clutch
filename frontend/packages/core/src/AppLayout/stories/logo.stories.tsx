@@ -1,11 +1,11 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 
-import Logo from "../logo";
+import LogoComponent from "../logo";
 
 export default {
   title: "Core/AppLayout/Logo",
-  component: Logo,
+  component: LogoComponent,
 } as Meta;
 
-export const Primary: React.FC<{}> = () => <Logo />;
+export const Logo: React.FC<{}> = () => <LogoComponent />;

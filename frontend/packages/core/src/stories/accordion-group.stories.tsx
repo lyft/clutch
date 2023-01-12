@@ -2,15 +2,24 @@ import * as React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { AccordionGroupProps } from "../accordion";
-import { Accordion, AccordionDetails, AccordionGroup } from "../accordion";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionGroup as AccordionGroupComponent,
+} from "../accordion";
 
 export default {
   title: "Core/Accordion/Accordion Group",
-  component: AccordionGroup,
+  component: AccordionGroupComponent,
+  argTypes: {
+    defaultExpandedIdx: {
+      description: "The index of the tab expanded by default on mount.",
+    },
+  },
 } as Meta;
 
 const Template = (props: AccordionGroupProps) => (
-  <AccordionGroup {...props}>
+  <AccordionGroupComponent {...props}>
     <Accordion title="First Accordion">
       <AccordionDetails>This is the first accordion.</AccordionDetails>
     </Accordion>
@@ -20,13 +29,8 @@ const Template = (props: AccordionGroupProps) => (
     <Accordion title="Third Accordion">
       <AccordionDetails>This is the third accordion.</AccordionDetails>
     </Accordion>
-  </AccordionGroup>
+  </AccordionGroupComponent>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {};
-
-export const WithDefaultExpanded = Template.bind({});
-WithDefaultExpanded.args = {
-  defaultExpandedIdx: 0,
-};
+export const AccordionGroup = Template.bind({});
+AccordionGroup.args = {};

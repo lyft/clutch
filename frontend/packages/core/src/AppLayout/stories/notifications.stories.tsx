@@ -4,11 +4,11 @@ import { Grid as MuiGrid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import type { NotificationsProp } from "../notifications";
-import Notifications from "../notifications";
+import NotificationsComponent from "../notifications";
 
 export default {
   title: "Core/AppLayout/Notifications",
-  component: Notifications,
+  component: NotificationsComponent,
 } as Meta;
 
 const Grid = styled(MuiGrid)({
@@ -18,11 +18,11 @@ const Grid = styled(MuiGrid)({
 
 const Template = (props: NotificationsProp) => (
   <Grid container alignItems="center" justifyContent="center">
-    <Notifications {...props} />
+    <NotificationsComponent {...props} />
   </Grid>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const Notifications = Template.bind({});
+Notifications.args = {
   data: [{ value: "New K8s workflow!" }, { value: "Clutch v1.18 release" }],
 };

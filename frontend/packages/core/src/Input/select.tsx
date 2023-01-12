@@ -183,7 +183,7 @@ export interface SelectOption extends BaseSelectOptions {
 }
 
 export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
-  defaultOption?: number;
+  defaultOption?: number | string;
   helperText?: string;
   label?: string;
   name: string;
@@ -191,7 +191,7 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> 
   onChange?: (value: string) => void;
 }
 
-const Select = ({
+export const Select = ({
   defaultOption = 0,
   disabled,
   error,
@@ -208,8 +208,26 @@ const Select = ({
     )
   );
 
-  const defaultIdx = defaultOption < flatOptions.length && defaultOption > 0 ? defaultOption : 0;
-  const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
+  // Will take a string or an integer and attempt to find the index where it exists based on the flattened items
+  const calculateDefaultOption = () => {
+    let option = defaultOption;
+
+    // handle empty case
+    if (option === undefined || option === "") {
+      option = 0;
+    }
+
+    if (Number.isInteger(option)) {
+      return option < flatOptions.length && option > 0 ? option : 0;
+    }
+
+    // we're a string, lets look it up based on the value/label and default to 0 if none
+    const index = flatOptions?.findIndex(opt => opt?.value === option || opt?.label === option);
+
+    return index >= 0 ? index : 0;
+  };
+
+  const [selectedIdx, setSelectedIdx] = React.useState(calculateDefaultOption());
 
   React.useEffect(() => {
     if (flatOptions.length !== 0) {

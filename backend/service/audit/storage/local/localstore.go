@@ -98,19 +98,23 @@ func (c *client) eventsInRange(ctx context.Context, start time.Time, end *time.T
 	return events
 }
 
-func (c *client) CountEvents(ctx context.Context, start time.Time, end *time.Time) (int64, error) {
-	events := c.eventsInRange(ctx, start, end)
-	return int64(len(events)), nil
-}
-
 // Does a full scan through and copies those with a timestamp that fits the bill.
 func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time, options *storage.ReadOptions) ([]*auditv1.Event, error) {
 	events := c.eventsInRange(ctx, start, end)
 	if options != nil {
-		startIdx := options.Offset
-		endIdx := options.Offset + options.Limit
-		if endIdx > int64(len(c.events)) {
-			endIdx = int64(len(c.events))
+		if options.Offset > int64(len(events)) {
+			return []*auditv1.Event{}, nil
+		}
+		startIdx := int64(0)
+		endIdx := int64(len(events))
+		if options.Offset != 0 && options.Offset > 0 {
+			startIdx = options.Offset
+		}
+		if options.Limit != 0 {
+			endIdx = options.Offset + options.Limit
+			if endIdx > int64(len(events)) {
+				endIdx = int64(len(events))
+			}
 		}
 		return events[startIdx:endIdx], nil
 	}

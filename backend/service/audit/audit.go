@@ -137,14 +137,6 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 	return c.storage.UpdateRequestEvent(ctx, id, update)
 }
 
-func (c *client) CountEvents(ctx context.Context, start time.Time, end *time.Time) (int64, error) {
-	eventCount, err := c.storage.CountEvents(ctx, start, end)
-	if err != nil {
-		return 0, err
-	}
-	return eventCount, nil
-}
-
 func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time, options *ReadOptions) ([]*auditv1.Event, error) {
 	var o *storage.ReadOptions
 	if options != nil {
