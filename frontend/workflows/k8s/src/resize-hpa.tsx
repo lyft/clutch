@@ -91,13 +91,13 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
         minSize: getWarning(minReplicas, hpa.sizing.minReplicas)
           ? {
               severity: "warning",
-              text: `New Max Size is more than ${warningThreshold * 100}% different`,
+              text: `New Max Size is more than ${WARNING_THRESHOLD * 100}% different`,
             }
           : undefined,
         maxSize: getWarning(maxReplicas, hpa.sizing.maxReplicas)
           ? {
               severity: "warning",
-              text: `New Max Size is more than ${warningThreshold * 100}% different`,
+              text: `New Max Size is more than ${WARNING_THRESHOLD * 100}% different`,
             }
           : undefined,
       });
