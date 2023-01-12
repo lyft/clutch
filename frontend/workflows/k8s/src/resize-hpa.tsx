@@ -44,6 +44,12 @@ const HPADetails: React.FC<WizardChild> = () => {
     hpaData.updateData(key, value);
   };
 
+  const notes = ({
+    text:
+      "The HPA should take just a few minutes to scale in either direction. The HPA min/max size may fluctuate as it's scaling for a few minutes; this is normal and due to variable factors, like the Lyft Rebalancer.",
+    severity: "info",
+  });
+
   const currentHpaData = useDataLayout("currentHpaData");
 
   const metadataAnnotations = [];
@@ -131,8 +137,9 @@ const HPADetails: React.FC<WizardChild> = () => {
       )}
       <ButtonGroup>
         <Button text="Back" variant="neutral" onClick={() => onBack()} />
-        <Button text="Resize" variant="destructive" onClick={onSubmit} />
+        <Button text="Execute" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
+      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
@@ -219,7 +226,7 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
     <Wizard dataLayout={dataLayout} heading={heading}>
       <HPAIdentifier name="Lookup" resolverType={resolverType} />
       <HPADetails name="Modify" />
-      <Confirm name="Confirmation" notes={notes} />
+      <Confirm name="Result" notes={notes} />
     </Wizard>
   );
 };
