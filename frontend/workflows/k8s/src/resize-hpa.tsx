@@ -35,6 +35,7 @@ const HPAIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
 
+// The same notes will be displayed at both the final and next-to-last steps.
 const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
   const { onSubmit, onBack } = useWizardContext();
   const hpaData = useDataLayout("hpaData");
