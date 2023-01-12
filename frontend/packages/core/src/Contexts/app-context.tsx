@@ -24,7 +24,10 @@ export type TriggeredHeaderData = {
 interface ContextProps {
   workflows: Workflow[];
   /**
-   * Will trigger the given header item based on the key, setting the open property as well as saving any optional data
+   * Will trigger the given header item based on the key, saving any optional data
+   * This is useful for when a component would like to trigger an item in the header through some state change,
+   * such as the NPS component opening or opening a search and prefilling it
+   *
    * Example of utilizing with NPS
    * Opening - triggerHeaderItem("NPS", { defaultOption: "Example 1" })
    * Closing - triggerHeaderItem("NPS", null)
