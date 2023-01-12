@@ -1,21 +1,17 @@
 import React from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
+
+import "@testing-library/jest-dom";
 
 import { Theme } from "../AppProvider/themes";
 import NotFound from "../not-found";
 
-describe("Not Found component", () => {
-  let component;
+test("renders correctly", () => {
+  const { asFragment } = render(
+    <Theme>
+      <NotFound />
+    </Theme>
+  );
 
-  beforeAll(() => {
-    component = mount(
-      <Theme>
-        <NotFound />
-      </Theme>
-    );
-  });
-
-  it("renders correctly", () => {
-    expect(component.debug()).toMatchSnapshot();
-  });
+  expect(asFragment()).toMatchSnapshot();
 });
