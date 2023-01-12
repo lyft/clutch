@@ -8,13 +8,11 @@ import {
   client,
   Confirmation,
   MetadataTable,
-  NoteConfig,
   NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
-import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import _ from "lodash";
 import { number, ref } from "yup";
@@ -37,21 +35,13 @@ const HPAIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
 
-const HPADetails: React.FC<WizardChild> = () => {
+const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
   const { onSubmit, onBack } = useWizardContext();
   const hpaData = useDataLayout("hpaData");
   const hpa = hpaData.displayValue() as IClutch.k8s.v1.HPA;
   const update = (key: string, value: any) => {
     hpaData.updateData(key, value);
   };
-
-  const notes: NoteConfig[] = [
-    {
-      text:
-        "The HPA should take just a few minutes to scale in either direction. The HPA min/max size may fluctuate as it's scaling for a few minutes; this is normal and due to variable factors, like the Lyft Rebalancer.",
-      severity: "info",
-    },
-  ];
 
   const currentHpaData = useDataLayout("currentHpaData");
 
@@ -228,7 +218,7 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <HPAIdentifier name="Lookup" resolverType={resolverType} />
-      <HPADetails name="Modify" />
+      <HPADetails name="Modify" notes={notes} />
       <Confirm name="Result" notes={notes} />
     </Wizard>
   );
