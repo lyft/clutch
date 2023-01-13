@@ -13,7 +13,6 @@ import {
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
-import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import _ from "lodash";
 import { number, ref } from "yup";
@@ -36,7 +35,8 @@ const HPAIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
 
-const HPADetails: React.FC<WizardChild> = () => {
+// The same notes will be displayed at both the final and next-to-last steps.
+const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
   const { onSubmit, onBack } = useWizardContext();
   const hpaData = useDataLayout("hpaData");
   const hpa = hpaData.displayValue() as IClutch.k8s.v1.HPA;
@@ -131,8 +131,9 @@ const HPADetails: React.FC<WizardChild> = () => {
       )}
       <ButtonGroup>
         <Button text="Back" variant="neutral" onClick={() => onBack()} />
-        <Button text="Resize" variant="destructive" onClick={onSubmit} />
+        <Button text="Execute" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
+      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
@@ -218,8 +219,8 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <HPAIdentifier name="Lookup" resolverType={resolverType} />
-      <HPADetails name="Modify" />
-      <Confirm name="Confirmation" notes={notes} />
+      <HPADetails name="Modify" notes={notes} />
+      <Confirm name="Result" notes={notes} />
     </Wizard>
   );
 };
