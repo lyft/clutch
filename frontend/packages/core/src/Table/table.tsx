@@ -31,6 +31,7 @@ const StyledTable = styled(MuiTable)<{
   $columnCount: number;
   $compress: boolean;
   $responsive?: TableProps["responsive"];
+  $overflow?: TableProps["overflow"];
 }>(
   {
     minWidth: "100%",
@@ -42,6 +43,9 @@ const StyledTable = styled(MuiTable)<{
     gridTemplateColumns: `repeat(${props.$columnCount}, auto)${
       props.$hasActionsColumn ? " 80px" : ""
     }`,
+    ".MuiTableCell-root": {
+      wordBreak: props.$overflow === "scroll" ? "normal" : props.$overflow,
+    },
   })
 );
 
@@ -49,7 +53,7 @@ const StyledTableBody = styled(MuiTableBody)({
   display: "contents",
 });
 
-const StyledTableHead = styled(MuiTableHead)({
+const StyledTableHeadRow = styled(MuiTableRow)({
   display: "contents",
   backgroundColor: "#D7DAF6",
 });
@@ -91,10 +95,9 @@ const StyledTableCell = styled(MuiTableCell)<{
   })
 );
 
-interface TableCellProps extends MuiTableCellProps {
+interface TableCellProps extends MuiTableCellProps, Pick<TableProps, "responsive"> {
   action?: boolean;
   border?: boolean;
-  responsive?: boolean;
 }
 
 const TableCell = ({ action, border, responsive, ...props }: TableCellProps) => (
@@ -122,6 +125,8 @@ interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   actionsColumn?: boolean;
   /** Make table responsive */
   responsive?: boolean;
+  /** How to handle horizontal overflow */
+  overflow?: "scroll" | "break-word";
   /** Table rows to render */
   children?:
     | (React.ReactElement<TableRowProps> | null | undefined | {})[]
@@ -134,6 +139,7 @@ const Table: React.FC<TableProps> = ({
   hideHeader = false,
   actionsColumn = false,
   responsive = false,
+  overflow = "scroll",
   children,
   ...props
 }) => {
@@ -147,6 +153,7 @@ const Table: React.FC<TableProps> = ({
         $columnCount={columns?.length}
         $hasActionsColumn={actionsColumn}
         $responsive={responsive}
+        $overflow={overflow}
         {...props}
       >
         {/*
@@ -154,16 +161,18 @@ const Table: React.FC<TableProps> = ({
           This may be unintended which is why we override wit hthe hideHeader prop.
         */}
         {showHeader && columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0 && (
-          <StyledTableHead>
-            {columns.map(h => (
-              <StyledTableCell $responsive={responsive}>
-                <Typography variant="subtitle3">{h}</Typography>
-              </StyledTableCell>
-            ))}
-            {actionsColumn && !(responsive && compress) && (
-              <StyledTableCell $responsive={responsive} $action />
-            )}
-          </StyledTableHead>
+          <MuiTableHead>
+            <StyledTableHeadRow>
+              {columns.map(h => (
+                <StyledTableCell key={h} $responsive={responsive}>
+                  <Typography variant="subtitle3">{h}</Typography>
+                </StyledTableCell>
+              ))}
+              {actionsColumn && !(responsive && compress) && (
+                <StyledTableCell $responsive={responsive} $action />
+              )}
+            </StyledTableHeadRow>
+          </MuiTableHead>
         )}
         <StyledTableBody>
           {React.Children.map(children, (c: React.ReactElement<TableRowProps>) =>
@@ -175,7 +184,9 @@ const Table: React.FC<TableProps> = ({
   );
 };
 
-export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
+export interface TableRowProps
+  extends Pick<MuiTableRowProps, "onClick">,
+    Pick<MuiTableCellProps, "colSpan"> {
   children?: React.ReactNode;
   /**
    * The default element to render if children are null. If not present and a child is null
@@ -187,8 +198,6 @@ export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
    * should set the responsive prop on the table.
    */
   responsive?: boolean;
-
-  colSpan?: number;
 }
 
 const TableRow = ({
