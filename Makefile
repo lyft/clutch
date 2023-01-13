@@ -16,7 +16,7 @@ PROJECT_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 	@grep -E '^\.PHONY: [a-zA-Z_-]+ .*?# .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = "(: |#)"}; {printf "%-30s %s\n", $$2, $$3}'
 
 .PHONY: all # Generate API, Frontend, and backend assets.
-all: preflight-checks api frontend backend-with-assets
+all: install-yarn preflight-checks api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
 api: yarn-ensure
@@ -197,3 +197,5 @@ preflight-checks:
 util-bump-aws:
 	cd backend && go list -m -f '{{if not .Indirect}}{{.Path}}{{end}}' all | grep aws-sdk-go | tr '\n' ' ' | xargs go get -u
 
+install-yarn:
+	@./tools/install-yarn.sh
