@@ -29,7 +29,7 @@ test("onChange is called when valid value", () => {
   expect(onChange).toHaveBeenCalled();
 });
 
-test("onChange is not called when valid value", () => {
+test("onChange is not called when invalid value", () => {
   render(<DateTimePicker value={new Date()} onChange={onChange} />);
 
   expect(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m")).toBeVisible();
