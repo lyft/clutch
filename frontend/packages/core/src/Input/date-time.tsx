@@ -21,20 +21,18 @@ const PaddedTextField = styled(TextField)({
 export interface DateTimePickerProps
   extends Pick<MuiDateTimePickerProps, "disabled" | "value" | "onChange" | "label"> {}
 
-const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => {
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <MuiDateTimePicker
-        renderInput={inputProps => <PaddedTextField {...inputProps} />}
-        onChange={(value: Dayjs) => {
-          if (value.isValid()) {
-            onChange(value.toDate());
-          }
-        }}
-        {...props}
-      />
-    </LocalizationProvider>
-  );
-};
+const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => (
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <MuiDateTimePicker
+      renderInput={inputProps => <PaddedTextField {...inputProps} />}
+      onChange={(value: Dayjs) => {
+        if (value.isValid()) {
+          onChange(value.toDate());
+        }
+      }}
+      {...props}
+    />
+  </LocalizationProvider>
+);
 
 export default DateTimePicker;

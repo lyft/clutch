@@ -20,6 +20,7 @@ import { client } from "../Network";
 
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
+import { Stack } from "@mui/material";
 
 const Form = styled.form({});
 
@@ -139,7 +140,9 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
           {schema.error ? (
             <Alert severity="error">Schema Error: ${schema.error.message}</Alert>
           ) : (
-            schema.fields.map(field => hydrateField(field, onChange, schemaValidation))
+            <Stack spacing={2}>
+              {schema.fields.map(field => hydrateField(field, onChange, schemaValidation))}
+            </Stack>
           )}
         </SchemaDetails>
         <AccordionDivider />

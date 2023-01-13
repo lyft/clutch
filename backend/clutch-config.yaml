@@ -16,11 +16,13 @@ gateway:
   stats:
     flush_interval: 1s
     log_reporter: {}
+  max_response_size_bytes: 25165824
   timeouts:
     default: 15s
   middleware:
     - name: clutch.middleware.stats
     - name: clutch.middleware.validate
+    - name: clutch.middleware.audit
   listener:
     tcp:
       address: 0.0.0.0
@@ -30,11 +32,31 @@ modules:
   - name: clutch.module.assets
   - name: clutch.module.dynamodb
   - name: clutch.module.healthcheck
+  - name: clutch.module.audit
   - name: clutch.module.resolver
   - name: clutch.module.aws
   - name: clutch.module.envoytriage
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
+  - name: clutch.module.featureflag
+    typed_config:
+      "@type": types.google.com/clutch.config.module.featureflag.v1.Config
+      simple:
+        flags:
+          k8sDashOrigin: true
+          dashEnabled: true
+          npsWizard: true
+          timelineView: true
+          redeployOffloadedFacet: true
+          incidentsDashCard: true
+          npsHeader: true
+          globalStatusDashCard: true
+          projectCatalog: true
+          shortLinks: true
+          projectCatalogCB: true
+          projectCatalogSettings: true
+          dashRefreshSelect: true
+          profiling: true
   - name: clutch.module.project
     typed_config:
       "@type": types.google.com/clutch.config.module.project.v1.Config
@@ -55,6 +77,15 @@ services:
   - name: clutch.service.k8s
     typed_config:
       "@type": types.google.com/clutch.config.service.k8s.v1.Config
+  - name: clutch.service.audit
+    typed_config:
+      "@type": types.google.com/clutch.config.service.audit.v1.Config
+      db_provider: clutch.service.db.postgres
+      filter:
+        denylist: true
+        rules:
+            - field: METHOD
+              text: Healthcheck
 resolvers:
   - name: clutch.resolver.aws
   - name: clutch.resolver.k8s

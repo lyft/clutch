@@ -244,6 +244,7 @@ const EventRows = ({
   onError,
 }: EventRowsProps) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [hasError, setHasError] = React.useState<boolean>(false);
   const [pageToken, setPageToken] = React.useState<string>("0");
   const [events, setEvents] = React.useState<IClutch.audit.v1.IEvent[]>([]);
 
@@ -267,9 +268,11 @@ const EventRows = ({
           setEvents(evnts => [...evnts, ...response.events]);
           setPageToken(response.nextPageToken);
         }
+        setHasError(false);
         onSuccess();
       })
       .catch((e: ClutchError) => {
+        setHasError(true);
         onError(e);
       })
       .finally(() => setIsLoading(false));
@@ -280,10 +283,11 @@ const EventRows = ({
     rootMargin: "0px",
     threshold: 1.0,
   };
+
   React.useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       const [entry] = entries;
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && !hasError) {
         fetch();
       }
     }, options);
@@ -399,7 +403,10 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
             endTime={endTime}
             key={key}
             onFetch={() => setIsLoading(true)}
-            onSuccess={() => setIsLoading(false)}
+            onSuccess={() => {
+              setIsLoading(false);
+              setError(null);
+            }}
             onError={e => {
               setIsLoading(false);
               setError(e);

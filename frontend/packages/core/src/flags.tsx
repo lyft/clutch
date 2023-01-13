@@ -85,6 +85,7 @@ const SimpleFeatureFlag = ({ feature, children }: SimpleFeatureFlagProps) => {
   const [flags, setFlags] = React.useState(cachedFlags?.flags || {});
   const [featureEnabled, setFeatureEnabled] = React.useState(false);
 
+  console.log("simple feature flag", feature);
   const loadFlags = () => {
     featureFlags().then(f => setFlags(f));
   };
