@@ -108,7 +108,7 @@ const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
     <Wizard dataLayout={dataLayout} heading={heading}>
       <PodIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
       <PodDetails name="Verify" notes={notes} />
-      <Confirm name="Confirmation" />
+      <Confirm name="Result" />
     </Wizard>
   );
 };

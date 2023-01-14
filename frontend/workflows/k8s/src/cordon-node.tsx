@@ -99,7 +99,7 @@ const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType, notes = []
     <Wizard dataLayout={dataLayout} heading={heading}>
       <NodeIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
       <NodeDetails name="Verify" />
-      <Confirm name="Confirmation" />
+      <Confirm name="Result" />
     </Wizard>
   );
 };

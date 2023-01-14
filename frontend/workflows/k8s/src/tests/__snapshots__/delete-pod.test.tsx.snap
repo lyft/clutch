@@ -4,6 +4,6 @@ exports[`Terminate Instance workflow renders correctly 1`] = `
 "<Wizard dataLayout={{...}} heading={[undefined]}>
   <PodIdentifier name=\\"Lookup\\" resolverType=\\"clutch.k8s.v1.Pod\\" notes={{...}} />
   <PodDetails name=\\"Verify\\" notes={{...}} />
-  <Confirm name=\\"Confirmation\\" />
+  <Confirm name=\\"Result\\" />
 </Wizard>"
 `;

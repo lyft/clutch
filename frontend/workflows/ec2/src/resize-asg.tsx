@@ -137,7 +137,7 @@ const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType
     <Wizard dataLayout={dataLayout} heading={heading}>
       <GroupIdentifier name="Lookup" resolverType={resolverType} />
       <GroupDetails name="Modify" />
-      <Confirm name="Confirmation" notes={notes} />
+      <Confirm name="Result" notes={notes} />
     </Wizard>
   );
 };
