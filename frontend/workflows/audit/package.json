@@ -10,8 +10,8 @@
     "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
-    "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
-    "compile:watch": "yarn compile:dev --watch",
+    "compile:dev": "node build.mjs $PWD",
+    "compile:watch": "node build.mjs $PWD -w",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh audit",
@@ -29,9 +29,6 @@
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
     "react-json-view": "^1.21.3"
-  },
-  "resolutions": {
-    "@types/react": "^17.0.2"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^2.0.0-beta"
