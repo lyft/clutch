@@ -1,81 +1,70 @@
 import * as React from "react";
-import { DateTimePicker as MuiDateTimePicker } from "@mui/x-date-pickers";
-import type { ReactWrapper } from "enzyme";
-import { mount } from "enzyme";
+import { fireEvent, render, screen } from "@testing-library/react";
 
-import type { DateTimePickerProps } from "../date-time";
+import "@testing-library/jest-dom";
+
 import DateTimePicker from "../date-time";
 
-describe("DateTimePicker", () => {
-  describe("TextField", () => {
-    const onChange = jest.fn();
-    let component: ReactWrapper<DateTimePickerProps>;
-    beforeAll(() => {
-      component = mount(<DateTimePicker value={new Date()} onChange={onChange} />);
-    });
+afterEach(() => {
+  jest.resetAllMocks();
+});
 
-    it("has padding", () => {
-      const adornedInput = component.find("div.MuiInputBase-adornedEnd");
-      expect(adornedInput).toHaveLength(1);
-      expect(getComputedStyle(adornedInput.getDOMNode()).getPropertyValue("padding-right")).toBe(
-        "14px"
-      );
-    });
+const onChange = jest.fn();
+test("has padding", () => {
+  const { container } = render(<DateTimePicker value={new Date()} onChange={onChange} />);
 
-    describe("onChange callback", () => {
-      beforeEach(() => {
-        onChange.mockReset();
-      });
-
-      it("is called when valid value", () => {
-        component = mount(<DateTimePicker value={new Date()} onChange={onChange} />);
-        const input = component.find("input");
-        expect(input).toHaveLength(1);
-        input.simulate("change", { target: { value: "11/16/2023 02:55 AM" } });
-        expect(onChange).toHaveBeenCalled();
-      });
-
-      it("is not called with invalid value", () => {
-        component = mount(<DateTimePicker value={new Date()} onChange={onChange} />);
-        const input = component.find("input");
-        expect(input).toHaveLength(1);
-        input.simulate("change", { target: { value: "invalid" } });
-        expect(onChange).not.toHaveBeenCalled();
-      });
-    });
+  expect(container.querySelectorAll(".MuiInputBase-adornedEnd")).toHaveLength(1);
+  expect(container.querySelector(".MuiInputBase-adornedEnd")).toHaveStyle({
+    "padding-right": "14px",
   });
+});
 
-  describe("proxies prop", () => {
-    let date: Date;
-    let onChange: () => void;
-    let component;
-    beforeAll(() => {
-      date = new Date();
-      onChange = () => {};
-      component = mount(
-        <DateTimePicker value={date} onChange={onChange} label="testing" disabled={false} />
-      );
-    });
+test("onChange is called when valid value", () => {
+  render(<DateTimePicker value={new Date()} onChange={onChange} />);
 
-    it("value", () => {
-      expect(component).toHaveLength(1);
-      const input = component.find(MuiDateTimePicker);
-      expect(input.props().value).toBe(date);
-    });
-
-    it("onChange", () => {
-      const input = component.find(MuiDateTimePicker);
-      expect(input.props().onChange).toBeDefined();
-    });
-
-    it("label", () => {
-      const outline = component.find(MuiDateTimePicker);
-      expect(outline.props().label).toBe("testing");
-    });
-
-    it("disabled", () => {
-      const outline = component.find(MuiDateTimePicker);
-      expect(outline.props().disabled).toBe(false);
-    });
+  expect(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m")).toBeVisible();
+  fireEvent.change(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m"), {
+    target: { value: "11/16/2023 02:55 AM" },
   });
+  expect(onChange).toHaveBeenCalled();
+});
+
+test("onChange is not called when invalid value", () => {
+  render(<DateTimePicker value={new Date()} onChange={onChange} />);
+
+  expect(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m")).toBeVisible();
+  fireEvent.change(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m"), {
+    target: { value: "invalid" },
+  });
+  expect(onChange).not.toHaveBeenCalled();
+});
+
+test("sets passed value correctly", () => {
+  const date = new Date();
+  const formattedDMY = new Intl.DateTimeFormat("en-US", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+  }).format(date);
+  const formattedTime = new Intl.DateTimeFormat("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+  const formattedDate = `${formattedDMY} ${formattedTime}`;
+  render(<DateTimePicker value={date} onChange={onChange} />);
+
+  expect(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m")).toHaveValue(formattedDate);
+});
+
+test("displays label correctly", () => {
+  const label = "testing";
+  render(<DateTimePicker value={new Date()} onChange={onChange} label={label} />);
+
+  expect(screen.getByLabelText(label)).toBeVisible();
+});
+
+test("is disabled", () => {
+  render(<DateTimePicker value={new Date()} onChange={onChange} disabled />);
+
+  expect(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m")).toBeDisabled();
 });
