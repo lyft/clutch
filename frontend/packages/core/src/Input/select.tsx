@@ -278,14 +278,7 @@ export const Select = ({
   };
 
   return (
-    <MuiFormControl
-      id={name}
-      key={name}
-      disabled={disabled}
-      error={error}
-      // sx={{ flex: flex ? 1 : 0 }}
-      fullWidth
-    >
+    <MuiFormControl id={name} key={name} disabled={disabled} error={error} fullWidth>
       {label && <StyledInputLabel>{label}</StyledInputLabel>}
       {flatOptions.length && (
         <StyledSelect
