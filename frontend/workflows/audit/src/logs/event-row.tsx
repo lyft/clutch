@@ -183,6 +183,7 @@ const EventRows = ({
     setIsLoading(true);
     const data = {
       range: { startTime, endTime },
+      limit: 10,
       pageToken,
     } as IClutch.audit.v1.IGetEventsRequest;
     client
