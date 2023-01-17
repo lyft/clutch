@@ -21,7 +21,6 @@ gateway:
   middleware:
     - name: clutch.middleware.stats
     - name: clutch.middleware.validate
-    - name: clutch.middleware.audit
   listener:
     tcp:
       address: 0.0.0.0
