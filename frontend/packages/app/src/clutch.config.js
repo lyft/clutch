@@ -92,7 +92,7 @@ module.exports = {
     landing: {
       trending: false,
       componentProps: {
-        // detailsPathPrefix: "/audit/event",
+        detailsPathPrefix: "/audit/event",
       },
     },
     event: {
