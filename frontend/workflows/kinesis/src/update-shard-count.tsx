@@ -155,7 +155,7 @@ const UpdateShardCount: React.FC<WorkflowProps> = ({ heading, resolverType }) =>
     <Wizard dataLayout={dataLayout} heading={heading}>
       <StreamIdentifier name="Lookup" resolverType={resolverType} />
       <StreamDetails name="Modify" />
-      <Confirm name="Confirmation" />
+      <Confirm name="Result" />
     </Wizard>
   );
 };

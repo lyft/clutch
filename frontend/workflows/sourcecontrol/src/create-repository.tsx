@@ -141,7 +141,7 @@ const CreateRepository: React.FC<WorkflowProps> = ({ heading }) => {
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <RepositoryDetails name="Repository Details" />
-      <Confirm name="Confirmation" />
+      <Confirm name="Result" />
     </Wizard>
   );
 };
