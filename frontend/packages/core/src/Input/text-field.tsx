@@ -15,6 +15,7 @@ import {
   TextField as MuiTextField,
   Typography,
 } from "@mui/material";
+import { orange } from "@mui/material/colors";
 import _ from "lodash";
 
 const KEY_ENTER = 13;
@@ -45,44 +46,36 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 });
 
-const StyledTextField = styled(BaseTextField)({
-  "--error-color": "#DB3615",
-  "--warning-color": "#FFCC80",
+const TEXT_FIELD_COLOR_MAP = {
+  default: "rgba(13, 16, 48, 0.6)",
+  inputDefault: "rgba(13, 16, 48, 0.38)",
+  error: "#DB3615",
+  warning: orange[200],
+  focused: "#3548d4",
+};
+
+const StyledTextField = styled(BaseTextField)<{
+  $color?: MuiStandardTextFieldProps["color"];
+}>({}, props => ({
   height: "unset",
-
   ".MuiInputLabel-root": {
-    "--label-color": "rgba(13, 16, 48, 0.6)",
-
-    color: "var(--label-color)",
-
+    color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
     "&.Mui-focused": {
-      color: "var(--label-color)",
-    },
-    "&.Mui-error": {
-      color: "var(--error-color)",
-    },
-    "&.MuiFormLabel-colorWarning:not(.Mui-error)": {
-      color: "var(--warning-color)",
+      color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
     },
   },
-
   ".MuiInputBase-root": {
     "--input-border-width": "1px",
-    "--input-default-color": "rgba(13, 16, 48, 0.38)",
     borderRadius: "4px",
     fontSize: "16px",
     backgroundColor: "#FFFFFF",
 
-    "& fieldset": {
-      borderColor: "var(--input-default-color)",
-    },
     "&.Mui-focused fieldset": {
-      borderColor: "#3548d4",
+      borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.focused}`,
       borderWidth: "var(--input-border-width)",
     },
-    "&.Mui-error fieldset": {
-      borderColor: "var(--error-color)",
-      borderWidth: "var(--input-border-width)",
+    "&:not(.Mui-focused) fieldset": {
+      borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
     },
     "&.MuiInputBase-colorWarning:not(.Mui-error)": {
       "& + .MuiFormHelperText-root": {
@@ -127,10 +120,7 @@ const StyledTextField = styled(BaseTextField)({
     marginTop: "7px",
     lineHeight: "16px",
     marginLeft: "0px",
-
-    "&.Mui-error": {
-      color: "var(--error-color)",
-    },
+    color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
 
     "> svg": {
       height: "16px",
@@ -138,7 +128,7 @@ const StyledTextField = styled(BaseTextField)({
       marginRight: "4px",
     },
   },
-});
+}));
 
 // popper containing the search result options
 const Popper = styled(MuiPopper)({
@@ -201,10 +191,6 @@ const AutocompleteResult: React.FC<AutocompleteResultProps> = ({ id, label }) =>
   </ResultGrid>
 );
 
-interface CustomInputProps {
-  warning?: boolean;
-}
-
 export interface TextFieldProps
   extends Pick<
       MuiStandardTextFieldProps,
@@ -225,8 +211,8 @@ export interface TextFieldProps
       | "required"
       | "type"
       | "value"
+      | "color"
     >,
-    Pick<CustomInputProps, "warning">,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
   autocompleteCallback?: (v: string) => Promise<{ results: { id?: string; label: string }[] }>;
@@ -238,7 +224,7 @@ const TextFieldRef = (
     onChange,
     onReturn,
     error,
-    warning,
+    color,
     helperText,
     readOnly,
     endAdornment,
@@ -272,11 +258,11 @@ const TextFieldRef = (
   let helpText = helperText;
 
   // Prepend a '!' icon to helperText displayed below the form if the form is in an error state.
-  if ((error || warning) && helpText) {
+  if (color && helpText) {
     helpText = (
       <>
-        {error && <ErrorIcon />}
-        {!error && warning && <WarningIcon />}
+        {color === "error" && <ErrorIcon />}
+        {color === "warning" && <WarningIcon />}
         {helperText}
       </>
     );
@@ -397,7 +383,7 @@ const TextFieldRef = (
       defaultValue={defaultValue}
       value={value}
       onChange={onChange}
-      color={warning ? "warning" : undefined}
+      color={color}
       {...props}
       {...{ ref }}
     />

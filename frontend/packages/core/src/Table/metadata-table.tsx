@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   Grid as MuiGrid,
+  StandardTextFieldProps,
   Table as MuiTable,
   TableBody as MuiTableBody,
   TableCell as MuiTableCell,
@@ -97,10 +98,7 @@ const Grid = styled(MuiGrid)({
     width: "100px",
     alignSelf: "center",
   },
-  ".MuiFormControl-root .MuiFormHelperText-root.Mui-error": {
-    flex: 1,
-  },
-  ".MuiFormControl-root .MuiInputBase-colorWarning + .MuiFormHelperText-root": {
+  ".MuiFormControl-root .MuiFormHelperText-root": {
     flex: 1,
   },
   ".textfield-disabled .MuiInput-input": {
@@ -152,11 +150,27 @@ interface MutableRowProps extends ImmutableRowProps {
 // to reset field to the default value
 const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
   const error = validation?.formState?.errors?.[data.name];
+  const { warning } = data.input;
 
   // intercept the update callback to prevent updates if there are form errors present
   // based on the validation.
   const updateCallback = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
     error ? () => {} : onUpdate(e);
+
+  // get helper text in case we need info or success cases
+  const getHelperText = (): String => error?.message || warning?.text || "";
+
+  // get the color if there is an error or warning
+  // adding more cases if we need info or success cases
+  const getTextFieldColor = (): StandardTextFieldProps["color"] | undefined => {
+    if (error) {
+      return "error";
+    }
+    if (warning) {
+      return "warning";
+    }
+    return undefined;
+  };
 
   const disabledTextFieldComponent = (
     <TextField
@@ -189,9 +203,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
             onChange={updateCallback}
             onReturn={onReturn}
             onFocus={updateCallback}
-            helperText={error?.message || data.input.warning?.text || ""}
+            helperText={getHelperText()}
             error={!!error || false}
-            warning={!!data.input.warning || false}
+            color={getTextFieldColor()}
             formRegistration={validation.register}
           />
         </Grid>
