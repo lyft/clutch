@@ -77,15 +77,6 @@ const StyledTextField = styled(BaseTextField)<{
     "&:not(.Mui-focused) fieldset": {
       borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
     },
-    "&.MuiInputBase-colorWarning:not(.Mui-error)": {
-      "& + .MuiFormHelperText-root": {
-        color: "var(--warning-color)",
-      },
-      fieldset: {
-        borderColor: "var(--warning-color)",
-        borderWidth: "var(--input-border-width)",
-      },
-    },
     "&.Mui-disabled fieldset": {
       backgroundColor: "rgba(13, 16, 48, 0.12)",
     },
