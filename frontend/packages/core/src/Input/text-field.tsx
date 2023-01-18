@@ -15,7 +15,6 @@ import {
   TextField as MuiTextField,
   Typography,
 } from "@mui/material";
-import { orange } from "@mui/material/colors";
 import _ from "lodash";
 
 const KEY_ENTER = 13;
@@ -50,7 +49,7 @@ const TEXT_FIELD_COLOR_MAP = {
   default: "rgba(13, 16, 48, 0.6)",
   inputDefault: "rgba(13, 16, 48, 0.38)",
   error: "#DB3615",
-  warning: orange[200],
+  warning: "#FCD34D",
   focused: "#3548d4",
 };
 
@@ -248,11 +247,12 @@ const TextFieldRef = (
 
   let helpText = helperText;
 
-  // Prepend a '!' icon to helperText displayed below the form if the form is in an error state.
-  if (color && helpText) {
+  // Prepend a circle '!' icon to helperText displayed below the form if the form is in an error state.
+  // Prepend a triangle '!' icon to helperText displayed below the form if the form is in a warning state.
+  if ((error || color) && helpText) {
     helpText = (
       <>
-        {color === "error" && <ErrorIcon />}
+        {(error || color === "error") && <ErrorIcon />}
         {color === "warning" && <WarningIcon />}
         {helperText}
       </>
