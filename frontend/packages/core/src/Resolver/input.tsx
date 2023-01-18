@@ -4,6 +4,7 @@ import type { clutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import SearchIcon from "@mui/icons-material/Search";
+import { Stack } from "@mui/material";
 
 import {
   Accordion,
@@ -20,7 +21,6 @@ import { client } from "../Network";
 
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
-import { Stack } from "@mui/material";
 
 const Form = styled.form({});
 
