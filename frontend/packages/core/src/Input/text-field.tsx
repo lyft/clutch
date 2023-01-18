@@ -62,6 +62,9 @@ const StyledTextField = styled(BaseTextField)<{
     "&.Mui-focused": {
       color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
     },
+    "&.Mui-error": {
+      color: `${TEXT_FIELD_COLOR_MAP.error}`,
+    },
   },
   ".MuiInputBase-root": {
     "--input-border-width": "1px",
@@ -75,6 +78,10 @@ const StyledTextField = styled(BaseTextField)<{
     },
     "&:not(.Mui-focused) fieldset": {
       borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
+    },
+    "&.Mui-error fieldset": {
+      borderColor: `${TEXT_FIELD_COLOR_MAP.error}`,
+      borderWidth: "var(--input-border-width)",
     },
     "&.Mui-disabled fieldset": {
       backgroundColor: "rgba(13, 16, 48, 0.12)",
@@ -111,6 +118,9 @@ const StyledTextField = styled(BaseTextField)<{
     lineHeight: "16px",
     marginLeft: "0px",
     color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
+    "&.Mui-error": {
+      color: `${TEXT_FIELD_COLOR_MAP.error}`,
+    },
 
     "> svg": {
       height: "16px",
