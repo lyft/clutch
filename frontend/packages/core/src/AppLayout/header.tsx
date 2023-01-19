@@ -15,6 +15,16 @@ import { UserInformation } from "./user";
 
 export const APP_BAR_HEIGHT = "64px";
 
+/**
+ * Properties used to allow Storybook examples to override featureflag settings
+ */
+interface HeaderProps extends AppConfiguration {
+  /**
+   * Will enable the NPS feedback component in the header
+   */
+  enableNPS?: boolean;
+}
+
 const AppBar = styled(MuiAppBar)({
   minWidth: "fit-content",
   background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
@@ -40,7 +50,11 @@ const StyledLogo = styled("img")({
   verticalAlign: "middle",
 });
 
-const Header: React.FC<AppConfiguration> = ({ title = "clutch", logo = <Logo /> }) => {
+const Header: React.FC<HeaderProps> = ({
+  title = "clutch",
+  logo = <Logo />,
+  enableNPS = false,
+}) => {
   const showNotifications = false;
 
   return (
@@ -59,11 +73,16 @@ const Header: React.FC<AppConfiguration> = ({ title = "clutch", logo = <Logo /> 
               </FeatureOn>
             </SimpleFeatureFlag>
             {showNotifications && <Notifications />}
-            <SimpleFeatureFlag feature="npsHeader">
-              <FeatureOn>
-                <NPSHeader />
-              </FeatureOn>
-            </SimpleFeatureFlag>
+            {enableNPS ? (
+              <NPSHeader />
+            ) : (
+              <SimpleFeatureFlag feature="npsHeader">
+                <FeatureOn>
+                  <NPSHeader />
+                </FeatureOn>
+              </SimpleFeatureFlag>
+            )}
+
             <UserInformation />
           </Grid>
         </Toolbar>
