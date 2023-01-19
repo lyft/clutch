@@ -124,6 +124,9 @@ const StyledButton = styled(MuiButton)<{ palette: ButtonPalette; size: ButtonSiz
     fontSize: "16px",
     textTransform: "none",
     margin: "12px 8px",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
   },
   props => ({
     ...colorCss(props.palette),
