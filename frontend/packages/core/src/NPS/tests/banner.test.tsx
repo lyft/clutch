@@ -8,18 +8,17 @@ import { HeaderItems } from "../../Contexts/app-context";
 import { Banner, BannerFeedbackProps } from "../banner";
 
 const customRender = ({ ...props }: BannerFeedbackProps) => {
-  let triggeredHeaderData = {};
+  let triggeredHeaderData = { NPS: {} };
 
   return render(
     <ApplicationContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
       value={{
         workflows: [],
-        triggerHeaderItem: (item: HeaderItems, open: boolean, data: unknown) => {
+        triggerHeaderItem: (item: HeaderItems, data: unknown) => {
           triggeredHeaderData = {
             ...triggeredHeaderData,
             [item]: {
-              open,
               ...(data as any),
             },
           };
@@ -72,8 +71,8 @@ test("An NPS banner component with a default container", () => {
   expect(screen.getByTestId("nps-banner-container")).toBeVisible();
 });
 
-test("An NPS banner component integrated into the page", () => {
-  customRender({ integrated: true });
+test("An NPS banner component not elevated on the page", () => {
+  customRender({ elevated: false });
 
   expect(screen.queryByTestId("nps-banner-container")).not.toBeInTheDocument();
 });
