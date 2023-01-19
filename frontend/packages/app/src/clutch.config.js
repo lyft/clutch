@@ -88,15 +88,4 @@ module.exports = {
       },
     },
   },
-  "@clutch-sh/audit": {
-    landing: {
-      trending: false,
-      componentProps: {
-        detailsPathPrefix: "/audit/event",
-      },
-    },
-    event: {
-      trending: false,
-    },
-  },
 };
