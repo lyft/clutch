@@ -12,10 +12,10 @@ import { Typography } from "../typography";
 
 export interface FeedbackBannerProps {
   /**
-   * Whether this component should appear integrated into the page versus in its own container
-   * @defaultValue false
+   * Whether this component should appear elevated on the page versus flat
+   * @defaultValue true
    */
-  integrated?: boolean;
+  elevated?: boolean;
   /**
    * The icon to display or null if none
    * @defaultValue <HappyEmoji />
@@ -49,7 +49,7 @@ const StyledPaper = styled(Paper)({
  * An NPS Feedback Banner which will open up the NPSHeader component to ask for feedback
  */
 export const Banner = ({
-  integrated = false,
+  elevated = true,
   icon = <HappyEmoji />,
   feedbackText = "Enjoying this feature? We would like your feedback!",
   feedbackButtonText = "Give Feedback",
@@ -83,11 +83,7 @@ export const Banner = ({
     </Grid>
   );
 
-  return integrated ? (
-    banner
-  ) : (
-    <StyledPaper data-testid="nps-banner-container">{banner}</StyledPaper>
-  );
+  return elevated ? <StyledPaper data-testid="nps-banner-container">{banner}</StyledPaper> : banner;
 };
 
 /**
