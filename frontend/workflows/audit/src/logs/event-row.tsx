@@ -48,16 +48,7 @@ const EventRow = ({ event, detailsPathPrefix, downloadPrefix }: EventRowProps) =
   const date = new Date(String(event.occurredAt)).toLocaleString();
   const requestBody = { ...event.event.requestMetadata.body };
   delete requestBody["@type"];
-  const method = event.event.methodName;
-  const service = event.event.serviceName;
-
-  // React.useEffect(() => {
-  //   if (shareClicked) {
-  //     const ticker = setTimeout() => {
-
-  //     }
-  //   }
-  // })
+  const { methodName, serviceName, username } = event.event;
 
   let actions = [
     {
@@ -106,17 +97,22 @@ const EventRow = ({ event, detailsPathPrefix, downloadPrefix }: EventRowProps) =
           disabled: shareClicked,
         },
       ];
-    } catch {}
+    } catch {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `invalid event URL: ${window.location.protocol}//${window.location.host}/${detailsPathPrefix}/${event.id}`
+      );
+    }
   }
 
   return (
     <>
       <TableRow>
         <>{date}</>
-        <>{method}</>
-        <>{service}</>
+        <>{methodName}</>
+        <>{serviceName}</>
         <MonospaceText>{JSON.stringify(requestBody, null, 1)}</MonospaceText>
-        <>{event.event.username}</>
+        <>{username}</>
         <Stack direction="row">
           <IconButton variant="neutral" onClick={() => setOpen(o => !o)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
