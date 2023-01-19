@@ -1,0 +1,40 @@
+{
+  "name": "@clutch-sh/audit",
+  "version": "0.1.0-beta",
+  "private": true,
+  "description": " Clutch Audit Workflows",
+  "license": "Apache-2.0",
+  "author": "clutch@lyft.com",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "node build.mjs $PWD",
+    "compile:watch": "node build.mjs $PWD -w",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "yarn run lint --fix",
+    "publishBeta": "../../../tools/publish-frontend.sh audit",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:watch": "yarn run test --watch"
+  },
+  "dependencies": {
+    "@clutch-sh/api": "^2.0.0-beta",
+    "@clutch-sh/core": "^2.0.0-beta",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.5",
+    "file-saver": "^2.0.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-is": "^17.0.2",
+    "react-json-view": "^1.21.3"
+  },
+  "devDependencies": {
+    "@clutch-sh/tools": "^2.0.0-beta"
+  },
+  "engines": {
+    "node": ">=16.0.0 <17",
+    "yarn": "^1.22.5"
+  }
+}
