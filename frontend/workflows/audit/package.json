@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/audit",
-  "version": "0.1.0-beta",
+  "version": "2.0.0-beta",
   "private": true,
   "description": " Clutch Audit Workflows",
   "license": "Apache-2.0",
