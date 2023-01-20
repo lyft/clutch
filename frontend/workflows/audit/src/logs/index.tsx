@@ -122,7 +122,7 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
             downloadPrefix={downloadPrefix}
             startTime={startTime}
             endTime={endTime}
-            key={timeRangeKey}
+            rangeKey={timeRangeKey}
             onFetch={() => setIsLoading(true)}
             onSuccess={() => {
               setIsLoading(false);
