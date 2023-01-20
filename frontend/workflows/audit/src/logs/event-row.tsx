@@ -148,7 +148,7 @@ const EventRow = ({ event, detailsPathPrefix, downloadPrefix }: EventRowProps) =
 interface EventRowsProps extends Pick<EventRowProps, "detailsPathPrefix" | "downloadPrefix"> {
   startTime: Date;
   endTime: Date;
-  key: string;
+  rangeKey: string;
   onFetch: () => void;
   onSuccess: () => void;
   onError: (e: ClutchError) => void;
@@ -159,7 +159,7 @@ const EventRows = ({
   downloadPrefix,
   startTime,
   endTime,
-  key,
+  rangeKey,
   onFetch,
   onSuccess,
   onError,
@@ -223,11 +223,12 @@ const EventRows = ({
       }
     };
   }, [containerRef, options]);
+
   React.useEffect(() => {
     setPageToken("0");
     setEvents([]);
     fetch();
-  }, [key]);
+  }, [rangeKey]);
 
   return (
     <>
