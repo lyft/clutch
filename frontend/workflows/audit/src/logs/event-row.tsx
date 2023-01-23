@@ -15,6 +15,7 @@ import { Stack } from "@mui/material";
 import FileSaver from "file-saver";
 
 const ENDPOINT = "/v1/audit/getEvents";
+const COLUMN_COUNT = 6;
 const MonospaceText = styled("div")({
   fontFamily: "monospace",
   padding: "8px",
@@ -123,7 +124,7 @@ const EventRow = ({ event, detailsPathPrefix, downloadPrefix }: EventRowProps) =
         </Stack>
       </TableRow>
       {open && (
-        <TableRow colSpan={6}>
+        <TableRow colSpan={COLUMN_COUNT}>
           <ReactJson
             src={event}
             name={null}
@@ -230,6 +231,13 @@ const EventRows = ({
     fetch();
   }, [rangeKey]);
 
+  if (events.length <= 0) {
+    return (
+      <TableRow colSpan={COLUMN_COUNT}>
+        <div style={{ textAlign: "center" }}>No Events Found</div>
+      </TableRow>
+    );
+  }
   return (
     <>
       {events.map((r, idx) => (
