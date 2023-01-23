@@ -70,6 +70,7 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
   const theme = useTheme();
   const shrink = useMediaQuery(theme.breakpoints.down("md"));
 
+  const genTimeRangeKey = () => `${startTime}-${endTime}-${new Date().toString()}`;
   return (
     <RootContainer spacing={2} direction="column">
       <Typography variant="h2">{heading}</Typography>
@@ -97,13 +98,13 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
             onQuickSelect={(start, end) => {
               setStartTime(start);
               setEndTime(end);
-              setTimeRangeKey(`${startTime}-${endTime}`);
+              setTimeRangeKey(genTimeRangeKey());
             }}
           />
           {shrink ? (
-            <Button text="Search" onClick={() => setTimeRangeKey(`${startTime}-${endTime}`)} />
+            <Button text="Search" onClick={() => setTimeRangeKey(genTimeRangeKey())} />
           ) : (
-            <IconButton onClick={() => setTimeRangeKey(`${startTime}-${endTime}`)}>
+            <IconButton onClick={() => setTimeRangeKey(genTimeRangeKey())}>
               <SearchIcon />
             </IconButton>
           )}
