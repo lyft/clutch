@@ -51,7 +51,7 @@ const TEXT_FIELD_COLOR_MAP = {
   inputHover: "#2D3F50",
   inputFocused: "#3548d4",
   primary: "#3548D4",
-  secondary: "#F5F6FD",
+  secondary: "#D7DAF6",
   info: "#3548D4",
   success: "#1E942D",
   warning: "#FCD34D",
