@@ -8,6 +8,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NoteConfig,
   NotePanel,
   Resolver,
   useWizardContext,
@@ -49,6 +50,18 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
   const metadataAnnotations = [];
   const metadataLabels = [];
 
+  const [warnings, setWarnings] = React.useState<{
+    minSize: NoteConfig;
+    maxSize: NoteConfig;
+  }>({ minSize: undefined, maxSize: undefined });
+
+  const warningThreshold = 0.5;
+  const getWarning = React.useCallback((current: number, newValue: number): boolean => {
+    return (
+      current * (1 / warningThreshold) < newValue || current / (1 / warningThreshold) > newValue
+    );
+  }, []);
+
   React.useEffect(() => {
     if (hpa.annotations) {
       _.forEach(hpa.annotations, (annotation, key) => {
@@ -67,6 +80,29 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
       currentHpaData.assign(hpa);
     }
   }, []);
+
+  React.useEffect(() => {
+    if ((currentHpaData.displayValue() as IClutch.k8s.v1.HPA).sizing) {
+      const {
+        minReplicas,
+        maxReplicas,
+      } = (currentHpaData.displayValue() as IClutch.k8s.v1.HPA).sizing;
+      setWarnings({
+        minSize: getWarning(minReplicas, hpa.sizing.minReplicas)
+          ? {
+              severity: "warning",
+              text: `New Max Size is more than ${warningThreshold * 100}% different`,
+            }
+          : undefined,
+        maxSize: getWarning(maxReplicas, hpa.sizing.maxReplicas)
+          ? {
+              severity: "warning",
+              text: `New Max Size is more than ${warningThreshold * 100}% different`,
+            }
+          : undefined,
+      });
+    }
+  }, [hpa.sizing.minReplicas, hpa.sizing.maxReplicas]);
 
   return (
     <WizardStep error={hpaData.error} isLoading={hpaData.isLoading}>
@@ -92,6 +128,7 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
                 hpa.sizing.minReplicas > 0
                   ? number().integer().moreThan(0)
                   : number().integer().min(0),
+              warning: warnings.minSize,
             },
           },
           {
@@ -110,6 +147,7 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
                       .integer()
                       .min(ref("Min Size") as Reference<number>)
                   : number().integer().moreThan(0),
+              warning: warnings.maxSize,
             },
           },
           { name: "Cluster", value: hpa.cluster },

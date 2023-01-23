@@ -2,6 +2,7 @@ import * as React from "react";
 import type { FieldValues, UseFormRegister } from "react-hook-form";
 import styled from "@emotion/styled";
 import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
 import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
@@ -46,6 +47,7 @@ const StyledAutocomplete = styled(Autocomplete)({
 
 const StyledTextField = styled(BaseTextField)({
   "--error-color": "#DB3615",
+  "--warning-color": "#FFCC80",
   height: "unset",
 
   ".MuiInputLabel-root": {
@@ -59,6 +61,10 @@ const StyledTextField = styled(BaseTextField)({
     "&.Mui-error": {
       color: "var(--error-color)",
     },
+  },
+
+  "&.Mui-warning .MuiInputLabel-root:not(.Mui-error), .MuiFormHelperText-root": {
+    color: "var(--warning-color)",
   },
 
   ".MuiInputBase-root": {
@@ -99,6 +105,12 @@ const StyledTextField = styled(BaseTextField)({
         opacity: 1,
       },
     },
+  },
+
+  "&.Mui-warning .MuiInputBase-root:not(.Mui-error) fieldset": {
+    "--input-border-width": "1px",
+    borderColor: "var(--warning-color)",
+    borderWidth: "var(--input-border-width)",
   },
 
   ".MuiInputBase-adornedEnd": {
@@ -187,6 +199,10 @@ const AutocompleteResult: React.FC<AutocompleteResultProps> = ({ id, label }) =>
   </ResultGrid>
 );
 
+interface CustomInputProps {
+  warning?: boolean;
+}
+
 export interface TextFieldProps
   extends Pick<
       MuiStandardTextFieldProps,
@@ -208,6 +224,7 @@ export interface TextFieldProps
       | "type"
       | "value"
     >,
+    Pick<CustomInputProps, "warning">,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
   autocompleteCallback?: (v: string) => Promise<{ results: { id?: string; label: string }[] }>;
@@ -219,6 +236,7 @@ const TextFieldRef = (
     onChange,
     onReturn,
     error,
+    warning,
     helperText,
     readOnly,
     endAdornment,
@@ -252,10 +270,11 @@ const TextFieldRef = (
   let helpText = helperText;
 
   // Prepend a '!' icon to helperText displayed below the form if the form is in an error state.
-  if (error && helpText) {
+  if ((error || warning) && helpText) {
     helpText = (
       <>
-        <ErrorIcon />
+        {error && <ErrorIcon />}
+        {!error && warning && <WarningIcon />}
         {helperText}
       </>
     );
@@ -376,6 +395,7 @@ const TextFieldRef = (
       defaultValue={defaultValue}
       value={value}
       onChange={onChange}
+      className={warning ? "Mui-warning" : ""}
       {...props}
       {...{ ref }}
     />

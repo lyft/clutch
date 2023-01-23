@@ -17,6 +17,7 @@ import type { BaseSchema } from "yup";
 import { object } from "yup";
 
 import { useWizardContext } from "../Contexts";
+import type { NoteConfig } from "../Feedback";
 import { Tooltip } from "../Feedback/tooltip";
 import TextField from "../Input/text-field";
 import styled from "../styled";
@@ -26,6 +27,7 @@ interface RowData {
     key?: string;
     type?: string;
     validation?: BaseSchema<unknown>;
+    warning?: NoteConfig;
   };
   textFieldLabels?: {
     disabledField: string;
@@ -96,6 +98,9 @@ const Grid = styled(MuiGrid)({
     alignSelf: "center",
   },
   ".MuiFormControl-root .MuiFormHelperText-root.Mui-error": {
+    flex: 1,
+  },
+  ".MuiFormControl-root.Mui-warning .MuiFormHelperText-root": {
     flex: 1,
   },
   ".textfield-disabled .MuiInput-input": {
@@ -184,8 +189,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
             onChange={updateCallback}
             onReturn={onReturn}
             onFocus={updateCallback}
-            helperText={error?.message || ""}
+            helperText={error?.message || data.input.warning?.text || ""}
             error={!!error || false}
+            warning={!!data.input.warning || false}
             formRegistration={validation.register}
           />
         </Grid>
