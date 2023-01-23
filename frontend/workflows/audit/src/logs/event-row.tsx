@@ -171,8 +171,8 @@ const EventRows = ({
 
   const containerRef = React.useRef(null);
 
-  const fetch = (page?: number) => {
-    if ((page === undefined && pageToken === "") || isLoading) {
+  const fetch = (page?: string) => {
+    if ((page === undefined && page === "" && pageToken === "") || isLoading) {
       return;
     }
     const tkn = page || pageToken;
@@ -231,7 +231,7 @@ const EventRows = ({
     // n.b. we explicitly pass in 0 here in addition to the setPageToken
     // call above since react won't pick up the state updates when
     // fetch is invoked.
-    fetch(0);
+    fetch("0");
   }, [rangeKey]);
 
   return (
