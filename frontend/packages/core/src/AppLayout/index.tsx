@@ -25,7 +25,10 @@ interface AppLayoutProps {
   configuration?: AppConfiguration;
 }
 
-const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false, configuration = {} }) => {
+const AppLayout: React.FC<AppLayoutProps> = ({
+  isLoading = false,
+  configuration = { hideDrawers: false },
+}) => {
   return (
     <AppGrid container direction="column">
       <Header {...configuration} />
@@ -34,7 +37,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false, configuration 
           <Loadable isLoading={isLoading} variant="overlay" />
         ) : (
           <>
-            <Drawer />
+            {!configuration?.hideDrawers && <Drawer />}
             <MainContent>
               <Outlet />
             </MainContent>

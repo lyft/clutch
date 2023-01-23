@@ -31,6 +31,11 @@ export interface AppConfiguration {
   title?: string;
   /** Supports a react node or a string representing a public assets path */
   logo?: React.ReactNode | string;
+  /**
+   * Will hide the drawers
+   * @defaultValue disabled
+   */
+  hideDrawers?: boolean;
 }
 
 /**
