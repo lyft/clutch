@@ -172,7 +172,7 @@ const EventRows = ({
   const containerRef = React.useRef(null);
 
   const fetch = (page?: string) => {
-    if ((page === undefined && page === "" && pageToken === "") || isLoading) {
+    if (((page === undefined || page === "") && pageToken === "") || isLoading) {
       return;
     }
     const tkn = page || pageToken;
