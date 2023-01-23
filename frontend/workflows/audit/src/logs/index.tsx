@@ -102,14 +102,9 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
             }}
           />
           {shrink ? (
-            <Button
-              text="Search"
-              onClick={() => setTimeRangeKey(genTimeRangeKey())}
-            />
+            <Button text="Search" onClick={() => setTimeRangeKey(genTimeRangeKey())} />
           ) : (
-            <IconButton
-              onClick={() => setTimeRangeKey(genTimeRangeKey())}
-            >
+            <IconButton onClick={() => setTimeRangeKey(genTimeRangeKey())}>
               <SearchIcon />
             </IconButton>
           )}
