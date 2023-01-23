@@ -171,16 +171,17 @@ const EventRows = ({
 
   const containerRef = React.useRef(null);
 
-  const fetch = () => {
-    if (pageToken === "" || isLoading) {
+  const fetch = (page?: number) => {
+    if ((page === undefined && pageToken === "") || isLoading) {
       return;
     }
+    const tkn = page || pageToken;
     onFetch();
     setIsLoading(true);
     const data = {
       range: { startTime, endTime },
       limit: 10,
-      pageToken,
+      pageToken: tkn,
     } as IClutch.audit.v1.IGetEventsRequest;
     client
       .post(ENDPOINT, data)
@@ -227,7 +228,10 @@ const EventRows = ({
   React.useEffect(() => {
     setPageToken("0");
     setEvents([]);
-    fetch();
+    // n.b. we explicitly pass in 0 here in addition to the setPageToken
+    // call above since react won't pick up the state updates when
+    // fetch is invoked.
+    fetch(0);
   }, [rangeKey]);
 
   return (

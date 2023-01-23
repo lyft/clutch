@@ -97,13 +97,18 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
             onQuickSelect={(start, end) => {
               setStartTime(start);
               setEndTime(end);
-              setTimeRangeKey(`${startTime}-${endTime}`);
+              setTimeRangeKey(`${startTime}-${endTime}-${new Date().toString()}`);
             }}
           />
           {shrink ? (
-            <Button text="Search" onClick={() => setTimeRangeKey(`${startTime}-${endTime}`)} />
+            <Button
+              text="Search"
+              onClick={() => setTimeRangeKey(`${startTime}-${endTime}-${new Date().toString()}`)}
+            />
           ) : (
-            <IconButton onClick={() => setTimeRangeKey(`${startTime}-${endTime}`)}>
+            <IconButton
+              onClick={() => setTimeRangeKey(`${startTime}-${endTime}-${new Date().toString()}`)}
+            >
               <SearchIcon />
             </IconButton>
           )}
