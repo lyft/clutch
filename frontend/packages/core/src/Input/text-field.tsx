@@ -48,9 +48,14 @@ const StyledAutocomplete = styled(Autocomplete)({
 const TEXT_FIELD_COLOR_MAP = {
   default: "rgba(13, 16, 48, 0.6)",
   inputDefault: "rgba(13, 16, 48, 0.38)",
-  error: "#DB3615",
+  inputHover: "#2D3F50",
+  inputFocused: "#3548d4",
+  primary: "#3548D4",
+  secondary: "#F5F6FD",
+  info: "#3548D4",
+  success: "#1E942D",
   warning: "#FCD34D",
-  focused: "#3548d4",
+  error: "#DB3615",
 };
 
 const StyledTextField = styled(BaseTextField)<{
@@ -72,12 +77,15 @@ const StyledTextField = styled(BaseTextField)<{
     fontSize: "16px",
     backgroundColor: "#FFFFFF",
 
-    "&.Mui-focused fieldset": {
-      borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.focused}`,
-      borderWidth: "var(--input-border-width)",
-    },
-    "&:not(.Mui-focused) fieldset": {
+    "&:not(.Mui-focused):not(:hover) fieldset": {
       borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
+    },
+    "&:hover fieldset": {
+      borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputHover}`,
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputFocused}`,
+      borderWidth: "var(--input-border-width)",
     },
     "&.Mui-error fieldset": {
       borderColor: `${TEXT_FIELD_COLOR_MAP.error}`,
