@@ -70,7 +70,7 @@ export const Banner = ({
           {feedbackText}
         </Typography>
       </Grid>
-      <Grid item sx={{ marginLeft: "16px" }}>
+      <Grid item>
         <Button
           id="nps-banner-button"
           data-testid="nps-banner-button"
