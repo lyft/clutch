@@ -20,7 +20,7 @@ import { object } from "yup";
 import { useWizardContext } from "../Contexts";
 import type { NoteConfig } from "../Feedback";
 import { Tooltip } from "../Feedback/tooltip";
-import TextField from "../Input/text-field";
+import { TextField } from "../Input/text-field";
 import styled from "../styled";
 
 interface RowData {

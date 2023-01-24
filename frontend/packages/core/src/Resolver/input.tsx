@@ -15,7 +15,7 @@ import {
 } from "../accordion";
 import { Button } from "../button";
 import { Alert } from "../Feedback";
-import TextField from "../Input/text-field";
+import { TextField } from "../Input/text-field";
 import { useSearchParams } from "../navigation";
 import { client } from "../Network";
 
