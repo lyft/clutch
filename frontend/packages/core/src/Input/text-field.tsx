@@ -77,20 +77,24 @@ const StyledTextField = styled(BaseTextField)<{
     fontSize: "16px",
     backgroundColor: "#FFFFFF",
 
-    "&:not(.Mui-focused):not(:hover) fieldset": {
-      borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
-    },
-    "&:hover fieldset": {
-      borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputHover}`,
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputFocused}`,
-      borderWidth: "var(--input-border-width)",
-    },
     "&.Mui-error fieldset": {
       borderColor: `${TEXT_FIELD_COLOR_MAP.error}`,
       borderWidth: "var(--input-border-width)",
     },
+
+    "&:not(.Mui-error)": {
+      "&:not(.Mui-focused):not(:hover) fieldset": {
+        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
+      },
+      "&:hover fieldset": {
+        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputHover}`,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputFocused}`,
+        borderWidth: "var(--input-border-width)",
+      },
+    },
+
     "&.Mui-disabled fieldset": {
       backgroundColor: "rgba(13, 16, 48, 0.12)",
     },
@@ -271,7 +275,7 @@ const TextFieldRef = (
     helpText = (
       <>
         {(error || color === "error") && <ErrorIcon />}
-        {color === "warning" && <WarningIcon />}
+        {!error && color === "warning" && <WarningIcon />}
         {helperText}
       </>
     );
