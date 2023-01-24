@@ -111,7 +111,7 @@ const StyledTextField = styled(BaseTextField)<{
       },
 
       "::placeholder": {
-        color: "var(--input-default-color)",
+        color: `${TEXT_FIELD_COLOR_MAP.inputDefault}`,
         opacity: 1,
       },
     },
