@@ -2,7 +2,7 @@
 
 exports[`AppLayout component renders correctly 1`] = `
 "<Styled(Component) container={true} direction=\\"column\\">
-  <Header />
+  <Header hideDrawers={false} />
   <Styled(Component) container={true} wrap=\\"nowrap\\">
     <Drawer />
     <Styled(div)>
