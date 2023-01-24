@@ -1,49 +1,30 @@
 import React from "react";
-import { matchers } from "@emotion/jest";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import { shallow } from "enzyme";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
+import "@testing-library/jest-dom";
 
 import * as ApplicationContext from "../../Contexts/app-context";
 import contextValues from "../../Contexts/tests/testContext";
 import { NPSHeader } from "..";
 
-// Add the custom matchers provided by '@emotion/jest'
-expect.extend(matchers);
+beforeEach(() => {
+  jest.spyOn(ApplicationContext, "useAppContext").mockReturnValue(contextValues);
+  jest.useFakeTimers();
+});
 
-describe("<NPSHeader />", () => {
-  describe("basic rendering", () => {
-    let wrapper;
+test("renders correctly", () => {
+  render(<NPSHeader />);
 
-    beforeEach(() => {
-      jest.spyOn(ApplicationContext, "useAppContext").mockReturnValue(contextValues);
-      jest.useFakeTimers();
-      wrapper = shallow(<NPSHeader />);
-    });
+  expect(screen.getAllByRole("button")).toHaveLength(1);
+  expect(screen.getByRole("button")).toHaveAttribute("id", "headerFeedbackIcon");
+});
 
-    afterEach(() => {
-      wrapper.unmount();
-    });
+test("opens a popper on click of feedback icon", async () => {
+  const user = userEvent.setup({ delay: null });
+  render(<NPSHeader />);
 
-    it("renders", () => {
-      expect(wrapper.find(NPSHeader)).toBeDefined();
-    });
-
-    it("renders clickable feedback icon", () => {
-      const feedbackIcon = wrapper.find("#headerFeedbackIcon");
-      expect(feedbackIcon).toBeTruthy();
-      expect(feedbackIcon.children().contains(<ChatBubbleOutlineIcon />)).toBeTruthy();
-    });
-
-    it("opens a popper on click of feedback icon", () => {
-      const feedbackIcon = wrapper.find("#headerFeedbackIcon");
-
-      expect(wrapper.find("Styled(Component)").at(1).prop("open")).toBeFalsy();
-
-      feedbackIcon.prop("onClick")();
-
-      wrapper.update();
-
-      expect(wrapper.find("Styled(Component)").at(1).prop("open")).toBeTruthy();
-    });
-  });
+  const feedbackButton = await screen.findByRole("button");
+  await user.click(feedbackButton);
+  expect(screen.getByRole("tooltip")).toBeInTheDocument();
 });
