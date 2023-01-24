@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import type { Meta } from "@storybook/react";
 
 import type { TextFieldProps } from "../text-field";
-import TextField from "../text-field";
+import { TextField } from "../text-field";
 
 export default {
   title: "Core/Input/TextField",
