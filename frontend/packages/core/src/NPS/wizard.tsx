@@ -19,7 +19,7 @@ const NPSWizard = () => {
   const [hasSubmit, setSubmit] = useState<boolean>(false);
 
   return (
-    <NPSContainer $submit={hasSubmit}>
+    <NPSContainer $submit={hasSubmit} data-testid="nps-wizard">
       <NPSFeedback origin="WIZARD" onSubmit={setSubmit} />
     </NPSContainer>
   );

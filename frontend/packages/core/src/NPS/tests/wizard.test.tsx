@@ -1,44 +1,85 @@
 import React from "react";
-import renderer from "react-test-renderer";
-import { matchers } from "@emotion/jest";
-import { shallow } from "enzyme";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
+import "@testing-library/jest-dom";
+
+import { client } from "../../Network";
 import { NPSWizard } from "..";
 
-// Add the custom matchers provided by '@emotion/jest'
-expect.extend(matchers);
+const defaultResult = {
+  prompt: "Test Prompt",
+  freeformPrompt: "Test Freeform",
+  ratingLabels: [
+    {
+      emoji: "SAD",
+      label: "bad",
+    },
+    {
+      emoji: "NEUTRAL",
+      label: "ok",
+    },
+    {
+      emoji: "HAPPY",
+      label: "great",
+    },
+  ],
+};
 
-describe("<NPSWizard />", () => {
-  describe("basic rendering", () => {
-    let wrapper;
+beforeEach(() => {
+  jest.spyOn(client, "post").mockReturnValue(
+    new Promise((resolve, reject) => {
+      resolve({
+        data: {
+          originSurvey: {
+            WIZARD: defaultResult,
+            HEADER: defaultResult,
+          },
+        },
+      });
+    })
+  );
+});
 
-    beforeEach(() => {
-      wrapper = shallow(<NPSWizard />);
-    });
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
-    afterEach(() => {
-      wrapper.unmount();
-    });
+test("renders correctly", async () => {
+  render(<NPSWizard />);
 
-    it("renders", () => {
-      expect(wrapper.find(NPSWizard)).toBeDefined();
-    });
+  expect(await screen.findByTestId("nps-wizard")).toBeVisible();
+});
 
-    it("renders feedback with wizard property", () => {
-      expect(wrapper.find("NPSFeedback").props().origin).toBe("WIZARD");
-    });
+test("renders the container with a bluish background", async () => {
+  render(<NPSWizard />);
 
-    it("renders the container with a bluish background", () => {
-      const component = renderer.create(<NPSWizard />).toJSON();
-      expect(component).toHaveStyleRule("background", "#F9F9FE");
-    });
+  expect(await screen.findByTestId("nps-wizard")).toHaveStyle({
+    background: "#F9F9FE",
+  });
+});
 
-    // TODO: Revisit this test, currently testing the styles is broken
-    // eslint-disable-next-line jest/no-disabled-tests
-    it.skip("removes the bluish background after submission", () => {
-      wrapper.find("NPSFeedback").prop("onSubmit")(true);
-      wrapper.update();
-      expect(wrapper).toHaveStyleRule("background", "unset");
-    });
+test("removes the bluish background", async () => {
+  const user = userEvent.setup();
+  const { container } = render(<NPSWizard />);
+
+  let emojiButton;
+  await waitFor(() => {
+    emojiButton = container.querySelector('[aria-label="Great"]');
+    expect(emojiButton).toBeVisible();
+  });
+
+  if (!emojiButton) {
+    return;
+  }
+
+  await user.click(emojiButton);
+
+  const submitButton = await screen.findByText("Submit");
+  expect(submitButton).toBeVisible();
+  await user.click(submitButton);
+
+  expect(screen.getByTestId("nps-wizard")).toHaveStyle({
+    background: "unset",
   });
 });
