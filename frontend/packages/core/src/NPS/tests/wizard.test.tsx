@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import "@testing-library/jest-dom";
@@ -61,22 +61,12 @@ test("renders the container with a bluish background", async () => {
 
 test("removes the bluish background", async () => {
   const user = userEvent.setup();
-  const { container } = render(<NPSWizard />);
+  render(<NPSWizard />);
 
-  let emojiButton;
-  await waitFor(() => {
-    emojiButton = container.querySelector('[aria-label="Great"]');
-    expect(emojiButton).toBeVisible();
-  });
-
-  if (!emojiButton) {
-    return;
-  }
-
+  const emojiButton = await screen.findByLabelText(/Great/i);
   await user.click(emojiButton);
 
   const submitButton = await screen.findByText("Submit");
-  expect(submitButton).toBeVisible();
   await user.click(submitButton);
 
   expect(screen.getByTestId("nps-wizard")).toHaveStyle({
