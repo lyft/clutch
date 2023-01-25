@@ -98,7 +98,7 @@ const colorCss = (palette: ButtonPalette) => {
 const BUTTON_SIZE_MAP = {
   xsmall: {
     height: "24px",
-    padding: "0px 8px",
+    padding: "4px 20px",
   },
   small: {
     height: "32px",
