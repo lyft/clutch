@@ -8,6 +8,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NoteConfig,
   NotePanel,
   Resolver,
   useWizardContext,
@@ -19,6 +20,8 @@ import { number, ref } from "yup";
 import type Reference from "yup/lib/Reference";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
+
+const WARNING_THRESHOLD = 0.5;
 
 const HPAIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
@@ -49,6 +52,16 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
   const metadataAnnotations = [];
   const metadataLabels = [];
 
+  const [warnings, setWarnings] = React.useState<{
+    minSize: NoteConfig;
+    maxSize: NoteConfig;
+  }>({ minSize: undefined, maxSize: undefined });
+  const getWarning = React.useCallback(
+    (current: number, newValue: number): boolean =>
+      current * (1 / WARNING_THRESHOLD) < newValue || current / (1 / WARNING_THRESHOLD) > newValue,
+    []
+  );
+
   React.useEffect(() => {
     if (hpa.annotations) {
       _.forEach(hpa.annotations, (annotation, key) => {
@@ -67,6 +80,29 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
       currentHpaData.assign(hpa);
     }
   }, []);
+
+  React.useEffect(() => {
+    if ((currentHpaData.displayValue() as IClutch.k8s.v1.HPA).sizing) {
+      const {
+        minReplicas,
+        maxReplicas,
+      } = (currentHpaData.displayValue() as IClutch.k8s.v1.HPA).sizing;
+      setWarnings({
+        minSize: getWarning(minReplicas, hpa.sizing.minReplicas)
+          ? {
+              severity: "warning",
+              text: `New Min Size is more than ${WARNING_THRESHOLD * 100}% different`,
+            }
+          : undefined,
+        maxSize: getWarning(maxReplicas, hpa.sizing.maxReplicas)
+          ? {
+              severity: "warning",
+              text: `New Max Size is more than ${WARNING_THRESHOLD * 100}% different`,
+            }
+          : undefined,
+      });
+    }
+  }, [hpa.sizing.minReplicas, hpa.sizing.maxReplicas]);
 
   return (
     <WizardStep error={hpaData.error} isLoading={hpaData.isLoading}>
@@ -92,6 +128,7 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
                 hpa.sizing.minReplicas > 0
                   ? number().integer().moreThan(0)
                   : number().integer().min(0),
+              warning: warnings.minSize,
             },
           },
           {
@@ -110,6 +147,7 @@ const HPADetails: React.FC<ConfirmChild> = ({ notes }) => {
                       .integer()
                       .min(ref("Min Size") as Reference<number>)
                   : number().integer().moreThan(0),
+              warning: warnings.maxSize,
             },
           },
           { name: "Cluster", value: hpa.cluster },
@@ -145,12 +183,11 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
 
   React.useEffect(() => {
     // if new values are either 50% bigger or smaller than old values, add a warning note
-    const alertLevel = 0.5;
     const { maxReplicas, minReplicas } = currentHpaData.sizing;
-    const maxUpperBound = (1 + alertLevel) * maxReplicas;
-    const maxLowerBound = (1 - alertLevel) * maxReplicas;
-    const minUpperBound = (1 + alertLevel) * minReplicas;
-    const minLowerBound = (1 - alertLevel) * minReplicas;
+    const maxUpperBound = (1 + WARNING_THRESHOLD) * maxReplicas;
+    const maxLowerBound = (1 - WARNING_THRESHOLD) * maxReplicas;
+    const minUpperBound = (1 + WARNING_THRESHOLD) * minReplicas;
+    const minLowerBound = (1 - WARNING_THRESHOLD) * minReplicas;
 
     const isMinReplicasDiffTooBig =
       hpa.sizing.minReplicas > minUpperBound || hpa.sizing.minReplicas < minLowerBound;

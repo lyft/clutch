@@ -2,6 +2,7 @@ import * as React from "react";
 import type { FieldValues, UseFormRegister } from "react-hook-form";
 import styled from "@emotion/styled";
 import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
 import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
@@ -44,41 +45,56 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 });
 
-const StyledTextField = styled(BaseTextField)({
-  "--error-color": "#DB3615",
+const TEXT_FIELD_COLOR_MAP = {
+  default: "rgba(13, 16, 48, 0.6)",
+  inputDefault: "rgba(13, 16, 48, 0.38)",
+  inputHover: "#2D3F50",
+  inputFocused: "#3548d4",
+  primary: "#3548D4",
+  secondary: "#D7DAF6",
+  info: "#3548D4",
+  success: "#1E942D",
+  warning: "#FCD34D",
+  error: "#DB3615",
+};
+
+const StyledTextField = styled(BaseTextField)<{
+  $color?: MuiStandardTextFieldProps["color"];
+}>({}, props => ({
   height: "unset",
-
   ".MuiInputLabel-root": {
-    "--label-color": "rgba(13, 16, 48, 0.6)",
-
-    color: "var(--label-color)",
-
+    color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
     "&.Mui-focused": {
-      color: "var(--label-color)",
+      color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
     },
     "&.Mui-error": {
-      color: "var(--error-color)",
+      color: `${TEXT_FIELD_COLOR_MAP.error}`,
     },
   },
-
   ".MuiInputBase-root": {
     "--input-border-width": "1px",
-    "--input-default-color": "rgba(13, 16, 48, 0.38)",
     borderRadius: "4px",
     fontSize: "16px",
     backgroundColor: "#FFFFFF",
 
-    "& fieldset": {
-      borderColor: "var(--input-default-color)",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#3548d4",
-      borderWidth: "var(--input-border-width)",
-    },
     "&.Mui-error fieldset": {
-      borderColor: "var(--error-color)",
+      borderColor: `${TEXT_FIELD_COLOR_MAP.error}`,
       borderWidth: "var(--input-border-width)",
     },
+
+    "&:not(.Mui-error)": {
+      "&:not(.Mui-focused):not(:hover) fieldset": {
+        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
+      },
+      "&:hover fieldset": {
+        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputHover}`,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputFocused}`,
+        borderWidth: "var(--input-border-width)",
+      },
+    },
+
     "&.Mui-disabled fieldset": {
       backgroundColor: "rgba(13, 16, 48, 0.12)",
     },
@@ -95,7 +111,7 @@ const StyledTextField = styled(BaseTextField)({
       },
 
       "::placeholder": {
-        color: "var(--input-default-color)",
+        color: `${TEXT_FIELD_COLOR_MAP.inputDefault}`,
         opacity: 1,
       },
     },
@@ -113,9 +129,9 @@ const StyledTextField = styled(BaseTextField)({
     marginTop: "7px",
     lineHeight: "16px",
     marginLeft: "0px",
-
+    color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
     "&.Mui-error": {
-      color: "var(--error-color)",
+      color: `${TEXT_FIELD_COLOR_MAP.error}`,
     },
 
     "> svg": {
@@ -124,7 +140,7 @@ const StyledTextField = styled(BaseTextField)({
       marginRight: "4px",
     },
   },
-});
+}));
 
 // popper containing the search result options
 const Popper = styled(MuiPopper)({
@@ -207,6 +223,7 @@ export interface TextFieldProps
       | "required"
       | "type"
       | "value"
+      | "color"
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
@@ -219,6 +236,7 @@ const TextFieldRef = (
     onChange,
     onReturn,
     error,
+    color,
     helperText,
     readOnly,
     endAdornment,
@@ -251,11 +269,13 @@ const TextFieldRef = (
 
   let helpText = helperText;
 
-  // Prepend a '!' icon to helperText displayed below the form if the form is in an error state.
-  if (error && helpText) {
+  // Prepend a circle '!' icon to helperText displayed below the form if the form is in an error state.
+  // Prepend a triangle '!' icon to helperText displayed below the form if the form is in a warning state.
+  if ((error || color) && helpText) {
     helpText = (
       <>
-        <ErrorIcon />
+        {(error || color === "error") && <ErrorIcon />}
+        {!error && color === "warning" && <WarningIcon />}
         {helperText}
       </>
     );
@@ -376,12 +396,13 @@ const TextFieldRef = (
       defaultValue={defaultValue}
       value={value}
       onChange={onChange}
+      color={color}
       {...props}
       {...{ ref }}
     />
   );
 };
 
-const TextField = React.forwardRef<HTMLDivElement, TextFieldProps>(TextFieldRef);
+export const TextField = React.forwardRef<HTMLDivElement, TextFieldProps>(TextFieldRef);
 
 export default TextField;
