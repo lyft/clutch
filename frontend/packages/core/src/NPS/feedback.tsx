@@ -203,12 +203,13 @@ const NPSFeedback = ({
   }
 
   return (
-    <form onSubmit={submitFeedback}>
+    <form onSubmit={submitFeedback} data-testid="feedback-component">
       <MuiGrid
         container
         direction="row"
         alignItems="center"
         style={{ padding: wizardOrigin ? "16px" : "24px" }}
+        data-testid="feedback-items-container"
       >
         <MuiGrid item xs>
           <Typography variant={wizardOrigin ? "subtitle3" : "subtitle2"}>
