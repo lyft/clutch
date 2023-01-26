@@ -54,8 +54,9 @@ test("emojis will update opacity to 1 on hover", async () => {
   const user = userEvent.setup();
   render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
 
-  await user.click(screen.getByLabelText(/Great/i)); // .hover not working
-  expect(screen.getByLabelText(/Great/i)).toHaveStyle("opacity: 1");
+  await user.hover(screen.getByLabelText(/Great/i));
+  expect(await screen.findByText("Great")).toHaveClass("MuiTooltip-tooltip");
+  expect(await screen.findByLabelText(/Great/i)).toHaveStyle("opacity: 1");
 });
 
 test("emojis will update opacity to 1 on selection", async () => {
