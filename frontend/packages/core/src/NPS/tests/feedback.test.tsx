@@ -222,7 +222,9 @@ describe("basic rendering", () => {
       `0 / ${maxLength}`
     );
 
-    await user.type(await screen.findByPlaceholderText(defaultResult.freeformPrompt), testValue);
+    const textbox = await screen.findByPlaceholderText(defaultResult.freeformPrompt);
+    await user.click(textbox);
+    await user.paste(testValue);
 
     expect(container.querySelector(".MuiFormHelperText-root")).toHaveTextContent(
       `${testValue.trim().length} / ${maxLength}`
@@ -230,7 +232,6 @@ describe("basic rendering", () => {
     expect(await screen.findByPlaceholderText(defaultResult.freeformPrompt)).toHaveValue(testValue);
   });
 
-  jest.setTimeout(30000);
   test("will display an error on feedback if more input is given than maxLength", async () => {
     const testValue = generateRandomString(FEEDBACK_MAX_LENGTH + 1);
     const user = userEvent.setup();
@@ -244,13 +245,15 @@ describe("basic rendering", () => {
       );
     });
 
-    await user.type(await screen.findByPlaceholderText(defaultResult.freeformPrompt), testValue);
+    const textbox = await screen.findByPlaceholderText(defaultResult.freeformPrompt);
+    await user.click(textbox);
+    await user.paste(testValue);
 
     expect(await screen.findByRole("textbox")).toHaveValue(testValue);
     expect(container.querySelector(".MuiFormHelperText-root")).toHaveTextContent(
       `${testValue.trim().length} / ${maxLength}`
     );
-    expect(await screen.findByPlaceholderText(defaultResult.freeformPrompt)).toHaveValue(testValue);
+    expect(container.querySelector(".MuiFormHelperText-root")).toHaveClass("Mui-error");
   });
 
   test("will disable the submit button upon error", async () => {
@@ -262,7 +265,9 @@ describe("basic rendering", () => {
 
     expect(await screen.findByText("Submit")).toBeEnabled();
 
-    await user.type(await screen.findByPlaceholderText(defaultResult.freeformPrompt), testValue);
+    const textbox = await screen.findByPlaceholderText(defaultResult.freeformPrompt);
+    await user.click(textbox);
+    await user.paste(testValue);
 
     expect(await screen.findByText("Submit")).toBeDisabled();
   });
