@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
-import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext, ShortLinkContext } from "../Contexts";

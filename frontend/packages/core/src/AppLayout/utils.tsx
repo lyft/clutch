@@ -1,5 +1,6 @@
-import type { Route, Workflow } from "../AppProvider/workflow";
 import * as _ from "lodash";
+
+import type { Route, Workflow } from "../AppProvider/workflow";
 
 interface GroupedRoutes {
   [category: string]: {
