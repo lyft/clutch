@@ -61,7 +61,7 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
     routes.forEach(route => {
       const additionalNPS = get(route, "componentProps.additionalNPS", []);
 
-      if (route.hideNav === undefined || route.hideNav === false || additionalNPS) {
+      if (route.hideNav === undefined || route.hideNav === false || additionalNPS.length > 0) {
         if (!typeMap[group]) {
           typeMap[group] = [];
         }
