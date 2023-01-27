@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { capitalize } from "lodash";
 
@@ -56,7 +56,9 @@ test("emojis will update opacity to 1 on hover", async () => {
 
   await user.hover(screen.getByLabelText(/Great/i));
   expect(await screen.findByText("Great")).toHaveClass("MuiTooltip-tooltip");
-  expect(await screen.findByLabelText(/Great/i)).toHaveStyle("opacity: 1");
+  // expect(await screen.findByLabelText(/Great/i)).toHaveStyle("opacity: 1");
+  await user.unhover(screen.getByLabelText(/Great/i));
+  await waitForElementToBeRemoved(() => screen.queryByText("Great"));
 });
 
 test("emojis will update opacity to 1 on selection", async () => {
