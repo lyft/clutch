@@ -58,16 +58,16 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
   workflows.forEach(workflow => {
     const { group, path, routes, displayName } = workflow;
 
-    if (!typeMap[group]) {
-      typeMap[group] = [];
-    }
-
     routes.forEach(route => {
       if (
         route.hideNav === undefined ||
         route.hideNav === false ||
         (route.hideNav === true && route.showInNPS === true)
       ) {
+        if (!typeMap[group]) {
+          typeMap[group] = [];
+        }
+
         typeMap[group].push({
           label: route.displayName || displayName,
           value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
