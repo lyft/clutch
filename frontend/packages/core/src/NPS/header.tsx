@@ -73,7 +73,7 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
           });
         }
 
-        if (additionalNPS) {
+        if (additionalNPS.length > 0) {
           typeMap[group].push(...additionalNPS);
         }
       }
