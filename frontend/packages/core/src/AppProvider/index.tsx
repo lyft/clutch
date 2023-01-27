@@ -92,25 +92,12 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 
   const [discoverableWorkflows, setDiscoverableWorkflows] = React.useState([]);
   React.useEffect(() => {
-    /** Filter out all of the workflows that are configured to be `hideNav: true`.
-     * This prevents the workflows from being discoverable by the user from the UI,
-     * both search and drawer navigation.
-     *
-     * The routes for all configured workflows will still be reachable
-     * by manually providing the full path in the URI.
-     */
-    const pw = _.cloneDeep(workflows).filter(workflow => {
+    const filteredWorkflows = workflows.filter(workflow => workflow.path === "");
+    if (filteredWorkflows.length > 0) {
       /** Used to control a custom landing page */
-      if (workflow.path === "") {
-        setHasCustomLanding(true);
-      }
-      const publicRoutes = workflow.routes.filter(route => {
-        return !(route?.hideNav !== undefined ? route.hideNav : false);
-      });
-      workflow.routes = publicRoutes; /* eslint-disable-line no-param-reassign */
-      return publicRoutes.length !== 0;
-    });
-    setDiscoverableWorkflows(pw);
+      setHasCustomLanding(true);
+    }
+    setDiscoverableWorkflows(workflows);
   }, [workflows]);
 
   const shortLinkProviderProps: ShortLinkContextProps = React.useMemo(

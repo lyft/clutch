@@ -1,4 +1,5 @@
 import type { Route, Workflow } from "../AppProvider/workflow";
+import * as _ from "lodash";
 
 interface GroupedRoutes {
   [category: string]: {
@@ -124,4 +125,27 @@ const searchIndexes = (workflows: Workflow[]): SearchIndex[] => {
   return indexOptions;
 };
 
-export { routesByGrouping, searchIndexes, sortedGroupings, workflowByRoute, workflowsByTrending };
+/** Filter out all of the workflows that are configured to be `hideNav: true`.
+ * This prevents the workflows from being discoverable by the user from the UI,
+ * both search and drawer navigation.
+ *
+ * The routes for all configured workflows will still be reachable
+ * by manually providing the full path in the URI.
+ */
+const filterHiddenRoutes = (workflows: Workflow[]): Workflow[] =>
+  _.cloneDeep(workflows).filter(workflow => {
+    const publicRoutes = workflow.routes.filter(route => {
+      return !(route?.hideNav !== undefined ? route.hideNav : false);
+    });
+    workflow.routes = publicRoutes; /* eslint-disable-line no-param-reassign */
+    return publicRoutes.length !== 0;
+  });
+
+export {
+  filterHiddenRoutes,
+  routesByGrouping,
+  searchIndexes,
+  sortedGroupings,
+  workflowByRoute,
+  workflowsByTrending,
+};

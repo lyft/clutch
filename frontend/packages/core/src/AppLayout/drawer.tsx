@@ -15,7 +15,7 @@ import { useAppContext } from "../Contexts";
 import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
 
-import { routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
+import { filterHiddenRoutes, routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
 
 // sidebar
 const DrawerPanel = styled(MuiDrawer)({
@@ -157,6 +157,7 @@ const Link: React.FC<LinkProps> = ({ to, text }) => {
 
 const Drawer: React.FC = () => {
   const { workflows } = useAppContext();
+  const filteredWorkflows = filterHiddenRoutes(workflows);
   const [activeWorkflow, setActiveWorkflow] = React.useState<Workflow>(null);
   const [openGroup, setOpenGroup] = React.useState("");
   const location = useLocation();
@@ -166,18 +167,18 @@ const Drawer: React.FC = () => {
   };
 
   React.useEffect(() => {
-    setActiveWorkflow(workflowByRoute(workflows, location.pathname));
+    setActiveWorkflow(workflowByRoute(filteredWorkflows, location.pathname));
   }, [location]);
 
   // Will hide the drawer if there are no visible workflows
-  if (!workflows.length) {
+  if (!filteredWorkflows.length) {
     return null;
   }
 
   return (
     <DrawerPanel data-qa="drawer" variant="permanent">
-      {sortedGroupings(workflows).map(grouping => {
-        const value = routesByGrouping(workflows)[grouping];
+      {sortedGroupings(filteredWorkflows).map(grouping => {
+        const value = routesByGrouping(filteredWorkflows)[grouping];
         const sortedWorkflows = _.sortBy(value.workflows, w => w.displayName);
 
         return (
