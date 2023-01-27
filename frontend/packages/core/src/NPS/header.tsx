@@ -63,14 +63,19 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
     }
 
     routes.forEach(route => {
-      typeMap[group].push({
-        label: route.displayName || displayName,
-        value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
-      });
-
-      const additionalNPS = get(route, "componentProps.additionalNPS", []);
-      if (additionalNPS) {
-        typeMap[group].push(...additionalNPS);
+      if (
+        route.hideNav === undefined ||
+        route.hideNav === false ||
+        (route.hideNav === true && route.showInNPS === true)
+      ) {
+        typeMap[group].push({
+          label: route.displayName || displayName,
+          value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
+        });
+        const additionalNPS = get(route, "componentProps.additionalNPS", []);
+        if (additionalNPS) {
+          typeMap[group].push(...additionalNPS);
+        }
       }
     });
   });

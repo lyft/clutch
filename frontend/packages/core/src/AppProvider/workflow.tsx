@@ -76,6 +76,8 @@ export interface Route {
   requiredConfigProps?: string[];
   /** Is the workflow discoverable via search and drawer navigation. This defaults to false. */
   hideNav?: boolean;
+  /** Is the workflow shown in the NPS header. This defaults to false. Only active if hideNav is true. */
+  showInNPS?: boolean;
   /**
    * The feature flag used to determine if the route should be registered.
    *
