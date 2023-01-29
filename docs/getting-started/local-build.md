@@ -16,7 +16,7 @@ In order to build Clutch, the following tools are required:
 - Yarn ([yarnpkg.com](https://classic.yarnpkg.com/en/docs/install))
 
 :::info
-If you are building on OSX you'll need to install coreutils. This is easiest with [homebrew](https://brew.sh/).
+If you are building on macOS you'll need to install coreutils. This is easiest with [homebrew](https://brew.sh/).
 ```bash
 brew install coreutils
 ```
@@ -74,7 +74,7 @@ If you receive an error message:
 ```
 tools/preflight-checks.sh: line 12: realpath: command not found
 ```
-Then `realpath` might not be in your `PATH` (you can check via `which realpath`).  To resolve this error message on OSX, try running `brew link coreutils` first, before running `make` again.
+Then `realpath` might not be in your `PATH` (you can check via `which realpath`).  To resolve this error message on macOS, try running `brew link coreutils` first, before running `make` again.
 
 #### 3. Run
 Launch Clutch with back-end configuration [clutch-config.yaml](https://github.com/lyft/clutch/blob/main/backend/clutch-config.yaml).
