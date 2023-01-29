@@ -7,7 +7,7 @@ import type { Dayjs } from "dayjs";
 
 import styled from "../styled";
 
-import TextField from "./text-field";
+import { TextField } from "./text-field";
 
 const PaddedTextField = styled(TextField)({
   // This is required as TextField intentionally unsets the right padding for
