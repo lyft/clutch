@@ -50,13 +50,12 @@ test("all emojis have an initial opacity of 0.5 when not selected", () => {
   });
 });
 
-test("emojis will update opacity to 1 on hover", async () => {
+test("emojis will have a tooltip show on hover", async () => {
   const user = userEvent.setup();
   render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
 
   await user.hover(screen.getByLabelText(/Great/i));
   expect(await screen.findByText("Great")).toHaveClass("MuiTooltip-tooltip");
-  // expect(await screen.findByLabelText(/Great/i)).toHaveStyle("opacity: 1");
   await user.unhover(screen.getByLabelText(/Great/i));
   await waitForElementToBeRemoved(() => screen.queryByText("Great"));
 });
