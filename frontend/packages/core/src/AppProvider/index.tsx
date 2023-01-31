@@ -92,7 +92,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [discoverableWorkflows, setDiscoverableWorkflows] = React.useState([]);
   React.useEffect(() => {
     const landingWorkflows = workflows.filter(workflow => workflow.path === "");
-    if (filteredWorkflows.length > 0) {
+    if (landingWorkflows.length > 0) {
       /** Used to control a custom landing page */
       setHasCustomLanding(true);
     }
