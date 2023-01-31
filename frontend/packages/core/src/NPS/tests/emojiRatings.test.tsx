@@ -1,114 +1,89 @@
 import React from "react";
-import renderer, { act } from "react-test-renderer";
-import { clutch as IClutch } from "@clutch-sh/api";
-import { matchers } from "@emotion/jest";
-import { shallow } from "enzyme";
+import { render, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { capitalize } from "lodash";
+
+import "@testing-library/jest-dom";
 
 import EmojiRatings from "../emojiRatings";
 
-// Add the custom matchers provided by '@emotion/jest'
-expect.extend(matchers);
+const stringExample = [
+  {
+    emoji: 1,
+    label: "bad",
+  },
+  {
+    emoji: 2,
+    label: "ok",
+  },
+  {
+    emoji: 3,
+    label: "great",
+  },
+];
 
-describe("<EmojiRatings />", () => {
-  const stringExample = [
-    {
-      emoji: 1,
-      label: "bad",
-    },
-    {
-      emoji: 2,
-      label: "ok",
-    },
-    {
-      emoji: 3,
-      label: "great",
-    },
-  ];
+const emojiMap = {
+  1: "SAD",
+  2: "NEUTRAL",
+  3: "HAPPY",
+};
 
-  const emojiMap = {
-    1: "SAD",
-    2: "NEUTRAL",
-    3: "HAPPY",
-  };
+test("will display a given list of emojis and their capitalized labels", () => {
+  render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
 
-  it("will display a given list of emojis and their capitalized labels", () => {
-    const wrapper = shallow(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
-    wrapper.children().forEach((node, i) => {
-      expect(node.find("Tooltip").prop("title")).toEqual(capitalize(stringExample[i].label));
-      expect(node.find("Emoji").prop("type")).toEqual(emojiMap[stringExample[i].emoji]);
-    });
+  const elements = screen.getAllByRole("button");
+
+  expect(elements).toHaveLength(stringExample.length);
+
+  elements.forEach((element, i) => {
+    expect(element).toHaveAttribute("aria-label", capitalize(stringExample[i].label));
   });
+});
 
-  it("all emojis have an initial opacity of 0.5 when not selected", () => {
-    const component = renderer
-      .create(<EmojiRatings ratings={stringExample} setRating={() => {}} />)
-      .toJSON();
+test("all emojis have an initial opacity of 0.5 when not selected", () => {
+  render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
 
-    component.forEach(node => {
-      expect(node).toHaveStyleRule("opacity", "0.5");
-    });
+  const elements = screen.getAllByRole("button");
+
+  elements.forEach((element, i) => {
+    expect(element).toHaveStyle("opacity: 0.5");
   });
+});
 
-  it("emojis will update opacity to 1 on hover", () => {
-    const component = renderer
-      .create(<EmojiRatings ratings={stringExample} setRating={() => {}} />)
-      .toJSON();
+test("emojis will have a tooltip show on hover", async () => {
+  const user = userEvent.setup();
+  render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
 
-    component.forEach(node => {
-      expect(node).toHaveStyleRule("opacity", "1", { target: ":hover" });
-    });
-  });
+  await user.hover(screen.getByLabelText(/Great/i));
+  expect(await screen.findByText("Great")).toHaveClass("MuiTooltip-tooltip");
+  await user.unhover(screen.getByLabelText(/Great/i));
+  await waitForElementToBeRemoved(() => screen.queryByText("Great"));
+});
 
-  it("emojis wll update opacity to 1 on selection", () => {
-    let component;
+test("emojis will update opacity to 1 on selection", async () => {
+  const user = userEvent.setup();
+  render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
 
-    act(() => {
-      component = renderer.create(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
-    });
+  await user.click(screen.getByLabelText(/Great/i));
+  expect(screen.getByLabelText(/Great/i)).toHaveStyle("opacity: 1");
+});
 
-    let [firstEmoji] = component.toJSON();
+test("will return a given emoji on select", async () => {
+  const user = userEvent.setup();
+  let selected: any = null;
 
-    expect(firstEmoji).toHaveStyleRule("opacity", "0.5");
+  render(
+    <EmojiRatings
+      ratings={stringExample}
+      setRating={rating => {
+        selected = rating;
+      }}
+    />
+  );
 
-    act(() => {
-      firstEmoji.props.onClick();
-    });
+  expect(selected).toBeNull();
 
-    [firstEmoji] = component.toJSON();
+  await user.click(screen.getByLabelText(/Ok/i));
 
-    expect(firstEmoji).toHaveStyleRule("opacity", "1");
-  });
-
-  it("will fetch emojis based on integers with a given enum", () => {
-    const enums = IClutch.feedback.v1.EmojiRating;
-    const wrapper = shallow(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
-
-    wrapper.children().forEach((node, i) => {
-      expect(enums[node.find("Emoji").prop("type")]).toEqual(stringExample[i].emoji);
-    });
-  });
-
-  it("will return a given emoji on select", () => {
-    let selected = null;
-
-    const wrapper = shallow(
-      <EmojiRatings
-        ratings={stringExample}
-        setRating={rating => {
-          selected = rating;
-        }}
-      />
-    );
-
-    expect(selected).toBeNull();
-
-    const neutralEmoji = wrapper.find("Tooltip").at(1).find("Styled(Component)");
-
-    neutralEmoji.prop("onClick")(null);
-
-    wrapper.update();
-
-    expect(selected.emoji).toEqual(emojiMap[stringExample[1].emoji]);
-  });
+  expect(selected.emoji).toEqual(emojiMap[stringExample[1].emoji]);
 });
