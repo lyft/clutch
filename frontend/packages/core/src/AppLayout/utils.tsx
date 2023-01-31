@@ -127,8 +127,8 @@ const searchIndexes = (workflows: Workflow[]): SearchIndex[] => {
 };
 
 /** Filter out all of the workflows that are configured to be `hideNav: true`.
- * This prevents the workflows from being discoverable by the user from the UI,
- * both search and drawer navigation.
+ * This prevents the workflows from being discoverable by the user from the UI where used.
+ * Some example usages are in the search and drawer navigation components.
  *
  * The routes for all configured workflows will still be reachable
  * by manually providing the full path in the URI.
