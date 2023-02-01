@@ -1,16 +1,30 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { BrowserRouter } from "react-router-dom";
+import { render, waitFor } from "@testing-library/react";
 
+import "@testing-library/jest-dom";
+
+import * as appContext from "../../Contexts/app-context";
+import { client } from "../../Network";
 import AppLayout from "..";
 
-describe("AppLayout component", () => {
-  let component;
+jest.spyOn(appContext, "useAppContext").mockReturnValue({ workflows: [] });
+jest.spyOn(client, "post").mockReturnValue(
+  new Promise((resolve, reject) => {
+    resolve({
+      data: {},
+    });
+  })
+);
 
-  beforeAll(() => {
-    component = shallow(<AppLayout />);
-  });
+test("renders correctly", async () => {
+  const { asFragment } = render(
+    <BrowserRouter>
+      <AppLayout />
+    </BrowserRouter>
+  );
 
-  it("renders correctly", () => {
-    expect(component.debug()).toMatchSnapshot();
+  await waitFor(() => {
+    expect(asFragment()).toMatchSnapshot();
   });
 });
