@@ -30,14 +30,14 @@ jobs:
           echo "tags=${TAGS}" >>${GITHUB_OUTPUT}
       - name: build and push
         if: github.ref == 'refs/heads/main'
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v4.0.0
         with:
           tags: ${{ steps.tags.outputs.tags }}
           push: true
           cache-from: type=registry,ref=lyft/clutch:latest
       - name: build
         if: github.ref != 'refs/heads/main'
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v4.0.0
         with:
           tags: ${{ steps.tags.outputs.tags }}
           push: false
