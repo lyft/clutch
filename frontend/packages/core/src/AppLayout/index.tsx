@@ -27,7 +27,7 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false, configuration = {} }) => {
   return (
-    <AppGrid container direction="column">
+    <AppGrid container direction="column" data-testid="app-layout-component">
       <Header {...configuration} />
       <ContentGrid container wrap="nowrap">
         {isLoading ? (
