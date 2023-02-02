@@ -21,7 +21,7 @@ import { useAppContext } from "../Contexts";
 import { useNavigate } from "../navigation";
 
 import type { SearchIndex } from "./utils";
-import { searchIndexes } from "./utils";
+import { filterHiddenRoutes, searchIndexes } from "./utils";
 
 const hotKey = "/";
 
@@ -197,7 +197,7 @@ const filterResults = (searchOptions: SearchIndex[], state: FilterOptionsState<S
 const SearchField: React.FC = () => {
   const { workflows } = useAppContext();
   const navigate = useNavigate();
-  const options = searchIndexes(workflows);
+  const options = searchIndexes(filterHiddenRoutes(workflows));
   const [inputValue, setInputValue] = React.useState("");
   const [showOptions, setShowOptions] = React.useState(false);
   const [open, setOpen] = React.useState(false);
