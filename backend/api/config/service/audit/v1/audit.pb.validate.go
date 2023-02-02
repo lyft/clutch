@@ -59,11 +59,21 @@ func (m *EventFilter) validate(all bool) error {
 
 	// no validation rules for Field
 
-	switch m.Value.(type) {
-
+	switch v := m.Value.(type) {
 	case *EventFilter_Text:
+		if v == nil {
+			err := EventFilterValidationError{
+				field:  "Value",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for Text
-
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {
@@ -455,9 +465,18 @@ func (m *Config) validate(all bool) error {
 		}
 	}
 
-	switch m.StorageProvider.(type) {
-
+	switch v := m.StorageProvider.(type) {
 	case *Config_DbProvider:
+		if v == nil {
+			err := ConfigValidationError{
+				field:  "StorageProvider",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
 		if len(m.GetDbProvider()) < 1 {
 			err := ConfigValidationError{
@@ -471,8 +490,19 @@ func (m *Config) validate(all bool) error {
 		}
 
 	case *Config_InMemory:
+		if v == nil {
+			err := ConfigValidationError{
+				field:  "StorageProvider",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for InMemory
-
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

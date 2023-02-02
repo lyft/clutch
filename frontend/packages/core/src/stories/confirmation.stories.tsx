@@ -1,16 +1,16 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 
-import Confirmation from "../confirmation";
+import ConfirmationComponent from "../confirmation";
 
 export default {
   title: "Core/Confirmation",
-  component: Confirmation,
+  component: ConfirmationComponent,
 } as Meta;
 
-const Template = (props: { action: string }) => <Confirmation {...props} />;
+const Template = (props: { action: string }) => <ConfirmationComponent {...props} />;
 
-export const Default = Template.bind({});
-Default.args = {
+export const Confirmation = Template.bind({});
+Confirmation.args = {
   action: "Deletion",
 };

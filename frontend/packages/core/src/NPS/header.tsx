@@ -58,19 +58,25 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
   workflows.forEach(workflow => {
     const { group, path, routes, displayName } = workflow;
 
-    if (!typeMap[group]) {
-      typeMap[group] = [];
-    }
-
     routes.forEach(route => {
-      typeMap[group].push({
-        label: route.displayName || displayName,
-        value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
-      });
-
       const additionalNPS = get(route, "componentProps.additionalNPS", []);
-      if (additionalNPS) {
-        typeMap[group].push(...additionalNPS);
+
+      const showRoute = route.hideNav === undefined || route.hideNav === false;
+      if (showRoute || additionalNPS.length > 0) {
+        if (!typeMap[group]) {
+          typeMap[group] = [];
+        }
+
+        if (showRoute) {
+          typeMap[group].push({
+            label: route.displayName || displayName,
+            value: `/${path}/${route.path}`.replace(/\/\/+/g, "/"),
+          });
+        }
+
+        if (additionalNPS.length > 0) {
+          typeMap[group].push(...additionalNPS);
+        }
       }
     });
   });
@@ -84,14 +90,26 @@ export const generateFeedbackTypes = (workflows: Workflow[]): SelectOption[] => 
   return feedbackTypes;
 };
 
+/**
+ * An NPS Header component which will render an icon in the banner and when clicked
+ * will ask the user to provide feedback
+ */
 const HeaderFeedback = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const anchorRef = React.useRef(null);
-  const { workflows } = useAppContext();
+  const { workflows, triggerHeaderItem, triggeredHeaderData } = useAppContext();
+  const [defaultFeedbackOption, setDefaultFeedbackOption] = React.useState<string>();
 
   const handleToggle = () => {
     setOpen(!open);
   };
+
+  React.useEffect(() => {
+    if (triggeredHeaderData && triggeredHeaderData.NPS) {
+      setDefaultFeedbackOption((triggeredHeaderData.NPS.defaultFeedbackOption as string) ?? "");
+      setOpen(true);
+    }
+  }, [triggeredHeaderData]);
 
   const handleClose = event => {
     // handler so that it wont close when selecting an item in the select
@@ -101,7 +119,11 @@ const HeaderFeedback = () => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-    setOpen(false);
+    // handler for the NPS Banner button so that it doesn't reset the headerLink
+    if (event.target.id !== "nps-banner-button") {
+      triggerHeaderItem && triggerHeaderItem("NPS", {});
+      setOpen(false);
+    }
   };
 
   return (
@@ -127,7 +149,11 @@ const HeaderFeedback = () => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="options">
-                  <NPSFeedback origin="HEADER" feedbackTypes={generateFeedbackTypes(workflows)} />
+                  <NPSFeedback
+                    origin="HEADER"
+                    feedbackTypes={generateFeedbackTypes(workflows)}
+                    defaultFeedbackOption={defaultFeedbackOption}
+                  />
                 </MenuList>
               </ClickAwayListener>
             </Paper>

@@ -1,85 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Not Found component renders correctly 1`] = `
-"<Theme>
-  <StyledEngineProvider injectFirst={true}>
-    <ThemeProvider theme={{...}}>
-      <ThemeProvider theme={{...}}>
-        <InnerThemeProvider>
-          <ThemeProvider theme={{...}}>
-            <CssBaseline>
-              <GlobalStyles styles={[Function: styles]}>
-                <GlobalStyles styles={[Function: styles]} defaultTheme={{...}}>
-                  <ForwardRef styles={[Function (anonymous)]} />
-                </GlobalStyles>
-              </GlobalStyles>
-            </CssBaseline>
-            <StylesProvider>
-              <NotFound>
-                <Styled(Component) container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}}>
-                  <ForwardRef(Grid) container={true} direction=\\"column\\" justifyContent=\\"center\\" alignItems=\\"center\\" style={{...}} className=\\"css-1rc10fs\\">
-                    <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1rc10fs\\" as=\\"div\\" style={{...}} sx={{...}}>
-                      <div className=\\"MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-zxxfrz-MuiGrid-root\\" style={{...}}>
-                        <Styled(Component) item={true}>
-                          <ForwardRef(Grid) item={true} className=\\"css-sm4uoy\\">
-                            <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-item css-sm4uoy\\" as=\\"div\\" sx={{...}}>
-                              <div className=\\"MuiGrid-root MuiGrid-item css-15yh1qb-MuiGrid-root\\">
-                                <ForwardRef(ThumbDownIcon) fontSize=\\"inherit\\">
-                                  <ForwardRef(SvgIcon) data-testid=\\"ThumbDownIcon\\" fontSize=\\"inherit\\">
-                                    <MuiSvgIconRoot as=\\"svg\\" className=\\"MuiSvgIcon-root MuiSvgIcon-fontSizeInherit\\" ownerState={{...}} focusable=\\"false\\" color={[undefined]} aria-hidden={true} role={[undefined]} viewBox=\\"0 0 24 24\\" data-testid=\\"ThumbDownIcon\\">
-                                      <svg className=\\"MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1yk9s9q-MuiSvgIcon-root\\" focusable=\\"false\\" color={[undefined]} aria-hidden={true} role={[undefined]} viewBox=\\"0 0 24 24\\" data-testid=\\"ThumbDownIcon\\">
-                                        <path d=\\"M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z\\" />
-                                      </svg>
-                                    </MuiSvgIconRoot>
-                                  </ForwardRef(SvgIcon)>
-                                </ForwardRef(ThumbDownIcon)>
-                              </div>
-                            </MuiGridRoot>
-                          </ForwardRef(Grid)>
-                        </Styled(Component)>
-                        <ForwardRef(Grid) item={true}>
-                          <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-item\\" as=\\"div\\" sx={{...}}>
-                            <div className=\\"MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root\\">
-                              <ForwardRef(Typography) align=\\"center\\" color=\\"textPrimary\\" variant=\\"h3\\">
-                                <MuiTypographyRoot as=\\"h3\\" ownerState={{...}} className=\\"MuiTypography-root MuiTypography-h3 MuiTypography-alignCenter\\" sx={{...}}>
-                                  <h3 className=\\"MuiTypography-root MuiTypography-h3 MuiTypography-alignCenter css-x6fgw-MuiTypography-root\\">
-                                    <ForwardRef(Grid) item={true}>
-                                      <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-item\\" as=\\"div\\" sx={{...}}>
-                                        <div className=\\"MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root\\">
-                                          Whoops...
-                                        </div>
-                                      </MuiGridRoot>
-                                    </ForwardRef(Grid)>
-                                    <ForwardRef(Grid) item={true}>
-                                      <MuiGridRoot ownerState={{...}} className=\\"MuiGrid-root MuiGrid-item\\" as=\\"div\\" sx={{...}}>
-                                        <div className=\\"MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root\\">
-                                          Looks like you took a wrong turn
-                                        </div>
-                                      </MuiGridRoot>
-                                    </ForwardRef(Grid)>
-                                  </h3>
-                                </MuiTypographyRoot>
-                              </ForwardRef(Typography)>
-                              <ForwardRef(Typography) align=\\"center\\" color=\\"textPrimary\\" variant=\\"h6\\">
-                                <MuiTypographyRoot as=\\"h6\\" ownerState={{...}} className=\\"MuiTypography-root MuiTypography-h6 MuiTypography-alignCenter\\" sx={{...}}>
-                                  <h6 className=\\"MuiTypography-root MuiTypography-h6 MuiTypography-alignCenter css-1n1umxm-MuiTypography-root\\">
-                                    &lt; 404 Not Found &gt;
-                                  </h6>
-                                </MuiTypographyRoot>
-                              </ForwardRef(Typography)>
-                            </div>
-                          </MuiGridRoot>
-                        </ForwardRef(Grid)>
-                      </div>
-                    </MuiGridRoot>
-                  </ForwardRef(Grid)>
-                </Styled(Component)>
-              </NotFound>
-            </StylesProvider>
-          </ThemeProvider>
-        </InnerThemeProvider>
-      </ThemeProvider>
-    </ThemeProvider>
-  </StyledEngineProvider>
-</Theme>"
+exports[`renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-zxxfrz-MuiGrid-root"
+    style="min-height: 80vh;"
+  >
+    <div
+      class="MuiGrid-root MuiGrid-item css-15yh1qb-MuiGrid-root"
+    >
+      <svg
+        aria-hidden="true"
+        class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1yk9s9q-MuiSvgIcon-root"
+        data-testid="ThumbDownIcon"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"
+        />
+      </svg>
+    </div>
+    <div
+      class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
+    >
+      <h3
+        class="MuiTypography-root MuiTypography-h3 MuiTypography-alignCenter css-x6fgw-MuiTypography-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
+        >
+          Whoops...
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
+        >
+          Looks like you took a wrong turn
+        </div>
+      </h3>
+      <h6
+        class="MuiTypography-root MuiTypography-h6 MuiTypography-alignCenter css-1n1umxm-MuiTypography-root"
+      >
+        &lt; 404 Not Found &gt;
+      </h6>
+    </div>
+  </div>
+</DocumentFragment>
 `;

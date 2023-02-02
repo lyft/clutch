@@ -73,6 +73,7 @@ const StyledSelect = styled(BaseSelect)({
   "--notched-border-width": "1px",
   padding: "0",
   backgroundColor: "#FFFFFF",
+  minWidth: "fit-content",
 
   ".MuiOutlinedInput-notchedOutline": {
     borderColor: "rgba(13, 16, 48, 0.38)",
@@ -189,9 +190,10 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> 
   name: string;
   options: SelectOption[];
   onChange?: (value: string) => void;
+  flex?: boolean;
 }
 
-const Select = ({
+export const Select = ({
   defaultOption = 0,
   disabled,
   error,
@@ -200,6 +202,7 @@ const Select = ({
   name,
   options,
   onChange,
+  flex = false,
 }: SelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flatten(
@@ -275,7 +278,7 @@ const Select = ({
   };
 
   return (
-    <MuiFormControl id={name} key={name} fullWidth disabled={disabled} error={error}>
+    <MuiFormControl id={name} key={name} disabled={disabled} error={error} fullWidth>
       {label && <StyledInputLabel>{label}</StyledInputLabel>}
       {flatOptions.length && (
         <StyledSelect

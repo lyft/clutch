@@ -61,15 +61,38 @@ func (m *Principal) validate(all bool) error {
 
 	var errors []error
 
-	switch m.Type.(type) {
-
+	oneofTypePresent := false
+	switch v := m.Type.(type) {
 	case *Principal_User:
+		if v == nil {
+			err := PrincipalValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofTypePresent = true
 		// no validation rules for User
-
 	case *Principal_Group:
+		if v == nil {
+			err := PrincipalValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofTypePresent = true
 		// no validation rules for Group
-
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofTypePresent {
 		err := PrincipalValidationError{
 			field:  "Type",
 			reason: "value is required",
@@ -78,7 +101,6 @@ func (m *Principal) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {

@@ -210,9 +210,20 @@ func (m *Point) validate(all bool) error {
 
 	// no validation rules for Href
 
-	switch m.Timestamp.(type) {
-
+	oneofTimestampPresent := false
+	switch v := m.Timestamp.(type) {
 	case *Point_Range:
+		if v == nil {
+			err := PointValidationError{
+				field:  "Timestamp",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofTimestampPresent = true
 
 		if all {
 			switch v := interface{}(m.GetRange()).(type) {
@@ -244,9 +255,22 @@ func (m *Point) validate(all bool) error {
 		}
 
 	case *Point_Millis:
+		if v == nil {
+			err := PointValidationError{
+				field:  "Timestamp",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofTimestampPresent = true
 		// no validation rules for Millis
-
 	default:
+		_ = v // ensures v is used
+	}
+	if !oneofTimestampPresent {
 		err := PointValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
@@ -255,7 +279,6 @@ func (m *Point) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-
 	}
 
 	if len(errors) > 0 {

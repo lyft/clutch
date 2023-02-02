@@ -99,7 +99,12 @@ export const Tabs = ({ children, value, variant, onChange, ...props }: TabsProps
   return (
     <div style={{ width: "100%" }}>
       <TabContext value={selectedIndex}>
-        <StyledTabs variant={variant} onChange={onChangeMiddleware} {...props}>
+        <StyledTabs
+          data-testid="styled-tabs"
+          variant={variant}
+          onChange={onChangeMiddleware}
+          {...props}
+        >
           {React.Children.map(children, (child, index) =>
             React.cloneElement(child, { value: index.toString() })
           )}

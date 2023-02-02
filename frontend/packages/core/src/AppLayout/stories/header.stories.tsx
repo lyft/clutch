@@ -3,15 +3,15 @@ import { MemoryRouter } from "react-router";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
-import Header from "../header";
+import HeaderComponent from "../header";
 
 export default {
   title: "Core/AppLayout/Header",
-  component: Header,
+  component: HeaderComponent,
   decorators: [
     () => (
       <MemoryRouter>
-        <Header />
+        <HeaderComponent />
       </MemoryRouter>
     ),
     StoryFn => {
@@ -58,4 +58,4 @@ export default {
   },
 } as Meta;
 
-export const Primary: React.FC<{}> = () => <Header />;
+export const Header: React.FC<{}> = () => <HeaderComponent />;

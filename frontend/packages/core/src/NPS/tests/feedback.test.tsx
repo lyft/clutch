@@ -1,340 +1,344 @@
 import React from "react";
-import { matchers } from "@emotion/jest";
-import { shallow } from "enzyme";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { capitalize } from "lodash";
+
+import "@testing-library/jest-dom";
 
 import contextValues from "../../Contexts/tests/testContext";
 import { client } from "../../Network";
 import NPSFeedback, { defaults, FEEDBACK_MAX_LENGTH } from "../feedback";
 import { generateFeedbackTypes } from "../header";
 
-// Adds the custom matchers provided by '@emotion/jest'
-expect.extend(matchers);
-
 const feedbackTypes = generateFeedbackTypes(contextValues.workflows);
 
-describe("<NPSFeedback />", () => {
-  const defaultResult = {
-    prompt: "Test Prompt",
-    freeformPrompt: "Test Freeform",
-    ratingLabels: [
-      {
-        emoji: "SAD",
-        label: "bad",
-      },
-      {
-        emoji: "NEUTRAL",
-        label: "ok",
-      },
-      {
-        emoji: "HAPPY",
-        label: "great",
-      },
-    ],
+const defaultResult = {
+  prompt: "Test Prompt",
+  freeformPrompt: "Test Freeform",
+  ratingLabels: [
+    {
+      emoji: "SAD",
+      label: "bad",
+    },
+    {
+      emoji: "NEUTRAL",
+      label: "ok",
+    },
+    {
+      emoji: "HAPPY",
+      label: "great",
+    },
+  ],
+};
+
+describe("api success", () => {
+  let spy;
+  beforeEach(() => {
+    spy = jest.spyOn(client, "post").mockReturnValue(
+      new Promise((resolve, reject) => {
+        resolve({
+          data: {
+            originSurvey: {
+              WIZARD: defaultResult,
+              HEADER: defaultResult,
+            },
+          },
+        });
+      })
+    );
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("renders survey text prompt", async () => {
+    render(<NPSFeedback origin="WIZARD" />);
+
+    expect(await screen.findByText(defaultResult.prompt)).toBeVisible();
+  });
+
+  test("renders emojis to <EmojiRatings />", async () => {
+    render(<NPSFeedback origin="WIZARD" />);
+
+    const emojiButtons = await screen.findAllByRole("button");
+
+    expect(defaultResult.ratingLabels.map(({ label }) => capitalize(label))).toEqual(
+      emojiButtons.map(element => element.getAttribute("aria-label"))
+    );
+  });
+
+  test("renders text placeholder", async () => {
+    const user = userEvent.setup();
+    render(<NPSFeedback origin="WIZARD" />);
+
+    await user.click(await screen.findByLabelText(/Great/i));
+
+    expect(await screen.findByPlaceholderText(defaultResult.freeformPrompt)).toBeVisible();
+  });
+
+  test("displays a successful submission alert after submit", async () => {
+    const user = userEvent.setup();
+    render(<NPSFeedback origin="WIZARD" />);
+
+    await user.click(await screen.findByLabelText(/Great/i));
+    await user.click(await screen.findByText("Submit"));
+
+    expect(await screen.findByText("Thank you for your feedback!")).toBeVisible();
+  });
+
+  test("sends feedback upon emoji selection change", async () => {
+    const user = userEvent.setup();
+    render(<NPSFeedback origin="WIZARD" />);
+    spy.mockClear();
+    expect(spy).not.toHaveBeenCalled();
+
+    await user.click(await screen.findByLabelText(/Great/i));
+    await user.click(await screen.findByText("Submit"));
+
+    await waitFor(() => {
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describe("api failure", () => {
+  beforeEach(() => {
+    jest.spyOn(client, "post").mockReturnValue(
+      new Promise((resolve, reject) => {
+        reject(new Error("Test Error"));
+      })
+    );
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("renders default text prompt", async () => {
+    render(<NPSFeedback origin="WIZARD" />);
+
+    expect(await screen.findByText(defaults.prompt as string)).toBeVisible();
+  });
+
+  test("renders default emojis to <EmojiRatings />", async () => {
+    render(<NPSFeedback origin="WIZARD" />);
+
+    const emojiButtons = await screen.findAllByRole("button");
+
+    if (!defaults.ratingLabels) {
+      return;
+    }
+
+    expect(defaults.ratingLabels.map(({ label }) => capitalize(label as string))).toEqual(
+      emojiButtons.map(element => element.getAttribute("aria-label"))
+    );
+  });
+
+  test("renders default text placeholder", async () => {
+    const user = userEvent.setup();
+    render(<NPSFeedback origin="WIZARD" />);
+
+    await user.click(await screen.findByLabelText(/Great/i));
+
+    expect(await screen.findByPlaceholderText(defaults.freeformPrompt as string)).toBeVisible();
+  });
+});
+
+describe("basic rendering", () => {
+  const maxLength = FEEDBACK_MAX_LENGTH;
+  const generateRandomString = (length, rs = "") => {
+    let randomString = rs;
+    randomString += Math.random().toString(20).substr(2, length);
+    if (randomString.length > length) return randomString.slice(0, length);
+    return generateRandomString(length, randomString);
   };
 
-  const clickEmoji = wrapper => {
-    wrapper.find("EmojiRatings").dive().find("Styled(Component)").first().prop("onClick")(null);
+  beforeEach(() => {
+    jest.spyOn(client, "post").mockReturnValue(
+      new Promise((resolve, reject) => {
+        resolve({
+          data: {
+            originSurvey: {
+              WIZARD: defaultResult,
+            },
+          },
+        });
+      })
+    );
+  });
 
-    wrapper.update();
-  };
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
-  describe("basic functionality", () => {
-    describe("api success", () => {
-      let wrapper;
-      let useEffect;
-      let spy;
-      const mockUseEffect = () => {
-        useEffect.mockImplementationOnce(f => f());
-      };
-      beforeEach(() => {
-        useEffect = jest.spyOn(React, "useEffect");
-        mockUseEffect();
-        spy = jest.spyOn(client, "post").mockReturnValue(
-          new Promise((resolve, reject) => {
-            resolve({
-              data: {
-                originSurvey: {
-                  WIZARD: defaultResult,
-                  HEADER: defaultResult,
-                },
-              },
-            });
-          })
-        );
-        wrapper = shallow(<NPSFeedback origin="WIZARD" />);
-      });
-      afterEach(() => {
-        wrapper.unmount();
-        spy.mockClear();
-      });
-      it("renders survey text prompt", () => {
-        expect(wrapper.find({ item: true }).at(0).find("Typography").childAt(0).text()).toEqual(
-          defaultResult.prompt
-        );
-      });
-      it("renders emojis to <EmojiRatings />", () => {
-        expect(wrapper.find("EmojiRatings").prop("ratings")).toEqual(defaultResult.ratingLabels);
-      });
-      it("renders text placeholder", () => {
-        clickEmoji(wrapper);
-        expect(wrapper.find("Styled(Component)").prop("placeholder")).toEqual(
-          defaultResult.freeformPrompt
-        );
-      });
-      it("displays a successful submission alert after submit", () => {
-        wrapper.find("form").prop("onSubmit")(null);
-        wrapper.update();
-        const alert = wrapper.find("FeedbackAlert");
-        expect(alert).toBeDefined();
-        expect(alert.dive().find("Typography").childAt(0).text()).toBe(
-          "Thank you for your feedback!"
-        );
-      });
-      it("sends feedback upon emoji selection change", () => {
-        mockUseEffect();
-        spy.mockClear();
-        expect(spy).not.toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledTimes(0);
-        clickEmoji(wrapper);
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledTimes(1);
-      });
-    });
-    describe("api failure", () => {
-      let wrapper;
-      let useEffect;
-      const mockUseEffect = () => {
-        useEffect.mockImplementationOnce(f => f());
-      };
-      beforeEach(() => {
-        useEffect = jest.spyOn(React, "useEffect");
-        mockUseEffect();
-        jest.spyOn(client, "post").mockReturnValue(
-          new Promise((resolve, reject) => {
-            reject(new Error("Test Error"));
-          })
-        );
-        wrapper = shallow(<NPSFeedback origin="WIZARD" />);
-      });
-      afterEach(() => {
-        wrapper.unmount();
-      });
-      it("renders default text prompt", () => {
-        expect(wrapper.find({ item: true }).at(0).find("Typography").childAt(0).text()).toEqual(
-          defaults.prompt
-        );
-      });
-      it("renders default emojis to <EmojiRatings />", () => {
-        expect(wrapper.find("EmojiRatings").prop("ratings")).toEqual(defaults.ratingLabels);
-      });
-      it("renders default text placeholder", () => {
-        clickEmoji(wrapper);
-        expect(wrapper.find("Styled(Component)").prop("placeholder")).toEqual(
-          defaults.freeformPrompt
-        );
-      });
+  test("will not display feedback form or submit unless emoji is selected", () => {
+    render(<NPSFeedback origin="WIZARD" />);
+
+    expect(screen.getByTestId("feedback-items-container").childElementCount).toBe(2);
+  });
+
+  test("will display text prompt at top", async () => {
+    render(<NPSFeedback origin="WIZARD" />);
+
+    const feedbackItems = await screen.findByTestId("feedback-items-container");
+    expect(feedbackItems.childNodes[0].firstChild).toHaveTextContent(defaultResult.prompt);
+  });
+
+  test("will display <EmojiRatings /> below prompt", async () => {
+    render(<NPSFeedback origin="WIZARD" />);
+
+    const feedbackItems = await screen.findByTestId("feedback-items-container");
+    feedbackItems.childNodes[1].childNodes.forEach(node => {
+      expect(node).toHaveAttribute("aria-label");
     });
   });
 
-  describe("basic rendering", () => {
-    const maxLength = FEEDBACK_MAX_LENGTH;
-    let wrapper;
-    let useEffect;
+  test("displays a text form and submit buttons after selection of emoji", async () => {
+    const user = userEvent.setup();
+    render(<NPSFeedback origin="WIZARD" />);
+    expect(screen.getByTestId("feedback-items-container").childElementCount).toBe(2);
 
-    const mockUseEffect = () => {
-      useEffect.mockImplementationOnce(f => f());
-    };
+    await user.click(await screen.findByLabelText(/Great/i));
 
-    const generateRandomString = (length, rs = "") => {
-      let randomString = rs;
-      randomString += Math.random().toString(20).substr(2, length);
-      if (randomString.length > length) return randomString.slice(0, length);
-      return generateRandomString(length, randomString);
-    };
-
-    beforeEach(() => {
-      useEffect = jest.spyOn(React, "useEffect");
-      mockUseEffect();
-      jest.spyOn(client, "post").mockReturnValue(
-        new Promise((resolve, reject) => {
-          resolve({
-            data: {
-              originSurvey: {
-                WIZARD: defaultResult,
-              },
-            },
-          });
-        })
-      );
-      wrapper = shallow(<NPSFeedback origin="WIZARD" />);
-    });
-
-    afterEach(() => {
-      wrapper.unmount();
-    });
-
-    it("will not display feedback form or submit unless emoji is selected", () => {
-      expect(wrapper.find({ item: true })).toHaveLength(2);
-      expect(wrapper.find("Button")).toHaveLength(0);
-      expect(wrapper.find("Styled(Component)")).toHaveLength(0);
-    });
-
-    it("will display text prompt at top", () => {
-      expect(wrapper.find({ item: true }).at(0).find("Styled(span)")).toBeDefined();
-    });
-
-    it("will display <EmojiRatings /> below prompt", () => {
-      expect(wrapper.find({ item: true }).at(1).find("EmojiRatings")).toBeDefined();
-    });
-
-    it("displays a text form and submit buttons after selection of emoji", () => {
-      expect(wrapper.find({ item: true })).toHaveLength(2);
-
-      clickEmoji(wrapper);
-
-      expect(wrapper.find({ item: true })).toHaveLength(4);
-      expect(wrapper.find("Styled(Component)")).toBeDefined();
-      expect(wrapper.find("Styled(Button)")).toBeDefined();
-    });
-
-    it("will update the length on feedback if input is given", () => {
-      clickEmoji(wrapper);
-
-      const testValue = "Some Feedback Text";
-
-      let textField = wrapper.find("Styled(Component)");
-
-      expect(textField.prop("helperText")).toBe(`0 / ${maxLength}`);
-
-      textField.prop("onChange")({ target: { value: testValue } });
-
-      wrapper.update();
-
-      textField = wrapper.find("Styled(Component)");
-
-      expect(textField.prop("helperText")).toBe(`${testValue.trim().length} / ${maxLength}`);
-      expect(textField.prop("value")).toEqual(testValue);
-    });
-
-    it("will display an error on feedback if more input is given than maxLength", () => {
-      clickEmoji(wrapper);
-
-      const testValue = generateRandomString(FEEDBACK_MAX_LENGTH * 2);
-
-      let textField = wrapper.find("Styled(Component)");
-
-      expect(textField.prop("helperText")).toBe(`0 / ${maxLength}`);
-
-      textField.prop("onChange")({ target: { value: testValue } });
-
-      wrapper.update();
-
-      textField = wrapper.find("Styled(Component)");
-
-      expect(textField.prop("helperText")).toBe(`${testValue.trim().length} / ${maxLength}`);
-      expect(textField.prop("value")).toEqual(testValue);
-      expect(textField.prop("error")).toBeTruthy();
-    });
-
-    it("will disable the submit button upon error", () => {
-      clickEmoji(wrapper);
-
-      let submitButton = wrapper.find("Styled(Button)");
-
-      expect(submitButton.prop("disabled")).toBeFalsy();
-
-      wrapper.find("Styled(Component)").prop("onChange")({
-        target: { value: generateRandomString(FEEDBACK_MAX_LENGTH + 1) },
-      });
-
-      wrapper.update();
-
-      submitButton = wrapper.find("Styled(Button)");
-
-      expect(submitButton.prop("disabled")).toBeTruthy();
-    });
+    expect(await (await screen.findByTestId("feedback-items-container")).childElementCount).toBe(4);
+    expect(await screen.findByRole("textbox")).toBeVisible();
+    expect(
+      await (await screen.findAllByRole("button")).filter(element =>
+        element.hasAttribute("aria-label")
+      )
+    ).toHaveLength(defaultResult.ratingLabels.length);
   });
 
-  // Verifies layout changes for given origins
-  describe("Wizard Origin Rendering", () => {
-    let wrapper;
-    let useEffect;
+  test("will update the length on feedback if input is given", async () => {
+    const testValue = "Some Feedback Text";
+    const user = userEvent.setup();
+    const { container } = render(<NPSFeedback origin="WIZARD" />);
 
-    const mockUseEffect = () => {
-      useEffect.mockImplementationOnce(f => f());
-    };
+    await user.click(await screen.findByLabelText(/Great/i));
 
-    beforeEach(() => {
-      useEffect = jest.spyOn(React, "useEffect");
-      mockUseEffect();
-      jest.spyOn(client, "post").mockReturnValue(
-        new Promise((resolve, reject) => {
-          resolve({
-            data: {
-              originSurvey: {
-                WIZARD: defaultResult,
-              },
-            },
-          });
-        })
-      );
-      wrapper = shallow(<NPSFeedback origin="WIZARD" />);
-    });
+    expect(container.querySelector(".MuiFormHelperText-root")).toHaveTextContent(
+      `0 / ${maxLength}`
+    );
 
-    afterEach(() => {
-      wrapper.unmount();
-    });
+    const textbox = await screen.findByPlaceholderText(defaultResult.freeformPrompt);
+    await user.click(textbox);
+    await user.paste(testValue);
 
-    it("renders", () => {
-      expect(wrapper).toBeDefined();
-    });
-
-    it("styles the submit button correctly", () => {
-      wrapper.find("EmojiRatings").dive().find("Styled(Component)").first().prop("onClick")(null);
-
-      wrapper.update();
-
-      expect(wrapper.find("Styled(Button)").prop("variant")).toBe("secondary");
-    });
+    expect(container.querySelector(".MuiFormHelperText-root")).toHaveTextContent(
+      `${testValue.trim().length} / ${maxLength}`
+    );
+    expect(await screen.findByPlaceholderText(defaultResult.freeformPrompt)).toHaveValue(testValue);
   });
 
-  describe("Header Origin Rendering", () => {
-    let wrapper;
-    let useEffect;
+  test("will display an error on feedback if more input is given than maxLength", async () => {
+    const testValue = generateRandomString(FEEDBACK_MAX_LENGTH + 1);
+    const user = userEvent.setup();
+    const { container } = render(<NPSFeedback origin="WIZARD" />);
 
-    const mockUseEffect = () => {
-      useEffect.mockImplementationOnce(f => f());
-    };
+    user.click(await screen.findByLabelText(/Great/i));
 
-    beforeEach(() => {
-      useEffect = jest.spyOn(React, "useEffect");
-      mockUseEffect();
-      jest.spyOn(client, "post").mockReturnValue(
-        new Promise((resolve, reject) => {
-          resolve({
-            data: {
-              originSurvey: {
-                HEADER: defaultResult,
-              },
-            },
-          });
-        })
+    await waitFor(() => {
+      expect(container.querySelector(".MuiFormHelperText-root")).toHaveTextContent(
+        `0 / ${maxLength}`
       );
-      wrapper = shallow(<NPSFeedback origin="HEADER" feedbackTypes={feedbackTypes} />);
     });
 
-    afterEach(() => {
-      wrapper.unmount();
-    });
+    const textbox = await screen.findByPlaceholderText(defaultResult.freeformPrompt);
+    await user.click(textbox);
+    await user.paste(testValue);
 
-    it("renders", () => {
-      expect(wrapper).toBeDefined();
-    });
+    expect(await screen.findByRole("textbox")).toHaveValue(testValue);
+    expect(container.querySelector(".MuiFormHelperText-root")).toHaveTextContent(
+      `${testValue.trim().length} / ${maxLength}`
+    );
+    expect(container.querySelector(".MuiFormHelperText-root")).toHaveClass("Mui-error");
+  });
 
-    it("styles the submit button correctly", () => {
-      clickEmoji(wrapper);
+  test("will disable the submit button upon error", async () => {
+    const testValue = generateRandomString(FEEDBACK_MAX_LENGTH + 1);
+    const user = userEvent.setup();
+    render(<NPSFeedback origin="WIZARD" />);
 
-      expect(wrapper.find("Styled(Button)").prop("variant")).toBe("primary");
-    });
+    user.click(await screen.findByLabelText(/Great/i));
+
+    expect(await screen.findByText("Submit")).toBeEnabled();
+
+    const textbox = await screen.findByPlaceholderText(defaultResult.freeformPrompt);
+    await user.click(textbox);
+    await user.paste(testValue);
+
+    expect(await screen.findByText("Submit")).toBeDisabled();
+  });
+});
+
+describe("Wizard Origin Rendering", () => {
+  beforeEach(() => {
+    jest.spyOn(client, "post").mockReturnValue(
+      new Promise((resolve, reject) => {
+        resolve({
+          data: {
+            originSurvey: {
+              WIZARD: defaultResult,
+            },
+          },
+        });
+      })
+    );
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("renders correctly", () => {
+    render(<NPSFeedback origin="WIZARD" />);
+
+    expect(screen.getByTestId("feedback-component")).toBeVisible();
+  });
+
+  test("styles the submit button correctly", async () => {
+    const user = userEvent.setup();
+    render(<NPSFeedback origin="WIZARD" />);
+
+    user.click(await screen.findByLabelText(/Great/i));
+
+    expect(await screen.findByText("Submit")).toHaveStyle("background-color: transparent");
+  });
+});
+
+describe("Header Origin Rendering", () => {
+  beforeEach(() => {
+    jest.spyOn(client, "post").mockReturnValue(
+      new Promise((resolve, reject) => {
+        resolve({
+          data: {
+            originSurvey: {
+              HEADER: defaultResult,
+            },
+          },
+        });
+      })
+    );
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("renders correctly", () => {
+    render(<NPSFeedback origin="HEADER" feedbackTypes={feedbackTypes} />);
+
+    expect(screen.getByTestId("feedback-component")).toBeVisible();
+  });
+
+  test("styles the submit button correctly", async () => {
+    const user = userEvent.setup();
+    render(<NPSFeedback origin="HEADER" feedbackTypes={feedbackTypes} />);
+
+    user.click(await screen.findByLabelText(/Great/i));
+
+    expect(await screen.findByText("Submit")).toHaveStyle("background-color: #3548D4");
   });
 });

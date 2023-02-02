@@ -7,7 +7,7 @@ import type { Dayjs } from "dayjs";
 
 import styled from "../styled";
 
-import TextField from "./text-field";
+import { TextField } from "./text-field";
 
 const PaddedTextField = styled(TextField)({
   // This is required as TextField intentionally unsets the right padding for
@@ -21,20 +21,18 @@ const PaddedTextField = styled(TextField)({
 export interface DateTimePickerProps
   extends Pick<MuiDateTimePickerProps, "disabled" | "value" | "onChange" | "label"> {}
 
-const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => {
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <MuiDateTimePicker
-        renderInput={inputProps => <PaddedTextField {...inputProps} />}
-        onChange={(value: Dayjs) => {
-          if (value.isValid()) {
-            onChange(value.toDate());
-          }
-        }}
-        {...props}
-      />
-    </LocalizationProvider>
-  );
-};
+const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => (
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <MuiDateTimePicker
+      renderInput={inputProps => <PaddedTextField {...inputProps} />}
+      onChange={(value: Dayjs) => {
+        if (value.isValid()) {
+          onChange(value.toDate());
+        }
+      }}
+      {...props}
+    />
+  </LocalizationProvider>
+);
 
 export default DateTimePicker;

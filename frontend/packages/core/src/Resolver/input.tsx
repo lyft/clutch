@@ -4,6 +4,7 @@ import type { clutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import SearchIcon from "@mui/icons-material/Search";
+import { Stack } from "@mui/material";
 
 import {
   Accordion,
@@ -14,7 +15,7 @@ import {
 } from "../accordion";
 import { Button } from "../button";
 import { Alert } from "../Feedback";
-import TextField from "../Input/text-field";
+import { TextField } from "../Input/text-field";
 import { useSearchParams } from "../navigation";
 import { client } from "../Network";
 
@@ -139,7 +140,9 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
           {schema.error ? (
             <Alert severity="error">Schema Error: ${schema.error.message}</Alert>
           ) : (
-            schema.fields.map(field => hydrateField(field, onChange, schemaValidation))
+            <Stack spacing={2}>
+              {schema.fields.map(field => hydrateField(field, onChange, schemaValidation))}
+            </Stack>
           )}
         </SchemaDetails>
         <AccordionDivider />

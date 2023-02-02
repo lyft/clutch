@@ -96,6 +96,10 @@ const colorCss = (palette: ButtonPalette) => {
 };
 
 const BUTTON_SIZE_MAP = {
+  xsmall: {
+    height: "24px",
+    padding: "4px 20px",
+  },
   small: {
     height: "32px",
     padding: "7px 32px",
@@ -110,7 +114,9 @@ const BUTTON_SIZE_MAP = {
   },
 };
 
-const StyledButton = styled(MuiButton)<{ palette: ButtonPalette; size: MuiButtonProps["size"] }>(
+export type ButtonSize = keyof typeof BUTTON_SIZE_MAP;
+
+const StyledButton = styled(MuiButton)<{ palette: ButtonPalette; size: ButtonSize }>(
   {
     borderRadius: "4px",
     fontWeight: 500,
@@ -118,6 +124,9 @@ const StyledButton = styled(MuiButton)<{ palette: ButtonPalette; size: MuiButton
     fontSize: "16px",
     textTransform: "none",
     margin: "12px 8px",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
   },
   props => ({
     ...colorCss(props.palette),
@@ -160,14 +169,21 @@ const variantPalette = (variant: ButtonVariant): ButtonPalette => {
 };
 
 export interface ButtonProps
-  extends Pick<
-    MuiButtonProps,
-    "id" | "disabled" | "endIcon" | "onClick" | "startIcon" | "type" | "size"
-  > {
-  /** Case-sensitive button text. */
+  extends Pick<MuiButtonProps, "id" | "disabled" | "endIcon" | "onClick" | "startIcon" | "type"> {
+  /**
+   * Case-sensitive button text
+   */
   text: string;
-  /** The button variantion. Defaults to primary. */
+  /**
+   * The button variantion
+   * @defaultValue primary
+   */
   variant?: ButtonVariant;
+  /**
+   * The buttons size
+   * @defaultValue medium
+   */
+  size?: ButtonSize;
 }
 
 /** A button with default themes based on use case. */

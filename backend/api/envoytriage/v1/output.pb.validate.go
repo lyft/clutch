@@ -1188,11 +1188,21 @@ func (m *Runtime_Entry) validate(all bool) error {
 
 	// no validation rules for Key
 
-	switch m.Type.(type) {
-
+	switch v := m.Type.(type) {
 	case *Runtime_Entry_Value:
+		if v == nil {
+			err := Runtime_EntryValidationError{
+				field:  "Type",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 		// no validation rules for Value
-
+	default:
+		_ = v // ensures v is used
 	}
 
 	if len(errors) > 0 {

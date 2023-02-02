@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
-import _ from "lodash";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext, ShortLinkContext } from "../Contexts";
+import type { HeaderItem, TriggeredHeaderData } from "../Contexts/app-context";
 import type { ShortLinkContextProps } from "../Contexts/short-link-context";
 import type { HydratedData, HydrateState } from "../Contexts/workflow-storage-context/types";
 import { Toast } from "../Feedback";
@@ -71,6 +71,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [hydrateState, setHydrateState] = React.useState<HydrateState | null>(null);
   const [hydrateError, setHydrateError] = React.useState<ClutchError | null>(null);
   const [hasCustomLanding, setHasCustomLanding] = React.useState<boolean>(false);
+  const [triggeredHeaderData, setTriggeredHeaderData] = React.useState<TriggeredHeaderData>();
 
   /** Used to control a race condition from displaying the workflow and the state being updated with the hydrated data */
   const [shortLinkLoading, setShortLinkLoading] = React.useState<boolean>(false);
@@ -90,25 +91,12 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 
   const [discoverableWorkflows, setDiscoverableWorkflows] = React.useState([]);
   React.useEffect(() => {
-    /** Filter out all of the workflows that are configured to be `hideNav: true`.
-     * This prevents the workflows from being discoverable by the user from the UI,
-     * both search and drawer navigation.
-     *
-     * The routes for all configured workflows will still be reachable
-     * by manually providing the full path in the URI.
-     */
-    const pw = _.cloneDeep(workflows).filter(workflow => {
+    const landingWorkflows = workflows.filter(workflow => workflow.path === "");
+    if (landingWorkflows.length > 0) {
       /** Used to control a custom landing page */
-      if (workflow.path === "") {
-        setHasCustomLanding(true);
-      }
-      const publicRoutes = workflow.routes.filter(route => {
-        return !(route?.hideNav !== undefined ? route.hideNav : false);
-      });
-      workflow.routes = publicRoutes; /* eslint-disable-line no-param-reassign */
-      return publicRoutes.length !== 0;
-    });
-    setDiscoverableWorkflows(pw);
+      setHasCustomLanding(true);
+    }
+    setDiscoverableWorkflows(workflows);
   }, [workflows]);
 
   const shortLinkProviderProps: ShortLinkContextProps = React.useMemo(
@@ -120,9 +108,21 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     [workflowSessionStore]
   );
 
-  const appContextValue = React.useMemo(() => ({ workflows: discoverableWorkflows }), [
-    discoverableWorkflows,
-  ]);
+  const appContextValue = React.useMemo(
+    () => ({
+      workflows: discoverableWorkflows,
+      triggerHeaderItem: (item: HeaderItem, data: unknown) =>
+        // Will set the open status and spread any additional data onto the property named after the item
+        setTriggeredHeaderData({
+          ...triggeredHeaderData,
+          [item]: {
+            ...(data as any),
+          },
+        }),
+      triggeredHeaderData,
+    }),
+    [discoverableWorkflows, triggeredHeaderData]
+  );
 
   return (
     <Router>
