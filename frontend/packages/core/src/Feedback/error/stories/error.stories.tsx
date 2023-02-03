@@ -164,3 +164,15 @@ WithWrappedDetails.args = {
   },
   onRetry: action("retry-click"),
 };
+
+export const WithChildren = Template.bind({});
+WithChildren.args = {
+  subject: {
+    status: {
+      code: 500,
+      text: "Client Error",
+    },
+    message: "Request exceeded timed out of 1 ms",
+  },
+  children: <h4>This message is complimentary to the error</h4>,
+};
