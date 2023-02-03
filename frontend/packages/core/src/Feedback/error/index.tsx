@@ -47,9 +47,10 @@ const OpenInNewIcon = styled(MuiOpenInNewIcon)({
 export interface ErrorProps {
   subject: ClutchError;
   onRetry?: () => void;
+  children?: React.ReactChild | React.ReactChildren;
 }
 
-const Error = ({ subject: error, onRetry }: ErrorProps) => {
+const Error = ({ subject: error, onRetry, children }: ErrorProps) => {
   const action =
     onRetry !== undefined ? (
       <IconButton aria-label="retry" color="inherit" size="small" onClick={() => onRetry()}>
@@ -61,6 +62,7 @@ const Error = ({ subject: error, onRetry }: ErrorProps) => {
     return (
       <Alert severity="error" title={error.status?.text} action={action}>
         {error.message}
+        {children}
       </Alert>
     );
   }
