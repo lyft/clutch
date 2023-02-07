@@ -172,7 +172,7 @@ WithChildren.args = {
       code: 500,
       text: "Client Error",
     },
-    message: "Request exceeded timed out of 1 ms",
+    message: "Request exceeded timeout of 1 ms",
   },
   children: <h4>This message is complimentary to the error</h4>,
 };
