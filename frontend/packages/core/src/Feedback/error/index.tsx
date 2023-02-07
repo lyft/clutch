@@ -62,7 +62,7 @@ const Error = ({ subject: error, onRetry, children }: ErrorProps) => {
     return (
       <Alert severity="error" title={error.status?.text} action={action}>
         {error.message}
-        {children}
+        {children && children}
       </Alert>
     );
   }
