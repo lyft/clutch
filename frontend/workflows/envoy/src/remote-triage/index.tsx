@@ -48,7 +48,7 @@ const TriageIdentifier: React.FC<TriageChild> = ({ host = "" }) => {
   return (
     <>
       <TextField
-        label="IP Address or Hostname"
+        label="IP Address"
         placeholder="127.0.0.1"
         onChange={e => resourceData.updateData("host", e.target.value)}
         onReturn={onSubmit}
