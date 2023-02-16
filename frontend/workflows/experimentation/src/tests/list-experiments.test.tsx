@@ -1,42 +1,34 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { BrowserRouter } from "react-router-dom";
+import { render } from "@testing-library/react";
+
+import "@testing-library/jest-dom";
 
 import ListExperiments from "../list-experiments";
 
-jest.mock("@clutch-sh/core", () => {
-  return {
-    ...(jest.requireActual("@clutch-sh/core") as any),
-    useNavigate: jest.fn(),
-  };
-});
+const links = [
+  {
+    displayName: "button_1",
+    path: "/path1",
+  },
+];
+const columns = [
+  {
+    id: "column_1",
+    header: "column 1",
+  },
+  {
+    id: "column_2",
+    header: "column 2",
+  },
+];
 
-describe("List Experiments workflow", () => {
-  let links;
-  let columns;
-
-  beforeAll(() => {
-    links = [
-      {
-        displayName: "button_1",
-        path: "/path1",
-      },
-    ];
-    columns = [
-      {
-        id: "column_1",
-        header: "column 1",
-      },
-      {
-        id: "column_2",
-        header: "column 2",
-      },
-    ];
-  });
-
-  it("renders correctly", () => {
-    const component = shallow(
+test("renders correctly", () => {
+  const { asFragment } = render(
+    <BrowserRouter>
       <ListExperiments heading="List Experiments" columns={columns} links={links} />
-    );
-    expect(component.debug()).toMatchSnapshot();
-  });
+    </BrowserRouter>
+  );
+
+  expect(asFragment()).toMatchSnapshot();
 });
