@@ -1,16 +1,17 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { BrowserRouter } from "react-router-dom";
+import { render } from "@testing-library/react";
+
+import "@testing-library/jest-dom";
 
 import RemoteTriage from "../remote-triage";
 
-describe("Remote Triage workflow", () => {
-  let component;
+test("renders correctly", () => {
+  const { asFragment } = render(
+    <BrowserRouter>
+      <RemoteTriage />
+    </BrowserRouter>
+  );
 
-  beforeAll(() => {
-    component = shallow(<RemoteTriage />);
-  });
-
-  it("renders correctly", () => {
-    expect(component.debug()).toMatchSnapshot();
-  });
+  expect(asFragment()).toMatchSnapshot();
 });
