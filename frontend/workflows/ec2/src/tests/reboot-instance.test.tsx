@@ -4,12 +4,12 @@ import { render } from "@testing-library/react";
 
 import "@testing-library/jest-dom";
 
-import ResizeAutoscalingGroup from "../resize-asg";
+import RebootInstance from "../reboot-instance";
 
 test("renders correctly", () => {
   const { asFragment } = render(
     <BrowserRouter>
-      <ResizeAutoscalingGroup resolverType="clutch.aws.ec2.v1.AutoscalingGroup" />
+      <RebootInstance resolverType="clutch.aws.ec2.v1.Instance" />
     </BrowserRouter>
   );
 
