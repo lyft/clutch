@@ -1,16 +1,17 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { BrowserRouter } from "react-router-dom";
+import { render } from "@testing-library/react";
+
+import "@testing-library/jest-dom";
 
 import DeletePod from "../delete-pod";
 
-describe("Terminate Instance workflow", () => {
-  let component;
+test("renders correctly", () => {
+  const { asFragment } = render(
+    <BrowserRouter>
+      <DeletePod resolverType="clutch.k8s.v1.Pod" />
+    </BrowserRouter>
+  );
 
-  beforeAll(() => {
-    component = shallow(<DeletePod resolverType="clutch.k8s.v1.Pod" />);
-  });
-
-  it("renders correctly", () => {
-    expect(component.debug()).toMatchSnapshot();
-  });
+  expect(asFragment()).toMatchSnapshot();
 });
