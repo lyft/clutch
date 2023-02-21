@@ -47,6 +47,7 @@ const StyledMoreVertIcon = styled.span({
 const StyledLinkTitle = styled.span({
   fontWeight: "bold",
   padding: "7px 0px",
+  color: "#2D3F50",
 });
 
 const StyledMultiLinkTitle = styled.span({
