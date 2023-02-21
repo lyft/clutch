@@ -1,43 +1,44 @@
 import React from "react";
-import { FormFields } from "@clutch-sh/experimentation";
-import { shallow } from "enzyme";
+import { BrowserRouter } from "react-router-dom";
+import { render } from "@testing-library/react";
+
+import "@testing-library/jest-dom";
 
 import { ExperimentDetails } from "../start-experiment";
 
-jest.mock("@clutch-sh/core", () => {
-  return {
-    ...(jest.requireActual("@clutch-sh/core") as any),
-    useNavigate: jest.fn(),
-  };
+const setup = (props?) => {
+  const utils = render(
+    <BrowserRouter>
+      <ExperimentDetails environments={[]} onStart={() => {}} {...props} />
+    </BrowserRouter>
+  );
+
+  const { asFragment } = utils;
+
+  return { utils, asFragment };
+};
+
+test("renders correctly", () => {
+  const { asFragment } = setup({
+    upstreamClusterTypeSelectionEnabled: false,
+  });
+
+  expect(asFragment()).toMatchSnapshot();
 });
 
-describe("Start Experiment workflow", () => {
-  it("renders correctly", () => {
-    const component = shallow(
-      <ExperimentDetails
-        upstreamClusterTypeSelectionEnabled={false}
-        environments={[]}
-        onStart={() => {}}
-      />
-    );
-    expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
+test("renders correctly with upstream cluster type selection enabled", () => {
+  const { asFragment } = setup({
+    upstreamClusterTypeSelectionEnabled: true,
   });
 
-  it("renders correctly with upstream cluster type selection enabled", () => {
-    const component = shallow(
-      <ExperimentDetails upstreamClusterTypeSelectionEnabled environments={[]} onStart={() => {}} />
-    );
-    expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
-  });
+  expect(asFragment()).toMatchSnapshot();
+});
 
-  it("renders correctly with environments", () => {
-    const component = shallow(
-      <ExperimentDetails
-        upstreamClusterTypeSelectionEnabled={false}
-        environments={[{ value: "staging" }]}
-        onStart={() => {}}
-      />
-    );
-    expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
+test("renders correctly with environments", () => {
+  const { utils, asFragment } = setup({
+    upstreamClusterTypeSelectionEnabled: false,
+    environments: [{ value: "staging" }],
   });
+  expect(utils.getByText(/Environment/i, { selector: "label" })).toBeVisible();
+  expect(asFragment().querySelector("#environmentValue-select")).toBeEnabled();
 });
