@@ -115,9 +115,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
         // Will set the open status and spread any additional data onto the property named after the item
         setTriggeredHeaderData({
           ...triggeredHeaderData,
-          [item]: {
-            ...(data as any),
-          },
+          [item]: data as any,
         }),
       triggeredHeaderData,
     }),

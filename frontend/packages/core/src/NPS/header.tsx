@@ -99,9 +99,16 @@ const HeaderFeedback = () => {
   const anchorRef = React.useRef(null);
   const { workflows, triggerHeaderItem, triggeredHeaderData } = useAppContext();
   const [defaultFeedbackOption, setDefaultFeedbackOption] = React.useState<string>();
+  const timer = React.useRef(null);
 
   const handleToggle = () => {
     setOpen(!open);
+  };
+
+  const timedClose = () => {
+    timer.current = setTimeout(() => {
+      setOpen(false);
+    }, 1500);
   };
 
   React.useEffect(() => {
@@ -121,8 +128,9 @@ const HeaderFeedback = () => {
     }
     // handler for the NPS Banner button so that it doesn't reset the headerLink
     if (event.target.id !== "nps-banner-button") {
-      triggerHeaderItem && triggerHeaderItem("NPS", {});
+      triggerHeaderItem && triggerHeaderItem("NPS", undefined);
       setOpen(false);
+      clearTimeout(timer.current);
     }
   };
 
@@ -153,6 +161,7 @@ const HeaderFeedback = () => {
                     origin="HEADER"
                     feedbackTypes={generateFeedbackTypes(workflows)}
                     defaultFeedbackOption={defaultFeedbackOption}
+                    onSubmit={timedClose}
                   />
                 </MenuList>
               </ClickAwayListener>
