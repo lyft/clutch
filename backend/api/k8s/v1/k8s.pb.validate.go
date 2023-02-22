@@ -3552,6 +3552,35 @@ func (m *Deployment) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetDeploymentSpec()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DeploymentValidationError{
+					field:  "DeploymentSpec",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DeploymentValidationError{
+					field:  "DeploymentSpec",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDeploymentSpec()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeploymentValidationError{
+				field:  "DeploymentSpec",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	// no validation rules for CreationTimeMillis
 
 	if len(errors) > 0 {
@@ -12645,6 +12674,137 @@ var _ interface {
 	ErrorName() string
 } = Deployment_DeploymentStatusValidationError{}
 
+// Validate checks the field values on Deployment_DeploymentSpec with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *Deployment_DeploymentSpec) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Deployment_DeploymentSpec with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Deployment_DeploymentSpecMultiError, or nil if none found.
+func (m *Deployment_DeploymentSpec) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Deployment_DeploymentSpec) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetTemplate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Deployment_DeploymentSpecValidationError{
+					field:  "Template",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Deployment_DeploymentSpecValidationError{
+					field:  "Template",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTemplate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Deployment_DeploymentSpecValidationError{
+				field:  "Template",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return Deployment_DeploymentSpecMultiError(errors)
+	}
+
+	return nil
+}
+
+// Deployment_DeploymentSpecMultiError is an error wrapping multiple validation
+// errors returned by Deployment_DeploymentSpec.ValidateAll() if the
+// designated constraints aren't met.
+type Deployment_DeploymentSpecMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Deployment_DeploymentSpecMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Deployment_DeploymentSpecMultiError) AllErrors() []error { return m }
+
+// Deployment_DeploymentSpecValidationError is the validation error returned by
+// Deployment_DeploymentSpec.Validate if the designated constraints aren't met.
+type Deployment_DeploymentSpecValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_DeploymentSpecValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Deployment_DeploymentSpecValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Deployment_DeploymentSpecValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Deployment_DeploymentSpecValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Deployment_DeploymentSpecValidationError) ErrorName() string {
+	return "Deployment_DeploymentSpecValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_DeploymentSpecValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_DeploymentSpec.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_DeploymentSpecValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_DeploymentSpecValidationError{}
+
 // Validate checks the field values on Deployment_DeploymentStatus_Condition
 // with the rules defined in the proto definition for this message. If any
 // rules are violated, the first error encountered is returned, or nil if
@@ -12758,6 +12918,560 @@ var _ interface {
 	ErrorName() string
 } = Deployment_DeploymentStatus_ConditionValidationError{}
 
+// Validate checks the field values on
+// Deployment_DeploymentSpec_PodTemplateSpec with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Deployment_DeploymentSpec_PodTemplateSpec) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// Deployment_DeploymentSpec_PodTemplateSpec with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in
+// Deployment_DeploymentSpec_PodTemplateSpecMultiError, or nil if none found.
+func (m *Deployment_DeploymentSpec_PodTemplateSpec) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Deployment_DeploymentSpec_PodTemplateSpec) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetSpec()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpecValidationError{
+					field:  "Spec",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpecValidationError{
+					field:  "Spec",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSpec()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Deployment_DeploymentSpec_PodTemplateSpecValidationError{
+				field:  "Spec",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return Deployment_DeploymentSpec_PodTemplateSpecMultiError(errors)
+	}
+
+	return nil
+}
+
+// Deployment_DeploymentSpec_PodTemplateSpecMultiError is an error wrapping
+// multiple validation errors returned by
+// Deployment_DeploymentSpec_PodTemplateSpec.ValidateAll() if the designated
+// constraints aren't met.
+type Deployment_DeploymentSpec_PodTemplateSpecMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Deployment_DeploymentSpec_PodTemplateSpecMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Deployment_DeploymentSpec_PodTemplateSpecMultiError) AllErrors() []error { return m }
+
+// Deployment_DeploymentSpec_PodTemplateSpecValidationError is the validation
+// error returned by Deployment_DeploymentSpec_PodTemplateSpec.Validate if the
+// designated constraints aren't met.
+type Deployment_DeploymentSpec_PodTemplateSpecValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_DeploymentSpec_PodTemplateSpecValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Deployment_DeploymentSpec_PodTemplateSpecValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Deployment_DeploymentSpec_PodTemplateSpecValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Deployment_DeploymentSpec_PodTemplateSpecValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Deployment_DeploymentSpec_PodTemplateSpecValidationError) ErrorName() string {
+	return "Deployment_DeploymentSpec_PodTemplateSpecValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_DeploymentSpec_PodTemplateSpecValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_DeploymentSpec_PodTemplateSpec.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_DeploymentSpec_PodTemplateSpecValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_DeploymentSpec_PodTemplateSpecValidationError{}
+
+// Validate checks the field values on
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpecMultiError, or nil if none found.
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetContainers() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError{
+						field:  fmt.Sprintf("Containers[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError{
+						field:  fmt.Sprintf("Containers[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError{
+					field:  fmt.Sprintf("Containers[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return Deployment_DeploymentSpec_PodTemplateSpec_PodSpecMultiError(errors)
+	}
+
+	return nil
+}
+
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpecMultiError is an error
+// wrapping multiple validation errors returned by
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec.ValidateAll() if the
+// designated constraints aren't met.
+type Deployment_DeploymentSpec_PodTemplateSpec_PodSpecMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Deployment_DeploymentSpec_PodTemplateSpec_PodSpecMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Deployment_DeploymentSpec_PodTemplateSpec_PodSpecMultiError) AllErrors() []error { return m }
+
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError is the
+// validation error returned by
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec.Validate if the
+// designated constraints aren't met.
+type Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError) ErrorName() string {
+	return "Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_DeploymentSpec_PodTemplateSpec_PodSpec.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_DeploymentSpec_PodTemplateSpec_PodSpecValidationError{}
+
+// Validate checks the field values on
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerMultiError, or
+// nil if none found.
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	if all {
+		switch v := interface{}(m.GetResources()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+					field:  "Resources",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+					field:  "Resources",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetResources()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+				field:  "Resources",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerMultiError(errors)
+	}
+
+	return nil
+}
+
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerMultiError is an
+// error wrapping multiple validation errors returned by
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container.ValidateAll()
+// if the designated constraints aren't met.
+type Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerMultiError) AllErrors() []error {
+	return m
+}
+
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError
+// is the validation error returned by
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container.Validate if the
+// designated constraints aren't met.
+type Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError) Key() bool {
+	return e.key
+}
+
+// ErrorName returns error name.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError) ErrorName() string {
+	return "Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{}
+
+// Validate checks the field values on
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsMultiError,
+// or nil if none found.
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Limits
+
+	// no validation rules for Requests
+
+	if len(errors) > 0 {
+		return Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsMultiError(errors)
+	}
+
+	return nil
+}
+
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsMultiError
+// is an error wrapping multiple validation errors returned by
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements.ValidateAll()
+// if the designated constraints aren't met.
+type Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsMultiError) AllErrors() []error {
+	return m
+}
+
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError
+// is the validation error returned by
+// Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements.Validate
+// if the designated constraints aren't met.
+type Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError) Key() bool {
+	return e.key
+}
+
+// ErrorName returns error name.
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError) ErrorName() string {
+	return "Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirementsValidationError{}
+
 // Validate checks the field values on UpdateDeploymentRequest_Fields with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -12832,6 +13546,40 @@ func (m *UpdateDeploymentRequest_Fields) validate(all bool) error {
 
 			// no validation rules for Annotations[key]
 		}
+	}
+
+	for idx, item := range m.GetContainerResources() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_FieldsValidationError{
+						field:  fmt.Sprintf("ContainerResources[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_FieldsValidationError{
+						field:  fmt.Sprintf("ContainerResources[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpdateDeploymentRequest_FieldsValidationError{
+					field:  fmt.Sprintf("ContainerResources[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	}
 
 	if len(errors) > 0 {
@@ -12914,6 +13662,273 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UpdateDeploymentRequest_FieldsValidationError{}
+
+// Validate checks the field values on
+// UpdateDeploymentRequest_Fields_ContainerResources with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *UpdateDeploymentRequest_Fields_ContainerResources) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// UpdateDeploymentRequest_Fields_ContainerResources with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in
+// UpdateDeploymentRequest_Fields_ContainerResourcesMultiError, or nil if none found.
+func (m *UpdateDeploymentRequest_Fields_ContainerResources) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateDeploymentRequest_Fields_ContainerResources) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ContainerName
+
+	if all {
+		switch v := interface{}(m.GetResources()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateDeploymentRequest_Fields_ContainerResourcesValidationError{
+					field:  "Resources",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateDeploymentRequest_Fields_ContainerResourcesValidationError{
+					field:  "Resources",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetResources()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateDeploymentRequest_Fields_ContainerResourcesValidationError{
+				field:  "Resources",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return UpdateDeploymentRequest_Fields_ContainerResourcesMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateDeploymentRequest_Fields_ContainerResourcesMultiError is an error
+// wrapping multiple validation errors returned by
+// UpdateDeploymentRequest_Fields_ContainerResources.ValidateAll() if the
+// designated constraints aren't met.
+type UpdateDeploymentRequest_Fields_ContainerResourcesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateDeploymentRequest_Fields_ContainerResourcesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateDeploymentRequest_Fields_ContainerResourcesMultiError) AllErrors() []error { return m }
+
+// UpdateDeploymentRequest_Fields_ContainerResourcesValidationError is the
+// validation error returned by
+// UpdateDeploymentRequest_Fields_ContainerResources.Validate if the
+// designated constraints aren't met.
+type UpdateDeploymentRequest_Fields_ContainerResourcesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateDeploymentRequest_Fields_ContainerResourcesValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e UpdateDeploymentRequest_Fields_ContainerResourcesValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e UpdateDeploymentRequest_Fields_ContainerResourcesValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e UpdateDeploymentRequest_Fields_ContainerResourcesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateDeploymentRequest_Fields_ContainerResourcesValidationError) ErrorName() string {
+	return "UpdateDeploymentRequest_Fields_ContainerResourcesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateDeploymentRequest_Fields_ContainerResourcesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateDeploymentRequest_Fields_ContainerResources.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateDeploymentRequest_Fields_ContainerResourcesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateDeploymentRequest_Fields_ContainerResourcesValidationError{}
+
+// Validate checks the field values on
+// UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsMultiError,
+// or nil if none found.
+func (m *UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Limits
+
+	// no validation rules for Requests
+
+	if len(errors) > 0 {
+		return UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsMultiError
+// is an error wrapping multiple validation errors returned by
+// UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements.ValidateAll()
+// if the designated constraints aren't met.
+type UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsMultiError) AllErrors() []error {
+	return m
+}
+
+// UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError
+// is the validation error returned by
+// UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements.Validate
+// if the designated constraints aren't met.
+type UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError) Key() bool {
+	return e.key
+}
+
+// ErrorName returns error name.
+func (e UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError) ErrorName() string {
+	return "UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirementsValidationError{}
 
 // Validate checks the field values on StatefulSet_Status with the rules
 // defined in the proto definition for this message. If any rules are
