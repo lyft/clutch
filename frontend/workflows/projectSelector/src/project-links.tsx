@@ -44,13 +44,8 @@ const StyledMoreVertIcon = styled.span({
   },
 });
 
-const StyledLinkTitle = styled.span({
-  fontWeight: "bold",
+const StyledLinkTitle = styled(Typography)({
   padding: "7px 0px",
-});
-
-const StyledMultiLinkTitle = styled.span({
-  fontWeight: "bold",
 });
 
 const StyledLinkBox = styled.div({
@@ -103,7 +98,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
             alt={validLinks[0].name ?? `Quick Link to ${validLinks[0].url}`}
           />
         </StyledCenterImgSpan>
-        <StyledLinkTitle>{linkGroupName}</StyledLinkTitle>
+        <StyledLinkTitle variant="h6">{linkGroupName}</StyledLinkTitle>
       </Link>
     </StyledMenuItem>
   ) : (
@@ -112,7 +107,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
         <StyledMultilinkImage>
           <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
         </StyledMultilinkImage>
-        <StyledMultiLinkTitle>{linkGroupName}</StyledMultiLinkTitle>
+        <Typography variant="h6">{linkGroupName}</Typography>
       </StyledMultilinkHeader>
       <div>
         {validLinks.map(link => {
