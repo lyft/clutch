@@ -7,7 +7,7 @@ import {
   Paper as MuiPaper,
   Popper as MuiPopper,
 } from "@mui/material";
-import { get, sortBy } from "lodash";
+import { get, isEmpty, sortBy } from "lodash";
 
 import type { Workflow } from "../AppProvider/workflow";
 import { IconButton } from "../button";
@@ -104,8 +104,14 @@ const HeaderFeedback = () => {
     setOpen(!open);
   };
 
+  const timedClose = () => {
+    setTimeout(() => {
+      setOpen(false);
+    }, 1500);
+  };
+
   React.useEffect(() => {
-    if (triggeredHeaderData && triggeredHeaderData.NPS) {
+    if (triggeredHeaderData && !isEmpty(triggeredHeaderData.NPS)) {
       setDefaultFeedbackOption((triggeredHeaderData.NPS.defaultFeedbackOption as string) ?? "");
       setOpen(true);
     }
@@ -153,6 +159,7 @@ const HeaderFeedback = () => {
                     origin="HEADER"
                     feedbackTypes={generateFeedbackTypes(workflows)}
                     defaultFeedbackOption={defaultFeedbackOption}
+                    onSubmit={timedClose}
                   />
                 </MenuList>
               </ClickAwayListener>
