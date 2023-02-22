@@ -1,25 +1,26 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { BrowserRouter } from "react-router-dom";
+import { render } from "@testing-library/react";
+
+import "@testing-library/jest-dom";
 
 import { StartExperiment } from "../start-experiment";
 
-jest.mock("@clutch-sh/core", () => {
-  return {
-    ...(jest.requireActual("@clutch-sh/core") as any),
-    useNavigate: jest.fn(),
-  };
+test("renders correctly", () => {
+  const { asFragment } = render(
+    <BrowserRouter>
+      <StartExperiment heading="Start Experiment" />
+    </BrowserRouter>
+  );
+
+  expect(asFragment()).toMatchSnapshot();
 });
 
-describe("Start Experiment workflow", () => {
-  it("renders correctly", () => {
-    const component = shallow(<StartExperiment heading="Start Experiment" />);
-    expect(component.debug()).toMatchSnapshot();
-  });
-
-  it("renders correctly with upstream cluster type selection enabled", () => {
-    const component = shallow(
+test("renders correctly with upstream cluster type selection enabled", () => {
+  const { asFragment } = render(
+    <BrowserRouter>
       <StartExperiment heading="Start Experiment" upstreamClusterTypeSelectionEnabled />
-    );
-    expect(component.debug()).toMatchSnapshot();
-  });
+    </BrowserRouter>
+  );
+  expect(asFragment()).toMatchSnapshot();
 });
