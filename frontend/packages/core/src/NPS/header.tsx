@@ -99,13 +99,14 @@ const HeaderFeedback = () => {
   const anchorRef = React.useRef(null);
   const { workflows, triggerHeaderItem, triggeredHeaderData } = useAppContext();
   const [defaultFeedbackOption, setDefaultFeedbackOption] = React.useState<string>();
+  const timer = React.useRef(null);
 
   const handleToggle = () => {
     setOpen(!open);
   };
 
   const timedClose = () => {
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       setOpen(false);
     }, 1500);
   };
@@ -129,6 +130,7 @@ const HeaderFeedback = () => {
     if (event.target.id !== "nps-banner-button") {
       triggerHeaderItem && triggerHeaderItem("NPS", {});
       setOpen(false);
+      clearTimeout(timer.current);
     }
   };
 
