@@ -7,7 +7,7 @@ import {
   Paper as MuiPaper,
   Popper as MuiPopper,
 } from "@mui/material";
-import { get, isEmpty, sortBy } from "lodash";
+import { get, sortBy } from "lodash";
 
 import type { Workflow } from "../AppProvider/workflow";
 import { IconButton } from "../button";
