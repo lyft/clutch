@@ -112,7 +112,7 @@ const HeaderFeedback = () => {
   };
 
   React.useEffect(() => {
-    if (triggeredHeaderData && !isEmpty(triggeredHeaderData.NPS)) {
+    if (triggeredHeaderData && triggeredHeaderData.NPS) {
       setDefaultFeedbackOption((triggeredHeaderData.NPS.defaultFeedbackOption as string) ?? "");
       setOpen(true);
     }
@@ -128,7 +128,7 @@ const HeaderFeedback = () => {
     }
     // handler for the NPS Banner button so that it doesn't reset the headerLink
     if (event.target.id !== "nps-banner-button") {
-      triggerHeaderItem && triggerHeaderItem("NPS", {});
+      triggerHeaderItem && triggerHeaderItem("NPS", undefined);
       setOpen(false);
       clearTimeout(timer.current);
     }
