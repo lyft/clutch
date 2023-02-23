@@ -45,13 +45,13 @@ require (
 	github.com/slack-go/slack v0.12.1
 	github.com/stretchr/testify v1.8.1
 	github.com/uber-go/tally/v4 v4.1.6
-	go.temporal.io/sdk v1.19.0
+	go.temporal.io/sdk v1.21.1
 	go.temporal.io/sdk/contrib/tally v0.2.0
 	go.uber.org/zap v1.24.0
 	golang.org/x/net v0.7.0
 	golang.org/x/oauth2 v0.4.0
 	golang.org/x/sync v0.1.0
-	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f
+	google.golang.org/genproto v0.0.0-20230127162408-596548ed4efa
 	google.golang.org/grpc v1.53.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
 	google.golang.org/protobuf v1.28.1
@@ -136,8 +136,8 @@ require (
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	go.opencensus.io v0.23.0 // indirect
-	go.temporal.io/api v1.13.0 // indirect
+	go.opencensus.io v0.24.0 // indirect
+	go.temporal.io/api v1.16.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.3.0 // indirect
@@ -146,7 +146,7 @@ require (
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/term v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
-	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65 // indirect
+	golang.org/x/time v0.1.0 // indirect
 	golang.org/x/tools v0.3.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
