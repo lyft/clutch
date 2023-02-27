@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/golang/protobuf/ptypes/any"
-	githubv3 "github.com/google/go-github/v37/github"
+	githubv3 "github.com/google/go-github/v50/github"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 

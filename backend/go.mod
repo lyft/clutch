@@ -30,7 +30,6 @@ require (
 	github.com/gogo/status v1.1.1
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/protobuf v1.5.2
-	github.com/google/go-github/v37 v37.0.0
 	github.com/google/go-github/v50 v50.1.0
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
