@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	githubv3 "github.com/google/go-github/v37/github"
+	githubv3 "github.com/google/go-github/v50/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
@@ -264,7 +264,7 @@ func (m *mockRepositories) GetContents(_ context.Context, _, _, _ string, _ *git
 	return &githubv3.RepositoryContent{}, nil, nil, nil
 }
 
-func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base, head string) (*githubv3.CommitsComparison, *githubv3.Response, error) {
+func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base, head string, opts *githubv3.ListOptions) (*githubv3.CommitsComparison, *githubv3.Response, error) {
 	if m.generalError {
 		return nil, nil, errors.New(problem)
 	}
@@ -278,7 +278,7 @@ func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base
 	}, nil, nil
 }
 
-func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha string) (*githubv3.RepositoryCommit, *githubv3.Response, error) {
+func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) (*githubv3.RepositoryCommit, *githubv3.Response, error) {
 	file := "testfile.go"
 	message := "committing some changes (#1)"
 	authorLogin := "foobar"
