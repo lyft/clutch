@@ -36,7 +36,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jhump/protoreflect v1.14.1
-	github.com/joho/godotenv v1.4.0
+	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.7
 	github.com/mitchellh/hashstructure/v2 v2.0.2
 	github.com/shurcooL/githubv4 v0.0.0-20221229060216-a8d4a561cc93
