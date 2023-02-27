@@ -161,7 +161,7 @@ func RegisterAuditAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 // RegisterAuditAPIHandlerFromEndpoint is same as RegisterAuditAPIHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterAuditAPIHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.Dial(endpoint, opts...)
+	conn, err := grpc.DialContext(ctx, endpoint, opts...)
 	if err != nil {
 		return err
 	}

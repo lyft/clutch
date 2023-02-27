@@ -279,7 +279,7 @@ func RegisterEC2APIHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 // RegisterEC2APIHandlerFromEndpoint is same as RegisterEC2APIHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterEC2APIHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.Dial(endpoint, opts...)
+	conn, err := grpc.DialContext(ctx, endpoint, opts...)
 	if err != nil {
 		return err
 	}
