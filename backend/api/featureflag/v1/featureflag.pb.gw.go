@@ -102,7 +102,7 @@ func RegisterFeatureFlagAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 // RegisterFeatureFlagAPIHandlerFromEndpoint is same as RegisterFeatureFlagAPIHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterFeatureFlagAPIHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.Dial(endpoint, opts...)
+	conn, err := grpc.DialContext(ctx, endpoint, opts...)
 	if err != nil {
 		return err
 	}

@@ -224,7 +224,7 @@ func RegisterAuthnAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 // RegisterAuthnAPIHandlerFromEndpoint is same as RegisterAuthnAPIHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterAuthnAPIHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.Dial(endpoint, opts...)
+	conn, err := grpc.DialContext(ctx, endpoint, opts...)
 	if err != nil {
 		return err
 	}
