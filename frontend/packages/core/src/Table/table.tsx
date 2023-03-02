@@ -206,8 +206,9 @@ const TableRow = ({
   cellDefault,
   responsive = false,
   colSpan,
+  ...props
 }: TableRowProps) => (
-  <StyledTableRow onClick={onClick} $responsive={responsive}>
+  <StyledTableRow onClick={onClick} $responsive={responsive} {...props}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
       <StyledTableCell key={index} $responsive={responsive} colSpan={colSpan}>
