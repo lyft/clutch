@@ -39,7 +39,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.7
 	github.com/mitchellh/hashstructure/v2 v2.0.2
-	github.com/shurcooL/githubv4 v0.0.0-20230215024106-420ad0987b9b
+	github.com/shurcooL/githubv4 v0.0.0-20230305132112-efb623903184
 	github.com/shurcooL/graphql v0.0.0-20220606043923-3cf50f8a0a29
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
 	github.com/slack-go/slack v0.12.1
