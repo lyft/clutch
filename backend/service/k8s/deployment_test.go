@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
@@ -250,6 +251,54 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 
 			deployment := ProtoForDeployment(tt.inputClusterName, tt.deployment)
 			assert.Equal(t, tt.expectedClusterName, deployment.Cluster)
+		})
+	}
+}
+
+func TestProtoForDeploymentSpec(t *testing.T) {
+	t.Parallel()
+
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "foo",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									Resources: v1.ResourceRequirements{
+										Limits: v1.ResourceList{
+											"cpu":    resource.MustParse("500m"),
+											"memory": resource.MustParse("128Mi"),
+										},
+										Requests: v1.ResourceList{
+											"cpu":    resource.MustParse("250m"),
+											"memory": resource.MustParse("64Mi"),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].Resources.Limits["cpu"], resource.MustParse(deployment.DeploymentSpec.Template.Spec.Containers[0].Resources.Limits["cpu"]))
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].Resources.Limits["memory"], resource.MustParse(deployment.DeploymentSpec.Template.Spec.Containers[0].Resources.Limits["memory"]))
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].Resources.Requests["cpu"], resource.MustParse(deployment.DeploymentSpec.Template.Spec.Containers[0].Resources.Requests["cpu"]))
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].Resources.Requests["memory"], resource.MustParse(deployment.DeploymentSpec.Template.Spec.Containers[0].Resources.Requests["memory"]))
 		})
 	}
 }

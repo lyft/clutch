@@ -16309,11 +16309,11 @@ export namespace clutch {
                 /** Deployment deploymentStatus */
                 deploymentStatus?: (clutch.k8s.v1.Deployment.IDeploymentStatus|null);
 
-                /** Deployment deploymentSpec */
-                deploymentSpec?: (clutch.k8s.v1.Deployment.IDeploymentSpec|null);
-
                 /** Deployment creationTimeMillis */
                 creationTimeMillis?: (number|Long|null);
+
+                /** Deployment deploymentSpec */
+                deploymentSpec?: (clutch.k8s.v1.Deployment.IDeploymentSpec|null);
             }
 
             /** Represents a Deployment. */
@@ -16343,11 +16343,11 @@ export namespace clutch {
                 /** Deployment deploymentStatus. */
                 public deploymentStatus?: (clutch.k8s.v1.Deployment.IDeploymentStatus|null);
 
-                /** Deployment deploymentSpec. */
-                public deploymentSpec?: (clutch.k8s.v1.Deployment.IDeploymentSpec|null);
-
                 /** Deployment creationTimeMillis. */
                 public creationTimeMillis: (number|Long);
+
+                /** Deployment deploymentSpec. */
+                public deploymentSpec?: (clutch.k8s.v1.Deployment.IDeploymentSpec|null);
 
                 /**
                  * Verifies a Deployment message.

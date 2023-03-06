@@ -620,6 +620,11 @@ message Deployment {
   }
   DeploymentStatus deployment_status = 6;
 
+  // This is a workound since protobufjs currently has serialization
+  // issues for well-known types like google.protobuf.Timestamp
+  // Unix timestamp (milliseconds since Jan 01 1970)
+  int64 creation_time_millis = 7;
+
   message DeploymentSpec {
     message PodTemplateSpec {
       message PodSpec {
@@ -637,13 +642,7 @@ message Deployment {
     }
     PodTemplateSpec template = 1;
   }
-
-  DeploymentSpec deployment_spec = 7;
-
-  // This is a workound since protobufjs currently has serialization
-  // issues for well-known types like google.protobuf.Timestamp
-  // Unix timestamp (milliseconds since Jan 01 1970)
-  int64 creation_time_millis = 8;
+  DeploymentSpec deployment_spec = 8;
 }
 
 message DescribeDeploymentRequest {
