@@ -1,9 +1,9 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
+import { GemIcon } from "../../Assets/icons";
 import type { MultiSelectProps } from "../select";
 import { MultiSelect } from "../select";
-import { GemIcon } from "../../Assets/icons";
 
 export default {
   title: "Core/Input/MultiSelect",
