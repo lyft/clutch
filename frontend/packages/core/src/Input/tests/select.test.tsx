@@ -32,6 +32,6 @@ test("multi select handles multiple", () => {
     />
   );
 
-  expect(container.querySelector("#foobar-select")).toBeInTheDocument();
-  expect(container.querySelector("#foobar-select")).toHaveTextContent("foo, bar");
+  expect(container.querySelector("#foobar-multi-select")).toBeInTheDocument();
+  expect(container.querySelector("#foobar-multi-select")).toHaveTextContent("foo, bar");
 });

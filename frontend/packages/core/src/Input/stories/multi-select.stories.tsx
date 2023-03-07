@@ -7,10 +7,6 @@ import { MultiSelect } from "../select";
 export default {
   title: "Core/Input/MultiSelect",
   component: MultiSelect,
-  argTypes: {
-    onChange: { action: "onChange event" },
-    selectOptions: { control: { type: "object" } },
-  },
 } as Meta;
 
 const Template = (props: MultiSelectProps) => <MultiSelect name="storybookDemo" {...props} />;
@@ -35,6 +31,10 @@ WithStartAdornment.args = {
   selectOptions: [
     {
       label: "Option 1",
+      startAdornment: <img src="https://clutch.sh/img/microsite/logo.svg" alt="logo" />,
+    },
+    {
+      label: "Option 2",
       startAdornment: <img src="https://clutch.sh/img/microsite/logo.svg" alt="logo" />,
     },
   ],
