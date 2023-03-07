@@ -3,6 +3,7 @@ import type { Meta } from "@storybook/react";
 
 import type { MultiSelectProps } from "../select";
 import { MultiSelect } from "../select";
+import { GemIcon } from "../../Assets/icons";
 
 export default {
   title: "Core/Input/MultiSelect",
@@ -35,7 +36,7 @@ WithStartAdornment.args = {
     },
     {
       label: "Option 2",
-      startAdornment: <img src="https://clutch.sh/img/microsite/logo.svg" alt="logo" />,
+      startAdornment: <GemIcon />,
     },
   ],
 };
