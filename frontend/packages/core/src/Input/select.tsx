@@ -215,6 +215,31 @@ const renderSelectItems = (option: SelectOption) => {
   return menuItemFromOption(option);
 };
 
+// Will take an array of strings or integers and attempt to find the indexes where they exist based on the flattened items
+const calculateDefaultOptions = (
+  defaultOptions: Array<number> | Array<string>,
+  flattenedOptions: BaseSelectOptions[]
+): Array<number> => {
+  const options = [];
+
+  if (defaultOptions === undefined || defaultOptions.length === 0) {
+    return options;
+  }
+
+  defaultOptions.forEach(option => {
+    if (Number.isInteger(option)) {
+      options.push(option < flattenedOptions.length && option > 0 ? option : 0);
+    }
+
+    // we're a string, lets look it up based on the value/label and default to 0 if none
+    const index = flattenedOptions?.findIndex(
+      opt => opt?.value === option || opt?.label === option
+    );
+    options.push(index >= 0 ? index : 0);
+  });
+  return options;
+};
+
 export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
   defaultOption?: number | string;
   helperText?: string;
@@ -222,7 +247,6 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> 
   name: string;
   options: SelectOption[];
   onChange?: (value: string) => void;
-  flex?: boolean;
 }
 
 const Select = ({
@@ -234,31 +258,17 @@ const Select = ({
   name,
   options,
   onChange,
-  flex = false,
 }: SelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(options);
+  const defaultOptions = calculateDefaultOptions(
+    [defaultOption] as Array<number> | Array<string>,
+    flatOptions
+  );
 
-  // Will take a string or an integer and attempt to find the index where it exists based on the flattened items
-  const calculateDefaultOption = () => {
-    let option = defaultOption;
-
-    // handle empty case
-    if (option === undefined || option === "") {
-      option = 0;
-    }
-
-    if (Number.isInteger(option)) {
-      return option < flatOptions.length && option > 0 ? option : 0;
-    }
-
-    // we're a string, lets look it up based on the value/label and default to 0 if none
-    const index = flatOptions?.findIndex(opt => opt?.value === option || opt?.label === option);
-
-    return index >= 0 ? index : 0;
-  };
-
-  const [selectedIdx, setSelectedIdx] = React.useState(calculateDefaultOption());
+  const [selectedIdx, setSelectedIdx] = React.useState(
+    defaultOptions.length > 0 ? defaultOptions[0] : 0
+  );
 
   React.useEffect(() => {
     if (flatOptions.length !== 0) {
@@ -310,7 +320,6 @@ export interface MultiSelectProps extends Pick<MuiSelectProps, "disabled" | "err
   name: string;
   selectOptions: SelectOption[];
   onChange?: (values: Array<string>) => void;
-  flex?: boolean;
 }
 
 const MultiSelect = ({
@@ -322,33 +331,12 @@ const MultiSelect = ({
   name,
   selectOptions,
   onChange,
-  flex = false,
 }: MultiSelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(selectOptions);
 
-  // Will take a string or an integer and attempt to find the index where it exists based on the flattened items
-  const calculateDefaultOption = (): Array<number> => {
-    const options = [];
-
-    if (defaultOptions === undefined || defaultOptions.length === 0) {
-      return options;
-    }
-
-    defaultOptions.forEach(option => {
-      if (Number.isInteger(option)) {
-        options.push(option < flatOptions.length && option > 0 ? option : 0);
-      }
-
-      // we're a string, lets look it up based on the value/label and default to 0 if none
-      const index = flatOptions?.findIndex(opt => opt?.value === option || opt?.label === option);
-      options.push(index >= 0 ? index : 0);
-    });
-    return options;
-  };
-
   const [selectedOptions, setSelectedOptions] = React.useState<Array<number>>(
-    calculateDefaultOption()
+    calculateDefaultOptions(defaultOptions, flatOptions)
   );
 
   const selectedValues = () =>
@@ -380,7 +368,7 @@ const MultiSelect = ({
       {flatOptions.length && (
         <StyledSelect
           multiple
-          id={`${name}-select`}
+          id={`${name}-multi-select`}
           value={selectedValues()}
           onChange={updateSelectedOptions}
           label={label}
