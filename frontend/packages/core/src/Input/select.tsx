@@ -193,7 +193,7 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> 
   flex?: boolean;
 }
 
-export const Select = ({
+const Select = ({
   defaultOption = 0,
   disabled,
   error,
@@ -300,4 +300,128 @@ export const Select = ({
   );
 };
 
-export default Select;
+export interface MultiSelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
+  defaultOptions?: Array<number> | Array<string>;
+  helperText?: string;
+  label?: string;
+  name: string;
+  selectOptions: SelectOption[];
+  onChange?: (values: Array<string>) => void;
+  flex?: boolean;
+}
+
+const MultiSelect = ({
+  defaultOptions = [],
+  disabled,
+  error,
+  helperText,
+  label,
+  name,
+  selectOptions,
+  onChange,
+  flex = false,
+}: MultiSelectProps) => {
+  // Flattens all options and sub grouped options for easier retrieval
+  const flatOptions: BaseSelectOptions[] = flatten(
+    selectOptions.map((option: SelectOption) =>
+      option.group ? option.group.map(groupOption => groupOption) : option
+    )
+  );
+
+  // Will take a string or an integer and attempt to find the index where it exists based on the flattened items
+  const calculateDefaultOption = (): Array<number> => {
+    const options = [];
+
+    if (defaultOptions === undefined || defaultOptions.length === 0) {
+      return options;
+    }
+
+    defaultOptions.forEach(option => {
+      if (Number.isInteger(option)) {
+        options.push(option < flatOptions.length && option > 0 ? option : 0);
+      }
+
+      // we're a string, lets look it up based on the value/label and default to 0 if none
+      const index = flatOptions?.findIndex(opt => opt?.value === option || opt?.label === option);
+      options.push(index >= 0 ? index : 0);
+    });
+    return options;
+  };
+
+  const [selectedOptions, setSelectedOptions] = React.useState<Array<number>>(
+    calculateDefaultOption()
+  );
+
+  const selectedValues = () =>
+    selectedOptions.map(idx => flatOptions[idx].value || flatOptions[idx].label);
+
+  React.useEffect(() => {
+    if (flatOptions.length !== 0) {
+      onChange && onChange(selectedValues());
+    }
+  }, [selectedOptions]);
+
+  const updateSelectedOptions = event => {
+    const { value } = event.target;
+    // handle if selecting a header option
+    if (!value) {
+      return;
+    }
+    const findIndex = val => flatOptions.findIndex(opt => opt.value === val || opt.label === val);
+    setSelectedOptions(value.map(val => findIndex(val)));
+  };
+
+  if (flatOptions.length === 0) {
+    return null;
+  }
+
+  const menuItem = option => (
+    <MenuItem key={option.label} value={option?.value || option.label}>
+      {option?.startAdornment &&
+        React.cloneElement(option.startAdornment, {
+          style: {
+            height: "100%",
+            maxHeight: "20px",
+            marginRight: "8px",
+            ...option.startAdornment.props.style,
+          },
+        })}
+      {option.label}
+    </MenuItem>
+  );
+
+  const renderSelectItems = option => {
+    if (option.group) {
+      return [
+        <ListSubheader>{option.label}</ListSubheader>,
+        option.group.map(opt => menuItem(opt)),
+      ];
+    }
+    return menuItem(option);
+  };
+
+  return (
+    <MuiFormControl id={name} key={name} disabled={disabled} error={error} fullWidth>
+      {label && <StyledInputLabel>{label}</StyledInputLabel>}
+      {flatOptions.length && (
+        <StyledSelect
+          multiple
+          id={`${name}-select`}
+          value={selectedValues()}
+          onChange={updateSelectedOptions}
+          label={label}
+        >
+          {selectOptions?.map(option => renderSelectItems(option))}
+        </StyledSelect>
+      )}
+      {helperText && (
+        <StyledFormHelperText>
+          {error && <ErrorIcon />}
+          {helperText}
+        </StyledFormHelperText>
+      )}
+    </MuiFormControl>
+  );
+};
+
+export { Select, MultiSelect };
