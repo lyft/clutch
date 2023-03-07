@@ -183,6 +183,38 @@ export interface SelectOption extends BaseSelectOptions {
   group?: BaseSelectOptions[];
 }
 
+const flattenBaseSelectOptions = (options: BaseSelectOptions[]) =>
+  flatten(
+    options.map((option: SelectOption) =>
+      option.group ? option.group.map(groupOption => groupOption) : option
+    )
+  );
+
+const menuItemFromOption = (option: BaseSelectOptions) => (
+  <MenuItem key={option.label} value={option?.value || option.label}>
+    {option?.startAdornment &&
+      React.cloneElement(option.startAdornment, {
+        style: {
+          height: "100%",
+          maxHeight: "20px",
+          marginRight: "8px",
+          ...option.startAdornment.props.style,
+        },
+      })}
+    {option.label}
+  </MenuItem>
+);
+
+const renderSelectItems = (option: SelectOption) => {
+  if (option.group) {
+    return [
+      <ListSubheader>{option.label}</ListSubheader>,
+      option.group.map(opt => menuItemFromOption(opt)),
+    ];
+  }
+  return menuItemFromOption(option);
+};
+
 export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
   defaultOption?: number | string;
   helperText?: string;
@@ -205,11 +237,7 @@ const Select = ({
   flex = false,
 }: SelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
-  const flatOptions: BaseSelectOptions[] = flatten(
-    options.map((option: SelectOption) =>
-      option.group ? option.group.map(groupOption => groupOption) : option
-    )
-  );
+  const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(options);
 
   // Will take a string or an integer and attempt to find the index where it exists based on the flattened items
   const calculateDefaultOption = () => {
@@ -251,31 +279,6 @@ const Select = ({
   if (flatOptions.length === 0) {
     return null;
   }
-
-  const menuItem = option => (
-    <MenuItem key={option.label} value={option?.value || option.label}>
-      {option?.startAdornment &&
-        React.cloneElement(option.startAdornment, {
-          style: {
-            height: "100%",
-            maxHeight: "20px",
-            marginRight: "8px",
-            ...option.startAdornment.props.style,
-          },
-        })}
-      {option.label}
-    </MenuItem>
-  );
-
-  const renderSelectItems = option => {
-    if (option.group) {
-      return [
-        <ListSubheader>{option.label}</ListSubheader>,
-        option.group.map(opt => menuItem(opt)),
-      ];
-    }
-    return menuItem(option);
-  };
 
   return (
     <MuiFormControl id={name} key={name} disabled={disabled} error={error} fullWidth>
@@ -322,11 +325,7 @@ const MultiSelect = ({
   flex = false,
 }: MultiSelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
-  const flatOptions: BaseSelectOptions[] = flatten(
-    selectOptions.map((option: SelectOption) =>
-      option.group ? option.group.map(groupOption => groupOption) : option
-    )
-  );
+  const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(selectOptions);
 
   // Will take a string or an integer and attempt to find the index where it exists based on the flattened items
   const calculateDefaultOption = (): Array<number> => {
@@ -374,31 +373,6 @@ const MultiSelect = ({
   if (flatOptions.length === 0) {
     return null;
   }
-
-  const menuItem = option => (
-    <MenuItem key={option.label} value={option?.value || option.label}>
-      {option?.startAdornment &&
-        React.cloneElement(option.startAdornment, {
-          style: {
-            height: "100%",
-            maxHeight: "20px",
-            marginRight: "8px",
-            ...option.startAdornment.props.style,
-          },
-        })}
-      {option.label}
-    </MenuItem>
-  );
-
-  const renderSelectItems = option => {
-    if (option.group) {
-      return [
-        <ListSubheader>{option.label}</ListSubheader>,
-        option.group.map(opt => menuItem(opt)),
-      ];
-    }
-    return menuItem(option);
-  };
 
   return (
     <MuiFormControl id={name} key={name} disabled={disabled} error={error} fullWidth>
