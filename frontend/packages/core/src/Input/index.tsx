@@ -3,7 +3,7 @@ export { default as DateTimePicker } from "./date-time";
 export { Form, FormRow } from "./form";
 export { default as Radio } from "./radio";
 export { default as RadioGroup } from "./radio-group";
-export { default as Select } from "./select";
+export { Select, MultiSelect } from "./select";
 export { default as Switch } from "./switchToggle";
 export { default as TextField } from "./text-field";
 export { default as ToggleButtonGroup, ToggleButton } from "./toggle-button-group";
