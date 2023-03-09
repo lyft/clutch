@@ -624,6 +624,25 @@ message Deployment {
   // issues for well-known types like google.protobuf.Timestamp
   // Unix timestamp (milliseconds since Jan 01 1970)
   int64 creation_time_millis = 7;
+
+  message DeploymentSpec {
+    message PodTemplateSpec {
+      message PodSpec {
+        message Container {
+          string name = 1;
+          message ResourceRequirements {
+            map<string, string> limits = 1;
+            map<string, string> requests = 2;
+          }
+          ResourceRequirements resources = 2;
+        }
+        repeated Container containers = 1;
+      }
+      PodSpec spec = 1;
+    }
+    PodTemplateSpec template = 1;
+  }
+  DeploymentSpec deployment_spec = 8;
 }
 
 message DescribeDeploymentRequest {
@@ -682,6 +701,16 @@ message UpdateDeploymentRequest {
   message Fields {
     map<string, string> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
     map<string, string> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+
+    message ContainerResources {
+      string container_name = 1;
+      message ResourceRequirements {
+        map<string, string> limits = 1;
+        map<string, string> requests = 2;
+      }
+      ResourceRequirements resources = 2;
+    }
+    repeated ContainerResources container_resources = 3;
   }
 
   Fields fields = 5 [ (validate.rules).message = {required : true} ];

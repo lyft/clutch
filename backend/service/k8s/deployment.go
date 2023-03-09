@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
@@ -74,6 +75,7 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 		Name:             deployment.Name,
 		Labels:           deployment.Labels,
 		Annotations:      deployment.Annotations,
+		DeploymentSpec:   ProtoForDeploymentSpec(deployment.Spec),
 		DeploymentStatus: ProtoForDeploymentStatus(deployment.Status),
 	}
 
@@ -83,6 +85,38 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 	}
 
 	return k8sDeployment
+}
+
+func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Deployment_DeploymentSpec {
+	deploymentContainers := make([]*k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container, 0, len(deploymentSpec.Template.Spec.Containers))
+	for _, container := range deploymentSpec.Template.Spec.Containers {
+		resourceLimits := make(map[string]string, len(container.Resources.Limits))
+		resourceRequests := make(map[string]string, len(container.Resources.Requests))
+
+		for res, quantity := range container.Resources.Limits {
+			resourceLimits[string(res)] = quantity.String()
+		}
+
+		for res, quantity := range container.Resources.Requests {
+			resourceRequests[string(res)] = quantity.String()
+		}
+
+		newContainer := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container{
+			Name: container.Name,
+			Resources: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements{
+				Limits:   resourceLimits,
+				Requests: resourceRequests,
+			},
+		}
+		deploymentContainers = append(deploymentContainers, newContainer)
+	}
+	return &k8sapiv1.Deployment_DeploymentSpec{
+		Template: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec{
+			Spec: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec{
+				Containers: deploymentContainers,
+			},
+		},
+	}
 }
 
 func ProtoForDeploymentStatus(deploymentStatus appsv1.DeploymentStatus) *k8sapiv1.Deployment_DeploymentStatus {
@@ -141,6 +175,9 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 
 	newDeployment := oldDeployment.DeepCopy()
 	mergeDeploymentLabelsAndAnnotations(newDeployment, fields)
+	if err := updateContainerResources(newDeployment, fields); err != nil {
+		return err
+	}
 
 	patchBytes, err := GenerateStrategicPatch(oldDeployment, newDeployment, appsv1.Deployment{})
 	if err != nil {
@@ -174,4 +211,28 @@ func mergeDeploymentLabelsAndAnnotations(deployment *appsv1.Deployment, fields *
 		deployment.Annotations = labels.Merge(labels.Set(deployment.Annotations), labels.Set(fields.Annotations))
 		deployment.Spec.Template.ObjectMeta.Annotations = labels.Merge(labels.Set(deployment.Spec.Template.ObjectMeta.Annotations), labels.Set(fields.Annotations))
 	}
+}
+
+func updateContainerResources(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
+	for _, containerResource := range fields.ContainerResources {
+		for _, container := range deployment.Spec.Template.Spec.Containers {
+			if container.Name == containerResource.ContainerName {
+				for resourceName := range containerResource.Resources.Limits {
+					quantity, err := resource.ParseQuantity(containerResource.Resources.Limits[resourceName])
+					if err != nil {
+						return err
+					}
+					container.Resources.Limits[v1.ResourceName(resourceName)] = quantity
+				}
+				for resourceName := range containerResource.Resources.Requests {
+					quantity, err := resource.ParseQuantity(containerResource.Resources.Requests[resourceName])
+					if err != nil {
+						return err
+					}
+					container.Resources.Requests[v1.ResourceName(resourceName)] = quantity
+				}
+			}
+		}
+	}
+	return nil
 }
