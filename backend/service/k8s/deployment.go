@@ -217,22 +217,19 @@ func updateContainerResources(deployment *appsv1.Deployment, fields *k8sapiv1.Up
 	for _, containerResource := range fields.ContainerResources {
 		for _, container := range deployment.Spec.Template.Spec.Containers {
 			if container.Name == containerResource.ContainerName {
-				resourceNames := []string{"cpu", "memory"}
-				for _, resourceName := range resourceNames {
-					if len(containerResource.Resources.Limits[resourceName]) > 0 {
-						quantity, err := resource.ParseQuantity(containerResource.Resources.Limits[resourceName])
-						if err != nil {
-							return err
-						}
-						container.Resources.Limits[v1.ResourceName(resourceName)] = quantity
+				for resourceName := range containerResource.Resources.Limits {
+					quantity, err := resource.ParseQuantity(containerResource.Resources.Limits[resourceName])
+					if err != nil {
+						return err
 					}
-					if len(containerResource.Resources.Requests[resourceName]) > 0 {
-						quantity, err := resource.ParseQuantity(containerResource.Resources.Requests[resourceName])
-						if err != nil {
-							return err
-						}
-						container.Resources.Requests[v1.ResourceName(resourceName)] = quantity
+					container.Resources.Limits[v1.ResourceName(resourceName)] = quantity
+				}
+				for resourceName := range containerResource.Resources.Requests {
+					quantity, err := resource.ParseQuantity(containerResource.Resources.Requests[resourceName])
+					if err != nil {
+						return err
 					}
+					container.Resources.Requests[v1.ResourceName(resourceName)] = quantity
 				}
 			}
 		}
