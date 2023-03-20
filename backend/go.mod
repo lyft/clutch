@@ -32,7 +32,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/google/go-github/v50 v50.1.0
 	github.com/google/uuid v1.3.0
-	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
+	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jhump/protoreflect v1.15.1
