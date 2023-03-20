@@ -35,7 +35,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/iancoleman/strcase v0.2.0
-	github.com/jhump/protoreflect v1.14.1
+	github.com/jhump/protoreflect v1.15.1
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.7
 	github.com/mitchellh/hashstructure/v2 v2.0.2
@@ -82,6 +82,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.14.4 // indirect
 	github.com/benbjohnson/clock v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/bufbuild/protocompile v0.4.0 // indirect
 	github.com/census-instrumentation/opencensus-proto v0.4.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/cloudflare/circl v1.1.0 // indirect
