@@ -17,6 +17,7 @@ import { string } from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
+// Examples of valid quantities: 0.1, 100m, 128974848, 129e6, 129M,  128974848000m, 123Mi
 const QUANTITY_REGEX = /^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/;
 
 const DeploymentIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
@@ -156,7 +157,7 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
   );
 };
 
-function fortmatResourceString(resourceName: string, resourceRequirement: string): string {
+function formatResourceString(resourceName: string, resourceRequirement: string): string {
   // Capitalize the first letter of resourceName
   const capitalizedResourceName = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
 
@@ -166,6 +167,15 @@ function fortmatResourceString(resourceName: string, resourceRequirement: string
 
   // Return the modified strings
   return `${capitalizedResourceName} ${modifiedResourceRequirement}`;
+}
+
+function findContainer(args: {
+  deploymentSpec: IClutch.k8s.v1.Deployment.IDeploymentSpec;
+  containerName: string;
+}): IClutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.IContainer {
+  return args.deploymentSpec.template.spec.containers.find(
+    container => container.name === args.containerName
+  );
 }
 
 const Confirm: React.FC<ConfirmChild> = () => {
@@ -182,20 +192,21 @@ const Confirm: React.FC<ConfirmChild> = () => {
     Object.keys(container.resources).forEach(resourceRequirement => {
       Object.keys(container.resources[resourceRequirement]).forEach(resourceName => {
         const newValue = container.resources[resourceRequirement][resourceName];
-        const oldValue = currentDeploymentData.deploymentSpec.template.spec.containers.find(
-          oldContainer => oldContainer.name === container.name
-        ).resources[resourceRequirement][resourceName];
+        const oldValue = findContainer({
+          deploymentSpec: currentDeploymentData.deploymentSpec,
+          containerName: container.name,
+        }).resources[resourceRequirement][resourceName];
         if (newValue !== oldValue) {
           if (!updatedContainer) {
             updateRows.push({ name: "Container Name", value: container.name });
             updatedContainer = true;
           }
           updateRows.push({
-            name: `Old ${fortmatResourceString(resourceName, resourceRequirement)}`,
+            name: `Old ${formatResourceString(resourceName, resourceRequirement)}`,
             value: oldValue,
           });
           updateRows.push({
-            name: `New ${fortmatResourceString(resourceName, resourceRequirement)}`,
+            name: `New ${formatResourceString(resourceName, resourceRequirement)}`,
             value: newValue,
           });
         }
@@ -238,20 +249,12 @@ const ScaleResources: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
       ) => {
         const clientset = inputData.clientset ?? "undefined";
         const limits: { [key: string]: string } = {
-          cpu: deploymentData.deploymentSpec.template.spec.containers.find(
-            container => container.name === deploymentData.containerName
-          ).resources.limits.cpu,
-          memory: deploymentData.deploymentSpec.template.spec.containers.find(
-            container => container.name === deploymentData.containerName
-          ).resources.limits.memory,
+          cpu: findContainer({ ...deploymentData }).resources.limits.cpu,
+          memory: findContainer({ ...deploymentData }).resources.limits.memory,
         };
         const requests: { [key: string]: string } = {
-          cpu: deploymentData.deploymentSpec.template.spec.containers.find(
-            container => container.name === deploymentData.containerName
-          ).resources.requests.cpu,
-          memory: deploymentData.deploymentSpec.template.spec.containers.find(
-            container => container.name === deploymentData.containerName
-          ).resources.requests.memory,
+          cpu: findContainer({ ...deploymentData }).resources.requests.cpu,
+          memory: findContainer({ ...deploymentData }).resources.requests.memory,
         };
         return client.post("/v1/k8s/updateDeployment", {
           clientset,
