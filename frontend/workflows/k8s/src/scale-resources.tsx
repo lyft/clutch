@@ -243,13 +243,14 @@ const ScaleResources: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
         currentDeploymentData: IClutch.k8s.v1.Deployment
       ) => {
         const clientset = inputData.clientset ?? "undefined";
+        const container = findContainer({ ...deploymentData });
         const limits: { [key: string]: string } = {
-          cpu: findContainer({ ...deploymentData }).resources.limits.cpu,
-          memory: findContainer({ ...deploymentData }).resources.limits.memory,
+          cpu: container.resources.limits.cpu,
+          memory: container.resources.limits.memory,
         };
         const requests: { [key: string]: string } = {
-          cpu: findContainer({ ...deploymentData }).resources.requests.cpu,
-          memory: findContainer({ ...deploymentData }).resources.requests.memory,
+          cpu: container.resources.requests.cpu,
+          memory: container.resources.requests.memory,
         };
         return client.post("/v1/k8s/updateDeployment", {
           clientset,
