@@ -17,7 +17,7 @@ import { string } from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
-// Examples of valid quantities: 0.1, 100m, 128974848, 129e6, 129M,  128974848000m, 123Mi
+// Examples of valid quantities: 0.1, 100m, 128974848, 129e6, 129M, 128974848000m, 123Mi
 const QUANTITY_REGEX = /^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/;
 
 const DeploymentIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
@@ -34,6 +34,15 @@ const DeploymentIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
 
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
+
+function findContainer(args: {
+  deploymentSpec: IClutch.k8s.v1.Deployment.IDeploymentSpec;
+  containerName: string;
+}): IClutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.IContainer {
+  return args.deploymentSpec.template.spec.containers.find(
+    container => container.name === args.containerName
+  );
+}
 
 const DeploymentDetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
@@ -57,6 +66,13 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
       currentDeploymentData.assign(deployment);
     }
   }, []);
+
+  const currentDeployment = findContainer({
+    deploymentSpec: deployment.deploymentSpec,
+    containerName,
+  });
+
+  const containerBase = `deploymentSpec.template.spec.containers[${containerIndex}]`;
 
   return (
     <WizardStep error={deploymentData.error} isLoading={deploymentData.isLoading}>
@@ -89,61 +105,53 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
           },
           {
             name: "CPU Limit",
-            value: deployment.deploymentSpec.template.spec.containers.find(
-              container => container.name === containerName
-            ).resources.limits.cpu,
+            value: currentDeployment.resources.limits.cpu,
             textFieldLabels: {
               disabledField: "Current Limit",
               updatedField: "New limit",
             },
             input: {
               type: "string",
-              key: `deploymentSpec.template.spec.containers[${containerIndex}].resources.limits.cpu`,
+              key: `${containerBase}.resources.limits.cpu`,
               validation: string().matches(QUANTITY_REGEX),
             },
           },
           {
             name: "CPU Request",
-            value: deployment.deploymentSpec.template.spec.containers.find(
-              container => container.name === containerName
-            ).resources.requests.cpu,
+            value: currentDeployment.resources.requests.cpu,
             textFieldLabels: {
               disabledField: "Current Request",
               updatedField: "New Request",
             },
             input: {
               type: "string",
-              key: `deploymentSpec.template.spec.containers[${containerIndex}].resources.requests.cpu`,
+              key: `${containerBase}.resources.requests.cpu`,
               validation: string().matches(QUANTITY_REGEX),
             },
           },
           {
             name: "Memory Limit",
-            value: deployment.deploymentSpec.template.spec.containers.find(
-              container => container.name === containerName
-            ).resources.limits.memory,
+            value: currentDeployment.resources.limits.memory,
             textFieldLabels: {
               disabledField: "Current Limit",
               updatedField: "New limit",
             },
             input: {
               type: "string",
-              key: `deploymentSpec.template.spec.containers[${containerIndex}].resources.limits.memory`,
+              key: `${containerBase}.resources.limits.memory`,
               validation: string().matches(QUANTITY_REGEX),
             },
           },
           {
             name: "Memory Request",
-            value: deployment.deploymentSpec.template.spec.containers.find(
-              container => container.name === containerName
-            ).resources.requests.memory,
+            value: currentDeployment.resources.requests.memory,
             textFieldLabels: {
               disabledField: "Current Request",
               updatedField: "New Request",
             },
             input: {
               type: "string",
-              key: `deploymentSpec.template.spec.containers[${containerIndex}].resources.requests.memory`,
+              key: `${containerBase}.resources.requests.memory`,
               validation: string().matches(QUANTITY_REGEX),
             },
           },
@@ -167,15 +175,6 @@ function formatResourceString(resourceName: string, resourceRequirement: string)
 
   // Return the modified strings
   return `${capitalizedResourceName} ${modifiedResourceRequirement}`;
-}
-
-function findContainer(args: {
-  deploymentSpec: IClutch.k8s.v1.Deployment.IDeploymentSpec;
-  containerName: string;
-}): IClutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.IContainer {
-  return args.deploymentSpec.template.spec.containers.find(
-    container => container.name === args.containerName
-  );
 }
 
 const Confirm: React.FC<ConfirmChild> = () => {
