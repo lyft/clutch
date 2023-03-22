@@ -25,7 +25,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.9.1
 	github.com/fullstorydev/grpcurl v1.8.7
 	github.com/go-git/go-billy/v5 v5.4.1
-	github.com/go-git/go-git/v5 v5.5.2
+	github.com/go-git/go-git/v5 v5.6.1
 	github.com/gobwas/glob v0.2.3
 	github.com/gogo/status v1.1.1
 	github.com/golang-migrate/migrate/v4 v4.15.2
@@ -65,8 +65,8 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
-	github.com/ProtonMail/go-crypto v0.0.0-20221026131551-cf6655e29de4 // indirect
-	github.com/acomagu/bufpipe v1.0.3 // indirect
+	github.com/ProtonMail/go-crypto v0.0.0-20230217124315-7d5c6f04bbb8 // indirect
+	github.com/acomagu/bufpipe v1.0.4 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.10 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.23 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.29 // indirect
@@ -120,7 +120,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
-	github.com/pjbgf/sha1cd v0.2.4-0.20230130103033-0066bacacbf6 // indirect
+	github.com/pjbgf/sha1cd v0.3.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.11.1 // indirect
@@ -140,7 +140,7 @@ require (
 	go.temporal.io/api v1.16.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
-	golang.org/x/crypto v0.3.0 // indirect
+	golang.org/x/crypto v0.6.0 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
