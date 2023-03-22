@@ -29,7 +29,7 @@
     "@clutch-sh/tools": "^2.0.0-beta"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=16.0.0 <17",
     "yarn": "^1.22.5"
   }
 }
