@@ -54,9 +54,9 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
 
   const currentDeploymentData = useDataLayout("currentDeploymentData");
 
-  const [containerName, setContainerName] = React.useState(
-    deployment.deploymentSpec.template.spec.containers[0].name
-  );
+  const { containers } = deployment.deploymentSpec.template.spec;
+
+  const [containerName, setContainerName] = React.useState(containers[0].name);
 
   const [containerIndex, setContainerIndex] = React.useState(0);
 
@@ -90,14 +90,10 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
                 name="containerName"
                 onChange={value => {
                   setContainerName(value);
-                  setContainerIndex(
-                    deployment.deploymentSpec.template.spec.containers.findIndex(
-                      container => container.name === value
-                    )
-                  );
+                  setContainerIndex(containers.findIndex(container => container.name === value));
                   deploymentData.updateData("containerName", value);
                 }}
-                options={deployment.deploymentSpec.template.spec.containers.map(container => {
+                options={containers.map(container => {
                   return { label: container.name };
                 })}
               />
