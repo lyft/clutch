@@ -6,7 +6,7 @@ did_checks_pass=true
 
 # Minimum versions
 MIN_GO_VERSION="1.17"
-MIN_NODE_VERSION="16.0.0"
+MIN_NODE_VERSION="18.0.0"
 MIN_YARN_VERSION="1.22.0"
 
 SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
