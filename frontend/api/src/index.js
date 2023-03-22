@@ -21351,6 +21351,7 @@ export const clutch = $root.clutch = (() => {
                          * @property {string|null} [redirectUrl] OIDC redirectUrl
                          * @property {Array.<string>|null} [scopes] OIDC scopes
                          * @property {string|null} [subjectClaimNameOverride] OIDC subjectClaimNameOverride
+                         * @property {string|null} [groupsClaimNameOverride] OIDC groupsClaimNameOverride
                          */
 
                         /**
@@ -21418,6 +21419,14 @@ export const clutch = $root.clutch = (() => {
                         OIDC.prototype.subjectClaimNameOverride = "";
 
                         /**
+                         * OIDC groupsClaimNameOverride.
+                         * @member {string} groupsClaimNameOverride
+                         * @memberof clutch.config.service.authn.v1.OIDC
+                         * @instance
+                         */
+                        OIDC.prototype.groupsClaimNameOverride = "";
+
+                        /**
                          * Verifies a OIDC message.
                          * @function verify
                          * @memberof clutch.config.service.authn.v1.OIDC
@@ -21450,6 +21459,9 @@ export const clutch = $root.clutch = (() => {
                             if (message.subjectClaimNameOverride != null && message.hasOwnProperty("subjectClaimNameOverride"))
                                 if (!$util.isString(message.subjectClaimNameOverride))
                                     return "subjectClaimNameOverride: string expected";
+                            if (message.groupsClaimNameOverride != null && message.hasOwnProperty("groupsClaimNameOverride"))
+                                if (!$util.isString(message.groupsClaimNameOverride))
+                                    return "groupsClaimNameOverride: string expected";
                             return null;
                         };
 
@@ -21482,6 +21494,8 @@ export const clutch = $root.clutch = (() => {
                             }
                             if (object.subjectClaimNameOverride != null)
                                 message.subjectClaimNameOverride = String(object.subjectClaimNameOverride);
+                            if (object.groupsClaimNameOverride != null)
+                                message.groupsClaimNameOverride = String(object.groupsClaimNameOverride);
                             return message;
                         };
 
@@ -21506,6 +21520,7 @@ export const clutch = $root.clutch = (() => {
                                 object.clientSecret = "";
                                 object.redirectUrl = "";
                                 object.subjectClaimNameOverride = "";
+                                object.groupsClaimNameOverride = "";
                             }
                             if (message.issuer != null && message.hasOwnProperty("issuer"))
                                 object.issuer = message.issuer;
@@ -21522,6 +21537,8 @@ export const clutch = $root.clutch = (() => {
                             }
                             if (message.subjectClaimNameOverride != null && message.hasOwnProperty("subjectClaimNameOverride"))
                                 object.subjectClaimNameOverride = message.subjectClaimNameOverride;
+                            if (message.groupsClaimNameOverride != null && message.hasOwnProperty("groupsClaimNameOverride"))
+                                object.groupsClaimNameOverride = message.groupsClaimNameOverride;
                             return object;
                         };
 

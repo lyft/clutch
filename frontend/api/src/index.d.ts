@@ -8877,6 +8877,9 @@ export namespace clutch {
 
                         /** OIDC subjectClaimNameOverride */
                         subjectClaimNameOverride?: (string|null);
+
+                        /** OIDC groupsClaimNameOverride */
+                        groupsClaimNameOverride?: (string|null);
                     }
 
                     /** Represents a OIDC. */
@@ -8905,6 +8908,9 @@ export namespace clutch {
 
                         /** OIDC subjectClaimNameOverride. */
                         public subjectClaimNameOverride: string;
+
+                        /** OIDC groupsClaimNameOverride. */
+                        public groupsClaimNameOverride: string;
 
                         /**
                          * Verifies a OIDC message.

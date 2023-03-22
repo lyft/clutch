@@ -102,6 +102,8 @@ func (m *OIDC) validate(all bool) error {
 
 	// no validation rules for SubjectClaimNameOverride
 
+	// no validation rules for GroupsClaimNameOverride
+
 	if len(errors) > 0 {
 		return OIDCMultiError(errors)
 	}

@@ -91,7 +91,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -132,7 +132,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
 	defer mockprovider.Close()
 
 	mockStorage := authnmock.NewMockStorage()
@@ -226,7 +226,7 @@ oidc:
 
 	mockStorage := authnmock.NewMockStorage()
 
-	mockprovider := authnmock.NewMockOIDCProviderServer("foo@example.com")
+	mockprovider := authnmock.NewMockOIDCProviderServer("foo@example.com", nil)
 	defer mockprovider.Close()
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
 
@@ -271,7 +271,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
 	defer mockprovider.Close()
 
 	mockStorage := authnmock.NewMockStorage()
@@ -387,7 +387,7 @@ oidc:
 	for idx, tc := range testcases {
 		tc := tc
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
-			mockprovider := authnmock.NewMockOIDCProviderServer(email)
+			mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
 			defer mockprovider.Close()
 			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
 
@@ -450,7 +450,7 @@ oidc:
 	c := cfg.GetOidc()
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -476,14 +476,16 @@ oidc:
   client_secret: my_client_secret
   redirect_url: "http://localhost:12000/v1/authn/callback"
   subject_claim_name_override: "email"
+  groups_claim_name_override: "groups"
   scopes:
   - openid
   - email
 `, cfg)
 
 	email := "user@example.com"
+	grps := []string{"group1", "group2"}
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, grps)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -499,6 +501,7 @@ oidc:
 	assert.NoError(t, err)
 	assert.NotNil(t, c)
 	assert.Equal(t, email, c.Subject)
+	assert.Equal(t, grps, c.Groups)
 }
 
 func TestConfigureableOIDCClaimsNoFieldProducesError(t *testing.T) {
@@ -518,7 +521,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -548,7 +551,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
 	mockprovider.SetGroupClaim([]string{"group1", "group2"})
 	defer mockprovider.Close()
 
@@ -579,7 +582,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
 	mockprovider.SetCustomClaim("")
 	defer mockprovider.Close()
 
