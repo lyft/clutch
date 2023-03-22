@@ -21,7 +21,7 @@ jobs:
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: Install renovate-config-validator
-        run: yarn add renovate
+        run: yarn add renovate@^34.0.0
         working-directory: build
       - name: Validate renovate.json
         run: yarn renovate-config-validator ../.github/renovate.json
