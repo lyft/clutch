@@ -46,7 +46,7 @@ const register = (): WorkflowConfiguration => {
         requiredConfigProps: ["resolverType"],
       },
       scaleResources: {
-        path: "scale/resources",
+        path: "resources/scale",
         displayName: "Scale Resources",
         description: "Scale CPU and memory requests and limits.",
         component: ScaleResources,
