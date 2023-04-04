@@ -39998,6 +39998,7 @@ export const clutch = $root.clutch = (() => {
                                  * @interface IContainer
                                  * @property {string|null} [name] Container name
                                  * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IResourceRequirements|null} [resources] Container resources
+                                 * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null} [livenessProbe] Container livenessProbe
                                  */
 
                                 /**
@@ -40032,6 +40033,28 @@ export const clutch = $root.clutch = (() => {
                                 Container.prototype.resources = null;
 
                                 /**
+                                 * Container livenessProbe.
+                                 * @member {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null|undefined} livenessProbe
+                                 * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                 * @instance
+                                 */
+                                Container.prototype.livenessProbe = null;
+
+                                // OneOf field names bound to virtual getters and setters
+                                let $oneOfFields;
+
+                                /**
+                                 * Container _livenessProbe.
+                                 * @member {"livenessProbe"|undefined} _livenessProbe
+                                 * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                 * @instance
+                                 */
+                                Object.defineProperty(Container.prototype, "_livenessProbe", {
+                                    get: $util.oneOfGetter($oneOfFields = ["livenessProbe"]),
+                                    set: $util.oneOfSetter($oneOfFields)
+                                });
+
+                                /**
                                  * Verifies a Container message.
                                  * @function verify
                                  * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
@@ -40042,6 +40065,7 @@ export const clutch = $root.clutch = (() => {
                                 Container.verify = function verify(message) {
                                     if (typeof message !== "object" || message === null)
                                         return "object expected";
+                                    let properties = {};
                                     if (message.name != null && message.hasOwnProperty("name"))
                                         if (!$util.isString(message.name))
                                             return "name: string expected";
@@ -40049,6 +40073,14 @@ export const clutch = $root.clutch = (() => {
                                         let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.verify(message.resources);
                                         if (error)
                                             return "resources." + error;
+                                    }
+                                    if (message.livenessProbe != null && message.hasOwnProperty("livenessProbe")) {
+                                        properties._livenessProbe = 1;
+                                        {
+                                            let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.verify(message.livenessProbe);
+                                            if (error)
+                                                return "livenessProbe." + error;
+                                        }
                                     }
                                     return null;
                                 };
@@ -40071,6 +40103,11 @@ export const clutch = $root.clutch = (() => {
                                         if (typeof object.resources !== "object")
                                             throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.resources: object expected");
                                         message.resources = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.fromObject(object.resources);
+                                    }
+                                    if (object.livenessProbe != null) {
+                                        if (typeof object.livenessProbe !== "object")
+                                            throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.livenessProbe: object expected");
+                                        message.livenessProbe = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.fromObject(object.livenessProbe);
                                     }
                                     return message;
                                 };
@@ -40096,6 +40133,11 @@ export const clutch = $root.clutch = (() => {
                                         object.name = message.name;
                                     if (message.resources != null && message.hasOwnProperty("resources"))
                                         object.resources = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.toObject(message.resources, options);
+                                    if (message.livenessProbe != null && message.hasOwnProperty("livenessProbe")) {
+                                        object.livenessProbe = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.toObject(message.livenessProbe, options);
+                                        if (options.oneofs)
+                                            object._livenessProbe = "livenessProbe";
+                                    }
                                     return object;
                                 };
 
@@ -40255,6 +40297,569 @@ export const clutch = $root.clutch = (() => {
                                     };
 
                                     return ResourceRequirements;
+                                })();
+
+                                Container.Probe = (function() {
+
+                                    /**
+                                     * Properties of a Probe.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @interface IProbe
+                                     * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbeHandler|null} [handler] Probe handler
+                                     * @property {number|null} [initialDelaySeconds] Probe initialDelaySeconds
+                                     * @property {number|null} [timeoutSeconds] Probe timeoutSeconds
+                                     * @property {number|null} [periodSeconds] Probe periodSeconds
+                                     * @property {number|null} [successThreshold] Probe successThreshold
+                                     * @property {number|null} [failureThreshold] Probe failureThreshold
+                                     * @property {number|Long|null} [terminationGracePeriodSeconds] Probe terminationGracePeriodSeconds
+                                     */
+
+                                    /**
+                                     * Constructs a new Probe.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @classdesc Represents a Probe.
+                                     * @implements IProbe
+                                     * @constructor
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe=} [properties] Properties to set
+                                     */
+                                    function Probe(properties) {
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * Probe handler.
+                                     * @member {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbeHandler|null|undefined} handler
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Probe.prototype.handler = null;
+
+                                    /**
+                                     * Probe initialDelaySeconds.
+                                     * @member {number|null|undefined} initialDelaySeconds
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Probe.prototype.initialDelaySeconds = null;
+
+                                    /**
+                                     * Probe timeoutSeconds.
+                                     * @member {number|null|undefined} timeoutSeconds
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Probe.prototype.timeoutSeconds = null;
+
+                                    /**
+                                     * Probe periodSeconds.
+                                     * @member {number|null|undefined} periodSeconds
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Probe.prototype.periodSeconds = null;
+
+                                    /**
+                                     * Probe successThreshold.
+                                     * @member {number|null|undefined} successThreshold
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Probe.prototype.successThreshold = null;
+
+                                    /**
+                                     * Probe failureThreshold.
+                                     * @member {number|null|undefined} failureThreshold
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Probe.prototype.failureThreshold = null;
+
+                                    /**
+                                     * Probe terminationGracePeriodSeconds.
+                                     * @member {number|Long|null|undefined} terminationGracePeriodSeconds
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Probe.prototype.terminationGracePeriodSeconds = null;
+
+                                    // OneOf field names bound to virtual getters and setters
+                                    let $oneOfFields;
+
+                                    /**
+                                     * Probe _handler.
+                                     * @member {"handler"|undefined} _handler
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Object.defineProperty(Probe.prototype, "_handler", {
+                                        get: $util.oneOfGetter($oneOfFields = ["handler"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Probe _initialDelaySeconds.
+                                     * @member {"initialDelaySeconds"|undefined} _initialDelaySeconds
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Object.defineProperty(Probe.prototype, "_initialDelaySeconds", {
+                                        get: $util.oneOfGetter($oneOfFields = ["initialDelaySeconds"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Probe _timeoutSeconds.
+                                     * @member {"timeoutSeconds"|undefined} _timeoutSeconds
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Object.defineProperty(Probe.prototype, "_timeoutSeconds", {
+                                        get: $util.oneOfGetter($oneOfFields = ["timeoutSeconds"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Probe _periodSeconds.
+                                     * @member {"periodSeconds"|undefined} _periodSeconds
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Object.defineProperty(Probe.prototype, "_periodSeconds", {
+                                        get: $util.oneOfGetter($oneOfFields = ["periodSeconds"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Probe _successThreshold.
+                                     * @member {"successThreshold"|undefined} _successThreshold
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Object.defineProperty(Probe.prototype, "_successThreshold", {
+                                        get: $util.oneOfGetter($oneOfFields = ["successThreshold"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Probe _failureThreshold.
+                                     * @member {"failureThreshold"|undefined} _failureThreshold
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Object.defineProperty(Probe.prototype, "_failureThreshold", {
+                                        get: $util.oneOfGetter($oneOfFields = ["failureThreshold"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Probe _terminationGracePeriodSeconds.
+                                     * @member {"terminationGracePeriodSeconds"|undefined} _terminationGracePeriodSeconds
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     */
+                                    Object.defineProperty(Probe.prototype, "_terminationGracePeriodSeconds", {
+                                        get: $util.oneOfGetter($oneOfFields = ["terminationGracePeriodSeconds"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Verifies a Probe message.
+                                     * @function verify
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    Probe.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        let properties = {};
+                                        if (message.handler != null && message.hasOwnProperty("handler")) {
+                                            properties._handler = 1;
+                                            {
+                                                let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler.verify(message.handler);
+                                                if (error)
+                                                    return "handler." + error;
+                                            }
+                                        }
+                                        if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
+                                            properties._initialDelaySeconds = 1;
+                                            if (!$util.isInteger(message.initialDelaySeconds))
+                                                return "initialDelaySeconds: integer expected";
+                                        }
+                                        if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
+                                            properties._timeoutSeconds = 1;
+                                            if (!$util.isInteger(message.timeoutSeconds))
+                                                return "timeoutSeconds: integer expected";
+                                        }
+                                        if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
+                                            properties._periodSeconds = 1;
+                                            if (!$util.isInteger(message.periodSeconds))
+                                                return "periodSeconds: integer expected";
+                                        }
+                                        if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
+                                            properties._successThreshold = 1;
+                                            if (!$util.isInteger(message.successThreshold))
+                                                return "successThreshold: integer expected";
+                                        }
+                                        if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
+                                            properties._failureThreshold = 1;
+                                            if (!$util.isInteger(message.failureThreshold))
+                                                return "failureThreshold: integer expected";
+                                        }
+                                        if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
+                                            properties._terminationGracePeriodSeconds = 1;
+                                            if (!$util.isInteger(message.terminationGracePeriodSeconds) && !(message.terminationGracePeriodSeconds && $util.isInteger(message.terminationGracePeriodSeconds.low) && $util.isInteger(message.terminationGracePeriodSeconds.high)))
+                                                return "terminationGracePeriodSeconds: integer|Long expected";
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a Probe message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe} Probe
+                                     */
+                                    Probe.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe)
+                                            return object;
+                                        let message = new $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe();
+                                        if (object.handler != null) {
+                                            if (typeof object.handler !== "object")
+                                                throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.handler: object expected");
+                                            message.handler = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler.fromObject(object.handler);
+                                        }
+                                        if (object.initialDelaySeconds != null)
+                                            message.initialDelaySeconds = object.initialDelaySeconds | 0;
+                                        if (object.timeoutSeconds != null)
+                                            message.timeoutSeconds = object.timeoutSeconds | 0;
+                                        if (object.periodSeconds != null)
+                                            message.periodSeconds = object.periodSeconds | 0;
+                                        if (object.successThreshold != null)
+                                            message.successThreshold = object.successThreshold | 0;
+                                        if (object.failureThreshold != null)
+                                            message.failureThreshold = object.failureThreshold | 0;
+                                        if (object.terminationGracePeriodSeconds != null)
+                                            if ($util.Long)
+                                                (message.terminationGracePeriodSeconds = $util.Long.fromValue(object.terminationGracePeriodSeconds)).unsigned = false;
+                                            else if (typeof object.terminationGracePeriodSeconds === "string")
+                                                message.terminationGracePeriodSeconds = parseInt(object.terminationGracePeriodSeconds, 10);
+                                            else if (typeof object.terminationGracePeriodSeconds === "number")
+                                                message.terminationGracePeriodSeconds = object.terminationGracePeriodSeconds;
+                                            else if (typeof object.terminationGracePeriodSeconds === "object")
+                                                message.terminationGracePeriodSeconds = new $util.LongBits(object.terminationGracePeriodSeconds.low >>> 0, object.terminationGracePeriodSeconds.high >>> 0).toNumber();
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a Probe message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @static
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe} message Probe
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    Probe.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (message.handler != null && message.hasOwnProperty("handler")) {
+                                            object.handler = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler.toObject(message.handler, options);
+                                            if (options.oneofs)
+                                                object._handler = "handler";
+                                        }
+                                        if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
+                                            object.initialDelaySeconds = message.initialDelaySeconds;
+                                            if (options.oneofs)
+                                                object._initialDelaySeconds = "initialDelaySeconds";
+                                        }
+                                        if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
+                                            object.timeoutSeconds = message.timeoutSeconds;
+                                            if (options.oneofs)
+                                                object._timeoutSeconds = "timeoutSeconds";
+                                        }
+                                        if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
+                                            object.periodSeconds = message.periodSeconds;
+                                            if (options.oneofs)
+                                                object._periodSeconds = "periodSeconds";
+                                        }
+                                        if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
+                                            object.successThreshold = message.successThreshold;
+                                            if (options.oneofs)
+                                                object._successThreshold = "successThreshold";
+                                        }
+                                        if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
+                                            object.failureThreshold = message.failureThreshold;
+                                            if (options.oneofs)
+                                                object._failureThreshold = "failureThreshold";
+                                        }
+                                        if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
+                                            if (typeof message.terminationGracePeriodSeconds === "number")
+                                                object.terminationGracePeriodSeconds = options.longs === String ? String(message.terminationGracePeriodSeconds) : message.terminationGracePeriodSeconds;
+                                            else
+                                                object.terminationGracePeriodSeconds = options.longs === String ? $util.Long.prototype.toString.call(message.terminationGracePeriodSeconds) : options.longs === Number ? new $util.LongBits(message.terminationGracePeriodSeconds.low >>> 0, message.terminationGracePeriodSeconds.high >>> 0).toNumber() : message.terminationGracePeriodSeconds;
+                                            if (options.oneofs)
+                                                object._terminationGracePeriodSeconds = "terminationGracePeriodSeconds";
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this Probe to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    Probe.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return Probe;
+                                })();
+
+                                Container.ProbeHandler = (function() {
+
+                                    /**
+                                     * Properties of a ProbeHandler.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @interface IProbeHandler
+                                     * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IExecAction|null} [exec] ProbeHandler exec
+                                     */
+
+                                    /**
+                                     * Constructs a new ProbeHandler.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @classdesc Represents a ProbeHandler.
+                                     * @implements IProbeHandler
+                                     * @constructor
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbeHandler=} [properties] Properties to set
+                                     */
+                                    function ProbeHandler(properties) {
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * ProbeHandler exec.
+                                     * @member {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IExecAction|null|undefined} exec
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     */
+                                    ProbeHandler.prototype.exec = null;
+
+                                    // OneOf field names bound to virtual getters and setters
+                                    let $oneOfFields;
+
+                                    /**
+                                     * ProbeHandler _exec.
+                                     * @member {"exec"|undefined} _exec
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     */
+                                    Object.defineProperty(ProbeHandler.prototype, "_exec", {
+                                        get: $util.oneOfGetter($oneOfFields = ["exec"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Verifies a ProbeHandler message.
+                                     * @function verify
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    ProbeHandler.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        let properties = {};
+                                        if (message.exec != null && message.hasOwnProperty("exec")) {
+                                            properties._exec = 1;
+                                            {
+                                                let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction.verify(message.exec);
+                                                if (error)
+                                                    return "exec." + error;
+                                            }
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a ProbeHandler message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler} ProbeHandler
+                                     */
+                                    ProbeHandler.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler)
+                                            return object;
+                                        let message = new $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler();
+                                        if (object.exec != null) {
+                                            if (typeof object.exec !== "object")
+                                                throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler.exec: object expected");
+                                            message.exec = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction.fromObject(object.exec);
+                                        }
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a ProbeHandler message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @static
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler} message ProbeHandler
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    ProbeHandler.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (message.exec != null && message.hasOwnProperty("exec")) {
+                                            object.exec = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction.toObject(message.exec, options);
+                                            if (options.oneofs)
+                                                object._exec = "exec";
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this ProbeHandler to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    ProbeHandler.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return ProbeHandler;
+                                })();
+
+                                Container.ExecAction = (function() {
+
+                                    /**
+                                     * Properties of an ExecAction.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @interface IExecAction
+                                     * @property {Array.<string>|null} [command] ExecAction command
+                                     */
+
+                                    /**
+                                     * Constructs a new ExecAction.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @classdesc Represents an ExecAction.
+                                     * @implements IExecAction
+                                     * @constructor
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IExecAction=} [properties] Properties to set
+                                     */
+                                    function ExecAction(properties) {
+                                        this.command = [];
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * ExecAction command.
+                                     * @member {Array.<string>} command
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction
+                                     * @instance
+                                     */
+                                    ExecAction.prototype.command = $util.emptyArray;
+
+                                    /**
+                                     * Verifies an ExecAction message.
+                                     * @function verify
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    ExecAction.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        if (message.command != null && message.hasOwnProperty("command")) {
+                                            if (!Array.isArray(message.command))
+                                                return "command: array expected";
+                                            for (let i = 0; i < message.command.length; ++i)
+                                                if (!$util.isString(message.command[i]))
+                                                    return "command: string[] expected";
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates an ExecAction message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction} ExecAction
+                                     */
+                                    ExecAction.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction)
+                                            return object;
+                                        let message = new $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction();
+                                        if (object.command) {
+                                            if (!Array.isArray(object.command))
+                                                throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction.command: array expected");
+                                            message.command = [];
+                                            for (let i = 0; i < object.command.length; ++i)
+                                                message.command[i] = String(object.command[i]);
+                                        }
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from an ExecAction message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction
+                                     * @static
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction} message ExecAction
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    ExecAction.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (options.arrays || options.defaults)
+                                            object.command = [];
+                                        if (message.command && message.command.length) {
+                                            object.command = [];
+                                            for (let j = 0; j < message.command.length; ++j)
+                                                object.command[j] = message.command[j];
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this ExecAction to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    ExecAction.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return ExecAction;
                                 })();
 
                                 return Container;
@@ -40984,6 +41589,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Object.<string,string>|null} [labels] Fields labels
                      * @property {Object.<string,string>|null} [annotations] Fields annotations
                      * @property {Array.<clutch.k8s.v1.UpdateDeploymentRequest.Fields.IContainerResources>|null} [containerResources] Fields containerResources
+                     * @property {Array.<clutch.k8s.v1.UpdateDeploymentRequest.Fields.IContainerProbes>|null} [containerProbes] Fields containerProbes
                      */
 
                     /**
@@ -40998,6 +41604,7 @@ export const clutch = $root.clutch = (() => {
                         this.labels = {};
                         this.annotations = {};
                         this.containerResources = [];
+                        this.containerProbes = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -41027,6 +41634,14 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     Fields.prototype.containerResources = $util.emptyArray;
+
+                    /**
+                     * Fields containerProbes.
+                     * @member {Array.<clutch.k8s.v1.UpdateDeploymentRequest.Fields.IContainerProbes>} containerProbes
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                     * @instance
+                     */
+                    Fields.prototype.containerProbes = $util.emptyArray;
 
                     /**
                      * Verifies a Fields message.
@@ -41062,6 +41677,15 @@ export const clutch = $root.clutch = (() => {
                                 let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.verify(message.containerResources[i]);
                                 if (error)
                                     return "containerResources." + error;
+                            }
+                        }
+                        if (message.containerProbes != null && message.hasOwnProperty("containerProbes")) {
+                            if (!Array.isArray(message.containerProbes))
+                                return "containerProbes: array expected";
+                            for (let i = 0; i < message.containerProbes.length; ++i) {
+                                let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.verify(message.containerProbes[i]);
+                                if (error)
+                                    return "containerProbes." + error;
                             }
                         }
                         return null;
@@ -41103,6 +41727,16 @@ export const clutch = $root.clutch = (() => {
                                 message.containerResources[i] = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.fromObject(object.containerResources[i]);
                             }
                         }
+                        if (object.containerProbes) {
+                            if (!Array.isArray(object.containerProbes))
+                                throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.containerProbes: array expected");
+                            message.containerProbes = [];
+                            for (let i = 0; i < object.containerProbes.length; ++i) {
+                                if (typeof object.containerProbes[i] !== "object")
+                                    throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.containerProbes: object expected");
+                                message.containerProbes[i] = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.fromObject(object.containerProbes[i]);
+                            }
+                        }
                         return message;
                     };
 
@@ -41119,8 +41753,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults)
+                        if (options.arrays || options.defaults) {
                             object.containerResources = [];
+                            object.containerProbes = [];
+                        }
                         if (options.objects || options.defaults) {
                             object.labels = {};
                             object.annotations = {};
@@ -41140,6 +41776,11 @@ export const clutch = $root.clutch = (() => {
                             object.containerResources = [];
                             for (let j = 0; j < message.containerResources.length; ++j)
                                 object.containerResources[j] = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.toObject(message.containerResources[j], options);
+                        }
+                        if (message.containerProbes && message.containerProbes.length) {
+                            object.containerProbes = [];
+                            for (let j = 0; j < message.containerProbes.length; ++j)
+                                object.containerProbes[j] = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.toObject(message.containerProbes[j], options);
                         }
                         return object;
                     };
@@ -41423,6 +42064,711 @@ export const clutch = $root.clutch = (() => {
                         })();
 
                         return ContainerResources;
+                    })();
+
+                    Fields.ContainerProbes = (function() {
+
+                        /**
+                         * Properties of a ContainerProbes.
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                         * @interface IContainerProbes
+                         * @property {string|null} [containerName] ContainerProbes containerName
+                         * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null} [livenessProbe] ContainerProbes livenessProbe
+                         */
+
+                        /**
+                         * Constructs a new ContainerProbes.
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                         * @classdesc Represents a ContainerProbes.
+                         * @implements IContainerProbes
+                         * @constructor
+                         * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.IContainerProbes=} [properties] Properties to set
+                         */
+                        function ContainerProbes(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * ContainerProbes containerName.
+                         * @member {string} containerName
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @instance
+                         */
+                        ContainerProbes.prototype.containerName = "";
+
+                        /**
+                         * ContainerProbes livenessProbe.
+                         * @member {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null|undefined} livenessProbe
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @instance
+                         */
+                        ContainerProbes.prototype.livenessProbe = null;
+
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * ContainerProbes _livenessProbe.
+                         * @member {"livenessProbe"|undefined} _livenessProbe
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @instance
+                         */
+                        Object.defineProperty(ContainerProbes.prototype, "_livenessProbe", {
+                            get: $util.oneOfGetter($oneOfFields = ["livenessProbe"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
+
+                        /**
+                         * Verifies a ContainerProbes message.
+                         * @function verify
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        ContainerProbes.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            let properties = {};
+                            if (message.containerName != null && message.hasOwnProperty("containerName"))
+                                if (!$util.isString(message.containerName))
+                                    return "containerName: string expected";
+                            if (message.livenessProbe != null && message.hasOwnProperty("livenessProbe")) {
+                                properties._livenessProbe = 1;
+                                {
+                                    let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.verify(message.livenessProbe);
+                                    if (error)
+                                        return "livenessProbe." + error;
+                                }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a ContainerProbes message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes} ContainerProbes
+                         */
+                        ContainerProbes.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes)
+                                return object;
+                            let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes();
+                            if (object.containerName != null)
+                                message.containerName = String(object.containerName);
+                            if (object.livenessProbe != null) {
+                                if (typeof object.livenessProbe !== "object")
+                                    throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.livenessProbe: object expected");
+                                message.livenessProbe = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.fromObject(object.livenessProbe);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a ContainerProbes message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @static
+                         * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes} message ContainerProbes
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        ContainerProbes.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.containerName = "";
+                            if (message.containerName != null && message.hasOwnProperty("containerName"))
+                                object.containerName = message.containerName;
+                            if (message.livenessProbe != null && message.hasOwnProperty("livenessProbe")) {
+                                object.livenessProbe = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.toObject(message.livenessProbe, options);
+                                if (options.oneofs)
+                                    object._livenessProbe = "livenessProbe";
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this ContainerProbes to JSON.
+                         * @function toJSON
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        ContainerProbes.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        ContainerProbes.Probe = (function() {
+
+                            /**
+                             * Properties of a Probe.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @interface IProbe
+                             * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbeHandler|null} [handler] Probe handler
+                             * @property {number|null} [initialDelaySeconds] Probe initialDelaySeconds
+                             * @property {number|null} [timeoutSeconds] Probe timeoutSeconds
+                             * @property {number|null} [periodSeconds] Probe periodSeconds
+                             * @property {number|null} [successThreshold] Probe successThreshold
+                             * @property {number|null} [failureThreshold] Probe failureThreshold
+                             * @property {number|Long|null} [terminationGracePeriodSeconds] Probe terminationGracePeriodSeconds
+                             */
+
+                            /**
+                             * Constructs a new Probe.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @classdesc Represents a Probe.
+                             * @implements IProbe
+                             * @constructor
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe=} [properties] Properties to set
+                             */
+                            function Probe(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * Probe handler.
+                             * @member {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbeHandler|null|undefined} handler
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Probe.prototype.handler = null;
+
+                            /**
+                             * Probe initialDelaySeconds.
+                             * @member {number|null|undefined} initialDelaySeconds
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Probe.prototype.initialDelaySeconds = null;
+
+                            /**
+                             * Probe timeoutSeconds.
+                             * @member {number|null|undefined} timeoutSeconds
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Probe.prototype.timeoutSeconds = null;
+
+                            /**
+                             * Probe periodSeconds.
+                             * @member {number|null|undefined} periodSeconds
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Probe.prototype.periodSeconds = null;
+
+                            /**
+                             * Probe successThreshold.
+                             * @member {number|null|undefined} successThreshold
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Probe.prototype.successThreshold = null;
+
+                            /**
+                             * Probe failureThreshold.
+                             * @member {number|null|undefined} failureThreshold
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Probe.prototype.failureThreshold = null;
+
+                            /**
+                             * Probe terminationGracePeriodSeconds.
+                             * @member {number|Long|null|undefined} terminationGracePeriodSeconds
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Probe.prototype.terminationGracePeriodSeconds = null;
+
+                            // OneOf field names bound to virtual getters and setters
+                            let $oneOfFields;
+
+                            /**
+                             * Probe _handler.
+                             * @member {"handler"|undefined} _handler
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Object.defineProperty(Probe.prototype, "_handler", {
+                                get: $util.oneOfGetter($oneOfFields = ["handler"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Probe _initialDelaySeconds.
+                             * @member {"initialDelaySeconds"|undefined} _initialDelaySeconds
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Object.defineProperty(Probe.prototype, "_initialDelaySeconds", {
+                                get: $util.oneOfGetter($oneOfFields = ["initialDelaySeconds"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Probe _timeoutSeconds.
+                             * @member {"timeoutSeconds"|undefined} _timeoutSeconds
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Object.defineProperty(Probe.prototype, "_timeoutSeconds", {
+                                get: $util.oneOfGetter($oneOfFields = ["timeoutSeconds"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Probe _periodSeconds.
+                             * @member {"periodSeconds"|undefined} _periodSeconds
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Object.defineProperty(Probe.prototype, "_periodSeconds", {
+                                get: $util.oneOfGetter($oneOfFields = ["periodSeconds"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Probe _successThreshold.
+                             * @member {"successThreshold"|undefined} _successThreshold
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Object.defineProperty(Probe.prototype, "_successThreshold", {
+                                get: $util.oneOfGetter($oneOfFields = ["successThreshold"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Probe _failureThreshold.
+                             * @member {"failureThreshold"|undefined} _failureThreshold
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Object.defineProperty(Probe.prototype, "_failureThreshold", {
+                                get: $util.oneOfGetter($oneOfFields = ["failureThreshold"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Probe _terminationGracePeriodSeconds.
+                             * @member {"terminationGracePeriodSeconds"|undefined} _terminationGracePeriodSeconds
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             */
+                            Object.defineProperty(Probe.prototype, "_terminationGracePeriodSeconds", {
+                                get: $util.oneOfGetter($oneOfFields = ["terminationGracePeriodSeconds"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Verifies a Probe message.
+                             * @function verify
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            Probe.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                let properties = {};
+                                if (message.handler != null && message.hasOwnProperty("handler")) {
+                                    properties._handler = 1;
+                                    {
+                                        let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler.verify(message.handler);
+                                        if (error)
+                                            return "handler." + error;
+                                    }
+                                }
+                                if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
+                                    properties._initialDelaySeconds = 1;
+                                    if (!$util.isInteger(message.initialDelaySeconds))
+                                        return "initialDelaySeconds: integer expected";
+                                }
+                                if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
+                                    properties._timeoutSeconds = 1;
+                                    if (!$util.isInteger(message.timeoutSeconds))
+                                        return "timeoutSeconds: integer expected";
+                                }
+                                if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
+                                    properties._periodSeconds = 1;
+                                    if (!$util.isInteger(message.periodSeconds))
+                                        return "periodSeconds: integer expected";
+                                }
+                                if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
+                                    properties._successThreshold = 1;
+                                    if (!$util.isInteger(message.successThreshold))
+                                        return "successThreshold: integer expected";
+                                }
+                                if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
+                                    properties._failureThreshold = 1;
+                                    if (!$util.isInteger(message.failureThreshold))
+                                        return "failureThreshold: integer expected";
+                                }
+                                if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
+                                    properties._terminationGracePeriodSeconds = 1;
+                                    if (!$util.isInteger(message.terminationGracePeriodSeconds) && !(message.terminationGracePeriodSeconds && $util.isInteger(message.terminationGracePeriodSeconds.low) && $util.isInteger(message.terminationGracePeriodSeconds.high)))
+                                        return "terminationGracePeriodSeconds: integer|Long expected";
+                                }
+                                return null;
+                            };
+
+                            /**
+                             * Creates a Probe message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe} Probe
+                             */
+                            Probe.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe)
+                                    return object;
+                                let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe();
+                                if (object.handler != null) {
+                                    if (typeof object.handler !== "object")
+                                        throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.handler: object expected");
+                                    message.handler = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler.fromObject(object.handler);
+                                }
+                                if (object.initialDelaySeconds != null)
+                                    message.initialDelaySeconds = object.initialDelaySeconds | 0;
+                                if (object.timeoutSeconds != null)
+                                    message.timeoutSeconds = object.timeoutSeconds | 0;
+                                if (object.periodSeconds != null)
+                                    message.periodSeconds = object.periodSeconds | 0;
+                                if (object.successThreshold != null)
+                                    message.successThreshold = object.successThreshold | 0;
+                                if (object.failureThreshold != null)
+                                    message.failureThreshold = object.failureThreshold | 0;
+                                if (object.terminationGracePeriodSeconds != null)
+                                    if ($util.Long)
+                                        (message.terminationGracePeriodSeconds = $util.Long.fromValue(object.terminationGracePeriodSeconds)).unsigned = false;
+                                    else if (typeof object.terminationGracePeriodSeconds === "string")
+                                        message.terminationGracePeriodSeconds = parseInt(object.terminationGracePeriodSeconds, 10);
+                                    else if (typeof object.terminationGracePeriodSeconds === "number")
+                                        message.terminationGracePeriodSeconds = object.terminationGracePeriodSeconds;
+                                    else if (typeof object.terminationGracePeriodSeconds === "object")
+                                        message.terminationGracePeriodSeconds = new $util.LongBits(object.terminationGracePeriodSeconds.low >>> 0, object.terminationGracePeriodSeconds.high >>> 0).toNumber();
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a Probe message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @static
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe} message Probe
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            Probe.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (message.handler != null && message.hasOwnProperty("handler")) {
+                                    object.handler = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler.toObject(message.handler, options);
+                                    if (options.oneofs)
+                                        object._handler = "handler";
+                                }
+                                if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
+                                    object.initialDelaySeconds = message.initialDelaySeconds;
+                                    if (options.oneofs)
+                                        object._initialDelaySeconds = "initialDelaySeconds";
+                                }
+                                if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
+                                    object.timeoutSeconds = message.timeoutSeconds;
+                                    if (options.oneofs)
+                                        object._timeoutSeconds = "timeoutSeconds";
+                                }
+                                if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
+                                    object.periodSeconds = message.periodSeconds;
+                                    if (options.oneofs)
+                                        object._periodSeconds = "periodSeconds";
+                                }
+                                if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
+                                    object.successThreshold = message.successThreshold;
+                                    if (options.oneofs)
+                                        object._successThreshold = "successThreshold";
+                                }
+                                if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
+                                    object.failureThreshold = message.failureThreshold;
+                                    if (options.oneofs)
+                                        object._failureThreshold = "failureThreshold";
+                                }
+                                if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
+                                    if (typeof message.terminationGracePeriodSeconds === "number")
+                                        object.terminationGracePeriodSeconds = options.longs === String ? String(message.terminationGracePeriodSeconds) : message.terminationGracePeriodSeconds;
+                                    else
+                                        object.terminationGracePeriodSeconds = options.longs === String ? $util.Long.prototype.toString.call(message.terminationGracePeriodSeconds) : options.longs === Number ? new $util.LongBits(message.terminationGracePeriodSeconds.low >>> 0, message.terminationGracePeriodSeconds.high >>> 0).toNumber() : message.terminationGracePeriodSeconds;
+                                    if (options.oneofs)
+                                        object._terminationGracePeriodSeconds = "terminationGracePeriodSeconds";
+                                }
+                                return object;
+                            };
+
+                            /**
+                             * Converts this Probe to JSON.
+                             * @function toJSON
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            Probe.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return Probe;
+                        })();
+
+                        ContainerProbes.ProbeHandler = (function() {
+
+                            /**
+                             * Properties of a ProbeHandler.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @interface IProbeHandler
+                             * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IExecAction|null} [exec] ProbeHandler exec
+                             */
+
+                            /**
+                             * Constructs a new ProbeHandler.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @classdesc Represents a ProbeHandler.
+                             * @implements IProbeHandler
+                             * @constructor
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbeHandler=} [properties] Properties to set
+                             */
+                            function ProbeHandler(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * ProbeHandler exec.
+                             * @member {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IExecAction|null|undefined} exec
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             */
+                            ProbeHandler.prototype.exec = null;
+
+                            // OneOf field names bound to virtual getters and setters
+                            let $oneOfFields;
+
+                            /**
+                             * ProbeHandler _exec.
+                             * @member {"exec"|undefined} _exec
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             */
+                            Object.defineProperty(ProbeHandler.prototype, "_exec", {
+                                get: $util.oneOfGetter($oneOfFields = ["exec"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Verifies a ProbeHandler message.
+                             * @function verify
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            ProbeHandler.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                let properties = {};
+                                if (message.exec != null && message.hasOwnProperty("exec")) {
+                                    properties._exec = 1;
+                                    {
+                                        let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction.verify(message.exec);
+                                        if (error)
+                                            return "exec." + error;
+                                    }
+                                }
+                                return null;
+                            };
+
+                            /**
+                             * Creates a ProbeHandler message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler} ProbeHandler
+                             */
+                            ProbeHandler.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler)
+                                    return object;
+                                let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler();
+                                if (object.exec != null) {
+                                    if (typeof object.exec !== "object")
+                                        throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler.exec: object expected");
+                                    message.exec = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction.fromObject(object.exec);
+                                }
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a ProbeHandler message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @static
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler} message ProbeHandler
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            ProbeHandler.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (message.exec != null && message.hasOwnProperty("exec")) {
+                                    object.exec = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction.toObject(message.exec, options);
+                                    if (options.oneofs)
+                                        object._exec = "exec";
+                                }
+                                return object;
+                            };
+
+                            /**
+                             * Converts this ProbeHandler to JSON.
+                             * @function toJSON
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            ProbeHandler.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return ProbeHandler;
+                        })();
+
+                        ContainerProbes.ExecAction = (function() {
+
+                            /**
+                             * Properties of an ExecAction.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @interface IExecAction
+                             * @property {Array.<string>|null} [command] ExecAction command
+                             */
+
+                            /**
+                             * Constructs a new ExecAction.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @classdesc Represents an ExecAction.
+                             * @implements IExecAction
+                             * @constructor
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IExecAction=} [properties] Properties to set
+                             */
+                            function ExecAction(properties) {
+                                this.command = [];
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * ExecAction command.
+                             * @member {Array.<string>} command
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction
+                             * @instance
+                             */
+                            ExecAction.prototype.command = $util.emptyArray;
+
+                            /**
+                             * Verifies an ExecAction message.
+                             * @function verify
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            ExecAction.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                if (message.command != null && message.hasOwnProperty("command")) {
+                                    if (!Array.isArray(message.command))
+                                        return "command: array expected";
+                                    for (let i = 0; i < message.command.length; ++i)
+                                        if (!$util.isString(message.command[i]))
+                                            return "command: string[] expected";
+                                }
+                                return null;
+                            };
+
+                            /**
+                             * Creates an ExecAction message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction} ExecAction
+                             */
+                            ExecAction.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction)
+                                    return object;
+                                let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction();
+                                if (object.command) {
+                                    if (!Array.isArray(object.command))
+                                        throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction.command: array expected");
+                                    message.command = [];
+                                    for (let i = 0; i < object.command.length; ++i)
+                                        message.command[i] = String(object.command[i]);
+                                }
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from an ExecAction message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction
+                             * @static
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction} message ExecAction
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            ExecAction.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (options.arrays || options.defaults)
+                                    object.command = [];
+                                if (message.command && message.command.length) {
+                                    object.command = [];
+                                    for (let j = 0; j < message.command.length; ++j)
+                                        object.command[j] = message.command[j];
+                                }
+                                return object;
+                            };
+
+                            /**
+                             * Converts this ExecAction to JSON.
+                             * @function toJSON
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            ExecAction.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return ExecAction;
+                        })();
+
+                        return ContainerProbes;
                     })();
 
                     return Fields;

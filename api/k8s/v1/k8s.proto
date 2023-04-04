@@ -635,6 +635,22 @@ message Deployment {
             map<string, string> requests = 2;
           }
           ResourceRequirements resources = 2;
+          message Probe {
+            optional ProbeHandler handler = 1;
+            optional int32 initialDelaySeconds = 2;
+            optional int32 timeoutSeconds = 3;
+            optional int32 periodSeconds = 4;
+            optional int32 successThreshold = 5;
+            optional int32 failureThreshold = 6;
+            optional int64 terminationGracePeriodSeconds = 7;
+          }
+          message ProbeHandler {
+            optional ExecAction exec = 1;
+          }
+          message ExecAction {
+            repeated string command = 1;
+          }
+          optional Probe livenessProbe = 3;
         }
         repeated Container containers = 1;
       }
@@ -711,6 +727,27 @@ message UpdateDeploymentRequest {
       ResourceRequirements resources = 2;
     }
     repeated ContainerResources container_resources = 3;
+
+    message ContainerProbes {
+      string container_name = 1;
+      message Probe {
+        optional ProbeHandler handler = 1;
+        optional int32 initialDelaySeconds = 2;
+        optional int32 timeoutSeconds = 3;
+        optional int32 periodSeconds = 4;
+        optional int32 successThreshold = 5;
+        optional int32 failureThreshold = 6;
+        optional int64 terminationGracePeriodSeconds = 7;
+      }
+      message ProbeHandler {
+        optional ExecAction exec = 1;
+      }
+      message ExecAction {
+        repeated string command = 1;
+      }
+      optional Probe livenessProbe = 2;
+    }
+    repeated ContainerProbes container_probes = 4;
   }
 
   Fields fields = 5 [ (validate.rules).message = {required : true} ];

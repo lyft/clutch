@@ -107,6 +107,19 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 				Limits:   resourceLimits,
 				Requests: resourceRequests,
 			},
+			LivenessProbe: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_Probe{
+				InitialDelaySeconds:           &container.LivenessProbe.InitialDelaySeconds,
+				TimeoutSeconds:                &container.LivenessProbe.TimeoutSeconds,
+				PeriodSeconds:                 &container.LivenessProbe.PeriodSeconds,
+				SuccessThreshold:              &container.LivenessProbe.SuccessThreshold,
+				FailureThreshold:              &container.LivenessProbe.FailureThreshold,
+				TerminationGracePeriodSeconds: container.LivenessProbe.TerminationGracePeriodSeconds,
+				// Handler: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ProbeHandler{
+				// 	Exec: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ExecAction{
+				// 		Command: &container.LivenessProbe.Handler.Exec.Command,
+				// 	},
+				// },
+			},
 		}
 		deploymentContainers = append(deploymentContainers, newContainer)
 	}
@@ -179,6 +192,10 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 		return err
 	}
 
+	if err := updateContainerProbes(newDeployment, fields); err != nil {
+		return err
+	}
+
 	patchBytes, err := GenerateStrategicPatch(oldDeployment, newDeployment, appsv1.Deployment{})
 	if err != nil {
 		return err
@@ -234,5 +251,17 @@ func updateContainerResources(deployment *appsv1.Deployment, fields *k8sapiv1.Up
 			}
 		}
 	}
+	return nil
+}
+
+func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
+	// for _, containerProbes := range fields.ContainerProbes {
+	// 	for _, container := range deployment.Spec.Template.Spec.Containers {
+	// 		if container.Name == containerProbes.ContainerName {
+	// 			resourceProbe := containerProbes.LivenessProbe
+	// 			container.LivenessProbe = resourceProbe
+	// 		}
+	// 	}
+	// }
 	return nil
 }
