@@ -114,11 +114,11 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 				SuccessThreshold:              &container.LivenessProbe.SuccessThreshold,
 				FailureThreshold:              &container.LivenessProbe.FailureThreshold,
 				TerminationGracePeriodSeconds: container.LivenessProbe.TerminationGracePeriodSeconds,
-				// Handler: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ProbeHandler{
-				// 	Exec: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ExecAction{
-				// 		Command: &container.LivenessProbe.Handler.Exec.Command,
-				// 	},
-				// },
+				Handler: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ProbeHandler{
+					Exec: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ExecAction{
+						Command: container.LivenessProbe.ProbeHandler.Exec.Command,
+					},
+				},
 			},
 		}
 		deploymentContainers = append(deploymentContainers, newContainer)
@@ -255,13 +255,33 @@ func updateContainerResources(deployment *appsv1.Deployment, fields *k8sapiv1.Up
 }
 
 func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
-	// for _, containerProbes := range fields.ContainerProbes {
-	// 	for _, container := range deployment.Spec.Template.Spec.Containers {
-	// 		if container.Name == containerProbes.ContainerName {
-	// 			resourceProbe := containerProbes.LivenessProbe
-	// 			container.LivenessProbe = resourceProbe
-	// 		}
-	// 	}
-	// }
+	for _, containerProbes := range fields.ContainerProbes {
+		for _, container := range deployment.Spec.Template.Spec.Containers {
+			if container.Name == containerProbes.ContainerName {
+				resourceProbe := containerProbes.LivenessProbe
+				if resourceProbe.InitialDelaySeconds != nil {
+					container.LivenessProbe.InitialDelaySeconds = *resourceProbe.InitialDelaySeconds
+				}
+				if resourceProbe.PeriodSeconds != nil {
+					container.LivenessProbe.PeriodSeconds = *resourceProbe.PeriodSeconds
+				}
+				if resourceProbe.TimeoutSeconds != nil {
+					container.LivenessProbe.TimeoutSeconds = *resourceProbe.TimeoutSeconds
+				}
+				if resourceProbe.SuccessThreshold != nil {
+					container.LivenessProbe.SuccessThreshold = *resourceProbe.SuccessThreshold
+				}
+				if resourceProbe.FailureThreshold != nil {
+					container.LivenessProbe.FailureThreshold = *resourceProbe.FailureThreshold
+				}
+				if resourceProbe.TerminationGracePeriodSeconds != nil {
+					container.LivenessProbe.TerminationGracePeriodSeconds = resourceProbe.TerminationGracePeriodSeconds
+				}
+				if resourceProbe.Handler != nil {
+					container.LivenessProbe.ProbeHandler.Exec.Command = resourceProbe.Handler.Exec.Command
+				}
+			}
+		}
+	}
 	return nil
 }
