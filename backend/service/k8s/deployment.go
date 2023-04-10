@@ -101,13 +101,53 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 			resourceRequests[string(res)] = quantity.String()
 		}
 
-		newContainer := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container{
-			Name: container.Name,
-			Resources: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements{
-				Limits:   resourceLimits,
-				Requests: resourceRequests,
-			},
-			LivenessProbe: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_Probe{
+		LivenessProbeObject := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_Probe{}
+		if container.LivenessProbe != nil {
+			LivenessProbeHTTPObject := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_HTTPGetAction{}
+			LivenessProbeHTTPHeaders := make([]*k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_HTTPHeader, 0)
+			if container.LivenessProbe.ProbeHandler.HTTPGet != nil {
+				if container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders != nil {
+					LivenessProbeHTTPHeaders := make([]*k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_HTTPHeader, 0, len(container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
+					for _, value := range container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
+						UniqueLivenessHeader := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_HTTPHeader{
+							Name:  &value.Name,
+							Value: &value.Value,
+						}
+						LivenessProbeHTTPHeaders = append(LivenessProbeHTTPHeaders, UniqueLivenessHeader)
+					}
+				}
+				LivenessProbeHTTPObject = &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_HTTPGetAction{
+					Path:        &container.LivenessProbe.ProbeHandler.HTTPGet.Path,
+					Port:        &container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal,
+					Host:        &container.LivenessProbe.ProbeHandler.HTTPGet.Host,
+					Scheme:      (*string)(&container.LivenessProbe.ProbeHandler.HTTPGet.Scheme),
+					HttpHeaders: LivenessProbeHTTPHeaders,
+				}
+			}
+			LivenessProbeExec := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ExecAction{}
+			if container.LivenessProbe.ProbeHandler.Exec != nil {
+				LivenessProbeExec = &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ExecAction{
+					Command: container.LivenessProbe.ProbeHandler.Exec.Command,
+				}
+			}
+
+			LivenessProbeTCPSocket := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_TCPSocketAction{}
+			if container.LivenessProbe.ProbeHandler.TCPSocket != nil {
+				LivenessProbeTCPSocket = &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_TCPSocketAction{
+					Port: &container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal,
+					Host: &container.LivenessProbe.ProbeHandler.TCPSocket.Host,
+				}
+			}
+
+			LivenessProbeGRPC := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_GRPCAction{}
+			if container.LivenessProbe.ProbeHandler.GRPC != nil {
+				LivenessProbeGRPC = &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_GRPCAction{
+					Port:    &container.LivenessProbe.ProbeHandler.GRPC.Port,
+					Service: container.LivenessProbe.ProbeHandler.GRPC.Service,
+				}
+			}
+
+			LivenessProbeObject = &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_Probe{
 				InitialDelaySeconds:           &container.LivenessProbe.InitialDelaySeconds,
 				TimeoutSeconds:                &container.LivenessProbe.TimeoutSeconds,
 				PeriodSeconds:                 &container.LivenessProbe.PeriodSeconds,
@@ -115,11 +155,21 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 				FailureThreshold:              &container.LivenessProbe.FailureThreshold,
 				TerminationGracePeriodSeconds: container.LivenessProbe.TerminationGracePeriodSeconds,
 				Handler: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ProbeHandler{
-					Exec: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ExecAction{
-						Command: container.LivenessProbe.ProbeHandler.Exec.Command,
-					},
+					Exec:      LivenessProbeExec,
+					HttpGet:   LivenessProbeHTTPObject,
+					TcpSocket: LivenessProbeTCPSocket,
+					Grpc:      LivenessProbeGRPC,
 				},
+			}
+		}
+
+		newContainer := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container{
+			Name: container.Name,
+			Resources: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements{
+				Limits:   resourceLimits,
+				Requests: resourceRequests,
 			},
+			LivenessProbe: LivenessProbeObject,
 		}
 		deploymentContainers = append(deploymentContainers, newContainer)
 	}
@@ -278,7 +328,44 @@ func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.Updat
 					container.LivenessProbe.TerminationGracePeriodSeconds = resourceProbe.TerminationGracePeriodSeconds
 				}
 				if resourceProbe.Handler != nil {
-					container.LivenessProbe.ProbeHandler.Exec.Command = resourceProbe.Handler.Exec.Command
+					if resourceProbe.Handler.Exec != nil {
+						container.LivenessProbe.ProbeHandler.Exec.Command = resourceProbe.Handler.Exec.Command
+					}
+					if resourceProbe.Handler.HttpGet != nil {
+						if resourceProbe.Handler.HttpGet.Host != nil {
+							container.LivenessProbe.ProbeHandler.HTTPGet.Host = *resourceProbe.Handler.HttpGet.Host
+						}
+						if resourceProbe.Handler.HttpGet.Path != nil {
+							container.LivenessProbe.ProbeHandler.HTTPGet.Path = *resourceProbe.Handler.HttpGet.Path
+						}
+						if resourceProbe.Handler.HttpGet.Port != nil {
+							container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal = *resourceProbe.Handler.HttpGet.Port
+						}
+						if resourceProbe.Handler.HttpGet.Scheme != nil {
+							container.LivenessProbe.ProbeHandler.HTTPGet.Scheme = (v1.URIScheme)(*resourceProbe.Handler.HttpGet.Scheme)
+						}
+						if resourceProbe.Handler.HttpGet.HttpHeaders != nil {
+							LivenessProbeHTTPHeaders := make([]v1.HTTPHeader, 0, len(resourceProbe.Handler.HttpGet.HttpHeaders))
+							for _, value := range resourceProbe.Handler.HttpGet.HttpHeaders {
+								UniqueLivenessHeader := v1.HTTPHeader{
+									Name:  *value.Name,
+									Value: *value.Value,
+								}
+								LivenessProbeHTTPHeaders = append(LivenessProbeHTTPHeaders, UniqueLivenessHeader)
+							}
+							container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders = LivenessProbeHTTPHeaders
+						}
+					}
+					if resourceProbe.Handler.TcpSocket != nil {
+						container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal = *resourceProbe.Handler.TcpSocket.Port
+						if resourceProbe.Handler.TcpSocket.Host != nil {
+							container.LivenessProbe.ProbeHandler.TCPSocket.Host = *resourceProbe.Handler.TcpSocket.Host
+						}
+					}
+					if resourceProbe.Handler.Grpc != nil {
+						container.LivenessProbe.ProbeHandler.GRPC.Port = *resourceProbe.Handler.Grpc.Port
+						container.LivenessProbe.ProbeHandler.GRPC.Service = resourceProbe.Handler.Grpc.Service
+					}
 				}
 			}
 		}
