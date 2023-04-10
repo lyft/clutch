@@ -40632,6 +40632,9 @@ export const clutch = $root.clutch = (() => {
                                      * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
                                      * @interface IProbeHandler
                                      * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IExecAction|null} [exec] ProbeHandler exec
+                                     * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPGetAction|null} [httpGet] ProbeHandler httpGet
+                                     * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ITCPSocketAction|null} [tcpSocket] ProbeHandler tcpSocket
+                                     * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IGRPCAction|null} [grpc] ProbeHandler grpc
                                      */
 
                                     /**
@@ -40657,6 +40660,30 @@ export const clutch = $root.clutch = (() => {
                                      */
                                     ProbeHandler.prototype.exec = null;
 
+                                    /**
+                                     * ProbeHandler httpGet.
+                                     * @member {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPGetAction|null|undefined} httpGet
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     */
+                                    ProbeHandler.prototype.httpGet = null;
+
+                                    /**
+                                     * ProbeHandler tcpSocket.
+                                     * @member {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ITCPSocketAction|null|undefined} tcpSocket
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     */
+                                    ProbeHandler.prototype.tcpSocket = null;
+
+                                    /**
+                                     * ProbeHandler grpc.
+                                     * @member {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IGRPCAction|null|undefined} grpc
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     */
+                                    ProbeHandler.prototype.grpc = null;
+
                                     // OneOf field names bound to virtual getters and setters
                                     let $oneOfFields;
 
@@ -40668,6 +40695,39 @@ export const clutch = $root.clutch = (() => {
                                      */
                                     Object.defineProperty(ProbeHandler.prototype, "_exec", {
                                         get: $util.oneOfGetter($oneOfFields = ["exec"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * ProbeHandler _httpGet.
+                                     * @member {"httpGet"|undefined} _httpGet
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     */
+                                    Object.defineProperty(ProbeHandler.prototype, "_httpGet", {
+                                        get: $util.oneOfGetter($oneOfFields = ["httpGet"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * ProbeHandler _tcpSocket.
+                                     * @member {"tcpSocket"|undefined} _tcpSocket
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     */
+                                    Object.defineProperty(ProbeHandler.prototype, "_tcpSocket", {
+                                        get: $util.oneOfGetter($oneOfFields = ["tcpSocket"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * ProbeHandler _grpc.
+                                     * @member {"grpc"|undefined} _grpc
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler
+                                     * @instance
+                                     */
+                                    Object.defineProperty(ProbeHandler.prototype, "_grpc", {
+                                        get: $util.oneOfGetter($oneOfFields = ["grpc"]),
                                         set: $util.oneOfSetter($oneOfFields)
                                     });
 
@@ -40691,6 +40751,30 @@ export const clutch = $root.clutch = (() => {
                                                     return "exec." + error;
                                             }
                                         }
+                                        if (message.httpGet != null && message.hasOwnProperty("httpGet")) {
+                                            properties._httpGet = 1;
+                                            {
+                                                let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction.verify(message.httpGet);
+                                                if (error)
+                                                    return "httpGet." + error;
+                                            }
+                                        }
+                                        if (message.tcpSocket != null && message.hasOwnProperty("tcpSocket")) {
+                                            properties._tcpSocket = 1;
+                                            {
+                                                let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction.verify(message.tcpSocket);
+                                                if (error)
+                                                    return "tcpSocket." + error;
+                                            }
+                                        }
+                                        if (message.grpc != null && message.hasOwnProperty("grpc")) {
+                                            properties._grpc = 1;
+                                            {
+                                                let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction.verify(message.grpc);
+                                                if (error)
+                                                    return "grpc." + error;
+                                            }
+                                        }
                                         return null;
                                     };
 
@@ -40710,6 +40794,21 @@ export const clutch = $root.clutch = (() => {
                                             if (typeof object.exec !== "object")
                                                 throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler.exec: object expected");
                                             message.exec = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction.fromObject(object.exec);
+                                        }
+                                        if (object.httpGet != null) {
+                                            if (typeof object.httpGet !== "object")
+                                                throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler.httpGet: object expected");
+                                            message.httpGet = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction.fromObject(object.httpGet);
+                                        }
+                                        if (object.tcpSocket != null) {
+                                            if (typeof object.tcpSocket !== "object")
+                                                throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler.tcpSocket: object expected");
+                                            message.tcpSocket = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction.fromObject(object.tcpSocket);
+                                        }
+                                        if (object.grpc != null) {
+                                            if (typeof object.grpc !== "object")
+                                                throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler.grpc: object expected");
+                                            message.grpc = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction.fromObject(object.grpc);
                                         }
                                         return message;
                                     };
@@ -40731,6 +40830,21 @@ export const clutch = $root.clutch = (() => {
                                             object.exec = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction.toObject(message.exec, options);
                                             if (options.oneofs)
                                                 object._exec = "exec";
+                                        }
+                                        if (message.httpGet != null && message.hasOwnProperty("httpGet")) {
+                                            object.httpGet = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction.toObject(message.httpGet, options);
+                                            if (options.oneofs)
+                                                object._httpGet = "httpGet";
+                                        }
+                                        if (message.tcpSocket != null && message.hasOwnProperty("tcpSocket")) {
+                                            object.tcpSocket = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction.toObject(message.tcpSocket, options);
+                                            if (options.oneofs)
+                                                object._tcpSocket = "tcpSocket";
+                                        }
+                                        if (message.grpc != null && message.hasOwnProperty("grpc")) {
+                                            object.grpc = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction.toObject(message.grpc, options);
+                                            if (options.oneofs)
+                                                object._grpc = "grpc";
                                         }
                                         return object;
                                     };
@@ -40860,6 +40974,706 @@ export const clutch = $root.clutch = (() => {
                                     };
 
                                     return ExecAction;
+                                })();
+
+                                Container.HTTPGetAction = (function() {
+
+                                    /**
+                                     * Properties of a HTTPGetAction.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @interface IHTTPGetAction
+                                     * @property {string|null} [path] HTTPGetAction path
+                                     * @property {number|null} [port] HTTPGetAction port
+                                     * @property {string|null} [host] HTTPGetAction host
+                                     * @property {string|null} [scheme] HTTPGetAction scheme
+                                     * @property {Array.<clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPHeader>|null} [httpHeaders] HTTPGetAction httpHeaders
+                                     */
+
+                                    /**
+                                     * Constructs a new HTTPGetAction.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @classdesc Represents a HTTPGetAction.
+                                     * @implements IHTTPGetAction
+                                     * @constructor
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPGetAction=} [properties] Properties to set
+                                     */
+                                    function HTTPGetAction(properties) {
+                                        this.httpHeaders = [];
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * HTTPGetAction path.
+                                     * @member {string|null|undefined} path
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    HTTPGetAction.prototype.path = null;
+
+                                    /**
+                                     * HTTPGetAction port.
+                                     * @member {number|null|undefined} port
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    HTTPGetAction.prototype.port = null;
+
+                                    /**
+                                     * HTTPGetAction host.
+                                     * @member {string|null|undefined} host
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    HTTPGetAction.prototype.host = null;
+
+                                    /**
+                                     * HTTPGetAction scheme.
+                                     * @member {string|null|undefined} scheme
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    HTTPGetAction.prototype.scheme = null;
+
+                                    /**
+                                     * HTTPGetAction httpHeaders.
+                                     * @member {Array.<clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPHeader>} httpHeaders
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    HTTPGetAction.prototype.httpHeaders = $util.emptyArray;
+
+                                    // OneOf field names bound to virtual getters and setters
+                                    let $oneOfFields;
+
+                                    /**
+                                     * HTTPGetAction _path.
+                                     * @member {"path"|undefined} _path
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    Object.defineProperty(HTTPGetAction.prototype, "_path", {
+                                        get: $util.oneOfGetter($oneOfFields = ["path"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * HTTPGetAction _port.
+                                     * @member {"port"|undefined} _port
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    Object.defineProperty(HTTPGetAction.prototype, "_port", {
+                                        get: $util.oneOfGetter($oneOfFields = ["port"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * HTTPGetAction _host.
+                                     * @member {"host"|undefined} _host
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    Object.defineProperty(HTTPGetAction.prototype, "_host", {
+                                        get: $util.oneOfGetter($oneOfFields = ["host"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * HTTPGetAction _scheme.
+                                     * @member {"scheme"|undefined} _scheme
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     */
+                                    Object.defineProperty(HTTPGetAction.prototype, "_scheme", {
+                                        get: $util.oneOfGetter($oneOfFields = ["scheme"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Verifies a HTTPGetAction message.
+                                     * @function verify
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    HTTPGetAction.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        let properties = {};
+                                        if (message.path != null && message.hasOwnProperty("path")) {
+                                            properties._path = 1;
+                                            if (!$util.isString(message.path))
+                                                return "path: string expected";
+                                        }
+                                        if (message.port != null && message.hasOwnProperty("port")) {
+                                            properties._port = 1;
+                                            if (!$util.isInteger(message.port))
+                                                return "port: integer expected";
+                                        }
+                                        if (message.host != null && message.hasOwnProperty("host")) {
+                                            properties._host = 1;
+                                            if (!$util.isString(message.host))
+                                                return "host: string expected";
+                                        }
+                                        if (message.scheme != null && message.hasOwnProperty("scheme")) {
+                                            properties._scheme = 1;
+                                            if (!$util.isString(message.scheme))
+                                                return "scheme: string expected";
+                                        }
+                                        if (message.httpHeaders != null && message.hasOwnProperty("httpHeaders")) {
+                                            if (!Array.isArray(message.httpHeaders))
+                                                return "httpHeaders: array expected";
+                                            for (let i = 0; i < message.httpHeaders.length; ++i) {
+                                                let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader.verify(message.httpHeaders[i]);
+                                                if (error)
+                                                    return "httpHeaders." + error;
+                                            }
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a HTTPGetAction message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction} HTTPGetAction
+                                     */
+                                    HTTPGetAction.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction)
+                                            return object;
+                                        let message = new $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction();
+                                        if (object.path != null)
+                                            message.path = String(object.path);
+                                        if (object.port != null)
+                                            message.port = object.port | 0;
+                                        if (object.host != null)
+                                            message.host = String(object.host);
+                                        if (object.scheme != null)
+                                            message.scheme = String(object.scheme);
+                                        if (object.httpHeaders) {
+                                            if (!Array.isArray(object.httpHeaders))
+                                                throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction.httpHeaders: array expected");
+                                            message.httpHeaders = [];
+                                            for (let i = 0; i < object.httpHeaders.length; ++i) {
+                                                if (typeof object.httpHeaders[i] !== "object")
+                                                    throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction.httpHeaders: object expected");
+                                                message.httpHeaders[i] = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader.fromObject(object.httpHeaders[i]);
+                                            }
+                                        }
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a HTTPGetAction message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @static
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction} message HTTPGetAction
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    HTTPGetAction.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (options.arrays || options.defaults)
+                                            object.httpHeaders = [];
+                                        if (message.path != null && message.hasOwnProperty("path")) {
+                                            object.path = message.path;
+                                            if (options.oneofs)
+                                                object._path = "path";
+                                        }
+                                        if (message.port != null && message.hasOwnProperty("port")) {
+                                            object.port = message.port;
+                                            if (options.oneofs)
+                                                object._port = "port";
+                                        }
+                                        if (message.host != null && message.hasOwnProperty("host")) {
+                                            object.host = message.host;
+                                            if (options.oneofs)
+                                                object._host = "host";
+                                        }
+                                        if (message.scheme != null && message.hasOwnProperty("scheme")) {
+                                            object.scheme = message.scheme;
+                                            if (options.oneofs)
+                                                object._scheme = "scheme";
+                                        }
+                                        if (message.httpHeaders && message.httpHeaders.length) {
+                                            object.httpHeaders = [];
+                                            for (let j = 0; j < message.httpHeaders.length; ++j)
+                                                object.httpHeaders[j] = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader.toObject(message.httpHeaders[j], options);
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this HTTPGetAction to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    HTTPGetAction.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return HTTPGetAction;
+                                })();
+
+                                Container.HTTPHeader = (function() {
+
+                                    /**
+                                     * Properties of a HTTPHeader.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @interface IHTTPHeader
+                                     * @property {string|null} [name] HTTPHeader name
+                                     * @property {string|null} [value] HTTPHeader value
+                                     */
+
+                                    /**
+                                     * Constructs a new HTTPHeader.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @classdesc Represents a HTTPHeader.
+                                     * @implements IHTTPHeader
+                                     * @constructor
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPHeader=} [properties] Properties to set
+                                     */
+                                    function HTTPHeader(properties) {
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * HTTPHeader name.
+                                     * @member {string|null|undefined} name
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader
+                                     * @instance
+                                     */
+                                    HTTPHeader.prototype.name = null;
+
+                                    /**
+                                     * HTTPHeader value.
+                                     * @member {string|null|undefined} value
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader
+                                     * @instance
+                                     */
+                                    HTTPHeader.prototype.value = null;
+
+                                    // OneOf field names bound to virtual getters and setters
+                                    let $oneOfFields;
+
+                                    /**
+                                     * HTTPHeader _name.
+                                     * @member {"name"|undefined} _name
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader
+                                     * @instance
+                                     */
+                                    Object.defineProperty(HTTPHeader.prototype, "_name", {
+                                        get: $util.oneOfGetter($oneOfFields = ["name"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * HTTPHeader _value.
+                                     * @member {"value"|undefined} _value
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader
+                                     * @instance
+                                     */
+                                    Object.defineProperty(HTTPHeader.prototype, "_value", {
+                                        get: $util.oneOfGetter($oneOfFields = ["value"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Verifies a HTTPHeader message.
+                                     * @function verify
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    HTTPHeader.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        let properties = {};
+                                        if (message.name != null && message.hasOwnProperty("name")) {
+                                            properties._name = 1;
+                                            if (!$util.isString(message.name))
+                                                return "name: string expected";
+                                        }
+                                        if (message.value != null && message.hasOwnProperty("value")) {
+                                            properties._value = 1;
+                                            if (!$util.isString(message.value))
+                                                return "value: string expected";
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a HTTPHeader message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader} HTTPHeader
+                                     */
+                                    HTTPHeader.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader)
+                                            return object;
+                                        let message = new $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader();
+                                        if (object.name != null)
+                                            message.name = String(object.name);
+                                        if (object.value != null)
+                                            message.value = String(object.value);
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a HTTPHeader message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader
+                                     * @static
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader} message HTTPHeader
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    HTTPHeader.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (message.name != null && message.hasOwnProperty("name")) {
+                                            object.name = message.name;
+                                            if (options.oneofs)
+                                                object._name = "name";
+                                        }
+                                        if (message.value != null && message.hasOwnProperty("value")) {
+                                            object.value = message.value;
+                                            if (options.oneofs)
+                                                object._value = "value";
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this HTTPHeader to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    HTTPHeader.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return HTTPHeader;
+                                })();
+
+                                Container.TCPSocketAction = (function() {
+
+                                    /**
+                                     * Properties of a TCPSocketAction.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @interface ITCPSocketAction
+                                     * @property {number|null} [port] TCPSocketAction port
+                                     * @property {string|null} [host] TCPSocketAction host
+                                     */
+
+                                    /**
+                                     * Constructs a new TCPSocketAction.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @classdesc Represents a TCPSocketAction.
+                                     * @implements ITCPSocketAction
+                                     * @constructor
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ITCPSocketAction=} [properties] Properties to set
+                                     */
+                                    function TCPSocketAction(properties) {
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * TCPSocketAction port.
+                                     * @member {number|null|undefined} port
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction
+                                     * @instance
+                                     */
+                                    TCPSocketAction.prototype.port = null;
+
+                                    /**
+                                     * TCPSocketAction host.
+                                     * @member {string|null|undefined} host
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction
+                                     * @instance
+                                     */
+                                    TCPSocketAction.prototype.host = null;
+
+                                    // OneOf field names bound to virtual getters and setters
+                                    let $oneOfFields;
+
+                                    /**
+                                     * TCPSocketAction _port.
+                                     * @member {"port"|undefined} _port
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction
+                                     * @instance
+                                     */
+                                    Object.defineProperty(TCPSocketAction.prototype, "_port", {
+                                        get: $util.oneOfGetter($oneOfFields = ["port"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * TCPSocketAction _host.
+                                     * @member {"host"|undefined} _host
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction
+                                     * @instance
+                                     */
+                                    Object.defineProperty(TCPSocketAction.prototype, "_host", {
+                                        get: $util.oneOfGetter($oneOfFields = ["host"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Verifies a TCPSocketAction message.
+                                     * @function verify
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    TCPSocketAction.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        let properties = {};
+                                        if (message.port != null && message.hasOwnProperty("port")) {
+                                            properties._port = 1;
+                                            if (!$util.isInteger(message.port))
+                                                return "port: integer expected";
+                                        }
+                                        if (message.host != null && message.hasOwnProperty("host")) {
+                                            properties._host = 1;
+                                            if (!$util.isString(message.host))
+                                                return "host: string expected";
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a TCPSocketAction message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction} TCPSocketAction
+                                     */
+                                    TCPSocketAction.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction)
+                                            return object;
+                                        let message = new $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction();
+                                        if (object.port != null)
+                                            message.port = object.port | 0;
+                                        if (object.host != null)
+                                            message.host = String(object.host);
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a TCPSocketAction message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction
+                                     * @static
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction} message TCPSocketAction
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    TCPSocketAction.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (message.port != null && message.hasOwnProperty("port")) {
+                                            object.port = message.port;
+                                            if (options.oneofs)
+                                                object._port = "port";
+                                        }
+                                        if (message.host != null && message.hasOwnProperty("host")) {
+                                            object.host = message.host;
+                                            if (options.oneofs)
+                                                object._host = "host";
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this TCPSocketAction to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    TCPSocketAction.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return TCPSocketAction;
+                                })();
+
+                                Container.GRPCAction = (function() {
+
+                                    /**
+                                     * Properties of a GRPCAction.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @interface IGRPCAction
+                                     * @property {number|null} [port] GRPCAction port
+                                     * @property {string|null} [service] GRPCAction service
+                                     */
+
+                                    /**
+                                     * Constructs a new GRPCAction.
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                     * @classdesc Represents a GRPCAction.
+                                     * @implements IGRPCAction
+                                     * @constructor
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IGRPCAction=} [properties] Properties to set
+                                     */
+                                    function GRPCAction(properties) {
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * GRPCAction port.
+                                     * @member {number|null|undefined} port
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction
+                                     * @instance
+                                     */
+                                    GRPCAction.prototype.port = null;
+
+                                    /**
+                                     * GRPCAction service.
+                                     * @member {string|null|undefined} service
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction
+                                     * @instance
+                                     */
+                                    GRPCAction.prototype.service = null;
+
+                                    // OneOf field names bound to virtual getters and setters
+                                    let $oneOfFields;
+
+                                    /**
+                                     * GRPCAction _port.
+                                     * @member {"port"|undefined} _port
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction
+                                     * @instance
+                                     */
+                                    Object.defineProperty(GRPCAction.prototype, "_port", {
+                                        get: $util.oneOfGetter($oneOfFields = ["port"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * GRPCAction _service.
+                                     * @member {"service"|undefined} _service
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction
+                                     * @instance
+                                     */
+                                    Object.defineProperty(GRPCAction.prototype, "_service", {
+                                        get: $util.oneOfGetter($oneOfFields = ["service"]),
+                                        set: $util.oneOfSetter($oneOfFields)
+                                    });
+
+                                    /**
+                                     * Verifies a GRPCAction message.
+                                     * @function verify
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    GRPCAction.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        let properties = {};
+                                        if (message.port != null && message.hasOwnProperty("port")) {
+                                            properties._port = 1;
+                                            if (!$util.isInteger(message.port))
+                                                return "port: integer expected";
+                                        }
+                                        if (message.service != null && message.hasOwnProperty("service")) {
+                                            properties._service = 1;
+                                            if (!$util.isString(message.service))
+                                                return "service: string expected";
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a GRPCAction message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction} GRPCAction
+                                     */
+                                    GRPCAction.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction)
+                                            return object;
+                                        let message = new $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction();
+                                        if (object.port != null)
+                                            message.port = object.port | 0;
+                                        if (object.service != null)
+                                            message.service = String(object.service);
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a GRPCAction message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction
+                                     * @static
+                                     * @param {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction} message GRPCAction
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    GRPCAction.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (message.port != null && message.hasOwnProperty("port")) {
+                                            object.port = message.port;
+                                            if (options.oneofs)
+                                                object._port = "port";
+                                        }
+                                        if (message.service != null && message.hasOwnProperty("service")) {
+                                            object.service = message.service;
+                                            if (options.oneofs)
+                                                object._service = "service";
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this GRPCAction to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    GRPCAction.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return GRPCAction;
                                 })();
 
                                 return Container;
@@ -42538,6 +43352,9 @@ export const clutch = $root.clutch = (() => {
                              * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
                              * @interface IProbeHandler
                              * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IExecAction|null} [exec] ProbeHandler exec
+                             * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPGetAction|null} [httpGet] ProbeHandler httpGet
+                             * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ITCPSocketAction|null} [tcpSocket] ProbeHandler tcpSocket
+                             * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IGRPCAction|null} [grpc] ProbeHandler grpc
                              */
 
                             /**
@@ -42563,6 +43380,30 @@ export const clutch = $root.clutch = (() => {
                              */
                             ProbeHandler.prototype.exec = null;
 
+                            /**
+                             * ProbeHandler httpGet.
+                             * @member {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPGetAction|null|undefined} httpGet
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             */
+                            ProbeHandler.prototype.httpGet = null;
+
+                            /**
+                             * ProbeHandler tcpSocket.
+                             * @member {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ITCPSocketAction|null|undefined} tcpSocket
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             */
+                            ProbeHandler.prototype.tcpSocket = null;
+
+                            /**
+                             * ProbeHandler grpc.
+                             * @member {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IGRPCAction|null|undefined} grpc
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             */
+                            ProbeHandler.prototype.grpc = null;
+
                             // OneOf field names bound to virtual getters and setters
                             let $oneOfFields;
 
@@ -42574,6 +43415,39 @@ export const clutch = $root.clutch = (() => {
                              */
                             Object.defineProperty(ProbeHandler.prototype, "_exec", {
                                 get: $util.oneOfGetter($oneOfFields = ["exec"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * ProbeHandler _httpGet.
+                             * @member {"httpGet"|undefined} _httpGet
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             */
+                            Object.defineProperty(ProbeHandler.prototype, "_httpGet", {
+                                get: $util.oneOfGetter($oneOfFields = ["httpGet"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * ProbeHandler _tcpSocket.
+                             * @member {"tcpSocket"|undefined} _tcpSocket
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             */
+                            Object.defineProperty(ProbeHandler.prototype, "_tcpSocket", {
+                                get: $util.oneOfGetter($oneOfFields = ["tcpSocket"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * ProbeHandler _grpc.
+                             * @member {"grpc"|undefined} _grpc
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler
+                             * @instance
+                             */
+                            Object.defineProperty(ProbeHandler.prototype, "_grpc", {
+                                get: $util.oneOfGetter($oneOfFields = ["grpc"]),
                                 set: $util.oneOfSetter($oneOfFields)
                             });
 
@@ -42597,6 +43471,30 @@ export const clutch = $root.clutch = (() => {
                                             return "exec." + error;
                                     }
                                 }
+                                if (message.httpGet != null && message.hasOwnProperty("httpGet")) {
+                                    properties._httpGet = 1;
+                                    {
+                                        let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction.verify(message.httpGet);
+                                        if (error)
+                                            return "httpGet." + error;
+                                    }
+                                }
+                                if (message.tcpSocket != null && message.hasOwnProperty("tcpSocket")) {
+                                    properties._tcpSocket = 1;
+                                    {
+                                        let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction.verify(message.tcpSocket);
+                                        if (error)
+                                            return "tcpSocket." + error;
+                                    }
+                                }
+                                if (message.grpc != null && message.hasOwnProperty("grpc")) {
+                                    properties._grpc = 1;
+                                    {
+                                        let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction.verify(message.grpc);
+                                        if (error)
+                                            return "grpc." + error;
+                                    }
+                                }
                                 return null;
                             };
 
@@ -42616,6 +43514,21 @@ export const clutch = $root.clutch = (() => {
                                     if (typeof object.exec !== "object")
                                         throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler.exec: object expected");
                                     message.exec = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction.fromObject(object.exec);
+                                }
+                                if (object.httpGet != null) {
+                                    if (typeof object.httpGet !== "object")
+                                        throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler.httpGet: object expected");
+                                    message.httpGet = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction.fromObject(object.httpGet);
+                                }
+                                if (object.tcpSocket != null) {
+                                    if (typeof object.tcpSocket !== "object")
+                                        throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler.tcpSocket: object expected");
+                                    message.tcpSocket = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction.fromObject(object.tcpSocket);
+                                }
+                                if (object.grpc != null) {
+                                    if (typeof object.grpc !== "object")
+                                        throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler.grpc: object expected");
+                                    message.grpc = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction.fromObject(object.grpc);
                                 }
                                 return message;
                             };
@@ -42637,6 +43550,21 @@ export const clutch = $root.clutch = (() => {
                                     object.exec = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction.toObject(message.exec, options);
                                     if (options.oneofs)
                                         object._exec = "exec";
+                                }
+                                if (message.httpGet != null && message.hasOwnProperty("httpGet")) {
+                                    object.httpGet = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction.toObject(message.httpGet, options);
+                                    if (options.oneofs)
+                                        object._httpGet = "httpGet";
+                                }
+                                if (message.tcpSocket != null && message.hasOwnProperty("tcpSocket")) {
+                                    object.tcpSocket = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction.toObject(message.tcpSocket, options);
+                                    if (options.oneofs)
+                                        object._tcpSocket = "tcpSocket";
+                                }
+                                if (message.grpc != null && message.hasOwnProperty("grpc")) {
+                                    object.grpc = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction.toObject(message.grpc, options);
+                                    if (options.oneofs)
+                                        object._grpc = "grpc";
                                 }
                                 return object;
                             };
@@ -42766,6 +43694,706 @@ export const clutch = $root.clutch = (() => {
                             };
 
                             return ExecAction;
+                        })();
+
+                        ContainerProbes.HTTPGetAction = (function() {
+
+                            /**
+                             * Properties of a HTTPGetAction.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @interface IHTTPGetAction
+                             * @property {string|null} [path] HTTPGetAction path
+                             * @property {number|null} [port] HTTPGetAction port
+                             * @property {string|null} [host] HTTPGetAction host
+                             * @property {string|null} [scheme] HTTPGetAction scheme
+                             * @property {Array.<clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPHeader>|null} [httpHeaders] HTTPGetAction httpHeaders
+                             */
+
+                            /**
+                             * Constructs a new HTTPGetAction.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @classdesc Represents a HTTPGetAction.
+                             * @implements IHTTPGetAction
+                             * @constructor
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPGetAction=} [properties] Properties to set
+                             */
+                            function HTTPGetAction(properties) {
+                                this.httpHeaders = [];
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * HTTPGetAction path.
+                             * @member {string|null|undefined} path
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            HTTPGetAction.prototype.path = null;
+
+                            /**
+                             * HTTPGetAction port.
+                             * @member {number|null|undefined} port
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            HTTPGetAction.prototype.port = null;
+
+                            /**
+                             * HTTPGetAction host.
+                             * @member {string|null|undefined} host
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            HTTPGetAction.prototype.host = null;
+
+                            /**
+                             * HTTPGetAction scheme.
+                             * @member {string|null|undefined} scheme
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            HTTPGetAction.prototype.scheme = null;
+
+                            /**
+                             * HTTPGetAction httpHeaders.
+                             * @member {Array.<clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPHeader>} httpHeaders
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            HTTPGetAction.prototype.httpHeaders = $util.emptyArray;
+
+                            // OneOf field names bound to virtual getters and setters
+                            let $oneOfFields;
+
+                            /**
+                             * HTTPGetAction _path.
+                             * @member {"path"|undefined} _path
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            Object.defineProperty(HTTPGetAction.prototype, "_path", {
+                                get: $util.oneOfGetter($oneOfFields = ["path"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * HTTPGetAction _port.
+                             * @member {"port"|undefined} _port
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            Object.defineProperty(HTTPGetAction.prototype, "_port", {
+                                get: $util.oneOfGetter($oneOfFields = ["port"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * HTTPGetAction _host.
+                             * @member {"host"|undefined} _host
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            Object.defineProperty(HTTPGetAction.prototype, "_host", {
+                                get: $util.oneOfGetter($oneOfFields = ["host"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * HTTPGetAction _scheme.
+                             * @member {"scheme"|undefined} _scheme
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             */
+                            Object.defineProperty(HTTPGetAction.prototype, "_scheme", {
+                                get: $util.oneOfGetter($oneOfFields = ["scheme"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Verifies a HTTPGetAction message.
+                             * @function verify
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            HTTPGetAction.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                let properties = {};
+                                if (message.path != null && message.hasOwnProperty("path")) {
+                                    properties._path = 1;
+                                    if (!$util.isString(message.path))
+                                        return "path: string expected";
+                                }
+                                if (message.port != null && message.hasOwnProperty("port")) {
+                                    properties._port = 1;
+                                    if (!$util.isInteger(message.port))
+                                        return "port: integer expected";
+                                }
+                                if (message.host != null && message.hasOwnProperty("host")) {
+                                    properties._host = 1;
+                                    if (!$util.isString(message.host))
+                                        return "host: string expected";
+                                }
+                                if (message.scheme != null && message.hasOwnProperty("scheme")) {
+                                    properties._scheme = 1;
+                                    if (!$util.isString(message.scheme))
+                                        return "scheme: string expected";
+                                }
+                                if (message.httpHeaders != null && message.hasOwnProperty("httpHeaders")) {
+                                    if (!Array.isArray(message.httpHeaders))
+                                        return "httpHeaders: array expected";
+                                    for (let i = 0; i < message.httpHeaders.length; ++i) {
+                                        let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader.verify(message.httpHeaders[i]);
+                                        if (error)
+                                            return "httpHeaders." + error;
+                                    }
+                                }
+                                return null;
+                            };
+
+                            /**
+                             * Creates a HTTPGetAction message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction} HTTPGetAction
+                             */
+                            HTTPGetAction.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction)
+                                    return object;
+                                let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction();
+                                if (object.path != null)
+                                    message.path = String(object.path);
+                                if (object.port != null)
+                                    message.port = object.port | 0;
+                                if (object.host != null)
+                                    message.host = String(object.host);
+                                if (object.scheme != null)
+                                    message.scheme = String(object.scheme);
+                                if (object.httpHeaders) {
+                                    if (!Array.isArray(object.httpHeaders))
+                                        throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction.httpHeaders: array expected");
+                                    message.httpHeaders = [];
+                                    for (let i = 0; i < object.httpHeaders.length; ++i) {
+                                        if (typeof object.httpHeaders[i] !== "object")
+                                            throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction.httpHeaders: object expected");
+                                        message.httpHeaders[i] = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader.fromObject(object.httpHeaders[i]);
+                                    }
+                                }
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a HTTPGetAction message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @static
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction} message HTTPGetAction
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            HTTPGetAction.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (options.arrays || options.defaults)
+                                    object.httpHeaders = [];
+                                if (message.path != null && message.hasOwnProperty("path")) {
+                                    object.path = message.path;
+                                    if (options.oneofs)
+                                        object._path = "path";
+                                }
+                                if (message.port != null && message.hasOwnProperty("port")) {
+                                    object.port = message.port;
+                                    if (options.oneofs)
+                                        object._port = "port";
+                                }
+                                if (message.host != null && message.hasOwnProperty("host")) {
+                                    object.host = message.host;
+                                    if (options.oneofs)
+                                        object._host = "host";
+                                }
+                                if (message.scheme != null && message.hasOwnProperty("scheme")) {
+                                    object.scheme = message.scheme;
+                                    if (options.oneofs)
+                                        object._scheme = "scheme";
+                                }
+                                if (message.httpHeaders && message.httpHeaders.length) {
+                                    object.httpHeaders = [];
+                                    for (let j = 0; j < message.httpHeaders.length; ++j)
+                                        object.httpHeaders[j] = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader.toObject(message.httpHeaders[j], options);
+                                }
+                                return object;
+                            };
+
+                            /**
+                             * Converts this HTTPGetAction to JSON.
+                             * @function toJSON
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            HTTPGetAction.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return HTTPGetAction;
+                        })();
+
+                        ContainerProbes.HTTPHeader = (function() {
+
+                            /**
+                             * Properties of a HTTPHeader.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @interface IHTTPHeader
+                             * @property {string|null} [name] HTTPHeader name
+                             * @property {string|null} [value] HTTPHeader value
+                             */
+
+                            /**
+                             * Constructs a new HTTPHeader.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @classdesc Represents a HTTPHeader.
+                             * @implements IHTTPHeader
+                             * @constructor
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPHeader=} [properties] Properties to set
+                             */
+                            function HTTPHeader(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * HTTPHeader name.
+                             * @member {string|null|undefined} name
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader
+                             * @instance
+                             */
+                            HTTPHeader.prototype.name = null;
+
+                            /**
+                             * HTTPHeader value.
+                             * @member {string|null|undefined} value
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader
+                             * @instance
+                             */
+                            HTTPHeader.prototype.value = null;
+
+                            // OneOf field names bound to virtual getters and setters
+                            let $oneOfFields;
+
+                            /**
+                             * HTTPHeader _name.
+                             * @member {"name"|undefined} _name
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader
+                             * @instance
+                             */
+                            Object.defineProperty(HTTPHeader.prototype, "_name", {
+                                get: $util.oneOfGetter($oneOfFields = ["name"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * HTTPHeader _value.
+                             * @member {"value"|undefined} _value
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader
+                             * @instance
+                             */
+                            Object.defineProperty(HTTPHeader.prototype, "_value", {
+                                get: $util.oneOfGetter($oneOfFields = ["value"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Verifies a HTTPHeader message.
+                             * @function verify
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            HTTPHeader.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                let properties = {};
+                                if (message.name != null && message.hasOwnProperty("name")) {
+                                    properties._name = 1;
+                                    if (!$util.isString(message.name))
+                                        return "name: string expected";
+                                }
+                                if (message.value != null && message.hasOwnProperty("value")) {
+                                    properties._value = 1;
+                                    if (!$util.isString(message.value))
+                                        return "value: string expected";
+                                }
+                                return null;
+                            };
+
+                            /**
+                             * Creates a HTTPHeader message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader} HTTPHeader
+                             */
+                            HTTPHeader.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader)
+                                    return object;
+                                let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader();
+                                if (object.name != null)
+                                    message.name = String(object.name);
+                                if (object.value != null)
+                                    message.value = String(object.value);
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a HTTPHeader message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader
+                             * @static
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader} message HTTPHeader
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            HTTPHeader.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (message.name != null && message.hasOwnProperty("name")) {
+                                    object.name = message.name;
+                                    if (options.oneofs)
+                                        object._name = "name";
+                                }
+                                if (message.value != null && message.hasOwnProperty("value")) {
+                                    object.value = message.value;
+                                    if (options.oneofs)
+                                        object._value = "value";
+                                }
+                                return object;
+                            };
+
+                            /**
+                             * Converts this HTTPHeader to JSON.
+                             * @function toJSON
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            HTTPHeader.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return HTTPHeader;
+                        })();
+
+                        ContainerProbes.TCPSocketAction = (function() {
+
+                            /**
+                             * Properties of a TCPSocketAction.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @interface ITCPSocketAction
+                             * @property {number|null} [port] TCPSocketAction port
+                             * @property {string|null} [host] TCPSocketAction host
+                             */
+
+                            /**
+                             * Constructs a new TCPSocketAction.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @classdesc Represents a TCPSocketAction.
+                             * @implements ITCPSocketAction
+                             * @constructor
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ITCPSocketAction=} [properties] Properties to set
+                             */
+                            function TCPSocketAction(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * TCPSocketAction port.
+                             * @member {number|null|undefined} port
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction
+                             * @instance
+                             */
+                            TCPSocketAction.prototype.port = null;
+
+                            /**
+                             * TCPSocketAction host.
+                             * @member {string|null|undefined} host
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction
+                             * @instance
+                             */
+                            TCPSocketAction.prototype.host = null;
+
+                            // OneOf field names bound to virtual getters and setters
+                            let $oneOfFields;
+
+                            /**
+                             * TCPSocketAction _port.
+                             * @member {"port"|undefined} _port
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction
+                             * @instance
+                             */
+                            Object.defineProperty(TCPSocketAction.prototype, "_port", {
+                                get: $util.oneOfGetter($oneOfFields = ["port"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * TCPSocketAction _host.
+                             * @member {"host"|undefined} _host
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction
+                             * @instance
+                             */
+                            Object.defineProperty(TCPSocketAction.prototype, "_host", {
+                                get: $util.oneOfGetter($oneOfFields = ["host"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Verifies a TCPSocketAction message.
+                             * @function verify
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            TCPSocketAction.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                let properties = {};
+                                if (message.port != null && message.hasOwnProperty("port")) {
+                                    properties._port = 1;
+                                    if (!$util.isInteger(message.port))
+                                        return "port: integer expected";
+                                }
+                                if (message.host != null && message.hasOwnProperty("host")) {
+                                    properties._host = 1;
+                                    if (!$util.isString(message.host))
+                                        return "host: string expected";
+                                }
+                                return null;
+                            };
+
+                            /**
+                             * Creates a TCPSocketAction message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction} TCPSocketAction
+                             */
+                            TCPSocketAction.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction)
+                                    return object;
+                                let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction();
+                                if (object.port != null)
+                                    message.port = object.port | 0;
+                                if (object.host != null)
+                                    message.host = String(object.host);
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a TCPSocketAction message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction
+                             * @static
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction} message TCPSocketAction
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            TCPSocketAction.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (message.port != null && message.hasOwnProperty("port")) {
+                                    object.port = message.port;
+                                    if (options.oneofs)
+                                        object._port = "port";
+                                }
+                                if (message.host != null && message.hasOwnProperty("host")) {
+                                    object.host = message.host;
+                                    if (options.oneofs)
+                                        object._host = "host";
+                                }
+                                return object;
+                            };
+
+                            /**
+                             * Converts this TCPSocketAction to JSON.
+                             * @function toJSON
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            TCPSocketAction.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return TCPSocketAction;
+                        })();
+
+                        ContainerProbes.GRPCAction = (function() {
+
+                            /**
+                             * Properties of a GRPCAction.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @interface IGRPCAction
+                             * @property {number|null} [port] GRPCAction port
+                             * @property {string|null} [service] GRPCAction service
+                             */
+
+                            /**
+                             * Constructs a new GRPCAction.
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                             * @classdesc Represents a GRPCAction.
+                             * @implements IGRPCAction
+                             * @constructor
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IGRPCAction=} [properties] Properties to set
+                             */
+                            function GRPCAction(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * GRPCAction port.
+                             * @member {number|null|undefined} port
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction
+                             * @instance
+                             */
+                            GRPCAction.prototype.port = null;
+
+                            /**
+                             * GRPCAction service.
+                             * @member {string|null|undefined} service
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction
+                             * @instance
+                             */
+                            GRPCAction.prototype.service = null;
+
+                            // OneOf field names bound to virtual getters and setters
+                            let $oneOfFields;
+
+                            /**
+                             * GRPCAction _port.
+                             * @member {"port"|undefined} _port
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction
+                             * @instance
+                             */
+                            Object.defineProperty(GRPCAction.prototype, "_port", {
+                                get: $util.oneOfGetter($oneOfFields = ["port"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * GRPCAction _service.
+                             * @member {"service"|undefined} _service
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction
+                             * @instance
+                             */
+                            Object.defineProperty(GRPCAction.prototype, "_service", {
+                                get: $util.oneOfGetter($oneOfFields = ["service"]),
+                                set: $util.oneOfSetter($oneOfFields)
+                            });
+
+                            /**
+                             * Verifies a GRPCAction message.
+                             * @function verify
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            GRPCAction.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                let properties = {};
+                                if (message.port != null && message.hasOwnProperty("port")) {
+                                    properties._port = 1;
+                                    if (!$util.isInteger(message.port))
+                                        return "port: integer expected";
+                                }
+                                if (message.service != null && message.hasOwnProperty("service")) {
+                                    properties._service = 1;
+                                    if (!$util.isString(message.service))
+                                        return "service: string expected";
+                                }
+                                return null;
+                            };
+
+                            /**
+                             * Creates a GRPCAction message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction} GRPCAction
+                             */
+                            GRPCAction.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction)
+                                    return object;
+                                let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction();
+                                if (object.port != null)
+                                    message.port = object.port | 0;
+                                if (object.service != null)
+                                    message.service = String(object.service);
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a GRPCAction message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction
+                             * @static
+                             * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction} message GRPCAction
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            GRPCAction.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (message.port != null && message.hasOwnProperty("port")) {
+                                    object.port = message.port;
+                                    if (options.oneofs)
+                                        object._port = "port";
+                                }
+                                if (message.service != null && message.hasOwnProperty("service")) {
+                                    object.service = message.service;
+                                    if (options.oneofs)
+                                        object._service = "service";
+                                }
+                                return object;
+                            };
+
+                            /**
+                             * Converts this GRPCAction to JSON.
+                             * @function toJSON
+                             * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            GRPCAction.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return GRPCAction;
                         })();
 
                         return ContainerProbes;
