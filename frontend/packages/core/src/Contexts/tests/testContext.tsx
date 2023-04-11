@@ -114,6 +114,16 @@ const contextValues: { workflows: any[] } = {
             resolverType: "clutch.k8s.v1.Node",
           },
         },
+        {
+          path: "probe/update",
+          displayName: "Update Probes",
+          description: "Update Probes on deployments",
+          requiredConfigProps: ["resolverType"],
+          trending: true,
+          componentProps: {
+            resolverType: "clutch.k8s.v1.Deployment",
+          },
+        },
       ],
     },
   ],

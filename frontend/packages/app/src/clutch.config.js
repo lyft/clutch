@@ -66,6 +66,12 @@ module.exports = {
         resolverType: "clutch.k8s.v1.Deployment",
       },
     },
+    updateLivenessProbe: {
+      trending: true,
+      componentProps: {
+        resolverType: "clutch.k8s.v1.Deployment",
+      },
+    },
     cordonNode: {
       trending: true,
       componentProps: {
