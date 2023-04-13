@@ -17,9 +17,8 @@ import { string } from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
-// Examples of valid quantities: 0.1, 100m, 128974848, 129e6, 129M, 128974848000m, 123Mi
+// Examples of valid Seconds: 0.1, 100s
 const SECONDS_REGEX = /^([-+]?[0-9]*[sS]*)$/;
-const PORT_REGEX = /^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
 
 const DeploymentIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
@@ -43,136 +42,6 @@ function findContainer(args: {
   return args.deploymentSpec.template.spec.containers.find(
     container => container.name === args.containerName
   );
-}
-
-function formatResourceData(Name: string, Value: string | number | string[], Path: string): object {
-  return {
-    name: Name,
-    value: Value,
-    textFieldLabels: {
-      disabledField: "Current Value",
-      updatedField: "New Value",
-    },
-    input: {
-      type: "string",
-      key: Path,
-      validation: string().matches(SECONDS_REGEX),
-    },
-  };
-}
-
-function getHandlerObjects(
-  currentDeployment: IClutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.IContainer,
-  containerBase: String
-) {
-  const handlerObject = [];
-  if (
-    currentDeployment.livenessProbe.handler.exec &&
-    currentDeployment.livenessProbe.handler.exec.command
-  ) {
-    currentDeployment.livenessProbe.handler.exec.command.map((command, index) =>
-      handlerObject.push(
-        formatResourceData(
-          `Command# ${index}`,
-          command,
-          `${containerBase}.livenessProbe.handler.exec.command`
-        )
-      )
-    );
-  }
-  if (
-    currentDeployment.livenessProbe.handler.grpc &&
-    currentDeployment.livenessProbe.handler.grpc.service
-  ) {
-    handlerObject.push(
-      formatResourceData(
-        "GRPC Port",
-        currentDeployment.livenessProbe.handler.grpc.port,
-        `${containerBase}.livenessProbe.handler.grpc.port`
-      )
-    );
-    handlerObject.push(
-      formatResourceData(
-        "GRPC Service",
-        currentDeployment.livenessProbe.handler.grpc.service,
-        `${containerBase}.livenessProbe.handler.grpc.service`
-      )
-    );
-  }
-  if (
-    currentDeployment.livenessProbe.handler.httpGet &&
-    currentDeployment.livenessProbe.handler.httpGet.path
-  ) {
-    handlerObject.push(
-      formatResourceData(
-        "HTTP Get Path",
-        currentDeployment.livenessProbe.handler.httpGet.path,
-        `${containerBase}.livenessProbe.handler.httpGet.path`
-      )
-    );
-    handlerObject.push(
-      formatResourceData(
-        "HTTP Get Port",
-        currentDeployment.livenessProbe.handler.httpGet.port,
-        `${containerBase}.livenessProbe.handler.httpGet.port`
-      )
-    );
-    handlerObject.push(
-      formatResourceData(
-        "HTTP Get Host",
-        currentDeployment.livenessProbe.handler.httpGet.host,
-        `${containerBase}.livenessProbe.handler.httpGet.host`
-      )
-    );
-    handlerObject.push(
-      formatResourceData(
-        "HTTP Get Schema",
-        currentDeployment.livenessProbe.handler.httpGet.scheme,
-        `${containerBase}.livenessProbe.handler.httpGet.scheme`
-      )
-    );
-    if (
-      currentDeployment.livenessProbe.handler.httpGet.httpHeaders &&
-      currentDeployment.livenessProbe.handler.httpGet.httpHeaders.length > 0
-    ) {
-      currentDeployment.livenessProbe.handler.httpGet.httpHeaders.map((header, index) => {
-        handlerObject.push(
-          formatResourceData(
-            `HTTP Get Header name ${index}`,
-            header.name,
-            `${containerBase}.livenessProbe.handler.httpGet.httpHeaders[${index}].name`
-          )
-        );
-        return handlerObject.push(
-          formatResourceData(
-            `HTTP Get Header value ${index}`,
-            header.value,
-            `${containerBase}.livenessProbe.handler.httpGet.httpHeaders[${index}].value`
-          )
-        );
-      });
-    }
-  }
-  if (
-    currentDeployment.livenessProbe.handler.tcpSocket &&
-    currentDeployment.livenessProbe.handler.tcpSocket.port
-  ) {
-    handlerObject.push(
-      formatResourceData(
-        "TCP Socket Host",
-        currentDeployment.livenessProbe.handler.tcpSocket.host,
-        `${containerBase}.livenessProbe.handler.tcpSocket.host`
-      )
-    );
-    handlerObject.push(
-      formatResourceData(
-        "TCP Socker Port",
-        currentDeployment.livenessProbe.handler.tcpSocket.port,
-        `${containerBase}.livenessProbe.handler.tcpSocket.port`
-      )
-    );
-  }
-  return handlerObject;
 }
 
 const DeploymentDetails: React.FC<WizardChild> = () => {
@@ -204,114 +73,112 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
   });
 
   const containerBase = `deploymentSpec.template.spec.containers[${containerIndex}]`;
-  const handlerObject = getHandlerObjects(currentDeployment, containerBase);
-
-  const deploymentDataObject = [
-    { name: "Name", value: deployment.name },
-    { name: "Namespace", value: deployment.namespace },
-    {
-      name: "Container Name",
-      value: (
-        <Select
-          label="Container Name"
-          name="containerName"
-          onChange={value => {
-            setContainerName(value);
-            setContainerIndex(containers.findIndex(container => container.name === value));
-            deploymentData.updateData("containerName", value);
-          }}
-          options={containers.map(container => {
-            return { label: container.name };
-          })}
-        />
-      ),
-    },
-    {
-      name: "Initial Delay Seconds",
-      value: currentDeployment.livenessProbe.initialDelaySeconds,
-      textFieldLabels: {
-        disabledField: "Current Value",
-        updatedField: "New Value",
-      },
-      input: {
-        type: "string",
-        key: `${containerBase}.livenessProbe.initialDelaySeconds`,
-        validation: string().matches(SECONDS_REGEX),
-      },
-    },
-    {
-      name: "Period Seconds",
-      value: currentDeployment.livenessProbe.periodSeconds,
-      textFieldLabels: {
-        disabledField: "Current Value",
-        updatedField: "New Value",
-      },
-      input: {
-        type: "string",
-        key: `${containerBase}.livenessProbe.periodSeconds`,
-        validation: string().matches(SECONDS_REGEX),
-      },
-    },
-    {
-      name: "Timeout Seconds",
-      value: currentDeployment.livenessProbe.timeoutSeconds,
-      textFieldLabels: {
-        disabledField: "Current Value",
-        updatedField: "New Value",
-      },
-      input: {
-        type: "string",
-        key: `${containerBase}.livenessProbe.timeoutSeconds`,
-        validation: string().matches(SECONDS_REGEX),
-      },
-    },
-    {
-      name: "Success Threshold",
-      value: currentDeployment.livenessProbe.successThreshold,
-      textFieldLabels: {
-        disabledField: "Current Value",
-        updatedField: "New Value",
-      },
-      input: {
-        type: "string",
-        key: `${containerBase}.livenessProbe.successThreshold`,
-        validation: string().matches(SECONDS_REGEX),
-      },
-    },
-    {
-      name: "Failure Threshold",
-      value: currentDeployment.livenessProbe.failureThreshold,
-      textFieldLabels: {
-        disabledField: "Current Value",
-        updatedField: "New Value",
-      },
-      input: {
-        type: "string",
-        key: `${containerBase}.livenessProbe.failureThreshold`,
-        validation: string().matches(SECONDS_REGEX),
-      },
-    },
-    {
-      name: "Termination Grace Period Seconds",
-      value: currentDeployment.livenessProbe.terminationGracePeriodSeconds,
-      textFieldLabels: {
-        disabledField: "Current Value",
-        updatedField: "New Value",
-      },
-      input: {
-        type: "string",
-        key: `${containerBase}.livenessProbe.terminationGracePeriodSeconds`,
-        validation: string().matches(SECONDS_REGEX),
-      },
-    },
-  ];
-
-  const finalDeploymentData = [...deploymentDataObject, ...handlerObject];
 
   return (
     <WizardStep error={deploymentData.error} isLoading={deploymentData.isLoading}>
       <strong>Deployment Details</strong>
-      <MetadataTable onUpdate={update} data={finalDeploymentData} />
+      <MetadataTable
+        onUpdate={update}
+        data={[
+          { name: "Name", value: deployment.name },
+          { name: "Namespace", value: deployment.namespace },
+          {
+            name: "Container Name",
+            value: (
+              <Select
+                label="Container Name"
+                name="containerName"
+                onChange={value => {
+                  setContainerName(value);
+                  setContainerIndex(containers.findIndex(container => container.name === value));
+                  deploymentData.updateData("containerName", value);
+                }}
+                options={containers.map(container => {
+                  return { label: container.name };
+                })}
+              />
+            ),
+          },
+          {
+            name: "Initial Delay Seconds",
+            value: currentDeployment.livenessProbe.initialDelaySeconds,
+            textFieldLabels: {
+              disabledField: "Current Value",
+              updatedField: "New Value",
+            },
+            input: {
+              type: "string",
+              key: `${containerBase}.livenessProbe.initialDelaySeconds`,
+              validation: string().matches(SECONDS_REGEX),
+            },
+          },
+          {
+            name: "Period Seconds",
+            value: currentDeployment.livenessProbe.periodSeconds,
+            textFieldLabels: {
+              disabledField: "Current Value",
+              updatedField: "New Value",
+            },
+            input: {
+              type: "string",
+              key: `${containerBase}.livenessProbe.periodSeconds`,
+              validation: string().matches(SECONDS_REGEX),
+            },
+          },
+          {
+            name: "Timeout Seconds",
+            value: currentDeployment.livenessProbe.timeoutSeconds,
+            textFieldLabels: {
+              disabledField: "Current Value",
+              updatedField: "New Value",
+            },
+            input: {
+              type: "string",
+              key: `${containerBase}.livenessProbe.timeoutSeconds`,
+              validation: string().matches(SECONDS_REGEX),
+            },
+          },
+          {
+            name: "Success Threshold",
+            value: currentDeployment.livenessProbe.successThreshold,
+            textFieldLabels: {
+              disabledField: "Current Value",
+              updatedField: "New Value",
+            },
+            input: {
+              type: "string",
+              key: `${containerBase}.livenessProbe.successThreshold`,
+              validation: string().matches(SECONDS_REGEX),
+            },
+          },
+          {
+            name: "Failure Threshold",
+            value: currentDeployment.livenessProbe.failureThreshold,
+            textFieldLabels: {
+              disabledField: "Current Value",
+              updatedField: "New Value",
+            },
+            input: {
+              type: "string",
+              key: `${containerBase}.livenessProbe.failureThreshold`,
+              validation: string().matches(SECONDS_REGEX),
+            },
+          },
+          {
+            name: "Termination Grace Period Seconds",
+            value: currentDeployment.livenessProbe.terminationGracePeriodSeconds,
+            textFieldLabels: {
+              disabledField: "Current Value",
+              updatedField: "New Value",
+            },
+            input: {
+              type: "string",
+              key: `${containerBase}.livenessProbe.terminationGracePeriodSeconds`,
+              validation: string().matches(SECONDS_REGEX),
+            },
+          },
+        ]}
+      />
       <ButtonGroup>
         <Button text="Back" variant="neutral" onClick={() => onBack()} />
         <Button text="Update" variant="destructive" onClick={onSubmit} />
