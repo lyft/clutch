@@ -91,7 +91,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -132,7 +132,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 	defer mockprovider.Close()
 
 	mockStorage := authnmock.NewMockStorage()
@@ -226,7 +226,7 @@ oidc:
 
 	mockStorage := authnmock.NewMockStorage()
 
-	mockprovider := authnmock.NewMockOIDCProviderServer("foo@example.com", nil)
+	mockprovider := authnmock.NewMockOIDCProviderServer("foo@example.com", nil, nil)
 	defer mockprovider.Close()
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
 
@@ -271,7 +271,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 	defer mockprovider.Close()
 
 	mockStorage := authnmock.NewMockStorage()
@@ -387,7 +387,7 @@ oidc:
 	for idx, tc := range testcases {
 		tc := tc
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
-			mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
+			mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 			defer mockprovider.Close()
 			ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
 
@@ -450,7 +450,7 @@ oidc:
 	c := cfg.GetOidc()
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -485,7 +485,7 @@ oidc:
 	email := "user@example.com"
 	grps := []string{"group1", "group2"}
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email, grps)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, grps, nil)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -521,7 +521,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -551,7 +551,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 	mockprovider.SetGroupClaim([]string{"group1", "group2"})
 	defer mockprovider.Close()
 
@@ -582,7 +582,7 @@ oidc:
 
 	email := "user@example.com"
 
-	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil)
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 	mockprovider.SetCustomClaim("")
 	defer mockprovider.Close()
 
@@ -594,4 +594,45 @@ oidc:
 	_, err = p.Exchange(context.Background(), "aaa")
 	assert.Error(t, err)
 	assert.ErrorContains(t, err, "claims field custom_claim is empty")
+}
+
+// Test that ClaimsFromOIDCToken method can accept a customgroups claim
+
+func TestOIDCClaimsFromTokenCustomGroups(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  subject_claim_name_override: "email"
+  groups_claim_name_override: "custom_groups_claim"
+  scopes:
+  - openid
+  - email
+  - groups
+`, cfg)
+
+	email := "email"
+	customGroups := []string{"group1", "group2"}
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, customGroups)
+	defer mockprovider.Close()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+	p, err := NewOIDCProvider(ctx, cfg, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	token, err := p.Exchange(context.Background(), "aaa")
+	assert.NoError(t, err)
+	assert.NotNil(t, token)
+
+	c, err := p.Verify(context.Background(), token.AccessToken)
+	assert.NoError(t, err)
+	assert.NotNil(t, c)
+	assert.Equal(t, email, c.Subject)
+	assert.Equal(t, customGroups, c.Groups)
 }
