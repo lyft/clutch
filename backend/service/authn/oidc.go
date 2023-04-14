@@ -455,20 +455,20 @@ func (cc *ClaimsConfig) ClaimsFromOIDCToken(ctx context.Context, t *oidc.IDToken
 	}
 	var groups []string
 	if cc.groupsClaimName != "" {
-		groupsInt, ok := claims["groups"]
+		groupsInt, ok := claims[cc.groupsClaimName]
 		if !ok {
-			return nil, fmt.Errorf("claims did not deserialize with %s field", "groups")
+			return nil, fmt.Errorf("claims did not deserialize with %s field", cc.groupsClaimName)
 		}
 		groupsIntSlice, ok := groupsInt.([]interface{})
 		if !ok {
-			return nil, fmt.Errorf("group claim did not deserialize with %s field, groups claim must be a list", "groups")
+			return nil, fmt.Errorf("group claim did not deserialize with %s field, groups claim must be a list", cc.groupsClaimName)
 		}
 
 		for _, v := range groupsIntSlice {
 			group, ok := v.(string)
 
 			if !ok {
-				return nil, fmt.Errorf("claims did not deserialize with %s field, group %v", "groups", v)
+				return nil, fmt.Errorf("claims did not deserialize with %s field, group %v", cc.groupsClaimName, v)
 			}
 
 			groups = append(groups, group)
