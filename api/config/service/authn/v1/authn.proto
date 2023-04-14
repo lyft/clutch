@@ -18,6 +18,9 @@ message OIDC {
   // The subject is mapped from the JWT token's email claim by default.
   // Set this field to the JWT token's claim name to override the subject.
   string subject_claim_name_override = 6;
+  // Groups are not mapped by default.
+  // Set this field to the JWT token's group claim name to override the groups.
+  string groups_claim_name_override = 7;
 }
 
 message Config {
