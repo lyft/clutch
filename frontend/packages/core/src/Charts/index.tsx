@@ -1,5 +1,6 @@
 export { default as TimeseriesChart } from "./timeseries";
 export { default as LinearTimeline } from "./linearTimeline";
+export { default as PieChart } from "./pie";
 
 export type {
   TimeseriesStylingProps,
@@ -12,4 +13,5 @@ export type {
   PresetShape,
   LinearTimelineDataPoint,
   ReferenceLineAxis,
+  PieChartData,
 } from "./types";

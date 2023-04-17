@@ -53,3 +53,10 @@ export interface TimeseriesStylingProps {
   gridBackgroundColor?: string;
   gridStroke?: string;
 }
+
+export interface PieChartData {
+  name: string;
+  value: string | number;
+  color?: string;
+  activeLabel?: string;
+}
