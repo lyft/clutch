@@ -1,14 +1,14 @@
 import React, { PureComponent } from "react";
 import {
   Cell,
-  Label,
+  Legend,
   Pie,
   PieChart as RechartsPieChart,
   ResponsiveContainer,
   Sector,
   Tooltip,
-  Legend,
 } from "recharts";
+
 import type { PieChartData } from "./types";
 
 interface PieChartProps {
@@ -139,9 +139,10 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       },
     };
 
-    let additionalProps = {
+    const additionalProps = {
       ...(chartOptions.activeTooltip
-        ? { activeIndex: this.state?.activeIndex, activeShape: renderActiveShape }
+        ? // eslint-disable-next-line react/destructuring-assignment
+          { activeIndex: this.state?.activeIndex, activeShape: renderActiveShape }
         : {}),
       ...(chartOptions.label
         ? {
@@ -165,8 +166,8 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
           {...additionalProps}
         >
           {data.map((entry, index) => (
-            // eslint-disable-next-line react/no-array-index-key
             <Cell
+              // eslint-disable-next-line react/no-array-index-key
               key={`cell-${index}`}
               fill={entry.color ?? DEFAULT_COLORS[index % DEFAULT_COLORS.length]}
             />
