@@ -11,25 +11,23 @@ import {
 
 import type { PieChartData } from "./types";
 
-interface PieChartProps {
+export interface PieChartProps {
   data: PieChartData[];
-  options?: {
-    dimensions?: {
-      height?: number;
-      width?: number;
-      innerRadius?: number;
-      outerRadius?: number;
-      paddingAngle?: number;
-      cx?: string;
-      cy?: string;
-    };
-    label?: boolean | React.ReactElement;
-    labelLine?: boolean;
-    legend?: boolean;
-    responsive?: boolean;
-    activeTooltip?: boolean;
-    tooltip?: boolean;
+  dimensions?: {
+    height?: number;
+    width?: number;
+    innerRadius?: number;
+    outerRadius?: number;
+    paddingAngle?: number;
+    cx?: string;
+    cy?: string;
   };
+  label?: boolean | React.ReactElement;
+  labelLine?: boolean;
+  legend?: boolean;
+  responsive?: boolean;
+  activeTooltip?: boolean;
+  tooltip?: boolean;
   children?: React.ReactChild;
 }
 
@@ -121,12 +119,25 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
   };
 
   render() {
-    const { children, data, options } = this.props;
+    const {
+      children,
+      data,
+      dimensions,
+      activeTooltip = true,
+      label,
+      labelLine,
+      legend,
+      responsive = true,
+      tooltip,
+    } = this.props;
 
     const chartOptions = {
-      activeTooltip: true,
-      responsive: true,
-      ...(options || {}),
+      activeTooltip,
+      responsive,
+      label,
+      labelLine,
+      legend,
+      tooltip,
       dimensions: {
         height: 275,
         width: 275,
@@ -135,7 +146,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
         paddingAngle: 2,
         cx: "50%",
         cy: "50%",
-        ...(options?.dimensions || {}),
+        ...(dimensions || {}),
       },
     };
 
