@@ -12,7 +12,13 @@ import {
 import type { PieChartData } from "./types";
 
 export interface PieChartProps {
+  /**
+   * The data to display in the chart
+   */
   data: PieChartData[];
+  /**
+   * Optional dimensions for the chart
+   */
   dimensions?: {
     height?: number;
     width?: number;
@@ -22,12 +28,40 @@ export interface PieChartProps {
     cx?: string;
     cy?: string;
   };
+  /**
+   * If `true` will display a label, conflicts with `activeTooltip`
+   * @default false
+   */
   label?: boolean | React.ReactElement;
+  /**
+   * If `true` will display a line to the label, only active with `label`
+   * @default false
+   */
   labelLine?: boolean;
+  /**
+   * If `true` will display a legend for the chart
+   * @default false
+   */
   legend?: boolean;
+  /**
+   * If `true` will display the chart in a ResponsiveContainer
+   * @default true
+   */
   responsive?: boolean;
+  /**
+   * If `true` will display an active tooltip with changing text
+   * @default true
+   */
   activeTooltip?: boolean;
+  /**
+   * If `true` will display a tooltip on hover over the chart slice
+   * @default false
+   */
   tooltip?: boolean;
+  /**
+   * (Optional) children to render inside of the <PieChart />, can reference API from
+   * Recharts (https://recharts.org/en-US/api/PieChart)
+   */
   children?: React.ReactChild;
 }
 
@@ -210,4 +244,4 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
   }
 }
 
-export default PieChart;
+export { PieChart };

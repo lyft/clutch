@@ -1,6 +1,6 @@
 export { default as TimeseriesChart } from "./timeseries";
 export { default as LinearTimeline } from "./linearTimeline";
-export { default as PieChart } from "./pie";
+export { PieChart } from "./pie";
 
 export type {
   TimeseriesStylingProps,

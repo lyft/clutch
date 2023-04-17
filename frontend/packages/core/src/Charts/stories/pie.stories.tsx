@@ -29,5 +29,7 @@ PieChart.args = {
     { name: "Test Value #3", value: 3 },
     { name: "Test Value #4", value: 4 },
     { name: "Test Value #5", value: 5 },
+    { name: "Test Value #6", value: 6 },
+    { name: "Test Value #7", value: 7 },
   ],
 };
