@@ -10,7 +10,7 @@
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
     "compile:dev": "node build.mjs $PWD",
-    "compile:watch": "node build.mjs $PWD -w",
+    "compile:watch": "yarn compile:dev -w",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh audit",
