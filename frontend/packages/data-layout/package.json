@@ -15,7 +15,7 @@
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
     "compile:dev": "yarn workspace @clutch-sh/tools buildDev $PWD",
-    "compile:watch": "yarn workspace @clutch-sh/tools buildDev $PWD -w",
+    "compile:watch": "yarn compile:dev -w",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "prepublishOnly": "yarn run build",

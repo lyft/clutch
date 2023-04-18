@@ -57,5 +57,5 @@
   ],
   "postUpdateOptions": ["gomodTidy"],
   "allowedPostUpgradeCommands": ["^make frontend-lint-fix$"],
-  "ignoreDeps": ["@date-io/core", "babel-jest", "esbuild"]
+  "ignoreDeps": ["@date-io/core", "babel-jest"]
 }
