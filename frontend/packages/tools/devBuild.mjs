@@ -11,7 +11,7 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
 
   files.forEach(file => {
     if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
-      if (file !== "tests" && file !== "stories" && file !== "dist") {
+      if (file !== "tests" && file !== "stories" && file !== "dist" && file !== "__snapshots__") {
         tmpArrayOfFiles = getAllFiles(`${dirPath}/${file}`, tmpArrayOfFiles);
       }
     } else {
@@ -22,11 +22,17 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
   return tmpArrayOfFiles;
 };
 
-esbuild.build({
+const options = {
   entryPoints: getAllFiles(`${process.argv[2]}/src`),
   outdir: `${process.argv[2]}/dist/`,
   target: "es2019",
   sourcemap: true,
-  watch: args.includes("-w"),
   tsconfig: `${process.argv[2]}/tsconfig.json`,
-});
+};
+
+if (args.includes("-w") || args.includes("--watch")) {
+  const ctx = await esbuild.context(options);
+  await ctx.watch();
+} else {
+  await esbuild.build(options);
+}

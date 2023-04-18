@@ -13,7 +13,7 @@
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
     "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
-    "compile:watch": "esbuild --target=es2019 --outdir=dist --sourcemap --watch src/*.tsx",
+    "compile:watch": "yarn compile:dev --watch=forever",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh k8s",
