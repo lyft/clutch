@@ -11,7 +11,7 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
 
   files.forEach(file => {
     if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
-      if (file !== "tests" && file !== "stories" && file !== "dist") {
+      if (file !== "tests" && file !== "stories" && file !== "dist" && file !== "__snapshots__") {
         tmpArrayOfFiles = getAllFiles(`${dirPath}/${file}`, tmpArrayOfFiles);
       }
     } else {
