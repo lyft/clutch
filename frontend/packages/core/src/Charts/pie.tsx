@@ -8,7 +8,6 @@ import {
   Sector,
   Tooltip,
 } from "recharts";
-
 import type { PieChartData } from "./types";
 
 export interface PieChartProps {
@@ -57,10 +56,16 @@ export interface PieChartProps {
    */
   responsiveContainer?: boolean;
   /**
-   * If `true` will display an active tooltip with changing text
-   * @default true
+   * It will display an active tooltip with changing text
+   * @default on
    */
-  activeTooltip?: boolean;
+  activeTooltip?:
+    | boolean
+    | {
+        staticLabel?: string;
+        payloadLabel?: string;
+        formatter?: (payload: any) => string;
+      };
   /**
    * If `true` will display a tooltip on hover over the chart slice
    * @default false
@@ -87,7 +92,7 @@ const DEFAULT_COLORS = [
   "#8884D8",
 ];
 
-const renderActiveShape = props => {
+const renderActiveShape = (props, options) => {
   const RADIAN = Math.PI / 180;
   const {
     cx,
@@ -115,7 +120,9 @@ const renderActiveShape = props => {
   return (
     <g>
       <text x={cx} y={cy} dy={8} textAnchor="middle">
-        {payload.activeLabel ?? payload.name}
+        {options.formatter && options.formatter(payload)}
+        {options.staticLabel && options.staticLabel}
+        {options.payloadLabel && `${options.payloadLabel} ${payload.name}`}
       </text>
       <Sector
         cx={cx}
@@ -162,7 +169,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       children,
       data,
       dimensions,
-      activeTooltip = true,
+      activeTooltip,
       label,
       labelLine,
       legend,
@@ -172,7 +179,8 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
     } = this.props;
 
     const chartOptions = {
-      activeTooltip,
+      activeTooltip: typeof activeTooltip === "boolean" ? activeTooltip : true,
+      activeTooltipOptions: typeof activeTooltip !== "boolean" ? { ...activeTooltip } : {},
       responsive: {
         width: "99%",
         height: "99%",
@@ -196,10 +204,14 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       },
     };
 
-    const additionalProps = {
+    let additionalProps = {
       ...(chartOptions.activeTooltip
         ? // eslint-disable-next-line react/destructuring-assignment
-          { activeIndex: this.state?.activeIndex, activeShape: renderActiveShape }
+          {
+            activeIndex: this.state?.activeIndex,
+            activeShape: props =>
+              renderActiveShape(props, { ...chartOptions.activeTooltipOptions }),
+          }
         : {}),
       ...(chartOptions.label
         ? {
