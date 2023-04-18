@@ -8,6 +8,7 @@ import {
   Sector,
   Tooltip,
 } from "recharts";
+
 import type { PieChartData } from "./types";
 
 export interface PieChartProps {
@@ -204,10 +205,10 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       },
     };
 
-    let additionalProps = {
+    const additionalProps = {
       ...(chartOptions.activeTooltip
-        ? // eslint-disable-next-line react/destructuring-assignment
-          {
+        ? {
+            // eslint-disable-next-line react/destructuring-assignment
             activeIndex: this.state?.activeIndex,
             activeShape: props =>
               renderActiveShape(props, { ...chartOptions.activeTooltipOptions }),
