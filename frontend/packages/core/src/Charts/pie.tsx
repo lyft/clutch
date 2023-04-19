@@ -29,7 +29,7 @@ export interface PieChartProps {
     cy?: string;
   };
   /**
-   * If `true` will display a label, conflicts with `activeTooltip`
+   * If `true` will display a label
    * @default false
    */
   label?: boolean | React.ReactElement;
@@ -44,18 +44,16 @@ export interface PieChartProps {
    */
   legend?: boolean;
   /**
-   * Settings for responsive container, will not be used if `responsiveContainer` is false
-   */
-  responsive?: {
-    width?: string;
-    height?: string;
-    aspect?: number;
-  };
-  /**
-   * If `true` will display the chart in a ResponsiveContainer
+   * Settings for responsive container
    * @default true
    */
-  responsiveContainer?: boolean;
+  responsive?:
+    | boolean
+    | {
+        width?: number | string;
+        height?: number | string;
+        aspect?: number;
+      };
   /**
    * It will display an active tooltip with changing text
    * @default on
@@ -75,8 +73,9 @@ export interface PieChartProps {
   /**
    * (Optional) children to render inside of the <PieChart />, can reference API from
    * Recharts (https://recharts.org/en-US/api/PieChart)
+   * These can override the Legend and Tooltip provided via the component
    */
-  children?: React.ReactChild;
+  children?: React.ReactChild | React.ReactChild[];
 }
 
 interface PieChartState {
@@ -173,22 +172,21 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       activeTooltip,
       label,
       labelLine,
-      legend,
-      responsive,
-      responsiveContainer = true,
+      legend = false,
+      responsive = true,
       tooltip,
     } = this.props;
 
     const chartOptions = {
       activeTooltip: typeof activeTooltip === "boolean" ? activeTooltip : true,
       activeTooltipOptions: typeof activeTooltip !== "boolean" ? { ...activeTooltip } : {},
-      responsive: {
+      responsive: typeof responsive === "boolean" ? responsive : true,
+      responsiveDimensions: {
         width: "99%",
         height: "99%",
         aspect: 2,
-        ...(responsive || {}),
+        ...(typeof responsive !== "boolean" ? responsive : {}),
       },
-      responsiveContainer,
       label,
       labelLine,
       legend,
@@ -229,7 +227,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       >
         <Pie
           data={data}
-          fill="#8884d8"
+          fill={DEFAULT_COLORS[0]}
           dataKey="value"
           onMouseEnter={this.onPieEnter}
           {...chartOptions.dimensions}
@@ -245,20 +243,14 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
         </Pie>
         {children && children}
         {chartOptions.legend && (
-          <Legend
-            layout="vertical"
-            align="right"
-            verticalAlign="top"
-            iconType="plainline"
-            height={36}
-          />
+          <Legend layout="vertical" align="right" verticalAlign="top" iconType="plainline" />
         )}
         {chartOptions.tooltip && <Tooltip />}
       </RechartsPieChart>
     );
 
-    return chartOptions.responsiveContainer ? (
-      <ResponsiveContainer {...chartOptions.responsive}>{chart}</ResponsiveContainer>
+    return chartOptions.responsive ? (
+      <ResponsiveContainer {...chartOptions.responsiveDimensions}>{chart}</ResponsiveContainer>
     ) : (
       chart
     );
