@@ -307,65 +307,66 @@ func updateContainerResources(deployment *appsv1.Deployment, fields *k8sapiv1.Up
 func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
 	for _, containerProbes := range fields.ContainerProbes {
 		for _, container := range deployment.Spec.Template.Spec.Containers {
-			if container.Name == containerProbes.ContainerName {
-				resourceProbe := containerProbes.LivenessProbe
-				if resourceProbe.InitialDelaySeconds != nil {
-					container.LivenessProbe.InitialDelaySeconds = *resourceProbe.InitialDelaySeconds
+			if container.Name != containerProbes.ContainerName {
+				continue
+			}
+			resourceProbe := containerProbes.LivenessProbe
+			if resourceProbe.InitialDelaySeconds != nil {
+				container.LivenessProbe.InitialDelaySeconds = *resourceProbe.InitialDelaySeconds
+			}
+			if resourceProbe.PeriodSeconds != nil {
+				container.LivenessProbe.PeriodSeconds = *resourceProbe.PeriodSeconds
+			}
+			if resourceProbe.TimeoutSeconds != nil {
+				container.LivenessProbe.TimeoutSeconds = *resourceProbe.TimeoutSeconds
+			}
+			if resourceProbe.SuccessThreshold != nil {
+				container.LivenessProbe.SuccessThreshold = *resourceProbe.SuccessThreshold
+			}
+			if resourceProbe.FailureThreshold != nil {
+				container.LivenessProbe.FailureThreshold = *resourceProbe.FailureThreshold
+			}
+			if resourceProbe.TerminationGracePeriodSeconds != nil {
+				container.LivenessProbe.TerminationGracePeriodSeconds = resourceProbe.TerminationGracePeriodSeconds
+			}
+			if resourceProbe.Handler != nil {
+				if resourceProbe.Handler.Exec != nil {
+					container.LivenessProbe.ProbeHandler.Exec.Command = resourceProbe.Handler.Exec.Command
 				}
-				if resourceProbe.PeriodSeconds != nil {
-					container.LivenessProbe.PeriodSeconds = *resourceProbe.PeriodSeconds
-				}
-				if resourceProbe.TimeoutSeconds != nil {
-					container.LivenessProbe.TimeoutSeconds = *resourceProbe.TimeoutSeconds
-				}
-				if resourceProbe.SuccessThreshold != nil {
-					container.LivenessProbe.SuccessThreshold = *resourceProbe.SuccessThreshold
-				}
-				if resourceProbe.FailureThreshold != nil {
-					container.LivenessProbe.FailureThreshold = *resourceProbe.FailureThreshold
-				}
-				if resourceProbe.TerminationGracePeriodSeconds != nil {
-					container.LivenessProbe.TerminationGracePeriodSeconds = resourceProbe.TerminationGracePeriodSeconds
-				}
-				if resourceProbe.Handler != nil {
-					if resourceProbe.Handler.Exec != nil {
-						container.LivenessProbe.ProbeHandler.Exec.Command = resourceProbe.Handler.Exec.Command
+				if resourceProbe.Handler.HttpGet != nil {
+					if resourceProbe.Handler.HttpGet.Host != nil {
+						container.LivenessProbe.ProbeHandler.HTTPGet.Host = *resourceProbe.Handler.HttpGet.Host
 					}
-					if resourceProbe.Handler.HttpGet != nil {
-						if resourceProbe.Handler.HttpGet.Host != nil {
-							container.LivenessProbe.ProbeHandler.HTTPGet.Host = *resourceProbe.Handler.HttpGet.Host
-						}
-						if resourceProbe.Handler.HttpGet.Path != nil {
-							container.LivenessProbe.ProbeHandler.HTTPGet.Path = *resourceProbe.Handler.HttpGet.Path
-						}
-						if resourceProbe.Handler.HttpGet.Port != nil {
-							container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal = *resourceProbe.Handler.HttpGet.Port
-						}
-						if resourceProbe.Handler.HttpGet.Scheme != nil {
-							container.LivenessProbe.ProbeHandler.HTTPGet.Scheme = (v1.URIScheme)(*resourceProbe.Handler.HttpGet.Scheme)
-						}
-						if resourceProbe.Handler.HttpGet.HttpHeaders != nil {
-							LivenessProbeHTTPHeaders := make([]v1.HTTPHeader, 0, len(resourceProbe.Handler.HttpGet.HttpHeaders))
-							for _, value := range resourceProbe.Handler.HttpGet.HttpHeaders {
-								UniqueLivenessHeader := v1.HTTPHeader{
-									Name:  *value.Name,
-									Value: *value.Value,
-								}
-								LivenessProbeHTTPHeaders = append(LivenessProbeHTTPHeaders, UniqueLivenessHeader)
+					if resourceProbe.Handler.HttpGet.Path != nil {
+						container.LivenessProbe.ProbeHandler.HTTPGet.Path = *resourceProbe.Handler.HttpGet.Path
+					}
+					if resourceProbe.Handler.HttpGet.Port != nil {
+						container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal = *resourceProbe.Handler.HttpGet.Port
+					}
+					if resourceProbe.Handler.HttpGet.Scheme != nil {
+						container.LivenessProbe.ProbeHandler.HTTPGet.Scheme = (v1.URIScheme)(*resourceProbe.Handler.HttpGet.Scheme)
+					}
+					if resourceProbe.Handler.HttpGet.HttpHeaders != nil {
+						LivenessProbeHTTPHeaders := make([]v1.HTTPHeader, 0, len(resourceProbe.Handler.HttpGet.HttpHeaders))
+						for _, value := range resourceProbe.Handler.HttpGet.HttpHeaders {
+							UniqueLivenessHeader := v1.HTTPHeader{
+								Name:  *value.Name,
+								Value: *value.Value,
 							}
-							container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders = LivenessProbeHTTPHeaders
+							LivenessProbeHTTPHeaders = append(LivenessProbeHTTPHeaders, UniqueLivenessHeader)
 						}
+						container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders = LivenessProbeHTTPHeaders
 					}
-					if resourceProbe.Handler.TcpSocket != nil {
-						container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal = *resourceProbe.Handler.TcpSocket.Port
-						if resourceProbe.Handler.TcpSocket.Host != nil {
-							container.LivenessProbe.ProbeHandler.TCPSocket.Host = *resourceProbe.Handler.TcpSocket.Host
-						}
+				}
+				if resourceProbe.Handler.TcpSocket != nil {
+					container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal = *resourceProbe.Handler.TcpSocket.Port
+					if resourceProbe.Handler.TcpSocket.Host != nil {
+						container.LivenessProbe.ProbeHandler.TCPSocket.Host = *resourceProbe.Handler.TcpSocket.Host
 					}
-					if resourceProbe.Handler.Grpc != nil {
-						container.LivenessProbe.ProbeHandler.GRPC.Port = *resourceProbe.Handler.Grpc.Port
-						container.LivenessProbe.ProbeHandler.GRPC.Service = resourceProbe.Handler.Grpc.Service
-					}
+				}
+				if resourceProbe.Handler.Grpc != nil {
+					container.LivenessProbe.ProbeHandler.GRPC.Port = *resourceProbe.Handler.Grpc.Port
+					container.LivenessProbe.ProbeHandler.GRPC.Service = resourceProbe.Handler.Grpc.Service
 				}
 			}
 		}
