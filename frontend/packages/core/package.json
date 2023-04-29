@@ -31,7 +31,7 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@hookform/devtools": "^4.0.2",
-    "@hookform/resolvers": "2.8.8",
+    "@hookform/resolvers": "3.1.0",
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.87",
     "@mui/material": "^5.8.5",
