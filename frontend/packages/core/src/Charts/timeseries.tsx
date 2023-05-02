@@ -12,7 +12,12 @@ import {
 } from "recharts";
 
 import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./helpers";
-import type { LineProps, TimeseriesReferenceLineProps, TimeseriesStylingProps } from "./types";
+import type {
+  CustomTooltipProps,
+  LineProps,
+  TimeseriesReferenceLineProps,
+  TimeseriesStylingProps,
+} from "./types";
 
 /*
   For reference lines (dashed lines), you can set the `axis` property to "x" or "y" to denote which axis 
@@ -35,7 +40,7 @@ export interface TimeseriesChartProps {
   yDomainSpread?: number | null;
   connectNulls?: boolean;
   regularIntervalTicks?: boolean;
-  tooltipFormatterFunc?: (value, name, props) => JSX.Element;
+  tooltipFormatterFunc?: ({ active, payload }: CustomTooltipProps) => JSX.Element;
   stylingProps?: TimeseriesStylingProps;
 }
 
