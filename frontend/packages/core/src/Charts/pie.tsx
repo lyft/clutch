@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import {
   Cell,
+  Label,
   Legend,
   Pie,
   PieChart as RechartsPieChart,
@@ -29,7 +30,7 @@ export interface PieChartProps {
     cy?: string;
   };
   /**
-   * If `true` will display a label
+   * If `true` will display a label for the pie pieces
    * @default false
    */
   label?: boolean | React.ReactElement;
@@ -38,6 +39,13 @@ export interface PieChartProps {
    * @default false
    */
   labelLine?: boolean;
+  /**
+   * If set, will display a label in the center of the pie chart (title) with an optional second label (subtitle)
+   */
+  centerLabel?: {
+    title?: string;
+    subtitle?: string;
+  };
   /**
    * If `true` will display a legend for the chart
    * @default false
@@ -119,11 +127,13 @@ const renderActiveShape = (props, options) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle">
-        {options.formatter && options.formatter(payload)}
-        {options.staticLabel && options.staticLabel}
-        {options.payloadLabel && `${options.payloadLabel} ${payload.name}`}
-      </text>
+      {(options.formatter || options.staticLabel || options.payloadLabel) && (
+        <text x={cx} y={cy} dy={8} textAnchor="middle">
+          {options.formatter && options.formatter(payload)}
+          {options.staticLabel && options.staticLabel}
+          {options.payloadLabel && `${options.payloadLabel} ${payload.name}`}
+        </text>
+      )}
       <Sector
         cx={cx}
         cy={cy}
@@ -154,6 +164,30 @@ const renderActiveShape = (props, options) => {
   );
 };
 
+const CenterLabel = props => {
+  const { options } = props;
+  const { cx, cy, fill } = props.viewBox;
+
+  if (!options) {
+    return null;
+  }
+
+  return (
+    <g>
+      {options.title && (
+        <text x={cx} y={cy} textAnchor="middle" fill={fill} style={{ fontSize: "36px" }}>
+          {options.title}
+        </text>
+      )}
+      {options.subtitle && (
+        <text x={cx} y={cy} dy={28} textAnchor="middle" fill={fill} style={{ fontSize: "14px" }}>
+          {options.subtitle}
+        </text>
+      )}
+    </g>
+  );
+};
+
 class PieChart extends PureComponent<PieChartProps, PieChartState> {
   constructor(props) {
     super(props);
@@ -167,6 +201,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
   render() {
     const {
       children,
+      centerLabel,
       data,
       dimensions,
       activeTooltip,
@@ -187,6 +222,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
         aspect: 2,
         ...(typeof responsive !== "boolean" ? responsive : {}),
       },
+      centerLabel,
       label,
       labelLine,
       legend,
@@ -240,6 +276,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
               fill={entry.color ?? DEFAULT_COLORS[index % DEFAULT_COLORS.length]}
             />
           ))}
+          {centerLabel && <Label content={<CenterLabel options={centerLabel} />} />}
         </Pie>
         {children && children}
         {chartOptions.legend && (
