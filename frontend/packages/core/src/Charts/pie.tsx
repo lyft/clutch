@@ -165,8 +165,8 @@ const renderActiveShape = (props, options) => {
 };
 
 const CenterLabel = props => {
-  const { options } = props;
-  const { cx, cy, fill } = props.viewBox;
+  const { options, viewBox } = props;
+  const { cx, cy, fill } = viewBox;
 
   if (!options) {
     return null;
