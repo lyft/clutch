@@ -9,6 +9,7 @@ LINKED_PACKAGES=(
   "react-dom"
   "react-router"
   "react-router-dom"
+  "recharts"
   "@emotion/react"
   "@emotion/styled"
   "@mui/styles"
