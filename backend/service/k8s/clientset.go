@@ -32,7 +32,11 @@ type ContextClientset interface {
 	Cluster() string
 }
 
-func NewContextClientset(namespace string, cluster string, clientset k8s.Interface, metrics k8s_metrics.Interface) ContextClientset {
+func NewContextClientset(namespace string, cluster string, clientset k8s.Interface) ContextClientset {
+	return newCtxClientsetImpl(namespace, cluster, clientset, nil)
+}
+
+func NewContextClientsetWithMetrics(namespace string, cluster string, clientset k8s.Interface, metrics k8s_metrics.Interface) ContextClientset {
 	return newCtxClientsetImpl(namespace, cluster, clientset, metrics)
 }
 

@@ -14,9 +14,9 @@ func TestClientsetManager(t *testing.T) {
 	fm := fake_k8s_metrics.NewSimpleClientset()
 
 	m := managerImpl{clientsets: map[string]*ctxClientsetImpl{
-		"core-0":  NewContextClientset("core-namespace", "core-cluster-0", fcs, fm).(*ctxClientsetImpl),
-		"core-1a": NewContextClientset("core-namespace", "core-cluster-1", fcs, fm).(*ctxClientsetImpl),
-		"core-1b": NewContextClientset("core-namespace", "core-cluster-1", fcs, fm).(*ctxClientsetImpl),
+		"core-0":  NewContextClientset("core-namespace", "core-cluster-0", fcs).(*ctxClientsetImpl),
+		"core-1a": NewContextClientsetWithMetrics("core-namespace", "core-cluster-1", fcs, fm).(*ctxClientsetImpl),
+		"core-1b": NewContextClientsetWithMetrics("core-namespace", "core-cluster-1", fcs, fm).(*ctxClientsetImpl),
 	}}
 
 	// No match found.
