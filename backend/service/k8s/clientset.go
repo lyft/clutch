@@ -11,6 +11,7 @@ import (
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+	k8s_metrics "k8s.io/metrics/pkg/client/clientset/versioned"
 
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 )
@@ -26,13 +27,23 @@ type ClientsetManager interface {
 
 type ContextClientset interface {
 	k8s.Interface
+	Metrics() k8s_metrics.Interface
 	Namespace() string
 	Cluster() string
 }
 
 func NewContextClientset(namespace string, cluster string, clientset k8s.Interface) ContextClientset {
+	return newCtxClientsetImpl(namespace, cluster, clientset, nil)
+}
+
+func NewContextClientsetWithMetrics(namespace string, cluster string, clientset k8s.Interface, metrics k8s_metrics.Interface) ContextClientset {
+	return newCtxClientsetImpl(namespace, cluster, clientset, metrics)
+}
+
+func newCtxClientsetImpl(namespace string, cluster string, clientset k8s.Interface, metrics k8s_metrics.Interface) *ctxClientsetImpl {
 	return &ctxClientsetImpl{
 		Interface: clientset,
+		metrics:   metrics,
 		namespace: namespace,
 		cluster:   cluster,
 	}
@@ -40,12 +51,14 @@ func NewContextClientset(namespace string, cluster string, clientset k8s.Interfa
 
 type ctxClientsetImpl struct {
 	k8s.Interface
+	metrics   k8s_metrics.Interface
 	namespace string
 	cluster   string
 }
 
-func (c *ctxClientsetImpl) Namespace() string { return c.namespace }
-func (c *ctxClientsetImpl) Cluster() string   { return c.cluster }
+func (c *ctxClientsetImpl) Namespace() string              { return c.namespace }
+func (c *ctxClientsetImpl) Cluster() string                { return c.cluster }
+func (c *ctxClientsetImpl) Metrics() k8s_metrics.Interface { return c.metrics }
 
 func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientConfig *k8sconfigv1.RestClientConfig, logger *zap.Logger) (ClientsetManager, error) {
 	kubeConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(rules, &clientcmd.ConfigOverrides{})
@@ -75,11 +88,16 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 			return nil, fmt.Errorf("could not create k8s clientset from config: %w", err)
 		}
 
+		metrics, err := k8s_metrics.NewForConfig(restConfig)
+		if err != nil {
+			return nil, fmt.Errorf("could not create k8s metrics clientset from config: %w", err)
+		}
+
 		ns, _, err := contextConfig.Namespace()
 		if err != nil {
 			return nil, err
 		}
-		lookup[name] = &ctxClientsetImpl{Interface: clientset, namespace: ns, cluster: ctxInfo.Cluster}
+		lookup[name] = newCtxClientsetImpl(ns, ctxInfo.Cluster, clientset, metrics)
 	}
 
 	// If there is no configured cluster produced fallback to InClusterConfig
@@ -99,7 +117,12 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 				return nil, fmt.Errorf("could not create k8s InClusterConfig: %w", err)
 			}
 
-			lookup[inCluster] = &ctxClientsetImpl{Interface: clientset, namespace: "default", cluster: inCluster}
+			metrics, err := k8s_metrics.NewForConfig(restConfig)
+			if err != nil {
+				return nil, fmt.Errorf("could not create k8s metrics clientset from config: %w", err)
+			}
+
+			lookup[inCluster] = newCtxClientsetImpl("default", inCluster, clientset, metrics)
 		case rest.ErrNotInCluster:
 			// Warn but allow to continue.
 			logger.Warn("unable to load configuration for kube clientset")

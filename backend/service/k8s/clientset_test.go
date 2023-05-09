@@ -6,14 +6,17 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"k8s.io/client-go/kubernetes/fake"
+	fake_k8s_metrics "k8s.io/metrics/pkg/client/clientset/versioned/fake"
 )
 
 func TestClientsetManager(t *testing.T) {
 	fcs := fake.NewSimpleClientset()
+	fm := fake_k8s_metrics.NewSimpleClientset()
+
 	m := managerImpl{clientsets: map[string]*ctxClientsetImpl{
 		"core-0":  NewContextClientset("core-namespace", "core-cluster-0", fcs).(*ctxClientsetImpl),
-		"core-1a": NewContextClientset("core-namespace", "core-cluster-1", fcs).(*ctxClientsetImpl),
-		"core-1b": NewContextClientset("core-namespace", "core-cluster-1", fcs).(*ctxClientsetImpl),
+		"core-1a": NewContextClientsetWithMetrics("core-namespace", "core-cluster-1", fcs, fm).(*ctxClientsetImpl),
+		"core-1b": NewContextClientsetWithMetrics("core-namespace", "core-cluster-1", fcs, fm).(*ctxClientsetImpl),
 	}}
 
 	// No match found.
