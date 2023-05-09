@@ -61,7 +61,7 @@ require (
 	k8s.io/apimachinery v0.23.6
 	k8s.io/client-go v0.23.6
 	k8s.io/metrics v0.23.6
-	k8s.io/utils v0.0.0-20230220204549-a5ecb0141aa5
+	k8s.io/utils v0.0.0-20230505201702-9f6742963106
 )
 
 require (
