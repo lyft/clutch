@@ -19,9 +19,14 @@ import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
 
+export interface WorkflowIcon {
+  path: string;
+}
+
 export interface UserConfiguration {
   [packageName: string]: {
-    [key: string]: ConfiguredRoute;
+    icon: WorkflowIcon;
+    [key: string]: WorkflowIcon | ConfiguredRoute;
   };
 }
 

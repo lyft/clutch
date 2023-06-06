@@ -4,6 +4,7 @@ import { Alert, Grid, IconButton } from "@mui/material";
 
 import { Dialog, DialogContent } from "../dialog";
 import Code from "../text";
+import type { WorkflowIcon } from "./index";
 
 export interface BaseWorkflowProps {
   heading: string;
@@ -54,6 +55,7 @@ export interface Workflow extends BaseWorkflowConfiguration, WorkflowShortlinkCo
    * on homepage) and `componentProps` which allow the passing of workflow/route
    * specific props.
    */
+  icon: WorkflowIcon;
   routes: ConfiguredRoute[];
 }
 

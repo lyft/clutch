@@ -16,6 +16,7 @@ import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
 
 import { filterHiddenRoutes, routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
+import type { WorkflowIcon } from "../AppProvider";
 
 // sidebar
 const DrawerPanel = styled(MuiDrawer)({
@@ -92,6 +93,7 @@ interface GroupProps {
   heading: string;
   open: boolean;
   selected: boolean;
+  icon: WorkflowIcon;
   updateOpenGroup: (heading: string) => void;
   closeGroup: () => void;
   children: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
@@ -101,6 +103,7 @@ const Group = ({
   heading,
   open = false,
   selected = false,
+  icon,
   updateOpenGroup,
   closeGroup,
   children,
@@ -126,7 +129,11 @@ const Group = ({
           updateOpenGroup(heading);
         }}
       >
-        <Avatar>{heading.charAt(0)}</Avatar>
+        {icon.path && icon.path.length > 0 ? (
+          <Avatar src={icon.path} />
+        ) : (
+          <Avatar>{heading.charAt(0)}</Avatar>
+        )}
         <GroupHeading align="center">{heading}</GroupHeading>
         <Popper open={open} onClickAway={closeGroup} anchorRef={anchorRef} id="workflow-options">
           {children}
@@ -180,13 +187,13 @@ const Drawer: React.FC = () => {
       {sortedGroupings(filteredWorkflows).map(grouping => {
         const value = routesByGrouping(filteredWorkflows)[grouping];
         const sortedWorkflows = _.sortBy(value.workflows, w => w.displayName);
-
         return (
           <Group
             key={grouping}
             heading={grouping}
             open={openGroup === grouping}
             selected={openGroup === grouping || activeWorkflow?.group === grouping}
+            icon={value.icon}
             updateOpenGroup={updateOpenGroup}
             closeGroup={() => setOpenGroup("")}
           >
