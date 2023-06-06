@@ -10,13 +10,13 @@ import {
 } from "@mui/material";
 import _ from "lodash";
 
+import type { WorkflowIcon } from "../AppProvider";
 import type { Workflow } from "../AppProvider/workflow";
 import { useAppContext } from "../Contexts";
 import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
 
 import { filterHiddenRoutes, routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
-import type { WorkflowIcon } from "../AppProvider";
 
 // sidebar
 const DrawerPanel = styled(MuiDrawer)({

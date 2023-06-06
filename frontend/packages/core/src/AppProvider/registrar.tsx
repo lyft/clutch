@@ -14,7 +14,8 @@ const workflowRoutes = (
     if (key === "icon") {
       return {} as ConfiguredRoute;
       // if workflow does not contain route with user-specified key return an empty object
-    } else if (workflow.routes[key] === undefined) {
+    }
+    if (workflow.routes[key] === undefined) {
       /* eslint-disable-next-line no-console */
       console.warn(
         `[${workflowId}][${key}] Not registered: Invalid config - route does not exist. Valid routes: ${Object.keys(

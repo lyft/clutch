@@ -1,6 +1,6 @@
 import * as _ from "lodash";
-import type { WorkflowIcon } from "../AppProvider";
 
+import type { WorkflowIcon } from "../AppProvider";
 import type { Route, Workflow } from "../AppProvider/workflow";
 
 interface GroupedRoutes {
