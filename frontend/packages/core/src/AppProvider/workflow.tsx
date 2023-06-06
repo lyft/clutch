@@ -52,11 +52,16 @@ interface WorkflowShortlinkConfiguration {
 
 export interface Workflow extends BaseWorkflowConfiguration, WorkflowShortlinkConfiguration {
   /**
+   * An optional property that is set via the config and allows for the display of an icon given a path,
+   * this will override the default avatar.
+   * { path: string }
+   */
+  icon: WorkflowIcon;
+  /**
    * Configured routes allow for the optional properties of `trending` (whether to display
    * on homepage) and `componentProps` which allow the passing of workflow/route
    * specific props.
    */
-  icon: WorkflowIcon;
   routes: ConfiguredRoute[];
 }
 
