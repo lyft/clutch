@@ -28,7 +28,7 @@ require (
 	github.com/go-git/go-git/v5 v5.5.2
 	github.com/gobwas/glob v0.2.3
 	github.com/gogo/status v1.1.1
-	github.com/golang-migrate/migrate/v4 v4.15.2
+	github.com/golang-migrate/migrate/v4 v4.16.1
 	github.com/golang/protobuf v1.5.3
 	github.com/google/go-github/v50 v50.2.0
 	github.com/google/uuid v1.3.0
@@ -48,9 +48,9 @@ require (
 	go.temporal.io/sdk v1.21.1
 	go.temporal.io/sdk/contrib/tally v0.2.0
 	go.uber.org/zap v1.24.0
-	golang.org/x/net v0.8.0
+	golang.org/x/net v0.10.0
 	golang.org/x/oauth2 v0.6.0
-	golang.org/x/sync v0.1.0
+	golang.org/x/sync v0.2.0
 	google.golang.org/genproto v0.0.0-20230320173215-1fe4d14fc725
 	google.golang.org/grpc v1.54.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
@@ -65,7 +65,7 @@ require (
 )
 
 require (
-	github.com/Microsoft/go-winio v0.5.2 // indirect
+	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230217124315-7d5c6f04bbb8 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.10 // indirect
@@ -143,12 +143,12 @@ require (
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
-	golang.org/x/mod v0.8.0 // indirect
-	golang.org/x/sys v0.6.0 // indirect
-	golang.org/x/term v0.6.0 // indirect
-	golang.org/x/text v0.8.0 // indirect
+	golang.org/x/mod v0.10.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/term v0.8.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/time v0.1.0 // indirect
-	golang.org/x/tools v0.6.0 // indirect
+	golang.org/x/tools v0.9.1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
