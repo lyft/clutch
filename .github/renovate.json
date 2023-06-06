@@ -24,9 +24,6 @@
     {
       "groupName": "eslint",
       "matchPackagePatterns": ["^eslint"],
-      "postUpgradeTasks": {
-        "commands": ["make frontend-lint-fix"]
-      },
       "schedule": ["every 2 week on monday"],
       "stabilityDays": 14
     },
@@ -56,6 +53,5 @@
     }
   ],
   "postUpdateOptions": ["gomodTidy"],
-  "allowedPostUpgradeCommands": ["^make frontend-lint-fix$"],
   "ignoreDeps": ["@date-io/core", "babel-jest"]
 }
