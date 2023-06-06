@@ -10,7 +10,11 @@ const workflowRoutes = (
 ): ConfiguredRoute[] => {
   const workflowConfig = configuration?.[workflowId] || {};
   const allRoutes = Object.keys(workflowConfig).map(key => {
-    // if workflow does not contain route with user-specified key return an empty object
+    // if workflow contains an icon, return an empty object
+    if (key === "icon") {
+      return {} as ConfiguredRoute;
+      // if workflow does not contain route with user-specified key return an empty object
+    }
     if (workflow.routes[key] === undefined) {
       /* eslint-disable-next-line no-console */
       console.warn(
@@ -64,8 +68,13 @@ const registeredWorkflows = async (
   let validWorkflows = Object.keys(workflows || [])
     .map((workflowId: string) => {
       const workflow = workflows[workflowId]();
+      const icon = configuration?.[workflowId]?.icon || { path: "" };
       try {
-        return { ...workflow, routes: workflowRoutes(workflowId, workflow, configuration) };
+        return {
+          ...workflow,
+          icon,
+          routes: workflowRoutes(workflowId, workflow, configuration),
+        };
       } catch {
         // n.b. if the routes aren't configured properly we drop the workflow
         /* eslint-disable-next-line no-console */

@@ -1,9 +1,11 @@
 import * as _ from "lodash";
 
+import type { WorkflowIcon } from "../AppProvider";
 import type { Route, Workflow } from "../AppProvider/workflow";
 
 interface GroupedRoutes {
   [category: string]: {
+    icon?: WorkflowIcon;
     workflows: {
       displayName: string;
       path: string;
@@ -56,7 +58,10 @@ const routesByGrouping = (workflows: Workflow[]): GroupedRoutes => {
   workflows.forEach(workflow => {
     const category = workflow.group;
     if (routes[category] === undefined) {
-      routes[category] = { workflows: [] };
+      routes[category] = {
+        workflows: [],
+        icon: workflow.icon,
+      };
     }
 
     routes[category].workflows = [
@@ -65,7 +70,7 @@ const routesByGrouping = (workflows: Workflow[]): GroupedRoutes => {
         return {
           displayName: getDisplayName(workflow, route, " -"),
           path: `${workflow.path}/${route.path}`,
-          trending: route.trending,
+          trending: route.trending || false,
         };
       }),
     ];
