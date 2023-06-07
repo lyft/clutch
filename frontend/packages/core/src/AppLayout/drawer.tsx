@@ -37,36 +37,40 @@ const GroupList = styled(List)({
   padding: "0px",
 });
 
-const GroupListItem = styled(ListItemButton)({
-  flexDirection: "column",
-  minHeight: "82px",
-  padding: "16px 8px 16px 8px",
-  height: "fit-content",
-  "&:hover": {
-    backgroundColor: "#F5F6FD",
-  },
-  "&:active": {
-    backgroundColor: "#D7DAF6",
-  },
-  // avatar and label
-  "&:hover, &:active, &.Mui-selected": {
-    ".MuiAvatar-root": {
-      backgroundColor: "#3548D4",
-    },
-    ".MuiTypography-root": {
-      color: "#3548D4",
-    },
-  },
-  "&.Mui-selected": {
-    backgroundColor: "#EBEDFB",
+const GroupListItem = styled(ListItemButton)<{ icon: boolean }>(
+  {
+    flexDirection: "column",
+    minHeight: "82px",
+    padding: "16px 8px 16px 8px",
+    height: "fit-content",
     "&:hover": {
       backgroundColor: "#F5F6FD",
     },
     "&:active": {
       backgroundColor: "#D7DAF6",
     },
+    "&.Mui-selected": {
+      backgroundColor: "#EBEDFB",
+      "&:hover": {
+        backgroundColor: "#F5F6FD",
+      },
+      "&:active": {
+        backgroundColor: "#D7DAF6",
+      },
+    },
   },
-});
+  props => ({
+    // avatar and label
+    "&:hover, &:active, &.Mui-selected": {
+      ".MuiAvatar-root": {
+        backgroundColor: props.icon ? "unset" : "#3548D4",
+      },
+      ".MuiTypography-root": {
+        color: "#3548D4",
+      },
+    },
+  })
+);
 
 const GroupHeading = styled(Typography)({
   color: "rgba(13, 16, 48, 0.6)",
@@ -80,10 +84,13 @@ const GroupHeading = styled(Typography)({
   overflow: "hidden",
 });
 
-const Avatar = styled(MuiAvatar)({
-  background: "rgba(13, 16, 48, 0.6)",
+const IconAvatar = styled(MuiAvatar)({
   height: "24px",
   width: "24px",
+});
+
+const Avatar = styled(IconAvatar)({
+  background: "rgba(13, 16, 48, 0.6)",
   color: "#FFFFFF",
   fontSize: "14px",
   borderRadius: "4px",
@@ -125,12 +132,13 @@ const Group = ({
         ref={anchorRef}
         aria-controls={open ? "workflow-options" : undefined}
         aria-haspopup="true"
+        icon={icon.path && icon.path.length > 0}
         onClick={() => {
           updateOpenGroup(heading);
         }}
       >
         {icon.path && icon.path.length > 0 ? (
-          <Avatar src={icon.path} />
+          <IconAvatar src={icon.path} />
         ) : (
           <Avatar>{heading.charAt(0)}</Avatar>
         )}
