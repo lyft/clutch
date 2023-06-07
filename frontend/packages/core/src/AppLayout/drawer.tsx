@@ -116,6 +116,7 @@ const Group = ({
   children,
 }: GroupProps) => {
   const anchorRef = React.useRef(null);
+  const validIcon = icon.path && icon.path.length > 0;
 
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
   // it's not explicitly marked as hidden.
@@ -132,16 +133,12 @@ const Group = ({
         ref={anchorRef}
         aria-controls={open ? "workflow-options" : undefined}
         aria-haspopup="true"
-        icon={icon.path && icon.path.length > 0}
+        icon={validIcon}
         onClick={() => {
           updateOpenGroup(heading);
         }}
       >
-        {icon.path && icon.path.length > 0 ? (
-          <IconAvatar src={icon.path} />
-        ) : (
-          <Avatar>{heading.charAt(0)}</Avatar>
-        )}
+        {validIcon ? <IconAvatar src={icon.path} /> : <Avatar>{heading.charAt(0)}</Avatar>}
         <GroupHeading align="center">{heading}</GroupHeading>
         <Popper open={open} onClickAway={closeGroup} anchorRef={anchorRef} id="workflow-options">
           {children}
