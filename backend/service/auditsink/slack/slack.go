@@ -148,10 +148,9 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 	}
 
 	// When a value is nil, the Go Template sets the value as "<no value>".
-	// Ex of when we hit this scenario: https://github.com/lyft/clutch/blob/main/api/k8s/v1/k8s.proto#L860
 	sanitized := strings.ReplaceAll(buf.String(), "<no value>", defaultNone)
 
-	return sanitized, nil
+	return strings.TrimSpace(sanitized), nil
 }
 
 func (s *svc) auditEventToMessage(username string, event *auditv1.RequestEvent) string {
