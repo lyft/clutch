@@ -138,7 +138,11 @@ const Group = ({
           updateOpenGroup(heading);
         }}
       >
-        {validIcon ? <IconAvatar src={icon.path} /> : <Avatar>{heading.charAt(0)}</Avatar>}
+        {validIcon ? (
+          <IconAvatar src={icon.path}>{heading.charAt(0)}</IconAvatar>
+        ) : (
+          <Avatar>{heading.charAt(0)}</Avatar>
+        )}
         <GroupHeading align="center">{heading}</GroupHeading>
         <Popper open={open} onClickAway={closeGroup} anchorRef={anchorRef} id="workflow-options">
           {children}
