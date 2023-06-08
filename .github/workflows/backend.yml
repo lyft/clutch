@@ -7,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - 'tools/scaffolding/**''
+      - 'tools/scaffolding/templates/gateway/**'
       - 'backend/**'
       - .github/workflows/backend.yml
       - tools/golangci-lint.sh
