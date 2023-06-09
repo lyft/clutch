@@ -2,7 +2,6 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import {
-  convertSearchParam,
   Error,
   Grid,
   styled,
@@ -11,7 +10,6 @@ import {
   useLocation,
   useNavigate,
   useParams,
-  useSearchParams,
 } from "@clutch-sh/core";
 
 import type { ProjectConfigPage, ProjectDetailsConfigWorkflowProps } from "..";
@@ -27,7 +25,6 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
   const { projectId, configType = defaultRoute } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
     null
   );
@@ -45,13 +42,24 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
       const splitLoc = location.pathname.split("/");
       const selectedPath = configPages[selectedPage]?.props?.path;
 
-      if (splitLoc[splitLoc.length - 1] !== "config") {
-        splitLoc.splice(splitLoc.length - 1, 1, selectedPath);
-      } else {
-        splitLoc.push(selectedPath);
-      }
+      if (selectedPath) {
+        if (splitLoc[splitLoc.length - 1] !== "config") {
+          splitLoc.splice(splitLoc.length - 1, 1, selectedPath);
+        } else {
+          splitLoc.push(selectedPath);
+        }
 
-      navigate(`${splitLoc.join("/")}${convertSearchParam(searchParams)}`, { replace: true });
+        // Used to reduce the number of navigation calls when the user is navigating between tabs
+        if (splitLoc.join("/") !== location.pathname.replace(/%20/, " ")) {
+          navigate(
+            {
+              pathname: splitLoc.join("/"),
+              search: window.location.search,
+            },
+            { replace: true }
+          );
+        }
+      }
     }
   }, [configPages, selectedPage]);
 
