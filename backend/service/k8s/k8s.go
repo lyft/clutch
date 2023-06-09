@@ -19,7 +19,6 @@ import (
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
-	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 )
 
 const Name = "clutch.service.k8s"
