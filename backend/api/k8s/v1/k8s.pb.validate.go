@@ -13289,6 +13289,39 @@ func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) validate(a
 
 	}
 
+	if m.ReadinessProbe != nil {
+
+		if all {
+			switch v := interface{}(m.GetReadinessProbe()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+						field:  "ReadinessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+						field:  "ReadinessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetReadinessProbe()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+					field:  "ReadinessProbe",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
 		return Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerMultiError(errors)
 	}
@@ -15020,6 +15053,39 @@ func (m *UpdateDeploymentRequest_Fields_ContainerProbes) validate(all bool) erro
 			if err := v.Validate(); err != nil {
 				return UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
 					field:  "LivenessProbe",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.ReadinessProbe != nil {
+
+		if all {
+			switch v := interface{}(m.GetReadinessProbe()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+						field:  "ReadinessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+						field:  "ReadinessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetReadinessProbe()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+					field:  "ReadinessProbe",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

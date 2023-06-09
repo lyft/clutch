@@ -40016,6 +40016,7 @@ export const clutch = $root.clutch = (() => {
                                  * @property {string|null} [name] Container name
                                  * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IResourceRequirements|null} [resources] Container resources
                                  * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null} [livenessProbe] Container livenessProbe
+                                 * @property {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null} [readinessProbe] Container readinessProbe
                                  */
 
                                 /**
@@ -40057,6 +40058,14 @@ export const clutch = $root.clutch = (() => {
                                  */
                                 Container.prototype.livenessProbe = null;
 
+                                /**
+                                 * Container readinessProbe.
+                                 * @member {clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null|undefined} readinessProbe
+                                 * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                 * @instance
+                                 */
+                                Container.prototype.readinessProbe = null;
+
                                 // OneOf field names bound to virtual getters and setters
                                 let $oneOfFields;
 
@@ -40068,6 +40077,17 @@ export const clutch = $root.clutch = (() => {
                                  */
                                 Object.defineProperty(Container.prototype, "_livenessProbe", {
                                     get: $util.oneOfGetter($oneOfFields = ["livenessProbe"]),
+                                    set: $util.oneOfSetter($oneOfFields)
+                                });
+
+                                /**
+                                 * Container _readinessProbe.
+                                 * @member {"readinessProbe"|undefined} _readinessProbe
+                                 * @memberof clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+                                 * @instance
+                                 */
+                                Object.defineProperty(Container.prototype, "_readinessProbe", {
+                                    get: $util.oneOfGetter($oneOfFields = ["readinessProbe"]),
                                     set: $util.oneOfSetter($oneOfFields)
                                 });
 
@@ -40099,6 +40119,14 @@ export const clutch = $root.clutch = (() => {
                                                 return "livenessProbe." + error;
                                         }
                                     }
+                                    if (message.readinessProbe != null && message.hasOwnProperty("readinessProbe")) {
+                                        properties._readinessProbe = 1;
+                                        {
+                                            let error = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.verify(message.readinessProbe);
+                                            if (error)
+                                                return "readinessProbe." + error;
+                                        }
+                                    }
                                     return null;
                                 };
 
@@ -40125,6 +40153,11 @@ export const clutch = $root.clutch = (() => {
                                         if (typeof object.livenessProbe !== "object")
                                             throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.livenessProbe: object expected");
                                         message.livenessProbe = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.fromObject(object.livenessProbe);
+                                    }
+                                    if (object.readinessProbe != null) {
+                                        if (typeof object.readinessProbe !== "object")
+                                            throw TypeError(".clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.readinessProbe: object expected");
+                                        message.readinessProbe = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.fromObject(object.readinessProbe);
                                     }
                                     return message;
                                 };
@@ -40154,6 +40187,11 @@ export const clutch = $root.clutch = (() => {
                                         object.livenessProbe = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.toObject(message.livenessProbe, options);
                                         if (options.oneofs)
                                             object._livenessProbe = "livenessProbe";
+                                    }
+                                    if (message.readinessProbe != null && message.hasOwnProperty("readinessProbe")) {
+                                        object.readinessProbe = $root.clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe.toObject(message.readinessProbe, options);
+                                        if (options.oneofs)
+                                            object._readinessProbe = "readinessProbe";
                                     }
                                     return object;
                                 };
@@ -42905,6 +42943,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface IContainerProbes
                          * @property {string|null} [containerName] ContainerProbes containerName
                          * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null} [livenessProbe] ContainerProbes livenessProbe
+                         * @property {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null} [readinessProbe] ContainerProbes readinessProbe
                          */
 
                         /**
@@ -42938,6 +42977,14 @@ export const clutch = $root.clutch = (() => {
                          */
                         ContainerProbes.prototype.livenessProbe = null;
 
+                        /**
+                         * ContainerProbes readinessProbe.
+                         * @member {clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null|undefined} readinessProbe
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @instance
+                         */
+                        ContainerProbes.prototype.readinessProbe = null;
+
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
 
@@ -42949,6 +42996,17 @@ export const clutch = $root.clutch = (() => {
                          */
                         Object.defineProperty(ContainerProbes.prototype, "_livenessProbe", {
                             get: $util.oneOfGetter($oneOfFields = ["livenessProbe"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
+
+                        /**
+                         * ContainerProbes _readinessProbe.
+                         * @member {"readinessProbe"|undefined} _readinessProbe
+                         * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes
+                         * @instance
+                         */
+                        Object.defineProperty(ContainerProbes.prototype, "_readinessProbe", {
+                            get: $util.oneOfGetter($oneOfFields = ["readinessProbe"]),
                             set: $util.oneOfSetter($oneOfFields)
                         });
 
@@ -42975,6 +43033,14 @@ export const clutch = $root.clutch = (() => {
                                         return "livenessProbe." + error;
                                 }
                             }
+                            if (message.readinessProbe != null && message.hasOwnProperty("readinessProbe")) {
+                                properties._readinessProbe = 1;
+                                {
+                                    let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.verify(message.readinessProbe);
+                                    if (error)
+                                        return "readinessProbe." + error;
+                                }
+                            }
                             return null;
                         };
 
@@ -42996,6 +43062,11 @@ export const clutch = $root.clutch = (() => {
                                 if (typeof object.livenessProbe !== "object")
                                     throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.livenessProbe: object expected");
                                 message.livenessProbe = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.fromObject(object.livenessProbe);
+                            }
+                            if (object.readinessProbe != null) {
+                                if (typeof object.readinessProbe !== "object")
+                                    throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.readinessProbe: object expected");
+                                message.readinessProbe = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.fromObject(object.readinessProbe);
                             }
                             return message;
                         };
@@ -43021,6 +43092,11 @@ export const clutch = $root.clutch = (() => {
                                 object.livenessProbe = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.toObject(message.livenessProbe, options);
                                 if (options.oneofs)
                                     object._livenessProbe = "livenessProbe";
+                            }
+                            if (message.readinessProbe != null && message.hasOwnProperty("readinessProbe")) {
+                                object.readinessProbe = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe.toObject(message.readinessProbe, options);
+                                if (options.oneofs)
+                                    object._readinessProbe = "readinessProbe";
                             }
                             return object;
                         };

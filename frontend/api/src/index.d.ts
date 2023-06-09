@@ -16714,6 +16714,9 @@ export namespace clutch {
 
                                 /** Container livenessProbe */
                                 livenessProbe?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null);
+
+                                /** Container readinessProbe */
+                                readinessProbe?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null);
                             }
 
                             /** Represents a Container. */
@@ -16734,8 +16737,14 @@ export namespace clutch {
                                 /** Container livenessProbe. */
                                 public livenessProbe?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null);
 
+                                /** Container readinessProbe. */
+                                public readinessProbe?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null);
+
                                 /** Container _livenessProbe. */
                                 public _livenessProbe?: "livenessProbe";
+
+                                /** Container _readinessProbe. */
+                                public _readinessProbe?: "readinessProbe";
 
                                 /**
                                  * Verifies a Container message.
@@ -17811,6 +17820,9 @@ export namespace clutch {
 
                         /** ContainerProbes livenessProbe */
                         livenessProbe?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null);
+
+                        /** ContainerProbes readinessProbe */
+                        readinessProbe?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null);
                     }
 
                     /** Represents a ContainerProbes. */
@@ -17828,8 +17840,14 @@ export namespace clutch {
                         /** ContainerProbes livenessProbe. */
                         public livenessProbe?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null);
 
+                        /** ContainerProbes readinessProbe. */
+                        public readinessProbe?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null);
+
                         /** ContainerProbes _livenessProbe. */
                         public _livenessProbe?: "livenessProbe";
+
+                        /** ContainerProbes _readinessProbe. */
+                        public _readinessProbe?: "readinessProbe";
 
                         /**
                          * Verifies a ContainerProbes message.

@@ -672,6 +672,7 @@ message Deployment {
             optional string service = 2;
           }
           optional Probe livenessProbe = 3;
+          optional Probe readinessProbe = 4;
         }
         repeated Container containers = 1;
       }
@@ -789,6 +790,7 @@ message UpdateDeploymentRequest {
         optional string service = 2;
       }
       optional Probe livenessProbe = 2;
+      optional Probe readinessProbe = 3;
     }
     repeated ContainerProbes container_probes = 4;
   }

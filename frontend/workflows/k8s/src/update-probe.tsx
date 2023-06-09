@@ -57,6 +57,7 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
   const { containers } = deployment.deploymentSpec.template.spec;
 
   const [containerName, setContainerName] = React.useState(containers[0].name);
+  const [probeType, setProbeType] = React.useState("livenessProbe");
 
   const [containerIndex, setContainerIndex] = React.useState(0);
 
@@ -71,6 +72,11 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
     deploymentSpec: deployment.deploymentSpec,
     containerName,
   });
+
+  const listedProbes = [];
+
+  if (currentDeployment.livenessProbe?.handler) listedProbes.push("livenessProbe");
+  if (currentDeployment.readinessProbe?.handler) listedProbes.push("readinessProbe");
 
   const containerBase = `deploymentSpec.template.spec.containers[${containerIndex}]`;
 
@@ -100,80 +106,131 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
             ),
           },
           {
+            name: "Probe Type",
+            value: (
+              <Select
+                label="Probe Type"
+                name="probeType"
+                onChange={value => {
+                  setProbeType(value);
+                }}
+                options={listedProbes.map(probe => {
+                  return { label: probe };
+                })}
+              />
+            ),
+          },
+          {
             name: "Initial Delay Seconds",
-            value: currentDeployment.livenessProbe.initialDelaySeconds,
+            value:
+              probeType === "livenessProbe"
+                ? currentDeployment.livenessProbe.initialDelaySeconds
+                : currentDeployment.readinessProbe.initialDelaySeconds,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key: `${containerBase}.livenessProbe.initialDelaySeconds`,
+              key:
+                probeType === "livenessProbe"
+                  ? `${containerBase}.livenessProbe.initialDelaySeconds`
+                  : `${containerBase}.readinessProbe.initialDelaySeconds`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Period Seconds",
-            value: currentDeployment.livenessProbe.periodSeconds,
+            value:
+              probeType === "livenessProbe"
+                ? currentDeployment.livenessProbe.periodSeconds
+                : currentDeployment.readinessProbe.periodSeconds,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key: `${containerBase}.livenessProbe.periodSeconds`,
+              key:
+                probeType === "livenessProbe"
+                  ? `${containerBase}.livenessProbe.periodSeconds`
+                  : `${containerBase}.readinessProbe.periodSeconds`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Timeout Seconds",
-            value: currentDeployment.livenessProbe.timeoutSeconds,
+            value:
+              probeType === "livenessProbe"
+                ? currentDeployment.livenessProbe.timeoutSeconds
+                : currentDeployment.readinessProbe.timeoutSeconds,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key: `${containerBase}.livenessProbe.timeoutSeconds`,
+              key:
+                probeType === "livenessProbe"
+                  ? `${containerBase}.livenessProbe.timeoutSeconds`
+                  : `${containerBase}.readinessProbe.timeoutSeconds`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Success Threshold",
-            value: currentDeployment.livenessProbe.successThreshold,
+            value:
+              probeType === "livenessProbe"
+                ? currentDeployment.livenessProbe.successThreshold
+                : currentDeployment.readinessProbe.successThreshold,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key: `${containerBase}.livenessProbe.successThreshold`,
+              key:
+                probeType === "livenessProbe"
+                  ? `${containerBase}.livenessProbe.successThreshold`
+                  : `${containerBase}.readinessProbe.successThreshold`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Failure Threshold",
-            value: currentDeployment.livenessProbe.failureThreshold,
+            value:
+              probeType === "livenessProbe"
+                ? currentDeployment.livenessProbe.failureThreshold
+                : currentDeployment.readinessProbe.failureThreshold,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key: `${containerBase}.livenessProbe.failureThreshold`,
+              key:
+                probeType === "livenessProbe"
+                  ? `${containerBase}.livenessProbe.failureThreshold`
+                  : `${containerBase}.readinessProbe.failureThreshold`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Termination Grace Period Seconds",
-            value: currentDeployment.livenessProbe.terminationGracePeriodSeconds,
+            value:
+              probeType === "livenessProbe"
+                ? currentDeployment.livenessProbe.terminationGracePeriodSeconds
+                : currentDeployment.readinessProbe.terminationGracePeriodSeconds,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key: `${containerBase}.livenessProbe.terminationGracePeriodSeconds`,
+              key:
+                probeType === "livenessProbe"
+                  ? `${containerBase}.livenessProbe.terminationGracePeriodSeconds`
+                  : `${containerBase}.readinessProbe.terminationGracePeriodSeconds`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
@@ -197,7 +254,12 @@ const Confirm: React.FC<ConfirmChild> = () => {
   const updateRows: any[] = [];
 
   let updatedContainer = false;
+  let probeType = "livenessProbe";
   deployment.deploymentSpec.template.spec.containers.forEach(container => {
+    if (!updatedContainer) {
+      updateRows.push({ name: "Container Name", value: container.name });
+      updatedContainer = true;
+    }
     Object.keys(container.livenessProbe).forEach(livenessAttribute => {
       if (livenessAttribute !== "handler") {
         const newValue = container.livenessProbe[livenessAttribute];
@@ -206,10 +268,6 @@ const Confirm: React.FC<ConfirmChild> = () => {
           containerName: container.name,
         }).livenessProbe[livenessAttribute];
         if (newValue !== oldValue) {
-          if (!updatedContainer) {
-            updateRows.push({ name: "Container Name", value: container.name });
-            updatedContainer = true;
-          }
           updateRows.push({
             name: `Old ${livenessAttribute}`,
             value: oldValue,
@@ -218,9 +276,31 @@ const Confirm: React.FC<ConfirmChild> = () => {
             name: `New ${livenessAttribute}`,
             value: newValue,
           });
+          probeType = "livenessProbe";
         }
       }
     });
+    Object.keys(container.readinessProbe).forEach(readinessAttribute => {
+      if (readinessAttribute !== "handler") {
+        const newValue = container.readinessProbe[readinessAttribute];
+        const oldValue = findContainer({
+          deploymentSpec: currentDeploymentData.deploymentSpec,
+          containerName: container.name,
+        }).readinessProbe[readinessAttribute];
+        if (newValue !== oldValue) {
+          updateRows.push({
+            name: `Old ${readinessAttribute}`,
+            value: oldValue,
+          });
+          updateRows.push({
+            name: `New ${readinessAttribute}`,
+            value: newValue,
+          });
+          probeType = "readnessProbe";
+        }
+      }
+    });
+    updateRows.push({ name: "Probe type", value: probeType });
   });
 
   return (
@@ -258,6 +338,7 @@ const UpdateLiveness: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
       ) => {
         const clientset = inputData.clientset ?? "undefined";
         const container = findContainer({ ...deploymentData });
+        // if()
         return client.post("/v1/k8s/updateDeployment", {
           clientset,
           cluster: deploymentData.cluster,
@@ -275,6 +356,15 @@ const UpdateLiveness: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
                   failureThreshold: container.livenessProbe.failureThreshold,
                   terminationGracePeriodSeconds:
                     container.livenessProbe.terminationGracePeriodSeconds,
+                },
+                readinessProbe: {
+                  timeoutSeconds: container.readinessProbe.timeoutSeconds,
+                  initialDelaySeconds: container.readinessProbe.initialDelaySeconds,
+                  periodSeconds: container.readinessProbe.periodSeconds,
+                  successThreshold: container.readinessProbe.successThreshold,
+                  failureThreshold: container.readinessProbe.failureThreshold,
+                  terminationGracePeriodSeconds:
+                    container.readinessProbe.terminationGracePeriodSeconds,
                 },
               },
             ],
