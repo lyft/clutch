@@ -6,7 +6,6 @@ import DeletePod from "./delete-pod";
 import KubeDashboard from "./k8s-dashboard";
 import ResizeHPA from "./resize-hpa";
 import ScaleResources from "./scale-resources";
-import UpdateLiveness from "./update-probe";
 
 interface ResolverConfigProps {
   resolverType: string;
@@ -65,13 +64,6 @@ const register = (): WorkflowConfiguration => {
         displayName: "Cordon/Uncordon Node",
         description: "Cordon or uncordon a node",
         component: CordonNode,
-        requiredConfigProps: ["resolverType"],
-      },
-      UpdateLiveness: {
-        path: "probe/update",
-        displayName: "Update Probes",
-        description: "Update Probes on deployments",
-        component: UpdateLiveness,
         requiredConfigProps: ["resolverType"],
       },
     },
