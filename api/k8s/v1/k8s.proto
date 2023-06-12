@@ -585,14 +585,17 @@ message HTTPGetAction {
   optional string scheme = 4;
   repeated HTTPHeader httpHeaders = 5;
 }
+
 message HTTPHeader {
   optional string name = 1;
   optional string value = 2;
 }
+
 message TCPSocketAction {
   optional int32 port = 1;
   optional string host = 2;
 }
+
 message GRPCAction {
   optional int32 port = 1;
   optional string service = 2;
