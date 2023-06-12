@@ -583,7 +583,7 @@ message HTTPGetAction {
   optional int32 port = 2;
   optional string host = 3;
   optional string scheme = 4;
-  repeated HTTPHeader httpHeaders = 5;
+  repeated HTTPHeader http_headers = 5;
 }
 
 message HTTPHeader {
@@ -604,16 +604,16 @@ message GRPCAction {
 message Probe {
   oneof handler {
     ExecAction exec = 1;
-    HTTPGetAction httpGet = 2;
-    TCPSocketAction tcpSocket = 3;
+    HTTPGetAction http_get = 2;
+    TCPSocketAction tcp_socket = 3;
     GRPCAction grpc = 4;
   }
-  optional int32 initialDelaySeconds = 5;
-  optional int32 timeoutSeconds = 6;
-  optional int32 periodSeconds = 7;
-  optional int32 successThreshold = 8;
-  optional int32 failureThreshold = 9;
-  optional int64 terminationGracePeriodSeconds = 10;
+  optional int32 initial_delay_seconds = 5;
+  optional int32 timeout_seconds = 6;
+  optional int32 period_seconds = 7;
+  optional int32 success_threshold = 8;
+  optional int32 failure_threshold = 9;
+  optional int64 termination_grace_period_seconds = 10;
 }
 
 message Deployment {
@@ -676,8 +676,8 @@ message Deployment {
             map<string, string> requests = 2;
           }
           ResourceRequirements resources = 2;
-          optional Probe livenessProbe = 3;
-          optional Probe readinessProbe = 4;
+          optional Probe liveness_probe = 3;
+          optional Probe readiness_probe = 4;
         }
         repeated Container containers = 1;
       }
@@ -757,8 +757,8 @@ message UpdateDeploymentRequest {
 
     message ContainerProbes {
       string container_name = 1;
-      optional Probe livenessProbe = 2;
-      optional Probe readinessProbe = 3;
+      optional Probe liveness_probe = 2;
+      optional Probe readiness_probe = 3;
     }
     repeated ContainerProbes container_probes = 4;
   }
