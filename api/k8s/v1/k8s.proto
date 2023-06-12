@@ -574,24 +574,10 @@ message DeleteHPARequest {
 message DeleteHPAResponse {
 }
 
-message Probe {
-  optional ProbeHandler handler = 1;
-  optional int32 initialDelaySeconds = 2;
-  optional int32 timeoutSeconds = 3;
-  optional int32 periodSeconds = 4;
-  optional int32 successThreshold = 5;
-  optional int32 failureThreshold = 6;
-  optional int64 terminationGracePeriodSeconds = 7;
-}
-message ProbeHandler {
-  optional ExecAction exec = 1;
-  optional HTTPGetAction httpGet = 2;
-  optional TCPSocketAction tcpSocket = 3;
-  optional GRPCAction grpc = 4;
-}
 message ExecAction {
   repeated string command = 1;
 }
+
 message HTTPGetAction {
   optional string path = 1;
   optional int32 port = 2;
@@ -610,6 +596,21 @@ message TCPSocketAction {
 message GRPCAction {
   optional int32 port = 1;
   optional string service = 2;
+}
+
+message Probe {
+  oneof handler {
+    ExecAction exec = 1;
+    HTTPGetAction httpGet = 2;
+    TCPSocketAction tcpSocket = 3;
+    GRPCAction grpc = 4;
+  }
+  optional int32 initialDelaySeconds = 5;
+  optional int32 timeoutSeconds = 6;
+  optional int32 periodSeconds = 7;
+  optional int32 successThreshold = 8;
+  optional int32 failureThreshold = 9;
+  optional int64 terminationGracePeriodSeconds = 10;
 }
 
 message Deployment {

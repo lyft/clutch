@@ -3491,392 +3491,6 @@ var _ interface {
 	ErrorName() string
 } = DeleteHPAResponseValidationError{}
 
-// Validate checks the field values on Probe with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Probe) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Probe with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in ProbeMultiError, or nil if none found.
-func (m *Probe) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Probe) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Handler != nil {
-
-		if all {
-			switch v := interface{}(m.GetHandler()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ProbeValidationError{
-						field:  "Handler",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ProbeValidationError{
-						field:  "Handler",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetHandler()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ProbeValidationError{
-					field:  "Handler",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if m.InitialDelaySeconds != nil {
-		// no validation rules for InitialDelaySeconds
-	}
-
-	if m.TimeoutSeconds != nil {
-		// no validation rules for TimeoutSeconds
-	}
-
-	if m.PeriodSeconds != nil {
-		// no validation rules for PeriodSeconds
-	}
-
-	if m.SuccessThreshold != nil {
-		// no validation rules for SuccessThreshold
-	}
-
-	if m.FailureThreshold != nil {
-		// no validation rules for FailureThreshold
-	}
-
-	if m.TerminationGracePeriodSeconds != nil {
-		// no validation rules for TerminationGracePeriodSeconds
-	}
-
-	if len(errors) > 0 {
-		return ProbeMultiError(errors)
-	}
-
-	return nil
-}
-
-// ProbeMultiError is an error wrapping multiple validation errors returned by
-// Probe.ValidateAll() if the designated constraints aren't met.
-type ProbeMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ProbeMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ProbeMultiError) AllErrors() []error { return m }
-
-// ProbeValidationError is the validation error returned by Probe.Validate if
-// the designated constraints aren't met.
-type ProbeValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ProbeValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ProbeValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ProbeValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ProbeValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ProbeValidationError) ErrorName() string { return "ProbeValidationError" }
-
-// Error satisfies the builtin error interface
-func (e ProbeValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sProbe.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ProbeValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ProbeValidationError{}
-
-// Validate checks the field values on ProbeHandler with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *ProbeHandler) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ProbeHandler with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in ProbeHandlerMultiError, or
-// nil if none found.
-func (m *ProbeHandler) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ProbeHandler) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if m.Exec != nil {
-
-		if all {
-			switch v := interface{}(m.GetExec()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ProbeHandlerValidationError{
-						field:  "Exec",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ProbeHandlerValidationError{
-						field:  "Exec",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetExec()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ProbeHandlerValidationError{
-					field:  "Exec",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if m.HttpGet != nil {
-
-		if all {
-			switch v := interface{}(m.GetHttpGet()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ProbeHandlerValidationError{
-						field:  "HttpGet",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ProbeHandlerValidationError{
-						field:  "HttpGet",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetHttpGet()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ProbeHandlerValidationError{
-					field:  "HttpGet",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if m.TcpSocket != nil {
-
-		if all {
-			switch v := interface{}(m.GetTcpSocket()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ProbeHandlerValidationError{
-						field:  "TcpSocket",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ProbeHandlerValidationError{
-						field:  "TcpSocket",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetTcpSocket()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ProbeHandlerValidationError{
-					field:  "TcpSocket",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if m.Grpc != nil {
-
-		if all {
-			switch v := interface{}(m.GetGrpc()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, ProbeHandlerValidationError{
-						field:  "Grpc",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, ProbeHandlerValidationError{
-						field:  "Grpc",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetGrpc()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ProbeHandlerValidationError{
-					field:  "Grpc",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if len(errors) > 0 {
-		return ProbeHandlerMultiError(errors)
-	}
-
-	return nil
-}
-
-// ProbeHandlerMultiError is an error wrapping multiple validation errors
-// returned by ProbeHandler.ValidateAll() if the designated constraints aren't met.
-type ProbeHandlerMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ProbeHandlerMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ProbeHandlerMultiError) AllErrors() []error { return m }
-
-// ProbeHandlerValidationError is the validation error returned by
-// ProbeHandler.Validate if the designated constraints aren't met.
-type ProbeHandlerValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ProbeHandlerValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ProbeHandlerValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ProbeHandlerValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ProbeHandlerValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ProbeHandlerValidationError) ErrorName() string { return "ProbeHandlerValidationError" }
-
-// Error satisfies the builtin error interface
-func (e ProbeHandlerValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sProbeHandler.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ProbeHandlerValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ProbeHandlerValidationError{}
-
 // Validate checks the field values on ExecAction with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -4447,6 +4061,297 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GRPCActionValidationError{}
+
+// Validate checks the field values on Probe with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Probe) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Probe with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ProbeMultiError, or nil if none found.
+func (m *Probe) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Probe) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch v := m.Handler.(type) {
+	case *Probe_Exec:
+		if v == nil {
+			err := ProbeValidationError{
+				field:  "Handler",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetExec()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "Exec",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "Exec",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetExec()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ProbeValidationError{
+					field:  "Exec",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Probe_HttpGet:
+		if v == nil {
+			err := ProbeValidationError{
+				field:  "Handler",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetHttpGet()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "HttpGet",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "HttpGet",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetHttpGet()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ProbeValidationError{
+					field:  "HttpGet",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Probe_TcpSocket:
+		if v == nil {
+			err := ProbeValidationError{
+				field:  "Handler",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetTcpSocket()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "TcpSocket",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "TcpSocket",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetTcpSocket()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ProbeValidationError{
+					field:  "TcpSocket",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Probe_Grpc:
+		if v == nil {
+			err := ProbeValidationError{
+				field:  "Handler",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetGrpc()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "Grpc",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "Grpc",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetGrpc()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ProbeValidationError{
+					field:  "Grpc",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		_ = v // ensures v is used
+	}
+
+	if m.InitialDelaySeconds != nil {
+		// no validation rules for InitialDelaySeconds
+	}
+
+	if m.TimeoutSeconds != nil {
+		// no validation rules for TimeoutSeconds
+	}
+
+	if m.PeriodSeconds != nil {
+		// no validation rules for PeriodSeconds
+	}
+
+	if m.SuccessThreshold != nil {
+		// no validation rules for SuccessThreshold
+	}
+
+	if m.FailureThreshold != nil {
+		// no validation rules for FailureThreshold
+	}
+
+	if m.TerminationGracePeriodSeconds != nil {
+		// no validation rules for TerminationGracePeriodSeconds
+	}
+
+	if len(errors) > 0 {
+		return ProbeMultiError(errors)
+	}
+
+	return nil
+}
+
+// ProbeMultiError is an error wrapping multiple validation errors returned by
+// Probe.ValidateAll() if the designated constraints aren't met.
+type ProbeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ProbeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ProbeMultiError) AllErrors() []error { return m }
+
+// ProbeValidationError is the validation error returned by Probe.Validate if
+// the designated constraints aren't met.
+type ProbeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ProbeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ProbeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ProbeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ProbeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ProbeValidationError) ErrorName() string { return "ProbeValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ProbeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sProbe.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ProbeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ProbeValidationError{}
 
 // Validate checks the field values on Deployment with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

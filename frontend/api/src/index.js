@@ -38970,570 +38970,6 @@ export const clutch = $root.clutch = (() => {
                 return DeleteHPAResponse;
             })();
 
-            v1.Probe = (function() {
-
-                /**
-                 * Properties of a Probe.
-                 * @memberof clutch.k8s.v1
-                 * @interface IProbe
-                 * @property {clutch.k8s.v1.IProbeHandler|null} [handler] Probe handler
-                 * @property {number|null} [initialDelaySeconds] Probe initialDelaySeconds
-                 * @property {number|null} [timeoutSeconds] Probe timeoutSeconds
-                 * @property {number|null} [periodSeconds] Probe periodSeconds
-                 * @property {number|null} [successThreshold] Probe successThreshold
-                 * @property {number|null} [failureThreshold] Probe failureThreshold
-                 * @property {number|Long|null} [terminationGracePeriodSeconds] Probe terminationGracePeriodSeconds
-                 */
-
-                /**
-                 * Constructs a new Probe.
-                 * @memberof clutch.k8s.v1
-                 * @classdesc Represents a Probe.
-                 * @implements IProbe
-                 * @constructor
-                 * @param {clutch.k8s.v1.IProbe=} [properties] Properties to set
-                 */
-                function Probe(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * Probe handler.
-                 * @member {clutch.k8s.v1.IProbeHandler|null|undefined} handler
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Probe.prototype.handler = null;
-
-                /**
-                 * Probe initialDelaySeconds.
-                 * @member {number|null|undefined} initialDelaySeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Probe.prototype.initialDelaySeconds = null;
-
-                /**
-                 * Probe timeoutSeconds.
-                 * @member {number|null|undefined} timeoutSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Probe.prototype.timeoutSeconds = null;
-
-                /**
-                 * Probe periodSeconds.
-                 * @member {number|null|undefined} periodSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Probe.prototype.periodSeconds = null;
-
-                /**
-                 * Probe successThreshold.
-                 * @member {number|null|undefined} successThreshold
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Probe.prototype.successThreshold = null;
-
-                /**
-                 * Probe failureThreshold.
-                 * @member {number|null|undefined} failureThreshold
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Probe.prototype.failureThreshold = null;
-
-                /**
-                 * Probe terminationGracePeriodSeconds.
-                 * @member {number|Long|null|undefined} terminationGracePeriodSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Probe.prototype.terminationGracePeriodSeconds = null;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * Probe _handler.
-                 * @member {"handler"|undefined} _handler
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_handler", {
-                    get: $util.oneOfGetter($oneOfFields = ["handler"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _initialDelaySeconds.
-                 * @member {"initialDelaySeconds"|undefined} _initialDelaySeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_initialDelaySeconds", {
-                    get: $util.oneOfGetter($oneOfFields = ["initialDelaySeconds"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _timeoutSeconds.
-                 * @member {"timeoutSeconds"|undefined} _timeoutSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_timeoutSeconds", {
-                    get: $util.oneOfGetter($oneOfFields = ["timeoutSeconds"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _periodSeconds.
-                 * @member {"periodSeconds"|undefined} _periodSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_periodSeconds", {
-                    get: $util.oneOfGetter($oneOfFields = ["periodSeconds"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _successThreshold.
-                 * @member {"successThreshold"|undefined} _successThreshold
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_successThreshold", {
-                    get: $util.oneOfGetter($oneOfFields = ["successThreshold"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _failureThreshold.
-                 * @member {"failureThreshold"|undefined} _failureThreshold
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_failureThreshold", {
-                    get: $util.oneOfGetter($oneOfFields = ["failureThreshold"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _terminationGracePeriodSeconds.
-                 * @member {"terminationGracePeriodSeconds"|undefined} _terminationGracePeriodSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_terminationGracePeriodSeconds", {
-                    get: $util.oneOfGetter($oneOfFields = ["terminationGracePeriodSeconds"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Verifies a Probe message.
-                 * @function verify
-                 * @memberof clutch.k8s.v1.Probe
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                Probe.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    let properties = {};
-                    if (message.handler != null && message.hasOwnProperty("handler")) {
-                        properties._handler = 1;
-                        {
-                            let error = $root.clutch.k8s.v1.ProbeHandler.verify(message.handler);
-                            if (error)
-                                return "handler." + error;
-                        }
-                    }
-                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
-                        properties._initialDelaySeconds = 1;
-                        if (!$util.isInteger(message.initialDelaySeconds))
-                            return "initialDelaySeconds: integer expected";
-                    }
-                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
-                        properties._timeoutSeconds = 1;
-                        if (!$util.isInteger(message.timeoutSeconds))
-                            return "timeoutSeconds: integer expected";
-                    }
-                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
-                        properties._periodSeconds = 1;
-                        if (!$util.isInteger(message.periodSeconds))
-                            return "periodSeconds: integer expected";
-                    }
-                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
-                        properties._successThreshold = 1;
-                        if (!$util.isInteger(message.successThreshold))
-                            return "successThreshold: integer expected";
-                    }
-                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
-                        properties._failureThreshold = 1;
-                        if (!$util.isInteger(message.failureThreshold))
-                            return "failureThreshold: integer expected";
-                    }
-                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
-                        properties._terminationGracePeriodSeconds = 1;
-                        if (!$util.isInteger(message.terminationGracePeriodSeconds) && !(message.terminationGracePeriodSeconds && $util.isInteger(message.terminationGracePeriodSeconds.low) && $util.isInteger(message.terminationGracePeriodSeconds.high)))
-                            return "terminationGracePeriodSeconds: integer|Long expected";
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a Probe message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.k8s.v1.Probe
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.Probe} Probe
-                 */
-                Probe.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.Probe)
-                        return object;
-                    let message = new $root.clutch.k8s.v1.Probe();
-                    if (object.handler != null) {
-                        if (typeof object.handler !== "object")
-                            throw TypeError(".clutch.k8s.v1.Probe.handler: object expected");
-                        message.handler = $root.clutch.k8s.v1.ProbeHandler.fromObject(object.handler);
-                    }
-                    if (object.initialDelaySeconds != null)
-                        message.initialDelaySeconds = object.initialDelaySeconds | 0;
-                    if (object.timeoutSeconds != null)
-                        message.timeoutSeconds = object.timeoutSeconds | 0;
-                    if (object.periodSeconds != null)
-                        message.periodSeconds = object.periodSeconds | 0;
-                    if (object.successThreshold != null)
-                        message.successThreshold = object.successThreshold | 0;
-                    if (object.failureThreshold != null)
-                        message.failureThreshold = object.failureThreshold | 0;
-                    if (object.terminationGracePeriodSeconds != null)
-                        if ($util.Long)
-                            (message.terminationGracePeriodSeconds = $util.Long.fromValue(object.terminationGracePeriodSeconds)).unsigned = false;
-                        else if (typeof object.terminationGracePeriodSeconds === "string")
-                            message.terminationGracePeriodSeconds = parseInt(object.terminationGracePeriodSeconds, 10);
-                        else if (typeof object.terminationGracePeriodSeconds === "number")
-                            message.terminationGracePeriodSeconds = object.terminationGracePeriodSeconds;
-                        else if (typeof object.terminationGracePeriodSeconds === "object")
-                            message.terminationGracePeriodSeconds = new $util.LongBits(object.terminationGracePeriodSeconds.low >>> 0, object.terminationGracePeriodSeconds.high >>> 0).toNumber();
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a Probe message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.k8s.v1.Probe
-                 * @static
-                 * @param {clutch.k8s.v1.Probe} message Probe
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                Probe.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (message.handler != null && message.hasOwnProperty("handler")) {
-                        object.handler = $root.clutch.k8s.v1.ProbeHandler.toObject(message.handler, options);
-                        if (options.oneofs)
-                            object._handler = "handler";
-                    }
-                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
-                        object.initialDelaySeconds = message.initialDelaySeconds;
-                        if (options.oneofs)
-                            object._initialDelaySeconds = "initialDelaySeconds";
-                    }
-                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
-                        object.timeoutSeconds = message.timeoutSeconds;
-                        if (options.oneofs)
-                            object._timeoutSeconds = "timeoutSeconds";
-                    }
-                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
-                        object.periodSeconds = message.periodSeconds;
-                        if (options.oneofs)
-                            object._periodSeconds = "periodSeconds";
-                    }
-                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
-                        object.successThreshold = message.successThreshold;
-                        if (options.oneofs)
-                            object._successThreshold = "successThreshold";
-                    }
-                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
-                        object.failureThreshold = message.failureThreshold;
-                        if (options.oneofs)
-                            object._failureThreshold = "failureThreshold";
-                    }
-                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
-                        if (typeof message.terminationGracePeriodSeconds === "number")
-                            object.terminationGracePeriodSeconds = options.longs === String ? String(message.terminationGracePeriodSeconds) : message.terminationGracePeriodSeconds;
-                        else
-                            object.terminationGracePeriodSeconds = options.longs === String ? $util.Long.prototype.toString.call(message.terminationGracePeriodSeconds) : options.longs === Number ? new $util.LongBits(message.terminationGracePeriodSeconds.low >>> 0, message.terminationGracePeriodSeconds.high >>> 0).toNumber() : message.terminationGracePeriodSeconds;
-                        if (options.oneofs)
-                            object._terminationGracePeriodSeconds = "terminationGracePeriodSeconds";
-                    }
-                    return object;
-                };
-
-                /**
-                 * Converts this Probe to JSON.
-                 * @function toJSON
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                Probe.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return Probe;
-            })();
-
-            v1.ProbeHandler = (function() {
-
-                /**
-                 * Properties of a ProbeHandler.
-                 * @memberof clutch.k8s.v1
-                 * @interface IProbeHandler
-                 * @property {clutch.k8s.v1.IExecAction|null} [exec] ProbeHandler exec
-                 * @property {clutch.k8s.v1.IHTTPGetAction|null} [httpGet] ProbeHandler httpGet
-                 * @property {clutch.k8s.v1.ITCPSocketAction|null} [tcpSocket] ProbeHandler tcpSocket
-                 * @property {clutch.k8s.v1.IGRPCAction|null} [grpc] ProbeHandler grpc
-                 */
-
-                /**
-                 * Constructs a new ProbeHandler.
-                 * @memberof clutch.k8s.v1
-                 * @classdesc Represents a ProbeHandler.
-                 * @implements IProbeHandler
-                 * @constructor
-                 * @param {clutch.k8s.v1.IProbeHandler=} [properties] Properties to set
-                 */
-                function ProbeHandler(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * ProbeHandler exec.
-                 * @member {clutch.k8s.v1.IExecAction|null|undefined} exec
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 */
-                ProbeHandler.prototype.exec = null;
-
-                /**
-                 * ProbeHandler httpGet.
-                 * @member {clutch.k8s.v1.IHTTPGetAction|null|undefined} httpGet
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 */
-                ProbeHandler.prototype.httpGet = null;
-
-                /**
-                 * ProbeHandler tcpSocket.
-                 * @member {clutch.k8s.v1.ITCPSocketAction|null|undefined} tcpSocket
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 */
-                ProbeHandler.prototype.tcpSocket = null;
-
-                /**
-                 * ProbeHandler grpc.
-                 * @member {clutch.k8s.v1.IGRPCAction|null|undefined} grpc
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 */
-                ProbeHandler.prototype.grpc = null;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * ProbeHandler _exec.
-                 * @member {"exec"|undefined} _exec
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 */
-                Object.defineProperty(ProbeHandler.prototype, "_exec", {
-                    get: $util.oneOfGetter($oneOfFields = ["exec"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * ProbeHandler _httpGet.
-                 * @member {"httpGet"|undefined} _httpGet
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 */
-                Object.defineProperty(ProbeHandler.prototype, "_httpGet", {
-                    get: $util.oneOfGetter($oneOfFields = ["httpGet"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * ProbeHandler _tcpSocket.
-                 * @member {"tcpSocket"|undefined} _tcpSocket
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 */
-                Object.defineProperty(ProbeHandler.prototype, "_tcpSocket", {
-                    get: $util.oneOfGetter($oneOfFields = ["tcpSocket"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * ProbeHandler _grpc.
-                 * @member {"grpc"|undefined} _grpc
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 */
-                Object.defineProperty(ProbeHandler.prototype, "_grpc", {
-                    get: $util.oneOfGetter($oneOfFields = ["grpc"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Verifies a ProbeHandler message.
-                 * @function verify
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                ProbeHandler.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    let properties = {};
-                    if (message.exec != null && message.hasOwnProperty("exec")) {
-                        properties._exec = 1;
-                        {
-                            let error = $root.clutch.k8s.v1.ExecAction.verify(message.exec);
-                            if (error)
-                                return "exec." + error;
-                        }
-                    }
-                    if (message.httpGet != null && message.hasOwnProperty("httpGet")) {
-                        properties._httpGet = 1;
-                        {
-                            let error = $root.clutch.k8s.v1.HTTPGetAction.verify(message.httpGet);
-                            if (error)
-                                return "httpGet." + error;
-                        }
-                    }
-                    if (message.tcpSocket != null && message.hasOwnProperty("tcpSocket")) {
-                        properties._tcpSocket = 1;
-                        {
-                            let error = $root.clutch.k8s.v1.TCPSocketAction.verify(message.tcpSocket);
-                            if (error)
-                                return "tcpSocket." + error;
-                        }
-                    }
-                    if (message.grpc != null && message.hasOwnProperty("grpc")) {
-                        properties._grpc = 1;
-                        {
-                            let error = $root.clutch.k8s.v1.GRPCAction.verify(message.grpc);
-                            if (error)
-                                return "grpc." + error;
-                        }
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a ProbeHandler message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.ProbeHandler} ProbeHandler
-                 */
-                ProbeHandler.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.ProbeHandler)
-                        return object;
-                    let message = new $root.clutch.k8s.v1.ProbeHandler();
-                    if (object.exec != null) {
-                        if (typeof object.exec !== "object")
-                            throw TypeError(".clutch.k8s.v1.ProbeHandler.exec: object expected");
-                        message.exec = $root.clutch.k8s.v1.ExecAction.fromObject(object.exec);
-                    }
-                    if (object.httpGet != null) {
-                        if (typeof object.httpGet !== "object")
-                            throw TypeError(".clutch.k8s.v1.ProbeHandler.httpGet: object expected");
-                        message.httpGet = $root.clutch.k8s.v1.HTTPGetAction.fromObject(object.httpGet);
-                    }
-                    if (object.tcpSocket != null) {
-                        if (typeof object.tcpSocket !== "object")
-                            throw TypeError(".clutch.k8s.v1.ProbeHandler.tcpSocket: object expected");
-                        message.tcpSocket = $root.clutch.k8s.v1.TCPSocketAction.fromObject(object.tcpSocket);
-                    }
-                    if (object.grpc != null) {
-                        if (typeof object.grpc !== "object")
-                            throw TypeError(".clutch.k8s.v1.ProbeHandler.grpc: object expected");
-                        message.grpc = $root.clutch.k8s.v1.GRPCAction.fromObject(object.grpc);
-                    }
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a ProbeHandler message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @static
-                 * @param {clutch.k8s.v1.ProbeHandler} message ProbeHandler
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                ProbeHandler.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (message.exec != null && message.hasOwnProperty("exec")) {
-                        object.exec = $root.clutch.k8s.v1.ExecAction.toObject(message.exec, options);
-                        if (options.oneofs)
-                            object._exec = "exec";
-                    }
-                    if (message.httpGet != null && message.hasOwnProperty("httpGet")) {
-                        object.httpGet = $root.clutch.k8s.v1.HTTPGetAction.toObject(message.httpGet, options);
-                        if (options.oneofs)
-                            object._httpGet = "httpGet";
-                    }
-                    if (message.tcpSocket != null && message.hasOwnProperty("tcpSocket")) {
-                        object.tcpSocket = $root.clutch.k8s.v1.TCPSocketAction.toObject(message.tcpSocket, options);
-                        if (options.oneofs)
-                            object._tcpSocket = "tcpSocket";
-                    }
-                    if (message.grpc != null && message.hasOwnProperty("grpc")) {
-                        object.grpc = $root.clutch.k8s.v1.GRPCAction.toObject(message.grpc, options);
-                        if (options.oneofs)
-                            object._grpc = "grpc";
-                    }
-                    return object;
-                };
-
-                /**
-                 * Converts this ProbeHandler to JSON.
-                 * @function toJSON
-                 * @memberof clutch.k8s.v1.ProbeHandler
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                ProbeHandler.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return ProbeHandler;
-            })();
-
             v1.ExecAction = (function() {
 
                 /**
@@ -40345,6 +39781,419 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return GRPCAction;
+            })();
+
+            v1.Probe = (function() {
+
+                /**
+                 * Properties of a Probe.
+                 * @memberof clutch.k8s.v1
+                 * @interface IProbe
+                 * @property {clutch.k8s.v1.IExecAction|null} [exec] Probe exec
+                 * @property {clutch.k8s.v1.IHTTPGetAction|null} [httpGet] Probe httpGet
+                 * @property {clutch.k8s.v1.ITCPSocketAction|null} [tcpSocket] Probe tcpSocket
+                 * @property {clutch.k8s.v1.IGRPCAction|null} [grpc] Probe grpc
+                 * @property {number|null} [initialDelaySeconds] Probe initialDelaySeconds
+                 * @property {number|null} [timeoutSeconds] Probe timeoutSeconds
+                 * @property {number|null} [periodSeconds] Probe periodSeconds
+                 * @property {number|null} [successThreshold] Probe successThreshold
+                 * @property {number|null} [failureThreshold] Probe failureThreshold
+                 * @property {number|Long|null} [terminationGracePeriodSeconds] Probe terminationGracePeriodSeconds
+                 */
+
+                /**
+                 * Constructs a new Probe.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a Probe.
+                 * @implements IProbe
+                 * @constructor
+                 * @param {clutch.k8s.v1.IProbe=} [properties] Properties to set
+                 */
+                function Probe(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Probe exec.
+                 * @member {clutch.k8s.v1.IExecAction|null|undefined} exec
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.exec = null;
+
+                /**
+                 * Probe httpGet.
+                 * @member {clutch.k8s.v1.IHTTPGetAction|null|undefined} httpGet
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.httpGet = null;
+
+                /**
+                 * Probe tcpSocket.
+                 * @member {clutch.k8s.v1.ITCPSocketAction|null|undefined} tcpSocket
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.tcpSocket = null;
+
+                /**
+                 * Probe grpc.
+                 * @member {clutch.k8s.v1.IGRPCAction|null|undefined} grpc
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.grpc = null;
+
+                /**
+                 * Probe initialDelaySeconds.
+                 * @member {number|null|undefined} initialDelaySeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.initialDelaySeconds = null;
+
+                /**
+                 * Probe timeoutSeconds.
+                 * @member {number|null|undefined} timeoutSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.timeoutSeconds = null;
+
+                /**
+                 * Probe periodSeconds.
+                 * @member {number|null|undefined} periodSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.periodSeconds = null;
+
+                /**
+                 * Probe successThreshold.
+                 * @member {number|null|undefined} successThreshold
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.successThreshold = null;
+
+                /**
+                 * Probe failureThreshold.
+                 * @member {number|null|undefined} failureThreshold
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.failureThreshold = null;
+
+                /**
+                 * Probe terminationGracePeriodSeconds.
+                 * @member {number|Long|null|undefined} terminationGracePeriodSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Probe.prototype.terminationGracePeriodSeconds = null;
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * Probe handler.
+                 * @member {"exec"|"httpGet"|"tcpSocket"|"grpc"|undefined} handler
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "handler", {
+                    get: $util.oneOfGetter($oneOfFields = ["exec", "httpGet", "tcpSocket", "grpc"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _initialDelaySeconds.
+                 * @member {"initialDelaySeconds"|undefined} _initialDelaySeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_initialDelaySeconds", {
+                    get: $util.oneOfGetter($oneOfFields = ["initialDelaySeconds"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _timeoutSeconds.
+                 * @member {"timeoutSeconds"|undefined} _timeoutSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_timeoutSeconds", {
+                    get: $util.oneOfGetter($oneOfFields = ["timeoutSeconds"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _periodSeconds.
+                 * @member {"periodSeconds"|undefined} _periodSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_periodSeconds", {
+                    get: $util.oneOfGetter($oneOfFields = ["periodSeconds"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _successThreshold.
+                 * @member {"successThreshold"|undefined} _successThreshold
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_successThreshold", {
+                    get: $util.oneOfGetter($oneOfFields = ["successThreshold"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _failureThreshold.
+                 * @member {"failureThreshold"|undefined} _failureThreshold
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_failureThreshold", {
+                    get: $util.oneOfGetter($oneOfFields = ["failureThreshold"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _terminationGracePeriodSeconds.
+                 * @member {"terminationGracePeriodSeconds"|undefined} _terminationGracePeriodSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_terminationGracePeriodSeconds", {
+                    get: $util.oneOfGetter($oneOfFields = ["terminationGracePeriodSeconds"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Verifies a Probe message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Probe
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Probe.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    let properties = {};
+                    if (message.exec != null && message.hasOwnProperty("exec")) {
+                        properties.handler = 1;
+                        {
+                            let error = $root.clutch.k8s.v1.ExecAction.verify(message.exec);
+                            if (error)
+                                return "exec." + error;
+                        }
+                    }
+                    if (message.httpGet != null && message.hasOwnProperty("httpGet")) {
+                        if (properties.handler === 1)
+                            return "handler: multiple values";
+                        properties.handler = 1;
+                        {
+                            let error = $root.clutch.k8s.v1.HTTPGetAction.verify(message.httpGet);
+                            if (error)
+                                return "httpGet." + error;
+                        }
+                    }
+                    if (message.tcpSocket != null && message.hasOwnProperty("tcpSocket")) {
+                        if (properties.handler === 1)
+                            return "handler: multiple values";
+                        properties.handler = 1;
+                        {
+                            let error = $root.clutch.k8s.v1.TCPSocketAction.verify(message.tcpSocket);
+                            if (error)
+                                return "tcpSocket." + error;
+                        }
+                    }
+                    if (message.grpc != null && message.hasOwnProperty("grpc")) {
+                        if (properties.handler === 1)
+                            return "handler: multiple values";
+                        properties.handler = 1;
+                        {
+                            let error = $root.clutch.k8s.v1.GRPCAction.verify(message.grpc);
+                            if (error)
+                                return "grpc." + error;
+                        }
+                    }
+                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
+                        properties._initialDelaySeconds = 1;
+                        if (!$util.isInteger(message.initialDelaySeconds))
+                            return "initialDelaySeconds: integer expected";
+                    }
+                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
+                        properties._timeoutSeconds = 1;
+                        if (!$util.isInteger(message.timeoutSeconds))
+                            return "timeoutSeconds: integer expected";
+                    }
+                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
+                        properties._periodSeconds = 1;
+                        if (!$util.isInteger(message.periodSeconds))
+                            return "periodSeconds: integer expected";
+                    }
+                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
+                        properties._successThreshold = 1;
+                        if (!$util.isInteger(message.successThreshold))
+                            return "successThreshold: integer expected";
+                    }
+                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
+                        properties._failureThreshold = 1;
+                        if (!$util.isInteger(message.failureThreshold))
+                            return "failureThreshold: integer expected";
+                    }
+                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
+                        properties._terminationGracePeriodSeconds = 1;
+                        if (!$util.isInteger(message.terminationGracePeriodSeconds) && !(message.terminationGracePeriodSeconds && $util.isInteger(message.terminationGracePeriodSeconds.low) && $util.isInteger(message.terminationGracePeriodSeconds.high)))
+                            return "terminationGracePeriodSeconds: integer|Long expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Probe message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Probe
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Probe} Probe
+                 */
+                Probe.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Probe)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Probe();
+                    if (object.exec != null) {
+                        if (typeof object.exec !== "object")
+                            throw TypeError(".clutch.k8s.v1.Probe.exec: object expected");
+                        message.exec = $root.clutch.k8s.v1.ExecAction.fromObject(object.exec);
+                    }
+                    if (object.httpGet != null) {
+                        if (typeof object.httpGet !== "object")
+                            throw TypeError(".clutch.k8s.v1.Probe.httpGet: object expected");
+                        message.httpGet = $root.clutch.k8s.v1.HTTPGetAction.fromObject(object.httpGet);
+                    }
+                    if (object.tcpSocket != null) {
+                        if (typeof object.tcpSocket !== "object")
+                            throw TypeError(".clutch.k8s.v1.Probe.tcpSocket: object expected");
+                        message.tcpSocket = $root.clutch.k8s.v1.TCPSocketAction.fromObject(object.tcpSocket);
+                    }
+                    if (object.grpc != null) {
+                        if (typeof object.grpc !== "object")
+                            throw TypeError(".clutch.k8s.v1.Probe.grpc: object expected");
+                        message.grpc = $root.clutch.k8s.v1.GRPCAction.fromObject(object.grpc);
+                    }
+                    if (object.initialDelaySeconds != null)
+                        message.initialDelaySeconds = object.initialDelaySeconds | 0;
+                    if (object.timeoutSeconds != null)
+                        message.timeoutSeconds = object.timeoutSeconds | 0;
+                    if (object.periodSeconds != null)
+                        message.periodSeconds = object.periodSeconds | 0;
+                    if (object.successThreshold != null)
+                        message.successThreshold = object.successThreshold | 0;
+                    if (object.failureThreshold != null)
+                        message.failureThreshold = object.failureThreshold | 0;
+                    if (object.terminationGracePeriodSeconds != null)
+                        if ($util.Long)
+                            (message.terminationGracePeriodSeconds = $util.Long.fromValue(object.terminationGracePeriodSeconds)).unsigned = false;
+                        else if (typeof object.terminationGracePeriodSeconds === "string")
+                            message.terminationGracePeriodSeconds = parseInt(object.terminationGracePeriodSeconds, 10);
+                        else if (typeof object.terminationGracePeriodSeconds === "number")
+                            message.terminationGracePeriodSeconds = object.terminationGracePeriodSeconds;
+                        else if (typeof object.terminationGracePeriodSeconds === "object")
+                            message.terminationGracePeriodSeconds = new $util.LongBits(object.terminationGracePeriodSeconds.low >>> 0, object.terminationGracePeriodSeconds.high >>> 0).toNumber();
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Probe message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Probe
+                 * @static
+                 * @param {clutch.k8s.v1.Probe} message Probe
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Probe.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (message.exec != null && message.hasOwnProperty("exec")) {
+                        object.exec = $root.clutch.k8s.v1.ExecAction.toObject(message.exec, options);
+                        if (options.oneofs)
+                            object.handler = "exec";
+                    }
+                    if (message.httpGet != null && message.hasOwnProperty("httpGet")) {
+                        object.httpGet = $root.clutch.k8s.v1.HTTPGetAction.toObject(message.httpGet, options);
+                        if (options.oneofs)
+                            object.handler = "httpGet";
+                    }
+                    if (message.tcpSocket != null && message.hasOwnProperty("tcpSocket")) {
+                        object.tcpSocket = $root.clutch.k8s.v1.TCPSocketAction.toObject(message.tcpSocket, options);
+                        if (options.oneofs)
+                            object.handler = "tcpSocket";
+                    }
+                    if (message.grpc != null && message.hasOwnProperty("grpc")) {
+                        object.grpc = $root.clutch.k8s.v1.GRPCAction.toObject(message.grpc, options);
+                        if (options.oneofs)
+                            object.handler = "grpc";
+                    }
+                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
+                        object.initialDelaySeconds = message.initialDelaySeconds;
+                        if (options.oneofs)
+                            object._initialDelaySeconds = "initialDelaySeconds";
+                    }
+                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
+                        object.timeoutSeconds = message.timeoutSeconds;
+                        if (options.oneofs)
+                            object._timeoutSeconds = "timeoutSeconds";
+                    }
+                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
+                        object.periodSeconds = message.periodSeconds;
+                        if (options.oneofs)
+                            object._periodSeconds = "periodSeconds";
+                    }
+                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
+                        object.successThreshold = message.successThreshold;
+                        if (options.oneofs)
+                            object._successThreshold = "successThreshold";
+                    }
+                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
+                        object.failureThreshold = message.failureThreshold;
+                        if (options.oneofs)
+                            object._failureThreshold = "failureThreshold";
+                    }
+                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
+                        if (typeof message.terminationGracePeriodSeconds === "number")
+                            object.terminationGracePeriodSeconds = options.longs === String ? String(message.terminationGracePeriodSeconds) : message.terminationGracePeriodSeconds;
+                        else
+                            object.terminationGracePeriodSeconds = options.longs === String ? $util.Long.prototype.toString.call(message.terminationGracePeriodSeconds) : options.longs === Number ? new $util.LongBits(message.terminationGracePeriodSeconds.low >>> 0, message.terminationGracePeriodSeconds.high >>> 0).toNumber() : message.terminationGracePeriodSeconds;
+                        if (options.oneofs)
+                            object._terminationGracePeriodSeconds = "terminationGracePeriodSeconds";
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Probe to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Probe.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Probe;
             })();
 
             v1.Deployment = (function() {
